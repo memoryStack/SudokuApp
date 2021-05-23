@@ -1,0 +1,14 @@
+com/sudokunative/ReactNativeFlipper.java
+ com.sudokunative.ReactNativeFlipper
+ com.sudokunative.ReactNativeFlipper$1
+ com.sudokunative.ReactNativeFlipper$2
+ com.sudokunative.ReactNativeFlipper$2$1
+com/sudokunative/BuildConfig.java
+ com.sudokunative.BuildConfig
+com/sudokunative/MainApplication.java
+ com.sudokunative.MainApplication
+ com.sudokunative.MainApplication$1
+com/sudokunative/MainActivity.java
+ com.sudokunative.MainActivity
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList
