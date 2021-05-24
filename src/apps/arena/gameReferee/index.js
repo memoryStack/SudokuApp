@@ -67,7 +67,6 @@ export const GameReferee = () => {
     const [mistakes, setMistakes] = useState(0)
     const timerId = useRef(null)
     const timerState = useRef('off')
-    const lastTimeUpdate
     
     // EVENTS.MADE_MISTAKE
     useEffect(() => {
