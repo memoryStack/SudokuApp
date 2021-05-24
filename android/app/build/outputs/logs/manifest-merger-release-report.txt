@@ -5,8 +5,8 @@ INJECTED from /Users/300067724/Desktop/SudokuNative/android/app/src/main/Android
 INJECTED from /Users/300067724/Desktop/SudokuNative/android/app/src/main/AndroidManifest.xml:1:1-25:12
 INJECTED from /Users/300067724/Desktop/SudokuNative/android/app/src/main/AndroidManifest.xml:1:1-25:12
 MERGED from [hermes-release.aar] /Users/300067724/.gradle/caches/transforms-2/files-2.1/e31842ac1c3bcfbffeba1c4c7dae8daa/jetified-hermes-release/AndroidManifest.xml:2:1-7:12
-MERGED from [:react-native-webview] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-23:12
 MERGED from [:react-native-svg] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-webview] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-23:12
 MERGED from [com.facebook.react:react-native:0.64.0] /Users/300067724/.gradle/caches/transforms-2/files-2.1/a56511b037fb04f244c71df782e66ef7/jetified-react-native-0.64.0/AndroidManifest.xml:2:1-13:12
 MERGED from [androidx.appcompat:appcompat:1.0.2] /Users/300067724/.gradle/caches/transforms-2/files-2.1/274ad4ee0842bebac47c95d973f2d871/appcompat-1.0.2/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.fragment:fragment:1.0.0] /Users/300067724/.gradle/caches/transforms-2/files-2.1/ca680a686f5617ec8882855dcbee7f2a/fragment-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -118,10 +118,10 @@ INJECTED from /Users/300067724/Desktop/SudokuNative/android/app/src/main/Android
 INJECTED from /Users/300067724/Desktop/SudokuNative/android/app/src/main/AndroidManifest.xml
 MERGED from [hermes-release.aar] /Users/300067724/.gradle/caches/transforms-2/files-2.1/e31842ac1c3bcfbffeba1c4c7dae8daa/jetified-hermes-release/AndroidManifest.xml:5:5-44
 MERGED from [hermes-release.aar] /Users/300067724/.gradle/caches/transforms-2/files-2.1/e31842ac1c3bcfbffeba1c4c7dae8daa/jetified-hermes-release/AndroidManifest.xml:5:5-44
-MERGED from [:react-native-webview] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-webview] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-svg] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-svg] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-webview] /Users/300067724/Desktop/SudokuNative/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.64.0] /Users/300067724/.gradle/caches/transforms-2/files-2.1/a56511b037fb04f244c71df782e66ef7/jetified-react-native-0.64.0/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.64.0] /Users/300067724/.gradle/caches/transforms-2/files-2.1/a56511b037fb04f244c71df782e66ef7/jetified-react-native-0.64.0/AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.appcompat:appcompat:1.0.2] /Users/300067724/.gradle/caches/transforms-2/files-2.1/274ad4ee0842bebac47c95d973f2d871/appcompat-1.0.2/AndroidManifest.xml:20:5-44
