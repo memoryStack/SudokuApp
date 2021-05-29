@@ -13,6 +13,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "react": "17.0.1",
     "react-native": "0.64.0",
+    "react-native-code-push": "^7.0.1",
     "react-native-svg": "9.6.4",
     "react-native-webview": "^11.3.2"
   },

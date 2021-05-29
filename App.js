@@ -1,7 +1,8 @@
-import React from 'react'
-import { View } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, Text } from 'react-native'
 import { Arena } from './src/apps/arena'
 import { setListener } from './src/utils/GlobalEventBus'
+import CodePush from 'react-native-code-push'
 
 // initialize the event bus
 
@@ -9,8 +10,18 @@ import { setListener } from './src/utils/GlobalEventBus'
  * right now it will contain the arena screen. later on will add proper screenNavigations logic n all
  */
 
+const CODE_PUSH_OPTIONS = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+}
+
 const App = () => {
 
+  useEffect(() => {
+    CodePush.sync({installMode: CodePush.InstallMode.IMMEDIATE}, (status) => {
+      console.log('@@@@@@@ JS update installed status', status)
+    })
+  }, [])
+    
   return (
     <View
       style={{
@@ -21,11 +32,13 @@ const App = () => {
         width: '100%',
       }}
     >
-      <Arena />
+      <Text>{`testing that bundleepush actually worked`}</Text>
+      <Text>{`testing that bundleepush actually worked 2`}</Text>
+      <Arena />      
     </View>
     
   );
 
 };
 
-export default App
+export default CodePush(CODE_PUSH_OPTIONS)(App)

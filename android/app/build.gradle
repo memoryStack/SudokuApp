@@ -82,6 +82,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -162,6 +163,23 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            // Note: CodePush updates shouldn't be tested in Debug mode as they're overriden by the RN packager. However, because CodePush checks for updates in all modes, we must supply a key.
+            resValue "string", "CodePushDeploymentKey", '""'
+            // adding it for the OS to identify between the builds if we want to install debug or release build of the same app
+            applicationIdSuffix ".debug"
+        }
+        releaseStaging {
+            // adding this buildType to test the changes on release staging area just before making any bundle push
+            // it will be exactly like release build
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            resValue "string", "CodePushDeploymentKey", '"NIpsc1UjAqGN4BJQOH0WkCspL2uIW3NzmoVgM"' // staging key on appcenter
+            // Note: It's a good idea to provide matchingFallbacks for the new buildType you create to prevent build issues
+            // Add the following line if not already there
+            matchingFallbacks = ['release']
+            applicationIdSuffix ".releaseStaging"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -170,6 +188,8 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            resValue "string", "CodePushDeploymentKey", '"lS8ZjsywJY70Fda52EWwFJqPffur02d_7ZN3x"'
+            applicationIdSuffix ".release"
         }
     }
 
