@@ -155,9 +155,9 @@ android {
         }
         releaseStaging {
             storeFile file('releaseStaging.keystore')
-            storePassword 'first test in stage before releasing'
+            storePassword 'stage@123'
             keyAlias 'androidreleasestagingkey'
-            keyPassword 'first test in stage before releasing'
+            keyPassword 'stage@123'
         }
         release {
             storeFile file(MYAPP_RELEASE_STORE_FILE)
@@ -168,6 +168,7 @@ android {
     }
     buildTypes {
         debug {
+            debuggable true
             signingConfig signingConfigs.debug
             // Note: CodePush updates shouldn't be tested in Debug mode as they're overriden by the RN packager. However, because CodePush checks for updates in all modes, we must supply a key.
             resValue "string", "CodePushDeploymentKey", '""'
