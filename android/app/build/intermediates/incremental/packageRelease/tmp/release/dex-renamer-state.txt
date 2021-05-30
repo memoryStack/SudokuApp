@@ -1,4 +1,0 @@
-#Mon May 24 18:47:32 IST 2021
-base.0=/Users/300067724/Desktop/SudokuNative/android/app/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
