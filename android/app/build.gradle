@@ -153,6 +153,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        releaseStaging {
+            storeFile file('releaseStaging.keystore')
+            storePassword 'first test in stage before releasing'
+            keyAlias 'androidreleasestagingkey'
+            keyPassword 'first test in stage before releasing'
+        }
         release {
             storeFile file(MYAPP_RELEASE_STORE_FILE)
             storePassword MYAPP_RELEASE_STORE_PASSWORD
@@ -171,7 +177,7 @@ android {
         releaseStaging {
             // adding this buildType to test the changes on release staging area just before making any bundle push
             // it will be exactly like release build
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.releaseStaging
             minifyEnabled enableProguardInReleaseBuilds
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
