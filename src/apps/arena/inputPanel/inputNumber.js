@@ -3,11 +3,11 @@ import { View, Text, Animated } from 'react-native'
 import { Styles } from './style'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit } from '../../../utils/GlobalEventBus'
-import { EVENTS } from '../../../resources/constants'
+import { EVENTS, GAME_STATE } from '../../../resources/constants'
 
 const ANIMATION_DURATION = 100
 const gameState = 'active'
-const InputNumber_ = ({ number }) => {
+const InputNumber_ = ({ number, gameState }) => {
     
     // subscribe and unsbscribe to the events
     useEffect(() => {
@@ -38,35 +38,30 @@ const InputNumber_ = ({ number }) => {
     }
 
     const onNumberClicked = () => {
-        if (!showInputNumber || gameState !== 'active') return
+        if (!showInputNumber || gameState !== GAME_STATE.ACTIVE) return
         animateInputNumber()
         emit(EVENTS.INPUT_NUMBER_CLICKED, { number })
     }
 
     return (
-        <View style={Styles.numberButtonContainer}>
-            {
-                showInputNumber ? 
-                    <Touchable 
-                        style={Styles.numberButtonContainer}
-                        onPress={onNumberClicked}
-                        touchable={TouchableTypes.opacity}
+            showInputNumber ? 
+                <Touchable 
+                    style={Styles.numberButtonContainer}
+                    onPress={onNumberClicked}
+                    touchable={TouchableTypes.opacity}
+                >
+                    <Animated.View
+                        style={[
+                            Styles.numberContainer,
+                            {
+                                transform: [{ scale: viewScaleAnimationConfig }]
+                            }
+                        ]}
                     >
-                        <Animated.View
-                            style={[
-                                Styles.numberContainer,
-                                {
-                                    transform: [{ scale: viewScaleAnimationConfig }]
-                                }
-                            ]}
-                        >
-                            <Text style={Styles.textStyle}>{number}</Text>
-                        </Animated.View>
-                    </Touchable>
-                : null
-            }
-        </View>
-        
+                        <Text style={Styles.textStyle}>{number}</Text>
+                    </Animated.View>
+                </Touchable>
+            : null
     )
 }
 

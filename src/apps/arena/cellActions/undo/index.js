@@ -4,19 +4,18 @@ import { Styles } from './style'
 import { UndoIcon } from '../../../../resources/svgIcons/undo'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { emit, addListener, removeListener } from '../../../../utils/GlobalEventBus'
-import { EVENTS } from '../../../../resources/constants'
+import { EVENTS, GAME_STATE } from '../../../../resources/constants'
 
-const Undo_ = ({ iconBoxSize }) => {
+const Undo_ = ({ iconBoxSize, gameState }) => {
 
-    // passing it as prop for let's use useCallback
     const onPress =  useCallback(() => {
-        // TODO: animate the icon
+        if (gameState !== GAME_STATE.ACTIVE) return 
         emit(EVENTS.UNDO_CLICKED)
-    }, [])
+    }, [gameState])
 
     useEffect(() => {
         const handler = () => {
-            // animate the to show the user that undo happened
+            // TODO: animate the icon to show the user that undo happened
         }
         addListener(EVENTS.UNDO_USED_SUCCESSFULLY, handler)
         return () => {

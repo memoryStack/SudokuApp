@@ -6,8 +6,8 @@ import { GAME_BOARD_WIDTH } from './gameBoard/dimensions' // make it a global co
 import { Inputpanel } from './inputPanel'
 import { CellActions } from './cellActions'
 import { Touchable, TouchableTypes } from '../components/Touchable'
-import { emit, addListener } from '../../utils/GlobalEventBus'
-import { EVENTS, LEVEL_DIFFICULTIES } from '../../resources/constants'
+import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
+import { EVENTS, LEVEL_DIFFICULTIES, GAME_STATE } from '../../resources/constants'
 
 /**
  * sudoku game play screen
@@ -15,20 +15,20 @@ import { EVENTS, LEVEL_DIFFICULTIES } from '../../resources/constants'
 
 export const Arena = () => {
 
-    // should this fuction be wrapped in useCallback ??
+    const [gameState, setGameState] = useState(GAME_STATE.ACTIVE) // get the initial state from previous sessison's game state
+
     const onPress = () => {
         // start new game
-
         // Sudoku board will listen to this event
-        emit(EVENTS.START_NEW_GAME, {difficultyLevel: LEVEL_DIFFICULTIES.EASY})
-
+        // emit(EVENTS.START_NEW_GAME, {difficultyLevel: LEVEL_DIFFICULTIES.EASY})
+        emit(EVENTS.CHANGE_GAME_STATE, gameState === GAME_STATE.INACTIVE ? GAME_STATE.ACTIVE : GAME_STATE.INACTIVE)
     }
 
-    const [count, setCount] = useState(0)
+    // listen for changing game state
     useEffect(() => {
-        setInterval(() => {
-            setCount(count => count+1)
-        }, 1000)
+        const handler = newState => newState && setGameState(newState)
+        addListener(EVENTS.CHANGE_GAME_STATE, handler)
+        return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
 
     return (
@@ -43,40 +43,21 @@ export const Arena = () => {
             <Touchable
                 onPress={onPress}
                 touchable={TouchableTypes.opacity}
-            >
-                
+            >    
                 <View style={{ 
                         height: 50, 
                         width: 50, 
                         backgroundColor: 'blue',
                         borderWidth: 1,
-                        margin: 10,
                     }}
                 />
-
-                <Text>{count}</Text>
-
             </Touchable>
-
-            {/* <Touchable
-                onPress={onPress}
-                touchable={TouchableTypes.opacity}
-            >
-                
-                <View style={{ 
-                        height: 50, 
-                        width: 50, 
-                        backgroundColor: 'blue',
-                        borderWidth: 1,
-                    }}
-                />
-
-            </Touchable> */}
-
-            <GameReferee />
-            <Board />
-            <Inputpanel />
-            <CellActions />
+            <GameReferee gameState={gameState} />
+            <Board gameState={gameState} />
+            <View style={{ marginVertical: 20 }}>
+                <Inputpanel gameState={gameState} />
+            </View>
+            <CellActions gameState={gameState} />
         </View>
     )
 }

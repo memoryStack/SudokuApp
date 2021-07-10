@@ -26,7 +26,6 @@ export const Styles = StyleSheet.create({
     notesRow: {
         display: 'flex',
         flexDirection: 'row',
-        flex: 1,
         width: '100%',
         justifyContent: 'space-around',
     },

@@ -3,6 +3,8 @@ import { View, Text } from 'react-native'
 import { Styles } from './style'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from '../dimensions'
+import { EVENTS, GAME_STATE } from '../../../../resources/constants'
+
 /**
  * 1. replace div with View
  * 2. use touchable
@@ -21,7 +23,6 @@ import { CELL_BORDER_WIDTH, CELL_HEIGHT } from '../dimensions'
 const looper = []
 for(let i=0;i<3;i++) looper.push(i)
 
-const gameState = 'active' // put this in constat somewhere globally
 const boxCenterCellRowColCordinates = [1, 4, 7]
 const boxOuterCellRowColCordinates = [0, 2, 3, 5, 6, 8]
 
@@ -34,7 +35,7 @@ export const Cell = ({
     cellBGColor = null, // change it's name to cellBG color
     mainValueFontColor = null,
     onCellClicked,
-    cellKey = '',
+    gameState,
 }) => {
     // if (row === 0 && col === 0) console.log('@@@@@@@ cellNotes', JSON.stringify(cellNotes))
     const getCellBordersStyle = () => {
@@ -61,10 +62,7 @@ export const Cell = ({
         return {}
     }
 
-    // TODO: remove this later on
-    // using this check to stop putting 9 * 81 extra views if we render the notoes boxes with the empty value
     const shouldRenderNotes = () => {
-        return 1
         for(let noteNum=0;noteNum<9;noteNum++){
             const { show } = cellNotes[noteNum]
             if (show) return 1
@@ -72,21 +70,15 @@ export const Cell = ({
         return 0
     }
 
-    /**
-     * to stop the warning had to put noe emore View component here
-     * test for performance decrease due to so many views used in the board compoent
-     */
     const getCellNotes = () => {
-        // console.log('@@@@@@ render cell notes', row, col)
         const cellNotesRows = looper.map((row) => {
             const cellNotesRow = looper.map((col) => {
                 const noteNum = row * 3 + col
                 const { show, noteValue } = cellNotes[noteNum] || {}
-                // console.log('@@@@@@', show, noteValue)
                 return (
                     <View key={`${noteNum}`}>
                         <Text style={Styles.noteText}>
-                            {show ? `${noteValue}` : ''} 
+                            {show ? `${noteValue}` : ' '} 
                         </Text>
                     </View>
                 )
@@ -96,17 +88,20 @@ export const Cell = ({
         return <View style={Styles.notesContainer}>{cellNotesRows}</View>
     }
 
+    const onPress = () =>
+        gameState === GAME_STATE.ACTIVE && onCellClicked(row, col)
+
     const renderCell = () => {
-        const containerStyle = [Styles.cell, cellBGColor, getCellBordersStyle(), { borderColor: 'black', }]
+        const containerStyle = [Styles.cell, cellBGColor, getCellBordersStyle(), { borderColor: 'black' }]
         return (
             <Touchable
                 touchable={TouchableTypes.opacity}
                 activeOpacity={1}
                 style={containerStyle}
-                onPress={() => gameState === 'active' && onCellClicked(row, col)} // call only if game is on
+                onPress={onPress}
             >
                 {
-                    gameState === 'active' ? // read from Global State. let's figure out if redux needs to be used or not (after  understanding it properly)
+                    gameState === GAME_STATE.ACTIVE ? // read from Global State. let's figure out if redux needs to be used or not (after  understanding it properly)
                         (
                             cellMainValue ?
                                 <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>

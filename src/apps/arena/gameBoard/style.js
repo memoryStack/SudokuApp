@@ -22,6 +22,10 @@ export const Styles = StyleSheet.create({
         // height: CELL_HEIGHT,
         // width: GAME_BOARD_WIDTH - 2,
     },
+    cellContainer: {
+        flex: 1,
+        height: '100%',
+    },
     thickBorder: {
         backgroundColor: 'black',
     },

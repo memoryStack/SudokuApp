@@ -2,10 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { View, Text } from 'react-native'
 import { Styles } from './style'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
-import { EVENTS } from '../../../resources/constants'
+import { EVENTS, GAME_STATE } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
-
-const gameState = 'active'
 
 const getTimeComponentString = value => {
     if(value > 9) return `${value}`
@@ -23,13 +21,13 @@ const getPauseTimerIcon = () => {
 
 const getStartTimerIcon = () => <View style={Styles.triangleShape} />
 
-const TimerView = ({ hours, minutes, seconds }) => {        
+const TimerView = ({ hours, minutes, seconds, gameState }) => {        
     return (
         <View style={Styles.timeCounter}>
             <Text style={Styles.textStyles}>{`${getTimeComponentString(hours)}:`}</Text>
             <Text style={Styles.textStyles}>{`${getTimeComponentString(minutes)}:`}</Text>
             <Text style={Styles.textStyles}>{`${getTimeComponentString(seconds)}`}</Text>
-            {gameState === 'active' ? getPauseTimerIcon() : getStartTimerIcon()}
+            {gameState === GAME_STATE.ACTIVE ? getPauseTimerIcon() : getStartTimerIcon()}
         </View>
     )
 }
@@ -47,18 +45,14 @@ const getNewTime = ({ hours, minutes, seconds }) => {
     return { hours, minutes, seconds }
 }
 
-const covertTime = seconds => {
-    let hours = Math.floor(seconds / 3600)
-    seconds = seconds - hours * 3600
-    let minutes = Math.floor(seconds / 60)
-    seconds -= minutes * 60
-    return { hours, minutes, seconds }
-}
-
+// TODO: there is a memory leak in this component. screenshot taken. error is related to events subscriptions in useEffect hooks
 // TODO: let's have a common unique states object for all the buttons which have stated like 'ACTIVE' or 'INACTIVE'
 // basically like a toggle
-let timerInstances=0
-export const GameReferee = () => {
+// TODO: maintain seperate file for Timer component. it will cause unecessary rederings for the other two componets
+let timerInstances = 0
+export const GameReferee = ({ gameState }) => {
+
+    // TODO: use "usePrevious" hook to toggle timer 
 
     const [time, setTime] = useState({ hours: 0, minutes: 0, seconds: 0 })
 
@@ -66,7 +60,6 @@ export const GameReferee = () => {
     const [difficultyLevel, setDifficultyLevel] = useState('Easy')
     const [mistakes, setMistakes] = useState(0)
     const timerId = useRef(null)
-    const timerState = useRef('off')
     
     // EVENTS.MADE_MISTAKE
     useEffect(() => {
@@ -86,37 +79,30 @@ export const GameReferee = () => {
     }
 
     const startTimer = () => {
-        console.log('@@@@@@ timer started')
         timerInstances++
         timerId.current = setInterval(updateTime, 1000)
-        timerState.current = 'on'
     }
 
     // use as CDM and first start the timer
+    // i guess i will have to remove this because of the below reason in useEffect hook
     useEffect(() => {
         startTimer()
     }, [])
 
     const stopTimer = () => {
         if (timerId.current) timerId.current = clearInterval(timerId.current)
-        timerState.current = 'off'
     }
 
     // EVENTS.NEW_GAME_STARTED
     useEffect(() => {
         const handler = ({ difficultyLevel }) => {
-            /**
-             * 1. reset mistakes count
-             * 2. update difficulty level
-             * 3. reset timer
-             */
             setDifficultyLevel(difficultyLevel)
             setMistakes(0)
             setTime({ hours: 0, minutes: 0, seconds: 0 })
-            console.log('@@@@@@@ STARTED NEW GAME')
             if (!timerId.current) {
                 // it might happen that timer got started on CDM and just milliseconds after that we 
                 // automatically started a new game of previous solved level
+                // TODO: think over the above case. i guess it would be simple if i remove startTimer from CDM
                 startTimer()
             }
         }
@@ -125,20 +111,27 @@ export const GameReferee = () => {
             removeListener(EVENTS.NEW_GAME_STARTED, handler)
         }
     }, [])
-    
-    // TODO: learn how to setup redux and reducers
+
+    // i can remove this hook by using "usePrevious" hook
+        // but let's do it this way for simplicity and learn "usePrevious" hook as wll to increase the understanding of hooks
+    useEffect(() => {
+        const handler = gameNewState =>
+            gameNewState === GAME_STATE.ACTIVE ? startTimer() : stopTimer()
+        addListener(EVENTS.CHANGE_GAME_STATE, handler)
+        return () => {
+            removeListener(EVENTS.CHANGE_GAME_STATE, handler)
+        }
+    }, [])
+
     const onTimerClicked = () => {
-        /**
-         * 1. predict the new state based on the current state 
-         * 2. toggle timer accordingly
-         * 3. emit the event for game new state
-         */
-        
-        timerState.current === 'on' ? stopTimer() : startTimer()
+        // unclickable if the game has finished
+        if (gameState !== GAME_STATE.ACTIVE && gameState !== GAME_STATE.INACTIVE) return
+        let gameNewState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
+        emit(EVENTS.CHANGE_GAME_STATE, gameNewState)
     }
 
     const { hours, minutes, seconds } = time
-    // console.log('@@@@@@', hours, minutes, seconds)
+
     return (
         <View style={Styles.container}>
             <Text style={Styles.textStyles}>{`Mistakes: ${mistakes}`}</Text>
@@ -152,6 +145,7 @@ export const GameReferee = () => {
                     hours={hours}
                     minutes={minutes}
                     seconds={seconds}
+                    gameState={gameState}
                 />
             </Touchable>
         </View>

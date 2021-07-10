@@ -2,22 +2,15 @@ const listeners = {}
 
 export function addListener(eventName, callback) {
     if (!eventName || !callback) return
-    // if(eventName === INPUT_NUMBER_CLICKED)
     let callBacks = []
     if (listeners[eventName]) callBacks = listeners[eventName]
     callBacks.push(callback)
     listeners[eventName] = callBacks
 }
 
-export function setListener(eventName, callback) {
-    if (!eventName || !callback) return
-    listeners[eventName] = [callback]
-}
-
 export function emit(eventName, data) {
     if (!eventName) return
     const callBacks = listeners[eventName] || []
-    console.log('@@@@@@@ callbacks for ', eventName, 'event are', callBacks.length)
     callBacks.forEach(callback => {
         callback(data)
     })

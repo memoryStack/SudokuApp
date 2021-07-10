@@ -9,13 +9,13 @@ import { Styles } from './style'
 const { width: windowWidth } = Dimensions.get('window')
 const ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 
-const CellActions_ = () => {
+const CellActions_ = ({ gameState }) => {
     return (
         <View style={Styles.container}>
-            <Undo iconBoxSize={ICON_BOX_DIMENSION} />
-            <Eraser iconBoxSize={ICON_BOX_DIMENSION} />
-            <Pencil iconBoxSize={ICON_BOX_DIMENSION} />
-            <Hint iconBoxSize={ICON_BOX_DIMENSION} />
+            <Undo iconBoxSize={ICON_BOX_DIMENSION} gameState={gameState} />
+            <Eraser iconBoxSize={ICON_BOX_DIMENSION} gameState={gameState} />
+            <Pencil iconBoxSize={ICON_BOX_DIMENSION} gameState={gameState} />
+            <Hint iconBoxSize={ICON_BOX_DIMENSION} gameState={gameState} />
         </View>
     )
 }

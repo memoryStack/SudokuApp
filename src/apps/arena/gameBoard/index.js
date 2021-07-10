@@ -4,11 +4,10 @@ import { Styles } from './style'
 import { Cell } from './cell'
 import { CELL_HEIGHT, INNER_THICK_BORDER_WIDTH, GAME_BOARD_WIDTH, OUTER_THIN_BORDER_WIDTH } from './dimensions'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
-import { EVENTS, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PENCIL_STATE } from '../../../resources/constants'
+import { EVENTS, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PENCIL_STATE, GAME_STATE } from '../../../resources/constants'
 import { initBoardData, generateNewSudokuPuzzle, sameHouseAsSelected, duplicacyPresent } from '../../../utils/util'
 import { getNewPencilState } from '../cellActions/pencil/index'
 
-const gameState = 'active'
 const looper = []
 for(let i=0;i<9;i++) {
     if (i%3 === 0 && i !== 0) looper.push(-1)
@@ -37,7 +36,7 @@ const initializeData = () => {
     return { movesStack, notesInfo, mainNumbers }
 }
 
-export const Board = ({}) => {
+export const Board = ({ gameState }) => {
     
     const { movesStack: initialMovesStack, notesInfo: initialNotesInfo, mainNumbers: initialMainNumbers } = initializeData()
     const [mainNumbers, updateMainNumbers] = useState(initialMainNumbers) // two dimentional array 
@@ -80,7 +79,7 @@ export const Board = ({}) => {
             updateNotesInfo(notesInfo)
             updateMainNumbers(mainNumbers)
             updateMovesStack(movesStack)
-
+            if (pencilState === PENCIL_STATE.ACTIVE) setPencilState(PENCIL_STATE.INACTIVE)
             
             emit(EVENTS.NEW_GAME_STARTED, { difficultyLevel })
 
@@ -319,24 +318,21 @@ export const Board = ({}) => {
         }
     }, [selectedCell, mainNumbers])
 
-    // it's ok to leave it like this (unoptimized)
-    const sameValueAsSelectedBox = (row, col) => {
-        return selectedCellMainValue && selectedCellMainValue === boardMainNumbers[row][col].value
-    }
-
+    const sameValueAsSelectedBox = (row, col) =>
+        selectedCellMainValue && selectedCellMainValue === boardMainNumbers[row][col].value
+    
     const getMainNumFontColor = (row, col) => {
-        return null
-        if (gameState !== 'active' || !boardMainNumbers[row][col].value) return null
-        const isWronglyPlaced = boardMainNumbers[row][col].value !== boardMainNumbers[row][col].solutionValue
+        if (!mainNumbers[row][col].value) return null
+        const isWronglyPlaced = mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue
         if (isWronglyPlaced) return Styles.wronglyFilledNumColor
-        if (!boardMainNumbers[row][col].isClue) return Styles.userFilledNumColor
+        if (!mainNumbers[row][col].isClue) return Styles.userFilledNumColor
         return Styles.clueNumColor
     }
 
     const getBoxBackgroundColor = (row, col) => {
-        if (gameState !== 'active') return null
+        if (gameState !== GAME_STATE.ACTIVE) return null
         const { row: selectedCellRow = 0, col: selectedCellCol = 0  } = selectedCell || {}
-        const isSameHouseAsSelected = sameHouseAsSelected(row, col, selectedCellRow, selectedCellCol) // utils func
+        const isSameHouseAsSelected = sameHouseAsSelected(row, col, selectedCellRow, selectedCellCol)
         const isSameValueAsSelected = sameValueAsSelectedBox(row, col)
         const isSelected = selectedCellRow === row && selectedCellCol === col
         
@@ -357,7 +353,7 @@ export const Board = ({}) => {
                         if (col === -1) return getThickBorderView(CELL_HEIGHT, INNER_THICK_BORDER_WIDTH, elementKey)
                         return (
                             <View
-                                style={{ height: '100%', flex: 1, }}
+                                style={Styles.cellContainer}
                                 key={elementKey}
                             >
                                 <Cell
@@ -368,7 +364,7 @@ export const Board = ({}) => {
                                     cellMainValue={mainNumbers[row][col].value}
                                     cellNotes={notesInfo[row][col]}
                                     onCellClicked={onCellClicked}
-                                    cellKey={elementKey}
+                                    gameState={gameState}
                                 />
                             </View>
                         )
@@ -379,15 +375,10 @@ export const Board = ({}) => {
     }
     
     const getBoard = () => {
-        // this.selectedBoxRow = this.state.selectedBox.row
-        // this.selectedBoxCol = this.state.selectedBox.col
-        // this.selectedBoxMainValue = this.state.boardData[this.selectedBoxRow][this.selectedBoxCol].value
-
-        // console.log('@@@@@@@@ xx', JSON.stringify(mainNumbers))
         let keyCounter = 0
         return (
             <View style={Styles.board}> 
-                {
+                { // TODO: give this looper a proper name
                     looper.map( row => {
                         const elementKey = `${keyCounter++}`
                         if (row === -1) return getThickBorderView(INNER_THICK_BORDER_WIDTH, GAME_BOARD_WIDTH - 2 * OUTER_THIN_BORDER_WIDTH, elementKey)

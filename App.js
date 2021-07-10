@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { View, Text } from 'react-native'
 import { Arena } from './src/apps/arena'
-import { setListener } from './src/utils/GlobalEventBus'
 import CodePush from 'react-native-code-push'
 
 // initialize the event bus
@@ -16,6 +15,8 @@ const CODE_PUSH_OPTIONS = {
 
 const App = () => {
 
+  // TODO: codepush is giving some error 
+  // {"status":400,"name":"Error","message":"Missing required query parameter \"deployment_key\""}
   useEffect(() => {
     CodePush.sync({installMode: CodePush.InstallMode.IMMEDIATE}, (status) => {
       console.log('@@@@@@@ JS update installed status', status)

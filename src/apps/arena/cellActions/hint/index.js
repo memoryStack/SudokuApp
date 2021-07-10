@@ -4,24 +4,31 @@ import { Styles } from './style'
 import { HintIcon } from '../../../../resources/svgIcons/hint'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { emit, addListener, removeListener } from '../../../../utils/GlobalEventBus'
-import { EVENTS } from '../../../../resources/constants'
+import { EVENTS, GAME_STATE } from '../../../../resources/constants'
 
-const Hint_ = ({ iconBoxSize }) => {
+// TODO: i should make it as a part of settings so that users can change it according to their confidence level
+// and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their 
+// comfort and confidence level
+const MAX_AVAILABLE_HINTS = 3
 
-    const gameState = 'active'
-    const [hints, setHints] = useState(3) // default hints
+const Hint_ = ({ iconBoxSize, gameState }) => {
 
-    // passing it as prop so let's use useCallback
-    const onPress = useCallback(() => {
-        // TODO: it would be cool if i can animate the icon
-        // to show that wisdom got transfered
-        emit(EVENTS.HINT_CLICKED)
-    }, [])
+    const [hints, setHints] = useState(MAX_AVAILABLE_HINTS) // default hints
 
     useEffect(() => {
-        const handler = () => {
-            setHints(hints-1)
-        }
+        const handler = () => setHints(MAX_AVAILABLE_HINTS)
+        addListener(EVENTS.NEW_GAME_STARTED, handler)
+        return () => removeListener(EVENTS.NEW_GAME_STARTED, handler)
+    }, [])
+
+    const onPress = useCallback(() => {
+        if (gameState !== GAME_STATE.ACTIVE) return
+        emit(EVENTS.HINT_CLICKED)
+    }, [gameState])
+
+    useEffect(() => {
+        // TODO: it would be cool if i can animate the icon to show that wisdom action worked
+        const handler = () => setHints(hints-1)
         addListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
         return () => {
             removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
@@ -37,7 +44,7 @@ const Hint_ = ({ iconBoxSize }) => {
             <>
                 <HintIcon iconBoxSize={iconBoxSize} />
                 {
-                    true && gameState === 'active' ?
+                    true && gameState === GAME_STATE.ACTIVE ?
                         <View style={Styles.tickerBox}>
                             <Text style={Styles.tickerText}>{hints}</Text>
                         </View>

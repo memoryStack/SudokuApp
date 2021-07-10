@@ -34,6 +34,8 @@ const DEFAULT_BEST_STATS = {
     },
 }
 
+// TODO: make a directory named `event` and  add these contants there along with the 
+// GlobalEvetBus file
 // events whose source is Sudoku Board
 const BOARD_EVENTS = {
     MADE_MISTAKE: 'MADE_MISTAKE',
@@ -54,6 +56,7 @@ const CELL_ACTION_EVENTS = {
 const EVENTS = {
     START_NEW_GAME: 'START_NEW_GAME',
     RESTART_GAME: 'RESTART_GAME',
+    CHANGE_GAME_STATE: 'CHANGE_GAME_STATE',
     NEW_GAME_STARTED: 'NEW_GAME_STARTED', // either new game is started of previous game re-started. will be helpful in reseting the components state for new game
     ...CELL_ACTION_EVENTS,
     ...BOARD_EVENTS,
@@ -62,11 +65,13 @@ const EVENTS = {
 // freeze these objects
 // TODO: think over this automaton
 const GAME_STATE = {
-    RUNNING: 'RUNNING',
-    PAUSED: 'PAUSED',
-    OVER: 'OVER',
+    ACTIVE: 'ACTIVE',
+    INACTIVE: 'INACTIVE',
+    OVER_SOLVED: 'OVER_SOLVED',
+    OVER_UNSOLVED: 'OVER_UNSOLVED',
 }
 
+// TODO: should make a general reusable state for these switches kind of states like "ON or OFF" or "ACTIVE or INACTIVE"
 const PENCIL_STATE = {
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE',
@@ -78,4 +83,5 @@ export {
     DEFAULT_BEST_STATS,
     EVENTS,
     PENCIL_STATE,
+    GAME_STATE,
 }
