@@ -1,5 +1,11 @@
 PODS:
+  - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
+  - CodePush (7.0.1):
+    - Base64 (~> 1.1)
+    - JWT (~> 3.0.0-beta.12)
+    - React-Core
+    - SSZipArchive (~> 2.2.2)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.64.0)
   - FBReactNativeSpec (0.64.0):
@@ -10,6 +16,8 @@ PODS:
     - React-jsi (= 0.64.0)
     - ReactCommon/turbomodule/core (= 0.64.0)
   - glog (0.3.5)
+  - JWT (3.0.0-beta.14):
+    - Base64 (~> 1.1.2)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -271,9 +279,11 @@ PODS:
     - React-perflogger (= 0.64.0)
   - RNSVG (9.6.4):
     - React
+  - SSZipArchive (2.2.3)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - CodePush (from `../node_modules/react-native-code-push`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -309,9 +319,14 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Base64
     - boost-for-react-native
+    - JWT
+    - SSZipArchive
 
 EXTERNAL SOURCES:
+  CodePush:
+    :path: "../node_modules/react-native-code-push"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -374,11 +389,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  CodePush: 019289464f0ea035a461334f5d64ae88c16b1e74
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
   FBReactNativeSpec: 1fcb54ceceaf67d037c994cef23938025719db6b
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
+  JWT: ef71dfb03e1f842081e64dc42eef0e164f35d251
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
   RCTTypeSafety: 512728b73549e72ad7330b92f3d42936f2a4de5b
@@ -404,6 +422,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
   RNSVG: a53a5de0d90ec96a6502cc3a4534dfcc0c130622
+  SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 364acee3289850c90c99e351e7afd93572b80bbb
