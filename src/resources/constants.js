@@ -57,6 +57,7 @@ const EVENTS = {
     START_NEW_GAME: 'START_NEW_GAME',
     RESTART_GAME: 'RESTART_GAME',
     CHANGE_GAME_STATE: 'CHANGE_GAME_STATE',
+    GAME_OVER: 'GAME_OVER',
     NEW_GAME_STARTED: 'NEW_GAME_STARTED', // either new game is started of previous game re-started. will be helpful in reseting the components state for new game
     ...CELL_ACTION_EVENTS,
     ...BOARD_EVENTS,

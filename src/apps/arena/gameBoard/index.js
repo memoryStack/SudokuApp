@@ -117,13 +117,18 @@ export const Board = ({ gameState }) => {
     const onCellClicked = useCallback((row, col) => {
         if (selectedCell.row !== row || selectedCell.col !== col) {
             selectCell({ row, col })
-            // setSelectedCellMainValue() // read it from the boardData later on
+            setSelectedCellMainValue(mainNumbers[row][col].value) // read it from the boardData later on
 
         }
-    }, [selectedCell])
+    }, [selectedCell, mainNumbers])
 
     const isPuzzleSolved = () => {
-        return false
+        for (let row=0;row<9;row++) {
+            for (let col=0;col<9;col++) {
+                if (!mainNumbers[row][col].value) return false
+            }
+        }
+        return true
     }
 
     // EVENTS.INPUT_NUMBER_CLICKED 
@@ -165,14 +170,9 @@ export const Board = ({ gameState }) => {
                         notesInfoDup[row][col][i].show = 0
                     }
                 }
-                if (number !== mainNumbersDup[row][col].solutionValue) {
-                    // emit a evet so that referee will increase the mistakes count
-                    emit(EVENTS.MADE_MISTAKE)
-                }
-                if (isPuzzleSolved()) {
-                    // emit an event or action to trigger that the the game is over and take necessary actions
-                    emit(EVENTS.PUZZLE_SOLVED)
-                }
+
+                if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
+                else if (isPuzzleSolved()) emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
             }
 
             const moveObject = {
@@ -318,8 +318,9 @@ export const Board = ({ gameState }) => {
         }
     }, [selectedCell, mainNumbers])
 
+    // TODO: need to fix the background color for same value as selected cell's number
     const sameValueAsSelectedBox = (row, col) =>
-        selectedCellMainValue && selectedCellMainValue === boardMainNumbers[row][col].value
+        selectedCellMainValue && selectedCellMainValue === mainNumbers[row][col].value
     
     const getMainNumFontColor = (row, col) => {
         if (!mainNumbers[row][col].value) return null

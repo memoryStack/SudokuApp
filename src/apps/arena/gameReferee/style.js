@@ -13,6 +13,7 @@ export const Styles = StyleSheet.create({
         width: 0,
         height: 0,
         borderWidth: 5,
+        marginLeft: 2,
         borderRightWidth: 0,
         borderLeftWidth: 8,
         borderLeftColor: 'rgba(0, 0, 0, .5)',
@@ -39,5 +40,6 @@ export const Styles = StyleSheet.create({
     pauseTimerIconContainer: {
         display: 'flex',
         flexDirection: 'row',
+        marginLeft: 2,
     },
 })
