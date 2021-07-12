@@ -1,3 +1,9 @@
+
+/**
+ * this file should be broken down. most of the functions are used by Arena so 
+ * these should be there not in global utils
+ */
+
 let tempSudoku
 let sudokuSolution
 let highlightedSinglesInfo = []
@@ -601,4 +607,15 @@ export const generateNewSudokuPuzzle = async (clues, notesData, originalSudokuBo
 		}
 	}
 
+}
+
+export const noOperationFunction = minisculePerfBoost => minisculePerfBoost && undefined
+
+export const rgba = function(hex, opacity) {
+    hex = hex.replace('#', '')
+    const r = parseInt(hex.substring(0, 2), 16)
+    const g = parseInt(hex.substring(2, 4), 16)
+    const b = parseInt(hex.substring(4, 6), 16)
+    const result = `rgba(${r}, ${g}, ${b}, ${opacity / 100})`
+    return result
 }

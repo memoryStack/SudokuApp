@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { Board } from './gameBoard'
 import { GameReferee } from './gameReferee'
 import { GAME_BOARD_WIDTH } from './gameBoard/dimensions' // make it a global constant lateron
@@ -8,14 +8,21 @@ import { CellActions } from './cellActions'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
 import { EVENTS, LEVEL_DIFFICULTIES, GAME_STATE } from '../../resources/constants'
+import { Page } from '../components/Page'
+import { BottomDragger } from '../components/BottomDragger'
 
-/**
- * sudoku game play screen
- */
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+    },
+})
 
 export const Arena = () => {
 
     const [gameState, setGameState] = useState(GAME_STATE.ACTIVE) // get the initial state from previous sessison's game state
+    const [pageHeight, setPageHeight] = useState(0)
 
     const onPress = () => {
         // start new game
@@ -32,32 +39,47 @@ export const Arena = () => {
     }, [])
 
     return (
-        <View style={{
-            display: 'flex',
-            alignItems: 'center',
-            width: '100%',
-            height: '100%',
-            top: 100,
-        }}> 
-
-            <Touchable
-                onPress={onPress}
-                touchable={TouchableTypes.opacity}
-            >    
-                <View style={{ 
-                        height: 50, 
-                        width: 50, 
-                        backgroundColor: 'blue',
-                        borderWidth: 1,
-                    }}
-                />
-            </Touchable>
-            <GameReferee gameState={gameState} />
-            <Board gameState={gameState} />
-            <View style={{ marginVertical: 20 }}>
-                <Inputpanel gameState={gameState} />
+        <Page>
+            <View style={styles.container} 
+                onLayout={({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
+                    console.log('@@@@ page height', height)
+                    setPageHeight(height)
+                }}
+            >
+                <Touchable
+                    onPress={onPress}
+                    touchable={TouchableTypes.opacity}
+                >    
+                    <View style={{ 
+                            height: 50, 
+                            width: 50, 
+                            backgroundColor: 'blue',
+                            borderWidth: 1,
+                        }}
+                    />
+                </Touchable>
+                <GameReferee gameState={gameState} />
+                <Board gameState={gameState} />
+                <View style={{ marginVertical: 20 }}>
+                    <Inputpanel gameState={gameState} />
+                </View>
+                <CellActions gameState={gameState} />
+                {
+                    pageHeight ? 
+                        <BottomDragger
+                            parentHeight={pageHeight}
+                            childrenHeight={500}
+                            headerText={'drag drag drag'}
+                        >
+                            <View style={{
+                                height: 500, 
+                                width: '100%',
+                                backgroundColor: 'black'
+                            }} />
+                        </BottomDragger>
+                    : null
+                }
             </View>
-            <CellActions gameState={gameState} />
-        </View>
+        </Page>
     )
 }

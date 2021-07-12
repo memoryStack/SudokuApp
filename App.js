@@ -15,7 +15,7 @@ const CODE_PUSH_OPTIONS = {
 
 const App = () => {
 
-  // TODO: codepush is giving some error 
+  // TODO: codepush is giving some error for ios
   // {"status":400,"name":"Error","message":"Missing required query parameter \"deployment_key\""}
   useEffect(() => {
     CodePush.sync({installMode: CodePush.InstallMode.IMMEDIATE}, (status) => {
@@ -33,8 +33,6 @@ const App = () => {
         width: '100%',
       }}
     >
-      <Text>{`testing that bundleepush actually worked`}</Text>
-      <Text>{`testing that bundleepush actually worked 2`}</Text>
       <Arena />      
     </View>
     
