@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Board } from './gameBoard'
 import { GameReferee } from './gameReferee'
@@ -7,9 +7,9 @@ import { Inputpanel } from './inputPanel'
 import { CellActions } from './cellActions'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
-import { EVENTS, LEVEL_DIFFICULTIES, GAME_STATE } from '../../resources/constants'
+import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES } from '../../resources/constants'
 import { Page } from '../components/Page'
-import { BottomDragger } from '../components/BottomDragger'
+import { NextGameMenu } from './nextGameMenu'
 
 const styles = StyleSheet.create({
     container: {
@@ -25,24 +25,26 @@ export const Arena = () => {
     const [pageHeight, setPageHeight] = useState(0)
 
     const onPress = () => {
-        // start new game
-        // Sudoku board will listen to this event
-        // emit(EVENTS.START_NEW_GAME, {difficultyLevel: LEVEL_DIFFICULTIES.EASY})
         emit(EVENTS.CHANGE_GAME_STATE, gameState === GAME_STATE.INACTIVE ? GAME_STATE.ACTIVE : GAME_STATE.INACTIVE)
     }
 
-    // listen for changing game state
+    // listen for changing game state. and it should be o;ly one listener through out the App
     useEffect(() => {
         const handler = newState => newState && setGameState(newState)
         addListener(EVENTS.CHANGE_GAME_STATE, handler)
         return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
 
+    useEffect(() => {
+        const handler = () => gameState !== GAME_STATE.ACTIVE && setGameState(GAME_STATE.ACTIVE)
+        addListener(EVENTS.NEW_GAME_STARTED, handler)
+        return () => removeListener(EVENTS.NEW_GAME_STARTED, handler)
+    }, [gameState])
+
     return (
         <Page>
             <View style={styles.container} 
                 onLayout={({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
-                    console.log('@@@@ page height', height)
                     setPageHeight(height)
                 }}
             >
@@ -50,7 +52,8 @@ export const Arena = () => {
                     onPress={onPress}
                     touchable={TouchableTypes.opacity}
                 >    
-                    <View style={{ 
+                    <View 
+                        style={{ 
                             height: 50, 
                             width: 50, 
                             backgroundColor: 'blue',
@@ -64,21 +67,7 @@ export const Arena = () => {
                     <Inputpanel gameState={gameState} />
                 </View>
                 <CellActions gameState={gameState} />
-                {
-                    pageHeight ? 
-                        <BottomDragger
-                            parentHeight={pageHeight}
-                            childrenHeight={500}
-                            headerText={'drag drag drag'}
-                        >
-                            <View style={{
-                                height: 500, 
-                                width: '100%',
-                                backgroundColor: 'black'
-                            }} />
-                        </BottomDragger>
-                    : null
-                }
+                {pageHeight ? <NextGameMenu parentHeight={pageHeight} /> : null}
             </View>
         </Page>
     )

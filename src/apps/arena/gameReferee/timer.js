@@ -35,22 +35,20 @@ const getPauseTimerIcon = () => {
 const getStartTimerIcon = () => <View style={Styles.triangleShape} />
 
 const Timer_ = ({ gameState }) => {        
-    
+
     // TODO: set the initial time value from props 
     // from previous game
     const [time, setTime] = useState({ hours: 0, minutes: 0, seconds: 0 })
     const timerId = useRef(null)
-  
+
     useEffect(() => {
         if (gameState === GAME_STATE.ACTIVE) startTimer()
-        else stopTimer()
-        return () => stopTimer()
+        return () =>  stopTimer()
     }, [gameState])
 
     // EVENTS.NEW_GAME_STARTED
     useEffect(() => {
-        const handler = () =>
-            setTime({ hours: 0, minutes: 0, seconds: 0 })
+        const handler = () => setTime({ hours: 0, minutes: 0, seconds: 0 })
         addListener(EVENTS.NEW_GAME_STARTED, handler)
         return () => removeListener(EVENTS.NEW_GAME_STARTED, handler)
     }, [])

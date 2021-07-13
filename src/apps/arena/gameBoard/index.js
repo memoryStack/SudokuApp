@@ -63,7 +63,6 @@ export const Board = ({ gameState }) => {
     useEffect(() => {
         const handler = async ({ difficultyLevel }) => {
             const time = Date.now()
-            console.log('@@@@@@ geenerate puzzle')
             if (!difficultyLevel) return
             // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
             const minClues = LEVELS_CLUES_INFO[difficultyLevel]
@@ -79,27 +78,38 @@ export const Board = ({ gameState }) => {
             updateNotesInfo(notesInfo)
             updateMainNumbers(mainNumbers)
             updateMovesStack(movesStack)
+            setSelectedCellMainValue(mainNumbers[0][0].value)
             if (pencilState === PENCIL_STATE.ACTIVE) setPencilState(PENCIL_STATE.INACTIVE)
-            
             emit(EVENTS.NEW_GAME_STARTED, { difficultyLevel })
-
         }
         addListener(EVENTS.START_NEW_GAME, handler)
         return () => {
             removeListener(EVENTS.START_NEW_GAME, handler)
         }
-    }, [])
+    }, [pencilState])
 
     // EVENTS.RESTART_GAME
+    // TODO: logic in "START_NEW_GAME" and "RESTART_GAME" is kind of repeated. deal with it later
     useEffect(() => {
         const handler = () => {
-            emit(EVENTS.START_NEW_GAME, { difficultyLevel: gameDifficultyLevel })
+            const { movesStack, notesInfo } = initializeData()
+            const mainNumbersClone = [...mainNumbers]
+            selectCell({ row: 0, col: 0 })
+            updateNotesInfo(notesInfo)
+            updateMovesStack(movesStack)
+            setSelectedCellMainValue(mainNumbersClone[0][0].value)
+            if (pencilState === PENCIL_STATE.ACTIVE) setPencilState(PENCIL_STATE.INACTIVE)
+            for(let row=0;row<9;row++)
+                for(let col=0;col<9;col++)
+                    if (!mainNumbersClone[row][col].isClue) mainNumbersClone[row][col].value = 0    
+            updateMainNumbers(mainNumbersClone)
+            emit(EVENTS.NEW_GAME_STARTED, { difficultyLevel: gameDifficultyLevel })
         }
         addListener(EVENTS.RESTART_GAME, handler)
         return () => {
             removeListener(EVENTS.RESTART_GAME, handler)
         }
-    }, [gameDifficultyLevel])
+    }, [gameDifficultyLevel, mainNumbers, pencilState])
 
     // using it only when the component will render first time only
     useEffect(() => {

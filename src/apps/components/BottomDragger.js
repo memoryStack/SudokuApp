@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useImperativeHandle, useRef } from 'react'
 import { View, Text, Animated, StyleSheet, PanResponder } from 'react-native'
 import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
 
 const ANIMATION_DURATION = 150
 const HEADER_HEIGHT = 50
-const RELEASE_LIMIT_FOR_AUTO_SCROLL = 50
-const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = .8
+const RELEASE_LIMIT_FOR_AUTO_SCROLL = 20
+const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = .9
 const XXSMALL_SIZE = 8
 const XSMALL_SPACE = 4
 const styles = StyleSheet.create({
@@ -45,14 +45,17 @@ const styles = StyleSheet.create({
     },
 })
 
-const BottomDragger_ = ({
-    children,
-    parentHeight,
-    childrenHeight,
-    headerText,
-    bottomMostPositionRatio = DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
-    onDraggerOpened = noOperationFunction
-}) => {
+const BottomDragger_ = React.forwardRef((props, ref) => {
+    const {
+        parentHeight,
+        childrenHeight,
+        headerText,
+        bottomMostPositionRatio = DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
+        children,
+        onDraggerOpened = noOperationFunction,
+        onDraggerClosed = noOperationFunction,
+    } = props
+
     // TODO: figure out how to remove this code duplication and how can we make it more efficient
     const [isFullView, setFullView] = useState(false)
     const [bottomMostPosition, setBottomMostPosition] = useState(parentHeight * bottomMostPositionRatio)
@@ -71,20 +74,9 @@ const BottomDragger_ = ({
         },
         onPanResponderRelease: (evt, gestureState) => {
             let nextPosition = isFullView ? topMostPosition : bottomMostPosition
-            if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) {
-                nextPosition = bottomMostPosition
-            } else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) {
-                nextPosition = topMostPosition
-            }
-            const shouldBeFullView = nextPosition === topMostPosition
-            Animated.timing(transformValue, {
-                toValue: nextPosition,
-                duration: ANIMATION_DURATION,
-                useNativeDriver: true,
-            }).start(() => {
-                setFullView(shouldBeFullView)
-                if (!isFullView && shouldBeFullView) onDraggerOpened()
-            })
+            if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = bottomMostPosition
+            else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = topMostPosition
+            moveDragger(nextPosition)
         },
     }))
 
@@ -113,23 +105,32 @@ const BottomDragger_ = ({
             },
             onPanResponderRelease: (evt, gestureState) => {
                 let nextPosition = isFullView ? topMostPosition : bottomMostPosition
-                if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) {
-                    nextPosition = bottomMostPosition
-                } else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) {
-                    nextPosition = topMostPosition
-                }
-                const shouldBeFullView = nextPosition === topMostPosition
-                Animated.timing(transformValue, {
-                    toValue: nextPosition,
-                    duration: ANIMATION_DURATION,
-                    useNativeDriver: true,
-                }).start(() => {
-                    setFullView(shouldBeFullView)
-                    if (!isFullView && shouldBeFullView) onDraggerOpened()
-                })
+                if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = bottomMostPosition
+                else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = topMostPosition
+                moveDragger(nextPosition)
             },
         }))
     }, [topMostPosition, bottomMostPosition, transformValue, isFullView])
+
+    useImperativeHandle(ref, () => ({
+        openDragger: (data = undefined) => moveDragger(topMostPosition, data),
+        closeDragger: (data = undefined) => moveDragger(bottomMostPosition, data),
+    }), [bottomMostPosition, topMostPosition])
+
+    const moveDragger = (toValue = bottomMostPosition, data = undefined) => {
+        Animated.timing(transformValue, {
+            toValue,
+            duration: ANIMATION_DURATION,
+            useNativeDriver: true,
+        }).start(() => {
+            const sholdBeFullView = toValue === topMostPosition ? true : false
+            if (sholdBeFullView !== isFullView) {
+                // there is a change in dragger's state so call callback and set new state
+                setFullView(sholdBeFullView)
+                sholdBeFullView ? onDraggerOpened(data) : onDraggerClosed(data)
+            }
+        })
+    }
 
     // i can use a memo hook here
     // or i can leave it as well because it's very unlikely that user will actually play with this dragger 
@@ -143,21 +144,11 @@ const BottomDragger_ = ({
         )
     }
 
-    const lowerOverlay = () => {
-        Animated.timing(transformValue, {
-            toValue: bottomMostPosition,
-            duration: ANIMATION_DURATION,
-            useNativeDriver: true,
-        }).start(() => {
-            setFullView(false)
-        })
-    }
-
     if (!children) return null
     return (
         <>
             {isFullView ? (
-                <Touchable touchable={'withoutFeedBack'} onPress={lowerOverlay}>
+                <Touchable touchable={'withoutFeedBack'} onPress={() => moveDragger(bottomMostPosition)}>
                     <Animated.View
                         style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]}
                     />
@@ -177,6 +168,6 @@ const BottomDragger_ = ({
             </Animated.View>
         </>
     )
-}
+})
 
 export const BottomDragger = React.memo(BottomDragger_)
