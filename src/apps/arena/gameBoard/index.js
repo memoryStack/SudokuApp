@@ -1,12 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { View } from 'react-native'
 import { Styles } from './style'
 import { Cell } from './cell'
 import { CELL_HEIGHT, INNER_THICK_BORDER_WIDTH, GAME_BOARD_WIDTH, OUTER_THIN_BORDER_WIDTH } from './dimensions'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
 import { EVENTS, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PENCIL_STATE, GAME_STATE } from '../../../resources/constants'
-import { initBoardData, generateNewSudokuPuzzle, sameHouseAsSelected, duplicacyPresent } from '../../../utils/util'
-import { getNewPencilState } from '../cellActions/pencil/index'
+import { initBoardData, generateNewSudokuPuzzle, sameHouseAsSelected, duplicacyPresent, deepClone } from '../../../utils/util'
+import { getKey, setKey } from '../../../utils/storage'
+import { usePrevious } from '../../../utils/customHooks'
 
 const looper = []
 for(let i=0;i<9;i++) {
@@ -17,120 +18,42 @@ for(let i=0;i<9;i++) {
 const getThickBorderView = (height, width, key = '') =>
     <View style={[Styles.thickBorder, {height, width}]} key={key} />
 
-const initializeData = () => {
-    // going to use the array as a stack
-    const movesStack = new Array()
-    const mainNumbers = initBoardData()
+export const Board = ({ gameState, pencilState, boardData }) => {
+    let movesStack = useRef(boardData.movesStack).current
+    const [mainNumbers, updateMainNumbers] = useState(boardData.mainNumbers)
+    const [notesInfo, updateNotesInfo] = useState(boardData.notesInfo)
+    const [selectedCell, selectCell] = useState(boardData.selectedCell)
+    let selectedCellMainValue = useRef(boardData.mainNumbers[selectedCell.row][selectedCell.col].value)
+    const previousGameState = usePrevious(gameState)
 
-    const notesInfo = new Array(9)
-    for(let i = 0;i < 9;i++) {
-        const rowNotes = []
-        for(let j = 0;j < 9;j++) {
-            const boxNotes = new Array(9)
-            for(let k = 1;k <= 9;k++)
-                boxNotes[k-1] = {"noteValue": k, "show": 0}
-            rowNotes.push(boxNotes)
-        }
-        notesInfo[i] = rowNotes
-    }
-    return { movesStack, notesInfo, mainNumbers }
-}
-
-export const Board = ({ gameState }) => {
-    
-    const { movesStack: initialMovesStack, notesInfo: initialNotesInfo, mainNumbers: initialMainNumbers } = initializeData()
-    const [mainNumbers, updateMainNumbers] = useState(initialMainNumbers) // two dimentional array 
-    const [notesInfo, updateNotesInfo] = useState(initialNotesInfo)
-    const [movesStack, updateMovesStack] = useState(initialMovesStack)
-    const [selectedCell, selectCell] = useState({ row: 0, col: 0 }) // let's have a radom cell for newGame SelectCell (just for fun)
-    const [selectedCellMainValue, setSelectedCellMainValue] = useState(0) // does this have to be a state variable ??  idts
-    const [gameDifficultyLevel, setGameDifficultyLevel] = useState('')
-    const [pencilState, setPencilState] = useState(PENCIL_STATE.INACTIVE) // use 'useRef' hook here to initialize the value of variable from the cache for the first render
-    
-    // EVENTS.PENCIL_CLICKED
     useEffect(() => {
-        const handler = () => {
-            setPencilState(getNewPencilState(pencilState))
-        }
-        addListener(EVENTS.PENCIL_CLICKED, handler)
-        return () => {
-            removeListener(EVENTS.PENCIL_CLICKED, handler)
-        }
-    }, [pencilState])
-
-    // TODO: the cleanup here is not working when killig the app. let's discuss this
-    // hook for starting new game
-    useEffect(() => {
-        const handler = async ({ difficultyLevel }) => {
-            const time = Date.now()
-            if (!difficultyLevel) return
-            // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
-            const minClues = LEVELS_CLUES_INFO[difficultyLevel]
-            const { movesStack, notesInfo, mainNumbers } = initializeData()
-            await generateNewSudokuPuzzle(minClues, notesInfo, mainNumbers)
-
-            console.log('@@@@@@@@ new puzzle', JSON.stringify(mainNumbers))
-            console.log('@@@@@@@@ time taken is', Date.now() - time)
-
-            // TODO: setState only if component is alive, (something i newly learned)
-            setGameDifficultyLevel(difficultyLevel)
-            selectCell({ row: 0, col: 0 })
-            updateNotesInfo(notesInfo)
-            updateMainNumbers(mainNumbers)
-            updateMovesStack(movesStack)
-            setSelectedCellMainValue(mainNumbers[0][0].value)
-            if (pencilState === PENCIL_STATE.ACTIVE) setPencilState(PENCIL_STATE.INACTIVE)
-            emit(EVENTS.NEW_GAME_STARTED, { difficultyLevel })
-        }
-        addListener(EVENTS.START_NEW_GAME, handler)
-        return () => {
-            removeListener(EVENTS.START_NEW_GAME, handler)
-        }
-    }, [pencilState])
-
-    // EVENTS.RESTART_GAME
-    // TODO: logic in "START_NEW_GAME" and "RESTART_GAME" is kind of repeated. deal with it later
-    useEffect(() => {
-        const handler = () => {
-            const { movesStack, notesInfo } = initializeData()
-            const mainNumbersClone = [...mainNumbers]
-            selectCell({ row: 0, col: 0 })
-            updateNotesInfo(notesInfo)
-            updateMovesStack(movesStack)
-            setSelectedCellMainValue(mainNumbersClone[0][0].value)
-            if (pencilState === PENCIL_STATE.ACTIVE) setPencilState(PENCIL_STATE.INACTIVE)
-            for(let row=0;row<9;row++)
-                for(let col=0;col<9;col++)
-                    if (!mainNumbersClone[row][col].isClue) mainNumbersClone[row][col].value = 0    
-            updateMainNumbers(mainNumbersClone)
-            emit(EVENTS.NEW_GAME_STARTED, { difficultyLevel: gameDifficultyLevel })
-        }
-        addListener(EVENTS.RESTART_GAME, handler)
-        return () => {
-            removeListener(EVENTS.RESTART_GAME, handler)
-        }
-    }, [gameDifficultyLevel, mainNumbers, pencilState])
-
-    // using it only when the component will render first time only
-    useEffect(() => {
-        // get data from cache for previous game if present 
-        // else start new game for previous played level or easy one
-        const cachedGameMainNumbers = null
-        const cachedGameNotesInfo = null
-        if (!cachedGameMainNumbers || !cachedGameNotesInfo) {
-            // TODO: read from cache which level user successfully solved previously
-            const newGameDifficultyLevel = null || LEVEL_DIFFICULTIES.EASY
-            emit(EVENTS.START_NEW_GAME, { difficultyLevel: newGameDifficultyLevel })
-        }
-    }, [])        
+        const { movesStack: moves, notesInfo, mainNumbers, selectedCell } = boardData
+        movesStack = moves
+        updateMainNumbers(mainNumbers)
+        updateNotesInfo(notesInfo)
+        selectCell(selectedCell)
+        selectedCellMainValue.current = mainNumbers[selectedCell.row][selectedCell.col].value
+    }, [boardData])
 
     const onCellClicked = useCallback((row, col) => {
-        if (selectedCell.row !== row || selectedCell.col !== col) {
-            selectCell({ row, col })
-            setSelectedCellMainValue(mainNumbers[row][col].value) // read it from the boardData later on
+        selectedCellMainValue.current = mainNumbers[row][col].value
+        selectCell(selectedCell => {
+            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
+            return selectedCell
+        })
+    }, [mainNumbers])
 
-        }
-    }, [selectedCell, mainNumbers])
+    useEffect(() => {
+        if (gameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE) {
+            const data = {
+                mainNumbers,
+                notesInfo,
+                selectedCell,
+                movesStack,
+            }
+            emit(EVENTS.SAVE_GAME_STATE, { type: 'boardData', data })
+        }        
+    }, [gameState, mainNumbers, notesInfo, selectedCell])
 
     const isPuzzleSolved = () => {
         for (let row=0;row<9;row++) {
@@ -149,17 +72,16 @@ export const Board = ({ gameState }) => {
             if (mainNumbers[row][col].value) return
             let valueType, moveType
             let notesErasedByMainValue = []
-            
-            const mainNumbersDup = [...mainNumbers]
-            const notesInfoDup = [...notesInfo]
-            const movesStackDup = [...movesStack]
+
+            let notesUpdated = false
             if (pencilState === PENCIL_STATE.ACTIVE && !isHintUsed) {
-                // if pencil is already selected then insert the value as notes
-                if (duplicacyPresent(row, col, number, mainNumbersDup)) return
+                // removing the below functionality because it kind of "baby spoon feeds" the user
+                // if (duplicacyPresent(row, col, number, mainNumbersDup)) return
                 valueType = 'notes'
-                const { show } = notesInfoDup[row][col][number-1]
+                const { show } = notesInfo[row][col][number-1]
                 moveType = show ? 'erase' : 'insert'
-                notesInfoDup[row][col][number-1].show = 1 - show
+                notesInfo[row][col][number-1].show = 1 - show
+                notesUpdated = true
             } else {
                 /**
                  * 1. mark move type and value type and add the number in cell
@@ -167,22 +89,37 @@ export const Board = ({ gameState }) => {
                  * 3. check if neeed to show an error msg
                  * 4. check if puzzle is solved or not
                 */ 
-
+                
+                const mainNumbersDup = [...mainNumbers]
                 // mark move type and valueType and add the number in cell
                 moveType = 'insert'
                 valueType = 'main'
                 mainNumbersDup[row][col].value = number
 
                 // erase all the notes first and store them in an array for undo operation on the board 
-                for(let i=0;i<9;i++){
-                    if(notesInfoDup[row][col][i].show){
+                for (let i=0;i<9;i++) {
+                    if (notesInfo[row][col][i].show) {
                         notesErasedByMainValue.push(i+1)
-                        notesInfoDup[row][col][i].show = 0
+                        notesInfo[row][col][i].show = 0
+                        notesUpdated = true
                     }
                 }
 
                 if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
-                else if (isPuzzleSolved()) emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
+                else {
+                    if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
+                    if (isPuzzleSolved()) {
+                        // first call the hints used successfully so that hints left can be updated prooperly
+                        // and correct hints left will be shown in the congrats card
+                        // setTimeout is also done because of the above reason
+                        setTimeout(() => {
+                            emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
+                        }, 0)
+                    }
+                }
+                
+                selectedCellMainValue.current = number
+                updateMainNumbers(mainNumbersDup)
             }
 
             const moveObject = {
@@ -194,19 +131,18 @@ export const Board = ({ gameState }) => {
                 col,
             }
 
-            movesStackDup.push(moveObject)
-            // i guess it would be better to put these three in a object
-            // becoz these get updated together most of the time
-            updateMainNumbers(mainNumbersDup)
-            updateNotesInfo(notesInfoDup)
-            updateMovesStack(movesStackDup)
+            movesStack.push(moveObject)
+            if (notesUpdated) {
+                notesInfo[row][col] = deepClone(notesInfo[row][col])
+                updateNotesInfo({...notesInfo})
+            }
         }
 
         addListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
         return () => {
             removeListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
         }
-    }, [mainNumbers, notesInfo, movesStack, selectedCell, pencilState])
+    }, [mainNumbers, notesInfo, selectedCell, pencilState])
 
     // EVENTS.UNDO_CLICKED
     // TODO: i think it would be better if when a mainValue is inserted in the cell 
@@ -215,11 +151,9 @@ export const Board = ({ gameState }) => {
     useEffect(() => {
         const handler = () => {
             if (!movesStack.length) return
-            const movesStackDup = [...movesStack]
             const mainNumbersDup = [...mainNumbers]
             const notesInfoDup = [...notesInfo]
-            const moveInfoToUndo = movesStackDup.pop(movesStackDup)
-            
+            const moveInfoToUndo = movesStack.pop()
 
             const { row, col, moveType, valueType, value } = moveInfoToUndo
             
@@ -246,8 +180,7 @@ export const Board = ({ gameState }) => {
                 }
             }
 
-            updateMainNumbers(mainNumbersDup)
-            updateMovesStack(movesStackDup)
+            updateMainNumbers(mainNumbersDup)            
             updateNotesInfo(notesInfoDup)
             selectCell({ row, col })
 
@@ -257,7 +190,7 @@ export const Board = ({ gameState }) => {
         return () => {
             removeListener(EVENTS.UNDO_CLICKED, handler)
         }
-    }, [movesStack, notesInfo, mainNumbers])
+    }, [notesInfo, mainNumbers])
     
     // EVENTS.ERASER_CLICKED
     useEffect(() => {
@@ -270,7 +203,6 @@ export const Board = ({ gameState }) => {
             const { row, col } = selectedCell
             let moveType, valueType, value
             const mainNumbersDup = [...mainNumbers]
-            const movesStackDup = [...movesStack]
             const notesInfoDup = [...notesInfo]
             let erasedSomeData = false
             
@@ -280,6 +212,7 @@ export const Board = ({ gameState }) => {
                 valueType = 'main'
                 value = [mainNumbers[row][col].value]
                 mainNumbersDup[row][col].value = 0
+                selectedCellMainValue.current = mainNumbersDup[row][col].value
             } else {
                 const cellNotes = notesInfoDup[row][col]
                 value = [] // will store the notes to be removed (basically the notes which are visible right now)
@@ -296,18 +229,19 @@ export const Board = ({ gameState }) => {
             if (!erasedSomeData) return
 
             const moveObject = { moveType, valueType, value, row, col }
-            movesStackDup.push(moveObject)
+            
+            movesStack.push(moveObject)
+            
             // again these three updates are together
             updateMainNumbers(mainNumbersDup)
             updateNotesInfo(notesInfoDup)
-            updateMovesStack(movesStackDup)
         }
         
         addListener(EVENTS.ERASER_CLICKED, handler)
         return () => {
             removeListener(EVENTS.ERASER_CLICKED, handler)
         }
-    }, [selectedCell, mainNumbers, movesStack, notesInfo])
+    }, [selectedCell, mainNumbers, notesInfo])
 
     // when hint is clicked 
     useEffect(() => {
@@ -319,7 +253,6 @@ export const Board = ({ gameState }) => {
             const { row, col } = selectedCell
             if (!mainNumbers[row][col].value) {
                 emit(EVENTS.INPUT_NUMBER_CLICKED, { number: mainNumbers[row][col].solutionValue, isHintUsed: true })
-                emit(EVENTS.HINT_USED_SUCCESSFULLY)
             }
         }
         addListener(EVENTS.HINT_CLICKED, handler)
@@ -330,7 +263,7 @@ export const Board = ({ gameState }) => {
 
     // TODO: need to fix the background color for same value as selected cell's number
     const sameValueAsSelectedBox = (row, col) =>
-        selectedCellMainValue && selectedCellMainValue === mainNumbers[row][col].value
+        selectedCellMainValue.current && selectedCellMainValue.current === mainNumbers[row][col].value
     
     const getMainNumFontColor = (row, col) => {
         if (!mainNumbers[row][col].value) return null
@@ -341,7 +274,7 @@ export const Board = ({ gameState }) => {
     }
 
     const getBoxBackgroundColor = (row, col) => {
-        if (gameState !== GAME_STATE.ACTIVE) return null
+        if (gameState === GAME_STATE.INACTIVE) return null
         const { row: selectedCellRow = 0, col: selectedCellCol = 0  } = selectedCell || {}
         const isSameHouseAsSelected = sameHouseAsSelected(row, col, selectedCellRow, selectedCellCol)
         const isSameValueAsSelected = sameValueAsSelectedBox(row, col)
@@ -389,7 +322,7 @@ export const Board = ({ gameState }) => {
         let keyCounter = 0
         return (
             <View style={Styles.board}> 
-                { // TODO: give this looper a proper name
+                {
                     looper.map( row => {
                         const elementKey = `${keyCounter++}`
                         if (row === -1) return getThickBorderView(INNER_THICK_BORDER_WIDTH, GAME_BOARD_WIDTH - 2 * OUTER_THIN_BORDER_WIDTH, elementKey)

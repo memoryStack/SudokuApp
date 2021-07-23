@@ -6,16 +6,6 @@ import { CELL_BORDER_WIDTH, CELL_HEIGHT } from '../dimensions'
 import { EVENTS, GAME_STATE } from '../../../../resources/constants'
 
 /**
- * 1. replace div with View
- * 2. use touchable
- * 3. replace ClassName with style
- * 4. remove all "this" keyword
- * 5. prepare Style.js file
- * 8. check for un-necessary rendering
- */
-
-/**
- * 6. pass unique key for each element in the list
  * 8. check for un-necessary rendering
  */
 
@@ -27,16 +17,18 @@ const boxCenterCellRowColCordinates = [1, 4, 7]
 const boxOuterCellRowColCordinates = [0, 2, 3, 5, 6, 8]
 
 // test for these default values and their types
-export const Cell = ({ 
+const Cell_ = ({ 
     row,
     col,
     cellNotes = [],
-    cellMainValue = 0, // indicates empty cell
-    cellBGColor = null, // change it's name to cellBG color
+    cellMainValue = 0,
+    cellBGColor = null, 
     mainValueFontColor = null,
     onCellClicked,
     gameState,
 }) => {
+    // if (row === 0 && col === 0) 
+    //     console.log('@@@@@@@ row col', JSON.stringify(cellNotes))
     // if (row === 0 && col === 0) console.log('@@@@@@@ cellNotes', JSON.stringify(cellNotes))
     const getCellBordersStyle = () => {
         if (boxOuterCellRowColCordinates.indexOf(row) !== -1 && boxOuterCellRowColCordinates.indexOf(col) !== -1) {
@@ -101,7 +93,7 @@ export const Cell = ({
                 onPress={onPress}
             >
                 {
-                    gameState === GAME_STATE.ACTIVE ? // read from Global State. let's figure out if redux needs to be used or not (after  understanding it properly)
+                    gameState !== GAME_STATE.INACTIVE ?
                         (
                             cellMainValue ?
                                 <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
@@ -115,3 +107,5 @@ export const Cell = ({
 
     return renderCell()
 }
+
+export const Cell = React.memo(Cell_)

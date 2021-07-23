@@ -5,21 +5,25 @@ import { HintIcon } from '../../../../resources/svgIcons/hint'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { emit, addListener, removeListener } from '../../../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE } from '../../../../resources/constants'
+import { usePrevious } from '../../../../utils/customHooks'
 
 // TODO: i should make it as a part of settings so that users can change it according to their confidence level
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their 
 // comfort and confidence level
 const MAX_AVAILABLE_HINTS = 3
 
-const Hint_ = ({ iconBoxSize, gameState }) => {
+const Hint_ = ({ iconBoxSize, gameState, numOfHints }) => {
 
-    const [hints, setHints] = useState(MAX_AVAILABLE_HINTS) // default hints
+    const [hints, setHints] = useState(numOfHints)
+    const previousGameState = usePrevious(gameState)
 
     useEffect(() => {
-        const handler = () => setHints(MAX_AVAILABLE_HINTS)
-        addListener(EVENTS.NEW_GAME_STARTED, handler)
-        return () => removeListener(EVENTS.NEW_GAME_STARTED, handler)
-    }, [])
+        let componentUnmounted = false
+        if (!componentUnmounted) setHints(numOfHints)
+        return () => {
+            componentUnmounted = true
+        }
+    }, [numOfHints])
 
     const onPress = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
@@ -28,12 +32,19 @@ const Hint_ = ({ iconBoxSize, gameState }) => {
 
     useEffect(() => {
         // TODO: it would be cool if i can animate the icon to show that wisdom action worked
-        const handler = () => setHints(hints-1)
+        const handler = () => setHints(hints => hints-1)
         addListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
         return () => {
             removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
         }
-    }, [hints])
+    }, [])
+
+    useEffect(() => {
+        if (gameState === GAME_STATE.OVER_SOLVED)
+            emit(EVENTS.SOLVED_PUZZLE_STAT, {type: 'hintsUsed', data: MAX_AVAILABLE_HINTS - hints})
+        if (gameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE) 
+            emit(EVENTS.SAVE_GAME_STATE, { type: 'hints', data: hints })
+    }, [gameState, hints])
 
     return (
         <Touchable

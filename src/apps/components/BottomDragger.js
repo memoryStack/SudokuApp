@@ -110,12 +110,14 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 moveDragger(nextPosition)
             },
         }))
-    }, [topMostPosition, bottomMostPosition, transformValue, isFullView])
+    }, [topMostPosition, bottomMostPosition, transformValue, isFullView, onDraggerOpened, onDraggerClosed])
 
+    // TODO: i had to add "onDraggerOpened" and "onDraggerClosed" in the dependency array here
+    // after that in "NextGameMenu" onDraggerOpened callback is reading correct game state. (revise this concept again)
     useImperativeHandle(ref, () => ({
         openDragger: (data = undefined) => moveDragger(topMostPosition, data),
         closeDragger: (data = undefined) => moveDragger(bottomMostPosition, data),
-    }), [bottomMostPosition, topMostPosition])
+    }), [isFullView, bottomMostPosition, topMostPosition, onDraggerOpened, onDraggerClosed])
 
     const moveDragger = (toValue = bottomMostPosition, data = undefined) => {
         Animated.timing(transformValue, {

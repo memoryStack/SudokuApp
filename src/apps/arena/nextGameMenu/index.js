@@ -7,18 +7,33 @@ import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES } from '../../../resources/const
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
 
+// TODO: research about using "useMemo" for the functions which are rendering a view in the 
+//          functional component
 const LEVEL_ICON_DIMENSION = 24
 const NEXT_GAME_MENU_ROW_HEIGHT = 50
-const NextGameMenu_ = ({ parentHeight }) => {
+const NextGameMenu_ = ({ parentHeight, gameState }) => {
 
     const nextGameMenuRef = useRef(null)
 
+    // when game is solved or over, i don't want the game state to be changed
+    // user should start the next game
     const onNewGameMenuOpened = useCallback(() => {
+        if (gameState !== GAME_STATE.ACTIVE) return
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
-    }, [])
+    }, [gameState])
 
+    // when game is solved or over, i don't want the game state to be changed
+    // user should start the next game
     const onNewGameMenuClosed = useCallback((optionSelectedFromMenu = false) => {
+        if (gameState !== GAME_STATE.INACTIVE) return
         !optionSelectedFromMenu && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
+    }, [gameState])
+
+    useEffect(() => {
+        const handler = () =>
+            nextGameMenuRef.current && nextGameMenuRef.current.openDragger()
+        addListener(EVENTS.OPEN_NEXT_GAME_MENU, handler)
+        return () => removeListener(EVENTS.OPEN_NEXT_GAME_MENU, handler)
     }, [])
 
     const getBar = (barNum, level) => {
@@ -53,26 +68,28 @@ const NextGameMenu_ = ({ parentHeight }) => {
         )
     }
 
-    const nextGameMenuItemClicked = (item) => {
+    const nextGameMenuItemClicked = useCallback(item => {
         if (item === 'restart') emit(EVENTS.RESTART_GAME)
         else emit(EVENTS.START_NEW_GAME, {difficultyLevel: item})
         nextGameMenuRef.current && nextGameMenuRef.current.closeDragger(true)
-    }
+    }, [nextGameMenuRef])
 
     const getNextGameMenu = () => {
         return (
             <View style={{ backgroundColor: 'white', width: '100%' }}>
                 {
-                    Object.keys(LEVEL_DIFFICULTIES).map((key, index) => {
+                    Object.keys(LEVEL_DIFFICULTIES).map((levelText, index) => {
                         return (
-                            <Touchable
-                                style={{ height: NEXT_GAME_MENU_ROW_HEIGHT, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',  width: '100%' }}
-                                touchable={TouchableTypes.opacity}
-                                onPress={() => nextGameMenuItemClicked(key)}
-                            >
-                                {getLevelIcon(index)}
-                                <Text style={{ fontSize: 16, color: 'black', marginLeft: 16 }}>{key}</Text>
-                            </Touchable>
+                            <View key={levelText}>
+                                <Touchable
+                                    style={{height: NEXT_GAME_MENU_ROW_HEIGHT, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',  width: '100%'}}
+                                    touchable={TouchableTypes.opacity}
+                                    onPress={() => nextGameMenuItemClicked(levelText)}
+                                >
+                                    {getLevelIcon(index)}
+                                    <Text style={{ fontSize: 16, color: 'black', marginLeft: 16 }}>{levelText}</Text>
+                                </Touchable>
+                            </View>
                         )
                     })
                 }

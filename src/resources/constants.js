@@ -1,6 +1,13 @@
 
 // key is level name and value is number of clues for that level
 
+const PREVIOUS_GAME = 'PREVIOUS_GAME' // cache key to store previous game data
+
+const PREVIOUS_GAME_STATUS = {
+    SOLVED: 'SOLVED',
+    UNSOLVED: 'UNSOLVED',
+}
+
 const LEVEL_DIFFICULTIES = {
     EASY: 'EASY',
     MEDIUM: 'MEDIUM',
@@ -9,7 +16,7 @@ const LEVEL_DIFFICULTIES = {
 }
 
 const LEVELS_CLUES_INFO = {
-    [LEVEL_DIFFICULTIES.EASY]: 38,
+    [LEVEL_DIFFICULTIES.EASY]: 80,
     [LEVEL_DIFFICULTIES.MEDIUM]: 32,
     [LEVEL_DIFFICULTIES.HARD]: 28,
     [LEVEL_DIFFICULTIES.EXPERT]: 24
@@ -54,13 +61,15 @@ const CELL_ACTION_EVENTS = {
 
 // list of all the events in the app
 const EVENTS = {
+    ...CELL_ACTION_EVENTS,
+    ...BOARD_EVENTS,
     START_NEW_GAME: 'START_NEW_GAME',
     RESTART_GAME: 'RESTART_GAME',
     CHANGE_GAME_STATE: 'CHANGE_GAME_STATE',
     GAME_OVER: 'GAME_OVER',
-    NEW_GAME_STARTED: 'NEW_GAME_STARTED', // either new game is started of previous game re-started. will be helpful in reseting the components state for new game
-    ...CELL_ACTION_EVENTS,
-    ...BOARD_EVENTS,
+    SOLVED_PUZZLE_STAT: 'SOLVED_PUZZLE_STAT',
+    OPEN_NEXT_GAME_MENU: 'OPEN_NEXT_GAME_MENU',
+    SAVE_GAME_STATE: 'SAVE_GAME_STATE',
 }
 
 // freeze these objects
@@ -79,6 +88,8 @@ const PENCIL_STATE = {
 }
 
 export {
+    PREVIOUS_GAME,
+    PREVIOUS_GAME_STATUS,
     LEVEL_DIFFICULTIES,
     LEVELS_CLUES_INFO,
     DEFAULT_BEST_STATS,
