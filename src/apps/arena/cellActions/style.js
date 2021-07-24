@@ -8,7 +8,6 @@ export const Styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         width: '100%',
-        // backgroundColor: 'red',
     },
     actionContainer: {
         display: 'flex',
@@ -27,11 +26,11 @@ export const Styles = StyleSheet.create({
         right: -4,
         width: 16,
         height: 16,
-        borderRadius: 100,
+        borderRadius: 8,
         backgroundColor: 'rgb(49, 90, 163)',
     },
     hintsTickerText: {
-        fontSize: 14,
+        fontSize: 12,
         color: 'white',
     },
 })

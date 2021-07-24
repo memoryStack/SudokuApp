@@ -31,7 +31,7 @@ const Pencil_ = ({ iconBoxSize, gameState, pencilState }) => {
             touchable={TouchableTypes.opacity}
         >
             <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL} />
-            <Text style={[Styles.actionText, isActive ? { color: ACTIVE_PENCIL_FILL } : null]}>{`Pencil`}</Text>
+            <Text style={[Styles.actionText, { color: isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL } ]}>{`Pencil`}</Text>
         </Touchable>
     )
 }

@@ -1,8 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet,  } from 'react-native'
+import { View, Animated, Text, StyleSheet,  } from 'react-native'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { noOperationFunction } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
+import { GAME_STATE } from '../../resources/constants'
+import { getTimeComponentString } from './utils/util'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
@@ -45,12 +47,6 @@ const styles = StyleSheet.create({
     }
 })
 
-// TODO: this is duplicated, put this in utils 
-const getTimeComponentString = (value) => {
-    if(value > 9) return `${value}`
-    else return `0${value}`
-}
-
 const getTimeView = (timeTaken = {}) => {
     const { hours, minutes, seconds } = timeTaken
     if (!hours && !minutes && !seconds) return null
@@ -63,7 +59,42 @@ const getTimeView = (timeTaken = {}) => {
     )
 }
 
-const CongratsCard_ = ({ stats, openNextGameMenu }) => {
+// TODO: change this file name to something generic
+const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
+
+    const gameSolved = gameState === GAME_STATE.OVER_SOLVED
+    console.log('@@@@ reder cograts card')
+    const getGameSolvedView = () => {
+        return (
+            <>
+                <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} />
+                <Text style={styles.congratsText}>{'Congratulations!'}</Text>
+                <View style={styles.statsContainer}>
+                    <View style={styles.statContainer}>
+                        <Text style={styles.statText}>{'Difficulty'}</Text>
+                        <Text style={styles.statText}>{stats.difficultyLevel}</Text>
+                    </View>
+                    <View style={styles.statContainer}>
+                        <Text style={styles.statText}>{'Time'}</Text>
+                        {getTimeView(stats.time)}
+                    </View>
+                    <View style={styles.statContainer}>
+                        <Text style={styles.statText}>{'Mistakes'}</Text>
+                        <Text style={styles.statText}>{stats.mistakes}</Text>
+                    </View>
+                    <View style={styles.statContainer}>
+                        <Text style={styles.statText}>{'Hints Used'}</Text>
+                        <Text style={styles.statText}>{stats.hintsUsed}</Text>
+                    </View>
+                </View>
+            </>
+        )
+    }
+
+    const getGameUnsolvedView = () => (
+        <Text style={{ textAlign: 'center' }}>{'you have reached the maximum mistakes limit\nGood Luck Next Time'}</Text>
+    )
+
     return (
         <Touchable 
             touchable={TouchableTypes.opacity}
@@ -71,26 +102,7 @@ const CongratsCard_ = ({ stats, openNextGameMenu }) => {
             onPress={noOperationFunction}
             style={styles.container}
         >
-            <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} />
-            <Text style={styles.congratsText}>{'Congratulations!'}</Text>
-            <View style={styles.statsContainer}>
-                <View style={styles.statContainer}>
-                    <Text style={styles.statText}>{'Difficulty'}</Text>
-                    <Text style={styles.statText}>{stats.difficultyLevel}</Text>
-                </View>
-                <View style={styles.statContainer}>
-                    <Text style={styles.statText}>{'Time'}</Text>
-                    {getTimeView(stats.time)}
-                </View>
-                <View style={styles.statContainer}>
-                    <Text style={styles.statText}>{'Mistakes'}</Text>
-                    <Text style={styles.statText}>{stats.mistakes}</Text>
-                </View>
-                <View style={styles.statContainer}>
-                    <Text style={styles.statText}>{'Hints Used'}</Text>
-                    <Text style={styles.statText}>{stats.hintsUsed}</Text>
-                </View>
-            </View>
+            {gameSolved ? getGameSolvedView() : getGameUnsolvedView()}
             <Touchable 
                 touchable={TouchableTypes.opacity}
                 onPress={openNextGameMenu}

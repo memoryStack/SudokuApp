@@ -5,6 +5,7 @@ import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus
 import { EVENTS, GAME_STATE } from '../../../resources/constants'
 import { Timer } from './timer'
 import { usePrevious } from '../../../utils/customHooks'
+import { isGameOver } from '../utils/util'
 
 // get it from settings for each level
 const MISTAKES_LIMIT = 3
@@ -42,16 +43,11 @@ export const GameReferee = ({ gameState, refereeData }) => {
     }, [])
     
     useEffect(() => {
-        if (gameState === GAME_STATE.OVER_SOLVED) {
-        // if (gameState === GAME_STATE.OVER_SOLVED && previousGameState === GAME_STATE.ACTIVE) {
-            // why there is use of using usePrevious hook ?
-            // isn't simply listening to gameState enough ??
-            emit(EVENTS.SOLVED_PUZZLE_STAT, {type: 'difficultyLevel', data: difficultyLevel}) // this info is already in Arena
-            emit(EVENTS.SOLVED_PUZZLE_STAT, {type: 'mistakes', data: mistakes})
-        }
+        if (isGameOver(gameState))
+            emit(EVENTS.GAME_OVER_STAT, {type: 'mistakes', data: mistakes})
         if (gameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE) 
             emit(EVENTS.SAVE_GAME_STATE, { type: 'mistakes', data: mistakes })
-    }, [gameState, difficultyLevel, mistakes])
+    }, [gameState, mistakes])
 
     return (
         <View style={Styles.container}>

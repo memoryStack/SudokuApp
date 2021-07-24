@@ -18,8 +18,6 @@ const Page_ = ({
     onBlur = noOperationFunction,
 }) => {
 
-    console.log('@@@@@ page render')
-
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')
 
     const handleFocus = useCallback(() => {

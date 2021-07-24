@@ -5,11 +5,7 @@ import { EVENTS, GAME_STATE } from '../../../resources/constants'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { usePrevious } from '../../../utils/customHooks'
-
-const getTimeComponentString = value => {
-    if(value > 9) return `${value}`
-    else return `0${value}`
-}
+import { isGameOver, getTimeComponentString } from '../utils/util'
 
 const getNewTime = ({ hours, minutes, seconds }) => {
     seconds++
@@ -56,10 +52,7 @@ const Timer_ = ({ gameState, timeData }) => {
     }, [gameState])
 
     useEffect(() => {
-        // what is the need of using usePrevious hook for first event
-        // TODO: let's check
-        if (gameState === GAME_STATE.OVER_SOLVED && previousGameState === GAME_STATE.ACTIVE)
-            emit(EVENTS.SOLVED_PUZZLE_STAT, {type: 'time', data: {...time}})
+        if (isGameOver(gameState)) emit(EVENTS.GAME_OVER_STAT, {type: 'time', data: {...time}})
         if (gameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE) 
             emit(EVENTS.SAVE_GAME_STATE, { type: 'time', data: {...time} })
     }, [gameState, time])
@@ -80,6 +73,7 @@ const Timer_ = ({ gameState, timeData }) => {
         // unclickable if the game has finished
         if (gameState !== GAME_STATE.ACTIVE && gameState !== GAME_STATE.INACTIVE) return
         let gameNewState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
+        console.log('@@@@@@@ timer next state', gameNewState)
         emit(EVENTS.CHANGE_GAME_STATE, gameNewState)
     }
 

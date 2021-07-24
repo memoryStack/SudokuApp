@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { View, Text, StyleSheet, Modal, AppState } from 'react-native'
+import { View, Animated, Text, StyleSheet } from 'react-native'
 import { Board } from './gameBoard'
 import { GameReferee } from './gameReferee'
 import { GAME_BOARD_WIDTH } from './gameBoard/dimensions' // make it a global constant lateron
@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
     },
 })
 
-const solvedGameStats = {
+// Game Over can result in either game solved or unsolved state
+const gameOverStats = {
     time: undefined,
-    difficultyLevel: undefined,
     mistakes: undefined,
     hintsUsed: undefined,
 }
@@ -104,6 +104,9 @@ const Arena_ = () => {
     const [refereeData, setRefereeData] = useState(initialRefereeData)
     const [boardData, setBoardData] = useState(initialBoardData)
     const [cellActionsData, setCellActionsData] = useState(initialCellActionsData)
+
+    // for game over halfcard animation
+    const fadeAnim = useRef(new Animated.Value(0)).current
 
     useEffect(() => {
         const handler = () => setCellActionsData(cellActionsData => ({...cellActionsData, pencilState: getNewPencilState(cellActionsData.pencilState)}))
@@ -183,8 +186,10 @@ const Arena_ = () => {
 
     // listen for changing game state. and it should be only one listener through out the Arena screen
     useEffect(() => {
-        const handler = newState =>
+        const handler = newState => {
+            console.log('@@@@@@ new game state is going to be', newState)
             newState && setGameState(newState)
+        }
         addListener(EVENTS.CHANGE_GAME_STATE, handler)
         return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
@@ -195,15 +200,16 @@ const Arena_ = () => {
     useEffect(() => {
         const handler = ({type: statType, data}) => {
             if (!statType) return
-            solvedGameStats[statType] = data
-            if (allKeysSet(solvedGameStats)) {
+            gameOverStats[statType] = data
+            if (allKeysSet(gameOverStats)) {
+                gameOverStats.difficultyLevel = refereeData.level
                 setGameSolvedCard(true)
                 // TODO: save all the stats to storage
             }
         }
-        addListener(EVENTS.SOLVED_PUZZLE_STAT, handler)
-        return () => removeListener(EVENTS.SOLVED_PUZZLE_STAT, handler)
-    }, [])
+        addListener(EVENTS.GAME_OVER_STAT, handler)
+        return () => removeListener(EVENTS.GAME_OVER_STAT, handler)
+    }, [refereeData])
 
     // TODO: find out what will happen if i am navigating back from "Arena" screen to some other screen
     //      is that case getting hhandled ??
@@ -247,24 +253,46 @@ const Arena_ = () => {
             emit(EVENTS.SAVE_GAME_STATE, { type: 'state', data: gameState })
     }, [gameState])
 
-    const hideCongratsModal = useCallback(() => {
-        setGameSolvedCard(false)
-        resetObjectKeys(solvedGameStats)
-        setTimeout(() => {
-            emit(EVENTS.OPEN_NEXT_GAME_MENU)
-        }, 300) // just so that sb kuch fast fast sa na ho
-    }, [])
-
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => { 
         setPageHeight(height)
     }, [])
 
     const handleGameInFocus = useCallback(() => {
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [])
+    }, [showGameSolvedCard])
 
     const handleGameOutOfFocus = useCallback(() => {
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
+    }, [showGameSolvedCard])
+
+    const fadeIn = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start()
+    }
+
+    const fadeOut = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+        }).start(() => {
+            setGameSolvedCard(false)
+        })
+    }
+
+    useEffect(() => {
+        if (showGameSolvedCard) fadeIn()
+    }, [showGameSolvedCard])
+
+    const hideCongratsModal = useCallback(() => {
+        fadeOut()
+        resetObjectKeys(gameOverStats)
+        setTimeout(() => {
+            emit(EVENTS.OPEN_NEXT_GAME_MENU)
+        }, 300) // just so that sb kuch fast fast sa na ho
     }, [])
 
     return (
@@ -294,21 +322,27 @@ const Arena_ = () => {
                         /> 
                     : null
                 }
-                <Modal
-                    animationType={'fade'}
-                    visible={showGameSolvedCard}
-                    transparent={true}
-                    onRequestClose={hideCongratsModal}
-                >
-                    <Touchable
-                        touchable={TouchableTypes.opacity}
-                        activeOpacity={1}
-                        style={{ justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, .8)' }}
-                        onPress={hideCongratsModal}
-                    >
-                        <CongratsCard stats={solvedGameStats} openNextGameMenu={hideCongratsModal} />
-                    </Touchable>
-                </Modal>
+                {
+                    showGameSolvedCard ?
+                        <Touchable
+                            touchable={TouchableTypes.opacity}
+                            activeOpacity={1}
+                            style={{ top: 0, bottom: 0, left: 0, right: 0, position: 'absolute' }}
+                            onPress={hideCongratsModal}
+                        >
+                            <Animated.View
+                                style={[
+                                    { justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, .8)' },
+                                    {
+                                        opacity: fadeAnim
+                                    }
+                                ]}
+                            >
+                                <CongratsCard gameState={gameState} stats={gameOverStats} openNextGameMenu={hideCongratsModal} />
+                            </Animated.View>
+                        </Touchable>
+                    : null
+                }
             </View>
         </Page>
     )

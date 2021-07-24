@@ -6,7 +6,8 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE } from '../../../resources/constants'
 import { usePrevious } from '../../../utils/customHooks'
-
+import { isGameOver } from '../utils/util'
+ 
 // TODO: i should make it as a part of settings so that users can change it according to their confidence level
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their 
 // comfort and confidence level
@@ -40,8 +41,8 @@ const Hint_ = ({ iconBoxSize, gameState, numOfHints }) => {
     }, [])
 
     useEffect(() => {
-        if (gameState === GAME_STATE.OVER_SOLVED)
-            emit(EVENTS.SOLVED_PUZZLE_STAT, {type: 'hintsUsed', data: MAX_AVAILABLE_HINTS - hints})
+        if (isGameOver(gameState))
+            emit(EVENTS.GAME_OVER_STAT, {type: 'hintsUsed', data: MAX_AVAILABLE_HINTS - hints})
         if (gameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE) 
             emit(EVENTS.SAVE_GAME_STATE, { type: 'hints', data: hints })
     }, [gameState, hints])

@@ -39,7 +39,7 @@ export const Styles = StyleSheet.create({
         backgroundColor: '#d5e5f6',
     },
     diffHouseSameValueBGColor: {
-        backgroundColor: 'rgba(113, 215, 249, 0.7)',
+        backgroundColor: 'rgb(172, 225, 248)',
     },
     wronglyFilledNumColor: {
         color: 'rgb(167, 51, 37)',
