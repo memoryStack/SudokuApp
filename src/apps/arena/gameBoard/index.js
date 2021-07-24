@@ -162,7 +162,7 @@ export const Board = ({ gameState, pencilState, boardData }) => {
                     }
                 } else {
                     // main value got erased, so fill that value in the cell
-                    mainNumbers[row][col].value = value[0]
+                    mainNumbersDup[row][col].value = value[0]
                 }
             } else {
                 const notesVisibilityChanges = value
@@ -173,9 +173,19 @@ export const Board = ({ gameState, pencilState, boardData }) => {
                 }
             }
 
+            const nextSelectedCell = { row, col }
+
+            if (movesStack.current.length) {
+                const len = movesStack.current.length
+                const { row, col } = movesStack.current[len-1]
+                nextSelectedCell.row = row
+                nextSelectedCell.col = col
+            }
+
             updateMainNumbers(mainNumbersDup)            
             updateNotesInfo(notesInfoDup)
-            selectCell({ row, col })
+            selectCell(nextSelectedCell)
+            selectedCellMainValue.current = mainNumbersDup[nextSelectedCell.row][nextSelectedCell.col].value
 
             emit(EVENTS.UNDO_USED_SUCCESSFULLY)
         }

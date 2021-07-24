@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         height: HEADER_HEIGHT,
         backgroundColor: 'white',
         borderWidth: 1,
-        borderColor: rgba('#282C3F', 10),
+        borderColor: 'rgb(216, 217, 220)',
         borderTopLeftRadius: XXSMALL_SIZE,
         borderTopRightRadius: XXSMALL_SIZE,
     },
@@ -58,6 +58,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
 
     // TODO: figure out how to remove this code duplication and how can we make it more efficient
     const [isFullView, setFullView] = useState(false)
+    const [isDraggerActive, setIsDraggerActive] = useState(false)
     const [bottomMostPosition, setBottomMostPosition] = useState(parentHeight * bottomMostPositionRatio)
     const [topMostPosition, setTopMostPosition] = useState(parentHeight - (childrenHeight + HEADER_HEIGHT))
     const [transformValue, setTransformValue] = useState(new Animated.Value(bottomMostPosition))
@@ -66,7 +67,10 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         outputRange: [1, 0],
     }))
     const [panResponder, setPanResponder] = useState(PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponder: () => {
+            setIsDraggerActive(true)
+            return true
+        },
         onPanResponderMove: (evt, gestureState) => {
             const nextPosition = (isFullView ? topMostPosition : bottomMostPosition) + gestureState.dy
             if (nextPosition > bottomMostPosition || nextPosition < topMostPosition) return
@@ -97,7 +101,10 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
 
     useEffect(() => {
         setPanResponder(PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponder: () => {
+                setIsDraggerActive(true)
+                return true
+            },
             onPanResponderMove: (evt, gestureState) => {
                 const nextPosition = (isFullView ? topMostPosition : bottomMostPosition) + gestureState.dy
                 if (nextPosition > bottomMostPosition || nextPosition < topMostPosition) return
@@ -130,6 +137,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 // there is a change in dragger's state so call callback and set new state
                 setFullView(sholdBeFullView)
                 sholdBeFullView ? onDraggerOpened(data) : onDraggerClosed(data)
+                if (!sholdBeFullView) setIsDraggerActive(false)
             }
         })
     }
@@ -149,7 +157,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     if (!children) return null
     return (
         <>
-            {isFullView ? (
+            {isDraggerActive ? ( // either fully opened or moving
                 <Touchable touchable={'withoutFeedBack'} onPress={() => moveDragger(bottomMostPosition)}>
                     <Animated.View
                         style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]}
