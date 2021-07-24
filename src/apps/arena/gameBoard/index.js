@@ -108,14 +108,7 @@ export const Board = ({ gameState, pencilState, boardData }) => {
                 if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
                 else {
                     if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
-                    if (isPuzzleSolved()) {
-                        // first call the hints used successfully so that hints left can be updated prooperly
-                        // and correct hints left will be shown in the congrats card
-                        // setTimeout is also done because of the above reason
-                        setTimeout(() => {
-                            emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
-                        }, 0)
-                    }
+                    if (isPuzzleSolved()) emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
                 }
                 
                 selectedCellMainValue.current = number

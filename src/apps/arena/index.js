@@ -12,7 +12,7 @@ import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { noOperationFunction, initBoardData as initMainNumbers, generateNewSudokuPuzzle } from '../../utils/util'
 import { CongratsCard } from './puzzleSolvedCongratsCard'
-import { getNewPencilState } from './cellActions/pencil/index'
+import { getNewPencilState } from './cellActions/pencil'
 import { getKey, setKey } from '../../utils/storage'
 import { usePrevious } from '../../utils/customHooks'
 
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
+        paddingTop: 16,
     },
 })
 

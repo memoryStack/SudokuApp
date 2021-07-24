@@ -1,11 +1,11 @@
 import React, { memo } from 'react'
 import { Svg, Path } from 'react-native-svg'
 
-function SvgComponent({ iconBoxSize }) {
+function SvgComponent({ iconBoxSize, fill }) {
     return (
         <Svg viewBox="0 0 352 512" width={iconBoxSize} height={iconBoxSize}>
             <Path
-                fill="currentColor"
+                fill={fill}
                 d="M96.06 454.35c.01 6.29 1.87 12.45 5.36 17.69l17.09 25.69a31.99 31.99
                     0 0 0 26.64 14.28h61.71a31.99 31.99 0 0 0 26.64-14.28l17.09-25.69a31.989 31.989
                     0 0 0 5.36-17.69l.04-38.35H96.01l.05 38.35zM0 176c0 44.37 16.45 84.85 43.56 115.78
