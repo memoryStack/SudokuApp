@@ -19,7 +19,7 @@ const getThickBorderView = (height, width, key = '') =>
     <View style={[Styles.thickBorder, {height, width}]} key={key} />
 
 export const Board = ({ gameState, pencilState, boardData }) => {
-    let movesStack = useRef(boardData.movesStack).current
+    let movesStack = useRef(boardData.movesStack)
     const [mainNumbers, updateMainNumbers] = useState(boardData.mainNumbers)
     const [notesInfo, updateNotesInfo] = useState(boardData.notesInfo)
     const [selectedCell, selectCell] = useState(boardData.selectedCell)
@@ -28,7 +28,7 @@ export const Board = ({ gameState, pencilState, boardData }) => {
 
     useEffect(() => {
         const { movesStack: moves, notesInfo, mainNumbers, selectedCell } = boardData
-        movesStack = moves
+        movesStack.current = moves
         updateMainNumbers(mainNumbers)
         updateNotesInfo(notesInfo)
         selectCell(selectedCell)
@@ -49,7 +49,7 @@ export const Board = ({ gameState, pencilState, boardData }) => {
                 mainNumbers,
                 notesInfo,
                 selectedCell,
-                movesStack,
+                movesStack: movesStack.current,
             }
             emit(EVENTS.SAVE_GAME_STATE, { type: 'boardData', data })
         }        
@@ -131,7 +131,7 @@ export const Board = ({ gameState, pencilState, boardData }) => {
                 col,
             }
 
-            movesStack.push(moveObject)
+            movesStack.current.push(moveObject)
             if (notesUpdated) {
                 notesInfo[row][col] = deepClone(notesInfo[row][col])
                 updateNotesInfo({...notesInfo})
@@ -150,10 +150,10 @@ export const Board = ({ gameState, pencilState, boardData }) => {
     // automatically see those notes without any computation logic
     useEffect(() => {
         const handler = () => {
-            if (!movesStack.length) return
+            if (!movesStack.current.length) return
             const mainNumbersDup = [...mainNumbers]
             const notesInfoDup = [...notesInfo]
-            const moveInfoToUndo = movesStack.pop()
+            const moveInfoToUndo = movesStack.current.pop()
 
             const { row, col, moveType, valueType, value } = moveInfoToUndo
             
@@ -230,7 +230,7 @@ export const Board = ({ gameState, pencilState, boardData }) => {
 
             const moveObject = { moveType, valueType, value, row, col }
             
-            movesStack.push(moveObject)
+            movesStack.current.push(moveObject)
             
             // again these three updates are together
             updateMainNumbers(mainNumbersDup)
