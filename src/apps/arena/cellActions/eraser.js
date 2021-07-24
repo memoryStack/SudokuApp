@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import { Text } from 'react-native'
-import { Styles } from './style'
-import { EraserIcon } from '../../../../resources/svgIcons/eraser'
-import { Touchable, TouchableTypes } from '../../../components/Touchable'
-import { emit } from '../../../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE } from '../../../../resources/constants'
+import { Styles, INACTIVE_ICON_FILL } from './style'
+import { EraserIcon } from '../../../resources/svgIcons/eraser'
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { emit } from '../../../utils/GlobalEventBus'
+import { EVENTS, GAME_STATE } from '../../../resources/constants'
 
 const Eraser_ = ({ iconBoxSize, gameState }) => {
 
@@ -20,15 +20,14 @@ const Eraser_ = ({ iconBoxSize, gameState }) => {
 
     return (
         <Touchable
-            style={Styles.container}
+            style={Styles.actionContainer}
             onPress={onPress}
             touchable={TouchableTypes.opacity}
         >
-            <EraserIcon iconBoxSize={iconBoxSize} />
-            <Text style={Styles.textStyle}>{`Eraser`}</Text>
+            <EraserIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
+            <Text style={Styles.actionText}>{`Eraser`}</Text>
         </Touchable>
     )
 }
 
 export const Eraser = React.memo(Eraser_)
-

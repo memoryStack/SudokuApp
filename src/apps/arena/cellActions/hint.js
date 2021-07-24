@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
-import { Styles } from './style'
-import { HintIcon } from '../../../../resources/svgIcons/hint'
-import { Touchable, TouchableTypes } from '../../../components/Touchable'
-import { emit, addListener, removeListener } from '../../../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE } from '../../../../resources/constants'
-import { usePrevious } from '../../../../utils/customHooks'
+import { Styles, INACTIVE_ICON_FILL } from './style'
+import { HintIcon } from '../../../resources/svgIcons/hint'
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
+import { EVENTS, GAME_STATE } from '../../../resources/constants'
+import { usePrevious } from '../../../utils/customHooks'
 
 // TODO: i should make it as a part of settings so that users can change it according to their confidence level
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their 
@@ -48,21 +48,21 @@ const Hint_ = ({ iconBoxSize, gameState, numOfHints }) => {
 
     return (
         <Touchable
-            style={Styles.container}
+            style={Styles.actionContainer}
             onPress={onPress}
             touchable={TouchableTypes.opacity}
         >
             <>
-                <HintIcon iconBoxSize={iconBoxSize} />
+                <HintIcon iconBoxSize={iconBoxSize} fill={hints === 0 ? INACTIVE_ICON_FILL : 'orange'} />
                 {
-                    true && gameState === GAME_STATE.ACTIVE ?
-                        <View style={Styles.tickerBox}>
-                            <Text style={Styles.tickerText}>{hints}</Text>
+                    gameState === GAME_STATE.ACTIVE && hints ?
+                        <View style={Styles.hintsTickerBox}>
+                            <Text style={Styles.hintsTickerText}>{hints}</Text>
                         </View>
                     : null
                 }
             </>
-            <Text style={Styles.textStyle}>{`Hint`}</Text>
+            <Text style={Styles.actionText}>{`Hint`}</Text>
         </Touchable>
     )
 }

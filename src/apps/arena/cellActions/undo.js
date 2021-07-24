@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from 'react'
 import { Text } from 'react-native'
-import { Styles } from './style'
-import { UndoIcon } from '../../../../resources/svgIcons/undo'
-import { Touchable, TouchableTypes } from '../../../components/Touchable'
-import { emit, addListener, removeListener } from '../../../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE } from '../../../../resources/constants'
+import { Styles, INACTIVE_ICON_FILL } from './style'
+import { UndoIcon } from '../../../resources/svgIcons/undo'
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
+import { EVENTS, GAME_STATE } from '../../../resources/constants'
 
 const Undo_ = ({ iconBoxSize, gameState }) => {
 
@@ -25,12 +25,12 @@ const Undo_ = ({ iconBoxSize, gameState }) => {
 
     return (
         <Touchable
-            style={Styles.container}
+            style={Styles.actionContainer}
             onPress={onPress}
             touchable={TouchableTypes.opacity}
         >
-            <UndoIcon iconBoxSize={iconBoxSize} />
-            <Text style={Styles.textStyle}>{`Undo`}</Text>
+            <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
+            <Text style={Styles.actionText}>{`Undo`}</Text>
         </Touchable>
     )
 }
