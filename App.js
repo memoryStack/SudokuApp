@@ -31,6 +31,7 @@ const App = () => {
         alignItems: 'center',
         height: '100%',
         width: '100%',
+        backgroundColor: 'white',
       }}
     >
       <Arena />      
