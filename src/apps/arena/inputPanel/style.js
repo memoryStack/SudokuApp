@@ -25,13 +25,14 @@ export const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: INPUT_NUMBER_DEFAULT_HEIGHT,
-        width: INPUT_NUMBER_DEFAULT_WIDTH,
+        width: Math.min(INPUT_NUMBER_DEFAULT_HEIGHT * .7, INPUT_NUMBER_DEFAULT_WIDTH),
         borderWidth: 1,
         borderColor: 'rgba(0, 0, 0, .1)',
         borderRadius: 100,
     },
     textStyle: {
         color: 'rgb(49, 90, 163)',
-        fontSize: 30,
+        fontSize: 28,
+        textAlign: 'center',
     },
 })

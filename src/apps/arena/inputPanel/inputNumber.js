@@ -6,7 +6,8 @@ import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE } from '../../../resources/constants'
 
 const ANIMATION_DURATION = 100
-const gameState = 'active'
+const hitSlopDimension = 8
+const hitSlop = { top: hitSlopDimension, bottom: hitSlopDimension, left: hitSlopDimension, right: hitSlopDimension }
 const InputNumber_ = ({ number, gameState }) => {
     
     // subscribe and unsbscribe to the events
@@ -46,9 +47,10 @@ const InputNumber_ = ({ number, gameState }) => {
     return (
             showInputNumber ? 
                 <Touchable 
-                    style={Styles.numberButtonContainer}
+                    // style={Styles.numberButtonContainer}
                     onPress={onNumberClicked}
                     touchable={TouchableTypes.opacity}
+                    hitSlop={hitSlop}
                 >
                     <Animated.View
                         style={[
@@ -58,7 +60,9 @@ const InputNumber_ = ({ number, gameState }) => {
                             }
                         ]}
                     >
-                        <Text style={Styles.textStyle}>{number}</Text>
+                        <View>
+                            <Text style={Styles.textStyle}>{number}</Text>
+                        </View>
                     </Animated.View>
                 </Touchable>
             : null

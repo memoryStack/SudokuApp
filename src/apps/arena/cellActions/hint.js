@@ -54,9 +54,9 @@ const Hint_ = ({ iconBoxSize, gameState, numOfHints }) => {
             touchable={TouchableTypes.opacity}
         >
             <>
-                <HintIcon iconBoxSize={iconBoxSize} fill={hints === 0 ? INACTIVE_ICON_FILL : 'orange'} />
+                <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
                 {
-                    gameState === GAME_STATE.ACTIVE && hints ?
+                    gameState === GAME_STATE.ACTIVE ?
                         <View style={Styles.hintsTickerBox}>
                             <Text style={Styles.hintsTickerText}>{hints}</Text>
                         </View>

@@ -16,6 +16,7 @@ export const Styles = StyleSheet.create({
     actionText: {
         fontSize: 16,
         marginTop: 8,
+        color: INACTIVE_ICON_FILL, // to match the icon color and below text color
     },
     hintsTickerBox: {
         display: 'flex',
