@@ -127,7 +127,7 @@ export const Board = ({ gameState, pencilState, boardData }) => {
             movesStack.current.push(moveObject)
             if (notesUpdated) {
                 notesInfo[row][col] = deepClone(notesInfo[row][col])
-                updateNotesInfo({...notesInfo})
+                updateNotesInfo([...notesInfo])
             }
         }
 
@@ -206,7 +206,10 @@ export const Board = ({ gameState, pencilState, boardData }) => {
             const { row, col } = selectedCell
             let moveType, valueType, value
             const mainNumbersDup = [...mainNumbers]
+            console.log('@@@@@ notesInfo', notesInfo)
             const notesInfoDup = [...notesInfo]
+            
+
             let erasedSomeData = false
             
             if (mainNumbers[row][col].value && !mainNumbers[row][col].isClue) {

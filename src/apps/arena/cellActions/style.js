@@ -1,17 +1,19 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
+const WINDOW_WIDTH = Dimensions.get('window').width
+const ACTION_CONTAINER_WIDTH = WINDOW_WIDTH / 4 // there are only 4 type of actions present
 export const INACTIVE_ICON_FILL = 'rgb(127, 127, 127)'
 export const Styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
         alignItems: 'center',
         width: '100%',
     },
     actionContainer: {
         display: 'flex',
         alignItems: 'center',
+        width: ACTION_CONTAINER_WIDTH,
     },
     actionText: {
         fontSize: 16,
@@ -24,7 +26,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         top: -4,
-        right: -4,
+        left: ACTION_CONTAINER_WIDTH / 2,
         width: 16,
         height: 16,
         borderRadius: 8,

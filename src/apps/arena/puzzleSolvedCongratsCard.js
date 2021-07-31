@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Animated, Text, StyleSheet,  } from 'react-native'
+import { View, Text, StyleSheet,  } from 'react-native'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { noOperationFunction } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
@@ -48,8 +48,7 @@ const styles = StyleSheet.create({
 })
 
 const getTimeView = (timeTaken = {}) => {
-    const { hours, minutes, seconds } = timeTaken
-    if (!hours && !minutes && !seconds) return null
+    const { hours = 0, minutes = 0, seconds = 0 } = timeTaken
     return (
         <View style={{ flexDirection: 'row' }}>
             {hours ? <Text style={styles.statText}>{hours}</Text> : null}
@@ -63,11 +62,15 @@ const getTimeView = (timeTaken = {}) => {
 const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
 
     const gameSolved = gameState === GAME_STATE.OVER_SOLVED
-    console.log('@@@@ reder cograts card')
+
     const getGameSolvedView = () => {
         return (
             <>
-                <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} />
+                {/* 
+                    this trophy icon works well only for debug builds. for release build app crashes. my guess is that it's because of wrong formats.
+                    like "m"(web) and "M"(App) for drawings
+                */}
+                {/* <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} /> */}
                 <Text style={styles.congratsText}>{'Congratulations!'}</Text>
                 <View style={styles.statsContainer}>
                     <View style={styles.statContainer}>

@@ -27,9 +27,9 @@ const Hint_ = ({ iconBoxSize, gameState, numOfHints }) => {
     }, [numOfHints])
 
     const onPress = useCallback(() => {
-        if (gameState !== GAME_STATE.ACTIVE) return
+        if (gameState !== GAME_STATE.ACTIVE || hints <= 0) return
         emit(EVENTS.HINT_CLICKED)
-    }, [gameState])
+    }, [gameState, hints])
 
     useEffect(() => {
         // TODO: it would be cool if i can animate the icon to show that wisdom action worked

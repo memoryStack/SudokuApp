@@ -259,19 +259,11 @@ const Arena_ = () => {
 
     const handleGameInFocus = useCallback(() => {
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [showGameSolvedCard])
+    }, [])
 
     const handleGameOutOfFocus = useCallback(() => {
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
-    }, [showGameSolvedCard])
-
-    const fadeIn = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-        }).start()
-    }
+    }, [])
 
     const fadeOut = () => {
         Animated.timing(fadeAnim, {
@@ -280,19 +272,25 @@ const Arena_ = () => {
             useNativeDriver: true,
         }).start(() => {
             setGameSolvedCard(false)
+            setTimeout(() => {
+                emit(EVENTS.OPEN_NEXT_GAME_MENU)
+            }, 100) // just so that sb kuch fast fast sa na ho
         })
     }
 
     useEffect(() => {
-        if (showGameSolvedCard) fadeIn()
+        if (showGameSolvedCard) {
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start()
+        }
     }, [showGameSolvedCard])
 
     const hideCongratsModal = useCallback(() => {
         fadeOut()
         resetObjectKeys(gameOverStats)
-        setTimeout(() => {
-            emit(EVENTS.OPEN_NEXT_GAME_MENU)
-        }, 300) // just so that sb kuch fast fast sa na ho
     }, [])
 
     return (
