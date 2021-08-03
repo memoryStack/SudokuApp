@@ -4,9 +4,8 @@ import { Styles } from './style'
 import { Cell } from './cell'
 import { CELL_HEIGHT, INNER_THICK_BORDER_WIDTH, GAME_BOARD_WIDTH, OUTER_THIN_BORDER_WIDTH } from './dimensions'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
-import { EVENTS, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PENCIL_STATE, GAME_STATE } from '../../../resources/constants'
-import { initBoardData, generateNewSudokuPuzzle, sameHouseAsSelected, duplicacyPresent, deepClone } from '../../../utils/util'
-import { getKey, setKey } from '../../../utils/storage'
+import { EVENTS, PENCIL_STATE, GAME_STATE } from '../../../resources/constants'
+import { sameHouseAsSelected, deepClone } from '../../../utils/util'
 import { usePrevious } from '../../../utils/customHooks'
 
 const looper = []
@@ -108,7 +107,14 @@ export const Board = ({ gameState, pencilState, boardData }) => {
                 if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
                 else {
                     if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
-                    if (isPuzzleSolved()) emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
+                    if (isPuzzleSolved()) {
+                        // i have to use hacks like this because in addListeners hooks if dependency is changed
+                        // then removeListener calls first and before addListener call emit() calls for GAME_STATS hooks in 
+                        // <Arena />. Same thing is happening while caching the previous game in <Arena />
+                        setTimeout(() => {
+                            emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
+                        }, 0)
+                    }
                 }
                 
                 selectedCellMainValue.current = number
@@ -206,7 +212,6 @@ export const Board = ({ gameState, pencilState, boardData }) => {
             const { row, col } = selectedCell
             let moveType, valueType, value
             const mainNumbersDup = [...mainNumbers]
-            console.log('@@@@@ notesInfo', notesInfo)
             const notesInfoDup = [...notesInfo]
             
 

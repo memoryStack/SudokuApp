@@ -61,6 +61,13 @@ const getTimeView = (timeTaken = {}) => {
 // TODO: change this file name to something generic
 const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
 
+    const {
+        mistakes,
+        difficultyLevel,
+        time,
+        hintsUsed,
+    } = stats
+
     const gameSolved = gameState === GAME_STATE.OVER_SOLVED
 
     const getGameSolvedView = () => {
@@ -75,19 +82,19 @@ const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
                 <View style={styles.statsContainer}>
                     <View style={styles.statContainer}>
                         <Text style={styles.statText}>{'Difficulty'}</Text>
-                        <Text style={styles.statText}>{stats.difficultyLevel}</Text>
+                        <Text style={styles.statText}>{difficultyLevel}</Text>
                     </View>
                     <View style={styles.statContainer}>
                         <Text style={styles.statText}>{'Time'}</Text>
-                        {getTimeView(stats.time)}
+                        {getTimeView(time)}
                     </View>
                     <View style={styles.statContainer}>
                         <Text style={styles.statText}>{'Mistakes'}</Text>
-                        <Text style={styles.statText}>{stats.mistakes}</Text>
+                        <Text style={styles.statText}>{mistakes}</Text>
                     </View>
                     <View style={styles.statContainer}>
                         <Text style={styles.statText}>{'Hints Used'}</Text>
-                        <Text style={styles.statText}>{stats.hintsUsed}</Text>
+                        <Text style={styles.statText}>{hintsUsed}</Text>
                     </View>
                 </View>
             </>

@@ -1,20 +1,28 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { View, Animated, Text, StyleSheet } from 'react-native'
+import { View, Animated, Text, StyleSheet, Dimensions } from 'react-native'
 import { Board } from './gameBoard'
-import { GameReferee } from './gameReferee'
-import { GAME_BOARD_WIDTH } from './gameBoard/dimensions' // make it a global constant lateron
 import { Inputpanel } from './inputPanel'
-import { CellActions } from './cellActions'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PREVIOUS_GAME_STATUS, PENCIL_STATE } from '../../resources/constants'
+import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PENCIL_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
-import { noOperationFunction, initBoardData as initMainNumbers, generateNewSudokuPuzzle } from '../../utils/util'
+import { initBoardData as initMainNumbers, generateNewSudokuPuzzle } from '../../utils/util'
 import { CongratsCard } from './puzzleSolvedCongratsCard'
 import { getNewPencilState } from './cellActions/pencil'
 import { getKey, setKey } from '../../utils/storage'
 import { usePrevious } from '../../utils/customHooks'
+import { Undo } from './cellActions/undo'
+import { Eraser } from './cellActions/eraser'
+import { Pencil } from './cellActions/pencil'
+import { Hint } from './cellActions/hint'
+import { Timer } from './timer'
+import { isGameOver } from './utils/util'
+
+const MAX_AVAILABLE_HINTS = 3
+const MISTAKES_LIMIT = 3
+const { width: windowWidth } = Dimensions.get('window')
+const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 
 const styles = StyleSheet.create({
     container: {
@@ -23,21 +31,39 @@ const styles = StyleSheet.create({
         height: '100%',
         paddingTop: 60,
     },
+    cellActionsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+    },
+    refereeContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '94%',
+        marginBottom: 4,
+    },
+    refereeTextStyles: {
+        fontSize: 14,
+    },
+    congratsBackground: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(0, 0, 0, .8)',
+    },
 })
 
-// Game Over can result in either game solved or unsolved state
-const gameOverStats = {
-    time: undefined,
-    mistakes: undefined,
-    hintsUsed: undefined,
-}
-
+// TODO: ise bhi khtm kr duga
+// it's not a good architecture to pull the data like this
 const gameStateToBeCached = {
     state: undefined,
     mistakes: undefined, // mistakes count
     time: undefined, // timer data
     boardData: undefined,
-    hints: undefined,
 }
 
 const allKeysSet = (object = {}) => 
@@ -55,7 +81,7 @@ const initBoardData = () => {
         for(let j = 0;j < 9;j++) {
             const boxNotes = new Array(9)
             for(let k = 1;k <= 9;k++)
-                boxNotes[k-1] = {"noteValue": k, "show": 0} // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstionn. but let's ignore it for not
+                boxNotes[k-1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstionn. but let's ignore it for not
             rowNotes.push(boxNotes)
         }
         notesInfo[i] = rowNotes
@@ -80,7 +106,7 @@ const initRefereeData = (level = LEVEL_DIFFICULTIES.EASY) => {
 const initCellActionsData = () => {
     return {
         pencilState: PENCIL_STATE.INACTIVE,
-        hints: 3,
+        hints: MAX_AVAILABLE_HINTS,
     }
 }
 
@@ -93,6 +119,19 @@ const initComponentsDefaultState = () => {
     }
 }
 
+const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
+    seconds++
+    if (seconds === 60) {
+        minutes++
+        seconds = 0
+    }
+    if (minutes === 60) {
+        hours++
+        minutes = 0
+    }
+    return { hours, minutes, seconds }
+}
+
 const Arena_ = () => {
 
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
@@ -101,15 +140,20 @@ const Arena_ = () => {
     const previousGameState = usePrevious(gameState)
 
     const { referee: initialRefereeData, cellActionsData: initialCellActionsData, boardData: initialBoardData } = useRef(initComponentsDefaultState()).current
-    const [refereeData, setRefereeData] = useState(initialRefereeData)
     const [boardData, setBoardData] = useState(initialBoardData)
-    const [cellActionsData, setCellActionsData] = useState(initialCellActionsData)
+    const [hints, setHints] = useState(initialCellActionsData.hints)
+    const [mistakes, setMistakes] = useState(initialRefereeData.mistakes)
+    const [difficultyLevel, setDifficultyLevel] = useState(initialRefereeData.difficultyLevel)
+    const [time, setTime] = useState(initialRefereeData.time)
+    const [pencilState, setPencilState] = useState(initialCellActionsData.pencilState)
+    const timerId = useRef(null)
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
 
+    // EVENTS.PENCIL_CLICKED
     useEffect(() => {
-        const handler = () => setCellActionsData(cellActionsData => ({...cellActionsData, pencilState: getNewPencilState(cellActionsData.pencilState)}))
+        const handler = () => setPencilState(pencilState => getNewPencilState(pencilState))
         addListener(EVENTS.PENCIL_CLICKED, handler)
         return () => {
             removeListener(EVENTS.PENCIL_CLICKED, handler)
@@ -126,15 +170,31 @@ const Arena_ = () => {
                 emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
             } else {
                 setRefereeData(referee)
+
+                const { hints, pencilState } = cellActionsData
+                setPencilState(pencilState)
+                setHints(hints)
+
                 setBoardData(boardData)
-                setCellActionsData(cellActionsData)
                 setGameState(GAME_STATE.ACTIVE)
             }
         } else {
-            emit(EVENTS.START_NEW_GAME, { difficultyLevel: refereeData.level })
+            emit(EVENTS.START_NEW_GAME, { difficultyLevel: initialRefereeData.level })
         }
     }, [])
     
+    const resetCellActions = () => {
+        const { pencilState, hints } = initCellActionsData()
+        setPencilState(pencilState)
+        setHints(hints)
+    }
+
+    const setRefereeData = ({ mistakes, level, time }) => {
+        setTime(time)
+        setDifficultyLevel(level)
+        setMistakes(mistakes)
+    }
+
     useEffect(() => {
         let componentUnmounted = false
         const handler = async ({ difficultyLevel }) => {
@@ -150,8 +210,9 @@ const Arena_ = () => {
 
             if (!componentUnmounted) {
                 setRefereeData(initRefereeData(difficultyLevel))
+
                 setBoardData(boardData)
-                setCellActionsData(initCellActionsData())
+                resetCellActions()
             }
             onNewGameStarted()
         }
@@ -171,9 +232,9 @@ const Arena_ = () => {
                 for(let col=0;col<9;col++)
                     if (!mainNumbersClone[row][col].isClue) mainNumbersClone[row][col].value = 0
             if (!componentUnmounted) { // setState only when component is alive
-                setRefereeData(initRefereeData(refereeData.level))
+                setRefereeData(initRefereeData(difficultyLevel))
                 setBoardData({...initBoardData(), mainNumbers: mainNumbersClone})
-                setCellActionsData(initCellActionsData())
+                resetCellActions()
             }
             onNewGameStarted()
         }
@@ -182,46 +243,52 @@ const Arena_ = () => {
             removeListener(EVENTS.RESTART_GAME, handler)
             componentUnmounted = true
         }
-    }, [refereeData, boardData])
+    }, [difficultyLevel, boardData])
 
     // listen for changing game state. and it should be only one listener through out the Arena screen
     useEffect(() => {
-        const handler = newState => {
-            console.log('@@@@@@ new game state is going to be', newState)
-            newState && setGameState(newState)
-        }
+        const handler = newState => newState && setGameState(newState)
         addListener(EVENTS.CHANGE_GAME_STATE, handler)
         return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
 
+    // EVENTS.MADE_MISTAKE
+    useEffect(() => {
+        let componentUnmounted = false
+        const handler = () => {
+            let totalMistakes = mistakes + 1
+            if (!componentUnmounted) {
+                setMistakes(totalMistakes)
+                totalMistakes === MISTAKES_LIMIT && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_UNSOLVED)
+            }
+        }
+        addListener(EVENTS.MADE_MISTAKE, handler)
+        return () => {
+            removeListener(EVENTS.MADE_MISTAKE, handler)
+            componentUnmounted = true
+        }
+    }, [mistakes])
+
     const onNewGameStarted = () =>
         gameState !== GAME_STATE.ACTIVE && setGameState(GAME_STATE.ACTIVE)
 
+    // show game over card
     useEffect(() => {
-        const handler = ({type: statType, data}) => {
-            if (!statType) return
-            gameOverStats[statType] = data
-            if (allKeysSet(gameOverStats)) {
-                gameOverStats.difficultyLevel = refereeData.level
-                setGameSolvedCard(true)
-                // TODO: save all the stats to storage
-            }
-        }
-        addListener(EVENTS.GAME_OVER_STAT, handler)
-        return () => removeListener(EVENTS.GAME_OVER_STAT, handler)
-    }, [refereeData])
+        if (isGameOver(gameState)) setGameSolvedCard(true)
+    }, [gameState])
 
     // TODO: find out what will happen if i am navigating back from "Arena" screen to some other screen
     //      is that case getting hhandled ??
     // DDD: new finding
     //      the callback to useEffect "() =>" i wrote it like "async () =>" mistakenly and because of this 
     //      the addListener works but not removeListener. lol
+    // NEXT BIG TODO:
     useEffect(() => {
         const handler = ({type, data}) => {
             if (!type) return
             gameStateToBeCached[type] = data
             if (allKeysSet(gameStateToBeCached)) {
-                const { state, mistakes, time, boardData, hints } = gameStateToBeCached
+                const { state, mistakes, time, boardData } = gameStateToBeCached
                 setKey(PREVIOUS_GAME, {
                     state,
                     referee: {
@@ -231,7 +298,7 @@ const Arena_ = () => {
                     },
                     boardData,
                     cellActionsData: {
-                        pencilState: cellActionsData.pencilState,
+                        pencilState: pencilState,
                         hints,
                     }
                 }).then(() => {
@@ -243,7 +310,16 @@ const Arena_ = () => {
         return () => {
             removeListener(EVENTS.SAVE_GAME_STATE, handler)
         }
-    }, [refereeData, cellActionsData])
+    }, [pencilState, hints])
+
+    // EVENTS.HINT_USED_SUCCESSFULLY
+    useEffect(() => {
+        const handler = () => setHints(hints => hints-1)
+        addListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
+        return () => {
+            removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
+        }
+    }, [])
 
     // lol. had to pass gameState like this. couldn't make dependency array above like
     // [gameState, refereeData, cellActionsData]
@@ -251,6 +327,28 @@ const Arena_ = () => {
     useEffect(() => {
         if (gameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE) 
             emit(EVENTS.SAVE_GAME_STATE, { type: 'state', data: gameState })
+    }, [gameState])
+
+    // TODO: can this be converted to a custom hook. just for challenging myself and fun
+    // timer logic
+    const updateTime = () => timerId.current && setTime(time => getNewTime(time))
+
+    const startTimer = () => timerId.current = setInterval(updateTime, 1000) // 1 sec
+
+    const stopTimer = () => {
+        if (timerId.current) timerId.current = clearInterval(timerId.current)
+    }
+
+    const onTimerClick = useCallback(() => {
+        // un-clickable if the game has finished
+        if (isGameOver(gameState)) return
+        let gameNewState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
+        emit(EVENTS.CHANGE_GAME_STATE, gameNewState)
+    }, [gameState]) 
+
+    useEffect(() => {
+        if (gameState === GAME_STATE.ACTIVE) startTimer()
+        else stopTimer()
     }, [gameState])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => { 
@@ -290,7 +388,6 @@ const Arena_ = () => {
 
     const hideCongratsModal = useCallback(() => {
         fadeOut()
-        resetObjectKeys(gameOverStats)
     }, [])
 
     return (
@@ -302,16 +399,25 @@ const Arena_ = () => {
                 style={styles.container} 
                 onLayout={onParentLayout}
             >
-                <GameReferee gameState={gameState} refereeData={refereeData} />
+                <View style={styles.refereeContainer}>
+                    <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
+                    <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
+                    <Timer gameState={gameState} time={time} onClick={onTimerClick} />
+                </View>
                 <Board 
                     boardData={boardData}
                     gameState={gameState}
-                    pencilState={cellActionsData.pencilState} 
+                    pencilState={pencilState}
                 />
                 <View style={{ marginVertical: 20 }}>
                     <Inputpanel gameState={gameState} />
                 </View>
-                <CellActions gameState={gameState} cellActionsData={cellActionsData} />
+                <View style={styles.cellActionsContainer}>
+                    <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
+                    <Eraser iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
+                    <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
+                    <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />
+                </View>
                 {
                     pageHeight ? 
                         <NextGameMenu 
@@ -329,14 +435,13 @@ const Arena_ = () => {
                             onPress={hideCongratsModal}
                         >
                             <Animated.View
-                                style={[
-                                    { justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, .8)' },
-                                    {
-                                        opacity: fadeAnim
-                                    }
-                                ]}
+                                style={[styles.congratsBackground, { opacity: fadeAnim }]}
                             >
-                                <CongratsCard gameState={gameState} stats={gameOverStats} openNextGameMenu={hideCongratsModal} />
+                                <CongratsCard
+                                    gameState={gameState}
+                                    stats={{mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - hints}}
+                                    openNextGameMenu={hideCongratsModal}
+                                />
                             </Animated.View>
                         </Touchable>
                     : null

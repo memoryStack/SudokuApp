@@ -4,12 +4,6 @@ const WINDOW_WIDTH = Dimensions.get('window').width
 const ACTION_CONTAINER_WIDTH = WINDOW_WIDTH / 4 // there are only 4 type of actions present
 export const INACTIVE_ICON_FILL = 'rgb(127, 127, 127)'
 export const Styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-    },
     actionContainer: {
         display: 'flex',
         alignItems: 'center',
