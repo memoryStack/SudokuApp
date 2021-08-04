@@ -5,6 +5,7 @@ import { noOperationFunction } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
 import { GAME_STATE } from '../../resources/constants'
 import { getTimeComponentString } from './utils/util'
+import { NewGameButton } from './newGameButton'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
@@ -32,28 +33,23 @@ const styles = StyleSheet.create({
     },
     statText: {
         fontSize: 16,
-    },
-    newGameButtonContainer: {
-        width: '80%',
-        paddingVertical: 8,
-        alignItems: 'center',
-        backgroundColor: '#4088da',
-        borderRadius: 3,
-        marginTop: 16,
-    },
-    newGameText: {
-        fontSize: 20,
-        color: 'white',
-    },
+    },    
     gameUnsolvedMsg: {
         textAlign: 'center',
+    },
+    newGameButtonContainer: {
+        marginTop: 16,
+        width: '80%',
+    },
+    timeStatContainer: {
+        flexDirection: 'row',
     }
 })
 
 const getTimeView = (timeTaken = {}) => {
     const { hours = 0, minutes = 0, seconds = 0 } = timeTaken
     return (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.timeStatContainer}>
             {hours ? <Text style={styles.statText}>{hours}</Text> : null}
             <Text style={styles.statText}>{`${getTimeComponentString(minutes)}:`}</Text>
             <Text style={styles.statText}>{getTimeComponentString(seconds)}</Text>
@@ -73,8 +69,6 @@ const GameOverCard_ = ({ gameState, stats, openNextGameMenu }) => {
 
     const gameSolved = gameState === GAME_STATE.OVER_SOLVED
     const gameUnsolved = gameState === GAME_STATE.OVER_UNSOLVED
-
-    console.log('@@@@@@ gameState', gameState, stats)
 
     const getGameSolvedView = () => {
         return (
@@ -121,13 +115,10 @@ const GameOverCard_ = ({ gameState, stats, openNextGameMenu }) => {
             style={styles.container}
         >
             {gameSolved ? getGameSolvedView() : gameUnsolved ? getGameUnsolvedView() : null}
-            <Touchable 
-                touchable={TouchableTypes.opacity}
-                onPress={openNextGameMenu}
-                style={styles.newGameButtonContainer}
-            >
-                <Text style={styles.newGameText}>{'New Game'}</Text>
-            </Touchable>
+            <NewGameButton 
+                onClick={openNextGameMenu}
+                containerStyle={styles.newGameButtonContainer}
+            />
         </Touchable>
     )
 }

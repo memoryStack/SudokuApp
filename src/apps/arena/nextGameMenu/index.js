@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { Svg, Path } from 'react-native-svg'
@@ -7,10 +7,32 @@ import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES } from '../../../resources/const
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
 
-// TODO: research about using "useMemo" for the functions which are rendering a view in the 
-//          functional component
 const LEVEL_ICON_DIMENSION = 24
 const NEXT_GAME_MENU_ROW_HEIGHT = 50
+const styles = StyleSheet.create({
+    nextGameMenuContainer: {
+        backgroundColor: 'white',
+        width: '100%',
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+    },
+    levelContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width: '100%',
+        height: NEXT_GAME_MENU_ROW_HEIGHT,
+        paddingHorizontal: 16,
+    },
+    levelText: {
+        fontSize: 16,
+        color: 'black',
+        marginLeft: 16,
+    },
+})
+
+// TODO: research about using "useMemo" for the functions which are rendering a view in the 
+//          functional component
 const NextGameMenu_ = ({ parentHeight, gameState }) => {
 
     const nextGameMenuRef = useRef(null)
@@ -76,30 +98,30 @@ const NextGameMenu_ = ({ parentHeight, gameState }) => {
 
     const getNextGameMenu = () => {
         return (
-            <View style={{ backgroundColor: 'white', width: '100%' }}>
+            <View style={styles.nextGameMenuContainer}>
                 {
                     Object.keys(LEVEL_DIFFICULTIES).map((levelText, index) => {
                         return (
                             <View key={levelText}>
                                 <Touchable
-                                    style={{height: NEXT_GAME_MENU_ROW_HEIGHT, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',  width: '100%'}}
+                                    style={styles.levelContainer}
                                     touchable={TouchableTypes.opacity}
                                     onPress={() => nextGameMenuItemClicked(levelText)}
                                 >
                                     {getLevelIcon(index)}
-                                    <Text style={{ fontSize: 16, color: 'black', marginLeft: 16 }}>{levelText}</Text>
+                                    <Text style={styles.levelText}>{levelText}</Text>
                                 </Touchable>
                             </View>
                         )
                     })
                 }
                 <Touchable
-                    style={{ height: NEXT_GAME_MENU_ROW_HEIGHT, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',  width: '100%' }}
+                    style={styles.levelContainer}
                     touchable={TouchableTypes.opacity}
                     onPress={() => nextGameMenuItemClicked('restart')} // later on replace this string to something better
                 >
                     <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
-                    <Text style={{ fontSize: 16, color: 'black', marginLeft: 16 }}>{'Restart'}</Text>
+                    <Text style={styles.levelText}>{'Restart'}</Text>
                 </Touchable>
             </View>
         )
@@ -109,10 +131,10 @@ const NextGameMenu_ = ({ parentHeight, gameState }) => {
         <BottomDragger
             parentHeight={parentHeight}
             childrenHeight={5 * NEXT_GAME_MENU_ROW_HEIGHT} // 4 levels and 1 for restart
-            headerText={'Next Game Menu'}
             onDraggerOpened={onNewGameMenuOpened}
             onDraggerClosed={onNewGameMenuClosed}
             ref={nextGameMenuRef}
+            bottomMostPositionRatio={1.1}
         >
             {getNextGameMenu()}
         </BottomDragger>

@@ -18,6 +18,7 @@ import { Pencil } from './cellActions/pencil'
 import { Hint } from './cellActions/hint'
 import { Timer } from './timer'
 import { isGameOver, shouldSaveGameState } from './utils/util'
+import { NewGameButton } from './newGameButton'
 
 const MAX_AVAILABLE_HINTS = 3
 const MISTAKES_LIMIT = 3
@@ -29,7 +30,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        paddingTop: 60,
+    },
+    newGameButtonContainer: {
+        alignSelf: 'flex-start',
+        height: 40,
+        width: 120,
+        marginVertical: 24,
+        marginLeft: windowWidth * 0.03,
     },
     cellActionsContainer: {
         display: 'flex',
@@ -48,7 +55,14 @@ const styles = StyleSheet.create({
     refereeTextStyles: {
         fontSize: 14,
     },
-    congratsBackground: {
+    gameOverCardAbsoluteBG: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    gameOverAnimatedBG: {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100%',
@@ -579,6 +593,10 @@ const Arena_ = () => {
         fadeOut()
     }, [])
 
+    const newGameButtonClick = useCallback(() => {
+        emit(EVENTS.OPEN_NEXT_GAME_MENU)
+    }, [])
+
     return (
         <Page
             onFocus={handleGameInFocus}
@@ -587,7 +605,11 @@ const Arena_ = () => {
             <View
                 style={styles.container} 
                 onLayout={onParentLayout}
-            >
+            >   
+                <NewGameButton
+                    onClick={newGameButtonClick}
+                    containerStyle={styles.newGameButtonContainer}
+                />
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
                     <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
@@ -612,7 +634,7 @@ const Arena_ = () => {
                 </View>
                 {
                     pageHeight ? 
-                        <NextGameMenu 
+                        <NextGameMenu
                             parentHeight={pageHeight}
                             gameState={gameState}
                         /> 
@@ -623,11 +645,11 @@ const Arena_ = () => {
                         <Touchable
                             touchable={TouchableTypes.opacity}
                             activeOpacity={1}
-                            style={{ top: 0, bottom: 0, left: 0, right: 0, position: 'absolute' }}
+                            style={styles.gameOverCardAbsoluteBG}
                             onPress={hideCongratsModal}
                         >
                             <Animated.View
-                                style={[styles.congratsBackground, { opacity: fadeAnim }]}
+                                style={[styles.gameOverAnimatedBG, { opacity: fadeAnim }]}
                             >
                                 <GameOverCard
                                     gameState={gameState}

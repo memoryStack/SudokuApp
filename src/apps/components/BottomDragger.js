@@ -4,7 +4,7 @@ import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
 
 const ANIMATION_DURATION = 150
-const HEADER_HEIGHT = 50
+let HEADER_HEIGHT = 50
 const RELEASE_LIMIT_FOR_AUTO_SCROLL = 20
 const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = .9
 const XXSMALL_SIZE = 8
@@ -56,6 +56,8 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         onDraggerClosed = noOperationFunction,
     } = props
 
+    if (!headerText) HEADER_HEIGHT = 0 // header won't be present in this case
+
     // TODO: figure out how to remove this code duplication and how can we make it more efficient
     const [isFullView, setFullView] = useState(false)
     const [isDraggerActive, setIsDraggerActive] = useState(false)
@@ -66,6 +68,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         inputRange: [topMostPosition, bottomMostPosition],
         outputRange: [1, 0],
     }))
+
     const [panResponder, setPanResponder] = useState(PanResponder.create({
         onStartShouldSetPanResponder: () => {
             setIsDraggerActive(true)
@@ -175,7 +178,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                     },
                 ]}
             >
-                {renderHeader()}
+                {headerText ? renderHeader() : null}
                 {children}
             </Animated.View>
         </>

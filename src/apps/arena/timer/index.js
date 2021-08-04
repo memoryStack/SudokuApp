@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { EVENTS, GAME_STATE } from '../../../resources/constants'
-import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
+import { GAME_STATE } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { usePrevious } from '../../../utils/customHooks'
-import { isGameOver, getTimeComponentString } from '../utils/util'
+import { getTimeComponentString } from '../utils/util'
 import { noOperationFunction } from '../../../utils/util'
 
 const hitSlop = { left: 8, right: 8, bottom: 8, top: 8 }
