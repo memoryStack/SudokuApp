@@ -44,6 +44,9 @@ const styles = StyleSheet.create({
     newGameText: {
         fontSize: 20,
         color: 'white',
+    },
+    gameUnsolvedMsg: {
+        textAlign: 'center',
     }
 })
 
@@ -59,7 +62,7 @@ const getTimeView = (timeTaken = {}) => {
 }
 
 // TODO: change this file name to something generic
-const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
+const GameOverCard_ = ({ gameState, stats, openNextGameMenu }) => {
 
     const {
         mistakes,
@@ -69,6 +72,9 @@ const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
     } = stats
 
     const gameSolved = gameState === GAME_STATE.OVER_SOLVED
+    const gameUnsolved = gameState === GAME_STATE.OVER_UNSOLVED
+
+    console.log('@@@@@@ gameState', gameState, stats)
 
     const getGameSolvedView = () => {
         return (
@@ -102,7 +108,9 @@ const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
     }
 
     const getGameUnsolvedView = () => (
-        <Text style={{ textAlign: 'center' }}>{'you have reached the maximum mistakes limit\nGood Luck Next Time'}</Text>
+        <Text style={styles.gameUnsolvedMsg}>
+            {'you have reached the maximum mistakes limit\nGood Luck Next Time'}
+        </Text>
     )
 
     return (
@@ -112,7 +120,7 @@ const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
             onPress={noOperationFunction}
             style={styles.container}
         >
-            {gameSolved ? getGameSolvedView() : getGameUnsolvedView()}
+            {gameSolved ? getGameSolvedView() : gameUnsolved ? getGameUnsolvedView() : null}
             <Touchable 
                 touchable={TouchableTypes.opacity}
                 onPress={openNextGameMenu}
@@ -124,4 +132,4 @@ const CongratsCard_ = ({ gameState, stats, openNextGameMenu }) => {
     )
 }
 
-export const CongratsCard = React.memo(CongratsCard_)
+export const GameOverCard = React.memo(GameOverCard_)

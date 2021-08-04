@@ -42,13 +42,8 @@ const DEFAULT_BEST_STATS = {
     },
 }
 
-// TODO: make a directory named `event` and  add these contants there along with the 
+// TODO: make a directory named `event` and  add these constants there along with the 
 // GlobalEvetBus file
-// events whose source is Sudoku Board
-const BOARD_EVENTS = {
-    MADE_MISTAKE: 'MADE_MISTAKE',
-    PUZZLE_SOLVED: 'PUZZLE_SOLVED',
-}
 
 const CELL_ACTION_EVENTS = {
     INPUT_NUMBER_CLICKED: 'INPUT_NUMBER_CLICKED',
@@ -63,16 +58,14 @@ const CELL_ACTION_EVENTS = {
 // list of all the events in the app
 const EVENTS = {
     ...CELL_ACTION_EVENTS,
-    ...BOARD_EVENTS,
     START_NEW_GAME: 'START_NEW_GAME',
     RESTART_GAME: 'RESTART_GAME',
     CHANGE_GAME_STATE: 'CHANGE_GAME_STATE',
     OPEN_NEXT_GAME_MENU: 'OPEN_NEXT_GAME_MENU',
-    SAVE_GAME_STATE: 'SAVE_GAME_STATE',
+    MADE_MISTAKE: 'MADE_MISTAKE',
 }
 
-// freeze these objects
-// TODO: think over this automaton
+// TODO: freeze these objects
 const GAME_STATE = {
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE',

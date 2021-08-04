@@ -7,8 +7,8 @@ import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PENCIL_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
-import { initBoardData as initMainNumbers, generateNewSudokuPuzzle } from '../../utils/util'
-import { CongratsCard } from './puzzleSolvedCongratsCard'
+import { initBoardData as initMainNumbers, generateNewSudokuPuzzle, deepClone } from '../../utils/util'
+import { GameOverCard } from './gameOverCard'
 import { getNewPencilState } from './cellActions/pencil'
 import { getKey, setKey } from '../../utils/storage'
 import { usePrevious } from '../../utils/customHooks'
@@ -17,7 +17,7 @@ import { Eraser } from './cellActions/eraser'
 import { Pencil } from './cellActions/pencil'
 import { Hint } from './cellActions/hint'
 import { Timer } from './timer'
-import { isGameOver } from './utils/util'
+import { isGameOver, shouldSaveGameState } from './utils/util'
 
 const MAX_AVAILABLE_HINTS = 3
 const MISTAKES_LIMIT = 3
@@ -56,21 +56,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
 })
-
-// TODO: ise bhi khtm kr duga
-// it's not a good architecture to pull the data like this
-const gameStateToBeCached = {
-    state: undefined,
-    mistakes: undefined, // mistakes count
-    time: undefined, // timer data
-    boardData: undefined,
-}
-
-const allKeysSet = (object = {}) => 
-    Object.keys(object).every(key => object[key] !== undefined)
-
-const resetObjectKeys = (object = {}) =>
-    Object.keys(object).forEach(key => object[key] = undefined)
 
 const initBoardData = () => {
     const movesStack = []
@@ -140,13 +125,22 @@ const Arena_ = () => {
     const previousGameState = usePrevious(gameState)
 
     const { referee: initialRefereeData, cellActionsData: initialCellActionsData, boardData: initialBoardData } = useRef(initComponentsDefaultState()).current
-    const [boardData, setBoardData] = useState(initialBoardData)
-    const [hints, setHints] = useState(initialCellActionsData.hints)
+    // referee state variables
+    const timerId = useRef(null)
     const [mistakes, setMistakes] = useState(initialRefereeData.mistakes)
     const [difficultyLevel, setDifficultyLevel] = useState(initialRefereeData.difficultyLevel)
     const [time, setTime] = useState(initialRefereeData.time)
+
+    // cell Actions state variables
+    const [hints, setHints] = useState(initialCellActionsData.hints)
     const [pencilState, setPencilState] = useState(initialCellActionsData.pencilState)
-    const timerId = useRef(null)
+    
+    // board state variables
+    let movesStack = useRef(initialBoardData.movesStack)
+    const [mainNumbers, updateMainNumbers] = useState(initialBoardData.mainNumbers)
+    const [notesInfo, updateNotesInfo] = useState(initialBoardData.notesInfo)
+    const [selectedCell, selectCell] = useState(initialBoardData.selectedCell)
+    let selectedCellMainValue = useRef(initialBoardData.mainNumbers[selectedCell.row][selectedCell.col].value)
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
@@ -170,13 +164,11 @@ const Arena_ = () => {
                 emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
             } else {
                 setRefereeData(referee)
-
+                setBoardData(boardData)
+                setGameState(GAME_STATE.ACTIVE)
                 const { hints, pencilState } = cellActionsData
                 setPencilState(pencilState)
                 setHints(hints)
-
-                setBoardData(boardData)
-                setGameState(GAME_STATE.ACTIVE)
             }
         } else {
             emit(EVENTS.START_NEW_GAME, { difficultyLevel: initialRefereeData.level })
@@ -187,6 +179,15 @@ const Arena_ = () => {
         const { pencilState, hints } = initCellActionsData()
         setPencilState(pencilState)
         setHints(hints)
+    }
+
+    const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
+        movesStack.current = moves
+        const {row = 0, col = 0} = selectedCell
+        selectedCellMainValue.current = mainNumbers[row][col].value
+        updateMainNumbers(mainNumbers)
+        updateNotesInfo(notesInfo)
+        selectCell(selectedCell)
     }
 
     const setRefereeData = ({ mistakes, level, time }) => {
@@ -204,13 +205,9 @@ const Arena_ = () => {
             const minClues = LEVELS_CLUES_INFO[difficultyLevel]
             const boardData = initBoardData()
             await generateNewSudokuPuzzle(minClues, boardData.notesInfo, boardData.mainNumbers)
-
-            console.log('@@@@@@@@ new puzzle', JSON.stringify(boardData.mainNumbers))
-            console.log('@@@@@@@@ time taken is', Date.now() - time)
-
+            console.log('@@@@@@@@ time taken is to generate new puzzle is', Date.now() - time)
             if (!componentUnmounted) {
                 setRefereeData(initRefereeData(difficultyLevel))
-
                 setBoardData(boardData)
                 resetCellActions()
             }
@@ -227,7 +224,7 @@ const Arena_ = () => {
     useEffect(() => {
         let componentUnmounted = false
         const handler = () => {
-            const mainNumbersClone = [...boardData.mainNumbers]
+            const mainNumbersClone = [...mainNumbers]
             for(let row=0;row<9;row++)
                 for(let col=0;col<9;col++)
                     if (!mainNumbersClone[row][col].isClue) mainNumbersClone[row][col].value = 0
@@ -243,7 +240,7 @@ const Arena_ = () => {
             removeListener(EVENTS.RESTART_GAME, handler)
             componentUnmounted = true
         }
-    }, [difficultyLevel, boardData])
+    }, [difficultyLevel, mainNumbers])
 
     // listen for changing game state. and it should be only one listener through out the Arena screen
     useEffect(() => {
@@ -277,57 +274,39 @@ const Arena_ = () => {
         if (isGameOver(gameState)) setGameSolvedCard(true)
     }, [gameState])
 
-    // TODO: find out what will happen if i am navigating back from "Arena" screen to some other screen
-    //      is that case getting hhandled ??
-    // DDD: new finding
-    //      the callback to useEffect "() =>" i wrote it like "async () =>" mistakenly and because of this 
-    //      the addListener works but not removeListener. lol
-    // NEXT BIG TODO:
     useEffect(() => {
-        const handler = ({type, data}) => {
-            if (!type) return
-            gameStateToBeCached[type] = data
-            if (allKeysSet(gameStateToBeCached)) {
-                const { state, mistakes, time, boardData } = gameStateToBeCached
-                setKey(PREVIOUS_GAME, {
-                    state,
-                    referee: {
-                        level: refereeData.level,
-                        mistakes,
-                        time,
-                    },
-                    boardData,
-                    cellActionsData: {
-                        pencilState: pencilState,
-                        hints,
-                    }
-                }).then(() => {
-                    resetObjectKeys(gameStateToBeCached)
-                }).catch(error => __DEV__ && console.log(error))
+        if (shouldSaveGameState(gameState, previousGameState)) {
+            const localGameStateToBeCached = {
+                state: gameState,
+                referee: {
+                    level: difficultyLevel,
+                    mistakes,
+                    time,
+                },
+                boardData: {
+                    mainNumbers,
+                    notesInfo,
+                    movesStack: movesStack.current,
+                    selectedCell,
+                },
+                cellActionsData: {
+                    pencilState,
+                    hints,
+                }
             }
+            setKey(PREVIOUS_GAME, localGameStateToBeCached)
+            .catch(error => {
+                __DEV__ && console.log(error)
+            })
         }
-        addListener(EVENTS.SAVE_GAME_STATE, handler)
-        return () => {
-            removeListener(EVENTS.SAVE_GAME_STATE, handler)
-        }
-    }, [pencilState, hints])
+    }, [gameState, pencilState, hints, time, mistakes, difficultyLevel, mainNumbers, notesInfo, selectedCell])
 
     // EVENTS.HINT_USED_SUCCESSFULLY
     useEffect(() => {
         const handler = () => setHints(hints => hints-1)
         addListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
-        return () => {
-            removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
-        }
+        return () => removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
     }, [])
-
-    // lol. had to pass gameState like this. couldn't make dependency array above like
-    // [gameState, refereeData, cellActionsData]
-    // TODO: i really need to learn some architectures man. this should be my next step in my learning
-    useEffect(() => {
-        if (gameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE) 
-            emit(EVENTS.SAVE_GAME_STATE, { type: 'state', data: gameState })
-    }, [gameState])
 
     // TODO: can this be converted to a custom hook. just for challenging myself and fun
     // timer logic
@@ -351,17 +330,227 @@ const Arena_ = () => {
         else stopTimer()
     }, [gameState])
 
+    // board handlers
+    const isPuzzleSolved = () => {
+        for (let row=0;row<9;row++) {
+            for (let col=0;col<9;col++) {
+                if (!mainNumbers[row][col].value) return false
+            }
+        }
+        return true
+    }
+
+    // EVENTS.INPUT_NUMBER_CLICKED 
+    useEffect(() => {
+        const handler = ({ number, isHintUsed = false }) => {
+            const { row, col } = selectedCell
+            if (mainNumbers[row][col].value) return
+            let valueType, moveType
+            let notesErasedByMainValue = []
+
+            let notesUpdated = false
+            if (pencilState === PENCIL_STATE.ACTIVE && !isHintUsed) {
+                // removing the below functionality because it kind of "baby spoon feeds" the user
+                // if (duplicacyPresent(row, col, number, mainNumbersDup)) return
+                valueType = 'notes'
+                const { show } = notesInfo[row][col][number-1]
+                moveType = show ? 'erase' : 'insert'
+                notesInfo[row][col][number-1].show = 1 - show
+                notesUpdated = true
+            } else {
+                /**
+                 * 1. mark move type and value type and add the number in cell
+                 * 2. erase all the notes first and store them in an array for undo operation on the board 
+                 * 3. check if neeed to show an error msg
+                 * 4. check if puzzle is solved or not
+                */ 
+                
+                const mainNumbersDup = [...mainNumbers]
+                // mark move type and valueType and add the number in cell
+                moveType = 'insert'
+                valueType = 'main'
+                mainNumbersDup[row][col].value = number
+
+                // erase all the notes first and store them in an array for undo operation on the board 
+                for (let i=0;i<9;i++) {
+                    if (notesInfo[row][col][i].show) {
+                        notesErasedByMainValue.push(i+1)
+                        notesInfo[row][col][i].show = 0
+                        notesUpdated = true
+                    }
+                }
+
+                if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
+                else {
+                    if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
+                    if (isPuzzleSolved()) emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
+                }
+                selectedCellMainValue.current = number
+                updateMainNumbers(mainNumbersDup)
+            }
+
+            const moveObject = {
+                moveType: moveType,
+                valueType: valueType,
+                value: [number], // why is this an array ??
+                notesErased: notesErasedByMainValue,
+                row,
+                col,
+            }
+
+            movesStack.current.push(moveObject)
+            if (notesUpdated) {
+                notesInfo[row][col] = deepClone(notesInfo[row][col])
+                updateNotesInfo([...notesInfo])
+            }
+        }
+
+        addListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
+        return () => {
+            removeListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
+        }
+    }, [mainNumbers, notesInfo, selectedCell, pencilState])
+
+    // EVENTS.UNDO_CLICKED
+    // TODO: i think it would be better if when a mainValue is inserted in the cell 
+    // then don't erase the already filled notes. becoz if we do redo then we will 
+    // automatically see those notes without any computation logic
+    useEffect(() => {
+        const handler = () => {
+            if (!movesStack.current.length) return
+            const mainNumbersDup = [...mainNumbers]
+            const notesInfoDup = [...notesInfo]
+            const moveInfoToUndo = movesStack.current.pop()
+
+            const { row, col, moveType, valueType, value } = moveInfoToUndo
+            
+            if (valueType === 'main') {
+                if (moveType === 'insert') {
+                    // hide the main value
+                    mainNumbersDup[row][col].value = 0
+                    // show the notes erased when this value inserted
+                    const { notesErased } = moveInfoToUndo
+                    for(let i=0;i<notesErased.length;i++){
+                        const note = notesErased[i]
+                        notesInfoDup[row][col][note - 1].show = 1
+                    }
+                } else {
+                    // main value got erased, so fill that value in the cell
+                    mainNumbersDup[row][col].value = value[0]
+                }
+            } else {
+                const notesVisibilityChanges = value
+                for(let i=0;i<notesVisibilityChanges.length;i++){
+                    const note = notesVisibilityChanges[i]
+                    const isVisible = notesInfoDup[row][col][note-1].show
+                    notesInfoDup[row][col][note-1].show = 1 - isVisible
+                }
+            }
+
+            const nextSelectedCell = { row, col }
+
+            if (movesStack.current.length) {
+                const len = movesStack.current.length
+                const { row, col } = movesStack.current[len-1]
+                nextSelectedCell.row = row
+                nextSelectedCell.col = col
+            }
+
+            updateMainNumbers(mainNumbersDup)            
+            updateNotesInfo(notesInfoDup)
+            selectCell(nextSelectedCell)
+            selectedCellMainValue.current = mainNumbersDup[nextSelectedCell.row][nextSelectedCell.col].value
+
+            emit(EVENTS.UNDO_USED_SUCCESSFULLY)
+        }
+        addListener(EVENTS.UNDO_CLICKED, handler)
+        return () => {
+            removeListener(EVENTS.UNDO_CLICKED, handler)
+        }
+    }, [notesInfo, mainNumbers])
+
+    // EVENTS.ERASER_CLICKED
+    useEffect(() => {
+        const handler = () => {
+            /**
+             * 1. if main number is present then remove it only if the number is not clue
+             * 2. check if any notes are present or not. if present then remove the notes
+             * 3. return if none of above happened
+             */
+            const { row, col } = selectedCell
+            let moveType, valueType, value
+            const mainNumbersDup = [...mainNumbers]
+            const notesInfoDup = [...notesInfo]
+            let erasedSomeData = false
+            
+            if (mainNumbers[row][col].value && !mainNumbers[row][col].isClue) {
+                erasedSomeData = true
+                moveType = 'erase'
+                valueType = 'main'
+                value = [mainNumbers[row][col].value]
+                mainNumbersDup[row][col].value = 0
+                selectedCellMainValue.current = mainNumbersDup[row][col].value
+            } else {
+                const cellNotes = notesInfoDup[row][col]
+                value = [] // will store the notes to be removed (basically the notes which are visible right now)
+                for (let i=0;i<9;i++) {
+                    if (cellNotes[i].show) {
+                        value.push(i+1)
+                        cellNotes[i].show = 0
+                    }
+                }
+                if (value.length) erasedSomeData = true
+            }
+
+            // on empty cell erase doesn't make sense
+            if (!erasedSomeData) return
+
+            const moveObject = { moveType, valueType, value, row, col }
+            movesStack.current.push(moveObject)
+            
+            // again these three updates are together
+            updateMainNumbers(mainNumbersDup)
+            updateNotesInfo(notesInfoDup)
+        }
+        
+        addListener(EVENTS.ERASER_CLICKED, handler)
+        return () => {
+            removeListener(EVENTS.ERASER_CLICKED, handler)
+        }
+    }, [selectedCell, mainNumbers, notesInfo])
+
+    // when hint is clicked 
+    useEffect(() => {
+        const handler = () => {
+            const { row, col } = selectedCell
+            if (!mainNumbers[row][col].value)
+                emit(EVENTS.INPUT_NUMBER_CLICKED, { number: mainNumbers[row][col].solutionValue, isHintUsed: true })
+        }
+        addListener(EVENTS.HINT_CLICKED, handler)
+        return () => removeListener(EVENTS.HINT_CLICKED, handler)
+    }, [selectedCell, mainNumbers])
+
+    const handleCellClicked = useCallback((row, col) => {
+        selectedCellMainValue.current = mainNumbers[row][col].value
+        selectCell(selectedCell => {
+            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
+            return selectedCell
+        })
+    }, [mainNumbers])
+
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => { 
         setPageHeight(height)
     }, [])
 
     const handleGameInFocus = useCallback(() => {
+        if (gameState !== GAME_STATE.INACTIVE) return
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [])
+    }, [gameState])
 
     const handleGameOutOfFocus = useCallback(() => {
+        if (gameState !== GAME_STATE.ACTIVE) return
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
-    }, [])
+    }, [gameState])
 
     const fadeOut = () => {
         Animated.timing(fadeAnim, {
@@ -404,10 +593,13 @@ const Arena_ = () => {
                     <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
                     <Timer gameState={gameState} time={time} onClick={onTimerClick} />
                 </View>
-                <Board 
-                    boardData={boardData}
+                <Board
                     gameState={gameState}
-                    pencilState={pencilState}
+                    mainNumbers={mainNumbers}
+                    notesInfo={notesInfo}
+                    selectedCell={selectedCell}
+                    selectedCellMainValue={selectedCellMainValue.current}
+                    onCellClick={handleCellClicked}
                 />
                 <View style={{ marginVertical: 20 }}>
                     <Inputpanel gameState={gameState} />
@@ -437,7 +629,7 @@ const Arena_ = () => {
                             <Animated.View
                                 style={[styles.congratsBackground, { opacity: fadeAnim }]}
                             >
-                                <CongratsCard
+                                <GameOverCard
                                     gameState={gameState}
                                     stats={{mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - hints}}
                                     openNextGameMenu={hideCongratsModal}
