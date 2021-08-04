@@ -35,14 +35,9 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         height: 40,
         width: 120,
-        marginVertical: 24,
+        marginTop: 16,
+        marginBottom: 8,
         marginLeft: windowWidth * 0.03,
-    },
-    cellActionsContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
     },
     refereeContainer: {
         display: 'flex',
@@ -69,6 +64,14 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
+    inputPanelCellActionsContainer: {
+        width: '100%',
+        marginTop: 24,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    cellActionsContainer: { justifyContent: 'space-around' },
 })
 
 const initBoardData = () => {
@@ -623,14 +626,16 @@ const Arena_ = () => {
                     selectedCellMainValue={selectedCellMainValue.current}
                     onCellClick={handleCellClicked}
                 />
-                <View style={{ marginVertical: 20 }}>
+                <View style={styles.inputPanelCellActionsContainer}>
+                    <View style={styles.cellActionsContainer}>
+                        <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
+                        <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />
+                    </View>
                     <Inputpanel gameState={gameState} />
-                </View>
-                <View style={styles.cellActionsContainer}>
-                    <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
-                    <Eraser iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
-                    <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
-                    <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />
+                    <View style={styles.cellActionsContainer}>
+                        <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
+                        <Eraser iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
+                    </View>
                 </View>
                 {
                     pageHeight ? 

@@ -16,11 +16,6 @@ export const Styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         width: '100%',
-        // justifyContent: 'space-evenly',
-        // alignSelf: 'center',
-        
-        // height: CELL_HEIGHT,
-        // width: GAME_BOARD_WIDTH - 2,
     },
     cellContainer: {
         flex: 1,

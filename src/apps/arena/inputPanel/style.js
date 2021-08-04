@@ -1,38 +1,43 @@
-import { StyleSheet } from 'react-native'
-import { INPUT_PANEL_HEIGHT, INPUT_NUMBER_CONTAINER_MAX_WIDTH } from '../../arena/gameBoard/dimensions'
+import { StyleSheet, Dimensions } from 'react-native'
 
-export const INPUT_NUMBER_DEFAULT_HEIGHT = INPUT_PANEL_HEIGHT * .8
-export const INPUT_NUMBER_DEFAULT_WIDTH = INPUT_NUMBER_CONTAINER_MAX_WIDTH * .7
-// TODO: make the layout flexible and test this on various devices
-export const Styles = StyleSheet.create({
+const { width } = Dimensions.get('window')
+const INPUT_NUMBER_DIMENSION = width * .94 / 9 * 1.5 // 1.5 times the size of the board cells
+const INPUT_GRID_DIMENSION = INPUT_NUMBER_DIMENSION * 3
+export const styles = StyleSheet.create({
     container: {
-        display: 'flex',
+        height: INPUT_GRID_DIMENSION,
+        width: INPUT_GRID_DIMENSION,
+    },
+    gridBorderContainer: {
+        position: 'absolute',
+        height: INPUT_GRID_DIMENSION,
+        width: INPUT_GRID_DIMENSION,
+        justifyContent: 'space-between',
+        zIndex: -1,
+    },
+    verticalBars: {
+        height: INPUT_GRID_DIMENSION,
+        width: 1,
+        backgroundColor: 'rgba(0, 0, 0, .1)'
+    },
+    horizontalBars: {
+        height: 1,
+        width: INPUT_GRID_DIMENSION,
+        backgroundColor: 'rgba(0, 0, 0, .1)'
+    },
+    rowContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-        height: INPUT_PANEL_HEIGHT,
     },
     numberButtonContainer: { // rectangular outer container for Input Number
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: INPUT_NUMBER_CONTAINER_MAX_WIDTH, // 9 numbers in the row
-        // height: 50,
-        height: '100%',
-    },
-    numberContainer: { // TODO: put shadow support for the button
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: INPUT_NUMBER_DEFAULT_HEIGHT,
-        width: Math.min(INPUT_NUMBER_DEFAULT_HEIGHT * .7, INPUT_NUMBER_DEFAULT_WIDTH),
-        borderWidth: 1,
-        borderColor: 'rgba(0, 0, 0, .1)',
-        borderRadius: 100,
+        width: INPUT_NUMBER_DIMENSION,
+        height: INPUT_NUMBER_DIMENSION,
     },
     textStyle: {
         color: 'rgb(49, 90, 163)',
-        fontSize: 28,
+        fontSize: 36,
         textAlign: 'center',
     },
 })
