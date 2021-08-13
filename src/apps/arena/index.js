@@ -83,7 +83,7 @@ const initBoardData = () => {
         for(let j = 0;j < 9;j++) {
             const boxNotes = new Array(9)
             for(let k = 1;k <= 9;k++)
-                boxNotes[k-1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstionn. but let's ignore it for not
+                boxNotes[k-1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
             rowNotes.push(boxNotes)
         }
         notesInfo[i] = rowNotes
@@ -221,7 +221,7 @@ const Arena_ = () => {
             // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
             const minClues = LEVELS_CLUES_INFO[difficultyLevel]
             const boardData = initBoardData()
-            await generateNewSudokuPuzzle(minClues, boardData.notesInfo, boardData.mainNumbers)
+            await generateNewSudokuPuzzle(minClues, boardData.mainNumbers) // it blocks the UI animation for "NextGameMenu"
             console.log('@@@@@@@@ time taken is to generate new puzzle is', Date.now() - time)
             if (!componentUnmounted) {
                 setRefereeData(initRefereeData(difficultyLevel))
