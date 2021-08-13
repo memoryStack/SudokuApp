@@ -689,8 +689,3 @@ export const rgba = function(hex, opacity) {
     return result
 }
 
-/**
- * 	Object.create or {...obj} or [...obj] or Object.assign doeos't work foor deep cloning
- */
-// TODO: this is very expensive piece of code. remove it completely
-export const deepClone = obj => obj && JSON.parse(JSON.stringify(obj))

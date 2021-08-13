@@ -7,7 +7,7 @@ import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PENCIL_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
-import { initBoardData as initMainNumbers, generateNewSudokuPuzzle, deepClone } from '../../utils/util'
+import { initBoardData as initMainNumbers, generateNewSudokuPuzzle } from '../../utils/util'
 import { GameOverCard } from './gameOverCard'
 import { getNewPencilState } from './cellActions/pencil'
 import { getKey, setKey } from '../../utils/storage'
@@ -417,7 +417,7 @@ const Arena_ = () => {
 
             movesStack.current.push(moveObject)
             if (notesUpdated) {
-                notesInfo[row][col] = deepClone(notesInfo[row][col])
+                notesInfo[row][col] = [...notesInfo[row][col]]
                 updateNotesInfo([...notesInfo])
             }
         }
@@ -432,6 +432,7 @@ const Arena_ = () => {
     // TODO: i think it would be better if when a mainValue is inserted in the cell 
     // then don't erase the already filled notes. becoz if we do redo then we will 
     // automatically see those notes without any computation logic
+    // TODO: improve these "setStates"
     useEffect(() => {
         const handler = () => {
             if (!movesStack.current.length) return
@@ -459,8 +460,7 @@ const Arena_ = () => {
                 const notesVisibilityChanges = value
                 for(let i=0;i<notesVisibilityChanges.length;i++){
                     const note = notesVisibilityChanges[i]
-                    const isVisible = notesInfoDup[row][col][note-1].show
-                    notesInfoDup[row][col][note-1].show = 1 - isVisible
+                    notesInfoDup[row][col][note-1].show = 1 - notesInfoDup[row][col][note-1].show
                 }
             }
 
@@ -473,7 +473,7 @@ const Arena_ = () => {
                 nextSelectedCell.col = col
             }
 
-            updateMainNumbers(mainNumbersDup)            
+            updateMainNumbers(mainNumbersDup)
             updateNotesInfo(notesInfoDup)
             selectCell(nextSelectedCell)
             selectedCellMainValue.current = mainNumbersDup[nextSelectedCell.row][nextSelectedCell.col].value
