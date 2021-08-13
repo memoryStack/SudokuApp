@@ -215,20 +215,22 @@ const Arena_ = () => {
 
     useEffect(() => {
         let componentUnmounted = false
-        const handler = async ({ difficultyLevel }) => {
+        const handler = ({ difficultyLevel }) => {
             const time = Date.now()
             if (!difficultyLevel) return
             // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
             const minClues = LEVELS_CLUES_INFO[difficultyLevel]
             const boardData = initBoardData()
-            await generateNewSudokuPuzzle(minClues, boardData.mainNumbers) // it blocks the UI animation for "NextGameMenu"
-            console.log('@@@@@@@@ time taken is to generate new puzzle is', Date.now() - time)
-            if (!componentUnmounted) {
-                setRefereeData(initRefereeData(difficultyLevel))
-                setBoardData(boardData)
-                resetCellActions()
-            }
-            onNewGameStarted()
+            generateNewSudokuPuzzle(minClues, boardData.mainNumbers)
+            .then(() => {
+                if (!componentUnmounted) {
+                    setRefereeData(initRefereeData(difficultyLevel))
+                    setBoardData(boardData)
+                    resetCellActions()
+                }
+                onNewGameStarted()
+                console.log('@@@@@@@@ time taken is to generate new puzzle is', Date.now() - time)
+            })
         }
         addListener(EVENTS.START_NEW_GAME, handler)
         return () => {

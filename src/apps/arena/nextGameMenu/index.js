@@ -91,9 +91,14 @@ const NextGameMenu_ = ({ parentHeight, gameState }) => {
     }
 
     const nextGameMenuItemClicked = useCallback(item => {
-        if (item === 'restart') emit(EVENTS.RESTART_GAME)
-        else emit(EVENTS.START_NEW_GAME, {difficultyLevel: item})
         nextGameMenuRef.current && nextGameMenuRef.current.closeDragger(true)
+        // TODO: figure out why any other solution doesn't work other than this setTimeout hack
+        // i tried that i called "closeDragger" in above line and didn't use setTimeout on below call then still
+        // the dragger went closing down after new puzzle started to generate
+        setTimeout(() => {
+            if (item === 'restart') emit(EVENTS.RESTART_GAME)
+            else emit(EVENTS.START_NEW_GAME, {difficultyLevel: item})
+        }, 0)
     }, [nextGameMenuRef])
 
     const getNextGameMenu = () => {
