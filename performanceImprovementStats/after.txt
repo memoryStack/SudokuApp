@@ -1,0 +1,51 @@
+after algorithm improvement
+    stats taken on Redmi K20 (Octa core, 6GB, max 2.2GHz)
+        below are the easy stats with 36 clues in ms
+            48
+            41
+            48
+            41
+            47
+            50
+            44
+            65
+            36
+            44
+        
+        below are the stats for medium 32 clues in ms
+            61
+            59
+            62
+            58
+            64
+            71
+            51
+            58
+            67
+            51
+        
+        below are stats for hard puzzle 28 clues in ms
+            76
+            103
+            75
+            118
+            81
+            90
+            93
+            105
+            160
+            62
+            95
+            92
+        
+        below are stats for expert puzzle for 24 clues in ms
+            111
+            145
+            136
+            141
+            101
+            133
+            202
+            147
+            150
+            167

@@ -1,0 +1,105 @@
+before algorithm improvement
+
+stats taken on Redmi K20 (Octa core, 6GB, max 2.2GHz)
+    below are the easy stats with 80 clues in ms
+        80
+        68
+        66
+        72
+        81
+        96
+        77
+        85
+        72
+        74
+
+    below are the stats for medium 32 clues in ms
+        169
+        162
+        220
+        191
+        294
+        277
+        155
+        192
+        270
+        508
+
+    below are stats  for hard puzzle 28 clues in ms
+        448
+        466
+        675
+        234
+        569
+        473
+        388
+        538
+        468
+        337
+
+    below are stats for expert puzzle for 24 clues in ms
+        1443
+        3087
+        1263
+        6499
+        4107
+        3265
+        2221
+        2117
+        3930
+        3453
+        2218
+        2002
+        4332
+
+stats taken on POCO X2 (Octa core, 6GB, max 2.2GHz)
+    below are the easy stats with 80 clues in ms
+        76
+        101
+        103
+        92
+        56
+        96
+        66
+        98
+        96
+        90
+    
+    below are the stats for medium 32 clues
+        204
+        180
+        227
+        212
+        325
+        198
+        189
+        161
+        230
+        290
+
+    below are stats  for hard puzzle 28 clues in ms
+        807
+        315
+        641
+        248
+        744
+        845
+        417
+        1132
+        753
+        798
+
+    below are stats for expert puzzle for 24 clues in ms
+        6822
+        1097
+        1336
+        1657
+        1686
+        2063
+        2730
+        2040
+        1235
+        2180
+        6142
+
+stats taken on Eureka 5040 (4GB, octacore, 1.4GHz)

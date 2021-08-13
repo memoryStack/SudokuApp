@@ -4,15 +4,15 @@
  * these should be there not in global utils
  */
 
-let tempSudoku
 let sudokuSolution
 let highlightedSinglesInfo = []
 const notesInstancesPlacesInfo = {}
-const houseType = ['row', 'col', 'block']
-const techniques = []
+const duplicacyCheckerStore = {}
+let notesData
+let sudokuBoard
 
 export const sameHouseAsSelected = (row, col, selectedBoxRow, selectedBoxCol) => {
-	if(row === selectedBoxRow || col === selectedBoxCol) return true
+	if (row === selectedBoxRow || col === selectedBoxCol) return true
 	const normalBoxBlockInfo = getBlockAndBoxNum(row, col)
 	const selectedBoxBlockInfo = getBlockAndBoxNum(selectedBoxRow, selectedBoxCol)
 	return normalBoxBlockInfo.blockNum === selectedBoxBlockInfo.blockNum
@@ -20,58 +20,29 @@ export const sameHouseAsSelected = (row, col, selectedBoxRow, selectedBoxCol) =>
 
 const getEmptyInstanceInfo = () => {
 	const info = {
-		row: new Array(),
-		col: new Array(),
-		block: new Array(),
+		rows: new Array(),
+		cols: new Array(),
+		blocks: new Array(),
 	}
+
 	for (let i=0;i<9;i++) {
-		info.row.push(new Array())
-		info.col.push(new Array())
-		info.block.push(new Array())
+		info.rows.push({ cells: new Array(9).fill(0), count: 0 })
+		info.cols.push({ cells: new Array(9).fill(0), count: 0 })
+		info.blocks.push({ cells: new Array(9).fill(0), count: 0 })
 	}
+
 	return info
 }
 
+// this DS will be used to find out hidden singles, without having to use loops
 const initNotesInstancesInfo = () => {
 	for(let instance = 1;instance <= 9;instance++)
 		notesInstancesPlacesInfo[instance] = getEmptyInstanceInfo()
 }
 
-// useful in filling cells using recursion
-export const copyNotesInstancesInfo = () => {
-	const notesInstancesPlacesInfoCopy = {}
-	for(let instance=1;instance<=9;instance++){
-		notesInstancesPlacesInfoCopy[instance] = getEmptyInstanceInfo()
-		for(let i=0;i<houseType.length;i++){
-			const house = houseType[i]
-			for(let houseNo=0;houseNo<9;houseNo++){
-				const instanceInfo = notesInstancesPlacesInfo[instance][house][houseNo]
-				for(let j=0;j<instanceInfo.length;j++)
-					notesInstancesPlacesInfoCopy[instance][house][houseNo].push(instanceInfo[j])
-			}
-		}
-	}
-	return notesInstancesPlacesInfoCopy
-}
-
-export const copyNotesInstancesInfoBack = (notesInstancesPlacesInfoCopy) => {
-	for(let instance = 1;instance <= 9;instance++){
-		for(let i=0;i<houseType.length;i++){
-			const house = houseType[i]
-			for(let houseNo=0;houseNo<9;houseNo++){
-				notesInstancesPlacesInfo[instance][house][houseNo] = []
-				const instanceInfo = notesInstancesPlacesInfoCopy[instance][house][houseNo]
-				for(let j=0;j<instanceInfo.length;j++){
-					notesInstancesPlacesInfo[instance][house][houseNo].push(instanceInfo[j])
-				}
-			}
-		}
-	}
-}
-
 // TODO: check if here solutionValue can be 0 instead of empty string
-export const initBoardData = () => {
-    const sudokuBoard = new Array(9)
+export const initBoardData = () => {	
+	const sudokuBoard = new Array(9)
     for(let i=0;i<9;i++){
 		const rowData = new Array(9)
 		for(let j=0;j<9;j++){
@@ -80,18 +51,6 @@ export const initBoardData = () => {
 		sudokuBoard[i] = rowData
     }
     return sudokuBoard
-}
-
-const copyBoard = (sudokuBoard) => {
-	for(let i=0;i<9;i++)
-		for(let j=0;j<9;j++)
-			tempSudoku[i][j].value = sudokuBoard[i][j].value
-}
-
-const getBlockRowCol = (row, col) => {
-	let blockRow = row - row%3
-	let blockCol = col - col%3
-	return {blockRow, blockCol}
 }
 
 const getBlockAndBoxNum = (row, col) => {
@@ -107,260 +66,345 @@ const getRowAndCol = (blockNum, boxNum) => {
 	return { row, col }
 }
 
-// this function will check if in row, col or block there is already an instance of 'num' is
-// present or not in any box the common house shared by row,col box
-export const duplicacyPresent = (row, col, num, sudokuBoard) => {
-    for(let j=0;j<9;j++) if(sudokuBoard[row][j].value == num) return 1 // check row
-	for(let i=0;i<9;i++) if(sudokuBoard[i][col].value == num) return 1 // check column
-
-    // check in box
-	const { blockRow, blockCol } =  getBlockRowCol(row, col)
-    for(let i=0;i<3;i++)
-		for(let j=0;j<3;j++)
-			if(sudokuBoard[blockRow + i][blockCol + j].value == num) return 1
-	return 0
+// will be used for hidden singles DS only
+// it is guranteed that this function would never return -1
+const getFirstFilledPosition = (cells) => {
+	for (let i=0;i<9;i++)
+		if (cells[i]) return i
+	return -1
 }
 
-// TODO: merge these two functions below
-export const invalidSudokuState = (notesData, sudokuBoard) => {
-	// check rows
-	for(let row=0;row<9;row++){
-		const occurence = new Array(10).fill(0)
-		for(let col=0;col<9;col++) {
-			const value = sudokuBoard[row][col].value
-			if(!value) continue
-			occurence[value]++
-			if(occurence[value] === 2) return true
-		}
-	}
+// it will be used in "sudokuSolver" before using recursion technique
+const findSingles = () => {
+	// naked singles
+	for (let row=0;row<9;row++)
+		for (let col=0;col<9;col++)
+			updateNakedSingles(row, col)
 
-	// check columns
-	for(let col=0;col<9;col++){
-		const occurence = new Array(10).fill(0)
-		for(let row=0;row<9;row++) {
-			const value = sudokuBoard[row][col].value
-			if(!value) continue
-			occurence[value]++
-			if(occurence[value] === 2) return true
-		}
-	}
-
-	// check notes of each column to verify each empty cell have some choice left
-	for(let row=0;row<9;row++){
-		for(let col=0;col<9;col++) {
-			if(sudokuBoard[row][col].value) continue
-			let choicesLeft = false
-			for(let instance=1;instance<=9;instance++) {
-				if(notesData[row][col][instance-1].show){
-					choicesLeft = true
-					break
-				}
+	// find hidden singles
+	for (let num = 1;num <= 9; num++) {
+		const { rows, cols, blocks } = notesInstancesPlacesInfo[num]
+		for (let row=0;row<9;row++) {
+			if (rows[row].count === 1) {
+				const { cells } = rows[row]
+				const cellNo = getFirstFilledPosition(cells)
+				highlightedSinglesInfo.push({ row, col: cellNo, num })
 			}
-			if(!choicesLeft) return true
+		}
+
+		for (let col=0;col<9;col++) {
+			if (cols[col].count === 1) {
+				const { cells } = cols[col]
+				const cellNo = getFirstFilledPosition(cells)
+				highlightedSinglesInfo.push({ row: cellNo, col, num })
+			}
+		}
+
+		for (let block=0;block<9;block++) {
+			if (blocks[block].count === 1) {
+				const { cells } = blocks[block]
+				const cellNo = getFirstFilledPosition(cells)
+				const { row, col } = getRowAndCol(block, cellNo)
+				highlightedSinglesInfo.push({ row, col, num })
+			}
 		}
 	}
+}
 
+// test if we are hiding values for already hidden cell or we are inserting values for already filled cells
+// because of the error i saw in the algo today
+const updateDuplicacyCheckerStore = (row, col, num) => {
+	const numIndex = num - 1
+	const { rows, cols, blocks } = duplicacyCheckerStore
+	const { blockNum } = getBlockAndBoxNum(row, col)
+	rows[row][numIndex] = 1 - rows[row][numIndex]
+	cols[col][numIndex] = 1 - cols[col][numIndex]
+	blocks[blockNum][numIndex] = 1 - blocks[blockNum][numIndex]
+}
+
+// it will update notes DS of all kinds
+// and will return if the removed note (need it only for note which we are hiding) was naked/hidden sigle
+const updateNoteInCell = (row, col, note, hideNote, validityChecksConfig) => {
+	const countAdd = hideNote ? -1 : 1
+	const showValue = hideNote ? 0 : 1
+
+	// naked single DS
+	notesData[row][col].boxNotes[note-1].show = showValue
+	notesData[row][col].count += countAdd
+
+	// hidden single DS
+	const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
+	const { blockNum, boxNum } = getBlockAndBoxNum(row, col)
+	rows[row].cells[col] = showValue // mark as present
+	rows[row].count += countAdd // increase the count in current row
+	cols[col].cells[row] = showValue
+	cols[col].count += countAdd
+	blocks[blockNum].cells[boxNum] = showValue
+	blocks[blockNum].count += countAdd
+
+	if (hideNote) {
+		const {
+			nakedSingle = false,
+			rowHiddenSingle = false,
+			colHiddenSingle = false,
+			blockHiddenSingle = false,
+		} = validityChecksConfig || {}
+		return (
+			(nakedSingle && !notesData[row][col].count)
+			|| (rowHiddenSingle && !rows[row].count)
+			|| (colHiddenSingle && !cols[col].count)
+			|| (blockHiddenSingle && !blocks[blockNum].count)
+		)
+	}
+}
+
+const updateNakedSingles = (row, col) => {
+	if (notesData[row][col].count === 1) {
+		// got new naked single
+		const { boxNotes } = notesData[row][col]
+		for (let note=1;note<=9;note++) {
+			if (boxNotes[note-1].show) {
+				highlightedSinglesInfo.push({ row, col, num: note })
+				return
+			}
+		}
+	}
+}
+
+// from a cell when note is removed it might lead to new hidden singles
+// of same type in same house
+const updateHiddenSingles = (row, col, note, housesToCheck = {}) => {
+
+	const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
+	const { checkInRow = true, checkInCol = true, checkInBlock = true } = housesToCheck
+
+	if (checkInRow && rows[row].count === 1) {
+		// hidden single generated in the row for "note"
+		const { cells } = rows[row]
+		const cellNo = getFirstFilledPosition(cells)
+		highlightedSinglesInfo.push({ row, col: cellNo, num: note })
+	}
+
+	if (checkInCol && cols[col].count === 1) {
+		// hidden single generated in the current col for "note"
+		const { cells } = cols[col]
+		const cellNo = getFirstFilledPosition(cells)
+		highlightedSinglesInfo.push({ row: cellNo, col, num: note })
+	}
+
+	if (checkInBlock) {
+		const { blockNum } = getBlockAndBoxNum(row, col)
+		if (blocks[blockNum].count === 1) {
+			// hidden single generated in the current block for the "note"
+			const { cells } = blocks[blockNum]
+			const cellNo = getFirstFilledPosition(cells)
+			const { row, col } = getRowAndCol(blockNum, cellNo)
+			highlightedSinglesInfo.push({ row, col, num: note })
+		}
+	}
+}
+
+const cellHasHiddenSingle = (row, col) => {
+	const { blockNum } = getBlockAndBoxNum(row, col)
+	for (let note=1;note<=9;note++) {
+		if (notesData[row][col].boxNotes[note-1].show) {
+			const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
+			if (rows[row].count === 1 || cols[col].count === 1 || blocks[blockNum].count === 1) return true
+		}
+	}
 	return false
 }
 
-export const isSudokuSolved = (sudokuBoard) => {
-	for(let row=0;row<9;row++)
-		for(let col=0;col<9;col++)
-			if(!sudokuBoard[row][col].value) return false
-
-	// check rows
-	for(let row=0;row<9;row++){
-		const occurence = new Array(10).fill(0)
-		for(let col=0;col<9;col++) {
-			occurence[sudokuBoard[row][col].value]++
-			if(occurence[sudokuBoard[row][col].value] === 2) return false
-		}
-	}
-
-	// check columns
-	for(let col=0;col<9;col++){
-		const occurence = new Array(10).fill(0)
-		for(let row=0;row<9;row++) {
-			occurence[sudokuBoard[row][col].value]++
-			if(occurence[sudokuBoard[row][col].value] === 2) return false
-		}
-	}
-
-	return true
+// going to insert num at the {row, col} cell, check for duplicacy
+const duplicacyPresent = (row, col, num) => {
+	const numIndex = num-1
+	const { rows, cols, blocks } = duplicacyCheckerStore
+	const { blockNum } = getBlockAndBoxNum(row, col)
+	return (rows[row][numIndex] || cols[col][numIndex] || blocks[blockNum][numIndex])
 }
 
-/*
-	this will mark all the valid notes of the newly generated sudoku grid and then will
-	also store the each occurences of a notes in every row/col/block
-*/
-export const generateNewPuzzleNotes = (notesData, sudokuBoard) => {
-	initNotesInstancesInfo()
-	for(let num=1;num<=9;num++) {
-		for(let row=0;row<9;row++) {
-			for(let col=0;col<9;col++) {
-				if(!sudokuBoard[row][col].value && !duplicacyPresent(row, col, num, sudokuBoard)){
-					const { blockNum, boxNum } = getBlockAndBoxNum(row, col)
-					notesData[row][col][num-1].show = 1
-					notesInstancesPlacesInfo[num].row[row].push(col) // row me konse col me present h
-					notesInstancesPlacesInfo[num].col[col].push(row) // col me konse row me present h
-					notesInstancesPlacesInfo[num].block[blockNum].push(boxNum) // block me konse box me present h
+const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNum) => {
+	const { blockNum: currentBlockNum } = getBlockAndBoxNum(currentRow, currentCol)
+	let newCells = []
+
+	// update notes for current cell
+	for (let note=1;note<=9;note++) {
+		if (!duplicacyPresent(currentRow, currentCol, note)) {
+			updateNoteInCell(currentRow, currentCol, note, false)
+		}
+	}
+	// it's guranteed that only "num" got inserted in the cell if notes count is 1
+	const numIsNakedSingleForCurrentCell = notesData[currentRow][currentCol].count === 1
+
+	// update for every column of currentRow
+	for (let col=0;col<9;col++) {
+		if (col !== currentCol && !sudokuBoard[currentRow][col].value && !notesData[currentRow][col].boxNotes[num-1].show && !duplicacyPresent(currentRow, col, num)) {
+			updateNoteInCell(currentRow, col, num, false)
+			if (getNewCellsForNum && !cellHasHiddenSingle(currentRow, col)) newCells.push({ row: currentRow, col })
+		}
+	}
+	const numIsHiddenSingleForCurrentRow = notesInstancesPlacesInfo[num].rows[currentRow].count === 1
+
+	// update for every row of currentColumn
+	for (let row=0;row<9;row++) {
+		if (row !== currentRow && !sudokuBoard[row][currentCol].value && !notesData[row][currentCol].boxNotes[num-1].show && !duplicacyPresent(row, currentCol, num)) {
+			updateNoteInCell(row, currentCol, num, false)
+			if (getNewCellsForNum && !cellHasHiddenSingle(row, currentCol)) newCells.push({ row, col: currentCol })
+		}
+	}
+	const numIsHiddenSingleForCurrentCol = notesInstancesPlacesInfo[num].cols[currentCol].count === 1
+
+	// update for every box of the current block
+	for (let boxNum=0;boxNum<9;boxNum++) {
+		const { row, col } = getRowAndCol(currentBlockNum, boxNum)
+		if (row === currentRow || col === currentCol) continue
+		if (!sudokuBoard[row][col].value && !notesData[row][col].boxNotes[num-1].show && !duplicacyPresent(row, col, num)) {
+			updateNoteInCell(row, col, num, false)
+			if (getNewCellsForNum && !cellHasHiddenSingle(row, col)) newCells.push({ row, col })
+		}
+	}
+	const numIsHiddenSingleForCurrentBlock = notesInstancesPlacesInfo[num].blocks[currentBlockNum].count === 1
+
+	if (getNewCellsForNum && (numIsNakedSingleForCurrentCell || numIsHiddenSingleForCurrentRow || numIsHiddenSingleForCurrentCol || numIsHiddenSingleForCurrentBlock))
+		newCells = []
+
+	return newCells
+}
+
+// getting used in the below function to check if the cell we filled is correct or not at this step
+const getValidityChecksConfig = (currentRow, currentCol, currentBlockNum, row, col, blockNum, currentCellDifferentNote = false) => {
+	if (currentCellDifferentNote) {
+		return {
+			nakedSingle: false,
+			rowHiddenSingle: true,
+			colHiddenSingle: true,
+			blockHiddenSingle: true,
+		}
+	}
+	const validityChecksConfig = {
+		nakedSingle: !(row === currentRow && col === currentCol),
+		rowHiddenSingle: row !== currentRow,
+		colHiddenSingle: col !== currentCol,
+		blockHiddenSingle: blockNum !== currentBlockNum,
+	}
+	return validityChecksConfig
+}
+
+// it will tell if after filling the current cell sudoku will enter in invalidState
+const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) => {
+	const { blockNum: currentBlockNum } = getBlockAndBoxNum(currentRow, currentCol)
+	let invalidFillInCurrentCell = false
+
+	// remove all the notes from current cell except "num"
+	// only "hidden singles" can be generated here, so watch over them also
+	// And let's insert duplicate entries in "highlightedSinglesInfo" array and just don't do insert 
+	// operation on already filled cell. this way i can check for correctness also.
+	for (let note=1;note<=9;note++) {
+		if (note === num) continue
+		if (notesData[currentRow][currentCol].boxNotes[note-1].show) {
+			// no chance of being removed note as naked single here
+			// but these notes can be hidden single in currentRow, currentCol, currentBlock
+			const validityChecksConfig = getValidityChecksConfig(currentRow, currentCol, currentBlockNum, currentRow, currentCol, currentBlockNum, true)
+			invalidFillInCurrentCell = updateNoteInCell(currentRow, currentCol, note, true, validityChecksConfig) || invalidFillInCurrentCell
+			updateSingles && updateHiddenSingles(currentRow, currentCol, note)
+		}
+	}
+
+	// remove from current block
+	for (let box=0;box<9;box++) {
+		const { row, col } = getRowAndCol(currentBlockNum, box)
+		if (notesData[row][col].boxNotes[num-1].show) {			
+			const validityChecksConfig = getValidityChecksConfig(currentRow, currentCol, currentBlockNum, row, col, currentBlockNum)
+			invalidFillInCurrentCell = updateNoteInCell(row, col, num, true, validityChecksConfig) || invalidFillInCurrentCell
+			if (updateSingles) {
+				updateNakedSingles(row, col)
+				// update for hidden single. no need to check for any blocks
+				// because it's the current block in which something is getting hidden
+				// and in this block we have already filled "num"
+				const housesToCheck = {
+					checkInRow: row !== currentRow,
+					checkInCol: col !== currentCol,
+					checkInBlock: false,
 				}
+				updateHiddenSingles(row, col, num, housesToCheck)
 			}
 		}
 	}
-}
 
-export const highlightNakedSingles = (notesData, sudokuBoard) => {
-	for(let row=0;row<9;row++){
-		for(let col=0;col<9;col++){
-			let cnt = 0
-			let instance
-			for(let i=0;i<9;i++){
-				if(notesData[row][col][i].show === 1) {
-					cnt++
-					instance = i+1
+	// remove from currentRow, but only for the cells which are not in currentBlock
+	for (let col=0;col<9;col++) {
+		if (notesData[currentRow][col].boxNotes[num-1].show) {
+			const validityChecksConfig = getValidityChecksConfig(currentRow, currentCol, currentBlockNum, currentRow, col, getBlockAndBoxNum(currentRow, col).blockNum)
+			invalidFillInCurrentCell = updateNoteInCell(currentRow, col, num, true, validityChecksConfig) || invalidFillInCurrentCell
+			if (updateSingles) {
+				updateNakedSingles(currentRow, col)
+				// no chance of hidden singles in row here
+				// only column and blocks can have it
+				const housesToCheck = {
+					checkInRow: false,
+					checkInCol: true,
+					checkInBlock: true,
 				}
-			}
-			if(cnt === 1) {
-				notesData[row][col][instance-1].highlight = 1
-				highlightedSinglesInfo.push({row: row, col: col, num: instance})
+				updateHiddenSingles(currentRow, col, num, housesToCheck)
 			}
 		}
 	}
-	const filledCells = highlightedSinglesInfo.length !== 0
-	fillSingles(notesData, sudokuBoard)
-	return filledCells
-}
 
-// we are talking about hidden singles here
-export const highlightHiddenSingles = (notesData, sudokuBoard) => {
-	// TODO: right now there are duplicate entries getting stored here. later write a logic to remove that
-	for(let instance = 1;instance <= 9;instance++) {
-		for(let i=0;i<9;i++) {
-			if(notesInstancesPlacesInfo[instance].row[i].length === 1) {
-				const col = notesInstancesPlacesInfo[instance].row[i][0]
-				notesData[i][col][instance-1].highlight = 1
-				highlightedSinglesInfo.push({row: i, col: col, num: instance})
-			}
-			if(notesInstancesPlacesInfo[instance].col[i].length === 1) {
-				const row = notesInstancesPlacesInfo[instance].col[i][0]
-				notesData[row][i][instance-1].highlight = 1
-				highlightedSinglesInfo.push({row: row, col: i, num: instance})
-			}
-			if(notesInstancesPlacesInfo[instance].block[i].length === 1) {
-				const boxNum = notesInstancesPlacesInfo[instance].block[i][0]
-				const { row, col } = getRowAndCol(i, boxNum)
-				notesData[row][col][instance-1].highlight = 1
-				highlightedSinglesInfo.push({row: row, col: col, num: instance})
+	// remove from current column
+	for (let row=0;row<9;row++) {
+		if (notesData[row][currentCol].boxNotes[num-1].show) {
+			const validityChecksConfig = getValidityChecksConfig(currentRow, currentCol, currentBlockNum, row, currentCol, getBlockAndBoxNum(row, currentCol).blockNum)
+			invalidFillInCurrentCell = updateNoteInCell(row, currentCol, num, true, validityChecksConfig) || invalidFillInCurrentCell
+			if (updateSingles) {
+				updateNakedSingles(row, currentCol)
+				// no chance of hidden singles in column here
+				// only row and blocks can have it
+				const housesToCheck = {
+					checkInRow: true,
+					checkInCol: false,
+					checkInBlock: true,
+				}
+				updateHiddenSingles(row, currentCol, num, housesToCheck)
 			}
 		}
 	}
-	const filledCells = highlightedSinglesInfo.length !== 0
-	fillSingles(notesData, sudokuBoard)
-	return filledCells
+
+	return invalidFillInCurrentCell
 }
 
-export const removeInstanceFromRowColumnAndBlock = (row, col, instanceInfo) => {
-	const {blockNum, boxNum} = getBlockAndBoxNum(row, col)
-
-	let index = instanceInfo.col[col].indexOf(row)
-	if(index !== -1) instanceInfo.col[col].splice(index, 1)
-
-	index = instanceInfo.row[row].indexOf(col)
-	if(index !== -1) instanceInfo.row[row].splice(index, 1)
-
-	index = instanceInfo.block[blockNum].indexOf(boxNum)
-	if(index !== -1) instanceInfo.block[blockNum].splice(index, 1)
+const fillCell = (row, col, num, updateSingles) => {
+	sudokuBoard[row][col].value = num
+	updateDuplicacyCheckerStore(row, col, num)
+	return updateNotesAfterFillCell(row, col, num, updateSingles)
 }
 
-// fill all the spotted singles and also remove those notes from notesInstancesPlacesInfo
-export const removeNotesInstanceInfo = (row, col, num) => {
-	let instanceInfo = notesInstancesPlacesInfo[num]
-	const instanceBoxes = [] // boxes from which this number should be removed
-	for(let i=0;i<instanceInfo.row[row].length;i++){
-		const col = instanceInfo.row[row][i]
-		instanceBoxes.push({row, col})
-	}
-	for(let i=0;i<instanceInfo.col[col].length;i++){
-		const row = instanceInfo.col[col][i]
-		instanceBoxes.push({row, col})
-	}
-	let {blockNum, boxNum} = getBlockAndBoxNum(row, col)
-	for(let i=0;i<instanceInfo.block[blockNum].length;i++){
-		boxNum = instanceInfo.block[blockNum][i]
-		const {row, col} = getRowAndCol(blockNum, boxNum)
-		instanceBoxes.push({row, col})
-	}
-
-	// now all these boxes are part of a row, col, block and we have to remove the possibility of this num from all these places
-	for(let i=0;i<instanceBoxes.length;i++){
-		const {row, col} = instanceBoxes[i]
-		removeInstanceFromRowColumnAndBlock(row, col, instanceInfo)
-	}
-
-	// empty all these arrays
-	instanceInfo.row[row] = []
-	instanceInfo.col[col] = []
-	blockNum = getBlockAndBoxNum(row, col).blockNum
-	instanceInfo.block[blockNum] = []
-
-	// now remove possibilities of other instances from this box of the row, col, block
-	for(let instance=1;instance<=9;instance++) {
-		instanceInfo = notesInstancesPlacesInfo[instance]
-
-		let index = instanceInfo.row[row].indexOf(col)
-		if(index !== -1)
-			instanceInfo.row[row].splice(index, 1)
-
-		index = instanceInfo.col[col].indexOf(row)
-		if(index !== -1)
-			instanceInfo.col[col].splice(index, 1)
-
-		const { blockNum, boxNum } = getBlockAndBoxNum(row, col)
-		index = instanceInfo.block[blockNum].indexOf(boxNum)
-		if(index !== -1)
-			instanceInfo.block[blockNum].splice(index, 1)
-	}
+const emptyCell = (row, col, getNewCellsForNum = false) => {
+	const valueToBeRemoved = sudokuBoard[row][col].value
+	sudokuBoard[row][col].value = 0
+	updateDuplicacyCheckerStore(row, col, valueToBeRemoved)
+	// 1. return new cells where "valueToBeRemoved" can be placed after removing it from current cell
+	// 2. newCells won't have current cell in the list
+	return updateNotesAfterEmptyCell(row, col, valueToBeRemoved, getNewCellsForNum)
 }
 
-export const hideNote = (row, col, num, notesData) => {
-	for(let j=0;j<9;j++) notesData[row][col][j].show = 0
-	// hide all the notes of this number from this row, col, block
-	for(let j=0;j<9;j++) {
-		notesData[row][j][num-1].show = 0 // from row
-		notesData[j][col][num-1].show = 0 // from col
-	}
-	const { blockCol, blockRow } = getBlockRowCol(row, col)
-	for(let j=0;j<3;j++)
-		for(let k=0;k<3;k++)
-			notesData[blockRow + j][blockCol + k][num-1].show = 0 // from box
-}
-
-export const fillSingles = (notesData, sudokuBoard) => {
-	for(let i=0;i<highlightedSinglesInfo.length;i++){
+const fillSingles = () => {
+	const cellsFilled = []
+	let invalidState = false
+	for (let i=0;i<highlightedSinglesInfo.length;i++) {
 		const { row, col, num } = highlightedSinglesInfo[i]
-		// hide all the notes of this box
-		for(let j=0;j<9;j++) notesData[row][col][j].show = 0
-		// hide all the notes of this number from this row, col, block
-		for(let j=0;j<9;j++) {
-			notesData[row][j][num-1].show = 0 // from row
-			notesData[j][col][num-1].show = 0 // from col
+		if (!sudokuBoard[row][col].value) {
+			cellsFilled.push({ row, col })
+			if (fillCell(row, col, num, true)) {
+				invalidState = true
+				break
+			}
 		}
-		const { blockCol, blockRow } = getBlockRowCol(row, col)
-    	for(let j=0;j<3;j++)
-			for(let k=0;k<3;k++)
-				notesData[blockRow + j][blockCol + k][num-1].show = 0 // from box
-		// unhighlight this highlighted clue
-		notesData[row][col][num-1].highlight = 0
-		// put this notes in the box as main value
-		sudokuBoard[row][col].value = num
-		// remove notes info from notesInstancesPlacesInfo
-		removeNotesInstanceInfo(row, col, num)
 	}
 	highlightedSinglesInfo = []
+	return { cellsFilled, invalidState }
 }
 
-const fillRecursionIndependentBoxes = (sudokuBoard) => {
+const fillRecursionIndependentBoxes = () => {
 	const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 	for(let row = 0;row < 3;row++){
 		for(let col = 0;col < 3;col++){
@@ -371,242 +415,267 @@ const fillRecursionIndependentBoxes = (sudokuBoard) => {
 	}
 }
 
-const copyNotes = (notesData) => {
-	const notesCopy = new Array(9)
-	for(let i = 0;i < 9;i++) {
-		const rowNotesCopy = []
-		for(let j = 0;j < 9;j++) {
-			const boxNotesCopy = new Array(9)
-			for(let k = 1;k <= 9;k++){
-				const show = notesData[i][j][k-1].show
-				boxNotesCopy[k-1] = {"noteValue": k, show}
-			}
-			rowNotesCopy.push(boxNotesCopy)
-		}
-		notesCopy[i] = rowNotesCopy
-	}
-	return notesCopy
-}
-
-const copyNotesBack = (notesCopy, notesData) => {
-	for(let row=0;row<9;row++){
-		for(let col=0;col<9;col++){
-			for(let instance=1;instance<=9;instance++){
-				const show = notesCopy[row][col][instance-1].show
-				notesData[row][col][instance-1].show = show
-			}
-		}
-	}
-}
-
-const copyBoardData = (sudokuBoard) => {
-	const boardDataCopy = new Array(9)
-	for(let i=0;i<9;i++){
-		const rowBoardData = new Array()
-		for(let j=0;j<9;j++) {
-			const value = sudokuBoard[i][j].value
-			rowBoardData.push({value, solutionValue: '', isClue: 0})
-		}
-		boardDataCopy[i] = rowBoardData
-	}
-	return boardDataCopy
-}
-
-const copyBoardDataBack = (boardDataCopy, sudokuBoard) => {
-	for(let row=0;row<9;row++){
-		for(let col=0;col<9;col++){
-			sudokuBoard[row][col].value = boardDataCopy[row][col].value
-		}
-	}
-}
-
-const getBoxToStartRecursionFrom = (sudokuBoard) => {
-	let row = -1
-	let col = -1
-	for(let i=0;i<9;i++){
-		for(let j=0;j<9;j++){
-			if(!sudokuBoard[i][j].value){
-				row = i
-				col = j
-				break
-			}
-		}
-		if(row !== -1 && col !== -1) break
-	}
+// TODO: store this info in a object and anytime a cell is getting emptied, update the object if 
+// that cell is small than current one
+// Remark: settling with this only
+const getBoxToStartRecursionFrom = () => {
+	let row = -1, col = -1
+	for (let i=0;i<9;i++)
+		for (let j=0;j<9;j++)
+			if (!sudokuBoard[i][j].value)
+				return { row: i, col: j }
 	return { row, col }
 }
 
-// TODO: optimize data copy operations (top priority)
-const recursion = (row, col, notesData, sudokuBoard) => {
-	// make relevant information copies
-	const notesCopy = copyNotes(notesData)
-	const boardDataCopy = copyBoardData(sudokuBoard)
-	const notesInstancesPlacesInfoCopy = copyNotesInstancesInfo()
-
-	let numberOfSol = 0
-	let valueToBeFilled = -1
-	for(let i=0;i<notesCopy[row][col].length;i++){
-		const noteVisible = notesCopy[row][col][i].show
-
-		if(noteVisible){
-			// hide note, fill box, remove instance info
-			valueToBeFilled = i+1
-			hideNote(row, col, valueToBeFilled, notesData)
-			sudokuBoard[row][col].value = valueToBeFilled
-			removeNotesInstanceInfo(row, col, valueToBeFilled)
-			const childNumOfSol = sudokuSolver(notesData, sudokuBoard) // use techniques after guessing value for this cell
-			numberOfSol += childNumOfSol
-			// restore the state just like before
-			copyBoardDataBack(boardDataCopy, sudokuBoard)
-			copyNotesBack(notesCopy, notesData)
-			copyNotesInstancesInfoBack(notesInstancesPlacesInfoCopy)
-			if(numberOfSol > 1) break
-		}
-	}
-	return numberOfSol
-}
-
-const sudokuSolver = (notesData, sudokuBoard) => {
-	let iterateAgain = true
+const recursion = (row, col, alreadyFilledCells) => {
 	let numberOfSolutions = 0
-	let usedRecursion = false
-	let sudokuSolved = isSudokuSolved(sudokuBoard)
-	if(sudokuSolved)
-		numberOfSolutions = 1
-
-	while(!sudokuSolved && !numberOfSolutions){
-		while(iterateAgain && !sudokuSolved){
-			let progressMade = false
-			for(let i=0;i<techniques.length && !sudokuSolved;i++){
-				const technique = techniques[i]
-				while(technique(notesData, sudokuBoard)){progressMade = true}
-				sudokuSolved = isSudokuSolved(sudokuBoard)
+	const boxNotes = notesData[row][col].boxNotes
+	for (let i=0;i<9;i++) {
+		if (boxNotes[i].show) {
+			//  don't search for singles because that "sudokuSolver" will do
+			const invalidState = fillCell(row, col, i + 1, false)
+			numberOfSolutions = !invalidState ? sudokuSolver(alreadyFilledCells + 1) : numberOfSolutions
+			emptyCell(row, col)
+			if (numberOfSolutions) {
+				// break the loop here because in "generateClues" func we can't remove the clue
+				// we are trying to remove. if we remove then it would lead to multiple solutions.
+				break
 			}
-			iterateAgain = progressMade
 		}
-		if (!sudokuSolved) {
-			// don't use recursion further if sudoku state is invalid
-			if(invalidSudokuState(notesData, sudokuBoard)) return 0
-			const { row, col } = getBoxToStartRecursionFrom(sudokuBoard)
-			if(row !== -1 && col !== -1)
-				numberOfSolutions = recursion(row, col, notesData, sudokuBoard)
-			usedRecursion = true
-		}
-		else numberOfSolutions = 1
-		if(usedRecursion && numberOfSolutions === 0) break
 	}
 	return numberOfSolutions
 }
 
-const insertTechniques = () => {
-	techniques.push(highlightNakedSingles)
-	techniques.push(highlightHiddenSingles)
+// is it possible to know already that how many cells are already filled ??
+// it would be an optimization and i wouldn't need to calculate that number
+const sudokuSolver = (alreadyFilledCells) => {
+	if (alreadyFilledCells === 81) return 1
+	
+	let numberOfSolutions = 0
+	// while filling singles, the function will fill newly generated singles as well
+	// and will check for duplicate entries as well, so no need to looping here
+	findSingles()
+	let { cellsFilled, invalidState } = fillSingles() // fillCell calls in this func will look for newly generated "naked" and "hidden" singles	
+	if (!invalidState) { // keep on solving if the state is valid
+		alreadyFilledCells += cellsFilled.length
+		if (alreadyFilledCells === 81) numberOfSolutions = 1
+		else {
+			// human techniques didn't solve completely, now use computer recursion power
+			const { row, col } = getBoxToStartRecursionFrom() // TODO: optimize this
+			if (row !== -1 && col !== -1)
+				numberOfSolutions = recursion(row, col, alreadyFilledCells)
+		}
+	}
+
+	for (let i=0;i<cellsFilled.length;i++) {
+		const { row, col } = cellsFilled[i]
+		emptyCell(row, col)
+	}
+	cellsFilled = []
+
+	return numberOfSolutions // possibly we are going to remove this cellsFilled from the return
 }
 
-const generateClues = (clues, notesData, sudokuBoard) => {
-	insertTechniques()
-	const filledCells = new Array()
-	for(let i=0;i<81;i++) filledCells.push(i)
-	let cluesToBeHidden = 81 - clues
+const initializeDuplicacyCheckerStore = () => {
+	const rows = []
+	const cols = []
+	const blocks = []
+	for(let i=0;i<9;i++){
+		rows.push(new Array(9).fill(0))
+		cols.push(new Array(9).fill(0))
+		blocks.push(new Array(9).fill(0))
+	}
 
+	for(let row=0; row < 9; row++){
+		for(let col=0; col < 9; col++){
+			let cellNum = sudokuBoard[row][col].value
+			if (cellNum) {
+				const numIndex = cellNum - 1
+				rows[row][numIndex] = 1
+				cols[col][numIndex] = 1
+				const { blockNum } = getBlockAndBoxNum(row, col)
+				blocks[blockNum][numIndex] = 1
+			}
+		}
+	}
+	
+	duplicacyCheckerStore.rows = rows
+	duplicacyCheckerStore.cols = cols
+	duplicacyCheckerStore.blocks = blocks
+}
+
+const initNotesData = () => {
+	notesData = new Array(9)
+	for(let i = 0;i < 9;i++) {
+        const rowNotes = []
+        for(let j = 0;j < 9;j++) {
+            const boxNotes = new Array(9)
+            for(let k = 1;k <= 9;k++)
+                boxNotes[k-1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
+            rowNotes.push({ boxNotes, count: 0 })
+        }
+        notesData[i] = rowNotes
+	}
+}
+
+const generateClues = (clues) => {	
 	const clueTypeInstanceCount = new Array(10).fill(9)
 	let numberOfDigitsDidExtinct = 0
-	while(cluesToBeHidden){
-		if(!filledCells.length) break
+	
+	initNotesData() // DS for naked singles
+	initNotesInstancesInfo() // DS for hidden singles
+	// remove 9 clues, 1 from each row without any worries
+	for (let row=0;row<9;row++) {
+		const col = Math.floor(Math.random() * 9) // 9 cols are there
+		const num = sudokuBoard[row][col].value
+		sudokuBoard[row][col].value = 0
+		updateDuplicacyCheckerStore(row, col, num)
+		clueTypeInstanceCount[num]--
+		if (clueTypeInstanceCount[num] === 0) numberOfDigitsDidExtinct++
+		// update notes, these boxes will have only 1 note in them which is the "num" we just removed
+		// so we don't need to check for any duplicacy of any kind
+		updateNoteInCell(row, col, num, false)
+	}
+	// all good till this point. our duplicacy checker is working absolutely fine
+
+	const filledCells = new Array()
+	for (let row=0;row<9;row++)
+		for (let col=0;col<9;col++)
+			if (sudokuBoard[row][col].value) filledCells.push(row * 9 + col)
+
+	let cluesToBeHidden = filledCells.length - clues
+	let cellsFilled = filledCells.length // full board is filled at begining
+
+	while (cluesToBeHidden) {
+		if (!filledCells.length) break
 		const filledBoxIndex = Math.floor(Math.random() * filledCells.length)
 		const box = filledCells[filledBoxIndex]
 		filledCells.splice(filledBoxIndex, 1)
 
 		const row = Math.floor(box / 9)
 		const col = box % 9
-
+		
 		const valueToHide = sudokuBoard[row][col].value
+		// we can have only 1 number which can go fully extinct, else we are surely gonna 
+		// have multiple solutions by just replacing all the instances of those two numbers
 		if (clueTypeInstanceCount[valueToHide] === 1 && numberOfDigitsDidExtinct) continue
-		sudokuBoard[row][col].value = 0
-		const boardDataCopy = copyBoardData(sudokuBoard)
-		// TODO:optimize this step to only 1 cell
-		generateNewPuzzleNotes(notesData, sudokuBoard) // generate notes before solving
-		const numOfSolutions = sudokuSolver(notesData, sudokuBoard)
-		if (numOfSolutions == 1) {
+
+		// get the list of cells in which current cell's number might appear as a candidate
+		// if we remove it and the list shouldn't contain the current cell
+		const newCells = emptyCell(row, col, true)
+		let safeToRemove = true
+		for (let i=0;i<newCells.length && safeToRemove;i++) {
+			const { row, col } = newCells[i]
+			// don't look for naked and hidden singles here because that sudokuSolver is doing
+			const invalidState = fillCell(row, col, valueToHide, false)
+			const numOfSolutions = !invalidState ? sudokuSolver(cellsFilled) : 0
+			// revert the above step and try another possible cell
+			emptyCell(row, col)
+			if (numOfSolutions) safeToRemove = false
+		}
+
+		if (safeToRemove) {
+			cellsFilled--
 			cluesToBeHidden--
 			clueTypeInstanceCount[valueToHide]--
-			if(clueTypeInstanceCount[valueToHide] === 0) numberOfDigitsDidExtinct++
+			if (clueTypeInstanceCount[valueToHide] === 0) numberOfDigitsDidExtinct++
+		} else {
+			// no need to look for naked and hidden singles
+			fillCell(row, col, valueToHide, false)
 		}
-		else {
-			boardDataCopy[row][col].value = valueToHide
-		}
-		copyBoardDataBack(boardDataCopy, sudokuBoard)
 	}
 }
 
-const hideAllNotes = (notesData) => {
-	for(let row=0;row<9;row++){
-		for(let col=0;col<9;col++){
-			for(let i=0;i<9;i++){
-				notesData[row][col][i].show = 0
+// can't this use singleton technique ??
+// TODO: make this recursion techique 
+const backtrackForSolvedGridGen = (row, col) => {
+    if (row == 9) return 1
+    if (col == 9)  return backtrackForSolvedGridGen(row + 1, 0)
+    if (sudokuBoard[row][col].value) return backtrackForSolvedGridGen(row, col + 1)
+
+    for (let num = 1;num <= 9;num++) {
+		if (!duplicacyPresent(row, col, num)) {
+			sudokuBoard[row][col].value = num
+			updateDuplicacyCheckerStore(row, col, num)
+			if (!backtrackForSolvedGridGen(row, col + 1)) {
+				sudokuBoard[row][col].value = 0
+				updateDuplicacyCheckerStore(row, col, num)
+			} else {
+				sudokuBoard[row][col].value = 0
+				updateDuplicacyCheckerStore(row, col, num)
+				return 1
 			}
 		}
 	}
+	return 0
 }
 
-const backtrackForSolvedGridGen = (row, col) => {
-    if(row == 9) return 1
-    if(col == 9)  return backtrackForSolvedGridGen(row + 1, 0)
-    if(tempSudoku[row][col].value) return backtrackForSolvedGridGen(row, col + 1)
+const recursionForSolvedGridGen = (row, col) => {
+	return backtrackForSolvedGridGen(row, col)
+}
 
-    for(let num = 1;num <= 9;num++){
-		if(!duplicacyPresent(row, col, num, tempSudoku)){
-			tempSudoku[row][col].value = num
-			if(!backtrackForSolvedGridGen(row, 1 + col)) tempSudoku[row][col].value = 0
-			else return 1
-		}
+const printBoardState = () => {
+	const a = new Array(9)
+	for (let row = 0;row < 9;row++) {
+		a[row] = []
+		for (let col = 0;col < 9;col++)
+			a[row].push(sudokuBoard[row][col].value)
+		console.log(...a[row])
 	}
-	if(tempSudoku[row][col] == 0) return 0
 }
 
-const recursionForSolvedGridGen = (row, col, sudokuBoard) => {
-    copyBoard(sudokuBoard)
-    return backtrackForSolvedGridGen(row, col)
-}
+// below notesData is not required at all
+export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
+	sudokuBoard = initBoardData()
+	sudokuSolution = initBoardData() // TODO: we can remove this as well will remove it later
 
-export const generateNewSudokuPuzzle = async (clues, notesData, originalSudokuBoard) => {
-	const sudokuBoard = initBoardData()
-	tempSudoku = initBoardData()
-	sudokuSolution = initBoardData()
+	// init duplicacy checker DS here
+	fillRecursionIndependentBoxes()
+	initializeDuplicacyCheckerStore()
 
-	fillRecursionIndependentBoxes(sudokuBoard)
-
-	for(let row = 0;row < 9;row++){
-		for(let col = 0;col < 9;col++){
-            const markInvalidNumbers = new Array(10).fill(0)
-			while(!sudokuBoard[row][col].value){
-				let numToFill = Math.floor(Math.random()*9) + 1
-				while(markInvalidNumbers[numToFill] || duplicacyPresent(row, col, numToFill, sudokuBoard))
-					numToFill = Math.floor(Math.random()*9) + 1
+	// TODO: do some research if below piece of code can be optimized or not
+	for (let row = 0;row < 9;row++) {
+		for (let col = 0;col < 9;col++) {
+			const numChoices = []
+			for (let num=1;num<=9;num++) numChoices.push(num)
+			while (!sudokuBoard[row][col].value) {
+				let numIndex = Math.floor(Math.random() * numChoices.length)
+				let numToFill = numChoices[numIndex]
+				numChoices.splice(numIndex, 1)
+				if (duplicacyPresent(row, col, numToFill)) continue
 				sudokuBoard[row][col].value = numToFill
-				if(!recursionForSolvedGridGen(0, 0, sudokuBoard)){
+				updateDuplicacyCheckerStore(row, col, numToFill)
+				if (!recursionForSolvedGridGen(0, 0)) {
 					sudokuBoard[row][col].value = 0
-					markInvalidNumbers[numToFill] = 1
+					updateDuplicacyCheckerStore(row, col, numToFill)
 				}
 			}
 		}
 	}
 
+	// fully solved puzzle is ready and store the solution at this point
 	for(let i=0;i<9;i++)
 		for(let j=0;j<9;j++)
 			sudokuSolution[i][j].value = sudokuBoard[i][j].value
 
-	generateClues(clues, notesData, sudokuBoard)
-	hideAllNotes(notesData)
+	// remove numbers to generate the puzzle
+	generateClues(clues)
 
+	// console.log('@@@@@ required clues are', clues)
+
+	// let count=0
 	for(let i=0;i<9;i++){
 		for(let j=0;j<9;j++){
-			if (sudokuBoard[i][j].value)
+			if (sudokuBoard[i][j].value) {
 				originalSudokuBoard[i][j] = {value: sudokuBoard[i][j].value, isClue: 1, solutionValue: sudokuSolution[i][j].value}
+				// count++
+			}
 			else originalSudokuBoard[i][j] = {value: 0, isClue: 0, solutionValue: sudokuSolution[i][j].value}
 		}
 	}
 
+	// console.log('@@@@@ actual clues are', count)
+	// printBoardState()
 }
 
 export const noOperationFunction = minisculePerfBoost => minisculePerfBoost && undefined
@@ -623,4 +692,5 @@ export const rgba = function(hex, opacity) {
 /**
  * 	Object.create or {...obj} or [...obj] or Object.assign doeos't work foor deep cloning
  */
+// TODO: this is very expensive piece of code. remove it completely
 export const deepClone = obj => obj && JSON.parse(JSON.stringify(obj))
