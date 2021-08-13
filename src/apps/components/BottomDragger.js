@@ -127,7 +127,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         openDragger: (data = undefined) => moveDragger(topMostPosition, data),
         closeDragger: (data = undefined) => moveDragger(bottomMostPosition, data),
-    }), [isFullView, isDraggerActive, bottomMostPosition, topMostPosition, onDraggerOpened, onDraggerClosed])
+    }), [isFullView, isDraggerActive, bottomMostPosition, topMostPosition, onDraggerOpened, onDraggerClosed, transformValue])
 
     const moveDragger = (toValue = bottomMostPosition, data = undefined) => {        
         // parent component might open the dragger. so mark dragger as active

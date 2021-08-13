@@ -2,12 +2,8 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { Styles } from './style'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
-import { CELL_BORDER_WIDTH, CELL_HEIGHT } from '../dimensions'
-import { EVENTS, GAME_STATE } from '../../../../resources/constants'
-
-/**
- * 8. check for un-necessary rendering
- */
+import { CELL_BORDER_WIDTH } from '../dimensions'
+import { GAME_STATE } from '../../../../resources/constants'
 
 // becoz only 3 notes are there in a row
 const looper = []
@@ -22,14 +18,11 @@ const Cell_ = ({
     col,
     cellNotes = [],
     cellMainValue = 0,
-    cellBGColor = null, 
+    cellBGColor = null,
     mainValueFontColor = null,
     onCellClicked,
     gameState,
 }) => {
-    // if (row === 0 && col === 0) 
-    //     console.log('@@@@@@@ row col', JSON.stringify(cellNotes))
-    // if (row === 0 && col === 0) console.log('@@@@@@@ cellNotes', JSON.stringify(cellNotes))
     const getCellBordersStyle = () => {
         if (boxOuterCellRowColCordinates.indexOf(row) !== -1 && boxOuterCellRowColCordinates.indexOf(col) !== -1) {
             return {}
