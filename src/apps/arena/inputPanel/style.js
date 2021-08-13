@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native'
+import { rgba } from '../../../utils/util';
 
 const { width } = Dimensions.get('window')
 const INPUT_NUMBER_DIMENSION = width * .94 / 9 * 1.5 // 1.5 times the size of the board cells
@@ -7,6 +8,7 @@ export const styles = StyleSheet.create({
     container: {
         height: INPUT_GRID_DIMENSION,
         width: INPUT_GRID_DIMENSION,
+        justifyContent: 'space-between',
     },
     gridBorderContainer: {
         position: 'absolute',
@@ -27,13 +29,16 @@ export const styles = StyleSheet.create({
     },
     rowContainer: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     numberButtonContainer: { // rectangular outer container for Input Number
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: INPUT_NUMBER_DIMENSION,
-        height: INPUT_NUMBER_DIMENSION,
+        width: INPUT_NUMBER_DIMENSION - 2,
+        height: INPUT_NUMBER_DIMENSION - 2,
+        backgroundColor: rgba('#d5e5f6', 60),
+        borderRadius: 12,
     },
     textStyle: {
         color: 'rgb(49, 90, 163)',

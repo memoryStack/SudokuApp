@@ -59,8 +59,8 @@ const Inputpanel_ = ({ gameState }) => {
                     )
                 })
             }
-            {getGrid('horizontal')}
-            {getGrid('vertical')}
+            {/* {getGrid('horizontal')}
+            {getGrid('vertical')} */}
         </View>
     )
 }
