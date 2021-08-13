@@ -18,9 +18,9 @@ const App = () => {
   // TODO: codepush is giving some error for ios
   // {"status":400,"name":"Error","message":"Missing required query parameter \"deployment_key\""}
   useEffect(() => {
-    CodePush.sync({installMode: CodePush.InstallMode.IMMEDIATE}, (status) => {
-      console.log('@@@@@@@ JS update installed status', status)
-    })
+    // CodePush.sync({installMode: CodePush.InstallMode.IMMEDIATE}, (status) => {
+    //   console.log('@@@@@@@ JS update installed status', status)
+    // })
   }, [])
     
   return (
