@@ -41,4 +41,5 @@ const App = () => {
 
 };
 
-export default CodePush(CODE_PUSH_OPTIONS)(App)
+// export default CodePush(CODE_PUSH_OPTIONS)(App)
+export default App
