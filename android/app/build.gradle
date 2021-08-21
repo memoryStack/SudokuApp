@@ -192,9 +192,10 @@ android {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
-            minifyEnabled enableProguardInReleaseBuilds
-            shrinkResources true
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            // TODO: fix it in order to stop the crash on release build.
+            // minifyEnabled enableProguardInReleaseBuilds
+            // shrinkResources true
+            // proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             resValue "string", "CodePushDeploymentKey", '"lS8ZjsywJY70Fda52EWwFJqPffur02d_7ZN3x"'
             applicationIdSuffix ".release"
         }

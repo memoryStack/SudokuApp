@@ -19,12 +19,13 @@ import { Hint } from './cellActions/hint'
 import { Timer } from './timer'
 import { isGameOver, shouldSaveGameState } from './utils/util'
 import { NewGameButton } from './newGameButton'
+import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 
 const MAX_AVAILABLE_HINTS = 3
 const MISTAKES_LIMIT = 3
 const { width: windowWidth } = Dimensions.get('window')
 const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
-
+let timeTaken = 0
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -221,16 +222,45 @@ const Arena_ = () => {
             // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
             const minClues = LEVELS_CLUES_INFO[difficultyLevel]
             const boardData = initBoardData()
-            generateNewSudokuPuzzle(minClues, boardData.mainNumbers)
-            .then(() => {
+            // now as i changed the position of "timeTaken" reading after the puzzle has 
+            // been generated looks like that puzzle algo was never a big issue. it was just the setStates latency
+            // TODO: Research on this setState issue.
+            RNSudokuPuzzle.getSudokuPuzzle(minClues)
+            .then(({ clues, solution }) => {
                 if (!componentUnmounted) {
-                    setRefereeData(initRefereeData(difficultyLevel))
+                    timeTaken = Date.now() - time
+                    let cellNo = 0;
+                    for (let row=0;row<9;row++) {
+                        for (let col=0;col<9;col++) {
+                            const cellvalue = clues[cellNo]
+                            boardData.mainNumbers[row][col] = {
+                                value: cellvalue,
+                                solutionValue: solution[cellNo],
+                                isClue: cellvalue !== 0,
+                            }
+                            cellNo++
+                        }
+                    }
                     setBoardData(boardData)
+                    setRefereeData(initRefereeData(difficultyLevel))
                     resetCellActions()
+                    onNewGameStarted()
+                    console.log('@@@@@@@@ time taken is to generate new puzzle is', timeTaken)
                 }
-                onNewGameStarted()
-                console.log('@@@@@@@@ time taken is to generate new puzzle is', Date.now() - time)
             })
+
+            // puzzle generator in JS
+            // generateNewSudokuPuzzle(minClues, boardData.mainNumbers)
+            // .then(() => {
+            //     if (!componentUnmounted) {
+            //         timeTaken = Date.now() - time
+            //         setBoardData(boardData)
+            //         setRefereeData(initRefereeData(difficultyLevel))
+            //         resetCellActions()
+            //         onNewGameStarted()
+            //     }
+            //     console.log('@@@@@@@@ time taken is to generate new puzzle is', timeTaken)
+            // })
         }
         addListener(EVENTS.START_NEW_GAME, handler)
         return () => {
@@ -238,7 +268,7 @@ const Arena_ = () => {
             componentUnmounted = true
         }
     }, [])
-    
+
     // EVENTS.RESTART_GAME
     useEffect(() => {
         let componentUnmounted = false
@@ -615,6 +645,9 @@ const Arena_ = () => {
                     onClick={newGameButtonClick}
                     containerStyle={styles.newGameButtonContainer}
                 />
+
+                <Text style={styles.refereeTextStyles}>{timeTaken}</Text>
+
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
                     <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>

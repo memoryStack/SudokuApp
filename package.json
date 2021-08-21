@@ -12,11 +12,11 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "fast-sudoku-puzzles": "git+https://github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-code-push": "^7.0.1",
-    "react-native-svg": "9.6.4",
-    "react-native-webview": "^11.3.2"
+    "react-native-svg": "9.6.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
