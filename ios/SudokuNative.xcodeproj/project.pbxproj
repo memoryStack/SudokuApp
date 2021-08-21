@@ -11,9 +11,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		57F82E1AED6087FCECFC8871 /* libPods-SudokuNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A3AFE105BF30799295FF6A /* libPods-SudokuNative.a */; };
+		264F22883A3DFF57926403B1 /* libPods-SudokuNative-SudokuNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2E2DEB7C6A936B59BBBEBB /* libPods-SudokuNative-SudokuNativeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		B1757663D9EC86675F2CC4D7 /* libPods-SudokuNative-SudokuNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80A7E743ECD00E567D57AFEC /* libPods-SudokuNative-SudokuNativeTests.a */; };
+		F6ADF574F7116BAABC497C5F /* libPods-SudokuNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 934E88F367026971CDA15F7C /* libPods-SudokuNative.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,19 +30,19 @@
 		00E356EE1AD99517003FC87E /* SudokuNativeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SudokuNativeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* SudokuNativeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SudokuNativeTests.m; sourceTree = "<group>"; };
-		0754A12B4BB435C7ABA138FC /* Pods-SudokuNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative.release.xcconfig"; path = "Target Support Files/Pods-SudokuNative/Pods-SudokuNative.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SudokuNative.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SudokuNative.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SudokuNative/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SudokuNative/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SudokuNative/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SudokuNative/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SudokuNative/main.m; sourceTree = "<group>"; };
-		287908C228491C2021E07770 /* Pods-SudokuNative-SudokuNativeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative-SudokuNativeTests.debug.xcconfig"; path = "Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests.debug.xcconfig"; sourceTree = "<group>"; };
-		28A3AFE105BF30799295FF6A /* libPods-SudokuNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SudokuNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		569F73AC407527E8E277F385 /* Pods-SudokuNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative.debug.xcconfig"; path = "Target Support Files/Pods-SudokuNative/Pods-SudokuNative.debug.xcconfig"; sourceTree = "<group>"; };
-		80A7E743ECD00E567D57AFEC /* libPods-SudokuNative-SudokuNativeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SudokuNative-SudokuNativeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C2E2DEB7C6A936B59BBBEBB /* libPods-SudokuNative-SudokuNativeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SudokuNative-SudokuNativeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C04E598DFE9CE24AB3D7A76 /* Pods-SudokuNative-SudokuNativeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative-SudokuNativeTests.release.xcconfig"; path = "Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SudokuNative/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		CE06040CA0A79631F229DA5F /* Pods-SudokuNative-SudokuNativeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative-SudokuNativeTests.release.xcconfig"; path = "Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests.release.xcconfig"; sourceTree = "<group>"; };
+		88399AAEB97953E82D7A14B9 /* Pods-SudokuNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative.release.xcconfig"; path = "Target Support Files/Pods-SudokuNative/Pods-SudokuNative.release.xcconfig"; sourceTree = "<group>"; };
+		88B52A1B02CAEBEAC7453272 /* Pods-SudokuNative-SudokuNativeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative-SudokuNativeTests.debug.xcconfig"; path = "Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		934E88F367026971CDA15F7C /* libPods-SudokuNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SudokuNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4FFF0D60439F486114A2AF1 /* Pods-SudokuNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative.debug.xcconfig"; path = "Target Support Files/Pods-SudokuNative/Pods-SudokuNative.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -51,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1757663D9EC86675F2CC4D7 /* libPods-SudokuNative-SudokuNativeTests.a in Frameworks */,
+				264F22883A3DFF57926403B1 /* libPods-SudokuNative-SudokuNativeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57F82E1AED6087FCECFC8871 /* libPods-SudokuNative.a in Frameworks */,
+				F6ADF574F7116BAABC497C5F /* libPods-SudokuNative.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,8 +100,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				28A3AFE105BF30799295FF6A /* libPods-SudokuNative.a */,
-				80A7E743ECD00E567D57AFEC /* libPods-SudokuNative-SudokuNativeTests.a */,
+				934E88F367026971CDA15F7C /* libPods-SudokuNative.a */,
+				6C2E2DEB7C6A936B59BBBEBB /* libPods-SudokuNative-SudokuNativeTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -121,7 +121,7 @@
 				00E356EF1AD99517003FC87E /* SudokuNativeTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				AED37339C879E5C58B57C044 /* Pods */,
+				AAC932B91590952D0CEE80D2 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -137,13 +137,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AED37339C879E5C58B57C044 /* Pods */ = {
+		AAC932B91590952D0CEE80D2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				569F73AC407527E8E277F385 /* Pods-SudokuNative.debug.xcconfig */,
-				0754A12B4BB435C7ABA138FC /* Pods-SudokuNative.release.xcconfig */,
-				287908C228491C2021E07770 /* Pods-SudokuNative-SudokuNativeTests.debug.xcconfig */,
-				CE06040CA0A79631F229DA5F /* Pods-SudokuNative-SudokuNativeTests.release.xcconfig */,
+				D4FFF0D60439F486114A2AF1 /* Pods-SudokuNative.debug.xcconfig */,
+				88399AAEB97953E82D7A14B9 /* Pods-SudokuNative.release.xcconfig */,
+				88B52A1B02CAEBEAC7453272 /* Pods-SudokuNative-SudokuNativeTests.debug.xcconfig */,
+				7C04E598DFE9CE24AB3D7A76 /* Pods-SudokuNative-SudokuNativeTests.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -156,11 +156,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SudokuNativeTests" */;
 			buildPhases = (
-				FA16368539125E8E039193FB /* [CP] Check Pods Manifest.lock */,
+				841C6567D66412CAC180F24B /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				4861B147F98AC5F8AD8DBE60 /* [CP] Copy Pods Resources */,
+				E34A4068D35372628A215A6C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -176,13 +176,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SudokuNative" */;
 			buildPhases = (
-				8DB76F085C247110CF5125E4 /* [CP] Check Pods Manifest.lock */,
+				EB79FCC9E270E9930D761148 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				A85AD1CA1925FBD4CAA140AE /* [CP] Copy Pods Resources */,
+				B92027B1AD66CFBF1CE1B4B0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -263,24 +263,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		4861B147F98AC5F8AD8DBE60 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8DB76F085C247110CF5125E4 /* [CP] Check Pods Manifest.lock */ = {
+		841C6567D66412CAC180F24B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -295,14 +278,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SudokuNative-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-SudokuNative-SudokuNativeTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A85AD1CA1925FBD4CAA140AE /* [CP] Copy Pods Resources */ = {
+		B92027B1AD66CFBF1CE1B4B0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -319,7 +302,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SudokuNative/Pods-SudokuNative-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FA16368539125E8E039193FB /* [CP] Check Pods Manifest.lock */ = {
+		E34A4068D35372628A215A6C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SudokuNative-SudokuNativeTests/Pods-SudokuNative-SudokuNativeTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB79FCC9E270E9930D761148 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -334,7 +334,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SudokuNative-SudokuNativeTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-SudokuNative-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -393,7 +393,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 287908C228491C2021E07770 /* Pods-SudokuNative-SudokuNativeTests.debug.xcconfig */;
+			baseConfigurationReference = 88B52A1B02CAEBEAC7453272 /* Pods-SudokuNative-SudokuNativeTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -420,7 +420,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CE06040CA0A79631F229DA5F /* Pods-SudokuNative-SudokuNativeTests.release.xcconfig */;
+			baseConfigurationReference = 7C04E598DFE9CE24AB3D7A76 /* Pods-SudokuNative-SudokuNativeTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -444,7 +444,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 569F73AC407527E8E277F385 /* Pods-SudokuNative.debug.xcconfig */;
+			baseConfigurationReference = D4FFF0D60439F486114A2AF1 /* Pods-SudokuNative.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -470,7 +470,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0754A12B4BB435C7ABA138FC /* Pods-SudokuNative.release.xcconfig */;
+			baseConfigurationReference = 88399AAEB97953E82D7A14B9 /* Pods-SudokuNative.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
