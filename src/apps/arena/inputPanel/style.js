@@ -1,8 +1,8 @@
-import { StyleSheet, Dimensions } from 'react-native'
-import { rgba } from '../../../utils/util';
+import { StyleSheet } from 'react-native'
+import { rgba } from '../../../utils/util'
+import { CELL_WIDTH } from '../gameBoard/dimensions'
 
-const { width } = Dimensions.get('window')
-const INPUT_NUMBER_DIMENSION = width * .94 / 9 * 1.5 // 1.5 times the size of the board cells
+const INPUT_NUMBER_DIMENSION = CELL_WIDTH * 1.5 // 1.5 times the size of the board cells
 const INPUT_GRID_DIMENSION = INPUT_NUMBER_DIMENSION * 3
 export const styles = StyleSheet.create({
     container: {
