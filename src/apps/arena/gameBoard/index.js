@@ -7,15 +7,14 @@ import { GAME_STATE } from '../../../resources/constants'
 import { sameHouseAsSelected } from '../../../utils/util'
 
 const looper = []
-for(let i=0;i<9;i++) {
-    if (i%3 === 0 && i !== 0) looper.push(-1)
-    looper.push(i)
+const bordersLooper = []
+for(let i=0;i<10;i++) {
+    if (i < 9) looper.push(i) // 9 cells are there in a row
+    bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const getThickBorderView = (height, width, key = '') =>
-    <View style={[Styles.thickBorder, {height, width}]} key={key} />
-
-export const Board = ({
+const THICK_BODER_THICKNESS = 3
+const Board_ = ({
     gameState,
     mainNumbers,
     notesInfo,
@@ -55,12 +54,10 @@ export const Board = ({
             <View style={Styles.rowStyle} key={key}>
                 {
                     looper.map((col) => {
-                        const elementKey = `${rowElementsKeyCounter++}`
-                        if (col === -1) return getThickBorderView(CELL_HEIGHT, INNER_THICK_BORDER_WIDTH, elementKey)
                         return (
                             <View
                                 style={Styles.cellContainer}
-                                key={elementKey}
+                                key={`${rowElementsKeyCounter++}`}
                             >
                                 <Cell
                                     row={row}
@@ -80,20 +77,44 @@ export const Board = ({
         )
     }
     
-    const getBoard = () => {
-        let keyCounter = 0
+    const getGrid = orientation => {
+        const isVertical = orientation === 'vertical'
+        const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
+        const normalBorderStyle = isVertical ? Styles.verticalBars : Styles.horizontalBars
+        const thickNessStyleField = isVertical ? 'width' : 'height'
+        const thickBorderStyle = {
+            ...normalBorderStyle,
+            [thickNessStyleField]: THICK_BODER_THICKNESS,
+        }
+
         return (
-            <View style={Styles.board}> 
+            <View
+                style={[Styles.gridBorderContainer, orientationBasedStyles]}
+                pointerEvents={'none'}
+            >
                 {
-                    looper.map( row => {
-                        const elementKey = `${keyCounter++}`
-                        if (row === -1) return getThickBorderView(INNER_THICK_BORDER_WIDTH, GAME_BOARD_WIDTH - 2 * OUTER_THIN_BORDER_WIDTH, elementKey)
-                        return renderRow(row, elementKey)
+                    bordersLooper.map((borderNum) => {
+                        const boldBorder = borderNum === 3 || borderNum === 6
+                        const borderViewStyle = boldBorder ? thickBorderStyle : normalBorderStyle
+                        return <View key={`${orientation}_${borderNum}`} style={borderViewStyle} />
                     })
                 }
             </View>
         )
     }
 
+    const getBoard = () => {
+        let keyCounter = 0
+        return (
+            <View style={Styles.board}>
+                {looper.map(row => renderRow(row, `${keyCounter++}`))}
+                {getGrid('horizontal')}
+                {getGrid('vertical')}
+            </View>
+        )
+    }
+
     return getBoard()
 }
+
+export const Board = React.memo(Board_)

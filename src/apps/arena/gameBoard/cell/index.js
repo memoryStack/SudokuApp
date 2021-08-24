@@ -2,15 +2,11 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { Styles } from './style'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
-import { CELL_BORDER_WIDTH } from '../dimensions'
 import { GAME_STATE } from '../../../../resources/constants'
 
 // becoz only 3 notes are there in a row
 const looper = []
 for(let i=0;i<3;i++) looper.push(i)
-
-const boxCenterCellRowColCordinates = [1, 4, 7]
-const boxOuterCellRowColCordinates = [0, 2, 3, 5, 6, 8]
 
 // test for these default values and their types
 const Cell_ = ({ 
@@ -23,35 +19,10 @@ const Cell_ = ({
     onCellClicked,
     gameState,
 }) => {
-    const getCellBordersStyle = () => {
-        if (boxOuterCellRowColCordinates.indexOf(row) !== -1 && boxOuterCellRowColCordinates.indexOf(col) !== -1) {
-            return {}
-        }
-        if (boxCenterCellRowColCordinates.indexOf(row) !== -1 && boxCenterCellRowColCordinates.indexOf(col) !== -1) {
-            return {
-                borderWidth: CELL_BORDER_WIDTH,
-            }
-        }
-        if (boxCenterCellRowColCordinates.indexOf(row) !== -1 && boxOuterCellRowColCordinates.indexOf(col) !== -1) {
-            return {
-                borderTopWidth: CELL_BORDER_WIDTH,
-                borderBottomWidth: CELL_BORDER_WIDTH,
-            }
-        }
-        if (boxOuterCellRowColCordinates.indexOf(row) !== -1 && boxCenterCellRowColCordinates.indexOf(col) !== -1) {
-            return {
-                borderRightWidth: CELL_BORDER_WIDTH,
-                borderLeftWidth: CELL_BORDER_WIDTH,
-            }
-        }
-        return {}
-    }
 
     const shouldRenderNotes = () => {
-        for(let noteNum=0;noteNum<9;noteNum++){
-            const { show } = cellNotes[noteNum]
-            if (show) return 1
-        }
+        for (let noteNum=0;noteNum<9;noteNum++)
+            if (cellNotes[noteNum].show) return 1
         return 0
     }
 
@@ -77,7 +48,7 @@ const Cell_ = ({
         gameState === GAME_STATE.ACTIVE && onCellClicked(row, col)
 
     const renderCell = () => {
-        const containerStyle = [Styles.cell, cellBGColor, getCellBordersStyle(), { borderColor: 'black' }]
+        const containerStyle = [Styles.cell, cellBGColor]
         return (
             <Touchable
                 touchable={TouchableTypes.opacity}

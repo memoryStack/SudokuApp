@@ -5,11 +5,25 @@ export const Styles = StyleSheet.create({
     board: { // figure out a way  for the shadow of this board
         display: 'flex',
         height: GAME_BOARD_HEIGHT,
-        width: '94%',
+        width: GAME_BOARD_WIDTH,
         marginHorizontal: 'auto',
-        borderWidth: OUTER_THIN_BORDER_WIDTH,
-        borderColor: 'rgba(0, 0, 0, 0.8)',
-        backgroundColor: 'black', // this color will be same as the color of the thick seperators
+    },
+    gridBorderContainer: {
+        position: 'absolute',
+        height: GAME_BOARD_HEIGHT,
+        width: GAME_BOARD_WIDTH,
+        justifyContent: 'space-between',
+        zIndex: 1,
+    },
+    verticalBars: {
+        height: GAME_BOARD_HEIGHT,
+        width: 1,
+        backgroundColor: 'rgba(0, 0, 0, .9)',
+    },
+    horizontalBars: {
+        width: GAME_BOARD_WIDTH,
+        height: 1,
+        backgroundColor: 'rgba(0, 0, 0, .9)',
     },
     rowStyle: {
         display: 'flex',
