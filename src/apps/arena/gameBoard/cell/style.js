@@ -11,10 +11,10 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         // height: CELL_HEIGHT,
         // width: CELL_WIDTH,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     mainNumberText: { // fontSize
-        fontSize: 20,
+        fontSize: CELL_HEIGHT * .75,
         // width: '100%',
     },
     notesContainer: {
@@ -35,7 +35,7 @@ export const Styles = StyleSheet.create({
     },
     noteText: {
         color: 'rgba(0, 0, 0, .8)',
-        fontSize: 8, // convert this to relative to the cellWidth
+        fontSize: CELL_HEIGHT * .3,
         alignSelf: 'center',
     },
 })
