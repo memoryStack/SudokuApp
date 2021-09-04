@@ -2,8 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { Styles } from './style'
 import { Cell } from './cell'
-import { CELL_HEIGHT, INNER_THICK_BORDER_WIDTH, GAME_BOARD_WIDTH, OUTER_THIN_BORDER_WIDTH } from './dimensions'
-import { GAME_STATE } from '../../../resources/constants'
+import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { sameHouseAsSelected } from '../../../utils/util'
 
 const looper = []
@@ -15,9 +14,10 @@ for(let i=0;i<10;i++) {
 
 const THICK_BODER_THICKNESS = 3
 const Board_ = ({
+    screenName = SCREEN_NAME.ARENA, // default will be arena
     gameState,
     mainNumbers,
-    notesInfo,
+    notesInfo = [],
     selectedCell = {},
     selectedCellMainValue = 0,
     onCellClick,
@@ -25,9 +25,17 @@ const Board_ = ({
 
     const sameValueAsSelectedBox = (row, col) =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[row][col].value
-    
+
+    const getCustomPuzzleMainNumFontColor = (row, col) => {
+        const isWronglyPlaced = mainNumbers[row][col].wronglyPlaced
+        if (isWronglyPlaced) return Styles.wronglyFilledNumColor
+        // consider any other number as clue
+        return Styles.clueNumColor
+    }
+
     const getMainNumFontColor = (row, col) => {
         if (!mainNumbers[row][col].value) return null
+        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return getCustomPuzzleMainNumFontColor(row, col)
         const isWronglyPlaced = mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue
         if (isWronglyPlaced) return Styles.wronglyFilledNumColor
         if (!mainNumbers[row][col].isClue) return Styles.userFilledNumColor
@@ -37,12 +45,13 @@ const Board_ = ({
     const getBoxBackgroundColor = (row, col) => {
         if (gameState === GAME_STATE.INACTIVE) return null
         const { row: selectedCellRow = 0, col: selectedCellCol = 0  } = selectedCell
-        const isSameHouseAsSelected = sameHouseAsSelected(row, col, selectedCellRow, selectedCellCol)
-        const isSameValueAsSelected = sameValueAsSelectedBox(row, col)
         const isSelected = selectedCellRow === row && selectedCellCol === col
         
         if (isSelected) return Styles.selectedCellBGColor
+        const isSameHouseAsSelected = sameHouseAsSelected(row, col, selectedCellRow, selectedCellCol)
+        const isSameValueAsSelected = sameValueAsSelectedBox(row, col)
         if (isSameHouseAsSelected && isSameValueAsSelected) return Styles.sameHouseSameValueBGColor
+        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells
         if (isSameHouseAsSelected) return Styles.sameHouseCellBGColor
         if (!isSameHouseAsSelected && isSameValueAsSelected) return Styles.diffHouseSameValueBGColor
         return null

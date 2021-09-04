@@ -8,18 +8,18 @@ import { emit } from '../../../utils/GlobalEventBus'
 const looper = []
 for(let i=0;i<3;i++) looper.push(i)
 
-const Inputpanel_ = ({ gameState }) => {
+const Inputpanel_ = ({eventsPrefix = '', gameState }) => {
 
     const onNumberClicked = (number) => {
         if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.INPUT_NUMBER_CLICKED, { number })
+        emit(eventsPrefix + EVENTS.INPUT_NUMBER_CLICKED, { number })
     }
 
     const inputNumber = number => {
         return (
             <Touchable
                 style={styles.numberButtonContainer}
-                onPress={() => {onNumberClicked(number)}}
+                onPress={() => onNumberClicked(number)}
                 touchable={TouchableTypes.opacity}                
             >
                 <Text style={styles.textStyle}>{number}</Text>

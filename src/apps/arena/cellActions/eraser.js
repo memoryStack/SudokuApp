@@ -6,17 +6,12 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE } from '../../../resources/constants'
 
-const Eraser_ = ({ iconBoxSize, gameState }) => {
+const Eraser_ = ({ iconBoxSize, gameState, eventsPrefix = '' }) => {
 
-    // passing it as prop for let's use useCallback
     const onPress = useCallback(() => {
-        // TODO: perform some kind of animation for the icon
         if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.ERASER_CLICKED)
+        emit(eventsPrefix + EVENTS.ERASER_CLICKED)
     }, [gameState])
-
-    // TODO: listen to eraser applied successfully event and animate the icon to give user a feedback
-    //         that eraser applied successfully on the cell
 
     return (
         <Touchable

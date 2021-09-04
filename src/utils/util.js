@@ -53,13 +53,13 @@ export const initBoardData = () => {
     return sudokuBoard
 }
 
-const getBlockAndBoxNum = (row, col) => {
+export const getBlockAndBoxNum = (row, col) => {
 	const blockNum = (row - row%3) + (col - col%3)/3
 	const boxNum = (row%3)*3 + col%3
 	return { blockNum, boxNum }
 }
 
-const getRowAndCol = (blockNum, boxNum) => {
+export const getRowAndCol = (blockNum, boxNum) => {
 	const addToRow = (boxNum - boxNum%3)/3
 	const row = (blockNum - blockNum%3) + addToRow
 	const col = (blockNum%3)*3 + boxNum%3

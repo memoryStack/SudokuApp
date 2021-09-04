@@ -16,14 +16,15 @@ const styles = StyleSheet.create({
     }
 })
 
-const NewGameButton_ = ({ onClick = noOperationFunction, containerStyle = null }) => {
+// TODO: let's see if this can be made a genric button
+const NewGameButton_ = ({ onClick = noOperationFunction, containerStyle = null, text = 'New Game' }) => {
     return (
         <Touchable 
                 touchable={TouchableTypes.opacity}
                 onPress={onClick}
                 style={[styles.newGameButtonContainer, containerStyle]}
             >
-                <Text style={styles.newGameText}>{'New Game'}</Text>
+                <Text style={styles.newGameText}>{text}</Text>
             </Touchable>
     )
 }

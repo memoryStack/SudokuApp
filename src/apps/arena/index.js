@@ -20,11 +20,13 @@ import { Timer } from './timer'
 import { isGameOver, shouldSaveGameState } from './utils/util'
 import { NewGameButton } from './newGameButton'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
+import { CustomPuzzle } from './customPuzzle'
 
 const MAX_AVAILABLE_HINTS = 3
 const MISTAKES_LIMIT = 3
 const { width: windowWidth } = Dimensions.get('window')
-const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
+export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
+const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'
 let timeTaken = 0
 const styles = StyleSheet.create({
     container: {
@@ -158,7 +160,10 @@ const Arena_ = () => {
     const [mainNumbers, updateMainNumbers] = useState(initialBoardData.mainNumbers)
     const [notesInfo, updateNotesInfo] = useState(initialBoardData.notesInfo)
     const [selectedCell, selectCell] = useState(initialBoardData.selectedCell)
-    let selectedCellMainValue = useRef(initialBoardData.mainNumbers[selectedCell.row][selectedCell.col].value)
+    const selectedCellMainValue = useRef(initialBoardData.mainNumbers[selectedCell.row][selectedCell.col].value)
+
+    const [showNextGameMenu, setShowNextGameMenu] = useState(false)
+    const [showCustomPuzzleHC, setShowCustomPuzzleHC] = useState(false)
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
@@ -266,6 +271,24 @@ const Arena_ = () => {
         return () => {
             removeListener(EVENTS.START_NEW_GAME, handler)
             componentUnmounted = true
+        }
+    }, [])
+
+    useEffect(() => {
+        const handler = ({ mainNumbers }) => {
+            // drag the customPuzzle HC and we can simply unmount the
+            // next game menu from view hirerechy
+            setShowNextGameMenu(false)
+            const boardData = initBoardData()
+            boardData.mainNumbers = mainNumbers
+            setBoardData(boardData)
+            setRefereeData(initRefereeData(CUSTOMIZED_PUZZLE_LEVEL_TITLE))
+            resetCellActions()
+            onNewGameStarted()
+        }
+        addListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
+        return () => {
+            removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
         }
     }, [])
 
@@ -568,6 +591,16 @@ const Arena_ = () => {
         }
     }, [selectedCell, mainNumbers, notesInfo])
 
+    useEffect(() => {
+        const handler = () => setShowCustomPuzzleHC(true)
+        addListener(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW, handler)
+        return () => removeListener(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW, handler)
+    }, [])
+
+    const handleCustomPuzzleClosed = useCallback(() => {
+        setShowCustomPuzzleHC(false)
+    }, [])
+
     // when hint is clicked 
     useEffect(() => {
         const handler = () => {
@@ -592,9 +625,10 @@ const Arena_ = () => {
     }, [])
 
     const handleGameInFocus = useCallback(() => {
-        if (gameState !== GAME_STATE.INACTIVE) return
+        // if the menu is opened let's keep it that way only
+        if (gameState !== GAME_STATE.INACTIVE || (showCustomPuzzleHC || showNextGameMenu)) return
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [gameState])
+    }, [gameState, showCustomPuzzleHC, showGameSolvedCard])
 
     const handleGameOutOfFocus = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
@@ -629,8 +663,20 @@ const Arena_ = () => {
     }, [])
 
     const newGameButtonClick = useCallback(() => {
-        emit(EVENTS.OPEN_NEXT_GAME_MENU)
-    }, [])
+        setShowNextGameMenu(true)
+        // when game is solved or over, i don't want the game state to be changed
+        // user should start the next game
+        if (gameState !== GAME_STATE.ACTIVE) return
+        emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
+    }, [gameState])
+
+    const onNewGameMenuClosed = useCallback((optionSelectedFromMenu = false) => {
+        setShowNextGameMenu(false)
+        // when game is solved or over, i don't want the game state to be changed
+        // user should start the next game
+        if (gameState !== GAME_STATE.INACTIVE) return
+        !optionSelectedFromMenu && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
+    }, [gameState])
 
     return (
         <Page
@@ -673,11 +719,19 @@ const Arena_ = () => {
                     </View>
                 </View>
                 {
-                    pageHeight ? 
+                    pageHeight && showNextGameMenu ?
                         <NextGameMenu
                             parentHeight={pageHeight}
-                            gameState={gameState}
+                            onMenuClosed={onNewGameMenuClosed}
                         /> 
+                    : null
+                }
+                {
+                    pageHeight && showCustomPuzzleHC ?
+                        <CustomPuzzle
+                            parentHeight={pageHeight}
+                            onCustomPuzzleClosed={handleCustomPuzzleClosed}
+                        />
                     : null
                 }
                 {
