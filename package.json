@@ -16,7 +16,7 @@
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-code-push": "^7.0.1",
-    "react-native-svg": "9.6.4"
+    "react-native-svg": "9.9.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
