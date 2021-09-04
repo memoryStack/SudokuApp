@@ -9,7 +9,7 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    hideSystemUI();
+    // hideSystemUI();
   }
 
   private void hideSystemUI() {
@@ -29,7 +29,7 @@ public class MainActivity extends ReactActivity {
   public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     if (hasFocus) {
-      hideSystemUI();
+      // hideSystemUI();
     }
   }
 
