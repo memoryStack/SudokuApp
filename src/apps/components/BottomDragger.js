@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useImperativeHandle, useRef } from 'react'
-import { View, Text, Animated, StyleSheet, PanResponder } from 'react-native'
+import React, { useState, useEffect, useImperativeHandle, useRef, useCallback } from 'react'
+import { View, Text, Animated, StyleSheet, PanResponder, Dimensions } from 'react-native'
 import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
 
@@ -9,6 +9,7 @@ const RELEASE_LIMIT_FOR_AUTO_SCROLL = 20
 const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = .9
 const XXSMALL_SIZE = 8
 const XSMALL_SPACE = 4
+const WINDOW_HEIGHT = Dimensions.get('window').height
 const styles = StyleSheet.create({
     slidingParentContainer: {
         position: 'absolute',
@@ -31,7 +32,8 @@ const styles = StyleSheet.create({
     },
     subView: {
         position: 'absolute',
-        width: '100%',
+        width: '100%',        
+        zIndex: 1, // had to put this. if i remove this then two sudoku boards were overlapping, which was weird to me.
     },
     clipStyle: {
         height: XSMALL_SPACE,
@@ -48,13 +50,17 @@ const styles = StyleSheet.create({
 const BottomDragger_ = React.forwardRef((props, ref) => {
     const {
         parentHeight,
-        childrenHeight,
-        headerText,
+        headerText = '',
         bottomMostPositionRatio = DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
         children,
         onDraggerOpened = noOperationFunction,
         onDraggerClosed = noOperationFunction,
+        stopBackgroundClickClose = false,
     } = props
+
+    // consider children as full screen height later on set it to it's real height 
+    // when we receive event callback for height
+    const [childrenHeight, setChildrenHeight] = useState(WINDOW_HEIGHT)
 
     if (!headerText) HEADER_HEIGHT = 0 // header won't be present in this case
 
@@ -100,7 +106,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 outputRange: [1, 0],
             })
         )
-    }, [parentHeight])
+    }, [parentHeight, childrenHeight])
 
     useEffect(() => {
         setPanResponder(PanResponder.create({
@@ -147,6 +153,20 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         })
     }
 
+    const childrenOnLayout = useCallback(event => {
+        const { nativeEvent: { layout: { height = 0 } = {} } = {} } = event
+        setChildrenHeight(height)
+        const topMostPosition = parentHeight - (height + HEADER_HEIGHT)
+        setTopMostPosition(topMostPosition)
+        if (!headerText) {
+            // mostly we want the dragger to be opened itself when header 
+            // clip is not present
+            setTimeout(() => {
+                ref.current && ref.current.openDragger()
+            }, 0)
+        }
+    }, [])
+
     // i can use a memo hook here
     // or i can leave it as well because it's very unlikely that user will actually play with this dragger 
     // and not the game. lol
@@ -163,7 +183,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     return (
         <>
             {isDraggerActive ? ( // either fully opened or moving
-                <Touchable touchable={'withoutFeedBack'} onPress={() => moveDragger(bottomMostPosition)}>
+                <Touchable touchable={'withoutFeedBack'} onPress={() => !stopBackgroundClickClose && moveDragger(bottomMostPosition)}>
                     <Animated.View
                         style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]}
                     />
@@ -178,8 +198,10 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                     },
                 ]}
             >
-                {headerText ? renderHeader() : null}
-                {children}
+                <View onLayout={childrenOnLayout}>
+                    {headerText ? renderHeader() : null}
+                    {children}
+                </View>
             </Animated.View>
         </>
     )
