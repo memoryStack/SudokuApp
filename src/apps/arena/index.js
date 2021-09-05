@@ -602,8 +602,10 @@ const Arena_ = () => {
                 for (let col=0;col<9;col++) {
                     if (!mainNumbers[row][col].value) {
                         for (let num=1;num<=9;num++) {
-                            if (!duplicacyPresent(row, col, num, mainNumbers))
-                                notesInfo[row][col][num-1].show = true
+                            if (!duplicacyPresent(row, col, num, mainNumbers)) {
+                                const { show } = notesInfo[row][col][num-1]
+                                notesInfo[row][col][num-1].show = 1 - show
+                            }
                         }
                         notesInfo[row][col] = [...notesInfo[row][col]]
                     }
