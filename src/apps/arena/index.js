@@ -7,7 +7,7 @@ import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PENCIL_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
-import { initBoardData as initMainNumbers, generateNewSudokuPuzzle } from '../../utils/util'
+import { initBoardData as initMainNumbers, generateNewSudokuPuzzle, getBlockAndBoxNum, getRowAndCol } from '../../utils/util'
 import { GameOverCard } from './gameOverCard'
 import { getNewPencilState } from './cellActions/pencil'
 import { getKey, setKey } from '../../utils/storage'
@@ -417,6 +417,56 @@ const Arena_ = () => {
         return true
     }
 
+    // TODO: fix the repeated lines in this func
+    // TODO: add the removed notes in cells other than currentCell to the undo move
+    //          right now we are just recording the current cells notes only
+    const removeNotesAfterCellFilled = (row, col, num) => {
+        let notesErasedByMainValue = []
+        // remove notes from current cell
+        for (let note=0;note<9;note++) { // taking note's indx
+            const { show } = notesInfo[row][col][note]
+            if (show) {
+                notesErasedByMainValue.push(note+1)
+                notesInfo[row][col][note].show = 0
+            }
+        }
+        if (notesErasedByMainValue.length) notesInfo[row][col] = [...notesInfo[row][col]]
+
+        // remove notes from current row
+        for (let row=0;row<9;row++) {
+            const noteIndx = num - 1
+            const { show } = notesInfo[row][col][noteIndx]
+            if (show) {
+                notesInfo[row][col][noteIndx].show = 0
+                notesInfo[row][col] = [...notesInfo[row][col]]
+            }
+        }
+        
+        // remove notes from current col
+        for (let col=0;col<9;col++) {
+            const noteIndx = num - 1
+            const { show } = notesInfo[row][col][noteIndx]
+            if (show) {
+                notesInfo[row][col][noteIndx].show = 0
+                notesInfo[row][col] = [...notesInfo[row][col]]
+            }
+        }
+        
+        // remove notes from current block
+        const { blockNum } = getBlockAndBoxNum(row, col)
+        for (let boxNum=0;boxNum<9;boxNum++) {
+            const { row, col } = getRowAndCol(blockNum, boxNum)
+            const noteIndx = num - 1
+            const { show } = notesInfo[row][col][noteIndx]
+            if (show) {
+                notesInfo[row][col][noteIndx].show = 0
+                notesInfo[row][col] = [...notesInfo[row][col]]
+            }
+        }
+
+        return notesErasedByMainValue
+    }
+
     // EVENTS.INPUT_NUMBER_CLICKED 
     useEffect(() => {
         const handler = ({ number, isHintUsed = false }) => {
@@ -425,16 +475,17 @@ const Arena_ = () => {
             let valueType, moveType
             let notesErasedByMainValue = []
 
-            let notesUpdated = false
+            let noteInserted = false
             if (pencilState === PENCIL_STATE.ACTIVE && !isHintUsed) {
                 // removing the below functionality because it kind of "baby spoon feeds" the user
                 // let's keep it for now and and we can keep it as a part of settings later on
-                if (duplicacyPresent(row, col, number, mainNumbersDup)) return
+                if (duplicacyPresent(row, col, number, mainNumbers)) return
                 valueType = 'notes'
                 const { show } = notesInfo[row][col][number-1]
                 moveType = show ? 'erase' : 'insert'
                 notesInfo[row][col][number-1].show = 1 - show
-                notesUpdated = true
+                notesInfo[row][col] = [...notesInfo[row][col]]
+                noteInserted = true
             } else {
                 /**
                  * 1. mark move type and value type and add the number in cell
@@ -449,14 +500,10 @@ const Arena_ = () => {
                 valueType = 'main'
                 mainNumbersDup[row][col].value = number
 
+                notesErasedByMainValue = removeNotesAfterCellFilled(row, col, number)
+
                 // erase all the notes first and store them in an array for undo operation on the board 
-                for (let i=0;i<9;i++) {
-                    if (notesInfo[row][col][i].show) {
-                        notesErasedByMainValue.push(i+1)
-                        notesInfo[row][col][i].show = 0
-                        notesUpdated = true
-                    }
-                }
+                
 
                 if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
                 else {
@@ -477,10 +524,7 @@ const Arena_ = () => {
             }
 
             movesStack.current.push(moveObject)
-            if (notesUpdated) {
-                notesInfo[row][col] = [...notesInfo[row][col]]
-                updateNotesInfo([...notesInfo])
-            }
+            if (noteInserted ||  notesErasedByMainValue.length) updateNotesInfo([...notesInfo])
         }
 
         addListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
@@ -601,13 +645,15 @@ const Arena_ = () => {
             for (let row=0;row<9;row++) {
                 for (let col=0;col<9;col++) {
                     if (!mainNumbers[row][col].value) {
+                        let notesUpdated = false
                         for (let num=1;num<=9;num++) {
-                            if (!duplicacyPresent(row, col, num, mainNumbers)) {
-                                const { show } = notesInfo[row][col][num-1]
+                            const { show } = notesInfo[row][col][num-1]
+                            if (!show && !duplicacyPresent(row, col, num, mainNumbers)) {
+                                notesUpdated = true
                                 notesInfo[row][col][num-1].show = 1 - show
                             }
                         }
-                        notesInfo[row][col] = [...notesInfo[row][col]]
+                        if (notesUpdated) notesInfo[row][col] = [...notesInfo[row][col]]
                     }
                 }
             }
