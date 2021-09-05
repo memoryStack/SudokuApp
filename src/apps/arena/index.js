@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
+        zIndex: 1,
     },
     gameOverAnimatedBG: {
         justifyContent: 'center',
@@ -67,14 +68,18 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
-    inputPanelCellActionsContainer: {
-        width: '100%',
-        marginTop: 24,
-        paddingHorizontal: 16,
+    cellActionsContainer: {
+        display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        width: '100%',
+        marginTop: 20,
     },
-    cellActionsContainer: { justifyContent: 'space-around' },
+    inputPanelContainer: {
+        width: '100%',
+        marginVertical: 20,
+    },
 })
 
 const initBoardData = () => {
@@ -182,7 +187,6 @@ const Arena_ = () => {
         const previousGame = await getKey(PREVIOUS_GAME)
         if (previousGame) {
             const { state, referee, boardData, cellActionsData } = previousGame
-            console.log('@@@@@@ got game from cache', previousGame)
             if (state !== GAME_STATE.INACTIVE) {
                 emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
             } else {
@@ -554,7 +558,7 @@ const Arena_ = () => {
             const mainNumbersDup = [...mainNumbers]
             const notesInfoDup = [...notesInfo]
             let erasedSomeData = false
-            
+
             if (mainNumbers[row][col].value && !mainNumbers[row][col].isClue) {
                 erasedSomeData = true
                 moveType = 'erase'
@@ -586,9 +590,7 @@ const Arena_ = () => {
         }
         
         addListener(EVENTS.ERASER_CLICKED, handler)
-        return () => {
-            removeListener(EVENTS.ERASER_CLICKED, handler)
-        }
+        return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
 
     useEffect(() => {
@@ -707,16 +709,14 @@ const Arena_ = () => {
                     selectedCellMainValue={selectedCellMainValue.current}
                     onCellClick={handleCellClicked}
                 />
-                <View style={styles.inputPanelCellActionsContainer}>
-                    <View style={styles.cellActionsContainer}>
-                        <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
-                        <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />
-                    </View>
+                <View style={styles.cellActionsContainer}>
+                    <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
+                    {/* <Eraser iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} /> */}
+                    <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
+                    <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />
+                </View>
+                <View style={styles.inputPanelContainer}>
                     <Inputpanel gameState={gameState} />
-                    <View style={styles.cellActionsContainer}>
-                        <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
-                        <Eraser iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
-                    </View>
                 </View>
                 {
                     pageHeight && showNextGameMenu ?

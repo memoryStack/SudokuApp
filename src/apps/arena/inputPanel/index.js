@@ -1,14 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { View, Text } from 'react-native'
 import { styles } from './style'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { GAME_STATE, EVENTS } from '../../../resources/constants'
 import { emit } from '../../../utils/GlobalEventBus'
 
-const looper = []
-for(let i=0;i<3;i++) looper.push(i)
-
-const Inputpanel_ = ({eventsPrefix = '', gameState }) => {
+const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
 
     const onNumberClicked = (number) => {
         if (gameState !== GAME_STATE.ACTIVE) return
@@ -27,40 +24,43 @@ const Inputpanel_ = ({eventsPrefix = '', gameState }) => {
         )
     }
 
-    const getGrid = orientation => {
-        const isVertical = orientation === 'vertical'
-        const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
+    const onEmptyCellClicked = useCallback(() => {
+        if (gameState !== GAME_STATE.ACTIVE) return        
+        emit(eventsPrefix + EVENTS.ERASER_CLICKED)
+    }, [eventsPrefix, gameState])
+
+    const getClearCellView = () => {
         return (
-            <View style={[styles.gridBorderContainer, orientationBasedStyles]}>
-                {
-                    [0, 1, 2, 3].map(() => {
-                        return (
-                            <View style={isVertical ? styles.verticalBars : styles.horizontalBars} />
-                        )
-                    })
-                }
-            </View>
+            <Touchable
+                style={styles.numberButtonContainer}
+                onPress={onEmptyCellClicked}
+                touchable={TouchableTypes.opacity}                
+            >
+                <Text style={styles.textStyle}>{'X'}</Text>
+            </Touchable>
         )
+    }
+
+    const getPanelView = () => {
+        const rows = []
+
+        let row = []
+        for (let i=1;i<=9;i++) {
+            row.push(inputNumber(i))
+            if (i === 5) {
+                rows.push(<View style={styles.rowContainer}>{row}</View>)
+                row = []
+            }
+        }
+        row.push(getClearCellView())
+        rows.push(<View style={styles.horizontalSeperator}/>)
+        rows.push(<View style={styles.rowContainer}>{row}</View>)
+        return rows
     }
 
     return (
         <View style={styles.container}>
-            {
-                looper.map(row => {
-                    return (
-                        <View style={styles.rowContainer}>
-                            {
-                                looper.map(col => {
-                                    const number = row * 3 + (col + 1)
-                                    return inputNumber(number)
-                                })
-                            }
-                        </View>
-                    )
-                })
-            }
-            {/* {getGrid('horizontal')}
-            {getGrid('vertical')} */}
+            {getPanelView()}
         </View>
     )
 }

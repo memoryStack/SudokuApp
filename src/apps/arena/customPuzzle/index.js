@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     },
     playButtonContainer: {
         paddingHorizontal: 24,
-        marginTop: 24,
     },
     snackBarContainer: {
         justifyContent: 'center',
@@ -246,11 +245,11 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                         gameState={GAME_STATE.ACTIVE}
                     />
                 </View>
-                <Eraser
+                {/* <Eraser
                     eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX}
                     iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                     gameState={'ACTIVE'}
-                />
+                /> */}
                 <NewGameButton
                     containerStyle={styles.playButtonContainer}
                     onClick={handlePlayClick}

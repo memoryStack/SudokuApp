@@ -6,9 +6,7 @@ const INPUT_NUMBER_DIMENSION = CELL_WIDTH * 1.5 // 1.5 times the size of the boa
 const INPUT_GRID_DIMENSION = INPUT_NUMBER_DIMENSION * 3
 export const styles = StyleSheet.create({
     container: {
-        height: INPUT_GRID_DIMENSION,
-        width: INPUT_GRID_DIMENSION,
-        justifyContent: 'space-between',
+        width: '100%',
     },
     gridBorderContainer: {
         position: 'absolute',
@@ -29,16 +27,21 @@ export const styles = StyleSheet.create({
     },
     rowContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
     },
     numberButtonContainer: { // rectangular outer container for Input Number
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: INPUT_NUMBER_DIMENSION - 2,
-        height: INPUT_NUMBER_DIMENSION - 2,
+        width: INPUT_NUMBER_DIMENSION,
+        height: INPUT_NUMBER_DIMENSION,
+        marginHorizontal: 2,
         backgroundColor: rgba('#d5e5f6', 60),
         borderRadius: 12,
+    },
+    horizontalSeperator: {
+        width: '100%',
+        height: 4,
     },
     textStyle: {
         color: 'rgb(49, 90, 163)',
