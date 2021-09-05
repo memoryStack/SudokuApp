@@ -500,13 +500,9 @@ const Arena_ = () => {
                 valueType = 'main'
                 mainNumbersDup[row][col].value = number
 
-                notesErasedByMainValue = removeNotesAfterCellFilled(row, col, number)
-
-                // erase all the notes first and store them in an array for undo operation on the board 
-                
-
                 if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
                 else {
+                    notesErasedByMainValue = removeNotesAfterCellFilled(row, col, number)
                     if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
                     if (isPuzzleSolved()) emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
                 }
