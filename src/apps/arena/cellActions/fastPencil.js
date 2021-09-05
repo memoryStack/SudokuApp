@@ -14,14 +14,14 @@ export const getNewPencilState = currentState => {
 const ACTIVE_PENCIL_FILL = 'rgb(57, 91, 158)'
 
 // TODO: use pencilState to animate the UI
-const Pencil_ = ({ iconBoxSize, gameState, pencilState }) => {
+const FastPencil_ = ({ iconBoxSize, gameState, pencilState }) => {
     
     const isActive = pencilState === PENCIL_STATE.ACTIVE
 
     const onPress = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
         // TODO: animate the icon and make some UI changes so that user knows if the pencil is active or not
-        emit(EVENTS.PENCIL_CLICKED)
+        emit(EVENTS.FAST_PENCIL_CLICKED)
     }, [gameState])
 
     return (
@@ -31,9 +31,9 @@ const Pencil_ = ({ iconBoxSize, gameState, pencilState }) => {
             touchable={TouchableTypes.opacity}
         >
             <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL} />
-            <Text style={[Styles.actionText, { color: isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL } ]}>{`Pencil`}</Text>
+            <Text style={[Styles.actionText, { color: isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL } ]}>{`Fast Pencil`}</Text>
         </Touchable>
     )
 }
 
-export const Pencil = React.memo(Pencil_)
+export const FastPencil = React.memo(FastPencil_)

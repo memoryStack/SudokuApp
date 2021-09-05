@@ -18,7 +18,7 @@ export const shouldSaveGameState = (currentGameState, previousGameState) => {
     return currentGameState === GAME_STATE.INACTIVE && previousGameState === GAME_STATE.ACTIVE
 }
 
-const duplicacyPresent = (row, col, num, mainNumbers) => {
+export const duplicacyPresent = (row, col, num, mainNumbers) => {
     for (let col=0;col<9;col++) if (mainNumbers[row][col].value === num) return 1 // check row
     for (let row=0;row<9;row++) if(mainNumbers[row][col].value === num) return 1 // check column
 

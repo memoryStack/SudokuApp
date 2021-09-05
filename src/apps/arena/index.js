@@ -15,9 +15,10 @@ import { usePrevious } from '../../utils/customHooks'
 import { Undo } from './cellActions/undo'
 import { Eraser } from './cellActions/eraser'
 import { Pencil } from './cellActions/pencil'
+import { FastPencil } from './cellActions/fastPencil'
 import { Hint } from './cellActions/hint'
 import { Timer } from './timer'
-import { isGameOver, shouldSaveGameState } from './utils/util'
+import { isGameOver, shouldSaveGameState, duplicacyPresent } from './utils/util'
 import { NewGameButton } from './newGameButton'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { CustomPuzzle } from './customPuzzle'
@@ -427,7 +428,8 @@ const Arena_ = () => {
             let notesUpdated = false
             if (pencilState === PENCIL_STATE.ACTIVE && !isHintUsed) {
                 // removing the below functionality because it kind of "baby spoon feeds" the user
-                // if (duplicacyPresent(row, col, number, mainNumbersDup)) return
+                // let's keep it for now and and we can keep it as a part of settings later on
+                if (duplicacyPresent(row, col, number, mainNumbersDup)) return
                 valueType = 'notes'
                 const { show } = notesInfo[row][col][number-1]
                 moveType = show ? 'erase' : 'insert'
@@ -593,6 +595,26 @@ const Arena_ = () => {
         return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
 
+    // EVENTS.FAST_PENCIL_CLICKED
+    useEffect(() => {
+        const handler = () => {
+            for (let row=0;row<9;row++) {
+                for (let col=0;col<9;col++) {
+                    if (!mainNumbers[row][col].value) {
+                        for (let num=1;num<=9;num++) {
+                            if (!duplicacyPresent(row, col, num, mainNumbers))
+                                notesInfo[row][col][num-1].show = true
+                        }
+                        notesInfo[row][col] = [...notesInfo[row][col]]
+                    }
+                }
+            }
+            updateNotesInfo([...notesInfo])
+        }
+        addListener(EVENTS.FAST_PENCIL_CLICKED, handler)
+        return () => removeListener(EVENTS.FAST_PENCIL_CLICKED, handler)
+    }, [mainNumbers, notesInfo])
+
     useEffect(() => {
         const handler = () => setShowCustomPuzzleHC(true)
         addListener(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW, handler)
@@ -688,14 +710,12 @@ const Arena_ = () => {
             <View
                 style={styles.container} 
                 onLayout={onParentLayout}
-            >   
+            >
                 <NewGameButton
                     onClick={newGameButtonClick}
                     containerStyle={styles.newGameButtonContainer}
                 />
-
                 <Text style={styles.refereeTextStyles}>{timeTaken}</Text>
-
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
                     <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
@@ -713,6 +733,7 @@ const Arena_ = () => {
                     <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
                     {/* <Eraser iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} /> */}
                     <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
+                    <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
                     <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />
                 </View>
                 <View style={styles.inputPanelContainer}>
