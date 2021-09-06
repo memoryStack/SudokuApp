@@ -32,9 +32,9 @@ const Cell_ = ({
                 const noteNum = row * 3 + col
                 const { show, noteValue } = cellNotes[noteNum] || {}
                 return (
-                    <View key={`${noteNum}`}>
+                    <View key={`${noteNum}`} style={Styles.noteContainer}>
                         <Text style={Styles.noteText}>
-                            {show ? `${noteValue}` : ' '} 
+                            {show ? `${noteValue}` : ''}
                         </Text>
                     </View>
                 )

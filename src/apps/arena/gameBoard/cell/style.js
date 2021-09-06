@@ -29,6 +29,7 @@ export const Styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-around',
     },
+    noteContainer: { flex: 1 },
     noteCell: {
         display: 'flex',
         justifyContent: 'center',
