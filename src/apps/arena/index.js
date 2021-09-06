@@ -710,9 +710,7 @@ const Arena_ = () => {
             useNativeDriver: true,
         }).start(() => {
             setGameSolvedCard(false)
-            setTimeout(() => {
-                emit(EVENTS.OPEN_NEXT_GAME_MENU)
-            }, 100) // just so that sb kuch fast fast sa na ho
+            setTimeout(() => setShowNextGameMenu(true), 100) // just so that sb kuch fast fast sa na ho
         })
     }
 
