@@ -6,7 +6,7 @@ import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PENCIL_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
-import { NextGameMenu } from './nextGameMenu'
+import { NextGameMenu, CUSTOMIZE_YOUR_PUZZLE_TITLE } from './nextGameMenu'
 import { initBoardData as initMainNumbers, generateNewSudokuPuzzle, getBlockAndBoxNum, getRowAndCol } from '../../utils/util'
 import { GameOverCard } from './gameOverCard'
 import { getNewPencilState } from './cellActions/pencil'
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
+        backgroundColor: 'white',
     },
     newGameButtonContainer: {
         alignSelf: 'flex-start',
@@ -143,7 +144,7 @@ const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
     return { hours, minutes, seconds }
 }
 
-const Arena_ = () => {
+const Arena_ = ({ navigation, route }) => {
 
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
     const [pageHeight, setPageHeight] = useState(0)
@@ -168,7 +169,6 @@ const Arena_ = () => {
     const [selectedCell, selectCell] = useState(initialBoardData.selectedCell)
     const selectedCellMainValue = useRef(initialBoardData.mainNumbers[selectedCell.row][selectedCell.col].value)
 
-    const [showNextGameMenu, setShowNextGameMenu] = useState(false)
     const [showCustomPuzzleHC, setShowCustomPuzzleHC] = useState(false)
 
     // for game over halfcard animation
@@ -180,26 +180,6 @@ const Arena_ = () => {
         addListener(EVENTS.PENCIL_CLICKED, handler)
         return () => {
             removeListener(EVENTS.PENCIL_CLICKED, handler)
-        }
-    }, [])
-
-    // resume previous game or start new game of previously solved level
-    useEffect(async () => {
-        const previousGame = await getKey(PREVIOUS_GAME)
-        if (previousGame) {
-            const { state, referee, boardData, cellActionsData } = previousGame
-            if (state !== GAME_STATE.INACTIVE) {
-                emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
-            } else {
-                setRefereeData(referee)
-                setBoardData(boardData)
-                setGameState(GAME_STATE.ACTIVE)
-                const { hints, pencilState } = cellActionsData
-                setPencilState(pencilState)
-                setHints(hints)
-            }
-        } else {
-            emit(EVENTS.START_NEW_GAME, { difficultyLevel: initialRefereeData.level })
         }
     }, [])
     
@@ -279,11 +259,39 @@ const Arena_ = () => {
         }
     }, [])
 
+    // resume previous game or start new game of previously solved level
+    useEffect(() => {
+        if (gameState !== GAME_STATE.INACTIVE) return
+        const { params: { selectedGameMenuItem = LEVEL_DIFFICULTIES.EASY } = {} } = route || {}
+        if (selectedGameMenuItem === 'resume') {
+            getKey(PREVIOUS_GAME).then(previousGame => {
+                if (previousGame) {
+                    const { state, referee, boardData, cellActionsData } = previousGame
+                    if (state !== GAME_STATE.INACTIVE) {
+                        emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
+                    } else {
+                        setRefereeData(referee)
+                        setBoardData(boardData)
+                        setGameState(GAME_STATE.ACTIVE)
+                        const { hints, pencilState } = cellActionsData
+                        setPencilState(pencilState)
+                        setHints(hints)
+                    }
+                } else {
+                    emit(EVENTS.START_NEW_GAME, { difficultyLevel: initialRefereeData.level })
+                }
+            }).catch(err => {
+                __DEV__ && console.log(err)
+            })
+        } else if (selectedGameMenuItem === CUSTOMIZE_YOUR_PUZZLE_TITLE) {
+            setShowCustomPuzzleHC(true)
+        } else {
+            emit(EVENTS.START_NEW_GAME, { difficultyLevel: selectedGameMenuItem })
+        }
+    }, [route])
+
     useEffect(() => {
         const handler = ({ mainNumbers }) => {
-            // drag the customPuzzle HC and we can simply unmount the
-            // next game menu from view hirerechy
-            setShowNextGameMenu(false)
             const boardData = initBoardData()
             boardData.mainNumbers = mainNumbers
             setBoardData(boardData)
@@ -694,9 +702,9 @@ const Arena_ = () => {
 
     const handleGameInFocus = useCallback(() => {
         // if the menu is opened let's keep it that way only
-        if (gameState !== GAME_STATE.INACTIVE || (showCustomPuzzleHC || showNextGameMenu)) return
+        if (gameState !== GAME_STATE.INACTIVE || (showCustomPuzzleHC)) return
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [gameState, showCustomPuzzleHC, showGameSolvedCard])
+    }, [gameState, showCustomPuzzleHC])
 
     const handleGameOutOfFocus = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
@@ -710,7 +718,6 @@ const Arena_ = () => {
             useNativeDriver: true,
         }).start(() => {
             setGameSolvedCard(false)
-            setTimeout(() => setShowNextGameMenu(true), 100) // just so that sb kuch fast fast sa na ho
         })
     }
 
@@ -728,35 +735,16 @@ const Arena_ = () => {
         fadeOut()
     }, [])
 
-    const newGameButtonClick = useCallback(() => {
-        setShowNextGameMenu(true)
-        // when game is solved or over, i don't want the game state to be changed
-        // user should start the next game
-        if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
-    }, [gameState])
-
-    const onNewGameMenuClosed = useCallback((optionSelectedFromMenu = false) => {
-        setShowNextGameMenu(false)
-        // when game is solved or over, i don't want the game state to be changed
-        // user should start the next game
-        if (gameState !== GAME_STATE.INACTIVE) return
-        !optionSelectedFromMenu && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [gameState])
-
     return (
         <Page
             onFocus={handleGameInFocus}
             onBlur={handleGameOutOfFocus}
+            navigation={navigation}
         >
             <View
                 style={styles.container} 
                 onLayout={onParentLayout}
             >
-                <NewGameButton
-                    onClick={newGameButtonClick}
-                    containerStyle={styles.newGameButtonContainer}
-                />
                 <Text style={styles.refereeTextStyles}>{timeTaken}</Text>
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
@@ -781,14 +769,6 @@ const Arena_ = () => {
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel gameState={gameState} />
                 </View>
-                {
-                    pageHeight && showNextGameMenu ?
-                        <NextGameMenu
-                            parentHeight={pageHeight}
-                            onMenuClosed={onNewGameMenuClosed}
-                        /> 
-                    : null
-                }
                 {
                     pageHeight && showCustomPuzzleHC ?
                         <CustomPuzzle

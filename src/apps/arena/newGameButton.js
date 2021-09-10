@@ -5,7 +5,7 @@ import { noOperationFunction } from '../../utils/util'
 
 const styles = StyleSheet.create({
     newGameButtonContainer: {
-        paddingVertical: 8,
+        padding: 8,
         alignItems: 'center',
         backgroundColor: '#4088da',
         borderRadius: 3,

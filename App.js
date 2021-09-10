@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
-import { Arena } from './src/apps/arena'
+import React, { useEffect, useState, useRef } from 'react'
+import { View } from 'react-native'
 import CodePush from 'react-native-code-push'
 import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
 import { EVENTS } from './src/resources/constants'
-
-// initialize the event bus
+import { NavigationContainer } from '@react-navigation/native'
+import { getNavigator } from './navigation/navigator'
 
 /**
  * right now it will contain the arena screen. later on will add proper screenNavigations logic n all
@@ -18,6 +17,8 @@ const CODE_PUSH_OPTIONS = {
 
 const App = () => {
 
+  const [snackbarMsg, setSnackBarMsg] = useState('')
+  const [snackbar, setSnackBarView] = useState(null)
   // TODO: codepush is giving some error for ios
   // {"status":400,"name":"Error","message":"Missing required query parameter \"deployment_key\""}
   useEffect(() => {
@@ -25,9 +26,6 @@ const App = () => {
     //   console.log('@@@@@@@ JS update installed status', status)
     // })
   }, [])
-    
-  const [snackbarMsg, setSnackBarMsg] = useState('')
-  const [snackbar, setSnackBarView] = useState(null)
 
   // added pretty raw implementation for snackbars right now
   // later on after finalizing a robust implementation i can make
@@ -51,28 +49,27 @@ const App = () => {
   return (
     <View
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         height: '100%',
         width: '100%',
         backgroundColor: 'white',
       }}
     >
-      <Arena />
+      <NavigationContainer>
+        {getNavigator()}
+      </NavigationContainer>
       {snackbar}
       {
         snackbarMsg ?
-        <SnackBar
-          msg={snackbarMsg}
-        />
-         : null
+          <SnackBar
+            msg={snackbarMsg}
+          />
+        : null
       }
     </View>
     
-  );
+  )
 
-};
+}
 
 // export default CodePush(CODE_PUSH_OPTIONS)(App)
 export default App

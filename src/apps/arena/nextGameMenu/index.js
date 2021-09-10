@@ -1,16 +1,14 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useRef } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { Svg, Path } from 'react-native-svg'
 import { RestartIcon } from '../../../resources/svgIcons/restart'
-import { EVENTS, LEVEL_DIFFICULTIES } from '../../../resources/constants'
+import { LEVEL_DIFFICULTIES } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { emit } from '../../../utils/GlobalEventBus'
 
 const LEVEL_ICON_DIMENSION = 24
 const NEXT_GAME_MENU_ROW_HEIGHT = 50
-const RESTART_TEXT = 'Restart'
-const CUSTOMIZE_YOUR_PUZZLE_TITLE = 'Customize Your Puzzle'
+export const CUSTOMIZE_YOUR_PUZZLE_TITLE = 'Customize Your Puzzle'
 const styles = StyleSheet.create({
     nextGameMenuContainer: {
         backgroundColor: 'white',
@@ -35,7 +33,7 @@ const styles = StyleSheet.create({
 
 // TODO: research about using "useMemo" for the functions which are rendering a view in the 
 //          functional component
-const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
+const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
 
     const nextGameMenuRef = useRef(null)
 
@@ -71,24 +69,6 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
         )
     }
 
-    const closeView = () =>
-        nextGameMenuRef.current && nextGameMenuRef.current.closeDragger(true)
-
-    const nextGameMenuItemClicked = useCallback(item => {
-        switch (item) {
-            case RESTART_TEXT: 
-                emit(EVENTS.RESTART_GAME)
-                closeView()
-                break
-            case CUSTOMIZE_YOUR_PUZZLE_TITLE:
-                emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
-                break
-            default:
-                emit(EVENTS.START_NEW_GAME, { difficultyLevel: item })
-                closeView()
-        }    
-    }, [nextGameMenuRef])
-
     const getNextGameMenu = () => {
         return (
             <View style={styles.nextGameMenuContainer}>
@@ -99,7 +79,7 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
                                 <Touchable
                                     style={styles.levelContainer}
                                     touchable={TouchableTypes.opacity}
-                                    onPress={() => nextGameMenuItemClicked(levelText)}
+                                    onPress={() => menuItemClick(levelText)}
                                 >
                                     {getLevelIcon(index)}
                                     <Text style={styles.levelText}>{levelText}</Text>
@@ -111,16 +91,16 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
                 <Touchable
                     style={styles.levelContainer}
                     touchable={TouchableTypes.opacity}
-                    onPress={() => nextGameMenuItemClicked(RESTART_TEXT)}
-                >
+                    onPress={() => menuItemClick('resume')}
+                > 
                     <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
-                    <Text style={styles.levelText}>{RESTART_TEXT}</Text>
+                    <Text style={styles.levelText}>{'Resume'}</Text>
                 </Touchable>
                 {/* TODO: make this and above option a little more configurable */}
                 <Touchable
                     style={styles.levelContainer}
                     touchable={TouchableTypes.opacity}
-                    onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
+                    onPress={() => menuItemClick(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
                 >
                     <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
                 </Touchable>
@@ -131,7 +111,6 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
     return (
         <BottomDragger
             parentHeight={parentHeight}
-            // onDraggerOpened={onNewGameMenuOpened}
             onDraggerClosed={onMenuClosed}
             ref={nextGameMenuRef}
             bottomMostPositionRatio={1.1}

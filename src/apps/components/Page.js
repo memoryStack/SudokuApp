@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { View, SafeAreaView, StyleSheet, AppState, Platform } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { SafeAreaView, StyleSheet, AppState, Platform } from 'react-native'
 import { noOperationFunction } from '../../utils/util'
 
 const styles = StyleSheet.create({
@@ -16,45 +16,50 @@ const Page_ = ({
     onLayout = noOperationFunction,
     onFocus = noOperationFunction,
     onBlur = noOperationFunction,
+    navigation,
 }) => {
 
-    const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')
+    const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active') 
 
-    const handleFocus = useCallback(() => {
+    const handleFocus = () => {
         if (isPageInFocus) return
         setIsPageInFocus(true)
         onFocus()
-    }, [isPageInFocus, onFocus])
+    }
 
-    const handleBlur = useCallback(() => {
+    const handleBlur = () => {
         if (!isPageInFocus) return
         setIsPageInFocus(false)
         onBlur()
-    }, [isPageInFocus, onBlur])
+    }
 
-    const handleAppStateChange = useCallback(nextAppState => {
+    const handleAppStateChange = nextAppState => {
         const hasComeToBlur = OUT_OF_FOCUS_APP_STATES.indexOf(nextAppState) !== -1
         const hasComeToFocus = nextAppState === 'active'
-        if (!isPageInFocus && hasComeToFocus) handleFocus()
-        if (isPageInFocus && hasComeToBlur) handleBlur()
-    }, [isPageInFocus, handleFocus, handleBlur])
+        hasComeToFocus && handleFocus()
+        hasComeToBlur && handleBlur()
+    }
 
-    // all the events for koowing that page is actually in focus or not
+    // all the events for knowing that page is actually in focus or not
     useEffect(() => {
-        // TODO: add react-navigation 'focus' and 'blur' events
         AppState.addEventListener('change', handleAppStateChange)
+        const unsubNavigation = [
+            navigation && navigation.addListener('focus', handleFocus),
+            navigation && navigation.addListener('blur', handleBlur),
+        ]
         if (Platform.OS === 'android') {
             AppState.addEventListener('focus', handleFocus)
             AppState.addEventListener('blur', handleBlur)
         }
         return () => {
             AppState.removeEventListener('change', handleAppStateChange)
+            unsubNavigation.forEach(unsub => unsub && unsub())
             if (Platform.OS === 'android') {
                 AppState.removeEventListener('focus', handleFocus)
                 AppState.removeEventListener('blur', handleBlur)
             }
         }
-    }, [handleAppStateChange, handleFocus, handleBlur])
+    }, [isPageInFocus, onFocus, onBlur, navigation])
 
     return (
         <SafeAreaView
