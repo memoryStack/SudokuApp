@@ -1,7 +1,8 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Arena } from '../src/apps/arena/index'
-import { Home } from '../src/apps/home/index'
+import { Arena } from '../src/apps/arena'
+import { Home } from '../src/apps/home'
+import { OnlineRoom } from '../src/apps/onlineRoom'
 
 const getRoutes = () => {
     return [
@@ -12,6 +13,10 @@ const getRoutes = () => {
         {
             name: 'Arena',
             component: Arena,
+        },
+        {
+            name: 'OnlineRoom',
+            component: OnlineRoom,
         }
     ]
 }

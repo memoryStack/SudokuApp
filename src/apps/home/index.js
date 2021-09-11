@@ -14,7 +14,7 @@ const Home_ = ({ navigation }) => {
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
     const handlePlayOnlineClick = useCallback(() => {
-        // navigate to online room screen
+        navigation.navigate('OnlineRoom')
     }, [])
 
     const handlePlayOfflineClick = useCallback(() => {
