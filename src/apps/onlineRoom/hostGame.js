@@ -78,10 +78,12 @@ const HostGame_ = ({ navigation }) => {
     }, [])
 
     const handleStartGameClick = useCallback(() => {
-        if (!selectedPuzzle || !roomID) {
+        if (!selectedPuzzle) {
             // nudge user about the issue
+        } else {
+            navigation.navigate('Arena', { mainNumbers, difficultyLevel })
         }
-    }, [selectedPuzzle])
+    }, [selectedPuzzle, mainNumbers, difficultyLevel])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => { 
         setPageHeight(height)
@@ -134,6 +136,7 @@ const HostGame_ = ({ navigation }) => {
         setMainNumbers(mainNumbers)
         setSelectedPuzzle(true)
         setShowGameMenu(false)
+        setDifficultyLevel(CUSTOMIZE_YOUR_PUZZLE_TITLE)
     }, [])
 
     return (

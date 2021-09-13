@@ -259,8 +259,8 @@ const Arena_ = ({ navigation, route }) => {
 
     // resume previous game or start new game of previously solved level
     useEffect(() => {
-        if (gameState !== GAME_STATE.INACTIVE) return
-        const { params: { selectedGameMenuItem = LEVEL_DIFFICULTIES.EASY } = {} } = route || {}
+        const { params: { selectedGameMenuItem } = {} } = route || {}
+        if (gameState !== GAME_STATE.INACTIVE || !selectedGameMenuItem) return
         if (selectedGameMenuItem === 'resume') {
             getKey(PREVIOUS_GAME).then(previousGame => {
                 if (previousGame) {
@@ -289,8 +289,27 @@ const Arena_ = ({ navigation, route }) => {
         } else {
             emit(EVENTS.START_NEW_GAME, { difficultyLevel: selectedGameMenuItem })
         }
+    }, [route, gameState])
+
+    // start puzzle sent as props
+    // Sources: 1. deep-link
+    //          2. online room puzzles which was selected before landing to this screen
+    // TODO: puzzle start code has a lot of duplicacy, tackle those
+    useEffect(() => {
+        const { params: { mainNumbers, difficultyLevel } = {} } = route || {}
+        if (!mainNumbers || !difficultyLevel) return
+
+        const boardData = initBoardData()
+        boardData.mainNumbers = mainNumbers
+        setBoardData(boardData)
+        setGameState(GAME_STATE.ACTIVE)
+        setRefereeData(initRefereeData(difficultyLevel))
+        resetCellActions()
+        onNewGameStarted()
     }, [route])
 
+    // TODO: repeated function calls
+    // oganize the code in this file
     const onCustomPuzzleValiditySuccessful = useCallback(({mainNumbers}) => {
         const boardData = initBoardData()
         boardData.mainNumbers = mainNumbers
