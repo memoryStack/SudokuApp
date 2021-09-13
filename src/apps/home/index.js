@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { NewGameButton } from '../arena/newGameButton'
 import { NextGameMenu } from '../arena/nextGameMenu'
+import { SCREEN_NAME } from '../../resources/constants'
 
 const styles = StyleSheet.create({
     buttonContainer: {
@@ -14,6 +15,8 @@ const Home_ = ({ navigation }) => {
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
     const handlePlayOnlineClick = useCallback(() => {
+        // TODO: can this navigation be null or undefined ??
+        //       i need a concrete answer
         navigation.navigate('OnlineRoom')
     }, [])
 
@@ -65,6 +68,7 @@ const Home_ = ({ navigation }) => {
             {
                 pageHeight && showNextGameMenu ?
                     <NextGameMenu
+                        screenName={SCREEN_NAME.HOME}
                         parentHeight={pageHeight}
                         menuItemClick={handleMenuItemClicked}
                         onMenuClosed={onNewGameMenuClosed}

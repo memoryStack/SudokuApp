@@ -268,6 +268,9 @@ const Arena_ = ({ navigation, route }) => {
                 if (previousGame) {
                     const { state, referee, boardData, cellActionsData } = previousGame
                     if (state !== GAME_STATE.INACTIVE) {
+                        // TODO: for this case we should show a nudge to the user becasue
+                        // we are starting a new puzzle while the user was expecting
+                        // a previous puzzle to be resumed
                         emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
                     } else {
                         setRefereeData(referee)
@@ -290,19 +293,13 @@ const Arena_ = ({ navigation, route }) => {
         }
     }, [route])
 
-    useEffect(() => {
-        const handler = ({ mainNumbers }) => {
-            const boardData = initBoardData()
-            boardData.mainNumbers = mainNumbers
-            setBoardData(boardData)
-            setRefereeData(initRefereeData(CUSTOMIZED_PUZZLE_LEVEL_TITLE))
-            resetCellActions()
-            onNewGameStarted()
-        }
-        addListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
-        return () => {
-            removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
-        }
+    const onCustomPuzzleValiditySuccessful = useCallback(({mainNumbers}) => {
+        const boardData = initBoardData()
+        boardData.mainNumbers = mainNumbers
+        setBoardData(boardData)
+        setRefereeData(initRefereeData(CUSTOMIZED_PUZZLE_LEVEL_TITLE))
+        resetCellActions()
+        onNewGameStarted()
     }, [])
 
     // EVENTS.RESTART_GAME
@@ -774,6 +771,7 @@ const Arena_ = ({ navigation, route }) => {
                         <CustomPuzzle
                             parentHeight={pageHeight}
                             onCustomPuzzleClosed={handleCustomPuzzleClosed}
+                            onPuzzleValiditySuccessful={onCustomPuzzleValiditySuccessful}
                         />
                     : null
                 }

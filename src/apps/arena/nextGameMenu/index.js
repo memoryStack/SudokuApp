@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { Svg, Path } from 'react-native-svg'
 import { RestartIcon } from '../../../resources/svgIcons/restart'
-import { LEVEL_DIFFICULTIES } from '../../../resources/constants'
+import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 const LEVEL_ICON_DIMENSION = 24
@@ -33,9 +33,7 @@ const styles = StyleSheet.create({
 
 // TODO: research about using "useMemo" for the functions which are rendering a view in the 
 //          functional component
-const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
-
-    const nextGameMenuRef = useRef(null)
+const NextGameMenu_ = ({ screenName, nextGameMenuRef, parentHeight, menuItemClick, onMenuClosed }) => {
 
     const getBar = (barNum, level) => {
         const pathD = ['M', (75 + 100 * barNum), '450', 'L', (75 + 100 * barNum), (350 - 100 * barNum),
@@ -88,14 +86,18 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                         )
                     })
                 }
-                <Touchable
-                    style={styles.levelContainer}
-                    touchable={TouchableTypes.opacity}
-                    onPress={() => menuItemClick('resume')}
-                > 
-                    <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
-                    <Text style={styles.levelText}>{'Resume'}</Text>
-                </Touchable>
+                {
+                    screenName === SCREEN_NAME.HOME ?
+                        <Touchable
+                            style={styles.levelContainer}
+                            touchable={TouchableTypes.opacity}
+                            onPress={() => menuItemClick('resume')}
+                        > 
+                            <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
+                            <Text style={styles.levelText}>{'Resume'}</Text>
+                        </Touchable>
+                    : null
+                }
                 {/* TODO: make this and above option a little more configurable */}
                 <Touchable
                     style={styles.levelContainer}
@@ -112,7 +114,7 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
         <BottomDragger
             parentHeight={parentHeight}
             onDraggerClosed={onMenuClosed}
-            ref={nextGameMenuRef}
+            ref={nextGameMenuRef || useRef(null)}
             bottomMostPositionRatio={1.1}
         >
             {getNextGameMenu()}

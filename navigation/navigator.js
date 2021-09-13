@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Arena } from '../src/apps/arena'
 import { Home } from '../src/apps/home'
 import { OnlineRoom } from '../src/apps/onlineRoom'
+import { HostGame } from '../src/apps/onlineRoom/hostGame'
 
 const getRoutes = () => {
     return [
@@ -17,6 +18,10 @@ const getRoutes = () => {
         {
             name: 'OnlineRoom',
             component: OnlineRoom,
+        },
+        {
+            name: 'HostGame',
+            component: HostGame,
         }
     ]
 }

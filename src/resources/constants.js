@@ -66,7 +66,6 @@ const EVENTS = {
     INPUT_CUSTOM_PUZZLE: 'INPUT_CUSTOM_PUZZLE',
     OPEN_CUSTOM_PUZZLE_INPUT_VIEW: 'OPEN_CUSTOM_PUZZLE_INPUT_VIEW',
     SHOW_SNACK_BAR: 'SHOW_SNACK_BAR',
-    START_CUSTOM_PUZZLE_GAME: 'START_CUSTOM_PUZZLE_GAME',
 }
 
 // TODO: freeze these objects
@@ -86,6 +85,8 @@ const PENCIL_STATE = {
 const SCREEN_NAME = {
     ARENA: 'arena',
     CUSTOM_PUZZLE: 'custom-puzzle',
+    CREATE_ROOM: 'create-room',
+    HOME: 'home',
 }
 
 export {

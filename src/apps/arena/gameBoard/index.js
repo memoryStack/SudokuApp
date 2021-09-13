@@ -51,7 +51,7 @@ const Board_ = ({
         const isSameHouseAsSelected = sameHouseAsSelected(row, col, selectedCellRow, selectedCellCol)
         const isSameValueAsSelected = sameValueAsSelectedBox(row, col)
         if (isSameHouseAsSelected && isSameValueAsSelected) return Styles.sameHouseSameValueBGColor
-        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells
+        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE || screenName === SCREEN_NAME.CREATE_ROOM) return null // won't show backgorund color for the below type of cells
         if (isSameHouseAsSelected) return Styles.sameHouseCellBGColor
         if (!isSameHouseAsSelected && isSameValueAsSelected) return Styles.diffHouseSameValueBGColor
         return null

@@ -10,8 +10,6 @@ import { Inputpanel } from '../inputPanel'
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { getNumberOfSolutions } from '../utils/util'
-import { CELL_ACTION_ICON_BOX_DIMENSION } from '../../arena/index'
-import { Eraser } from '../cellActions/eraser'
 
 const INPUT_NUMBER_CLICK_EVENT_PREFIX = 'CUSTOM_PUZZLE_'
 const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
@@ -98,7 +96,7 @@ const isDuplicateEntry = (mainNumbers, {row, col}, number) => {
 
 // TODO: memory leaks are happening in this component and also NextGameMenu component
 //          have to be fixed
-const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
+const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed, onPuzzleValiditySuccessful }) => {
 
     const initialBoardData = useRef(initBoardData()).current
     const [mainNumbers, setMainNumbers] = useState(initialBoardData.mainNumbers)
@@ -189,7 +187,7 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
             if (isMultipleSolutionsExist) {
                 showSnackBar('puzzle has multiple valid solutions. please input valid puzzle')
             } else {
-                emit(EVENTS.START_CUSTOM_PUZZLE_GAME, { mainNumbers })
+                onPuzzleValiditySuccessful({mainNumbers})
                 closeView()
             }
         }
@@ -208,6 +206,7 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
             const { row, col } = selectedCell
             mainNumbers[row][col].value = 0
             setMainNumbers([...mainNumbers])
+            selectedCellMainValue.current = 0
         }
         addListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.ERASER_CLICKED, handler)
         return () => removeListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.ERASER_CLICKED, handler)
@@ -245,11 +244,6 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                         gameState={GAME_STATE.ACTIVE}
                     />
                 </View>
-                {/* <Eraser
-                    eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX}
-                    iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                    gameState={'ACTIVE'}
-                /> */}
                 <NewGameButton
                     containerStyle={styles.playButtonContainer}
                     onClick={handlePlayClick}

@@ -32,7 +32,7 @@ const OnlineRoom_ = ({ navigation }) => {
     const roomIDInputRef = useRef(null)
 
     const handleCreateRoomClick = useCallback(() => {
-    
+        navigation.navigate('HostGame')
     }, [])
 
     const handleJoinRoomClick = useCallback(() => {
