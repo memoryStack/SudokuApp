@@ -141,7 +141,8 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed, onPuzzleValiditySuc
                         nextCol = 0
                         nextRow++
                     }
-                    if (nextRow !== 9) handleCellClicked(nextRow, nextCol)
+                    if (nextRow !== 9)
+                        emit(SCREEN_NAME.CUSTOM_PUZZLE + EVENTS.SELECT_CELL, { row: nextRow, col: nextCol })
                 }, 100)
             }
         }
