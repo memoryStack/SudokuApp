@@ -5,9 +5,19 @@ import { NextGameMenu } from '../arena/nextGameMenu'
 import { SCREEN_NAME } from '../../resources/constants'
 
 const styles = StyleSheet.create({
-    buttonContainer: {
-
-    }
+    container: {
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'white',
+    },
+    gameModeOptionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        width: '100%',
+        top: 200,
+    },
 })
 
 const Home_ = ({ navigation }) => {    
@@ -39,23 +49,10 @@ const Home_ = ({ navigation }) => {
 
     return (
         <View
-            style={{
-                alignItems: 'center',
-                height: '100%',
-                width: '100%',
-                backgroundColor: 'white',
-            }}
+            style={styles.container}
             onLayout={onParentLayout}
         >
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    width: '100%',
-                    top: 200,
-                }}
-            >
+            <View style={styles.gameModeOptionsContainer}>
                 <NewGameButton
                     onClick={handlePlayOnlineClick}
                     text={'Play Online'}
