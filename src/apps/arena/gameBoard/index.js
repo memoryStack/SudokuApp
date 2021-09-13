@@ -14,13 +14,12 @@ for(let i=0;i<10;i++) {
 
 const THICK_BODER_THICKNESS = 3
 const Board_ = ({
-    screenName = SCREEN_NAME.ARENA, // default will be arena
+    screenName = '',
     gameState,
     mainNumbers,
     notesInfo = [],
     selectedCell = {},
     selectedCellMainValue = 0,
-    onCellClick,
 }) => {
 
     const sameValueAsSelectedBox = (row, col) =>
@@ -75,8 +74,8 @@ const Board_ = ({
                                     mainValueFontColor={getMainNumFontColor(row, col)}
                                     cellMainValue={mainNumbers[row][col].value}
                                     cellNotes={notesInfo[row][col]}
-                                    onCellClicked={onCellClick}
                                     gameState={gameState}
+                                    screenName={screenName}
                                 />
                             </View>
                         )
@@ -90,10 +89,10 @@ const Board_ = ({
         const isVertical = orientation === 'vertical'
         const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
         const normalBorderStyle = isVertical ? Styles.verticalBars : Styles.horizontalBars
-        const thickNessStyleField = isVertical ? 'width' : 'height'
+        const thicknessStyleField = isVertical ? 'width' : 'height'
         const thickBorderStyle = {
             ...normalBorderStyle,
-            [thickNessStyleField]: THICK_BODER_THICKNESS,
+            [thicknessStyleField]: THICK_BODER_THICKNESS,
         }
 
         return (

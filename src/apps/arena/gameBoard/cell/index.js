@@ -2,7 +2,8 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { Styles } from './style'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
-import { GAME_STATE } from '../../../../resources/constants'
+import { GAME_STATE, EVENTS } from '../../../../resources/constants'
+import { emit } from '../../../../utils/GlobalEventBus'
 
 // becoz only 3 notes are there in a row
 const looper = []
@@ -16,8 +17,8 @@ const Cell_ = ({
     cellMainValue = 0,
     cellBGColor = null,
     mainValueFontColor = null,
-    onCellClicked,
     gameState,
+    screenName,
 }) => {
 
     const shouldRenderNotes = () => {
@@ -44,8 +45,10 @@ const Cell_ = ({
         return <View style={Styles.notesContainer}>{cellNotesRows}</View>
     }
 
-    const onPress = () =>
-        gameState === GAME_STATE.ACTIVE && onCellClicked(row, col)
+    const onPress = () => {
+        if (gameState !== GAME_STATE.ACTIVE) return
+        emit(screenName + EVENTS.SELECT_CELL, { row, col })
+    }
 
     const renderCell = () => {
         const containerStyle = [Styles.cell, cellBGColor]

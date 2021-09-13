@@ -4,7 +4,7 @@ import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PENCIL_STATE } from '../../resources/constants'
+import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME, PENCIL_STATE, SCREEN_NAME } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE } from './nextGameMenu'
 import { initBoardData as initMainNumbers, generateNewSudokuPuzzle, getBlockAndBoxNum, getRowAndCol } from '../../utils/util'
@@ -300,6 +300,8 @@ const Arena_ = ({ navigation, route }) => {
         if (!mainNumbers || !difficultyLevel) return
 
         const boardData = initBoardData()
+        // TODO: this is keeping the reference to the previous screen's value
+        //       this has to be fixed
         boardData.mainNumbers = mainNumbers
         setBoardData(boardData)
         setGameState(GAME_STATE.ACTIVE)
@@ -702,12 +704,16 @@ const Arena_ = ({ navigation, route }) => {
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
     }, [selectedCell, mainNumbers])
 
-    const handleCellClicked = useCallback((row, col) => {
-        selectedCellMainValue.current = mainNumbers[row][col].value
-        selectCell(selectedCell => {
-            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
-            return selectedCell
-        })
+    useEffect(() => {
+        const handler = ({row, col}) => {
+            selectedCellMainValue.current = mainNumbers[row][col].value
+            selectCell(selectedCell => {
+                if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
+                return selectedCell
+            })
+        }
+        addListener(EVENTS.SELECT_CELL, handler)
+        return () => removeListener(EVENTS.SELECT_CELL, handler)
     }, [mainNumbers])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => { 
@@ -771,7 +777,6 @@ const Arena_ = ({ navigation, route }) => {
                     notesInfo={notesInfo}
                     selectedCell={selectedCell}
                     selectedCellMainValue={selectedCellMainValue.current}
-                    onCellClick={handleCellClicked}
                 />
                 <View style={styles.cellActionsContainer}>
                     <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />

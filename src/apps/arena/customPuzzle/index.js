@@ -193,12 +193,16 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed, onPuzzleValiditySuc
         }
     }, [mainNumbers])
 
-    const handleCellClicked = useCallback((row, col) => {
-        selectedCellMainValue.current = mainNumbers[row][col].value
-        selectCell(selectedCell => {
-            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
-            return selectedCell
-        })
+    useEffect(() => {
+        const handler = ({row, col}) => {
+            selectedCellMainValue.current = mainNumbers[row][col].value
+            selectCell(selectedCell => {
+                if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
+                return selectedCell
+            })
+        }
+        addListener(SCREEN_NAME.CUSTOM_PUZZLE + EVENTS.SELECT_CELL, handler)
+        return () => removeListener(SCREEN_NAME.CUSTOM_PUZZLE + EVENTS.SELECT_CELL, handler)
     }, [mainNumbers])
 
     useEffect(() => {
@@ -236,7 +240,6 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed, onPuzzleValiditySuc
                     notesInfo={initialBoardData.notesInfo}
                     selectedCell={selectedCell}
                     selectedCellMainValue={selectedCellMainValue.current}
-                    onCellClick={handleCellClicked}
                 />
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel 
