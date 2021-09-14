@@ -548,9 +548,7 @@ const Arena_ = ({ navigation, route }) => {
         }
 
         addListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
-        return () => {
-            removeListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
-        }
+        return () => removeListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
     }, [mainNumbers, notesInfo, selectedCell, pencilState])
 
     // EVENTS.UNDO_CLICKED
@@ -598,11 +596,10 @@ const Arena_ = ({ navigation, route }) => {
                 nextSelectedCell.col = col
             }
 
+            selectedCellMainValue.current = mainNumbersDup[nextSelectedCell.row][nextSelectedCell.col].value
             updateMainNumbers(mainNumbersDup)
             updateNotesInfo(notesInfoDup)
             selectCell(nextSelectedCell)
-            selectedCellMainValue.current = mainNumbersDup[nextSelectedCell.row][nextSelectedCell.col].value
-
             emit(EVENTS.UNDO_USED_SUCCESSFULLY)
         }
         addListener(EVENTS.UNDO_CLICKED, handler)
