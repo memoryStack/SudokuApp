@@ -773,7 +773,6 @@ const Arena_ = () => {
                 />
                 <View style={styles.cellActionsContainer}>
                     <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
-                    {/* <Eraser iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} /> */}
                     <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
                     <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
                     <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />

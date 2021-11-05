@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { View, Text } from 'react-native'
 import { Styles, INACTIVE_ICON_FILL } from './style'
 import { HintIcon } from '../../../resources/svgIcons/hint'
@@ -12,10 +12,10 @@ import { EVENTS, GAME_STATE } from '../../../resources/constants'
 
 const Hint_ = ({ iconBoxSize, gameState, hints }) => {
 
-    const onPress = useCallback(() => {
+    const onPress = () => {
         if (gameState !== GAME_STATE.ACTIVE || hints <= 0) return
         emit(EVENTS.HINT_CLICKED)
-    }, [gameState, hints])
+    }
 
     return (
         <Touchable

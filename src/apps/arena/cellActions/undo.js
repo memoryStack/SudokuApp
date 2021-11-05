@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Text } from 'react-native'
 import { Styles, INACTIVE_ICON_FILL } from './style'
 import { UndoIcon } from '../../../resources/svgIcons/undo'
@@ -8,10 +8,10 @@ import { EVENTS, GAME_STATE } from '../../../resources/constants'
 
 const Undo_ = ({ iconBoxSize, gameState }) => {
 
-    const onPress =  useCallback(() => {
+    const onPress = () => {
         if (gameState !== GAME_STATE.ACTIVE) return 
         emit(EVENTS.UNDO_CLICKED)
-    }, [gameState])
+    }
 
     useEffect(() => {
         const handler = () => {
