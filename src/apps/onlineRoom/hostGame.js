@@ -148,7 +148,7 @@ const HostGame_ = ({ navigation }) => {
                 <Text>{'Room ID:'}</Text>
                 {/*  add a loader here  */}
             </View>
-            <Text style={styles.difficultyLevel}>{difficultyLevel}</Text>
+            <Text style={styles.difficultyLevel}>{selectedPuzzle ? difficultyLevel : 'Select Puzzle'}</Text>
             <Board
                 screenName={SCREEN_NAME.CREATE_ROOM}
                 gameState={GAME_STATE.ACTIVE} // else the click on cells wouldn't work

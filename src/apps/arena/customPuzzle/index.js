@@ -133,18 +133,18 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed, onPuzzleValiditySuc
             }
             setMainNumbers([...mainNumbers])
 
-            if (!mainNumbers[row][col].wronglyPlaced) {
-                setTimeout(() => {
-                    let nextCol = col + 1
-                    let nextRow = row
-                    if (nextCol === 9) {
-                        nextCol = 0
-                        nextRow++
-                    }
-                    if (nextRow !== 9)
-                        emit(SCREEN_NAME.CUSTOM_PUZZLE + EVENTS.SELECT_CELL, { row: nextRow, col: nextCol })
-                }, 100)
-            }
+            // if (!mainNumbers[row][col].wronglyPlaced) {
+            //     setTimeout(() => {
+            //         let nextCol = col + 1
+            //         let nextRow = row
+            //         if (nextCol === 9) {
+            //             nextCol = 0
+            //             nextRow++
+            //         }
+            //         if (nextRow !== 9)
+            //             emit(SCREEN_NAME.CUSTOM_PUZZLE + EVENTS.SELECT_CELL, { row: nextRow, col: nextCol })
+            //     }, 100)
+            // }
         }
         addListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.INPUT_NUMBER_CLICKED, handler)
         return () => removeListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.INPUT_NUMBER_CLICKED, handler)

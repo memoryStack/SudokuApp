@@ -1,0 +1,95 @@
+
+// event for starting new game
+{
+    "type": "START_NEW_GAME",
+    "data": {
+        "puzzle": [],
+        "difficultyLevel": "EASY"
+    }
+}
+
+// sync time with server, user might kill app and join again
+{
+    "type": "SYNC_TIMER",
+    "data": {
+        "time": {
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0
+        }
+    }
+}
+
+// restart game is pressed
+{
+    "type": "RESTART_GAME",
+    "data": null
+}
+
+// game controller can choose to pause the game as a break
+{
+    "type": "PAUSE_GAME",
+    "data": null
+}
+
+// show snackbar, (not sure what i will do with this)
+{
+    "type": "SHOW_SNACK_BAR",
+    "data": {
+        "msg": "hey man, how are you ??"
+    }
+}
+
+{
+    "type": "INPUT_NUMBER_CLICKED",
+    "data": {
+        "number": 1
+    }
+}
+
+{
+    "type": "HINT_CLICKED",
+    "data": null
+}
+
+{
+    "type": "UNDO_CLICKED",
+    "data": null
+}
+
+{
+    "type": "ERASER_CLICKED",
+    "data": null
+}
+
+{
+    "type": "PENCIL_CLICKED",
+    "data": null
+}
+
+{
+    "type": "FAST_PENCIL_CLICKED",
+    "data": null
+}
+
+{
+    "type": "CELL_CLICKED", // SELECT CELL
+    "data": {
+        "selectedCell": {
+            "row": 0,
+            "col": 0
+        }
+    }
+}
+
+////////////////////////////////////////////////////
+// events on board cells which are produced by interactions
+/*
+    1. INPUT_NUMBER_CLICKED
+    2. HINT_CLICKED
+    3. UNDO_CLICKED
+    4. ERASER_CLICKED
+    5. PENCIL_CLICKED
+    6. FAST_PENCIL_CLICKED    
+    7. SELECT_CELL
+*/
