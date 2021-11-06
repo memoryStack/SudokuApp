@@ -1,6 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet } from 'react-native'
 
-const WINDOW_WIDTH = Dimensions.get('window').width
 const ACTION_CONTAINER_WIDTH = 60 // there are only 4 type of actions present
 export const INACTIVE_ICON_FILL = 'rgb(127, 127, 127)'
 export const Styles = StyleSheet.create({

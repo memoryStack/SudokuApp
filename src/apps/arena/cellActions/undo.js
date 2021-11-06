@@ -3,15 +3,10 @@ import { Text } from 'react-native'
 import { Styles, INACTIVE_ICON_FILL } from './style'
 import { UndoIcon } from '../../../resources/svgIcons/undo'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE } from '../../../resources/constants'
+import { addListener, removeListener } from '../../../utils/GlobalEventBus'
+import { EVENTS } from '../../../resources/constants'
 
-const Undo_ = ({ iconBoxSize, gameState }) => {
-
-    const onPress = () => {
-        if (gameState !== GAME_STATE.ACTIVE) return 
-        emit(EVENTS.UNDO_CLICKED)
-    }
+const Undo_ = ({ iconBoxSize, onClick }) => {
 
     useEffect(() => {
         const handler = () => {
@@ -26,7 +21,7 @@ const Undo_ = ({ iconBoxSize, gameState }) => {
     return (
         <Touchable
             style={Styles.actionContainer}
-            onPress={onPress}
+            onPress={onClick}
             touchable={TouchableTypes.opacity}
         >
             <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />

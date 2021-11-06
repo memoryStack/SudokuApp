@@ -9,11 +9,9 @@ import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { initBoardData as initMainNumbers, generateNewSudokuPuzzle, getBlockAndBoxNum, getRowAndCol } from '../../utils/util'
 import { GameOverCard } from './gameOverCard'
-import { getNewPencilState } from './cellActions/pencil'
 import { getKey, setKey } from '../../utils/storage'
 import { usePrevious } from '../../utils/customHooks'
 import { Undo } from './cellActions/undo'
-import { Eraser } from './cellActions/eraser'
 import { Pencil } from './cellActions/pencil'
 import { FastPencil } from './cellActions/fastPencil'
 import { Hint } from './cellActions/hint'
@@ -22,8 +20,8 @@ import { isGameOver, shouldSaveGameState, duplicacyPresent } from './utils/util'
 import { NewGameButton } from './newGameButton'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { CustomPuzzle } from './customPuzzle'
+import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions';
 
-const MAX_AVAILABLE_HINTS = 3
 const MISTAKES_LIMIT = 3
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -114,18 +112,10 @@ const initRefereeData = (level = LEVEL_DIFFICULTIES.EASY) => {
     }
 }
 
-const initCellActionsData = () => {
-    return {
-        pencilState: PENCIL_STATE.INACTIVE,
-        hints: MAX_AVAILABLE_HINTS,
-    }
-}
-
 // default or empty state
 const initComponentsDefaultState = () => {
     return {
         referee: initRefereeData(),
-        cellActionsData: initCellActionsData(),
         boardData: initBoardData(),
     }
 }
@@ -157,9 +147,14 @@ const Arena_ = () => {
     const [difficultyLevel, setDifficultyLevel] = useState(initialRefereeData.difficultyLevel)
     const [time, setTime] = useState(initialRefereeData.time)
 
-    // cell Actions state variables
-    const [hints, setHints] = useState(initialCellActionsData.hints)
-    const [pencilState, setPencilState] = useState(initialCellActionsData.pencilState)
+    const {
+        pencilState,
+        hints,
+        onPencilClick,
+        onHintClick,
+        onFastPencilClick,
+        onUndoClick,
+    } = useCellActions(gameState)
     
     // board state variables
     let movesStack = useRef(initialBoardData.movesStack)
@@ -174,29 +169,17 @@ const Arena_ = () => {
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
 
-    // EVENTS.PENCIL_CLICKED
-    useEffect(() => {
-        const handler = () => setPencilState(pencilState => getNewPencilState(pencilState))
-        addListener(EVENTS.PENCIL_CLICKED, handler)
-        return () => {
-            removeListener(EVENTS.PENCIL_CLICKED, handler)
-        }
-    }, [])
-
     // resume previous game or start new game of previously solved level
     useEffect(async () => {
         const previousGame = await getKey(PREVIOUS_GAME)
         if (previousGame) {
-            const { state, referee, boardData, cellActionsData } = previousGame
+            const { state, referee, boardData } = previousGame
             if (state !== GAME_STATE.INACTIVE) {
                 emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
             } else {
                 setRefereeData(referee)
                 setBoardData(boardData)
                 setGameState(GAME_STATE.ACTIVE)
-                const { hints, pencilState } = cellActionsData
-                setPencilState(pencilState)
-                setHints(hints)
             }
         } else {
             emit(EVENTS.START_NEW_GAME, { difficultyLevel: initialRefereeData.level })
@@ -204,9 +187,6 @@ const Arena_ = () => {
     }, [])
     
     const resetCellActions = () => {
-        const { pencilState, hints } = initCellActionsData()
-        setPencilState(pencilState)
-        setHints(hints)
     }
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
@@ -377,13 +357,6 @@ const Arena_ = () => {
             })
         }
     }, [gameState, pencilState, hints, time, mistakes, difficultyLevel, mainNumbers, notesInfo, selectedCell])
-
-    // EVENTS.HINT_USED_SUCCESSFULLY
-    useEffect(() => {
-        const handler = () => setHints(hints => hints-1)
-        addListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
-        return () => removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
-    }, [])
 
     // TODO: can this be converted to a custom hook. just for challenging myself and fun
     // timer logic
@@ -772,10 +745,25 @@ const Arena_ = () => {
                     onCellClick={handleCellClicked}
                 />
                 <View style={styles.cellActionsContainer}>
-                    <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
-                    <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} pencilState={pencilState} />
-                    <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} />
-                    <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} gameState={gameState} hints={hints} />
+                    <Undo
+                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                        onClick={onUndoClick}
+                    />
+                    <Pencil
+                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                        pencilState={pencilState}
+                        onClick={onPencilClick}
+                    />
+                    <FastPencil
+                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                        onClick={onFastPencilClick}
+                    />
+                    <Hint
+                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                        gameState={gameState}
+                        hints={hints}
+                        onClick={onHintClick}
+                    />
                 </View>
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel gameState={gameState} />
