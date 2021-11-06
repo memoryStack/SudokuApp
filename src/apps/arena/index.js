@@ -21,8 +21,8 @@ import { NewGameButton } from './newGameButton'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { CustomPuzzle } from './customPuzzle'
 import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions';
+import { useReferee } from './hooks/referee';
 
-const MISTAKES_LIMIT = 3
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'
@@ -120,19 +120,6 @@ const initComponentsDefaultState = () => {
     }
 }
 
-const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
-    seconds++
-    if (seconds === 60) {
-        minutes++
-        seconds = 0
-    }
-    if (minutes === 60) {
-        hours++
-        minutes = 0
-    }
-    return { hours, minutes, seconds }
-}
-
 const Arena_ = () => {
 
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
@@ -140,12 +127,7 @@ const Arena_ = () => {
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
     const previousGameState = usePrevious(gameState)
 
-    const { referee: initialRefereeData, cellActionsData: initialCellActionsData, boardData: initialBoardData } = useRef(initComponentsDefaultState()).current
-    // referee state variables
-    const timerId = useRef(null)
-    const [mistakes, setMistakes] = useState(initialRefereeData.mistakes)
-    const [difficultyLevel, setDifficultyLevel] = useState(initialRefereeData.difficultyLevel)
-    const [time, setTime] = useState(initialRefereeData.time)
+    const { boardData: initialBoardData } = useRef(initComponentsDefaultState()).current
 
     const {
         pencilState,
@@ -156,6 +138,14 @@ const Arena_ = () => {
         onUndoClick,
     } = useCellActions(gameState)
     
+    const {
+        MISTAKES_LIMIT,
+        mistakes,
+        time,
+        difficultyLevel,
+        onTimerClick,
+    } = useReferee(gameState)
+
     // board state variables
     let movesStack = useRef(initialBoardData.movesStack)
     const [mainNumbers, updateMainNumbers] = useState(initialBoardData.mainNumbers)
@@ -173,16 +163,15 @@ const Arena_ = () => {
     useEffect(async () => {
         const previousGame = await getKey(PREVIOUS_GAME)
         if (previousGame) {
-            const { state, referee, boardData } = previousGame
+            const { state, boardData } = previousGame
             if (state !== GAME_STATE.INACTIVE) {
                 emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
             } else {
-                setRefereeData(referee)
                 setBoardData(boardData)
                 setGameState(GAME_STATE.ACTIVE)
             }
         } else {
-            emit(EVENTS.START_NEW_GAME, { difficultyLevel: initialRefereeData.level })
+            emit(EVENTS.START_NEW_GAME, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
         }
     }, [])
     
@@ -196,12 +185,6 @@ const Arena_ = () => {
         updateMainNumbers(mainNumbers)
         updateNotesInfo(notesInfo)
         selectCell(selectedCell)
-    }
-
-    const setRefereeData = ({ mistakes, level, time }) => {
-        setTime(time)
-        setDifficultyLevel(level)
-        setMistakes(mistakes)
     }
 
     useEffect(() => {
@@ -232,7 +215,6 @@ const Arena_ = () => {
                         }
                     }
                     setBoardData(boardData)
-                    setRefereeData(initRefereeData(difficultyLevel))
                     resetCellActions()
                     onNewGameStarted()
                     console.log('@@@@@@@@ time taken is to generate new puzzle is', timeTaken)
@@ -267,7 +249,6 @@ const Arena_ = () => {
             const boardData = initBoardData()
             boardData.mainNumbers = mainNumbers
             setBoardData(boardData)
-            setRefereeData(initRefereeData(CUSTOMIZED_PUZZLE_LEVEL_TITLE))
             resetCellActions()
             onNewGameStarted()
         }
@@ -286,7 +267,6 @@ const Arena_ = () => {
                 for(let col=0;col<9;col++)
                     if (!mainNumbersClone[row][col].isClue) mainNumbersClone[row][col].value = 0
             if (!componentUnmounted) { // setState only when component is alive
-                setRefereeData(initRefereeData(difficultyLevel))
                 setBoardData({...initBoardData(), mainNumbers: mainNumbersClone})
                 resetCellActions()
             }
@@ -305,23 +285,6 @@ const Arena_ = () => {
         addListener(EVENTS.CHANGE_GAME_STATE, handler)
         return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
-
-    // EVENTS.MADE_MISTAKE
-    useEffect(() => {
-        let componentUnmounted = false
-        const handler = () => {
-            let totalMistakes = mistakes + 1
-            if (!componentUnmounted) {
-                setMistakes(totalMistakes)
-                totalMistakes === MISTAKES_LIMIT && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_UNSOLVED)
-            }
-        }
-        addListener(EVENTS.MADE_MISTAKE, handler)
-        return () => {
-            removeListener(EVENTS.MADE_MISTAKE, handler)
-            componentUnmounted = true
-        }
-    }, [mistakes])
 
     const onNewGameStarted = () =>
         gameState !== GAME_STATE.ACTIVE && setGameState(GAME_STATE.ACTIVE)
@@ -358,28 +321,6 @@ const Arena_ = () => {
         }
     }, [gameState, pencilState, hints, time, mistakes, difficultyLevel, mainNumbers, notesInfo, selectedCell])
 
-    // TODO: can this be converted to a custom hook. just for challenging myself and fun
-    // timer logic
-    const updateTime = () => timerId.current && setTime(time => getNewTime(time))
-
-    const startTimer = () => timerId.current = setInterval(updateTime, 1000) // 1 sec
-
-    const stopTimer = () => {
-        if (timerId.current) timerId.current = clearInterval(timerId.current)
-    }
-
-    const onTimerClick = useCallback(() => {
-        // un-clickable if the game has finished
-        if (isGameOver(gameState)) return
-        let gameNewState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
-        emit(EVENTS.CHANGE_GAME_STATE, gameNewState)
-    }, [gameState]) 
-
-    useEffect(() => {
-        if (gameState === GAME_STATE.ACTIVE) startTimer()
-        else stopTimer()
-    }, [gameState])
-
     // board handlers
     const isPuzzleSolved = () => {
         for (let row=0;row<9;row++) {
@@ -414,7 +355,7 @@ const Arena_ = () => {
                 notesInfo[row][col] = [...notesInfo[row][col]]
             }
         }
-        
+
         // remove notes from current col
         for (let col=0;col<9;col++) {
             const noteIndx = num - 1
