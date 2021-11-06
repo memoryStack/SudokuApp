@@ -22,6 +22,7 @@ import { CustomPuzzle } from './customPuzzle'
 import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions';
 import { useReferee } from './hooks/referee';
 import { useGameBoard } from './hooks/gameBoard';
+import { useManageGame } from './hooks/gameHandler';
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -82,10 +83,9 @@ const styles = StyleSheet.create({
 })
 
 const Arena_ = () => {
-
-    const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
+    const { gameState  } = useManageGame()
     const previousGameState = usePrevious(gameState)
 
     const {
@@ -120,20 +120,20 @@ const Arena_ = () => {
     const fadeAnim = useRef(new Animated.Value(0)).current
 
     // resume previous game or start new game of previously solved level
-    useEffect(async () => {
-        const previousGame = await getKey(PREVIOUS_GAME)
-        if (previousGame) {
-            const { state } = previousGame
-            if (state !== GAME_STATE.INACTIVE) {
-                // emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
-            } else {
-                // setBoardData(boardData)
-                setGameState(GAME_STATE.ACTIVE)
-            }
-        } else {
-            emit(EVENTS.START_NEW_GAME, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
-        }
-    }, [])
+    // useEffect(async () => {
+    //     const previousGame = await getKey(PREVIOUS_GAME)
+    //     if (previousGame) {
+    //         const { state } = previousGame
+    //         if (state !== GAME_STATE.INACTIVE) {
+    //             // emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
+    //         } else {
+    //             // setBoardData(boardData)
+    //             // setGameState(GAME_STATE.ACTIVE)
+    //         }
+    //     } else {
+    //         // emit(EVENTS.START_NEW_GAME, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
+    //     }
+    // }, [])
     
     const resetCellActions = () => {
     }
@@ -141,59 +141,8 @@ const Arena_ = () => {
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
     }
 
-    useEffect(() => {
-        let componentUnmounted = false
-        const handler = ({ difficultyLevel }) => {
-            const time = Date.now()
-            if (!difficultyLevel) return
-            // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
-            const minClues = LEVELS_CLUES_INFO[difficultyLevel]
-            const boardData = initBoardData()
-            // now as i changed the position of "timeTaken" reading after the puzzle has 
-            // been generated looks like that puzzle algo was never a big issue. it was just the setStates latency
-            // TODO: Research on this setState issue.
-            RNSudokuPuzzle.getSudokuPuzzle(minClues)
-            .then(({ clues, solution }) => {
-                if (!componentUnmounted) {
-                    timeTaken = Date.now() - time
-                    let cellNo = 0;
-                    for (let row=0;row<9;row++) {
-                        for (let col=0;col<9;col++) {
-                            const cellvalue = clues[cellNo]
-                            boardData.mainNumbers[row][col] = {
-                                value: cellvalue,
-                                solutionValue: solution[cellNo],
-                                isClue: cellvalue !== 0,
-                            }
-                            cellNo++
-                        }
-                    }
-                    setBoardData(boardData)
-                    resetCellActions()
-                    onNewGameStarted()
-                    console.log('@@@@@@@@ time taken is to generate new puzzle is', timeTaken)
-                }
-            })
-
-            // puzzle generator in JS
-            // generateNewSudokuPuzzle(minClues, boardData.mainNumbers)
-            // .then(() => {
-            //     if (!componentUnmounted) {
-            //         timeTaken = Date.now() - time
-            //         setBoardData(boardData)
-            //         setRefereeData(initRefereeData(difficultyLevel))
-            //         resetCellActions()
-            //         onNewGameStarted()
-            //     }
-            //     console.log('@@@@@@@@ time taken is to generate new puzzle is', timeTaken)
-            // })
-        }
-        addListener(EVENTS.START_NEW_GAME, handler)
-        return () => {
-            removeListener(EVENTS.START_NEW_GAME, handler)
-            componentUnmounted = true
-        }
-    }, [])
+    // this should go in 
+    
 
     useEffect(() => {
         const handler = ({ mainNumbers }) => {
@@ -210,13 +159,6 @@ const Arena_ = () => {
         return () => {
             removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
         }
-    }, [])
-
-    // listen for changing game state. and it should be only one listener through out the Arena screen
-    useEffect(() => {
-        const handler = newState => newState && setGameState(newState)
-        addListener(EVENTS.CHANGE_GAME_STATE, handler)
-        return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
 
     const onNewGameStarted = () =>

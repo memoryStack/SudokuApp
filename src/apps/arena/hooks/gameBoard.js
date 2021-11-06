@@ -125,7 +125,7 @@ const useGameBoard = (gameState, pencilState) => {
 
     }, [])
 
-    // EVENTS.RESTART_GAME restart/reset/start new game the game
+    // EVENTS.RESTART_GAME
     useEffect(() => {
         let componentUnmounted = false
         const handler = () => {
@@ -138,7 +138,6 @@ const useGameBoard = (gameState, pencilState) => {
             }
             if (!componentUnmounted)
                 setBoardData({...initBoardData(), mainNumbers: mainNumbersClone})
-            // onNewGameStarted()
         }
         addListener(EVENTS.RESTART_GAME, handler)
         return () => {
@@ -146,6 +145,16 @@ const useGameBoard = (gameState, pencilState) => {
             componentUnmounted = true
         }
     }, [mainNumbers])
+
+    useEffect(() => {
+        const handler = ({ mainNumbers }) => {
+            setBoardData({...initBoardData(), mainNumbers})
+        }
+        addListener(EVENTS.START_NEW_GAME, handler)
+        return () => {
+            removeListener(EVENTS.START_NEW_GAME, handler)
+        }
+    }, [])
 
     // EVENTS.INPUT_NUMBER_CLICKED 
     useEffect(() => {

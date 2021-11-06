@@ -5,6 +5,7 @@ import { getKey } from '../../../utils/storage'
 import { isGameOver } from '../utils/util';
 
 const MISTAKES_LIMIT = 3
+// TODO: change it from refree to game tracking info
 const initRefereeData = (level = LEVEL_DIFFICULTIES.EASY) => {
     return {
         level,
@@ -48,14 +49,23 @@ const useReferee = (gameState) => {
         }
     }, [])
 
+    useEffect(() => {
+        const handler = ({ difficultyLevel }) => {
+            setRefereeData(initRefereeData(difficultyLevel))
+        }
+        
+        addListener(EVENTS.START_NEW_GAME, handler)
+        return () => removeListener(EVENTS.START_NEW_GAME, handler)
+    }, [])
+
     // restart/reset/start new game the game
     useEffect(() => {
-        const handler = ({ difficultyLevel } = {}) => {
+        const handler = () => {
             setRefereeData(initRefereeData(difficultyLevel))
         }
         addListener(EVENTS.RESTART_GAME, handler)
         return () => removeListener(EVENTS.RESTART_GAME, handler)
-    }, [])
+    }, [difficultyLevel])
 
     // cache the game's data
     useEffect(() => {

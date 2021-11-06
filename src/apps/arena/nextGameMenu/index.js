@@ -84,7 +84,7 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
                 emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
                 break
             default:
-                emit(EVENTS.START_NEW_GAME, { difficultyLevel: item })
+                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: item })
                 closeView()
         }    
     }, [nextGameMenuRef])
