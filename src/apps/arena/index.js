@@ -8,7 +8,6 @@ import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAM
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
-import { getKey, setKey } from '../../utils/storage'
 import { usePrevious } from '../../utils/customHooks'
 import { Undo } from './cellActions/undo'
 import { Pencil } from './cellActions/pencil'
@@ -17,7 +16,6 @@ import { Hint } from './cellActions/hint'
 import { Timer } from './timer'
 import { isGameOver } from './utils/util'
 import { NewGameButton } from './newGameButton'
-import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { CustomPuzzle } from './customPuzzle'
 import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions';
 import { useReferee } from './hooks/referee';
@@ -26,7 +24,6 @@ import { useManageGame } from './hooks/gameHandler';
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
-const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'
 let timeTaken = 0
 const styles = StyleSheet.create({
     container: {
@@ -85,7 +82,7 @@ const styles = StyleSheet.create({
 const Arena_ = () => {
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
-    const { gameState  } = useManageGame()
+    const { gameState, showNextGameMenu, setShowNextGameMenu } = useManageGame()
     const previousGameState = usePrevious(gameState)
 
     const {
@@ -113,48 +110,16 @@ const Arena_ = () => {
         onTimerClick,
     } = useReferee(gameState)
 
-    const [showNextGameMenu, setShowNextGameMenu] = useState(false)
+    
     const [showCustomPuzzleHC, setShowCustomPuzzleHC] = useState(false)
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
-    
-    const resetCellActions = () => {
-    }
-
-    const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
-    }
-
-    // this should go in 
-    
-
-    useEffect(() => {
-        const handler = ({ mainNumbers }) => {
-            // drag the customPuzzle HC and we can simply unmount the
-            // next game menu from view hirerechy
-            setShowNextGameMenu(false)
-            const boardData = initBoardData()
-            boardData.mainNumbers = mainNumbers
-            setBoardData(boardData)
-            resetCellActions()
-            onNewGameStarted()
-        }
-        addListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
-        return () => {
-            removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
-        }
-    }, [])
-
-    const onNewGameStarted = () =>
-        gameState !== GAME_STATE.ACTIVE && setGameState(GAME_STATE.ACTIVE)
 
     // show game over card
     useEffect(() => {
         if (isGameOver(gameState)) setGameSolvedCard(true)
     }, [gameState])
-
-    useEffect(() => {
-    }, [gameState, pencilState, hints, time, mistakes, difficultyLevel, mainNumbers, notesInfo, selectedCell])
 
     useEffect(() => {
         const handler = () => setShowCustomPuzzleHC(true)

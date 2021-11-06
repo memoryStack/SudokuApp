@@ -90,6 +90,8 @@ const SCREEN_NAME = {
     CUSTOM_PUZZLE: 'custom-puzzle',
 }
 
+const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'
+
 export {
     PREVIOUS_GAME,
     PREVIOUS_GAME_STATUS,
@@ -100,4 +102,5 @@ export {
     PENCIL_STATE,
     GAME_STATE,
     SCREEN_NAME,
+    CUSTOMIZED_PUZZLE_LEVEL_TITLE,
 }

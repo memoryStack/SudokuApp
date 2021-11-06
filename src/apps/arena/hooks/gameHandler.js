@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { LEVEL_DIFFICULTIES, PREVIOUS_GAME, EVENTS, GAME_STATE, LEVELS_CLUES_INFO } from '../../../resources/constants';
+import { LEVEL_DIFFICULTIES, PREVIOUS_GAME, EVENTS, GAME_STATE, LEVELS_CLUES_INFO, CUSTOMIZED_PUZZLE_LEVEL_TITLE } from '../../../resources/constants';
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { getKey } from '../../../utils/storage'
 import { isGameOver } from '../utils/util'
@@ -26,6 +26,7 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
 
 const useManageGame = () => {
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
+    const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
     // resume previous game or start new game of previously solved level
     useEffect(async () => {
@@ -99,8 +100,23 @@ const useManageGame = () => {
         }
     }, [])
 
+
+    useEffect(() => {
+        const handler = ({ mainNumbers }) => {
+            // drag the customPuzzle HC and we can simply unmount the
+            // next game menu from view hirerechy
+            setShowNextGameMenu(false)
+            emit(EVENTS.START_NEW_GAME, { difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE, mainNumbers })
+            setGameState(GAME_STATE.ACTIVE)
+        }
+        addListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
+        return () => removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
+    }, [])
+
     return {
         gameState,
+        showNextGameMenu,
+        setShowNextGameMenu,
     }
 }
 
