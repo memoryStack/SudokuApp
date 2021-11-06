@@ -44,32 +44,24 @@ const Cell_ = ({
         return <View style={Styles.notesContainer}>{cellNotesRows}</View>
     }
 
-    const onPress = () =>
-        gameState === GAME_STATE.ACTIVE && onCellClicked(row, col)
-
-    const renderCell = () => {
-        const containerStyle = [Styles.cell, cellBGColor]
-        return (
-            <Touchable
-                touchable={TouchableTypes.opacity}
-                activeOpacity={1}
-                style={containerStyle}
-                onPress={onPress}
-            >
-                {
-                    gameState !== GAME_STATE.INACTIVE ?
-                        (
-                            cellMainValue ?
-                                <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
-                            : shouldRenderNotes() ? getCellNotes(row, col) : null
-                        )
-                    : null
-                }
-            </Touchable>
-        )
-    }
-
-    return renderCell()
+    return (
+        <Touchable
+            touchable={TouchableTypes.opacity}
+            activeOpacity={1}
+            style={[Styles.cell, cellBGColor]}
+            onPress={() => onCellClicked(row, col)}
+        >
+            {
+                gameState !== GAME_STATE.INACTIVE ?
+                    (
+                        cellMainValue ?
+                            <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
+                        : shouldRenderNotes() ? getCellNotes(row, col) : null
+                    )
+                : null
+            }
+        </Touchable>
+    )
 }
 
 export const Cell = React.memo(Cell_)
