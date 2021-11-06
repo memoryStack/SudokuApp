@@ -5,12 +5,6 @@ import { getKey } from '../../../utils/storage'
 import { isGameOver } from '../utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 
-/**
- * START_PREVIOUS_GAME
- * START_NEW_GAME
- * RESTART_GAME
- */
-
 const transformNativeGeneratedPuzzle = (clues, solution) => {
     const mainNumbers = new Array(9)
     let cellNo = 0;
@@ -32,15 +26,27 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
 
 const useManageGame = () => {
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
-    
-    useEffect(() => {
-        const handler = () => {
 
+    // resume previous game or start new game of previously solved level
+    useEffect(async () => {
+        const previousGameData = await getKey(PREVIOUS_GAME)
+        if (previousGameData) {
+            const { state, referee } = previousGameData
+            if (state !== GAME_STATE.INACTIVE) {
+                emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.difficultyLevel })
+            } else {
+                // TODO: figure out if setTimeout needs to be removed or not
+                // it's very imp. thing to do. for now keep it in setTimeout. (it works without use of setTimeout as well)
+                // read about microtasks and asynchronous in JS and find out when/where
+                // useEffects run and figure out whole thing about promise/eventLoop as well
+                setTimeout(() => {
+                    emit(EVENTS.RESUME_PREVIOUS_GAME, previousGameData)
+                    setGameState(GAME_STATE.ACTIVE)
+                }, 0)
+            }
+        } else {
+            emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
         }
-        // addListener()
-        // return () => {
-        //     removeListener(EVENTS)
-        // }
     }, [])
 
     useEffect(() => {

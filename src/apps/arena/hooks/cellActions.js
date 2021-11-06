@@ -24,29 +24,29 @@ const useCellActions = (gameState) => {
     const [pencilState, setPencilState] = useState(initialCellActionsData.pencilState)
     const [hints, setHints] = useState(initialCellActionsData.hints)
 
-    // get data from previous game
-    // TODO: i guess this logic will be repeated in all hooks,
-    // it's better to take it out and re-use it
-    useEffect(async () => {
-        const previousGame = await getKey(PREVIOUS_GAME)
-        if (previousGame) {
-            const { state, cellActionsData } = previousGame
-            if (state === GAME_STATE.INACTIVE) {
-                const { hints, pencilState } = cellActionsData
-                setPencilState(pencilState)
-                setHints(hints)
-            }
+    useEffect(() => {
+        const handler = ({ cellActionsData }) => {
+            const { hints, pencilState } = cellActionsData
+            setPencilState(pencilState)
+            setHints(hints)
         }
+        addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
+        return () => removeListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
     }, [])
 
-    // restart/reset/start new game the game
+    const dataResetHandler = () => {
+        setHints(MAX_AVAILABLE_HINTS)
+        setPencilState(PENCIL_STATE.INACTIVE)
+    }
+
     useEffect(() => {
-        const handler = () => {
-            setHints(MAX_AVAILABLE_HINTS)
-            setPencilState(PENCIL_STATE.INACTIVE)
-        }
-        addListener(EVENTS.RESTART_GAME, handler)
-        return () => removeListener(EVENTS.RESTART_GAME, handler)
+        addListener(EVENTS.START_NEW_GAME, dataResetHandler)
+        return () => removeListener(EVENTS.START_NEW_GAME, dataResetHandler)
+    }, [])
+
+    useEffect(() => {
+        addListener(EVENTS.RESTART_GAME, dataResetHandler)
+        return () => removeListener(EVENTS.RESTART_GAME, dataResetHandler)
     }, [])
 
     // TODO: cache game stats

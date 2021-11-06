@@ -6,9 +6,9 @@ import { isGameOver } from '../utils/util';
 
 const MISTAKES_LIMIT = 3
 // TODO: change it from refree to game tracking info
-const initRefereeData = (level = LEVEL_DIFFICULTIES.EASY) => {
+const initRefereeData = (difficultyLevel = LEVEL_DIFFICULTIES.EASY) => {
     return {
-        level,
+        difficultyLevel,
         mistakes: 0,
         time: { hours: 0, minutes: 0, seconds: 0 }
     }
@@ -29,36 +29,33 @@ const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
 
 const useReferee = (gameState) => {
     const timerId = useRef(null)
-    const { level, mistakes: defaultMistakes, time: defaultTime } = useRef(initRefereeData()).current
+    const { difficultyLevel: defaultDifficultyLevel, mistakes: defaultMistakes, time: defaultTime } = useRef(initRefereeData()).current
     const [mistakes, setMistakes] = useState(defaultMistakes)
-    const [difficultyLevel, setDifficultyLevel] = useState(level)
+    const [difficultyLevel, setDifficultyLevel] = useState(defaultDifficultyLevel)
     const [time, setTime] = useState(defaultTime)
 
-    const setRefereeData = ({ mistakes, level, time }) => {
+    const setRefereeData = ({ mistakes, difficultyLevel, time }) => {
         setTime(time)
-        setDifficultyLevel(level)
+        setDifficultyLevel(difficultyLevel)
         setMistakes(mistakes)
     }
 
-    // get values from previous game
-    useEffect(async () => {
-        const previousGame = await getKey(PREVIOUS_GAME)
-        if (previousGame) {
-            const { state, referee } = previousGame
-            if (state === GAME_STATE.INACTIVE) setRefereeData(referee)
+    useEffect(() => {
+        const handler = ({ referee }) => {
+            setRefereeData(referee)
         }
-    }, [])
+        addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
+        return () => removeListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
+    }, [])    
 
     useEffect(() => {
         const handler = ({ difficultyLevel }) => {
             setRefereeData(initRefereeData(difficultyLevel))
         }
-        
         addListener(EVENTS.START_NEW_GAME, handler)
         return () => removeListener(EVENTS.START_NEW_GAME, handler)
     }, [])
 
-    // restart/reset/start new game the game
     useEffect(() => {
         const handler = () => {
             setRefereeData(initRefereeData(difficultyLevel))

@@ -118,22 +118,6 @@ const Arena_ = () => {
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
-
-    // resume previous game or start new game of previously solved level
-    // useEffect(async () => {
-    //     const previousGame = await getKey(PREVIOUS_GAME)
-    //     if (previousGame) {
-    //         const { state } = previousGame
-    //         if (state !== GAME_STATE.INACTIVE) {
-    //             // emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.level })
-    //         } else {
-    //             // setBoardData(boardData)
-    //             // setGameState(GAME_STATE.ACTIVE)
-    //         }
-    //     } else {
-    //         // emit(EVENTS.START_NEW_GAME, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
-    //     }
-    // }, [])
     
     const resetCellActions = () => {
     }

@@ -111,21 +111,14 @@ const useGameBoard = (gameState, pencilState) => {
         selectCell(selectedCell)
     }
 
-    // get data from previous game
-    useEffect(async () => {
-        const previousGame = await getKey(PREVIOUS_GAME)
-        if (previousGame) {
-            const { state, boardData } = previousGame
-            if (state === GAME_STATE.INACTIVE) setBoardData(boardData)
-        }
-    }, [])
-
-    // cache the data
     useEffect(() => {
-
+        const handler = ({ boardData }) => {
+            setBoardData(boardData)
+        }
+        addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
+        return () => removeListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
     }, [])
 
-    // EVENTS.RESTART_GAME
     useEffect(() => {
         let componentUnmounted = false
         const handler = () => {
@@ -154,6 +147,11 @@ const useGameBoard = (gameState, pencilState) => {
         return () => {
             removeListener(EVENTS.START_NEW_GAME, handler)
         }
+    }, [])
+
+    // cache the data
+    useEffect(() => {
+
     }, [])
 
     // EVENTS.INPUT_NUMBER_CLICKED 
