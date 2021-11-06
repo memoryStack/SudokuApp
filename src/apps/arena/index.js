@@ -104,18 +104,9 @@ const initBoardData = () => {
     }
 }
 
-const initRefereeData = (level = LEVEL_DIFFICULTIES.EASY) => {
-    return {
-        level,
-        mistakes: 0,
-        time: { hours: 0, minutes: 0, seconds: 0 }
-    }
-}
-
 // default or empty state
 const initComponentsDefaultState = () => {
     return {
-        referee: initRefereeData(),
         boardData: initBoardData(),
     }
 }
