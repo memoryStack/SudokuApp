@@ -147,8 +147,8 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
             if (sholdBeFullView !== isFullView) {
                 // there is a change in dragger's state so call callback and set new state
                 setFullView(sholdBeFullView)
-                sholdBeFullView ? onDraggerOpened(data) : onDraggerClosed(data)
                 if (!sholdBeFullView) setIsDraggerActive(false)
+                sholdBeFullView ? onDraggerOpened(data) : onDraggerClosed(data)
             }
         })
     }
