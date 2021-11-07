@@ -52,6 +52,7 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
         else fill = "black"
         return (
             <Path
+                key={`${barNum}`}
                 d={pathD}
                 stroke={stroke}
                 fill={fill}
