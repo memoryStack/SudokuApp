@@ -109,6 +109,7 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
                     })
                 }
                 <Touchable
+                    key={'restart'}
                     style={styles.levelContainer}
                     touchable={TouchableTypes.opacity}
                     onPress={() => nextGameMenuItemClicked(RESTART_TEXT)}
@@ -118,6 +119,7 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
                 </Touchable>
                 {/* TODO: make this and above option a little more configurable */}
                 <Touchable
+                    key={'custom_puzzle'}
                     style={styles.levelContainer}
                     touchable={TouchableTypes.opacity}
                     onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
