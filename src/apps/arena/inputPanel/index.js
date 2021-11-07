@@ -17,7 +17,8 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
             <Touchable
                 style={styles.numberButtonContainer}
                 onPress={() => onNumberClicked(number)}
-                touchable={TouchableTypes.opacity}                
+                touchable={TouchableTypes.opacity}
+                key={`${number}`}
             >
                 <Text style={styles.textStyle}>{number}</Text>
             </Touchable>
@@ -34,7 +35,8 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
             <Touchable
                 style={styles.numberButtonContainer}
                 onPress={onEmptyCellClicked}
-                touchable={TouchableTypes.opacity}                
+                touchable={TouchableTypes.opacity}
+                key={'X'}
             >
                 <Text style={styles.textStyle}>{'X'}</Text>
             </Touchable>
@@ -48,13 +50,13 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
         for (let i=1;i<=9;i++) {
             row.push(inputNumber(i))
             if (i === 5) {
-                rows.push(<View style={styles.rowContainer}>{row}</View>)
+                rows.push(<View key={'rowOne'} style={styles.rowContainer}>{row}</View>)
                 row = []
             }
         }
         row.push(getClearCellView())
-        rows.push(<View style={styles.horizontalSeperator}/>)
-        rows.push(<View style={styles.rowContainer}>{row}</View>)
+        rows.push(<View key={'hori_seperator'} style={styles.horizontalSeperator}/>)
+        rows.push(<View key={'rowTwo'} style={styles.rowContainer}>{row}</View>)
         return rows
     }
 
