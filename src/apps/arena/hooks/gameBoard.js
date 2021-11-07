@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { PREVIOUS_GAME, EVENTS, GAME_STATE, PENCIL_STATE } from '../../../resources/constants';
+import { EVENTS, GAME_STATE, PENCIL_STATE } from '../../../resources/constants';
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { getKey } from '../../../utils/storage'
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { duplicacyPresent } from '../utils/util'
+import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler';
 
 const initBoardData = () => {
     const movesStack = []
@@ -112,8 +112,8 @@ const useGameBoard = (gameState, pencilState) => {
     }
 
     useEffect(() => {
-        const handler = ({ boardData }) => {
-            setBoardData(boardData)
+        const handler = (previousGameData) => {
+            setBoardData(previousGameData[GAME_DATA_KEYS.BOARD_DATA])
         }
         addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
         return () => removeListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
@@ -149,10 +149,20 @@ const useGameBoard = (gameState, pencilState) => {
         }
     }, [])
 
-    // cache the data
     useEffect(() => {
+        const handler = () => {
+            const boardData = {
+                mainNumbers,
+                notesInfo,
+                movesStack: movesStack.current,
+                selectedCell,
+            }
+            cacheGameData(GAME_DATA_KEYS.BOARD_DATA, boardData)
+        }
 
-    }, [])
+        addListener(EVENTS.CACHE_GAME_DATA, handler)
+        return () => removeListener(EVENTS.CACHE_GAME_DATA, handler)
+    }, [mainNumbers, notesInfo, movesStack, selectedCell])
 
     // EVENTS.INPUT_NUMBER_CLICKED 
     useEffect(() => {

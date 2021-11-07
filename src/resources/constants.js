@@ -1,8 +1,6 @@
 
 // key is level name and value is number of clues for that level
 
-const PREVIOUS_GAME = 'PREVIOUS_GAME' // cache key to store previous game data
-
 const PREVIOUS_GAME_STATUS = {
     SOLVED: 'SOLVED',
     UNSOLVED: 'UNSOLVED',
@@ -16,7 +14,7 @@ const LEVEL_DIFFICULTIES = {
 }
 
 const LEVELS_CLUES_INFO = {
-    // [LEVEL_DIFFICULTIES.EASY]: 80,
+    // [LEVEL_DIFFICULTIES.EASY]: 70,
     [LEVEL_DIFFICULTIES.EASY]: 36,
     [LEVEL_DIFFICULTIES.MEDIUM]: 32,
     [LEVEL_DIFFICULTIES.HARD]: 28,
@@ -69,6 +67,7 @@ const EVENTS = {
     START_CUSTOM_PUZZLE_GAME: 'START_CUSTOM_PUZZLE_GAME',
     GENERATE_NEW_PUZZLE: 'GENERATE_NEW_PUZZLE',
     RESUME_PREVIOUS_GAME: 'RESUME_PREVIOUS_GAME',
+    CACHE_GAME_DATA: 'CACHE_GAME_DATA',
 }
 
 // TODO: freeze these objects
@@ -93,7 +92,6 @@ const SCREEN_NAME = {
 const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'
 
 export {
-    PREVIOUS_GAME,
     PREVIOUS_GAME_STATUS,
     LEVEL_DIFFICULTIES,
     LEVELS_CLUES_INFO,

@@ -1,9 +1,11 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
-import { LEVEL_DIFFICULTIES, PREVIOUS_GAME, EVENTS, GAME_STATE, LEVELS_CLUES_INFO, CUSTOMIZED_PUZZLE_LEVEL_TITLE } from '../../../resources/constants';
+import { useState, useEffect } from 'react'
+import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE, LEVELS_CLUES_INFO, CUSTOMIZED_PUZZLE_LEVEL_TITLE } from '../../../resources/constants';
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { getKey } from '../../../utils/storage'
-import { isGameOver } from '../utils/util'
+import { shouldSaveGameState } from '../utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
+import { usePrevious } from '../../../utils/customHooks'
+import { getKey } from '../../../utils/storage'
+import { cacheGameData, GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler';
 
 const transformNativeGeneratedPuzzle = (clues, solution) => {
     const mainNumbers = new Array(9)
@@ -26,15 +28,17 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
 
 const useManageGame = () => {
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
+    const previousGameState = usePrevious(gameState)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
     // resume previous game or start new game of previously solved level
     useEffect(async () => {
-        const previousGameData = await getKey(PREVIOUS_GAME)
+        const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
         if (previousGameData) {
-            const { state, referee } = previousGameData
+            const state = previousGameData[GAME_DATA_KEYS.STATE]
+            const refereeData = previousGameData[GAME_DATA_KEYS.REFEREE]
             if (state !== GAME_STATE.INACTIVE) {
-                emit(EVENTS.START_NEW_GAME, { difficultyLevel: referee.difficultyLevel })
+                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: refereeData.difficultyLevel })
             } else {
                 // TODO: figure out if setTimeout needs to be removed or not
                 // it's very imp. thing to do. for now keep it in setTimeout. (it works without use of setTimeout as well)
@@ -112,6 +116,14 @@ const useManageGame = () => {
         addListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
         return () => removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
     }, [])
+
+    // cache game data
+    useEffect(() => {
+        if (shouldSaveGameState(gameState, previousGameState)) {
+            cacheGameData(GAME_DATA_KEYS.STATE, gameState)
+            emit(EVENTS.CACHE_GAME_DATA)
+        }
+    }, [gameState])
 
     return {
         gameState,

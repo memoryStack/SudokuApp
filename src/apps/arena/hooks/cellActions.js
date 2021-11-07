@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { GAME_STATE, EVENTS, PENCIL_STATE, PREVIOUS_GAME } from '../../../resources/constants'
+import { GAME_STATE, EVENTS, PENCIL_STATE } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { getKey } from '../../../utils/storage'
+import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler';
 
 const MAX_AVAILABLE_HINTS = 3
 
@@ -25,8 +25,8 @@ const useCellActions = (gameState) => {
     const [hints, setHints] = useState(initialCellActionsData.hints)
 
     useEffect(() => {
-        const handler = ({ cellActionsData }) => {
-            const { hints, pencilState } = cellActionsData
+        const handler = (previousGameData) => {
+            const { hints, pencilState } = previousGameData[GAME_DATA_KEYS.CELL_ACTIONS]
             setPencilState(pencilState)
             setHints(hints)
         }
@@ -49,10 +49,18 @@ const useCellActions = (gameState) => {
         return () => removeListener(EVENTS.RESTART_GAME, dataResetHandler)
     }, [])
 
-    // TODO: cache game stats
     useEffect(() => {
+        const handler = () => {
+            const cellActionsData = {
+                pencilState,
+                hints,
+            }
+            cacheGameData(GAME_DATA_KEYS.CELL_ACTIONS, cellActionsData)
+        }
 
-    }, [])
+        addListener(EVENTS.CACHE_GAME_DATA, handler)
+        return () => removeListener(EVENTS.CACHE_GAME_DATA, handler)
+    }, [pencilState, hints])
 
     // pencil handlers
     const onPencilClick = useCallback(() => {

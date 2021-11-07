@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { LEVEL_DIFFICULTIES, PREVIOUS_GAME, EVENTS, GAME_STATE } from '../../../resources/constants';
+import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE } from '../../../resources/constants';
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { getKey } from '../../../utils/storage'
 import { isGameOver } from '../utils/util';
+import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler';
 
 const MISTAKES_LIMIT = 3
 // TODO: change it from refree to game tracking info
@@ -41,8 +41,8 @@ const useReferee = (gameState) => {
     }
 
     useEffect(() => {
-        const handler = ({ referee }) => {
-            setRefereeData(referee)
+        const handler = (previousGameData) => {
+            setRefereeData(previousGameData[GAME_DATA_KEYS.REFEREE])
         }
         addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
         return () => removeListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
@@ -64,10 +64,19 @@ const useReferee = (gameState) => {
         return () => removeListener(EVENTS.RESTART_GAME, handler)
     }, [difficultyLevel])
 
-    // cache the game's data
     useEffect(() => {
+        const handler = () => {            
+            const refereeData = {
+                difficultyLevel,
+                mistakes,
+                time,
+            }
+            cacheGameData(GAME_DATA_KEYS.REFEREE,  refereeData)
+        }
 
-    }, [])
+        addListener(EVENTS.CACHE_GAME_DATA, handler)
+        return () => removeListener(EVENTS.CACHE_GAME_DATA, handler)
+    }, [difficultyLevel, mistakes,  time])
 
     const updateTime = () => timerId.current && setTime(time => getNewTime(time))
 

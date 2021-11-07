@@ -6,7 +6,7 @@ const getKey = async KEY => {
     if (!KEY) return null
     try {
         const value = await AsyncStorage.getItem(KEY)
-        return value != null ? JSON.parse(value) : null
+        return value !== null ? JSON.parse(value) : null
     } catch(error) {
         __DEV__ && console.log(error.message)
         return null
@@ -20,7 +20,7 @@ const setKey = async (KEY, data) => {
         // and we don't do JSON.stringify then it will give error while doing JSON.parse on this value in "getKey" func
         await AsyncStorage.setItem(KEY, JSON.stringify(data))
     } catch (error) {
-        __DEV__ && console.log(error.message)
+        return error
     }
 }
 

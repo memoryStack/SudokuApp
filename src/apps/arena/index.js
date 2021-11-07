@@ -4,11 +4,10 @@ import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE, LEVEL_DIFFICULTIES, LEVELS_CLUES_INFO, PREVIOUS_GAME } from '../../resources/constants'
+import { EVENTS, GAME_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
-import { usePrevious } from '../../utils/customHooks'
 import { Undo } from './cellActions/undo'
 import { Pencil } from './cellActions/pencil'
 import { FastPencil } from './cellActions/fastPencil'
@@ -83,7 +82,6 @@ const Arena_ = () => {
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
     const { gameState, showNextGameMenu, setShowNextGameMenu } = useManageGame()
-    const previousGameState = usePrevious(gameState)
 
     const {
         pencilState,
