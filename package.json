@@ -7,12 +7,14 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prettier": "prettier --write '**/*.{ts,tsx,js}'"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "fast-sudoku-puzzles": "git+https://github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
+    "prettier": "^2.4.1",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-code-push": "^7.0.1",
