@@ -6,7 +6,7 @@ import { rgba, noOperationFunction } from '../../utils/util'
 const ANIMATION_DURATION = 150
 let HEADER_HEIGHT = 50
 const RELEASE_LIMIT_FOR_AUTO_SCROLL = 20
-const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = .9
+const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = 0.9
 const XXSMALL_SIZE = 8
 const XSMALL_SPACE = 4
 const WINDOW_HEIGHT = Dimensions.get('window').height
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     },
     subView: {
         position: 'absolute',
-        width: '100%',        
+        width: '100%',
         zIndex: 1, // had to put this. if i remove this then two sudoku boards were overlapping, which was weird to me.
     },
     clipStyle: {
@@ -58,7 +58,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         stopBackgroundClickClose = false,
     } = props
 
-    // consider children as full screen height later on set it to it's real height 
+    // consider children as full screen height later on set it to it's real height
     // when we receive event callback for height
     const [childrenHeight, setChildrenHeight] = useState(WINDOW_HEIGHT)
 
@@ -70,46 +70,15 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     const [bottomMostPosition, setBottomMostPosition] = useState(parentHeight * bottomMostPositionRatio)
     const [topMostPosition, setTopMostPosition] = useState(parentHeight - (childrenHeight + HEADER_HEIGHT))
     const [transformValue, setTransformValue] = useState(new Animated.Value(bottomMostPosition))
-    const [transparentViewOpacityConfig, setTransparentViewOpacityConfig] = useState(transformValue.interpolate({
-        inputRange: [topMostPosition, bottomMostPosition],
-        outputRange: [1, 0],
-    }))
+    const [transparentViewOpacityConfig, setTransparentViewOpacityConfig] = useState(
+        transformValue.interpolate({
+            inputRange: [topMostPosition, bottomMostPosition],
+            outputRange: [1, 0],
+        }),
+    )
 
-    const [panResponder, setPanResponder] = useState(PanResponder.create({
-        onStartShouldSetPanResponder: () => {
-            setIsDraggerActive(true)
-            return true
-        },
-        onPanResponderMove: (evt, gestureState) => {
-            const nextPosition = (isFullView ? topMostPosition : bottomMostPosition) + gestureState.dy
-            if (nextPosition > bottomMostPosition || nextPosition < topMostPosition) return
-            transformValue.setValue(nextPosition)
-        },
-        onPanResponderRelease: (evt, gestureState) => {
-            let nextPosition = isFullView ? topMostPosition : bottomMostPosition
-            if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = bottomMostPosition
-            else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = topMostPosition
-            moveDragger(nextPosition)
-        },
-    }))
-
-    useEffect(() => {
-        const bottomMostPosition = parentHeight * bottomMostPositionRatio
-        const topMostPosition = parentHeight - (childrenHeight + HEADER_HEIGHT)
-        const transformValue = new Animated.Value(bottomMostPosition)
-        setBottomMostPosition(bottomMostPosition)
-        setTopMostPosition(topMostPosition)
-        setTransformValue(transformValue)
-        setTransparentViewOpacityConfig(
-            transformValue.interpolate({
-                inputRange: [topMostPosition, bottomMostPosition],
-                outputRange: [1, 0],
-            })
-        )
-    }, [parentHeight, childrenHeight])
-
-    useEffect(() => {
-        setPanResponder(PanResponder.create({
+    const [panResponder, setPanResponder] = useState(
+        PanResponder.create({
             onStartShouldSetPanResponder: () => {
                 setIsDraggerActive(true)
                 return true
@@ -125,17 +94,67 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = topMostPosition
                 moveDragger(nextPosition)
             },
-        }))
+        }),
+    )
+
+    useEffect(() => {
+        const bottomMostPosition = parentHeight * bottomMostPositionRatio
+        const topMostPosition = parentHeight - (childrenHeight + HEADER_HEIGHT)
+        const transformValue = new Animated.Value(bottomMostPosition)
+        setBottomMostPosition(bottomMostPosition)
+        setTopMostPosition(topMostPosition)
+        setTransformValue(transformValue)
+        setTransparentViewOpacityConfig(
+            transformValue.interpolate({
+                inputRange: [topMostPosition, bottomMostPosition],
+                outputRange: [1, 0],
+            }),
+        )
+    }, [parentHeight, childrenHeight])
+
+    useEffect(() => {
+        setPanResponder(
+            PanResponder.create({
+                onStartShouldSetPanResponder: () => {
+                    setIsDraggerActive(true)
+                    return true
+                },
+                onPanResponderMove: (evt, gestureState) => {
+                    const nextPosition = (isFullView ? topMostPosition : bottomMostPosition) + gestureState.dy
+                    if (nextPosition > bottomMostPosition || nextPosition < topMostPosition) return
+                    transformValue.setValue(nextPosition)
+                },
+                onPanResponderRelease: (evt, gestureState) => {
+                    let nextPosition = isFullView ? topMostPosition : bottomMostPosition
+                    if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = bottomMostPosition
+                    else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL)
+                        nextPosition = topMostPosition
+                    moveDragger(nextPosition)
+                },
+            }),
+        )
     }, [topMostPosition, bottomMostPosition, transformValue, isFullView, onDraggerOpened, onDraggerClosed])
 
     // TODO: i had to add "onDraggerOpened" and "onDraggerClosed" in the dependency array here
     // after that in "NextGameMenu" onDraggerOpened callback is reading correct game state. (revise this concept again)
-    useImperativeHandle(ref, () => ({
-        openDragger: (data = undefined) => moveDragger(topMostPosition, data),
-        closeDragger: (data = undefined) => moveDragger(bottomMostPosition, data),
-    }), [isFullView, isDraggerActive, bottomMostPosition, topMostPosition, onDraggerOpened, onDraggerClosed, transformValue])
+    useImperativeHandle(
+        ref,
+        () => ({
+            openDragger: (data = undefined) => moveDragger(topMostPosition, data),
+            closeDragger: (data = undefined) => moveDragger(bottomMostPosition, data),
+        }),
+        [
+            isFullView,
+            isDraggerActive,
+            bottomMostPosition,
+            topMostPosition,
+            onDraggerOpened,
+            onDraggerClosed,
+            transformValue,
+        ],
+    )
 
-    const moveDragger = (toValue = bottomMostPosition, data = undefined) => {        
+    const moveDragger = (toValue = bottomMostPosition, data = undefined) => {
         // parent component might open the dragger. so mark dragger as active
         if (!isDraggerActive) setIsDraggerActive(true)
         Animated.timing(transformValue, {
@@ -159,7 +178,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         const topMostPosition = parentHeight - (height + HEADER_HEIGHT)
         setTopMostPosition(topMostPosition)
         if (!headerText) {
-            // mostly we want the dragger to be opened itself when header 
+            // mostly we want the dragger to be opened itself when header
             // clip is not present
             setTimeout(() => {
                 ref.current && ref.current.openDragger()
@@ -168,7 +187,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     }, [])
 
     // i can use a memo hook here
-    // or i can leave it as well because it's very unlikely that user will actually play with this dragger 
+    // or i can leave it as well because it's very unlikely that user will actually play with this dragger
     // and not the game. lol
     const renderHeader = () => {
         return (
@@ -183,10 +202,11 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     return (
         <>
             {isDraggerActive ? ( // either fully opened or moving
-                <Touchable touchable={'withoutFeedBack'} onPress={() => !stopBackgroundClickClose && moveDragger(bottomMostPosition)}>
-                    <Animated.View
-                        style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]}
-                    />
+                <Touchable
+                    touchable={'withoutFeedBack'}
+                    onPress={() => !stopBackgroundClickClose && moveDragger(bottomMostPosition)}
+                >
+                    <Animated.View style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]} />
                 </Touchable>
             ) : null}
             <Animated.View

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { GAME_STATE, EVENTS, PENCIL_STATE } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler';
+import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 
 const MAX_AVAILABLE_HINTS = 3
 
@@ -18,14 +18,13 @@ const getNewPencilState = currentState => {
 }
 
 // TODO: let's think of better naming for this set of operations on a cell
-const useCellActions = (gameState) => {    
-
+const useCellActions = gameState => {
     const initialCellActionsData = useRef(initCellActionsData()).current
     const [pencilState, setPencilState] = useState(initialCellActionsData.pencilState)
     const [hints, setHints] = useState(initialCellActionsData.hints)
 
     useEffect(() => {
-        const handler = (previousGameData) => {
+        const handler = previousGameData => {
             const { hints, pencilState } = previousGameData[GAME_DATA_KEYS.CELL_ACTIONS]
             setPencilState(pencilState)
             setHints(hints)
@@ -76,7 +75,7 @@ const useCellActions = (gameState) => {
     // hint used successfully
     useEffect(() => {
         const handler = () => {
-            setHints(hints => hints-1)
+            setHints(hints => hints - 1)
         }
         addListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
         return () => removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
@@ -104,7 +103,4 @@ const useCellActions = (gameState) => {
     }
 }
 
-export  {
-    MAX_AVAILABLE_HINTS,
-    useCellActions,
-}
+export { MAX_AVAILABLE_HINTS, useCellActions }

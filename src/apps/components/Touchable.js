@@ -41,10 +41,10 @@ const defaultProps = {
     underlayColorType: {
         color: 'white',
         opacity: 0,
-    }
+    },
 }
 
-const getTouchable = (touchable) => {
+const getTouchable = touchable => {
     if (!touchable) touchable = defaultTouchable
     touchable = touchable.toLowerCase().includes('nativefeedback') && Platform.OS === 'ios' ? 'highLight' : touchable
     return TouchablesMap[touchable]

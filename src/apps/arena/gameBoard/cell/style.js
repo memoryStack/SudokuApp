@@ -13,8 +13,9 @@ export const Styles = StyleSheet.create({
         // width: CELL_WIDTH,
         backgroundColor: 'white',
     },
-    mainNumberText: { // fontSize
-        fontSize: CELL_HEIGHT * .75,
+    mainNumberText: {
+        // fontSize
+        fontSize: CELL_HEIGHT * 0.75,
         // width: '100%',
     },
     notesContainer: {
@@ -36,7 +37,7 @@ export const Styles = StyleSheet.create({
     },
     noteText: {
         color: 'rgba(0, 0, 0, .8)',
-        fontSize: CELL_HEIGHT * .3,
+        fontSize: CELL_HEIGHT * 0.3,
         alignSelf: 'center',
     },
 })

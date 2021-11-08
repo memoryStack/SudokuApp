@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     inputPanelContainer: {
-        marginVertical: 24
+        marginVertical: 24,
     },
     playButtonContainer: {
         paddingHorizontal: 24,
@@ -50,19 +50,18 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         color: 'white',
-    }
+    },
 })
 
 const initBoardData = () => {
     const movesStack = []
     const mainNumbers = initMainNumbers()
     const notesInfo = new Array(9)
-    for(let i = 0;i < 9;i++) {
+    for (let i = 0; i < 9; i++) {
         const rowNotes = []
-        for(let j = 0;j < 9;j++) {
+        for (let j = 0; j < 9; j++) {
             const boxNotes = new Array(9)
-            for(let k = 1;k <= 9;k++)
-                boxNotes[k-1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
+            for (let k = 1; k <= 9; k++) boxNotes[k - 1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
             rowNotes.push(boxNotes)
         }
         notesInfo[i] = rowNotes
@@ -76,20 +75,18 @@ const initBoardData = () => {
     }
 }
 
-const isDuplicateEntry = (mainNumbers, {row, col}, number) => {
+const isDuplicateEntry = (mainNumbers, { row, col }, number) => {
     let houseCount = 0
-    for (let col=0;col<9;col++)
-        if (mainNumbers[row][col].value === number) houseCount++
+    for (let col = 0; col < 9; col++) if (mainNumbers[row][col].value === number) houseCount++
     if (houseCount > 1) return true
-    
+
     houseCount = 0
-    for (let row=0;row<9;row++)
-        if (mainNumbers[row][col].value === number) houseCount++
+    for (let row = 0; row < 9; row++) if (mainNumbers[row][col].value === number) houseCount++
     if (houseCount > 1) return true
-    
+
     houseCount = 0
     const { blockNum } = getBlockAndBoxNum(row, col)
-    for (let box=0;box<9;box++) {
+    for (let box = 0; box < 9; box++) {
         const { row, col } = getRowAndCol(blockNum, box)
         if (mainNumbers[row][col].value === number) houseCount++
     }
@@ -99,38 +96,37 @@ const isDuplicateEntry = (mainNumbers, {row, col}, number) => {
 // TODO: memory leaks are happening in this component and also NextGameMenu component
 //          have to be fixed
 const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
-
     const initialBoardData = useRef(initBoardData()).current
     const [mainNumbers, setMainNumbers] = useState(initialBoardData.mainNumbers)
     const [selectedCell, selectCell] = useState(initialBoardData.selectedCell)
-    const selectedCellMainValue = useRef(null) // in start it will be empty grid only    
+    const selectedCellMainValue = useRef(null) // in start it will be empty grid only
     const customPuzzleRef = useRef(null)
 
     useEffect(() => {
         const handler = ({ number }) => {
             selectedCellMainValue.current = number
-            
+
             const { row, col } = selectedCell
             const initialValue = mainNumbers[row][col].value
             mainNumbers[row][col].value = number
             mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, selectedCell, number)
-            
+
             if (initialValue && initialValue !== number) {
                 // reset "wronglyPlaced" flag for the values which might be
                 // converted from wronglyPlaced to correctly placed due to input in this cell
-                for (let col=0;col<9;col++) {
+                for (let col = 0; col < 9; col++) {
                     if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, {row, col}, initialValue)
+                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
                 }
-                for (let row=0;row<9;row++) {
+                for (let row = 0; row < 9; row++) {
                     if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, {row, col}, initialValue)
+                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
                 }
                 const { blockNum } = getBlockAndBoxNum(row, col)
-                for (let box=0;box<9;box++) {
+                for (let box = 0; box < 9; box++) {
                     const { row, col } = getRowAndCol(blockNum, box)
                     if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, {row, col}, initialValue)
+                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
                 }
             }
             setMainNumbers([...mainNumbers])
@@ -172,8 +168,8 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
 
     const getCluesCount = () => {
         let cluesCount = 0
-        for (let row=0;row<9;row++) {
-            for (let col=0;col<9;col++) {
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
                 if (mainNumbers[row][col].value) cluesCount++
             }
         }
@@ -195,13 +191,16 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
         }
     }, [mainNumbers])
 
-    const handleCellClicked = useCallback((row, col) => {
-        selectedCellMainValue.current = mainNumbers[row][col].value
-        selectCell(selectedCell => {
-            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
-            return selectedCell
-        })
-    }, [mainNumbers])
+    const handleCellClicked = useCallback(
+        (row, col) => {
+            selectedCellMainValue.current = mainNumbers[row][col].value
+            selectCell(selectedCell => {
+                if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
+                return selectedCell
+            })
+        },
+        [mainNumbers],
+    )
 
     useEffect(() => {
         const handler = () => {
@@ -240,21 +239,14 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                     onCellClick={handleCellClicked}
                 />
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel 
-                        eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX}
-                        gameState={GAME_STATE.ACTIVE}
-                    />
+                    <Inputpanel eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX} gameState={GAME_STATE.ACTIVE} />
                 </View>
                 {/* <Eraser
                     eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX}
                     iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                     gameState={'ACTIVE'}
                 /> */}
-                <NewGameButton
-                    containerStyle={styles.playButtonContainer}
-                    onClick={handlePlayClick}
-                    text={'PLAY'}
-                />
+                <NewGameButton containerStyle={styles.playButtonContainer} onClick={handlePlayClick} text={'PLAY'} />
             </View>
         </BottomDragger>
     )

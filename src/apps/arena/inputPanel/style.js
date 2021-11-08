@@ -18,18 +18,19 @@ export const styles = StyleSheet.create({
     verticalBars: {
         height: INPUT_GRID_DIMENSION,
         width: 1,
-        backgroundColor: 'rgba(0, 0, 0, .1)'
+        backgroundColor: 'rgba(0, 0, 0, .1)',
     },
     horizontalBars: {
         height: 1,
         width: INPUT_GRID_DIMENSION,
-        backgroundColor: 'rgba(0, 0, 0, .1)'
+        backgroundColor: 'rgba(0, 0, 0, .1)',
     },
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    numberButtonContainer: { // rectangular outer container for Input Number
+    numberButtonContainer: {
+        // rectangular outer container for Input Number
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

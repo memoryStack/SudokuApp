@@ -54,12 +54,7 @@ const getPauseTimerIcon = () => {
 const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
 const Timer_ = ({ gameState, time, onClick = noOperationFunction }) => (
-    <Touchable
-        style={styles.timeCounter}
-        onPress={onClick}
-        touchable={TouchableTypes.opacity}
-        hitSlop={hitSlop}
-    >
+    <Touchable style={styles.timeCounter} onPress={onClick} touchable={TouchableTypes.opacity} hitSlop={hitSlop}>
         <Text style={styles.textStyles}>{`${getTimeComponentString(time.hours)}:`}</Text>
         <Text style={styles.textStyles}>{`${getTimeComponentString(time.minutes)}:`}</Text>
         <Text style={styles.textStyles}>{`${getTimeComponentString(time.seconds)}`}</Text>

@@ -7,7 +7,6 @@ import { addListener, removeListener } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../resources/constants'
 
 const Undo_ = ({ iconBoxSize, onClick }) => {
-
     useEffect(() => {
         const handler = () => {
             // TODO: animate the icon to show the user that undo happened
@@ -19,11 +18,7 @@ const Undo_ = ({ iconBoxSize, onClick }) => {
     }, [])
 
     return (
-        <Touchable
-            style={Styles.actionContainer}
-            onPress={onClick}
-            touchable={TouchableTypes.opacity}
-        >
+        <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
             <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
             <Text style={Styles.actionText}>{`Undo`}</Text>
         </Touchable>

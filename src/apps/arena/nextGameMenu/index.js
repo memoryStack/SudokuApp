@@ -33,38 +33,42 @@ const styles = StyleSheet.create({
     },
 })
 
-// TODO: research about using "useMemo" for the functions which are rendering a view in the 
+// TODO: research about using "useMemo" for the functions which are rendering a view in the
 //          functional component
 const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
-
     const nextGameMenuRef = useRef(null)
 
     const getBar = (barNum, level) => {
-        const pathD = ['M', (75 + 100 * barNum), '450', 'L', (75 + 100 * barNum), (350 - 100 * barNum),
-                        'A 25 25 0 0 1', (125 + 100 * barNum), (350 - 100 * barNum), 'L', (125 + 100 * barNum), '450',
-                        'A 25 25 0 0 1', (75 + 100 * barNum), '450'].join(' ')
+        const pathD = [
+            'M',
+            75 + 100 * barNum,
+            '450',
+            'L',
+            75 + 100 * barNum,
+            350 - 100 * barNum,
+            'A 25 25 0 0 1',
+            125 + 100 * barNum,
+            350 - 100 * barNum,
+            'L',
+            125 + 100 * barNum,
+            '450',
+            'A 25 25 0 0 1',
+            75 + 100 * barNum,
+            '450',
+        ].join(' ')
 
         let stroke
         let fill
-        if (barNum <= level) stroke = "rgba(0, 0, 0, .5)"
-        else stroke = "black"
-        if (barNum > level) fill = "none"
-        else fill = "black"
-        return (
-            <Path
-                key={`${barNum}`}
-                d={pathD}
-                stroke={stroke}
-                fill={fill}
-                strokeWidth={5}
-            />
-        )
+        if (barNum <= level) stroke = 'rgba(0, 0, 0, .5)'
+        else stroke = 'black'
+        if (barNum > level) fill = 'none'
+        else fill = 'black'
+        return <Path key={`${barNum}`} d={pathD} stroke={stroke} fill={fill} strokeWidth={5} />
     }
 
-    const getLevelIcon = (level) => {
+    const getLevelIcon = level => {
         const childArray = []
-        for(let i = 0; i < 4; i++)
-            childArray.push(getBar(i, level))
+        for (let i = 0; i < 4; i++) childArray.push(getBar(i, level))
         return (
             <Svg viewBox="0 0 500 500" width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION}>
                 {childArray}
@@ -72,43 +76,43 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
         )
     }
 
-    const closeView = () =>
-        nextGameMenuRef.current && nextGameMenuRef.current.closeDragger(true)
+    const closeView = () => nextGameMenuRef.current && nextGameMenuRef.current.closeDragger(true)
 
-    const nextGameMenuItemClicked = useCallback(item => {
-        switch (item) {
-            case RESTART_TEXT: 
-                emit(EVENTS.RESTART_GAME)
-                closeView()
-                break
-            case CUSTOMIZE_YOUR_PUZZLE_TITLE:
-                emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
-                break
-            default:
-                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: item })
-                closeView()
-        }    
-    }, [nextGameMenuRef])
+    const nextGameMenuItemClicked = useCallback(
+        item => {
+            switch (item) {
+                case RESTART_TEXT:
+                    emit(EVENTS.RESTART_GAME)
+                    closeView()
+                    break
+                case CUSTOMIZE_YOUR_PUZZLE_TITLE:
+                    emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
+                    break
+                default:
+                    emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: item })
+                    closeView()
+            }
+        },
+        [nextGameMenuRef],
+    )
 
     const getNextGameMenu = () => {
         return (
             <View style={styles.nextGameMenuContainer}>
-                {
-                    Object.keys(LEVEL_DIFFICULTIES).map((levelText, index) => {
-                        return (
-                            <View key={levelText}>
-                                <Touchable
-                                    style={styles.levelContainer}
-                                    touchable={TouchableTypes.opacity}
-                                    onPress={() => nextGameMenuItemClicked(levelText)}
-                                >
-                                    {getLevelIcon(index)}
-                                    <Text style={styles.levelText}>{levelText}</Text>
-                                </Touchable>
-                            </View>
-                        )
-                    })
-                }
+                {Object.keys(LEVEL_DIFFICULTIES).map((levelText, index) => {
+                    return (
+                        <View key={levelText}>
+                            <Touchable
+                                style={styles.levelContainer}
+                                touchable={TouchableTypes.opacity}
+                                onPress={() => nextGameMenuItemClicked(levelText)}
+                            >
+                                {getLevelIcon(index)}
+                                <Text style={styles.levelText}>{levelText}</Text>
+                            </Touchable>
+                        </View>
+                    )
+                })}
                 <Touchable
                     key={'restart'}
                     style={styles.levelContainer}

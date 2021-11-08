@@ -2,7 +2,8 @@ import { StyleSheet } from 'react-native'
 import { GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, CELL_HEIGHT, OUTER_THIN_BORDER_WIDTH } from './dimensions'
 
 export const Styles = StyleSheet.create({
-    board: { // figure out a way  for the shadow of this board
+    board: {
+        // figure out a way  for the shadow of this board
         display: 'flex',
         height: GAME_BOARD_HEIGHT,
         width: GAME_BOARD_WIDTH,
@@ -58,5 +59,5 @@ export const Styles = StyleSheet.create({
     },
     clueNumColor: {
         color: 'rgb(12, 25, 22)',
-    }
+    },
 })

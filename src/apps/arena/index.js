@@ -16,10 +16,10 @@ import { Timer } from './timer'
 import { isGameOver } from './utils/util'
 import { NewGameButton } from './newGameButton'
 import { CustomPuzzle } from './customPuzzle'
-import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions';
-import { useReferee } from './hooks/referee';
-import { useGameBoard } from './hooks/gameBoard';
-import { useManageGame } from './hooks/gameHandler';
+import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions'
+import { useReferee } from './hooks/referee'
+import { useGameBoard } from './hooks/gameBoard'
+import { useManageGame } from './hooks/gameHandler'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -83,32 +83,15 @@ const Arena_ = () => {
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
     const { gameState, showNextGameMenu, setShowNextGameMenu } = useManageGame()
 
-    const {
+    const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions(gameState)
+
+    const { mainNumbers, notesInfo, selectedCell, selectedCellMainValue, onCellClick } = useGameBoard(
+        gameState,
         pencilState,
-        hints,
-        onPencilClick,
-        onHintClick,
-        onFastPencilClick,
-        onUndoClick,
-    } = useCellActions(gameState)
-    
-    const {
-        mainNumbers,
-        notesInfo,
-        selectedCell,
-        selectedCellMainValue,
-        onCellClick,
-    } = useGameBoard(gameState, pencilState)
+    )
 
-    const {
-        MISTAKES_LIMIT,
-        mistakes,
-        time,
-        difficultyLevel,
-        onTimerClick,
-    } = useReferee(gameState)
+    const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState)
 
-    
     const [showCustomPuzzleHC, setShowCustomPuzzleHC] = useState(false)
 
     // for game over halfcard animation
@@ -129,13 +112,13 @@ const Arena_ = () => {
         setShowCustomPuzzleHC(false)
     }, [])
 
-    const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => { 
+    const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
         setPageHeight(height)
     }, [])
 
     const handleGameInFocus = useCallback(() => {
         // if the menu is opened let's keep it that way only
-        if (gameState !== GAME_STATE.INACTIVE || (showCustomPuzzleHC || showNextGameMenu)) return
+        if (gameState !== GAME_STATE.INACTIVE || showCustomPuzzleHC || showNextGameMenu) return
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
     }, [gameState, showCustomPuzzleHC, showGameSolvedCard])
 
@@ -177,27 +160,21 @@ const Arena_ = () => {
         emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
     }, [gameState])
 
-    const onNewGameMenuClosed = useCallback((optionSelectedFromMenu = false) => {
-        setShowNextGameMenu(false)
-        // when game is solved or over, i don't want the game state to be changed
-        // user should start the next game
-        if (gameState !== GAME_STATE.INACTIVE) return
-        !optionSelectedFromMenu && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [gameState])
+    const onNewGameMenuClosed = useCallback(
+        (optionSelectedFromMenu = false) => {
+            setShowNextGameMenu(false)
+            // when game is solved or over, i don't want the game state to be changed
+            // user should start the next game
+            if (gameState !== GAME_STATE.INACTIVE) return
+            !optionSelectedFromMenu && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
+        },
+        [gameState],
+    )
 
     return (
-        <Page
-            onFocus={handleGameInFocus}
-            onBlur={handleGameOutOfFocus}
-        >
-            <View
-                style={styles.container} 
-                onLayout={onParentLayout}
-            >
-                <NewGameButton
-                    onClick={newGameButtonClick}
-                    containerStyle={styles.newGameButtonContainer}
-                />
+        <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus}>
+            <View style={styles.container} onLayout={onParentLayout}>
+                <NewGameButton onClick={newGameButtonClick} containerStyle={styles.newGameButtonContainer} />
                 <Text style={styles.refereeTextStyles}>{timeTaken}</Text>
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
@@ -213,19 +190,13 @@ const Arena_ = () => {
                     onCellClick={onCellClick}
                 />
                 <View style={styles.cellActionsContainer}>
-                    <Undo
-                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                        onClick={onUndoClick}
-                    />
+                    <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onUndoClick} />
                     <Pencil
                         iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                         pencilState={pencilState}
                         onClick={onPencilClick}
                     />
-                    <FastPencil
-                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                        onClick={onFastPencilClick}
-                    />
+                    <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onFastPencilClick} />
                     <Hint
                         iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                         gameState={gameState}
@@ -236,42 +207,28 @@ const Arena_ = () => {
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel gameState={gameState} />
                 </View>
-                {
-                    pageHeight && showNextGameMenu ?
-                        <NextGameMenu
-                            parentHeight={pageHeight}
-                            onMenuClosed={onNewGameMenuClosed}
-                        /> 
-                    : null
-                }
-                {
-                    pageHeight && showCustomPuzzleHC ?
-                        <CustomPuzzle
-                            parentHeight={pageHeight}
-                            onCustomPuzzleClosed={handleCustomPuzzleClosed}
-                        />
-                    : null
-                }
-                {
-                    showGameSolvedCard ?
-                        <Touchable
-                            touchable={TouchableTypes.opacity}
-                            activeOpacity={1}
-                            style={styles.gameOverCardAbsoluteBG}
-                            onPress={hideCongratsModal}
-                        >
-                            <Animated.View
-                                style={[styles.gameOverAnimatedBG, { opacity: fadeAnim }]}
-                            >
-                                <GameOverCard
-                                    gameState={gameState}
-                                    stats={{mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - hints}}
-                                    openNextGameMenu={hideCongratsModal}
-                                />
-                            </Animated.View>
-                        </Touchable>
-                    : null
-                }
+                {pageHeight && showNextGameMenu ? (
+                    <NextGameMenu parentHeight={pageHeight} onMenuClosed={onNewGameMenuClosed} />
+                ) : null}
+                {pageHeight && showCustomPuzzleHC ? (
+                    <CustomPuzzle parentHeight={pageHeight} onCustomPuzzleClosed={handleCustomPuzzleClosed} />
+                ) : null}
+                {showGameSolvedCard ? (
+                    <Touchable
+                        touchable={TouchableTypes.opacity}
+                        activeOpacity={1}
+                        style={styles.gameOverCardAbsoluteBG}
+                        onPress={hideCongratsModal}
+                    >
+                        <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim }]}>
+                            <GameOverCard
+                                gameState={gameState}
+                                stats={{ mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - hints }}
+                                openNextGameMenu={hideCongratsModal}
+                            />
+                        </Animated.View>
+                    </Touchable>
+                ) : null}
             </View>
         </Page>
     )

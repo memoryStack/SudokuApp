@@ -1,4 +1,4 @@
-import { setKey } from "../../../utils/storage";
+import { setKey } from '../../../utils/storage'
 
 const PREVIOUS_GAME_DATA_KEY = 'PREVIOUS_GAME'
 
@@ -18,15 +18,13 @@ const dataToBeCached = {
 
 const shouldCacheData = () => {
     const keys = Object.keys(dataToBeCached)
-    for (const key of keys)
-        if (!dataToBeCached[key]) return false
+    for (const key of keys) if (!dataToBeCached[key]) return false
     return true
 }
 
 const resetDataToBeCached = () => {
     const keys = Object.keys(dataToBeCached)
-    for (const key of keys)
-        dataToBeCached[key] = null
+    for (const key of keys) dataToBeCached[key] = null
 }
 
 const cacheGameData = (key, data) => {
@@ -35,14 +33,13 @@ const cacheGameData = (key, data) => {
     dataToBeCached[key] = data
     if (shouldCacheData()) {
         setKey(PREVIOUS_GAME_DATA_KEY, dataToBeCached)
-        .then(() => {
-            resetDataToBeCached()
-        })
-        .catch(error => {
-            __DEV__ && console.log(error)
-            resetDataToBeCached()
-        })
-
+            .then(() => {
+                resetDataToBeCached()
+            })
+            .catch(error => {
+                __DEV__ && console.log(error)
+                resetDataToBeCached()
+            })
     }
 }
 

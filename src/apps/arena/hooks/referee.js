@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE } from '../../../resources/constants';
+import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { isGameOver } from '../utils/util';
-import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler';
+import { isGameOver } from '../utils/util'
+import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 
 const MISTAKES_LIMIT = 3
 // TODO: change it from refree to game tracking info
@@ -10,7 +10,7 @@ const initRefereeData = (difficultyLevel = LEVEL_DIFFICULTIES.EASY) => {
     return {
         difficultyLevel,
         mistakes: 0,
-        time: { hours: 0, minutes: 0, seconds: 0 }
+        time: { hours: 0, minutes: 0, seconds: 0 },
     }
 }
 
@@ -27,9 +27,13 @@ const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
     return { hours, minutes, seconds }
 }
 
-const useReferee = (gameState) => {
+const useReferee = gameState => {
     const timerId = useRef(null)
-    const { difficultyLevel: defaultDifficultyLevel, mistakes: defaultMistakes, time: defaultTime } = useRef(initRefereeData()).current
+    const {
+        difficultyLevel: defaultDifficultyLevel,
+        mistakes: defaultMistakes,
+        time: defaultTime,
+    } = useRef(initRefereeData()).current
     const [mistakes, setMistakes] = useState(defaultMistakes)
     const [difficultyLevel, setDifficultyLevel] = useState(defaultDifficultyLevel)
     const [time, setTime] = useState(defaultTime)
@@ -41,12 +45,12 @@ const useReferee = (gameState) => {
     }
 
     useEffect(() => {
-        const handler = (previousGameData) => {
+        const handler = previousGameData => {
             setRefereeData(previousGameData[GAME_DATA_KEYS.REFEREE])
         }
         addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
         return () => removeListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
-    }, [])    
+    }, [])
 
     useEffect(() => {
         const handler = ({ difficultyLevel }) => {
@@ -65,22 +69,22 @@ const useReferee = (gameState) => {
     }, [difficultyLevel])
 
     useEffect(() => {
-        const handler = () => {            
+        const handler = () => {
             const refereeData = {
                 difficultyLevel,
                 mistakes,
                 time,
             }
-            cacheGameData(GAME_DATA_KEYS.REFEREE,  refereeData)
+            cacheGameData(GAME_DATA_KEYS.REFEREE, refereeData)
         }
 
         addListener(EVENTS.CACHE_GAME_DATA, handler)
         return () => removeListener(EVENTS.CACHE_GAME_DATA, handler)
-    }, [difficultyLevel, mistakes,  time])
+    }, [difficultyLevel, mistakes, time])
 
     const updateTime = () => timerId.current && setTime(time => getNewTime(time))
 
-    const startTimer = () => timerId.current = setInterval(updateTime, 1000)
+    const startTimer = () => (timerId.current = setInterval(updateTime, 1000))
 
     const stopTimer = () => {
         if (timerId.current) timerId.current = clearInterval(timerId.current)
@@ -91,7 +95,7 @@ const useReferee = (gameState) => {
         if (isGameOver(gameState)) return
         const gameNewState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
         emit(EVENTS.CHANGE_GAME_STATE, gameNewState)
-    }, [gameState]) 
+    }, [gameState])
 
     // hook to start timer
     useEffect(() => {
@@ -131,6 +135,4 @@ const useReferee = (gameState) => {
     }
 }
 
-export {
-    useReferee
-}
+export { useReferee }

@@ -6,10 +6,10 @@ import { GAME_STATE } from '../../../../resources/constants'
 
 // becoz only 3 notes are there in a row
 const looper = []
-for(let i=0;i<3;i++) looper.push(i)
+for (let i = 0; i < 3; i++) looper.push(i)
 
 // test for these default values and their types
-const Cell_ = ({ 
+const Cell_ = ({
     row,
     col,
     cellNotes = [],
@@ -19,27 +19,27 @@ const Cell_ = ({
     onCellClicked,
     gameState,
 }) => {
-
     const shouldRenderNotes = () => {
-        for (let noteNum=0;noteNum<9;noteNum++)
-            if (cellNotes[noteNum].show) return 1
+        for (let noteNum = 0; noteNum < 9; noteNum++) if (cellNotes[noteNum].show) return 1
         return 0
     }
 
     const getCellNotes = () => {
-        const cellNotesRows = looper.map((row) => {
-            const cellNotesRow = looper.map((col) => {
+        const cellNotesRows = looper.map(row => {
+            const cellNotesRow = looper.map(col => {
                 const noteNum = row * 3 + col
                 const { show, noteValue } = cellNotes[noteNum] || {}
                 return (
                     <View key={`${noteNum}`} style={Styles.noteContainer}>
-                        <Text style={Styles.noteText}>
-                            {show ? `${noteValue}` : ''}
-                        </Text>
+                        <Text style={Styles.noteText}>{show ? `${noteValue}` : ''}</Text>
                     </View>
                 )
             })
-            return <View style={Styles.notesRow} key={`${row}`}>{cellNotesRow}</View>
+            return (
+                <View style={Styles.notesRow} key={`${row}`}>
+                    {cellNotesRow}
+                </View>
+            )
         })
         return <View style={Styles.notesContainer}>{cellNotesRows}</View>
     }
@@ -51,15 +51,13 @@ const Cell_ = ({
             style={[Styles.cell, cellBGColor]}
             onPress={() => onCellClicked(row, col)}
         >
-            {
-                gameState !== GAME_STATE.INACTIVE ?
-                    (
-                        cellMainValue ?
-                            <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
-                        : shouldRenderNotes() ? getCellNotes(row, col) : null
-                    )
-                : null
-            }
+            {gameState !== GAME_STATE.INACTIVE ? (
+                cellMainValue ? (
+                    <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
+                ) : shouldRenderNotes() ? (
+                    getCellNotes(row, col)
+                ) : null
+            ) : null}
         </Touchable>
     )
 }

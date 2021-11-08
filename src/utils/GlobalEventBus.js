@@ -1,4 +1,3 @@
-
 const listeners = {}
 
 export function addListener(eventName, callback) {

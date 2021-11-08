@@ -7,7 +7,7 @@ import { sameHouseAsSelected } from '../../../utils/util'
 
 const looper = []
 const bordersLooper = []
-for(let i=0;i<10;i++) {
+for (let i = 0; i < 10; i++) {
     if (i < 9) looper.push(i) // 9 cells are there in a row
     bordersLooper.push(i) // 10 borders will be drawn
 }
@@ -22,7 +22,6 @@ const Board_ = ({
     selectedCellMainValue = 0,
     onCellClick,
 }) => {
-
     const sameValueAsSelectedBox = (row, col) =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[row][col].value
 
@@ -44,9 +43,9 @@ const Board_ = ({
 
     const getBoxBackgroundColor = (row, col) => {
         if (gameState === GAME_STATE.INACTIVE) return null
-        const { row: selectedCellRow = 0, col: selectedCellCol = 0  } = selectedCell
+        const { row: selectedCellRow = 0, col: selectedCellCol = 0 } = selectedCell
         const isSelected = selectedCellRow === row && selectedCellCol === col
-        
+
         if (isSelected) return Styles.selectedCellBGColor
         const isSameHouseAsSelected = sameHouseAsSelected(row, col, selectedCellRow, selectedCellCol)
         const isSameValueAsSelected = sameValueAsSelectedBox(row, col)
@@ -61,31 +60,26 @@ const Board_ = ({
         let rowElementsKeyCounter = 0
         return (
             <View style={Styles.rowStyle} key={key}>
-                {
-                    looper.map((col) => {
-                        return (
-                            <View
-                                style={Styles.cellContainer}
-                                key={`${rowElementsKeyCounter++}`}
-                            >
-                                <Cell
-                                    row={row}
-                                    col={col}
-                                    cellBGColor={getBoxBackgroundColor(row, col)}
-                                    mainValueFontColor={getMainNumFontColor(row, col)}
-                                    cellMainValue={mainNumbers[row][col].value}
-                                    cellNotes={notesInfo[row][col]}
-                                    onCellClicked={onCellClick}
-                                    gameState={gameState}
-                                />
-                            </View>
-                        )
-                    })
-                }
+                {looper.map(col => {
+                    return (
+                        <View style={Styles.cellContainer} key={`${rowElementsKeyCounter++}`}>
+                            <Cell
+                                row={row}
+                                col={col}
+                                cellBGColor={getBoxBackgroundColor(row, col)}
+                                mainValueFontColor={getMainNumFontColor(row, col)}
+                                cellMainValue={mainNumbers[row][col].value}
+                                cellNotes={notesInfo[row][col]}
+                                onCellClicked={onCellClick}
+                                gameState={gameState}
+                            />
+                        </View>
+                    )
+                })}
             </View>
         )
     }
-    
+
     const getGrid = orientation => {
         const isVertical = orientation === 'vertical'
         const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
@@ -97,17 +91,12 @@ const Board_ = ({
         }
 
         return (
-            <View
-                style={[Styles.gridBorderContainer, orientationBasedStyles]}
-                pointerEvents={'none'}
-            >
-                {
-                    bordersLooper.map((borderNum) => {
-                        const boldBorder = borderNum === 3 || borderNum === 6
-                        const borderViewStyle = boldBorder ? thickBorderStyle : normalBorderStyle
-                        return <View key={`${orientation}_${borderNum}`} style={borderViewStyle} />
-                    })
-                }
+            <View style={[Styles.gridBorderContainer, orientationBasedStyles]} pointerEvents={'none'}>
+                {bordersLooper.map(borderNum => {
+                    const boldBorder = borderNum === 3 || borderNum === 6
+                    const borderViewStyle = boldBorder ? thickBorderStyle : normalBorderStyle
+                    return <View key={`${orientation}_${borderNum}`} style={borderViewStyle} />
+                })}
             </View>
         )
     }

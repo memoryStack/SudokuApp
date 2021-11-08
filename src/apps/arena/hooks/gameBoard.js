@@ -1,20 +1,19 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { EVENTS, GAME_STATE, PENCIL_STATE } from '../../../resources/constants';
+import { EVENTS, GAME_STATE, PENCIL_STATE } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { duplicacyPresent } from '../utils/util'
-import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler';
+import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 
 const initBoardData = () => {
     const movesStack = []
     const mainNumbers = initMainNumbers()
     const notesInfo = new Array(9)
-    for(let i = 0;i < 9;i++) {
+    for (let i = 0; i < 9; i++) {
         const rowNotes = []
-        for(let j = 0;j < 9;j++) {
+        for (let j = 0; j < 9; j++) {
             const boxNotes = new Array(9)
-            for(let k = 1;k <= 9;k++)
-                boxNotes[k-1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
+            for (let k = 1; k <= 9; k++) boxNotes[k - 1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
             rowNotes.push(boxNotes)
         }
         notesInfo[i] = rowNotes
@@ -24,13 +23,13 @@ const initBoardData = () => {
         movesStack,
         notesInfo,
         mainNumbers,
-        selectedCell: {row: 0, col: 0},
+        selectedCell: { row: 0, col: 0 },
     }
 }
 
-const isPuzzleSolved = (mainNumbers) => {
-    for (let row=0;row<9;row++) {
-        for (let col=0;col<9;col++) {
+const isPuzzleSolved = mainNumbers => {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
             if (!mainNumbers[row][col].value) return false
         }
     }
@@ -43,17 +42,18 @@ const isPuzzleSolved = (mainNumbers) => {
 const removeNotesAfterCellFilled = (notesInfo, row, col, num) => {
     let notesErasedByMainValue = []
     // remove notes from current cell
-    for (let note=0;note<9;note++) { // taking note's indx
+    for (let note = 0; note < 9; note++) {
+        // taking note's indx
         const { show } = notesInfo[row][col][note]
         if (show) {
-            notesErasedByMainValue.push(note+1)
+            notesErasedByMainValue.push(note + 1)
             notesInfo[row][col][note].show = 0
         }
     }
     if (notesErasedByMainValue.length) notesInfo[row][col] = [...notesInfo[row][col]]
 
     // remove notes from current row
-    for (let row=0;row<9;row++) {
+    for (let row = 0; row < 9; row++) {
         const noteIndx = num - 1
         const { show } = notesInfo[row][col][noteIndx]
         if (show) {
@@ -63,7 +63,7 @@ const removeNotesAfterCellFilled = (notesInfo, row, col, num) => {
     }
 
     // remove notes from current col
-    for (let col=0;col<9;col++) {
+    for (let col = 0; col < 9; col++) {
         const noteIndx = num - 1
         const { show } = notesInfo[row][col][noteIndx]
         if (show) {
@@ -71,10 +71,10 @@ const removeNotesAfterCellFilled = (notesInfo, row, col, num) => {
             notesInfo[row][col] = [...notesInfo[row][col]]
         }
     }
-    
+
     // remove notes from current block
     const { blockNum } = getBlockAndBoxNum(row, col)
-    for (let boxNum=0;boxNum<9;boxNum++) {
+    for (let boxNum = 0; boxNum < 9; boxNum++) {
         const { row, col } = getRowAndCol(blockNum, boxNum)
         const noteIndx = num - 1
         const { show } = notesInfo[row][col][noteIndx]
@@ -88,7 +88,6 @@ const removeNotesAfterCellFilled = (notesInfo, row, col, num) => {
 }
 
 const useGameBoard = (gameState, pencilState) => {
-
     const {
         movesStack: initialmovesStack,
         notesInfo: initialNotes,
@@ -104,7 +103,7 @@ const useGameBoard = (gameState, pencilState) => {
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
         movesStack.current = moves
-        const {row = 0, col = 0} = selectedCell
+        const { row = 0, col = 0 } = selectedCell
         selectedCellMainValue.current = mainNumbers[row][col].value
         updateMainNumbers(mainNumbers)
         updateNotesInfo(notesInfo)
@@ -112,7 +111,7 @@ const useGameBoard = (gameState, pencilState) => {
     }
 
     useEffect(() => {
-        const handler = (previousGameData) => {
+        const handler = previousGameData => {
             setBoardData(previousGameData[GAME_DATA_KEYS.BOARD_DATA])
         }
         addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
@@ -123,14 +122,12 @@ const useGameBoard = (gameState, pencilState) => {
         let componentUnmounted = false
         const handler = () => {
             const mainNumbersClone = [...mainNumbers]
-            for (let row=0;row<9;row++) {
-                for (let col=0;col<9;col++) {
-                    if (!mainNumbersClone[row][col].isClue)
-                        mainNumbersClone[row][col].value = 0
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (!mainNumbersClone[row][col].isClue) mainNumbersClone[row][col].value = 0
                 }
             }
-            if (!componentUnmounted)
-                setBoardData({...initBoardData(), mainNumbers: mainNumbersClone})
+            if (!componentUnmounted) setBoardData({ ...initBoardData(), mainNumbers: mainNumbersClone })
         }
         addListener(EVENTS.RESTART_GAME, handler)
         return () => {
@@ -141,7 +138,7 @@ const useGameBoard = (gameState, pencilState) => {
 
     useEffect(() => {
         const handler = ({ mainNumbers }) => {
-            setBoardData({...initBoardData(), mainNumbers})
+            setBoardData({ ...initBoardData(), mainNumbers })
         }
         addListener(EVENTS.START_NEW_GAME, handler)
         return () => {
@@ -164,7 +161,7 @@ const useGameBoard = (gameState, pencilState) => {
         return () => removeListener(EVENTS.CACHE_GAME_DATA, handler)
     }, [mainNumbers, notesInfo, movesStack, selectedCell])
 
-    // EVENTS.INPUT_NUMBER_CLICKED 
+    // EVENTS.INPUT_NUMBER_CLICKED
     useEffect(() => {
         const handler = ({ number, isHintUsed = false }) => {
             const { row, col } = selectedCell
@@ -178,19 +175,19 @@ const useGameBoard = (gameState, pencilState) => {
                 // let's keep it for now and and we can keep it as a part of settings later on
                 if (duplicacyPresent(row, col, number, mainNumbers)) return
                 valueType = 'notes'
-                const { show } = notesInfo[row][col][number-1]
+                const { show } = notesInfo[row][col][number - 1]
                 moveType = show ? 'erase' : 'insert'
-                notesInfo[row][col][number-1].show = 1 - show
+                notesInfo[row][col][number - 1].show = 1 - show
                 notesInfo[row][col] = [...notesInfo[row][col]]
                 noteInserted = true
             } else {
                 /**
                  * 1. mark move type and value type and add the number in cell
-                 * 2. erase all the notes first and store them in an array for undo operation on the board 
+                 * 2. erase all the notes first and store them in an array for undo operation on the board
                  * 3. check if neeed to show an error msg
                  * 4. check if puzzle is solved or not
-                */ 
-                
+                 */
+
                 const mainNumbersDup = [...mainNumbers]
                 // mark move type and valueType and add the number in cell
                 moveType = 'insert'
@@ -222,7 +219,7 @@ const useGameBoard = (gameState, pencilState) => {
             }
 
             movesStack.current.push(moveObject)
-            if (noteInserted ||  notesErasedByMainValue.length) updateNotesInfo([...notesInfo])
+            if (noteInserted || notesErasedByMainValue.length) updateNotesInfo([...notesInfo])
         }
 
         addListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
@@ -232,8 +229,8 @@ const useGameBoard = (gameState, pencilState) => {
     }, [mainNumbers, notesInfo, selectedCell, pencilState])
 
     // EVENTS.UNDO_CLICKED
-    // TODO: i think it would be better if when a mainValue is inserted in the cell 
-    // then don't erase the already filled notes. becoz if we do redo then we will 
+    // TODO: i think it would be better if when a mainValue is inserted in the cell
+    // then don't erase the already filled notes. becoz if we do redo then we will
     // automatically see those notes without any computation logic
     // TODO: improve these "setStates"
     useEffect(() => {
@@ -244,14 +241,14 @@ const useGameBoard = (gameState, pencilState) => {
             const moveInfoToUndo = movesStack.current.pop()
 
             const { row, col, moveType, valueType, value } = moveInfoToUndo
-            
+
             if (valueType === 'main') {
                 if (moveType === 'insert') {
                     // hide the main value
                     mainNumbersDup[row][col].value = 0
                     // show the notes erased when this value inserted
                     const { notesErased } = moveInfoToUndo
-                    for(let i=0;i<notesErased.length;i++){
+                    for (let i = 0; i < notesErased.length; i++) {
                         const note = notesErased[i]
                         notesInfoDup[row][col][note - 1].show = 1
                     }
@@ -261,9 +258,9 @@ const useGameBoard = (gameState, pencilState) => {
                 }
             } else {
                 const notesVisibilityChanges = value
-                for(let i=0;i<notesVisibilityChanges.length;i++){
+                for (let i = 0; i < notesVisibilityChanges.length; i++) {
                     const note = notesVisibilityChanges[i]
-                    notesInfoDup[row][col][note-1].show = 1 - notesInfoDup[row][col][note-1].show
+                    notesInfoDup[row][col][note - 1].show = 1 - notesInfoDup[row][col][note - 1].show
                 }
             }
 
@@ -271,7 +268,7 @@ const useGameBoard = (gameState, pencilState) => {
 
             if (movesStack.current.length) {
                 const len = movesStack.current.length
-                const { row, col } = movesStack.current[len-1]
+                const { row, col } = movesStack.current[len - 1]
                 nextSelectedCell.row = row
                 nextSelectedCell.col = col
             }
@@ -313,9 +310,9 @@ const useGameBoard = (gameState, pencilState) => {
             } else {
                 const cellNotes = notesInfoDup[row][col]
                 value = [] // will store the notes to be removed (basically the notes which are visible right now)
-                for (let i=0;i<9;i++) {
+                for (let i = 0; i < 9; i++) {
                     if (cellNotes[i].show) {
-                        value.push(i+1)
+                        value.push(i + 1)
                         cellNotes[i].show = 0
                     }
                 }
@@ -327,12 +324,12 @@ const useGameBoard = (gameState, pencilState) => {
 
             const moveObject = { moveType, valueType, value, row, col }
             movesStack.current.push(moveObject)
-            
+
             // again these three updates are together
             updateMainNumbers(mainNumbersDup)
             updateNotesInfo(notesInfoDup)
         }
-        
+
         addListener(EVENTS.ERASER_CLICKED, handler)
         return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
@@ -340,15 +337,15 @@ const useGameBoard = (gameState, pencilState) => {
     // EVENTS.FAST_PENCIL_CLICKED
     useEffect(() => {
         const handler = () => {
-            for (let row=0;row<9;row++) {
-                for (let col=0;col<9;col++) {
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
                     if (!mainNumbers[row][col].value) {
                         let notesUpdated = false
-                        for (let num=1;num<=9;num++) {
-                            const { show } = notesInfo[row][col][num-1]
+                        for (let num = 1; num <= 9; num++) {
+                            const { show } = notesInfo[row][col][num - 1]
                             if (!show && !duplicacyPresent(row, col, num, mainNumbers)) {
                                 notesUpdated = true
-                                notesInfo[row][col][num-1].show = 1 - show
+                                notesInfo[row][col][num - 1].show = 1 - show
                             }
                         }
                         if (notesUpdated) notesInfo[row][col] = [...notesInfo[row][col]]
@@ -372,14 +369,17 @@ const useGameBoard = (gameState, pencilState) => {
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
     }, [selectedCell, mainNumbers])
 
-    const onCellClick = useCallback((row, col) => {
-        if (gameState !== GAME_STATE.ACTIVE) return
-        selectedCellMainValue.current = mainNumbers[row][col].value
-        selectCell(selectedCell => {
-            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
-            return selectedCell
-        })
-    }, [mainNumbers, gameState])
+    const onCellClick = useCallback(
+        (row, col) => {
+            if (gameState !== GAME_STATE.ACTIVE) return
+            selectedCellMainValue.current = mainNumbers[row][col].value
+            selectCell(selectedCell => {
+                if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
+                return selectedCell
+            })
+        },
+        [mainNumbers, gameState],
+    )
 
     return {
         mainNumbers,
@@ -390,6 +390,4 @@ const useGameBoard = (gameState, pencilState) => {
     }
 }
 
-export {
-    useGameBoard,
-}
+export { useGameBoard }

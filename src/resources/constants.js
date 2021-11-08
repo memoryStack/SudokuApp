@@ -1,4 +1,3 @@
-
 // key is level name and value is number of clues for that level
 
 const PREVIOUS_GAME_STATUS = {
@@ -22,25 +21,25 @@ const LEVELS_CLUES_INFO = {
 }
 
 const DEFAULT_BEST_STATS = {
-    'Easy': {
+    Easy: {
         time: {},
         mistakes: -1,
     },
-    'Medium': {
+    Medium: {
         time: {},
         mistakes: -1,
     },
-    'Hard': {
+    Hard: {
         time: {},
         mistakes: -1,
     },
-    'Expert': {
+    Expert: {
         time: {},
         mistakes: -1,
     },
 }
 
-// TODO: make a directory named `event` and  add these constants there along with the 
+// TODO: make a directory named `event` and  add these constants there along with the
 // GlobalEvetBus file
 
 const CELL_ACTION_EVENTS = {

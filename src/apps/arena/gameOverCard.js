@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet,  } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { noOperationFunction } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
@@ -17,13 +17,13 @@ const styles = StyleSheet.create({
         width: '70%',
     },
     congratsText: {
-        fontSize: 30, 
+        fontSize: 30,
         fontWeight: 'bold',
         marginVertical: 8,
     },
     statsContainer: {
         marginTop: 20,
-        width: '100%'
+        width: '100%',
     },
     statContainer: {
         flexDirection: 'row',
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     },
     statText: {
         fontSize: 16,
-    },    
+    },
     gameUnsolvedMsg: {
         textAlign: 'center',
     },
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     timeStatContainer: {
         flexDirection: 'row',
-    }
+    },
 })
 
 const getTimeView = (timeTaken = {}) => {
@@ -59,13 +59,7 @@ const getTimeView = (timeTaken = {}) => {
 
 // TODO: change this file name to something generic
 const GameOverCard_ = ({ gameState, stats, openNextGameMenu }) => {
-
-    const {
-        mistakes,
-        difficultyLevel,
-        time,
-        hintsUsed,
-    } = stats
+    const { mistakes, difficultyLevel, time, hintsUsed } = stats
 
     const gameSolved = gameState === GAME_STATE.OVER_SOLVED
     const gameUnsolved = gameState === GAME_STATE.OVER_UNSOLVED
@@ -102,23 +96,18 @@ const GameOverCard_ = ({ gameState, stats, openNextGameMenu }) => {
     }
 
     const getGameUnsolvedView = () => (
-        <Text style={styles.gameUnsolvedMsg}>
-            {'you have reached the maximum mistakes limit\nGood Luck Next Time'}
-        </Text>
+        <Text style={styles.gameUnsolvedMsg}>{'you have reached the maximum mistakes limit\nGood Luck Next Time'}</Text>
     )
 
     return (
-        <Touchable 
+        <Touchable
             touchable={TouchableTypes.opacity}
             activeOpacity={1}
             onPress={noOperationFunction}
             style={styles.container}
         >
             {gameSolved ? getGameSolvedView() : gameUnsolved ? getGameUnsolvedView() : null}
-            <NewGameButton 
-                onClick={openNextGameMenu}
-                containerStyle={styles.newGameButtonContainer}
-            />
+            <NewGameButton onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
         </Touchable>
     )
 }

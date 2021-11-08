@@ -17,7 +17,6 @@ const Page_ = ({
     onFocus = noOperationFunction,
     onBlur = noOperationFunction,
 }) => {
-
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')
 
     const handleFocus = useCallback(() => {
@@ -32,12 +31,15 @@ const Page_ = ({
         onBlur()
     }, [isPageInFocus, onBlur])
 
-    const handleAppStateChange = useCallback(nextAppState => {
-        const hasComeToBlur = OUT_OF_FOCUS_APP_STATES.indexOf(nextAppState) !== -1
-        const hasComeToFocus = nextAppState === 'active'
-        if (!isPageInFocus && hasComeToFocus) handleFocus()
-        if (isPageInFocus && hasComeToBlur) handleBlur()
-    }, [isPageInFocus, handleFocus, handleBlur])
+    const handleAppStateChange = useCallback(
+        nextAppState => {
+            const hasComeToBlur = OUT_OF_FOCUS_APP_STATES.indexOf(nextAppState) !== -1
+            const hasComeToFocus = nextAppState === 'active'
+            if (!isPageInFocus && hasComeToFocus) handleFocus()
+            if (isPageInFocus && hasComeToBlur) handleBlur()
+        },
+        [isPageInFocus, handleFocus, handleBlur],
+    )
 
     // all the events for koowing that page is actually in focus or not
     useEffect(() => {
@@ -57,10 +59,7 @@ const Page_ = ({
     }, [handleAppStateChange, handleFocus, handleBlur])
 
     return (
-        <SafeAreaView
-            onLayout={onLayout}
-            style={styles.safeAreaView}
-        >
+        <SafeAreaView onLayout={onLayout} style={styles.safeAreaView}>
             {children}
         </SafeAreaView>
     )
