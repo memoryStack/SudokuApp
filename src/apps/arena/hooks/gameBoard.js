@@ -4,6 +4,7 @@ import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { duplicacyPresent } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
+import { getSmartHint } from '../utils/smartHint'
 
 const initBoardData = () => {
     const movesStack = []
@@ -99,6 +100,7 @@ const useGameBoard = (gameState, pencilState) => {
     const [mainNumbers, updateMainNumbers] = useState(initialMainNumbers)
     const [notesInfo, updateNotesInfo] = useState(initialNotes)
     const [selectedCell, selectCell] = useState(initialSelectedCell)
+    const [showSmartHint, setSmartHint] = useState(false)
     const selectedCellMainValue = useRef(mainNumbers[selectedCell.row][selectedCell.col].value)
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
@@ -358,12 +360,32 @@ const useGameBoard = (gameState, pencilState) => {
         return () => removeListener(EVENTS.FAST_PENCIL_CLICKED, handler)
     }, [mainNumbers, notesInfo])
 
-    // EVENTS.HINT_CLICKED
+    // EVENTS.HINT_CLICKED {it will fill the cell with the solution value directly}
+    // useEffect(() => {
+    //     const handler = () => {
+    //         const { row, col } = selectedCell
+    //         if (!mainNumbers[row][col].value)
+    //             emit(EVENTS.INPUT_NUMBER_CLICKED, { number: mainNumbers[row][col].solutionValue, isHintUsed: true })
+    //     }
+    //     addListener(EVENTS.HINT_CLICKED, handler)
+    //     return () => removeListener(EVENTS.HINT_CLICKED, handler)
+    // }, [selectedCell, mainNumbers])
+
+    // it will provide the smart hint with the step wise step logic
     useEffect(() => {
         const handler = () => {
             const { row, col } = selectedCell
-            if (!mainNumbers[row][col].value)
-                emit(EVENTS.INPUT_NUMBER_CLICKED, { number: mainNumbers[row][col].solutionValue, isHintUsed: true })
+            if (!mainNumbers[row][col].value) {
+                getSmartHint(selectedCell, mainNumbers)
+                    .then(value => {
+                        console.log('@@@@ value', value)
+                    })
+                    .catch(error => {
+                        __DEV__ && console.log(error)
+                    })
+            } else {
+                // TODO: show some popup for dummies
+            }
         }
         addListener(EVENTS.HINT_CLICKED, handler)
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
@@ -387,6 +409,7 @@ const useGameBoard = (gameState, pencilState) => {
         selectedCell,
         selectedCellMainValue: selectedCellMainValue.current,
         onCellClick,
+        showSmartHint,
     }
 }
 

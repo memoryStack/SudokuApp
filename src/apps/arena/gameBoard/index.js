@@ -41,6 +41,7 @@ const Board_ = ({
         return Styles.clueNumColor
     }
 
+    // this is going to get complicated, i guess it's better to break it
     const getBoxBackgroundColor = (row, col) => {
         if (gameState === GAME_STATE.INACTIVE) return null
         const { row: selectedCellRow = 0, col: selectedCellCol = 0 } = selectedCell
@@ -53,7 +54,7 @@ const Board_ = ({
         if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells
         if (isSameHouseAsSelected) return Styles.sameHouseCellBGColor
         if (!isSameHouseAsSelected && isSameValueAsSelected) return Styles.diffHouseSameValueBGColor
-        return null
+        return Styles.defaultCellBGColor
     }
 
     const renderRow = (row, key) => {

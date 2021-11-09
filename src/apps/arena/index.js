@@ -76,6 +76,15 @@ const styles = StyleSheet.create({
         width: '100%',
         marginVertical: 20,
     },
+    hintsBlurView: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(0, 0, 0, .5)',
+    },
+    sudokuBoardContainer: {
+        zIndex: 1,
+    },
 })
 
 const Arena_ = () => {
@@ -85,7 +94,7 @@ const Arena_ = () => {
 
     const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions(gameState)
 
-    const { mainNumbers, notesInfo, selectedCell, selectedCellMainValue, onCellClick } = useGameBoard(
+    const { mainNumbers, notesInfo, selectedCell, selectedCellMainValue, onCellClick, showSmartHint } = useGameBoard(
         gameState,
         pencilState,
     )
@@ -181,14 +190,16 @@ const Arena_ = () => {
                     <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
                     <Timer gameState={gameState} time={time} onClick={onTimerClick} />
                 </View>
-                <Board
-                    gameState={gameState}
-                    mainNumbers={mainNumbers}
-                    notesInfo={notesInfo}
-                    selectedCell={selectedCell}
-                    selectedCellMainValue={selectedCellMainValue}
-                    onCellClick={onCellClick}
-                />
+                <View style={showSmartHint ? styles.sudokuBoardContainer : null}>
+                    <Board
+                        gameState={gameState}
+                        mainNumbers={mainNumbers}
+                        notesInfo={notesInfo}
+                        selectedCell={selectedCell}
+                        selectedCellMainValue={selectedCellMainValue}
+                        onCellClick={onCellClick}
+                    />
+                </View>
                 <View style={styles.cellActionsContainer}>
                     <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onUndoClick} />
                     <Pencil
@@ -229,6 +240,7 @@ const Arena_ = () => {
                         </Animated.View>
                     </Touchable>
                 ) : null}
+                {showSmartHint ? <View style={styles.hintsBlurView} /> : null}
             </View>
         </Page>
     )

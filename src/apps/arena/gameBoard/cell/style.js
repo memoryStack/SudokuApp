@@ -11,7 +11,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         // height: CELL_HEIGHT,
         // width: CELL_WIDTH,
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
     },
     mainNumberText: {
         // fontSize

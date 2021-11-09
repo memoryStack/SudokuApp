@@ -51,6 +51,9 @@ export const Styles = StyleSheet.create({
     diffHouseSameValueBGColor: {
         backgroundColor: 'rgb(172, 225, 248)',
     },
+    defaultCellBGColor: {
+        backgroundColor: 'white',
+    },
     wronglyFilledNumColor: {
         color: 'rgb(167, 51, 37)',
     },
