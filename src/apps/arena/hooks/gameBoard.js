@@ -88,7 +88,7 @@ const removeNotesAfterCellFilled = (notesInfo, row, col, num) => {
     return notesErasedByMainValue
 }
 
-const useGameBoard = (gameState, pencilState) => {
+const useGameBoard = (gameState, pencilState, hints) => {
     const {
         movesStack: initialmovesStack,
         notesInfo: initialNotes,
@@ -363,13 +363,14 @@ const useGameBoard = (gameState, pencilState) => {
     // EVENTS.HINT_CLICKED {it will fill the cell with the solution value directly}
     // useEffect(() => {
     //     const handler = () => {
+    //         // if (!hints) return
     //         const { row, col } = selectedCell
     //         if (!mainNumbers[row][col].value)
     //             emit(EVENTS.INPUT_NUMBER_CLICKED, { number: mainNumbers[row][col].solutionValue, isHintUsed: true })
     //     }
     //     addListener(EVENTS.HINT_CLICKED, handler)
     //     return () => removeListener(EVENTS.HINT_CLICKED, handler)
-    // }, [selectedCell, mainNumbers])
+    // }, [selectedCell, mainNumbers, hints])
 
     // it will provide the smart hint with the step wise step logic
     useEffect(() => {
@@ -377,8 +378,8 @@ const useGameBoard = (gameState, pencilState) => {
             const { row, col } = selectedCell
             if (!mainNumbers[row][col].value) {
                 getSmartHint(selectedCell, mainNumbers)
-                    .then(value => {
-                        console.log('@@@@ value', value)
+                    .then(hintInfo => {
+                        console.log('@@@@ hintInfo', hintInfo)
                     })
                     .catch(error => {
                         __DEV__ && console.log(error)

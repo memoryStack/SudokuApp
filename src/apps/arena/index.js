@@ -97,6 +97,7 @@ const Arena_ = () => {
     const { mainNumbers, notesInfo, selectedCell, selectedCellMainValue, onCellClick, showSmartHint } = useGameBoard(
         gameState,
         pencilState,
+        hints,
     )
 
     const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState)
