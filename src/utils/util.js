@@ -703,7 +703,7 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
         }
     }
 
-    // TODO: change prettier rules to handle these kind of for loops issues
+    // just write loops with {} body to avoid the prettier issue
     // fully solved puzzle is ready and store the solution at this point
     for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++) sudokuSolution[i][j].value = sudokuBoard[i][j].value
 
