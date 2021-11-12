@@ -18,17 +18,20 @@ export const shouldSaveGameState = (currentGameState, previousGameState) => {
 }
 
 export const duplicacyPresent = (row, col, num, mainNumbers) => {
-    for (let col = 0; col < 9; col++) if (mainNumbers[row][col].value === num) return 1 // check row
-    for (let row = 0; row < 9; row++) if (mainNumbers[row][col].value === num) return 1 // check column
+    for (let col = 0; col < 9; col++) {
+        if (mainNumbers[row][col].value === num) return 1 // check row
+    }
+    for (let row = 0; row < 9; row++) {
+        if (mainNumbers[row][col].value === num) return 1 // check column
+    }
 
     const blockRow = row - (row % 3)
     const blockColumn = col - (col % 3)
-    for (
-        let i = 0;
-        i < 3;
-        i++ // check in box
-    )
-        for (let j = 0; j < 3; j++) if (mainNumbers[blockRow + i][blockColumn + j].value === num) return 1
+    for (let i = 0;i < 3;i++) { // check in block
+        for (let j = 0; j < 3; j++) {
+            if (mainNumbers[blockRow + i][blockColumn + j].value === num) return 1
+        }
+    }
     return 0
 }
 
