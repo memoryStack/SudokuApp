@@ -27,7 +27,8 @@ export const duplicacyPresent = (row, col, num, mainNumbers) => {
 
     const blockRow = row - (row % 3)
     const blockColumn = col - (col % 3)
-    for (let i = 0;i < 3;i++) { // check in block
+    for (let i = 0; i < 3; i++) {
+        // check in block
         for (let j = 0; j < 3; j++) {
             if (mainNumbers[blockRow + i][blockColumn + j].value === num) return 1
         }
