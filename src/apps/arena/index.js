@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useEffect, useRef, useReducer } from 'react'
 import { View, Animated, Text, StyleSheet, Dimensions } from 'react-native'
 import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
@@ -20,6 +20,7 @@ import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions'
 import { useReferee } from './hooks/referee'
 import { useGameBoard } from './hooks/gameBoard'
 import { useManageGame } from './hooks/gameHandler'
+import SmartHintHC from './smartHintHC'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -76,12 +77,6 @@ const styles = StyleSheet.create({
         width: '100%',
         marginVertical: 20,
     },
-    hintsBlurView: {
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'rgba(0, 0, 0, .5)',
-    },
     sudokuBoardContainer: {
         zIndex: 1,
     },
@@ -94,13 +89,22 @@ const Arena_ = () => {
 
     const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions(gameState)
 
-    const { mainNumbers, notesInfo, selectedCell, selectedCellMainValue, onCellClick, showSmartHint } = useGameBoard(
-        gameState,
-        pencilState,
-        hints,
-    )
+    const {
+        mainNumbers,
+        notesInfo,
+        selectedCell,
+        selectedCellMainValue,
+        onCellClick,
+        smartHintInfo: {
+            show: showSmartHint,
+            info: {
+                cellsToFocusData = {},
+                techniqueInfo: { title: smartHintTitle = '', logic: smartHintLogic = '' } = {},
+            } = {},
+        } = {},
+    } = useGameBoard(gameState, pencilState, hints)
 
-    const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState)
+    const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState, showSmartHint)
 
     const [showCustomPuzzleHC, setShowCustomPuzzleHC] = useState(false)
 
@@ -181,6 +185,10 @@ const Arena_ = () => {
         [gameState],
     )
 
+    const onSmartHintHCClosed = useCallback(() => {
+        emit(EVENTS.SMART_HINTS_HC_CLOSED)
+    }, [])
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus}>
             <View style={styles.container} onLayout={onParentLayout}>
@@ -199,6 +207,8 @@ const Arena_ = () => {
                         selectedCell={selectedCell}
                         selectedCellMainValue={selectedCellMainValue}
                         onCellClick={onCellClick}
+                        showSmartHint={showSmartHint}
+                        smartHintCellsHighlightInfo={cellsToFocusData}
                     />
                 </View>
                 <View style={styles.cellActionsContainer}>
@@ -241,7 +251,14 @@ const Arena_ = () => {
                         </Animated.View>
                     </Touchable>
                 ) : null}
-                {showSmartHint ? <View style={styles.hintsBlurView} /> : null}
+                {showSmartHint ? (
+                    <SmartHintHC
+                        parentHeight={pageHeight}
+                        title={smartHintTitle}
+                        logic={smartHintLogic}
+                        onSmartHintHCClosed={onSmartHintHCClosed}
+                    />
+                ) : null}
             </View>
         </Page>
     )

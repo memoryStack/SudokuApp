@@ -100,7 +100,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
     const [mainNumbers, updateMainNumbers] = useState(initialMainNumbers)
     const [notesInfo, updateNotesInfo] = useState(initialNotes)
     const [selectedCell, selectCell] = useState(initialSelectedCell)
-    const [showSmartHint, setSmartHint] = useState(false)
+    const [smartHintInfo, setSmartHintData] = useState({ show: false, info: {} })
     const selectedCellMainValue = useRef(mainNumbers[selectedCell.row][selectedCell.col].value)
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
@@ -378,8 +378,9 @@ const useGameBoard = (gameState, pencilState, hints) => {
             const { row, col } = selectedCell
             if (!mainNumbers[row][col].value) {
                 getSmartHint(selectedCell, mainNumbers)
-                    .then(hintInfo => {
-                        console.log('@@@@ hintInfo', hintInfo)
+                    .then(info => {
+                        console.log('@@@@ hintInfo', info)
+                        if (info) setSmartHintData({ show: true, info })
                     })
                     .catch(error => {
                         __DEV__ && console.log(error)
@@ -392,16 +393,24 @@ const useGameBoard = (gameState, pencilState, hints) => {
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
     }, [selectedCell, mainNumbers])
 
+    useEffect(() => {
+        const handler = () => {
+            setSmartHintData({ show: false, info: {} })
+        }
+        addListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
+        return () => removeListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
+    }, [])
+
     const onCellClick = useCallback(
         (row, col) => {
-            if (gameState !== GAME_STATE.ACTIVE) return
+            if (gameState !== GAME_STATE.ACTIVE || smartHintInfo.show) return
             selectedCellMainValue.current = mainNumbers[row][col].value
             selectCell(selectedCell => {
                 if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
                 return selectedCell
             })
         },
-        [mainNumbers, gameState],
+        [mainNumbers, gameState, smartHintInfo],
     )
 
     return {
@@ -410,7 +419,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
         selectedCell,
         selectedCellMainValue: selectedCellMainValue.current,
         onCellClick,
-        showSmartHint,
+        smartHintInfo,
     }
 }
 

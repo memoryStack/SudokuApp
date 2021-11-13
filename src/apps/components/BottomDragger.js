@@ -10,6 +10,7 @@ const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = 0.9
 const XXSMALL_SIZE = 8
 const XSMALL_SPACE = 4
 const WINDOW_HEIGHT = Dimensions.get('window').height
+export const HC_OVERLAY_BG_COLOR = 'rgba(0, 0, 0, .8)'
 const styles = StyleSheet.create({
     slidingParentContainer: {
         position: 'absolute',
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, .8)',
+        backgroundColor: HC_OVERLAY_BG_COLOR,
     },
     header: {
         justifyContent: 'space-around',
@@ -56,6 +57,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         onDraggerOpened = noOperationFunction,
         onDraggerClosed = noOperationFunction,
         stopBackgroundClickClose = false,
+        showBackgroundOverlay = true,
     } = props
 
     // consider children as full screen height later on set it to it's real height

@@ -27,7 +27,7 @@ const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
     return { hours, minutes, seconds }
 }
 
-const useReferee = gameState => {
+const useReferee = (gameState, showSmartHint) => {
     const timerId = useRef(null)
     const {
         difficultyLevel: defaultDifficultyLevel,
@@ -99,10 +99,10 @@ const useReferee = gameState => {
 
     // hook to start timer
     useEffect(() => {
-        if (gameState === GAME_STATE.ACTIVE) startTimer()
+        if (gameState === GAME_STATE.ACTIVE && !showSmartHint) startTimer()
         else stopTimer()
         return () => stopTimer()
-    }, [gameState])
+    }, [gameState, showSmartHint])
 
     // on mistake is made
     useEffect(() => {

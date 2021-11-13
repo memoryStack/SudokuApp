@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, CELL_HEIGHT, OUTER_THIN_BORDER_WIDTH } from './dimensions'
+import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
 
 export const Styles = StyleSheet.create({
     board: {
@@ -8,6 +9,7 @@ export const Styles = StyleSheet.create({
         height: GAME_BOARD_HEIGHT,
         width: GAME_BOARD_WIDTH,
         marginHorizontal: 'auto',
+        backgroundColor: 'white',
     },
     gridBorderContainer: {
         position: 'absolute',
@@ -50,6 +52,10 @@ export const Styles = StyleSheet.create({
     },
     diffHouseSameValueBGColor: {
         backgroundColor: 'rgb(172, 225, 248)',
+    },
+    smartHintOutOfFocusBGColor: {
+        backgroundColor: HC_OVERLAY_BG_COLOR,
+        // backgroundColor: 'rgba(0, 0, 0, .2)',
     },
     defaultCellBGColor: {
         backgroundColor: 'white',

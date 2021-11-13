@@ -51,7 +51,7 @@ const SMART_HINTS_TECHNIQUES = {
 const SMART_HINTS_CELLS_BG_COLOR = {
     SELECTED: boardStyles.selectedCellBGColor,
     IN_FOCUS_DEFAULT: boardStyles.defaultCellBGColor,
-    WINNER_CANDIDATE_PROHIBITED_EMPTY_CELLS: boardStyles.wronglyFilledNumColor,
+    WINNER_CANDIDATE_PROHIBITED_EMPTY_CELLS: { backgroundColor: boardStyles.wronglyFilledNumColor.color },
 }
 
 const copyBoardMainNumbers = mainNumbers => {
@@ -223,7 +223,6 @@ const getNakedSingleTechniqueToFocus = (row, col, type, mainNumbers) => {
 // naked single ends here
 
 // hidden singles starts here
-
 const getHiddenSingleLogic = (type, value) => {
     return `in the highlighted ${type}, ${value} can't appear in cells highlighted with red color due to the highlighted instances of same number. So it has only one place where it can come`
 }

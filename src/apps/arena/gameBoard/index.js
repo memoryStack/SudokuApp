@@ -21,6 +21,8 @@ const Board_ = ({
     selectedCell = {},
     selectedCellMainValue = 0,
     onCellClick,
+    showSmartHint,
+    smartHintCellsHighlightInfo,
 }) => {
     const sameValueAsSelectedBox = (row, col) =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[row][col].value
@@ -41,8 +43,19 @@ const Board_ = ({
         return Styles.clueNumColor
     }
 
+    const getSmartHintActiveBgColor = (row, col) => {
+        return (
+            (smartHintCellsHighlightInfo[row] &&
+                smartHintCellsHighlightInfo[row][col] &&
+                smartHintCellsHighlightInfo[row][col].bgColor) ||
+            Styles.smartHintOutOfFocusBGColor
+        )
+    }
+
     // this is going to get complicated, i guess it's better to break it
     const getBoxBackgroundColor = (row, col) => {
+        if (showSmartHint) return getSmartHintActiveBgColor(row, col)
+
         if (gameState === GAME_STATE.INACTIVE) return null
         const { row: selectedCellRow = 0, col: selectedCellCol = 0 } = selectedCell
         const isSelected = selectedCellRow === row && selectedCellCol === col
