@@ -224,6 +224,10 @@ const getNakedSingleTechniqueToFocus = (row, col, type, mainNumbers) => {
 
 // hidden singles starts here
 
+const getHiddenSingleLogic = (type, value) => {
+    return `in the highlighted ${type}, ${value} can't appear in cells highlighted with red color due to the highlighted instances of same number. So it has only one place where it can come`
+}
+
 const getCurrentCellNotes = (row, col, mainNumbers) => {
     const possibleCandiates = []
     const numbersAlreadyInHouses = {}
@@ -591,19 +595,15 @@ const getHiddenSingleInBlockData = (selectedRow, selectedCol, mainNumbers) => {
 
 const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
     let cellsToFocusData = null
-    let logic = ''
     switch (type) {
         case HIDDEN_SINGLE_TYPES.ROW:
             cellsToFocusData = getHiddenSingleInRowOrColData(row, col, HIDDEN_SINGLE_TYPES.ROW, mainNumbers)
-            logic = 'some msg to make specifically for row'
             break
         case HIDDEN_SINGLE_TYPES.COL:
             cellsToFocusData = getHiddenSingleInRowOrColData(row, col, HIDDEN_SINGLE_TYPES.COL, mainNumbers)
-            logic = 'some msg to make specifically for column'
             break
         case HIDDEN_SINGLE_TYPES.BLOCK:
             cellsToFocusData = getHiddenSingleInBlockData(row, col, mainNumbers)
-            logic = `in the highlighted ${type}, ${mainNumbers[row][col].solutionValue} can't appear in any other empty cell due to other highlighted instances of same number`
             break
     }
 
@@ -611,7 +611,7 @@ const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
         cellsToFocusData,
         techniqueInfo: {
             title: SMART_HINTS_TECHNIQUES.HIDDEN_SINGLE.TITLE,
-            logic,
+            logic: getHiddenSingleLogic(type, mainNumbers[row][col].solutionValue),
         },
     }
 }
