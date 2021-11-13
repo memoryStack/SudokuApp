@@ -224,21 +224,21 @@ const getNakedSingleTechniqueToFocus = (row, col, type, mainNumbers) => {
 
 // hidden singles starts here
 
-const getCurrentCellNotes = (row, col, boardMainNumbersCopy) => {
+const getCurrentCellNotes = (row, col, mainNumbers) => {
     const possibleCandiates = []
     const numbersAlreadyInHouses = {}
     for (let row = 0; row < 9; row++) {
-        const filledValue = boardMainNumbersCopy[row][col].value
+        const filledValue = mainNumbers[row][col].value
         if (filledValue) numbersAlreadyInHouses[filledValue] = true
     }
     for (let col = 0; col < 9; col++) {
-        const filledValue = boardMainNumbersCopy[row][col].value
+        const filledValue = mainNumbers[row][col].value
         if (filledValue) numbersAlreadyInHouses[filledValue] = true
     }
     const { blockNum } = getBlockAndBoxNum(row, col)
     for (let cellNo = 0; cellNo < 9; cellNo++) {
         const { row, col } = getRowAndCol(blockNum, cellNo)
-        const filledValue = boardMainNumbersCopy[row][col].value
+        const filledValue = mainNumbers[row][col].value
         if (filledValue) numbersAlreadyInHouses[filledValue] = true
     }
     for (let num = 1; num <= 9; num++) {
@@ -247,8 +247,8 @@ const getCurrentCellNotes = (row, col, boardMainNumbersCopy) => {
     return possibleCandiates
 }
 
-const checkHiddenSingle = (row, col, boardMainNumbersCopy) => {
-    const possibleCandiates = getCurrentCellNotes(row, col, boardMainNumbersCopy)
+const checkHiddenSingle = (row, col, mainNumbers) => {
+    const possibleCandiates = getCurrentCellNotes(row, col, mainNumbers)
     let singleType = ''
 
     for (let i = 0; i < possibleCandiates.length; i++) {
@@ -258,8 +258,8 @@ const checkHiddenSingle = (row, col, boardMainNumbersCopy) => {
         const { blockNum } = getBlockAndBoxNum(row, col)
         for (let cellNo = 0; cellNo < 9; cellNo++) {
             const { row, col } = getRowAndCol(blockNum, cellNo)
-            const isEmptyCell = boardMainNumbersCopy[row][col].value === 0
-            if (isEmptyCell && !duplicacyPresent(row, col, candidate, boardMainNumbersCopy)) {
+            const isEmptyCell = mainNumbers[row][col].value === 0
+            if (isEmptyCell && !duplicacyPresent(row, col, candidate, mainNumbers)) {
                 possibleOccurencesInHouse++
             }
         }
@@ -271,8 +271,8 @@ const checkHiddenSingle = (row, col, boardMainNumbersCopy) => {
         // check in col (more natural as per my experiance. would like to switch it as well just as a experience)
         possibleOccurencesInHouse = 0
         for (let row = 0; row < 9; row++) {
-            const isEmptyCell = boardMainNumbersCopy[row][col].value === 0
-            if (isEmptyCell && !duplicacyPresent(row, col, candidate, boardMainNumbersCopy)) {
+            const isEmptyCell = mainNumbers[row][col].value === 0
+            if (isEmptyCell && !duplicacyPresent(row, col, candidate, mainNumbers)) {
                 possibleOccurencesInHouse++
             }
         }
@@ -284,8 +284,8 @@ const checkHiddenSingle = (row, col, boardMainNumbersCopy) => {
         // check in row
         possibleOccurencesInHouse = 0
         for (let col = 0; col < 9; col++) {
-            const isEmptyCell = boardMainNumbersCopy[row][col].value === 0
-            if (isEmptyCell && !duplicacyPresent(row, col, candidate, boardMainNumbersCopy)) {
+            const isEmptyCell = mainNumbers[row][col].value === 0
+            if (isEmptyCell && !duplicacyPresent(row, col, candidate, mainNumbers)) {
                 possibleOccurencesInHouse++
             }
         }
@@ -323,27 +323,21 @@ const getCandidateInstanceCoordinatesInBlock = (candidate, block, mainNumbers) =
     return null
 }
 
-const highlightBlockRowCells = (
+const hiddenSingleInRowHighlightBlockCells = ({
     selectedRow,
     selectedCol,
     blockNum,
     mainNumbers,
     cellsToFocusData,
     candidateCordinatesInBlock,
-) => {
+}) => {
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
-    if (candidateCordinatesInBlock) {
-        const { row, col } = candidateCordinatesInBlock
-        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
-        cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-    }
     if (!cellsToFocusData[selectedRow]) cellsToFocusData[selectedRow] = {}
     const currentBlockStartColumn = (blockNum % 3) * 3
     for (let i = 0; i < 3; i++) {
         const col = currentBlockStartColumn + i
         if (col === selectedCol) continue
         if (!mainNumbers[selectedRow][col].value) {
-            // search in this column which cell has winner candidate
             if (!candidateCordinatesInBlock) {
                 const { row: instanceRow, col: instanceCol } = getCandidateInstanceCoordinatesInCol(
                     winnerCandidate,
@@ -362,47 +356,114 @@ const highlightBlockRowCells = (
     }
 }
 
-// row and column are going to have same logic, let's write them down in the same function only
-const getHiddenSingleInRowData = (selectedRow, selectedCol, mainNumbers) => {
+const hiddenSingleInColHighlightBlockCells = ({
+    selectedRow,
+    selectedCol,
+    blockNum,
+    mainNumbers,
+    cellsToFocusData,
+    candidateCordinatesInBlock,
+}) => {
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
+    const currentBlockStartRow = Math.floor(blockNum / 3) * 3
+    for (let i = 0; i < 3; i++) {
+        const row = currentBlockStartRow + i
+        if (row === selectedRow) continue
+        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
+        if (!mainNumbers[row][selectedCol].value) {
+            if (!candidateCordinatesInBlock) {
+                const { row: instanceRow, col: instanceCol } = getCandidateInstanceCoordinatesInRow(
+                    winnerCandidate,
+                    row,
+                    mainNumbers,
+                )
+                if (!cellsToFocusData[instanceRow]) cellsToFocusData[instanceRow] = {}
+                cellsToFocusData[instanceRow][instanceCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+            }
+            cellsToFocusData[row][selectedCol] = {
+                bgColor: SMART_HINTS_CELLS_BG_COLOR.WINNER_CANDIDATE_PROHIBITED_EMPTY_CELLS,
+            }
+        } else {
+            cellsToFocusData[row][selectedCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+        }
+    }
+}
+
+const highlightBlockCells = ({ selectedRow, selectedCol, blockNum, mainNumbers, cellsToFocusData, singleType }) => {
+    const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
+    const candidateCordinatesInBlock = getCandidateInstanceCoordinatesInBlock(winnerCandidate, blockNum, mainNumbers)
+    if (candidateCordinatesInBlock) {
+        const { row, col } = candidateCordinatesInBlock
+        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
+        cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+    }
+
+    if (singleType === HIDDEN_SINGLE_TYPES.ROW) {
+        hiddenSingleInRowHighlightBlockCells({
+            selectedRow,
+            selectedCol,
+            blockNum,
+            mainNumbers,
+            cellsToFocusData,
+            candidateCordinatesInBlock,
+        })
+    } else {
+        hiddenSingleInColHighlightBlockCells({
+            selectedRow,
+            selectedCol,
+            blockNum,
+            mainNumbers,
+            cellsToFocusData,
+            candidateCordinatesInBlock,
+        })
+    }
+}
+
+const getNextNeighbourBlock = (currentBlockNum, type) => {
+    let neighbourBlockNum = -1
+    if (type === HIDDEN_SINGLE_TYPES.ROW) {
+        neighbourBlockNum = currentBlockNum + 1
+        if (neighbourBlockNum % 3 === 0) neighbourBlockNum -= 3
+    } else if (type === HIDDEN_SINGLE_TYPES.COL) {
+        neighbourBlockNum = (currentBlockNum + 3) % 9
+    }
+    return neighbourBlockNum
+}
+
+// row and column are going to have same logic, let's write them down in the same function only
+// let's make it generic for col as well
+const getHiddenSingleInRowOrColData = (selectedRow, selectedCol, type, mainNumbers) => {
     const cellsToFocusData = {}
     if (!cellsToFocusData[selectedRow]) cellsToFocusData[selectedRow] = {}
     cellsToFocusData[selectedRow][selectedCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
 
     const { blockNum: currentBlockNum } = getBlockAndBoxNum(selectedRow, selectedCol)
-    highlightBlockRowCells(selectedRow, selectedCol, currentBlockNum, mainNumbers, cellsToFocusData)
+    highlightBlockCells({
+        selectedRow,
+        selectedCol,
+        blockNum: currentBlockNum,
+        mainNumbers,
+        cellsToFocusData,
+        singleType: type,
+    })
 
     // check in 2 neighbour blocks
-    let neighbourBlockNum = currentBlockNum + 1
-    if (neighbourBlockNum % 3 === 0) neighbourBlockNum -= 3
-    let candidateCordinates = getCandidateInstanceCoordinatesInBlock(winnerCandidate, neighbourBlockNum, mainNumbers)
-    highlightBlockRowCells(
-        selectedRow,
-        selectedCol,
-        neighbourBlockNum,
-        mainNumbers,
-        cellsToFocusData,
-        candidateCordinates,
-    )
-
-    neighbourBlockNum++
-    if (neighbourBlockNum % 3 === 0) neighbourBlockNum -= 3
-    candidateCordinates = getCandidateInstanceCoordinatesInBlock(winnerCandidate, neighbourBlockNum, mainNumbers)
-    highlightBlockRowCells(
-        selectedRow,
-        selectedCol,
-        neighbourBlockNum,
-        mainNumbers,
-        cellsToFocusData,
-        candidateCordinates,
-    )
-
+    let neighboursBlocks = 2
+    let neighbourBlockNum = getNextNeighbourBlock(currentBlockNum, type)
+    while (neighboursBlocks--) {
+        highlightBlockCells({
+            selectedRow,
+            selectedCol,
+            blockNum: neighbourBlockNum,
+            mainNumbers,
+            cellsToFocusData,
+            singleType: type,
+        })
+        neighbourBlockNum = getNextNeighbourBlock(neighbourBlockNum, type)
+    }
     return cellsToFocusData
 }
 
-const getHiddenSingleInColData = (selectedRow, selectedCol, mainNumbers) => {}
-
-// test it first before moving to above implementations
 const getHiddenSingleInBlockData = (selectedRow, selectedCol, mainNumbers) => {
     // highlight all the cells of the current block
     const { blockNum } = getBlockAndBoxNum(selectedRow, selectedCol)
@@ -533,12 +594,12 @@ const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
     let logic = ''
     switch (type) {
         case HIDDEN_SINGLE_TYPES.ROW:
-            cellsToFocusData = getHiddenSingleInRowData(row, col, mainNumbers)
-            logic = 'some msg to make'
+            cellsToFocusData = getHiddenSingleInRowOrColData(row, col, HIDDEN_SINGLE_TYPES.ROW, mainNumbers)
+            logic = 'some msg to make specifically for row'
             break
         case HIDDEN_SINGLE_TYPES.COL:
-            cellsToFocusData = getHiddenSingleInColData(row, col, mainNumbers)
-            // logic
+            cellsToFocusData = getHiddenSingleInRowOrColData(row, col, HIDDEN_SINGLE_TYPES.COL, mainNumbers)
+            logic = 'some msg to make specifically for column'
             break
         case HIDDEN_SINGLE_TYPES.BLOCK:
             cellsToFocusData = getHiddenSingleInBlockData(row, col, mainNumbers)
@@ -554,10 +615,8 @@ const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
         },
     }
 }
-
 // hidden singles ends here
 
-// deep clone the mainNumbers
 // write this in JS and if performance is not good then shift to native side
 const getSmartHint = async ({ row, col }, originalMainNumbers) => {
     const boardMainNumbersCopy = copyBoardMainNumbers(originalMainNumbers)
