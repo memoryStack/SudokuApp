@@ -10,8 +10,6 @@ import { Inputpanel } from '../inputPanel'
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { getNumberOfSolutions } from '../utils/util'
-import { CELL_ACTION_ICON_BOX_DIMENSION } from '../../arena/index'
-import { Eraser } from '../cellActions/eraser'
 
 const INPUT_NUMBER_CLICK_EVENT_PREFIX = 'CUSTOM_PUZZLE_'
 const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
