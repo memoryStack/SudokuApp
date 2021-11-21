@@ -4,7 +4,7 @@ import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit, addListener, removeListener } from '../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE } from '../../resources/constants'
+import { EVENTS, GAME_STATE, DEEPLINK_HOST_NAME } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
@@ -207,7 +207,7 @@ const Arena_ = () => {
 
         const options = {
             message: 'Solve This Sudoku Challenge',
-            url: `https://www.amazing-sudoku.com/puzzle/${puzzleString}`,
+            url: `${DEEPLINK_HOST_NAME}${puzzleString}`,
         }
         Share.open(options)
             .then(noOperationFunction, noOperationFunction)

@@ -91,6 +91,7 @@ const SCREEN_NAME = {
 }
 
 const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'
+const DEEPLINK_HOST_NAME = 'https://www.amazing-sudoku.com/puzzle/'
 
 export {
     PREVIOUS_GAME_STATUS,
@@ -102,4 +103,5 @@ export {
     GAME_STATE,
     SCREEN_NAME,
     CUSTOMIZED_PUZZLE_LEVEL_TITLE,
+    DEEPLINK_HOST_NAME,
 }

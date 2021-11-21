@@ -6,6 +6,7 @@ import {
     GAME_STATE,
     LEVELS_CLUES_INFO,
     CUSTOMIZED_PUZZLE_LEVEL_TITLE,
+    DEEPLINK_HOST_NAME,
 } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { shouldSaveGameState, getNumberOfSolutions } from '../utils/util'
@@ -35,13 +36,12 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
 
 const transformDeeplinkPuzzle = url => {
     console.log('deeplink url is', url)
-    const startIndex = url.indexOf('puzzle')
+    const startIndex = url.indexOf(DEEPLINK_HOST_NAME)
     if (startIndex === -1) {
         // show popup about the format of the url
     }
 
-    // length of puzzle/ is 7
-    const boardMainNumbers = url.substring(startIndex + 7)
+    const boardMainNumbers = url.substring(DEEPLINK_HOST_NAME.length)
     console.log(boardMainNumbers)
     if (boardMainNumbers.length < 81) {
         // show some error  about the invalidity of the puzzle link
@@ -83,14 +83,7 @@ const useManageGame = () => {
 
     // resume previous game or start new game of previously solved level or take care of deeplinking
     useEffect(() => {
-        const handler = async () => {
-            // TODO: error handling
-            const initialUrl = await Linking.getInitialURL()
-            if (initialUrl) {
-                transformDeeplinkPuzzle(initialUrl)
-                return
-            }
-
+        const startPreviousGame = async () => {
             const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
             if (previousGameData) {
                 const state = previousGameData[GAME_DATA_KEYS.STATE]
@@ -111,7 +104,15 @@ const useManageGame = () => {
                 emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
             }
         }
-        handler()
+
+        Linking.getInitialURL()
+            .then(url => {
+                if (url) transformDeeplinkPuzzle(url)
+                else startPreviousGame()
+            })
+            .catch(error => {
+                console.log(__DEV__ && error)
+            })
     }, [])
 
     useEffect(() => {
