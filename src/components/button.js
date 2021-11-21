@@ -1,12 +1,13 @@
 import React from 'react'
 import { Text, StyleSheet } from 'react-native'
-import { Touchable, TouchableTypes } from '../components/Touchable'
-import { noOperationFunction } from '../../utils/util'
+import { Touchable, TouchableTypes } from '../apps/components/Touchable'
+import { noOperationFunction } from '../utils/util'
 
 const styles = StyleSheet.create({
     defaultContainer: {
         paddingVertical: 8,
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#4088da',
         borderRadius: 3,
     },

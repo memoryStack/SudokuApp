@@ -5,7 +5,7 @@ import { noOperationFunction } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
 import { GAME_STATE } from '../../resources/constants'
 import { getTimeComponentString } from './utils/util'
-import { Button } from './newGameButton'
+import { Button } from '../../components/button'
 import { NEW_GAME } from '../../resources/stringLiterals'
 
 const TROPHY_ICON_DIMENSION = 60
