@@ -112,6 +112,7 @@ const useManageGame = () => {
             })
             .catch(error => {
                 console.log(__DEV__ && error)
+                startPreviousGame()
             })
     }, [])
 
