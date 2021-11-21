@@ -239,11 +239,6 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX} gameState={GAME_STATE.ACTIVE} />
                 </View>
-                {/* <Eraser
-                    eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX}
-                    iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                    gameState={'ACTIVE'}
-                /> */}
                 <NewGameButton containerStyle={styles.playButtonContainer} onClick={handlePlayClick} text={'PLAY'} />
             </View>
         </BottomDragger>

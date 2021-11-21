@@ -21,10 +21,10 @@ import { useReferee } from './hooks/referee'
 import { useGameBoard } from './hooks/gameBoard'
 import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
+import Share from 'react-native-share'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
-let timeTaken = 0
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -79,6 +79,11 @@ const styles = StyleSheet.create({
     },
     sudokuBoardContainer: {
         zIndex: 1,
+    },
+    headerButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
     },
 })
 
@@ -189,11 +194,37 @@ const Arena_ = () => {
         emit(EVENTS.SMART_HINTS_HC_CLOSED)
     }, [])
 
+    const share = () => {
+        let puzzleString = ''
+
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                puzzleString = `${puzzleString}${mainNumbers[row][col].value}`
+            }
+        }
+
+        const options = {
+            message: 'Solve this Sudoku Challenge',
+            title: 'share sudoku puzzle',
+            url: `https://www.amazing-sudoku.com/puzzle/${puzzleString}`,
+        }
+
+        Share.open(options)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(error => {
+                __DEV__ && console.log(error)
+            })
+    }
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus}>
             <View style={styles.container} onLayout={onParentLayout}>
-                <NewGameButton onClick={newGameButtonClick} containerStyle={styles.newGameButtonContainer} />
-                <Text style={styles.refereeTextStyles}>{timeTaken}</Text>
+                <View style={styles.headerButtonsContainer}>
+                    <NewGameButton onClick={newGameButtonClick} containerStyle={styles.newGameButtonContainer} />
+                    <NewGameButton onClick={share} containerStyle={styles.newGameButtonContainer} />
+                </View>
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
                     <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>

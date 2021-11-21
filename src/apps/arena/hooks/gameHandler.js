@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Linking } from 'react-native'
 import {
     LEVEL_DIFFICULTIES,
     EVENTS,
@@ -7,7 +8,7 @@ import {
     CUSTOMIZED_PUZZLE_LEVEL_TITLE,
 } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { shouldSaveGameState } from '../utils/util'
+import { shouldSaveGameState, getNumberOfSolutions } from '../utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { usePrevious } from '../../../utils/customHooks'
 import { getKey } from '../../../utils/storage'
@@ -32,32 +33,85 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
     return mainNumbers
 }
 
+const transformDeeplinkPuzzle = url => {
+    console.log('deeplink url is', url)
+    const startIndex = url.indexOf('puzzle')
+    if (startIndex === -1) {
+        // show popup about the format of the url
+    }
+
+    // length of puzzle/ is 7
+    const boardMainNumbers = url.substring(startIndex + 7)
+    console.log(boardMainNumbers)
+    if (boardMainNumbers.length < 81) {
+        // show some error  about the invalidity of the puzzle link
+    } else {
+        const mainNumbers = new Array(9)
+        let cellNo = 0
+        for (let row = 0; row < 9; row++) {
+            const rowData = new Array(9)
+            for (let col = 0; col < 9; col++) {
+                const clueIntValue = parseInt(boardMainNumbers[cellNo], 10)
+                if (isNaN(clueIntValue)) {
+                    // abort and show invalidity message
+                }
+                // const cellvalue = clues[cellNo]
+                rowData[col] = {
+                    value: clueIntValue,
+                    solutionValue: '',
+                    isClue: clueIntValue !== 0,
+                }
+                cellNo++
+            }
+            mainNumbers[row] = rowData
+        }
+
+        // let's check if the puzzle is valid or not ?
+        if (getNumberOfSolutions(mainNumbers) === 1) {
+            // puzzle can be started
+            emit(EVENTS.START_DEEPLINK_PUZZLE, { mainNumbers })
+        } else {
+            // show  error message and  don't start the puzzle
+        }
+    }
+}
+
 const useManageGame = () => {
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
     const previousGameState = usePrevious(gameState)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
-    // resume previous game or start new game of previously solved level
-    useEffect(async () => {
-        const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
-        if (previousGameData) {
-            const state = previousGameData[GAME_DATA_KEYS.STATE]
-            const refereeData = previousGameData[GAME_DATA_KEYS.REFEREE]
-            if (state !== GAME_STATE.INACTIVE) {
-                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: refereeData.difficultyLevel })
-            } else {
-                // TODO: figure out if setTimeout needs to be removed or not
-                // it's very imp. thing to do. for now keep it in setTimeout. (it works without use of setTimeout as well)
-                // read about microtasks and asynchronous in JS and find out when/where
-                // useEffects run and figure out whole thing about promise/eventLoop as well
-                setTimeout(() => {
-                    emit(EVENTS.RESUME_PREVIOUS_GAME, previousGameData)
-                    setGameState(GAME_STATE.ACTIVE)
-                }, 0)
+    // resume previous game or start new game of previously solved level or take care of deeplinking
+    useEffect(() => {
+        const handler = async () => {
+            // TODO: error handling
+            const initialUrl = await Linking.getInitialURL()
+            if (initialUrl) {
+                transformDeeplinkPuzzle(initialUrl)
+                return
             }
-        } else {
-            emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
+
+            const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
+            if (previousGameData) {
+                const state = previousGameData[GAME_DATA_KEYS.STATE]
+                const refereeData = previousGameData[GAME_DATA_KEYS.REFEREE]
+                if (state !== GAME_STATE.INACTIVE) {
+                    emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: refereeData.difficultyLevel })
+                } else {
+                    // TODO: figure out if setTimeout needs to be removed or not
+                    // it's very imp. thing to do. for now keep it in setTimeout. (it works without use of setTimeout as well)
+                    // read about microtasks and asynchronous in JS and find out when/where
+                    // useEffects run and figure out whole thing about promise/eventLoop as well
+                    setTimeout(() => {
+                        emit(EVENTS.RESUME_PREVIOUS_GAME, previousGameData)
+                        setGameState(GAME_STATE.ACTIVE)
+                    }, 0)
+                }
+            } else {
+                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
+            }
         }
+        handler()
     }, [])
 
     useEffect(() => {
@@ -109,7 +163,7 @@ const useManageGame = () => {
             removeListener(EVENTS.GENERATE_NEW_PUZZLE, handler)
             componentUnmounted = true
         }
-    }, [])
+    }, [transformNativeGeneratedPuzzle])
 
     useEffect(() => {
         const handler = ({ mainNumbers }) => {
@@ -122,6 +176,22 @@ const useManageGame = () => {
         addListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
         return () => removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
     }, [])
+
+    useEffect(() => {
+        const handler = ({ mainNumbers }) => {
+            emit(EVENTS.START_NEW_GAME, { difficultyLevel: 'Shared Puzzle', mainNumbers })
+            setGameState(GAME_STATE.ACTIVE)
+        }
+        addListener(EVENTS.START_DEEPLINK_PUZZLE, handler)
+        return () => removeListener(EVENTS.START_DEEPLINK_PUZZLE, handler)
+    }, [])
+
+    // app was in background ad brought to fore-ground by deeplink
+    useEffect(() => {
+        const handler = ({ url }) => transformDeeplinkPuzzle(url)
+        Linking.addEventListener('url', handler)
+        return () => Linking.removeEventListener('url', handler)
+    }, [transformDeeplinkPuzzle])
 
     // cache game data
     useEffect(() => {
