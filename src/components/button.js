@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, StyleSheet } from 'react-native'
 import { Touchable, TouchableTypes } from '../apps/components/Touchable'
 import { noOperationFunction } from '../utils/util'
+import { fonts } from '../resources/fonts/font';
 
 const styles = StyleSheet.create({
     defaultContainer: {
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
     defaultText: {
         fontSize: 20,
         color: 'white',
+        fontFamily: fonts.regular,
     },
 })
 

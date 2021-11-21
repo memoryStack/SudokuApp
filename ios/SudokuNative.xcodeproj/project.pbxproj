@@ -14,6 +14,9 @@
 		264F22883A3DFF57926403B1 /* libPods-SudokuNative-SudokuNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2E2DEB7C6A936B59BBBEBB /* libPods-SudokuNative-SudokuNativeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F6ADF574F7116BAABC497C5F /* libPods-SudokuNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 934E88F367026971CDA15F7C /* libPods-SudokuNative.a */; };
+		EE82BD76EF4549678C749823 /* ProximaNovaBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9A6246222214DD3B8591C03 /* ProximaNovaBold.ttf */; };
+		95B3429536294E2F96191DED /* ProximaNovaItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD7D55245D2B4E54BD4298A4 /* ProximaNovaItalic.ttf */; };
+		41B2370B95B043F1B0258DF5 /* ProximaNovaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 275A6154D65B44118F9367E4 /* ProximaNovaRegular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +47,9 @@
 		934E88F367026971CDA15F7C /* libPods-SudokuNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SudokuNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4FFF0D60439F486114A2AF1 /* Pods-SudokuNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudokuNative.debug.xcconfig"; path = "Target Support Files/Pods-SudokuNative/Pods-SudokuNative.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		C9A6246222214DD3B8591C03 /* ProximaNovaBold.ttf */ = {isa = PBXFileReference; name = "ProximaNovaBold.ttf"; path = "../src/resources/fonts/ProximaNovaBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DD7D55245D2B4E54BD4298A4 /* ProximaNovaItalic.ttf */ = {isa = PBXFileReference; name = "ProximaNovaItalic.ttf"; path = "../src/resources/fonts/ProximaNovaItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		275A6154D65B44118F9367E4 /* ProximaNovaRegular.ttf */ = {isa = PBXFileReference; name = "ProximaNovaRegular.ttf"; path = "../src/resources/fonts/ProximaNovaRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				AAC932B91590952D0CEE80D2 /* Pods */,
+				DB0AEC41EE834BB8BD79E5DF /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -148,6 +155,17 @@
 			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		DB0AEC41EE834BB8BD79E5DF /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				C9A6246222214DD3B8591C03 /* ProximaNovaBold.ttf */,
+				DD7D55245D2B4E54BD4298A4 /* ProximaNovaItalic.ttf */,
+				275A6154D65B44118F9367E4 /* ProximaNovaRegular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -243,6 +261,9 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				EE82BD76EF4549678C749823 /* ProximaNovaBold.ttf in Resources */,
+				95B3429536294E2F96191DED /* ProximaNovaItalic.ttf in Resources */,
+				41B2370B95B043F1B0258DF5 /* ProximaNovaRegular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
