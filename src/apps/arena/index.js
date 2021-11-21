@@ -22,7 +22,8 @@ import { useGameBoard } from './hooks/gameBoard'
 import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
-import { NEW_GAME, SHARE } from '../../resources/stringLiterals'
+import { NEW_GAME, SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
+import { noOperationFunction } from '../../utils/util'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -195,7 +196,7 @@ const Arena_ = () => {
         emit(EVENTS.SMART_HINTS_HC_CLOSED)
     }, [])
 
-    const share = () => {
+    const handleSharePuzzleClick = useCallback(() => {
         let puzzleString = ''
 
         for (let row = 0; row < 9; row++) {
@@ -205,19 +206,16 @@ const Arena_ = () => {
         }
 
         const options = {
-            message: 'Solve this Sudoku Challenge',
-            title: 'share sudoku puzzle',
+            message: 'Solve This Sudoku Challenge',
             url: `https://www.amazing-sudoku.com/puzzle/${puzzleString}`,
         }
-
         Share.open(options)
-            .then(res => {
-                console.log(res)
-            })
+            .then(noOperationFunction, noOperationFunction)
             .catch(error => {
                 __DEV__ && console.log(error)
+                emit(EVENTS.SHOW_SNACK_BAR, { msg: SOMETHING_WENT_WRONG })
             })
-    }
+    }, [mainNumbers])
 
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus}>
@@ -228,7 +226,11 @@ const Arena_ = () => {
                         containerStyle={styles.newGameButtonContainer}
                         text={NEW_GAME}
                     />
-                    <Button onClick={share} containerStyle={styles.newGameButtonContainer} text={SHARE} />
+                    <Button
+                        onClick={handleSharePuzzleClick}
+                        containerStyle={styles.newGameButtonContainer}
+                        text={SHARE}
+                    />
                 </View>
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
