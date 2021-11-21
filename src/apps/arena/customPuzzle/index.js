@@ -5,11 +5,12 @@ import { EVENTS, GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
 import { Board } from '../gameBoard'
-import { NewGameButton } from '../newGameButton'
+import { Button } from '../newGameButton'
 import { Inputpanel } from '../inputPanel'
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { getNumberOfSolutions } from '../utils/util'
+import { PLAY } from '../../../resources/stringLiterals'
 
 const INPUT_NUMBER_CLICK_EVENT_PREFIX = 'CUSTOM_PUZZLE_'
 const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
@@ -239,7 +240,7 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX} gameState={GAME_STATE.ACTIVE} />
                 </View>
-                <NewGameButton containerStyle={styles.playButtonContainer} onClick={handlePlayClick} text={'PLAY'} />
+                <Button containerStyle={styles.playButtonContainer} onClick={handlePlayClick} text={PLAY} />
             </View>
         </BottomDragger>
     )

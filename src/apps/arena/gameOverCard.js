@@ -5,7 +5,8 @@ import { noOperationFunction } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
 import { GAME_STATE } from '../../resources/constants'
 import { getTimeComponentString } from './utils/util'
-import { NewGameButton } from './newGameButton'
+import { Button } from './newGameButton'
+import { NEW_GAME } from '../../resources/stringLiterals'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
@@ -107,7 +108,7 @@ const GameOverCard_ = ({ gameState, stats, openNextGameMenu }) => {
             style={styles.container}
         >
             {gameSolved ? getGameSolvedView() : gameUnsolved ? getGameUnsolvedView() : null}
-            <NewGameButton onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
+            <Button onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} text={NEW_GAME} />
         </Touchable>
     )
 }

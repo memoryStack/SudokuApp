@@ -4,29 +4,29 @@ import { Touchable, TouchableTypes } from '../components/Touchable'
 import { noOperationFunction } from '../../utils/util'
 
 const styles = StyleSheet.create({
-    newGameButtonContainer: {
+    defaultContainer: {
         paddingVertical: 8,
         alignItems: 'center',
         backgroundColor: '#4088da',
         borderRadius: 3,
     },
-    newGameText: {
+    defaultText: {
         fontSize: 20,
         color: 'white',
     },
 })
 
-// TODO: let's see if this can be made a genric button
-const NewGameButton_ = ({ onClick = noOperationFunction, containerStyle = null, text = 'New Game' }) => {
+// TODO: make the tuchable configurable as well when in need
+const Button_ = ({ onClick = noOperationFunction, containerStyle = null, text = '', textStyles = null }) => {
     return (
         <Touchable
             touchable={TouchableTypes.opacity}
             onPress={onClick}
-            style={[styles.newGameButtonContainer, containerStyle]}
+            style={[styles.defaultContainer, containerStyle]}
         >
-            <Text style={styles.newGameText}>{text}</Text>
+            <Text style={[styles.defaultText, textStyles]}>{text}</Text>
         </Touchable>
     )
 }
 
-export const NewGameButton = React.memo(NewGameButton_)
+export const Button = React.memo(Button_)

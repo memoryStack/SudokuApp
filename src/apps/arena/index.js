@@ -14,7 +14,7 @@ import { FastPencil } from './cellActions/fastPencil'
 import { Hint } from './cellActions/hint'
 import { Timer } from './timer'
 import { isGameOver } from './utils/util'
-import { NewGameButton } from './newGameButton'
+import { Button } from './newGameButton'
 import { CustomPuzzle } from './customPuzzle'
 import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions'
 import { useReferee } from './hooks/referee'
@@ -22,6 +22,7 @@ import { useGameBoard } from './hooks/gameBoard'
 import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
+import { NEW_GAME, SHARE } from '../../resources/stringLiterals'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -222,8 +223,12 @@ const Arena_ = () => {
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus}>
             <View style={styles.container} onLayout={onParentLayout}>
                 <View style={styles.headerButtonsContainer}>
-                    <NewGameButton onClick={newGameButtonClick} containerStyle={styles.newGameButtonContainer} />
-                    <NewGameButton onClick={share} containerStyle={styles.newGameButtonContainer} />
+                    <Button
+                        onClick={newGameButtonClick}
+                        containerStyle={styles.newGameButtonContainer}
+                        text={NEW_GAME}
+                    />
+                    <Button onClick={share} containerStyle={styles.newGameButtonContainer} text={SHARE} />
                 </View>
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
