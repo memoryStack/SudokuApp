@@ -4,7 +4,9 @@ import { styles } from './style'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { GAME_STATE, EVENTS } from '../../../resources/constants'
 import { emit } from '../../../utils/GlobalEventBus'
+import { CloseIcon } from '../../../resources/svgIcons/close'
 
+const CLOSE_ICON_DIMENSION = 28
 const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
     const onNumberClicked = number => {
         if (gameState !== GAME_STATE.ACTIVE) return
@@ -35,9 +37,9 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
                 style={styles.numberButtonContainer}
                 onPress={onEmptyCellClicked}
                 touchable={TouchableTypes.opacity}
-                key={'X'}
+                key={'erase_cell'}
             >
-                <Text style={styles.textStyle}>{'X'}</Text>
+                <CloseIcon height={CLOSE_ICON_DIMENSION} width={CLOSE_ICON_DIMENSION} fill={'rgb(40, 90, 163)'} />
             </Touchable>
         )
     }
