@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { Svg, Path } from 'react-native-svg'
 import { RestartIcon } from '../../../resources/svgIcons/restart'
+import { PersonalizePuzzleIcon } from '../../../resources/svgIcons/personalizePuzzle'
 import { EVENTS, LEVEL_DIFFICULTIES } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit } from '../../../utils/GlobalEventBus'
@@ -115,6 +116,16 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
                         </View>
                     )
                 })}
+                {/* TODO: make these options a little more configurable */}
+                <Touchable
+                    key={'custom_puzzle'}
+                    style={styles.levelContainer}
+                    touchable={TouchableTypes.opacity}
+                    onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
+                >
+                    <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
+                    <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
+                </Touchable>
                 <Touchable
                     key={'restart'}
                     style={styles.levelContainer}
@@ -123,15 +134,6 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
                 >
                     <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
                     <Text style={styles.levelText}>{RESTART_TEXT}</Text>
-                </Touchable>
-                {/* TODO: make this and above option a little more configurable */}
-                <Touchable
-                    key={'custom_puzzle'}
-                    style={styles.levelContainer}
-                    touchable={TouchableTypes.opacity}
-                    onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
-                >
-                    <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
                 </Touchable>
             </View>
         )
