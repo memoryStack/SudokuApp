@@ -41,7 +41,7 @@ const Cell_ = ({
                 </View>
             )
         })
-        return <View style={Styles.notesContainer}>{cellNotesRows}</View>
+        return <>{cellNotesRows}</>
     }
 
     return (
