@@ -11,6 +11,7 @@ import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } fro
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { getNumberOfSolutions } from '../utils/util'
 import { PLAY } from '../../../resources/stringLiterals'
+import { fonts } from '../../../resources/fonts/font'
 
 const INPUT_NUMBER_CLICK_EVENT_PREFIX = 'CUSTOM_PUZZLE_'
 const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         color: 'white',
+        fontFamily: fonts.regular,
     },
 })
 

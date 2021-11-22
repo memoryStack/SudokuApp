@@ -2,6 +2,7 @@ import React, { useState, useEffect, useImperativeHandle, useRef, useCallback } 
 import { View, Text, Animated, StyleSheet, PanResponder, Dimensions } from 'react-native'
 import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
+import { fonts } from '../../resources/fonts/font'
 
 const ANIMATION_DURATION = 150
 let HEADER_HEIGHT = 50
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 20,
         color: rgba('#282C3F', 90),
+        fontFamily: fonts.regular,
     },
 })
 

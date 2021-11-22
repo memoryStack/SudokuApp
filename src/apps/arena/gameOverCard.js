@@ -7,6 +7,7 @@ import { GAME_STATE } from '../../resources/constants'
 import { getTimeComponentString } from './utils/util'
 import { Button } from '../../components/button'
 import { NEW_GAME } from '../../resources/stringLiterals'
+import { fonts } from '../../resources/fonts/font'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
@@ -21,6 +22,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         marginVertical: 8,
+        fontFamily: fonts.regular,
     },
     statsContainer: {
         marginTop: 20,
@@ -34,6 +36,7 @@ const styles = StyleSheet.create({
     },
     statText: {
         fontSize: 16,
+        fontFamily: fonts.regular,
     },
     gameUnsolvedMsg: {
         textAlign: 'center',

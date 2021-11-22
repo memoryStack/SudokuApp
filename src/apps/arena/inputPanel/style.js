@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { rgba } from '../../../utils/util'
 import { CELL_WIDTH } from '../gameBoard/dimensions'
+import { fonts } from '../../../resources/fonts/font'
 
 const INPUT_NUMBER_DIMENSION = CELL_WIDTH * 1.5 // 1.5 times the size of the board cells
 const INPUT_GRID_DIMENSION = INPUT_NUMBER_DIMENSION * 3
@@ -48,5 +49,6 @@ export const styles = StyleSheet.create({
         color: 'rgb(49, 90, 163)',
         fontSize: 36,
         textAlign: 'center',
+        fontFamily: fonts.regular,
     },
 })

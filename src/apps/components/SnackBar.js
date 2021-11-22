@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { fonts } from '../../resources/fonts/font'
 
 const styles = StyleSheet.create({
     container: {
@@ -17,6 +18,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         color: 'white', // need designer's input
+        fontFamily: fonts.regular,
     },
 })
 

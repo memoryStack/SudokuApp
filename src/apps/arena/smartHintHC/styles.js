@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native'
+import { fonts } from '../../../resources/fonts/font'
 
 const windowHeight = Dimensions.get('window').height
 export const styles = StyleSheet.create({
@@ -18,6 +19,7 @@ export const styles = StyleSheet.create({
     hintTitle: {
         fontWeight: 'bold',
         fontSize: 20,
+        fontFamily: fonts.regular,
     },
     logicContainer: {
         flex: 1,
@@ -25,5 +27,6 @@ export const styles = StyleSheet.create({
     },
     hintLogicText: {
         fontSize: 16,
+        fontFamily: fonts.regular,
     },
 })

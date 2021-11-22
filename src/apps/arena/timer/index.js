@@ -4,6 +4,7 @@ import { GAME_STATE } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { getTimeComponentString } from '../utils/util'
 import { noOperationFunction } from '../../../utils/util'
+import { fonts } from '../../../resources/fonts/font'
 
 const hitSlop = { left: 8, right: 8, bottom: 8, top: 8 }
 const styles = StyleSheet.create({
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
     },
     textStyles: {
         fontSize: 14,
+        fontFamily: fonts.regular,
     },
     timeCounter: {
         display: 'flex',

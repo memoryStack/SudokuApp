@@ -24,6 +24,7 @@ import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
 import { NEW_GAME, SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
 import { noOperationFunction } from '../../utils/util'
+import { fonts } from '../../resources/fonts/font'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
     },
     refereeTextStyles: {
         fontSize: 14,
+        fontFamily: fonts.regular,
     },
     gameOverCardAbsoluteBG: {
         position: 'absolute',

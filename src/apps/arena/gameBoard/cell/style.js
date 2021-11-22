@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { CELL_HEIGHT, CELL_WIDTH } from '../dimensions'
+import { fonts } from '../../../../resources/fonts/font'
 
 export const Styles = StyleSheet.create({
     cell: {
@@ -16,6 +17,7 @@ export const Styles = StyleSheet.create({
     mainNumberText: {
         // fontSize
         fontSize: CELL_HEIGHT * 0.75,
+        fontFamily: fonts.regular,
         // width: '100%',
     },
     notesContainer: {
@@ -39,5 +41,6 @@ export const Styles = StyleSheet.create({
         color: 'rgba(0, 0, 0, .8)',
         fontSize: CELL_HEIGHT * 0.3,
         alignSelf: 'center',
+        fontFamily: fonts.regular,
     },
 })

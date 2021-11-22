@@ -6,6 +6,7 @@ import { RestartIcon } from '../../../resources/svgIcons/restart'
 import { EVENTS, LEVEL_DIFFICULTIES } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit } from '../../../utils/GlobalEventBus'
+import { fonts } from '../../../resources/fonts/font'
 
 const LEVEL_ICON_DIMENSION = 24
 const NEXT_GAME_MENU_ROW_HEIGHT = 50
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black',
         marginLeft: 16,
+        fontFamily: fonts.regular,
     },
 })
 
