@@ -11,3 +11,9 @@
 # these options are added because of eabling hermes
 -keep class com.facebook.hermes.unicode.** { *; }
 -keep class com.facebook.jni.** { *; }
+
+# react-native-svg
+-keep public class com.horcrux.svg.** {*;}
+
+# sudoku puzzle class
+-keep class com.anujrao.sudokucpp.PuzzleInfo { *; }
