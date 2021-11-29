@@ -60,6 +60,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         onDraggerClosed = noOperationFunction,
         stopBackgroundClickClose = false,
         showBackgroundOverlay = true,
+        animateBackgroundOverlayOnClose = true,
     } = props
 
     // consider children as full screen height later on set it to it's real height
@@ -77,7 +78,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     const [transparentViewOpacityConfig, setTransparentViewOpacityConfig] = useState(
         transformValue.interpolate({
             inputRange: [topMostPosition, bottomMostPosition],
-            outputRange: [1, 0],
+            outputRange: [1, animateBackgroundOverlayOnClose ? 0 : 1],
         }),
     )
 
@@ -110,8 +111,9 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         setTransformValue(transformValue)
         setTransparentViewOpacityConfig(
             transformValue.interpolate({
+                // this object is duplicated above as well
                 inputRange: [topMostPosition, bottomMostPosition],
-                outputRange: [1, 0],
+                outputRange: [1, animateBackgroundOverlayOnClose ? 0 : 1],
             }),
         )
     }, [parentHeight, childrenHeight])

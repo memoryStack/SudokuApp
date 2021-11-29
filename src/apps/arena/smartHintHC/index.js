@@ -18,6 +18,7 @@ export default React.memo(({ title = '', logic = '', parentHeight, onSmartHintHC
             onDraggerClosed={onSmartHintHCClosed}
             parentHeight={parentHeight}
             bottomMostPositionRatio={1.1} // TODO: we can make it a default i guess
+            animateBackgroundOverlayOnClose={false}
         >
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
