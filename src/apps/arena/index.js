@@ -203,7 +203,8 @@ const Arena_ = () => {
 
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
-                puzzleString = `${puzzleString}${mainNumbers[row][col].value}`
+                const num = mainNumbers[row][col].isClue ? mainNumbers[row][col].value : 0
+                puzzleString = `${puzzleString}${num}`
             }
         }
 
