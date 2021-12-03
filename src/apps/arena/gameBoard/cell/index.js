@@ -3,6 +3,9 @@ import { View, Text } from 'react-native'
 import { Styles } from './style'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { GAME_STATE } from '../../../../resources/constants'
+import { CloseIcon } from '../../../../resources/svgIcons/close'
+import { CELL_HEIGHT } from '../dimensions'
+import { Styles as boardStyles } from '../style'
 
 // becoz only 3 notes are there in a row
 const looper = []
@@ -18,6 +21,7 @@ const Cell_ = ({
     mainValueFontColor = null,
     onCellClicked,
     gameState,
+    displayCrossIcon = false,
 }) => {
     const shouldRenderNotes = () => {
         for (let noteNum = 0; noteNum < 9; noteNum++) if (cellNotes[noteNum].show) return 1
@@ -44,6 +48,24 @@ const Cell_ = ({
         return <>{cellNotesRows}</>
     }
 
+    const getCellContent = () => {
+        if (displayCrossIcon) {
+            return (
+                <CloseIcon
+                    height={CELL_HEIGHT * 0.66}
+                    width={CELL_HEIGHT * 0.66}
+                    fill={boardStyles.wronglyFilledNumColor.color}
+                />
+            )
+        }
+
+        return cellMainValue ? (
+            <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
+        ) : shouldRenderNotes() ? (
+            getCellNotes(row, col)
+        ) : null
+    }
+
     return (
         <Touchable
             touchable={TouchableTypes.opacity}
@@ -51,13 +73,7 @@ const Cell_ = ({
             style={[Styles.cell, cellBGColor]}
             onPress={() => onCellClicked(row, col)}
         >
-            {gameState !== GAME_STATE.INACTIVE ? (
-                cellMainValue ? (
-                    <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
-                ) : shouldRenderNotes() ? (
-                    getCellNotes(row, col)
-                ) : null
-            ) : null}
+            {gameState !== GAME_STATE.INACTIVE ? getCellContent() : null}
         </Touchable>
     )
 }
