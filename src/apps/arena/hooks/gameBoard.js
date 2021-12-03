@@ -379,7 +379,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
             if (!mainNumbers[row][col].value) {
                 getSmartHint(selectedCell, mainNumbers)
                     .then(info => {
-                        console.log('@@@@ hintInfo', info)
+                        __DEV__ && console.log('@@@@ hintInfo', info)
                         if (info) setSmartHintData({ show: true, info })
                     })
                     .catch(error => {

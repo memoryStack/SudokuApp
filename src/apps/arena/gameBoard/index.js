@@ -70,6 +70,16 @@ const Board_ = ({
         return Styles.defaultCellBGColor
     }
 
+    const shouldMarkCellAsInhabitable = (row, col) => {
+        if (!showSmartHint) return false
+
+        return !!(
+            smartHintCellsHighlightInfo[row] &&
+            smartHintCellsHighlightInfo[row][col] &&
+            smartHintCellsHighlightInfo[row][col].inhabitable
+        )
+    }
+
     const renderRow = (row, key) => {
         let rowElementsKeyCounter = 0
         return (
@@ -86,6 +96,7 @@ const Board_ = ({
                                 cellNotes={notesInfo[row][col]}
                                 onCellClicked={onCellClick}
                                 gameState={gameState}
+                                displayCrossIcon={shouldMarkCellAsInhabitable(row, col)}
                             />
                         </View>
                     )

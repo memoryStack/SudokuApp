@@ -51,7 +51,6 @@ const SMART_HINTS_TECHNIQUES = {
 const SMART_HINTS_CELLS_BG_COLOR = {
     SELECTED: boardStyles.selectedCellBGColor,
     IN_FOCUS_DEFAULT: boardStyles.defaultCellBGColor,
-    WINNER_CANDIDATE_PROHIBITED_EMPTY_CELLS: { backgroundColor: boardStyles.wronglyFilledNumColor.color },
 }
 
 const copyBoardMainNumbers = mainNumbers => {
@@ -326,6 +325,13 @@ const getCandidateInstanceCoordinatesInBlock = (candidate, block, mainNumbers) =
     return null
 }
 
+const getInhabitableCellData = () => {
+    return {
+        bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+        inhabitable: true,
+    }
+}
+
 const hiddenSingleInRowHighlightBlockCells = ({
     selectedRow,
     selectedCol,
@@ -350,9 +356,7 @@ const hiddenSingleInRowHighlightBlockCells = ({
                 if (!cellsToFocusData[instanceRow]) cellsToFocusData[instanceRow] = {}
                 cellsToFocusData[instanceRow][instanceCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             }
-            cellsToFocusData[selectedRow][col] = {
-                bgColor: SMART_HINTS_CELLS_BG_COLOR.WINNER_CANDIDATE_PROHIBITED_EMPTY_CELLS,
-            }
+            cellsToFocusData[selectedRow][col] = getInhabitableCellData()
         } else {
             cellsToFocusData[selectedRow][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         }
@@ -383,9 +387,7 @@ const hiddenSingleInColHighlightBlockCells = ({
                 if (!cellsToFocusData[instanceRow]) cellsToFocusData[instanceRow] = {}
                 cellsToFocusData[instanceRow][instanceCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             }
-            cellsToFocusData[row][selectedCol] = {
-                bgColor: SMART_HINTS_CELLS_BG_COLOR.WINNER_CANDIDATE_PROHIBITED_EMPTY_CELLS,
-            }
+            cellsToFocusData[row][selectedCol] = getInhabitableCellData()
         } else {
             cellsToFocusData[row][selectedCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         }
@@ -557,7 +559,7 @@ const getHiddenSingleInBlockData = (selectedRow, selectedCol, mainNumbers) => {
         }
 
         if (!mainNumbers[row][col].value) {
-            cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.WINNER_CANDIDATE_PROHIBITED_EMPTY_CELLS }
+            cellsToFocusData[row][col] = getInhabitableCellData()
             // calculate who wins here and highlight that instance and record it
             if (mustHighlightWinnerInstances.row[row] || mustHighlightWinnerInstances.col[col]) continue
 
@@ -632,7 +634,6 @@ const getSmartHint = async ({ row, col }, originalMainNumbers) => {
     if (hiddenSinglePresent) {
         return getHiddenSingleTechniqueInfo(row, col, hiddenSingleType, boardMainNumbersCopy)
     }
-    // next: search for hidden singles in this cell
 
     return null
 }
