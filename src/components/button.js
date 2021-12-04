@@ -7,6 +7,7 @@ import { fonts } from '../resources/fonts/font'
 const styles = StyleSheet.create({
     defaultContainer: {
         paddingVertical: 8,
+        paddingHorizontal: 8,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#4088da',
