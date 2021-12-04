@@ -1,4 +1,6 @@
 import { GAME_STATE } from '../../../resources/constants'
+import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
+import { getKey } from '../../../utils/storage'
 
 const gameOverStates = [GAME_STATE.OVER_SOLVED, GAME_STATE.OVER_UNSOLVED]
 let numOfSolutions = 0
@@ -72,4 +74,14 @@ export const getNumberOfSolutions = mainNumbers => {
         }
     }
     return numOfSolutions
+}
+
+export const previousInactiveGameExists = async () => {
+    const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
+    let result = false
+    if (previousGameData) {
+        const state = previousGameData[GAME_DATA_KEYS.STATE]
+        if (state === GAME_STATE.INACTIVE) result = true
+    }
+    return result
 }

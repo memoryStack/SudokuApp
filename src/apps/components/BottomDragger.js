@@ -183,6 +183,8 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         setChildrenHeight(height)
         const topMostPosition = parentHeight - (height + HEADER_HEIGHT)
         setTopMostPosition(topMostPosition)
+        // TODO: on children height changed dynamically, this openDragger will be called 2 times
+        // STOP THAT
         if (!headerText) {
             // mostly we want the dragger to be opened itself when header
             // clip is not present

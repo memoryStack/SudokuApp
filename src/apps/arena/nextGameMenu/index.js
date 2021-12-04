@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { Svg, Path } from 'react-native-svg'
@@ -9,6 +9,7 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit } from '../../../utils/GlobalEventBus'
 import { fonts } from '../../../resources/fonts/font'
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '../../../resources/stringLiterals'
+import { previousInactiveGameExists } from '../utils/util'
 
 const LEVEL_ICON_DIMENSION = 24
 const NEXT_GAME_MENU_ROW_HEIGHT = 50
@@ -42,6 +43,18 @@ const styles = StyleSheet.create({
 // TODO: find a good icon for this resume option
 const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClosed }) => {
     const nextGameMenuRef = useRef(null)
+    const [showResumeOption, setShowResumeOption] = useState(false)
+
+    useEffect(() => {
+        if (screenName !== SCREEN_NAME.HOME) return
+        previousInactiveGameExists()
+            .then(showResume => {
+                if (showResume) setShowResumeOption(showResume)
+            })
+            .catch(error => {
+                __DEV__ && console.log(error)
+            })
+    }, [screenName])
 
     const getBar = (barNum, level) => {
         const pathD = [
@@ -132,7 +145,7 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
                     <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
                     <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
                 </Touchable>
-                {screenName === SCREEN_NAME.HOME ? (
+                {screenName === SCREEN_NAME.HOME && showResumeOption ? (
                     <Touchable
                         key={RESUME}
                         style={styles.levelContainer}
