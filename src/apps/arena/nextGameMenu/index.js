@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 
 // TODO: research about using "useMemo" for the functions which are rendering a view in the
 //          functional component
-const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
+const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
     const nextGameMenuRef = useRef(null)
 
     const getBar = (barNum, level) => {
@@ -83,17 +83,21 @@ const NextGameMenu_ = ({ parentHeight, onMenuClosed }) => {
 
     const nextGameMenuItemClicked = useCallback(
         item => {
-            switch (item) {
-                case RESTART_TEXT:
-                    emit(EVENTS.RESTART_GAME)
-                    closeView()
-                    break
-                case CUSTOMIZE_YOUR_PUZZLE_TITLE:
-                    emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
-                    break
-                default:
-                    emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: item })
-                    closeView()
+            if (menuItemClick) {
+                menuItemClick(item)
+            } else {
+                switch (item) {
+                    case RESTART_TEXT:
+                        emit(EVENTS.RESTART_GAME)
+                        closeView()
+                        break
+                    case CUSTOMIZE_YOUR_PUZZLE_TITLE:
+                        emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
+                        break
+                    default:
+                        emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: item })
+                        closeView()
+                }
             }
         },
         [nextGameMenuRef],
