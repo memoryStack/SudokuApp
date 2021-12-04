@@ -4,15 +4,16 @@ import { BottomDragger } from '../../components/BottomDragger'
 import { Svg, Path } from 'react-native-svg'
 import { RestartIcon } from '../../../resources/svgIcons/restart'
 import { PersonalizePuzzleIcon } from '../../../resources/svgIcons/personalizePuzzle'
-import { EVENTS, LEVEL_DIFFICULTIES } from '../../../resources/constants'
+import { EVENTS, LEVEL_DIFFICULTIES, SCREEN_NAME } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { emit } from '../../../utils/GlobalEventBus'
 import { fonts } from '../../../resources/fonts/font'
+import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '../../../resources/stringLiterals'
 
 const LEVEL_ICON_DIMENSION = 24
 const NEXT_GAME_MENU_ROW_HEIGHT = 50
 const RESTART_TEXT = 'Restart'
-const CUSTOMIZE_YOUR_PUZZLE_TITLE = 'Customize Your Puzzle'
+
 const styles = StyleSheet.create({
     nextGameMenuContainer: {
         backgroundColor: 'white',
@@ -38,7 +39,8 @@ const styles = StyleSheet.create({
 
 // TODO: research about using "useMemo" for the functions which are rendering a view in the
 //          functional component
-const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
+// TODO: find a good icon for this resume option
+const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClosed }) => {
     const nextGameMenuRef = useRef(null)
 
     const getBar = (barNum, level) => {
@@ -122,7 +124,7 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                 })}
                 {/* TODO: make these options a little more configurable */}
                 <Touchable
-                    key={'custom_puzzle'}
+                    key={CUSTOMIZE_YOUR_PUZZLE_TITLE}
                     style={styles.levelContainer}
                     touchable={TouchableTypes.opacity}
                     onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
@@ -130,15 +132,17 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                     <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
                     <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
                 </Touchable>
-                <Touchable
-                    key={'restart'}
-                    style={styles.levelContainer}
-                    touchable={TouchableTypes.opacity}
-                    onPress={() => nextGameMenuItemClicked(RESTART_TEXT)}
-                >
-                    <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
-                    <Text style={styles.levelText}>{RESTART_TEXT}</Text>
-                </Touchable>
+                {screenName === SCREEN_NAME.HOME ? (
+                    <Touchable
+                        key={RESUME}
+                        style={styles.levelContainer}
+                        touchable={TouchableTypes.opacity}
+                        onPress={() => nextGameMenuItemClicked(RESUME)}
+                    >
+                        <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
+                        <Text style={styles.levelText}>{RESUME}</Text>
+                    </Touchable>
+                ) : null}
             </View>
         )
     }

@@ -6,4 +6,6 @@ export const NEW_GAME = 'New Game',
     LAUNCHING_PREVIOUS_PUZZLE = 'Launching previous puzzle',
     DEEPLINK_PUZZLE_NO_SOLUTIONS = 'Puzzle has no solutions.',
     DEEPLINK_PUZZLE_MULTIPLE_SOLUTIONS = 'Puzzle has multiple solutions.',
-    START_GAME = 'Start Game'
+    START_GAME = 'Start Game',
+    CUSTOMIZE_YOUR_PUZZLE_TITLE = 'Customize Your Puzzle',
+    RESUME = 'Resume'

@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%',
         width: '100%',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     startGameButtonContainer: {
         top: 200,
@@ -50,7 +50,7 @@ const Home_ = ({ navigation }) => {
             />
             {pageHeight && showNextGameMenu ? (
                 <NextGameMenu
-                    // screenName={SCREEN_NAME.HOME} TODO:
+                    screenName={SCREEN_NAME.HOME}
                     parentHeight={pageHeight}
                     menuItemClick={handleMenuItemClicked}
                     onMenuClosed={onNewGameMenuClosed}

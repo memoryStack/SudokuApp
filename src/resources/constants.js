@@ -87,6 +87,7 @@ const PENCIL_STATE = {
 }
 
 const SCREEN_NAME = {
+    HOME: 'home',
     ARENA: 'arena',
     CUSTOM_PUZZLE: 'custom-puzzle',
 }
