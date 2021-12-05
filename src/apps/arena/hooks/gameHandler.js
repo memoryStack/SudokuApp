@@ -90,10 +90,32 @@ const verifyDeeplinkAndStartPuzzle = url => {
     }
 }
 
+// manage the logic related to custom puzzle HC
+// TODO: this can made generic state handler for all the HCs
+const useCustomPuzzleHC = () => {
+    const [show, setShowCustomPuzzleHC] = useState(false)
+
+    // TODO: see if it's needed to put this in useCallback or not
+    const closeView = () => setShowCustomPuzzleHC(false)
+
+    useEffect(() => {
+        const handler = () => setShowCustomPuzzleHC(true)
+        addListener(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW, handler)
+        return () => removeListener(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW, handler)
+    }, [])
+
+    return {
+        show,
+        closeView,
+    }
+}
+
 const useManageGame = route => {
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
     const previousGameState = usePrevious(gameState)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
+
+    const { show: showCustomPuzzleHC, closeView: closeCustomPuzzleHC } = useCustomPuzzleHC()
 
     const handleDeeplinkPuzzleLaunch = url => {
         let startDefaultPuzzleProcess = true
@@ -125,6 +147,8 @@ const useManageGame = route => {
         return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
 
+    // TODO: let's  find out if this "route" can be changed in between ??
+    // if yes then remove it from dependency
     useEffect(() => {
         const handler = async () => {
             const { params: { selectedGameMenuItem } = {} } = route || {}
@@ -141,7 +165,7 @@ const useManageGame = route => {
                     emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
                     break
                 case CUSTOMIZE_YOUR_PUZZLE_TITLE:
-                    // TODO: show custom puzzle input HC
+                    emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
                     break
                 default:
                     __DEV__ && console.log(new Error('invalid menu item'))
@@ -227,6 +251,8 @@ const useManageGame = route => {
         gameState,
         showNextGameMenu,
         setShowNextGameMenu,
+        showCustomPuzzleHC,
+        closeCustomPuzzleHC,
     }
 }
 

@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
 const Arena_ = ({ navigation, route }) => {
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
-    const { gameState, showNextGameMenu, setShowNextGameMenu } = useManageGame(route)
+    const { gameState, showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } =
+        useManageGame(route)
 
     const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions(gameState)
 
@@ -116,8 +117,6 @@ const Arena_ = ({ navigation, route }) => {
 
     const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState, showSmartHint)
 
-    const [showCustomPuzzleHC, setShowCustomPuzzleHC] = useState(false)
-
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
 
@@ -125,16 +124,6 @@ const Arena_ = ({ navigation, route }) => {
     useEffect(() => {
         if (isGameOver(gameState)) setGameSolvedCard(true)
     }, [gameState])
-
-    useEffect(() => {
-        const handler = () => setShowCustomPuzzleHC(true)
-        addListener(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW, handler)
-        return () => removeListener(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW, handler)
-    }, [])
-
-    const handleCustomPuzzleClosed = useCallback(() => {
-        setShowCustomPuzzleHC(false)
-    }, [])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
         setPageHeight(height)
@@ -275,7 +264,7 @@ const Arena_ = ({ navigation, route }) => {
                     <NextGameMenu parentHeight={pageHeight} onMenuClosed={onNewGameMenuClosed} />
                 ) : null}
                 {pageHeight && showCustomPuzzleHC ? (
-                    <CustomPuzzle parentHeight={pageHeight} onCustomPuzzleClosed={handleCustomPuzzleClosed} />
+                    <CustomPuzzle parentHeight={pageHeight} onCustomPuzzleClosed={closeCustomPuzzleHC} />
                 ) : null}
                 {showGameSolvedCard ? (
                     <Touchable
