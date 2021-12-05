@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import React, { useCallback, useState, useEffect } from 'react'
+import { View, StyleSheet, Linking } from 'react-native'
 import { NextGameMenu } from '../arena/nextGameMenu'
 import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
@@ -40,6 +40,28 @@ const Home_ = ({ navigation }) => {
         },
         [navigation],
     )
+
+    const launchDeeplinkPuzzle = url => {
+        navigation.navigate('Arena', { puzzleUrl: url })
+    }
+
+    useEffect(() => {
+        Linking.getInitialURL()
+            .then(url => {
+                url && launchDeeplinkPuzzle(url)
+            })
+            .catch(error => {
+                __DEV__ && console.log(error)
+            })
+    }, [])
+
+    useEffect(() => {
+        const handler = ({ url }) => {
+            launchDeeplinkPuzzle(url)
+        }
+        Linking.addEventListener('url', handler)
+        return () => Linking.removeEventListener('url', handler)
+    }, [])
 
     return (
         <View style={styles.container} onLayout={onParentLayout}>

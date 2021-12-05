@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Linking } from 'react-native'
 import {
     LEVEL_DIFFICULTIES,
     EVENTS,
@@ -16,7 +15,7 @@ import { getKey } from '../../../utils/storage'
 import { cacheGameData, GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import {
     INVALID_DEEPLINK_PUZZLE,
-    LAUNCHING_PREVIOUS_PUZZLE,
+    LAUNCHING_DEFAULT_PUZZLE,
     DEEPLINK_PUZZLE_NO_SOLUTIONS,
     RESUME,
     CUSTOMIZE_YOUR_PUZZLE_TITLE,
@@ -43,15 +42,16 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
 
 // returns true if the deeplink puzzle is valid
 const verifyDeeplinkAndStartPuzzle = url => {
+    // TODO: change this message LAUNCHING_PREVIOUS_PUZZLE to something that suits it
     const startIndex = url.indexOf(DEEPLINK_HOST_NAME)
     if (startIndex === -1) {
-        emit(EVENTS.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_PREVIOUS_PUZZLE}` })
+        emit(EVENTS.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}` })
         return
     }
 
     const boardMainNumbers = url.substring(DEEPLINK_HOST_NAME.length)
     if (boardMainNumbers.length !== 81) {
-        emit(EVENTS.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_PREVIOUS_PUZZLE}` })
+        emit(EVENTS.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}` })
         return
     }
 
@@ -62,7 +62,7 @@ const verifyDeeplinkAndStartPuzzle = url => {
         for (let col = 0; col < 9; col++) {
             const clueIntValue = parseInt(boardMainNumbers[cellNo], 10)
             if (isNaN(clueIntValue)) {
-                emit(EVENTS.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_PREVIOUS_PUZZLE}` })
+                emit(EVENTS.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}` })
                 return
             }
             rowData[col] = {
@@ -111,35 +111,13 @@ const useCustomPuzzleHC = () => {
 }
 
 const useManageGame = route => {
+    const { params: { puzzleUrl = '', selectedGameMenuItem = '' } = {} } = route || {}
+
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
     const previousGameState = usePrevious(gameState)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
     const { show: showCustomPuzzleHC, closeView: closeCustomPuzzleHC } = useCustomPuzzleHC()
-
-    const handleDeeplinkPuzzleLaunch = url => {
-        let startDefaultPuzzleProcess = true
-        if (url) startDefaultPuzzleProcess = !verifyDeeplinkAndStartPuzzle(url)
-        startDefaultPuzzleProcess && emit(EVENTS.START_DEFAULT_GAME_PROCESS)
-    }
-
-    useEffect(() => {
-        Linking.getInitialURL()
-            .then(url => {
-                handleDeeplinkPuzzleLaunch(url)
-            })
-            .catch(error => {
-                __DEV__ && console.log(error)
-                emit(EVENTS.START_DEFAULT_GAME_PROCESS)
-            })
-    }, [])
-
-    // app was in background and brought to fore-ground by deeplink
-    useEffect(() => {
-        const handler = ({ url }) => handleDeeplinkPuzzleLaunch(url)
-        Linking.addEventListener('url', handler)
-        return () => Linking.removeEventListener('url', handler)
-    }, [])
 
     useEffect(() => {
         const handler = newState => newState && setGameState(newState)
@@ -147,37 +125,10 @@ const useManageGame = route => {
         return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
 
-    // TODO: let's  find out if this "route" can be changed in between ??
-    // if yes then remove it from dependency
-    useEffect(() => {
-        const handler = async () => {
-            const { params: { selectedGameMenuItem = '' } = {} } = route || {}
-            switch (selectedGameMenuItem) {
-                case LEVEL_DIFFICULTIES.EASY:
-                case LEVEL_DIFFICULTIES.MEDIUM:
-                case LEVEL_DIFFICULTIES.HARD:
-                case LEVEL_DIFFICULTIES.EXPERT:
-                    emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: selectedGameMenuItem })
-                    break
-                case RESUME:
-                    const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
-                    emit(EVENTS.RESUME_PREVIOUS_GAME, previousGameData)
-                    emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-                    break
-                case CUSTOMIZE_YOUR_PUZZLE_TITLE:
-                    emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
-                    break
-                default:
-                    __DEV__ && console.log(new Error('invalid menu item'))
-            }
-        }
-        addListener(EVENTS.START_DEFAULT_GAME_PROCESS, handler)
-        return () => removeListener(EVENTS.START_DEFAULT_GAME_PROCESS, handler)
-    }, [route])
-
     useEffect(() => {
         let componentUnmounted = false
         const handler = ({ difficultyLevel }) => {
+            console.log('@@@@@@ difficulty level', difficultyLevel)
             if (!difficultyLevel) return
             // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
             const minClues = LEVELS_CLUES_INFO[difficultyLevel]
@@ -246,6 +197,42 @@ const useManageGame = route => {
             emit(EVENTS.CACHE_GAME_DATA)
         }
     }, [gameState])
+
+    // TODO: what if the puzzle is already solved ??
+    useEffect(() => {
+        if (!puzzleUrl) return
+        let startDefaultPuzzleProcess = true
+        if (puzzleUrl) startDefaultPuzzleProcess = !verifyDeeplinkAndStartPuzzle(puzzleUrl)
+        startDefaultPuzzleProcess && emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
+    }, [puzzleUrl])
+
+    useEffect(() => {
+        if (!selectedGameMenuItem) return
+        switch (selectedGameMenuItem) {
+            case LEVEL_DIFFICULTIES.EASY:
+            case LEVEL_DIFFICULTIES.MEDIUM:
+            case LEVEL_DIFFICULTIES.HARD:
+            case LEVEL_DIFFICULTIES.EXPERT:
+                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: selectedGameMenuItem })
+                break
+            case RESUME:
+                getKey(PREVIOUS_GAME_DATA_KEY)
+                    .then(previousGameData => {
+                        emit(EVENTS.RESUME_PREVIOUS_GAME, previousGameData)
+                        emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
+                    })
+                    .catch(error => {
+                        __DEV__ && console.log(error)
+                    })
+                break
+            case CUSTOMIZE_YOUR_PUZZLE_TITLE:
+                emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
+                break
+            default:
+                __DEV__ && console.log('@@@@ starting easy puzzle')
+                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
+        }
+    }, [selectedGameMenuItem])
 
     return {
         gameState,
