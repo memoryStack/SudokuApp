@@ -151,7 +151,7 @@ const useManageGame = route => {
     // if yes then remove it from dependency
     useEffect(() => {
         const handler = async () => {
-            const { params: { selectedGameMenuItem } = {} } = route || {}
+            const { params: { selectedGameMenuItem = '' } = {} } = route || {}
             switch (selectedGameMenuItem) {
                 case LEVEL_DIFFICULTIES.EASY:
                 case LEVEL_DIFFICULTIES.MEDIUM:
