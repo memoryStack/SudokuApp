@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
+        backgroundColor: 'white',
     },
     newGameButtonContainer: {
         alignSelf: 'flex-start',
@@ -91,10 +92,11 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = () => {
+const Arena_ = ({ navigation, route }) => {
+    // console.log('@@@@@nav', navigation, route)
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
-    const { gameState, showNextGameMenu, setShowNextGameMenu } = useManageGame()
+    const { gameState, showNextGameMenu, setShowNextGameMenu } = useManageGame(route)
 
     const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions(gameState)
 

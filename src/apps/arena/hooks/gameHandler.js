@@ -18,6 +18,8 @@ import {
     INVALID_DEEPLINK_PUZZLE,
     LAUNCHING_PREVIOUS_PUZZLE,
     DEEPLINK_PUZZLE_NO_SOLUTIONS,
+    RESUME,
+    CUSTOMIZE_YOUR_PUZZLE_TITLE,
 } from '../../../resources/stringLiterals'
 
 const transformNativeGeneratedPuzzle = (clues, solution) => {
@@ -88,7 +90,7 @@ const verifyDeeplinkAndStartPuzzle = url => {
     }
 }
 
-const useManageGame = () => {
+const useManageGame = route => {
     const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
     const previousGameState = usePrevious(gameState)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
@@ -125,29 +127,29 @@ const useManageGame = () => {
 
     useEffect(() => {
         const handler = async () => {
-            const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
-            if (previousGameData) {
-                const state = previousGameData[GAME_DATA_KEYS.STATE]
-                const refereeData = previousGameData[GAME_DATA_KEYS.REFEREE]
-                if (state !== GAME_STATE.INACTIVE) {
-                    emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: refereeData.difficultyLevel })
-                } else {
-                    // TODO: figure out if setTimeout needs to be removed or not
-                    // it's very imp. thing to do. for now keep it in setTimeout. (it works without use of setTimeout as well)
-                    // read about microtasks and asynchronous in JS and find out when/where
-                    // useEffects run and figure out whole thing about promise/eventLoop as well
-                    setTimeout(() => {
-                        emit(EVENTS.RESUME_PREVIOUS_GAME, previousGameData)
-                        setGameState(GAME_STATE.ACTIVE)
-                    }, 0)
-                }
-            } else {
-                emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: LEVEL_DIFFICULTIES.EASY })
+            const { params: { selectedGameMenuItem } = {} } = route || {}
+            switch (selectedGameMenuItem) {
+                case LEVEL_DIFFICULTIES.EASY:
+                case LEVEL_DIFFICULTIES.MEDIUM:
+                case LEVEL_DIFFICULTIES.HARD:
+                case LEVEL_DIFFICULTIES.EXPERT:
+                    emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: selectedGameMenuItem })
+                    break
+                case RESUME:
+                    const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
+                    emit(EVENTS.RESUME_PREVIOUS_GAME, previousGameData)
+                    emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
+                    break
+                case CUSTOMIZE_YOUR_PUZZLE_TITLE:
+                    // TODO: show custom puzzle input HC
+                    break
+                default:
+                    __DEV__ && console.log(new Error('invalid menu item'))
             }
         }
         addListener(EVENTS.START_DEFAULT_GAME_PROCESS, handler)
         return () => removeListener(EVENTS.START_DEFAULT_GAME_PROCESS, handler)
-    }, [])
+    }, [route])
 
     useEffect(() => {
         let componentUnmounted = false
