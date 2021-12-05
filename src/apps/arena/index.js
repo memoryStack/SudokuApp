@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
 })
 
 const Arena_ = ({ navigation, route }) => {
-    // console.log('@@@@@nav', navigation, route)
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
     const { gameState, showNextGameMenu, setShowNextGameMenu } = useManageGame(route)
@@ -223,7 +222,7 @@ const Arena_ = ({ navigation, route }) => {
     }, [mainNumbers])
 
     return (
-        <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus}>
+        <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 <View style={styles.headerButtonsContainer}>
                     <Button

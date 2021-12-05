@@ -16,6 +16,7 @@ const Page_ = ({
     onLayout = noOperationFunction,
     onFocus = noOperationFunction,
     onBlur = noOperationFunction,
+    navigation,
 }) => {
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')
 
@@ -41,22 +42,26 @@ const Page_ = ({
         [isPageInFocus, handleFocus, handleBlur],
     )
 
-    // all the events for koowing that page is actually in focus or not
+    // all the events for knowing that page is actually in focus or not
     useEffect(() => {
-        // TODO: add react-navigation 'focus' and 'blur' events
         AppState.addEventListener('change', handleAppStateChange)
+        const unsubNavigation = [
+            navigation && navigation.addListener('focus', handleFocus),
+            navigation && navigation.addListener('blur', handleBlur),
+        ]
         if (Platform.OS === 'android') {
             AppState.addEventListener('focus', handleFocus)
             AppState.addEventListener('blur', handleBlur)
         }
         return () => {
             AppState.removeEventListener('change', handleAppStateChange)
+            unsubNavigation.forEach(unsub => unsub && unsub())
             if (Platform.OS === 'android') {
                 AppState.removeEventListener('focus', handleFocus)
                 AppState.removeEventListener('blur', handleBlur)
             }
         }
-    }, [handleAppStateChange, handleFocus, handleBlur])
+    }, [handleAppStateChange, handleFocus, handleBlur, navigation])
 
     return (
         <SafeAreaView onLayout={onLayout} style={styles.safeAreaView}>
