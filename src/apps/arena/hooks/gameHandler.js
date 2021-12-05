@@ -129,7 +129,7 @@ const useManageGame = route => {
                 handleDeeplinkPuzzleLaunch(url)
             })
             .catch(error => {
-                console.log(__DEV__ && error)
+                __DEV__ && console.log(error)
                 emit(EVENTS.START_DEFAULT_GAME_PROCESS)
             })
     }, [])
