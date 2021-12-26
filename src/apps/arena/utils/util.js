@@ -62,6 +62,7 @@ const checkDuplicateSolutions = (row, col, mainNumbers) => {
     }
 }
 
+// TODO: it's name should be changed. it is not returning number of solutions exactly
 export const getNumberOfSolutions = mainNumbers => {
     numOfSolutions = 0
     checkDuplicateSolutions(0, 0, mainNumbers)
@@ -76,6 +77,7 @@ export const getNumberOfSolutions = mainNumbers => {
     return numOfSolutions
 }
 
+// how can i test this function's behaviour ??
 export const previousInactiveGameExists = async () => {
     const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
     let result = false
