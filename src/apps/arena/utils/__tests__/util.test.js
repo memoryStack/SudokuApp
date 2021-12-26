@@ -38,7 +38,7 @@ describe('should cache game data', () => {
     test('shouldSaveGameState test 1', () => {
         expect(shouldSaveGameState(GAME_STATE.OVER_SOLVED)).toBe(true)
     })
-    
+
     test('shouldSaveGameState test 2', () => {
         expect(shouldSaveGameState(GAME_STATE.OVER_UNSOLVED)).toBe(true)
     })
