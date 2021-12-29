@@ -6,7 +6,10 @@ import { GAME_STATE } from '../../../../resources/constants'
 import { CloseIcon } from '../../../../resources/svgIcons/close'
 import { CELL_HEIGHT } from '../dimensions'
 import { Styles as boardStyles } from '../style'
+import { fonts } from '../../../../resources/fonts/font'
 
+const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
+const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 // becoz only 3 notes are there in a row
 const looper = []
 for (let i = 0; i < 3; i++) looper.push(i)
@@ -22,10 +25,16 @@ const Cell_ = ({
     onCellClicked,
     gameState,
     displayCrossIcon = false,
+    smartHintData,
 }) => {
     const shouldRenderNotes = () => {
         for (let noteNum = 0; noteNum < 9; noteNum++) if (cellNotes[noteNum].show) return 1
         return 0
+    }
+
+    const getNotesFontColor = noteValue => {
+        const { notesToHighlightData: { [`${noteValue}`]: { fontColor = null } = {} } = {} } = smartHintData || {}
+        return fontColor
     }
 
     const getCellNotes = () => {
@@ -33,9 +42,17 @@ const Cell_ = ({
             const cellNotesRow = looper.map(col => {
                 const noteNum = row * 3 + col
                 const { show, noteValue } = cellNotes[noteNum] || {}
+                const noteFontColor = show && smartHintData ? getNotesFontColor(noteValue) : null
                 return (
                     <View key={`${noteNum}`} style={Styles.noteContainer}>
-                        <Text style={Styles.noteText}>{show ? `${noteValue}` : ''}</Text>
+                        <Text
+                            style={[
+                                Styles.noteText,
+                                noteFontColor ? { color: noteFontColor, fontFamily: fonts.bold } : null,
+                            ]}
+                        >
+                            {show ? `${noteValue}` : ''}
+                        </Text>
                     </View>
                 )
             })
@@ -52,8 +69,8 @@ const Cell_ = ({
         if (displayCrossIcon) {
             return (
                 <CloseIcon
-                    height={CELL_HEIGHT * 0.66}
-                    width={CELL_HEIGHT * 0.66}
+                    height={CROSS_ICON_DIMENSION}
+                    width={CROSS_ICON_DIMENSION}
                     fill={boardStyles.wronglyFilledNumColor.color}
                 />
             )

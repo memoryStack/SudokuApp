@@ -618,21 +618,311 @@ const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
 }
 // hidden singles ends here
 
+// TODO: this file is getting huge, break it
+// selections are for finding out doubles and triples. it will save us time as we won't have to find nC2 or nC3 again and again for each
+// row, colum and block
+// rename it pls
+const SELECTIONS = {
+    2: {
+        2: [[1, 0]],
+        3: [],
+    },
+    3: {
+        2: [
+            [1, 0],
+            [2, 0],
+            [2, 1],
+        ],
+        3: [[2, 1, 0]],
+    },
+    4: {
+        2: [
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [2, 1],
+            [3, 1],
+            [3, 2],
+        ],
+        3: [
+            [2, 1, 0],
+            [3, 1, 0],
+            [3, 2, 0],
+            [3, 2, 1],
+        ],
+    },
+    5: {
+        2: [
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [4, 0],
+            [2, 1],
+            [3, 1],
+            [4, 1],
+            [3, 2],
+            [4, 2],
+            [4, 3],
+        ],
+        3: [
+            [2, 1, 0],
+            [3, 1, 0],
+            [4, 1, 0],
+            [3, 2, 0],
+            [4, 2, 0],
+            [4, 3, 0],
+            [3, 2, 1],
+            [4, 2, 1],
+            [4, 3, 1],
+            [4, 3, 2],
+        ],
+    },
+    6: {
+        2: [
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [4, 0],
+            [5, 0],
+            [2, 1],
+            [3, 1],
+            [4, 1],
+            [5, 1],
+            [3, 2],
+            [4, 2],
+            [5, 2],
+            [4, 3],
+            [5, 3],
+            [5, 4],
+        ],
+        3: [
+            [2, 1, 0],
+            [3, 1, 0],
+            [4, 1, 0],
+            [5, 1, 0],
+            [3, 2, 0],
+            [4, 2, 0],
+            [5, 2, 0],
+            [4, 3, 0],
+            [5, 3, 0],
+            [5, 4, 0],
+            [3, 2, 1],
+            [4, 2, 1],
+            [5, 2, 1],
+            [4, 3, 1],
+            [5, 3, 1],
+            [5, 4, 1],
+            [4, 3, 2],
+            [5, 3, 2],
+            [5, 4, 2],
+            [5, 4, 3],
+        ],
+    },
+}
+
+// naked doubles or triples starts here
+const prepareNakedDublesOrTriplesHintData = (toBeHighlightedCells, doublesCells, doubles, notesData) => {
+    const cellsToFocusData = {}
+    const areSameCells = (A, B) => A.row === B.row && A.col === B.col
+    const isDoublesHostCell = cell => {
+        return doublesCells.some(aDoubleCell => areSameCells(aDoubleCell, cell))
+    }
+    toBeHighlightedCells.forEach(({ row, col }) => {
+        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
+        cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+
+        const notesToHighlightData = {}
+        let notesWillBeHighlighted = false
+        doubles.forEach(doublesStr => {
+            const doublesNum = parseInt(doublesStr, 10)
+            if (notesData[row][col][doublesNum - 1].show) {
+                if (isDoublesHostCell({ row, col })) {
+                    notesToHighlightData[doublesStr] = { fontColor: 'green' }
+                } else {
+                    notesToHighlightData[doublesStr] = { fontColor: 'red' }
+                }
+                notesWillBeHighlighted = true
+            }
+        })
+        if (notesWillBeHighlighted) cellsToFocusData[row][col].notesToHighlightData = notesToHighlightData
+    })
+
+    const hintMessage = () =>
+        `In the highlighted region, two cells have exactly two same candidates ${doubles[0]} and ${doubles[1]} highlighted in green color. So one of the squares in the pair has to be ${doubles[0]}, and other one has to be ${doubles[1]}. So ${doubles[0]} and ${doubles[1]} in other cells highlighted in red color can't appear there and we can erase these instances from these cells`
+
+    return {
+        cellsToFocusData,
+        techniqueInfo: {
+            title: 'Naked Doubles',
+            logic: hintMessage(),
+        },
+    }
+}
+
+// TODO: there can be multiple doubles and triples in the highlighted region
+//         how to tackle those cases so that user get most benefit ??
+const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, sudokuBoard) => {
+    const houseType = ['row', 'col', 'block']
+    const houseNum = {
+        row: selectedCell.row,
+        col: selectedCell.col,
+        block: getBlockAndBoxNum(selectedCell.row, selectedCell.col).blockNum,
+    }
+    let foundHint = false
+    // for (let i = 0; i < 9 && !foundHint; i++) { //  remove this loop
+    // houseNo
+    for (let j = 0; j < houseType.length && !foundHint; j++) {
+        const houseAllBoxes = [] // all the house boxes
+        const validBoxes = [] // all  the boxes with favorable number of instances in them
+        for (let box = 0; box < 9; box++) {
+            let row
+            let col
+            if (houseType[j] === 'row') {
+                row = houseNum.row
+                col = box
+            }
+            if (houseType[j] === 'col') {
+                row = box
+                col = houseNum.col
+            }
+            if (houseType[j] === 'block') {
+                const obj = getRowAndCol(houseNum.block, box)
+                row = obj.row
+                col = obj.col
+            }
+            houseAllBoxes.push({ row, col })
+
+            if (sudokuBoard[row][col].value) continue
+
+            // i guess we can store info for notes here only ad then use that down below
+            let boxVisibleNotesCount = 0
+            for (let note = 1; note <= 9; note++) if (notesData[row][col][note - 1].show) boxVisibleNotesCount++
+            if (boxVisibleNotesCount >= 2 && boxVisibleNotesCount <= noOfInstances)
+                // this is a valid box for further analysis
+                validBoxes.push({ row, col })
+        }
+
+        const maxValidBoxes = validBoxes.length
+        if (maxValidBoxes > 6 || maxValidBoxes < noOfInstances) continue
+        const possibleSelections = SELECTIONS[maxValidBoxes][noOfInstances]
+        for (let k = 0; k < possibleSelections.length && !foundHint; k++) {
+            const selectedBoxes = []
+            for (let x = 0; x < possibleSelections[k].length; x++) {
+                const selectedIndex = possibleSelections[k][x]
+                const box = validBoxes[selectedIndex]
+                selectedBoxes.push(box)
+            }
+
+            const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
+            for (let x = 0; x < selectedBoxes.length; x++) {
+                const { row, col } = selectedBoxes[x]
+                for (let z = 0; z < 9; z++) {
+                    if (notesData[row][col][z].show) {
+                        if (!eachVisibleNotesInfo[z + 1]) eachVisibleNotesInfo[z + 1] = 1
+                        else eachVisibleNotesInfo[z + 1]++
+                    }
+                }
+            }
+
+            const keys = Object.keys(eachVisibleNotesInfo)
+            let shouldAbort = keys.length !== noOfInstances
+            for (let x = 0; x < keys.length; x++) {
+                const count = eachVisibleNotesInfo[keys[x]]
+                if (!(count >= 2 && count <= noOfInstances)) {
+                    shouldAbort = true
+                    break
+                }
+            }
+
+            if (shouldAbort) continue // analyze some other cells
+            foundHint = true
+
+            // if house is row or col
+            if (houseType[j] === 'row' || houseType[j] === 'col') {
+                // remove the hard coding like this because it will be used for triples as well
+                const { blockNum: firstCellBlockNum } = getBlockAndBoxNum(selectedBoxes[0].row, selectedBoxes[0].col)
+                const { blockNum: secondCellBlockNum } = getBlockAndBoxNum(selectedBoxes[1].row, selectedBoxes[1].col)
+                if (firstCellBlockNum === secondCellBlockNum) {
+                    const blockNum = firstCellBlockNum
+                    for (let boxNum = 0; boxNum < 9; boxNum++) {
+                        const { row, col } = getRowAndCol(blockNum, boxNum)
+                        if (
+                            (houseType[j] === 'row' && row !== houseNum[houseType[j]]) ||
+                            (houseType[j] === 'col' && col !== houseNum[houseType[j]])
+                        )
+                            houseAllBoxes.push({ row, col })
+                    }
+                }
+            } else {
+                // check if cells are in a row or col or not
+                const { row: firstCellRow, col: firstCellCol } = selectedBoxes[0]
+                const { row: secondCellRow, col: secondCellCol } = selectedBoxes[1]
+                const { blockNum: doublesBlockNum } = getBlockAndBoxNum(selectedBoxes[0].row, selectedBoxes[0].col)
+                if (firstCellRow === secondCellRow) {
+                    // belong to same row
+                    for (let col = 0; col < 9; col++) {
+                        const { blockNum } = getBlockAndBoxNum(firstCellRow, col)
+                        if (doublesBlockNum !== blockNum) houseAllBoxes.push({ row: firstCellRow, col })
+                    }
+                }
+                if (firstCellCol === secondCellCol) {
+                    // belong to same col
+                    for (let row = 0; row < 9; row++) {
+                        const { blockNum } = getBlockAndBoxNum(row, firstCellCol)
+                        if (doublesBlockNum !== blockNum) houseAllBoxes.push({ row, col: firstCellCol })
+                    }
+                }
+            }
+
+            console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, keys)
+            return {
+                present: true,
+                returnData: prepareNakedDublesOrTriplesHintData(houseAllBoxes, selectedBoxes, keys, notesData),
+            }
+
+            //   highlightByNakedDoublesOrTriples(
+            //     houseAllBoxes, // all boxes to highlight (not all)
+            //     selectedBoxes, // cells which contains the pair
+            //     keys, // it contains the numbers which make the pair actually
+            //     notesData
+            //   )
+        }
+    }
+    // }
+
+    return { present: foundHint }
+}
+
+// naked doubles or triples ends here
+
 // write this in JS and if performance is not good then shift to native side
-const getSmartHint = async ({ row, col }, originalMainNumbers) => {
+const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
+    // why are we copying it ?? is it getting modified somewhere ??
+    // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
     const boardMainNumbersCopy = copyBoardMainNumbers(originalMainNumbers)
 
     // we don't need this DS to know if aked single is present or not in this cell
     // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
 
-    const { present: nakedSinglePresent, type: nakedSingleType } = checkNakedSingle(row, col, boardMainNumbersCopy)
-    if (nakedSinglePresent) {
-        return getNakedSingleTechniqueToFocus(row, col, nakedSingleType, originalMainNumbers)
-    }
+    // const { present: nakedSinglePresent, type: nakedSingleType } = checkNakedSingle(row, col, boardMainNumbersCopy)
+    // if (nakedSinglePresent) {
+    //     return getNakedSingleTechniqueToFocus(row, col, nakedSingleType, originalMainNumbers)
+    // }
 
-    const { present: hiddenSinglePresent, type: hiddenSingleType } = checkHiddenSingle(row, col, boardMainNumbersCopy)
-    if (hiddenSinglePresent) {
-        return getHiddenSingleTechniqueInfo(row, col, hiddenSingleType, boardMainNumbersCopy)
+    // const { present: hiddenSinglePresent, type: hiddenSingleType } = checkHiddenSingle(row, col, boardMainNumbersCopy)
+    // if (hiddenSinglePresent) {
+    //     return getHiddenSingleTechniqueInfo(row, col, hiddenSingleType, boardMainNumbersCopy)
+    // }
+
+    const { present: nakedDoubleFound, returnData } = highlightNakedDoublesOrTriples(
+        2,
+        { row, col },
+        notesData,
+        originalMainNumbers,
+    )
+    if (nakedDoubleFound) {
+        __DEV__ && console.log('@@@@@ naked double hint data', returnData)
+        return returnData
     }
 
     return null

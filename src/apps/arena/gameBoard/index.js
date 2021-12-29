@@ -85,6 +85,7 @@ const Board_ = ({
         return (
             <View style={Styles.rowStyle} key={key}>
                 {looper.map(col => {
+                    const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
                     return (
                         <View style={Styles.cellContainer} key={`${rowElementsKeyCounter++}`}>
                             <Cell
@@ -97,6 +98,7 @@ const Board_ = ({
                                 onCellClicked={onCellClick}
                                 gameState={gameState}
                                 displayCrossIcon={shouldMarkCellAsInhabitable(row, col)}
+                                smartHintData={smartHintData}
                             />
                         </View>
                     )

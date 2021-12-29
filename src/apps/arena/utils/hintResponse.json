@@ -1,0 +1,84 @@
+{
+	"cellsToFocusData": {
+		"1": {
+			"0": {
+				"bgColor": {
+					"backgroundColor": "white"
+				}
+			},
+			"1": {
+				"bgColor": {
+					"backgroundColor": "white"
+				}
+			},
+			"2": {
+				"bgColor": {
+					"backgroundColor": "white"
+				},
+				"notesToHighlightData": {
+					"6": {
+						"fontColor": "green"
+					},
+					"9": {
+						"fontColor": "green"
+					}
+				}
+			},
+			"3": {
+				"bgColor": {
+					"backgroundColor": "white"
+				}
+			},
+			"4": {
+				"bgColor": {
+					"backgroundColor": "white"
+				}
+			},
+			"5": {
+				"bgColor": {
+					"backgroundColor": "white"
+				}
+			},
+			"6": {
+				"bgColor": {
+					"backgroundColor": "white"
+				},
+				"notesToHighlightData": {
+					"6": {
+						"fontColor": "red"
+					}
+				}
+			},
+			"7": {
+				"bgColor": {
+					"backgroundColor": "white"
+				},
+				"notesToHighlightData": {
+					"6": {
+						"fontColor": "red"
+					},
+					"9": {
+						"fontColor": "red"
+					}
+				}
+			},
+			"8": {
+				"bgColor": {
+					"backgroundColor": "white"
+				},
+				"notesToHighlightData": {
+					"6": {
+						"fontColor": "green"
+					},
+					"9": {
+						"fontColor": "green"
+					}
+				}
+			}
+		}
+	},
+	"techniqueInfo": {
+		"title": "Naked Doubles",
+		"logic": "under construction"
+	}
+}
