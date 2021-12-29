@@ -87,3 +87,6 @@ export const previousInactiveGameExists = async () => {
     }
     return result
 }
+
+// TODO: write tests for it
+export const areSameCells = (cellA, cellB) => cellA.row === cellB.row && cellA.col === cellB.col

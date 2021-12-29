@@ -1,5 +1,5 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { duplicacyPresent } from './util'
+import { duplicacyPresent, areSameCells } from './util'
 import { Styles as boardStyles } from '../gameBoard/style'
 
 const HOUSE_TYPE = {
@@ -721,25 +721,31 @@ const SELECTIONS = {
 }
 
 // naked doubles or triples starts here
-const prepareNakedDublesOrTriplesHintData = (toBeHighlightedCells, doublesCells, doubles, notesData) => {
+const prepareNakedDublesOrTriplesHintData = (
+    noOfInstances,
+    toBeHighlightedCells,
+    groupCells,
+    groupCandidates,
+    notesData,
+) => {
+    const isNakedDoubles = noOfInstances === 2
     const cellsToFocusData = {}
-    const areSameCells = (A, B) => A.row === B.row && A.col === B.col
-    const isDoublesHostCell = cell => {
-        return doublesCells.some(aDoubleCell => areSameCells(aDoubleCell, cell))
-    }
+
+    const isGroupHostCell = cell => groupCells.some(groupCell => areSameCells(groupCell, cell))
+
     toBeHighlightedCells.forEach(({ row, col }) => {
         if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
         cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
 
         const notesToHighlightData = {}
         let notesWillBeHighlighted = false
-        doubles.forEach(doublesStr => {
-            const doublesNum = parseInt(doublesStr, 10)
-            if (notesData[row][col][doublesNum - 1].show) {
-                if (isDoublesHostCell({ row, col })) {
-                    notesToHighlightData[doublesStr] = { fontColor: 'green' }
+        groupCandidates.forEach(groupCandidate => {
+            const groupCandidateNum = parseInt(groupCandidate, 10)
+            if (notesData[row][col][groupCandidateNum - 1].show) {
+                if (isGroupHostCell({ row, col })) {
+                    notesToHighlightData[groupCandidate] = { fontColor: 'green' }
                 } else {
-                    notesToHighlightData[doublesStr] = { fontColor: 'red' }
+                    notesToHighlightData[groupCandidate] = { fontColor: 'red' }
                 }
                 notesWillBeHighlighted = true
             }
@@ -747,8 +753,25 @@ const prepareNakedDublesOrTriplesHintData = (toBeHighlightedCells, doublesCells,
         if (notesWillBeHighlighted) cellsToFocusData[row][col].notesToHighlightData = notesToHighlightData
     })
 
+    const groupCellsCountEnglishText = isNakedDoubles ? 'two' : 'three'
+    const getGroupCandidatesListText = () => {
+        return isNakedDoubles
+            ? `${groupCandidates[0]} and ${groupCandidates[1]}`
+            : `${groupCandidates[0]}, ${groupCandidates[1]} and ${groupCandidates[2]}`
+    }
+
+    const getCellsHostingText = () => {
+        const groupCandidatesText = isNakedDoubles
+            ? `${groupCandidates[0]}, and another one ${groupCandidates[1]}`
+            : `${groupCandidates[0]}, another ${groupCandidates[1]}, and the last ${groupCandidates[2]}`
+
+        return `So one of the squares has to be ${groupCandidatesText} (which is which is yet unknown).`
+    }
+
+    // TODO: this msg needs to be simplified for tripple case [{1,2}, {1,2,3}, {2, 3}]
+    // this case doesn't fit exactly in the below explaination
     const hintMessage = () =>
-        `In the highlighted region, two cells have exactly two same candidates ${doubles[0]} and ${doubles[1]} highlighted in green color. So one of the squares in the pair has to be ${doubles[0]}, and other one has to be ${doubles[1]}. So ${doubles[0]} and ${doubles[1]} in other cells highlighted in red color can't appear there and we can erase these instances from these cells`
+        `In the highlighted region, ${groupCellsCountEnglishText} cells have exactly same candidates ${getGroupCandidatesListText()} highlighted in green color. ${getCellsHostingText()} So ${getGroupCandidatesListText()} highlighted in red color can't appear there and we can erase these instances from these cells`
 
     return {
         cellsToFocusData,
@@ -877,7 +900,13 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
             console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, keys)
             return {
                 present: true,
-                returnData: prepareNakedDublesOrTriplesHintData(houseAllBoxes, selectedBoxes, keys, notesData),
+                returnData: prepareNakedDublesOrTriplesHintData(
+                    noOfInstances,
+                    houseAllBoxes,
+                    selectedBoxes,
+                    keys,
+                    notesData,
+                ),
             }
 
             //   highlightByNakedDoublesOrTriples(
