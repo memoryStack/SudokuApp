@@ -1,4 +1,4 @@
-import { getTimeComponentString, isGameOver, shouldSaveGameState } from '../util'
+import { getTimeComponentString, isGameOver, shouldSaveGameState, areSameCells } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 
 describe('time component value formatter', () => {
@@ -49,5 +49,31 @@ describe('should cache game data', () => {
 
     test('shouldSaveGameState test 4', () => {
         expect(shouldSaveGameState(GAME_STATE.INACTIVE, GAME_STATE.ACTIVE)).toBe(true)
+    })
+})
+
+describe('are same cells', () => {
+    test('areSameCells test 1', () => {
+        const cellA = { row: 2, col: 2 }
+        const cellB = { row: 2, col: 2 }
+        expect(areSameCells(cellA, cellB)).toBe(true)
+    })
+
+    test('areSameCells test 2', () => {
+        const cellA = { row: 2, col: 2 }
+        const cellB = { row: 2, col: 3 }
+        expect(areSameCells(cellA, cellB)).toBe(false)
+    })
+
+    test('areSameCells test 3', () => {
+        const cellA = { row: 1, col: 2 }
+        const cellB = { row: 3, col: 4 }
+        expect(areSameCells(cellA, cellB)).toBe(false)
+    })
+
+    test('areSameCells test 4', () => {
+        const cellA = { row: 5, col: 8 }
+        const cellB = { row: 8, col: 8 }
+        expect(areSameCells(cellA, cellB)).toBe(false)
     })
 })
