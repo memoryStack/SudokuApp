@@ -87,7 +87,7 @@ const isDuplicateEntry = (mainNumbers, cell, number) => {
     if (houseCount > 1) return true
 
     houseCount = 0
-    const { blockNum } = getBlockAndBoxNum(row, col, cell)
+    const { blockNum } = getBlockAndBoxNum(cell)
     for (let box = 0; box < 9; box++) {
         const { row, col } = getRowAndCol(blockNum, box)
         if (mainNumbers[row][col].value === number) houseCount++
@@ -124,7 +124,7 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                     if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
                         mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
                 }
-                const { blockNum } = getBlockAndBoxNum(row, col, selectedCell)
+                const { blockNum } = getBlockAndBoxNum(selectedCell)
                 for (let box = 0; box < 9; box++) {
                     const { row, col } = getRowAndCol(blockNum, box)
                     if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)

@@ -20,17 +20,17 @@ test('getRowAndCol test 3', () => {
 test('getBlockAndBoxNum test 1', () => {
     const cell = { row: 2, col: 7 }
     const output = { blockNum: 2, boxNum: 7 }
-    expect(getBlockAndBoxNum(2, 7, cell)).toStrictEqual(output)
+    expect(getBlockAndBoxNum(cell)).toStrictEqual(output)
 })
 
 test('getBlockAndBoxNum test 2', () => {
     const cell = { row: 4, col: 4 }
     const output = { blockNum: 4, boxNum: 4 }
-    expect(getBlockAndBoxNum(4, 4, cell)).toStrictEqual(output)
+    expect(getBlockAndBoxNum(cell)).toStrictEqual(output)
 })
 
 test('getBlockAndBoxNum test 3', () => {
     const cell = { row: 4, col: 6 }
     const output = { blockNum: 5, boxNum: 3 }
-    expect(getBlockAndBoxNum(4, 6, cell)).toStrictEqual(output)
+    expect(getBlockAndBoxNum(cell)).toStrictEqual(output)
 })

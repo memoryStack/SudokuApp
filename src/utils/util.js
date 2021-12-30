@@ -12,8 +12,8 @@ let sudokuBoard
 
 export const sameHouseAsSelected = (cell, selectedCell) => {
     if (cell.row === selectedCell.row || cell.col === selectedCell.col) return true
-    const normalBoxBlockInfo = getBlockAndBoxNum(cell.row, cell.col, cell)
-    const selectedBoxBlockInfo = getBlockAndBoxNum(selectedCell.row, selectedCell.col, selectedCell)
+    const normalBoxBlockInfo = getBlockAndBoxNum(cell)
+    const selectedBoxBlockInfo = getBlockAndBoxNum(selectedCell)
     return normalBoxBlockInfo.blockNum === selectedBoxBlockInfo.blockNum
 }
 
@@ -52,8 +52,7 @@ export const initBoardData = () => {
 }
 
 // TODO: write a test case that this func shouldn't change anything in input
-// args a and b are ready to be removed
-export const getBlockAndBoxNum = (a, b, cell) => {
+export const getBlockAndBoxNum = cell => {
     const { row, col } = cell
     const blockNum = row - (row % 3) + (col - (col % 3)) / 3
     const boxNum = (row % 3) * 3 + (col % 3)
@@ -114,7 +113,7 @@ const findSingles = () => {
 const updateDuplicacyCheckerStore = (row, col, num) => {
     const numIndex = num - 1
     const { rows, cols, blocks } = duplicacyCheckerStore
-    const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+    const { blockNum } = getBlockAndBoxNum({ row, col })
     rows[row][numIndex] = 1 - rows[row][numIndex]
     cols[col][numIndex] = 1 - cols[col][numIndex]
     blocks[blockNum][numIndex] = 1 - blocks[blockNum][numIndex]
@@ -132,7 +131,7 @@ const updateNoteInCell = (row, col, note, hideNote, validityChecksConfig) => {
 
     // hidden single DS
     const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
-    const { blockNum, boxNum } = getBlockAndBoxNum(row, col, { row, col })
+    const { blockNum, boxNum } = getBlockAndBoxNum({ row, col })
     rows[row].cells[col] = showValue // mark as present
     rows[row].count += countAdd // increase the count in current row
     cols[col].cells[row] = showValue
@@ -190,7 +189,7 @@ const updateHiddenSingles = (row, col, note, housesToCheck = {}) => {
     }
 
     if (checkInBlock) {
-        const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+        const { blockNum } = getBlockAndBoxNum({ row, col })
         if (blocks[blockNum].count === 1) {
             // hidden single generated in the current block for the "note"
             const { cells } = blocks[blockNum]
@@ -202,7 +201,7 @@ const updateHiddenSingles = (row, col, note, housesToCheck = {}) => {
 }
 
 const cellHasHiddenSingle = (row, col) => {
-    const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+    const { blockNum } = getBlockAndBoxNum({ row, col })
     for (let note = 1; note <= 9; note++) {
         if (notesData[row][col].boxNotes[note - 1].show) {
             const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
@@ -216,12 +215,12 @@ const cellHasHiddenSingle = (row, col) => {
 const duplicacyPresent = (row, col, num) => {
     const numIndex = num - 1
     const { rows, cols, blocks } = duplicacyCheckerStore
-    const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+    const { blockNum } = getBlockAndBoxNum({ row, col })
     return rows[row][numIndex] || cols[col][numIndex] || blocks[blockNum][numIndex]
 }
 
 const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNum) => {
-    const { blockNum: currentBlockNum } = getBlockAndBoxNum(currentRow, currentCol, {
+    const { blockNum: currentBlockNum } = getBlockAndBoxNum({
         row: currentRow,
         col: currentCol,
     })
@@ -320,7 +319,7 @@ const getValidityChecksConfig = (
 
 // it will tell if after filling the current cell sudoku will enter in invalidState
 const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) => {
-    const { blockNum: currentBlockNum } = getBlockAndBoxNum(currentRow, currentCol, {
+    const { blockNum: currentBlockNum } = getBlockAndBoxNum({
         row: currentRow,
         col: currentCol,
     })
@@ -388,7 +387,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                 currentBlockNum,
                 currentRow,
                 col,
-                getBlockAndBoxNum(currentRow, col, { row: currentRow, col }).blockNum,
+                getBlockAndBoxNum({ row: currentRow, col }).blockNum,
             )
             invalidFillInCurrentCell =
                 updateNoteInCell(currentRow, col, num, true, validityChecksConfig) || invalidFillInCurrentCell
@@ -415,7 +414,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                 currentBlockNum,
                 row,
                 currentCol,
-                getBlockAndBoxNum(row, currentCol, { row, col: currentCol }).blockNum,
+                getBlockAndBoxNum({ row, col: currentCol }).blockNum,
             )
             invalidFillInCurrentCell =
                 updateNoteInCell(row, currentCol, num, true, validityChecksConfig) || invalidFillInCurrentCell
@@ -555,7 +554,7 @@ const initializeDuplicacyCheckerStore = () => {
                 const numIndex = cellNum - 1
                 rows[row][numIndex] = 1
                 cols[col][numIndex] = 1
-                const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+                const { blockNum } = getBlockAndBoxNum({ row, col })
                 blocks[blockNum][numIndex] = 1
             }
         }

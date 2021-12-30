@@ -111,7 +111,7 @@ const checkNakedSingle = (row, col, mainNumbers) => {
 
     if (candidatesFilled === 0) {
         // check for block
-        const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+        const { blockNum } = getBlockAndBoxNum({ row, col })
         for (let boxNum = 0; boxNum < 9; boxNum++) {
             const { row, col } = getRowAndCol(blockNum, boxNum)
             if (mainNumbers[row][col].value) candidatesFilled++
@@ -163,7 +163,7 @@ const nakedSingleBlockDataToHighlight = (selectedRow, selectedCol, cellsToFocusD
         row: selectedRow,
         col: selectedCol,
     }
-    const { blockNum } = getBlockAndBoxNum(selectedRow, selectedCol, selectedCell)
+    const { blockNum } = getBlockAndBoxNum(selectedCell)
     for (let cell = 0; cell < 9; cell++) {
         const { row, col } = getRowAndCol(blockNum, cell)
         if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
@@ -243,7 +243,7 @@ const getCurrentCellNotes = (mainNumbers, cell) => {
         const filledValue = mainNumbers[row][col].value
         if (filledValue) numbersAlreadyInHouses[filledValue] = true
     }
-    const { blockNum } = getBlockAndBoxNum(row, col, cell)
+    const { blockNum } = getBlockAndBoxNum(cell)
     for (let cellNo = 0; cellNo < 9; cellNo++) {
         const { row, col } = getRowAndCol(blockNum, cellNo)
         const filledValue = mainNumbers[row][col].value
@@ -264,7 +264,7 @@ const checkHiddenSingle = (row, col, mainNumbers) => {
         const candidate = possibleCandiates[i]
         // first check in block
         let possibleOccurencesInHouse = 0
-        const { blockNum } = getBlockAndBoxNum(row, col, cell)
+        const { blockNum } = getBlockAndBoxNum(cell)
         for (let cellNo = 0; cellNo < 9; cellNo++) {
             const { row, col } = getRowAndCol(blockNum, cellNo)
             const isEmptyCell = mainNumbers[row][col].value === 0
@@ -453,7 +453,7 @@ const getHiddenSingleInRowOrColData = (selectedRow, selectedCol, type, mainNumbe
         row: selectedRow,
         col: selectedCol,
     }
-    const { blockNum: currentBlockNum } = getBlockAndBoxNum(selectedRow, selectedCol, selectedCell)
+    const { blockNum: currentBlockNum } = getBlockAndBoxNum(selectedCell)
     highlightBlockCells({
         selectedRow,
         selectedCol,
@@ -486,7 +486,7 @@ const getHiddenSingleInBlockData = (selectedRow, selectedCol, mainNumbers) => {
         row: selectedRow,
         col: selectedCol,
     }
-    const { blockNum } = getBlockAndBoxNum(selectedRow, selectedCol, selectedCell)
+    const { blockNum } = getBlockAndBoxNum(selectedCell)
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
     const neighbourRows = {}
     const neighbourCols = {}
@@ -713,7 +713,7 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
     const houseNum = {
         row: selectedCell.row,
         col: selectedCell.col,
-        block: getBlockAndBoxNum(selectedCell.row, selectedCell.col, selectedCell).blockNum,
+        block: getBlockAndBoxNum(selectedCell).blockNum,
     }
     let foundHint = false
     // for (let i = 0; i < 9 && !foundHint; i++) { //  remove this loop
@@ -791,7 +791,7 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
 
             // if house is row or col
             if ((houseType[j] === 'row' || houseType[j] === 'col') && areSameBlockCells(selectedBoxes)) {
-                const { blockNum } = getBlockAndBoxNum(selectedBoxes[0].row, selectedBoxes[0].col, selectedBoxes[0])
+                const { blockNum } = getBlockAndBoxNum(selectedBoxes[0])
                 for (let boxNum = 0; boxNum < 9; boxNum++) {
                     const { row, col } = getRowAndCol(blockNum, boxNum)
                     if (
@@ -804,13 +804,13 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
                 if (areSameRowCells(selectedBoxes)) {
                     const { row } = selectedBoxes[0]
                     for (let col = 0; col < 9; col++) {
-                        const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+                        const { blockNum } = getBlockAndBoxNum({ row, col })
                         if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
                     }
                 } else if (areSameColCells(selectedBoxes)) {
                     const { col } = selectedBoxes[0]
                     for (let row = 0; row < 9; row++) {
-                        const { blockNum } = getBlockAndBoxNum(row, col, { row, col })
+                        const { blockNum } = getBlockAndBoxNum({ row, col })
                         if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
                     }
                 }

@@ -75,7 +75,7 @@ const removeNotesAfterCellFilled = (notesInfo, num, cell) => {
     }
 
     // remove notes from current block
-    const { blockNum } = getBlockAndBoxNum(row, col, cell)
+    const { blockNum } = getBlockAndBoxNum(cell)
     for (let boxNum = 0; boxNum < 9; boxNum++) {
         const { row, col } = getRowAndCol(blockNum, boxNum)
         const noteIndx = num - 1
