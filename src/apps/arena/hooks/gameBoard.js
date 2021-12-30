@@ -375,19 +375,19 @@ const useGameBoard = (gameState, pencilState, hints) => {
     // it will provide the smart hint with the step wise step logic
     useEffect(() => {
         const handler = () => {
-            const { row, col } = selectedCell
-            if (!mainNumbers[row][col].value) {
-                getSmartHint(selectedCell, mainNumbers, notesInfo)
-                    .then(info => {
-                        __DEV__ && console.log('@@@@ hintInfo', JSON.stringify(info))
-                        if (info) setSmartHintData({ show: true, info })
-                    })
-                    .catch(error => {
-                        __DEV__ && console.log(error)
-                    })
-            } else {
-                // TODO: show some popup for dummies
-            }
+            // const { row, col } = selectedCell
+            // if (!mainNumbers[row][col].value) {
+            getSmartHint(selectedCell, mainNumbers, notesInfo)
+                .then(info => {
+                    __DEV__ && console.log('@@@@ hintInfo', JSON.stringify(info))
+                    if (info) setSmartHintData({ show: true, info })
+                })
+                .catch(error => {
+                    __DEV__ && console.log(error)
+                })
+            // } else {
+            // TODO: show some popup for dummies
+            // }
         }
         addListener(EVENTS.HINT_CLICKED, handler)
         return () => removeListener(EVENTS.HINT_CLICKED, handler)

@@ -828,18 +828,26 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
     const boardMainNumbersCopy = copyBoardMainNumbers(originalMainNumbers)
 
+    const cellFilled = !!originalMainNumbers[row][col].value
+
     // we don't need this DS to know if aked single is present or not in this cell
     // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
 
-    // const { present: nakedSinglePresent, type: nakedSingleType } = checkNakedSingle(row, col, boardMainNumbersCopy)
-    // if (nakedSinglePresent) {
-    //     return getNakedSingleTechniqueToFocus(row, col, nakedSingleType, originalMainNumbers)
-    // }
+    if (!cellFilled) {
+        const { present: nakedSinglePresent, type: nakedSingleType } = checkNakedSingle(row, col, boardMainNumbersCopy)
+        if (nakedSinglePresent) {
+            return getNakedSingleTechniqueToFocus(row, col, nakedSingleType, originalMainNumbers)
+        }
 
-    // const { present: hiddenSinglePresent, type: hiddenSingleType } = checkHiddenSingle(row, col, boardMainNumbersCopy)
-    // if (hiddenSinglePresent) {
-    //     return getHiddenSingleTechniqueInfo(row, col, hiddenSingleType, boardMainNumbersCopy)
-    // }
+        const { present: hiddenSinglePresent, type: hiddenSingleType } = checkHiddenSingle(
+            row,
+            col,
+            boardMainNumbersCopy,
+        )
+        if (hiddenSinglePresent) {
+            return getHiddenSingleTechniqueInfo(row, col, hiddenSingleType, boardMainNumbersCopy)
+        }
+    }
 
     const { present: nakedDoubleFound, returnData } = highlightNakedDoublesOrTriples(
         2,
@@ -848,7 +856,7 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
         originalMainNumbers,
     )
     if (nakedDoubleFound) {
-        __DEV__ && console.log('@@@@@ naked double hint data', returnData)
+        __DEV__ && console.log('@@@@@ naked multiple hint data', returnData)
         return returnData
     }
 
@@ -859,7 +867,7 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
         originalMainNumbers,
     )
     if (nakedTrippleFound) {
-        __DEV__ && console.log('@@@@@ naked double hint data', returnData)
+        __DEV__ && console.log('@@@@@ naked multiple hint data', returnData)
         return nakedTrippleReturnData
     }
 
