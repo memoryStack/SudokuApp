@@ -22,7 +22,7 @@ const Board_ = ({
     selectedCellMainValue = 0,
     onCellClick,
     showSmartHint,
-    smartHintCellsHighlightInfo,
+    smartHintCellsHighlightInfo = {},
 }) => {
     const sameValueAsSelectedBox = (row, col) =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[row][col].value

@@ -740,3 +740,15 @@ export const rgba = function (hex, opacity) {
     const result = `rgba(${r}, ${g}, ${b}, ${opacity / 100})`
     return result
 }
+
+// prototypes to the array
+if (Array.prototype.allValuesSame === undefined) {
+    Array.prototype.allValuesSame = function () {
+        for (let i = 1; i < this.length; i++) {
+            if (this[i] !== this[0]) {
+                return false
+            }
+        }
+        return true
+    }
+}

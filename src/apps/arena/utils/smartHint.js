@@ -1,5 +1,5 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { duplicacyPresent, areSameCells } from './util'
+import { duplicacyPresent, areSameCells, areSameRowCells, areSameColCells, areSameBlockCells } from './util'
 import { Styles as boardStyles } from '../gameBoard/style'
 import { N_CHOOSE_K } from '../../../resources/constants'
 
@@ -677,7 +677,7 @@ const prepareNakedDublesOrTriplesHintData = (
     return {
         cellsToFocusData,
         techniqueInfo: {
-            title: 'Naked Doubles',
+            title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
             logic: hintMessage(),
         },
     }
@@ -685,8 +685,17 @@ const prepareNakedDublesOrTriplesHintData = (
 
 // TODO: there can be multiple doubles and triples in the highlighted region
 //         how to tackle those cases so that user get most benefit ??
+
+const getVisibileNotesCount = ({ row, col }, notesData) => {
+    let result = 0
+    for (let note = 1; note <= 9; note++) {
+        if (notesData[row][col][note - 1].show) result++
+    }
+    return result
+}
+
 const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, sudokuBoard) => {
-    const houseType = ['row', 'col', 'block']
+    const houseType = ['block', 'row', 'col']
     const houseNum = {
         row: selectedCell.row,
         col: selectedCell.col,
@@ -718,17 +727,21 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
 
             if (sudokuBoard[row][col].value) continue
 
-            // i guess we can store info for notes here only ad then use that down below
-            let boxVisibleNotesCount = 0
-            for (let note = 1; note <= 9; note++) if (notesData[row][col][note - 1].show) boxVisibleNotesCount++
-            if (boxVisibleNotesCount >= 2 && boxVisibleNotesCount <= noOfInstances)
-                // this is a valid box for further analysis
+            // i guess we can store info for notes here only and then use that down below. What is this ??
+            const boxVisibleNotesCount = getVisibileNotesCount({ row, col }, notesData)
+            const MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD = 2
+            if (
+                boxVisibleNotesCount >= MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD &&
+                boxVisibleNotesCount <= noOfInstances
+            )
                 validBoxes.push({ row, col })
         }
 
-        const maxValidBoxes = validBoxes.length
-        if (maxValidBoxes > 6 || maxValidBoxes < noOfInstances) continue
-        const possibleSelections = N_CHOOSE_K[maxValidBoxes][noOfInstances]
+        const validBoxesCount = validBoxes.length
+        // TODO: check the below threshold for naked multiple cases.
+        const VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH = 6 // to avoid computing 7C2 and 7C3, because that might be heavy
+        if (validBoxesCount > VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH || validBoxesCount < noOfInstances) continue
+        const possibleSelections = N_CHOOSE_K[validBoxesCount][noOfInstances]
         for (let k = 0; k < possibleSelections.length && !foundHint; k++) {
             const selectedBoxes = []
             for (let x = 0; x < possibleSelections[k].length; x++) {
@@ -740,72 +753,63 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
             const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
             for (let x = 0; x < selectedBoxes.length; x++) {
                 const { row, col } = selectedBoxes[x]
-                for (let z = 0; z < 9; z++) {
-                    if (notesData[row][col][z].show) {
-                        if (!eachVisibleNotesInfo[z + 1]) eachVisibleNotesInfo[z + 1] = 1
-                        else eachVisibleNotesInfo[z + 1]++
+                for (let note = 1; note <= 9; note++) {
+                    if (notesData[row][col][note - 1].show) {
+                        if (!eachVisibleNotesInfo[note]) eachVisibleNotesInfo[note] = 1
+                        else eachVisibleNotesInfo[note]++
                     }
                 }
             }
 
-            const keys = Object.keys(eachVisibleNotesInfo)
-            let shouldAbort = keys.length !== noOfInstances
-            for (let x = 0; x < keys.length; x++) {
-                const count = eachVisibleNotesInfo[keys[x]]
+            const groupCandidates = Object.keys(eachVisibleNotesInfo)
+            let shouldAbort = groupCandidates.length !== noOfInstances
+            for (let x = 0; x < groupCandidates.length; x++) {
+                const count = eachVisibleNotesInfo[groupCandidates[x]]
                 if (!(count >= 2 && count <= noOfInstances)) {
+                    // TODO: this needs to be checked again
                     shouldAbort = true
                     break
                 }
             }
 
-            if (shouldAbort) continue // analyze some other cells
+            if (shouldAbort) continue // analyze some other combination of cells
             foundHint = true
 
             // if house is row or col
-            if (houseType[j] === 'row' || houseType[j] === 'col') {
-                // remove the hard coding like this because it will be used for triples as well
-                const { blockNum: firstCellBlockNum } = getBlockAndBoxNum(selectedBoxes[0].row, selectedBoxes[0].col)
-                const { blockNum: secondCellBlockNum } = getBlockAndBoxNum(selectedBoxes[1].row, selectedBoxes[1].col)
-                if (firstCellBlockNum === secondCellBlockNum) {
-                    const blockNum = firstCellBlockNum
-                    for (let boxNum = 0; boxNum < 9; boxNum++) {
-                        const { row, col } = getRowAndCol(blockNum, boxNum)
-                        if (
-                            (houseType[j] === 'row' && row !== houseNum[houseType[j]]) ||
-                            (houseType[j] === 'col' && col !== houseNum[houseType[j]])
-                        )
-                            houseAllBoxes.push({ row, col })
-                    }
+            if ((houseType[j] === 'row' || houseType[j] === 'col') && areSameBlockCells(selectedBoxes)) {
+                const { blockNum } = getBlockAndBoxNum(selectedBoxes[0].row, selectedBoxes[0].col)
+                for (let boxNum = 0; boxNum < 9; boxNum++) {
+                    const { row, col } = getRowAndCol(blockNum, boxNum)
+                    if (
+                        (houseType[j] === 'row' && row !== houseNum[houseType[j]]) ||
+                        (houseType[j] === 'col' && col !== houseNum[houseType[j]])
+                    )
+                        houseAllBoxes.push({ row, col })
                 }
             } else {
-                // check if cells are in a row or col or not
-                const { row: firstCellRow, col: firstCellCol } = selectedBoxes[0]
-                const { row: secondCellRow, col: secondCellCol } = selectedBoxes[1]
-                const { blockNum: doublesBlockNum } = getBlockAndBoxNum(selectedBoxes[0].row, selectedBoxes[0].col)
-                if (firstCellRow === secondCellRow) {
-                    // belong to same row
+                if (areSameRowCells(selectedBoxes)) {
+                    const { row } = selectedBoxes[0]
                     for (let col = 0; col < 9; col++) {
-                        const { blockNum } = getBlockAndBoxNum(firstCellRow, col)
-                        if (doublesBlockNum !== blockNum) houseAllBoxes.push({ row: firstCellRow, col })
+                        const { blockNum } = getBlockAndBoxNum(row, col)
+                        if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
                     }
-                }
-                if (firstCellCol === secondCellCol) {
-                    // belong to same col
+                } else if (areSameColCells(selectedBoxes)) {
+                    const { col } = selectedBoxes[0]
                     for (let row = 0; row < 9; row++) {
-                        const { blockNum } = getBlockAndBoxNum(row, firstCellCol)
-                        if (doublesBlockNum !== blockNum) houseAllBoxes.push({ row, col: firstCellCol })
+                        const { blockNum } = getBlockAndBoxNum(row, col)
+                        if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
                     }
                 }
             }
 
-            console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, keys)
+            __DEV__ && console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
             return {
                 present: true,
                 returnData: prepareNakedDublesOrTriplesHintData(
                     noOfInstances,
                     houseAllBoxes,
                     selectedBoxes,
-                    keys,
+                    groupCandidates,
                     notesData,
                 ),
             }
@@ -846,6 +850,17 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     if (nakedDoubleFound) {
         __DEV__ && console.log('@@@@@ naked double hint data', returnData)
         return returnData
+    }
+
+    const { present: nakedTrippleFound, returnData: nakedTrippleReturnData } = highlightNakedDoublesOrTriples(
+        3,
+        { row, col },
+        notesData,
+        originalMainNumbers,
+    )
+    if (nakedTrippleFound) {
+        __DEV__ && console.log('@@@@@ naked double hint data', returnData)
+        return nakedTrippleReturnData
     }
 
     return null
