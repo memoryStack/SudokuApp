@@ -40,7 +40,8 @@ const isPuzzleSolved = mainNumbers => {
 // TODO: fix the repeated lines in this func
 // TODO: add the removed notes in cells other than currentCell to the undo move
 //          right now we are just recording the current cells notes only
-const removeNotesAfterCellFilled = (notesInfo, row, col, num) => {
+const removeNotesAfterCellFilled = (notesInfo, num, cell) => {
+    const { row, col } = cell
     let notesErasedByMainValue = []
     // remove notes from current cell
     for (let note = 0; note < 9; note++) {
@@ -74,7 +75,7 @@ const removeNotesAfterCellFilled = (notesInfo, row, col, num) => {
     }
 
     // remove notes from current block
-    const { blockNum } = getBlockAndBoxNum(row, col)
+    const { blockNum } = getBlockAndBoxNum(row, col, cell)
     for (let boxNum = 0; boxNum < 9; boxNum++) {
         const { row, col } = getRowAndCol(blockNum, boxNum)
         const noteIndx = num - 1
@@ -198,7 +199,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
 
                 if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
                 else {
-                    notesErasedByMainValue = removeNotesAfterCellFilled(notesInfo, row, col, number)
+                    notesErasedByMainValue = removeNotesAfterCellFilled(notesInfo, number, selectedCell)
                     if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
                     if (isPuzzleSolved(mainNumbersDup)) {
                         // a little delay is better

@@ -92,7 +92,10 @@ export const previousInactiveGameExists = async () => {
 export const areSameCells = (cellA, cellB) => cellA.row === cellB.row && cellA.col === cellB.col
 
 export const areSameBlockCells = cells => {
-    const cellsBlockNum = cells.map(({ row, col }) => getBlockAndBoxNum(row, col).blockNum)
+    const cellsBlockNum = cells.map(cell => {
+        const { row, col } = cell
+        return getBlockAndBoxNum(row, col, cell).blockNum
+    })
     return cellsBlockNum.allValuesSame()
 }
 
