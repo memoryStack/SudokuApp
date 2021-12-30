@@ -185,7 +185,6 @@ const useManageGame = route => {
         const handler = ({ mainNumbers }) => {
             setTimeout(() => {
                 emit(EVENTS.START_NEW_GAME, { difficultyLevel: 'Shared Puzzle', mainNumbers })
-                console.log('@@@@@@ start deeplinnk puzzle', JSON.stringify(mainNumbers))
                 setGameState(GAME_STATE.ACTIVE)
             }, 0)
         }

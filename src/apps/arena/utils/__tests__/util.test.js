@@ -1,4 +1,12 @@
-import { getTimeComponentString, isGameOver, shouldSaveGameState, areSameCells } from '../util'
+import {
+    getTimeComponentString,
+    isGameOver,
+    shouldSaveGameState,
+    areSameCells,
+    areSameBlockCells,
+    areSameRowCells,
+    areSameColCells,
+} from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 
 describe('time component value formatter', () => {
@@ -75,5 +83,92 @@ describe('are same cells', () => {
         const cellA = { row: 5, col: 8 }
         const cellB = { row: 8, col: 8 }
         expect(areSameCells(cellA, cellB)).toBe(false)
+    })
+})
+
+describe('are same block cells', () => {
+    test('areSameBlockCells test 1', () => {
+        const cells = [
+            { row: 0, col: 0 },
+            { row: 0, col: 1 },
+            { row: 2, col: 0 },
+        ]
+        expect(areSameBlockCells(cells)).toBe(true)
+    })
+
+    test('areSameBlockCells test 2', () => {
+        const cells = [
+            { row: 0, col: 0 },
+            { row: 0, col: 1 },
+            { row: 2, col: 5 },
+        ]
+        expect(areSameBlockCells(cells)).toBe(false)
+    })
+
+    test('areSameBlockCells test 3', () => {
+        const cells = [
+            { row: 0, col: 0 },
+            { row: 3, col: 3 },
+            { row: 7, col: 7 },
+        ]
+        expect(areSameBlockCells(cells)).toBe(false)
+    })
+})
+
+describe('are same row cells', () => {
+    test('areSameRowCells test 1', () => {
+        const cells = [
+            { row: 0, col: 0 },
+            { row: 0, col: 1 },
+            { row: 0, col: 2 },
+        ]
+        expect(areSameRowCells(cells)).toBe(true)
+    })
+
+    test('areSameRowCells test 2', () => {
+        const cells = [
+            { row: 0, col: 0 },
+            { row: 0, col: 3 },
+            { row: 0, col: 7 },
+        ]
+        expect(areSameRowCells(cells)).toBe(true)
+    })
+
+    test('areSameRowCells test 3', () => {
+        const cells = [
+            { row: 3, col: 5 },
+            { row: 3, col: 3 },
+            { row: 4, col: 7 },
+        ]
+        expect(areSameRowCells(cells)).toBe(false)
+    })
+})
+
+describe('are same col cells', () => {
+    test('areSameColCells test 1', () => {
+        const cells = [
+            { row: 0, col: 3 },
+            { row: 4, col: 3 },
+            { row: 8, col: 3 },
+        ]
+        expect(areSameColCells(cells)).toBe(true)
+    })
+
+    test('areSameColCells test 2', () => {
+        const cells = [
+            { row: 4, col: 4 },
+            { row: 6, col: 4 },
+            { row: 8, col: 4 },
+        ]
+        expect(areSameColCells(cells)).toBe(true)
+    })
+
+    test('areSameColCells test 3', () => {
+        const cells = [
+            { row: 3, col: 6 },
+            { row: 3, col: 7 },
+            { row: 4, col: 7 },
+        ]
+        expect(areSameColCells(cells)).toBe(false)
     })
 })
