@@ -183,8 +183,11 @@ const useManageGame = route => {
 
     useEffect(() => {
         const handler = ({ mainNumbers }) => {
-            emit(EVENTS.START_NEW_GAME, { difficultyLevel: 'Shared Puzzle', mainNumbers })
-            setGameState(GAME_STATE.ACTIVE)
+            setTimeout(() => {
+                emit(EVENTS.START_NEW_GAME, { difficultyLevel: 'Shared Puzzle', mainNumbers })
+                console.log('@@@@@@ start deeplinnk puzzle', JSON.stringify(mainNumbers))
+                setGameState(GAME_STATE.ACTIVE)
+            }, 0)
         }
         addListener(EVENTS.START_DEEPLINK_PUZZLE, handler)
         return () => removeListener(EVENTS.START_DEEPLINK_PUZZLE, handler)
