@@ -79,7 +79,7 @@ const Cell_ = ({
         return cellMainValue ? (
             <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
         ) : shouldRenderNotes() ? (
-            getCellNotes(row, col)
+            getCellNotes()
         ) : null
     }
 
