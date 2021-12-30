@@ -1,6 +1,7 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { duplicacyPresent, areSameCells } from './util'
 import { Styles as boardStyles } from '../gameBoard/style'
+import { N_CHOOSE_K } from '../../../resources/constants'
 
 const HOUSE_TYPE = {
     ROW: 'row',
@@ -619,106 +620,6 @@ const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
 // hidden singles ends here
 
 // TODO: this file is getting huge, break it
-// selections are for finding out doubles and triples. it will save us time as we won't have to find nC2 or nC3 again and again for each
-// row, colum and block
-// rename it pls
-const SELECTIONS = {
-    2: {
-        2: [[1, 0]],
-        3: [],
-    },
-    3: {
-        2: [
-            [1, 0],
-            [2, 0],
-            [2, 1],
-        ],
-        3: [[2, 1, 0]],
-    },
-    4: {
-        2: [
-            [1, 0],
-            [2, 0],
-            [3, 0],
-            [2, 1],
-            [3, 1],
-            [3, 2],
-        ],
-        3: [
-            [2, 1, 0],
-            [3, 1, 0],
-            [3, 2, 0],
-            [3, 2, 1],
-        ],
-    },
-    5: {
-        2: [
-            [1, 0],
-            [2, 0],
-            [3, 0],
-            [4, 0],
-            [2, 1],
-            [3, 1],
-            [4, 1],
-            [3, 2],
-            [4, 2],
-            [4, 3],
-        ],
-        3: [
-            [2, 1, 0],
-            [3, 1, 0],
-            [4, 1, 0],
-            [3, 2, 0],
-            [4, 2, 0],
-            [4, 3, 0],
-            [3, 2, 1],
-            [4, 2, 1],
-            [4, 3, 1],
-            [4, 3, 2],
-        ],
-    },
-    6: {
-        2: [
-            [1, 0],
-            [2, 0],
-            [3, 0],
-            [4, 0],
-            [5, 0],
-            [2, 1],
-            [3, 1],
-            [4, 1],
-            [5, 1],
-            [3, 2],
-            [4, 2],
-            [5, 2],
-            [4, 3],
-            [5, 3],
-            [5, 4],
-        ],
-        3: [
-            [2, 1, 0],
-            [3, 1, 0],
-            [4, 1, 0],
-            [5, 1, 0],
-            [3, 2, 0],
-            [4, 2, 0],
-            [5, 2, 0],
-            [4, 3, 0],
-            [5, 3, 0],
-            [5, 4, 0],
-            [3, 2, 1],
-            [4, 2, 1],
-            [5, 2, 1],
-            [4, 3, 1],
-            [5, 3, 1],
-            [5, 4, 1],
-            [4, 3, 2],
-            [5, 3, 2],
-            [5, 4, 2],
-            [5, 4, 3],
-        ],
-    },
-}
 
 // naked doubles or triples starts here
 const prepareNakedDublesOrTriplesHintData = (
@@ -827,7 +728,7 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
 
         const maxValidBoxes = validBoxes.length
         if (maxValidBoxes > 6 || maxValidBoxes < noOfInstances) continue
-        const possibleSelections = SELECTIONS[maxValidBoxes][noOfInstances]
+        const possibleSelections = N_CHOOSE_K[maxValidBoxes][noOfInstances]
         for (let k = 0; k < possibleSelections.length && !foundHint; k++) {
             const selectedBoxes = []
             for (let x = 0; x < possibleSelections[k].length; x++) {
@@ -908,13 +809,6 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
                     notesData,
                 ),
             }
-
-            //   highlightByNakedDoublesOrTriples(
-            //     houseAllBoxes, // all boxes to highlight (not all)
-            //     selectedBoxes, // cells which contains the pair
-            //     keys, // it contains the numbers which make the pair actually
-            //     notesData
-            //   )
         }
     }
     // }
