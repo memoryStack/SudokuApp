@@ -863,26 +863,19 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
         }
     }
 
-    const { present: nakedDoubleFound, returnData } = highlightNakedDoublesOrTriples(
-        2,
-        { row, col },
-        notesData,
-        originalMainNumbers,
-    )
-    if (nakedDoubleFound) {
-        __DEV__ && console.log('@@@@@ naked multiple hint data', returnData)
-        return returnData
-    }
-
-    const { present: nakedTrippleFound, returnData: nakedTrippleReturnData } = highlightNakedDoublesOrTriples(
-        3,
-        { row, col },
-        notesData,
-        originalMainNumbers,
-    )
-    if (nakedTrippleFound) {
-        __DEV__ && console.log('@@@@@ naked multiple hint data', returnData)
-        return nakedTrippleReturnData
+    const possibleGroupCandidatesCount = [2, 3]
+    for (let i = 0; i < possibleGroupCandidatesCount.length; i++) {
+        const groupCandidatesCount = possibleGroupCandidatesCount[i]
+        const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
+            groupCandidatesCount,
+            { row, col },
+            notesData,
+            originalMainNumbers,
+        )
+        if (nakedGroupFound) {
+            __DEV__ && console.log('@@@@@ naked multiple hint data', returnData)
+            return returnData
+        }
     }
 
     return null
