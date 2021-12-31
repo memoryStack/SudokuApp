@@ -708,6 +708,7 @@ const getVisibileNotesCount = ({ row, col }, notesData) => {
     return result
 }
 
+// TODO: think over the namings harder. i see a lot of in-consistencies
 const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, sudokuBoard) => {
     const houseType = ['block', 'row', 'col']
     const houseNum = {
@@ -814,6 +815,24 @@ const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, 
                         if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
                     }
                 }
+            }
+
+            const groupWillRemoveCandidates = houseAllBoxes.some(cell => {
+                const isSelectedCell = selectedBoxes.some(selectedCell => {
+                    return areSameCells(cell, selectedCell)
+                })
+                return (
+                    !isSelectedCell &&
+                    groupCandidates.some(groupCandidate => {
+                        const groupCandidateNum = parseInt(groupCandidate, 10)
+                        return notesData[cell.row][cell.col][groupCandidateNum - 1].show
+                    })
+                )
+            })
+
+            if (!groupWillRemoveCandidates) {
+                foundHint = false
+                continue
             }
 
             __DEV__ && console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
