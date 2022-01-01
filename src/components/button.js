@@ -21,12 +21,19 @@ const styles = StyleSheet.create({
 })
 
 // TODO: make the tuchable configurable as well when in need
-const Button_ = ({ onClick = noOperationFunction, containerStyle = null, text = '', textStyles = null }) => {
+// TODO: add support for touchable hitslops as well
+const Button_ = ({
+    onClick = noOperationFunction,
+    containerStyle = null,
+    text = '',
+    textStyles = null,
+    avoidDefaultContainerStyles = false,
+}) => {
     return (
         <Touchable
             touchable={TouchableTypes.opacity}
             onPress={onClick}
-            style={[styles.defaultContainer, containerStyle]}
+            style={[avoidDefaultContainerStyles ? null : styles.defaultContainer, containerStyle]}
         >
             <Text style={[styles.defaultText, textStyles]}>{text}</Text>
         </Touchable>

@@ -11,10 +11,17 @@ export const styles = StyleSheet.create({
         padding: 16,
         height: windowHeight / 4,
     },
+    containerHeightWithFooter: {
+        height: windowHeight / 4 + 20,
+    },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 12,
+    },
+    hintTitleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     hintTitle: {
         fontWeight: 'bold',
@@ -29,4 +36,13 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: fonts.regular,
     },
+    hintsCountText: { marginLeft: 8, fontSize: 20 },
+    footerContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 16,
+    },
+    footerButtonText: { color: '#4088da' },
 })

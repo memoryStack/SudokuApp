@@ -216,13 +216,15 @@ const getNakedSingleTechniqueToFocus = (row, col, type, mainNumbers) => {
             )
     }
 
-    return {
-        cellsToFocusData,
-        techniqueInfo: {
-            title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
-            logic,
+    return [
+        {
+            cellsToFocusData,
+            techniqueInfo: {
+                title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
+                logic,
+            },
         },
-    }
+    ]
 }
 // naked single ends here
 
@@ -623,13 +625,15 @@ const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
             break
     }
 
-    return {
-        cellsToFocusData,
-        techniqueInfo: {
-            title: SMART_HINTS_TECHNIQUES.HIDDEN_SINGLE.TITLE,
-            logic: getHiddenSingleLogic(type, mainNumbers[row][col].solutionValue),
+    return [
+        {
+            cellsToFocusData,
+            techniqueInfo: {
+                title: SMART_HINTS_TECHNIQUES.HIDDEN_SINGLE.TITLE,
+                logic: getHiddenSingleLogic(type, mainNumbers[row][col].solutionValue),
+            },
         },
-    }
+    ]
 }
 // hidden singles ends here
 
@@ -709,148 +713,149 @@ const getVisibileNotesCount = ({ row, col }, notesData) => {
 }
 
 // TODO: think over the namings harder. i see a lot of in-consistencies
-const highlightNakedDoublesOrTriples = (noOfInstances, selectedCell, notesData, sudokuBoard) => {
+const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard) => {
     const houseType = ['block', 'row', 'col']
-    const houseNum = {
-        row: selectedCell.row,
-        col: selectedCell.col,
-        block: getBlockAndBoxNum(selectedCell).blockNum,
-    }
-    let foundHint = false
-    // for (let i = 0; i < 9 && !foundHint; i++) { //  remove this loop
-    // houseNo
-    for (let j = 0; j < houseType.length && !foundHint; j++) {
-        const houseAllBoxes = [] // all the house boxes
-        const validBoxes = [] // all  the boxes with favorable number of instances in them
-        for (let box = 0; box < 9; box++) {
-            let row
-            let col
-            if (houseType[j] === 'row') {
-                row = houseNum.row
-                col = box
-            }
-            if (houseType[j] === 'col') {
-                row = box
-                col = houseNum.col
-            }
-            if (houseType[j] === 'block') {
-                const obj = getRowAndCol(houseNum.block, box)
-                row = obj.row
-                col = obj.col
-            }
-            houseAllBoxes.push({ row, col })
 
-            if (sudokuBoard[row][col].value) continue
-
-            // i guess we can store info for notes here only and then use that down below. What is this ??
-            const boxVisibleNotesCount = getVisibileNotesCount({ row, col }, notesData)
-            const MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD = 2
-            if (
-                boxVisibleNotesCount >= MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD &&
-                boxVisibleNotesCount <= noOfInstances
-            )
-                validBoxes.push({ row, col })
+    const hints = []
+    for (let i = 0; i < 9; i++) {
+        const houseNum = {
+            row: i,
+            col: i,
+            block: i,
         }
 
-        const validBoxesCount = validBoxes.length
-        // TODO: check the below threshold for naked multiple cases.
-        const VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH = 6 // to avoid computing 7C2 and 7C3, because that might be heavy
-        if (validBoxesCount > VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH || validBoxesCount < noOfInstances) continue
-        const possibleSelections = N_CHOOSE_K[validBoxesCount][noOfInstances]
-        for (let k = 0; k < possibleSelections.length && !foundHint; k++) {
-            const selectedBoxes = []
-            for (let x = 0; x < possibleSelections[k].length; x++) {
-                const selectedIndex = possibleSelections[k][x]
-                const box = validBoxes[selectedIndex]
-                selectedBoxes.push(box)
-            }
-
-            const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
-            for (let x = 0; x < selectedBoxes.length; x++) {
-                const { row, col } = selectedBoxes[x]
-                for (let note = 1; note <= 9; note++) {
-                    if (notesData[row][col][note - 1].show) {
-                        if (!eachVisibleNotesInfo[note]) eachVisibleNotesInfo[note] = 1
-                        else eachVisibleNotesInfo[note]++
-                    }
+        for (let j = 0; j < houseType.length; j++) {
+            const houseAllBoxes = [] // all the house boxes
+            const validBoxes = [] // all  the boxes with favorable number of instances in them
+            for (let box = 0; box < 9; box++) {
+                let row
+                let col
+                if (houseType[j] === 'row') {
+                    row = houseNum.row
+                    col = box
                 }
-            }
-
-            const groupCandidates = Object.keys(eachVisibleNotesInfo)
-            let shouldAbort = groupCandidates.length !== noOfInstances
-            for (let x = 0; x < groupCandidates.length; x++) {
-                const count = eachVisibleNotesInfo[groupCandidates[x]]
-                if (!(count >= 2 && count <= noOfInstances)) {
-                    // TODO: this needs to be checked again
-                    shouldAbort = true
-                    break
+                if (houseType[j] === 'col') {
+                    row = box
+                    col = houseNum.col
                 }
-            }
-
-            if (shouldAbort) continue // analyze some other combination of cells
-            foundHint = true
-
-            // if house is row or col
-            if ((houseType[j] === 'row' || houseType[j] === 'col') && areSameBlockCells(selectedBoxes)) {
-                const { blockNum } = getBlockAndBoxNum(selectedBoxes[0])
-                for (let boxNum = 0; boxNum < 9; boxNum++) {
-                    const { row, col } = getRowAndCol(blockNum, boxNum)
-                    if (
-                        (houseType[j] === 'row' && row !== houseNum[houseType[j]]) ||
-                        (houseType[j] === 'col' && col !== houseNum[houseType[j]])
-                    )
-                        houseAllBoxes.push({ row, col })
+                if (houseType[j] === 'block') {
+                    const obj = getRowAndCol(houseNum.block, box)
+                    row = obj.row
+                    col = obj.col
                 }
-            } else {
-                if (areSameRowCells(selectedBoxes)) {
-                    const { row } = selectedBoxes[0]
-                    for (let col = 0; col < 9; col++) {
-                        const { blockNum } = getBlockAndBoxNum({ row, col })
-                        if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
-                    }
-                } else if (areSameColCells(selectedBoxes)) {
-                    const { col } = selectedBoxes[0]
-                    for (let row = 0; row < 9; row++) {
-                        const { blockNum } = getBlockAndBoxNum({ row, col })
-                        if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
-                    }
-                }
-            }
+                houseAllBoxes.push({ row, col })
 
-            const groupWillRemoveCandidates = houseAllBoxes.some(cell => {
-                const isSelectedCell = selectedBoxes.some(selectedCell => {
-                    return areSameCells(cell, selectedCell)
-                })
-                return (
-                    !isSelectedCell &&
-                    groupCandidates.some(groupCandidate => {
-                        const groupCandidateNum = parseInt(groupCandidate, 10)
-                        return notesData[cell.row][cell.col][groupCandidateNum - 1].show
-                    })
+                if (sudokuBoard[row][col].value) continue
+
+                // i guess we can store info for notes here only and then use that down below. What is this ??
+                const boxVisibleNotesCount = getVisibileNotesCount({ row, col }, notesData)
+                const MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD = 2
+                if (
+                    boxVisibleNotesCount >= MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD &&
+                    boxVisibleNotesCount <= noOfInstances
                 )
-            })
-
-            if (!groupWillRemoveCandidates) {
-                foundHint = false
-                continue
+                    validBoxes.push({ row, col })
             }
 
-            __DEV__ && console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
-            return {
-                present: true,
-                returnData: prepareNakedDublesOrTriplesHintData(
+            const validBoxesCount = validBoxes.length
+            // TODO: check the below threshold for naked multiple cases.
+            const VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH = 6 // to avoid computing 7C2 and 7C3, because that might be heavy
+            if (validBoxesCount > VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH || validBoxesCount < noOfInstances) continue
+            const possibleSelections = N_CHOOSE_K[validBoxesCount][noOfInstances]
+            for (let k = 0; k < possibleSelections.length; k++) {
+                const selectedBoxes = []
+                for (let x = 0; x < possibleSelections[k].length; x++) {
+                    const selectedIndex = possibleSelections[k][x]
+                    const box = validBoxes[selectedIndex]
+                    selectedBoxes.push(box)
+                }
+
+                const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
+                for (let x = 0; x < selectedBoxes.length; x++) {
+                    const { row, col } = selectedBoxes[x]
+                    for (let note = 1; note <= 9; note++) {
+                        if (notesData[row][col][note - 1].show) {
+                            if (!eachVisibleNotesInfo[note]) eachVisibleNotesInfo[note] = 1
+                            else eachVisibleNotesInfo[note]++
+                        }
+                    }
+                }
+
+                const groupCandidates = Object.keys(eachVisibleNotesInfo)
+                let shouldAbort = groupCandidates.length !== noOfInstances
+                for (let x = 0; x < groupCandidates.length; x++) {
+                    const count = eachVisibleNotesInfo[groupCandidates[x]]
+                    if (!(count >= 2 && count <= noOfInstances)) {
+                        // TODO: this needs to be checked again
+                        shouldAbort = true
+                        break
+                    }
+                }
+
+                if (shouldAbort) continue // analyze some other combination of cells
+
+                // if house is row or col
+                if ((houseType[j] === 'row' || houseType[j] === 'col') && areSameBlockCells(selectedBoxes)) {
+                    const { blockNum } = getBlockAndBoxNum(selectedBoxes[0])
+                    for (let boxNum = 0; boxNum < 9; boxNum++) {
+                        const { row, col } = getRowAndCol(blockNum, boxNum)
+                        if (
+                            (houseType[j] === 'row' && row !== houseNum[houseType[j]]) ||
+                            (houseType[j] === 'col' && col !== houseNum[houseType[j]])
+                        )
+                            houseAllBoxes.push({ row, col })
+                    }
+                } else {
+                    if (areSameRowCells(selectedBoxes)) {
+                        const { row } = selectedBoxes[0]
+                        for (let col = 0; col < 9; col++) {
+                            const { blockNum } = getBlockAndBoxNum({ row, col })
+                            if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
+                        }
+                    } else if (areSameColCells(selectedBoxes)) {
+                        const { col } = selectedBoxes[0]
+                        for (let row = 0; row < 9; row++) {
+                            const { blockNum } = getBlockAndBoxNum({ row, col })
+                            if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
+                        }
+                    }
+                }
+
+                const groupWillRemoveCandidates = houseAllBoxes.some(cell => {
+                    const isSelectedCell = selectedBoxes.some(selectedCell => {
+                        return areSameCells(cell, selectedCell)
+                    })
+                    return (
+                        !isSelectedCell &&
+                        groupCandidates.some(groupCandidate => {
+                            const groupCandidateNum = parseInt(groupCandidate, 10)
+                            return notesData[cell.row][cell.col][groupCandidateNum - 1].show
+                        })
+                    )
+                })
+
+                if (!groupWillRemoveCandidates) {
+                    continue
+                }
+
+                __DEV__ && console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
+                const getHintData = prepareNakedDublesOrTriplesHintData(
                     noOfInstances,
                     houseAllBoxes,
                     selectedBoxes,
                     groupCandidates,
                     notesData,
-                ),
+                )
+
+                hints.push(getHintData)
             }
         }
     }
-    // }
 
-    return { present: foundHint }
+    return {
+        present: hints.length > 0,
+        returnData: hints,
+    }
 }
 
 // naked doubles or triples ends here
@@ -887,7 +892,6 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
         const groupCandidatesCount = possibleGroupCandidatesCount[i]
         const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
             groupCandidatesCount,
-            { row, col },
             notesData,
             originalMainNumbers,
         )

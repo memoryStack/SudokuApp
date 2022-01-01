@@ -101,7 +101,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
     const [mainNumbers, updateMainNumbers] = useState(initialMainNumbers)
     const [notesInfo, updateNotesInfo] = useState(initialNotes)
     const [selectedCell, selectCell] = useState(initialSelectedCell)
-    const [smartHintInfo, setSmartHintData] = useState({ show: false, info: {} })
+    const [smartHintInfo, setSmartHintData] = useState({ show: false, hints: [], currentHintNum: 0 })
     const selectedCellMainValue = useRef(mainNumbers[selectedCell.row][selectedCell.col].value)
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
@@ -374,21 +374,37 @@ const useGameBoard = (gameState, pencilState, hints) => {
     // }, [selectedCell, mainNumbers, hints])
 
     // it will provide the smart hint with the step wise step logic
+
+    const onNextHintClick = useCallback(() => {
+        setSmartHintData(hintsData => {
+            const nextHintNum = hintsData.currentHintNum + 1
+            return {
+                ...hintsData,
+                currentHintNum: nextHintNum,
+            }
+        })
+    }, [])
+
+    const onPrevHintClick = useCallback(() => {
+        setSmartHintData(hintsData => {
+            const prevHintNum = hintsData.currentHintNum - 1
+            return {
+                ...hintsData,
+                currentHintNum: prevHintNum,
+            }
+        })
+    }, [])
+
     useEffect(() => {
         const handler = () => {
-            // const { row, col } = selectedCell
-            // if (!mainNumbers[row][col].value) {
             getSmartHint(selectedCell, mainNumbers, notesInfo)
-                .then(info => {
-                    __DEV__ && console.log('@@@@ hintInfo', JSON.stringify(info))
-                    if (info) setSmartHintData({ show: true, info })
+                .then(hints => {
+                    __DEV__ && console.log('@@@@ hintInfo', JSON.stringify(hints))
+                    if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })
                 })
                 .catch(error => {
                     __DEV__ && console.log(error)
                 })
-            // } else {
-            // TODO: show some popup for dummies
-            // }
         }
         addListener(EVENTS.HINT_CLICKED, handler)
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
@@ -396,7 +412,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
 
     useEffect(() => {
         const handler = () => {
-            setSmartHintData({ show: false, info: {} })
+            setSmartHintData({ show: false, hints: [], currentHintNum: 0 })
         }
         addListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
         return () => removeListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
@@ -420,7 +436,14 @@ const useGameBoard = (gameState, pencilState, hints) => {
         selectedCell,
         selectedCellMainValue: selectedCellMainValue.current,
         onCellClick,
-        smartHintInfo,
+        smartHintInfo: {
+            show: smartHintInfo.show,
+            info: smartHintInfo.currentHintNum ? smartHintInfo.hints[smartHintInfo.currentHintNum - 1] : {},
+            nextHintClick: onNextHintClick,
+            prevHintClick: onPrevHintClick,
+            currentHintNum: smartHintInfo.currentHintNum,
+            totalHintsCount: smartHintInfo.hints.length,
+        },
     }
 }
 

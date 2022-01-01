@@ -112,6 +112,10 @@ const Arena_ = ({ navigation, route }) => {
                 cellsToFocusData = {},
                 techniqueInfo: { title: smartHintTitle = '', logic: smartHintLogic = '' } = {},
             } = {},
+            nextHintClick,
+            prevHintClick,
+            currentHintNum,
+            totalHintsCount,
         } = {},
     } = useGameBoard(gameState, pencilState, hints)
 
@@ -288,6 +292,10 @@ const Arena_ = ({ navigation, route }) => {
                         title={smartHintTitle}
                         logic={smartHintLogic}
                         onSmartHintHCClosed={onSmartHintHCClosed}
+                        nextHintClick={nextHintClick}
+                        prevHintClick={prevHintClick}
+                        currentHintNum={currentHintNum}
+                        totalHintsCount={totalHintsCount}
                     />
                 ) : null}
             </View>

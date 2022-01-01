@@ -57,6 +57,17 @@ const styles = StyleSheet.create({
 const initBoardData = () => {
     const movesStack = []
     const mainNumbers = initMainNumbers()
+
+    const str = '126009073005627090708003020070092600800006019060305740009264187080001000000908060'
+    for (let i = 0; i < str.length; i++) {
+        const row = Math.floor(i / 9)
+        const col = i % 9
+        if (str[i]) {
+            mainNumbers[row][col].value = parseInt(str[i], 10)
+            mainNumbers[row][col].isClue = 1
+        }
+    }
+
     const notesInfo = new Array(9)
     for (let i = 0; i < 9; i++) {
         const rowNotes = []
