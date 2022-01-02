@@ -31,6 +31,8 @@ const _SmartHintHC = ({
     const displayNextButton = !(isOnlyHint || isLastHint)
     const displayPrevButton = !(isOnlyHint || isFirstHint)
 
+    const displayFooter = displayNextButton || displayPrevButton
+
     return (
         <BottomDragger
             ref={smartHintHCRef}
@@ -40,12 +42,7 @@ const _SmartHintHC = ({
             bottomMostPositionRatio={1.1} // TODO: we can make it a default i guess
             animateBackgroundOverlayOnClose={false}
         >
-            <View
-                style={[
-                    styles.container,
-                    displayNextButton || displayPrevButton ? styles.containerHeightWithFooter : null,
-                ]}
-            >
+            <View style={[styles.container, displayFooter ? styles.containerHeightWithFooter : null]}>
                 <View style={styles.headerContainer}>
                     <View style={styles.hintTitleContainer}>
                         <Text style={styles.hintTitle}>{title}</Text>
@@ -60,20 +57,22 @@ const _SmartHintHC = ({
                 <ScrollView style={styles.logicContainer}>
                     <Text style={styles.hintLogicText}>{logic}</Text>
                 </ScrollView>
-                <View style={styles.footerContainer}>
-                    <Button
-                        text={displayPrevButton ? prevButtonText : ''}
-                        onClick={displayPrevButton ? prevHintClick : noOperationFunction}
-                        avoidDefaultContainerStyles={true}
-                        textStyles={styles.footerButtonText}
-                    />
-                    <Button
-                        text={displayNextButton ? nextButtonText : ''} // TODO: find better way to hide the button.it's wtf right now
-                        onClick={displayNextButton ? nextHintClick : noOperationFunction}
-                        avoidDefaultContainerStyles={true}
-                        textStyles={styles.footerButtonText}
-                    />
-                </View>
+                {displayFooter ? (
+                    <View style={styles.footerContainer}>
+                        <Button
+                            text={displayPrevButton ? prevButtonText : ''}
+                            onClick={displayPrevButton ? prevHintClick : noOperationFunction}
+                            avoidDefaultContainerStyles={true}
+                            textStyles={styles.footerButtonText}
+                        />
+                        <Button
+                            text={displayNextButton ? nextButtonText : ''} // TODO: find better way to hide the button.it's wtf right now
+                            onClick={displayNextButton ? nextHintClick : noOperationFunction}
+                            avoidDefaultContainerStyles={true}
+                            textStyles={styles.footerButtonText}
+                        />
+                    </View>
+                ) : null}
             </View>
         </BottomDragger>
     )

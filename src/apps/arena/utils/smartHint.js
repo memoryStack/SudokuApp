@@ -712,19 +712,40 @@ const getVisibileNotesCount = ({ row, col }, notesData) => {
     return result
 }
 
+// this func is used for a very special case in below func
+const getHouseCellsNum = (cells, houseType) => {
+    let result = []
+    if (houseType === 'row' || houseType === 'col') {
+        const cellNumKey = houseType === 'row' ? 'col' : 'row'
+        result = cells.map(cell => cell[cellNumKey])
+    }
+    result = cells.map(cell => {
+        const { boxNum } = getBlockAndBoxNum(cell)
+        return boxNum
+    })
+    // the result will container numbers [0...9] so normal sort works
+    return result.sort()
+}
+
 // TODO: think over the namings harder. i see a lot of in-consistencies
 const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard) => {
     const houseType = ['block', 'row', 'col']
 
-    const hints = []
-    for (let i = 0; i < 9; i++) {
-        const houseNum = {
-            row: i,
-            col: i,
-            block: i,
-        }
+    const groupsFoundInHouses = {
+        row: {},
+        col: {},
+        block: {},
+    }
 
-        for (let j = 0; j < houseType.length; j++) {
+    const hints = []
+    for (let j = 0; j < houseType.length; j++) {
+        for (let i = 0; i < 9; i++) {
+            const houseNum = {
+                row: i,
+                col: i,
+                block: i,
+            }
+
             const houseAllBoxes = [] // all the house boxes
             const validBoxes = [] // all  the boxes with favorable number of instances in them
             for (let box = 0; box < 9; box++) {
@@ -762,12 +783,25 @@ const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard) =
             const VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH = 6 // to avoid computing 7C2 and 7C3, because that might be heavy
             if (validBoxesCount > VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH || validBoxesCount < noOfInstances) continue
             const possibleSelections = N_CHOOSE_K[validBoxesCount][noOfInstances]
+
             for (let k = 0; k < possibleSelections.length; k++) {
                 const selectedBoxes = []
                 for (let x = 0; x < possibleSelections[k].length; x++) {
                     const selectedIndex = possibleSelections[k][x]
                     const box = validBoxes[selectedIndex]
                     selectedBoxes.push(box)
+                }
+
+                // check these boxes if they are covered or not already
+                if (houseType[j] === 'row' || houseType[j] === 'col') {
+                    // TODO: let's wrap this condition into a func
+                    const selectedCellsNum = getHouseCellsNum(selectedBoxes, houseType[j])
+                    const houseCellsProcessed = groupsFoundInHouses[houseType[j]][`${i}`] || []
+                    let cellsProcessedAlready = houseCellsProcessed.length === selectedCellsNum.length
+                    // run loop and check one by one
+                    for (let idx = 0; idx < selectedCellsNum.length && cellsProcessedAlready; idx++)
+                        cellsProcessedAlready = houseCellsProcessed[idx] === selectedCellsNum[idx]
+                    if (cellsProcessedAlready) continue
                 }
 
                 const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
@@ -834,8 +868,19 @@ const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard) =
                     )
                 })
 
-                if (!groupWillRemoveCandidates) {
-                    continue
+                if (!groupWillRemoveCandidates) continue
+
+                // Note: the correctness of this DS depends on entries order in "houseType"
+                groupsFoundInHouses[houseType[j]][`${i}`] = getHouseCellsNum(selectedBoxes, houseType[j])
+                if (houseAllBoxes.length === 15) {
+                    // group cells belong to 2 houses, one is block for sure and another one can be either row or col
+                    if (areSameRowCells(selectedBoxes)) {
+                        const { row } = selectedBoxes[0]
+                        groupsFoundInHouses['row'][`${row}`] = getHouseCellsNum(selectedBoxes, 'row')
+                    } else {
+                        const { col } = selectedBoxes[0]
+                        groupsFoundInHouses['col'][`${col}`] = getHouseCellsNum(selectedBoxes, 'col')
+                    }
                 }
 
                 __DEV__ && console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
@@ -876,7 +921,6 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
         if (nakedSinglePresent) {
             return getNakedSingleTechniqueToFocus(row, col, nakedSingleType, originalMainNumbers)
         }
-
         const { present: hiddenSinglePresent, type: hiddenSingleType } = checkHiddenSingle(
             row,
             col,

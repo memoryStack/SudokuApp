@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 16,
+        marginTop: 8,
     },
     footerButtonText: { color: '#4088da' },
 })
