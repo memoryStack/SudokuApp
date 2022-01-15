@@ -445,7 +445,7 @@ const fillCell = (row, col, num, updateSingles) => {
     return updateNotesAfterFillCell(row, col, num, updateSingles)
 }
 
-const emptyCell = (row, col, getNewCellsForNum = false) => {
+const emptyCell = ({row, col}, getNewCellsForNum = false) => {
     const valueToBeRemoved = sudokuBoard[row][col].value
     sudokuBoard[row][col].value = 0
     updateDuplicacyCheckerStore({row, col}, valueToBeRemoved)
@@ -492,7 +492,8 @@ const getBoxToStartRecursionFrom = () => {
     return { row, col }
 }
 
-const recursion = (row, col, alreadyFilledCells) => {
+const recursion = (cell, alreadyFilledCells) => {
+    const {row, col} = cell
     let numberOfSolutions = 0
     const boxNotes = notesData[row][col].boxNotes
     for (let i = 0; i < 9; i++) {
@@ -500,7 +501,7 @@ const recursion = (row, col, alreadyFilledCells) => {
             //  don't search for singles because that "sudokuSolver" will do
             const invalidState = fillCell(row, col, i + 1, false)
             numberOfSolutions = !invalidState ? sudokuSolver(alreadyFilledCells + 1) : numberOfSolutions
-            emptyCell(row, col)
+            emptyCell(cell)
             if (numberOfSolutions) {
                 // break the loop here because in "generateClues" func we can't remove the clue
                 // we are trying to remove. if we remove then it would lead to multiple solutions.
@@ -528,13 +529,12 @@ const sudokuSolver = alreadyFilledCells => {
         else {
             // human techniques didn't solve completely, now use computer recursion power
             const { row, col } = getBoxToStartRecursionFrom() // TODO: optimize this
-            if (row !== -1 && col !== -1) numberOfSolutions = recursion(row, col, alreadyFilledCells)
+            if (row !== -1 && col !== -1) numberOfSolutions = recursion({row, col}, alreadyFilledCells)
         }
     }
 
     for (let i = 0; i < cellsFilled.length; i++) {
-        const { row, col } = cellsFilled[i]
-        emptyCell(row, col)
+        emptyCell(cellsFilled[i])
     }
     cellsFilled = []
 
@@ -582,7 +582,7 @@ const initNotesData = () => {
     }
 }
 
-const generateClues = clues => { // xx
+const generateClues = clues => {
     const clueTypeInstanceCount = new Array(10).fill(9)
     let numberOfDigitsDidExtinct = 0
 
@@ -593,12 +593,13 @@ const generateClues = clues => { // xx
         const col = Math.floor(Math.random() * 9) // 9 cols are there
         const num = sudokuBoard[row][col].value
         sudokuBoard[row][col].value = 0
-        updateDuplicacyCheckerStore({row, col}, num)
+        const cell = {row, col}
+        updateDuplicacyCheckerStore(cell, num)
         clueTypeInstanceCount[num]--
         if (clueTypeInstanceCount[num] === 0) numberOfDigitsDidExtinct++
         // update notes, these boxes will have only 1 note in them which is the "num" we just removed
         // so we don't need to check for any duplicacy of any kind
-        updateNoteInCell({ row, col }, num, false)
+        updateNoteInCell(cell, num, false)
     }
     // all good till this point. our duplicacy checker is working absolutely fine
 
@@ -625,15 +626,15 @@ const generateClues = clues => { // xx
 
         // get the list of cells in which current cell's number might appear as a candidate
         // if we remove it and the list shouldn't contain the current cell
-        const newCells = emptyCell(row, col, true)
+        const newCells = emptyCell({row, col}, true)
         let safeToRemove = true
         for (let i = 0; i < newCells.length && safeToRemove; i++) {
             const { row, col } = newCells[i]
             // don't look for naked and hidden singles here because that sudokuSolver is doing
-            const invalidState = fillCell(row, col, valueToHide, false)
+            const invalidState = fillCell(row, col, valueToHide, false)  // XX
             const numOfSolutions = !invalidState ? sudokuSolver(cellsFilled) : 0
             // revert the above step and try another possible cell
-            emptyCell(row, col)
+            emptyCell(newCells[i])
             if (numOfSolutions) safeToRemove = false
         }
 
