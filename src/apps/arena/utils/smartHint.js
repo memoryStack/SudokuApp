@@ -87,7 +87,8 @@ const copyBoardMainNumbers = mainNumbers => {
 //     return notesData
 // }
 
-const checkNakedSingle = (row, col, mainNumbers) => {
+const checkNakedSingle = (cell, mainNumbers) => {
+    const { row, col } = cell
     let singleType = ''
     let candidatesFilled = 0
     for (let col = 0; col < 9; col++) {
@@ -184,7 +185,8 @@ const nakedSingleMixHousesDataToHighlight = (row, col) => {
     return cellsToFocusData
 }
 
-const getNakedSingleTechniqueToFocus = (row, col, type, mainNumbers) => {
+const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
+    const { row, col } = cell
     let cellsToFocusData = null
     let logic = ''
     switch (type) {
@@ -257,8 +259,8 @@ const getCurrentCellNotes = (mainNumbers, cell) => {
     return possibleCandiates
 }
 
-const checkHiddenSingle = (row, col, mainNumbers) => {
-    const cell = { row, col }
+const checkHiddenSingle = (cell, mainNumbers) => {
+    const { row, col } = cell
     const possibleCandiates = getCurrentCellNotes(mainNumbers, cell)
     let singleType = ''
 
@@ -446,7 +448,8 @@ const getNextNeighbourBlock = (currentBlockNum, type) => {
 
 // row and column are going to have same logic, let's write them down in the same function only
 // let's make it generic for col as well
-const getHiddenSingleInRowOrColData = (selectedRow, selectedCol, type, mainNumbers) => {
+const getHiddenSingleInRowOrColData = (cell, type, mainNumbers) => {
+    const { row: selectedRow, col: selectedCol } = cell
     const cellsToFocusData = {}
     if (!cellsToFocusData[selectedRow]) cellsToFocusData[selectedRow] = {}
     cellsToFocusData[selectedRow][selectedCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
@@ -482,13 +485,10 @@ const getHiddenSingleInRowOrColData = (selectedRow, selectedCol, type, mainNumbe
     return cellsToFocusData
 }
 
-const getHiddenSingleInBlockData = (selectedRow, selectedCol, mainNumbers) => {
+const getHiddenSingleInBlockData = (cell, mainNumbers) => {
+    const { row: selectedRow, col: selectedCol } = cell
     // highlight all the cells of the current block
-    const selectedCell = {
-        row: selectedRow,
-        col: selectedCol,
-    }
-    const { blockNum } = getBlockAndBoxNum(selectedCell)
+    const { blockNum } = getBlockAndBoxNum(cell)
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
     const neighbourRows = {}
     const neighbourCols = {}
@@ -611,17 +611,17 @@ const getHiddenSingleInBlockData = (selectedRow, selectedCol, mainNumbers) => {
     return cellsToFocusData
 }
 
-const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
+const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
     let cellsToFocusData = null
     switch (type) {
         case HIDDEN_SINGLE_TYPES.ROW:
-            cellsToFocusData = getHiddenSingleInRowOrColData(row, col, HIDDEN_SINGLE_TYPES.ROW, mainNumbers)
+            cellsToFocusData = getHiddenSingleInRowOrColData(cell, HIDDEN_SINGLE_TYPES.ROW, mainNumbers)
             break
         case HIDDEN_SINGLE_TYPES.COL:
-            cellsToFocusData = getHiddenSingleInRowOrColData(row, col, HIDDEN_SINGLE_TYPES.COL, mainNumbers)
+            cellsToFocusData = getHiddenSingleInRowOrColData(cell, HIDDEN_SINGLE_TYPES.COL, mainNumbers)
             break
         case HIDDEN_SINGLE_TYPES.BLOCK:
-            cellsToFocusData = getHiddenSingleInBlockData(row, col, mainNumbers)
+            cellsToFocusData = getHiddenSingleInBlockData(cell, mainNumbers)
             break
     }
 
@@ -630,7 +630,7 @@ const getHiddenSingleTechniqueInfo = (row, col, type, mainNumbers) => {
             cellsToFocusData,
             techniqueInfo: {
                 title: SMART_HINTS_TECHNIQUES.HIDDEN_SINGLE.TITLE,
-                logic: getHiddenSingleLogic(type, mainNumbers[row][col].solutionValue),
+                logic: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue),
             },
         },
     ]
@@ -913,21 +913,23 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
 
     const cellFilled = !!originalMainNumbers[row][col].value
 
-    // we don't need this DS to know if aked single is present or not in this cell
+    // we don't need this DS to know if naked single is present or not in this cell
     // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
 
     if (!cellFilled) {
-        const { present: nakedSinglePresent, type: nakedSingleType } = checkNakedSingle(row, col, boardMainNumbersCopy)
+        const { present: nakedSinglePresent, type: nakedSingleType } = checkNakedSingle(
+            { row, col },
+            boardMainNumbersCopy,
+        )
         if (nakedSinglePresent) {
-            return getNakedSingleTechniqueToFocus(row, col, nakedSingleType, originalMainNumbers)
+            return getNakedSingleTechniqueToFocus(nakedSingleType, originalMainNumbers, { row, col })
         }
         const { present: hiddenSinglePresent, type: hiddenSingleType } = checkHiddenSingle(
-            row,
-            col,
+            { row, col },
             boardMainNumbersCopy,
         )
         if (hiddenSinglePresent) {
-            return getHiddenSingleTechniqueInfo(row, col, hiddenSingleType, boardMainNumbersCopy)
+            return getHiddenSingleTechniqueInfo({ row, col }, hiddenSingleType, boardMainNumbersCopy)
         }
     }
 
