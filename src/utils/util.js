@@ -222,16 +222,13 @@ const duplicacyPresent = (num, cell) => {
     return rows[row][numIndex] || cols[col][numIndex] || blocks[blockNum][numIndex]
 }
 
-const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNum) => {
-    const { blockNum: currentBlockNum } = getBlockAndBoxNum({
-        row: currentRow,
-        col: currentCol,
-    })
+const updateNotesAfterEmptyCell = (cell, num, getNewCellsForNum) => {
+    const { row: currentRow, col: currentCol } = cell
+    const { blockNum: currentBlockNum } = getBlockAndBoxNum(cell)
     let newCells = []
 
     // update notes for current cell
     for (let note = 1; note <= 9; note++) {
-        const cell = { row: currentRow, col: currentCol }
         if (!duplicacyPresent(note, cell)) updateNoteInCell(cell, note, false)
     }
     // it's guranteed that only "num" got inserted in the cell if notes count is 1
@@ -453,7 +450,7 @@ const emptyCell = (row, col, getNewCellsForNum = false) => {
     updateDuplicacyCheckerStore(row, col, valueToBeRemoved)
     // 1. return new cells where "valueToBeRemoved" can be placed after removing it from current cell
     // 2. newCells won't have current cell in the list
-    return updateNotesAfterEmptyCell(row, col, valueToBeRemoved, getNewCellsForNum)
+    return updateNotesAfterEmptyCell({ row, col }, valueToBeRemoved, getNewCellsForNum)
 }
 
 const fillSingles = () => {
