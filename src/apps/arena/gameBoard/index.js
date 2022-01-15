@@ -70,13 +70,12 @@ const Board_ = ({
         return Styles.defaultCellBGColor
     }
 
-    const shouldMarkCellAsInhabitable = (row, col) => {
+    const shouldMarkCellAsInhabitable = ( cell) => {
         if (!showSmartHint) return false
-
         return !!(
-            smartHintCellsHighlightInfo[row] &&
-            smartHintCellsHighlightInfo[row][col] &&
-            smartHintCellsHighlightInfo[row][col].inhabitable
+            smartHintCellsHighlightInfo[cell.row] &&
+            smartHintCellsHighlightInfo[cell.row][cell.col] &&
+            smartHintCellsHighlightInfo[cell.row][cell.col].inhabitable
         )
     }
 
@@ -86,6 +85,7 @@ const Board_ = ({
             <View style={Styles.rowStyle} key={key}>
                 {looper.map(col => {
                     const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
+                    const cell = {row, col}
                     return (
                         <View style={Styles.cellContainer} key={`${rowElementsKeyCounter++}`}>
                             <Cell
@@ -97,7 +97,7 @@ const Board_ = ({
                                 cellNotes={notesInfo[row][col]}
                                 onCellClicked={onCellClick}
                                 gameState={gameState}
-                                displayCrossIcon={shouldMarkCellAsInhabitable(row, col)}
+                                displayCrossIcon={shouldMarkCellAsInhabitable( cell)}
                                 smartHintData={smartHintData}
                             />
                         </View>
