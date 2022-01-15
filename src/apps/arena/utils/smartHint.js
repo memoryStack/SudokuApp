@@ -75,7 +75,7 @@ const copyBoardMainNumbers = mainNumbers => {
 //             const boxNotes = new Array(9)
 //             let cellNotesCount = 0
 //             for (let k = 1; k <= 9; k++) {
-//                 if (!duplicacyPresent(i, j, k, mainNumbers, {row: i, col: j})) {
+//                 if (!duplicacyPresent( k, mainNumbers, {row: i, col: j})) {
 //                     boxNotes[k - 1] = k
 //                     cellNotesCount++
 //                 }
@@ -125,7 +125,7 @@ const checkNakedSingle = (row, col, mainNumbers) => {
         for (let num = 1; num <= 9; num++) {
             // TODO: make a map here to make it faster. that way we can find the same
             // thing in 36 iterations instead of 81 iterations
-            if (duplicacyPresent(row, col, num, mainNumbers, { row, col })) candidatesFilled++
+            if (duplicacyPresent(num, mainNumbers, { row, col })) candidatesFilled++
         }
         if (candidatesFilled === 8) singleType = NAKED_SINGLE_TYPES.MIX
         else candidatesFilled = 0
@@ -270,7 +270,7 @@ const checkHiddenSingle = (row, col, mainNumbers) => {
         for (let cellNo = 0; cellNo < 9; cellNo++) {
             const { row, col } = getRowAndCol(blockNum, cellNo)
             const isEmptyCell = mainNumbers[row][col].value === 0
-            if (isEmptyCell && !duplicacyPresent(row, col, candidate, mainNumbers, { row, col })) {
+            if (isEmptyCell && !duplicacyPresent(candidate, mainNumbers, { row, col })) {
                 possibleOccurencesInHouse++
             }
         }
@@ -283,7 +283,7 @@ const checkHiddenSingle = (row, col, mainNumbers) => {
         possibleOccurencesInHouse = 0
         for (let row = 0; row < 9; row++) {
             const isEmptyCell = mainNumbers[row][col].value === 0
-            if (isEmptyCell && !duplicacyPresent(row, col, candidate, mainNumbers, { row, col })) {
+            if (isEmptyCell && !duplicacyPresent(candidate, mainNumbers, { row, col })) {
                 possibleOccurencesInHouse++
             }
         }
@@ -296,7 +296,7 @@ const checkHiddenSingle = (row, col, mainNumbers) => {
         possibleOccurencesInHouse = 0
         for (let col = 0; col < 9; col++) {
             const isEmptyCell = mainNumbers[row][col].value === 0
-            if (isEmptyCell && !duplicacyPresent(row, col, candidate, mainNumbers, { row, col })) {
+            if (isEmptyCell && !duplicacyPresent(candidate, mainNumbers, { row, col })) {
                 possibleOccurencesInHouse++
             }
         }
