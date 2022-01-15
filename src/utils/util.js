@@ -321,11 +321,9 @@ const getValidityChecksConfig = (
 }
 
 // it will tell if after filling the current cell sudoku will enter in invalidState
-const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) => {
-    const { blockNum: currentBlockNum } = getBlockAndBoxNum({
-        row: currentRow,
-        col: currentCol,
-    })
+const updateNotesAfterFillCell = (cell, num, updateSingles) => {
+    const {row: currentRow, col: currentCol} = cell
+    const { blockNum: currentBlockNum } = getBlockAndBoxNum(cell)
     let invalidFillInCurrentCell = false
 
     // remove all the notes from current cell except "num"
@@ -337,6 +335,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
         if (notesData[currentRow][currentCol].boxNotes[note - 1].show) {
             // no chance of being removed note as naked single here
             // but these notes can be hidden single in currentRow, currentCol, currentBlock
+            // XX
             const validityChecksConfig = getValidityChecksConfig(
                 currentRow,
                 currentCol,
@@ -439,10 +438,10 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
     return invalidFillInCurrentCell
 }
 
-const fillCell = ({row, col}, num, updateSingles) => {
-    sudokuBoard[row][col].value = num
-    updateDuplicacyCheckerStore({row, col}, num)
-    return updateNotesAfterFillCell(row, col, num, updateSingles) // XX
+const fillCell = (cell, num, updateSingles) => {
+    sudokuBoard[cell.row][cell.col].value = num
+    updateDuplicacyCheckerStore(cell, num)
+    return updateNotesAfterFillCell(cell, num, updateSingles)
 }
 
 const emptyCell = ({row, col}, getNewCellsForNum = false) => {
