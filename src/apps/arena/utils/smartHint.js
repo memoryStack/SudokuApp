@@ -138,18 +138,18 @@ const checkNakedSingle = (cell, mainNumbers) => {
     }
 }
 
-const nakedSingleRowDataToHighlight = (row, col, cellsToFocusData = {}) => {
-    // const cellsToFocusData = {[row]: {}}
-    for (let cell = 0; cell < 9; cell++) {
+const nakedSingleRowDataToHighlight = (cell, cellsToFocusData = {}) => {
+    const { row, col } = cell
+    for (let cellNo = 0; cellNo < 9; cellNo++) {
         if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
         const cellBGColor =
-            cell === col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[row][cell] = { bgColor: cellBGColor }
+            cellNo === col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
+        cellsToFocusData[row][cellNo] = { bgColor: cellBGColor }
     }
     return cellsToFocusData
 }
 
-const nakedSingleColDataToHighlight = (row, col, cellsToFocusData = {}) => {
+const nakedSingleColDataToHighlight = ({ row, col }, cellsToFocusData = {}) => {
     for (let cell = 0; cell < 9; cell++) {
         if (!cellsToFocusData[cell]) cellsToFocusData[cell] = {}
         const cellBGColor =
@@ -159,7 +159,7 @@ const nakedSingleColDataToHighlight = (row, col, cellsToFocusData = {}) => {
     return cellsToFocusData
 }
 
-const nakedSingleBlockDataToHighlight = (selectedRow, selectedCol, cellsToFocusData = {}) => {
+const nakedSingleBlockDataToHighlight = ({ row: selectedRow, col: selectedCol }, cellsToFocusData = {}) => {
     const selectedCell = {
         row: selectedRow,
         col: selectedCol,
@@ -178,10 +178,10 @@ const nakedSingleBlockDataToHighlight = (selectedRow, selectedCol, cellsToFocusD
 }
 
 // if naked single is because of the mix of two or more houses
-const nakedSingleMixHousesDataToHighlight = (row, col) => {
-    let cellsToFocusData = nakedSingleRowDataToHighlight(row, col)
-    cellsToFocusData = nakedSingleColDataToHighlight(row, col, cellsToFocusData)
-    cellsToFocusData = nakedSingleBlockDataToHighlight(row, col, cellsToFocusData)
+const nakedSingleMixHousesDataToHighlight = cell => {
+    let cellsToFocusData = nakedSingleRowDataToHighlight(cell)
+    cellsToFocusData = nakedSingleColDataToHighlight(cell, cellsToFocusData)
+    cellsToFocusData = nakedSingleBlockDataToHighlight(cell, cellsToFocusData)
     return cellsToFocusData
 }
 
@@ -191,28 +191,28 @@ const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
     let logic = ''
     switch (type) {
         case NAKED_SINGLE_TYPES.ROW:
-            cellsToFocusData = nakedSingleRowDataToHighlight(row, col)
+            cellsToFocusData = nakedSingleRowDataToHighlight(cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 'row',
                 mainNumbers[row][col].solutionValue,
             )
             break
         case NAKED_SINGLE_TYPES.COL:
-            cellsToFocusData = nakedSingleColDataToHighlight(row, col)
+            cellsToFocusData = nakedSingleColDataToHighlight(cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 'col',
                 mainNumbers[row][col].solutionValue,
             )
             break
         case NAKED_SINGLE_TYPES.BLOCK:
-            cellsToFocusData = nakedSingleBlockDataToHighlight(row, col)
+            cellsToFocusData = nakedSingleBlockDataToHighlight(cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 'block',
                 mainNumbers[row][col].solutionValue,
             )
             break
         case NAKED_SINGLE_TYPES.MIX:
-            cellsToFocusData = nakedSingleMixHousesDataToHighlight(row, col)
+            cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg(
                 mainNumbers[row][col].solutionValue,
             )
