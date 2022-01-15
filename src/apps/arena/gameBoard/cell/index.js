@@ -88,7 +88,7 @@ const Cell_ = ({
             touchable={TouchableTypes.opacity}
             activeOpacity={1}
             style={[Styles.cell, cellBGColor]}
-            onPress={() => onCellClicked(row, col)}
+            onPress={() => onCellClicked({ row, col })}
         >
             {gameState !== GAME_STATE.INACTIVE ? getCellContent() : null}
         </Touchable>

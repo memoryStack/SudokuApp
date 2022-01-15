@@ -152,7 +152,7 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                         nextCol = 0
                         nextRow++
                     }
-                    if (nextRow !== 9) handleCellClicked(nextRow, nextCol)
+                    if (nextRow !== 9) handleCellClicked({ row: nextRow, col: nextCol })
                 }, 100)
             }
         }
@@ -205,7 +205,7 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
     }, [mainNumbers])
 
     const handleCellClicked = useCallback(
-        (row, col) => {
+        ({ row, col }) => {
             selectedCellMainValue.current = mainNumbers[row][col].value
             selectCell(selectedCell => {
                 if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }

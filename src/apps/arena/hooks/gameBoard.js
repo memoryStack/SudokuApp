@@ -419,7 +419,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
     }, [])
 
     const onCellClick = useCallback(
-        (row, col) => {
+        ({ row, col }) => {
             if (gameState !== GAME_STATE.ACTIVE || smartHintInfo.show) return
             selectedCellMainValue.current = mainNumbers[row][col].value
             selectCell(selectedCell => {
