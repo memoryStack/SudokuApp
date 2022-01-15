@@ -20,7 +20,15 @@ export const shouldSaveGameState = (currentGameState, previousGameState) => {
     return currentGameState === GAME_STATE.INACTIVE && previousGameState === GAME_STATE.ACTIVE
 }
 
-export const duplicacyPresent = (row, col, num, mainNumbers) => {
+export const duplicacyPresent = (row, col, num, mainNumbers, cell) => {
+    if (cell) {
+        row = cell.row
+        col = cell.col
+    }
+    return tempFunc(row, col, num, mainNumbers)
+}
+
+const tempFunc = (row, col, num, mainNumbers) => {
     for (let col = 0; col < 9; col++) {
         if (mainNumbers[row][col].value === num) return 1 // check row
     }
@@ -55,7 +63,7 @@ const checkDuplicateSolutions = (row, col, mainNumbers) => {
 
     for (let num = 1; num <= 9; num++) {
         if (numOfSolutions > 1) break
-        if (!duplicacyPresent(row, col, num, mainNumbers)) {
+        if (!duplicacyPresent(row, col, num, mainNumbers, { row, col })) {
             mainNumbers[row][col].value = num
             checkDuplicateSolutions(row, col + 1, mainNumbers)
             mainNumbers[row][col].value = 0
