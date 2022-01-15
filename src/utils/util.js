@@ -121,7 +121,8 @@ const updateDuplicacyCheckerStore = (row, col, num) => {
 
 // it will update notes DS of all kinds
 // and will return if the removed note (need it only for note which we are hiding) was naked/hidden sigle
-const updateNoteInCell = (row, col, note, hideNote, validityChecksConfig) => {
+const updateNoteInCell = (cell, note, hideNote, validityChecksConfig) => {
+    const { row, col } = cell
     const countAdd = hideNote ? -1 : 1
     const showValue = hideNote ? 0 : 1
 
@@ -131,7 +132,7 @@ const updateNoteInCell = (row, col, note, hideNote, validityChecksConfig) => {
 
     // hidden single DS
     const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
-    const { blockNum, boxNum } = getBlockAndBoxNum({ row, col })
+    const { blockNum, boxNum } = getBlockAndBoxNum(cell)
     rows[row].cells[col] = showValue // mark as present
     rows[row].count += countAdd // increase the count in current row
     cols[col].cells[row] = showValue
@@ -170,7 +171,7 @@ const updateNakedSingles = (row, col) => {
 
 // from a cell when note is removed it might lead to new hidden singles
 // of same type in same house
-const updateHiddenSingles = (row, col, note, housesToCheck = {}) => {
+const updateHiddenSingles = ({ row, col }, note, housesToCheck = {}) => {
     const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
     const { checkInRow = true, checkInCol = true, checkInBlock = true } = housesToCheck
 
@@ -230,39 +231,38 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
 
     // update notes for current cell
     for (let note = 1; note <= 9; note++) {
-        if (!duplicacyPresent(note, { row: currentRow, col: currentCol })) {
-            updateNoteInCell(currentRow, currentCol, note, false)
-        }
+        const cell = { row: currentRow, col: currentCol }
+        if (!duplicacyPresent(note, cell)) updateNoteInCell(cell, note, false)
     }
     // it's guranteed that only "num" got inserted in the cell if notes count is 1
     const numIsNakedSingleForCurrentCell = notesData[currentRow][currentCol].count === 1
 
     // update for every column of currentRow
     for (let col = 0; col < 9; col++) {
+        const cell = { row: currentRow, col }
         if (
             col !== currentCol &&
             !sudokuBoard[currentRow][col].value &&
             !notesData[currentRow][col].boxNotes[num - 1].show &&
-            !duplicacyPresent(num, { row: currentRow, col })
+            !duplicacyPresent(num, cell)
         ) {
-            updateNoteInCell(currentRow, col, num, false)
-            if (getNewCellsForNum && !cellHasHiddenSingle({ row: currentRow, col }))
-                newCells.push({ row: currentRow, col })
+            updateNoteInCell(cell, num, false)
+            if (getNewCellsForNum && !cellHasHiddenSingle(cell)) newCells.push(cell)
         }
     }
     const numIsHiddenSingleForCurrentRow = notesInstancesPlacesInfo[num].rows[currentRow].count === 1
 
     // update for every row of currentColumn
     for (let row = 0; row < 9; row++) {
+        const cell = { row, col: currentCol }
         if (
             row !== currentRow &&
             !sudokuBoard[row][currentCol].value &&
             !notesData[row][currentCol].boxNotes[num - 1].show &&
-            !duplicacyPresent(num, { row, col: currentCol })
+            !duplicacyPresent(num, cell)
         ) {
-            updateNoteInCell(row, currentCol, num, false)
-            if (getNewCellsForNum && !cellHasHiddenSingle({ row, col: currentCol }))
-                newCells.push({ row, col: currentCol })
+            updateNoteInCell(cell, num, false)
+            if (getNewCellsForNum && !cellHasHiddenSingle(cell)) newCells.push(cell)
         }
     }
     const numIsHiddenSingleForCurrentCol = notesInstancesPlacesInfo[num].cols[currentCol].count === 1
@@ -271,13 +271,14 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
     for (let boxNum = 0; boxNum < 9; boxNum++) {
         const { row, col } = getRowAndCol(currentBlockNum, boxNum)
         if (row === currentRow || col === currentCol) continue
+        const cell = { row, col }
         if (
             !sudokuBoard[row][col].value &&
             !notesData[row][col].boxNotes[num - 1].show &&
-            !duplicacyPresent(num, { row, col })
+            !duplicacyPresent(num, cell)
         ) {
-            updateNoteInCell(row, col, num, false)
-            if (getNewCellsForNum && !cellHasHiddenSingle({ row, col })) newCells.push({ row, col })
+            updateNoteInCell(cell, num, false)
+            if (getNewCellsForNum && !cellHasHiddenSingle(cell)) newCells.push(cell)
         }
     }
     const numIsHiddenSingleForCurrentBlock = notesInstancesPlacesInfo[num].blocks[currentBlockNum].count === 1
@@ -348,8 +349,9 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                 true,
             )
             invalidFillInCurrentCell =
-                updateNoteInCell(currentRow, currentCol, note, true, validityChecksConfig) || invalidFillInCurrentCell
-            updateSingles && updateHiddenSingles(currentRow, currentCol, note)
+                updateNoteInCell({ row: currentRow, col: currentCol }, note, true, validityChecksConfig) ||
+                invalidFillInCurrentCell
+            updateSingles && updateHiddenSingles({ row: currentRow, col: currentCol }, note)
         }
     }
 
@@ -366,7 +368,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                 currentBlockNum,
             )
             invalidFillInCurrentCell =
-                updateNoteInCell(row, col, num, true, validityChecksConfig) || invalidFillInCurrentCell
+                updateNoteInCell({ row, col }, num, true, validityChecksConfig) || invalidFillInCurrentCell
             if (updateSingles) {
                 updateNakedSingles(row, col)
                 // update for hidden single. no need to check for any blocks
@@ -377,7 +379,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                     checkInCol: col !== currentCol,
                     checkInBlock: false,
                 }
-                updateHiddenSingles(row, col, num, housesToCheck)
+                updateHiddenSingles({ row, col }, num, housesToCheck)
             }
         }
     }
@@ -394,7 +396,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                 getBlockAndBoxNum({ row: currentRow, col }).blockNum,
             )
             invalidFillInCurrentCell =
-                updateNoteInCell(currentRow, col, num, true, validityChecksConfig) || invalidFillInCurrentCell
+                updateNoteInCell({ row: currentRow, col }, num, true, validityChecksConfig) || invalidFillInCurrentCell
             if (updateSingles) {
                 updateNakedSingles(currentRow, col)
                 // no chance of hidden singles in row here
@@ -404,7 +406,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                     checkInCol: true,
                     checkInBlock: true,
                 }
-                updateHiddenSingles(currentRow, col, num, housesToCheck)
+                updateHiddenSingles({ row: currentRow, col }, num, housesToCheck)
             }
         }
     }
@@ -421,7 +423,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                 getBlockAndBoxNum({ row, col: currentCol }).blockNum,
             )
             invalidFillInCurrentCell =
-                updateNoteInCell(row, currentCol, num, true, validityChecksConfig) || invalidFillInCurrentCell
+                updateNoteInCell({ row, col: currentCol }, num, true, validityChecksConfig) || invalidFillInCurrentCell
             if (updateSingles) {
                 updateNakedSingles(row, currentCol)
                 // no chance of hidden singles in column here
@@ -431,7 +433,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
                     checkInCol: false,
                     checkInBlock: true,
                 }
-                updateHiddenSingles(row, currentCol, num, housesToCheck)
+                updateHiddenSingles({ row, col: currentCol }, num, housesToCheck)
             }
         }
     }
@@ -598,7 +600,7 @@ const generateClues = clues => {
         if (clueTypeInstanceCount[num] === 0) numberOfDigitsDidExtinct++
         // update notes, these boxes will have only 1 note in them which is the "num" we just removed
         // so we don't need to check for any duplicacy of any kind
-        updateNoteInCell(row, col, num, false)
+        updateNoteInCell({ row, col }, num, false)
     }
     // all good till this point. our duplicacy checker is working absolutely fine
 
