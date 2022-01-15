@@ -110,10 +110,11 @@ const findSingles = () => {
 
 // test if we are hiding values for already hidden cell or we are inserting values for already filled cells
 // because of the error i saw in the algo today
-const updateDuplicacyCheckerStore = (row, col, num) => {
+const updateDuplicacyCheckerStore = (cell, num) => {
+    const {row, col} = cell
     const numIndex = num - 1
     const { rows, cols, blocks } = duplicacyCheckerStore
-    const { blockNum } = getBlockAndBoxNum({ row, col })
+    const { blockNum } = getBlockAndBoxNum(cell)
     rows[row][numIndex] = 1 - rows[row][numIndex]
     cols[col][numIndex] = 1 - cols[col][numIndex]
     blocks[blockNum][numIndex] = 1 - blocks[blockNum][numIndex]
@@ -440,14 +441,14 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
 
 const fillCell = (row, col, num, updateSingles) => {
     sudokuBoard[row][col].value = num
-    updateDuplicacyCheckerStore(row, col, num)
+    updateDuplicacyCheckerStore({row, col}, num)
     return updateNotesAfterFillCell(row, col, num, updateSingles)
 }
 
 const emptyCell = (row, col, getNewCellsForNum = false) => {
     const valueToBeRemoved = sudokuBoard[row][col].value
     sudokuBoard[row][col].value = 0
-    updateDuplicacyCheckerStore(row, col, valueToBeRemoved)
+    updateDuplicacyCheckerStore({row, col}, valueToBeRemoved)
     // 1. return new cells where "valueToBeRemoved" can be placed after removing it from current cell
     // 2. newCells won't have current cell in the list
     return updateNotesAfterEmptyCell({ row, col }, valueToBeRemoved, getNewCellsForNum)
@@ -592,7 +593,7 @@ const generateClues = clues => {
         const col = Math.floor(Math.random() * 9) // 9 cols are there
         const num = sudokuBoard[row][col].value
         sudokuBoard[row][col].value = 0
-        updateDuplicacyCheckerStore(row, col, num)
+        updateDuplicacyCheckerStore({row, col}, num)
         clueTypeInstanceCount[num]--
         if (clueTypeInstanceCount[num] === 0) numberOfDigitsDidExtinct++
         // update notes, these boxes will have only 1 note in them which is the "num" we just removed
@@ -658,13 +659,13 @@ const backtrackForSolvedGridGen = (row, col) => {
     for (let num = 1; num <= 9; num++) {
         if (!duplicacyPresent(num, { row, col })) {
             sudokuBoard[row][col].value = num
-            updateDuplicacyCheckerStore(row, col, num)
+            updateDuplicacyCheckerStore({row, col}, num)
             if (!backtrackForSolvedGridGen(row, col + 1)) {
                 sudokuBoard[row][col].value = 0
-                updateDuplicacyCheckerStore(row, col, num)
+                updateDuplicacyCheckerStore({row, col}, num)
             } else {
                 sudokuBoard[row][col].value = 0
-                updateDuplicacyCheckerStore(row, col, num)
+                updateDuplicacyCheckerStore({row, col}, num)
                 return 1
             }
         }
@@ -703,12 +704,13 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
                 let numIndex = Math.floor(Math.random() * numChoices.length)
                 let numToFill = numChoices[numIndex]
                 numChoices.splice(numIndex, 1)
-                if (duplicacyPresent(numToFill, { row, col })) continue
+                const cell = {row, col}
+                if (duplicacyPresent(numToFill, cell )) continue
                 sudokuBoard[row][col].value = numToFill
-                updateDuplicacyCheckerStore(row, col, numToFill)
+                updateDuplicacyCheckerStore(cell, numToFill)
                 if (!recursionForSolvedGridGen(0, 0)) {
                     sudokuBoard[row][col].value = 0
-                    updateDuplicacyCheckerStore(row, col, numToFill)
+                    updateDuplicacyCheckerStore(cell, numToFill)
                 }
             }
         }
