@@ -25,10 +25,11 @@ export const duplicacyPresent = (row, col, num, mainNumbers, cell) => {
         row = cell.row
         col = cell.col
     }
-    return tempFunc(row, col, num, mainNumbers)
+    return tempFunc(num, mainNumbers, cell)
 }
 
-const tempFunc = (row, col, num, mainNumbers) => {
+const tempFunc = (num, mainNumbers, cell) => {
+    const { row, col } = cell
     for (let col = 0; col < 9; col++) {
         if (mainNumbers[row][col].value === num) return 1 // check row
     }
