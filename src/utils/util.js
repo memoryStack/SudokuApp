@@ -76,7 +76,7 @@ const getFirstFilledPosition = cells => {
 // it will be used in "sudokuSolver" before using recursion technique
 const findSingles = () => {
     // naked singles
-    for (let row = 0; row < 9; row++) for (let col = 0; col < 9; col++) updateNakedSingles(row, col)
+    for (let row = 0; row < 9; row++) for (let col = 0; col < 9; col++) updateNakedSingles({ row, col })
 
     // find hidden singles
     for (let num = 1; num <= 9; num++) {
@@ -156,7 +156,7 @@ const updateNoteInCell = (cell, note, hideNote, validityChecksConfig) => {
     }
 }
 
-const updateNakedSingles = (row, col) => {
+const updateNakedSingles = ({ row, col }) => {
     if (notesData[row][col].count === 1) {
         // got new naked single
         const { boxNotes } = notesData[row][col]
@@ -370,7 +370,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
             invalidFillInCurrentCell =
                 updateNoteInCell({ row, col }, num, true, validityChecksConfig) || invalidFillInCurrentCell
             if (updateSingles) {
-                updateNakedSingles(row, col)
+                updateNakedSingles({ row, col })
                 // update for hidden single. no need to check for any blocks
                 // because it's the current block in which something is getting hidden
                 // and in this block we have already filled "num"
@@ -398,7 +398,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
             invalidFillInCurrentCell =
                 updateNoteInCell({ row: currentRow, col }, num, true, validityChecksConfig) || invalidFillInCurrentCell
             if (updateSingles) {
-                updateNakedSingles(currentRow, col)
+                updateNakedSingles({ row: currentRow, col })
                 // no chance of hidden singles in row here
                 // only column and blocks can have it
                 const housesToCheck = {
@@ -425,7 +425,7 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
             invalidFillInCurrentCell =
                 updateNoteInCell({ row, col: currentCol }, num, true, validityChecksConfig) || invalidFillInCurrentCell
             if (updateSingles) {
-                updateNakedSingles(row, currentCol)
+                updateNakedSingles({ row, col: currentCol })
                 // no chance of hidden singles in column here
                 // only row and blocks can have it
                 const housesToCheck = {
