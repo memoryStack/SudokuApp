@@ -111,7 +111,7 @@ const findSingles = () => {
 // test if we are hiding values for already hidden cell or we are inserting values for already filled cells
 // because of the error i saw in the algo today
 const updateDuplicacyCheckerStore = (cell, num) => {
-    const {row, col} = cell
+    const { row, col } = cell
     const numIndex = num - 1
     const { rows, cols, blocks } = duplicacyCheckerStore
     const { blockNum } = getBlockAndBoxNum(cell)
@@ -294,6 +294,8 @@ const updateNotesAfterEmptyCell = (cell, num, getNewCellsForNum) => {
 }
 
 // getting used in the below function to check if the cell we filled is correct or not at this step
+// TODO: understand the context of the parameters of this func
+//          to group the parameters of cells
 const getValidityChecksConfig = (
     currentRow,
     currentCol,
@@ -322,7 +324,7 @@ const getValidityChecksConfig = (
 
 // it will tell if after filling the current cell sudoku will enter in invalidState
 const updateNotesAfterFillCell = (cell, num, updateSingles) => {
-    const {row: currentRow, col: currentCol} = cell
+    const { row: currentRow, col: currentCol } = cell
     const { blockNum: currentBlockNum } = getBlockAndBoxNum(cell)
     let invalidFillInCurrentCell = false
 
@@ -335,7 +337,6 @@ const updateNotesAfterFillCell = (cell, num, updateSingles) => {
         if (notesData[currentRow][currentCol].boxNotes[note - 1].show) {
             // no chance of being removed note as naked single here
             // but these notes can be hidden single in currentRow, currentCol, currentBlock
-            // XX
             const validityChecksConfig = getValidityChecksConfig(
                 currentRow,
                 currentCol,
@@ -444,10 +445,10 @@ const fillCell = (cell, num, updateSingles) => {
     return updateNotesAfterFillCell(cell, num, updateSingles)
 }
 
-const emptyCell = ({row, col}, getNewCellsForNum = false) => {
+const emptyCell = ({ row, col }, getNewCellsForNum = false) => {
     const valueToBeRemoved = sudokuBoard[row][col].value
     sudokuBoard[row][col].value = 0
-    updateDuplicacyCheckerStore({row, col}, valueToBeRemoved)
+    updateDuplicacyCheckerStore({ row, col }, valueToBeRemoved)
     // 1. return new cells where "valueToBeRemoved" can be placed after removing it from current cell
     // 2. newCells won't have current cell in the list
     return updateNotesAfterEmptyCell({ row, col }, valueToBeRemoved, getNewCellsForNum)
@@ -459,7 +460,7 @@ const fillSingles = () => {
     for (let i = 0; i < highlightedSinglesInfo.length; i++) {
         const { row, col, num } = highlightedSinglesInfo[i]
         if (!sudokuBoard[row][col].value) {
-            const cell = {row, col}
+            const cell = { row, col }
             cellsFilled.push(cell)
             if (fillCell(cell, num, true)) {
                 invalidState = true
@@ -493,7 +494,7 @@ const getBoxToStartRecursionFrom = () => {
 }
 
 const recursion = (cell, alreadyFilledCells) => {
-    const {row, col} = cell
+    const { row, col } = cell
     let numberOfSolutions = 0
     const boxNotes = notesData[row][col].boxNotes
     for (let i = 0; i < 9; i++) {
@@ -529,7 +530,7 @@ const sudokuSolver = alreadyFilledCells => {
         else {
             // human techniques didn't solve completely, now use computer recursion power
             const { row, col } = getBoxToStartRecursionFrom() // TODO: optimize this
-            if (row !== -1 && col !== -1) numberOfSolutions = recursion({row, col}, alreadyFilledCells)
+            if (row !== -1 && col !== -1) numberOfSolutions = recursion({ row, col }, alreadyFilledCells)
         }
     }
 
@@ -593,7 +594,7 @@ const generateClues = clues => {
         const col = Math.floor(Math.random() * 9) // 9 cols are there
         const num = sudokuBoard[row][col].value
         sudokuBoard[row][col].value = 0
-        const cell = {row, col}
+        const cell = { row, col }
         updateDuplicacyCheckerStore(cell, num)
         clueTypeInstanceCount[num]--
         if (clueTypeInstanceCount[num] === 0) numberOfDigitsDidExtinct++
@@ -626,7 +627,7 @@ const generateClues = clues => {
 
         // get the list of cells in which current cell's number might appear as a candidate
         // if we remove it and the list shouldn't contain the current cell
-        const newCells = emptyCell({row, col}, true)
+        const newCells = emptyCell({ row, col }, true)
         let safeToRemove = true
         for (let i = 0; i < newCells.length && safeToRemove; i++) {
             // don't look for naked and hidden singles here because that sudokuSolver is doing
@@ -644,24 +645,24 @@ const generateClues = clues => {
             if (clueTypeInstanceCount[valueToHide] === 0) numberOfDigitsDidExtinct++
         } else {
             // no need to look for naked and hidden singles
-            fillCell({row, col}, valueToHide, false)
+            fillCell({ row, col }, valueToHide, false)
         }
     }
 }
 
 // can't this use singleton technique ??
 // TODO: make this recursion techique
-const backtrackForSolvedGridGen = (cell) => {
-    const {row, col} = cell
+const backtrackForSolvedGridGen = cell => {
+    const { row, col } = cell
     if (row == 9) return 1
-    if (col == 9) return backtrackForSolvedGridGen({row: row + 1, col: 0})
-    if (sudokuBoard[row][col].value) return backtrackForSolvedGridGen({row, col: col + 1})
+    if (col == 9) return backtrackForSolvedGridGen({ row: row + 1, col: 0 })
+    if (sudokuBoard[row][col].value) return backtrackForSolvedGridGen({ row, col: col + 1 })
 
     for (let num = 1; num <= 9; num++) {
         if (!duplicacyPresent(num, cell)) {
             sudokuBoard[row][col].value = num
             updateDuplicacyCheckerStore(cell, num)
-            if (!backtrackForSolvedGridGen({row, col: col + 1})) {
+            if (!backtrackForSolvedGridGen({ row, col: col + 1 })) {
                 sudokuBoard[row][col].value = 0
                 updateDuplicacyCheckerStore(cell, num)
             } else {
@@ -674,7 +675,7 @@ const backtrackForSolvedGridGen = (cell) => {
     return 0
 }
 
-const recursionForSolvedGridGen = (cell) => {
+const recursionForSolvedGridGen = cell => {
     return backtrackForSolvedGridGen(cell)
 }
 
@@ -705,11 +706,11 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
                 let numIndex = Math.floor(Math.random() * numChoices.length)
                 let numToFill = numChoices[numIndex]
                 numChoices.splice(numIndex, 1)
-                const cell = {row, col}
-                if (duplicacyPresent(numToFill, cell )) continue
+                const cell = { row, col }
+                if (duplicacyPresent(numToFill, cell)) continue
                 sudokuBoard[row][col].value = numToFill
                 updateDuplicacyCheckerStore(cell, numToFill)
-                if (!recursionForSolvedGridGen({row: 0, col: 0})) {
+                if (!recursionForSolvedGridGen({ row: 0, col: 0 })) {
                     sudokuBoard[row][col].value = 0
                     updateDuplicacyCheckerStore(cell, numToFill)
                 }
