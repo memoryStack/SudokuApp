@@ -212,10 +212,11 @@ const cellHasHiddenSingle = (row, col) => {
 }
 
 // going to insert num at the {row, col} cell, check for duplicacy
-const duplicacyPresent = (row, col, num) => {
+const duplicacyPresent = (num, cell) => {
+    const { row, col } = cell
     const numIndex = num - 1
     const { rows, cols, blocks } = duplicacyCheckerStore
-    const { blockNum } = getBlockAndBoxNum({ row, col })
+    const { blockNum } = getBlockAndBoxNum(cell)
     return rows[row][numIndex] || cols[col][numIndex] || blocks[blockNum][numIndex]
 }
 
@@ -228,7 +229,7 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
 
     // update notes for current cell
     for (let note = 1; note <= 9; note++) {
-        if (!duplicacyPresent(currentRow, currentCol, note)) {
+        if (!duplicacyPresent(note, { row: currentRow, col: currentCol })) {
             updateNoteInCell(currentRow, currentCol, note, false)
         }
     }
@@ -241,7 +242,7 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
             col !== currentCol &&
             !sudokuBoard[currentRow][col].value &&
             !notesData[currentRow][col].boxNotes[num - 1].show &&
-            !duplicacyPresent(currentRow, col, num)
+            !duplicacyPresent(num, { row: currentRow, col })
         ) {
             updateNoteInCell(currentRow, col, num, false)
             if (getNewCellsForNum && !cellHasHiddenSingle(currentRow, col)) newCells.push({ row: currentRow, col })
@@ -255,7 +256,7 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
             row !== currentRow &&
             !sudokuBoard[row][currentCol].value &&
             !notesData[row][currentCol].boxNotes[num - 1].show &&
-            !duplicacyPresent(row, currentCol, num)
+            !duplicacyPresent(num, { row, col: currentCol })
         ) {
             updateNoteInCell(row, currentCol, num, false)
             if (getNewCellsForNum && !cellHasHiddenSingle(row, currentCol)) newCells.push({ row, col: currentCol })
@@ -270,7 +271,7 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
         if (
             !sudokuBoard[row][col].value &&
             !notesData[row][col].boxNotes[num - 1].show &&
-            !duplicacyPresent(row, col, num)
+            !duplicacyPresent(num, { row, col })
         ) {
             updateNoteInCell(row, col, num, false)
             if (getNewCellsForNum && !cellHasHiddenSingle(row, col)) newCells.push({ row, col })
@@ -653,7 +654,7 @@ const backtrackForSolvedGridGen = (row, col) => {
     if (sudokuBoard[row][col].value) return backtrackForSolvedGridGen(row, col + 1)
 
     for (let num = 1; num <= 9; num++) {
-        if (!duplicacyPresent(row, col, num)) {
+        if (!duplicacyPresent(num, { row, col })) {
             sudokuBoard[row][col].value = num
             updateDuplicacyCheckerStore(row, col, num)
             if (!backtrackForSolvedGridGen(row, col + 1)) {
@@ -700,7 +701,7 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
                 let numIndex = Math.floor(Math.random() * numChoices.length)
                 let numToFill = numChoices[numIndex]
                 numChoices.splice(numIndex, 1)
-                if (duplicacyPresent(row, col, numToFill)) continue
+                if (duplicacyPresent(numToFill, { row, col })) continue
                 sudokuBoard[row][col].value = numToFill
                 updateDuplicacyCheckerStore(row, col, numToFill)
                 if (!recursionForSolvedGridGen(0, 0)) {
