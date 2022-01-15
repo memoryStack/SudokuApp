@@ -325,6 +325,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
             // on empty cell erase doesn't make sense
             if (!erasedSomeData) return
 
+            // TODO: group cell row, col here as well
             const moveObject = { moveType, valueType, value, row, col }
             movesStack.current.push(moveObject)
 

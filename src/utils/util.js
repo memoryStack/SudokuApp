@@ -200,8 +200,9 @@ const updateHiddenSingles = (row, col, note, housesToCheck = {}) => {
     }
 }
 
-const cellHasHiddenSingle = (row, col) => {
-    const { blockNum } = getBlockAndBoxNum({ row, col })
+const cellHasHiddenSingle = cell => {
+    const { row, col } = cell
+    const { blockNum } = getBlockAndBoxNum(cell)
     for (let note = 1; note <= 9; note++) {
         if (notesData[row][col].boxNotes[note - 1].show) {
             const { rows, cols, blocks } = notesInstancesPlacesInfo[note]
@@ -245,7 +246,8 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
             !duplicacyPresent(num, { row: currentRow, col })
         ) {
             updateNoteInCell(currentRow, col, num, false)
-            if (getNewCellsForNum && !cellHasHiddenSingle(currentRow, col)) newCells.push({ row: currentRow, col })
+            if (getNewCellsForNum && !cellHasHiddenSingle({ row: currentRow, col }))
+                newCells.push({ row: currentRow, col })
         }
     }
     const numIsHiddenSingleForCurrentRow = notesInstancesPlacesInfo[num].rows[currentRow].count === 1
@@ -259,7 +261,8 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
             !duplicacyPresent(num, { row, col: currentCol })
         ) {
             updateNoteInCell(row, currentCol, num, false)
-            if (getNewCellsForNum && !cellHasHiddenSingle(row, currentCol)) newCells.push({ row, col: currentCol })
+            if (getNewCellsForNum && !cellHasHiddenSingle({ row, col: currentCol }))
+                newCells.push({ row, col: currentCol })
         }
     }
     const numIsHiddenSingleForCurrentCol = notesInstancesPlacesInfo[num].cols[currentCol].count === 1
@@ -274,7 +277,7 @@ const updateNotesAfterEmptyCell = (currentRow, currentCol, num, getNewCellsForNu
             !duplicacyPresent(num, { row, col })
         ) {
             updateNoteInCell(row, col, num, false)
-            if (getNewCellsForNum && !cellHasHiddenSingle(row, col)) newCells.push({ row, col })
+            if (getNewCellsForNum && !cellHasHiddenSingle({ row, col })) newCells.push({ row, col })
         }
     }
     const numIsHiddenSingleForCurrentBlock = notesInstancesPlacesInfo[num].blocks[currentBlockNum].count === 1
