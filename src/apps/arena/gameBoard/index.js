@@ -24,8 +24,8 @@ const Board_ = ({
     showSmartHint,
     smartHintCellsHighlightInfo = {},
 }) => {
-    const sameValueAsSelectedBox = (row, col) =>
-        selectedCellMainValue && selectedCellMainValue === mainNumbers[row][col].value
+    const sameValueAsSelectedBox = ( cell) =>
+        selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
 
     const getCustomPuzzleMainNumFontColor = (row, col) => {
         const isWronglyPlaced = mainNumbers[row][col].wronglyPlaced
@@ -53,7 +53,7 @@ const Board_ = ({
     }
 
     // this is going to get complicated, i guess it's better to break it
-    const getBoxBackgroundColor = (row, col) => {
+    const getBoxBackgroundColor = (row, col, cell) => {
         if (showSmartHint) return getSmartHintActiveBgColor(row, col)
 
         if (gameState === GAME_STATE.INACTIVE) return null
@@ -62,7 +62,7 @@ const Board_ = ({
 
         if (isSelected) return Styles.selectedCellBGColor
         const isSameHouseAsSelected = sameHouseAsSelected({ row, col }, { row: selectedCellRow, col: selectedCellCol })
-        const isSameValueAsSelected = sameValueAsSelectedBox(row, col)
+        const isSameValueAsSelected = sameValueAsSelectedBox( cell)
         if (isSameHouseAsSelected && isSameValueAsSelected) return Styles.sameHouseSameValueBGColor
         if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells
         if (isSameHouseAsSelected) return Styles.sameHouseCellBGColor
@@ -91,7 +91,7 @@ const Board_ = ({
                             <Cell
                                 row={row}
                                 col={col}
-                                cellBGColor={getBoxBackgroundColor(row, col)}
+                                cellBGColor={getBoxBackgroundColor(row, col, {row, col})}
                                 mainValueFontColor={getMainNumFontColor(row, col)}
                                 cellMainValue={mainNumbers[row][col].value}
                                 cellNotes={notesInfo[row][col]}
