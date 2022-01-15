@@ -439,10 +439,10 @@ const updateNotesAfterFillCell = (currentRow, currentCol, num, updateSingles) =>
     return invalidFillInCurrentCell
 }
 
-const fillCell = (row, col, num, updateSingles) => {
+const fillCell = ({row, col}, num, updateSingles) => {
     sudokuBoard[row][col].value = num
     updateDuplicacyCheckerStore({row, col}, num)
-    return updateNotesAfterFillCell(row, col, num, updateSingles)
+    return updateNotesAfterFillCell(row, col, num, updateSingles) // XX
 }
 
 const emptyCell = ({row, col}, getNewCellsForNum = false) => {
@@ -460,8 +460,9 @@ const fillSingles = () => {
     for (let i = 0; i < highlightedSinglesInfo.length; i++) {
         const { row, col, num } = highlightedSinglesInfo[i]
         if (!sudokuBoard[row][col].value) {
-            cellsFilled.push({ row, col })
-            if (fillCell(row, col, num, true)) {
+            const cell = {row, col}
+            cellsFilled.push(cell)
+            if (fillCell(cell, num, true)) {
                 invalidState = true
                 break
             }
@@ -499,7 +500,7 @@ const recursion = (cell, alreadyFilledCells) => {
     for (let i = 0; i < 9; i++) {
         if (boxNotes[i].show) {
             //  don't search for singles because that "sudokuSolver" will do
-            const invalidState = fillCell(row, col, i + 1, false)
+            const invalidState = fillCell(cell, i + 1, false)
             numberOfSolutions = !invalidState ? sudokuSolver(alreadyFilledCells + 1) : numberOfSolutions
             emptyCell(cell)
             if (numberOfSolutions) {
@@ -629,9 +630,8 @@ const generateClues = clues => {
         const newCells = emptyCell({row, col}, true)
         let safeToRemove = true
         for (let i = 0; i < newCells.length && safeToRemove; i++) {
-            const { row, col } = newCells[i]
             // don't look for naked and hidden singles here because that sudokuSolver is doing
-            const invalidState = fillCell(row, col, valueToHide, false)  // XX
+            const invalidState = fillCell(newCells[i], valueToHide, false)
             const numOfSolutions = !invalidState ? sudokuSolver(cellsFilled) : 0
             // revert the above step and try another possible cell
             emptyCell(newCells[i])
@@ -645,7 +645,7 @@ const generateClues = clues => {
             if (clueTypeInstanceCount[valueToHide] === 0) numberOfDigitsDidExtinct++
         } else {
             // no need to look for naked and hidden singles
-            fillCell(row, col, valueToHide, false)
+            fillCell({row, col}, valueToHide, false)
         }
     }
 }
