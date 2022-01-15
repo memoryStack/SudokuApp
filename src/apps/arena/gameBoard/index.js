@@ -24,26 +24,28 @@ const Board_ = ({
     showSmartHint,
     smartHintCellsHighlightInfo = {},
 }) => {
-    const sameValueAsSelectedBox = ( cell) =>
+    const sameValueAsSelectedBox = cell =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
 
-    const getCustomPuzzleMainNumFontColor = (row, col) => {
-        const isWronglyPlaced = mainNumbers[row][col].wronglyPlaced
+    const getCustomPuzzleMainNumFontColor = cell => {
+        const isWronglyPlaced = mainNumbers[cell.row][cell.col].wronglyPlaced
         if (isWronglyPlaced) return Styles.wronglyFilledNumColor
         // consider any other number as clue
         return Styles.clueNumColor
     }
 
-    const getMainNumFontColor = (row, col) => {
+    const getMainNumFontColor = cell => {
+        const { row, col } = cell
         if (!mainNumbers[row][col].value) return null
-        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return getCustomPuzzleMainNumFontColor(row, col)
+        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return getCustomPuzzleMainNumFontColor(cell)
         const isWronglyPlaced = mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue
         if (isWronglyPlaced) return Styles.wronglyFilledNumColor
         if (!mainNumbers[row][col].isClue) return Styles.userFilledNumColor
         return Styles.clueNumColor
     }
 
-    const getSmartHintActiveBgColor = (row, col) => {
+    const getSmartHintActiveBgColor = cell => {
+        const { row, col } = cell
         return (
             (smartHintCellsHighlightInfo[row] &&
                 smartHintCellsHighlightInfo[row][col] &&
@@ -53,16 +55,17 @@ const Board_ = ({
     }
 
     // this is going to get complicated, i guess it's better to break it
-    const getBoxBackgroundColor = (row, col, cell) => {
-        if (showSmartHint) return getSmartHintActiveBgColor(row, col)
+    const getBoxBackgroundColor = cell => {
+        const { row, col } = cell
+        if (showSmartHint) return getSmartHintActiveBgColor(cell)
 
         if (gameState === GAME_STATE.INACTIVE) return null
         const { row: selectedCellRow = 0, col: selectedCellCol = 0 } = selectedCell
         const isSelected = selectedCellRow === row && selectedCellCol === col
 
         if (isSelected) return Styles.selectedCellBGColor
-        const isSameHouseAsSelected = sameHouseAsSelected({ row, col }, { row: selectedCellRow, col: selectedCellCol })
-        const isSameValueAsSelected = sameValueAsSelectedBox( cell)
+        const isSameHouseAsSelected = sameHouseAsSelected(cell, { row: selectedCellRow, col: selectedCellCol })
+        const isSameValueAsSelected = sameValueAsSelectedBox(cell)
         if (isSameHouseAsSelected && isSameValueAsSelected) return Styles.sameHouseSameValueBGColor
         if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells
         if (isSameHouseAsSelected) return Styles.sameHouseCellBGColor
@@ -70,7 +73,7 @@ const Board_ = ({
         return Styles.defaultCellBGColor
     }
 
-    const shouldMarkCellAsInhabitable = ( cell) => {
+    const shouldMarkCellAsInhabitable = cell => {
         if (!showSmartHint) return false
         return !!(
             smartHintCellsHighlightInfo[cell.row] &&
@@ -85,19 +88,19 @@ const Board_ = ({
             <View style={Styles.rowStyle} key={key}>
                 {looper.map(col => {
                     const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
-                    const cell = {row, col}
+                    const cell = { row, col }
                     return (
                         <View style={Styles.cellContainer} key={`${rowElementsKeyCounter++}`}>
                             <Cell
                                 row={row}
                                 col={col}
-                                cellBGColor={getBoxBackgroundColor(row, col, {row, col})}
-                                mainValueFontColor={getMainNumFontColor(row, col)}
+                                cellBGColor={getBoxBackgroundColor(cell)}
+                                mainValueFontColor={getMainNumFontColor(cell)}
                                 cellMainValue={mainNumbers[row][col].value}
                                 cellNotes={notesInfo[row][col]}
                                 onCellClicked={onCellClick}
                                 gameState={gameState}
-                                displayCrossIcon={shouldMarkCellAsInhabitable( cell)}
+                                displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
                                 smartHintData={smartHintData}
                             />
                         </View>
