@@ -582,7 +582,7 @@ const initNotesData = () => {
     }
 }
 
-const generateClues = clues => {
+const generateClues = clues => { // xx
     const clueTypeInstanceCount = new Array(10).fill(9)
     let numberOfDigitsDidExtinct = 0
 
@@ -651,21 +651,22 @@ const generateClues = clues => {
 
 // can't this use singleton technique ??
 // TODO: make this recursion techique
-const backtrackForSolvedGridGen = (row, col) => {
+const backtrackForSolvedGridGen = (cell) => {
+    const {row, col} = cell
     if (row == 9) return 1
-    if (col == 9) return backtrackForSolvedGridGen(row + 1, 0)
-    if (sudokuBoard[row][col].value) return backtrackForSolvedGridGen(row, col + 1)
+    if (col == 9) return backtrackForSolvedGridGen({row: row + 1, col: 0})
+    if (sudokuBoard[row][col].value) return backtrackForSolvedGridGen({row, col: col + 1})
 
     for (let num = 1; num <= 9; num++) {
-        if (!duplicacyPresent(num, { row, col })) {
+        if (!duplicacyPresent(num, cell)) {
             sudokuBoard[row][col].value = num
-            updateDuplicacyCheckerStore({row, col}, num)
-            if (!backtrackForSolvedGridGen(row, col + 1)) {
+            updateDuplicacyCheckerStore(cell, num)
+            if (!backtrackForSolvedGridGen({row, col: col + 1})) {
                 sudokuBoard[row][col].value = 0
-                updateDuplicacyCheckerStore({row, col}, num)
+                updateDuplicacyCheckerStore(cell, num)
             } else {
                 sudokuBoard[row][col].value = 0
-                updateDuplicacyCheckerStore({row, col}, num)
+                updateDuplicacyCheckerStore(cell, num)
                 return 1
             }
         }
@@ -673,8 +674,8 @@ const backtrackForSolvedGridGen = (row, col) => {
     return 0
 }
 
-const recursionForSolvedGridGen = (row, col) => {
-    return backtrackForSolvedGridGen(row, col)
+const recursionForSolvedGridGen = (cell) => {
+    return backtrackForSolvedGridGen(cell)
 }
 
 const printBoardState = () => {
@@ -708,7 +709,7 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
                 if (duplicacyPresent(numToFill, cell )) continue
                 sudokuBoard[row][col].value = numToFill
                 updateDuplicacyCheckerStore(cell, numToFill)
-                if (!recursionForSolvedGridGen(0, 0)) {
+                if (!recursionForSolvedGridGen({row: 0, col: 0})) {
                     sudokuBoard[row][col].value = 0
                     updateDuplicacyCheckerStore(cell, numToFill)
                 }
