@@ -20,7 +20,6 @@ import {
     RESUME,
     CUSTOMIZE_YOUR_PUZZLE_TITLE,
 } from '../../../resources/stringLiterals'
-import { generateNewSudokuPuzzle, initBoardData } from '../../../utils/util'
 
 const transformNativeGeneratedPuzzle = (clues, solution) => {
     const mainNumbers = new Array(9)
@@ -149,17 +148,17 @@ const useManageGame = route => {
                 })
 
             // puzzle generator in JS
-            generateNewSudokuPuzzle(minClues, initBoardData()).then(() => {
-                console.log('no error')
-                // if (!componentUnmounted) {
-                //     // timeTaken = Date.now() - time
-                //     // setBoardData(boardData)
-                //     // setRefereeData(initRefereeData(difficultyLevel))
-                //     // resetCellActions()
-                //     // onNewGameStarted()
-                // }
-                // console.log('@@@@@@@@ time taken is to generate new puzzle is', timeTaken)
-            })
+            // generateNewSudokuPuzzle(minClues, initBoardData()).then(() => {
+            //     console.log('no error')
+            //     // if (!componentUnmounted) {
+            //     //     // timeTaken = Date.now() - time
+            //     //     // setBoardData(boardData)
+            //     //     // setRefereeData(initRefereeData(difficultyLevel))
+            //     //     // resetCellActions()
+            //     //     // onNewGameStarted()
+            //     // }
+            //     // console.log('@@@@@@@@ time taken is to generate new puzzle is', timeTaken)
+            // })
         }
 
         addListener(EVENTS.GENERATE_NEW_PUZZLE, handler)
