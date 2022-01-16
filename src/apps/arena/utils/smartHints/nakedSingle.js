@@ -1,5 +1,5 @@
-import { getBlockAndBoxNum, getRowAndCol } from "../../../../utils/util"
-import { duplicacyPresent } from "../util"
+import { getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
+import { duplicacyPresent } from '../util'
 import { NAKED_SINGLE_TYPES } from './constants'
 
 export const getNakedSingle = (cell, mainNumbers) => {

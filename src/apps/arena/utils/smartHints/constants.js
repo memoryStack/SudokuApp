@@ -5,6 +5,4 @@ const NAKED_SINGLE_TYPES = {
     MIX: 'mix',
 }
 
-export {
-    NAKED_SINGLE_TYPES
-}
+export { NAKED_SINGLE_TYPES }
