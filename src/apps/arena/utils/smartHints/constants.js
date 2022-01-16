@@ -5,4 +5,10 @@ const NAKED_SINGLE_TYPES = {
     MIX: 'mix',
 }
 
-export { NAKED_SINGLE_TYPES }
+const HIDDEN_SINGLE_TYPES = {
+    ROW: 'row',
+    COL: 'col',
+    BLOCK: 'block',
+}
+
+export { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES }
