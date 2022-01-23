@@ -767,3 +767,7 @@ if (Array.prototype.allValuesSame === undefined) {
         return true
     }
 }
+
+export const consoleLog = (data, stringifyData = true) => {
+    __DEV__ && console.log('@@@@@@' , stringifyData ? JSON.stringify(data) : data)
+}

@@ -1,5 +1,5 @@
-import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { getNakedSingle } from './smartHints/nakedSingle'
+import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
+import { getAllNakedSingles } from './smartHints/nakedSingle'
 import { getHiddenSingle } from './smartHints/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from './smartHints/constants'
@@ -145,15 +145,13 @@ const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
             )
     }
 
-    return [
-        {
+    return {
             cellsToFocusData,
             techniqueInfo: {
                 title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
                 logic,
             },
-        },
-    ]
+        }
 }
 // naked single ends here
 
@@ -496,15 +494,14 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     // we don't need this DS to know if naked single is present or not in this cell
     // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
 
-    if (!cellFilled) {
-        const { present: nakedSinglePresent, type: nakedSingleType } = getNakedSingle(
-            { row, col },
-            boardMainNumbersCopy,
-        )
+    const nakedSinglesData = getAllNakedSingles(notesData)
+    if (nakedSinglesData.length) {
+        return nakedSinglesData.map(({ cell, type }) => {
+            return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)    
+        })
+    }
 
-        if (nakedSinglePresent) {
-            return getNakedSingleTechniqueToFocus(nakedSingleType, originalMainNumbers, { row, col })
-        }
+    if (!cellFilled) {
         const { present: hiddenSinglePresent, type: hiddenSingleType } = getHiddenSingle(
             { row, col },
             boardMainNumbersCopy,

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { EVENTS, GAME_STATE, PENCIL_STATE } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
+import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol, consoleLog } from '../../../utils/util'
 import { duplicacyPresent } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { getSmartHint } from '../utils/smartHint'
@@ -356,6 +356,8 @@ const useGameBoard = (gameState, pencilState, hints) => {
                     }
                 }
             }
+            
+            consoleLog(notesInfo)
             updateNotesInfo([...notesInfo])
         }
         addListener(EVENTS.FAST_PENCIL_CLICKED, handler)
