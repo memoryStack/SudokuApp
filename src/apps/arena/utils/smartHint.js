@@ -485,8 +485,6 @@ const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
 }
 // hidden singles ends here
 
-// TODO: this file is getting huge, break it
-
 // write this in JS and if performance is not good then shift to native side
 const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     // why are we copying it ?? is it getting modified somewhere ??

@@ -21,9 +21,9 @@ const App = () => {
     // TODO: codepush is giving some error for ios
     // {"status":400,"name":"Error","message":"Missing required query parameter \"deployment_key\""}
     useEffect(() => {
-        // CodePush.sync({installMode: CodePush.InstallMode.IMMEDIATE}, (status) => {
-        //   console.log('@@@@@@@ JS update installed status', status)
-        // })
+        CodePush.sync({installMode: CodePush.InstallMode.IMMEDIATE}, (status) => {
+          console.log('@@@@@@@ JS update installed status', status)
+        })
     }, [])
 
     const [snackbarMsg, setSnackBarMsg] = useState('')
@@ -54,7 +54,7 @@ const App = () => {
             style={{
                 height: '100%',
                 width: '100%',
-                backgroundColor: 'white',
+                backgroundColor: 'white', 
             }}
         >
             <NavigationContainer>{getNavigator()}</NavigationContainer>
@@ -64,5 +64,5 @@ const App = () => {
     )
 }
 
-// export default CodePush(CODE_PUSH_OPTIONS)(App)
-export default App
+export default CodePush(CODE_PUSH_OPTIONS)(App)
+// export default App
