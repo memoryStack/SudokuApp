@@ -356,7 +356,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
                     }
                 }
             }
-            
+
             consoleLog(notesInfo)
             updateNotesInfo([...notesInfo])
         }

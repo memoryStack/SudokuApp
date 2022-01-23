@@ -769,5 +769,5 @@ if (Array.prototype.allValuesSame === undefined) {
 }
 
 export const consoleLog = (data, stringifyData = true) => {
-    __DEV__ && console.log('@@@@@@' , stringifyData ? JSON.stringify(data) : data)
+    __DEV__ && console.log('@@@@@@', stringifyData ? JSON.stringify(data) : data)
 }

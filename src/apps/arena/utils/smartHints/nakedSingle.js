@@ -2,7 +2,7 @@ import { getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { duplicacyPresent } from '../util'
 import { NAKED_SINGLE_TYPES } from './constants'
 
-const isNakedSinglePresent = (cellNotes) => {
+const isNakedSinglePresent = cellNotes => {
     let possibleCandidatesCount = 0
     let mainNumber = -1
     cellNotes.forEach(({ show, noteValue }) => {
@@ -14,18 +14,17 @@ const isNakedSinglePresent = (cellNotes) => {
 
     return {
         present: possibleCandidatesCount === 1,
-        mainNumber: possibleCandidatesCount === 1 ? mainNumber : -1
+        mainNumber: possibleCandidatesCount === 1 ? mainNumber : -1,
     }
 }
 
-export const getAllNakedSingles = (notesInfo) => {
+export const getAllNakedSingles = notesInfo => {
     const nakedSingles = []
-    for (let row=0;row<9;row++) {
-        for (let col=0;col<9;col++) {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
             const { present: nakedSinglePresent, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
             // TODO: fix the sin added here
-            if (nakedSinglePresent)
-                nakedSingles.push({ cell: {row, col}, mainNumber, type: NAKED_SINGLE_TYPES.MIX })
+            if (nakedSinglePresent) nakedSingles.push({ cell: { row, col }, mainNumber, type: NAKED_SINGLE_TYPES.MIX })
         }
     }
     return nakedSingles

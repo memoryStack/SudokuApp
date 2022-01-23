@@ -146,12 +146,12 @@ const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
     }
 
     return {
-            cellsToFocusData,
-            techniqueInfo: {
-                title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
-                logic,
-            },
-        }
+        cellsToFocusData,
+        techniqueInfo: {
+            title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
+            logic,
+        },
+    }
 }
 // naked single ends here
 
@@ -497,7 +497,7 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     const nakedSinglesData = getAllNakedSingles(notesData)
     if (nakedSinglesData.length) {
         return nakedSinglesData.map(({ cell, type }) => {
-            return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)    
+            return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
         })
     }
 
