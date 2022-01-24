@@ -21,6 +21,7 @@ export const getAllNakedSingles = (mainNumbers, notesInfo) => {
     const nakedSingles = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
+            if (mainNumbers[row][col].value) continue
             // TODO: change "mainNumber" field name. it doesn't feel right.
             const { present: nakedSinglePresent, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
             if (nakedSinglePresent)
