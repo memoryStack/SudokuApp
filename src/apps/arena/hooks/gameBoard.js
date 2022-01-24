@@ -358,6 +358,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
             }
 
             consoleLog(JSON.stringify(notesInfo))
+            consoleLog('@@@@@@@ main numbers', JSON.stringify(mainNumbers))
             updateNotesInfo([...notesInfo])
         }
         addListener(EVENTS.FAST_PENCIL_CLICKED, handler)

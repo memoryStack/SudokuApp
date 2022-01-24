@@ -494,7 +494,7 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     // we don't need this DS to know if naked single is present or not in this cell
     // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
 
-    const nakedSinglesData = getAllNakedSingles(notesData)
+    const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
     if (nakedSinglesData.length) {
         return nakedSinglesData.map(({ cell, type }) => {
             return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
