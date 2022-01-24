@@ -1,5 +1,5 @@
-import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { getAllNakedSingles } from './smartHints/nakedSingle'
+import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
+import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
 import { getHiddenSingle } from './smartHints/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from './smartHints/constants'

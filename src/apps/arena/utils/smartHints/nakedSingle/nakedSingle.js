@@ -1,5 +1,5 @@
-import { getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
-import { NAKED_SINGLE_TYPES } from './constants'
+import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
+import { NAKED_SINGLE_TYPES } from '../constants'
 
 const isNakedSinglePresent = cellNotes => {
     let possibleCandidatesCount = 0

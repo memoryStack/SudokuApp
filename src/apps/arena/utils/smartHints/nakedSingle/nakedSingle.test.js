@@ -1,5 +1,5 @@
 import { getAllNakedSingles } from './nakedSingle'
-import { NAKED_SINGLE_TYPES } from './constants'
+import { NAKED_SINGLE_TYPES } from '../constants'
 
 test('naked singles', () => {
     const { mainNumbersTestOne, notesDataTestOne } = require('./nakedSingleTestData')
