@@ -2,37 +2,20 @@ import { getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { duplicacyPresent } from '../util'
 import { HIDDEN_SINGLE_TYPES } from './constants'
 
-const getCurrentCellNotes = (mainNumbers, cell) => {
+// TODO: refactor the below func
+const getHiddenSingle = (cell, mainNumbers, cellNotes) => {
     const { row, col } = cell
-    const possibleCandiates = []
-    const numbersAlreadyInHouses = {}
-    for (let row = 0; row < 9; row++) {
-        const filledValue = mainNumbers[row][col].value
-        if (filledValue) numbersAlreadyInHouses[filledValue] = true
-    }
-    for (let col = 0; col < 9; col++) {
-        const filledValue = mainNumbers[row][col].value
-        if (filledValue) numbersAlreadyInHouses[filledValue] = true
-    }
-    const { blockNum } = getBlockAndBoxNum(cell)
-    for (let cellNo = 0; cellNo < 9; cellNo++) {
-        const { row, col } = getRowAndCol(blockNum, cellNo)
-        const filledValue = mainNumbers[row][col].value
-        if (filledValue) numbersAlreadyInHouses[filledValue] = true
-    }
-    for (let num = 1; num <= 9; num++) {
-        if (!numbersAlreadyInHouses[num]) possibleCandiates.push(num)
-    }
-    return possibleCandiates
-}
-
-export const getHiddenSingle = (cell, mainNumbers) => {
-    const { row, col } = cell
-    const possibleCandiates = getCurrentCellNotes(mainNumbers, cell)
     let singleType = ''
 
+    const possibleCandiates = []
+    cellNotes.forEach(({ noteValue, show }) => {
+        if (show) possibleCandiates.push(noteValue)
+    })
+
+    let singleCandidate = -1
     for (let i = 0; i < possibleCandiates.length; i++) {
         const candidate = possibleCandiates[i]
+        singleCandidate = candidate
         // first check in block
         let possibleOccurencesInHouse = 0
         const { blockNum } = getBlockAndBoxNum(cell)
@@ -78,5 +61,18 @@ export const getHiddenSingle = (cell, mainNumbers) => {
     return {
         present: singleType !== '',
         type: singleType,
+        mainNumber: singleCandidate,
     }
+}
+
+export const getAllHiddenSingles = (mainNumbers, notesData) => {
+    const result = []
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (mainNumbers[row][col].value) continue
+            const { present, type, mainNumber } = getHiddenSingle({ row, col }, mainNumbers, notesData[row][col])
+            if (present) result.push({ cell: { row, col }, mainNumber, type })
+        }
+    }
+    return result
 }

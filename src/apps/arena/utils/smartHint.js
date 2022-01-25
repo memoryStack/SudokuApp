@@ -1,6 +1,6 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
-import { getHiddenSingle } from './smartHints/hiddenSingle'
+import { getAllHiddenSingles } from './smartHints/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from './smartHints/constants'
 
@@ -471,25 +471,22 @@ const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
             break
     }
 
-    return [
-        {
-            cellsToFocusData,
-            techniqueInfo: {
-                title: SMART_HINTS_TECHNIQUES.HIDDEN_SINGLE.TITLE,
-                logic: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue),
-            },
+    return {
+        cellsToFocusData,
+        techniqueInfo: {
+            title: SMART_HINTS_TECHNIQUES.HIDDEN_SINGLE.TITLE,
+            logic: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue),
         },
-    ]
+    }
 }
 // hidden singles ends here
 
+// TODO: remove the {row, col} parameter
 // write this in JS and if performance is not good then shift to native side
 const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     // why are we copying it ?? is it getting modified somewhere ??
     // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
-    const boardMainNumbersCopy = copyBoardMainNumbers(originalMainNumbers)
-
-    const cellFilled = !!originalMainNumbers[row][col].value
+    // const boardMainNumbersCopy = copyBoardMainNumbers(originalMainNumbers)
 
     // we don't need this DS to know if naked single is present or not in this cell
     // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
@@ -501,14 +498,11 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
         })
     }
 
-    if (!cellFilled) {
-        const { present: hiddenSinglePresent, type: hiddenSingleType } = getHiddenSingle(
-            { row, col },
-            boardMainNumbersCopy,
-        )
-        if (hiddenSinglePresent) {
-            return getHiddenSingleTechniqueInfo({ row, col }, hiddenSingleType, boardMainNumbersCopy)
-        }
+    const hiddenSinglesData = getAllHiddenSingles(originalMainNumbers, notesData)
+    if (hiddenSinglesData.length) {
+        return hiddenSinglesData.map(({ cell, type }) => {
+            return getHiddenSingleTechniqueInfo(cell, type, originalMainNumbers)
+        })
     }
 
     const possibleGroupCandidatesCount = [2, 3]
