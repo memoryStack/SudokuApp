@@ -2,6 +2,34 @@ import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
 import { HIDDEN_SINGLE_TYPES } from '../constants'
 import { isCellEmpty } from '../../util'
 
+const isCandidateSolutionForBlockCell = (candidate, cell, mainNumbers, notesData) => {
+    let possibleHostCellsCount = 0
+    const { blockNum } = getBlockAndBoxNum(cell)
+    for (let cellNo = 0; cellNo < 9; cellNo++) {
+        const { row, col } = getRowAndCol(blockNum, cellNo)
+        if (isCellEmpty({ row, col }, mainNumbers) && notesData[row][col][candidate - 1].show) possibleHostCellsCount++
+    }
+    return possibleHostCellsCount === 1
+}
+
+const isCandidateSolutionForColCell = (candidate, cell, mainNumbers, notesData) => {
+    let possibleHostCellsCount = 0
+    for (let row = 0; row < 9; row++) {
+        if (isCellEmpty({ row, col: cell.col }, mainNumbers) && notesData[row][cell.col][candidate - 1].show)
+            possibleHostCellsCount++
+    }
+    return possibleHostCellsCount === 1
+}
+
+const isCandidateSolutionForRowCell = (candidate, cell, mainNumbers, notesData) => {
+    let possibleHostCellsCount = 0
+    for (let col = 0; col < 9; col++) {
+        if (isCellEmpty({ row: cell.row, col }, mainNumbers) && notesData[cell.row][col][candidate - 1].show)
+            possibleHostCellsCount++
+    }
+    return possibleHostCellsCount === 1
+}
+
 const getCellHiddenSingle = (cell, mainNumbers, notesData) => {
     const { row, col } = cell
     let singleType = ''
@@ -12,50 +40,23 @@ const getCellHiddenSingle = (cell, mainNumbers, notesData) => {
     })
 
     let singleCandidate = -1
-
-    // TODO: replace below loop with this one
-    // possibleCandiates.some((candidate) => {
-    // })
-
-    for (let i = 0; i < possibleCandiates.length; i++) {
-        const candidate = possibleCandiates[i]
+    possibleCandiates.some(candidate => {
         singleCandidate = candidate
-
-        // first check in block
-        let possibleOccurencesInHouse = 0
-        const { blockNum } = getBlockAndBoxNum(cell)
-        for (let cellNo = 0; cellNo < 9; cellNo++) {
-            const { row, col } = getRowAndCol(blockNum, cellNo)
-            if (isCellEmpty({ row, col }, mainNumbers) && notesData[row][col][candidate - 1].show)
-                possibleOccurencesInHouse++
-        }
-        if (possibleOccurencesInHouse === 1) {
+        if (isCandidateSolutionForBlockCell(candidate, cell, mainNumbers, notesData)) {
             singleType = HIDDEN_SINGLE_TYPES.BLOCK
-            break
+            return true
         }
-
         // check in col (more natural as per my experiance. would like to switch it as well just as a experience)
-        possibleOccurencesInHouse = 0
-        for (let row = 0; row < 9; row++) {
-            if (isCellEmpty({ row, col }, mainNumbers) && notesData[row][col][candidate - 1].show)
-                possibleOccurencesInHouse++
-        }
-        if (possibleOccurencesInHouse === 1) {
+        if (isCandidateSolutionForColCell(candidate, cell, mainNumbers, notesData)) {
             singleType = HIDDEN_SINGLE_TYPES.COL
-            break
+            return true
         }
-
-        // check in row
-        possibleOccurencesInHouse = 0
-        for (let col = 0; col < 9; col++) {
-            if (isCellEmpty({ row, col }, mainNumbers) && notesData[row][col][candidate - 1].show)
-                possibleOccurencesInHouse++
-        }
-        if (possibleOccurencesInHouse === 1) {
+        if (isCandidateSolutionForRowCell(candidate, cell, mainNumbers, notesData)) {
             singleType = HIDDEN_SINGLE_TYPES.ROW
-            break
+            return true
         }
-    }
+        return false
+    })
 
     return {
         present: singleType !== '',
