@@ -4,11 +4,13 @@ import { NAKED_SINGLE_TYPES } from '../constants'
 const isNakedSinglePresent = cellNotes => {
     let possibleCandidatesCount = 0
     let mainNumber = -1
-    cellNotes.forEach(({ show, noteValue }) => {
+
+    cellNotes.some(({ show, noteValue }) => {
         if (show) {
             possibleCandidatesCount++
             mainNumber = noteValue
         }
+        return possibleCandidatesCount > 1
     })
 
     return {
