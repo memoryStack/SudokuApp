@@ -110,3 +110,7 @@ export const areSameColCells = cells => {
     const cellsCol = cells.map(({ col }) => col)
     return cellsCol.allValuesSame()
 }
+
+export const isCellEmpty = ({ row, col }, mainNumbers) => {
+    return mainNumbers[row][col].value === 0
+}
