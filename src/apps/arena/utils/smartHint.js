@@ -1,6 +1,6 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
-import { getAllHiddenSingles } from './smartHints/hiddenSingle'
+import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from './smartHints/constants'
 

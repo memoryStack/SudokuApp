@@ -1,5 +1,5 @@
 import { HIDDEN_SINGLE_TYPES } from '../constants'
-import { getAllHiddenSingles } from '../hiddenSingle'
+import { getAllHiddenSingles } from './hiddenSingle'
 
 test('hidden singles', () => {
     const { mainNumbers, notesData } = require('./testData')
