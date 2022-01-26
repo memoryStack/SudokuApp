@@ -95,7 +95,6 @@ export const areSameCells = (cellA, cellB) => cellA.row === cellB.row && cellA.c
 
 export const areSameBlockCells = cells => {
     const cellsBlockNum = cells.map(cell => {
-        const { row, col } = cell
         return getBlockAndBoxNum(cell).blockNum
     })
     return cellsBlockNum.allValuesSame()
