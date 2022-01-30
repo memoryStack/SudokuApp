@@ -23,8 +23,9 @@ import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
 import { NEW_GAME, SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
-import { noOperationFunction } from '../../utils/util'
+import { consoleLog, noOperationFunction } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
+import { usePrevious } from '../../utils/customHooks'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -111,6 +112,7 @@ const Arena_ = ({ navigation, route }) => {
             info: {
                 cellsToFocusData = {},
                 techniqueInfo: { title: smartHintTitle = '', logic: smartHintLogic = '' } = {},
+                selectCellOnClose,
             } = {},
             nextHintClick,
             prevHintClick,
@@ -118,6 +120,18 @@ const Arena_ = ({ navigation, route }) => {
             totalHintsCount,
         } = {},
     } = useGameBoard(gameState, pencilState, hints)
+
+    // TODO: i couldn't use this logic to update the cell after hint HC is closed
+    // it's because i am using useEffect in usePrevious hook and it results in infinite
+    // re-rendering. dig up the reason why this is happening. (URGENT)
+    // have to change this usePrevious
+    // const smartHintWasVisible = usePrevious(showSmartHint, true)
+    // const smartHintFocusedCell = usePrevious(selectCellOnClose)
+    // if (smartHintWasVisible && !showSmartHint) {
+    //     // select the cell on which smart hint HC was closed
+    //     consoleLog('@@@@@@ selectcellonclose', smartHintFocusedCell)
+    //     // onCellClick(smartHintFocusedCell)
+    // }
 
     const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState, showSmartHint)
 
@@ -189,8 +203,8 @@ const Arena_ = ({ navigation, route }) => {
     )
 
     const onSmartHintHCClosed = useCallback(() => {
-        emit(EVENTS.SMART_HINTS_HC_CLOSED)
-    }, [])
+        emit(EVENTS.SMART_HINTS_HC_CLOSED, selectCellOnClose)
+    }, [selectCellOnClose])
 
     const handleSharePuzzleClick = useCallback(() => {
         let puzzleString = ''

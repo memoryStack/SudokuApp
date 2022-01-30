@@ -415,21 +415,26 @@ const useGameBoard = (gameState, pencilState, hints) => {
     }, [selectedCell, mainNumbers, notesInfo])
 
     useEffect(() => {
-        const handler = () => {
+        const handler = newCellToBeSelected => {
             setSmartHintData({ show: false, hints: [], currentHintNum: 0 })
+            newCellToBeSelected && updateSelectedCell(newCellToBeSelected)
         }
         addListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
         return () => removeListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
-    }, [])
+    }, [mainNumbers])
+
+    const updateSelectedCell = ({ row, col }) => {
+        selectedCellMainValue.current = mainNumbers[row][col].value
+        selectCell(selectedCell => {
+            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
+            return selectedCell
+        })
+    }
 
     const onCellClick = useCallback(
-        ({ row, col }) => {
+        cell => {
             if (gameState !== GAME_STATE.ACTIVE || smartHintInfo.show) return
-            selectedCellMainValue.current = mainNumbers[row][col].value
-            selectCell(selectedCell => {
-                if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
-                return selectedCell
-            })
+            updateSelectedCell(cell)
         },
         [mainNumbers, gameState, smartHintInfo],
     )

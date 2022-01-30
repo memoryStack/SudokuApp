@@ -151,6 +151,7 @@ const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
             title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
             logic,
         },
+        selectCellOnClose: { row, col },
     }
 }
 // naked single ends here
@@ -477,6 +478,7 @@ const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
             title: SMART_HINTS_TECHNIQUES.HIDDEN_SINGLE.TITLE,
             logic: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue),
         },
+        selectCellOnClose: cell,
     }
 }
 // hidden singles ends here
