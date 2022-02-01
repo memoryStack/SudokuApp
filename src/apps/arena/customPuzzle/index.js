@@ -58,7 +58,7 @@ const initBoardData = () => {
     const movesStack = []
     const mainNumbers = initMainNumbers()
 
-    const str = '615030700000790010040005030000523090520000008400068000306080970200479006900300281'
+    const str = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
     for (let i = 0; i < str.length; i++) {
         const row = Math.floor(i / 9)
         const col = i % 9
