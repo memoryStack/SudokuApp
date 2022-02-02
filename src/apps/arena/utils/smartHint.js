@@ -482,6 +482,7 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
     return cellsToFocusData
 }
 
+// simplify the flow from here
 const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
     let cellsToFocusData = null
     switch (type) {
@@ -507,21 +508,17 @@ const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
 }
 // hidden singles ends here
 
-// TODO: remove the {row, col} parameter
 // write this in JS and if performance is not good then shift to native side
-const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
+const getSmartHint = async (originalMainNumbers, notesData) => {
     // why are we copying it ?? is it getting modified somewhere ??
     // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
-    // const boardMainNumbersCopy = copyBoardMainNumbers(originalMainNumbers)
-    // we don't need this DS to know if naked single is present or not in this cell
-    // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
 
-    const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
-    if (nakedSinglesData.length) {
-        return nakedSinglesData.map(({ cell, type }) => {
-            return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
-        })
-    }
+    // const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
+    // if (nakedSinglesData.length) {
+    //     return nakedSinglesData.map(({ cell, type }) => {
+    //         return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
+    //     })
+    // }
 
     const hiddenSinglesData = getAllHiddenSingles(originalMainNumbers, notesData)
     if (hiddenSinglesData.length) {

@@ -401,7 +401,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
 
     useEffect(() => {
         const handler = () => {
-            getSmartHint(selectedCell, mainNumbers, notesInfo)
+            getSmartHint(mainNumbers, notesInfo)
                 .then(hints => {
                     consoleLog('@@@@ hintInfo', JSON.stringify(hints))
                     if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })
@@ -417,7 +417,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
         }
         addListener(EVENTS.HINT_CLICKED, handler)
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
-    }, [selectedCell, mainNumbers, notesInfo])
+    }, [mainNumbers, notesInfo])
 
     useEffect(() => {
         const handler = newCellToBeSelected => {

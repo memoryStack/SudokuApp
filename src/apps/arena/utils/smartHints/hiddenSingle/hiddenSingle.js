@@ -69,9 +69,10 @@ export const getAllHiddenSingles = (mainNumbers, notesData) => {
     const result = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
-            if (mainNumbers[row][col].value) continue
-            const { present, type, mainNumber } = getCellHiddenSingle({ row, col }, mainNumbers, notesData)
-            if (present) result.push({ cell: { row, col }, mainNumber, type })
+            const cell = { row, col }
+            if (!isCellEmpty(cell, mainNumbers)) continue
+            const { present, type, mainNumber } = getCellHiddenSingle(cell, mainNumbers, notesData)
+            if (present) result.push({ cell, mainNumber, type })
         }
     }
     return result
