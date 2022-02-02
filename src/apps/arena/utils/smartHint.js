@@ -483,7 +483,7 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
 }
 
 // simplify the flow from here
-const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
+export const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
     let cellsToFocusData = null
     switch (type) {
         case HIDDEN_SINGLE_TYPES.ROW:
