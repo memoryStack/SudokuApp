@@ -484,18 +484,10 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
 
 // simplify the flow from here
 export const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
-    let cellsToFocusData = null
-    switch (type) {
-        case HIDDEN_SINGLE_TYPES.ROW:
-            cellsToFocusData = getHiddenSingleInRowOrColData(cell, HIDDEN_SINGLE_TYPES.ROW, mainNumbers)
-            break
-        case HIDDEN_SINGLE_TYPES.COL:
-            cellsToFocusData = getHiddenSingleInRowOrColData(cell, HIDDEN_SINGLE_TYPES.COL, mainNumbers)
-            break
-        case HIDDEN_SINGLE_TYPES.BLOCK:
-            cellsToFocusData = getHiddenSingleInBlockData(cell, mainNumbers)
-            break
-    }
+    let cellsToFocusData =
+        type === HIDDEN_SINGLE_TYPES.BLOCK
+            ? getHiddenSingleInBlockData(cell, mainNumbers)
+            : getHiddenSingleInRowOrColData(cell, type, mainNumbers)
 
     return {
         cellsToFocusData,
