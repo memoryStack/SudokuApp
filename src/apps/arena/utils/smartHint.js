@@ -365,6 +365,34 @@ const getHiddenSingleInRowOrColData = (cell, type, mainNumbers) => {
     return cellsToFocusData
 }
 
+const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, neighbourRows) => {
+    const getWinnerInstancePosInRow = () => {
+        for (let col = 0; col < 9; col++) {
+            if (mainNumbers[firstCell.row][col].value === winnerCandidate) return col
+        }
+        return -1
+    }
+
+    const getBlockEmptyCellsCountInRow = () => {
+        let result = 0
+        for (let i = 0; i < 3; i++) {
+            if (isCellEmpty({ row: firstCell.row, col: firstCell.col + i }, mainNumbers)) result++
+        }
+        return result
+    }
+
+    const emptyCellsCount = getBlockEmptyCellsCountInRow()
+    if (emptyCellsCount) {
+        const winnerInstancePos = getWinnerInstancePosInRow()
+        if (winnerInstancePos !== -1) {
+            neighbourRows[firstCell.row] = {
+                emptyCellsCount,
+                col: winnerInstancePos,
+            }
+        }
+    }
+}
+
 const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     const { row: hostRow, col: hostCol } = hostCell
 
@@ -379,40 +407,8 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     for (let i = 0; i < 3; i++) {
         const row = startRow + i
 
-        // it is basically calculating how many empty cells of this block in the row
-        // are eliminated by an instance of winner candidate in the same row
         if (row !== hostRow) {
-            const getWinnerInstanceInfoInRow = () => {
-                for (let col = 0; col < 9; col++) {
-                    if (mainNumbers[row][col].value === winnerCandidate) {
-                        return {
-                            present: true,
-                            column: col,
-                        }
-                    }
-                }
-                return {
-                    present: false,
-                    column: -1,
-                }
-            }
-            const winnerInstanceInfo = getWinnerInstanceInfoInRow()
-
-            const getBlockEmptyCellsCountInRow = () => {
-                let result = 0
-                for (let i = 0; i < 3; i++) {
-                    if (isCellEmpty({ row, col: startCol + i }, mainNumbers)) result++
-                }
-                return result
-            }
-
-            const emptyCellsCount = getBlockEmptyCellsCountInRow()
-            if (winnerInstanceInfo.present && emptyCellsCount) {
-                neighbourRows[row] = {
-                    emptyCellsCount,
-                    col: winnerInstanceInfo.column,
-                }
-            }
+            getWinnerInstanceInfoInRow({ row, col: startCol }, winnerCandidate, mainNumbers, neighbourRows)
         }
 
         const col = startCol + i
