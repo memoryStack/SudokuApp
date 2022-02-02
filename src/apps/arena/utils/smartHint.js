@@ -356,18 +356,19 @@ const getHiddenSingleInRowOrColData = (cell, type, mainNumbers) => {
     return cellsToFocusData
 }
 
-const getHiddenSingleInBlockData = (cell, mainNumbers) => {
-    const { row: selectedRow, col: selectedCol } = cell
+const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
+    const { row: hostRow, col: hostCol } = hostCell
+
     // highlight all the cells of the current block
-    const { blockNum } = getBlockAndBoxNum(cell)
-    const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
+    const { blockNum } = getBlockAndBoxNum(hostCell)
+    const winnerCandidate = mainNumbers[hostRow][hostCol].solutionValue
     const neighbourRows = {}
     const neighbourCols = {}
     const startRow = blockNum - (blockNum % 3)
     const startCol = (blockNum % 3) * 3
     for (let i = 0; i < 3; i++) {
         const row = startRow + i
-        if (row !== selectedRow) {
+        if (row !== hostRow) {
             let winnerInstancePresent = false
             let emptyCellsCountInCurrentBlock = 0
             let winnerInstanceColumn
@@ -389,7 +390,7 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
             }
         }
         const col = startCol + i
-        if (col !== selectedCol) {
+        if (col !== hostCol) {
             let winnerInstancePresent = false
             let emptyCellsCountInCurrentBlock = 0
             let winnerInstanceRow
@@ -416,7 +417,7 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
     const cellsToFocusData = {}
     Object.keys(neighbourRows).forEach(rowKey => {
         const rowInt = parseInt(rowKey, 10)
-        if (!mainNumbers[rowInt][selectedCol].value) {
+        if (!mainNumbers[rowInt][hostCol].value) {
             const { col: instanceColumn } = neighbourRows[rowKey]
             if (!cellsToFocusData[rowInt]) cellsToFocusData[rowInt] = {}
             cellsToFocusData[rowInt][instanceColumn] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
@@ -426,7 +427,7 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
 
     Object.keys(neighbourCols).forEach(colKey => {
         const colInt = parseInt(colKey, 10)
-        if (!mainNumbers[selectedRow][colInt].value) {
+        if (!mainNumbers[hostRow][colInt].value) {
             const { row: instanceRow } = neighbourCols[colKey]
             if (!cellsToFocusData[instanceRow]) cellsToFocusData[instanceRow] = {}
             cellsToFocusData[instanceRow][colInt] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
@@ -441,7 +442,7 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
             cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             continue
         }
-        if (row === selectedRow && col === selectedCol) {
+        if (row === hostRow && col === hostCol) {
             cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
             continue
         }
@@ -482,7 +483,7 @@ const getHiddenSingleInBlockData = (cell, mainNumbers) => {
     return cellsToFocusData
 }
 
-// simplify the flow from here
+// TODO: simplify the flow from here
 export const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
     let cellsToFocusData =
         type === HIDDEN_SINGLE_TYPES.BLOCK
