@@ -403,11 +403,16 @@ const useGameBoard = (gameState, pencilState, hints) => {
         const handler = () => {
             getSmartHint(selectedCell, mainNumbers, notesInfo)
                 .then(hints => {
-                    __DEV__ && console.log('@@@@ hintInfo', JSON.stringify(hints))
+                    consoleLog('@@@@ hintInfo', JSON.stringify(hints))
                     if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })
+                    else
+                        emit(EVENTS.SHOW_SNACK_BAR, {
+                            msg: 'no hints found. try filling some more guesses in cells with pencil and then try again',
+                            visibleTime: 5000,
+                        })
                 })
                 .catch(error => {
-                    __DEV__ && console.log(error)
+                    consoleLog(error)
                 })
         }
         addListener(EVENTS.HINT_CLICKED, handler)

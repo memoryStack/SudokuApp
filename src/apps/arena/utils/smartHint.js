@@ -1,4 +1,4 @@
-import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
+import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
 import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
@@ -353,8 +353,6 @@ const getHiddenSingleInRowOrColData = (cell, type, mainNumbers) => {
         })
         neighbourBlockNum = getNextNeighbourBlock(neighbourBlockNum, type)
     }
-
-    // cell.row === 4 && cell.col === 4 && consoleLog('@@@@@@', JSON.stringify())
     return cellsToFocusData
 }
 
@@ -515,7 +513,6 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
     // why are we copying it ?? is it getting modified somewhere ??
     // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
     // const boardMainNumbersCopy = copyBoardMainNumbers(originalMainNumbers)
-
     // we don't need this DS to know if naked single is present or not in this cell
     // const nakedSinglesNotesInfo = getCellsNotesInfo(boardMainNumbersCopy)
 
@@ -542,7 +539,7 @@ const getSmartHint = async ({ row, col }, originalMainNumbers, notesData) => {
             originalMainNumbers,
         )
         if (nakedGroupFound) {
-            __DEV__ && console.log('@@@@@ naked multiple hint data', returnData)
+            consoleLog('@@@@@ naked multiple hint data', returnData)
             return returnData
         }
     }
