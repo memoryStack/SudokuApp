@@ -191,6 +191,14 @@ const getInhabitableCellData = () => {
     }
 }
 
+// TODO: write test cases for it
+const getBlockStartCell = blockNum => {
+    return {
+        row: blockNum - (blockNum % 3),
+        col: (blockNum % 3) * 3,
+    }
+}
+
 const hiddenSingleInRowHighlightBlockCells = ({
     selectedRow,
     selectedCol,
@@ -201,7 +209,8 @@ const hiddenSingleInRowHighlightBlockCells = ({
 }) => {
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
     if (!cellsToFocusData[selectedRow]) cellsToFocusData[selectedRow] = {}
-    const currentBlockStartColumn = (blockNum % 3) * 3
+
+    const currentBlockStartColumn = getBlockStartCell(blockNum).col
     for (let i = 0; i < 3; i++) {
         const col = currentBlockStartColumn + i
         if (col === selectedCol) continue
@@ -231,7 +240,7 @@ const hiddenSingleInColHighlightBlockCells = ({
     candidateCordinatesInBlock,
 }) => {
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
-    const currentBlockStartRow = Math.floor(blockNum / 3) * 3
+    const currentBlockStartRow = getBlockStartCell(blockNum).row
     for (let i = 0; i < 3; i++) {
         const row = currentBlockStartRow + i
         if (row === selectedRow) continue
@@ -364,8 +373,9 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     const winnerCandidate = mainNumbers[hostRow][hostCol].solutionValue
     const neighbourRows = {}
     const neighbourCols = {}
-    const startRow = blockNum - (blockNum % 3)
-    const startCol = (blockNum % 3) * 3
+
+    const { row: startRow, col: startCol } = getBlockStartCell(blockNum)
+
     for (let i = 0; i < 3; i++) {
         const row = startRow + i
         if (row !== hostRow) {
