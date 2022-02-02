@@ -369,36 +369,52 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     const { row: hostRow, col: hostCol } = hostCell
 
     // highlight all the cells of the current block
-    const { blockNum } = getBlockAndBoxNum(hostCell)
-    const winnerCandidate = mainNumbers[hostRow][hostCol].solutionValue
+    // change the naming of "neighbourRows" and "neighbourCols"
+    // it doesn't communicate anything
     const neighbourRows = {}
     const neighbourCols = {}
-
-    const { row: startRow, col: startCol } = getBlockStartCell(blockNum)
-
+    const { blockNum: hostBlockNum } = getBlockAndBoxNum(hostCell)
+    const { row: startRow, col: startCol } = getBlockStartCell(hostBlockNum)
+    const winnerCandidate = mainNumbers[hostRow][hostCol].solutionValue
     for (let i = 0; i < 3; i++) {
         const row = startRow + i
+
+        // it is basically calculating how many empty cells of this block in the row
+        // are eliminated by an instance of winner candidate in the same row
         if (row !== hostRow) {
-            let winnerInstancePresent = false
-            let emptyCellsCountInCurrentBlock = 0
-            let winnerInstanceColumn
-            for (let col = 0; col < 9; col++) {
-                const filledValue = mainNumbers[row][col].value
-                if (filledValue === winnerCandidate) {
-                    winnerInstancePresent = true
-                    winnerInstanceColumn = col
+            const getWinnerInstanceInfoInRow = () => {
+                for (let col = 0; col < 9; col++) {
+                    if (mainNumbers[row][col].value === winnerCandidate) {
+                        return {
+                            present: true,
+                            column: col,
+                        }
+                    }
                 }
-                if (!filledValue && col >= startCol && col < startCol + 3) {
-                    emptyCellsCountInCurrentBlock++
+                return {
+                    present: false,
+                    column: -1,
                 }
             }
-            if (winnerInstancePresent && emptyCellsCountInCurrentBlock) {
+            const winnerInstanceInfo = getWinnerInstanceInfoInRow()
+
+            const getBlockEmptyCellsCountInRow = () => {
+                let result = 0
+                for (let i = 0; i < 3; i++) {
+                    if (isCellEmpty({ row, col: startCol + i }, mainNumbers)) result++
+                }
+                return result
+            }
+
+            const emptyCellsCount = getBlockEmptyCellsCountInRow()
+            if (winnerInstanceInfo.present && emptyCellsCount) {
                 neighbourRows[row] = {
-                    emptyCellsCount: emptyCellsCountInCurrentBlock,
-                    col: winnerInstanceColumn,
+                    emptyCellsCount,
+                    col: winnerInstanceInfo.column,
                 }
             }
         }
+
         const col = startCol + i
         if (col !== hostCol) {
             let winnerInstancePresent = false
@@ -446,7 +462,7 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     })
 
     for (let cellNo = 0; cellNo < 9; cellNo++) {
-        const { row, col } = getRowAndCol(blockNum, cellNo)
+        const { row, col } = getRowAndCol(hostBlockNum, cellNo)
         if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
         if (mainNumbers[row][col].value) {
             cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
