@@ -393,6 +393,34 @@ const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, nei
     }
 }
 
+const getWinnerInstanceInfoInCol = (firstCell, winnerCandidate, mainNumbers, neighbourCols) => {
+    const getWinnerInstancePosInCol = () => {
+        for (let row = 0; row < 9; row++) {
+            if (mainNumbers[row][firstCell.col].value === winnerCandidate) return row
+        }
+        return -1
+    }
+
+    const getBlockEmptyCellsCountInCol = () => {
+        let result = 0
+        for (let i = 0; i < 3; i++) {
+            if (isCellEmpty({ row: firstCell.row + i, col: firstCell.col }, mainNumbers)) result++
+        }
+        return result
+    }
+
+    const emptyCellsCount = getBlockEmptyCellsCountInCol()
+    if (emptyCellsCount) {
+        const winnerInstancePos = getWinnerInstancePosInCol()
+        if (winnerInstancePos !== -1) {
+            neighbourCols[firstCell.col] = {
+                emptyCellsCount,
+                row: winnerInstancePos,
+            }
+        }
+    }
+}
+
 const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     const { row: hostRow, col: hostCol } = hostCell
 
@@ -413,25 +441,7 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
 
         const col = startCol + i
         if (col !== hostCol) {
-            let winnerInstancePresent = false
-            let emptyCellsCountInCurrentBlock = 0
-            let winnerInstanceRow
-            for (let row = 0; row < 9; row++) {
-                const filledValue = mainNumbers[row][col].value
-                if (filledValue === winnerCandidate) {
-                    winnerInstancePresent = true
-                    winnerInstanceRow = row
-                }
-                if (!filledValue && row >= startRow && row < startRow + 3) {
-                    emptyCellsCountInCurrentBlock++
-                }
-            }
-            if (winnerInstancePresent && emptyCellsCountInCurrentBlock) {
-                neighbourCols[col] = {
-                    emptyCellsCount: emptyCellsCountInCurrentBlock,
-                    row: winnerInstanceRow,
-                }
-            }
+            getWinnerInstanceInfoInCol({ row: startRow, col }, winnerCandidate, mainNumbers, neighbourCols)
         }
     }
 
