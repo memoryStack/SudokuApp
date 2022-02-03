@@ -332,16 +332,17 @@ const getNextNeighbourBlock = (currentBlockNum, type) => {
 
 // row and column are going to have same logic, let's write them down in the same function only
 // let's make it generic for col as well
-const getHiddenSingleInRowOrColData = (cell, type, mainNumbers) => {
-    const { row: selectedRow, col: selectedCol } = cell
+// TODO: refactoring this
+const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
+    const { row: hostRow, col: hostCol } = hostCell
     const cellsToFocusData = {}
-    if (!cellsToFocusData[selectedRow]) cellsToFocusData[selectedRow] = {}
-    cellsToFocusData[selectedRow][selectedCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
+    if (!cellsToFocusData[hostRow]) cellsToFocusData[hostRow] = {}
+    cellsToFocusData[hostRow][hostCol] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
 
-    const { blockNum: currentBlockNum } = getBlockAndBoxNum(cell)
+    const { blockNum: currentBlockNum } = getBlockAndBoxNum(hostCell)
     highlightBlockCells({
-        selectedRow,
-        selectedCol,
+        selectedRow: hostRow,
+        selectedCol: hostCol,
         blockNum: currentBlockNum,
         mainNumbers,
         cellsToFocusData,
@@ -353,8 +354,8 @@ const getHiddenSingleInRowOrColData = (cell, type, mainNumbers) => {
     let neighbourBlockNum = getNextNeighbourBlock(currentBlockNum, type)
     while (neighboursBlocks--) {
         highlightBlockCells({
-            selectedRow,
-            selectedCol,
+            selectedRow: hostRow,
+            selectedCol: hostCol,
             blockNum: neighbourBlockNum,
             mainNumbers,
             cellsToFocusData,
@@ -555,7 +556,7 @@ export const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
     let cellsToFocusData =
         type === HIDDEN_SINGLE_TYPES.BLOCK
             ? getHiddenSingleInBlockData(cell, mainNumbers)
-            : getHiddenSingleInRowOrColData(cell, type, mainNumbers)
+            : getHiddenSingleInRowOrColData(cell, type, mainNumbers) // start simplying this func now
 
     return {
         cellsToFocusData,
