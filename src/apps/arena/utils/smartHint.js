@@ -279,7 +279,6 @@ const shouldHighlightWinnerCandidateInstanceInBlock = (hostCell, blockNum, singl
     return false
 }
 
-// TODO: simplify this flow
 const highlightBlockCells = ({ selectedRow, selectedCol, blockNum, mainNumbers, cellsToFocusData, singleType }) => {
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
 
@@ -574,12 +573,12 @@ const getSmartHint = async (originalMainNumbers, notesData) => {
     // why are we copying it ?? is it getting modified somewhere ??
     // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
 
-    // const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
-    // if (nakedSinglesData.length) {
-    //     return nakedSinglesData.map(({ cell, type }) => {
-    //         return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
-    //     })
-    // }
+    const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
+    if (nakedSinglesData.length) {
+        return nakedSinglesData.map(({ cell, type }) => {
+            return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
+        })
+    }
 
     const hiddenSinglesData = getAllHiddenSingles(originalMainNumbers, notesData)
     if (hiddenSinglesData.length) {
