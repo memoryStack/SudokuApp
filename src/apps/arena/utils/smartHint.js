@@ -489,7 +489,9 @@ const winnerInstanceHighlightableInCellSharedHouse = (cell, highlightableNeighbo
     )
 }
 
-// TODO: test how cross-hatching fits into this highlighting properlys̄
+// TODO: test how cross-hatching fits into this highlighting properly
+// TODO: we can break it down further but let's leave it for now.
+//          the flow looks much simpler now.
 const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     const { row: hostRow, col: hostCol } = hostCell
     // NOTE: here we are using 'neighbour' in relative to hostCell
@@ -512,7 +514,6 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
             getWinnerInstanceInfoInCol({ row: startRow, col }, winnerCandidate, mainNumbers, neighbourCols)
     }
 
-    // will store which instances will be must highlighted (i guess in the neighbour_row and neighbour_col)
     const cellsToFocusData = {}
     const highlightableNeighbourHousesWinnerCandidates = {
         rows: getMustHighlightableNeighbourRows(neighbourRows, hostCell, mainNumbers, cellsToFocusData),
