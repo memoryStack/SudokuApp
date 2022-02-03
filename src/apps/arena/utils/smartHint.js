@@ -450,6 +450,45 @@ const getMustHighlightableNeighbourCols = (neighbourCols, hostCell, mainNumbers,
     return result
 }
 
+const getNewHighlightableInstanceHouseType = ({ row, col }, neighbourRows, neighbourCols) => {
+    let result = ''
+    if (neighbourRows[row] && neighbourCols[col]) {
+        const cellsRuledOutByRowInstance = neighbourRows[row].emptyCellsCount
+        const cellsRuledOutByColInstance = neighbourCols[col].emptyCellsCount
+        result = cellsRuledOutByRowInstance > cellsRuledOutByColInstance ? HOUSE_TYPE.ROW : HOUSE_TYPE.COL
+    }
+    if (!neighbourRows[row] && neighbourCols[col]) result = HOUSE_TYPE.COL
+    if (neighbourRows[row] && !neighbourCols[col]) result = HOUSE_TYPE.ROW
+    return result
+}
+
+const highlightNeighbourHouseNewWinnerInstance = (
+    { row, col },
+    instanceHouseType,
+    neighbourRows,
+    neighbourCols,
+    highlightableNeighbourHousesWinnerCandidates,
+    cellsToFocusData,
+) => {
+    if (instanceHouseType === HOUSE_TYPE.ROW) {
+        highlightableNeighbourHousesWinnerCandidates.rows[row] = true
+        const { col: instanceColumn } = neighbourRows[row]
+        cellsToFocusData[row][instanceColumn] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+    } else if (instanceHouseType === HOUSE_TYPE.COL) {
+        highlightableNeighbourHousesWinnerCandidates.cols[col] = true
+        const { row: instanceRow } = neighbourCols[col]
+        if (!cellsToFocusData[instanceRow]) cellsToFocusData[instanceRow] = {}
+        cellsToFocusData[instanceRow][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+    }
+}
+
+const winnerInstanceHighlightableInCellSharedHouse = (cell, highlightableNeighbourHousesWinnerCandidates) => {
+    return (
+        highlightableNeighbourHousesWinnerCandidates.rows[cell.row] ||
+        highlightableNeighbourHousesWinnerCandidates.cols[cell.col]
+    )
+}
+
 // TODO: test how cross-hatching fits into this highlighting properlys̄
 const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     const { row: hostRow, col: hostCol } = hostCell
@@ -483,51 +522,29 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     for (let cellNo = 0; cellNo < 9; cellNo++) {
         const { row, col } = getRowAndCol(hostBlockNum, cellNo)
         if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
+
         if (!isCellEmpty({ row, col }, mainNumbers)) {
             cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             continue
         }
+
         if (areSameCells({ row, col }, hostCell)) {
             cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
             continue
         }
 
-        if (isCellEmpty({ row, col }, mainNumbers)) {
-            cellsToFocusData[row][col] = getInhabitableCellData()
-            // calculate who wins here and highlight that instance and record it
-            if (
-                highlightableNeighbourHousesWinnerCandidates.rows[row] ||
-                highlightableNeighbourHousesWinnerCandidates.cols[col]
-            )
-                continue
+        cellsToFocusData[row][col] = getInhabitableCellData()
+        if (winnerInstanceHighlightableInCellSharedHouse({ row, col }, highlightableNeighbourHousesWinnerCandidates))
+            continue
 
-            let highlightInstanceHouseType = ''
-            if (neighbourRows[row] && neighbourCols[col]) {
-                const cellsRuledOutByRowInstance = neighbourRows[row].emptyCellsCount
-                const cellsRuledOutByColInstance = neighbourCols[col].emptyCellsCount
-                highlightInstanceHouseType =
-                    cellsRuledOutByRowInstance > cellsRuledOutByColInstance ? HOUSE_TYPE.ROW : HOUSE_TYPE.COL
-            }
-
-            if (!neighbourRows[row] && neighbourCols[col]) {
-                highlightInstanceHouseType = HOUSE_TYPE.COL
-            }
-
-            if (neighbourRows[row] && !neighbourCols[col]) {
-                highlightInstanceHouseType = HOUSE_TYPE.ROW
-            }
-
-            if (highlightInstanceHouseType === HOUSE_TYPE.ROW) {
-                highlightableNeighbourHousesWinnerCandidates.rows[row] = true
-                const { col: instanceColumn } = neighbourRows[row]
-                cellsToFocusData[row][instanceColumn] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-            } else if (highlightInstanceHouseType === HOUSE_TYPE.COL) {
-                highlightableNeighbourHousesWinnerCandidates.cols[col] = true
-                const { row: instanceRow } = neighbourCols[col]
-                if (!cellsToFocusData[instanceRow]) cellsToFocusData[instanceRow] = {}
-                cellsToFocusData[instanceRow][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-            }
-        }
+        highlightNeighbourHouseNewWinnerInstance(
+            { row, col },
+            getNewHighlightableInstanceHouseType({ row, col }, neighbourRows, neighbourCols),
+            neighbourRows,
+            neighbourCols,
+            highlightableNeighbourHousesWinnerCandidates,
+            cellsToFocusData,
+        )
     }
     return cellsToFocusData
 }
