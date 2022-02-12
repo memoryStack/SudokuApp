@@ -3,6 +3,7 @@ import { N_CHOOSE_K } from '../../../../resources/constants'
 import { getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { SMART_HINTS_CELLS_BG_COLOR } from './constants'
 
+// TODO: write test case for it and refactor it properly
 const prepareNakedDublesOrTriplesHintData = (
     noOfInstances,
     toBeHighlightedCells,

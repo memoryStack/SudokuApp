@@ -58,7 +58,11 @@ const initBoardData = () => {
     const movesStack = []
     const mainNumbers = initMainNumbers()
 
-    const str = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
+    // this string have naked groups present
+    // const str = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
+
+    // have hidden group (may be double)
+    const str = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
     for (let i = 0; i < str.length; i++) {
         const row = Math.floor(i / 9)
         const col = i % 9
