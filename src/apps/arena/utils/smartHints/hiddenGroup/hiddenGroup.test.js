@@ -46,7 +46,7 @@ test('hidden doubles', () => {
     // how to decouple this in any way ??
     const expectedResult = [
         {
-            house: { type: HOUSE_TYPE.ROW, num: 0 },
+            house: { type: HOUSE_TYPE.ROW, num: 0 }, // naked double
             groupCandidates: [8, 5],
             groupCells: [
                 { row: 0, col: 1 },
@@ -63,4 +63,53 @@ test('hidden doubles', () => {
         },
     ]
     expect(getAllHiddenGroups(2, notesData, mainNumbers)).toStrictEqual(expectedResult)
+})
+
+test('hidden tripples', () => {
+    const { mainNumbers, notesData } = require('./hiddenTrippleTestData')
+    // TODO: order of records is coupled with the algorithm implementation
+    // how to decouple this in any way ??
+
+    // TODO: order is messed up in these hints. can't use array for the inputs.
+    // for now just using the returned order by the algorithm
+    const expectedResult = [
+        {
+            house: { type: HOUSE_TYPE.BLOCK, num: 4 }, // naked tripple
+            groupCandidates: [8, 6, 4],
+            groupCells: [
+                { row: 4, col: 3 },
+                { row: 4, col: 5 },
+                { row: 4, col: 4 },
+            ],
+        },
+        {
+            house: { type: HOUSE_TYPE.ROW, num: 5 }, // naked tripple
+            groupCandidates: [6, 5, 2],
+            groupCells: [
+                { row: 5, col: 2 },
+                { row: 5, col: 6 },
+                { row: 5, col: 7 },
+            ],
+        },
+
+        {
+            house: { type: HOUSE_TYPE.COL, num: 2 }, // hidden triple
+            groupCandidates: [8, 3, 1],
+            groupCells: [
+                { row: 0, col: 2 },
+                { row: 2, col: 2 },
+                { row: 6, col: 2 },
+            ],
+        },
+        {
+            house: { type: HOUSE_TYPE.COL, num: 4 }, // naked tripple
+            groupCandidates: [9, 6, 4],
+            groupCells: [
+                { row: 0, col: 4 },
+                { row: 7, col: 4 },
+                { row: 4, col: 4 },
+            ],
+        },
+    ]
+    expect(getAllHiddenGroups(3, notesData, mainNumbers)).toStrictEqual(expectedResult)
 })

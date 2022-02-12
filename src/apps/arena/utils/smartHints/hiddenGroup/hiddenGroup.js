@@ -34,8 +34,11 @@ const getHouseCells = (houseType, houseNum) => {
     throw 'invalid house type'
 }
 
-const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) =>
-    candidateOccurencesCount === groupCandidatesCount
+const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
+    if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount
+    if (groupCandidatesCount === 3)
+        return candidateOccurencesCount >= 2 && candidateOccurencesCount <= groupCandidatesCount
+}
 
 export const validCandidatesInHouseAndTheirLocations = (
     houseType,
@@ -121,6 +124,7 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
                 mainNumbers,
                 notesData,
             )
+
             if (validCandidatesWithLocations.length >= 2) {
                 result.push(
                     ...findHiddenGroupsFromValidCandidates(
