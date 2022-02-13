@@ -75,13 +75,25 @@ export const validCandidatesInHouseAndTheirLocations = (
     return result
 }
 
-// const getCellNum = (cell) => {
-//     return cell.row * 9 + cell.col
-// }
-
 const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
-const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCount, houseType, houseNum) => {
+const getDistinctCandidatesListInCells = (groupCells, notesData) => {
+    const candidates = {}
+    groupCells.forEach(({ row, col }) => {
+        const cellNotes = notesData[row][col]
+        cellNotes.forEach(({ show, noteValue }) => {
+            if (show) candidates[noteValue] = true
+        })
+    })
+    return Object.keys(candidates)
+}
+
+const isNakedGroup = (groupCandidatesCount, groupCells, notesData) => {
+    const candidatesList = getDistinctCandidatesListInCells(groupCells, notesData)
+    return groupCandidatesCount === candidatesList.length
+}
+
+const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCount, houseType, houseNum, notesData) => {
     // TODO: put some thought into this condition here
     if (validCandidates.length > 6)
         throw `to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`
@@ -100,7 +112,10 @@ const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCou
             })
         })
 
-        if (groupCells.length === groupCandidatesCount) {
+        if (
+            groupCells.length === groupCandidatesCount &&
+            !isNakedGroup(groupCandidates.length, groupCells, notesData)
+        ) {
             result.push({
                 house: { type: houseType, num: houseNum },
                 groupCandidates,
@@ -111,7 +126,6 @@ const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCou
     return result
 }
 
-// right now it's producing the naked group as well. fix it.
 const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
     const result = []
     const houseIterationOrder = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
@@ -132,6 +146,7 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
                         groupCandidatesCount,
                         houseType,
                         houseNum,
+                        notesData,
                     ),
                 )
             }
