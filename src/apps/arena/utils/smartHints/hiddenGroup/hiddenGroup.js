@@ -93,6 +93,14 @@ const isNakedGroup = (groupCandidatesCount, groupCells, notesData) => {
     return groupCandidatesCount === candidatesList.length
 }
 
+const isGroupCellsExist = (newHiddenGroupCells, allHiddenGroups) => {
+    return allHiddenGroups.some(({ groupCells: existingHiddenGroupCells }) => {
+        return existingHiddenGroupCells.every((existingHiddenGroupCell, idx) => {
+            return areSameCells(existingHiddenGroupCell, newHiddenGroupCells[idx])
+        })
+    })
+}
+
 const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCount, houseType, houseNum, notesData) => {
     // TODO: put some thought into this condition here
     if (validCandidates.length > 6)
@@ -101,6 +109,7 @@ const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCou
     const result = []
     const N = validCandidates.length
     const K = groupCandidatesCount
+
     N_CHOOSE_K[N][K].forEach(selection => {
         const groupCandidates = []
         const groupCells = []
@@ -140,15 +149,17 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
             )
 
             if (validCandidatesWithLocations.length >= 2) {
-                result.push(
-                    ...findHiddenGroupsFromValidCandidates(
-                        validCandidatesWithLocations,
-                        groupCandidatesCount,
-                        houseType,
-                        houseNum,
-                        notesData,
-                    ),
+                const hiddenGroupsInHouse = findHiddenGroupsFromValidCandidates(
+                    validCandidatesWithLocations,
+                    groupCandidatesCount,
+                    houseType,
+                    houseNum,
+                    notesData,
                 )
+                const newHiddenGroups = hiddenGroupsInHouse.filter(({ groupCells: hiddenGroupHostCells }) => {
+                    return !isGroupCellsExist(hiddenGroupHostCells, result)
+                })
+                result.push(...newHiddenGroups)
             }
         }
     })

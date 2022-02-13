@@ -79,7 +79,8 @@ test('hidden tripples', () => {
 })
 
 test('hidden tripples duplicate houses with same group cells', () => {
-    const { mainNumbers, duplicateHousesTestNotesData } = require('./hiddenTrippleTestData')
+    // TODO: break down this test data file
+    const { mainNumbers, multipleHousesHiddenGroupNotesData } = require('./hiddenTrippleTestData')
     // TODO: order of records is coupled with the algorithm implementation
     // DANGER: violating the rule of TDD
     // how to decouple this in any way ??
@@ -89,15 +90,6 @@ test('hidden tripples duplicate houses with same group cells', () => {
     const expectedResult = [
         {
             house: { type: HOUSE_TYPE.BLOCK, num: 4 },
-            groupCandidates: [8, 6, 4],
-            groupCells: [
-                { row: 4, col: 3 },
-                { row: 4, col: 5 },
-                { row: 4, col: 4 },
-            ],
-        },
-        {
-            house: { type: HOUSE_TYPE.ROW, num: 4 }, // this should not appear after the fix
             groupCandidates: [8, 6, 4],
             groupCells: [
                 { row: 4, col: 3 },
@@ -124,5 +116,5 @@ test('hidden tripples duplicate houses with same group cells', () => {
             ],
         },
     ]
-    expect(getAllHiddenGroups(3, duplicateHousesTestNotesData, mainNumbers)).toStrictEqual(expectedResult)
+    expect(getAllHiddenGroups(3, multipleHousesHiddenGroupNotesData, mainNumbers)).toStrictEqual(expectedResult)
 })

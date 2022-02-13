@@ -3523,7 +3523,7 @@ const mainNumbers = [
     ],
 ]
 
-const duplicateHousesTestNotesData = [
+const multipleHousesHiddenGroupNotesData = [
     [
         [
             {
@@ -6622,4 +6622,4 @@ const duplicateHousesTestNotesData = [
     ],
 ]
 
-export { notesData, mainNumbers, duplicateHousesTestNotesData }
+export { notesData, mainNumbers, multipleHousesHiddenGroupNotesData }
