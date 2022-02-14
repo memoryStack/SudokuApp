@@ -176,7 +176,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
             if (pencilState === PENCIL_STATE.ACTIVE && !isHintUsed) {
                 // removing the below functionality because it kind of "baby spoon feeds" the user
                 // let's keep it for now and and we can keep it as a part of settings later on
-                // if (duplicacyPresent(number, mainNumbers, { row, col })) return
+                if (duplicacyPresent(number, mainNumbers, { row, col })) return
                 valueType = 'notes'
                 const { show } = notesInfo[row][col][number - 1]
                 moveType = show ? 'erase' : 'insert'

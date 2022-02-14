@@ -263,6 +263,31 @@ const shouldHighlightSecondaryHouseCells = (houseCells, groupHostCells, groupCan
     })
 }
 
+const highlightSecondaryHouseCells = (
+    houseCells,
+    groupHostCells,
+    groupCandidates,
+    mainNumbers,
+    notesData,
+    cellsToFocusData,
+) => {
+    houseCells.forEach(cell => {
+        const isHostCell = isCellExists(cell, groupHostCells)
+        if (!isHostCell) {
+            if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
+            cellsToFocusData[cell.row][cell.col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+            if (isCellEmpty(cell, mainNumbers)) {
+                const isPrimaryHouse = false
+                cellsToFocusData[cell.row][cell.col].notesToHighlightData = getCellNotesHighlightData(
+                    isPrimaryHouse,
+                    notesData[cell.row][cell.col],
+                    groupCandidates,
+                )
+            }
+        }
+    })
+}
+
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
@@ -277,36 +302,25 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
     if (secondaryHostHouse.type) {
-        // highlight secondary house cells as well
-        // highlight only if the it's helpful
-
         const secondaryHouseCells = getHouseCells(secondaryHostHouse.type, secondaryHostHouse.num)
         // TODO: this logic is of eligibility check for highlighting secondary house cells is wrong
         // will come up with the usecase for it later
-        const highlightSecondaryHouseCells = shouldHighlightSecondaryHouseCells(
+        const secondaryHouseEligibleForHighlight = shouldHighlightSecondaryHouseCells(
             secondaryHouseCells,
             hostCells,
             candidates,
             mainNumbers,
             notesData,
         )
-        if (highlightSecondaryHouseCells) {
-            secondaryHouseCells.forEach(cell => {
-                const isHostCell = isCellExists(cell, hostCells)
-                if (!isHostCell) {
-                    if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
-                    cellsToFocusData[cell.row][cell.col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-                    if (isCellEmpty(cell, mainNumbers)) {
-                        const isPrimaryHouse = false
-                        cellsToFocusData[cell.row][cell.col].notesToHighlightData = getCellNotesHighlightData(
-                            isPrimaryHouse,
-                            notesData[cell.row][cell.col],
-                            candidates,
-                        )
-                    }
-                }
-            })
-        }
+        if (secondaryHouseEligibleForHighlight)
+            highlightSecondaryHouseCells(
+                secondaryHouseCells,
+                hostCells,
+                candidates,
+                mainNumbers,
+                notesData,
+                cellsToFocusData,
+            )
     }
 
     const getHintMessage = () => {
