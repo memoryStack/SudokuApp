@@ -208,21 +208,13 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
     return result
 }
 
-const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
-    const {
-        house: { type: houseType, num: houseNum },
-        groupCandidates: candidates,
-        groupCells: hostCells,
-    } = group
-    // highlight primary house cells first
-    const cellsToFocusData = {}
+const highlightPrimaryHouseCells = (houseType, houseNum, candidates, groupHostCells, notesData, cellsToFocusData) => {
     const primaryHouseCells = getHouseCells(houseType, houseNum)
-
     primaryHouseCells.forEach(cell => {
         if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
         cellsToFocusData[cell.row][cell.col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
 
-        const isHostCell = isCellExists(cell, hostCells)
+        const isHostCell = isCellExists(cell, groupHostCells)
         if (isHostCell) {
             const isPrimaryHouse = true
             cellsToFocusData[cell.row][cell.col].notesToHighlightData = getCellNotesHighlightData(
@@ -232,6 +224,18 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             )
         }
     })
+}
+
+const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
+    const {
+        house: { type: houseType, num: houseNum },
+        groupCandidates: candidates,
+        groupCells: hostCells,
+    } = group
+
+    const cellsToFocusData = {}
+
+    highlightPrimaryHouseCells(houseType, houseNum, candidates, hostCells, notesData, cellsToFocusData)
 
     const getSecondaryHostHouse = () => {
         // TODO: nested ifs. can it be made linear or refactor into better readability ??
