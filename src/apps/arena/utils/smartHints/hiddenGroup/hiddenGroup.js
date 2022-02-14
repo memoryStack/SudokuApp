@@ -189,6 +189,25 @@ const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => 
     }
 }
 
+const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
+    const result = {}
+
+    // put these color in the color scheme and replace for naked group as well
+    const NOTES_COLOR_SCHEME = {
+        candidate: isPrimaryHouse ? 'green' : 'red',
+        nonCandidate: isPrimaryHouse ? 'red' : '',
+    }
+    cellNotes.forEach(({ show, noteValue }) => {
+        if (show) {
+            const isGroupCandidate = candidates.includes(noteValue)
+            result[noteValue] = {
+                fontColor: isGroupCandidate ? NOTES_COLOR_SCHEME.candidate : NOTES_COLOR_SCHEME.nonCandidate,
+            }
+        }
+    })
+    return result
+}
+
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
@@ -199,36 +218,19 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const cellsToFocusData = {}
     const primaryHouseCells = getHouseCells(houseType, houseNum)
 
-    const getCellNotesHighlightData = (hostHouseType, cellNotes) => {
-        const result = {}
-        const isPrimaryHouse = hostHouseType === houseType
-        // put these color in the color scheme and replace for naked group as well
-        const NOTES_COLOR_SCHEME = {
-            candidate: isPrimaryHouse ? 'green' : 'red',
-            nonCandidate: isPrimaryHouse ? 'red' : '',
-        }
-
-        cellNotes.forEach(({ show, noteValue }) => {
-            if (show) {
-                const isGroupCandidate = candidates.includes(noteValue)
-                result[noteValue] = {
-                    fontColor: isGroupCandidate ? NOTES_COLOR_SCHEME.candidate : NOTES_COLOR_SCHEME.nonCandidate,
-                }
-            }
-        })
-        return result
-    }
-
     primaryHouseCells.forEach(cell => {
         if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
         cellsToFocusData[cell.row][cell.col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
 
         const isHostCell = isCellExists(cell, hostCells)
-        if (isHostCell)
+        if (isHostCell) {
+            const isPrimaryHouse = true
             cellsToFocusData[cell.row][cell.col].notesToHighlightData = getCellNotesHighlightData(
-                houseType,
+                isPrimaryHouse,
                 notesData[cell.row][cell.col],
+                candidates,
             )
+        }
     })
 
     const getSecondaryHostHouse = () => {
@@ -283,11 +285,14 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
                 if (!isHostCell) {
                     if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
                     cellsToFocusData[cell.row][cell.col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-                    if (isCellEmpty(cell, mainNumbers))
+                    if (isCellEmpty(cell, mainNumbers)) {
+                        const isPrimaryHouse = false
                         cellsToFocusData[cell.row][cell.col].notesToHighlightData = getCellNotesHighlightData(
-                            secondaryHostHouse.type,
+                            isPrimaryHouse,
                             notesData[cell.row][cell.col],
+                            candidates,
                         )
+                    }
                 }
             })
         }
