@@ -189,6 +189,7 @@ const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => 
     }
 }
 
+/**  from here starts data preparation for UI  */
 const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
     const result = {}
 
@@ -226,6 +227,32 @@ const highlightPrimaryHouseCells = (houseType, houseNum, candidates, groupHostCe
     })
 }
 
+const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
+    // TODO: nested ifs. can it be made linear or refactor into better readability ??
+    let result = {}
+
+    if (isRowOrColHouse(primaryHouseType) && areSameBlockCells(groupHostCells)) {
+        result = {
+            type: HOUSE_TYPE.BLOCK,
+            num: getBlockAndBoxNum(groupHostCells[0]).blockNum,
+        }
+    } else if (primaryHouseType === HOUSE_TYPE.BLOCK) {
+        if (areSameRowCells(groupHostCells)) {
+            result = {
+                type: HOUSE_TYPE.ROW,
+                num: groupHostCells[0].row,
+            }
+        } else if (areSameColCells(groupHostCells)) {
+            result = {
+                type: HOUSE_TYPE.COL,
+                num: groupHostCells[0].col,
+            }
+        }
+    }
+
+    return result
+}
+
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
@@ -237,33 +264,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     highlightPrimaryHouseCells(houseType, houseNum, candidates, hostCells, notesData, cellsToFocusData)
 
-    const getSecondaryHostHouse = () => {
-        // TODO: nested ifs. can it be made linear or refactor into better readability ??
-        let result = {}
-
-        if (isRowOrColHouse(houseType) && areSameBlockCells(hostCells)) {
-            result = {
-                type: HOUSE_TYPE.BLOCK,
-                num: getBlockAndBoxNum(hostCells[0]).blockNum,
-            }
-        } else if (houseType === HOUSE_TYPE.BLOCK) {
-            if (areSameRowCells(hostCells)) {
-                result = {
-                    type: HOUSE_TYPE.ROW,
-                    num: hostCells[0].row,
-                }
-            } else if (areSameColCells(hostCells)) {
-                result = {
-                    type: HOUSE_TYPE.COL,
-                    num: hostCells[0].col,
-                }
-            }
-        }
-
-        return result
-    }
-
-    const secondaryHostHouse = getSecondaryHostHouse()
+    const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
 
     if (secondaryHostHouse.type) {
@@ -282,6 +283,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             })
         }
 
+        // TODO: this logic is of eligibility check for highlighting secondary house cells is wrong
+        // will come up with the usecase for it later
         const shouldHighlightSecondaryHouseCells = checkSecondaryHouseInFocusEligibility()
         if (shouldHighlightSecondaryHouseCells) {
             secondaryHouseCells.forEach(cell => {
