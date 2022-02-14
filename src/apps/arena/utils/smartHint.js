@@ -4,6 +4,7 @@ import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from './smartHints/constants'
 import { areSameCells, isCellEmpty } from './util'
+import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
 
 export const HOUSE_TYPE = {
     ROW: 'row',
@@ -573,32 +574,46 @@ const getSmartHint = async (originalMainNumbers, notesData) => {
     // why are we copying it ?? is it getting modified somewhere ??
     // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
 
-    const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
-    if (nakedSinglesData.length) {
-        return nakedSinglesData.map(({ cell, type }) => {
-            return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
-        })
-    }
+    // const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
+    // if (nakedSinglesData.length) {
+    //     return nakedSinglesData.map(({ cell, type }) => {
+    //         return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
+    //     })
+    // }
 
-    const hiddenSinglesData = getAllHiddenSingles(originalMainNumbers, notesData)
-    if (hiddenSinglesData.length) {
-        return hiddenSinglesData.map(({ cell, type }) => {
-            return getHiddenSingleTechniqueInfo(cell, type, originalMainNumbers)
-        })
-    }
+    // const hiddenSinglesData = getAllHiddenSingles(originalMainNumbers, notesData)
+    // if (hiddenSinglesData.length) {
+    //     return hiddenSinglesData.map(({ cell, type }) => {
+    //         return getHiddenSingleTechniqueInfo(cell, type, originalMainNumbers)
+    //     })
+    // }
 
     const possibleGroupCandidatesCount = [2, 3]
+    // for (let i = 0; i < possibleGroupCandidatesCount.length; i++) {
+    //     const groupCandidatesCount = possibleGroupCandidatesCount[i]
+    //     const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
+    //         groupCandidatesCount,
+    //         notesData,
+    //         originalMainNumbers,
+    //     )
+    //     if (nakedGroupFound) return returnData
+    // }
+
     for (let i = 0; i < possibleGroupCandidatesCount.length; i++) {
         const groupCandidatesCount = possibleGroupCandidatesCount[i]
-        const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
-            groupCandidatesCount,
-            notesData,
-            originalMainNumbers,
-        )
-        if (nakedGroupFound) {
-            consoleLog('@@@@@ naked multiple hint data', returnData)
-            return returnData
-        }
+
+        const { present, returnData } = highlightHiddenGroups(groupCandidatesCount, notesData, originalMainNumbers)
+        if (present) return returnData
+
+        // const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
+        //     groupCandidatesCount,
+        //     notesData,
+        //     originalMainNumbers,
+        // )
+        // if (nakedGroupFound) {
+        //     consoleLog('@@@@@ naked multiple hint data', JSON.stringify(returnData))
+        //     return returnData
+        // }
     }
 
     return null
