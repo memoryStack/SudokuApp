@@ -253,6 +253,16 @@ const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
     return result
 }
 
+const shouldHighlightSecondaryHouseCells = (houseCells, groupHostCells, groupCandidates, mainNumbers, notesData) => {
+    return houseCells.some(cell => {
+        if (!isCellEmpty(cell, mainNumbers)) return false
+        if (isCellExists(cell, groupHostCells)) return false
+        return groupCandidates.some(groupCandidate => {
+            return notesData[cell.row][cell.col][groupCandidate - 1].show
+        })
+    })
+}
+
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
@@ -266,27 +276,21 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
-
     if (secondaryHostHouse.type) {
         // highlight secondary house cells as well
         // highlight only if the it's helpful
 
         const secondaryHouseCells = getHouseCells(secondaryHostHouse.type, secondaryHostHouse.num)
-        const checkSecondaryHouseInFocusEligibility = () => {
-            return secondaryHouseCells.some(cell => {
-                if (!isCellEmpty(cell, mainNumbers)) return false
-                if (isCellExists(cell, hostCells)) return false
-                return candidates.some(groupCandidate => {
-                    // check the type of the group candidate here
-                    return notesData[cell.row][cell.col][groupCandidate - 1].show
-                })
-            })
-        }
-
         // TODO: this logic is of eligibility check for highlighting secondary house cells is wrong
         // will come up with the usecase for it later
-        const shouldHighlightSecondaryHouseCells = checkSecondaryHouseInFocusEligibility()
-        if (shouldHighlightSecondaryHouseCells) {
+        const highlightSecondaryHouseCells = shouldHighlightSecondaryHouseCells(
+            secondaryHouseCells,
+            hostCells,
+            candidates,
+            mainNumbers,
+            notesData,
+        )
+        if (highlightSecondaryHouseCells) {
             secondaryHouseCells.forEach(cell => {
                 const isHostCell = isCellExists(cell, hostCells)
                 if (!isHostCell) {
