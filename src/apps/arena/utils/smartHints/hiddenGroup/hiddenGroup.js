@@ -301,11 +301,12 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
+    let secondaryHouseEligibleForHighlight
     if (secondaryHostHouse.type) {
         const secondaryHouseCells = getHouseCells(secondaryHostHouse.type, secondaryHostHouse.num)
         // TODO: this logic is of eligibility check for highlighting secondary house cells is wrong
         // will come up with the usecase for it later
-        const secondaryHouseEligibleForHighlight = shouldHighlightSecondaryHouseCells(
+        secondaryHouseEligibleForHighlight = shouldHighlightSecondaryHouseCells(
             secondaryHouseCells,
             hostCells,
             candidates,
@@ -323,23 +324,38 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             )
     }
 
-    const getHintMessage = () => {
-        return 'some logic coming soon'
+    const getExplaination = () => {
+        const primaryHouseType = houseType
+
+        const getCandidatesListForMessage = () => {
+            if (candidates.length === 2) return `${candidates[0]} and ${candidates[1]}`
+            return `${candidates[0]}, ${candidates[1]} and ${candidates[2]}`
+        }
+
+        const hiddenType = candidates.length === 2 ? 'Hidden Double' : 'Hidden Tripple'
+
+        const candidatesCountText = candidates.length === 2 ? 'two' : 'three'
+        const groupCellsCountText = candidatesCountText
+
+        const getSecondaryHouseNotesEliminationMsg = () => {
+            if (!secondaryHouseEligibleForHighlight) return ''
+            return ` Since the cells where ${hiddenType} is formed are also the part of the highlighted ${
+                secondaryHostHouse.type
+            }. Now because ${getCandidatesListForMessage()} will be present in one of these ${groupCellsCountText} cells for sure (which is which is yet unknown). We can remove ${getCandidatesListForMessage()} highlighted in red color in this ${
+                secondaryHostHouse.type
+            }.`
+        }
+
+        return `In the highlighted ${primaryHouseType}, ${candidatesCountText} numbers ${getCandidatesListForMessage()} highlighted in green color are present only in ${groupCellsCountText} cells. this arrangement forms a ${hiddenType}, so in this ${primaryHouseType} no other candidate can appear in the cells where ${getCandidatesListForMessage()} are present and the numbers highlighted in red color in these cells can be removed safely.${getSecondaryHouseNotesEliminationMsg()}`
     }
 
     return {
         cellsToFocusData,
         techniqueInfo: {
             title: group.groupCandidates.length === 2 ? 'Hidden Double' : 'Hidden Tripple',
-            logic: getHintMessage(),
+            logic: getExplaination(),
         },
     }
-
-    // result.techniqueInfo = {
-    //     "title": "Naked Double",
-    //     "logic": "In the highlighted region, two cells have exactly same candidates 2 and 4 highlighted in green color. So one of the squares has to be 2, and another one 4 (which is which is yet unknown). So 2 and 4 highlighted in red color can't appear there and we can erase these instances from these cells"
-    // }
-    // return result
 }
 
 export { getAllHiddenGroups, highlightHiddenGroups }
