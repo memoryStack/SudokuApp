@@ -22,4 +22,14 @@ const SMART_HINTS_CELLS_BG_COLOR = {
     IN_FOCUS_DEFAULT: boardStyles.defaultCellBGColor,
 }
 
-export { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR }
+const NUMBER_TO_TEXT = {
+    2: 'two',
+    3: 'three',
+}
+
+const HIDDEN_GROUP_TYPE = {
+    2: 'Hidden Double',
+    3: 'Hidden Tripple',
+}
+
+export { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR, NUMBER_TO_TEXT, HIDDEN_GROUP_TYPE }

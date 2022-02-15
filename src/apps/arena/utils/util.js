@@ -113,3 +113,5 @@ export const areSameColCells = cells => {
 export const isCellEmpty = ({ row, col }, mainNumbers) => {
     return mainNumbers[row][col].value === 0
 }
+
+export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
