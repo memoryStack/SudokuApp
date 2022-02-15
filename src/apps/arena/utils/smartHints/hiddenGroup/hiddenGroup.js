@@ -288,6 +288,47 @@ const highlightSecondaryHouseCells = (
     })
 }
 
+const getGroupCandidatesListForMessage = candidates => {
+    if (candidates.length === 2) return `${candidates[0]} and ${candidates[1]}`
+    return `${candidates[0]}, ${candidates[1]} and ${candidates[2]}`
+}
+
+const NUMBERS_TO_TEXT = {
+    2: 'two',
+    3: 'three',
+}
+
+const HIDDEN_GROUP_TYPE = {
+    2: 'Hidden Double',
+    3: 'Hidden Tripple',
+}
+
+const getSecondaryHouseHintExplaination = (houseType, groupCandidates) => {
+    const candidatesCount = groupCandidates.length
+    return ` Since the cells where ${
+        HIDDEN_GROUP_TYPE[candidatesCount]
+    } is formed are also the part of the highlighted ${houseType}. Now because ${getGroupCandidatesListForMessage(
+        groupCandidates,
+    )} will be present in one of these ${
+        NUMBERS_TO_TEXT[candidatesCount]
+    } cells for sure (which is which is yet unknown). We can remove ${getGroupCandidatesListForMessage(
+        groupCandidates,
+    )} highlighted in red color in this ${houseType}.`
+}
+
+const getPrimaryHouseHintExplaination = (houseType, groupCandidates) => {
+    const candidatesCount = groupCandidates.length
+    return `In the highlighted ${houseType}, ${
+        NUMBERS_TO_TEXT[candidatesCount]
+    } numbers ${getGroupCandidatesListForMessage(groupCandidates)} highlighted in green color are present only in ${
+        NUMBERS_TO_TEXT[candidatesCount]
+    } cells. this arrangement forms a ${
+        HIDDEN_GROUP_TYPE[candidatesCount]
+    }, so in this ${houseType} no other candidate can appear in the cells where ${getGroupCandidatesListForMessage(
+        groupCandidates,
+    )} are present and the numbers highlighted in red color in these cells can be removed safely.`
+}
+
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
@@ -324,36 +365,16 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             )
     }
 
-    const getExplaination = () => {
-        const primaryHouseType = houseType
-
-        const getCandidatesListForMessage = () => {
-            if (candidates.length === 2) return `${candidates[0]} and ${candidates[1]}`
-            return `${candidates[0]}, ${candidates[1]} and ${candidates[2]}`
-        }
-
-        const hiddenType = candidates.length === 2 ? 'Hidden Double' : 'Hidden Tripple'
-
-        const candidatesCountText = candidates.length === 2 ? 'two' : 'three'
-        const groupCellsCountText = candidatesCountText
-
-        const getSecondaryHouseNotesEliminationMsg = () => {
-            if (!secondaryHouseEligibleForHighlight) return ''
-            return ` Since the cells where ${hiddenType} is formed are also the part of the highlighted ${
-                secondaryHostHouse.type
-            }. Now because ${getCandidatesListForMessage()} will be present in one of these ${groupCellsCountText} cells for sure (which is which is yet unknown). We can remove ${getCandidatesListForMessage()} highlighted in red color in this ${
-                secondaryHostHouse.type
-            }.`
-        }
-
-        return `In the highlighted ${primaryHouseType}, ${candidatesCountText} numbers ${getCandidatesListForMessage()} highlighted in green color are present only in ${groupCellsCountText} cells. this arrangement forms a ${hiddenType}, so in this ${primaryHouseType} no other candidate can appear in the cells where ${getCandidatesListForMessage()} are present and the numbers highlighted in red color in these cells can be removed safely.${getSecondaryHouseNotesEliminationMsg()}`
-    }
+    const primaryHouseNotesEliminationLogic = getPrimaryHouseHintExplaination(houseType, candidates)
+    const secondaryHouseNotesEliminationLogic = secondaryHouseEligibleForHighlight
+        ? getSecondaryHouseHintExplaination(secondaryHostHouse.type, candidates)
+        : ''
 
     return {
         cellsToFocusData,
         techniqueInfo: {
-            title: group.groupCandidates.length === 2 ? 'Hidden Double' : 'Hidden Tripple',
-            logic: getExplaination(),
+            title: HIDDEN_GROUP_TYPE[group.groupCandidates.length],
+            logic: primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic,
         },
     }
 }

@@ -601,19 +601,8 @@ const getSmartHint = async (originalMainNumbers, notesData) => {
 
     for (let i = 0; i < possibleGroupCandidatesCount.length; i++) {
         const groupCandidatesCount = possibleGroupCandidatesCount[i]
-
         const { present, returnData } = highlightHiddenGroups(groupCandidatesCount, notesData, originalMainNumbers)
         if (present) return returnData
-
-        // const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
-        //     groupCandidatesCount,
-        //     notesData,
-        //     originalMainNumbers,
-        // )
-        // if (nakedGroupFound) {
-        //     consoleLog('@@@@@ naked multiple hint data', JSON.stringify(returnData))
-        //     return returnData
-        // }
     }
 
     return null
