@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { View, Animated, Text, StyleSheet, Dimensions } from 'react-native'
 import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
@@ -22,13 +22,17 @@ import { useGameBoard } from './hooks/gameBoard'
 import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
-import { NEW_GAME, SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
-import { consoleLog, noOperationFunction } from '../../utils/util'
+import { SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
+import { noOperationFunction } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
-import { usePrevious } from '../../utils/customHooks'
+import { ShareIcon } from '../../resources/svgIcons/share'
+import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
+const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
+const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
+const HEADER_ICON_DIMENSION = 32
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -88,8 +92,12 @@ const styles = StyleSheet.create({
     },
     headerButtonsContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         width: '100%',
+        paddingHorizontal: 16,
+        marginTop: 16,
+        marginBottom: 40,
     },
 })
 
@@ -228,21 +236,35 @@ const Arena_ = ({ navigation, route }) => {
             })
     }, [mainNumbers])
 
+    const handleBackPress = useCallback(() => {
+        navigation.goBack()
+    }, [navigation])
+
+    const header = useMemo(() => {
+        return (
+            <View style={styles.headerButtonsContainer}>
+                <Touchable
+                    touchable={TouchableTypes.opacity}
+                    onPress={handleBackPress}
+                    hitSlop={HEADER_ICONS_TOUCHABLE_HIT_SLOP}
+                >
+                    <LeftArrow width={HEADER_ICON_DIMENSION} height={HEADER_ICON_DIMENSION} fill={HEADER_ICON_FILL} />
+                </Touchable>
+                <Touchable
+                    touchable={TouchableTypes.opacity}
+                    onPress={handleSharePuzzleClick}
+                    hitSlop={HEADER_ICONS_TOUCHABLE_HIT_SLOP}
+                >
+                    <ShareIcon width={HEADER_ICON_DIMENSION} height={HEADER_ICON_DIMENSION} fill={HEADER_ICON_FILL} />
+                </Touchable>
+            </View>
+        )
+    }, [handleBackPress, handleSharePuzzleClick])
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
-                <View style={styles.headerButtonsContainer}>
-                    <Button
-                        onClick={newGameButtonClick}
-                        containerStyle={styles.newGameButtonContainer}
-                        text={NEW_GAME}
-                    />
-                    <Button
-                        onClick={handleSharePuzzleClick}
-                        containerStyle={styles.newGameButtonContainer}
-                        text={SHARE}
-                    />
-                </View>
+                {header}
                 <View style={styles.refereeContainer}>
                     <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
                     <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>

@@ -574,30 +574,30 @@ const getSmartHint = async (originalMainNumbers, notesData) => {
     // why are we copying it ?? is it getting modified somewhere ??
     // TODO: write a test case for it, so that it doesn't modifiy the inputs at all
 
-    // const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
-    // if (nakedSinglesData.length) {
-    //     return nakedSinglesData.map(({ cell, type }) => {
-    //         return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
-    //     })
-    // }
+    const nakedSinglesData = getAllNakedSingles(originalMainNumbers, notesData)
+    if (nakedSinglesData.length) {
+        return nakedSinglesData.map(({ cell, type }) => {
+            return getNakedSingleTechniqueToFocus(type, originalMainNumbers, cell)
+        })
+    }
 
-    // const hiddenSinglesData = getAllHiddenSingles(originalMainNumbers, notesData)
-    // if (hiddenSinglesData.length) {
-    //     return hiddenSinglesData.map(({ cell, type }) => {
-    //         return getHiddenSingleTechniqueInfo(cell, type, originalMainNumbers)
-    //     })
-    // }
+    const hiddenSinglesData = getAllHiddenSingles(originalMainNumbers, notesData)
+    if (hiddenSinglesData.length) {
+        return hiddenSinglesData.map(({ cell, type }) => {
+            return getHiddenSingleTechniqueInfo(cell, type, originalMainNumbers)
+        })
+    }
 
     const possibleGroupCandidatesCount = [2, 3]
-    // for (let i = 0; i < possibleGroupCandidatesCount.length; i++) {
-    //     const groupCandidatesCount = possibleGroupCandidatesCount[i]
-    //     const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
-    //         groupCandidatesCount,
-    //         notesData,
-    //         originalMainNumbers,
-    //     )
-    //     if (nakedGroupFound) return returnData
-    // }
+    for (let i = 0; i < possibleGroupCandidatesCount.length; i++) {
+        const groupCandidatesCount = possibleGroupCandidatesCount[i]
+        const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
+            groupCandidatesCount,
+            notesData,
+            originalMainNumbers,
+        )
+        if (nakedGroupFound) return returnData
+    }
 
     for (let i = 0; i < possibleGroupCandidatesCount.length; i++) {
         const groupCandidatesCount = possibleGroupCandidatesCount[i]
