@@ -1,10 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { View, StyleSheet, Linking } from 'react-native'
+import { View, StyleSheet, Linking, Image, Text } from 'react-native'
 import { NextGameMenu } from '../arena/nextGameMenu'
 import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
-import { START_GAME } from '../../resources/stringLiterals'
+import { rgba } from '../../utils/util'
+import { CELL_WIDTH } from '../arena/gameBoard/dimensions'
 
+const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -13,8 +15,42 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     startGameButtonContainer: {
-        top: 200,
+        marginTop: '20%',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
     },
+    sudokuTextContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-around',
+        marginTop: '5%',
+        paddingHorizontal: 16,
+    },
+    sudokuLetterText: {
+        width: CELL_WIDTH * 1.3,
+        height: CELL_WIDTH * 1.3,
+        backgroundColor: rgba('#d5e5f6', 60),
+        borderRadius: 12,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        color: 'rgb(49, 90, 163)',
+        fontSize: CELL_WIDTH * 0.75,
+    },
+    appIcon: {
+        width: 100,
+        height: 100,
+        marginTop: '30%'
+    },
+    playButtonContainer: {
+        backgroundColor: rgba('#d5e5f6', 60),
+        borderRadius: 8,
+        paddingHorizontal: 20,
+        marginTop: '20%'
+    },
+    playButtonText: {
+        color: 'rgb(49, 90, 163)',
+        fontSize: 24,
+    }
 })
 
 const Home_ = ({ navigation }) => {
@@ -63,13 +99,50 @@ const Home_ = ({ navigation }) => {
         return () => Linking.removeEventListener('url', handler)
     }, [])
 
-    return (
-        <View style={styles.container} onLayout={onParentLayout}>
+    const renderAppIcon = () => {
+        return (
+            <Image
+                source={require( '../../resources/assets/appIcon.png')}
+                style={styles.appIcon}
+            />
+        )
+    }
+
+    const renderSudokuText = () => {
+        const renderLetter = (letter, index) => {
+            return (
+                <Text
+                    style={styles.sudokuLetterText}
+                    key={`${index}`}
+                >
+                    {letter}
+                </Text>
+            )
+        }
+
+        return (
+            <View style={styles.sudokuTextContainer}>
+                {SUDOKU_LETTERS.map(renderLetter)}
+            </View>
+        )
+    }
+
+    const renderPlayButton = () => {
+        return (
             <Button
                 onClick={handlePlayOfflineClick}
-                text={START_GAME}
-                containerStyle={styles.startGameButtonContainer}
+                text={'Play'}
+                containerStyle={styles.playButtonContainer}
+                textStyles={styles.playButtonText}
             />
+        )
+    }
+
+    return (
+        <View style={styles.container} onLayout={onParentLayout}>
+            {renderAppIcon()}
+            {renderSudokuText()}
+            {renderPlayButton()}
             {pageHeight && showNextGameMenu ? (
                 <NextGameMenu
                     screenName={SCREEN_NAME.HOME}
