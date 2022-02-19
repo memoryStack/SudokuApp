@@ -261,15 +261,21 @@ const Arena_ = ({ navigation, route }) => {
         )
     }, [handleBackPress, handleSharePuzzleClick])
 
+    const renderRefreeView = () => {
+        return (
+            <View style={styles.refereeContainer}>
+                <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
+                <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
+                <Timer gameState={gameState} time={time} onClick={onTimerClick} />
+            </View>
+        )
+    }
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
-                <View style={styles.refereeContainer}>
-                    <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
-                    <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
-                    <Timer gameState={gameState} time={time} onClick={onTimerClick} />
-                </View>
+                {renderRefreeView()}
                 <View style={showSmartHint ? styles.sudokuBoardContainer : null}>
                     <Board
                         gameState={gameState}

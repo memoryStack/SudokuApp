@@ -35,7 +35,9 @@ const styles = StyleSheet.create({
     timeCounter: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'flex-end',
         alignItems: 'center',
+        width: '20%',
     },
     pauseTimerIconContainer: {
         display: 'flex',
