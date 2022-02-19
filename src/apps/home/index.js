@@ -39,18 +39,18 @@ const styles = StyleSheet.create({
     appIcon: {
         width: 100,
         height: 100,
-        marginTop: '30%'
+        marginTop: '30%',
     },
     playButtonContainer: {
         backgroundColor: rgba('#d5e5f6', 60),
         borderRadius: 8,
         paddingHorizontal: 20,
-        marginTop: '20%'
+        marginTop: '20%',
     },
     playButtonText: {
         color: 'rgb(49, 90, 163)',
         fontSize: 24,
-    }
+    },
 })
 
 const Home_ = ({ navigation }) => {
@@ -100,31 +100,19 @@ const Home_ = ({ navigation }) => {
     }, [])
 
     const renderAppIcon = () => {
-        return (
-            <Image
-                source={require( '../../resources/assets/appIcon.png')}
-                style={styles.appIcon}
-            />
-        )
+        return <Image source={require('../../resources/assets/appIcon.png')} style={styles.appIcon} />
     }
 
     const renderSudokuText = () => {
         const renderLetter = (letter, index) => {
             return (
-                <Text
-                    style={styles.sudokuLetterText}
-                    key={`${index}`}
-                >
+                <Text style={styles.sudokuLetterText} key={`${index}`}>
                     {letter}
                 </Text>
             )
         }
 
-        return (
-            <View style={styles.sudokuTextContainer}>
-                {SUDOKU_LETTERS.map(renderLetter)}
-            </View>
-        )
+        return <View style={styles.sudokuTextContainer}>{SUDOKU_LETTERS.map(renderLetter)}</View>
     }
 
     const renderPlayButton = () => {

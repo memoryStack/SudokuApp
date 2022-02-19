@@ -10,15 +10,21 @@ import { GAME_STATE } from '../../../resources/constants'
 // comfort and confidence level
 
 const Hint_ = ({ iconBoxSize, gameState, hints, onClick }) => {
+    const renderTickerIcon = () => {
+        return null
+        if (gameState !== GAME_STATE.ACTIVE) return null
+        return (
+            <View style={Styles.hintsTickerBox}>
+                <Text style={Styles.hintsTickerText}>{hints}</Text>
+            </View>
+        )
+    }
+
     return (
         <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
             <>
                 <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-                {gameState === GAME_STATE.ACTIVE ? (
-                    <View style={Styles.hintsTickerBox}>
-                        <Text style={Styles.hintsTickerText}>{hints}</Text>
-                    </View>
-                ) : null}
+                {renderTickerIcon()}
             </>
             <Text style={Styles.actionText}>{`Hint`}</Text>
         </Touchable>
