@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useCallback, useState } from 'react/cjs/react.development'
 
 const usePrevious = value => {
     const ref = useRef(null)
@@ -9,4 +10,14 @@ const usePrevious = value => {
     return ref.current
 }
 
-export { usePrevious }
+const useToggle = defaultValue => {
+    const [value, setValue] = useState(defaultValue)
+
+    const toggleValue = useCallback(value => {
+        setValue(currentValue => (typeof value === 'boolean' ? value : !currentValue))
+    }, [])
+
+    return [value, toggleValue]
+}
+
+export { usePrevious, useToggle }
