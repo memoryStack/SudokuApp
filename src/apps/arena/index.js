@@ -3,7 +3,7 @@ import { View, Animated, Text, StyleSheet, Dimensions } from 'react-native'
 import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
-import { emit } from '../../utils/GlobalEventBus'
+import { addListener, emit } from '../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE, DEEPLINK_HOST_NAME } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
@@ -23,10 +23,11 @@ import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
 import { SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
-import { noOperationFunction } from '../../utils/util'
+import { noOperationFunction, rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
+import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
 
 const { width: windowWidth } = Dimensions.get('window')
 export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -271,6 +272,152 @@ const Arena_ = ({ navigation, route }) => {
         )
     }
 
+    // probably this is a good time to introduce useToggle
+    const [showHintsMenu, setHintsMenuVisibility] = useState(false)
+
+    useEffect(() => {
+        const handler = () => setHintsMenuVisibility(showHintsMenu => !showHintsMenu)
+        addListener(EVENTS.HINT_CLICKED, handler)
+        return () => removeListener(EVENTS.HINT_CLICKED, handler)
+    }, [])
+
+    const renderHintsMenu = () => {
+        if (!showHintsMenu) return null
+
+        const handleItemClicked = code => {
+            emit(EVENTS.SHOW_SELECTIVE_HINT, { code })
+            setHintsMenuVisibility(false)
+        }
+
+        const hintsMenu = [
+            {
+                label: 'Naked\nSingle',
+                code: 0,
+            },
+            {
+                label: 'Hidden\nSingle',
+                code: 1,
+            },
+            {
+                label: 'Naked\nDouble',
+                code: 2,
+            },
+            {
+                label: 'Hidden\nDouble',
+                code: 3,
+            },
+            {
+                label: 'Naked\nTripple',
+                code: 4,
+            },
+            {
+                label: 'Hidden\nTripple',
+                code: 5,
+            },
+            {
+                label: 'All',
+                code: -1,
+            },
+        ]
+
+        const renderMenuItem = ({ label, code }) => {
+            return (
+                <Touchable
+                    style={{
+                        flex: 1,
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        // backgroundColor: rgba('#d5e5f6', 60),
+                        // backgroundColor: 'white',
+                    }}
+                    onPress={() => handleItemClicked(code)}
+                    touchable={TouchableTypes.opacity}
+                    key={label}
+                >
+                    <Text
+                        style={{
+                            color: 'rgb(49, 90, 163)',
+                            fontSize: 20,
+                            fontFamily: fonts.regular,
+                        }}
+                    >
+                        {label}
+                    </Text>
+                </Touchable>
+            )
+        }
+
+        const COLUMNS_COUNT = 2
+        const BORDER_THICKNESS = 2
+
+        const rows = []
+        let row = []
+        hintsMenu.forEach((item, index) => {
+            const isLastItem = index === hintsMenu.length - 1
+            const isLastColumn = index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastItem
+
+            const menuItem = renderMenuItem(item)
+            row.push(menuItem)
+
+            if (isLastColumn) {
+                rows.push(
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            height: '25%',
+                        }}
+                    >
+                        {row}
+                    </View>,
+                )
+
+                if (!isLastItem)
+                    rows.push(
+                        <View
+                            style={{ width: '101%', height: BORDER_THICKNESS, backgroundColor: 'rgb(49, 90, 163)' }}
+                        />,
+                    )
+
+                row = []
+            } else {
+                row.push(
+                    <View style={{ width: BORDER_THICKNESS, height: '101%', backgroundColor: 'rgb(49, 90, 163)' }} />,
+                )
+            }
+        })
+
+        return (
+            <Touchable onPress={() => setHintsMenuVisibility(false)}>
+                <View
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
+                        width: '100%',
+                        position: 'absolute',
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    }}
+                >
+                    <View
+                        style={{
+                            height: '50%',
+                            width: '75%',
+                            backgroundColor: 'white',
+                            borderRadius: 32,
+                            overflow: 'hidden',
+                        }}
+                    >
+                        {rows}
+                    </View>
+                </View>
+            </Touchable>
+        )
+    }
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
@@ -340,6 +487,7 @@ const Arena_ = ({ navigation, route }) => {
                         totalHintsCount={totalHintsCount}
                     />
                 ) : null}
+                {renderHintsMenu()}
             </View>
         </Page>
     )

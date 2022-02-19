@@ -404,6 +404,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
 
     useEffect(() => {
         const handler = () => {
+            return
             getSmartHint(mainNumbers, notesInfo)
                 .then(hints => {
                     consoleLog('@@@@ hintInfo', JSON.stringify(hints))
@@ -421,6 +422,27 @@ const useGameBoard = (gameState, pencilState, hints) => {
         }
         addListener(EVENTS.HINT_CLICKED, handler)
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
+    }, [mainNumbers, notesInfo])
+
+    useEffect(() => {
+        const handler = ({ code: hintCode }) => {
+            getSmartHint(mainNumbers, notesInfo, hintCode)
+                .then(hints => {
+                    consoleLog('@@@@ hintInfo', JSON.stringify(hints))
+                    if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })
+                    else {
+                        emit(EVENTS.SHOW_SNACK_BAR, {
+                            msg: 'no hints found. try filling some more guesses in cells with pencil and then try again',
+                            visibleTime: 5000,
+                        })
+                    }
+                })
+                .catch(error => {
+                    consoleLog(error)
+                })
+        }
+        addListener(EVENTS.SHOW_SELECTIVE_HINT, handler)
+        return () => removeListener(EVENTS.SHOW_SELECTIVE_HINT, handler)
     }, [mainNumbers, notesInfo])
 
     useEffect(() => {
