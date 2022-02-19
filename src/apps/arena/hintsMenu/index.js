@@ -68,13 +68,15 @@ const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
         row.push(menuItem)
 
         if (isLastColumn) {
-            rows.push(<View style={styles.menuRowContainer}>{row}</View>)
-
-            if (!isLastItem) rows.push(<View style={styles.horizontalSeperator} />)
-
+            rows.push(
+                <View style={styles.menuRowContainer} key={`row_${index}`}>
+                    {row}
+                </View>,
+            )
+            if (!isLastItem) rows.push(<View style={styles.horizontalSeperator} key={`horizoSep_${index}`} />)
             row = []
         } else {
-            row.push(<View style={styles.verticalSeperator} />)
+            row.push(<View style={styles.verticalSeperator} key={`verticalSep_${index}`} />)
         }
     })
 
