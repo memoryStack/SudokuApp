@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { Styles } from './style'
+import { styles } from './style'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { GAME_STATE } from '../../../../resources/constants'
 import { CloseIcon } from '../../../../resources/svgIcons/close'
@@ -44,10 +44,10 @@ const Cell_ = ({
                 const { show, noteValue } = cellNotes[noteNum] || {}
                 const noteFontColor = show && smartHintData ? getNotesFontColor(noteValue) : null
                 return (
-                    <View key={`${noteNum}`} style={Styles.noteContainer}>
+                    <View key={`${noteNum}`} style={styles.noteContainer}>
                         <Text
                             style={[
-                                Styles.noteText,
+                                styles.noteText,
                                 noteFontColor ? { color: noteFontColor, fontFamily: fonts.bold } : null,
                             ]}
                         >
@@ -57,7 +57,7 @@ const Cell_ = ({
                 )
             })
             return (
-                <View style={Styles.notesRow} key={`${row}`}>
+                <View style={styles.notesRow} key={`${row}`}>
                     {cellNotesRow}
                 </View>
             )
@@ -77,7 +77,7 @@ const Cell_ = ({
         }
 
         return cellMainValue ? (
-            <Text style={[Styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
+            <Text style={[styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
         ) : shouldRenderNotes() ? (
             getCellNotes()
         ) : null
@@ -87,7 +87,7 @@ const Cell_ = ({
         <Touchable
             touchable={TouchableTypes.opacity}
             activeOpacity={1}
-            style={[Styles.cell, cellBGColor]}
+            style={[styles.cell, cellBGColor]}
             onPress={() => onCellClicked({ row, col })}
         >
             {gameState !== GAME_STATE.INACTIVE ? getCellContent() : null}

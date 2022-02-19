@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import { CELL_HEIGHT } from '../dimensions'
 import { fonts } from '../../../../resources/fonts/font'
 
-export const Styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     cell: {
         flex: 1,
     },
