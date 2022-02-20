@@ -1,4 +1,4 @@
-import { HOUSE_TYPE } from './smartHint'
+import { HOUSE_TYPE } from './smartHints/constants'
 import { getRowAndCol } from '../../../utils/util'
 
 const getRowHouseCells = houseNum => {

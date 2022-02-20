@@ -3,13 +3,6 @@ import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
 
-// TODO: move it
-export const HOUSE_TYPE = {
-    ROW: 'row',
-    COL: 'col',
-    BLOCK: 'block',
-}
-
 // TODO: change the below to support selective hints as well
 const hintsHandlerMap = {
     0: function (mainNumbers, notesData) {

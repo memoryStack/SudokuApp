@@ -1,4 +1,4 @@
-import { HOUSE_TYPE } from '../../smartHint'
+import { HOUSE_TYPE } from '../../smartHints/constants'
 import { getAllHiddenGroups, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
 
 test('hidden doubles valid candidates test 1', () => {

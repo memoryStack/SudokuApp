@@ -1,6 +1,6 @@
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { consoleLog } from '../../../../../utils/util'
-import { HOUSE_TYPE } from '../../smartHint'
+import { HOUSE_TYPE } from '../../smartHints/constants'
 import { areSameCells, isCellEmpty, isCellExists } from '../../util'
 import { getGroupUIHighlightData } from './uiHighlightData'
 import { getHouseCells } from '../../houseCells'

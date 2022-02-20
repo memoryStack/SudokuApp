@@ -13,6 +13,13 @@ const HIDDEN_SINGLE_TYPES = {
     BLOCK: 'block',
 }
 
+// TODO: above 3 constans are kind of same
+const HOUSE_TYPE = {
+    ROW: 'row',
+    COL: 'col',
+    BLOCK: 'block',
+}
+
 /*
     TODO: come upp with better colors later on
     let's focus on the functionality for now
@@ -32,4 +39,11 @@ const HIDDEN_GROUP_TYPE = {
     3: 'Hidden Tripple',
 }
 
-export { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR, NUMBER_TO_TEXT, HIDDEN_GROUP_TYPE }
+export {
+    NAKED_SINGLE_TYPES,
+    HIDDEN_SINGLE_TYPES,
+    SMART_HINTS_CELLS_BG_COLOR,
+    NUMBER_TO_TEXT,
+    HIDDEN_GROUP_TYPE,
+    HOUSE_TYPE,
+}

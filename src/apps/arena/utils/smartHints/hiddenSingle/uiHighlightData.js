@@ -1,5 +1,5 @@
 import { HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { HOUSE_TYPE } from '../../smartHint'
+import { HOUSE_TYPE } from '../../smartHints/constants'
 import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
 import { isCellEmpty, areSameCells } from '../../util'
 

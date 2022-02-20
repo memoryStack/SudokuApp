@@ -1,5 +1,5 @@
 import { getBlockAndBoxNum } from '../../../../../utils/util'
-import { HOUSE_TYPE } from '../../smartHint'
+import { HOUSE_TYPE } from '../../smartHints/constants'
 import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCellExists } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
