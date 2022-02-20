@@ -425,8 +425,8 @@ const useGameBoard = (gameState, pencilState, hints) => {
     }, [mainNumbers, notesInfo])
 
     useEffect(() => {
-        const handler = ({ code: hintCode }) => {
-            getSmartHint(mainNumbers, notesInfo, hintCode)
+        const handler = ({ id }) => {
+            getSmartHint(mainNumbers, notesInfo, id)
                 .then(hints => {
                     consoleLog('@@@@ hintInfo', JSON.stringify(hints))
                     if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })

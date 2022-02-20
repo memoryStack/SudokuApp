@@ -39,34 +39,48 @@ const HIDDEN_GROUP_TYPE = {
     3: 'Hidden Tripple',
 }
 
-const HINTS_MENU_ITEMS = [
+const HINTS_IDS = {
+    NAKED_SINGLE: 'NAKED_SINGLE',
+    HIDDEN_SINGLE: 'HIDDEN_SINGLE',
+    NAKED_DOUBLE: 'NAKED_DOUBLE',
+    HIDDEN_DOUBLE: 'HIDDEN_DOUBLE',
+    NAKED_TRIPPLE: 'NAKED_TRIPPLE',
+    HIDDEN_TRIPPLE: 'HIDDEN_TRIPPLE',
+    ALL: 'ALL',
+}
+
+const INDEPENDENT_HINTS_MENU_ITEMS = [
     {
         label: 'Naked\nSingle',
-        code: 0,
+        id: HINTS_IDS.NAKED_SINGLE,
     },
     {
         label: 'Hidden\nSingle',
-        code: 1,
+        id: HINTS_IDS.HIDDEN_SINGLE,
     },
     {
         label: 'Naked\nDouble',
-        code: 2,
+        id: HINTS_IDS.NAKED_DOUBLE,
     },
     {
         label: 'Hidden\nDouble',
-        code: 3,
+        id: HINTS_IDS.HIDDEN_DOUBLE,
     },
     {
         label: 'Naked\nTripple',
-        code: 4,
+        id: HINTS_IDS.NAKED_TRIPPLE,
     },
     {
         label: 'Hidden\nTripple',
-        code: 5,
+        id: HINTS_IDS.HIDDEN_TRIPPLE,
     },
+]
+
+const HINTS_MENU_ITEMS = [
+    ...INDEPENDENT_HINTS_MENU_ITEMS,
     {
         label: 'All',
-        code: -1,
+        id: HINTS_IDS.ALL,
     },
 ]
 
@@ -78,4 +92,6 @@ export {
     HIDDEN_GROUP_TYPE,
     HOUSE_TYPE,
     HINTS_MENU_ITEMS,
+    HINTS_IDS,
+    INDEPENDENT_HINTS_MENU_ITEMS,
 }

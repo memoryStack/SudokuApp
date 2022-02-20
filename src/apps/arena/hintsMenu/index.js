@@ -10,16 +10,16 @@ import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 const COLUMNS_COUNT = 2
 
 const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
-    const handleItemClicked = code => {
-        emit(EVENTS.SHOW_SELECTIVE_HINT, { code })
+    const handleItemClicked = id => {
+        emit(EVENTS.SHOW_SELECTIVE_HINT, { id })
         visibilityToggler()
     }
 
-    const renderMenuItem = ({ label, code }) => {
+    const renderMenuItem = ({ label, id }) => {
         return (
             <Touchable
                 style={styles.menuItem}
-                onPress={() => handleItemClicked(code)}
+                onPress={() => handleItemClicked(id)}
                 touchable={TouchableTypes.opacity}
                 key={label}
             >
