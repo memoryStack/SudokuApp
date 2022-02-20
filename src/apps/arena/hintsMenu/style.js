@@ -35,6 +35,14 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-    horizontalSeperator: { width: '101%', height: BORDER_THICKNESS, backgroundColor: 'rgb(49, 90, 163)' },
-    verticalSeperator: { width: BORDER_THICKNESS, height: '101%', backgroundColor: 'rgb(49, 90, 163)' },
+    horizontalSeperator: {
+        width: '101%',
+        height: BORDER_THICKNESS,
+        backgroundColor: 'rgb(49, 90, 163)',
+    },
+    verticalSeperator: {
+        width: BORDER_THICKNESS,
+        height: '101%',
+        backgroundColor: 'rgb(49, 90, 163)',
+    },
 })
