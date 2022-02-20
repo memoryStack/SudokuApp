@@ -5,6 +5,7 @@ import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../resources/constants'
 import { noOperationFunction } from '../../../utils/util'
 import { styles } from './style'
+import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 
 const COLUMNS_COUNT = 2
 
@@ -13,37 +14,6 @@ const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
         emit(EVENTS.SHOW_SELECTIVE_HINT, { code })
         visibilityToggler()
     }
-
-    const hintsMenu = [
-        {
-            label: 'Naked\nSingle',
-            code: 0,
-        },
-        {
-            label: 'Hidden\nSingle',
-            code: 1,
-        },
-        {
-            label: 'Naked\nDouble',
-            code: 2,
-        },
-        {
-            label: 'Hidden\nDouble',
-            code: 3,
-        },
-        {
-            label: 'Naked\nTripple',
-            code: 4,
-        },
-        {
-            label: 'Hidden\nTripple',
-            code: 5,
-        },
-        {
-            label: 'All',
-            code: -1,
-        },
-    ]
 
     const renderMenuItem = ({ label, code }) => {
         return (
@@ -60,8 +30,8 @@ const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
 
     const rows = []
     let row = []
-    hintsMenu.forEach((item, index) => {
-        const isLastItem = index === hintsMenu.length - 1
+    HINTS_MENU_ITEMS.forEach((item, index) => {
+        const isLastItem = index === HINTS_MENU_ITEMS.length - 1
         const isLastColumn = index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastItem
 
         const menuItem = renderMenuItem(item)

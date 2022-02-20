@@ -39,6 +39,37 @@ const HIDDEN_GROUP_TYPE = {
     3: 'Hidden Tripple',
 }
 
+const HINTS_MENU_ITEMS = [
+    {
+        label: 'Naked\nSingle',
+        code: 0,
+    },
+    {
+        label: 'Hidden\nSingle',
+        code: 1,
+    },
+    {
+        label: 'Naked\nDouble',
+        code: 2,
+    },
+    {
+        label: 'Hidden\nDouble',
+        code: 3,
+    },
+    {
+        label: 'Naked\nTripple',
+        code: 4,
+    },
+    {
+        label: 'Hidden\nTripple',
+        code: 5,
+    },
+    {
+        label: 'All',
+        code: -1,
+    },
+]
+
 export {
     NAKED_SINGLE_TYPES,
     HIDDEN_SINGLE_TYPES,
@@ -46,4 +77,5 @@ export {
     NUMBER_TO_TEXT,
     HIDDEN_GROUP_TYPE,
     HOUSE_TYPE,
+    HINTS_MENU_ITEMS,
 }
