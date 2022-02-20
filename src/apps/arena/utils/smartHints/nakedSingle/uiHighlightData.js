@@ -16,9 +16,6 @@ const SMART_HINTS_TECHNIQUES = {
             getMultipleHouseMsg: solutionValue => getMultipleHousesNakeSingleDescription(solutionValue),
         },
     },
-    HIDDEN_SINGLE: {
-        TITLE: 'Hidden Single',
-    },
 }
 
 const nakedSingleRowDataToHighlight = (cell, cellsToFocusData = {}) => {
