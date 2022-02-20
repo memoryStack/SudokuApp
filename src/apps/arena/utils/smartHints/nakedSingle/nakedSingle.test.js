@@ -1,4 +1,4 @@
-import { getAllNakedSingles } from './nakedSingle'
+import { getNakedSinglesRawInfo } from './nakedSingle'
 import { NAKED_SINGLE_TYPES } from '../constants'
 
 test('naked singles', () => {
@@ -14,5 +14,5 @@ test('naked singles', () => {
         { cell: { row: 8, col: 4 }, mainNumber: 5, type: NAKED_SINGLE_TYPES.MIX },
         { cell: { row: 8, col: 5 }, mainNumber: 6, type: NAKED_SINGLE_TYPES.MIX },
     ]
-    expect(getAllNakedSingles(mainNumbersTestOne, notesDataTestOne)).toStrictEqual(nakedSinglesData)
+    expect(getNakedSinglesRawInfo(mainNumbersTestOne, notesDataTestOne)).toStrictEqual(nakedSinglesData)
 })

@@ -1,175 +1,19 @@
-import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
 import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
-import { NAKED_SINGLE_TYPES, HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from './smartHints/constants'
-import { areSameCells, isCellEmpty } from './util'
 import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
 
+// TODO: move it
 export const HOUSE_TYPE = {
     ROW: 'row',
     COL: 'col',
     BLOCK: 'block',
 }
 
-// naked single starts here
-// TODO: transfer it in other file of hints and tricks
-const getSingleHouseNakedSingleDescription = (houseType, solutionValue) =>
-    `in this ${houseType} only the selected cell is empty so from 1-9 only one number can come in this cell which is ${solutionValue}`
-
-const getMultipleHousesNakeSingleDescription = solutionValue =>
-    `except ${solutionValue} every other number from 1-9 is preset in the row, col and block of this highlighted cell so only number that can appear in this cell is ${solutionValue}`
-
-const SMART_HINTS_TECHNIQUES = {
-    NAKED_SINGLE: {
-        TITLE: 'Naked Single',
-        DESCRIPTION: {
-            getSingleHouseMsg: (houseType, solutionValue) =>
-                getSingleHouseNakedSingleDescription(houseType, solutionValue),
-            getMultipleHouseMsg: solutionValue => getMultipleHousesNakeSingleDescription(solutionValue),
-        },
-    },
-    HIDDEN_SINGLE: {
-        TITLE: 'Hidden Single',
-    },
-}
-
-const copyBoardMainNumbers = mainNumbers => {
-    const boardCopy = new Array(9)
-    for (let i = 0; i < 9; i++) {
-        const rowData = new Array(9)
-        for (let j = 0; j < 9; j++) {
-            rowData[j] = { ...mainNumbers[i][j] }
-        }
-        boardCopy[i] = rowData
-    }
-    return boardCopy
-}
-
-// DS for naked singles
-// const getCellsNotesInfo = (mainNumbers) => {
-//     const notesData = new Array(9)
-//     for (let i = 0; i < 9; i++) {
-//         const rowNotes = []
-//         for (let j = 0; j < 9; j++) {
-//             const boxNotes = new Array(9)
-//             let cellNotesCount = 0
-//             for (let k = 1; k <= 9; k++) {
-//                 if (!duplicacyPresent( k, mainNumbers, {row: i, col: j})) {
-//                     boxNotes[k - 1] = k
-//                     cellNotesCount++
-//                 }
-//             }
-//             rowNotes.push({ boxNotes, count: cellNotesCount })
-//         }
-//         notesData[i] = rowNotes
-//     }
-//     return notesData
-// }
-
-const nakedSingleRowDataToHighlight = (cell, cellsToFocusData = {}) => {
-    const { row, col } = cell
-    for (let cellNo = 0; cellNo < 9; cellNo++) {
-        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
-        const cellBGColor =
-            cellNo === col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[row][cellNo] = { bgColor: cellBGColor }
-    }
-    return cellsToFocusData
-}
-
-const nakedSingleColDataToHighlight = ({ row, col }, cellsToFocusData = {}) => {
-    for (let cell = 0; cell < 9; cell++) {
-        if (!cellsToFocusData[cell]) cellsToFocusData[cell] = {}
-        const cellBGColor =
-            cell === row ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[cell][col] = { bgColor: cellBGColor }
-    }
-    return cellsToFocusData
-}
-
-const nakedSingleBlockDataToHighlight = ({ row: selectedRow, col: selectedCol }, cellsToFocusData = {}) => {
-    const selectedCell = {
-        row: selectedRow,
-        col: selectedCol,
-    }
-    const { blockNum } = getBlockAndBoxNum(selectedCell)
-    for (let cell = 0; cell < 9; cell++) {
-        const { row, col } = getRowAndCol(blockNum, cell)
-        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
-        const cellBGColor =
-            selectedRow === row && selectedCol === col
-                ? SMART_HINTS_CELLS_BG_COLOR.SELECTED
-                : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[row][col] = { bgColor: cellBGColor }
-    }
-    return cellsToFocusData
-}
-
-// if naked single is because of the mix of two or more houses
-const nakedSingleMixHousesDataToHighlight = cell => {
-    let cellsToFocusData = nakedSingleRowDataToHighlight(cell)
-    cellsToFocusData = nakedSingleColDataToHighlight(cell, cellsToFocusData)
-    cellsToFocusData = nakedSingleBlockDataToHighlight(cell, cellsToFocusData)
-    return cellsToFocusData
-}
-
-const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
-    const { row, col } = cell
-    let cellsToFocusData = null
-    let logic = ''
-    switch (type) {
-        case NAKED_SINGLE_TYPES.ROW:
-            cellsToFocusData = nakedSingleRowDataToHighlight(cell)
-            logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
-                'row',
-                mainNumbers[row][col].solutionValue,
-            )
-            break
-        case NAKED_SINGLE_TYPES.COL:
-            cellsToFocusData = nakedSingleColDataToHighlight(cell)
-            logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
-                'col',
-                mainNumbers[row][col].solutionValue,
-            )
-            break
-        case NAKED_SINGLE_TYPES.BLOCK:
-            cellsToFocusData = nakedSingleBlockDataToHighlight(cell)
-            logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
-                'block',
-                mainNumbers[row][col].solutionValue,
-            )
-            break
-        case NAKED_SINGLE_TYPES.MIX:
-            cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell)
-            logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg(
-                mainNumbers[row][col].solutionValue,
-            )
-    }
-
-    return {
-        cellsToFocusData,
-        techniqueInfo: {
-            title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
-            logic,
-        },
-        selectCellOnClose: { row, col },
-    }
-}
-// naked single ends here
-
 // TODO: change the below to support selective hints as well
-
 const hintsHandlerMap = {
     0: function (mainNumbers, notesData) {
-        let result = null
-        const nakedSinglesData = getAllNakedSingles(mainNumbers, notesData)
-        if (nakedSinglesData.length) {
-            result = nakedSinglesData.map(({ cell, type }) => {
-                return getNakedSingleTechniqueToFocus(type, mainNumbers, cell)
-            })
-        }
-        return result
+        return getAllNakedSingles(mainNumbers, notesData)
     },
     1: function (mainNumbers, notesData) {
         return getAllHiddenSingles(mainNumbers, notesData)

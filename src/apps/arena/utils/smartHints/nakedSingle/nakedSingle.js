@@ -1,6 +1,7 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
 import { isCellEmpty } from '../../util'
 import { NAKED_SINGLE_TYPES } from '../constants'
+import { getUIHighlightData } from './uiHighlightData'
 
 const isNakedSinglePresent = cellNotes => {
     let possibleCandidatesCount = 0
@@ -52,16 +53,22 @@ const getHouseType = (cell, mainNumbers) => {
     return NAKED_SINGLE_TYPES.MIX
 }
 
-export const getAllNakedSingles = (mainNumbers, notesInfo) => {
-    const nakedSingles = []
+const getNakedSinglesRawInfo = (mainNumbers, notesInfo) => {
+    const result = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (mainNumbers[row][col].value) continue
             // TODO: change "mainNumber" field name. it doesn't feel right.
             const { present, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
-            if (present)
-                nakedSingles.push({ cell: { row, col }, mainNumber, type: getHouseType({ row, col }, mainNumbers) })
+            if (present) result.push({ cell: { row, col }, mainNumber, type: getHouseType({ row, col }, mainNumbers) })
         }
     }
-    return nakedSingles
+    return result
 }
+
+const getAllNakedSingles = (mainNumbers, notesInfo) => {
+    const singles = getNakedSinglesRawInfo(mainNumbers, notesInfo)
+    return getUIHighlightData(singles, mainNumbers)
+}
+
+export { getAllNakedSingles, getNakedSinglesRawInfo }
