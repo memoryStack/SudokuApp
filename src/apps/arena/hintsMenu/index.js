@@ -34,19 +34,17 @@ const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
         const isLastItem = index === HINTS_MENU_ITEMS.length - 1
         const isLastColumn = index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastItem
 
-        const menuItem = renderMenuItem(item)
-        row.push(menuItem)
+        if (row.length) row.push(<View style={styles.verticalSeperator} key={`verticalSep_${index}`} />)
+        row.push(renderMenuItem(item))
 
         if (isLastColumn) {
+            if (rows.length) rows.push(<View style={styles.horizontalSeperator} key={`horizoSep_${index}`} />)
             rows.push(
                 <View style={styles.menuRowContainer} key={`row_${index}`}>
                     {row}
                 </View>,
             )
-            if (!isLastItem) rows.push(<View style={styles.horizontalSeperator} key={`horizoSep_${index}`} />)
             row = []
-        } else {
-            row.push(<View style={styles.verticalSeperator} key={`verticalSep_${index}`} />)
         }
     })
 
