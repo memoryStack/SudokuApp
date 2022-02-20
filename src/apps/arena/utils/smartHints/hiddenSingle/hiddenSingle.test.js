@@ -1,6 +1,6 @@
-import { getHiddenSingleTechniqueInfo } from '../../smartHint'
 import { HIDDEN_SINGLE_TYPES } from '../constants'
-import { getAllHiddenSingles } from './hiddenSingle'
+import { getAllHiddenSingles, getHiddenSinglesRawInfo } from './hiddenSingle'
+import { getHiddenSingleTechniqueInfo } from './uiHighlightData'
 
 test('hidden singles', () => {
     const { mainNumbers, notesData } = require('./testData')
@@ -21,15 +21,13 @@ test('hidden singles', () => {
         { cell: { row: 7, col: 2 }, mainNumber: 1, type: HIDDEN_SINGLE_TYPES.BLOCK },
         { cell: { row: 7, col: 6 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.BLOCK },
     ]
-    expect(getAllHiddenSingles(mainNumbers, notesData)).toStrictEqual(hiddenSingles)
+    expect(getHiddenSinglesRawInfo(mainNumbers, notesData)).toStrictEqual(hiddenSingles)
 })
 
+// TODO: should remove these kind of tests. it's very volatile to change
 test('hidden singles hints UI text', () => {
     const { mainNumbers, notesData } = require('./testData')
-    const hiddenSinglesHintsUIData = getAllHiddenSingles(mainNumbers, notesData).map(({ cell, type }) => {
-        return getHiddenSingleTechniqueInfo(cell, type, mainNumbers)
-    })
-    expect(hiddenSinglesHintsUIData).toStrictEqual(HIDDEN_SINGLE_UI_DATA)
+    expect(getAllHiddenSingles(mainNumbers, notesData)).toStrictEqual(HIDDEN_SINGLE_UI_DATA)
 })
 
 const HIDDEN_SINGLE_UI_DATA = [

@@ -1,6 +1,7 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
 import { HIDDEN_SINGLE_TYPES } from '../constants'
 import { isCellEmpty } from '../../util'
+import { getUIHighlightData } from './uiHighlightData'
 
 const isCandidateSolutionForBlockCell = (candidate, cell, mainNumbers, notesData) => {
     let possibleHostCellsCount = 0
@@ -65,7 +66,7 @@ const getCellHiddenSingle = (cell, mainNumbers, notesData) => {
     }
 }
 
-export const getAllHiddenSingles = (mainNumbers, notesData) => {
+const getHiddenSinglesRawInfo = (mainNumbers, notesData) => {
     const result = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -77,3 +78,10 @@ export const getAllHiddenSingles = (mainNumbers, notesData) => {
     }
     return result
 }
+
+const getAllHiddenSingles = (mainNumbers, notesData) => {
+    const singles = getHiddenSinglesRawInfo(mainNumbers, notesData)
+    return getUIHighlightData(singles, mainNumbers)
+}
+
+export { getAllHiddenSingles, getHiddenSinglesRawInfo }

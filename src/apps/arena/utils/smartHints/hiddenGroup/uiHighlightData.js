@@ -139,7 +139,6 @@ const getPrimaryHouseHintExplaination = (houseType, groupCandidates) => {
     )} are present and the numbers highlighted in red color in these cells can be removed safely.`
 }
 
-// export it
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
