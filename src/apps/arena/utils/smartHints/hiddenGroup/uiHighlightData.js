@@ -4,6 +4,7 @@ import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCel
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { HIDDEN_GROUP_TYPE, NUMBER_TO_TEXT } from '../constants'
+import { setCellDataInHintResult } from '../util'
 
 const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
     const result = {}
@@ -27,18 +28,18 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
 const highlightPrimaryHouseCells = (houseType, houseNum, candidates, groupHostCells, notesData, cellsToFocusData) => {
     const primaryHouseCells = getHouseCells(houseType, houseNum)
     primaryHouseCells.forEach(cell => {
-        if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
-        cellsToFocusData[cell.row][cell.col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-
+        const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         const isHostCell = isCellExists(cell, groupHostCells)
         if (isHostCell) {
             const isPrimaryHouse = true
-            cellsToFocusData[cell.row][cell.col].notesToHighlightData = getCellNotesHighlightData(
+            cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
                 isPrimaryHouse,
                 notesData[cell.row][cell.col],
                 candidates,
             )
         }
+        // TODO: improve the naming of this func
+        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
     })
 }
 
@@ -94,16 +95,16 @@ const highlightSecondaryHouseCells = (
     houseCells.forEach(cell => {
         const isHostCell = isCellExists(cell, groupHostCells)
         if (!isHostCell) {
-            if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
-            cellsToFocusData[cell.row][cell.col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+            const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             if (isCellEmpty(cell, mainNumbers)) {
                 const isPrimaryHouse = false
-                cellsToFocusData[cell.row][cell.col].notesToHighlightData = getCellNotesHighlightData(
+                cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
                     isPrimaryHouse,
                     notesData[cell.row][cell.col],
                     groupCandidates,
                 )
             }
+            setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
         }
     })
 }

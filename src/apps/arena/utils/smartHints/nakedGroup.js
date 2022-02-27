@@ -1,7 +1,8 @@
 import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
-import { getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
+import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { SMART_HINTS_CELLS_BG_COLOR } from './constants'
+import { setCellDataInHintResult } from './util'
 
 // TODO: write test case for it and refactor it properly
 const prepareNakedDublesOrTriplesHintData = (
@@ -17,8 +18,7 @@ const prepareNakedDublesOrTriplesHintData = (
     const isGroupHostCell = cell => groupCells.some(groupCell => areSameCells(groupCell, cell))
 
     toBeHighlightedCells.forEach(({ row, col }) => {
-        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
-        cellsToFocusData[row][col] = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+        const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
 
         const notesToHighlightData = {}
         let notesWillBeHighlighted = false
@@ -33,7 +33,9 @@ const prepareNakedDublesOrTriplesHintData = (
                 notesWillBeHighlighted = true
             }
         })
-        if (notesWillBeHighlighted) cellsToFocusData[row][col].notesToHighlightData = notesToHighlightData
+
+        if (notesWillBeHighlighted) cellHighlightData.notesToHighlightData = notesToHighlightData
+        setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
     })
 
     const groupCellsCountEnglishText = isNakedDoubles ? 'two' : 'three'
@@ -247,7 +249,8 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                     }
                 }
 
-                __DEV__ && console.log('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
+                consoleLog('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
+
                 const getHintData = prepareNakedDublesOrTriplesHintData(
                     noOfInstances,
                     houseAllBoxes,

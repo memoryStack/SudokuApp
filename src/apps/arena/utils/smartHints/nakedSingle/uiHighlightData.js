@@ -1,5 +1,6 @@
 import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
 import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES } from '../constants'
+import { setCellDataInHintResult } from '../util'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue) =>
     `in this ${houseType} only the selected cell is empty so from 1-9 only one number can come in this cell which is ${solutionValue}`
@@ -20,38 +21,37 @@ const SMART_HINTS_TECHNIQUES = {
 
 const nakedSingleRowDataToHighlight = (cell, cellsToFocusData = {}) => {
     for (let col = 0; col < 9; col++) {
-        if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
-        const cellBGColor =
-            col === cell.col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[cell.row][col] = { bgColor: cellBGColor }
+        const cellHighlightData = {
+            bgColor:
+                col === cell.col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+        }
+        setCellDataInHintResult({ row: cell.row, col }, cellHighlightData, cellsToFocusData)
     }
     return cellsToFocusData
 }
 
 const nakedSingleColDataToHighlight = (cell, cellsToFocusData = {}) => {
     for (let row = 0; row < 9; row++) {
-        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
-        const cellBGColor =
-            row === cell.row ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[row][cell.col] = { bgColor: cellBGColor }
+        const cellHighlightData = {
+            bgColor:
+                row === cell.row ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+        }
+        setCellDataInHintResult({ row, col: cell.col }, cellHighlightData, cellsToFocusData)
     }
     return cellsToFocusData
 }
 
-const nakedSingleBlockDataToHighlight = ({ row: selectedRow, col: selectedCol }, cellsToFocusData = {}) => {
-    const selectedCell = {
-        row: selectedRow,
-        col: selectedCol,
-    }
-    const { blockNum } = getBlockAndBoxNum(selectedCell)
+const nakedSingleBlockDataToHighlight = (hostCell, cellsToFocusData = {}) => {
+    const { blockNum } = getBlockAndBoxNum(hostCell)
     for (let cell = 0; cell < 9; cell++) {
         const { row, col } = getRowAndCol(blockNum, cell)
-        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
-        const cellBGColor =
-            selectedRow === row && selectedCol === col
-                ? SMART_HINTS_CELLS_BG_COLOR.SELECTED
-                : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[row][col] = { bgColor: cellBGColor }
+        const cellHighlightData = {
+            bgColor:
+                hostCell.row === row && hostCell.col === col
+                    ? SMART_HINTS_CELLS_BG_COLOR.SELECTED
+                    : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+        }
+        setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
     }
     return cellsToFocusData
 }
