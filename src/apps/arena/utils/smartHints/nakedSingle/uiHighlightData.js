@@ -19,23 +19,21 @@ const SMART_HINTS_TECHNIQUES = {
 }
 
 const nakedSingleRowDataToHighlight = (cell, cellsToFocusData = {}) => {
-    const { row, col } = cell
-    for (let cellNo = 0; cellNo < 9; cellNo++) {
-        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
+    for (let col = 0; col < 9; col++) {
+        if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
         const cellBGColor =
-            cellNo === col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[row][cellNo] = { bgColor: cellBGColor }
+            col === cell.col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
+        cellsToFocusData[cell.row][col] = { bgColor: cellBGColor }
     }
     return cellsToFocusData
 }
 
-const nakedSingleColDataToHighlight = ({ row, col }, cellsToFocusData = {}) => {
-    // Todo: cell is used in wrong context. 'cell' is refered to as { row, col } at most of the places
-    for (let cell = 0; cell < 9; cell++) {
-        if (!cellsToFocusData[cell]) cellsToFocusData[cell] = {}
+const nakedSingleColDataToHighlight = (cell, cellsToFocusData = {}) => {
+    for (let row = 0; row < 9; row++) {
+        if (!cellsToFocusData[row]) cellsToFocusData[row] = {}
         const cellBGColor =
-            cell === row ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
-        cellsToFocusData[cell][col] = { bgColor: cellBGColor }
+            row === cell.row ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT
+        cellsToFocusData[row][cell.col] = { bgColor: cellBGColor }
     }
     return cellsToFocusData
 }
