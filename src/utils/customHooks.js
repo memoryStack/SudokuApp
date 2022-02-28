@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react'
-import { useCallback, useState } from 'react/cjs/react.development'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
 const usePrevious = value => {
     const ref = useRef(null)

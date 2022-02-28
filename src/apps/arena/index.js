@@ -27,7 +27,6 @@ import { noOperationFunction, rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
-import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
 import { useToggle } from '../../utils/customHooks'
 import { HintsMenu } from './hintsMenu'
 
