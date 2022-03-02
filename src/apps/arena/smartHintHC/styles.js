@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 import { fonts } from '../../../resources/fonts/font'
 
 const windowHeight = Dimensions.get('window').height
+const FOOTER_HEIGHT = 24
 export const styles = StyleSheet.create({
     container: {
         width: '100%',
@@ -12,7 +13,7 @@ export const styles = StyleSheet.create({
         height: windowHeight / 4,
     },
     containerHeightWithFooter: {
-        height: windowHeight / 4 + 20,
+        height: windowHeight / 4 + FOOTER_HEIGHT,
     },
     headerContainer: {
         flexDirection: 'row',
@@ -39,6 +40,7 @@ export const styles = StyleSheet.create({
     hintsCountText: { marginLeft: 8, fontSize: 20 },
     footerContainer: {
         flexDirection: 'row',
+        height: FOOTER_HEIGHT,
         width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',

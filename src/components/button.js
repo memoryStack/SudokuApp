@@ -28,12 +28,14 @@ const Button_ = ({
     text = '',
     textStyles = null,
     avoidDefaultContainerStyles = false,
+    ...rest
 }) => {
     return (
         <Touchable
             touchable={TouchableTypes.opacity}
             onPress={onClick}
             style={[avoidDefaultContainerStyles ? null : styles.defaultContainer, containerStyle]}
+            {...rest}
         >
             <Text style={[styles.defaultText, textStyles]}>{text}</Text>
         </Touchable>

@@ -7,7 +7,7 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Button } from '../../../components/button'
 import { noOperationFunction } from '../../../utils/util'
 
-const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
+const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 
 const _SmartHintHC = ({
     title = '',
@@ -50,7 +50,7 @@ const _SmartHintHC = ({
                             <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
                         ) : null}
                     </View>
-                    <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={CLOSE_ICON_HITSLOP}>
+                    <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
                         <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
                     </Touchable>
                 </View>
@@ -64,12 +64,14 @@ const _SmartHintHC = ({
                             onClick={displayPrevButton ? prevHintClick : noOperationFunction}
                             avoidDefaultContainerStyles={true}
                             textStyles={styles.footerButtonText}
+                            hitSlop={HITSLOP}
                         />
                         <Button
                             text={displayNextButton ? nextButtonText : ''} // TODO: find better way to hide the button.it's wtf right now
                             onClick={displayNextButton ? nextHintClick : noOperationFunction}
                             avoidDefaultContainerStyles={true}
                             textStyles={styles.footerButtonText}
+                            hitSlop={HITSLOP}
                         />
                     </View>
                 ) : null}

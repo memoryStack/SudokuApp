@@ -4,7 +4,6 @@ import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
 
 export const Styles = StyleSheet.create({
     board: {
-        // figure out a way  for the shadow of this board
         display: 'flex',
         height: GAME_BOARD_HEIGHT,
         width: GAME_BOARD_WIDTH,

@@ -65,15 +65,16 @@ const initBoardData = () => {
     // const str = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
 
     // have hidden tripple
-    const str = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
-    for (let i = 0; i < str.length; i++) {
-        const row = Math.floor(i / 9)
-        const col = i % 9
-        if (str[i]) {
-            mainNumbers[row][col].value = parseInt(str[i], 10)
-            mainNumbers[row][col].isClue = 1
-        }
-    }
+    // const str = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
+
+    // for (let i = 0; i < str.length; i++) {
+    //     const row = Math.floor(i / 9)
+    //     const col = i % 9
+    //     if (str[i]) {
+    //         mainNumbers[row][col].value = parseInt(str[i], 10)
+    //         mainNumbers[row][col].isClue = 1
+    //     }
+    // }
 
     const notesInfo = new Array(9)
     for (let i = 0; i < 9; i++) {

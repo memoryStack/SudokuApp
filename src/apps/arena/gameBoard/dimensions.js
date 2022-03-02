@@ -1,14 +1,15 @@
 import { Dimensions } from 'react-native'
 
-// TODO: figure out why in myntra dimensions are passed as props to the components with a HOC withDimensions ??
-const { width: windowWidth } = Dimensions.get('window')
-
-let a = Math.floor(windowWidth * 0.94)
-const extraPixels = (a - (2 * 3 + 2 * 1)) % 9
-a -= extraPixels
+const getGameBoardWidth = () => {
+    const { width: windowWidth } = Dimensions.get('window')
+    let result = Math.floor(windowWidth * 0.94)
+    const extraPixels = (result - (2 * 3 + 2 * 1)) % 9
+    result -= extraPixels
+    return result
+}
 
 /* board and cell dimensions */
-export const GAME_BOARD_WIDTH = a,
+export const GAME_BOARD_WIDTH = getGameBoardWidth(),
     GAME_BOARD_HEIGHT = GAME_BOARD_WIDTH,
     INNER_THICK_BORDER_WIDTH = 3,
     OUTER_THIN_BORDER_WIDTH = 1,

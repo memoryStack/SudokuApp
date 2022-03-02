@@ -46,6 +46,7 @@ const HINTS_IDS = {
     HIDDEN_DOUBLE: 'HIDDEN_DOUBLE',
     NAKED_TRIPPLE: 'NAKED_TRIPPLE',
     HIDDEN_TRIPPLE: 'HIDDEN_TRIPPLE',
+    X_WING: 'X_WING',
     ALL: 'ALL',
 }
 
@@ -74,6 +75,10 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
         label: 'Hidden\nTripple',
         id: HINTS_IDS.HIDDEN_TRIPPLE,
     },
+    {
+        label: 'X-Wing',
+        id: HINTS_IDS.X_WING,
+    }
 ]
 
 const HINTS_MENU_ITEMS = [
