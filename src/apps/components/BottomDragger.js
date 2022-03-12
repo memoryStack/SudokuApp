@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
 })
 
 const BottomDragger_ = React.forwardRef((props, ref) => {
-    
     const {
         parentHeight,
         headerText = '',

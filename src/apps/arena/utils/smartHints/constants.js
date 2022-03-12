@@ -78,7 +78,7 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
     {
         label: 'X-Wing',
         id: HINTS_IDS.X_WING,
-    }
+    },
 ]
 
 const HINTS_MENU_ITEMS = [

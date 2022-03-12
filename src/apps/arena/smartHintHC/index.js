@@ -19,7 +19,6 @@ const SmartHintHC_ = ({
     prevHintClick = noOperationFunction,
     currentHintNum,
     totalHintsCount,
-    
 }) => {
     const smartHintHCRef = useRef(null)
 

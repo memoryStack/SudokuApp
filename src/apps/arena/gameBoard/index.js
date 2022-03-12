@@ -4,7 +4,10 @@ import { getStyles } from './style'
 import { Cell } from './cell'
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { sameHouseAsSelected } from '../../../utils/util'
-import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
+import {
+    useBoardElementsDimensions,
+    INNER_THICK_BORDER_WIDTH,
+} from '../../../utils/customHooks/boardElementsDimensions'
 
 const looper = []
 const bordersLooper = []
@@ -13,7 +16,6 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const THICK_BODER_THICKNESS = 3
 const Board_ = ({
     screenName = SCREEN_NAME.ARENA, // default will be arena
     gameState,
@@ -25,7 +27,6 @@ const Board_ = ({
     showSmartHint,
     smartHintCellsHighlightInfo = {},
 }) => {
-
     const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT } = useBoardElementsDimensions()
 
     const Styles = useMemo(() => {
@@ -125,7 +126,7 @@ const Board_ = ({
         const thickNessStyleField = isVertical ? 'width' : 'height'
         const thickBorderStyle = {
             ...normalBorderStyle,
-            [thickNessStyleField]: THICK_BODER_THICKNESS,
+            [thickNessStyleField]: INNER_THICK_BORDER_WIDTH,
         }
 
         return (

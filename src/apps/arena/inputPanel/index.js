@@ -1,13 +1,20 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { View, Text } from 'react-native'
-import { styles } from './style'
+import { getStyles } from './style'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { GAME_STATE, EVENTS } from '../../../resources/constants'
 import { emit } from '../../../utils/GlobalEventBus'
 import { CloseIcon } from '../../../resources/svgIcons/close'
+import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
 
 const CLOSE_ICON_DIMENSION = 28
 const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
+    const { CELL_WIDTH } = useBoardElementsDimensions()
+
+    const styles = useMemo(() => {
+        return getStyles(CELL_WIDTH)
+    }, [CELL_WIDTH])
+
     const onNumberClicked = number => {
         if (gameState !== GAME_STATE.ACTIVE) return
         emit(eventsPrefix + EVENTS.INPUT_NUMBER_CLICKED, { number })

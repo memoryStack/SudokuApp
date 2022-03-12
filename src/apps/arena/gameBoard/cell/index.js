@@ -1,15 +1,14 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View, Text } from 'react-native'
-import { styles } from './style'
+import { getStyles } from './style'
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { GAME_STATE } from '../../../../resources/constants'
 import { CloseIcon } from '../../../../resources/svgIcons/close'
-import { CELL_HEIGHT } from '../dimensions'
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../style'
 import { fonts } from '../../../../resources/fonts/font'
+import { useBoardElementsDimensions } from '../../../../utils/customHooks/boardElementsDimensions'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
-const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 // becoz only 3 notes are there in a row
 const looper = []
 for (let i = 0; i < 3; i++) looper.push(i)
@@ -27,6 +26,13 @@ const Cell_ = ({
     displayCrossIcon = false,
     smartHintData,
 }) => {
+    const { CELL_HEIGHT } = useBoardElementsDimensions()
+    const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
+
+    const styles = useMemo(() => {
+        return getStyles(CELL_HEIGHT)
+    }, [CELL_HEIGHT])
+
     const shouldRenderNotes = () => {
         for (let noteNum = 0; noteNum < 9; noteNum++) if (cellNotes[noteNum].show) return 1
         return 0

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { GRID_THIN_BORDERS_WIDTH } from '../../../utils/customHooks/boardElementsDimensions'
 import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
 
 // TODO: think of a better color scheme mechanism
@@ -54,12 +55,12 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {
         },
         verticalBars: {
             height: GAME_BOARD_HEIGHT,
-            width: 1,
+            width: GRID_THIN_BORDERS_WIDTH,
             backgroundColor: 'rgba(0, 0, 0, .9)',
         },
         horizontalBars: {
             width: GAME_BOARD_WIDTH,
-            height: 1,
+            height: GRID_THIN_BORDERS_WIDTH,
             backgroundColor: 'rgba(0, 0, 0, .9)',
         },
         rowStyle: {
@@ -72,7 +73,6 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {
             flex: 1,
             height: '100%',
         },
-        ...COLOR_SCHEME_STYLES
+        ...COLOR_SCHEME_STYLES,
     })
-    
 }

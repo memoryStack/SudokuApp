@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
 })
 
 const Arena_ = ({ navigation, route }) => {
-
     const { width: windowWidth } = useWindowDimensions()
 
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
