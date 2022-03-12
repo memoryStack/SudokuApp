@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View } from 'react-native'
-import { Styles } from './style'
+import { getStyles } from './style'
 import { Cell } from './cell'
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { sameHouseAsSelected } from '../../../utils/util'
+import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
 
 const looper = []
 const bordersLooper = []
@@ -24,6 +25,13 @@ const Board_ = ({
     showSmartHint,
     smartHintCellsHighlightInfo = {},
 }) => {
+
+    const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT } = useBoardElementsDimensions()
+
+    const Styles = useMemo(() => {
+        return getStyles({ GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH })
+    }, [GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT])
+
     const sameValueAsSelectedBox = cell =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
 

@@ -5,7 +5,7 @@ import { Touchable, TouchableTypes } from '../../../components/Touchable'
 import { GAME_STATE } from '../../../../resources/constants'
 import { CloseIcon } from '../../../../resources/svgIcons/close'
 import { CELL_HEIGHT } from '../dimensions'
-import { Styles as boardStyles } from '../style'
+import { COLOR_SCHEME_STYLES as boardColorStyles } from '../style'
 import { fonts } from '../../../../resources/fonts/font'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
@@ -71,7 +71,7 @@ const Cell_ = ({
                 <CloseIcon
                     height={CROSS_ICON_DIMENSION}
                     width={CROSS_ICON_DIMENSION}
-                    fill={boardStyles.wronglyFilledNumColor.color}
+                    fill={boardColorStyles.wronglyFilledNumColor.color}
                 />
             )
         }

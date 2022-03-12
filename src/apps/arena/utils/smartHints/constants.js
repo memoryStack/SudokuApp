@@ -1,4 +1,4 @@
-import { Styles as boardStyles } from '../../gameBoard/style'
+import { COLOR_SCHEME_STYLES as boardColorStyles } from '../../gameBoard/style'
 
 const NAKED_SINGLE_TYPES = {
     ROW: 'row',
@@ -25,8 +25,8 @@ const HOUSE_TYPE = {
     let's focus on the functionality for now
 */
 const SMART_HINTS_CELLS_BG_COLOR = {
-    SELECTED: boardStyles.selectedCellBGColor,
-    IN_FOCUS_DEFAULT: boardStyles.defaultCellBGColor,
+    SELECTED: boardColorStyles.selectedCellBGColor,
+    IN_FOCUS_DEFAULT: boardColorStyles.defaultCellBGColor,
 }
 
 const NUMBER_TO_TEXT = {

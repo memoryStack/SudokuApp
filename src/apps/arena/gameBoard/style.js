@@ -1,42 +1,8 @@
 import { StyleSheet } from 'react-native'
-import { GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, CELL_HEIGHT, OUTER_THIN_BORDER_WIDTH } from './dimensions'
 import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
 
-export const Styles = StyleSheet.create({
-    board: {
-        display: 'flex',
-        height: GAME_BOARD_HEIGHT,
-        width: GAME_BOARD_WIDTH,
-        marginHorizontal: 'auto',
-        backgroundColor: 'white',
-    },
-    gridBorderContainer: {
-        position: 'absolute',
-        height: GAME_BOARD_HEIGHT,
-        width: GAME_BOARD_WIDTH,
-        justifyContent: 'space-between',
-        zIndex: 1,
-    },
-    verticalBars: {
-        height: GAME_BOARD_HEIGHT,
-        width: 1,
-        backgroundColor: 'rgba(0, 0, 0, .9)',
-    },
-    horizontalBars: {
-        width: GAME_BOARD_WIDTH,
-        height: 1,
-        backgroundColor: 'rgba(0, 0, 0, .9)',
-    },
-    rowStyle: {
-        display: 'flex',
-        flexDirection: 'row',
-        flex: 1,
-        width: '100%',
-    },
-    cellContainer: {
-        flex: 1,
-        height: '100%',
-    },
+// TODO: think of a better color scheme mechanism
+export const COLOR_SCHEME_STYLES = {
     thickBorder: {
         backgroundColor: 'black',
     },
@@ -68,4 +34,45 @@ export const Styles = StyleSheet.create({
     clueNumColor: {
         color: 'rgb(12, 25, 22)',
     },
-})
+}
+
+export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {
+    return StyleSheet.create({
+        board: {
+            display: 'flex',
+            height: GAME_BOARD_HEIGHT,
+            width: GAME_BOARD_WIDTH,
+            marginHorizontal: 'auto',
+            backgroundColor: 'white',
+        },
+        gridBorderContainer: {
+            position: 'absolute',
+            height: GAME_BOARD_HEIGHT,
+            width: GAME_BOARD_WIDTH,
+            justifyContent: 'space-between',
+            zIndex: 1,
+        },
+        verticalBars: {
+            height: GAME_BOARD_HEIGHT,
+            width: 1,
+            backgroundColor: 'rgba(0, 0, 0, .9)',
+        },
+        horizontalBars: {
+            width: GAME_BOARD_WIDTH,
+            height: 1,
+            backgroundColor: 'rgba(0, 0, 0, .9)',
+        },
+        rowStyle: {
+            display: 'flex',
+            flexDirection: 'row',
+            flex: 1,
+            width: '100%',
+        },
+        cellContainer: {
+            flex: 1,
+            height: '100%',
+        },
+        ...COLOR_SCHEME_STYLES
+    })
+    
+}
