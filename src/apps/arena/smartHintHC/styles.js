@@ -1,20 +1,8 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { fonts } from '../../../resources/fonts/font'
 
-const windowHeight = Dimensions.get('window').height
 const FOOTER_HEIGHT = 24
 export const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        backgroundColor: 'white',
-        padding: 16,
-        height: windowHeight / 4,
-    },
-    containerHeightWithFooter: {
-        height: windowHeight / 4 + FOOTER_HEIGHT,
-    },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -48,3 +36,14 @@ export const styles = StyleSheet.create({
     },
     footerButtonText: { color: '#4088da' },
 })
+
+export const getContainerStyles = (windowHeight, displayFooter) => {
+    return {
+        width: '100%',
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        backgroundColor: 'white',
+        padding: 16,
+        height: windowHeight / 4 + (displayFooter ? FOOTER_HEIGHT : 0),
+    }
+}

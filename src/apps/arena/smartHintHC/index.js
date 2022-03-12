@@ -1,15 +1,15 @@
 import React, { useRef } from 'react'
-import { styles } from './styles'
+import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Button } from '../../../components/button'
 import { noOperationFunction } from '../../../utils/util'
+import { withDimensions } from '../../../hocs/withDimensions'
 
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
-
-const _SmartHintHC = ({
+const SmartHintHC_ = ({
     title = '',
     logic = '',
     parentHeight,
@@ -20,6 +20,7 @@ const _SmartHintHC = ({
     prevHintClick = noOperationFunction,
     currentHintNum,
     totalHintsCount,
+    windowHeight,
 }) => {
     const smartHintHCRef = useRef(null)
 
@@ -33,6 +34,8 @@ const _SmartHintHC = ({
 
     const displayFooter = displayNextButton || displayPrevButton
 
+    const containerStyles = getContainerStyles(windowHeight, displayFooter)
+
     return (
         <BottomDragger
             ref={smartHintHCRef}
@@ -42,7 +45,7 @@ const _SmartHintHC = ({
             bottomMostPositionRatio={1.1} // TODO: we can make it a default i guess
             animateBackgroundOverlayOnClose={false}
         >
-            <View style={[styles.container, displayFooter ? styles.containerHeightWithFooter : null]}>
+            <View style={containerStyles}>
                 <View style={styles.headerContainer}>
                     <View style={styles.hintTitleContainer}>
                         <Text style={styles.hintTitle}>{title}</Text>
@@ -80,4 +83,4 @@ const _SmartHintHC = ({
     )
 }
 
-export default React.memo(_SmartHintHC)
+export default React.memo(withDimensions(SmartHintHC_))
