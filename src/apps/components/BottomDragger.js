@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useImperativeHandle, useRef, useCallback } from 'react'
-import { View, Text, Animated, StyleSheet, PanResponder, Dimensions } from 'react-native'
+import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
+import { View, Text, Animated, StyleSheet, PanResponder } from 'react-native'
 import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
+import { withDimensions } from '../../hocs/withDimensions'
 
 const ANIMATION_DURATION = 150
 let HEADER_HEIGHT = 50
@@ -10,7 +11,6 @@ const RELEASE_LIMIT_FOR_AUTO_SCROLL = 20
 const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = 0.9
 const XXSMALL_SIZE = 8
 const XSMALL_SPACE = 4
-const WINDOW_HEIGHT = Dimensions.get('window').height
 export const HC_OVERLAY_BG_COLOR = 'rgba(0, 0, 0, .8)'
 const styles = StyleSheet.create({
     slidingParentContainer: {
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
 })
 
 const BottomDragger_ = React.forwardRef((props, ref) => {
+    
     const {
         parentHeight,
         headerText = '',
@@ -61,11 +62,12 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         stopBackgroundClickClose = false,
         showBackgroundOverlay = true,
         animateBackgroundOverlayOnClose = true,
+        windowHeight,
     } = props
 
     // consider children as full screen height later on set it to it's real height
     // when we receive event callback for height
-    const [childrenHeight, setChildrenHeight] = useState(WINDOW_HEIGHT)
+    const [childrenHeight, setChildrenHeight] = useState(windowHeight)
 
     if (!headerText) HEADER_HEIGHT = 0 // header won't be present in this case
 
@@ -235,4 +237,4 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     )
 })
 
-export const BottomDragger = React.memo(BottomDragger_)
+export const BottomDragger = React.memo(withDimensions(BottomDragger_))
