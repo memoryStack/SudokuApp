@@ -10,7 +10,7 @@ import {
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { shouldSaveGameState, getNumberOfSolutions } from '../utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
-import { usePrevious } from '../../../utils/customHooks'
+import { usePrevious } from '../../../utils/customHooks/commonUtility'
 import { getKey } from '../../../utils/storage'
 import { cacheGameData, GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import {

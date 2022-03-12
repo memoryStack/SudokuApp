@@ -27,7 +27,7 @@ import { noOperationFunction, rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
-import { useToggle } from '../../utils/customHooks'
+import { useToggle } from '../../utils/customHooks/commonUtility'
 import { HintsMenu } from './hintsMenu'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
