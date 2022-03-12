@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
-import { View, Animated, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Animated, Text, StyleSheet } from 'react-native'
 import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
@@ -29,9 +29,8 @@ import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 import { useToggle } from '../../utils/customHooks'
 import { HintsMenu } from './hintsMenu'
+import { withDimensions } from '../../hocs/withDimensions'
 
-const { width: windowWidth } = Dimensions.get('window')
-export const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
 const HEADER_ICON_DIMENSION = 32
@@ -41,14 +40,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: 'white',
-    },
-    newGameButtonContainer: {
-        alignSelf: 'flex-start',
-        height: 40,
-        width: 120,
-        marginTop: 16,
-        marginBottom: 8,
-        marginLeft: windowWidth * 0.03,
     },
     refereeContainer: {
         display: 'flex',
@@ -103,7 +94,11 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = ({ navigation, route }) => {
+const Arena_ = ({ navigation, route, ...rest }) => {
+
+    const { windowWidth } = rest
+    const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
+
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
     const { gameState, showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } =
@@ -359,4 +354,4 @@ const Arena_ = ({ navigation, route }) => {
     )
 }
 
-export const Arena = React.memo(Arena_)
+export const Arena = React.memo(withDimensions(Arena_))
