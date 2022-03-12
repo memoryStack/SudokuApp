@@ -1,12 +1,11 @@
 import React, { useRef } from 'react'
 import { getContainerStyles, styles } from './styles'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Button } from '../../../components/button'
 import { noOperationFunction } from '../../../utils/util'
-import { withDimensions } from '../../../hocs/withDimensions'
 
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({
@@ -20,9 +19,11 @@ const SmartHintHC_ = ({
     prevHintClick = noOperationFunction,
     currentHintNum,
     totalHintsCount,
-    windowHeight,
+    
 }) => {
     const smartHintHCRef = useRef(null)
+
+    const { height: windowHeight } = useWindowDimensions()
 
     const closeView = () => smartHintHCRef.current && smartHintHCRef.current.closeDragger(true)
 
@@ -83,4 +84,4 @@ const SmartHintHC_ = ({
     )
 }
 
-export default React.memo(withDimensions(SmartHintHC_))
+export default React.memo(SmartHintHC_)

@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
-import { View, Text, Animated, StyleSheet, PanResponder } from 'react-native'
+import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions } from 'react-native'
 import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
-import { withDimensions } from '../../hocs/withDimensions'
 
 const ANIMATION_DURATION = 150
 let HEADER_HEIGHT = 50
@@ -62,11 +61,11 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         stopBackgroundClickClose = false,
         showBackgroundOverlay = true,
         animateBackgroundOverlayOnClose = true,
-        windowHeight,
     } = props
 
     // consider children as full screen height later on set it to it's real height
     // when we receive event callback for height
+    const { height: windowHeight } = useWindowDimensions()
     const [childrenHeight, setChildrenHeight] = useState(windowHeight)
 
     if (!headerText) HEADER_HEIGHT = 0 // header won't be present in this case
@@ -237,4 +236,4 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     )
 })
 
-export const BottomDragger = React.memo(withDimensions(BottomDragger_))
+export const BottomDragger = React.memo(BottomDragger_)

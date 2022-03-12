@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
-import { View, Animated, Text, StyleSheet } from 'react-native'
+import { View, Animated, Text, StyleSheet, useWindowDimensions } from 'react-native'
 import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
@@ -29,7 +29,6 @@ import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 import { useToggle } from '../../utils/customHooks'
 import { HintsMenu } from './hintsMenu'
-import { withDimensions } from '../../hocs/withDimensions'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -94,9 +93,10 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = ({ navigation, route, ...rest }) => {
+const Arena_ = ({ navigation, route }) => {
 
-    const { windowWidth } = rest
+    const { width: windowWidth } = useWindowDimensions()
+
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 
     const [pageHeight, setPageHeight] = useState(0)
@@ -354,4 +354,4 @@ const Arena_ = ({ navigation, route, ...rest }) => {
     )
 }
 
-export const Arena = React.memo(withDimensions(Arena_))
+export const Arena = React.memo(Arena_)
