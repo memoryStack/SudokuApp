@@ -131,7 +131,7 @@ const useManageGame = route => {
             console.log('@@@@@@ difficulty level', difficultyLevel)
             if (!difficultyLevel) return
             // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
-            const minClues = 70 // LEVELS_CLUES_INFO[difficultyLevel]
+            const minClues = LEVELS_CLUES_INFO[difficultyLevel]
             // now as i changed the position of "timeTaken" reading after the puzzle has
             // been generated looks like that puzzle algo was never a big issue. it was just the setStates latency
             // TODO: Research on this setState issue.
