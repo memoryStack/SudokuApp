@@ -111,6 +111,7 @@ const Arena_ = ({ navigation, route }) => {
         selectedCell,
         selectedCellMainValue,
         onCellClick,
+        mainNumbersInstancesCount,
         smartHintInfo: {
             show: showSmartHint,
             info: {
@@ -311,7 +312,7 @@ const Arena_ = ({ navigation, route }) => {
                     />
                 </View>
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel gameState={gameState} />
+                    <Inputpanel gameState={gameState} mainNumbersInstancesCount={mainNumbersInstancesCount} />
                 </View>
                 {pageHeight && showNextGameMenu ? (
                     <NextGameMenu parentHeight={pageHeight} onMenuClosed={onNewGameMenuClosed} />

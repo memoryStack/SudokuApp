@@ -103,6 +103,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
     const [selectedCell, selectCell] = useState(initialSelectedCell)
     const [smartHintInfo, setSmartHintData] = useState({ show: false, hints: [], currentHintNum: 0 })
     const selectedCellMainValue = useRef(mainNumbers[selectedCell.row][selectedCell.col].value)
+    const [mainNumbersInstancesCount, setMainNumbersInstancesCount] = useState(new Array(10).fill(0))
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
         movesStack.current = moves
@@ -230,6 +231,26 @@ const useGameBoard = (gameState, pencilState, hints) => {
             removeListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
         }
     }, [mainNumbers, notesInfo, selectedCell, pencilState])
+
+    useEffect(() => {
+        const instancesCountAfterUpdate = new Array(10).fill(0)
+        for (let row=0;row<9;row++) {
+            for (let col=0;col<9;col++) {
+                const value = mainNumbers[row][col].value
+                instancesCountAfterUpdate[value]++;
+            }
+        }
+
+        let areEqual = true
+        for (let i=1;i<=9 && areEqual;i++) {
+            if (mainNumbersInstancesCount[i] !== instancesCountAfterUpdate[i]) {
+                areEqual = false
+            }
+        }
+
+        if (!areEqual) setMainNumbersInstancesCount(instancesCountAfterUpdate)
+
+    }, [mainNumbers, mainNumbersInstancesCount])
 
     // EVENTS.UNDO_CLICKED
     // TODO: i think it would be better if when a mainValue is inserted in the cell
@@ -476,6 +497,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
         selectedCell,
         selectedCellMainValue: selectedCellMainValue.current,
         onCellClick,
+        mainNumbersInstancesCount,
         smartHintInfo: {
             show: smartHintInfo.show,
             info: smartHintInfo.currentHintNum ? smartHintInfo.hints[smartHintInfo.currentHintNum - 1] : {},

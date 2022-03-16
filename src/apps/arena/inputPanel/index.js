@@ -8,7 +8,7 @@ import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
 
 const CLOSE_ICON_DIMENSION = 28
-const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
+const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
     const styles = useMemo(() => {
@@ -20,7 +20,9 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
         emit(eventsPrefix + EVENTS.INPUT_NUMBER_CLICKED, { number })
     }
 
-    const inputNumber = number => {
+    const areAllInstancesFilled = (number) => mainNumbersInstancesCount[number] === 9
+
+    const renderInputNumber = number => {
         return (
             <Touchable
                 style={styles.numberButtonContainer}
@@ -28,7 +30,7 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
                 touchable={TouchableTypes.opacity}
                 key={`${number}`}
             >
-                <Text style={styles.textStyle}>{number}</Text>
+                <Text style={styles.textStyle}>{areAllInstancesFilled(number) ? '' : number}</Text>
             </Touchable>
         )
     }
@@ -49,14 +51,14 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState }) => {
                 <CloseIcon height={CLOSE_ICON_DIMENSION} width={CLOSE_ICON_DIMENSION} fill={'rgb(40, 90, 163)'} />
             </Touchable>
         )
-    }
+    }    
 
     const getPanelView = () => {
         const rows = []
 
         let row = []
         for (let i = 1; i <= 9; i++) {
-            row.push(inputNumber(i))
+            row.push(renderInputNumber(i))
             if (i === 5) {
                 rows.push(
                     <View key={'rowOne'} style={styles.rowContainer}>
