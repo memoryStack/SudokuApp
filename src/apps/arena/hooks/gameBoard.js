@@ -234,22 +234,21 @@ const useGameBoard = (gameState, pencilState, hints) => {
 
     useEffect(() => {
         const instancesCountAfterUpdate = new Array(10).fill(0)
-        for (let row=0;row<9;row++) {
-            for (let col=0;col<9;col++) {
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
                 const value = mainNumbers[row][col].value
-                instancesCountAfterUpdate[value]++;
+                instancesCountAfterUpdate[value]++
             }
         }
 
         let areEqual = true
-        for (let i=1;i<=9 && areEqual;i++) {
+        for (let i = 1; i <= 9 && areEqual; i++) {
             if (mainNumbersInstancesCount[i] !== instancesCountAfterUpdate[i]) {
                 areEqual = false
             }
         }
 
         if (!areEqual) setMainNumbersInstancesCount(instancesCountAfterUpdate)
-
     }, [mainNumbers, mainNumbersInstancesCount])
 
     // EVENTS.UNDO_CLICKED

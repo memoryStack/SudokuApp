@@ -111,6 +111,8 @@ const Board_ = ({
                                 gameState={gameState}
                                 displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
                                 smartHintData={smartHintData}
+                                selectedMainNumber={selectedCellMainValue}
+                                showSmartHint={showSmartHint}
                             />
                         </View>
                     )

@@ -25,6 +25,8 @@ const Cell_ = ({
     gameState,
     displayCrossIcon = false,
     smartHintData,
+    selectedMainNumber = 0,
+    showSmartHint,
 }) => {
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
@@ -39,8 +41,14 @@ const Cell_ = ({
     }
 
     const getNotesFontColor = noteValue => {
-        const { notesToHighlightData: { [`${noteValue}`]: { fontColor = null } = {} } = {} } = smartHintData || {}
-        return fontColor
+        if (showSmartHint) {
+            const { notesToHighlightData: { [`${noteValue}`]: { fontColor = null } = {} } = {} } = smartHintData || {}
+            return fontColor
+        }
+        // remove it later or make it better for practice sessions
+        if (__DEV__ && noteValue === selectedMainNumber) {
+            return 'red'
+        }
     }
 
     const getCellNotes = () => {
@@ -48,7 +56,7 @@ const Cell_ = ({
             const cellNotesRow = looper.map(col => {
                 const noteNum = row * 3 + col
                 const { show, noteValue } = cellNotes[noteNum] || {}
-                const noteFontColor = show && smartHintData ? getNotesFontColor(noteValue) : null
+                const noteFontColor = show ? getNotesFontColor(noteValue) : null
                 return (
                     <View key={`${noteNum}`} style={styles.noteContainer}>
                         <Text

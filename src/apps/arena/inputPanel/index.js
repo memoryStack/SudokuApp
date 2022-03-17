@@ -21,7 +21,7 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount }
         emit(eventsPrefix + EVENTS.INPUT_NUMBER_CLICKED, { number })
     }
 
-    const areAllInstancesFilled = (number) => mainNumbersInstancesCount[number] === 9
+    const areAllInstancesFilled = number => mainNumbersInstancesCount[number] === 9
 
     const renderInputNumber = number => {
         const allInstancesFilled = areAllInstancesFilled(number)
@@ -53,7 +53,7 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount }
                 <CloseIcon height={CLOSE_ICON_DIMENSION} width={CLOSE_ICON_DIMENSION} fill={'rgb(40, 90, 163)'} />
             </Touchable>
         )
-    }    
+    }
 
     const getPanelView = () => {
         const rows = []

@@ -67,14 +67,17 @@ const initBoardData = () => {
     // have hidden tripple
     // const str = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
 
-    // for (let i = 0; i < str.length; i++) {
-    //     const row = Math.floor(i / 9)
-    //     const col = i % 9
-    //     if (str[i]) {
-    //         mainNumbers[row][col].value = parseInt(str[i], 10)
-    //         mainNumbers[row][col].isClue = 1
-    //     }
-    // }
+    // have x-wing
+    const str = '600095007540007100002800050800000090000078000030000008050002300304500020920030504'
+
+    for (let i = 0; i < str.length; i++) {
+        const row = Math.floor(i / 9)
+        const col = i % 9
+        if (str[i]) {
+            mainNumbers[row][col].value = parseInt(str[i], 10)
+            mainNumbers[row][col].isClue = 1
+        }
+    }
 
     const notesInfo = new Array(9)
     for (let i = 0; i < 9; i++) {
