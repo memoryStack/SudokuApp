@@ -6,6 +6,7 @@ import { GAME_STATE, EVENTS } from '../../../resources/constants'
 import { emit } from '../../../utils/GlobalEventBus'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
+import { noOperationFunction } from '../../../utils/util'
 
 const CLOSE_ICON_DIMENSION = 28
 const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount }) => {
@@ -23,14 +24,15 @@ const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount }
     const areAllInstancesFilled = (number) => mainNumbersInstancesCount[number] === 9
 
     const renderInputNumber = number => {
+        const allInstancesFilled = areAllInstancesFilled(number)
         return (
             <Touchable
                 style={styles.numberButtonContainer}
-                onPress={() => onNumberClicked(number)}
+                onPress={!allInstancesFilled ? () => onNumberClicked(number) : noOperationFunction}
                 touchable={TouchableTypes.opacity}
                 key={`${number}`}
             >
-                <Text style={styles.textStyle}>{areAllInstancesFilled(number) ? '' : number}</Text>
+                <Text style={styles.textStyle}>{allInstancesFilled ? '' : number}</Text>
             </Touchable>
         )
     }
