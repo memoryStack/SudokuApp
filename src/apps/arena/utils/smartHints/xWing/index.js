@@ -1,3 +1,4 @@
+import { getHouseCells } from '../../houseCells'
 import { areSameColCells, areSameRowCells, isCellEmpty } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { getUIHighlightData } from './uiHighlightData'
@@ -46,6 +47,29 @@ const areHostCells = (firstHouseCells, secondHouseCells) => {
     return true
 }
 
+// TODO: change the name.
+// this func checks if the X-Wing will remove some notes in the cross-house type or not
+const removesSomeNotes = ({ cells, candidate, type: houseType }, notesData) => {
+    const firstHouseCells = cells[0]
+
+    // get cross houses cells
+    let result = true
+    firstHouseCells.forEach(({ row, col }) => {
+        const crossHouseType = houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW
+        const houseNum = crossHouseType === HOUSE_TYPE.ROW ? row : col
+        const crossHouseCells = getHouseCells(crossHouseType, houseNum)
+
+        let candidateInstancesCount = 0
+        crossHouseCells.forEach(({ row, col }) => {
+            if (notesData[row][col][candidate - 1].show) candidateInstancesCount++
+        })
+
+        if (candidateInstancesCount < 3) result = false
+    })
+
+    return result
+}
+
 // naming
 const xxx_findCandidate = (candidatesInFirstHouse, candidatesInSecondHouse, houseType) => {
     const result = []
@@ -53,6 +77,7 @@ const xxx_findCandidate = (candidatesInFirstHouse, candidatesInSecondHouse, hous
         const firstHouseCells = candidatesInFirstHouse[candidate]
         const secondHouseCells = candidatesInSecondHouse[candidate]
         if (firstHouseCells && secondHouseCells && areHostCells(firstHouseCells, secondHouseCells)) {
+            // also check if these host cells make an impact or not ??
             result.push({
                 cells: [firstHouseCells, secondHouseCells],
                 candidate: parseInt(candidate, 10),
@@ -86,7 +111,14 @@ export const getXWing = (mainNumbers, notesData) => {
                 )
                 deleteInvalidCandidates(candidatesInSecondHouse)
 
-                result.push(...xxx_findCandidate(candidatesInFirstHouse, candidatesInSecondHouse, houseType))
+                let xWingsInHouses = xxx_findCandidate(
+                    candidatesInFirstHouse,
+                    candidatesInSecondHouse,
+                    houseType,
+                ).filter(xWing => {
+                    return removesSomeNotes(xWing, notesData)
+                })
+                result.push(...xWingsInHouses)
             }
         }
     })

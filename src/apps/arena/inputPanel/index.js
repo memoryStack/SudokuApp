@@ -9,7 +9,7 @@ import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElem
 import { noOperationFunction } from '../../../utils/util'
 
 const CLOSE_ICON_DIMENSION = 28
-const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount }) => {
+const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount = new Array(10).fill(0) }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
     const styles = useMemo(() => {
