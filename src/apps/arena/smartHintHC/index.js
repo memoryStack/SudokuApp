@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
@@ -23,6 +23,22 @@ const SmartHintHC_ = ({
     const smartHintHCRef = useRef(null)
 
     const { height: windowHeight } = useWindowDimensions()
+
+    const scrollViewRef = useRef(null)
+    const hintsScrollPositions = useRef({})
+
+    useEffect(() => {
+        if (hintsScrollPositions.current && hintsScrollPositions.current[currentHintNum] === undefined) {
+            scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true })
+        } else {
+            const previousScrollPosition = hintsScrollPositions.current && hintsScrollPositions.current[currentHintNum]
+            scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: previousScrollPosition, animated: true })
+        }
+    }, [currentHintNum])
+
+    const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } } = {} } = {}) => {
+        if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
+    }
 
     const closeView = () => smartHintHCRef.current && smartHintHCRef.current.closeDragger(true)
 
@@ -57,7 +73,7 @@ const SmartHintHC_ = ({
                         <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
                     </Touchable>
                 </View>
-                <ScrollView style={styles.logicContainer}>
+                <ScrollView style={styles.logicContainer} ref={scrollViewRef} onScroll={handleOnScroll}>
                     <Text style={styles.hintLogicText}>{logic}</Text>
                 </ScrollView>
                 {displayFooter ? (
