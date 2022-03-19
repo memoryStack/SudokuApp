@@ -135,19 +135,24 @@ const Home_ = ({ navigation }) => {
         )
     }
 
+    const renderNewGameMenu = () => {
+        if (!(pageHeight && showNextGameMenu)) return null
+        return (
+            <NextGameMenu
+                screenName={SCREEN_NAME.HOME}
+                parentHeight={pageHeight}
+                menuItemClick={handleMenuItemClicked}
+                onMenuClosed={onNewGameMenuClosed}
+            />
+        )
+    }
+
     return (
         <View style={styles.container} onLayout={onParentLayout}>
             {renderAppIcon()}
             {renderSudokuText()}
             {renderPlayButton()}
-            {pageHeight && showNextGameMenu ? (
-                <NextGameMenu
-                    screenName={SCREEN_NAME.HOME}
-                    parentHeight={pageHeight}
-                    menuItemClick={handleMenuItemClicked}
-                    onMenuClosed={onNewGameMenuClosed}
-                />
-            ) : null}
+            {renderNewGameMenu()}
         </View>
     )
 }

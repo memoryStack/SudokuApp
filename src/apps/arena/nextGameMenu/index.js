@@ -43,15 +43,17 @@ const styles = StyleSheet.create({
 // TODO: find a good icon for this resume option
 const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClosed }) => {
     const nextGameMenuRef = useRef(null)
-    const [showResumeOption, setShowResumeOption] = useState(false)
+
+    const [pendingGame, setPendingGame] = useState({ checkedStatus: false, available: false })
 
     useEffect(() => {
         if (screenName !== SCREEN_NAME.HOME) return
         previousInactiveGameExists()
-            .then(showResume => {
-                if (showResume) setShowResumeOption(showResume)
+            .then(pendingGameAvailable => {
+                setPendingGame({ available: pendingGameAvailable, checkedStatus: true })
             })
             .catch(error => {
+                setPendingGame(pendingGame => ({ ...pendingGame, checkedStatus: true }))
                 __DEV__ && console.log(error)
             })
     }, [screenName])
@@ -145,7 +147,7 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
                     <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
                     <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
                 </Touchable>
-                {screenName === SCREEN_NAME.HOME && showResumeOption ? (
+                {screenName === SCREEN_NAME.HOME && pendingGame.available ? (
                     <Touchable
                         key={RESUME}
                         style={styles.levelContainer}
@@ -159,6 +161,8 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
             </View>
         )
     }
+
+    if (!pendingGame.checkedStatus) return null
 
     return (
         <BottomDragger
