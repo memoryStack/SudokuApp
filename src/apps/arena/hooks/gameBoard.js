@@ -5,6 +5,7 @@ import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol, cons
 import { duplicacyPresent } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { getSmartHint } from '../utils/smartHint'
+import { NO_HINTS_FOUND_POPUP_TEXT } from '../utils/smartHints/constants'
 
 const initBoardData = () => {
     const movesStack = []
@@ -422,6 +423,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
         })
     }, [])
 
+    // outdated func
     useEffect(() => {
         const handler = () => {
             return
@@ -444,6 +446,10 @@ const useGameBoard = (gameState, pencilState, hints) => {
         return () => removeListener(EVENTS.HINT_CLICKED, handler)
     }, [mainNumbers, notesInfo])
 
+    const getNoHintsFoundMsg = id => {
+        return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
+    }
+
     useEffect(() => {
         const handler = ({ id }) => {
             getSmartHint(mainNumbers, notesInfo, id)
@@ -452,7 +458,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
                     if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })
                     else {
                         emit(EVENTS.SHOW_SNACK_BAR, {
-                            msg: 'no hints found. try filling some more guesses in cells with pencil and then try again',
+                            msg: getNoHintsFoundMsg(id),
                             visibleTime: 5000,
                         })
                     }

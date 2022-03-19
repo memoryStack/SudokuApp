@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'

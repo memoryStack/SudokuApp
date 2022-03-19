@@ -71,16 +71,16 @@ const initBoardData = () => {
     // const str = '600095007540007100002800050800000090000078000030000008050002300304500020920030504'
 
     // have x-wing with no notes to remove
-    const str = '090008170000670002100590400904280001080016050761904080005009000049100025000000849'
+    // const str = '090008170000670002100590400904280001080016050761904080005009000049100025000000849'
 
-    for (let i = 0; i < str.length; i++) {
-        const row = Math.floor(i / 9)
-        const col = i % 9
-        if (str[i]) {
-            mainNumbers[row][col].value = parseInt(str[i], 10)
-            mainNumbers[row][col].isClue = 1
-        }
-    }
+    // for (let i = 0; i < str.length; i++) {
+    //     const row = Math.floor(i / 9)
+    //     const col = i % 9
+    //     if (str[i]) {
+    //         mainNumbers[row][col].value = parseInt(str[i], 10)
+    //         mainNumbers[row][col].isClue = 1
+    //     }
+    // }
 
     const notesInfo = new Array(9)
     for (let i = 0; i < 9; i++) {

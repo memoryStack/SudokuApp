@@ -89,6 +89,17 @@ const HINTS_MENU_ITEMS = [
     },
 ]
 
+const NO_HINTS_FOUND_POPUP_TEXT = {
+    [HINTS_IDS.NAKED_SINGLE]: 'naked singles',
+    [HINTS_IDS.HIDDEN_SINGLE]: 'hidden singles',
+    [HINTS_IDS.NAKED_DOUBLE]: 'naked doubles',
+    [HINTS_IDS.HIDDEN_DOUBLE]: 'hidden doubles',
+    [HINTS_IDS.NAKED_TRIPPLE]: 'naked tripples',
+    [HINTS_IDS.HIDDEN_TRIPPLE]: 'hidden tripples',
+    [HINTS_IDS.X_WING]: 'x-wings',
+    [HINTS_IDS.ALL]: 'hints',
+}
+
 export {
     NAKED_SINGLE_TYPES,
     HIDDEN_SINGLE_TYPES,
@@ -99,4 +110,5 @@ export {
     HINTS_MENU_ITEMS,
     HINTS_IDS,
     INDEPENDENT_HINTS_MENU_ITEMS,
+    NO_HINTS_FOUND_POPUP_TEXT,
 }
