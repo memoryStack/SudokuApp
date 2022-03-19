@@ -1,6 +1,6 @@
 // how to name the file so that xWing prefix doesn't need to be there ??
 
-import { getXWing } from '.'
+import { getAllXWings } from '.'
 import { HOUSE_TYPE } from '../constants'
 
 test('perfect xWing', () => {
@@ -36,5 +36,5 @@ test('perfect xWing', () => {
             type: HOUSE_TYPE.ROW,
         },
     ]
-    expect(getXWing(mainNumbers, notesData)).toStrictEqual(expectedXWings)
+    expect(getAllXWings(mainNumbers, notesData)).toStrictEqual(expectedXWings)
 })

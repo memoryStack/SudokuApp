@@ -3,7 +3,6 @@ import { areSameColCells, areSameRowCells, isCellEmpty } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { getUIHighlightData } from './uiHighlightData'
 
-// houseType will be row or col only for the current use case
 const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
     const result = []
     for (let cellNo = 0; cellNo < 9; cellNo++) {
@@ -14,8 +13,7 @@ const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
     return result
 }
 
-// TODO: should we test helper funcs like this as well in TDD ??
-const getCandidatesOccurencesInHouse = (houseNum, houseType, notesData, mainNumbers) => {
+const getAllCandidatesOccurencesInHouse = (houseNum, houseType, notesData, mainNumbers) => {
     const emptyCellsInHouse = getEmptyCellsInHouse(houseNum, houseType, mainNumbers)
     const result = {}
     emptyCellsInHouse.forEach(cell => {
@@ -31,53 +29,54 @@ const getCandidatesOccurencesInHouse = (houseNum, houseType, notesData, mainNumb
 }
 
 const deleteInvalidCandidates = candidatesOccurences => {
+    const HOUSE_OCCURENCES_FOR_VALID_CANDIDATE = 2
     for (let candidate = 1; candidate <= 9; candidate++) {
-        if (candidatesOccurences[candidate] && candidatesOccurences[candidate].length !== 2)
+        if (
+            candidatesOccurences[candidate] &&
+            candidatesOccurences[candidate].length !== HOUSE_OCCURENCES_FOR_VALID_CANDIDATE
+        )
             delete candidatesOccurences[candidate]
     }
 }
 
-// we will receive two houses cells and checking if these 4 cells make a X-Wing or not
-const areHostCells = (firstHouseCells, secondHouseCells) => {
+const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+
+const removableNotesInCrossHouse = ({ cells, candidate, type: houseType }, notesData) => {
+    // TODO: change this variable name. too long
+    const MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVING_XWING = 3
+
+    const anyCellOfEachHouse = cells[0]
+    return anyCellOfEachHouse
+        .map(({ row, col }) => {
+            const crossHouseType = getCrossHouseType(houseType)
+            const crossHouseNum = crossHouseType === HOUSE_TYPE.ROW ? row : col
+            const crossHouseCells = getHouseCells(crossHouseType, crossHouseNum)
+
+            let candidateInstancesCount = 0
+            crossHouseCells.forEach(({ row, col }) => {
+                if (notesData[row][col][candidate - 1].show) candidateInstancesCount++
+            })
+
+            return candidateInstancesCount >= MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVING_XWING
+        })
+        .some(removableNotesPresent => removableNotesPresent)
+}
+
+const areXWingCells = (firstHouseCells, secondHouseCells) => {
     for (let i = 0; i < firstHouseCells.length; i++) {
-        // TODO: better naming
-        const cellsArray = [firstHouseCells[i], secondHouseCells[i]]
-        if (!(areSameRowCells(cellsArray) || areSameColCells(cellsArray))) return false
+        const cellsPair = [firstHouseCells[i], secondHouseCells[i]]
+        const sameLevelVerticallyOrHorizontally = areSameRowCells(cellsPair) || areSameColCells(cellsPair)
+        if (!sameLevelVerticallyOrHorizontally) return false
     }
     return true
 }
 
-// TODO: change the name.
-// this func checks if the X-Wing will remove some notes in the cross-house type or not
-const removesSomeNotes = ({ cells, candidate, type: houseType }, notesData) => {
-    const firstHouseCells = cells[0]
-
-    // get cross houses cells
-    let result = true
-    firstHouseCells.forEach(({ row, col }) => {
-        const crossHouseType = houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW
-        const houseNum = crossHouseType === HOUSE_TYPE.ROW ? row : col
-        const crossHouseCells = getHouseCells(crossHouseType, houseNum)
-
-        let candidateInstancesCount = 0
-        crossHouseCells.forEach(({ row, col }) => {
-            if (notesData[row][col][candidate - 1].show) candidateInstancesCount++
-        })
-
-        if (candidateInstancesCount < 3) result = false
-    })
-
-    return result
-}
-
-// naming
-const xxx_findCandidate = (candidatesInFirstHouse, candidatesInSecondHouse, houseType) => {
+const findAllXWingsInHousesPair = (candidatesInFirstHouse, candidatesInSecondHouse, houseType) => {
     const result = []
     Object.keys(candidatesInFirstHouse).forEach(candidate => {
         const firstHouseCells = candidatesInFirstHouse[candidate]
         const secondHouseCells = candidatesInSecondHouse[candidate]
-        if (firstHouseCells && secondHouseCells && areHostCells(firstHouseCells, secondHouseCells)) {
-            // also check if these host cells make an impact or not ??
+        if (firstHouseCells && secondHouseCells && areXWingCells(firstHouseCells, secondHouseCells)) {
             result.push({
                 cells: [firstHouseCells, secondHouseCells],
                 candidate: parseInt(candidate, 10),
@@ -88,14 +87,13 @@ const xxx_findCandidate = (candidatesInFirstHouse, candidatesInSecondHouse, hous
     return result
 }
 
-export const getXWing = (mainNumbers, notesData) => {
-    const houseTypes = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
+export const getAllXWings = (mainNumbers, notesData) => {
     const result = []
-
-    houseTypes.forEach(houseType => {
+    const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
+    searchableHouses.forEach(houseType => {
         for (let firstHouseNum = 0; firstHouseNum < 9; firstHouseNum++) {
             for (let secondHouseNum = firstHouseNum + 1; secondHouseNum < 9; secondHouseNum++) {
-                const candidatesInFirstHouse = getCandidatesOccurencesInHouse(
+                const candidatesInFirstHouse = getAllCandidatesOccurencesInHouse(
                     firstHouseNum,
                     houseType,
                     notesData,
@@ -103,7 +101,7 @@ export const getXWing = (mainNumbers, notesData) => {
                 )
                 deleteInvalidCandidates(candidatesInFirstHouse)
 
-                const candidatesInSecondHouse = getCandidatesOccurencesInHouse(
+                const candidatesInSecondHouse = getAllCandidatesOccurencesInHouse(
                     secondHouseNum,
                     houseType,
                     notesData,
@@ -111,13 +109,12 @@ export const getXWing = (mainNumbers, notesData) => {
                 )
                 deleteInvalidCandidates(candidatesInSecondHouse)
 
-                let xWingsInHouses = xxx_findCandidate(
+                const xWingsInHouses = findAllXWingsInHousesPair(
                     candidatesInFirstHouse,
                     candidatesInSecondHouse,
                     houseType,
-                ).filter(xWing => {
-                    return removesSomeNotes(xWing, notesData)
-                })
+                )
+
                 result.push(...xWingsInHouses)
             }
         }
@@ -126,7 +123,10 @@ export const getXWing = (mainNumbers, notesData) => {
     return result
 }
 
-export const getXWingHintData = (mainNumbers, notesData) => {
-    const xWings = getXWing(mainNumbers, notesData)
+export const getXWingHints = (mainNumbers, notesData) => {
+    const xWings = getAllXWings(mainNumbers, notesData).filter(xWing => {
+        return removableNotesInCrossHouse(xWing, notesData)
+    })
+
     return getUIHighlightData(xWings, notesData)
 }
