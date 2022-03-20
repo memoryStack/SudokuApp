@@ -1,0 +1,14 @@
+cd ../
+# TODO: make these inputs configurable or take these from some central place
+if [ "$1" = "p" ]
+then 
+	environmentType="Production"
+elif [ "$1" = "s" ]
+then
+	environmentType="Staging"
+else
+	echo "Error: unknown deployment environment" >&2
+	exit 1
+fi
+appVersionName=$2
+appcenter codepush release-react -a anujabo186-gmail.com/Sudoku -d $environmentType -t $appVersionName
