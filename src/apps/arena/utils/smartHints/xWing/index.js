@@ -39,7 +39,7 @@ const deleteInvalidCandidates = candidatesOccurences => {
     }
 }
 
-const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+export const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
 const removableNotesInCrossHouse = ({ cells, candidate, type: houseType }, notesData) => {
     // TODO: change this variable name. too long
@@ -62,7 +62,7 @@ const removableNotesInCrossHouse = ({ cells, candidate, type: houseType }, notes
         .some(removableNotesPresent => removableNotesPresent)
 }
 
-const areXWingCells = (firstHouseCells, secondHouseCells) => {
+export const areXWingCells = (firstHouseCells, secondHouseCells) => {
     for (let i = 0; i < firstHouseCells.length; i++) {
         const cellsPair = [firstHouseCells[i], secondHouseCells[i]]
         const sameLevelVerticallyOrHorizontally = areSameRowCells(cellsPair) || areSameColCells(cellsPair)
