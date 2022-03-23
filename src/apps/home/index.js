@@ -138,12 +138,7 @@ const Home_ = ({ navigation }) => {
     const renderNewGameMenu = () => {
         if (!(pageHeight && showNextGameMenu)) return null
         return (
-            <NextGameMenu
-                screenName={SCREEN_NAME.HOME}
-                parentHeight={pageHeight}
-                menuItemClick={handleMenuItemClicked}
-                onMenuClosed={onNewGameMenuClosed}
-            />
+            <NextGameMenu screenName={SCREEN_NAME.HOME} parentHeight={pageHeight} menuItemClick={handleMenuItemClicked} onMenuClosed={onNewGameMenuClosed} />
         )
     }
 
