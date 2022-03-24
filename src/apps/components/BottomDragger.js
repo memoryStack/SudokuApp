@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     subView: {
         position: 'absolute',
         width: '100%',
-        zIndex: 1, // had to put this. if i remove this then two sudoku boards were overlapping, which was weird to me.
     },
     clipStyle: {
         height: XSMALL_SPACE,
@@ -105,10 +104,11 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     useEffect(() => {
         const bottomMostPosition = parentHeight * bottomMostPositionRatio
         const topMostPosition = parentHeight - (childrenHeight + HEADER_HEIGHT)
-        const transformValue = new Animated.Value(bottomMostPosition)
+        const transformValue = new Animated.Value(isFullView ? topMostPosition : bottomMostPosition)
         setBottomMostPosition(bottomMostPosition)
         setTopMostPosition(topMostPosition)
         setTransformValue(transformValue)
+
         setTransparentViewOpacityConfig(
             transformValue.interpolate({
                 // this object is duplicated above as well
@@ -116,7 +116,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 outputRange: [1, animateBackgroundOverlayOnClose ? 0 : 1],
             }),
         )
-    }, [parentHeight, childrenHeight])
+    }, [parentHeight, childrenHeight, isFullView])
 
     useEffect(() => {
         setPanResponder(
