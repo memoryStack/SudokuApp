@@ -15,7 +15,7 @@
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/stack": "^6.0.11",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "fast-sudoku-puzzles": "git+https://github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
+    "fast-sudoku-puzzles": "https://memoryStack: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@github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
     "prettier": "^2.4.1",
     "react": "17.0.1",
     "react-native": "0.64.0",
