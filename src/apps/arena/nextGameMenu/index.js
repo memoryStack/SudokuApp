@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClosed }) => {
     const nextGameMenuRef = useRef(null)
 
-    const [pendingGame, setPendingGame] = useState({ checkedStatus: false, available: false })
+    const [pendingGame, setPendingGame] = useState({ checkedStatus: screenName !== SCREEN_NAME.HOME, available: false })
 
     useEffect(() => {
         if (screenName !== SCREEN_NAME.HOME) return
