@@ -8,6 +8,8 @@ import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
+import { useSelector } from 'react-redux'
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 const looper = []
 const bordersLooper = []
@@ -24,9 +26,16 @@ const Board_ = ({
     selectedCell = {},
     selectedCellMainValue = 0,
     onCellClick,
-    showSmartHint,
-    smartHintCellsHighlightInfo = {},
 }) => {
+
+    const {
+        show: showSmartHint,
+        hint: {
+            cellsToFocusData: smartHintCellsHighlightInfo = {}
+        } = {},
+    } = useSelector( getHintHCInfo )
+
+
     const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT } = useBoardElementsDimensions()
 
     const Styles = useMemo(() => {
@@ -145,7 +154,7 @@ const Board_ = ({
     const getBoard = () => {
         let keyCounter = 0
         return (
-            <View style={Styles.board}>
+            <View style={[Styles.board, showSmartHint ? { zIndex: 1 } : null]}>
                 {looper.map(row => renderRow(row, `${keyCounter++}`))}
                 {getGrid('horizontal')}
                 {getGrid('vertical')}

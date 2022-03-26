@@ -128,6 +128,8 @@ const Arena_ = ({ navigation, route }) => {
     //     // onCellClick(smartHintFocusedCell)
     // }
 
+    const { show: showSmartHint } = useSelector(getHintHCInfo)
+
     const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState, showSmartHint)
 
     // for game over halfcard animation
@@ -260,32 +262,20 @@ const Arena_ = ({ navigation, route }) => {
         if (!showHintsMenu) return null
         return <HintsMenu visibilityToggler={setHintsMenuVisibility} />
     }
-
-    // TODO: move it to board component
-    const {
-        show: showSmartHint,
-        hint: {
-            cellsToFocusData
-        } = {},
-    } = useSelector(getHintHCInfo)
     
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
                 {renderRefreeView()}
-                <View style={showSmartHint ? styles.sudokuBoardContainer : null}>
-                    <Board
-                        gameState={gameState}
-                        mainNumbers={mainNumbers}
-                        notesInfo={notesInfo}
-                        selectedCell={selectedCell}
-                        selectedCellMainValue={selectedCellMainValue}
-                        onCellClick={onCellClick}
-                        showSmartHint={showSmartHint}
-                        smartHintCellsHighlightInfo={cellsToFocusData}
-                    />
-                </View>
+                <Board
+                    gameState={gameState}
+                    mainNumbers={mainNumbers}
+                    notesInfo={notesInfo}
+                    selectedCell={selectedCell}
+                    selectedCellMainValue={selectedCellMainValue}
+                    onCellClick={onCellClick}
+                />
                 <View style={styles.cellActionsContainer}>
                     <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onUndoClick} />
                     <Pencil
