@@ -10,6 +10,8 @@ import { invokeDispatch } from '../../../redux/dispatch.helpers'
 import { setHints } from '../store/reducers/smartHintHC.reducers'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { showHints } from '../store/actions/smartHintHC.actions'
+import { addMistake } from '../store/actions/refree.actions'
 
 const initBoardData = () => {
     const movesStack = []
@@ -202,7 +204,10 @@ const useGameBoard = (gameState, pencilState, hints) => {
                 valueType = 'main'
                 mainNumbersDup[row][col].value = number
 
-                if (number !== mainNumbersDup[row][col].solutionValue) emit(EVENTS.MADE_MISTAKE)
+                if (number !== mainNumbersDup[row][col].solutionValue) {
+                    emit(EVENTS.MADE_MISTAKE) // TODO: remove this event
+                    addMistake()
+                }
                 else {
                     notesErasedByMainValue = removeNotesAfterCellFilled(notesInfo, number, selectedCell)
                     if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
@@ -414,10 +419,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
             getSmartHint(mainNumbers, notesInfo, id)
                 .then(hints => {
                     consoleLog('@@@@ hintInfo', JSON.stringify(hints))
-                    if (hints) {
-                        // setSmartHintData({ show: true, hints, currentHintNum: 1 })
-                        invokeDispatch(setHints(hints))
-                    }
+                    if (hints) showHints(hints)
                     else {
                         emit(EVENTS.SHOW_SNACK_BAR, {
                             msg: getNoHintsFoundMsg(id),

@@ -1,6 +1,10 @@
 import { invokeDispatch } from "../../../../redux/dispatch.helpers"
 
-import { removeHints, setNextHint, setPrevHint } from '../reducers/smartHintHC.reducers'
+import { removeHints, setNextHint, setPrevHint, setHints } from '../reducers/smartHintHC.reducers'
+
+export const showHints = (hints) => {
+    invokeDispatch(setHints(hints))
+}
 
 export const clearHints = () => {
     invokeDispatch(removeHints())

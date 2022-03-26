@@ -32,6 +32,7 @@ import { HintsMenu } from './hintsMenu'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import Refree from './refree'
+import { getMistakes } from './store/selectors/refree.selectors'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -131,7 +132,7 @@ const Arena_ = ({ navigation, route }) => {
 
     const { show: showSmartHint } = useSelector(getHintHCInfo)
 
-    const { MISTAKES_LIMIT, mistakes, time, difficultyLevel, onTimerClick } = useReferee(gameState, showSmartHint)
+    const { MISTAKES_LIMIT, time, difficultyLevel, onTimerClick } = useReferee(gameState, showSmartHint)
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
@@ -254,12 +255,13 @@ const Arena_ = ({ navigation, route }) => {
         return <HintsMenu visibilityToggler={setHintsMenuVisibility} />
     }
     
+    const mistakes = useSelector(getMistakes)
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
                 <Refree
-                    mistakes={mistakes}
                     onTimerClick={onTimerClick}
                     maxMistakesLimit={MISTAKES_LIMIT}
                     time={time}

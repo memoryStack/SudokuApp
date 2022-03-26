@@ -1,4 +1,3 @@
-import { consoleLog } from "../../../../utils/util";
 
 const stateHandlers = {
     setHints: (state, action) => {
@@ -13,7 +12,6 @@ const stateHandlers = {
         state.hints = []
     },
     setNextHint: (state, action) => {
-        consoleLog('@@@@@ next clicled')
         state.currentHintNum += 1
     },
     setPrevHint: (state, action) => {

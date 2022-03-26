@@ -3,6 +3,9 @@ import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE } from '../../../resources/const
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { isGameOver } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
+import { updateMistakes } from '../store/actions/refree.actions'
+import { useSelector } from 'react-redux'
+import { getMistakes } from '../store/selectors/refree.selectors'
 
 const MISTAKES_LIMIT = 3
 // TODO: change it from refree to game tracking info
@@ -31,17 +34,18 @@ const useReferee = (gameState, showSmartHint) => {
     const timerId = useRef(null)
     const {
         difficultyLevel: defaultDifficultyLevel,
-        mistakes: defaultMistakes,
         time: defaultTime,
     } = useRef(initRefereeData()).current
-    const [mistakes, setMistakes] = useState(defaultMistakes)
+
+    const mistakes = useSelector(getMistakes)
+
     const [difficultyLevel, setDifficultyLevel] = useState(defaultDifficultyLevel)
     const [time, setTime] = useState(defaultTime)
 
     const setRefereeData = ({ mistakes, difficultyLevel, time }) => {
         setTime(time)
         setDifficultyLevel(difficultyLevel)
-        setMistakes(mistakes)
+        updateMistakes(mistakes)
     }
 
     useEffect(() => {
@@ -68,6 +72,7 @@ const useReferee = (gameState, showSmartHint) => {
         return () => removeListener(EVENTS.RESTART_GAME, handler)
     }, [difficultyLevel])
 
+    // TODO: mistakes needed for caching game data
     useEffect(() => {
         const handler = () => {
             const refereeData = {
@@ -104,14 +109,12 @@ const useReferee = (gameState, showSmartHint) => {
         return () => stopTimer()
     }, [gameState, showSmartHint])
 
-    // TODO: this will be removed
-    // on mistake is made
+    // TODO: this will be removed in future
     useEffect(() => {
         let componentUnmounted = false
         const handler = () => {
             let totalMistakes = mistakes + 1
             if (!componentUnmounted) {
-                setMistakes(totalMistakes)
                 if (totalMistakes === MISTAKES_LIMIT) {
                     // do it after a little delay
                     setTimeout(() => {
@@ -129,7 +132,7 @@ const useReferee = (gameState, showSmartHint) => {
 
     return {
         MISTAKES_LIMIT,
-        mistakes,
+        // mistakes,
         time,
         difficultyLevel,
         onTimerClick,

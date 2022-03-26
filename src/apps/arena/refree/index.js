@@ -1,8 +1,11 @@
 import React from 'react'
 
 import { View, Text, StyleSheet } from 'react-native'
+import { useSelector } from 'react-redux'
 import { fonts } from '../../../resources/fonts/font'
 import withActions from '../../../utils/hocs/withActions'
+import { consoleLog } from '../../../utils/util'
+import { getMistakes } from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 
 const styles = StyleSheet.create({
@@ -21,13 +24,15 @@ const styles = StyleSheet.create({
 })
 
 const _Refree = ({
-    mistakes,
     onTimerClick,
     maxMistakesLimit,
     time,
     difficultyLevel,
     gameState,
 }) => {
+
+    const mistakes = useSelector(getMistakes)
+
     return (
         <View style={styles.refereeContainer}>
             <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${maxMistakesLimit}`}</Text>
