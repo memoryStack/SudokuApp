@@ -9,10 +9,8 @@ export const smartHintHCSlice = createSlice({
   reducers: stateHandlers,
 });
 
-
 export default smartHintHCSlice.reducer;
 
-// Action creators are generated for each case reducer function
 export const {
     setHints,
     removeHints,

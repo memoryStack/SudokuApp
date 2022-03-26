@@ -31,6 +31,7 @@ import { useToggle } from '../../utils/customHooks/commonUtility'
 import { HintsMenu } from './hintsMenu'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
+import Refree from './refree'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -242,16 +243,6 @@ const Arena_ = ({ navigation, route }) => {
         )
     }, [handleBackPress, handleSharePuzzleClick])
 
-    const renderRefreeView = () => {
-        return (
-            <View style={styles.refereeContainer}>
-                <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${MISTAKES_LIMIT}`}</Text>
-                <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
-                <Timer gameState={gameState} time={time} onClick={onTimerClick} />
-            </View>
-        )
-    }
-
     const [showHintsMenu, setHintsMenuVisibility] = useToggle(false)
     useEffect(() => {
         addListener(EVENTS.HINT_CLICKED, setHintsMenuVisibility)
@@ -267,7 +258,14 @@ const Arena_ = ({ navigation, route }) => {
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
-                {renderRefreeView()}
+                <Refree
+                    mistakes={mistakes}
+                    onTimerClick={onTimerClick}
+                    maxMistakesLimit={MISTAKES_LIMIT}
+                    time={time}
+                    difficultyLevel={difficultyLevel}
+                    gameState={gameState}
+                />
                 <Board
                     gameState={gameState}
                     mainNumbers={mainNumbers}

@@ -104,6 +104,7 @@ const useReferee = (gameState, showSmartHint) => {
         return () => stopTimer()
     }, [gameState, showSmartHint])
 
+    // TODO: this will be removed
     // on mistake is made
     useEffect(() => {
         let componentUnmounted = false
