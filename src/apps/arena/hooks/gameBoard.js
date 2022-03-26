@@ -6,6 +6,10 @@ import { duplicacyPresent } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { getSmartHint } from '../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../utils/smartHints/constants'
+import { invokeDispatch } from '../../../redux/dispatch.helpers'
+import { setHints } from '../store/reducers/smartHintHC.reducers'
+import { useSelector } from 'react-redux'
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 const initBoardData = () => {
     const movesStack = []
@@ -102,7 +106,6 @@ const useGameBoard = (gameState, pencilState, hints) => {
     const [mainNumbers, updateMainNumbers] = useState(initialMainNumbers)
     const [notesInfo, updateNotesInfo] = useState(initialNotes)
     const [selectedCell, selectCell] = useState(initialSelectedCell)
-    const [smartHintInfo, setSmartHintData] = useState({ show: false, hints: [], currentHintNum: 0 })
     const selectedCellMainValue = useRef(mainNumbers[selectedCell.row][selectedCell.col].value)
     const [mainNumbersInstancesCount, setMainNumbersInstancesCount] = useState(new Array(10).fill(0))
 
@@ -140,7 +143,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
             componentUnmounted = true
         }
     }, [mainNumbers])
-
+    
     useEffect(() => {
         const handler = ({ mainNumbers }) => {
             setBoardData({ ...initBoardData(), mainNumbers })
@@ -401,61 +404,20 @@ const useGameBoard = (gameState, pencilState, hints) => {
     //     return () => removeListener(EVENTS.HINT_CLICKED, handler)
     // }, [selectedCell, mainNumbers, hints])
 
-    // it will provide the smart hint with the step wise step logic
-
-    const onNextHintClick = useCallback(() => {
-        setSmartHintData(hintsData => {
-            const nextHintNum = hintsData.currentHintNum + 1
-            return {
-                ...hintsData,
-                currentHintNum: nextHintNum,
-            }
-        })
-    }, [])
-
-    const onPrevHintClick = useCallback(() => {
-        setSmartHintData(hintsData => {
-            const prevHintNum = hintsData.currentHintNum - 1
-            return {
-                ...hintsData,
-                currentHintNum: prevHintNum,
-            }
-        })
-    }, [])
-
-    // outdated func
-    useEffect(() => {
-        const handler = () => {
-            return
-            getSmartHint(mainNumbers, notesInfo)
-                .then(hints => {
-                    consoleLog('@@@@ hintInfo', JSON.stringify(hints))
-                    if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })
-                    else {
-                        emit(EVENTS.SHOW_SNACK_BAR, {
-                            msg: 'no hints found. try filling some more guesses in cells with pencil and then try again',
-                            visibleTime: 5000,
-                        })
-                    }
-                })
-                .catch(error => {
-                    consoleLog(error)
-                })
-        }
-        addListener(EVENTS.HINT_CLICKED, handler)
-        return () => removeListener(EVENTS.HINT_CLICKED, handler)
-    }, [mainNumbers, notesInfo])
-
     const getNoHintsFoundMsg = id => {
         return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
     }
 
+    // it will provide the smart hint with the step wise step logic
     useEffect(() => {
         const handler = ({ id }) => {
             getSmartHint(mainNumbers, notesInfo, id)
                 .then(hints => {
                     consoleLog('@@@@ hintInfo', JSON.stringify(hints))
-                    if (hints) setSmartHintData({ show: true, hints, currentHintNum: 1 })
+                    if (hints) {
+                        // setSmartHintData({ show: true, hints, currentHintNum: 1 })
+                        invokeDispatch(setHints(hints))
+                    }
                     else {
                         emit(EVENTS.SHOW_SNACK_BAR, {
                             msg: getNoHintsFoundMsg(id),
@@ -472,10 +434,7 @@ const useGameBoard = (gameState, pencilState, hints) => {
     }, [mainNumbers, notesInfo])
 
     useEffect(() => {
-        const handler = newCellToBeSelected => {
-            setSmartHintData({ show: false, hints: [], currentHintNum: 0 })
-            newCellToBeSelected && updateSelectedCell(newCellToBeSelected)
-        }
+        const handler = newCellToBeSelected => newCellToBeSelected && updateSelectedCell(newCellToBeSelected)
         addListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
         return () => removeListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
     }, [mainNumbers])
@@ -488,12 +447,14 @@ const useGameBoard = (gameState, pencilState, hints) => {
         })
     }
 
+    const { show: showSmartHintHC } = useSelector(getHintHCInfo)
+
     const onCellClick = useCallback(
         cell => {
-            if (gameState !== GAME_STATE.ACTIVE || smartHintInfo.show) return
+            if (gameState !== GAME_STATE.ACTIVE || showSmartHintHC) return
             updateSelectedCell(cell)
         },
-        [mainNumbers, gameState, smartHintInfo],
+        [mainNumbers, gameState, showSmartHintHC],
     )
 
     return {
@@ -503,14 +464,6 @@ const useGameBoard = (gameState, pencilState, hints) => {
         selectedCellMainValue: selectedCellMainValue.current,
         onCellClick,
         mainNumbersInstancesCount,
-        smartHintInfo: {
-            show: smartHintInfo.show,
-            info: smartHintInfo.currentHintNum ? smartHintInfo.hints[smartHintInfo.currentHintNum - 1] : {},
-            nextHintClick: onNextHintClick,
-            prevHintClick: onPrevHintClick,
-            currentHintNum: smartHintInfo.currentHintNum,
-            totalHintsCount: smartHintInfo.hints.length,
-        },
     }
 }
 

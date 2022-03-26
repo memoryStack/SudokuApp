@@ -14,6 +14,7 @@
     "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/stack": "^6.0.11",
+    "@reduxjs/toolkit": "^1.8.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "fast-sudoku-puzzles": "https://memoryStack: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@github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
     "prettier": "^2.4.1",
@@ -24,7 +25,8 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.0",
     "react-native-share": "^7.3.0",
-    "react-native-svg": "9.9.6"
+    "react-native-svg": "9.9.6",
+    "react-redux": "^7.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

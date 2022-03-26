@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
@@ -6,20 +6,43 @@ import { CloseIcon } from '../../../resources/svgIcons/close'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Button } from '../../../components/button'
 import { noOperationFunction } from '../../../utils/util'
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import withActions from '../../../utils/hocs/withActions'
+import { useSelector } from 'react-redux'
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
+const NEXT_BUTTON_TEXT = 'Next'
+const PREV_BUTTON_TEXT = 'Prev'
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({
-    title = '',
-    logic = '',
     parentHeight,
     onSmartHintHCClosed,
-    nextButtonText = 'Next',
-    prevButtonText = 'Prev',
-    nextHintClick = noOperationFunction,
-    prevHintClick = noOperationFunction,
-    currentHintNum,
-    totalHintsCount,
+    onAction,
 }) => {
+
+    const {
+        show: showSmartHint,
+        hint: {
+            techniqueInfo: { title = '', logic = '' } = {},
+            selectCellOnClose,
+        } = {},
+        currentHintNum,
+        totalHintsCount
+    } = useSelector(getHintHCInfo)
+
+    const onNextClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_NEXT_CLICK })
+    }, [onAction])
+
+    const onPrevClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
+    }, [onAction])
+
+    const onClosed = useCallback(() => {
+        onSmartHintHCClosed(selectCellOnClose)
+        onAction({ type: ACTION_TYPES.ON_CLOSE })
+    }, [onAction, selectCellOnClose])
+
     const smartHintHCRef = useRef(null)
 
     const { height: windowHeight } = useWindowDimensions()
@@ -52,11 +75,13 @@ const SmartHintHC_ = ({
 
     const containerStyles = getContainerStyles(windowHeight, displayFooter)
 
+    if (!showSmartHint) return null
+
     return (
         <BottomDragger
             ref={smartHintHCRef}
             stopBackgroundClickClose
-            onDraggerClosed={onSmartHintHCClosed}
+            onDraggerClosed={onClosed}
             parentHeight={parentHeight}
             bottomMostPositionRatio={1.1} // TODO: we can make it a default i guess
             animateBackgroundOverlayOnClose={false}
@@ -79,15 +104,15 @@ const SmartHintHC_ = ({
                 {displayFooter ? (
                     <View style={styles.footerContainer}>
                         <Button
-                            text={displayPrevButton ? prevButtonText : ''}
-                            onClick={displayPrevButton ? prevHintClick : noOperationFunction}
+                            text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
+                            onClick={displayPrevButton ? onPrevClick : noOperationFunction}
                             avoidDefaultContainerStyles={true}
                             textStyles={styles.footerButtonText}
                             hitSlop={HITSLOP}
                         />
                         <Button
-                            text={displayNextButton ? nextButtonText : ''} // TODO: find better way to hide the button.it's wtf right now
-                            onClick={displayNextButton ? nextHintClick : noOperationFunction}
+                            text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
+                            onClick={displayNextButton ? onNextClick : noOperationFunction}
                             avoidDefaultContainerStyles={true}
                             textStyles={styles.footerButtonText}
                             hitSlop={HITSLOP}
@@ -99,4 +124,4 @@ const SmartHintHC_ = ({
     )
 }
 
-export default React.memo(SmartHintHC_)
+export default React.memo(withActions(ACTION_HANDLERS)(SmartHintHC_))

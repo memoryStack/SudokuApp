@@ -29,6 +29,8 @@ import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 import { useToggle } from '../../utils/customHooks/commonUtility'
 import { HintsMenu } from './hintsMenu'
+import { useSelector } from 'react-redux'
+import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -112,18 +114,6 @@ const Arena_ = ({ navigation, route }) => {
         selectedCellMainValue,
         onCellClick,
         mainNumbersInstancesCount,
-        smartHintInfo: {
-            show: showSmartHint,
-            info: {
-                cellsToFocusData = {},
-                techniqueInfo: { title: smartHintTitle = '', logic: smartHintLogic = '' } = {},
-                selectCellOnClose,
-            } = {},
-            nextHintClick,
-            prevHintClick,
-            currentHintNum,
-            totalHintsCount,
-        } = {},
     } = useGameBoard(gameState, pencilState, hints)
 
     // TODO: i couldn't use this logic to update the cell after hint HC is closed
@@ -188,14 +178,6 @@ const Arena_ = ({ navigation, route }) => {
         fadeOut()
     }, [])
 
-    const newGameButtonClick = useCallback(() => {
-        setShowNextGameMenu(true)
-        // when game is solved or over, i don't want the game state to be changed
-        // user should start the next game
-        if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
-    }, [gameState])
-
     const onNewGameMenuClosed = useCallback(
         (optionSelectedFromMenu = false) => {
             setShowNextGameMenu(false)
@@ -207,9 +189,9 @@ const Arena_ = ({ navigation, route }) => {
         [gameState],
     )
 
-    const onSmartHintHCClosed = useCallback(() => {
+    const onSmartHintHCClosed = useCallback((selectCellOnClose) => {
         emit(EVENTS.SMART_HINTS_HC_CLOSED, selectCellOnClose)
-    }, [selectCellOnClose])
+    }, [])
 
     const handleSharePuzzleClick = useCallback(() => {
         let puzzleString = ''
@@ -279,6 +261,14 @@ const Arena_ = ({ navigation, route }) => {
         return <HintsMenu visibilityToggler={setHintsMenuVisibility} />
     }
 
+    // TODO: move it to board component
+    const {
+        show: showSmartHint,
+        hint: {
+            cellsToFocusData
+        } = {},
+    } = useSelector(getHintHCInfo)
+    
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
@@ -336,18 +326,7 @@ const Arena_ = ({ navigation, route }) => {
                         </Animated.View>
                     </Touchable>
                 ) : null}
-                {showSmartHint ? (
-                    <SmartHintHC
-                        parentHeight={pageHeight}
-                        title={smartHintTitle}
-                        logic={smartHintLogic}
-                        onSmartHintHCClosed={onSmartHintHCClosed}
-                        nextHintClick={nextHintClick}
-                        prevHintClick={prevHintClick}
-                        currentHintNum={currentHintNum}
-                        totalHintsCount={totalHintsCount}
-                    />
-                ) : null}
+                <SmartHintHC parentHeight={pageHeight} onSmartHintHCClosed={onSmartHintHCClosed} />
                 {renderHintsMenu()}
             </View>
         </Page>

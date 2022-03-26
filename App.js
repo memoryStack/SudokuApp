@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import CodePush from 'react-native-code-push'
+import { Provider } from "react-redux";
+
 import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
 import { EVENTS } from './src/resources/constants'
 import { NavigationContainer } from '@react-navigation/native'
 import { getNavigator } from './src/navigation/navigator'
+
+import store from "./src/redux/store";
 
 // initialize the event bus
 
@@ -50,17 +54,19 @@ const App = () => {
 
     // TODO: why putting here alignItems to center make everything invisible ??
     return (
-        <View
-            style={{
-                height: '100%',
-                width: '100%',
-                backgroundColor: 'white',
-            }}
-        >
-            <NavigationContainer>{getNavigator()}</NavigationContainer>
-            {snackbar}
-            {snackbarMsg ? <SnackBar msg={snackbarMsg} /> : null}
-        </View>
+        <Provider store={store}>
+            <View
+                style={{
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: 'white',
+                }}
+            >
+                <NavigationContainer>{getNavigator()}</NavigationContainer>
+                {snackbar}
+                {snackbarMsg ? <SnackBar msg={snackbarMsg} /> : null}
+            </View>
+        </Provider>
     )
 }
 
