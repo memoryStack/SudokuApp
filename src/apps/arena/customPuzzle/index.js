@@ -256,9 +256,9 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                 >
                     <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
                 </Touchable>
+                {/* TODO: solve the problem of gameState being not-active and input not visible on custom puzzles board */}
                 <Board
                     screenName={SCREEN_NAME.CUSTOM_PUZZLE}
-                    gameState={GAME_STATE.ACTIVE} // else the click on cells wouldn't work
                     mainNumbers={mainNumbers}
                     notesInfo={initialBoardData.notesInfo}
                     selectedCell={selectedCell}
@@ -266,7 +266,7 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                     onCellClick={handleCellClicked}
                 />
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX} gameState={GAME_STATE.ACTIVE} />
+                    <Inputpanel eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX} />
                 </View>
                 <Button containerStyle={styles.playButtonContainer} onClick={handlePlayClick} text={PLAY} />
             </View>
