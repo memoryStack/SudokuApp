@@ -33,6 +33,7 @@ import { useSelector } from 'react-redux'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import Refree from './refree'
 import { getDifficultyLevel, getMistakes } from './store/selectors/refree.selectors'
+import { getGameState } from './store/selectors/gameState.selectors'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -104,10 +105,10 @@ const Arena_ = ({ navigation, route }) => {
 
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
-    const { gameState, showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } =
+    const { showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } =
         useManageGame(route)
 
-    const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions(gameState)
+    const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions()
 
     const {
         mainNumbers,
@@ -116,7 +117,7 @@ const Arena_ = ({ navigation, route }) => {
         selectedCellMainValue,
         onCellClick,
         mainNumbersInstancesCount,
-    } = useGameBoard(gameState, pencilState, hints)
+    } = useGameBoard(pencilState, hints)
 
     // TODO: i couldn't use this logic to update the cell after hint HC is closed
     // it's because i am using useEffect in usePrevious hook and it results in infinite
@@ -130,12 +131,12 @@ const Arena_ = ({ navigation, route }) => {
     //     // onCellClick(smartHintFocusedCell)
     // }
 
-    const { show: showSmartHint } = useSelector(getHintHCInfo)
-
-    const { MISTAKES_LIMIT, time, onTimerClick } = useReferee(gameState, showSmartHint)
+    const { MISTAKES_LIMIT, time, onTimerClick } = useReferee()
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
+
+    const gameState = useSelector(getGameState)
 
     // show game over card
     useEffect(() => {
@@ -266,10 +267,8 @@ const Arena_ = ({ navigation, route }) => {
                     onTimerClick={onTimerClick}
                     maxMistakesLimit={MISTAKES_LIMIT}
                     time={time}
-                    gameState={gameState}
                 />
                 <Board
-                    gameState={gameState}
                     mainNumbers={mainNumbers}
                     notesInfo={notesInfo}
                     selectedCell={selectedCell}
@@ -286,13 +285,12 @@ const Arena_ = ({ navigation, route }) => {
                     <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onFastPencilClick} />
                     <Hint
                         iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                        gameState={gameState}
                         hints={hints}
                         onClick={onHintClick}
                     />
                 </View>
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel gameState={gameState} mainNumbersInstancesCount={mainNumbersInstancesCount} />
+                    <Inputpanel mainNumbersInstancesCount={mainNumbersInstancesCount} />
                 </View>
                 {pageHeight && showNextGameMenu ? (
                     <NextGameMenu parentHeight={pageHeight} onMenuClosed={onNewGameMenuClosed} />
@@ -309,7 +307,6 @@ const Arena_ = ({ navigation, route }) => {
                     >
                         <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim }]}>
                             <GameOverCard
-                                gameState={gameState}
                                 stats={{ mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - hints }}
                                 openNextGameMenu={hideCongratsModal}
                             />

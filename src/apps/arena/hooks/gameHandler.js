@@ -20,6 +20,10 @@ import {
     RESUME,
     CUSTOMIZE_YOUR_PUZZLE_TITLE,
 } from '../../../resources/stringLiterals'
+import { updateGameState } from '../store/actions/gameState.actions'
+import { useSelector } from 'react-redux'
+import { getGameState } from '../store/selectors/gameState.selectors'
+import { consoleLog } from '../../../utils/util'
 
 const transformNativeGeneratedPuzzle = (clues, solution) => {
     const mainNumbers = new Array(9)
@@ -113,14 +117,17 @@ const useCustomPuzzleHC = () => {
 const useManageGame = route => {
     const { params: { puzzleUrl = '', selectedGameMenuItem = '' } = {} } = route || {}
 
-    const [gameState, setGameState] = useState(GAME_STATE.INACTIVE)
+    const gameState = useSelector(getGameState)
+
+    consoleLog('@@@@ game state', gameState)
+
     const previousGameState = usePrevious(gameState)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
     const { show: showCustomPuzzleHC, closeView: closeCustomPuzzleHC } = useCustomPuzzleHC()
 
     useEffect(() => {
-        const handler = newState => newState && setGameState(newState)
+        const handler = newState => updateGameState(newState)
         addListener(EVENTS.CHANGE_GAME_STATE, handler)
         return () => removeListener(EVENTS.CHANGE_GAME_STATE, handler)
     }, [])
@@ -140,7 +147,7 @@ const useManageGame = route => {
                     if (!componentUnmounted) {
                         const mainNumbers = transformNativeGeneratedPuzzle(clues, solution)
                         emit(EVENTS.START_NEW_GAME, { difficultyLevel, mainNumbers })
-                        setGameState(GAME_STATE.ACTIVE)
+                        updateGameState(GAME_STATE.ACTIVE)
                     }
                 })
                 .catch(error => {
@@ -175,7 +182,7 @@ const useManageGame = route => {
             // next game menu from view hirerechy
             setShowNextGameMenu(false)
             emit(EVENTS.START_NEW_GAME, { difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE, mainNumbers })
-            setGameState(GAME_STATE.ACTIVE)
+            updateGameState(GAME_STATE.ACTIVE)
         }
         addListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
         return () => removeListener(EVENTS.START_CUSTOM_PUZZLE_GAME, handler)
@@ -185,7 +192,7 @@ const useManageGame = route => {
         const handler = ({ mainNumbers }) => {
             setTimeout(() => {
                 emit(EVENTS.START_NEW_GAME, { difficultyLevel: 'Shared Puzzle', mainNumbers })
-                setGameState(GAME_STATE.ACTIVE)
+                updateGameState(GAME_STATE.ACTIVE)
             }, 0)
         }
         addListener(EVENTS.START_DEEPLINK_PUZZLE, handler)
@@ -237,7 +244,6 @@ const useManageGame = route => {
     }, [selectedGameMenuItem])
 
     return {
-        gameState,
         showNextGameMenu,
         setShowNextGameMenu,
         showCustomPuzzleHC,

@@ -7,10 +7,14 @@ import { emit } from '../../../utils/GlobalEventBus'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
 import { noOperationFunction } from '../../../utils/util'
+import { useSelector } from 'react-redux'
+import { getGameState } from '../store/selectors/gameState.selectors'
 
 const CLOSE_ICON_DIMENSION = 28
-const Inputpanel_ = ({ eventsPrefix = '', gameState, mainNumbersInstancesCount = new Array(10).fill(0) }) => {
+const Inputpanel_ = ({ eventsPrefix = '', mainNumbersInstancesCount = new Array(10).fill(0) }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
+
+    const gameState = useSelector(getGameState)
 
     const styles = useMemo(() => {
         return getStyles(CELL_WIDTH)

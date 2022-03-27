@@ -10,6 +10,7 @@ import {
 } from '../../../utils/customHooks/boardElementsDimensions'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { getGameState } from '../store/selectors/gameState.selectors'
 
 const looper = []
 const bordersLooper = []
@@ -20,13 +21,14 @@ for (let i = 0; i < 10; i++) {
 
 const Board_ = ({
     screenName = SCREEN_NAME.ARENA, // default will be arena
-    gameState,
     mainNumbers,
     notesInfo = [],
     selectedCell = {},
     selectedCellMainValue = 0,
     onCellClick,
 }) => {
+
+    const gameState = useSelector(getGameState)
 
     const {
         show: showSmartHint,

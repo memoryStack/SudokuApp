@@ -8,6 +8,8 @@ import { getTimeComponentString } from './utils/util'
 import { Button } from '../../components/button'
 import { NEW_GAME } from '../../resources/stringLiterals'
 import { fonts } from '../../resources/fonts/font'
+import { useSelector } from 'react-redux'
+import { getGameState } from './store/selectors/gameState.selectors'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
@@ -62,8 +64,10 @@ const getTimeView = (timeTaken = {}) => {
 }
 
 // TODO: change this file name to something generic
-const GameOverCard_ = ({ gameState, stats, openNextGameMenu }) => {
+const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     const { mistakes, difficultyLevel, time, hintsUsed } = stats
+
+    const gameState = useSelector(getGameState)
 
     const gameSolved = gameState === GAME_STATE.OVER_SOLVED
     const gameUnsolved = gameState === GAME_STATE.OVER_UNSOLVED

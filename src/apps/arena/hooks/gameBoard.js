@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { showHints } from '../store/actions/smartHintHC.actions'
 import { addMistake } from '../store/actions/refree.actions'
+import { getGameState } from '../store/selectors/gameState.selectors'
 
 const initBoardData = () => {
     const movesStack = []
@@ -96,7 +97,10 @@ const removeNotesAfterCellFilled = (notesInfo, num, cell) => {
     return notesErasedByMainValue
 }
 
-const useGameBoard = (gameState, pencilState, hints) => {
+const useGameBoard = (pencilState, hints) => {
+    
+    const gameState = useSelector(getGameState)
+
     const {
         movesStack: initialmovesStack,
         notesInfo: initialNotes,

@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
+import { useSelector } from 'react-redux'
 import { GAME_STATE, EVENTS, PENCIL_STATE } from '../../../resources/constants'
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
+import { getGameState } from '../store/selectors/gameState.selectors'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 
 const MAX_AVAILABLE_HINTS = 3
@@ -18,7 +20,10 @@ const getNewPencilState = currentState => {
 }
 
 // TODO: let's think of better naming for this set of operations on a cell
-const useCellActions = gameState => {
+const useCellActions = () => {
+
+    const gameState = useSelector(getGameState)
+
     const initialCellActionsData = useRef(initCellActionsData()).current
     const [pencilState, setPencilState] = useState(initialCellActionsData.pencilState)
     const [hints, setHints] = useState(initialCellActionsData.hints)

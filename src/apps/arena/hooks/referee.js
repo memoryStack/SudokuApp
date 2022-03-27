@@ -6,6 +6,8 @@ import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { updateDifficultylevel, updateMistakes } from '../store/actions/refree.actions'
 import { useSelector } from 'react-redux'
 import { getDifficultyLevel, getMistakes } from '../store/selectors/refree.selectors'
+import { getGameState } from '../store/selectors/gameState.selectors'
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 const MISTAKES_LIMIT = 3
 // TODO: change it from refree to game tracking info
@@ -30,7 +32,12 @@ const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
     return { hours, minutes, seconds }
 }
 
-const useReferee = (gameState, showSmartHint) => {
+const useReferee = () => {
+    
+    const gameState = useSelector(getGameState)
+
+    const { show: showSmartHint } = useSelector(getHintHCInfo)
+
     const timerId = useRef(null)
     const {
         time: defaultTime,
