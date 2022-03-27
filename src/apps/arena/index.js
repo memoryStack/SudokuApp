@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
-import { View, Animated, Text, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, Animated, StyleSheet } from 'react-native'
 import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
@@ -8,10 +8,6 @@ import { EVENTS, GAME_STATE, DEEPLINK_HOST_NAME } from '../../resources/constant
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
-import { Undo } from './cellActions/undo'
-import { Pencil } from './cellActions/pencil'
-import { FastPencil } from './cellActions/fastPencil'
-import { Hint } from './cellActions/hint'
 import { isGameOver } from './utils/util'
 import { Button } from '../../components/button'
 import { CustomPuzzle } from './customPuzzle'
@@ -29,10 +25,10 @@ import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 import { useToggle } from '../../utils/customHooks/commonUtility'
 import { HintsMenu } from './hintsMenu'
 import { useSelector } from 'react-redux'
-import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
+import { BoardController } from './cellActions'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -71,14 +67,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
-    cellActionsContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        width: '100%',
-        marginTop: 20,
-    },
+    
     inputPanelContainer: {
         width: '100%',
         marginVertical: 20,
@@ -98,9 +87,6 @@ const styles = StyleSheet.create({
 })
 
 const Arena_ = ({ navigation, route }) => {
-    const { width: windowWidth } = useWindowDimensions()
-
-    const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
@@ -272,20 +258,8 @@ const Arena_ = ({ navigation, route }) => {
                     selectedCellMainValue={selectedCellMainValue}
                     onCellClick={onCellClick}
                 />
-                <View style={styles.cellActionsContainer}>
-                    <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onUndoClick} />
-                    <Pencil
-                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                        pencilState={pencilState}
-                        onClick={onPencilClick}
-                    />
-                    <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onFastPencilClick} />
-                    <Hint
-                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                        hints={hints}
-                        onClick={onHintClick}
-                    />
-                </View>
+                {/* TODO: it can be named better */}
+                <BoardController /> 
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel mainNumbersInstancesCount={mainNumbersInstancesCount} />
                 </View>

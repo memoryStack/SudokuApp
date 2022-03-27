@@ -66,17 +66,6 @@ const useCellActions = () => {
         return () => removeListener(EVENTS.CACHE_GAME_DATA, handler)
     }, [pencilState, hints])
 
-    // pencil handlers
-    const onPencilClick = useCallback(() => {
-        if (gameState !== GAME_STATE.ACTIVE) return
-        setPencilState(pencilState => getNewPencilState(pencilState))
-    }, [gameState])
-
-    const onHintClick = useCallback(() => {
-        if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.HINT_CLICKED)
-    }, [gameState])
-
     // hint used successfully
     useEffect(() => {
         const handler = () => {
@@ -86,25 +75,9 @@ const useCellActions = () => {
         return () => removeListener(EVENTS.HINT_USED_SUCCESSFULLY, handler)
     }, [])
 
-    // fast pencil click
-    const onFastPencilClick = useCallback(() => {
-        if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.FAST_PENCIL_CLICKED)
-    }, [gameState])
-
-    // undo clicked
-    const onUndoClick = useCallback(() => {
-        if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.UNDO_CLICKED)
-    }, [gameState])
-
     return {
         pencilState,
         hints,
-        onPencilClick,
-        onHintClick,
-        onFastPencilClick,
-        onUndoClick,
     }
 }
 

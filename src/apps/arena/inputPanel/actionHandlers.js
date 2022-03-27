@@ -3,6 +3,7 @@ import { EVENTS, GAME_STATE, SCREEN_NAME } from "../../../resources/constants"
 import { emit } from "../../../utils/GlobalEventBus"
 import { getGameState } from "../store/selectors/gameState.selectors"
 
+// TODO: make it global for everyone to use
 const isGameActive = () => {
     const gameState = getGameState(getStoreState())
     return gameState === GAME_STATE.ACTIVE
