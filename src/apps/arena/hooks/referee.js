@@ -3,9 +3,9 @@ import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE } from '../../../resources/const
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { isGameOver } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { updateMistakes } from '../store/actions/refree.actions'
+import { updateDifficultylevel, updateMistakes } from '../store/actions/refree.actions'
 import { useSelector } from 'react-redux'
-import { getMistakes } from '../store/selectors/refree.selectors'
+import { getDifficultyLevel, getMistakes } from '../store/selectors/refree.selectors'
 
 const MISTAKES_LIMIT = 3
 // TODO: change it from refree to game tracking info
@@ -33,18 +33,17 @@ const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
 const useReferee = (gameState, showSmartHint) => {
     const timerId = useRef(null)
     const {
-        difficultyLevel: defaultDifficultyLevel,
         time: defaultTime,
     } = useRef(initRefereeData()).current
 
     const mistakes = useSelector(getMistakes)
+    const difficultyLevel = useSelector(getDifficultyLevel)
 
-    const [difficultyLevel, setDifficultyLevel] = useState(defaultDifficultyLevel)
     const [time, setTime] = useState(defaultTime)
 
     const setRefereeData = ({ mistakes, difficultyLevel, time }) => {
         setTime(time)
-        setDifficultyLevel(difficultyLevel)
+        updateDifficultylevel(difficultyLevel)
         updateMistakes(mistakes)
     }
 
@@ -132,9 +131,7 @@ const useReferee = (gameState, showSmartHint) => {
 
     return {
         MISTAKES_LIMIT,
-        // mistakes,
         time,
-        difficultyLevel,
         onTimerClick,
     }
 }

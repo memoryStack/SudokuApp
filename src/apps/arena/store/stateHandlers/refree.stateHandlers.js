@@ -8,6 +8,9 @@ const stateHandlers = {
     resetMistakes: (state, action) => {
         state.mistakes = 0
     },
+    setDifficultylevel: (state, { payload }) => {
+        state.difficultyLevel = payload
+    }
 };
 
 export default stateHandlers;

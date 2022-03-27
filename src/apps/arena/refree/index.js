@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { fonts } from '../../../resources/fonts/font'
 import withActions from '../../../utils/hocs/withActions'
 import { consoleLog } from '../../../utils/util'
-import { getMistakes } from '../store/selectors/refree.selectors'
+import { getMistakes, getDifficultyLevel } from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 
 const styles = StyleSheet.create({
@@ -27,11 +27,11 @@ const _Refree = ({
     onTimerClick,
     maxMistakesLimit,
     time,
-    difficultyLevel,
     gameState,
 }) => {
 
     const mistakes = useSelector(getMistakes)
+    const difficultyLevel = useSelector(getDifficultyLevel)
 
     return (
         <View style={styles.refereeContainer}>

@@ -15,4 +15,5 @@ export const {
     increaseMistakes,
     resetMistakes,
     setMistakes,
+    setDifficultylevel,
 } = refreeSlice.actions;
