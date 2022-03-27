@@ -29,11 +29,9 @@ const _Refree = ({
     maxMistakesLimit,
     onAction,
 }) => {
-    // TODO: reduce time comp. props
-    const gameState = useSelector(getGameState)
+
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
-    const time = useSelector(getTime)
 
     const onTimerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_TIMER_CLICK })
@@ -43,7 +41,7 @@ const _Refree = ({
         <View style={styles.refereeContainer}>
             <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${maxMistakesLimit}`}</Text>
             <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
-            <Timer gameState={gameState} time={time} onClick={onTimerClick} />
+            <Timer onClick={onTimerClick} />
         </View>
     )
 }

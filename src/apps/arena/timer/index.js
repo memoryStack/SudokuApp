@@ -5,6 +5,9 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { getTimeComponentString } from '../utils/util'
 import { noOperationFunction } from '../../../utils/util'
 import { fonts } from '../../../resources/fonts/font'
+import { useSelector } from 'react-redux'
+import { getGameState } from '../store/selectors/gameState.selectors'
+import { getTime } from '../store/selectors/refree.selectors'
 
 const hitSlop = { left: 8, right: 8, bottom: 8, top: 8 }
 const styles = StyleSheet.create({
@@ -46,24 +49,30 @@ const styles = StyleSheet.create({
     },
 })
 
-const getPauseTimerIcon = () => {
-    return (
-        <View style={styles.pauseTimerIconContainer}>
-            <View style={[styles.pauseButtonMiddleGap, styles.rectangleShape]} />
-            <View style={styles.rectangleShape} />
-        </View>
-    )
-}
-
 const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
-const Timer_ = ({ gameState, time, onClick = noOperationFunction }) => (
-    <Touchable style={styles.timeCounter} onPress={onClick} touchable={TouchableTypes.opacity} hitSlop={hitSlop}>
-        <Text style={styles.textStyles}>{`${getTimeComponentString(time.hours)}:`}</Text>
-        <Text style={styles.textStyles}>{`${getTimeComponentString(time.minutes)}:`}</Text>
-        <Text style={styles.textStyles}>{`${getTimeComponentString(time.seconds)}`}</Text>
-        {gameState === GAME_STATE.ACTIVE ? getPauseTimerIcon() : getStartTimerIcon()}
-    </Touchable>
-)
+const Timer_ = ({ onClick = noOperationFunction }) => {
+    
+    const gameState = useSelector(getGameState)
+    const time = useSelector(getTime)
+
+    const getPauseTimerIcon = () => {
+        return (
+            <View style={styles.pauseTimerIconContainer}>
+                <View style={[styles.pauseButtonMiddleGap, styles.rectangleShape]} />
+                <View style={styles.rectangleShape} />
+            </View>
+        )
+    }
+
+    return  (
+        <Touchable style={styles.timeCounter} onPress={onClick} touchable={TouchableTypes.opacity} hitSlop={hitSlop}>
+            <Text style={styles.textStyles}>{`${getTimeComponentString(time.hours)}:`}</Text>
+            <Text style={styles.textStyles}>{`${getTimeComponentString(time.minutes)}:`}</Text>
+            <Text style={styles.textStyles}>{`${getTimeComponentString(time.seconds)}`}</Text>
+            {gameState === GAME_STATE.ACTIVE ? getPauseTimerIcon() : getStartTimerIcon()}
+        </Touchable>
+    )
+}
 
 export const Timer = React.memo(Timer_)
