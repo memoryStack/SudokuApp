@@ -93,7 +93,7 @@ const Arena_ = ({ navigation, route }) => {
     const { showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } =
         useManageGame(route)
 
-    const { pencilState, hints, onPencilClick, onHintClick, onFastPencilClick, onUndoClick } = useCellActions()
+    const { hints, } = useCellActions()
 
     const {
         mainNumbers,
@@ -102,7 +102,7 @@ const Arena_ = ({ navigation, route }) => {
         selectedCellMainValue,
         onCellClick,
         mainNumbersInstancesCount,
-    } = useGameBoard(pencilState, hints)
+    } = useGameBoard(hints)
 
     // TODO: i couldn't use this logic to update the cell after hint HC is closed
     // it's because i am using useEffect in usePrevious hook and it results in infinite

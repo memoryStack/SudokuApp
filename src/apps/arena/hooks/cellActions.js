@@ -1,8 +1,9 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { GAME_STATE, EVENTS, PENCIL_STATE } from '../../../resources/constants'
-import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
-import { getGameState } from '../store/selectors/gameState.selectors'
+import { EVENTS, PENCIL_STATE } from '../../../resources/constants'
+import { addListener, removeListener } from '../../../utils/GlobalEventBus'
+import { updatePencil } from '../store/actions/boardController.actions'
+import { getPencilStatus } from '../store/selectors/boardController.selectors'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 
 const MAX_AVAILABLE_HINTS = 3
@@ -14,24 +15,18 @@ const initCellActionsData = () => {
     }
 }
 
-const getNewPencilState = currentState => {
-    if (!currentState) return PENCIL_STATE.INACTIVE
-    return currentState === PENCIL_STATE.ACTIVE ? PENCIL_STATE.INACTIVE : PENCIL_STATE.ACTIVE
-}
-
 // TODO: let's think of better naming for this set of operations on a cell
 const useCellActions = () => {
 
-    const gameState = useSelector(getGameState)
+    const pencilState = useSelector(getPencilStatus)
 
     const initialCellActionsData = useRef(initCellActionsData()).current
-    const [pencilState, setPencilState] = useState(initialCellActionsData.pencilState)
     const [hints, setHints] = useState(initialCellActionsData.hints)
 
     useEffect(() => {
         const handler = previousGameData => {
             const { hints, pencilState } = previousGameData[GAME_DATA_KEYS.CELL_ACTIONS]
-            setPencilState(pencilState)
+            updatePencil(pencilState)
             setHints(hints)
         }
         addListener(EVENTS.RESUME_PREVIOUS_GAME, handler)
@@ -40,7 +35,7 @@ const useCellActions = () => {
 
     const dataResetHandler = () => {
         setHints(MAX_AVAILABLE_HINTS)
-        setPencilState(PENCIL_STATE.INACTIVE)
+        updatePencil(PENCIL_STATE.INACTIVE)
     }
 
     useEffect(() => {
@@ -76,7 +71,6 @@ const useCellActions = () => {
     }, [])
 
     return {
-        pencilState,
         hints,
     }
 }

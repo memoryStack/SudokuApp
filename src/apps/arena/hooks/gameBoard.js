@@ -13,6 +13,7 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { showHints } from '../store/actions/smartHintHC.actions'
 import { addMistake } from '../store/actions/refree.actions'
 import { getGameState } from '../store/selectors/gameState.selectors'
+import { getPencilStatus } from '../store/selectors/boardController.selectors'
 
 const initBoardData = () => {
     const movesStack = []
@@ -97,9 +98,11 @@ const removeNotesAfterCellFilled = (notesInfo, num, cell) => {
     return notesErasedByMainValue
 }
 
-const useGameBoard = (pencilState, hints) => {
+const useGameBoard = (hints) => {
     
     const gameState = useSelector(getGameState)
+
+    const pencilState = useSelector(getPencilStatus)
 
     const {
         movesStack: initialmovesStack,
