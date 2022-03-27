@@ -12,7 +12,6 @@ import { Undo } from './cellActions/undo'
 import { Pencil } from './cellActions/pencil'
 import { FastPencil } from './cellActions/fastPencil'
 import { Hint } from './cellActions/hint'
-import { Timer } from './timer'
 import { isGameOver } from './utils/util'
 import { Button } from '../../components/button'
 import { CustomPuzzle } from './customPuzzle'
@@ -32,7 +31,7 @@ import { HintsMenu } from './hintsMenu'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import Refree from './refree'
-import { getDifficultyLevel, getMistakes } from './store/selectors/refree.selectors'
+import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
@@ -131,7 +130,7 @@ const Arena_ = ({ navigation, route }) => {
     //     // onCellClick(smartHintFocusedCell)
     // }
 
-    const { MISTAKES_LIMIT, time, onTimerClick } = useReferee()
+    const { MISTAKES_LIMIT } = useReferee()
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
@@ -259,15 +258,13 @@ const Arena_ = ({ navigation, route }) => {
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
 
+    const time = useSelector( getTime )
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
-                <Refree
-                    onTimerClick={onTimerClick}
-                    maxMistakesLimit={MISTAKES_LIMIT}
-                    time={time}
-                />
+                <Refree maxMistakesLimit={MISTAKES_LIMIT} />
                 <Board
                     mainNumbers={mainNumbers}
                     notesInfo={notesInfo}

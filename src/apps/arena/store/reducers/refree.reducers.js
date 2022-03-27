@@ -16,4 +16,5 @@ export const {
     resetMistakes,
     setMistakes,
     setDifficultylevel,
+    setTime,
 } = refreeSlice.actions;

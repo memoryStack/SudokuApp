@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { View, Text, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -6,8 +6,9 @@ import { fonts } from '../../../resources/fonts/font'
 import withActions from '../../../utils/hocs/withActions'
 import { consoleLog } from '../../../utils/util'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { getMistakes, getDifficultyLevel } from '../store/selectors/refree.selectors'
+import { getMistakes, getDifficultyLevel, getTime } from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
 const styles = StyleSheet.create({
     refereeContainer: {
@@ -25,13 +26,18 @@ const styles = StyleSheet.create({
 })
 
 const _Refree = ({
-    onTimerClick,
     maxMistakesLimit,
-    time,
+    onAction,
 }) => {
+    // TODO: reduce time comp. props
     const gameState = useSelector(getGameState)
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
+    const time = useSelector(getTime)
+
+    const onTimerClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_TIMER_CLICK })
+    }, [onAction])
 
     return (
         <View style={styles.refereeContainer}>
@@ -42,4 +48,4 @@ const _Refree = ({
     )
 }
 
-export default React.memo(_Refree)
+export default React.memo(withActions(ACTION_HANDLERS)( _Refree))

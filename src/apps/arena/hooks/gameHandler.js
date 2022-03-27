@@ -135,7 +135,7 @@ const useManageGame = route => {
     useEffect(() => {
         let componentUnmounted = false
         const handler = ({ difficultyLevel }) => {
-            console.log('@@@@@@ difficulty level', difficultyLevel)
+            consoleLog('@@@@@@ difficulty level', difficultyLevel)
             if (!difficultyLevel) return
             // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
             const minClues = LEVELS_CLUES_INFO[difficultyLevel]

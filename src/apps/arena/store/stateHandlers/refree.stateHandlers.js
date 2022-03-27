@@ -10,6 +10,10 @@ const stateHandlers = {
     },
     setDifficultylevel: (state, { payload }) => {
         state.difficultyLevel = payload
+    },
+    setTime: (state, { payload }) => {
+        console.log('@@@@@@ time in stateHandler', payload)
+        state.time = {...payload}
     }
 };
 

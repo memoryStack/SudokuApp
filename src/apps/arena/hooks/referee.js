@@ -3,11 +3,12 @@ import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE } from '../../../resources/const
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { isGameOver } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { updateDifficultylevel, updateMistakes } from '../store/actions/refree.actions'
+import { updateDifficultylevel, updateMistakes, updateTime, stopTimer, startTimer } from '../store/actions/refree.actions'
 import { useSelector } from 'react-redux'
-import { getDifficultyLevel, getMistakes } from '../store/selectors/refree.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { getDifficultyLevel, getMistakes, getTime } from '../store/selectors/refree.selectors'
+import { consoleLog } from '../../../utils/util'
 
 const MISTAKES_LIMIT = 3
 // TODO: change it from refree to game tracking info
@@ -19,39 +20,23 @@ const initRefereeData = (difficultyLevel = LEVEL_DIFFICULTIES.EASY) => {
     }
 }
 
-const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
-    seconds++
-    if (seconds === 60) {
-        minutes++
-        seconds = 0
-    }
-    if (minutes === 60) {
-        hours++
-        minutes = 0
-    }
-    return { hours, minutes, seconds }
-}
-
 const useReferee = () => {
     
     const gameState = useSelector(getGameState)
 
     const { show: showSmartHint } = useSelector(getHintHCInfo)
 
-    const timerId = useRef(null)
-    const {
-        time: defaultTime,
-    } = useRef(initRefereeData()).current
-
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
+    const time = useSelector(getTime)
 
-    const [time, setTime] = useState(defaultTime)
+    consoleLog('@@@@@ time from state', time)
 
     const setRefereeData = ({ mistakes, difficultyLevel, time }) => {
-        setTime(time)
-        updateDifficultylevel(difficultyLevel)
+        // TODO: maybe make another action to update all of these
         updateMistakes(mistakes)
+        updateDifficultylevel(difficultyLevel)
+        updateTime(time)
     }
 
     useEffect(() => {
@@ -93,21 +78,6 @@ const useReferee = () => {
         return () => removeListener(EVENTS.CACHE_GAME_DATA, handler)
     }, [difficultyLevel, mistakes, time])
 
-    const updateTime = () => timerId.current && setTime(time => getNewTime(time))
-
-    const startTimer = () => (timerId.current = setInterval(updateTime, 1000))
-
-    const stopTimer = () => {
-        if (timerId.current) timerId.current = clearInterval(timerId.current)
-    }
-
-    const onTimerClick = useCallback(() => {
-        // un-clickable if the game has finished
-        if (isGameOver(gameState)) return
-        const gameNewState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
-        emit(EVENTS.CHANGE_GAME_STATE, gameNewState)
-    }, [gameState])
-
     // hook to start timer
     useEffect(() => {
         if (gameState === GAME_STATE.ACTIVE && !showSmartHint) startTimer()
@@ -138,8 +108,6 @@ const useReferee = () => {
 
     return {
         MISTAKES_LIMIT,
-        time,
-        onTimerClick,
     }
 }
 
