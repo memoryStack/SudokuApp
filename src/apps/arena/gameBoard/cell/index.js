@@ -7,6 +7,7 @@ import { CloseIcon } from '../../../../resources/svgIcons/close'
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../style'
 import { fonts } from '../../../../resources/fonts/font'
 import { useBoardElementsDimensions } from '../../../../utils/customHooks/boardElementsDimensions'
+import { consoleLog } from '../../../../utils/util'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
 // becoz only 3 notes are there in a row

@@ -30,8 +30,6 @@ const useReferee = () => {
     const difficultyLevel = useSelector(getDifficultyLevel)
     const time = useSelector(getTime)
 
-    consoleLog('@@@@@ time from state', time)
-
     const setRefereeData = ({ mistakes, difficultyLevel, time }) => {
         // TODO: maybe make another action to update all of these
         updateMistakes(mistakes)

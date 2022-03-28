@@ -63,6 +63,4 @@ const BoardController_ = ({
     )
 }
 
-
-
 export const BoardController = React.memo(withActions(ACTION_HANDLERS) (BoardController_))

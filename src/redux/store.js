@@ -5,6 +5,7 @@ import smartHintHCReducers from "../apps/arena/store/reducers/smartHintHC.reduce
 import refreeReducers from "../apps/arena/store/reducers/refree.reducers";
 import gameStateReducers from "../apps/arena/store/reducers/gameState.reducers";
 import boardControllerReducers from "../apps/arena/store/reducers/boardController.reducers";
+import boardReducers from "../apps/arena/store/reducers/board.reducers";
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         refree: refreeReducers,
         gameState: gameStateReducers,
         boardController: boardControllerReducers,
+        board: boardReducers,
     }
 });
 

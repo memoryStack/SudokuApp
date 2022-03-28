@@ -119,8 +119,6 @@ const useManageGame = route => {
 
     const gameState = useSelector(getGameState)
 
-    consoleLog('@@@@ game state', gameState)
-
     const previousGameState = usePrevious(gameState)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
