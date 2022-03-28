@@ -11,6 +11,7 @@ import {
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
+import { getMainNumbers } from '../store/selectors/board.selectors'
 
 const looper = []
 const bordersLooper = []
@@ -21,7 +22,6 @@ for (let i = 0; i < 10; i++) {
 
 const Board_ = ({
     screenName = SCREEN_NAME.ARENA, // default will be arena
-    mainNumbers,
     notesInfo = [],
     selectedCell = {},
     selectedCellMainValue = 0,
@@ -29,6 +29,8 @@ const Board_ = ({
 }) => {
 
     const gameState = useSelector(getGameState)
+
+    const mainNumbers = useSelector(getMainNumbers)
 
     const {
         show: showSmartHint,

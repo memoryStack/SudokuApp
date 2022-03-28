@@ -471,7 +471,6 @@ const useGameBoard = (hints) => {
     )
 
     return {
-        mainNumbers,
         notesInfo,
         selectedCell,
         selectedCellMainValue: selectedCellMainValue.current,
