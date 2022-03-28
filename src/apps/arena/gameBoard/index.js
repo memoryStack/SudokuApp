@@ -23,13 +23,14 @@ for (let i = 0; i < 10; i++) {
 const Board_ = ({
     screenName = SCREEN_NAME.ARENA, // default will be arena
     notesInfo = [],
-    selectedCellMainValue = 0,
     onCellClick,
 }) => {
 
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
     const selectedCell = useSelector(getSelectedCell)
+
+    const selectedCellMainValue = mainNumbers[ selectedCell.row ][ selectedCell.col ].value || 0
 
     const {
         show: showSmartHint,

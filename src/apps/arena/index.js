@@ -98,7 +98,6 @@ const Arena_ = ({ navigation, route }) => {
 
     const {
         notesInfo,
-        selectedCellMainValue,
         onCellClick,
         mainNumbersInstancesCount,
     } = useGameBoard(hints)
@@ -253,7 +252,6 @@ const Arena_ = ({ navigation, route }) => {
                 <Refree maxMistakesLimit={MISTAKES_LIMIT} />
                 <Board
                     notesInfo={notesInfo}
-                    selectedCellMainValue={selectedCellMainValue}
                     onCellClick={onCellClick}
                 />
                 {/* TODO: it can be named better */}

@@ -117,13 +117,11 @@ const useGameBoard = (hints) => {
     const selectedCell = useSelector(getSelectedCell)
 
     const [notesInfo, updateNotesInfo] = useState(initialNotes)
-    const selectedCellMainValue = useRef(mainNumbers[selectedCell.row][selectedCell.col].value)
     const [mainNumbersInstancesCount, setMainNumbersInstancesCount] = useState(new Array(10).fill(0))
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
         movesStack.current = moves
         const { row = 0, col = 0 } = selectedCell
-        selectedCellMainValue.current = mainNumbers[row][col].value
         updateMainNumbers(mainNumbers)
         updateNotesInfo(notesInfo)
         updateSelectedCell(selectedCell)
@@ -229,7 +227,6 @@ const useGameBoard = (hints) => {
                         }, 500)
                     }
                 }
-                selectedCellMainValue.current = number
                 updateCellMainNumber(selectedCell, number)
             }
 
@@ -289,7 +286,6 @@ const useGameBoard = (hints) => {
                 if (moveType === 'insert') {
                     // hide the main value
                     removeMainNumber({ row, col })
-                    selectedCellMainValue.current = 0
                     // show the notes erased when this value inserted
                     const { notesErased } = moveInfoToUndo
                     for (let i = 0; i < notesErased.length; i++) {
@@ -299,7 +295,6 @@ const useGameBoard = (hints) => {
                 } else {
                     // main value got erased, so fill that value in the cell
                     updateCellMainNumber({row, col}, value[0])
-                    selectedCellMainValue.current = value[0]
                 }
             } else {
                 const notesVisibilityChanges = value
@@ -353,7 +348,6 @@ const useGameBoard = (hints) => {
                 valueType = 'main'
                 value = [mainNumbers[row][col].value]
                 removeMainNumber(selectedCell)
-                selectedCellMainValue.current = 0
             } else if (!mainNumbers[row][col].value) {
                 const cellNotes = notesInfoDup[row][col]
                 value = [] // will store the notes to be removed (basically the notes which are visible right now)
@@ -453,7 +447,6 @@ const useGameBoard = (hints) => {
     }, [mainNumbers, selectedCell])
 
     const updateSelectedCell_ = ({ row, col }) => {
-        selectedCellMainValue.current = mainNumbers[row][col].value
         if (selectedCell.row !== row || selectedCell.col !== col) updateSelectedCell({ row, col })
     }
 
@@ -469,7 +462,6 @@ const useGameBoard = (hints) => {
 
     return {
         notesInfo,
-        selectedCellMainValue: selectedCellMainValue.current,
         onCellClick,
         mainNumbersInstancesCount,
     }
