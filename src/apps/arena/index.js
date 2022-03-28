@@ -98,7 +98,6 @@ const Arena_ = ({ navigation, route }) => {
 
     const {
         notesInfo,
-        selectedCell,
         selectedCellMainValue,
         onCellClick,
         mainNumbersInstancesCount,
@@ -123,7 +122,7 @@ const Arena_ = ({ navigation, route }) => {
 
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
-    
+
     // show game over card
     useEffect(() => {
         if (isGameOver(gameState)) setGameSolvedCard(true)
@@ -254,7 +253,6 @@ const Arena_ = ({ navigation, route }) => {
                 <Refree maxMistakesLimit={MISTAKES_LIMIT} />
                 <Board
                     notesInfo={notesInfo}
-                    selectedCell={selectedCell}
                     selectedCellMainValue={selectedCellMainValue}
                     onCellClick={onCellClick}
                 />
