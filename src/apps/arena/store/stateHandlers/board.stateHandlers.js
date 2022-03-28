@@ -11,6 +11,9 @@ const stateHandlers = {
         const { row, col }  = payload
         state.mainNumbers[row][col].value = 0
     },
+    setSelectedCell: (state, { payload }) => {
+        state.selectedCell = payload
+    },
 };
 
 export default stateHandlers;

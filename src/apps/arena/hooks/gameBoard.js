@@ -12,10 +12,10 @@ import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { showHints } from '../store/actions/smartHintHC.actions'
 import { addMistake } from '../store/actions/refree.actions'
-import { updateMainNumbers, updateCellMainNumber, removeMainNumber } from '../store/actions/board.actions'
+import { updateMainNumbers, updateCellMainNumber, removeMainNumber, updateSelectedCell } from '../store/actions/board.actions'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { getPencilStatus } from '../store/selectors/boardController.selectors'
-import { getMainNumbers } from '../store/selectors/board.selectors'
+import { getMainNumbers, getSelectedCell } from '../store/selectors/board.selectors'
 
 const initBoardData = () => {
     const movesStack = []
@@ -109,15 +109,14 @@ const useGameBoard = (hints) => {
     const {
         movesStack: initialmovesStack,
         notesInfo: initialNotes,
-        selectedCell: initialSelectedCell,
     } = useRef(initBoardData()).current
 
     const movesStack = useRef(initialmovesStack)
 
     const mainNumbers = useSelector(getMainNumbers)
+    const selectedCell = useSelector(getSelectedCell)
 
     const [notesInfo, updateNotesInfo] = useState(initialNotes)
-    const [selectedCell, selectCell] = useState(initialSelectedCell)
     const selectedCellMainValue = useRef(mainNumbers[selectedCell.row][selectedCell.col].value)
     const [mainNumbersInstancesCount, setMainNumbersInstancesCount] = useState(new Array(10).fill(0))
 
@@ -127,7 +126,7 @@ const useGameBoard = (hints) => {
         selectedCellMainValue.current = mainNumbers[row][col].value
         updateMainNumbers(mainNumbers)
         updateNotesInfo(notesInfo)
-        selectCell(selectedCell)
+        updateSelectedCell(selectedCell)
     }
 
     useEffect(() => {
@@ -320,7 +319,8 @@ const useGameBoard = (hints) => {
             }
 
             updateNotesInfo(notesInfoDup)
-            selectCell(nextSelectedCell)
+            // selectCell(nextSelectedCell)
+            updateSelectedCell(selectedCell)
 
             emit(EVENTS.UNDO_USED_SUCCESSFULLY)
         }
@@ -447,17 +447,14 @@ const useGameBoard = (hints) => {
     }, [mainNumbers, notesInfo])
 
     useEffect(() => {
-        const handler = newCellToBeSelected => newCellToBeSelected && updateSelectedCell(newCellToBeSelected)
+        const handler = newCellToBeSelected => newCellToBeSelected && updateSelectedCell_(newCellToBeSelected)
         addListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
         return () => removeListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
-    }, [mainNumbers])
+    }, [mainNumbers, selectedCell])
 
-    const updateSelectedCell = ({ row, col }) => {
+    const updateSelectedCell_ = ({ row, col }) => {
         selectedCellMainValue.current = mainNumbers[row][col].value
-        selectCell(selectedCell => {
-            if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
-            return selectedCell
-        })
+        if (selectedCell.row !== row || selectedCell.col !== col) updateSelectedCell({ row, col })
     }
 
     const { show: showSmartHintHC } = useSelector(getHintHCInfo)
@@ -465,14 +462,13 @@ const useGameBoard = (hints) => {
     const onCellClick = useCallback(
         cell => {
             if (gameState !== GAME_STATE.ACTIVE || showSmartHintHC) return
-            updateSelectedCell(cell)
+            updateSelectedCell_(cell)
         },
-        [gameState, showSmartHintHC],
+        [mainNumbers, gameState, showSmartHintHC, selectedCell],
     )
 
     return {
         notesInfo,
-        selectedCell,
         selectedCellMainValue: selectedCellMainValue.current,
         onCellClick,
         mainNumbersInstancesCount,

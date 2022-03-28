@@ -29,6 +29,7 @@ import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
+import { getMainNumbers } from './store/selectors/board.selectors'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -96,7 +97,6 @@ const Arena_ = ({ navigation, route }) => {
     const { hints, } = useCellActions()
 
     const {
-        mainNumbers,
         notesInfo,
         selectedCell,
         selectedCellMainValue,
@@ -122,7 +122,8 @@ const Arena_ = ({ navigation, route }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current
 
     const gameState = useSelector(getGameState)
-
+    const mainNumbers = useSelector(getMainNumbers)
+    
     // show game over card
     useEffect(() => {
         if (isGameOver(gameState)) setGameSolvedCard(true)
@@ -252,7 +253,6 @@ const Arena_ = ({ navigation, route }) => {
                 {header}
                 <Refree maxMistakesLimit={MISTAKES_LIMIT} />
                 <Board
-                    mainNumbers={mainNumbers}
                     notesInfo={notesInfo}
                     selectedCell={selectedCell}
                     selectedCellMainValue={selectedCellMainValue}

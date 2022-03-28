@@ -15,4 +15,5 @@ export const {
     setMainNumbers,
     setCellMainNumber,
     eraseCellMainValue,
+    setSelectedCell,
 } = boardSlice.actions;
