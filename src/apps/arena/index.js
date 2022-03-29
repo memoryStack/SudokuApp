@@ -18,7 +18,7 @@ import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
 import { SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
-import { noOperationFunction, rgba } from '../../utils/util'
+import { consoleLog, noOperationFunction, rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
@@ -29,7 +29,7 @@ import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
-import { getMainNumbers } from './store/selectors/board.selectors'
+import { getMainNumbers, getNotesInfo } from './store/selectors/board.selectors'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -97,7 +97,6 @@ const Arena_ = ({ navigation, route }) => {
     const { hints, } = useCellActions()
 
     const {
-        notesInfo,
         onCellClick,
         mainNumbersInstancesCount,
     } = useGameBoard(hints)
@@ -244,6 +243,10 @@ const Arena_ = ({ navigation, route }) => {
     const difficultyLevel = useSelector(getDifficultyLevel)
 
     const time = useSelector( getTime )
+
+    const notesInfo = useSelector(getNotesInfo)
+    
+    consoleLog('@@@@@ notesInfo in arena', notesInfo)
 
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>

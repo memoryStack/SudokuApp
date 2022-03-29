@@ -16,4 +16,7 @@ export const {
     setCellMainNumber,
     eraseCellMainValue,
     setSelectedCell,
+    setNotes,
+    setNotesBunch,
+    eraseNotesBunch,
 } = boardSlice.actions;

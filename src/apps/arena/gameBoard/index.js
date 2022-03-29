@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { getStyles } from './style'
 import { Cell } from './cell'
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { sameHouseAsSelected } from '../../../utils/util'
+import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
@@ -29,7 +29,7 @@ const Board_ = ({
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
     const selectedCell = useSelector(getSelectedCell)
-
+    consoleLog('@@@@@@@ selectedCell', selectedCell)
     const selectedCellMainValue = mainNumbers[ selectedCell.row ][ selectedCell.col ].value || 0
 
     const {

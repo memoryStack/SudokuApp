@@ -6,36 +6,29 @@ import { duplicacyPresent } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { getSmartHint } from '../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../utils/smartHints/constants'
-import { invokeDispatch } from '../../../redux/dispatch.helpers'
 import { setHints } from '../store/reducers/smartHintHC.reducers'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { showHints } from '../store/actions/smartHintHC.actions'
 import { addMistake } from '../store/actions/refree.actions'
-import { updateMainNumbers, updateCellMainNumber, removeMainNumber, updateSelectedCell } from '../store/actions/board.actions'
+import {
+    updateMainNumbers,
+    updateCellMainNumber,
+    removeMainNumber,
+    updateSelectedCell,
+    updateNotes,
+    removeNotesAfterCellFilled,
+    removeCellNotes,
+    addCellNote,
+} from '../store/actions/board.actions'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { getPencilStatus } from '../store/selectors/boardController.selectors'
-import { getMainNumbers, getSelectedCell } from '../store/selectors/board.selectors'
+import { getMainNumbers, getNotesInfo, getSelectedCell } from '../store/selectors/board.selectors'
 
 const initBoardData = () => {
     const movesStack = []
-    const mainNumbers = initMainNumbers()
-    const notesInfo = new Array(9)
-    for (let i = 0; i < 9; i++) {
-        const rowNotes = []
-        for (let j = 0; j < 9; j++) {
-            const boxNotes = new Array(9)
-            for (let k = 1; k <= 9; k++) boxNotes[k - 1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
-            rowNotes.push(boxNotes)
-        }
-        notesInfo[i] = rowNotes
-    }
-
     return {
         movesStack,
-        notesInfo,
-        mainNumbers,
-        selectedCell: { row: 0, col: 0 },
     }
 }
 
@@ -48,58 +41,6 @@ const isPuzzleSolved = mainNumbers => {
     return true
 }
 
-// TODO: fix the repeated lines in this func
-// TODO: add the removed notes in cells other than currentCell to the undo move
-//          right now we are just recording the current cells notes only
-const removeNotesAfterCellFilled = (notesInfo, num, cell) => {
-    const { row, col } = cell
-    let notesErasedByMainValue = []
-    // remove notes from current cell
-    for (let note = 0; note < 9; note++) {
-        // taking note's indx
-        const { show } = notesInfo[row][col][note]
-        if (show) {
-            notesErasedByMainValue.push(note + 1)
-            notesInfo[row][col][note].show = 0
-        }
-    }
-    if (notesErasedByMainValue.length) notesInfo[row][col] = [...notesInfo[row][col]]
-
-    // remove notes from current row
-    for (let row = 0; row < 9; row++) {
-        const noteIndx = num - 1
-        const { show } = notesInfo[row][col][noteIndx]
-        if (show) {
-            notesInfo[row][col][noteIndx].show = 0
-            notesInfo[row][col] = [...notesInfo[row][col]]
-        }
-    }
-
-    // remove notes from current col
-    for (let col = 0; col < 9; col++) {
-        const noteIndx = num - 1
-        const { show } = notesInfo[row][col][noteIndx]
-        if (show) {
-            notesInfo[row][col][noteIndx].show = 0
-            notesInfo[row][col] = [...notesInfo[row][col]]
-        }
-    }
-
-    // remove notes from current block
-    const { blockNum } = getBlockAndBoxNum(cell)
-    for (let boxNum = 0; boxNum < 9; boxNum++) {
-        const { row, col } = getRowAndCol(blockNum, boxNum)
-        const noteIndx = num - 1
-        const { show } = notesInfo[row][col][noteIndx]
-        if (show) {
-            notesInfo[row][col][noteIndx].show = 0
-            notesInfo[row][col] = [...notesInfo[row][col]]
-        }
-    }
-
-    return notesErasedByMainValue
-}
-
 const useGameBoard = (hints) => {
     
     const gameState = useSelector(getGameState)
@@ -108,22 +49,20 @@ const useGameBoard = (hints) => {
 
     const {
         movesStack: initialmovesStack,
-        notesInfo: initialNotes,
     } = useRef(initBoardData()).current
 
     const movesStack = useRef(initialmovesStack)
 
     const mainNumbers = useSelector(getMainNumbers)
     const selectedCell = useSelector(getSelectedCell)
+    const notesInfo = useSelector(getNotesInfo)
 
-    const [notesInfo, updateNotesInfo] = useState(initialNotes)
     const [mainNumbersInstancesCount, setMainNumbersInstancesCount] = useState(new Array(10).fill(0))
 
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
         movesStack.current = moves
-        const { row = 0, col = 0 } = selectedCell
         updateMainNumbers(mainNumbers)
-        updateNotesInfo(notesInfo)
+        updateNotes(notesInfo)
         updateSelectedCell(selectedCell)
     }
 
@@ -194,8 +133,7 @@ const useGameBoard = (hints) => {
                 valueType = 'notes'
                 const { show } = notesInfo[row][col][number - 1]
                 moveType = show ? 'erase' : 'insert'
-                notesInfo[row][col][number - 1].show = 1 - show
-                notesInfo[row][col] = [...notesInfo[row][col]]
+                addCellNote({ row, col }, number)
                 noteInserted = true
             } else {
                 /**
@@ -205,7 +143,7 @@ const useGameBoard = (hints) => {
                  * 4. check if puzzle is solved or not
                  */
 
-                const mainNumbersDup =  JSON.parse(JSON.stringify(mainNumbers)) // [...mainNumbers]
+                const mainNumbersDup = [...mainNumbers]
                 // mark move type and valueType and add the number in cell
                 moveType = 'insert'
                 valueType = 'main'
@@ -218,7 +156,7 @@ const useGameBoard = (hints) => {
                     addMistake()
                 }
                 else {
-                    notesErasedByMainValue = removeNotesAfterCellFilled(notesInfo, number, selectedCell)
+                    notesErasedByMainValue = removeNotesAfterCellFilled(number, selectedCell)
                     if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
                     if (isPuzzleSolved(mainNumbersDup)) {
                         // a little delay is better
@@ -240,7 +178,6 @@ const useGameBoard = (hints) => {
             }
 
             movesStack.current.push(moveObject)
-            if (noteInserted || notesErasedByMainValue.length) updateNotesInfo([...notesInfo])
         }
 
         addListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
@@ -276,7 +213,6 @@ const useGameBoard = (hints) => {
     useEffect(() => {
         const handler = () => {
             if (!movesStack.current.length) return
-            const mainNumbersDup = [...mainNumbers]
             const notesInfoDup = [...notesInfo]
             const moveInfoToUndo = movesStack.current.pop()
 
@@ -313,8 +249,8 @@ const useGameBoard = (hints) => {
                 nextSelectedCell.col = col
             }
 
-            updateNotesInfo(notesInfoDup)
-            // selectCell(nextSelectedCell)
+            // updateNotesInfo(notesInfoDup)
+
             updateSelectedCell(selectedCell)
 
             emit(EVENTS.UNDO_USED_SUCCESSFULLY)
@@ -338,7 +274,6 @@ const useGameBoard = (hints) => {
 
             const { row, col } = selectedCell
             let moveType, valueType, value
-            const mainNumbersDup = [...mainNumbers]
             const notesInfoDup = [...notesInfo]
             let erasedSomeData = false
 
@@ -366,9 +301,7 @@ const useGameBoard = (hints) => {
             // TODO: group cell row, col here as well
             const moveObject = { moveType, valueType, value, row, col }
             movesStack.current.push(moveObject)
-
-            // again these three updates are together
-            updateNotesInfo(notesInfoDup)
+            removeCellNotes(selectedCell)
         }
 
         addListener(EVENTS.ERASER_CLICKED, handler)
@@ -396,7 +329,7 @@ const useGameBoard = (hints) => {
 
             consoleLog(JSON.stringify(notesInfo))
             consoleLog('@@@@@@@ main numbers', JSON.stringify(mainNumbers))
-            updateNotesInfo([...notesInfo])
+            // updateNotesInfo([...notesInfo])
         }
         addListener(EVENTS.FAST_PENCIL_CLICKED, handler)
         return () => removeListener(EVENTS.FAST_PENCIL_CLICKED, handler)
@@ -461,7 +394,6 @@ const useGameBoard = (hints) => {
     )
 
     return {
-        notesInfo,
         onCellClick,
         mainNumbersInstancesCount,
     }
