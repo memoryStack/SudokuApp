@@ -44,7 +44,7 @@ export const removeCellNotes = (cell) => {
         if (show) bunch.push({ cell, note: noteValue })
     })
     // TODO: should we shift logic from stateHandlers to here ??
-    invokeDispatch(eraseNotesBunch(cell))
+    invokeDispatch(eraseNotesBunch(bunch))
 }
 
 export const addCellNote = (cell, number) => {

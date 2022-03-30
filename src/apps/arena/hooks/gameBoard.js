@@ -308,33 +308,6 @@ const useGameBoard = (hints) => {
         return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
 
-    // EVENTS.FAST_PENCIL_CLICKED
-    useEffect(() => {
-        const handler = () => {
-            for (let row = 0; row < 9; row++) {
-                for (let col = 0; col < 9; col++) {
-                    if (!mainNumbers[row][col].value) {
-                        let notesUpdated = false
-                        for (let num = 1; num <= 9; num++) {
-                            const { show } = notesInfo[row][col][num - 1]
-                            if (!show && !duplicacyPresent(num, mainNumbers, { row, col })) {
-                                notesUpdated = true
-                                notesInfo[row][col][num - 1].show = 1 - show
-                            }
-                        }
-                        if (notesUpdated) notesInfo[row][col] = [...notesInfo[row][col]]
-                    }
-                }
-            }
-
-            consoleLog(JSON.stringify(notesInfo))
-            consoleLog('@@@@@@@ main numbers', JSON.stringify(mainNumbers))
-            // updateNotesInfo([...notesInfo])
-        }
-        addListener(EVENTS.FAST_PENCIL_CLICKED, handler)
-        return () => removeListener(EVENTS.FAST_PENCIL_CLICKED, handler)
-    }, [mainNumbers, notesInfo])
-
     // EVENTS.HINT_CLICKED {it will fill the cell with the solution value directly}
     // useEffect(() => {
     //     const handler = () => {

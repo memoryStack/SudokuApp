@@ -2,7 +2,7 @@
 import { getStoreState } from "../../../redux/dispatch.helpers"
 import { EVENTS, GAME_STATE } from "../../../resources/constants"
 import { emit } from "../../../utils/GlobalEventBus"
-import { updatePencil } from "../store/actions/boardController.actions"
+import { updatePencil, fastPencilAction } from "../store/actions/boardController.actions"
 import { getGameState } from "../store/selectors/gameState.selectors"
 
 const isGameActive = () => {
@@ -10,6 +10,7 @@ const isGameActive = () => {
     return gameState === GAME_STATE.ACTIVE
 }
 
+// TODO: this will be handled later
 const handleUndoClick = () => {
     if (!isGameActive()) return
     emit(EVENTS.UNDO_CLICKED)
@@ -21,8 +22,8 @@ const handlePencilClick = () => {
 }
 
 const handleFastPencilClick = () => {
-    if (!isGameActive()) return
-    emit(EVENTS.FAST_PENCIL_CLICKED)
+    if (!isGameActive()) return    
+    fastPencilAction()
 }
 
 const handleHintClick = () => {
