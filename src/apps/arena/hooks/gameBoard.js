@@ -308,18 +308,6 @@ const useGameBoard = (hints) => {
         return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
 
-    // EVENTS.HINT_CLICKED {it will fill the cell with the solution value directly}
-    // useEffect(() => {
-    //     const handler = () => {
-    //         // if (!hints) return
-    //         const { row, col } = selectedCell
-    //         if (!mainNumbers[row][col].value)
-    //             emit(EVENTS.INPUT_NUMBER_CLICKED, { number: mainNumbers[row][col].solutionValue, isHintUsed: true })
-    //     }
-    //     addListener(EVENTS.HINT_CLICKED, handler)
-    //     return () => removeListener(EVENTS.HINT_CLICKED, handler)
-    // }, [selectedCell, mainNumbers, hints])
-
     const getNoHintsFoundMsg = id => {
         return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
     }

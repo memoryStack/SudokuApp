@@ -3,7 +3,7 @@ import { View, Animated, StyleSheet } from 'react-native'
 import { Board } from './gameBoard'
 import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
-import { addListener, emit, removeListener } from '../../utils/GlobalEventBus'
+import { emit } from '../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE, DEEPLINK_HOST_NAME } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
@@ -30,6 +30,7 @@ import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refr
 import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
 import { getMainNumbers, getNotesInfo } from './store/selectors/board.selectors'
+import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -228,15 +229,10 @@ const Arena_ = ({ navigation, route }) => {
         )
     }, [handleBackPress, handleSharePuzzleClick])
 
-    const [showHintsMenu, setHintsMenuVisibility] = useToggle(false)
-    useEffect(() => {
-        addListener(EVENTS.HINT_CLICKED, setHintsMenuVisibility)
-        return () => removeListener(EVENTS.HINT_CLICKED, setHintsMenuVisibility)
-    }, [setHintsMenuVisibility])
-
+    const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
     const renderHintsMenu = () => {
         if (!showHintsMenu) return null
-        return <HintsMenu visibilityToggler={setHintsMenuVisibility} />
+        return <HintsMenu  />
     }
     
     const mistakes = useSelector(getMistakes)
@@ -246,8 +242,6 @@ const Arena_ = ({ navigation, route }) => {
 
     const notesInfo = useSelector(getNotesInfo)
     
-    consoleLog('@@@@@ notesInfo in arena', notesInfo)
-
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>

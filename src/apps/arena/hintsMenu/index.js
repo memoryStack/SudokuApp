@@ -1,25 +1,28 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { View, Text } from 'react-native'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { emit } from '../../../utils/GlobalEventBus'
-import { EVENTS } from '../../../resources/constants'
-import { noOperationFunction } from '../../../utils/util'
 import { styles } from './style'
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
+import withActions from '../../../utils/hocs/withActions'
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
 const COLUMNS_COUNT = 2
 
-const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
-    const handleItemClicked = id => {
-        emit(EVENTS.SHOW_SELECTIVE_HINT, { id })
-        visibilityToggler()
+const HintsMenu_ = ({ onAction}) => {
+
+    const onOverlayContainerClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS })
+    }, [onAction])
+
+    const onMenuItemClick = (id) => {
+        onAction({ type: ACTION_TYPES.ON_MENU_ITEM_PRESS, payload: id, })
     }
 
     const renderMenuItem = ({ label, id }) => {
         return (
             <Touchable
                 style={styles.menuItem}
-                onPress={() => handleItemClicked(id)}
+                onPress={() => onMenuItemClick(id)}
                 touchable={TouchableTypes.opacity}
                 key={label}
             >
@@ -32,7 +35,7 @@ const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
     let row = []
     HINTS_MENU_ITEMS.forEach((item, index) => {
         const isLastItem = index === HINTS_MENU_ITEMS.length - 1
-        const isLastColumn = index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastItem
+        const isLastColumn = (index % COLUMNS_COUNT) === COLUMNS_COUNT - 1 || isLastItem
 
         if (row.length) row.push(<View style={styles.verticalSeperator} key={`verticalSep_${index}`} />)
         row.push(renderMenuItem(item))
@@ -49,7 +52,7 @@ const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
     })
 
     return (
-        <Touchable onPress={visibilityToggler}>
+        <Touchable onPress={onOverlayContainerClick}>
             <View style={styles.overlayContainer}>
                 <View style={styles.container}>{rows}</View>
             </View>
@@ -57,4 +60,6 @@ const HintsMenu_ = ({ visibilityToggler = noOperationFunction }) => {
     )
 }
 
-export const HintsMenu = React.memo(HintsMenu_)
+
+
+export const HintsMenu = React.memo( withActions(ACTION_HANDLERS) (HintsMenu_))

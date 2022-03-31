@@ -14,5 +14,6 @@ export default boardControllerSlice.reducer;
 export const {
     setPencil,
     decreaseHint,
-    setHints
+    setHints,
+    setHintsMenu,
 } = boardControllerSlice.actions;

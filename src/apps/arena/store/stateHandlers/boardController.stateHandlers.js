@@ -7,6 +7,9 @@ const stateHandlers = {
     },
     setHints: (state, { payload }) => {
         state.hintsLeft = payload
+    },
+    setHintsMenu: (state, { payload }) => {
+        state.showHintsMenu = payload
     }
 };
 

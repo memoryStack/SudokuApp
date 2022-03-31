@@ -3,7 +3,7 @@ import { PENCIL_STATE } from "../../../../resources/constants"
 import { duplicacyPresent } from "../../utils/util"
 import { setNotesBunch } from "../reducers/board.reducers"
 
-import { setPencil, setHints, decreaseHint } from '../reducers/boardController.reducers'
+import { setPencil, setHints, decreaseHint, setHintsMenu } from '../reducers/boardController.reducers'
 import { getMainNumbers, getNotesInfo } from "../selectors/board.selectors"
 import { getPencilStatus } from "../selectors/boardController.selectors"
 
@@ -40,4 +40,8 @@ export const fastPencilAction = () => {
     }
 
     invokeDispatch(setNotesBunch(bunch))
+}
+
+export const hintsMenuVisibilityAction = (visibilityStatus) => {
+    invokeDispatch(setHintsMenu(visibilityStatus))
 }

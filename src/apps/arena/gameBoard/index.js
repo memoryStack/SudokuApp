@@ -29,7 +29,6 @@ const Board_ = ({
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
     const selectedCell = useSelector(getSelectedCell)
-    consoleLog('@@@@@@@ selectedCell', selectedCell)
     const selectedCellMainValue = mainNumbers[ selectedCell.row ][ selectedCell.col ].value || 0
 
     const {
