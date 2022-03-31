@@ -14,7 +14,7 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
-const SmartHintHC_ = ({ parentHeight, onSmartHintHCClosed, onAction }) => {
+const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
         show: showSmartHint,
         hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose } = {},
@@ -31,8 +31,7 @@ const SmartHintHC_ = ({ parentHeight, onSmartHintHCClosed, onAction }) => {
     }, [onAction])
 
     const onClosed = useCallback(() => {
-        onSmartHintHCClosed(selectCellOnClose)
-        onAction({ type: ACTION_TYPES.ON_CLOSE })
+        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
     }, [onAction, selectCellOnClose])
 
     const smartHintHCRef = useRef(null)

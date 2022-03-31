@@ -1,10 +1,12 @@
-import { consoleLog } from '../../../utils/util'
+import { updateSelectedCell } from '../store/actions/board.actions'
 import { clearHints, showNextHint, showPrevHint } from '../store/actions/smartHintHC.actions'
 
-const handleOnClose = () => clearHints()
+const handleOnClose = ({ params: newCellToSelect }) => {
+    if (newCellToSelect) updateSelectedCell(newCellToSelect)
+    clearHints()
+}
 
 const handleNextClick = () => {
-    consoleLog('@@@@@ next cliekd')
     showNextHint()
 }
 

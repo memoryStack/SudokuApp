@@ -160,10 +160,6 @@ const Arena_ = ({ navigation, route }) => {
         [gameState],
     )
 
-    const onSmartHintHCClosed = useCallback(selectCellOnClose => {
-        emit(EVENTS.SMART_HINTS_HC_CLOSED, selectCellOnClose)
-    }, [])
-
     const handleSharePuzzleClick = useCallback(() => {
         let puzzleString = ''
 
@@ -234,7 +230,6 @@ const Arena_ = ({ navigation, route }) => {
                 {/* TODO: it can be named better */}
                 <BoardController />
                 <View style={styles.inputPanelContainer}>
-                    {/* <Inputpanel mainNumbersInstancesCount={mainNumbersInstancesCount} /> */}
                     <GameInputPanel />
                 </View>
                 {pageHeight && showNextGameMenu ? (
@@ -258,7 +253,7 @@ const Arena_ = ({ navigation, route }) => {
                         </Animated.View>
                     </Touchable>
                 ) : null}
-                <SmartHintHC parentHeight={pageHeight} onSmartHintHCClosed={onSmartHintHCClosed} />
+                <SmartHintHC parentHeight={pageHeight} />
                 {renderHintsMenu()}
             </View>
         </Page>

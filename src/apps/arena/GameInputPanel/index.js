@@ -29,7 +29,6 @@ const InputPanelContainer_ = () => {
         }
     }, [mainNumbers, numbersVisible])
 
-    // TODO: change the logic to send an array of true and false only
     return (
         <Inputpanel numbersVisible={numbersVisible} />
     )

@@ -278,16 +278,6 @@ const useGameBoard = hints => {
         return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
 
-    useEffect(() => {
-        const handler = newCellToBeSelected => newCellToBeSelected && updateSelectedCell_(newCellToBeSelected)
-        addListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
-        return () => removeListener(EVENTS.SMART_HINTS_HC_CLOSED, handler)
-    }, [mainNumbers, selectedCell])
-
-    const updateSelectedCell_ = ({ row, col }) => {
-        if (selectedCell.row !== row || selectedCell.col !== col) updateSelectedCell({ row, col })
-    }
-        
 }
 
 export { useGameBoard }
