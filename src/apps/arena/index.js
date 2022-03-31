@@ -223,6 +223,7 @@ const Arena_ = ({ navigation, route }) => {
     }, [handleBackPress, handleSharePuzzleClick])
 
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
+
     const renderHintsMenu = () => {
         if (!showHintsMenu) return null
         return <HintsMenu />
