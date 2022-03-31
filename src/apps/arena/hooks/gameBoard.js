@@ -4,12 +4,8 @@ import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol, consoleLog } from '../../../utils/util'
 import { duplicacyPresent } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { getSmartHint } from '../utils/smartHint'
-import { NO_HINTS_FOUND_POPUP_TEXT } from '../utils/smartHints/constants'
-import { setHints } from '../store/reducers/smartHintHC.reducers'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import { showHints } from '../store/actions/smartHintHC.actions'
 import { addMistake } from '../store/actions/refree.actions'
 import {
     updateMainNumbers,
@@ -308,31 +304,7 @@ const useGameBoard = (hints) => {
         return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
 
-    const getNoHintsFoundMsg = id => {
-        return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
-    }
-
-    // it will provide the smart hint with the step wise step logic
-    useEffect(() => {
-        const handler = ({ id }) => {
-            getSmartHint(mainNumbers, notesInfo, id)
-                .then(hints => {
-                    consoleLog('@@@@ hintInfo', JSON.stringify(hints))
-                    if (hints) showHints(hints)
-                    else {
-                        emit(EVENTS.SHOW_SNACK_BAR, {
-                            msg: getNoHintsFoundMsg(id),
-                            visibleTime: 5000,
-                        })
-                    }
-                })
-                .catch(error => {
-                    consoleLog(error)
-                })
-        }
-        addListener(EVENTS.SHOW_SELECTIVE_HINT, handler)
-        return () => removeListener(EVENTS.SHOW_SELECTIVE_HINT, handler)
-    }, [mainNumbers, notesInfo])
+    
 
     useEffect(() => {
         const handler = newCellToBeSelected => newCellToBeSelected && updateSelectedCell_(newCellToBeSelected)

@@ -1,6 +1,5 @@
 import { hintsMenuVisibilityAction } from "../store/actions/boardController.actions"
-import { emit } from '../../../utils/GlobalEventBus'
-import { EVENTS } from '../../../resources/constants'
+import { showHints } from "../store/actions/smartHintHC.actions"
 
 const handleCloseHintsMenu = () => {
     hintsMenuVisibilityAction(false)
@@ -8,7 +7,7 @@ const handleCloseHintsMenu = () => {
 
 const handleMenuItemPress = ({ params: id }) => {
     handleCloseHintsMenu()
-    emit(EVENTS.SHOW_SELECTIVE_HINT, { id })
+    showHints(id)
 }
 
 const ACTION_TYPES = {
