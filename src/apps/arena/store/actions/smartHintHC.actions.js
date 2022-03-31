@@ -1,20 +1,20 @@
-import { getStoreState, invokeDispatch } from "../../../../redux/dispatch.helpers"
-import { EVENTS } from "../../../../resources/constants"
-import { emit } from "../../../../utils/GlobalEventBus"
-import { consoleLog } from "../../../../utils/util"
-import { getSmartHint } from "../../utils/smartHint"
-import { NO_HINTS_FOUND_POPUP_TEXT } from "../../utils/smartHints/constants"
+import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
+import { EVENTS } from '../../../../resources/constants'
+import { emit } from '../../../../utils/GlobalEventBus'
+import { consoleLog } from '../../../../utils/util'
+import { getSmartHint } from '../../utils/smartHint'
+import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
 import { removeHints, setNextHint, setPrevHint, setHints } from '../reducers/smartHintHC.reducers'
-import { getMainNumbers, getNotesInfo } from "../selectors/board.selectors"
+import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
 
 const getNoHintsFoundMsg = id => {
     return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
 }
 
-export const showHints = (hintId) => {
+export const showHints = hintId => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
-    
+
     getSmartHint(mainNumbers, notesInfo, hintId)
         .then(hints => {
             consoleLog('@@@@ hintInfo', JSON.stringify(hints))
@@ -29,12 +29,12 @@ export const showHints = (hintId) => {
         .catch(error => {
             // TODO: make the popup scrollable for very long systraces
             consoleLog(error)
-             if (__DEV__ ) {
+            if (__DEV__) {
                 emit(EVENTS.SHOW_SNACK_BAR, {
-                    msg: JSON.stringify( error.stack),
+                    msg: JSON.stringify(error.stack),
                     visibleTime: 10000,
                 })
-             }
+            }
         })
 }
 

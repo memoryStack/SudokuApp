@@ -1,4 +1,3 @@
-
 const stateHandlers = {
     setHints: (state, action) => {
         const { payload: hints } = action
@@ -16,7 +15,7 @@ const stateHandlers = {
     },
     setPrevHint: (state, action) => {
         state.currentHintNum -= 1
-    }
-};
+    },
+}
 
-export default stateHandlers;
+export default stateHandlers

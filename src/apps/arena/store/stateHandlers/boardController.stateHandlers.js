@@ -10,7 +10,7 @@ const stateHandlers = {
     },
     setHintsMenu: (state, { payload }) => {
         state.showHintsMenu = payload
-    }
-};
+    },
+}
 
-export default stateHandlers;
+export default stateHandlers

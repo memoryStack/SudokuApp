@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import CodePush from 'react-native-code-push'
-import { Provider } from "react-redux";
+import { Provider } from 'react-redux'
 
 import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
@@ -9,7 +9,7 @@ import { EVENTS } from './src/resources/constants'
 import { NavigationContainer } from '@react-navigation/native'
 import { getNavigator } from './src/navigation/navigator'
 
-import store from "./src/redux/store";
+import store from './src/redux/store'
 
 // initialize the event bus
 

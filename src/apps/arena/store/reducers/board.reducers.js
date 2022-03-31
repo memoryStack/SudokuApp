@@ -1,15 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
-import { INITIAL_STATE } from "../state/board.state";
-import stateHandlers from "../stateHandlers/board.stateHandlers";
+import { INITIAL_STATE } from '../state/board.state'
+import stateHandlers from '../stateHandlers/board.stateHandlers'
 
 export const boardSlice = createSlice({
-  name: "board",
-  initialState: INITIAL_STATE,
-  reducers: stateHandlers,
-});
+    name: 'board',
+    initialState: INITIAL_STATE,
+    reducers: stateHandlers,
+})
 
-export default boardSlice.reducer;
+export default boardSlice.reducer
 
 export const {
     setMainNumbers,
@@ -19,4 +19,4 @@ export const {
     setNotes,
     setNotesBunch,
     eraseNotesBunch,
-} = boardSlice.actions;
+} = boardSlice.actions

@@ -1,6 +1,4 @@
-
-
-export const getHintHCInfo = (state) => {
+export const getHintHCInfo = state => {
     const currentHintNum = state.smartHintHC.currentHintNum
     if (currentHintNum === -1) return {}
     return {

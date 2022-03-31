@@ -25,19 +25,13 @@ const Board_ = ({
     notesInfo = [],
     onCellClick,
 }) => {
-
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
     const selectedCell = useSelector(getSelectedCell)
-    const selectedCellMainValue = mainNumbers[ selectedCell.row ][ selectedCell.col ].value || 0
+    const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
-    const {
-        show: showSmartHint,
-        hint: {
-            cellsToFocusData: smartHintCellsHighlightInfo = {}
-        } = {},
-    } = useSelector( getHintHCInfo )
-
+    const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
+        useSelector(getHintHCInfo)
 
     const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT } = useBoardElementsDimensions()
 

@@ -1,10 +1,9 @@
-
-import { getStoreState } from "../../../redux/dispatch.helpers"
-import { EVENTS, GAME_STATE } from "../../../resources/constants"
-import { emit } from "../../../utils/GlobalEventBus"
-import { consoleLog } from "../../../utils/util"
-import { updatePencil, fastPencilAction, hintsMenuVisibilityAction } from "../store/actions/boardController.actions"
-import { getGameState } from "../store/selectors/gameState.selectors"
+import { getStoreState } from '../../../redux/dispatch.helpers'
+import { EVENTS, GAME_STATE } from '../../../resources/constants'
+import { emit } from '../../../utils/GlobalEventBus'
+import { consoleLog } from '../../../utils/util'
+import { updatePencil, fastPencilAction, hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
+import { getGameState } from '../store/selectors/gameState.selectors'
 
 const isGameActive = () => {
     const gameState = getGameState(getStoreState())
@@ -23,7 +22,7 @@ const handlePencilClick = () => {
 }
 
 const handleFastPencilClick = () => {
-    if (!isGameActive()) return    
+    if (!isGameActive()) return
     fastPencilAction()
 }
 
@@ -46,7 +45,4 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_HINT_CLICK]: handleHintClick,
 }
 
-export {
-    ACTION_TYPES,
-    ACTION_HANDLERS,
-}
+export { ACTION_TYPES, ACTION_HANDLERS }

@@ -1,4 +1,3 @@
-
 const stateHandlers = {
     setMainNumbers: (state, { payload }) => {
         state.mainNumbers = payload
@@ -8,7 +7,7 @@ const stateHandlers = {
         state.mainNumbers[cell.row][cell.col].value = number
     },
     eraseCellMainValue: (state, { payload }) => {
-        const { row, col }  = payload
+        const { row, col } = payload
         state.mainNumbers[row][col].value = 0
     },
     setSelectedCell: (state, { payload }) => {
@@ -19,16 +18,16 @@ const stateHandlers = {
     },
     setNotesBunch: (state, { payload }) => {
         const notesBunch = payload
-        notesBunch.forEach((( { cell, note } ) => {
+        notesBunch.forEach(({ cell, note }) => {
             state.notesInfo[cell.row][cell.col][note - 1].show = 1
-        }))
+        })
     },
     eraseNotesBunch: (state, { payload }) => {
         const notesBunch = payload
-        notesBunch.forEach((( { cell, note } ) => {
+        notesBunch.forEach(({ cell, note }) => {
             state.notesInfo[cell.row][cell.col][note - 1].show = 0
-        }))
-    }
-};
+        })
+    },
+}
 
-export default stateHandlers;
+export default stateHandlers

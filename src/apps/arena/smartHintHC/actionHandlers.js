@@ -22,7 +22,4 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_PREV_CLICK]: handlePrevClick,
 }
 
-export {
-    ACTION_TYPES,
-    ACTION_HANDLERS,
-}
+export { ACTION_TYPES, ACTION_HANDLERS }

@@ -9,18 +9,14 @@ import withActions from '../../../utils/hocs/withActions'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
 const CLOSE_ICON_DIMENSION = 28
-const Inputpanel_ = ({
-    mainNumbersInstancesCount = new Array(10).fill(0),
-    onAction,
-}) => {
+const Inputpanel_ = ({ mainNumbersInstancesCount = new Array(10).fill(0), onAction }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
     const styles = useMemo(() => {
         return getStyles(CELL_WIDTH)
     }, [CELL_WIDTH])
 
-    const onNumberClicked = number =>
-        onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
+    const onNumberClicked = number => onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
 
     const areAllInstancesFilled = number => mainNumbersInstancesCount[number] === 9
 
@@ -80,11 +76,7 @@ const Inputpanel_ = ({
         return rows
     }
 
-    return (
-        <View style={styles.container}>
-            {getPanelView()}
-        </View>
-    )
+    return <View style={styles.container}>{getPanelView()}</View>
 }
 
 export const Inputpanel = React.memo(withActions(ACTION_HANDLERS)(Inputpanel_))

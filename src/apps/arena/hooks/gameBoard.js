@@ -37,15 +37,12 @@ const isPuzzleSolved = mainNumbers => {
     return true
 }
 
-const useGameBoard = (hints) => {
-    
+const useGameBoard = hints => {
     const gameState = useSelector(getGameState)
 
     const pencilState = useSelector(getPencilStatus)
 
-    const {
-        movesStack: initialmovesStack,
-    } = useRef(initBoardData()).current
+    const { movesStack: initialmovesStack } = useRef(initBoardData()).current
 
     const movesStack = useRef(initialmovesStack)
 
@@ -87,7 +84,7 @@ const useGameBoard = (hints) => {
             componentUnmounted = true
         }
     }, [mainNumbers])
-    
+
     useEffect(() => {
         const handler = ({ mainNumbers }) => {
             setBoardData({ ...initBoardData(), mainNumbers })
@@ -150,8 +147,7 @@ const useGameBoard = (hints) => {
                 if (number !== mainNumbersDup[row][col].solutionValue) {
                     emit(EVENTS.MADE_MISTAKE) // TODO: remove this event
                     addMistake()
-                }
-                else {
+                } else {
                     notesErasedByMainValue = removeNotesAfterCellFilled(number, selectedCell)
                     if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
                     if (isPuzzleSolved(mainNumbersDup)) {
@@ -226,7 +222,7 @@ const useGameBoard = (hints) => {
                     }
                 } else {
                     // main value got erased, so fill that value in the cell
-                    updateCellMainNumber({row, col}, value[0])
+                    updateCellMainNumber({ row, col }, value[0])
                 }
             } else {
                 const notesVisibilityChanges = value
@@ -303,8 +299,6 @@ const useGameBoard = (hints) => {
         addListener(EVENTS.ERASER_CLICKED, handler)
         return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     }, [selectedCell, mainNumbers, notesInfo])
-
-    
 
     useEffect(() => {
         const handler = newCellToBeSelected => newCellToBeSelected && updateSelectedCell_(newCellToBeSelected)

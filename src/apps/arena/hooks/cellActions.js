@@ -17,7 +17,6 @@ const initCellActionsData = () => {
 
 // TODO: let's think of better naming for this set of operations on a cell
 const useCellActions = () => {
-
     const pencilState = useSelector(getPencilStatus)
 
     const initialCellActionsData = useRef(initCellActionsData()).current

@@ -3,7 +3,13 @@ import { LEVEL_DIFFICULTIES, EVENTS, GAME_STATE } from '../../../resources/const
 import { addListener, emit, removeListener } from '../../../utils/GlobalEventBus'
 import { isGameOver } from '../utils/util'
 import { cacheGameData, GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { updateDifficultylevel, updateMistakes, updateTime, stopTimer, startTimer } from '../store/actions/refree.actions'
+import {
+    updateDifficultylevel,
+    updateMistakes,
+    updateTime,
+    stopTimer,
+    startTimer,
+} from '../store/actions/refree.actions'
 import { useSelector } from 'react-redux'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
@@ -21,7 +27,6 @@ const initRefereeData = (difficultyLevel = LEVEL_DIFFICULTIES.EASY) => {
 }
 
 const useReferee = () => {
-    
     const gameState = useSelector(getGameState)
 
     const { show: showSmartHint } = useSelector(getHintHCInfo)

@@ -1,19 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
-import { INITIAL_STATE } from "../state/boardController.state";
-import stateHandlers from "../stateHandlers/boardController.stateHandlers";
+import { INITIAL_STATE } from '../state/boardController.state'
+import stateHandlers from '../stateHandlers/boardController.stateHandlers'
 
 export const boardControllerSlice = createSlice({
-  name: "boardController",
-  initialState: INITIAL_STATE,
-  reducers: stateHandlers,
-});
+    name: 'boardController',
+    initialState: INITIAL_STATE,
+    reducers: stateHandlers,
+})
 
-export default boardControllerSlice.reducer;
+export default boardControllerSlice.reducer
 
-export const {
-    setPencil,
-    decreaseHint,
-    setHints,
-    setHintsMenu,
-} = boardControllerSlice.actions;
+export const { setPencil, decreaseHint, setHints, setHintsMenu } = boardControllerSlice.actions

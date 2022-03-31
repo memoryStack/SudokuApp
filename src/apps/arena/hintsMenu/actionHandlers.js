@@ -1,5 +1,5 @@
-import { hintsMenuVisibilityAction } from "../store/actions/boardController.actions"
-import { showHints } from "../store/actions/smartHintHC.actions"
+import { hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
+import { showHints } from '../store/actions/smartHintHC.actions'
 
 const handleCloseHintsMenu = () => {
     hintsMenuVisibilityAction(false)
@@ -20,7 +20,4 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_MENU_ITEM_PRESS]: handleMenuItemPress,
 }
 
-export {
-    ACTION_TYPES,
-    ACTION_HANDLERS,
-}
+export { ACTION_TYPES, ACTION_HANDLERS }

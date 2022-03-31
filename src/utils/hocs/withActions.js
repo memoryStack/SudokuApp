@@ -1,52 +1,43 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
 
 const DEFAULT_OPTIONS = {
-  shouldForwardAction: false,
-};
+    shouldForwardAction: false,
+}
 
-const withActions = (
-  actionHandlers = {},
-  initialState = {},
-  options = DEFAULT_OPTIONS
-) => function wrapComponent(WrappedComponent) {
-    class WithActions extends PureComponent {
-        state = initialState;
+const withActions = (actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS) =>
+    function wrapComponent(WrappedComponent) {
+        class WithActions extends PureComponent {
+            state = initialState
 
-        getState = () => ({ ...this.props, ...this.state });
+            getState = () => ({ ...this.props, ...this.state })
 
-        handleAction = (action = {}) => {
-            const handler = actionHandlers[action.type];
-            const { onAction, shouldForwardAction } = this.props;
+            handleAction = (action = {}) => {
+                const handler = actionHandlers[action.type]
+                const { onAction, shouldForwardAction } = this.props
 
-            let result;
+                let result
 
-            if (handler) {
-                result = handler({
-                    params: action.payload,
-                    getState: this.getState,
-                    setState: this.setState.bind(this),
-                });
+                if (handler) {
+                    result = handler({
+                        params: action.payload,
+                        getState: this.getState,
+                        setState: this.setState.bind(this),
+                    })
+                }
+
+                if (options.shouldForwardAction || shouldForwardAction) {
+                    result = onAction(action, result)
+                }
+
+                return result
             }
 
-            if (options.shouldForwardAction || shouldForwardAction) {
-                result = onAction(action, result);
+            render() {
+                return <WrappedComponent {...this.props} {...this.state} onAction={this.handleAction} />
             }
-
-            return result;
-        };
-
-        render() {
-            return (
-                <WrappedComponent
-                    {...this.props}
-                    {...this.state}
-                    onAction={this.handleAction}
-                />
-            );
         }
+
+        return WithActions
     }
 
-    return WithActions;
-};
-
-export default withActions;
+export default withActions

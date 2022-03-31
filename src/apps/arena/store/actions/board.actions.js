@@ -1,4 +1,4 @@
-import { getStoreState, invokeDispatch } from "../../../../redux/dispatch.helpers"
+import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 
 import {
     setMainNumbers,
@@ -9,35 +9,37 @@ import {
     setNotesBunch,
     eraseNotesBunch,
 } from '../reducers/board.reducers'
-import { getNotesInfo } from "../selectors/board.selectors"
+import { getNotesInfo } from '../selectors/board.selectors'
 
-export const updateMainNumbers = (mainNumbers) => {
+export const updateMainNumbers = mainNumbers => {
     if (!mainNumbers) return
     invokeDispatch(setMainNumbers(mainNumbers))
 }
 
 export const updateCellMainNumber = (cell, number) => {
-    invokeDispatch(setCellMainNumber({
-        cell,
-        number,
-    }))
+    invokeDispatch(
+        setCellMainNumber({
+            cell,
+            number,
+        }),
+    )
 }
 
-export const removeMainNumber = (cell) => {
+export const removeMainNumber = cell => {
     invokeDispatch(eraseCellMainValue(cell))
 }
 
-export const updateSelectedCell = (cell) => {
+export const updateSelectedCell = cell => {
     if (!cell) return
     invokeDispatch(setSelectedCell(cell))
 }
 
-export const updateNotes = (notes) => {
+export const updateNotes = notes => {
     if (!notes) return
     invokeDispatch(setNotes(notes))
 }
 
-export const removeCellNotes = (cell) => {
+export const removeCellNotes = cell => {
     const bunch = []
     const notesInfo = getNotesInfo(getStoreState())
     notesInfo[cell.row][cell.col].forEach(({ noteValue, show }) => {
@@ -48,12 +50,12 @@ export const removeCellNotes = (cell) => {
 }
 
 export const addCellNote = (cell, number) => {
-    const bunch = [{cell, note: number}]
+    const bunch = [{ cell, note: number }]
     invokeDispatch(setNotesBunch(bunch))
 }
 
 export const removeCellNote = (cell, number) => {
-    const bunch = [{cell, note: number}]
+    const bunch = [{ cell, note: number }]
     invokeDispatch(eraseNotesBunch(bunch))
 }
 
@@ -90,9 +92,9 @@ export const removeNotesAfterCellFilled = (number, cell) => {
         {
             type: HOUSE_TYPE.BLOCK,
             num: getBlockAndBoxNum(cell).blockNum,
-        }
+        },
     ]
-    
+
     houses.forEach(({ type, num }) => {
         getHouseCells(type, num).forEach(({ row, col }) => {
             const { show } = notesInfo[row][col][number - 1]

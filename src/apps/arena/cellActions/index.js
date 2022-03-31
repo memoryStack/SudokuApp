@@ -1,13 +1,13 @@
-import React, { useCallback } from "react"
+import React, { useCallback } from 'react'
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
-import { Undo } from "./undo"
-import { Pencil } from "./pencil"
-import { FastPencil } from "./fastPencil"
-import { Hint } from "./hint"
-import withActions from "../../../utils/hocs/withActions"
-import { ACTION_HANDLERS, ACTION_TYPES } from "./actionHandlers"
-import { useSelector } from "react-redux"
-import { getPencilStatus } from "../store/selectors/boardController.selectors"
+import { Undo } from './undo'
+import { Pencil } from './pencil'
+import { FastPencil } from './fastPencil'
+import { Hint } from './hint'
+import withActions from '../../../utils/hocs/withActions'
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { useSelector } from 'react-redux'
+import { getPencilStatus } from '../store/selectors/boardController.selectors'
 
 const styles = StyleSheet.create({
     cellActionsContainer: {
@@ -20,11 +20,8 @@ const styles = StyleSheet.create({
     },
 })
 
-const BoardController_ = ({ 
-    onAction
- }) => {
-
-    const pencilState = useSelector( getPencilStatus )
+const BoardController_ = ({ onAction }) => {
+    const pencilState = useSelector(getPencilStatus)
 
     const { width: windowWidth } = useWindowDimensions()
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -48,11 +45,7 @@ const BoardController_ = ({
     return (
         <View style={styles.cellActionsContainer}>
             <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onUndoClick} />
-            <Pencil
-                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                pencilState={pencilState}
-                onClick={onPencilClick}
-            />
+            <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} pencilState={pencilState} onClick={onPencilClick} />
             <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onFastPencilClick} />
             <Hint
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
@@ -63,4 +56,4 @@ const BoardController_ = ({
     )
 }
 
-export const BoardController = React.memo(withActions(ACTION_HANDLERS) (BoardController_))
+export const BoardController = React.memo(withActions(ACTION_HANDLERS)(BoardController_))

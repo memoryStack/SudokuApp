@@ -12,7 +12,6 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 // comfort and confidence level
 
 const Hint_ = ({ iconBoxSize, hints, onClick }) => {
-    
     const gameState = useSelector(getGameState)
 
     const renderTickerIcon = () => {

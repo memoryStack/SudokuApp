@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
 const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
 const Timer_ = ({ onClick = noOperationFunction }) => {
-    
     const gameState = useSelector(getGameState)
     const time = useSelector(getTime)
 
@@ -65,7 +64,7 @@ const Timer_ = ({ onClick = noOperationFunction }) => {
         )
     }
 
-    return  (
+    return (
         <Touchable style={styles.timeCounter} onPress={onClick} touchable={TouchableTypes.opacity} hitSlop={hitSlop}>
             <Text style={styles.textStyles}>{`${getTimeComponentString(time.hours)}:`}</Text>
             <Text style={styles.textStyles}>{`${getTimeComponentString(time.minutes)}:`}</Text>

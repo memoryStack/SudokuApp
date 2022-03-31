@@ -8,14 +8,13 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
 const COLUMNS_COUNT = 2
 
-const HintsMenu_ = ({ onAction}) => {
-
+const HintsMenu_ = ({ onAction }) => {
     const onOverlayContainerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS })
     }, [onAction])
 
-    const onMenuItemClick = (id) => {
-        onAction({ type: ACTION_TYPES.ON_MENU_ITEM_PRESS, payload: id, })
+    const onMenuItemClick = id => {
+        onAction({ type: ACTION_TYPES.ON_MENU_ITEM_PRESS, payload: id })
     }
 
     const renderMenuItem = ({ label, id }) => {
@@ -35,7 +34,7 @@ const HintsMenu_ = ({ onAction}) => {
     let row = []
     HINTS_MENU_ITEMS.forEach((item, index) => {
         const isLastItem = index === HINTS_MENU_ITEMS.length - 1
-        const isLastColumn = (index % COLUMNS_COUNT) === COLUMNS_COUNT - 1 || isLastItem
+        const isLastColumn = index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastItem
 
         if (row.length) row.push(<View style={styles.verticalSeperator} key={`verticalSep_${index}`} />)
         row.push(renderMenuItem(item))
@@ -60,6 +59,4 @@ const HintsMenu_ = ({ onAction}) => {
     )
 }
 
-
-
-export const HintsMenu = React.memo( withActions(ACTION_HANDLERS) (HintsMenu_))
+export const HintsMenu = React.memo(withActions(ACTION_HANDLERS)(HintsMenu_))

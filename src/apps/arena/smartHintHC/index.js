@@ -14,20 +14,12 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
-const SmartHintHC_ = ({
-    parentHeight,
-    onSmartHintHCClosed,
-    onAction,
-}) => {
-
+const SmartHintHC_ = ({ parentHeight, onSmartHintHCClosed, onAction }) => {
     const {
         show: showSmartHint,
-        hint: {
-            techniqueInfo: { title = '', logic = '' } = {},
-            selectCellOnClose,
-        } = {},
+        hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose } = {},
         currentHintNum,
-        totalHintsCount
+        totalHintsCount,
     } = useSelector(getHintHCInfo)
 
     const onNextClick = useCallback(() => {

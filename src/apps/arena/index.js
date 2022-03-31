@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
-    
+
     inputPanelContainer: {
         width: '100%',
         marginVertical: 20,
@@ -87,18 +87,13 @@ const styles = StyleSheet.create({
 })
 
 const Arena_ = ({ navigation, route }) => {
-
     const [pageHeight, setPageHeight] = useState(0)
     const [showGameSolvedCard, setGameSolvedCard] = useState(false)
-    const { showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } =
-        useManageGame(route)
+    const { showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } = useManageGame(route)
 
-    const { hints, } = useCellActions()
+    const { hints } = useCellActions()
 
-    const {
-        onCellClick,
-        mainNumbersInstancesCount,
-    } = useGameBoard(hints)
+    const { onCellClick, mainNumbersInstancesCount } = useGameBoard(hints)
 
     // TODO: i couldn't use this logic to update the cell after hint HC is closed
     // it's because i am using useEffect in usePrevious hook and it results in infinite
@@ -176,7 +171,7 @@ const Arena_ = ({ navigation, route }) => {
         [gameState],
     )
 
-    const onSmartHintHCClosed = useCallback((selectCellOnClose) => {
+    const onSmartHintHCClosed = useCallback(selectCellOnClose => {
         emit(EVENTS.SMART_HINTS_HC_CLOSED, selectCellOnClose)
     }, [])
 
@@ -230,27 +225,24 @@ const Arena_ = ({ navigation, route }) => {
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
     const renderHintsMenu = () => {
         if (!showHintsMenu) return null
-        return <HintsMenu  />
+        return <HintsMenu />
     }
-    
+
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
 
-    const time = useSelector( getTime )
+    const time = useSelector(getTime)
 
     const notesInfo = useSelector(getNotesInfo)
-    
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
                 <Refree maxMistakesLimit={MISTAKES_LIMIT} />
-                <Board
-                    notesInfo={notesInfo}
-                    onCellClick={onCellClick}
-                />
+                <Board notesInfo={notesInfo} onCellClick={onCellClick} />
                 {/* TODO: it can be named better */}
-                <BoardController /> 
+                <BoardController />
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel mainNumbersInstancesCount={mainNumbersInstancesCount} />
                 </View>

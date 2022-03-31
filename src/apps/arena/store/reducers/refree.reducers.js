@@ -1,20 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
-import { INITIAL_STATE } from "../state/refree.state";
-import stateHandlers from "../stateHandlers/refree.stateHandlers";
+import { INITIAL_STATE } from '../state/refree.state'
+import stateHandlers from '../stateHandlers/refree.stateHandlers'
 
 export const refreeSlice = createSlice({
-  name: "refree",
-  initialState: INITIAL_STATE,
-  reducers: stateHandlers,
-});
+    name: 'refree',
+    initialState: INITIAL_STATE,
+    reducers: stateHandlers,
+})
 
-export default refreeSlice.reducer;
+export default refreeSlice.reducer
 
-export const {
-    increaseMistakes,
-    resetMistakes,
-    setMistakes,
-    setDifficultylevel,
-    setTime,
-} = refreeSlice.actions;
+export const { increaseMistakes, resetMistakes, setMistakes, setDifficultylevel, setTime } = refreeSlice.actions

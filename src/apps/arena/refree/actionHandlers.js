@@ -1,7 +1,4 @@
-import { timerClick } from "../store/actions/refree.actions"
-
-
-
+import { timerClick } from '../store/actions/refree.actions'
 
 // const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
 //     seconds++
@@ -24,9 +21,7 @@ import { timerClick } from "../store/actions/refree.actions"
 //     if (timerId.current) timerId.current = clearInterval(timerId.current)
 // }
 
-const handleInit = () => {
-    
-}
+const handleInit = () => {}
 
 const handleTimerClick = () => {
     timerClick()
@@ -42,7 +37,4 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_INIT]: handleInit,
 }
 
-export {
-    ACTION_TYPES,
-    ACTION_HANDLERS,
-}
+export { ACTION_TYPES, ACTION_HANDLERS }

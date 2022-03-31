@@ -23,11 +23,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const _Refree = ({
-    maxMistakesLimit,
-    onAction,
-}) => {
-
+const _Refree = ({ maxMistakesLimit, onAction }) => {
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
 
@@ -44,4 +40,4 @@ const _Refree = ({
     )
 }
 
-export default React.memo(withActions(ACTION_HANDLERS)( _Refree))
+export default React.memo(withActions(ACTION_HANDLERS)(_Refree))
