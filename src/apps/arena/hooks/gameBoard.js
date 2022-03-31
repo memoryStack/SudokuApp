@@ -49,8 +49,6 @@ const useGameBoard = hints => {
     const selectedCell = useSelector(getSelectedCell)
     const notesInfo = useSelector(getNotesInfo)
 
-    const [mainNumbersInstancesCount, setMainNumbersInstancesCount] = useState(new Array(10).fill(0))
-
     const setBoardData = ({ mainNumbers, notesInfo, selectedCell, movesStack: moves }) => {
         movesStack.current = moves
         updateMainNumbers(mainNumbers)
@@ -177,25 +175,6 @@ const useGameBoard = hints => {
         }
     }, [mainNumbers, notesInfo, selectedCell, pencilState])
 
-    useEffect(() => {
-        const instancesCountAfterUpdate = new Array(10).fill(0)
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
-                const value = mainNumbers[row][col].value
-                instancesCountAfterUpdate[value]++
-            }
-        }
-
-        let areEqual = true
-        for (let i = 1; i <= 9 && areEqual; i++) {
-            if (mainNumbersInstancesCount[i] !== instancesCountAfterUpdate[i]) {
-                areEqual = false
-            }
-        }
-
-        if (!areEqual) setMainNumbersInstancesCount(instancesCountAfterUpdate)
-    }, [mainNumbers, mainNumbersInstancesCount])
-
     // EVENTS.UNDO_CLICKED
     // TODO: i think it would be better if when a mainValue is inserted in the cell
     // then don't erase the already filled notes. becoz if we do redo then we will
@@ -308,10 +287,7 @@ const useGameBoard = hints => {
     const updateSelectedCell_ = ({ row, col }) => {
         if (selectedCell.row !== row || selectedCell.col !== col) updateSelectedCell({ row, col })
     }
-
-    return {
-        mainNumbersInstancesCount,
-    }
+        
 }
 
 export { useGameBoard }

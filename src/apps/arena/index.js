@@ -29,6 +29,7 @@ import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
 import { getMainNumbers, getNotesInfo } from './store/selectors/board.selectors'
 import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
+import { GameInputPanel } from './GameInputPanel'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -93,7 +94,7 @@ const Arena_ = ({ navigation, route }) => {
 
     const { hints } = useCellActions()
 
-    const { mainNumbersInstancesCount } = useGameBoard(hints)
+    useGameBoard(hints)
 
     const { MISTAKES_LIMIT } = useReferee()
 
@@ -233,7 +234,8 @@ const Arena_ = ({ navigation, route }) => {
                 {/* TODO: it can be named better */}
                 <BoardController />
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel mainNumbersInstancesCount={mainNumbersInstancesCount} />
+                    {/* <Inputpanel mainNumbersInstancesCount={mainNumbersInstancesCount} /> */}
+                    <GameInputPanel />
                 </View>
                 {pageHeight && showNextGameMenu ? (
                     <NextGameMenu parentHeight={pageHeight} onMenuClosed={onNewGameMenuClosed} />
