@@ -38,7 +38,6 @@ const isPuzzleSolved = mainNumbers => {
 }
 
 const useGameBoard = hints => {
-    const gameState = useSelector(getGameState)
 
     const pencilState = useSelector(getPencilStatus)
 
@@ -310,18 +309,7 @@ const useGameBoard = hints => {
         if (selectedCell.row !== row || selectedCell.col !== col) updateSelectedCell({ row, col })
     }
 
-    const { show: showSmartHintHC } = useSelector(getHintHCInfo)
-
-    const onCellClick = useCallback(
-        cell => {
-            if (gameState !== GAME_STATE.ACTIVE || showSmartHintHC) return
-            updateSelectedCell_(cell)
-        },
-        [mainNumbers, gameState, showSmartHintHC, selectedCell],
-    )
-
     return {
-        onCellClick,
         mainNumbersInstancesCount,
     }
 }

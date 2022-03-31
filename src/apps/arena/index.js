@@ -93,19 +93,7 @@ const Arena_ = ({ navigation, route }) => {
 
     const { hints } = useCellActions()
 
-    const { onCellClick, mainNumbersInstancesCount } = useGameBoard(hints)
-
-    // TODO: i couldn't use this logic to update the cell after hint HC is closed
-    // it's because i am using useEffect in usePrevious hook and it results in infinite
-    // re-rendering. dig up the reason why this is happening. (URGENT)
-    // have to change this usePrevious
-    // const smartHintWasVisible = usePrevious(showSmartHint, true)
-    // const smartHintFocusedCell = usePrevious(selectCellOnClose)
-    // if (smartHintWasVisible && !showSmartHint) {
-    //     // select the cell on which smart hint HC was closed
-    //     consoleLog('@@@@@@ selectcellonclose', smartHintFocusedCell)
-    //     // onCellClick(smartHintFocusedCell)
-    // }
+    const { mainNumbersInstancesCount } = useGameBoard(hints)
 
     const { MISTAKES_LIMIT } = useReferee()
 
@@ -241,7 +229,7 @@ const Arena_ = ({ navigation, route }) => {
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
                 <Refree maxMistakesLimit={MISTAKES_LIMIT} />
-                <Board notesInfo={notesInfo} onCellClick={onCellClick} />
+                <Board notesInfo={notesInfo} />
                 {/* TODO: it can be named better */}
                 <BoardController />
                 <View style={styles.inputPanelContainer}>

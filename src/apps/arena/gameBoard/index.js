@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { View } from 'react-native'
 import { getStyles } from './style'
 import { Cell } from './cell'
@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { getMainNumbers, getSelectedCell } from '../store/selectors/board.selectors'
+import withActions from '../../../utils/hocs/withActions'
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
 const looper = []
 const bordersLooper = []
@@ -23,7 +25,7 @@ for (let i = 0; i < 10; i++) {
 const Board_ = ({
     screenName = SCREEN_NAME.ARENA, // default will be arena
     notesInfo = [],
-    onCellClick,
+    onAction,
 }) => {
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
@@ -97,6 +99,10 @@ const Board_ = ({
         )
     }
 
+    const onCellClick = useCallback((cell) => {
+        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    }, [onAction])
+
     const renderRow = (row, key) => {
         let rowElementsKeyCounter = 0
         return (
@@ -113,7 +119,7 @@ const Board_ = ({
                                 mainValueFontColor={getMainNumFontColor(cell)}
                                 cellMainValue={mainNumbers[row][col].value}
                                 cellNotes={notesInfo[row][col]}
-                                onCellClicked={onCellClick}
+                                onCellClick={onCellClick}
                                 gameState={gameState}
                                 displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
                                 smartHintData={smartHintData}
@@ -162,4 +168,4 @@ const Board_ = ({
     return getBoard()
 }
 
-export const Board = React.memo(Board_)
+export const Board = React.memo(withActions(ACTION_HANDLERS)( Board_))

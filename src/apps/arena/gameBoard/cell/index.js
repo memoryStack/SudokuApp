@@ -22,7 +22,7 @@ const Cell_ = ({
     cellMainValue = 0,
     cellBGColor = null,
     mainValueFontColor = null,
-    onCellClicked,
+    onCellClick,
     gameState,
     displayCrossIcon = false,
     smartHintData,
@@ -103,7 +103,7 @@ const Cell_ = ({
             touchable={TouchableTypes.opacity}
             activeOpacity={1}
             style={[styles.cell, cellBGColor]}
-            onPress={() => onCellClicked({ row, col })}
+            onPress={() => onCellClick({ row, col })}
         >
             {gameState !== GAME_STATE.INACTIVE ? getCellContent() : null}
         </Touchable>
