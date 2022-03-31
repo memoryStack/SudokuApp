@@ -1,7 +1,4 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
-import { getBlockAndBoxNum } from '../../../../utils/util'
-import { getHouseCells } from '../../utils/houseCells'
-import { HOUSE_TYPE } from '../../utils/smartHints/constants'
 
 import {
     setMainNumbers,
@@ -60,50 +57,4 @@ export const addCellNote = (cell, number) => {
 export const removeCellNote = (cell, number) => {
     const bunch = [{ cell, note: number }]
     invokeDispatch(eraseNotesBunch(bunch))
-}
-
-// TODO: tranfrom it for movesData
-// TODO: add the removed notes in cells other than currentCell to the undo move
-//          right now we are just recording the current cells notes only
-export const removeNotesAfterCellFilled = (number, cell) => {
-    const notesInfo = getNotesInfo(getStoreState())
-    const { row, col } = cell
-    let notesErasedByMainValue = []
-    
-    const bunch = []
-    for (let note = 0; note < 9; note++) {
-        const { show } = notesInfo[row][col][note]
-        if (show) {
-            notesErasedByMainValue.push(note + 1)
-            bunch.push({ cell, note: note + 1 })
-        }
-    }
-
-    const houses = [
-        {
-            type: HOUSE_TYPE.ROW,
-            num: row,
-        },
-        {
-            type: HOUSE_TYPE.COL,
-            num: col,
-        },
-        {
-            type: HOUSE_TYPE.BLOCK,
-            num:  getBlockAndBoxNum(cell).blockNum,
-        },
-    ]
-
-    houses.forEach(({ type, num }) => {
-        getHouseCells(type, num).forEach(({ row, col }) => {
-            const { show } = notesInfo[row][col][number - 1]
-            if (show) {
-                bunch.push({ cell: { row, col }, note: number })
-            }
-        })
-    })
-
-    invokeDispatch(eraseNotesBunch(bunch))
-
-    return notesErasedByMainValue
 }

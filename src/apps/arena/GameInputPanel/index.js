@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import withActions from "../../../utils/hocs/withActions"
 import { Inputpanel } from "../inputPanel"
 import { getMainNumbers } from "../store/selectors/board.selectors"
+import { ACTION_HANDLERS } from "./actionHandlers"
 
-const InputPanelContainer_ = () => {
+const GameInputPanel_ = ({
+    onAction
+}) => {
     const mainNumbers = useSelector(getMainNumbers)
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
 
@@ -30,8 +34,8 @@ const InputPanelContainer_ = () => {
     }, [mainNumbers, numbersVisible])
 
     return (
-        <Inputpanel numbersVisible={numbersVisible} />
+        <Inputpanel numbersVisible={numbersVisible} onAction={onAction} />
     )
 }
 
-export const GameInputPanel = React.memo(InputPanelContainer_)
+export const GameInputPanel = React.memo(withActions(ACTION_HANDLERS)(GameInputPanel_))

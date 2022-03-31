@@ -5,8 +5,7 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
 import { noOperationFunction } from '../../../utils/util'
-import withActions from '../../../utils/hocs/withActions'
-import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { ACTION_TYPES } from './constants'
 
 const CLOSE_ICON_DIMENSION = 28
 const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) => {
@@ -76,4 +75,4 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
     return <View style={styles.container}>{getPanelView()}</View>
 }
 
-export const Inputpanel = React.memo(withActions(ACTION_HANDLERS)(Inputpanel_))
+export const Inputpanel = React.memo(Inputpanel_)
