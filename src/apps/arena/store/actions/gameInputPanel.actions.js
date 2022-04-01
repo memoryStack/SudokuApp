@@ -9,7 +9,7 @@ import { duplicacyPresent } from '../../utils/util'
 import { eraseNotesBunch } from '../reducers/board.reducers'
 import { getMainNumbers, getNotesInfo, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
-import { addCellNote, removeCellNote, updateCellMainNumber } from './board.actions'
+import { addCellNote, removeCellNote, removeCellNotes, removeMainNumber, updateCellMainNumber } from './board.actions'
 import { addMistake } from './refree.actions'
 
 // TODO: tranfrom it for movesData
@@ -79,5 +79,13 @@ export const inputNumberAction = (number) => {
     }
 }
 
+// mutate it for supporting moves tracking
 export const eraseAction = () => {
+    const selectedCell = getSelectedCell(getStoreState())
+    const mainNumbers = getMainNumbers(getStoreState())    
+    if (mainNumbers[selectedCell.row][selectedCell.col].value && !mainNumbers[selectedCell.row][selectedCell.col].isClue) {
+        removeMainNumber(selectedCell)
+    } else if (!mainNumbers[selectedCell.row][selectedCell.col].value) {
+        removeCellNotes(selectedCell)
+    }
 }

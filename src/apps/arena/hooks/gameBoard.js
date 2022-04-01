@@ -39,8 +39,6 @@ const isPuzzleSolved = mainNumbers => {
 
 const useGameBoard = hints => {
 
-    const pencilState = useSelector(getPencilStatus)
-
     const { movesStack: initialmovesStack } = useRef(initBoardData()).current
 
     const movesStack = useRef(initialmovesStack)
@@ -232,56 +230,47 @@ const useGameBoard = hints => {
     }, [notesInfo, mainNumbers])
 
     // EVENTS.ERASER_CLICKED
-    useEffect(() => {
-        const handler = () => {
-            /**
-             * 1. if main number is present then remove it only if the number is not clue
-             * 2. check if any notes are present or not. if present then remove the notes
-             * 3. return if none of above happened
-             */
-
-            consoleLog('@@@@@', JSON.stringify(notesInfo))
-
-            const { row, col } = selectedCell
-            let moveType, valueType, value
-            const notesInfoDup = [...notesInfo]
-            let erasedSomeData = false
-
-            if (mainNumbers[row][col].value && !mainNumbers[row][col].isClue) {
-                erasedSomeData = true
-                moveType = 'erase'
-                valueType = 'main'
-                value = [mainNumbers[row][col].value]
-                removeMainNumber(selectedCell)
-            } else if (!mainNumbers[row][col].value) {
-                const cellNotes = notesInfoDup[row][col]
-                value = [] // will store the notes to be removed (basically the notes which are visible right now)
-                for (let i = 0; i < 9; i++) {
-                    if (cellNotes[i].show) {
-                        value.push(i + 1)
-                        cellNotes[i].show = 0
-                    }
-                }
-                if (value.length) erasedSomeData = true
-            }
-
-            // on empty cell erase doesn't make sense
-            if (!erasedSomeData) return
-
-            // TODO: group cell row, col here as well
-            const moveObject = { moveType, valueType, value, row, col }
-            movesStack.current.push(moveObject)
-            removeCellNotes(selectedCell)
-        }
-
-        addListener(EVENTS.ERASER_CLICKED, handler)
-        return () => removeListener(EVENTS.ERASER_CLICKED, handler)
-    }, [selectedCell, mainNumbers, notesInfo])
+    // useEffect(() => {
+    //     const handler = () => {
+    //         /**
+    //          * 1. if main number is present then remove it only if the number is not clue
+    //          * 2. check if any notes are present or not. if present then remove the notes
+    //          * 3. return if none of above happened
+    //          */
+    //         consoleLog('@@@@@', JSON.stringify(notesInfo))
+    //         const { row, col } = selectedCell
+    //         let moveType, valueType, value
+    //         const notesInfoDup = [...notesInfo]
+    //         let erasedSomeData = false
+    //         if (mainNumbers[row][col].value && !mainNumbers[row][col].isClue) {
+    //             erasedSomeData = true
+    //             moveType = 'erase'
+    //             valueType = 'main'
+    //             value = [mainNumbers[row][col].value]
+    //             removeMainNumber(selectedCell)
+    //         } else if (!mainNumbers[row][col].value) {
+    //             const cellNotes = notesInfoDup[row][col]
+    //             value = [] // will store the notes to be removed (basically the notes which are visible right now)
+    //             for (let i = 0; i < 9; i++) {
+    //                 if (cellNotes[i].show) {
+    //                     value.push(i + 1)
+    //                     cellNotes[i].show = 0
+    //                 }
+    //             }
+    //             if (value.length) erasedSomeData = true
+    //         }
+    //         // on empty cell erase doesn't make sense
+    //         if (!erasedSomeData) return
+    //         // TODO: group cell row, col here as well
+    //         const moveObject = { moveType, valueType, value, row, col }
+    //         movesStack.current.push(moveObject)
+    //         removeCellNotes(selectedCell)
+    //     }
+    //     addListener(EVENTS.ERASER_CLICKED, handler)
+    //     return () => removeListener(EVENTS.ERASER_CLICKED, handler)
+    // }, [selectedCell, mainNumbers, notesInfo])
 
 }
 
 export { useGameBoard }
 
-// INPUT_NUMBER_CLICKED
-// UNDO_CLICKED
-// ERASER_CLICKED

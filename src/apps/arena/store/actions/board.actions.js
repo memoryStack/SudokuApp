@@ -40,12 +40,13 @@ export const updateNotes = notes => {
 }
 
 export const removeCellNotes = cell => {
+    // TODO: should we shift logic from stateHandlers to here ??
     const bunch = []
     const notesInfo = getNotesInfo(getStoreState())
     notesInfo[cell.row][cell.col].forEach(({ noteValue, show }) => {
         if (show) bunch.push({ cell, note: noteValue })
     })
-    // TODO: should we shift logic from stateHandlers to here ??
+    if (!bunch.length) return
     invokeDispatch(eraseNotesBunch(bunch))
 }
 
