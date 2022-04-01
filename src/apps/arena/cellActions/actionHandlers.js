@@ -1,13 +1,10 @@
-import { EVENTS } from '../../../resources/constants'
-import { emit } from '../../../utils/GlobalEventBus'
-import { consoleLog } from '../../../utils/util'
-import { updatePencil, fastPencilAction, hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
+import { fastPencilAction, undoAction } from '../store/actions/board.actions'
+import { updatePencil, hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
 import { isGameActive } from '../store/utils'
 
-// TODO: this will be handled later
 const handleUndoClick = () => {
     if (!isGameActive()) return
-    emit(EVENTS.UNDO_CLICKED)
+    undoAction()
 }
 
 const handlePencilClick = () => {

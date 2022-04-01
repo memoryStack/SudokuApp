@@ -1,8 +1,8 @@
-import { ACTION_TYPES } from "../inputPanel/constants";
-import { eraseAction, inputNumberAction } from "../store/actions/gameInputPanel.actions";
-import { isGameActive } from "../store/utils";
+import { ACTION_TYPES } from '../inputPanel/constants'
+import { eraseAction, inputNumberAction } from '../store/actions/board.actions'
+import { isGameActive } from '../store/utils'
 
-const handleNumberClick = ({ params: number }) => {    
+const handleNumberClick = ({ params: number }) => {
     if (!isGameActive()) return
     inputNumberAction(number)
 }

@@ -27,7 +27,7 @@ import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
-import { getMainNumbers, getNotesInfo } from './store/selectors/board.selectors'
+import { getMainNumbers } from './store/selectors/board.selectors'
 import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
 import { GameInputPanel } from './GameInputPanel'
 
@@ -219,14 +219,12 @@ const Arena_ = ({ navigation, route }) => {
 
     const time = useSelector(getTime)
 
-    const notesInfo = useSelector(getNotesInfo)
-
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
                 <Refree maxMistakesLimit={MISTAKES_LIMIT} />
-                <Board notesInfo={notesInfo} />
+                <Board />
                 {/* TODO: it can be named better */}
                 <BoardController />
                 <View style={styles.inputPanelContainer}>

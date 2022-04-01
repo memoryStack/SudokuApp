@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
-import withActions from "../../../utils/hocs/withActions"
-import { Inputpanel } from "../inputPanel"
-import { getMainNumbers } from "../store/selectors/board.selectors"
-import { ACTION_HANDLERS } from "./actionHandlers"
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import withActions from '../../../utils/hocs/withActions'
+import { Inputpanel } from '../inputPanel'
+import { getMainNumbers } from '../store/selectors/board.selectors'
+import { ACTION_HANDLERS } from './actionHandlers'
 
-const GameInputPanel_ = ({
-    onAction
-}) => {
+const GameInputPanel_ = ({ onAction }) => {
     const mainNumbers = useSelector(getMainNumbers)
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
 
@@ -33,9 +31,7 @@ const GameInputPanel_ = ({
         }
     }, [mainNumbers, numbersVisible])
 
-    return (
-        <Inputpanel numbersVisible={numbersVisible} onAction={onAction} />
-    )
+    return <Inputpanel numbersVisible={numbersVisible} onAction={onAction} />
 }
 
 export const GameInputPanel = React.memo(withActions(ACTION_HANDLERS)(GameInputPanel_))

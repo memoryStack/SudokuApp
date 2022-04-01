@@ -38,7 +38,6 @@ const isPuzzleSolved = mainNumbers => {
 }
 
 const useGameBoard = hints => {
-
     const { movesStack: initialmovesStack } = useRef(initBoardData()).current
 
     const movesStack = useRef(initialmovesStack)
@@ -108,63 +107,63 @@ const useGameBoard = hints => {
     // EVENTS.INPUT_NUMBER_CLICKED
     // useEffect(() => {
     //     const handler = ({ number, isHintUsed = false }) => {
-            // const { row, col } = selectedCell
-            // if (mainNumbers[row][col].value) return
-            // let valueType, moveType
-            // let notesErasedByMainValue = []
+    // const { row, col } = selectedCell
+    // if (mainNumbers[row][col].value) return
+    // let valueType, moveType
+    // let notesErasedByMainValue = []
 
-            // let noteInserted = false
-            // if (pencilState === PENCIL_STATE.ACTIVE && !isHintUsed) {
-            //     // removing the below functionality because it kind of "baby spoon feeds" the user
-            //     // let's keep it for now and and we can keep it as a part of settings later on
-            //     if (duplicacyPresent(number, mainNumbers, { row, col })) return
-            //     valueType = 'notes'
-            //     const { show } = notesInfo[row][col][number - 1]
-            //     moveType = show ? 'erase' : 'insert'
-            //     addCellNote({ row, col }, number)
-            //     noteInserted = true
-            // } else {
-            //     /**
-            //      * 1. mark move type and value type and add the number in cell
-            //      * 2. erase all the notes first and store them in an array for undo operation on the board
-            //      * 3. check if neeed to show an error msg
-            //      * 4. check if puzzle is solved or not
-            //      */
+    // let noteInserted = false
+    // if (pencilState === PENCIL_STATE.ACTIVE && !isHintUsed) {
+    //     // removing the below functionality because it kind of "baby spoon feeds" the user
+    //     // let's keep it for now and and we can keep it as a part of settings later on
+    //     if (duplicacyPresent(number, mainNumbers, { row, col })) return
+    //     valueType = 'notes'
+    //     const { show } = notesInfo[row][col][number - 1]
+    //     moveType = show ? 'erase' : 'insert'
+    //     addCellNote({ row, col }, number)
+    //     noteInserted = true
+    // } else {
+    //     /**
+    //      * 1. mark move type and value type and add the number in cell
+    //      * 2. erase all the notes first and store them in an array for undo operation on the board
+    //      * 3. check if neeed to show an error msg
+    //      * 4. check if puzzle is solved or not
+    //      */
 
-            //     const mainNumbersDup = [...mainNumbers]
-            //     // mark move type and valueType and add the number in cell
-            //     moveType = 'insert'
-            //     valueType = 'main'
-            //     mainNumbersDup[row][col].value = number
+    //     const mainNumbersDup = [...mainNumbers]
+    //     // mark move type and valueType and add the number in cell
+    //     moveType = 'insert'
+    //     valueType = 'main'
+    //     mainNumbersDup[row][col].value = number
 
-            //     // consoleLog('@@@@@@@@ duppp', mainNumbersDup)
+    //     // consoleLog('@@@@@@@@ duppp', mainNumbersDup)
 
-            //     if (number !== mainNumbersDup[row][col].solutionValue) {
-            //         emit(EVENTS.MADE_MISTAKE) // TODO: remove this event
-            //         addMistake()
-            //     } else {
-            //         notesErasedByMainValue = removeNotesAfterCellFilled(number, selectedCell)
-            //         if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
-            //         if (isPuzzleSolved(mainNumbersDup)) {
-            //             // a little delay is better
-            //             setTimeout(() => {
-            //                 emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
-            //             }, 500)
-            //         }
-            //     }
-            //     updateCellMainNumber(selectedCell, number)
-            // }
+    //     if (number !== mainNumbersDup[row][col].solutionValue) {
+    //         emit(EVENTS.MADE_MISTAKE) // TODO: remove this event
+    //         addMistake()
+    //     } else {
+    //         notesErasedByMainValue = removeNotesAfterCellFilled(number, selectedCell)
+    //         if (isHintUsed) emit(EVENTS.HINT_USED_SUCCESSFULLY)
+    //         if (isPuzzleSolved(mainNumbersDup)) {
+    //             // a little delay is better
+    //             setTimeout(() => {
+    //                 emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.OVER_SOLVED)
+    //             }, 500)
+    //         }
+    //     }
+    //     updateCellMainNumber(selectedCell, number)
+    // }
 
-            // const moveObject = {
-            //     moveType: moveType,
-            //     valueType: valueType,
-            //     value: [number], // why is this an array ??
-            //     notesErased: notesErasedByMainValue,
-            //     row,
-            //     col,
-            // }
+    // const moveObject = {
+    //     moveType: moveType,
+    //     valueType: valueType,
+    //     value: [number], // why is this an array ??
+    //     notesErased: notesErasedByMainValue,
+    //     row,
+    //     col,
+    // }
 
-            // movesStack.current.push(moveObject)
+    // movesStack.current.push(moveObject)
     //     }
 
     //     addListener(EVENTS.INPUT_NUMBER_CLICKED, handler)
@@ -178,56 +177,56 @@ const useGameBoard = hints => {
     // then don't erase the already filled notes. becoz if we do redo then we will
     // automatically see those notes without any computation logic
     // TODO: improve these "setStates"
-    useEffect(() => {
-        const handler = () => {
-            if (!movesStack.current.length) return
-            const notesInfoDup = [...notesInfo]
-            const moveInfoToUndo = movesStack.current.pop()
+    // useEffect(() => {
+    //     const handler = () => {
+    //         if (!movesStack.current.length) return
+    //         const notesInfoDup = [...notesInfo]
+    //         const moveInfoToUndo = movesStack.current.pop()
 
-            const { row, col, moveType, valueType, value } = moveInfoToUndo
+    //         const { row, col, moveType, valueType, value } = moveInfoToUndo
 
-            if (valueType === 'main') {
-                if (moveType === 'insert') {
-                    // hide the main value
-                    removeMainNumber({ row, col })
-                    // show the notes erased when this value inserted
-                    const { notesErased } = moveInfoToUndo
-                    for (let i = 0; i < notesErased.length; i++) {
-                        const note = notesErased[i]
-                        notesInfoDup[row][col][note - 1].show = 1
-                    }
-                } else {
-                    // main value got erased, so fill that value in the cell
-                    updateCellMainNumber({ row, col }, value[0])
-                }
-            } else {
-                const notesVisibilityChanges = value
-                for (let i = 0; i < notesVisibilityChanges.length; i++) {
-                    const note = notesVisibilityChanges[i]
-                    notesInfoDup[row][col][note - 1].show = 1 - notesInfoDup[row][col][note - 1].show
-                }
-            }
+    //         if (valueType === 'main') {
+    //             if (moveType === 'insert') {
+    //                 // hide the main value
+    //                 removeMainNumber({ row, col })
+    //                 // show the notes erased when this value inserted
+    //                 const { notesErased } = moveInfoToUndo
+    //                 for (let i = 0; i < notesErased.length; i++) {
+    //                     const note = notesErased[i]
+    //                     notesInfoDup[row][col][note - 1].show = 1
+    //                 }
+    //             } else {
+    //                 // main value got erased, so fill that value in the cell
+    //                 updateCellMainNumber({ row, col }, value[0])
+    //             }
+    //         } else {
+    //             const notesVisibilityChanges = value
+    //             for (let i = 0; i < notesVisibilityChanges.length; i++) {
+    //                 const note = notesVisibilityChanges[i]
+    //                 notesInfoDup[row][col][note - 1].show = 1 - notesInfoDup[row][col][note - 1].show
+    //             }
+    //         }
 
-            const nextSelectedCell = { row, col }
+    //         const nextSelectedCell = { row, col }
 
-            if (movesStack.current.length) {
-                const len = movesStack.current.length
-                const { row, col } = movesStack.current[len - 1]
-                nextSelectedCell.row = row
-                nextSelectedCell.col = col
-            }
+    //         if (movesStack.current.length) {
+    //             const len = movesStack.current.length
+    //             const { row, col } = movesStack.current[len - 1]
+    //             nextSelectedCell.row = row
+    //             nextSelectedCell.col = col
+    //         }
 
-            // updateNotesInfo(notesInfoDup)
+    //         // updateNotesInfo(notesInfoDup)
 
-            updateSelectedCell(selectedCell)
+    //         updateSelectedCell(selectedCell)
 
-            emit(EVENTS.UNDO_USED_SUCCESSFULLY)
-        }
-        addListener(EVENTS.UNDO_CLICKED, handler)
-        return () => {
-            removeListener(EVENTS.UNDO_CLICKED, handler)
-        }
-    }, [notesInfo, mainNumbers])
+    //         emit(EVENTS.UNDO_USED_SUCCESSFULLY)
+    //     }
+    //     addListener(EVENTS.UNDO_CLICKED, handler)
+    //     return () => {
+    //         removeListener(EVENTS.UNDO_CLICKED, handler)
+    //     }
+    // }, [notesInfo, mainNumbers])
 
     // EVENTS.ERASER_CLICKED
     // useEffect(() => {
@@ -269,8 +268,6 @@ const useGameBoard = hints => {
     //     addListener(EVENTS.ERASER_CLICKED, handler)
     //     return () => removeListener(EVENTS.ERASER_CLICKED, handler)
     // }, [selectedCell, mainNumbers, notesInfo])
-
 }
 
 export { useGameBoard }
-

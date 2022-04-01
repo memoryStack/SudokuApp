@@ -24,4 +24,5 @@ export const INITIAL_STATE = {
     mainNumbers: initMainNumbers(),
     selectedCell: { row: 0, col: 0 },
     notesInfo: initNotesInfo(),
+    moves: [],
 }

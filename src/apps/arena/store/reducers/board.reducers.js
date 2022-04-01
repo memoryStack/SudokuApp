@@ -19,4 +19,6 @@ export const {
     setNotes,
     setNotesBunch,
     eraseNotesBunch,
+    addMove,
+    popMove,
 } = boardSlice.actions

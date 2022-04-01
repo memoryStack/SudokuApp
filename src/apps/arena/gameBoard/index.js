@@ -11,7 +11,7 @@ import {
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { getMainNumbers, getSelectedCell } from '../store/selectors/board.selectors'
+import { getMainNumbers, getNotesInfo, getSelectedCell } from '../store/selectors/board.selectors'
 import withActions from '../../../utils/hocs/withActions'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
@@ -22,13 +22,14 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
+// TODO: why is it re-rendering so much ??
 const Board_ = ({
     screenName = SCREEN_NAME.ARENA, // default will be arena
-    notesInfo = [],
     onAction,
 }) => {
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
+    const notesInfo = useSelector(getNotesInfo)
     const selectedCell = useSelector(getSelectedCell)
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
@@ -99,9 +100,12 @@ const Board_ = ({
         )
     }
 
-    const onCellClick = useCallback((cell) => {
-        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction])
+    const onCellClick = useCallback(
+        cell => {
+            onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+        },
+        [onAction],
+    )
 
     const renderRow = (row, key) => {
         let rowElementsKeyCounter = 0
@@ -168,4 +172,4 @@ const Board_ = ({
     return getBoard()
 }
 
-export const Board = React.memo(withActions(ACTION_HANDLERS)( Board_))
+export const Board = React.memo(withActions(ACTION_HANDLERS)(Board_))
