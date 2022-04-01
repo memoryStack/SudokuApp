@@ -94,7 +94,7 @@ const Arena_ = ({ navigation, route }) => {
 
     const { hints } = useCellActions()
 
-    useGameBoard(hints)
+    useGameBoard()
 
     const { MISTAKES_LIMIT } = useReferee()
 
