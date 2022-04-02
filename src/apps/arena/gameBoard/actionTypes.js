@@ -1,0 +1,5 @@
+const ACTION_TYPES = {
+    ON_CELL_PRESS: 'ON_CELL_PRESS',
+}
+
+export { ACTION_TYPES }

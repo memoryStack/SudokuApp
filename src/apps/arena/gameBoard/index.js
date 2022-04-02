@@ -3,17 +3,14 @@ import { View } from 'react-native'
 import { getStyles } from './style'
 import { Cell } from './cell'
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
+import { sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
 import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import { getGameState } from '../store/selectors/gameState.selectors'
-import { getMainNumbers, getNotesInfo, getSelectedCell } from '../store/selectors/board.selectors'
-import withActions from '../../../utils/hocs/withActions'
-import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { ACTION_TYPES } from './actionTypes'
 
 const looper = []
 const bordersLooper = []
@@ -24,13 +21,14 @@ for (let i = 0; i < 10; i++) {
 
 // TODO: why is it re-rendering so much ??
 const Board_ = ({
-    screenName = SCREEN_NAME.ARENA, // default will be arena
+    screenName,
+    gameState,
+    mainNumbers,
+    notesInfo,
+    selectedCell,
     onAction,
 }) => {
-    const gameState = useSelector(getGameState)
-    const mainNumbers = useSelector(getMainNumbers)
-    const notesInfo = useSelector(getNotesInfo)
-    const selectedCell = useSelector(getSelectedCell)
+
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
@@ -158,7 +156,7 @@ const Board_ = ({
         )
     }
 
-    const getBoard = () => {
+    const renderBoard = () => {
         let keyCounter = 0
         return (
             <View style={[Styles.board, showSmartHint ? { zIndex: 1 } : null]}>
@@ -169,7 +167,7 @@ const Board_ = ({
         )
     }
 
-    return getBoard()
+    return renderBoard()
 }
 
-export const Board = React.memo(withActions(ACTION_HANDLERS)(Board_))
+export const Board = React.memo(Board_)

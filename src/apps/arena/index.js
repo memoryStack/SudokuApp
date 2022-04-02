@@ -1,7 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
-import { Board } from './gameBoard'
-import { Inputpanel } from './inputPanel'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { emit } from '../../utils/GlobalEventBus'
 import { EVENTS, GAME_STATE, DEEPLINK_HOST_NAME } from '../../resources/constants'
@@ -30,6 +28,7 @@ import { BoardController } from './cellActions'
 import { getMainNumbers } from './store/selectors/board.selectors'
 import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
 import { GameInputPanel } from './GameInputPanel'
+import { PuzzleBoard } from './PuzzleBoard'
 
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -224,7 +223,7 @@ const Arena_ = ({ navigation, route }) => {
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
                 <Refree maxMistakesLimit={MISTAKES_LIMIT} />
-                <Board />
+                <PuzzleBoard />
                 {/* TODO: it can be named better */}
                 <BoardController />
                 <View style={styles.inputPanelContainer}>

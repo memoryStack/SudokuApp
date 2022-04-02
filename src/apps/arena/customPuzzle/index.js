@@ -1,19 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
-import { EVENTS, GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
+import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { emit, addListener, removeListener } from '../../../utils/GlobalEventBus'
 import { Board } from '../gameBoard'
 import { Button } from '../../../components/button'
 import { Inputpanel } from '../inputPanel'
-import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { CloseIcon } from '../../../resources/svgIcons/close'
-import { getNumberOfSolutions } from '../utils/util'
 import { PLAY } from '../../../resources/stringLiterals'
 import { fonts } from '../../../resources/fonts/font'
+import { ACTION_HANDLERS, ACTION_TYPES, INITIAL_STATE } from './actionHandlers'
+import withActions from '../../../utils/hocs/withActions'
 
-const INPUT_NUMBER_CLICK_EVENT_PREFIX = 'CUSTOM_PUZZLE_'
 const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const styles = StyleSheet.create({
     container: {
@@ -54,190 +52,32 @@ const styles = StyleSheet.create({
     },
 })
 
-const initBoardData = () => {
-    const movesStack = []
-    const mainNumbers = initMainNumbers()
+const CustomPuzzle_ = ({
+    mainNumbers,
+    selectedCell,
+    notesInfo,
+    parentHeight,
+    onCustomPuzzleClosed,
+    onAction,
+}) => {
 
-    // this string have naked groups present
-    // const str = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
-
-    // have hidden group (may be double)
-    // const str = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
-
-    // have hidden tripple
-    // const str = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
-
-    // have x-wing
-    // const str = '600095007540007100002800050800000090000078000030000008050002300304500020920030504'
-
-    // have x-wing with no notes to remove
-    // const str = '090008170000670002100590400904280001080016050761904080005009000049100025000000849'
-
-    // for (let i = 0; i < str.length; i++) {
-    //     const row = Math.floor(i / 9)
-    //     const col = i % 9
-    //     if (str[i]) {
-    //         mainNumbers[row][col].value = parseInt(str[i], 10)
-    //         mainNumbers[row][col].isClue = 1
-    //     }
-    // }
-
-    const notesInfo = new Array(9)
-    for (let i = 0; i < 9; i++) {
-        const rowNotes = []
-        for (let j = 0; j < 9; j++) {
-            const boxNotes = new Array(9)
-            for (let k = 1; k <= 9; k++) boxNotes[k - 1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
-            rowNotes.push(boxNotes)
-        }
-        notesInfo[i] = rowNotes
-    }
-
-    return {
-        movesStack,
-        notesInfo,
-        mainNumbers,
-        selectedCell: { row: 0, col: 0 },
-    }
-}
-
-const isDuplicateEntry = (mainNumbers, cell, number) => {
-    const { row, col } = cell
-    let houseCount = 0
-    for (let col = 0; col < 9; col++) if (mainNumbers[row][col].value === number) houseCount++
-    if (houseCount > 1) return true
-
-    houseCount = 0
-    for (let row = 0; row < 9; row++) if (mainNumbers[row][col].value === number) houseCount++
-    if (houseCount > 1) return true
-
-    houseCount = 0
-    const { blockNum } = getBlockAndBoxNum(cell)
-    for (let box = 0; box < 9; box++) {
-        const { row, col } = getRowAndCol(blockNum, box)
-        if (mainNumbers[row][col].value === number) houseCount++
-    }
-    return houseCount > 1
-}
-
-// TODO: memory leaks are happening in this component and also NextGameMenu component
-//          have to be fixed
-const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
-    const initialBoardData = useRef(initBoardData()).current
-    const [mainNumbers, setMainNumbers] = useState(initialBoardData.mainNumbers)
-    const [selectedCell, selectCell] = useState(initialBoardData.selectedCell)
-    const selectedCellMainValue = useRef(null) // in start it will be empty grid only
     const customPuzzleRef = useRef(null)
 
-    useEffect(() => {
-        const handler = ({ number }) => {
-            selectedCellMainValue.current = number
+    const handleOnClose = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: customPuzzleRef })
+    }, [onAction])
 
-            const { row, col } = selectedCell
-            const initialValue = mainNumbers[row][col].value
-            mainNumbers[row][col].value = number
-            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, selectedCell, number)
+    const handlePlayClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef, snackBarRenderer } })
+    }, [mainNumbers])
 
-            if (initialValue && initialValue !== number) {
-                // reset "wronglyPlaced" flag for the values which might be
-                // converted from wronglyPlaced to correctly placed due to input in this cell
-                for (let col = 0; col < 9; col++) {
-                    if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
-                }
-                for (let row = 0; row < 9; row++) {
-                    if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
-                }
-                const { blockNum } = getBlockAndBoxNum(selectedCell)
-                for (let box = 0; box < 9; box++) {
-                    const { row, col } = getRowAndCol(blockNum, box)
-                    if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                        mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
-                }
-            }
-            setMainNumbers([...mainNumbers])
-
-            if (!mainNumbers[row][col].wronglyPlaced) {
-                setTimeout(() => {
-                    let nextCol = col + 1
-                    let nextRow = row
-                    if (nextCol === 9) {
-                        nextCol = 0
-                        nextRow++
-                    }
-                    if (nextRow !== 9) handleCellClicked({ row: nextRow, col: nextCol })
-                }, 100)
-            }
-        }
-        addListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.INPUT_NUMBER_CLICKED, handler)
-        return () => removeListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.INPUT_NUMBER_CLICKED, handler)
-    }, [mainNumbers, selectedCell])
-
-    const closeView = useCallback(() => {
-        customPuzzleRef.current && customPuzzleRef.current.closeDragger()
-    }, [customPuzzleRef])
-
-    const getSnackBarView = msg => {
+    const snackBarRenderer = msg => {
         return (
             <View style={styles.snackBarContainer}>
                 <Text style={styles.snackBarText}>{msg}</Text>
             </View>
         )
     }
-
-    const showSnackBar = msg => {
-        emit(EVENTS.SHOW_SNACK_BAR, {
-            snackbarView: getSnackBarView(msg),
-            visibleTime: 3000,
-        })
-    }
-
-    const getCluesCount = () => {
-        let cluesCount = 0
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
-                if (mainNumbers[row][col].value) cluesCount++
-            }
-        }
-        return cluesCount
-    }
-
-    const handlePlayClick = useCallback(() => {
-        // check the validity of the puzzle
-        if (getCluesCount() < 18) {
-            showSnackBar('clues are less than 18')
-        } else {
-            const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) > 1
-            if (isMultipleSolutionsExist) {
-                showSnackBar('puzzle has multiple valid solutions. please input valid puzzle')
-            } else {
-                emit(EVENTS.START_CUSTOM_PUZZLE_GAME, { mainNumbers })
-                closeView()
-            }
-        }
-    }, [mainNumbers])
-
-    const handleCellClicked = useCallback(
-        ({ row, col }) => {
-            selectedCellMainValue.current = mainNumbers[row][col].value
-            selectCell(selectedCell => {
-                if (selectedCell.row !== row || selectedCell.col !== col) return { row, col }
-                return selectedCell
-            })
-        },
-        [mainNumbers],
-    )
-
-    useEffect(() => {
-        const handler = () => {
-            const { row, col } = selectedCell
-            mainNumbers[row][col].value = 0
-            setMainNumbers([...mainNumbers])
-        }
-        addListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.ERASER_CLICKED, handler)
-        return () => removeListener(INPUT_NUMBER_CLICK_EVENT_PREFIX + EVENTS.ERASER_CLICKED, handler)
-    }, [mainNumbers, selectedCell])
 
     return (
         <BottomDragger
@@ -251,22 +91,21 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
                 <Touchable
                     touchable={TouchableTypes.opacity}
                     style={styles.closeIconContainer}
-                    onPress={closeView}
+                    onPress={handleOnClose}
                     hitSlop={CLOSE_ICON_HITSLOP}
                 >
                     <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
                 </Touchable>
-                {/* TODO: solve the problem of gameState being not-active and input not visible on custom puzzles board */}
                 <Board
+                    gameState={GAME_STATE.ACTIVE}
                     screenName={SCREEN_NAME.CUSTOM_PUZZLE}
                     mainNumbers={mainNumbers}
-                    notesInfo={initialBoardData.notesInfo}
+                    notesInfo={notesInfo}
                     selectedCell={selectedCell}
-                    selectedCellMainValue={selectedCellMainValue.current}
-                    onCellClick={handleCellClicked}
+                    onAction={onAction}
                 />
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel eventsPrefix={INPUT_NUMBER_CLICK_EVENT_PREFIX} />
+                    <Inputpanel onAction={onAction} />
                 </View>
                 <Button containerStyle={styles.playButtonContainer} onClick={handlePlayClick} text={PLAY} />
             </View>
@@ -274,4 +113,4 @@ const CustomPuzzle_ = ({ parentHeight, onCustomPuzzleClosed }) => {
     )
 }
 
-export const CustomPuzzle = React.memo(CustomPuzzle_)
+export const CustomPuzzle = React.memo(withActions(ACTION_HANDLERS, INITIAL_STATE)( CustomPuzzle_))
