@@ -52,15 +52,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const CustomPuzzle_ = ({
-    mainNumbers,
-    selectedCell,
-    notesInfo,
-    parentHeight,
-    onCustomPuzzleClosed,
-    onAction,
-}) => {
-
+const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onCustomPuzzleClosed, onAction }) => {
     const customPuzzleRef = useRef(null)
 
     const handleOnClose = useCallback(() => {
@@ -113,4 +105,4 @@ const CustomPuzzle_ = ({
     )
 }
 
-export const CustomPuzzle = React.memo(withActions(ACTION_HANDLERS, INITIAL_STATE)( CustomPuzzle_))
+export const CustomPuzzle = React.memo(withActions(ACTION_HANDLERS, INITIAL_STATE)(CustomPuzzle_))

@@ -1,24 +1,32 @@
-import React from "react"
+import React from 'react'
 import { useSelector } from 'react-redux'
-import { SCREEN_NAME } from "../../../resources/constants"
-import withActions from "../../../utils/hocs/withActions"
-import { Board } from "../gameBoard"
-import { getMainNumbers, getNotesInfo, getSelectedCell } from "../store/selectors/board.selectors"
-import { getGameState } from "../store/selectors/gameState.selectors"
-import { ACTION_HANDLERS } from "./actionHandlers"
+import { SCREEN_NAME } from '../../../resources/constants'
+import withActions from '../../../utils/hocs/withActions'
+import { Board } from '../gameBoard'
+import { useCacheGameState } from '../hooks/useCacheGameState'
+import { getMainNumbers, getMoves, getNotesInfo, getSelectedCell } from '../store/selectors/board.selectors'
+import { getGameState } from '../store/selectors/gameState.selectors'
+import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
+import { ACTION_HANDLERS } from './actionHandlers'
 
-const PuzzleBoard_ = ({
-    onAction
-}) => {
-
+const PuzzleBoard_ = ({ onAction }) => {
     const gameState = useSelector(getGameState)
     const mainNumbers = useSelector(getMainNumbers)
     const notesInfo = useSelector(getNotesInfo)
     const selectedCell = useSelector(getSelectedCell)
+    const moves = useSelector(getMoves)
+
+    const dataToCache = {
+        mainNumbers,
+        notesInfo,
+        moves,
+        selectedCell,
+    }
+    useCacheGameState(GAME_DATA_KEYS.BOARD_DATA, dataToCache)
 
     return (
         <Board
-            sreenName={ SCREEN_NAME.ARENA }
+            sreenName={SCREEN_NAME.ARENA}
             gameState={gameState}
             mainNumbers={mainNumbers}
             notesInfo={notesInfo}
@@ -28,4 +36,4 @@ const PuzzleBoard_ = ({
     )
 }
 
-export const PuzzleBoard = React.memo(withActions(ACTION_HANDLERS) (PuzzleBoard_))
+export const PuzzleBoard = React.memo(withActions(ACTION_HANDLERS)(PuzzleBoard_))

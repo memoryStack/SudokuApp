@@ -28,6 +28,9 @@ const stateHandlers = {
             state.notesInfo[cell.row][cell.col][note - 1].show = 0
         })
     },
+    setMoves: (state, { payload }) => {
+        state.moves = payload
+    },
     addMove: (state, { payload }) => {
         state.moves.push(payload)
     },

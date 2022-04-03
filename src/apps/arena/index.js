@@ -8,10 +8,6 @@ import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
 import { isGameOver } from './utils/util'
 import { CustomPuzzle } from './customPuzzle'
-import { useCellActions, MAX_AVAILABLE_HINTS } from './hooks/cellActions'
-import { useReferee } from './hooks/referee'
-import { useGameBoard } from './hooks/gameBoard'
-import { useManageGame } from './hooks/gameHandler'
 import SmartHintHC from './smartHintHC'
 import Share from 'react-native-share'
 import { SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
@@ -29,7 +25,15 @@ import { getMainNumbers } from './store/selectors/board.selectors'
 import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
 import { GameInputPanel } from './GameInputPanel'
 import { PuzzleBoard } from './PuzzleBoard'
+import withActions from '../../utils/hocs/withActions'
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { useCacheGameState } from './hooks/useCacheGameState'
+import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
+import { updateGameState } from './store/actions/gameState.actions'
+import { useToggle } from '../../utils/customHooks/commonUtility'
 
+const MAX_AVAILABLE_HINTS = 3
+const MISTAKES_LIMIT = 3
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
 const HEADER_ICON_DIMENSION = 32
@@ -86,22 +90,31 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = ({ navigation, route }) => {
+const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     const [pageHeight, setPageHeight] = useState(0)
-    const [showGameSolvedCard, setGameSolvedCard] = useState(false)
-    const { showNextGameMenu, setShowNextGameMenu, showCustomPuzzleHC, closeCustomPuzzleHC } = useManageGame(route)
 
-    const { hints } = useCellActions()
+    // TODO: this should be determined by the game-state
+    const [showGameSolvedCard, setGameSolvedCard] = useToggle(false)
 
-    useGameBoard()
+    const [showNextGameMenu, setShowNextGameMenu] = useToggle(false)
 
-    const { MISTAKES_LIMIT } = useReferee()
+    useEffect(() => {
+        const { params: { puzzleUrl = '', selectedGameMenuItem = '' } = {} } = route || {}
+        if (puzzleUrl) {
+            onAction({ type: ACTION_TYPES.ON_INIT_SHARED_PUZZLE, payload: puzzleUrl })
+        } else {
+            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: selectedGameMenuItem })
+        }
+    }, [route, onAction])
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
 
     const gameState = useSelector(getGameState)
+
     const mainNumbers = useSelector(getMainNumbers)
+
+    useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
     // show game over card
     useEffect(() => {
@@ -112,15 +125,16 @@ const Arena_ = ({ navigation, route }) => {
         setPageHeight(height)
     }, [])
 
+    // shfit these to actionHandlers later
     const handleGameInFocus = useCallback(() => {
         // if the menu is opened let's keep it that way only
         if (gameState !== GAME_STATE.INACTIVE || showCustomPuzzleHC || showNextGameMenu) return
-        emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
-    }, [gameState, showCustomPuzzleHC, showGameSolvedCard])
+        updateGameState(GAME_STATE.ACTIVE)
+    }, [gameState, showCustomPuzzleHC, showNextGameMenu, showGameSolvedCard])
 
     const handleGameOutOfFocus = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
-        emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.INACTIVE)
+        updateGameState(GAME_STATE.INACTIVE)
     }, [gameState])
 
     const fadeOut = () => {
@@ -154,7 +168,7 @@ const Arena_ = ({ navigation, route }) => {
             // when game is solved or over, i don't want the game state to be changed
             // user should start the next game
             if (gameState !== GAME_STATE.INACTIVE) return
-            !optionSelectedFromMenu && emit(EVENTS.CHANGE_GAME_STATE, GAME_STATE.ACTIVE)
+            !optionSelectedFromMenu && updateGameState(GAME_STATE.ACTIVE)
         },
         [gameState],
     )
@@ -181,9 +195,11 @@ const Arena_ = ({ navigation, route }) => {
             })
     }, [mainNumbers])
 
-    const handleBackPress = useCallback(() => {
-        navigation.goBack()
-    }, [navigation])
+    const handleBackPress = () => {
+        onAction({
+            type: ACTION_TYPES.ON_BACK_PRESS,
+        })
+    }
 
     const header = useMemo(() => {
         return (
@@ -204,7 +220,7 @@ const Arena_ = ({ navigation, route }) => {
                 </Touchable>
             </View>
         )
-    }, [handleBackPress, handleSharePuzzleClick])
+    }, [handleSharePuzzleClick])
 
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
 
@@ -218,6 +234,59 @@ const Arena_ = ({ navigation, route }) => {
 
     const time = useSelector(getTime)
 
+    const onStartCustomPuzzle = useCallback(
+        mainNumbers => {
+            onAction({
+                type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
+                payload: mainNumbers,
+            })
+        },
+        [onAction],
+    )
+
+    const onCustomPuzzleHCClosed = useCallback(() => {
+        onAction({
+            type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE,
+        })
+    }, [onAction])
+
+    const renderCustomPuzzleHC = () => {
+        if (!(pageHeight && showCustomPuzzleHC)) return null
+        return (
+            <CustomPuzzle
+                parentHeight={pageHeight}
+                onCustomPuzzleClosed={onCustomPuzzleHCClosed}
+                startCustomPuzzle={onStartCustomPuzzle}
+            />
+        )
+    }
+
+    const onNewGameMenuItemClick = useCallback(
+        item => {
+            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
+        },
+        [onAction],
+    )
+
+    const renderNextGameMenu = () => {
+        if (!(pageHeight && showNextGameMenu)) return null
+        return (
+            <NextGameMenu
+                parentHeight={pageHeight}
+                onMenuClosed={onNewGameMenuClosed}
+                menuItemClick={onNewGameMenuItemClick}
+            />
+        )
+    }
+
+    const renderInputPanel = () => {
+        return (
+            <View style={styles.inputPanelContainer}>
+                <GameInputPanel />
+            </View>
+        )
+    }
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
@@ -226,15 +295,9 @@ const Arena_ = ({ navigation, route }) => {
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
                 <BoardController />
-                <View style={styles.inputPanelContainer}>
-                    <GameInputPanel />
-                </View>
-                {pageHeight && showNextGameMenu ? (
-                    <NextGameMenu parentHeight={pageHeight} onMenuClosed={onNewGameMenuClosed} />
-                ) : null}
-                {pageHeight && showCustomPuzzleHC ? (
-                    <CustomPuzzle parentHeight={pageHeight} onCustomPuzzleClosed={closeCustomPuzzleHC} />
-                ) : null}
+                {renderInputPanel()}
+                {renderNextGameMenu()}
+                {renderCustomPuzzleHC()}
                 {showGameSolvedCard ? (
                     <Touchable
                         touchable={TouchableTypes.opacity}
@@ -244,7 +307,7 @@ const Arena_ = ({ navigation, route }) => {
                     >
                         <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim }]}>
                             <GameOverCard
-                                stats={{ mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - hints }}
+                                stats={{ mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - 2 }}
                                 openNextGameMenu={hideCongratsModal}
                             />
                         </Animated.View>
@@ -257,4 +320,4 @@ const Arena_ = ({ navigation, route }) => {
     )
 }
 
-export const Arena = React.memo(Arena_)
+export const Arena = React.memo(withActions(ACTION_HANDLERS)(Arena_))

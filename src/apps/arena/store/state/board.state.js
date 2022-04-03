@@ -1,7 +1,7 @@
 import { initBoardData as initMainNumbers } from '../../../../utils/util'
 
 // TODO: move it to utils
-const initNotesInfo = () => {
+export const initNotesInfo = () => {
     const notesInfo = new Array(9)
     for (let i = 0; i < 9; i++) {
         const rowNotes = []

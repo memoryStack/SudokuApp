@@ -1,10 +1,10 @@
-import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from "../inputPanel/constants"
+import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { areSameCells } from "../utils/util"
+import { areSameCells } from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
-import { EVENTS } from "../../../resources/constants"
-import { emit } from "../../../utils/GlobalEventBus"
+import { EVENTS } from '../../../resources/constants'
+import { emit } from '../../../utils/GlobalEventBus'
 
 const initBoardData = () => {
     const mainNumbers = initMainNumbers()
@@ -84,7 +84,6 @@ const isDuplicateEntry = (mainNumbers, cell, number) => {
 }
 
 const handleInputNumberClick = ({ setState, getState, params: number }) => {
-
     const { selectedCell, mainNumbers } = getState()
 
     const { row, col } = selectedCell
@@ -123,7 +122,6 @@ const handleInputNumberClick = ({ setState, getState, params: number }) => {
             if (nextRow !== 9) setState({ selectedCell: { row: nextRow, col: nextCol } })
         }, 0)
     }
-    
 }
 
 const handleEraseClick = ({ setState, getState }) => {
@@ -134,11 +132,11 @@ const handleEraseClick = ({ setState, getState }) => {
 
 const handleCellClick = ({ setState, getState, params: cell }) => {
     const { selectedCell } = getState()
-    if ( areSameCells( selectedCell, cell ) ) return
+    if (areSameCells(selectedCell, cell)) return
     setState({ selectedCell: cell })
 }
 
-const getCluesCount = (mainNumbers) => {
+const getCluesCount = mainNumbers => {
     let cluesCount = 0
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -161,19 +159,19 @@ const showSnackBar = ({ snackBarRenderer, msg }) => {
     })
 }
 
-const handlePlay = ({ getState, params: { snackBarRenderer , ref: customPuzzleHCRef } }) => {
-    const { mainNumbers } = getState()
+const handlePlay = ({ getState, params: { snackBarRenderer, ref: customPuzzleHCRef } }) => {
+    const { mainNumbers, startCustomPuzzle } = getState()
 
     // check the validity of the puzzle
     if (getCluesCount(mainNumbers) < 18) {
-        showSnackBar({ msg: 'clues are less than 18', snackBarRenderer})
+        showSnackBar({ msg: 'clues are less than 18', snackBarRenderer })
     } else {
         const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) > 1
         if (isMultipleSolutionsExist) {
-            showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer})
+            showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer })
         } else {
-            emit(EVENTS.START_CUSTOM_PUZZLE_GAME, { mainNumbers })
-            handleOnClose({ params: customPuzzleHCRef  } )
+            startCustomPuzzle(mainNumbers)
+            handleOnClose({ params: customPuzzleHCRef })
         }
     }
 }
@@ -183,7 +181,7 @@ const ACTION_TYPES = {
     ...INPUT_PANEL_ACTION_TYPES,
     ON_INIT: 'ON_INIT',
     ON_CLOSE: 'ON_CLOSE',
-    ON_PLAY: 'ON_PLAY'
+    ON_PLAY: 'ON_PLAY',
 }
 
 // in-consistency in the action_type names
@@ -196,8 +194,4 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_PLAY]: handlePlay,
 }
 
-export {
-    INITIAL_STATE,
-    ACTION_TYPES,
-    ACTION_HANDLERS,
-}
+export { INITIAL_STATE, ACTION_TYPES, ACTION_HANDLERS }

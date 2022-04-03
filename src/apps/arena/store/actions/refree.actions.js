@@ -48,6 +48,7 @@ const incrementTime = () => {
 }
 
 export const startTimer = () => {
+    consoleLog('@@@@@@ start the timer')
     timerId = setInterval(incrementTime, 1000)
 }
 

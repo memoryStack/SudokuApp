@@ -20,15 +20,7 @@ for (let i = 0; i < 10; i++) {
 }
 
 // TODO: why is it re-rendering so much ??
-const Board_ = ({
-    screenName,
-    gameState,
-    mainNumbers,
-    notesInfo,
-    selectedCell,
-    onAction,
-}) => {
-
+const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =

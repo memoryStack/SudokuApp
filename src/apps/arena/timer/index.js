@@ -7,7 +7,6 @@ import { noOperationFunction } from '../../../utils/util'
 import { fonts } from '../../../resources/fonts/font'
 import { useSelector } from 'react-redux'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { getTime } from '../store/selectors/refree.selectors'
 
 const hitSlop = { left: 8, right: 8, bottom: 8, top: 8 }
 const styles = StyleSheet.create({
@@ -51,9 +50,8 @@ const styles = StyleSheet.create({
 
 const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
-const Timer_ = ({ onClick = noOperationFunction }) => {
+const Timer_ = ({ onClick = noOperationFunction, time }) => {
     const gameState = useSelector(getGameState)
-    const time = useSelector(getTime)
 
     const getPauseTimerIcon = () => {
         return (

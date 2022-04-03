@@ -13,6 +13,7 @@ import {
     setNotes,
     setNotesBunch,
     eraseNotesBunch,
+    setMoves,
     addMove,
     popMove,
 } from '../reducers/board.reducers'
@@ -43,6 +44,10 @@ export const updateSelectedCell = cell => {
 export const updateNotes = notes => {
     if (!notes) return
     invokeDispatch(setNotes(notes))
+}
+
+export const updateMoves = moves => {
+    invokeDispatch(setMoves(moves))
 }
 
 export const fastPencilAction = () => {

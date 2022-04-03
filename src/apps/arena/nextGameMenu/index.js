@@ -13,7 +13,6 @@ import { previousInactiveGameExists } from '../utils/util'
 
 const LEVEL_ICON_DIMENSION = 24
 const NEXT_GAME_MENU_ROW_HEIGHT = 50
-const RESTART_TEXT = 'Restart'
 
 const styles = StyleSheet.create({
     nextGameMenuContainer: {
@@ -104,10 +103,6 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
                 menuItemClick(item)
             } else {
                 switch (item) {
-                    case RESTART_TEXT:
-                        emit(EVENTS.RESTART_GAME)
-                        closeView()
-                        break
                     case CUSTOMIZE_YOUR_PUZZLE_TITLE:
                         emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
                         break

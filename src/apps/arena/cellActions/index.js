@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
 import { Undo } from './undo'
 import { Pencil } from './pencil'
@@ -8,6 +8,10 @@ import withActions from '../../../utils/hocs/withActions'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { useSelector } from 'react-redux'
 import { getPencilStatus } from '../store/selectors/boardController.selectors'
+import { getGameState } from '../store/selectors/gameState.selectors'
+import { useCacheGameState } from '../hooks/useCacheGameState'
+import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
+import { consoleLog } from '../../../utils/util'
 
 const styles = StyleSheet.create({
     cellActionsContainer: {
@@ -22,6 +26,9 @@ const styles = StyleSheet.create({
 
 const BoardController_ = ({ onAction }) => {
     const pencilState = useSelector(getPencilStatus)
+    const hints = 3 // TODO: add proper logic for it
+
+    useCacheGameState(GAME_DATA_KEYS.CELL_ACTIONS, { pencilState, hints })
 
     const { width: windowWidth } = useWindowDimensions()
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
@@ -47,11 +54,7 @@ const BoardController_ = ({ onAction }) => {
             <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onUndoClick} />
             <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} pencilState={pencilState} onClick={onPencilClick} />
             <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onFastPencilClick} />
-            <Hint
-                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                // hints={hints}
-                onClick={onHintClick}
-            />
+            <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} hints={hints} onClick={onHintClick} />
         </View>
     )
 }
