@@ -1,3 +1,5 @@
+
+import Share from 'react-native-share'
 import {
     LEVEL_DIFFICULTIES,
     GAME_STATE,
@@ -22,11 +24,14 @@ import {
 } from '../../resources/stringLiterals'
 import { updateGameState } from './store/actions/gameState.actions'
 import { getGameState } from './store/selectors/gameState.selectors'
-import { consoleLog, initBoardData as initMainNumbers } from '../../utils/util'
+import { consoleLog, initBoardData as initMainNumbers, noOperationFunction } from '../../utils/util'
 import { updateMainNumbers, updateMoves, updateNotes, updateSelectedCell } from './store/actions/board.actions'
 import { initNotesInfo } from './store/state/board.state'
 import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
+import { SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
+import { getMainNumbers } from './store/selectors/board.selectors'
+import { getStoreState } from '../../redux/dispatch.helpers'
 
 const getMainNumbersFromString = puzzle => {
     const result = new Array(9)
@@ -217,9 +222,33 @@ const handleCustomPuzzleHCClose = ({ setState }) => {
     setState({ showCustomPuzzleHC: false })
 }
 
+const handleSharePuzzle = () => {
+    const mainNumbers = getMainNumbers( getStoreState() )
+    
+    let puzzleString = ''
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            const num = mainNumbers[row][col].isClue ? mainNumbers[row][col].value : 0
+            puzzleString = `${puzzleString}${num}`
+        }
+    }
+
+    const options = {
+        message: 'Solve This Sudoku Challenge',
+        url: `${DEEPLINK_HOST_NAME}${puzzleString}`,
+    }
+    Share.open(options)
+        .then(noOperationFunction, noOperationFunction)
+        .catch(error => {
+            consoleLog(error)
+            emit(EVENTS.SHOW_SNACK_BAR, { msg: SOMETHING_WENT_WRONG })
+        })
+}
+
 const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
     ON_BACK_PRESS: 'ON_BACK_PRESS',
+    ON_SHARE_CLICK: 'ON_SHARE_CLICK',
     ON_INIT_SHARED_PUZZLE: 'ON_INIT_SHARED_PUZZLE',
     ON_NEW_GAME_MENU_ITEM_PRESS: 'ON_NEW_GAME_MENU_ITEM_PRESS',
     ON_START_CUSTOM_PUZZLE: 'ON_START_CUSTOM_PUZZLE',
@@ -229,6 +258,7 @@ const ACTION_TYPES = {
 const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
+    [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
     [ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS]: handleMenuItemPress,
     [ACTION_TYPES.ON_START_CUSTOM_PUZZLE]: handleStartCustomPuzzle,

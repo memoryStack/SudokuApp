@@ -1,17 +1,13 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
 import { Touchable, TouchableTypes } from '../components/Touchable'
-import { emit } from '../../utils/GlobalEventBus'
-import { EVENTS, GAME_STATE, DEEPLINK_HOST_NAME } from '../../resources/constants'
+import { GAME_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
 import { isGameOver } from './utils/util'
 import { CustomPuzzle } from './customPuzzle'
 import SmartHintHC from './smartHintHC'
-import Share from 'react-native-share'
-import { SHARE, SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
-import { consoleLog, noOperationFunction, rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
@@ -174,26 +170,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     )
 
     const handleSharePuzzleClick = useCallback(() => {
-        let puzzleString = ''
-
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
-                const num = mainNumbers[row][col].isClue ? mainNumbers[row][col].value : 0
-                puzzleString = `${puzzleString}${num}`
-            }
-        }
-
-        const options = {
-            message: 'Solve This Sudoku Challenge',
-            url: `${DEEPLINK_HOST_NAME}${puzzleString}`,
-        }
-        Share.open(options)
-            .then(noOperationFunction, noOperationFunction)
-            .catch(error => {
-                __DEV__ && console.log(error)
-                emit(EVENTS.SHOW_SNACK_BAR, { msg: SOMETHING_WENT_WRONG })
-            })
-    }, [mainNumbers])
+        onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
+    }, [])
 
     const handleBackPress = () => {
         onAction({
