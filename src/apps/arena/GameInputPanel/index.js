@@ -14,7 +14,9 @@ const GameInputPanel_ = ({ onAction }) => {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const value = mainNumbers[row][col].value
-                instancesCountAfterUpdate[value]++
+                if (value === mainNumbers[row][col].solutionValue) {
+                    instancesCountAfterUpdate[value]++
+                }
             }
         }
 
