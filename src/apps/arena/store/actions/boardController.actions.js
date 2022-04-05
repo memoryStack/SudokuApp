@@ -1,6 +1,6 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
-import { setPencil, setHintsMenu } from '../reducers/boardController.reducers'
+import { setPencil, setHintsMenu, resetState } from '../reducers/boardController.reducers'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 
 const getNewPencilState = currentState => {
@@ -18,4 +18,12 @@ export const updatePencil = (newState = '') => {
 
 export const hintsMenuVisibilityAction = visibilityStatus => {
     invokeDispatch(setHintsMenu(visibilityStatus))
+}
+
+export const resetStoreState = () => {
+    invokeDispatch(resetState({
+        pencilState: PENCIL_STATE.INACTIVE,
+        hintsLeft: 3,
+        showHintsMenu: false,
+    }))
 }

@@ -11,6 +11,8 @@ export const useCacheGameState = (key, data) => {
     const previousGameState = usePrevious(gameState)
 
     useEffect(() => {
-        if (shouldSaveGameState(gameState, previousGameState)) cacheGameData(key, data)
+        if (shouldSaveGameState(gameState, previousGameState)) {
+            cacheGameData(key, data)
+        }
     }, [key, data, gameState])
 }

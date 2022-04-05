@@ -1,4 +1,9 @@
 const stateHandlers = {
+    resetState: (state, { payload }) => {
+        state.pencilState = payload.pencilState
+        state.hintsLeft = payload.hintsLeft
+        state.showHintsMenu = payload.showHintsMenu
+    },
     setPencil: (state, { payload }) => {
         state.pencilState = payload
     },

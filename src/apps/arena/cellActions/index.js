@@ -8,10 +8,8 @@ import withActions from '../../../utils/hocs/withActions'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { useSelector } from 'react-redux'
 import { getPencilStatus } from '../store/selectors/boardController.selectors'
-import { getGameState } from '../store/selectors/gameState.selectors'
 import { useCacheGameState } from '../hooks/useCacheGameState'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { consoleLog } from '../../../utils/util'
 
 const styles = StyleSheet.create({
     cellActionsContainer: {
@@ -29,6 +27,12 @@ const BoardController_ = ({ onAction }) => {
     const hints = 3 // TODO: add proper logic for it
 
     useCacheGameState(GAME_DATA_KEYS.CELL_ACTIONS, { pencilState, hints })
+
+    useEffect(() => {
+        return () => {
+            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
+        }
+    }, [])
 
     const { width: windowWidth } = useWindowDimensions()
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5

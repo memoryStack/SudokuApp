@@ -185,6 +185,7 @@ const resumePreviousGame = previousGameData => {
     startGame({
         ...previousGameData[GAME_DATA_KEYS.BOARD_DATA],
         ...previousGameData[GAME_DATA_KEYS.REFEREE],
+        ...previousGameData[GAME_DATA_KEYS.CELL_ACTIONS],
     })
 }
 
