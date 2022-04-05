@@ -17,6 +17,12 @@ const PuzzleBoard_ = ({ onAction }) => {
     const moves = useSelector(getMoves)
 
     useEffect(() => {
+        return () => {
+            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
+        }
+    }, [])
+
+    useEffect(() => {
         onAction({
             type: ACTION_TYPES.ON_MAIN_NUMBERS_UPDATE,
             payload: mainNumbers,

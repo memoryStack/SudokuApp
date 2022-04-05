@@ -22,4 +22,5 @@ export const {
     setMoves,
     addMove,
     popMove,
+    resetState,
 } = boardSlice.actions

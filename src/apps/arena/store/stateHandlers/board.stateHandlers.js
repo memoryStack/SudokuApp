@@ -1,4 +1,10 @@
 const stateHandlers = {
+    resetState: (state, { payload }) => {
+        state.mainNumbers = payload.mainNumbers
+        state.selectedCell = payload.selectedCell
+        state.notesInfo = payload.notesInfo
+        state.moves = payload.moves
+    },
     setMainNumbers: (state, { payload }) => {
         state.mainNumbers = payload
     },
