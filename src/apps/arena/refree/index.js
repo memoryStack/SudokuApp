@@ -37,6 +37,12 @@ const _Refree = ({ onAction }) => {
     const gameState = useSelector(getGameState)
 
     useEffect(() => {
+        return () => {
+            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
+        }
+    }, [])
+
+    useEffect(() => {
         if (mistakes >= maxMistakesLimit) {
             onAction({
                 type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED

@@ -4,7 +4,7 @@ import { consoleLog } from '../../../../utils/util'
 import { isGameOver } from '../../utils/util'
 import { setGameState } from '../reducers/gameState.reducers'
 
-import { resetMistakes, increaseMistakes, setMistakes, setDifficultylevel, setTime } from '../reducers/refree.reducers'
+import { resetMistakes, increaseMistakes, setMistakes, setDifficultylevel, setTime, resetState } from '../reducers/refree.reducers'
 import { getGameState } from '../selectors/gameState.selectors'
 import { getTime } from '../selectors/refree.selectors'
 
@@ -50,10 +50,13 @@ const incrementTime = () => {
 }
 
 export const startTimer = () => {
-    consoleLog('@@@@@@ start the timer')
     timerId = setInterval(incrementTime, 1000)
 }
 
 export const stopTimer = () => {
     if (timerId) timerId = clearInterval(timerId)
+}
+
+export const resetStoreState = () => {
+    invokeDispatch(resetState())
 }

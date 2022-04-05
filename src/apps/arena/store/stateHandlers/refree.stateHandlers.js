@@ -1,4 +1,10 @@
 const stateHandlers = {
+    resetState: (state, action) => {
+        state.maxMistakesLimit = 3
+        state.mistakes = 0
+        state.difficultyLevel = ''
+        state.time = { hours: 0, minutes: 0, seconds: 0 }
+    },
     increaseMistakes: (state, action) => {
         state.mistakes += 1
     },

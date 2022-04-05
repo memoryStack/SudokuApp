@@ -23,7 +23,7 @@ const Cell_ = ({
     cellBGColor = null,
     mainValueFontColor = null,
     onCellClick,
-    gameState,
+    showCellContent,
     displayCrossIcon = false,
     smartHintData,
     selectedMainNumber = 0,
@@ -97,8 +97,6 @@ const Cell_ = ({
             getCellNotes()
         ) : null
     }
-
-    const showCellContent = [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
 
     return (
         <Touchable

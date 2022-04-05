@@ -101,18 +101,10 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
         item => {
             if (menuItemClick) {
                 menuItemClick(item)
-            } else {
-                switch (item) {
-                    case CUSTOMIZE_YOUR_PUZZLE_TITLE:
-                        emit(EVENTS.OPEN_CUSTOM_PUZZLE_INPUT_VIEW)
-                        break
-                    default:
-                        emit(EVENTS.GENERATE_NEW_PUZZLE, { difficultyLevel: item })
-                        closeView()
-                }
+                closeView()
             }
         },
-        [nextGameMenuRef],
+        [nextGameMenuRef, menuItemClick],
     )
 
     const getNextGameMenu = () => {

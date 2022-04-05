@@ -118,7 +118,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
         setPageHeight(height)
     }, [])
-
+ 
     useEffect(() => {
         return () => {
             updateGameState(GAME_STATE.GAME_SELECT)

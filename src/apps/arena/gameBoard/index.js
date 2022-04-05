@@ -21,6 +21,9 @@ for (let i = 0; i < 10; i++) {
 
 // TODO: why is it re-rendering so much ??
 const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
+    
+    const showCellContent = [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
+
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
@@ -67,7 +70,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         const { row, col } = cell
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
 
-        if (gameState === GAME_STATE.INACTIVE) return null
+        if (!showCellContent) return null
         const { row: selectedCellRow = 0, col: selectedCellCol = 0 } = selectedCell
         const isSelected = selectedCellRow === row && selectedCellCol === col
 
@@ -114,11 +117,11 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
                                 cellMainValue={mainNumbers[row][col].value}
                                 cellNotes={notesInfo[row][col]}
                                 onCellClick={onCellClick}
-                                gameState={gameState}
                                 displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
                                 smartHintData={smartHintData}
                                 selectedMainNumber={selectedCellMainValue}
                                 showSmartHint={showSmartHint}
+                                showCellContent={showCellContent}
                             />
                         </View>
                     )
