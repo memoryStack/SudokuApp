@@ -17,7 +17,6 @@ import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
-import { getMainNumbers } from './store/selectors/board.selectors'
 import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
 import { GameInputPanel } from './GameInputPanel'
 import { PuzzleBoard } from './PuzzleBoard'
@@ -26,10 +25,10 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { useCacheGameState } from './hooks/useCacheGameState'
 import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 import { updateGameState } from './store/actions/gameState.actions'
-import { useToggle } from '../../utils/customHooks/commonUtility'
+import { usePrevious, useToggle } from '../../utils/customHooks/commonUtility'
+import { consoleLog } from '../../utils/util'
 
 const MAX_AVAILABLE_HINTS = 3
-const MISTAKES_LIMIT = 3
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
 const HEADER_ICON_DIMENSION = 32
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
-
     inputPanelContainer: {
         width: '100%',
         marginVertical: 20,
@@ -92,7 +90,13 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     // TODO: this should be determined by the game-state
     const [showGameSolvedCard, setGameSolvedCard] = useToggle(false)
 
-    const [showNextGameMenu, setShowNextGameMenu] = useToggle(false)
+    const [showNextGameMenu, toggleNextGameMenu] = useToggle(false)
+
+    const gameState = useSelector(getGameState)
+
+    const previousGameState = usePrevious(gameState)
+
+    useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
     useEffect(() => {
         const { params: { puzzleUrl = '', selectedGameMenuItem = '' } = {} } = route || {}
@@ -105,12 +109,6 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
 
     // for game over halfcard animation
     const fadeAnim = useRef(new Animated.Value(0)).current
-
-    const gameState = useSelector(getGameState)
-
-    const mainNumbers = useSelector(getMainNumbers)
-
-    useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
     // show game over card
     useEffect(() => {
@@ -140,7 +138,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
             useNativeDriver: true,
         }).start(() => {
             setGameSolvedCard(false)
-            setTimeout(() => setShowNextGameMenu(true), 100) // just so that sb kuch fast fast sa na ho
+            setTimeout(() => toggleNextGameMenu(true), 100) // just so that sb kuch fast fast sa na ho
         })
     }
 
@@ -158,20 +156,10 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         fadeOut()
     }, [])
 
-    const onNewGameMenuClosed = useCallback(
-        (optionSelectedFromMenu = false) => {
-            setShowNextGameMenu(false)
-            // when game is solved or over, i don't want the game state to be changed
-            // user should start the next game
-            if (gameState !== GAME_STATE.INACTIVE) return
-            !optionSelectedFromMenu && updateGameState(GAME_STATE.ACTIVE)
-        },
-        [gameState],
-    )
-
     const handleSharePuzzleClick = useCallback(() => {
+        if ( [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) === -1) return
         onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
-    }, [])
+    }, [gameState])
 
     const handleBackPress = () => {
         onAction({
@@ -222,11 +210,15 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         [onAction],
     )
 
-    const onCustomPuzzleHCClosed = useCallback(() => {
+    // know if puzzle was created or not
+    // if not then fallback to the previous state
+    const onCustomPuzzleHCClosed = useCallback((puzzleFilled) => {
+        consoleLog('@@@@@@ puzzleFilled', puzzleFilled)
         onAction({
             type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE,
+            payload: { puzzleFilled, previousGameState },
         })
-    }, [onAction])
+    }, [onAction, previousGameState])
 
     const renderCustomPuzzleHC = () => {
         if (!(pageHeight && showCustomPuzzleHC)) return null
@@ -251,7 +243,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         return (
             <NextGameMenu
                 parentHeight={pageHeight}
-                onMenuClosed={onNewGameMenuClosed}
+                onMenuClosed={toggleNextGameMenu}
                 menuItemClick={onNewGameMenuItemClick}
             />
         )
@@ -269,7 +261,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
                 {header}
-                <Refree maxMistakesLimit={MISTAKES_LIMIT} />
+                <Refree />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
                 <BoardController />

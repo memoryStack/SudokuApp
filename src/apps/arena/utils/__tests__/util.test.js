@@ -33,22 +33,22 @@ describe('is game over', () => {
     })
 
     test('isGameOver test 3', () => {
-        expect(isGameOver(GAME_STATE.OVER_SOLVED)).toBe(true)
+        expect(isGameOver(GAME_STATE.OVER.SOLVED)).toBe(true)
     })
 
     test('isGameOver test 4', () => {
-        expect(isGameOver(GAME_STATE.OVER_UNSOLVED)).toBe(true)
+        expect(isGameOver(GAME_STATE.OVER.UNSOLVED)).toBe(true)
     })
 })
 
 describe('should cache game data', () => {
     // if game is over then it will always save the state
     test('shouldSaveGameState test 1', () => {
-        expect(shouldSaveGameState(GAME_STATE.OVER_SOLVED)).toBe(true)
+        expect(shouldSaveGameState(GAME_STATE.OVER.SOLVED)).toBe(true)
     })
 
     test('shouldSaveGameState test 2', () => {
-        expect(shouldSaveGameState(GAME_STATE.OVER_UNSOLVED)).toBe(true)
+        expect(shouldSaveGameState(GAME_STATE.OVER.UNSOLVED)).toBe(true)
     })
 
     test('shouldSaveGameState test 3', () => {

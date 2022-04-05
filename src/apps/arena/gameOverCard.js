@@ -69,8 +69,8 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
 
     const gameState = useSelector(getGameState)
 
-    const gameSolved = gameState === GAME_STATE.OVER_SOLVED
-    const gameUnsolved = gameState === GAME_STATE.OVER_UNSOLVED
+    const gameSolved = gameState === GAME_STATE.OVER.SOLVED
+    const gameUnsolved = gameState === GAME_STATE.OVER.UNSOLVED
 
     const getGameSolvedView = () => {
         return (

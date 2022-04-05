@@ -59,12 +59,14 @@ const EVENTS = {
     START_DEFAULT_GAME_PROCESS: 'START_DEFAULT_GAME_PROCESS',
 }
 
-// TODO: freeze these objects
 const GAME_STATE = {
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE',
-    OVER_SOLVED: 'OVER_SOLVED',
-    OVER_UNSOLVED: 'OVER_UNSOLVED',
+    GAME_SELECT: 'GAME_SELECT',
+    OVER: {
+        SOLVED: 'SOLVED',
+        UNSOLVED: 'UNSOLVED',
+    },
 }
 
 // TODO: should make a general reusable state for these switches kind of states like "ON or OFF" or "ACTIVE or INACTIVE"

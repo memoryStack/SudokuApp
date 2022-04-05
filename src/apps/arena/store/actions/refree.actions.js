@@ -11,7 +11,9 @@ import { getTime } from '../selectors/refree.selectors'
 export const clearMistakes = () => invokeDispatch(resetMistakes())
 
 // TODO: maybe change the namings
-export const addMistake = () => invokeDispatch(increaseMistakes())
+export const addMistake = () => {
+    invokeDispatch(increaseMistakes())
+}
 
 export const updateMistakes = mistakes => invokeDispatch(setMistakes(mistakes))
 
@@ -19,7 +21,7 @@ export const updateDifficultylevel = level => invokeDispatch(setDifficultylevel(
 
 export const timerClick = () => {
     const gameState = getGameState(getStoreState())
-    if (isGameOver(gameState)) return
+    if (!(gameState === GAME_STATE.ACTIVE || gameState === GAME_STATE.INACTIVE)) return
     const newGameState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
     invokeDispatch(setGameState(newGameState))
 }

@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onCustomPuzzleClosed, onAction }) => {
+const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onCustomPuzzleClosed, validPuzzleFilled = false, onAction }) => {
     const customPuzzleRef = useRef(null)
 
     const handleOnClose = useCallback(() => {
@@ -62,6 +62,10 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
     const handlePlayClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef, snackBarRenderer } })
     }, [mainNumbers])
+
+    const onHCClosed = useCallback(() => {
+        onCustomPuzzleClosed(validPuzzleFilled)
+    }, [validPuzzleFilled])
 
     const snackBarRenderer = msg => {
         return (
@@ -74,7 +78,7 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
     return (
         <BottomDragger
             parentHeight={parentHeight}
-            onDraggerClosed={onCustomPuzzleClosed}
+            onDraggerClosed={onHCClosed}
             ref={customPuzzleRef}
             bottomMostPositionRatio={1.1}
             stopBackgroundClickClose={true}

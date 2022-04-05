@@ -61,7 +61,7 @@ const resetInitialState = () => {
 resetInitialState()
 
 const handleInit = ({ setState }) => {
-    setState(initBoardData())
+    setState({...initBoardData(), validPuzzleFilled: false})
 }
 
 const isDuplicateEntry = (mainNumbers, cell, number) => {
@@ -159,7 +159,7 @@ const showSnackBar = ({ snackBarRenderer, msg }) => {
     })
 }
 
-const handlePlay = ({ getState, params: { snackBarRenderer, ref: customPuzzleHCRef } }) => {
+const handlePlay = ({ setState, getState, params: { snackBarRenderer, ref: customPuzzleHCRef } }) => {
     const { mainNumbers, startCustomPuzzle } = getState()
 
     // check the validity of the puzzle
@@ -170,6 +170,7 @@ const handlePlay = ({ getState, params: { snackBarRenderer, ref: customPuzzleHCR
         if (isMultipleSolutionsExist) {
             showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer })
         } else {
+            setState({ validPuzzleFilled: true })
             startCustomPuzzle(mainNumbers)
             handleOnClose({ params: customPuzzleHCRef })
         }

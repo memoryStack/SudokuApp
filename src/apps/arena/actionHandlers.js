@@ -189,6 +189,8 @@ const resumePreviousGame = previousGameData => {
 }
 
 const handleMenuItemPress = ({ setState, params: menuItem }) => {
+    updateGameState(GAME_STATE.GAME_SELECT)
+
     switch (menuItem) {
         case LEVEL_DIFFICULTIES.EASY:
         case LEVEL_DIFFICULTIES.MEDIUM:
@@ -218,8 +220,9 @@ const handleStartCustomPuzzle = ({ params: mainNumbers }) => {
     startNewGame({ mainNumbers, difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE })
 }
 
-const handleCustomPuzzleHCClose = ({ setState }) => {
+const handleCustomPuzzleHCClose = ({ setState, params: { puzzleFilled, previousGameState } }) => {
     setState({ showCustomPuzzleHC: false })
+    if (!puzzleFilled) updateGameState(previousGameState)
 }
 
 const handleSharePuzzle = () => {

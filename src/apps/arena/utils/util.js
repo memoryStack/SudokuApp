@@ -3,7 +3,7 @@ import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
 import { getBlockAndBoxNum } from '../../../utils/util'
 
-const gameOverStates = [GAME_STATE.OVER_SOLVED, GAME_STATE.OVER_UNSOLVED]
+const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
 let numOfSolutions = 0
 
 export const isGameOver = gameState => {

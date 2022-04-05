@@ -8,7 +8,7 @@ import withActions from '../../../utils/hocs/withActions'
 import { useCacheGameState } from '../hooks/useCacheGameState'
 import { startTimer, stopTimer } from '../store/actions/refree.actions'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { getMistakes, getDifficultyLevel, getTime } from '../store/selectors/refree.selectors'
+import { getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit } from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
@@ -28,12 +28,21 @@ const styles = StyleSheet.create({
     },
 })
 
-const _Refree = ({ maxMistakesLimit, onAction }) => {
+const _Refree = ({ onAction }) => {
+    const maxMistakesLimit = useSelector(getMaxMistakesLimit)
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
     const time = useSelector(getTime)
 
     const gameState = useSelector(getGameState)
+
+    useEffect(() => {
+        if (mistakes >= maxMistakesLimit) {
+            onAction({
+                type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED
+            })
+        }
+    }, [mistakes, maxMistakesLimit])
 
     // TODO: check what happens when back button is pressed
     useEffect(() => {
