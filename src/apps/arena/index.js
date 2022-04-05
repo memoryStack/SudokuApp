@@ -119,13 +119,18 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         setPageHeight(height)
     }, [])
 
+    useEffect(() => {
+        return () => {
+            updateGameState(GAME_STATE.GAME_SELECT)
+        }
+    }, [])
+
     // shfit these to actionHandlers later
     const handleGameInFocus = useCallback(() => {
-        // if the menu is opened let's keep it that way only
         if (gameState !== GAME_STATE.INACTIVE || showCustomPuzzleHC || showNextGameMenu) return
         updateGameState(GAME_STATE.ACTIVE)
     }, [gameState, showCustomPuzzleHC, showNextGameMenu, showGameSolvedCard])
-
+    
     const handleGameOutOfFocus = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
         updateGameState(GAME_STATE.INACTIVE)

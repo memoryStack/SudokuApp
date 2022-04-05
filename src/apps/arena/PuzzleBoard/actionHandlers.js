@@ -1,6 +1,8 @@
 import { updateSelectedCell } from '../store/actions/board.actions'
 import { isGameActive } from '../store/utils'
-import { ACTION_TYPES } from '../gameBoard/actionTypes'
+import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
+import { updateGameState } from '../store/actions/gameState.actions'
+import { GAME_STATE } from '../../../resources/constants'
 
 const handleCellPress = ({ params: cell }) => {
     // TODO: some improvements can be done here like
@@ -9,8 +11,26 @@ const handleCellPress = ({ params: cell }) => {
     updateSelectedCell(cell)
 }
 
-const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_CELL_PRESS]: handleCellPress,
+const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
+    let correctlyFilledCells = 0
+    for(let row=0;row<9;row++) {
+        for (let col=0;col<9;col++) {
+            const cellMainNumber = mainNumbers[row][col]
+            if (cellMainNumber.solutionValue && (cellMainNumber.solutionValue === cellMainNumber.value))
+            correctlyFilledCells++
+        }
+    }
+    if (correctlyFilledCells === 81) updateGameState(GAME_STATE.OVER.SOLVED)
 }
 
-export { ACTION_HANDLERS }
+const ACTION_TYPES = {
+    ...BOARD_GENERIC_ACTION_TYPES,
+    ON_MAIN_NUMBERS_UPDATE: 'ON_MAIN_NUMBERS_UPDATE',
+}
+
+const ACTION_HANDLERS = {
+    [ACTION_TYPES.ON_CELL_PRESS]: handleCellPress,
+    [ACTION_TYPES.ON_MAIN_NUMBERS_UPDATE]: handleMainNumbersUpdate,
+}
+
+export { ACTION_TYPES, ACTION_HANDLERS }

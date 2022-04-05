@@ -98,6 +98,8 @@ const Cell_ = ({
         ) : null
     }
 
+    const showCellContent = [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
+
     return (
         <Touchable
             touchable={TouchableTypes.opacity}
@@ -105,7 +107,7 @@ const Cell_ = ({
             style={[styles.cell, cellBGColor]}
             onPress={() => onCellClick({ row, col })}
         >
-            {gameState !== GAME_STATE.INACTIVE ? getCellContent() : null}
+            {showCellContent ? getCellContent() : null}
         </Touchable>
     )
 }
