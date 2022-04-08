@@ -19,7 +19,6 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-// TODO: why is it re-rendering so much ??
 const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
     
     const showCellContent = [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
