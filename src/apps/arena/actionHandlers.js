@@ -9,12 +9,11 @@ import {
     EVENTS,
     PENCIL_STATE,
 } from '../../resources/constants'
-import { addListener, emit, removeListener } from '../../utils/GlobalEventBus'
-import { shouldSaveGameState, getNumberOfSolutions } from './utils/util'
+import { emit } from '../../utils/GlobalEventBus'
+import { getNumberOfSolutions, initNotes } from './utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
-import { usePrevious } from '../../utils/customHooks/commonUtility'
 import { getKey } from '../../utils/storage'
-import { cacheGameData, GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
+import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
 import {
     INVALID_DEEPLINK_PUZZLE,
     LAUNCHING_DEFAULT_PUZZLE,
@@ -23,10 +22,8 @@ import {
     CUSTOMIZE_YOUR_PUZZLE_TITLE,
 } from '../../resources/stringLiterals'
 import { updateGameState } from './store/actions/gameState.actions'
-import { getGameState } from './store/selectors/gameState.selectors'
-import { consoleLog, initBoardData as initMainNumbers, noOperationFunction } from '../../utils/util'
+import { consoleLog, noOperationFunction } from '../../utils/util'
 import { updateMainNumbers, updateMoves, updateNotes, updateSelectedCell } from './store/actions/board.actions'
-import { initNotesInfo } from './store/state/board.state'
 import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
 import { SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
@@ -110,7 +107,7 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
 
     startGame({
         mainNumbers,
-        notesInfo: initNotesInfo(),
+        notesInfo: initNotes(),
         selectedCell: { row: 0, col: 0 },
         moves: [],
         ...initRefereeData(),

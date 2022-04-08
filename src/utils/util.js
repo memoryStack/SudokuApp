@@ -39,7 +39,7 @@ const initNotesInstancesInfo = () => {
 }
 
 // TODO: check if here solutionValue can be 0 instead of empty string
-export const initBoardData = () => {
+export const initMainNumbers = () => {
     const sudokuBoard = new Array(9)
     for (let i = 0; i < 9; i++) {
         const rowData = new Array(9)
@@ -690,8 +690,8 @@ const printBoardState = () => {
 
 // below notesData is not required at all
 export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
-    sudokuBoard = initBoardData()
-    sudokuSolution = initBoardData() // TODO: we can remove this as well will remove it later
+    sudokuBoard = initMainNumbers()
+    sudokuSolution = initMainNumbers() // TODO: we can remove this as well will remove it later
 
     // init duplicacy checker DS here
     fillRecursionIndependentBoxes()

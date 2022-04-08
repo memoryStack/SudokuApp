@@ -1,6 +1,6 @@
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
-import { initBoardData as initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
+import { initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { areSameCells } from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
 import { EVENTS } from '../../../resources/constants'

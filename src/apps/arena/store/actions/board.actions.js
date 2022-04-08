@@ -1,9 +1,8 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
-import { consoleLog, getBlockAndBoxNum, initBoardData as initMainNumbers } from '../../../../utils/util'
-import { Cell } from '../../gameBoard/cell'
+import { getBlockAndBoxNum, initMainNumbers } from '../../../../utils/util'
 import { HOUSE_TYPE } from '../../utils/smartHints/constants'
-import { duplicacyPresent } from '../../utils/util'
+import { duplicacyPresent, initNotes } from '../../utils/util'
 
 import {
     setMainNumbers,
@@ -22,7 +21,6 @@ import { getMainNumbers, getMoves, getNotesInfo, getSelectedCell } from '../sele
 import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
 import { getHouseCells } from '../../utils/houseCells'
-import { initNotesInfo } from '../state/board.state'
 
 const constructMove = ({ mainNumber = {}, notes = {} }) => {
     const selectedCell = getSelectedCell(getStoreState())
@@ -279,7 +277,7 @@ export const resetStoreState = () => {
     invokeDispatch(resetState({
         mainNumbers: initMainNumbers(),
         selectedCell: { row: 0, col: 0 },
-        notesInfo: initNotesInfo(),
+        notesInfo: initNotes(),
         moves: [],
     }))
 }
