@@ -1,6 +1,7 @@
+const EMPTY_OBJECT = {}
 export const getHintHCInfo = state => {
     const currentHintNum = state.smartHintHC.currentHintNum
-    if (currentHintNum === -1) return {}
+    if (currentHintNum === -1) return EMPTY_OBJECT
     return {
         show: state.smartHintHC.show,
         currentHintNum,
