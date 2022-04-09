@@ -39,6 +39,7 @@ const initNotesInstancesInfo = () => {
 }
 
 // TODO: check if here solutionValue can be 0 instead of empty string
+// TODO: remove it from this utils file to arena utils or to board/utils. that's the right plae for it.
 export const initMainNumbers = () => {
     const sudokuBoard = new Array(9)
     for (let i = 0; i < 9; i++) {

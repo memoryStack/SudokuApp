@@ -61,7 +61,7 @@ const resetInitialState = () => {
 resetInitialState()
 
 const handleInit = ({ setState }) => {
-    setState({...initBoardData(), validPuzzleFilled: false})
+    setState({ ...initBoardData(), validPuzzleFilled: false })
 }
 
 const isDuplicateEntry = (mainNumbers, cell, number) => {

@@ -20,8 +20,8 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
-    
-    const showCellContent = [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
+    const showCellContent =
+        [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
 
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 

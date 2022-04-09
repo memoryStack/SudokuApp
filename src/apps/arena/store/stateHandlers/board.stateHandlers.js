@@ -4,6 +4,7 @@ const stateHandlers = {
         state.selectedCell = payload.selectedCell
         state.notesInfo = payload.notesInfo
         state.moves = payload.moves
+        state.possibleNotes = payload.possibleNotes
     },
     setMainNumbers: (state, { payload }) => {
         state.mainNumbers = payload
@@ -32,6 +33,21 @@ const stateHandlers = {
         const notesBunch = payload
         notesBunch.forEach(({ cell, note }) => {
             state.notesInfo[cell.row][cell.col][note - 1].show = 0
+        })
+    },
+    setPossibleNotes: (state, { payload }) => {
+        state.possibleNotes = payload
+    },
+    setPossibleNotesBunch: (state, { payload }) => {
+        const notesBunch = payload
+        notesBunch.forEach(({ cell, note }) => {
+            state.possibleNotes[cell.row][cell.col][note - 1].show = 1
+        })
+    },
+    erasePossibleNotesBunch: (state, { payload }) => {
+        const notesBunch = payload
+        notesBunch.forEach(({ cell, note }) => {
+            state.possibleNotes[cell.row][cell.col][note - 1].show = 0
         })
     },
     setMoves: (state, { payload }) => {

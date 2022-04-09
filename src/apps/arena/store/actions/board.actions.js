@@ -2,9 +2,14 @@ import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helper
 import { PENCIL_STATE } from '../../../../resources/constants'
 import { getBlockAndBoxNum, initMainNumbers } from '../../../../utils/util'
 import { HOUSE_TYPE } from '../../utils/smartHints/constants'
-import { duplicacyPresent, initNotes } from '../../utils/util'
+import { duplicacyPresent, initNotes, isCellEmpty } from '../../utils/util'
+import { boardActions } from '../reducers/board.reducers'
+import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
+import { getPencilStatus } from '../selectors/boardController.selectors'
+import { addMistake } from './refree.actions'
+import { getHouseCells } from '../../utils/houseCells'
 
-import {
+const {
     setMainNumbers,
     setCellMainNumber,
     eraseCellMainValue,
@@ -16,11 +21,10 @@ import {
     addMove,
     popMove,
     resetState,
-} from '../reducers/board.reducers'
-import { getMainNumbers, getMoves, getNotesInfo, getSelectedCell } from '../selectors/board.selectors'
-import { getPencilStatus } from '../selectors/boardController.selectors'
-import { addMistake } from './refree.actions'
-import { getHouseCells } from '../../utils/houseCells'
+    setPossibleNotes,
+    setPossibleNotesBunch,
+    erasePossibleNotesBunch,
+} = boardActions
 
 const constructMove = ({ mainNumber = {}, notes = {} }) => {
     const selectedCell = getSelectedCell(getStoreState())
@@ -86,9 +90,8 @@ const MOVES_TYPES = {
     REMOVE: 'REMOVE',
 }
 
-const getVisibileNotesBunchInCell = cell => {
+const getVisibileNotesBunchInCell = (cell, notesInfo) => {
     const result = []
-    const notesInfo = getNotesInfo(getStoreState())
     for (let note = 0; note < 9; note++) {
         const { show } = notesInfo[cell.row][cell.col][note]
         if (show) result.push({ cell, note: note + 1 })
@@ -96,11 +99,10 @@ const getVisibileNotesBunchInCell = cell => {
     return result
 }
 
-const getNotesToRemoveAfterMainNumberInput = (number, cell) => {
-    const result = []
-    result.push(...getVisibileNotesBunchInCell(cell))
-
-    const houses = [
+// TODO: this can be moved to utils
+// or do i have this func in utils ?
+const getCellHousesInfo = cell => {
+    const result = [
         {
             type: HOUSE_TYPE.ROW,
             num: cell.row,
@@ -114,9 +116,15 @@ const getNotesToRemoveAfterMainNumberInput = (number, cell) => {
             num: getBlockAndBoxNum(cell).blockNum,
         },
     ]
+    return result
+}
 
-    const notesInfo = getNotesInfo(getStoreState())
-    houses.forEach(({ type, num }) => {
+const getNotesToRemoveAfterMainNumberInput = (number, cell, notesInfo) => {
+    const result = []
+    result.push(...getVisibileNotesBunchInCell(cell, notesInfo))
+
+    const cellHouses = getCellHousesInfo(cell)
+    cellHouses.forEach(({ type, num }) => {
         getHouseCells(type, num).forEach(({ row, col }) => {
             const { show } = notesInfo[row][col][number - 1]
             if (show) result.push({ cell: { row, col }, note: number })
@@ -141,8 +149,11 @@ const inputMainNumber = number => {
 
     if (number !== mainNumbers[selectedCell.row][selectedCell.col].solutionValue) addMistake()
     else {
-        const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell)
+        const notesInfo = getNotesInfo(getStoreState())
+        const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, notesInfo)
         invokeDispatch(eraseNotesBunch(notesBunch))
+
+        erasePossibleNotesOnNumberInput(number, selectedCell)
 
         move.notes = {
             action: MOVES_TYPES.REMOVE,
@@ -151,8 +162,6 @@ const inputMainNumber = number => {
     }
 
     invokeDispatch(addMove(constructMove(move)))
-
-    // TODO: if all the cells are filled then change game state
 }
 
 // TODO: break it down
@@ -190,7 +199,8 @@ export const inputNumberAction = number => {
 }
 
 const removeCellNotes = cell => {
-    const notesBunch = getVisibileNotesBunchInCell(cell)
+    const notesInfo = getNotesInfo(getStoreState())
+    const notesBunch = getVisibileNotesBunchInCell(cell, notesInfo)
     if (!notesBunch.length) return
 
     invokeDispatch(eraseNotesBunch(notesBunch))
@@ -233,6 +243,58 @@ export const eraseAction = () => {
     }
 }
 
+export const initPossibleNotes = mainNumbers => {
+    setTimeout(() => {
+        const notes = initNotes()
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)
+                cellNotes.forEach(({ note }) => {
+                    notes[row][col][note - 1].show = 1
+                })
+            }
+        }
+
+        invokeDispatch(setPossibleNotes(notes))
+    })
+}
+
+const getCellAllPossibleNotes = (cell, mainNumbers) => {
+    const result = []
+    if (!isCellEmpty(cell, mainNumbers)) return result
+
+    for (let num = 1; num <= 9; num++) {
+        if (!duplicacyPresent(num, mainNumbers, cell)) {
+            result.push({ cell, note: num })
+        }
+    }
+    return result
+}
+
+function erasePossibleNotesOnNumberInput(number, selectedCell) {
+    const possibleNotesInfo = getPossibleNotes(getStoreState())
+    const possibleNotesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, possibleNotesInfo)
+    invokeDispatch(erasePossibleNotesBunch(possibleNotesBunch))
+}
+
+const addPossibleNotesOnMainNumberErased = (selectedCell, wasCorrectValue, mainNumbers) => {
+    if (!wasCorrectValue) return
+
+    const numberRemoved = mainNumbers[selectedCell.row][selectedCell.col].solutionValue
+    const possibleNotesBunch = [...getCellAllPossibleNotes(selectedCell, mainNumbers)]
+
+    const cellHouses = getCellHousesInfo(selectedCell)
+    cellHouses.forEach(({ type, num: houseNum }) => {
+        getHouseCells(type, houseNum).forEach(cell => {
+            if (!mainNumbers[cell.row][cell.col].value && !duplicacyPresent(numberRemoved, mainNumbers, cell)) {
+                possibleNotesBunch.push({ cell, note: numberRemoved })
+            }
+        })
+    })
+
+    invokeDispatch(setPossibleNotesBunch(possibleNotesBunch))
+}
+
 export const undoAction = () => {
     const moves = getMoves(getStoreState())
     if (!moves.length) return
@@ -255,8 +317,19 @@ export const undoAction = () => {
         if (!mainNumberMove.action) return
 
         if (mainNumberMove.action === MOVES_TYPES.ADD) {
-            invokeDispatch(eraseCellMainValue(previousMove.selectedCell))
+            const cell = previousMove.selectedCell
+            const mainNumbersBeforeErase = getMainNumbers(getStoreState())
+            invokeDispatch(eraseCellMainValue(cell))
+
+            // TODO: may be we can extract this check and make it a util func
+            const wasCorrectValue =
+                mainNumbersBeforeErase[cell.row][cell.col].value ===
+                mainNumbersBeforeErase[cell.row][cell.col].solutionValue
+            const mainNumbersAfterErase = getMainNumbers(getStoreState())
+            addPossibleNotesOnMainNumberErased(cell, wasCorrectValue, mainNumbersAfterErase)
         } else {
+            // this will be executed only for the mistake made.
+            // correct filled numbers are anyway not erasable.
             invokeDispatch(setCellMainNumber({ cell: previousMove.selectedCell, number: mainNumberMove.value }))
         }
     }
@@ -274,10 +347,13 @@ export const undoAction = () => {
 }
 
 export const resetStoreState = () => {
-    invokeDispatch(resetState({
-        mainNumbers: initMainNumbers(),
-        selectedCell: { row: 0, col: 0 },
-        notesInfo: initNotes(),
-        moves: [],
-    }))
+    invokeDispatch(
+        resetState({
+            mainNumbers: initMainNumbers(),
+            selectedCell: { row: 0, col: 0 },
+            notesInfo: initNotes(),
+            moves: [],
+            possibleNotes: initNotes(),
+        }),
+    )
 }

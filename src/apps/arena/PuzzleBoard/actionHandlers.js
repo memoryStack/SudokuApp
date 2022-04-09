@@ -14,11 +14,11 @@ const handleCellPress = ({ params: cell }) => {
 
 const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
     let correctlyFilledCells = 0
-    for(let row=0;row<9;row++) {
-        for (let col=0;col<9;col++) {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
             const cellMainNumber = mainNumbers[row][col]
-            if (cellMainNumber.solutionValue && (cellMainNumber.solutionValue === cellMainNumber.value))
-            correctlyFilledCells++
+            if (cellMainNumber.solutionValue && cellMainNumber.solutionValue === cellMainNumber.value)
+                correctlyFilledCells++
         }
     }
     if (correctlyFilledCells === 81) updateGameState(GAME_STATE.OVER.SOLVED)

@@ -21,9 +21,11 @@ export const hintsMenuVisibilityAction = visibilityStatus => {
 }
 
 export const resetStoreState = () => {
-    invokeDispatch(resetState({
-        pencilState: PENCIL_STATE.INACTIVE,
-        hintsLeft: 3,
-        showHintsMenu: false,
-    }))
+    invokeDispatch(
+        resetState({
+            pencilState: PENCIL_STATE.INACTIVE,
+            hintsLeft: 3,
+            showHintsMenu: false,
+        }),
+    )
 }

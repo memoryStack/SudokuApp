@@ -4,7 +4,14 @@ import { consoleLog } from '../../../../utils/util'
 import { isGameOver } from '../../utils/util'
 import { setGameState } from '../reducers/gameState.reducers'
 
-import { resetMistakes, increaseMistakes, setMistakes, setDifficultylevel, setTime, resetState } from '../reducers/refree.reducers'
+import {
+    resetMistakes,
+    increaseMistakes,
+    setMistakes,
+    setDifficultylevel,
+    setTime,
+    resetState,
+} from '../reducers/refree.reducers'
 import { getGameState } from '../selectors/gameState.selectors'
 import { getTime } from '../selectors/refree.selectors'
 

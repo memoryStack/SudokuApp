@@ -118,7 +118,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
         setPageHeight(height)
     }, [])
- 
+
     useEffect(() => {
         return () => {
             updateGameState(GAME_STATE.GAME_SELECT)
@@ -130,7 +130,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         if (gameState !== GAME_STATE.INACTIVE || showCustomPuzzleHC || showNextGameMenu) return
         updateGameState(GAME_STATE.ACTIVE)
     }, [gameState, showCustomPuzzleHC, showNextGameMenu, showGameSolvedCard])
-    
+
     const handleGameOutOfFocus = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
         updateGameState(GAME_STATE.INACTIVE)
@@ -162,7 +162,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     }, [])
 
     const handleSharePuzzleClick = useCallback(() => {
-        if ( [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) === -1) return
+        if ([GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) === -1) return
         onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
     }, [gameState])
 
@@ -217,13 +217,16 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
 
     // know if puzzle was created or not
     // if not then fallback to the previous state
-    const onCustomPuzzleHCClosed = useCallback((puzzleFilled) => {
-        consoleLog('@@@@@@ puzzleFilled', puzzleFilled)
-        onAction({
-            type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE,
-            payload: { puzzleFilled, previousGameState },
-        })
-    }, [onAction, previousGameState])
+    const onCustomPuzzleHCClosed = useCallback(
+        puzzleFilled => {
+            consoleLog('@@@@@@ puzzleFilled', puzzleFilled)
+            onAction({
+                type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE,
+                payload: { puzzleFilled, previousGameState },
+            })
+        },
+        [onAction, previousGameState],
+    )
 
     const renderCustomPuzzleHC = () => {
         if (!(pageHeight && showCustomPuzzleHC)) return null

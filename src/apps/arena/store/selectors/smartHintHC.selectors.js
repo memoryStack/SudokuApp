@@ -1,3 +1,5 @@
+// TODO: add support for the default values for all these
+// primitive types of values
 const EMPTY_OBJECT = {}
 export const getHintHCInfo = state => {
     const currentHintNum = state.smartHintHC.currentHintNum

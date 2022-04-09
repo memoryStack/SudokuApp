@@ -4,7 +4,13 @@ import { SCREEN_NAME } from '../../../resources/constants'
 import withActions from '../../../utils/hocs/withActions'
 import { Board } from '../gameBoard'
 import { useCacheGameState } from '../hooks/useCacheGameState'
-import { getMainNumbers, getMoves, getNotesInfo, getSelectedCell } from '../store/selectors/board.selectors'
+import {
+    getMainNumbers,
+    getMoves,
+    getNotesInfo,
+    getPossibleNotes,
+    getSelectedCell,
+} from '../store/selectors/board.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { ACTION_TYPES, ACTION_HANDLERS } from './actionHandlers'

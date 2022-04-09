@@ -11,4 +11,5 @@ export const refreeSlice = createSlice({
 
 export default refreeSlice.reducer
 
-export const { increaseMistakes, resetMistakes, setMistakes, setDifficultylevel, setTime, resetState } = refreeSlice.actions
+export const { increaseMistakes, resetMistakes, setMistakes, setDifficultylevel, setTime, resetState } =
+    refreeSlice.actions

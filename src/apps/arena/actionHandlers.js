@@ -1,4 +1,3 @@
-
 import Share from 'react-native-share'
 import {
     LEVEL_DIFFICULTIES,
@@ -23,7 +22,13 @@ import {
 } from '../../resources/stringLiterals'
 import { updateGameState } from './store/actions/gameState.actions'
 import { consoleLog, noOperationFunction } from '../../utils/util'
-import { updateMainNumbers, updateMoves, updateNotes, updateSelectedCell } from './store/actions/board.actions'
+import {
+    updateMainNumbers,
+    updateMoves,
+    updateNotes,
+    updateSelectedCell,
+    initPossibleNotes,
+} from './store/actions/board.actions'
 import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
 import { SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
@@ -83,6 +88,7 @@ const startGame = ({ mainNumbers, notesInfo, selectedCell, moves, difficultyLeve
     updateNotes(notesInfo)
     updateSelectedCell(selectedCell)
     updateMoves(moves)
+    initPossibleNotes(mainNumbers)
 
     // refree state
     updateDifficultylevel(difficultyLevel)
@@ -224,8 +230,8 @@ const handleCustomPuzzleHCClose = ({ setState, params: { puzzleFilled, previousG
 }
 
 const handleSharePuzzle = () => {
-    const mainNumbers = getMainNumbers( getStoreState() )
-    
+    const mainNumbers = getMainNumbers(getStoreState())
+
     let puzzleString = ''
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {

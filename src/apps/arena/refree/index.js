@@ -45,7 +45,7 @@ const _Refree = ({ onAction }) => {
     useEffect(() => {
         if (mistakes >= maxMistakesLimit) {
             onAction({
-                type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED
+                type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED,
             })
         }
     }, [mistakes, maxMistakesLimit])
