@@ -2,13 +2,8 @@ import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
 import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
-import { HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS } from './smartHints/constants'
+import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS } from './smartHints/constants'
 import { getXWingHints } from './smartHints/xWing'
-
-const GROUPS = {
-    NAKED_GROUP: 'NAKED_GROUP',
-    HIDDEN_GROUP: 'HIDDEN_GROUP',
-}
 
 const hintsHandlerMap = {
     [HINTS_IDS.NAKED_SINGLE]: function (mainNumbers, notesData) {

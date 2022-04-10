@@ -1,8 +1,9 @@
 import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
-import { SMART_HINTS_CELLS_BG_COLOR } from './constants'
+import { GROUPS, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import { setCellDataInHintResult } from './util'
+import { isHintValid } from './validityTest'
 
 // TODO: write test case for it and refactor it properly
 const prepareNakedDublesOrTriplesHintData = (
@@ -251,15 +252,21 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
 
                 consoleLog('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
 
-                const getHintData = prepareNakedDublesOrTriplesHintData(
-                    noOfInstances,
-                    houseAllBoxes,
-                    selectedBoxes,
-                    groupCandidates,
-                    notesData,
-                )
-
-                hints.push(getHintData)
+                const isValidNakedGroup = isHintValid({
+                    type: GROUPS.NAKED_GROUP,
+                    data: { groupCandidates, hostCells: selectedBoxes },
+                })
+                if (isValidNakedGroup) {
+                    hints.push(
+                        prepareNakedDublesOrTriplesHintData(
+                            noOfInstances,
+                            houseAllBoxes,
+                            selectedBoxes,
+                            groupCandidates,
+                            notesData,
+                        ),
+                    )
+                }
             }
         }
     }

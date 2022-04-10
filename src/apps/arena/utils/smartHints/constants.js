@@ -15,6 +15,11 @@ const HIDDEN_SINGLE_TYPES = {
     ...HOUSE_TYPE,
 }
 
+const GROUPS = {
+    NAKED_GROUP: 'NAKED_GROUP',
+    HIDDEN_GROUP: 'HIDDEN_GROUP',
+}
+
 /*
     TODO: come upp with better colors later on
     let's focus on the functionality for now
@@ -98,6 +103,7 @@ const NO_HINTS_FOUND_POPUP_TEXT = {
 export {
     NAKED_SINGLE_TYPES,
     HIDDEN_SINGLE_TYPES,
+    GROUPS,
     SMART_HINTS_CELLS_BG_COLOR,
     NUMBER_TO_TEXT,
     HIDDEN_GROUP_TYPE,
