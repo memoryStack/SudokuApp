@@ -1,6 +1,7 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
 import { isCellEmpty } from '../../util'
-import { NAKED_SINGLE_TYPES } from '../constants'
+import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
+import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
 
 const isNakedSinglePresent = cellNotes => {
@@ -60,7 +61,8 @@ const getNakedSinglesRawInfo = (mainNumbers, notesInfo) => {
             if (mainNumbers[row][col].value) continue
             // TODO: change "mainNumber" field name. it doesn't feel right.
             const { present, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
-            if (present) result.push({ cell: { row, col }, mainNumber, type: getHouseType({ row, col }, mainNumbers) })
+            const isValid = isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell: {row, col} } })
+            if (present && isValid) result.push({ cell: { row, col }, mainNumber, type: getHouseType({ row, col }, mainNumbers) })
         }
     }
     return result
