@@ -1,23 +1,18 @@
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../../gameBoard/style'
 
-const NAKED_SINGLE_TYPES = {
-    ROW: 'row',
-    COL: 'col',
-    BLOCK: 'block',
-    MIX: 'mix',
-}
-
-const HIDDEN_SINGLE_TYPES = {
-    ROW: 'row',
-    COL: 'col',
-    BLOCK: 'block',
-}
-
-// TODO: above 3 constans are kind of same
 const HOUSE_TYPE = {
     ROW: 'row',
     COL: 'col',
     BLOCK: 'block',
+}
+
+const NAKED_SINGLE_TYPES = {
+    ...HOUSE_TYPE,
+    MIX: 'mix',
+}
+
+const HIDDEN_SINGLE_TYPES = {
+    ...HOUSE_TYPE,
 }
 
 /*

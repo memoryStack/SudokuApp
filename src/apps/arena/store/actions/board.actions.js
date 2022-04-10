@@ -7,7 +7,7 @@ import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
-import { getHouseCells } from '../../utils/houseCells'
+import { getHouseCells, getCellHousesInfo } from '../../utils/houseCells'
 
 const {
     setMainNumbers,
@@ -96,26 +96,6 @@ const getVisibileNotesBunchInCell = (cell, notesInfo) => {
         const { show } = notesInfo[cell.row][cell.col][note]
         if (show) result.push({ cell, note: note + 1 })
     }
-    return result
-}
-
-// TODO: this can be moved to utils
-// or do i have this func in utils ?
-const getCellHousesInfo = cell => {
-    const result = [
-        {
-            type: HOUSE_TYPE.ROW,
-            num: cell.row,
-        },
-        {
-            type: HOUSE_TYPE.COL,
-            num: cell.col,
-        },
-        {
-            type: HOUSE_TYPE.BLOCK,
-            num: getBlockAndBoxNum(cell).blockNum,
-        },
-    ]
     return result
 }
 

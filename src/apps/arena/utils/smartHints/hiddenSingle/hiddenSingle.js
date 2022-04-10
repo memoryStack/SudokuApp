@@ -1,37 +1,9 @@
-import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
-import { HIDDEN_SINGLE_TYPES } from '../constants'
+import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 import { isCellEmpty } from '../../util'
 import { getUIHighlightData } from './uiHighlightData'
+import { isHintValid } from '../validityTest'
 
-const isCandidateSolutionForBlockCell = (candidate, cell, mainNumbers, notesData) => {
-    let possibleHostCellsCount = 0
-    const { blockNum } = getBlockAndBoxNum(cell)
-    for (let cellNo = 0; cellNo < 9; cellNo++) {
-        const { row, col } = getRowAndCol(blockNum, cellNo)
-        if (isCellEmpty({ row, col }, mainNumbers) && notesData[row][col][candidate - 1].show) possibleHostCellsCount++
-    }
-    return possibleHostCellsCount === 1
-}
-
-const isCandidateSolutionForColCell = (candidate, cell, mainNumbers, notesData) => {
-    let possibleHostCellsCount = 0
-    for (let row = 0; row < 9; row++) {
-        if (isCellEmpty({ row, col: cell.col }, mainNumbers) && notesData[row][cell.col][candidate - 1].show)
-            possibleHostCellsCount++
-    }
-    return possibleHostCellsCount === 1
-}
-
-const isCandidateSolutionForRowCell = (candidate, cell, mainNumbers, notesData) => {
-    let possibleHostCellsCount = 0
-    for (let col = 0; col < 9; col++) {
-        if (isCellEmpty({ row: cell.row, col }, mainNumbers) && notesData[cell.row][col][candidate - 1].show)
-            possibleHostCellsCount++
-    }
-    return possibleHostCellsCount === 1
-}
-
-const getCellHiddenSingle = (cell, mainNumbers, notesData) => {
+const getCellHiddenSingle = (cell, notesData) => {
     const { row, col } = cell
     let singleType = ''
 
@@ -43,19 +15,23 @@ const getCellHiddenSingle = (cell, mainNumbers, notesData) => {
     let singleCandidate = -1
     possibleCandiates.some(candidate => {
         singleCandidate = candidate
-        if (isCandidateSolutionForBlockCell(candidate, cell, mainNumbers, notesData)) {
+        if (
+            isHintValid({ type: HINTS_IDS.HIDDEN_SINGLE, data: { cell, type: HIDDEN_SINGLE_TYPES.BLOCK, candidate } })
+        ) {
             singleType = HIDDEN_SINGLE_TYPES.BLOCK
             return true
         }
-        // check in col (more natural as per my experiance. would like to switch it as well just as a experience)
-        if (isCandidateSolutionForColCell(candidate, cell, mainNumbers, notesData)) {
+
+        if (isHintValid({ type: HINTS_IDS.HIDDEN_SINGLE, data: { cell, type: HIDDEN_SINGLE_TYPES.COL, candidate } })) {
             singleType = HIDDEN_SINGLE_TYPES.COL
             return true
         }
-        if (isCandidateSolutionForRowCell(candidate, cell, mainNumbers, notesData)) {
+
+        if (isHintValid({ type: HINTS_IDS.HIDDEN_SINGLE, data: { cell, type: HIDDEN_SINGLE_TYPES.ROW, candidate } })) {
             singleType = HIDDEN_SINGLE_TYPES.ROW
             return true
         }
+
         return false
     })
 
@@ -72,7 +48,8 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData) => {
         for (let col = 0; col < 9; col++) {
             const cell = { row, col }
             if (!isCellEmpty(cell, mainNumbers)) continue
-            const { present, type, mainNumber } = getCellHiddenSingle(cell, mainNumbers, notesData)
+
+            const { present, type, mainNumber } = getCellHiddenSingle(cell, notesData)
             if (present) result.push({ cell, mainNumber, type })
         }
     }

@@ -2,6 +2,7 @@ import { GAME_STATE } from '../../../resources/constants'
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
 import { getBlockAndBoxNum } from '../../../utils/util'
+import { HOUSE_TYPE } from './smartHints/constants'
 
 const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
 let numOfSolutions = 0
@@ -132,4 +133,37 @@ export const initNotes = () => {
         notesInfo[i] = rowNotes
     }
     return notesInfo
+}
+
+export const getCellRowHouseInfo = cell => {
+    return {
+        type: HOUSE_TYPE.ROW,
+        num: cell.row,
+    }
+}
+
+export const getCellColHouseInfo = cell => {
+    return {
+        type: HOUSE_TYPE.COL,
+        num: cell.col,
+    }
+}
+
+export const getCellBlockHouseInfo = cell => {
+    return {
+        type: HOUSE_TYPE.BLOCK,
+        num: getBlockAndBoxNum(cell).blockNum,
+    }
+}
+
+export const getCellHouseInfo = (type, cell) => {
+    if (type === HOUSE_TYPE.ROW) return getCellRowHouseInfo(cell)
+    if (type === HOUSE_TYPE.COL) return getCellColHouseInfo(cell)
+    if (type === HOUSE_TYPE.BLOCK) return getCellBlockHouseInfo(cell)
+    throw 'un-identified house'
+}
+
+export const getCellHousesInfo = cell => {
+    const result = [getCellRowHouseInfo(cell), getCellColHouseInfo(cell), getCellBlockHouseInfo(cell)]
+    return result
 }

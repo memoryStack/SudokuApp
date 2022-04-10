@@ -59,10 +59,11 @@ const getNakedSinglesRawInfo = (mainNumbers, notesInfo) => {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (mainNumbers[row][col].value) continue
+            const cell = { row, col }
             // TODO: change "mainNumber" field name. it doesn't feel right.
             const { present, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
-            const isValid = isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell: {row, col} } })
-            if (present && isValid) result.push({ cell: { row, col }, mainNumber, type: getHouseType({ row, col }, mainNumbers) })
+            const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
+            if (present && isValid) result.push({ cell, mainNumber, type: getHouseType(cell, mainNumbers) })
         }
     }
     return result
