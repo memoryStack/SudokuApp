@@ -4,11 +4,13 @@ import { GROUPS, HINTS_IDS } from '../constants'
 import { isValidHiddenSingle } from './hiddenSingle'
 import { isValidNakedSingle } from './nakedSingle'
 import { isValidNakedGroup } from './nakedGroup'
+import { isValidHiddenGroup } from './hiddenGroup'
 
 const HINT_TYPE_VS_VALIDITY_CHECKER = {
     [HINTS_IDS.NAKED_SINGLE]: isValidNakedSingle,
     [HINTS_IDS.HIDDEN_SINGLE]: isValidHiddenSingle,
     [GROUPS.NAKED_GROUP]: isValidNakedGroup,
+    [GROUPS.HIDDEN_GROUP]: isValidHiddenGroup,
 }
 
 export const isHintValid = ({ type, data }) => {

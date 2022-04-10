@@ -1,9 +1,10 @@
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { consoleLog } from '../../../../../utils/util'
-import { HOUSE_TYPE } from '../../smartHints/constants'
+import { GROUPS, HOUSE_TYPE } from '../../smartHints/constants'
 import { areSameCells, isCellEmpty, isCellExists } from '../../util'
 import { getGroupUIHighlightData } from './uiHighlightData'
 import { getHouseCells } from '../../houseCells'
+import { isHintValid } from '../validityTest'
 
 const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
     if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount
@@ -125,9 +126,22 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
                     houseNum,
                     notesData,
                 )
-                const newHiddenGroups = hiddenGroupsInHouse.filter(({ groupCells: hiddenGroupHostCells }) => {
-                    return !isGroupCellsExist(hiddenGroupHostCells, result)
+
+                const newHiddenGroups = hiddenGroupsInHouse.filter(group => {
+                    const groupAlreadyPicked = isGroupCellsExist(group.groupCells, result)
+                    return (
+                        !groupAlreadyPicked &&
+                        isHintValid({
+                            type: GROUPS.HIDDEN_GROUP,
+                            data: {
+                                houseType: group.house.type,
+                                groupCandidates: group.groupCandidates,
+                                hostCells: group.groupCells,
+                            },
+                        })
+                    )
                 })
+
                 result.push(...newHiddenGroups)
             }
         }
