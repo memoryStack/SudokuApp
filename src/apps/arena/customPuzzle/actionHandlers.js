@@ -170,9 +170,10 @@ const handlePlay = ({ setState, getState, params: { snackBarRenderer, ref: custo
         if (isMultipleSolutionsExist) {
             showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer })
         } else {
-            setState({ validPuzzleFilled: true })
-            startCustomPuzzle(mainNumbers)
-            handleOnClose({ params: customPuzzleHCRef })
+            setState({ validPuzzleFilled: true }, () => {
+                startCustomPuzzle(mainNumbers)
+                handleOnClose({ params: customPuzzleHCRef })
+            })
         }
     }
 }

@@ -1,6 +1,7 @@
 import { getHouseCells } from '../../houseCells'
 import { areSameColCells, areSameRowCells, isCellEmpty } from '../../util'
-import { HOUSE_TYPE } from '../constants'
+import { HINTS_IDS, HOUSE_TYPE } from '../constants'
+import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
 
 const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
@@ -76,12 +77,19 @@ const findAllXWingsInHousesPair = (candidatesInFirstHouse, candidatesInSecondHou
     Object.keys(candidatesInFirstHouse).forEach(candidate => {
         const firstHouseCells = candidatesInFirstHouse[candidate]
         const secondHouseCells = candidatesInSecondHouse[candidate]
-        if (firstHouseCells && secondHouseCells && areXWingCells(firstHouseCells, secondHouseCells)) {
-            result.push({
-                cells: [firstHouseCells, secondHouseCells],
-                candidate: parseInt(candidate, 10),
-                type: houseType,
-            })
+        const candidateNum = parseInt(candidate, 10)
+        const xWing = {
+            cells: [firstHouseCells, secondHouseCells],
+            candidate: candidateNum,
+            type: houseType,
+        }
+        if (
+            firstHouseCells &&
+            secondHouseCells &&
+            areXWingCells(firstHouseCells, secondHouseCells) &&
+            isHintValid({ type: HINTS_IDS.X_WING, data: xWing })
+        ) {
+            result.push(xWing)
         }
     })
     return result
