@@ -1,7 +1,7 @@
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { areSameCells } from '../utils/util'
+import { areSameCells, isCellEmpty } from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
 import { EVENTS } from '../../../resources/constants'
 import { emit } from '../../../utils/GlobalEventBus'
@@ -25,7 +25,7 @@ const initBoardData = () => {
     // const str = '090008170000670002100590400904280001080016050761904080005009000049100025000000849'
 
     // have XY or Y or V Wing
-    const str = '800360900009010863063089005924673158386951724571824396432196587698537000000248639'
+    const str = '800360900009090863063089005924673158386951724571824396432196587698537000000248639'
 
     for (let i = 0; i < str.length; i++) {
         const row = Math.floor(i / 9)
@@ -162,22 +162,46 @@ const showSnackBar = ({ snackBarRenderer, msg }) => {
     })
 }
 
+// TODO: use same logic it for shared puzzles as well
+const duplicatesInPuzzle = mainNumbers => {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (isCellEmpty({ row, col }, mainNumbers)) continue
+            if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
+                return {
+                    present: true,
+                    cell: { row, col },
+                }
+            }
+        }
+    }
+    return { present: false }
+}
+
 const handlePlay = ({ setState, getState, params: { snackBarRenderer, ref: customPuzzleHCRef } }) => {
     const { mainNumbers, startCustomPuzzle } = getState()
 
-    // check the validity of the puzzle
     if (getCluesCount(mainNumbers) < 18) {
         showSnackBar({ msg: 'clues are less than 18', snackBarRenderer })
+        return
+    }
+
+    const duplicateNumber = duplicatesInPuzzle(mainNumbers)
+    if (duplicateNumber.present) {
+        setState({ selectedCell: duplicateNumber.cell })
+        showSnackBar({ msg: 'puzzle has multiple numbers in same house', snackBarRenderer })
+        return
+    }
+
+    const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) > 1
+    console.log('@@@@@@ mainNumbers after puzzle', JSON.stringify(mainNumbers))
+    if (isMultipleSolutionsExist) {
+        showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer })
     } else {
-        const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) > 1
-        if (isMultipleSolutionsExist) {
-            showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer })
-        } else {
-            setState({ validPuzzleFilled: true }, () => {
-                startCustomPuzzle(mainNumbers)
-                handleOnClose({ params: customPuzzleHCRef })
-            })
-        }
+        setState({ validPuzzleFilled: true }, () => {
+            startCustomPuzzle(mainNumbers)
+            handleOnClose({ params: customPuzzleHCRef })
+        })
     }
 }
 
