@@ -4,6 +4,7 @@ import { consoleLog } from '../../../../../utils/util'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import { getCellHousesInfo, getCellHouseInfo, isCellEmpty, areSameCells, isCellExists } from '../../util'
 import { HOUSE_TYPE } from '../constants'
+import { getUIHighlightData } from './uiHighlightData'
 
 const VALID_NOTES_COUNT_IN_CELL = 2
 const VALID_NOTES_COUNT_IN_CELLS_PAIR = 3
@@ -125,6 +126,12 @@ const duplicateYWing = (newYWing, existingYWings) => {
     })
 }
 
+const getCommonNoteInWingCells = (cellANotes, cellBNotes) => {
+    for (let i = 0; i < cellANotes.length; i++) {
+        if (cellBNotes.includes(cellANotes[i])) return cellANotes[i]
+    }
+}
+
 export const getAllYWings = (mainNumbers, notesData) => {
     const yWingCells = getAllValidYWingCells(mainNumbers, notesData)
 
@@ -189,6 +196,7 @@ export const getAllYWings = (mainNumbers, notesData) => {
                                 const newYWing = {
                                     pivotCell: pivot.cell,
                                     wingCells: [firstWing.cell, secondWing.cell],
+                                    wingsCommonNote: getCommonNoteInWingCells(firstWing.notes, secondWing.notes),
                                 }
                                 if (!duplicateYWing(newYWing, rawYWings)) rawYWings.push(newYWing)
                             })
@@ -200,4 +208,10 @@ export const getAllYWings = (mainNumbers, notesData) => {
     })
 
     return rawYWings
+}
+
+export const getYWingsHints = (mainNumbers, notesData) => {
+    const rawYWings = getAllYWings(mainNumbers, notesData)
+
+    return getUIHighlightData(rawYWings, notesData)
 }

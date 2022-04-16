@@ -6,7 +6,7 @@ import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 import withActions from '../../../utils/hocs/withActions'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
-const COLUMNS_COUNT = 2
+const COLUMNS_COUNT = 3
 
 const HintsMenu_ = ({ onAction }) => {
     const onOverlayContainerClick = useCallback(() => {

@@ -47,6 +47,7 @@ const HINTS_IDS = {
     NAKED_TRIPPLE: 'NAKED_TRIPPLE',
     HIDDEN_TRIPPLE: 'HIDDEN_TRIPPLE',
     X_WING: 'X_WING',
+    Y_WING: 'Y_WING',
     ALL: 'ALL',
 }
 
@@ -79,6 +80,10 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
         label: 'X-Wing',
         id: HINTS_IDS.X_WING,
     },
+    {
+        label: 'Y-Wing',
+        id: HINTS_IDS.Y_WING,
+    },
 ]
 
 const HINTS_MENU_ITEMS = [
@@ -97,6 +102,7 @@ const NO_HINTS_FOUND_POPUP_TEXT = {
     [HINTS_IDS.NAKED_TRIPPLE]: 'naked tripples',
     [HINTS_IDS.HIDDEN_TRIPPLE]: 'hidden tripples',
     [HINTS_IDS.X_WING]: 'x-wings',
+    [HINTS_IDS.Y_WING]: 'y-wings',
     [HINTS_IDS.ALL]: 'hints',
 }
 

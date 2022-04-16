@@ -4,6 +4,7 @@ import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
 import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS } from './smartHints/constants'
 import { getXWingHints } from './smartHints/xWing'
+import { getYWingsHints } from './smartHints/yWing/yWing'
 
 const hintsHandlerMap = {
     [HINTS_IDS.NAKED_SINGLE]: function (mainNumbers, notesData) {
@@ -40,6 +41,11 @@ const hintsHandlerMap = {
     },
     [HINTS_IDS.X_WING]: function (mainNumbers, notesData) {
         return getXWingHints(mainNumbers, notesData)
+    },
+    [HINTS_IDS.Y_WING]: function (mainNumbers, notesData) {
+        const yWingsData = getYWingsHints(mainNumbers, notesData)
+        if (!yWingsData.length) return null
+        return yWingsData
     },
     [HINTS_IDS.ALL]: function (mainNumbers, notesData) {
         const result = []
