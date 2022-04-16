@@ -172,3 +172,23 @@ describe('are same col cells', () => {
         expect(areSameColCells(cells)).toBe(false)
     })
 })
+
+describe('two arrays same values', () => {
+    test('test 1', () => {
+        const arrayA = [1, 2]
+        const arrayB = [1]
+        expect(arrayA.sameArrays(arrayB)).toBe(false)
+    })
+
+    test('test 2', () => {
+        const arrayA = [1, 2]
+        const arrayB = [1, 3]
+        expect(arrayA.sameArrays(arrayB)).toBe(false)
+    })
+
+    test('test 2', () => {
+        const arrayA = [1, 2]
+        const arrayB = [1, 2]
+        expect(arrayA.sameArrays(arrayB)).toBe(true)
+    })
+})

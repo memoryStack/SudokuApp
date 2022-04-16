@@ -70,7 +70,7 @@ const prepareNakedDublesOrTriplesHintData = (
 
 // TODO: there can be multiple doubles and triples in the highlighted region
 //         how to tackle those cases so that user get most benefit ??
-
+// TODO: for yWing hint have added such a function. use that and replace this func
 const getVisibileNotesCount = ({ row, col }, notesData) => {
     let result = 0
     for (let note = 1; note <= 9; note++) {
@@ -94,6 +94,7 @@ const getHouseCellsNum = (cells, houseType) => {
     return result.sort()
 }
 
+// TODO: break this file
 // TODO: think over the namings harder. i see a lot of in-consistencies
 export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard) => {
     const houseType = ['block', 'row', 'col']

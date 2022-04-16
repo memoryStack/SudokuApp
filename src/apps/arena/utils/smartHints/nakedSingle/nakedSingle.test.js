@@ -1,8 +1,23 @@
 import { getNakedSinglesRawInfo } from './nakedSingle'
 import { NAKED_SINGLE_TYPES } from '../constants'
 
+jest.mock('../../../../../redux/dispatch.helpers')
+jest.mock('../../../store/selectors/board.selectors')
+
+const mockBoardSelectors = mockedNotes => {
+    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
+    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
+    // mocked notes will be same for user input and possibles notes as well
+    getPossibleNotes.mockReturnValue(mockedNotes)
+    getNotesInfo.mockReturnValue(mockedNotes)
+    getStoreState.mockReturnValue({})
+}
+
 test('naked singles', () => {
     const { mainNumbersTestOne, notesDataTestOne } = require('./nakedSingleTestData')
+
+    mockBoardSelectors(notesDataTestOne)
+
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
     // TODO: another test case would be better with a mix of types. here all type are MIX

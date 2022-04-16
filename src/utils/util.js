@@ -769,6 +769,19 @@ if (Array.prototype.allValuesSame === undefined) {
     }
 }
 
+// TODO: change naming
+if (Array.prototype.sameArrays === undefined) {
+    Array.prototype.sameArrays = function (arrayB) {
+        if (this.length !== arrayB.length) return false
+        for (let i = 0; i < this.length; i++) {
+            if (this[i] !== arrayB[i]) {
+                return false
+            }
+        }
+        return true
+    }
+}
+
 export const consoleLog = (...args) => {
     __DEV__ && console.log(...args)
 }

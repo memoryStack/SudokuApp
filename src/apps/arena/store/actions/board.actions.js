@@ -2,12 +2,12 @@ import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helper
 import { PENCIL_STATE } from '../../../../resources/constants'
 import { getBlockAndBoxNum, initMainNumbers } from '../../../../utils/util'
 import { HOUSE_TYPE } from '../../utils/smartHints/constants'
-import { duplicacyPresent, initNotes, isCellEmpty } from '../../utils/util'
+import { duplicacyPresent, getCellHousesInfo, initNotes, isCellEmpty } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
-import { getHouseCells, getCellHousesInfo } from '../../utils/houseCells'
+import { getHouseCells } from '../../utils/houseCells'
 
 const {
     setMainNumbers,

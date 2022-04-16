@@ -24,14 +24,17 @@ const initBoardData = () => {
     // have x-wing with no notes to remove
     // const str = '090008170000670002100590400904280001080016050761904080005009000049100025000000849'
 
-    // for (let i = 0; i < str.length; i++) {
-    //     const row = Math.floor(i / 9)
-    //     const col = i % 9
-    //     if (str[i]) {
-    //         mainNumbers[row][col].value = parseInt(str[i], 10)
-    //         mainNumbers[row][col].isClue = 1
-    //     }
-    // }
+    // have XY or Y or V Wing
+    const str = '800360900009010863063089005924673158386951724571824396432196587698537000000248639'
+
+    for (let i = 0; i < str.length; i++) {
+        const row = Math.floor(i / 9)
+        const col = i % 9
+        if (str[i]) {
+            mainNumbers[row][col].value = parseInt(str[i], 10)
+            mainNumbers[row][col].isClue = 1
+        }
+    }
 
     const notesInfo = new Array(9)
     for (let i = 0; i < 9; i++) {

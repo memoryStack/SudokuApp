@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { getStyles } from './style'
 import { Cell } from './cell'
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { sameHouseAsSelected } from '../../../utils/util'
+import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
@@ -20,6 +20,9 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
+    consoleLog('@@@@@@ mainNumbers', JSON.stringify(mainNumbers))
+    consoleLog('@@@@@@ notes', JSON.stringify(notesInfo))
+
     const showCellContent =
         [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
 

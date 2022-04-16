@@ -1,8 +1,22 @@
 import { HOUSE_TYPE } from '../../smartHints/constants'
 import { getAllHiddenGroups, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
 
+jest.mock('../../../../../redux/dispatch.helpers')
+jest.mock('../../../store/selectors/board.selectors')
+
+const mockBoardSelectors = mockedNotes => {
+    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
+    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
+    // mocked notes will be same for user input and possibles notes as well
+    getPossibleNotes.mockReturnValue(mockedNotes)
+    getNotesInfo.mockReturnValue(mockedNotes)
+    getStoreState.mockReturnValue({})
+}
+
 test('hidden doubles valid candidates test 1', () => {
     const { mainNumbers, notesData } = require('./testData')
+    mockBoardSelectors(notesData)
+
     const expectedResult = [
         {
             candidate: 5,
@@ -19,6 +33,7 @@ test('hidden doubles valid candidates test 1', () => {
 
 test('hidden doubles valid candidates test 2', () => {
     const { mainNumbers, notesData } = require('./testData')
+    mockBoardSelectors(notesData)
     const expectedResult = [
         {
             candidate: 4,
@@ -42,6 +57,7 @@ test('hidden doubles valid candidates test 2', () => {
 
 test('hidden doubles', () => {
     const { mainNumbers, notesData } = require('./testData')
+    mockBoardSelectors(notesData)
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
     const expectedResult = [
@@ -59,6 +75,7 @@ test('hidden doubles', () => {
 
 test('hidden tripples', () => {
     const { mainNumbers, notesData } = require('./hiddenTrippleTestData')
+    mockBoardSelectors(notesData)
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
 
@@ -81,6 +98,7 @@ test('hidden tripples', () => {
 test('hidden tripples duplicate houses with same group cells', () => {
     // TODO: break down this test data file
     const { mainNumbers, multipleHousesHiddenGroupNotesData } = require('./hiddenTrippleTestData')
+    mockBoardSelectors(multipleHousesHiddenGroupNotesData)
     // TODO: order of records is coupled with the algorithm implementation
     // DANGER: violating the rule of TDD
     // how to decouple this in any way ??

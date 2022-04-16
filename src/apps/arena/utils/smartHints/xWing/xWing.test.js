@@ -3,8 +3,22 @@
 import { areXWingCells, getAllXWings, getCrossHouseType } from '.'
 import { HOUSE_TYPE } from '../constants'
 
+jest.mock('../../../../../redux/dispatch.helpers')
+jest.mock('../../../store/selectors/board.selectors')
+
+const mockBoardSelectors = mockedNotes => {
+    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
+    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
+    // mocked notes will be same for user input and possibles notes as well
+    getPossibleNotes.mockReturnValue(mockedNotes)
+    getNotesInfo.mockReturnValue(mockedNotes)
+    getStoreState.mockReturnValue({})
+}
+
 test('perfect xWing', () => {
     const { mainNumbers, notesData } = require('./testData')
+
+    mockBoardSelectors(notesData)
 
     const expectedXWings = [
         {
