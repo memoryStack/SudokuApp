@@ -1,7 +1,7 @@
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { areSameCells, isCellEmpty } from '../utils/util'
+import { areSameCells, duplicatesInPuzzle, isDuplicateEntry, isCellEmpty } from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
 import { EVENTS } from '../../../resources/constants'
 import { emit } from '../../../utils/GlobalEventBus'
@@ -65,25 +65,6 @@ resetInitialState()
 
 const handleInit = ({ setState }) => {
     setState({ ...initBoardData(), validPuzzleFilled: false })
-}
-
-const isDuplicateEntry = (mainNumbers, cell, number) => {
-    const { row, col } = cell
-    let houseCount = 0
-    for (let col = 0; col < 9; col++) if (mainNumbers[row][col].value === number) houseCount++
-    if (houseCount > 1) return true
-
-    houseCount = 0
-    for (let row = 0; row < 9; row++) if (mainNumbers[row][col].value === number) houseCount++
-    if (houseCount > 1) return true
-
-    houseCount = 0
-    const { blockNum } = getBlockAndBoxNum(cell)
-    for (let box = 0; box < 9; box++) {
-        const { row, col } = getRowAndCol(blockNum, box)
-        if (mainNumbers[row][col].value === number) houseCount++
-    }
-    return houseCount > 1
 }
 
 const handleInputNumberClick = ({ setState, getState, params: number }) => {
@@ -160,22 +141,6 @@ const showSnackBar = ({ snackBarRenderer, msg }) => {
         snackbarView: snackBarRenderer(msg),
         visibleTime: 5000,
     })
-}
-
-// TODO: use same logic it for shared puzzles as well
-const duplicatesInPuzzle = mainNumbers => {
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            if (isCellEmpty({ row, col }, mainNumbers)) continue
-            if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
-                return {
-                    present: true,
-                    cell: { row, col },
-                }
-            }
-        }
-    }
-    return { present: false }
 }
 
 const handlePlay = ({ setState, getState, params: { snackBarRenderer, ref: customPuzzleHCRef } }) => {

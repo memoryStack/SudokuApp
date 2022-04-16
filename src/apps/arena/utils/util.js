@@ -1,7 +1,7 @@
 import { GAME_STATE } from '../../../resources/constants'
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
-import { getBlockAndBoxNum } from '../../../utils/util'
+import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { HOUSE_TYPE } from './smartHints/constants'
 
 const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
@@ -166,4 +166,39 @@ export const getCellHouseInfo = (type, cell) => {
 export const getCellHousesInfo = cell => {
     const result = [getCellRowHouseInfo(cell), getCellColHouseInfo(cell), getCellBlockHouseInfo(cell)]
     return result
+}
+
+// TODO: merge duplicacyPresent and isDuplicateEntry functions into one
+export const isDuplicateEntry = (mainNumbers, cell, number) => {
+    const { row, col } = cell
+    let houseCount = 0
+    for (let col = 0; col < 9; col++) if (mainNumbers[row][col].value === number) houseCount++
+    if (houseCount > 1) return true
+
+    houseCount = 0
+    for (let row = 0; row < 9; row++) if (mainNumbers[row][col].value === number) houseCount++
+    if (houseCount > 1) return true
+
+    houseCount = 0
+    const { blockNum } = getBlockAndBoxNum(cell)
+    for (let box = 0; box < 9; box++) {
+        const { row, col } = getRowAndCol(blockNum, box)
+        if (mainNumbers[row][col].value === number) houseCount++
+    }
+    return houseCount > 1
+}
+
+export const duplicatesInPuzzle = mainNumbers => {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (isCellEmpty({ row, col }, mainNumbers)) continue
+            if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
+                return {
+                    present: true,
+                    cell: { row, col },
+                }
+            }
+        }
+    }
+    return { present: false }
 }

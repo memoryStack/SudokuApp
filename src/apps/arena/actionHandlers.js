@@ -9,7 +9,7 @@ import {
     PENCIL_STATE,
 } from '../../resources/constants'
 import { emit } from '../../utils/GlobalEventBus'
-import { getNumberOfSolutions, initNotes } from './utils/util'
+import { duplicatesInPuzzle, getNumberOfSolutions, initNotes } from './utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '../../utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
@@ -130,6 +130,14 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
 
     const puzzleNumbers = puzzleUrl.substring(DEEPLINK_HOST_NAME.length)
     const mainNumbers = getMainNumbersFromString(puzzleNumbers)
+
+    if (duplicatesInPuzzle(mainNumbers).present) {
+        // TODO: give option to correct the puzzle if user can
+        emit(EVENTS.SHOW_SNACK_BAR, { msg: `puzzle is invalid. ${LAUNCHING_DEFAULT_PUZZLE}` })
+        generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
+        return
+    }
+
     const numberOfSolutions = getNumberOfSolutions(mainNumbers)
     switch (true) {
         case numberOfSolutions === 0:
