@@ -4,7 +4,7 @@ import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog } from '../../../../utils/util'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
-import { removeHints, setNextHint, setPrevHint, setHints } from '../reducers/smartHintHC.reducers'
+import { removeHints, setNextHint, setPrevHint, setHints, resetState } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
 
 const getNoHintsFoundMsg = id => {
@@ -48,4 +48,13 @@ export const showNextHint = () => {
 
 export const showPrevHint = () => {
     invokeDispatch(setPrevHint())
+}
+
+export const resetStoreState = () => {
+    const newState = {
+        show: false,
+        currentHintNum: -1,
+        hints: [],
+    }
+    invokeDispatch(resetState(newState))
 }

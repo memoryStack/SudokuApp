@@ -1,4 +1,12 @@
 const stateHandlers = {
+    resetState: (state, action) => {
+        const {
+            payload: { show, currentHintNum, hints },
+        } = action
+        state.show = show
+        state.currentHintNum = currentHintNum
+        state.hints = hints
+    },
     setHints: (state, action) => {
         const { payload: hints } = action
         state.show = true

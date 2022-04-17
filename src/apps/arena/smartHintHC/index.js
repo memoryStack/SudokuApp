@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
@@ -8,7 +9,6 @@ import { Button } from '../../../components/button'
 import { noOperationFunction } from '../../../utils/util'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
-import { useSelector } from 'react-redux'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 const NEXT_BUTTON_TEXT = 'Next'
@@ -21,6 +21,12 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
+
+    useEffect(() => {
+        return () => {
+            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
+        }
+    }, [])
 
     const onNextClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_NEXT_CLICK })

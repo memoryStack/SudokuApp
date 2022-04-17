@@ -11,4 +11,4 @@ export const smartHintHCSlice = createSlice({
 
 export default smartHintHCSlice.reducer
 
-export const { setHints, removeHints, setNextHint, setPrevHint } = smartHintHCSlice.actions
+export const { setHints, removeHints, setNextHint, setPrevHint, resetState } = smartHintHCSlice.actions
