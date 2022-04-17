@@ -44,7 +44,7 @@ const hintsHandlerMap = {
     },
     [HINTS_IDS.Y_WING]: function (mainNumbers, notesData) {
         const yWingsData = getYWingsHints(mainNumbers, notesData)
-        if (!yWingsData.length) return null
+        if (!yWingsData || !yWingsData.length) return null
         return yWingsData
     },
     [HINTS_IDS.ALL]: function (mainNumbers, notesData) {

@@ -82,6 +82,10 @@ const getUICellsToFocusData = ({ commonNoteInWings, pivotCell, wingCells, elimin
     return cellsToFocusData
 }
 
+const getHintExplaination = ({ pivotNotes, commonNoteInWings }) => {
+    return `In the highlighted green cell, either ${pivotNotes[0]} or ${pivotNotes[1]} can come here. now whatever comes in the green cell, one of the orange cell will be ${commonNoteInWings} for sure. and the notes highlighted in the red in cells which can be seen by both orange cells can be eliminated.`
+}
+
 const getYWingHintUIHighlightData = (yWing, notesData) => {
     const { pivot, wings } = yWing
 
@@ -99,8 +103,6 @@ const getYWingHintUIHighlightData = (yWing, notesData) => {
 
     if (!eliminableNotesCells.length) return null
 
-    // highlight all the relevant cells and prepare the logic as well
-
     const cellsToFocusData = getUICellsToFocusData({
         commonNoteInWings,
         pivotCell,
@@ -112,7 +114,7 @@ const getYWingHintUIHighlightData = (yWing, notesData) => {
         cellsToFocusData,
         techniqueInfo: {
             title: 'Y Wing',
-            logic: 'logic coming soon',
+            logic: getHintExplaination({ pivotNotes: pivot.notes, commonNoteInWings }),
         },
     }
 }
