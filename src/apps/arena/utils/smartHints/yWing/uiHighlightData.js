@@ -83,7 +83,12 @@ const getUICellsToFocusData = ({ commonNoteInWings, pivotCell, wingCells, elimin
 }
 
 const getYWingHintUIHighlightData = (yWing, notesData) => {
-    const { pivotCell, wingCells } = yWing
+    const { pivot, wings } = yWing
+
+    const pivotCell = pivot.cell
+    const wingCells = wings.map(wing => {
+        return wing.cell
+    })
 
     const commonNoteInWings = yWing.wingsCommonNote
     const wingsCommonSeenCells = getWingsCommonCells(...wingCells)

@@ -30,25 +30,28 @@ test('yWing', () => {
 
     const expectedYWings = [
         {
-            pivotCell: { row: 1, col: 0 },
-            wingCells: [
-                { row: 0, col: 2 },
-                { row: 1, col: 5 },
+            pivot: { cell: { row: 1, col: 0 }, notes: [2, 7] },
+            wings: [
+                { cell: { row: 0, col: 2 }, notes: [5, 7] },
+                { cell: { row: 1, col: 5 }, notes: [2, 5] },
             ],
+            wingsCommonNote: 5,
         },
         {
-            pivotCell: { row: 0, col: 2 },
-            wingCells: [
-                { row: 1, col: 0 },
-                { row: 0, col: 5 },
+            pivot: { cell: { row: 0, col: 2 }, notes: [5, 7] },
+            wings: [
+                { cell: { row: 1, col: 0 }, notes: [2, 7] },
+                { cell: { row: 0, col: 5 }, notes: [2, 5] },
             ],
+            wingsCommonNote: 2,
         },
         {
-            pivotCell: { row: 1, col: 1 },
-            wingCells: [
-                { row: 0, col: 2 },
-                { row: 1, col: 3 },
+            pivot: { cell: { row: 1, col: 1 }, notes: [4, 5] },
+            wings: [
+                { cell: { row: 0, col: 2 }, notes: [5, 7] },
+                { cell: { row: 1, col: 3 }, notes: [4, 7] },
             ],
+            wingsCommonNote: 7,
         },
     ]
     expect(getAllYWings(mainNumbers, notesData)).toStrictEqual(expectedYWings)

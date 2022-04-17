@@ -112,9 +112,17 @@ export const isCommonHouseCells = (cellA, cellB) => {
     return Object.values(commonHouses).includes(true)
 }
 
+const extractYWingCells = yWing => {
+    const pivotCell = yWing.pivot.cell
+    const wingCells = yWing.wings.map(wing => {
+        return wing.cell
+    })
+    return [pivotCell, ...wingCells]
+}
+
 const areSameYWings = (yWingA, yWingB) => {
-    const yWingACells = [yWingA.pivotCell, ...yWingA.wingCells]
-    const yWingBCells = [yWingB.pivotCell, ...yWingB.wingCells]
+    const yWingACells = extractYWingCells(yWingA)
+    const yWingBCells = extractYWingCells(yWingB)
     return yWingACells.every(cell => {
         return isCellExists(cell, yWingBCells)
     })
@@ -194,8 +202,8 @@ export const getAllYWings = (mainNumbers, notesData) => {
                             // there can be more than 1 second wing in the house we are searching
                             secondWings.forEach(secondWing => {
                                 const newYWing = {
-                                    pivotCell: pivot.cell,
-                                    wingCells: [firstWing.cell, secondWing.cell],
+                                    pivot: pivot,
+                                    wings: [firstWing, secondWing],
                                     wingsCommonNote: getCommonNoteInWingCells(firstWing.notes, secondWing.notes),
                                 }
                                 if (!duplicateYWing(newYWing, rawYWings)) rawYWings.push(newYWing)
