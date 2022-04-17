@@ -1,16 +1,12 @@
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { consoleLog } from '../../../../../utils/util'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
-import { getCellHousesInfo, getCellHouseInfo, isCellEmpty, areSameCells, isCellExists } from '../../util'
+import { getCellHousesInfo, getCellHouseInfo, isCellEmpty, isCellExists } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { getUIHighlightData } from './uiHighlightData'
 
 const VALID_NOTES_COUNT_IN_CELL = 2
 const VALID_NOTES_COUNT_IN_CELLS_PAIR = 3
-const VALID_NOTES_COUNT_IN_YWING = 3
-
-const isCellHaveOnlyTwoNotes = userInput => {}
 
 // TODO: export this to utils
 export const getCellVisibleNotes = notes => {
@@ -153,7 +149,7 @@ export const getAllYWings = (mainNumbers, notesData) => {
     const rawYWings = []
     allHouses.forEach(houseType => {
         for (let houseNum = 0; houseNum < 9; houseNum++) {
-            const houseYWingCells = housesYWingCells[houseType][houseNum]
+            const houseYWingCells = housesYWingCells[houseType]?.[houseNum]
             if (!houseYWingCells) continue
 
             const totalYWingCells = houseYWingCells.length
