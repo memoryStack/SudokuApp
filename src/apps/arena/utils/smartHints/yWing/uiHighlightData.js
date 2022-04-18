@@ -1,6 +1,5 @@
-import { consoleLog } from '../../../../../utils/util'
 import { getHouseCells } from '../../houseCells'
-import { getCellHousesInfo } from '../../util'
+import { getCellHousesInfo, isCellNoteVisible, convertBoardCellToNum, convertBoardCellNumToCell } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { setCellDataInHintResult } from '../util'
 
@@ -16,17 +15,6 @@ const COLORS = {
     [YWING_CELLS_TYPES.ELIMINABLE_NOTE]: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
 }
 
-const convertBoardCellToNum = ({ row, col }) => {
-    return row * 9 + col
-}
-
-const convertBoardCellNumToCell = cellNum => {
-    return {
-        row: Math.floor(cellNum / 9),
-        col: cellNum % 9,
-    }
-}
-
 const getHousesCellsNum = cell => {
     const result = {}
     getCellHousesInfo(cell).forEach(({ type, num }) => {
@@ -38,6 +26,8 @@ const getHousesCellsNum = cell => {
     return result
 }
 
+// TODO: this func can be shifted to utils.
+// but let's keep it here only for now
 const getWingsCommonCells = (wingCellA, wingCellB) => {
     const wingACells = getHousesCellsNum(wingCellA)
     const wingBCells = getHousesCellsNum(wingCellB)
@@ -53,31 +43,36 @@ const getWingsCommonCells = (wingCellA, wingCellB) => {
     })
 }
 
-const cellNoteVisible = (note, cellNotes) => {
-    consoleLog('@@@@@ note', note)
-    return cellNotes[note - 1].show
-}
-
-const getUICellsToFocusData = ({ commonNoteInWings, pivotCell, wingCells, eliminableNotesCells }) => {
-    const cellsToFocusData = {}
-
+const addPivotUIHighlightData = (pivotCell, cellsToFocusData) => {
     const pivotCellHighlightData = { bgColor: COLORS[YWING_CELLS_TYPES.PIVOT] }
     setCellDataInHintResult(pivotCell, pivotCellHighlightData, cellsToFocusData)
+}
 
+const addWingsUIHighlightData = (wingCells, cellsToFocusData) => {
     wingCells.forEach(wingCell => {
         const wingCellHighlightData = { bgColor: COLORS[YWING_CELLS_TYPES.WING] }
         setCellDataInHintResult(wingCell, wingCellHighlightData, cellsToFocusData)
     })
+}
 
+const addEliminableNoteCellUIHighlightData = (eliminableNote, eliminableNotesCells, cellsToFocusData) => {
     eliminableNotesCells.forEach(cell => {
         const cellHighlightData = { bgColor: COLORS[YWING_CELLS_TYPES.ELIMINABLE_NOTE] }
         cellHighlightData.notesToHighlightData = {
-            [commonNoteInWings]: {
+            [eliminableNote]: {
                 fontColor: 'red',
             },
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
     })
+}
+
+const getUICellsToFocusData = ({ commonNoteInWings, pivotCell, wingCells, eliminableNotesCells }) => {
+    const cellsToFocusData = {}
+
+    addPivotUIHighlightData(pivotCell, cellsToFocusData)
+    addWingsUIHighlightData(wingCells, cellsToFocusData)
+    addEliminableNoteCellUIHighlightData(commonNoteInWings, eliminableNotesCells, cellsToFocusData)
 
     return cellsToFocusData
 }
@@ -86,7 +81,7 @@ const getHintExplaination = ({ pivotNotes, commonNoteInWings }) => {
     return `In the highlighted green cell, either ${pivotNotes[0]} or ${pivotNotes[1]} can come here. now whatever comes in the green cell, one of the orange cell will be ${commonNoteInWings} for sure. and the notes highlighted in the red in cells which can be seen by both orange cells can be eliminated.`
 }
 
-const getYWingHintUIHighlightData = (yWing, notesData) => {
+export const getYWingHintUIHighlightData = (yWing, notesData) => {
     const { pivot, wings } = yWing
 
     const pivotCell = pivot.cell
@@ -98,7 +93,7 @@ const getYWingHintUIHighlightData = (yWing, notesData) => {
     const wingsCommonSeenCells = getWingsCommonCells(...wingCells)
 
     const eliminableNotesCells = wingsCommonSeenCells.filter(cell => {
-        return cellNoteVisible(commonNoteInWings, notesData[cell.row][cell.col])
+        return isCellNoteVisible(commonNoteInWings, notesData[cell.row][cell.col])
     })
 
     if (!eliminableNotesCells.length) return null
@@ -117,15 +112,4 @@ const getYWingHintUIHighlightData = (yWing, notesData) => {
             logic: getHintExplaination({ pivotNotes: pivot.notes, commonNoteInWings }),
         },
     }
-}
-
-// can inline this func in yWIng file only
-export const getUIHighlightData = (yWings, notesData) => {
-    if (!yWings.length) return null
-
-    return yWings
-        .map(yWing => {
-            return getYWingHintUIHighlightData(yWing, notesData)
-        })
-        .filter(yWingHint => !!yWingHint)
 }

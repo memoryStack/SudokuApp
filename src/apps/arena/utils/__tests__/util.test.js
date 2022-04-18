@@ -6,8 +6,12 @@ import {
     areSameBlockCells,
     areSameRowCells,
     areSameColCells,
+    getPairCellsCommonHouses,
+    getCellVisibleNotes,
+    getCellVisibleNotesCount,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
+import { HOUSE_TYPE } from '../smartHints/constants'
 
 describe('time component value formatter', () => {
     test('getTimeComponentString test 1', () => {
@@ -191,4 +195,88 @@ describe('two arrays same values', () => {
         const arrayB = [1, 2]
         expect(arrayA.sameArrays(arrayB)).toBe(true)
     })
+})
+
+test('pair cells common houses', () => {
+    const testOne = {
+        cellA: { row: 0, col: 5 },
+        cellB: { row: 1, col: 5 },
+    }
+    const testOneExpectedResult = {
+        [HOUSE_TYPE.ROW]: false,
+        [HOUSE_TYPE.COL]: true,
+        [HOUSE_TYPE.BLOCK]: true,
+    }
+    expect(getPairCellsCommonHouses(testOne.cellA, testOne.cellB)).toStrictEqual(testOneExpectedResult)
+
+    const testTwo = {
+        cellA: { row: 0, col: 5 },
+        cellB: { row: 8, col: 6 },
+    }
+    const testTwoExpectedResult = {
+        [HOUSE_TYPE.ROW]: false,
+        [HOUSE_TYPE.COL]: false,
+        [HOUSE_TYPE.BLOCK]: false,
+    }
+    expect(getPairCellsCommonHouses(testTwo.cellA, testTwo.cellB)).toStrictEqual(testTwoExpectedResult)
+})
+
+test('get cell visible notes ', () => {
+    const cellNotesTestOne = [
+        { noteValue: 1, show: 0 },
+        { noteValue: 2, show: 0 },
+        { noteValue: 3, show: 1 },
+        { noteValue: 4, show: 0 },
+        { noteValue: 5, show: 0 },
+        { noteValue: 6, show: 1 },
+        { noteValue: 7, show: 0 },
+        { noteValue: 8, show: 0 },
+        { noteValue: 9, show: 0 },
+    ]
+
+    expect(getCellVisibleNotes(cellNotesTestOne)).toStrictEqual([3, 6])
+
+    const cellNotesTestTwo = [
+        { noteValue: 1, show: 0 },
+        { noteValue: 2, show: 0 },
+        { noteValue: 3, show: 0 },
+        { noteValue: 4, show: 0 },
+        { noteValue: 5, show: 0 },
+        { noteValue: 6, show: 0 },
+        { noteValue: 7, show: 0 },
+        { noteValue: 8, show: 0 },
+        { noteValue: 9, show: 0 },
+    ]
+
+    expect(getCellVisibleNotes(cellNotesTestTwo)).toStrictEqual([])
+})
+
+test('cell visible notes count ', () => {
+    const cellNotesTestOne = [
+        { noteValue: 1, show: 0 },
+        { noteValue: 2, show: 0 },
+        { noteValue: 3, show: 1 },
+        { noteValue: 4, show: 0 },
+        { noteValue: 5, show: 0 },
+        { noteValue: 6, show: 1 },
+        { noteValue: 7, show: 0 },
+        { noteValue: 8, show: 0 },
+        { noteValue: 9, show: 0 },
+    ]
+
+    expect(getCellVisibleNotesCount(cellNotesTestOne)).toBe(2)
+
+    const cellNotesTestTwo = [
+        { noteValue: 1, show: 0 },
+        { noteValue: 2, show: 0 },
+        { noteValue: 3, show: 0 },
+        { noteValue: 4, show: 0 },
+        { noteValue: 5, show: 0 },
+        { noteValue: 6, show: 0 },
+        { noteValue: 7, show: 0 },
+        { noteValue: 8, show: 0 },
+        { noteValue: 9, show: 0 },
+    ]
+
+    expect(getCellVisibleNotesCount(cellNotesTestTwo)).toBe(0)
 })

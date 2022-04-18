@@ -202,3 +202,43 @@ export const duplicatesInPuzzle = mainNumbers => {
     }
     return { present: false }
 }
+
+export const getPairCellsCommonHouses = (cellA, cellB) => {
+    const cellAHouses = getCellHousesInfo(cellA)
+    const cellBHouses = getCellHousesInfo(cellB)
+
+    const result = {}
+    for (let i = 0; i < cellAHouses.length; i++) {
+        const houseType = cellAHouses[i].type
+        result[houseType] = cellAHouses[i].num === cellBHouses[i].num
+    }
+
+    return result
+}
+
+export const getCellVisibleNotes = notes => {
+    const result = []
+    notes.forEach(({ noteValue, show }) => {
+        if (show) result.push(noteValue)
+    })
+    return result
+}
+
+export const getCellVisibleNotesCount = notes => {
+    return getCellVisibleNotes(notes).length
+}
+
+export const isCellNoteVisible = (note, cellNotes) => {
+    return cellNotes[note - 1].show
+}
+
+export const convertBoardCellToNum = ({ row, col }) => {
+    return row * 9 + col
+}
+
+export const convertBoardCellNumToCell = cellNum => {
+    return {
+        row: Math.floor(cellNum / 9),
+        col: cellNum % 9,
+    }
+}
