@@ -242,3 +242,26 @@ export const convertBoardCellNumToCell = cellNum => {
         col: cellNum % 9,
     }
 }
+
+export const getCellsCommonHouses = (cells) => {
+    const result = {
+        [HOUSE_TYPE.BLOCK]: true,
+        [HOUSE_TYPE.ROW]: true,
+        [HOUSE_TYPE.COL]: true,
+    }
+    for (let i=1;i<cells.length;i++) {
+        const pairCommonHouses = getPairCellsCommonHouses(cells[i-1], cells[i])
+        for (let key in result) {
+            result[key] = result[key] && pairCommonHouses[key]
+        }
+    }
+
+    return result
+}
+
+export const areSameCellsSets = (setA, setB) => {
+    if (setA.length !== setB.length) return false
+    return setA.every(cell => {
+        return isCellExists(cell, setB)
+    })
+}

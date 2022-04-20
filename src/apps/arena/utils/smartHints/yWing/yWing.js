@@ -9,6 +9,7 @@ import {
     getPairCellsCommonHouses,
     getCellVisibleNotes,
     getCellVisibleNotesCount,
+    areSameCellsSets,
 } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { getYWingHintUIHighlightData } from './uiHighlightData'
@@ -100,12 +101,7 @@ const extractYWingCellsFromYWing = yWing => {
 const areSameYWings = (yWingA, yWingB) => {
     const yWingACells = extractYWingCellsFromYWing(yWingA)
     const yWingBCells = extractYWingCellsFromYWing(yWingB)
-    // TODO: below routine can be moved to utils
-    //  all it's doing is checking if 2 sets have same cells or not
-    // but length of 2 sets mucst be same
-    return yWingACells.every(cell => {
-        return isCellExists(cell, yWingBCells)
-    })
+    return areSameCellsSets(yWingACells, yWingBCells)
 }
 
 const isDuplicateYWing = (newYWing, existingYWings) => {
