@@ -5,7 +5,10 @@ import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
 import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS } from './smartHints/constants'
 import { getXWingHints } from './smartHints/xWing'
 import { getYWingsHints } from './smartHints/yWing/yWing'
+import { getOmissionHints } from './smartHints/omission/omission'
 
+// TODO: fix the contract of this module. it returns null and receiving all
+// sorts of things from it's dependent modules
 const hintsHandlerMap = {
     [HINTS_IDS.NAKED_SINGLE]: function (mainNumbers, notesData) {
         return getAllNakedSingles(mainNumbers, notesData)
@@ -46,6 +49,11 @@ const hintsHandlerMap = {
         const yWingsData = getYWingsHints(mainNumbers, notesData)
         if (!yWingsData || !yWingsData.length) return null
         return yWingsData
+    },
+    [HINTS_IDS.OMISSION]: function (mainNumbers, notesData) {
+        const omissionData = getOmissionHints(mainNumbers, notesData)
+        if (!omissionData || !omissionData.length) return null
+        return omissionData
     },
     [HINTS_IDS.ALL]: function (mainNumbers, notesData) {
         const result = []

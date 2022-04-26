@@ -48,6 +48,7 @@ const HINTS_IDS = {
     HIDDEN_TRIPPLE: 'HIDDEN_TRIPPLE',
     X_WING: 'X_WING',
     Y_WING: 'Y_WING',
+    OMISSION: 'OMISSION',
     ALL: 'ALL',
 }
 
@@ -83,6 +84,10 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
     {
         label: 'Y-Wing',
         id: HINTS_IDS.Y_WING,
+    },
+    {
+        label: 'Omission',
+        id: HINTS_IDS.OMISSION,
     },
 ]
 

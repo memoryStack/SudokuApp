@@ -243,14 +243,14 @@ export const convertBoardCellNumToCell = cellNum => {
     }
 }
 
-export const getCellsCommonHouses = (cells) => {
+export const getCellsCommonHouses = cells => {
     const result = {
         [HOUSE_TYPE.BLOCK]: true,
         [HOUSE_TYPE.ROW]: true,
         [HOUSE_TYPE.COL]: true,
     }
-    for (let i=1;i<cells.length;i++) {
-        const pairCommonHouses = getPairCellsCommonHouses(cells[i-1], cells[i])
+    for (let i = 1; i < cells.length; i++) {
+        const pairCommonHouses = getPairCellsCommonHouses(cells[i - 1], cells[i])
         for (let key in result) {
             result[key] = result[key] && pairCommonHouses[key]
         }

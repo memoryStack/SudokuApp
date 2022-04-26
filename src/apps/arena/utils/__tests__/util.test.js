@@ -294,17 +294,15 @@ test('common houses in cells ', () => {
         [HOUSE_TYPE.ROW]: true,
         [HOUSE_TYPE.COL]: false,
     }
-    expect(getCellsCommonHouses (testOne)).toStrictEqual(expectedResultOne)
+    expect(getCellsCommonHouses(testOne)).toStrictEqual(expectedResultOne)
 
-    const testTwo = [
-        { row: 0, col: 0 },
-    ]
+    const testTwo = [{ row: 0, col: 0 }]
     const expectedResultTwo = {
         [HOUSE_TYPE.BLOCK]: true,
         [HOUSE_TYPE.ROW]: true,
         [HOUSE_TYPE.COL]: true,
     }
-    expect(getCellsCommonHouses (testTwo)).toStrictEqual(expectedResultTwo)
+    expect(getCellsCommonHouses(testTwo)).toStrictEqual(expectedResultTwo)
 
     const testThree = [
         { row: 0, col: 0 },
@@ -316,7 +314,7 @@ test('common houses in cells ', () => {
         [HOUSE_TYPE.ROW]: false,
         [HOUSE_TYPE.COL]: false,
     }
-    expect(getCellsCommonHouses (testThree)).toStrictEqual(expectedResultThree)
+    expect(getCellsCommonHouses(testThree)).toStrictEqual(expectedResultThree)
 })
 
 test('are same cells sets', () => {
@@ -327,20 +325,32 @@ test('are same cells sets', () => {
     expect(areSameCellsSets(testOne.setA, testOne.setB)).toBe(true)
 
     const testTwo = {
-        setA: [{row: 0, col: 0}],
+        setA: [{ row: 0, col: 0 }],
         setB: [],
     }
     expect(areSameCellsSets(testTwo.setA, testTwo.setB)).toBe(false)
 
     const testThree = {
-        setA: [{row: 0, col: 0}, { row: 5, col: 8 }],
-        setB: [{row: 0, col: 0}, { row: 5, col: 8 }],
+        setA: [
+            { row: 0, col: 0 },
+            { row: 5, col: 8 },
+        ],
+        setB: [
+            { row: 0, col: 0 },
+            { row: 5, col: 8 },
+        ],
     }
     expect(areSameCellsSets(testThree.setA, testThree.setB)).toBe(true)
 
     const testFour = {
-        setA: [{row: 0, col: 0}, { row: 5, col: 8 }],
-        setB: [{row: 0, col: 0}, { row: 5, col: 0 }],
+        setA: [
+            { row: 0, col: 0 },
+            { row: 5, col: 8 },
+        ],
+        setB: [
+            { row: 0, col: 0 },
+            { row: 5, col: 0 },
+        ],
     }
     expect(areSameCellsSets(testFour.setA, testFour.setB)).toBe(false)
 })
