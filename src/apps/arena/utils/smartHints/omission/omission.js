@@ -1,4 +1,3 @@
-import { consoleLog } from '../../../../../utils/util'
 import { getHouseCells } from '../../houseCells'
 import {
     getCellsCommonHouses,
@@ -19,12 +18,13 @@ export const areValidOmissionHostCells = hostCells => {
     const cellsCommonHouses = Object.values(getCellsCommonHouses(hostCells)).filter(value => {
         return value
     })
-
     return cellsCommonHouses.length === HOST_CELLS_COMMON_HOUSES_COUNT
 }
 
 // TODO: change it's name to something more expressive intent
 // TODO: this func is doing 2 things. transform it
+// let's come back to this some time later and see if 
+// it should be made simple or not
 export const isNoteHaveOmissionInHouse = (note, house, mainNumbers, notesData) => {
     const houseCells = getHouseCells(house.type, house.num)
 
