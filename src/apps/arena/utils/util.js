@@ -1,7 +1,7 @@
 import { GAME_STATE } from '../../../resources/constants'
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
-import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
+import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { HOUSE_TYPE } from './smartHints/constants'
 
 const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
@@ -86,7 +86,7 @@ export const previousInactiveGameExists = async () => {
     let result = false
     if (previousGameData) {
         const state = previousGameData[GAME_DATA_KEYS.STATE]
-        if (state === GAME_STATE.INACTIVE) result = true
+        if ([GAME_STATE.INACTIVE, GAME_STATE.DISPLAY_HINT].includes(state)) result = true
     }
     return result
 }

@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { usePrevious } from '../../../utils/customHooks/commonUtility'
-import { consoleLog } from '../../../utils/util'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { cacheGameData } from '../utils/cacheGameHandler'
 import { shouldSaveGameState } from '../utils/util'
