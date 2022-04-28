@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
-import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions } from 'react-native'
+import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler } from 'react-native'
 import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
@@ -140,6 +140,18 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
             }),
         )
     }, [topMostPosition, bottomMostPosition, transformValue, isFullView, onDraggerOpened, onDraggerClosed])
+
+    // TODO: add constants for these events to put them in one place
+    useEffect(() => {
+        const handler = () => {
+            moveDragger()
+            return true
+        }
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handler)
+        return () => {
+            backHandler.remove()
+        }
+    }, [isFullView, isDraggerActive, bottomMostPosition, topMostPosition, onDraggerOpened, onDraggerClosed, transformValue])
 
     // TODO: i had to add "onDraggerOpened" and "onDraggerClosed" in the dependency array here
     // after that in "NextGameMenu" onDraggerOpened callback is reading correct game state. (revise this concept again)
