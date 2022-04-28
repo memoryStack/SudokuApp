@@ -5,6 +5,7 @@ import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { rgba } from '../../utils/util'
 import { useBoardElementsDimensions } from '../../utils/customHooks/boardElementsDimensions'
+import { EVENTS } from '../../constants/events'
 
 const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
 
@@ -78,6 +79,7 @@ const Home_ = ({ navigation }) => {
         setShowNextGameMenu(false)
     }, [])
 
+    // TODO: put these screenNames to constants
     const handleMenuItemClicked = useCallback(
         item => {
             setShowNextGameMenu(false)
@@ -104,10 +106,11 @@ const Home_ = ({ navigation }) => {
         const handler = ({ url }) => {
             launchDeeplinkPuzzle(url)
         }
-        Linking.addEventListener('url', handler)
-        return () => Linking.removeEventListener('url', handler)
+        Linking.addEventListener(EVENTS.LINKING_URL, handler)
+        return () => Linking.removeEventListener(EVENTS.LINKING_URL, handler)
     }, [])
 
+    // TODO: get these assets from a central place
     const renderAppIcon = () => {
         return <Image source={require('../../resources/assets/appIcon.png')} style={styles.appIcon} />
     }

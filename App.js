@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 
 import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
-import { EVENTS } from './src/resources/constants'
+import { EVENTS } from './src/constants/events'
 import { NavigationContainer } from '@react-navigation/native'
 import { getNavigator } from './src/navigation/navigator'
 
@@ -46,9 +46,9 @@ const App = () => {
                 else setSnackBarView(null)
             }, visibleTime)
         }
-        addListener(EVENTS.SHOW_SNACK_BAR, handler)
+        addListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
         return () => {
-            removeListener(EVENTS.SHOW_SNACK_BAR, handler)
+            removeListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
         }
     }, [])
 

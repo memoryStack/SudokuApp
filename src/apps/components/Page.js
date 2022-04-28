@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, SafeAreaView, StyleSheet, AppState, Platform } from 'react-native'
+import { SafeAreaView, StyleSheet, AppState, Platform } from 'react-native'
+import { EVENTS } from '../../constants/events'
 import { noOperationFunction } from '../../utils/util'
 
 const styles = StyleSheet.create({
@@ -44,21 +45,21 @@ const Page_ = ({
 
     // all the events for knowing that page is actually in focus or not
     useEffect(() => {
-        AppState.addEventListener('change', handleAppStateChange)
+        AppState.addEventListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
         const unsubNavigation = [
-            navigation && navigation.addListener('focus', handleFocus),
-            navigation && navigation.addListener('blur', handleBlur),
+            navigation && navigation.addListener(EVENTS.NAVIGATION.FOCUS, handleFocus),
+            navigation && navigation.addListener(EVENTS.NAVIGATION.BLUR, handleBlur),
         ]
         if (Platform.OS === 'android') {
-            AppState.addEventListener('focus', handleFocus)
-            AppState.addEventListener('blur', handleBlur)
+            AppState.addEventListener(EVENTS.APP_STATE.FOCUS, handleFocus)
+            AppState.addEventListener(EVENTS.APP_STATE.BLUR, handleBlur)
         }
         return () => {
-            AppState.removeEventListener('change', handleAppStateChange)
+            AppState.removeEventListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
             unsubNavigation.forEach(unsub => unsub && unsub())
             if (Platform.OS === 'android') {
-                AppState.removeEventListener('focus', handleFocus)
-                AppState.removeEventListener('blur', handleBlur)
+                AppState.removeEventListener(EVENTS.APP_STATE.FOCUS, handleFocus)
+                AppState.removeEventListener(EVENTS.APP_STATE.BLUR, handleBlur)
             }
         }
     }, [handleAppStateChange, handleFocus, handleBlur, navigation])

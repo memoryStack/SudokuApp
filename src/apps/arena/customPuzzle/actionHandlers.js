@@ -1,10 +1,10 @@
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { areSameCells, duplicatesInPuzzle, isDuplicateEntry, isCellEmpty } from '../utils/util'
+import { areSameCells, duplicatesInPuzzle, isDuplicateEntry } from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
-import { EVENTS } from '../../../resources/constants'
 import { emit } from '../../../utils/GlobalEventBus'
+import { EVENTS } from '../../../constants/events'
 
 const initBoardData = () => {
     const mainNumbers = initMainNumbers()
@@ -142,7 +142,7 @@ const handleOnClose = ({ params: ref }) => {
 }
 
 const showSnackBar = ({ snackBarRenderer, msg }) => {
-    emit(EVENTS.SHOW_SNACK_BAR, {
+    emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
         snackbarView: snackBarRenderer(msg),
         visibleTime: 5000,
     })

@@ -3,6 +3,7 @@ import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, Ba
 import { Touchable } from '../components/Touchable'
 import { rgba, noOperationFunction } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
+import { EVENTS } from '../../constants/events'
 
 const ANIMATION_DURATION = 150
 let HEADER_HEIGHT = 50
@@ -147,11 +148,19 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
             moveDragger()
             return true
         }
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', handler)
+        const backHandler = BackHandler.addEventListener(EVENTS.HARDWARE_BACK_PRESS, handler)
         return () => {
             backHandler.remove()
         }
-    }, [isFullView, isDraggerActive, bottomMostPosition, topMostPosition, onDraggerOpened, onDraggerClosed, transformValue])
+    }, [
+        isFullView,
+        isDraggerActive,
+        bottomMostPosition,
+        topMostPosition,
+        onDraggerOpened,
+        onDraggerClosed,
+        transformValue,
+    ])
 
     // TODO: i had to add "onDraggerOpened" and "onDraggerClosed" in the dependency array here
     // after that in "NextGameMenu" onDraggerOpened callback is reading correct game state. (revise this concept again)

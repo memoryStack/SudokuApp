@@ -5,7 +5,6 @@ import {
     LEVELS_CLUES_INFO,
     CUSTOMIZED_PUZZLE_LEVEL_TITLE,
     DEEPLINK_HOST_NAME,
-    EVENTS,
     PENCIL_STATE,
 } from '../../resources/constants'
 import { emit } from '../../utils/GlobalEventBus'
@@ -34,6 +33,7 @@ import { updatePencil } from './store/actions/boardController.actions'
 import { SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
 import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState } from '../../redux/dispatch.helpers'
+import { EVENTS } from '../../constants/events'
 
 const getMainNumbersFromString = puzzle => {
     const result = new Array(9)
@@ -44,7 +44,7 @@ const getMainNumbersFromString = puzzle => {
         for (let col = 0; col < 9; col++) {
             const clueIntValue = parseInt(puzzle[cellNo], 10)
             if (isNaN(clueIntValue)) {
-                emit(EVENTS.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}` })
+                emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}` })
                 throw 'invalid puzzle'
             }
             rowData[col] = {
@@ -123,7 +123,7 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
 const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
     const urlFormatError = getUrlFormatError(puzzleUrl)
     if (urlFormatError) {
-        emit(EVENTS.SHOW_SNACK_BAR, { msg: urlFormatError })
+        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: urlFormatError })
         generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
         return
     }
@@ -133,7 +133,7 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
 
     if (duplicatesInPuzzle(mainNumbers).present) {
         // TODO: give option to correct the puzzle if user can
-        emit(EVENTS.SHOW_SNACK_BAR, { msg: `puzzle is invalid. ${LAUNCHING_DEFAULT_PUZZLE}` })
+        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `puzzle is invalid. ${LAUNCHING_DEFAULT_PUZZLE}` })
         generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
         return
     }
@@ -141,7 +141,7 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
     const numberOfSolutions = getNumberOfSolutions(mainNumbers)
     switch (true) {
         case numberOfSolutions === 0:
-            emit(EVENTS.SHOW_SNACK_BAR, { msg: `${DEEPLINK_PUZZLE_NO_SOLUTIONS} ${LAUNCHING_DEFAULT_PUZZLE}` })
+            emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${DEEPLINK_PUZZLE_NO_SOLUTIONS} ${LAUNCHING_DEFAULT_PUZZLE}` })
             generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
             break
         case numberOfSolutions === 1:
@@ -149,7 +149,7 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
             break
         case numberOfSolutions >= 1:
         default:
-            emit(EVENTS.SHOW_SNACK_BAR, { msg: `Puzzle has multiple solutions. ${LAUNCHING_DEFAULT_PUZZLE}` })
+            emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `Puzzle has multiple solutions. ${LAUNCHING_DEFAULT_PUZZLE}` })
             generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
     }
 }
@@ -256,7 +256,7 @@ const handleSharePuzzle = () => {
         .then(noOperationFunction, noOperationFunction)
         .catch(error => {
             consoleLog(error)
-            emit(EVENTS.SHOW_SNACK_BAR, { msg: SOMETHING_WENT_WRONG })
+            emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: SOMETHING_WENT_WRONG })
         })
 }
 

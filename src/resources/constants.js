@@ -1,5 +1,3 @@
-// key is level name and value is number of clues for that level
-
 const PREVIOUS_GAME_STATUS = {
     SOLVED: 'SOLVED',
     UNSOLVED: 'UNSOLVED',
@@ -13,7 +11,6 @@ const LEVEL_DIFFICULTIES = {
 }
 
 const LEVELS_CLUES_INFO = {
-    // [LEVEL_DIFFICULTIES.EASY]: 70,
     [LEVEL_DIFFICULTIES.EASY]: 36,
     [LEVEL_DIFFICULTIES.MEDIUM]: 32,
     [LEVEL_DIFFICULTIES.HARD]: 28,
@@ -37,26 +34,6 @@ const DEFAULT_BEST_STATS = {
         time: {},
         mistakes: -1,
     },
-}
-
-// TODO: make a directory named `event` and  add these constants there along with the
-// GlobalEvetBus file
-
-const CELL_ACTION_EVENTS = {
-    HINT_USED_SUCCESSFULLY: 'HINT_USED_SUCCESSFULLY',
-    UNDO_USED_SUCCESSFULLY: 'UNDO_USED_SUCCESSFULLY',
-}
-
-// list of all the events in the app
-const EVENTS = {
-    ...CELL_ACTION_EVENTS,
-    START_NEW_GAME: 'START_NEW_GAME',
-    RESTART_GAME: 'RESTART_GAME',
-    OPEN_CUSTOM_PUZZLE_INPUT_VIEW: 'OPEN_CUSTOM_PUZZLE_INPUT_VIEW',
-    SHOW_SNACK_BAR: 'SHOW_SNACK_BAR',
-    GENERATE_NEW_PUZZLE: 'GENERATE_NEW_PUZZLE',
-    START_DEEPLINK_PUZZLE: 'START_DEEPLINK_PUZZLE',
-    START_DEFAULT_GAME_PROCESS: 'START_DEFAULT_GAME_PROCESS',
 }
 
 const GAME_STATE = {
@@ -188,7 +165,6 @@ export {
     LEVEL_DIFFICULTIES,
     LEVELS_CLUES_INFO,
     DEFAULT_BEST_STATS,
-    EVENTS,
     PENCIL_STATE,
     GAME_STATE,
     SCREEN_NAME,

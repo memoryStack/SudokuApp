@@ -1,5 +1,6 @@
+import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
-import { EVENTS, GAME_STATE } from '../../../../resources/constants'
+import { GAME_STATE } from '../../../../resources/constants'
 import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog } from '../../../../utils/util'
 import { getSmartHint } from '../../utils/smartHint'
@@ -23,7 +24,7 @@ export const showHints = hintId => {
                 invokeDispatch(setHints(hints))
                 updateGameState(GAME_STATE.DISPLAY_HINT)
             } else {
-                emit(EVENTS.SHOW_SNACK_BAR, {
+                emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
                     msg: getNoHintsFoundMsg(hintId),
                     visibleTime: 5000,
                 })
@@ -33,7 +34,7 @@ export const showHints = hintId => {
             // TODO: make the popup scrollable for very long systraces
             consoleLog(error)
             if (__DEV__) {
-                emit(EVENTS.SHOW_SNACK_BAR, {
+                emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
                     msg: JSON.stringify(error.stack),
                     visibleTime: 10000,
                 })
