@@ -1,11 +1,12 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
-import { EVENTS } from '../../../../resources/constants'
+import { EVENTS, GAME_STATE } from '../../../../resources/constants'
 import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog } from '../../../../utils/util'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
 import { removeHints, setNextHint, setPrevHint, setHints, resetState } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
+import { updateGameState } from './gameState.actions'
 
 const getNoHintsFoundMsg = id => {
     return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
@@ -18,8 +19,10 @@ export const showHints = hintId => {
     getSmartHint(mainNumbers, notesInfo, hintId)
         .then(hints => {
             consoleLog('@@@@ hintInfo', JSON.stringify(hints))
-            if (hints) invokeDispatch(setHints(hints))
-            else {
+            if (hints) {
+                invokeDispatch(setHints(hints))
+                updateGameState(GAME_STATE.DISPLAY_HINT)
+            } else {
                 emit(EVENTS.SHOW_SNACK_BAR, {
                     msg: getNoHintsFoundMsg(hintId),
                     visibleTime: 5000,

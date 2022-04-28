@@ -62,6 +62,7 @@ const EVENTS = {
 const GAME_STATE = {
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE',
+    DISPLAY_HINT: 'DISPLAY_HINT',
     GAME_SELECT: 'GAME_SELECT',
     OVER: {
         SOLVED: 'SOLVED',

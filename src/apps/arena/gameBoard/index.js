@@ -20,11 +20,12 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
-    consoleLog('@@@@@@ mainNumbers', JSON.stringify(mainNumbers))
-    consoleLog('@@@@@@ notes', JSON.stringify(notesInfo))
-
-    const showCellContent =
-        [GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) !== -1
+    const showCellContent = [
+        GAME_STATE.ACTIVE,
+        GAME_STATE.DISPLAY_HINT,
+        GAME_STATE.OVER.SOLVED,
+        GAME_STATE.OVER.UNSOLVED,
+    ].includes(gameState)
 
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 

@@ -1,9 +1,12 @@
+import { GAME_STATE } from '../../../resources/constants'
 import { updateSelectedCell } from '../store/actions/board.actions'
+import { updateGameState } from '../store/actions/gameState.actions'
 import { clearHints, showNextHint, showPrevHint, resetStoreState } from '../store/actions/smartHintHC.actions'
 
 const handleOnClose = ({ params: newCellToSelect }) => {
     if (newCellToSelect) updateSelectedCell(newCellToSelect)
     clearHints()
+    updateGameState(GAME_STATE.ACTIVE)
 }
 
 const handleNextClick = () => {

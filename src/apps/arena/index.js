@@ -126,6 +126,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     }, [])
 
     // shfit these to actionHandlers later
+    // TODO: put "showCustomPuzzleHC" and "showNextGameMenu" as GAME_SELECT state
+    // and use an array here to determine this condition easier way
     const handleGameInFocus = useCallback(() => {
         if (gameState !== GAME_STATE.INACTIVE || showCustomPuzzleHC || showNextGameMenu) return
         updateGameState(GAME_STATE.ACTIVE)

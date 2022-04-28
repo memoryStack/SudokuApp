@@ -17,8 +17,7 @@ export const getTimeComponentString = value => {
 }
 
 export const shouldSaveGameState = (currentGameState, previousGameState) => {
-    if (isGameOver(currentGameState)) return true
-    return currentGameState === GAME_STATE.INACTIVE && previousGameState === GAME_STATE.ACTIVE
+    return currentGameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE
 }
 
 export const duplicacyPresent = (num, mainNumbers, cell) => {
