@@ -7,7 +7,8 @@ import {
     getCellHousesInfo,
     isCellExists,
 } from '../../util'
-import { HOUSE_TYPE } from '../constants'
+import { HINTS_IDS, HOUSE_TYPE } from '../constants'
+import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
 
 const HOST_CELLS_COMMON_HOUSES_COUNT = 2
@@ -23,7 +24,7 @@ export const areValidOmissionHostCells = hostCells => {
 
 // TODO: change it's name to something more expressive intent
 // TODO: this func is doing 2 things. transform it
-// let's come back to this some time later and see if 
+// let's come back to this some time later and see if
 // it should be made simple or not
 export const isNoteHaveOmissionInHouse = (note, house, mainNumbers, notesData) => {
     const houseCells = getHouseCells(house.type, house.num)
@@ -36,8 +37,11 @@ export const isNoteHaveOmissionInHouse = (note, house, mainNumbers, notesData) =
             return isCellNoteVisible(note, notesData[cell.row][cell.col])
         })
 
+    const isValidOmission =
+        isHintValid({ type: HINTS_IDS.OMISSION, data: { houseCells, note, userNotesHostCells: hostCells } }) &&
+        areValidOmissionHostCells(hostCells)
     return {
-        present: areValidOmissionHostCells(hostCells),
+        present: isValidOmission,
         hostCells,
     }
 }

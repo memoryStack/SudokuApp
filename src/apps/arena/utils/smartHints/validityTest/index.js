@@ -6,6 +6,7 @@ import { isValidNakedSingle } from './nakedSingle'
 import { isValidNakedGroup } from './nakedGroup'
 import { isValidHiddenGroup } from './hiddenGroup'
 import { isValidXWing } from './xWing'
+import { isValidOmission } from './omission'
 
 const HINT_TYPE_VS_VALIDITY_CHECKER = {
     [HINTS_IDS.NAKED_SINGLE]: isValidNakedSingle,
@@ -13,6 +14,7 @@ const HINT_TYPE_VS_VALIDITY_CHECKER = {
     [GROUPS.NAKED_GROUP]: isValidNakedGroup,
     [GROUPS.HIDDEN_GROUP]: isValidHiddenGroup,
     [HINTS_IDS.X_WING]: isValidXWing,
+    [HINTS_IDS.OMISSION]: isValidOmission,
 }
 
 export const isHintValid = ({ type, data }) => {

@@ -108,6 +108,7 @@ const NO_HINTS_FOUND_POPUP_TEXT = {
     [HINTS_IDS.HIDDEN_TRIPPLE]: 'hidden tripples',
     [HINTS_IDS.X_WING]: 'x-wings',
     [HINTS_IDS.Y_WING]: 'y-wings',
+    [HINTS_IDS.OMISSION]: 'Omissions',
     [HINTS_IDS.ALL]: 'hints',
 }
 
