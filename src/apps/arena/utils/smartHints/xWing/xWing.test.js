@@ -1,6 +1,6 @@
 // how to name the file so that xWing prefix doesn't need to be there ??
 
-import { areXWingCells, getAllXWings, getCrossHouseType } from '.'
+import { areXWingCells, getAllXWings, getCrossHouseType, getHouseXWingLegs } from '.'
 import { HOUSE_TYPE } from '../constants'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -106,4 +106,77 @@ describe('xWing areXWingCells', () => {
         ]
         expect(areXWingCells(firstHouseCells, secondHouseCells)).toEqual(false)
     })
+})
+
+describe('house XWing perfect Legs', () => {
+    
+    const { mainNumbers, notesData } = require('./testData')
+    mockBoardSelectors(notesData)
+
+    // row house
+    test('test 1', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 0 }
+        const expectedXWingLegs = [
+            {
+                candidate: 2,
+                cells: [{row: 0, col: 3}, {row: 0, col: 6}]
+            }
+        ]
+
+        expect( getHouseXWingLegs(house, mainNumbers, notesData) ) .toStrictEqual(expectedXWingLegs)
+    })
+
+    test('test 2', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 1 }
+        const expectedXWingLegs = [
+            {
+                candidate: 8,
+                cells: [{row: 1, col: 2}, {row: 1, col: 7}]
+            },
+            {
+                candidate: 9,
+                cells: [{row: 1, col: 2}, {row: 1, col: 8}]
+            }
+        ]
+        
+        expect( getHouseXWingLegs(house, mainNumbers, notesData) ) .toStrictEqual(expectedXWingLegs)
+    })
+
+    test('test 2', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 1 }
+        const expectedXWingLegs = [
+            {
+                candidate: 8,
+                cells: [{row: 1, col: 2}, {row: 1, col: 7}]
+            },
+            {
+                candidate: 9,
+                cells: [{row: 1, col: 2}, {row: 1, col: 8}]
+            }
+        ]
+        
+        expect( getHouseXWingLegs(house, mainNumbers, notesData) ) .toStrictEqual(expectedXWingLegs)
+    })
+  
+    test('test 4', () => {
+        const house = { type: HOUSE_TYPE.COL, num: 0 }
+        const expectedXWingLegs = [
+            {
+                candidate: 2,
+                cells: [{row: 4, col: 0}, {row: 5, col: 0}]
+            },
+            {
+                candidate: 4,
+                cells: [{row: 4, col: 0}, {row: 5, col: 0}]
+            }
+        ]
+        
+        expect( getHouseXWingLegs(house, mainNumbers, notesData) ) .toStrictEqual(expectedXWingLegs)
+    })
+
+    test('test 5, no XWing Legs', () => {
+        const house = { type: HOUSE_TYPE.COL, num: 7 }
+        expect( getHouseXWingLegs(house, mainNumbers, notesData) ) .toStrictEqual([])
+    })
+
 })

@@ -1,19 +1,17 @@
 import { getHouseCells } from '../../houseCells'
-import { areSameColCells, areSameRowCells, isCellEmpty } from '../../util'
+import { areSameColCells, areSameRowCells, getHousePossibleNotes, isCellEmpty } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
 
 const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
-    const result = []
-    for (let cellNo = 0; cellNo < 9; cellNo++) {
-        const row = houseType === HOUSE_TYPE.ROW ? houseNum : cellNo
-        const col = houseType === HOUSE_TYPE.COL ? houseNum : cellNo
-        if (isCellEmpty({ row, col }, mainNumbers)) result.push({ row, col })
-    }
-    return result
+    return getHouseCells(houseType, houseNum)
+    .filter((cell) => {
+        return isCellEmpty(cell, mainNumbers)
+    })
 }
 
+// we can use this func for our purpose below
 const getAllCandidatesOccurencesInHouse = (houseNum, houseType, notesData, mainNumbers) => {
     const emptyCellsInHouse = getEmptyCellsInHouse(houseNum, houseType, mainNumbers)
     const result = {}
@@ -29,6 +27,8 @@ const getAllCandidatesOccurencesInHouse = (houseNum, houseType, notesData, mainN
     return result
 }
 
+// filtering if the candidate is valid for being a XWing leg or not
+// TODO: this will be changed for finding out sashimi and finned X-Wings
 const deleteInvalidCandidates = candidatesOccurences => {
     const HOUSE_OCCURENCES_FOR_VALID_CANDIDATE = 2
     for (let candidate = 1; candidate <= 9; candidate++) {
@@ -95,9 +95,43 @@ const findAllXWingsInHousesPair = (candidatesInFirstHouse, candidatesInSecondHou
     return result
 }
 
+// covering only perfect legs right now
+export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
+    const result = []
+
+    const candidatesHostCells = getAllCandidatesOccurencesInHouse(
+        house.num,
+        house.type,
+        notesData,
+        mainNumbers,
+    )
+    deleteInvalidCandidates(candidatesHostCells)
+
+    for (let note=1;note<=9;note++) {
+        if (!candidatesHostCells[note]) continue
+        result.push({ candidate: note,cells: candidatesHostCells[note] })
+    }
+
+    return result
+}
+
 export const getAllXWings = (mainNumbers, notesData) => {
     const result = []
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
+
+    // const housesXWingLegs = {
+    //     [HOUSE_TYPE.COL]: [],
+    //     [HOUSE_TYPE.ROW]: [],
+    // }
+    // searchableHouses.forEach((houseType) => {
+    //     for (let houseNum = 0; houseNum < 9; houseNum++) {
+
+    //         const housePossibleXWingLegs = [] // return an array
+
+
+    //     }
+    // })
+
     searchableHouses.forEach(houseType => {
         for (let firstHouseNum = 0; firstHouseNum < 9; firstHouseNum++) {
             for (let secondHouseNum = firstHouseNum + 1; secondHouseNum < 9; secondHouseNum++) {

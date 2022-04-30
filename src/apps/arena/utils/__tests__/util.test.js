@@ -11,6 +11,7 @@ import {
     getCellVisibleNotesCount,
     getCellsCommonHouses,
     areSameCellsSets,
+    getHousePossibleNotes,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
@@ -357,3 +358,28 @@ test('are same cells sets', () => {
     }
     expect(areSameCellsSets(testFour.setA, testFour.setB)).toBe(false)
 })
+
+describe('all possible notes in house', () => {
+    test('test 1', () => {    
+        const { mainNumbers } = require('../smartHints/xWing/testData')
+        const house = { type: HOUSE_TYPE.ROW, num: 0 }
+        const expectedPossibleNotes = [1, 2, 3, 4, 8]
+        expect(getHousePossibleNotes(house, mainNumbers)).toStrictEqual(expectedPossibleNotes)
+    })
+    
+    test('test 2', () => {    
+        const { mainNumbers } = require('../smartHints/xWing/testData')
+        const house = { type: HOUSE_TYPE.COL, num: 5 }
+        const expectedPossibleNotes = [1, 3, 4, 6, 9]
+        expect(getHousePossibleNotes(house, mainNumbers)).toStrictEqual(expectedPossibleNotes)
+    })
+    
+    test('test 3', () => {    
+        const { mainNumbers } = require('../smartHints/xWing/testData')
+        const house = { type: HOUSE_TYPE.BLOCK, num: 8 }
+        const expectedPossibleNotes = [1, 6, 7, 8, 9]
+        expect(getHousePossibleNotes(house, mainNumbers)).toStrictEqual(expectedPossibleNotes)
+    })
+
+})
+

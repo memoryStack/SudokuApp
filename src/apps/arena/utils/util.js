@@ -3,6 +3,7 @@ import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { HOUSE_TYPE } from './smartHints/constants'
+import { getHouseCells } from './houseCells'
 
 const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
 let numOfSolutions = 0
@@ -263,4 +264,21 @@ export const areSameCellsSets = (setA, setB) => {
     return setA.every(cell => {
         return isCellExists(cell, setB)
     })
+}
+
+export const getHousePossibleNotes = (house, mainNumbers) => {
+    const houseCells = getHouseCells(house.type, house.num)
+
+    const possibleNotes = new Array(10).fill(true)
+    possibleNotes[0] = false
+    houseCells.forEach((cell) => {
+        const cellValue = mainNumbers[cell.row][cell.col].value
+        if (cellValue) possibleNotes[cellValue] = false
+    })
+
+    const result = []
+    for(let num=1;num<=9;num++){
+        if (possibleNotes[num]) result.push(num)
+    }
+    return result
 }
