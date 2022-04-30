@@ -1,5 +1,5 @@
 import { getHouseCells } from '../../houseCells'
-import { areSameColCells, areSameRowCells, getHousePossibleNotes, isCellEmpty } from '../../util'
+import { areSameColCells, areSameRowCells, isCellEmpty } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
@@ -72,27 +72,14 @@ export const areXWingCells = (firstHouseCells, secondHouseCells) => {
     return true
 }
 
-const findAllXWingsInHousesPair = (candidatesInFirstHouse, candidatesInSecondHouse, houseType) => {
-    const result = []
-    Object.keys(candidatesInFirstHouse).forEach(candidate => {
-        const firstHouseCells = candidatesInFirstHouse[candidate]
-        const secondHouseCells = candidatesInSecondHouse[candidate]
-        const candidateNum = parseInt(candidate, 10)
-        const xWing = {
-            cells: [firstHouseCells, secondHouseCells],
-            candidate: candidateNum,
-            type: houseType,
-        }
-        if (
-            firstHouseCells &&
-            secondHouseCells &&
-            areXWingCells(firstHouseCells, secondHouseCells) &&
-            isHintValid({ type: HINTS_IDS.X_WING, data: xWing })
-        ) {
-            result.push(xWing)
-        }
-    })
-    return result
+// these legs belong to same candidate and from same houseType
+const areValidXWingLegs = (legA, legB) => {
+    const xWing = {
+        cells: [legA.cells, legB.cells],
+        candidate: legA.candidate,
+        type: legA.house.type,
+    }    
+    return areXWingCells(legA.cells, legB.cells) && isHintValid({ type: HINTS_IDS.X_WING, data: xWing })
 }
 
 // covering only perfect legs right now
@@ -109,58 +96,52 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
 
     for (let note=1;note<=9;note++) {
         if (!candidatesHostCells[note]) continue
-        result.push({ candidate: note,cells: candidatesHostCells[note] })
+        result.push({ candidate: note, cells: candidatesHostCells[note] })
     }
 
     return result
+}
+
+const addCandidateXWingLeg = ({ candidate, house, cells }, candidateXWingLegs) => {
+    if (!candidateXWingLegs[candidate]) candidateXWingLegs[candidate] = {}
+    if (!candidateXWingLegs[candidate][house.type]) candidateXWingLegs[candidate][house.type] = []
+    candidateXWingLegs[candidate][house.type].push({ candidate, house, cells })
 }
 
 export const getAllXWings = (mainNumbers, notesData) => {
     const result = []
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
 
-    // const housesXWingLegs = {
-    //     [HOUSE_TYPE.COL]: [],
-    //     [HOUSE_TYPE.ROW]: [],
-    // }
-    // searchableHouses.forEach((houseType) => {
-    //     for (let houseNum = 0; houseNum < 9; houseNum++) {
-
-    //         const housePossibleXWingLegs = [] // return an array
-
-
-    //     }
-    // })
-
-    searchableHouses.forEach(houseType => {
-        for (let firstHouseNum = 0; firstHouseNum < 9; firstHouseNum++) {
-            for (let secondHouseNum = firstHouseNum + 1; secondHouseNum < 9; secondHouseNum++) {
-                const candidatesInFirstHouse = getAllCandidatesOccurencesInHouse(
-                    firstHouseNum,
-                    houseType,
-                    notesData,
-                    mainNumbers,
-                )
-                deleteInvalidCandidates(candidatesInFirstHouse)
-
-                const candidatesInSecondHouse = getAllCandidatesOccurencesInHouse(
-                    secondHouseNum,
-                    houseType,
-                    notesData,
-                    mainNumbers,
-                )
-                deleteInvalidCandidates(candidatesInSecondHouse)
-
-                const xWingsInHouses = findAllXWingsInHousesPair(
-                    candidatesInFirstHouse,
-                    candidatesInSecondHouse,
-                    houseType,
-                )
-
-                result.push(...xWingsInHouses)
-            }
+    // for each note, in each house type
+    const candidateXWingLegs = {}
+    searchableHouses.forEach((houseType) => {
+        for (let houseNum = 0; houseNum < 9; houseNum++) {
+            const house = { type: houseType, num: houseNum }
+            const housePossibleXWingLegs = getHouseXWingLegs(house, mainNumbers, notesData)
+            housePossibleXWingLegs.forEach((xWingLeg) => {
+                addCandidateXWingLeg({ ...xWingLeg, house }, candidateXWingLegs)
+            })
         }
     })
+
+    for (const candidate in candidateXWingLegs) {
+        searchableHouses.forEach((houseType) => {
+            const candidateXWingLegsInHouses = candidateXWingLegs[candidate][houseType]
+            for (let i=0;i<candidateXWingLegsInHouses.length;i++) {
+                for (let j=i+1;j<candidateXWingLegsInHouses.length;j++) {
+                    const firsLeg = candidateXWingLegsInHouses[i]
+                    const secondLeg = candidateXWingLegsInHouses[j]
+                    if (areValidXWingLegs(firsLeg, secondLeg)) {
+                        result.push({
+                            cells: [firsLeg.cells, secondLeg.cells],
+                            candidate: firsLeg.candidate,
+                            type: firsLeg.house.type,
+                        })
+                    }
+                }
+            }
+        })
+    }
 
     return result
 }
