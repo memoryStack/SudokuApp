@@ -1,7 +1,8 @@
-import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { isCellExists } from '../../util'
-import { setCellDataInHintResult } from '../util'
-import { getHouseCells } from '../../houseCells'
+import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { isCellExists } from '../../../util'
+import { setCellDataInHintResult } from '../../util'
+import { getHouseCells } from '../../../houseCells'
+import { getCrossHouseType } from '../utils'
 
 const DIAGONAL_CELLS_COLORS = {
     TOP_LEFT_BOTTOM_RIGHT: 'orange',
@@ -61,8 +62,6 @@ const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     })
 }
 
-const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
-
 const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, cellsToFocusData) => {
     const xWingCells = [...cells[0], ...cells[1]]
     const firstCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].col : cells[0][0].row
@@ -96,11 +95,13 @@ const getTechniqueExplaination = ({ houseType, candidate }) => {
     return `In the two highlighted ${houseFullName}, number ${candidate} is a possible solution for only two cells. notice that the cells in these ${houseFullName} where ${candidate} can come are present in the same ${crossHouseFullName} as well. this rectangular arrangement of these 4 cells highlighted in ${DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT} and ${DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT} colors make a X-Wing. now only ways ${candidate} can be placed in these two ${houseFullName} correctly are if either ${candidate} comes in both ${DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT} cells or both ${DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT} cells. in these both ways ${candidate} can't be placed in the cells where it is highlighted in red in these two ${crossHouseFullName}. so we can remove these red highlghted notes safely.`
 }
 
-const getUIData = ({ candidate, cells, type: houseType }, notesData) => {
-    const cellsToFocusData = {}
+export const getPerfectXWingUIData = ({ legs, houseType }, notesData) => {
+    const candidate = legs[0].candidate
+    const cells = legs.map(leg => leg.cells)
 
     const xWingCells = [...cells[0], ...cells[1]]
-
+    
+    const cellsToFocusData = {}
     highlightXWingCells(xWingCells, candidate, cellsToFocusData)
     highlightHouseCells({ houseType, cells }, cellsToFocusData)
     highlightCrossHouseCells({ houseType, cells, candidate }, notesData, cellsToFocusData)
@@ -112,12 +113,4 @@ const getUIData = ({ candidate, cells, type: houseType }, notesData) => {
             logic: getTechniqueExplaination({ houseType, candidate }),
         },
     }
-}
-
-export const getUIHighlightData = (xWings, notesData) => {
-    if (!xWings.length) return null
-
-    return xWings.map(xWing => {
-        return getUIData(xWing, notesData)
-    })
 }
