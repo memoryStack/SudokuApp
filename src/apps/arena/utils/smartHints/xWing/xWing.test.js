@@ -33,7 +33,7 @@ test('perfect xWing', () => {
 
     const expectedXWings = [
         {
-            type: LEG_TYPES.FINNED,
+            type: XWING_TYPES.FINNED,
             houseType: HOUSE_TYPE.ROW,
             legs: [
                 {
@@ -56,7 +56,7 @@ test('perfect xWing', () => {
             ],
         },
         {
-            type: LEG_TYPES.FINNED,
+            type: XWING_TYPES.FINNED,
             houseType: HOUSE_TYPE.COL,
             legs: [
                 {
@@ -80,7 +80,7 @@ test('perfect xWing', () => {
         },
 
         {
-            type: LEG_TYPES.FINNED,
+            type: XWING_TYPES.FINNED,
             houseType: HOUSE_TYPE.COL,
             legs: [
                 {
@@ -124,9 +124,8 @@ test('perfect xWing', () => {
                 },
             ],
         },
-
         {
-            type: LEG_TYPES.FINNED,
+            type: XWING_TYPES.FINNED,
             houseType: HOUSE_TYPE.ROW,
             legs: [
                 {
@@ -149,7 +148,7 @@ test('perfect xWing', () => {
             ],
         },
         {
-            type: LEG_TYPES.PERFECT,
+            type: XWING_TYPES.PERFECT,
             houseType: HOUSE_TYPE.COL,
             legs: [
                 {
@@ -172,7 +171,7 @@ test('perfect xWing', () => {
         },
         {
             houseType: HOUSE_TYPE.ROW,
-            type: LEG_TYPES.PERFECT,
+            type: XWING_TYPES.PERFECT,
             legs: [
                 {
                     candidate: 8,
