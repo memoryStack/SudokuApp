@@ -1,4 +1,4 @@
-import { isPerfectXWing, getAllXWings, getHouseXWingLegs, isFinnedLeg, isFinnedXWing, isFinnedXWingRemovesNotes } from '.'
+import { isPerfectXWing, getAllXWings, getHouseXWingLegs, isFinnedLeg, isFinnedXWing, isFinnedXWingRemovesNotes, isSashimiFinnedXWing, categorizeSashimiPerfectLegCells, getAlignedCellInPerfectLeg, getSashimiCell } from '.'
 import { HOUSE_TYPE } from '../constants'
 import { LEG_TYPES } from './constants'
 import { categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getCrossHouseType } from './utils'
@@ -501,6 +501,176 @@ describe(' removable notes host cells for finned X-Wing ', () => {
 
         const expectedResult = [{ row: 5, col: 4 }]
         expect(getFinnedXWingRemovableNotesHostCells(data)).toStrictEqual(expectedResult)
+    })
+
+})
+
+describe('isSashimiFinnedXWing()', () => {
+
+    test('returns true for 1 perfect leg and 1 finned leg for row houseType with valid finned leg and sashimi cell with finns', () => {
+        const perfectLeg = {
+            candidate: 4,
+            cells: [{ row: 7, col: 5 }, { row: 7, col: 8 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 4,
+            cells: [{ row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }],
+            type: LEG_TYPES.FINNED,
+        }
+        const xWingHouseType = HOUSE_TYPE.ROW
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(true)
+    })
+
+    test('returns true for 1 perfect leg and 1 finned leg for column houseType with valid finned leg and sashimi cell with finns', () => {
+        const perfectLeg = {
+            candidate: 4,
+            cells: [{ row: 4, col: 5 }, { row: 7, col: 5 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 4,
+            cells: [{ row: 3, col: 6 }, { row: 5, col: 6 }, { row: 7, col: 6 }],
+            type: LEG_TYPES.FINNED,
+        }
+        const xWingHouseType = HOUSE_TYPE.COL
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(true)
+    })
+
+    test('returns false for 1 perfect leg and 1 finned leg for column houseType with invalid finned leg', () => {
+        const perfectLeg = {
+            candidate: 4,
+            cells: [{ row: 4, col: 5 }, { row: 7, col: 5 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 4,
+            cells: [{ row: 3, col: 6 }, { row: 7, col: 6 }, { row: 8, col: 6 }],
+            type: LEG_TYPES.FINNED,
+        }
+        const xWingHouseType = HOUSE_TYPE.COL
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(false)
+    })
+
+    // will fail
+    test('returns false for 1 perfect leg and 1 finned leg for column houseType with valid finned leg but sashimi cell will be without finns', () => {
+        const perfectLeg = {
+            candidate: 4,
+            cells: [{ row: 4, col: 5 }, { row: 8, col: 5 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 4,
+            cells: [{ row: 6, col: 6 }, { row: 7, col: 6 }, { row: 8, col: 6 }],
+            type: LEG_TYPES.FINNED,
+        }
+        const xWingHouseType = HOUSE_TYPE.COL
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(false)
+    })
+
+    test('returns true for both perfect legs', () => {
+        const perfectLeg = {
+            candidate: 4,
+            cells: [{ row: 4, col: 5 }, { row: 7, col: 5 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 4,
+            cells: [{ row: 3, col: 6 }, { row: 7, col: 6 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const xWingHouseType = HOUSE_TYPE.COL
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(true)
+    })
+
+    test('returns false for both perfect legs when artificial sashimi-finned leg will have host cells spread over three blocks', () => {
+        const perfectLeg = {
+            candidate: 4,
+            cells: [{ row: 4, col: 5 }, { row: 7, col: 5 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 4,
+            cells: [{ row: 2, col: 6 }, { row: 7, col: 6 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const xWingHouseType = HOUSE_TYPE.COL
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(false)
+    })
+
+    test('returns false for both perfect legs when artificial sashimi-finned leg have host cells spread over two blocks but sashimi cell will be without finns', () => {
+        const perfectLeg = {
+            candidate: 4,
+            cells: [{ row: 4, col: 5 }, { row: 7, col: 5 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 4,
+            cells: [{ row: 6, col: 6 }, { row: 7, col: 6 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const xWingHouseType = HOUSE_TYPE.COL
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(false)
+    })
+
+})
+
+// mainly will use it for sashimi only. will make it more
+// general if other use cases occurs
+describe('getAlignedCellInPerfectLeg()', () => {
+
+    test('returns aligned cell 1 aligned cell present', () => {
+        const perfectLegCells = [{ row: 7, col: 5 }, { row: 7, col: 8 }]
+        const otherLegCells = [{ row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }]
+        const expectedResult = { row: 7, col: 8 }
+        expect(getAlignedCellInPerfectLeg(perfectLegCells, otherLegCells)).toStrictEqual(expectedResult)
+    })
+
+    test('returns first cell for both aligned cell present (basically perfect x-wing cells)', () => {
+        const perfectLegCells = [{ row: 7, col: 5 }, { row: 7, col: 8 }]
+        const otherLegCells = [{ row: 3, col: 5 }, { row: 3, col: 8 }]
+        const expectedResult = { row: 7, col: 5 }
+        expect(getAlignedCellInPerfectLeg(perfectLegCells, otherLegCells)).toStrictEqual(expectedResult)
+    })
+
+    test('returns undefined for no aligned cells', () => {
+        const perfectLegCells = [{ row: 7, col: 1 }, { row: 7, col: 3 }]
+        const otherLegCells = [{ row: 3, col: 2 }, { row: 3, col: 6 }]
+        expect(getAlignedCellInPerfectLeg(perfectLegCells, otherLegCells)).toBeUndefined()
+    })
+
+})
+
+describe('categorizeSashimiPerfectLegCells()', () => {
+
+    test('sepertes sashimi aligned cell and cell aligned with perfect part of finned-sashimi', () => {
+        const perfectLegCells = [{ row: 7, col: 5 }, { row: 7, col: 8 }]
+        const otherLegCells = [{ row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }]
+        const expectedResult = {
+            perfectAligned: { row: 7, col: 8 },
+            sashimiAligned: { row: 7, col: 5 },
+        }
+        expect(categorizeSashimiPerfectLegCells(perfectLegCells, otherLegCells)).toStrictEqual(expectedResult)
+    })
+
+})
+
+describe('getSashimiCell()', () => {
+
+    test('returns sashimi cell for row house type sashimi-finned XWing', () => {
+        const xWingHouseType = HOUSE_TYPE.ROW
+        const sashimiAlignedCell = { row: 7, col: 5 }
+        const otherLegCells = [{ row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }]
+        const expectedResult = { row: 3, col: 5 }
+        expect(getSashimiCell(sashimiAlignedCell, otherLegCells, xWingHouseType)).toStrictEqual(expectedResult)
+    })
+
+    test('returns sashimi cell for col house type sashimi-finned XWing', () => {
+        const xWingHouseType = HOUSE_TYPE.COL
+        const sashimiAlignedCell = { row: 7, col: 5 }
+        const otherLegCells = [{ row: 3, col: 8 }, { row: 6, col: 8 }, { row: 8, col: 8 }]
+        const expectedResult = { row: 7, col: 8 }
+        expect(getSashimiCell(sashimiAlignedCell, otherLegCells, xWingHouseType)).toStrictEqual(expectedResult)
     })
 
 })

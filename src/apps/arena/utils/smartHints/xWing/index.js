@@ -1,9 +1,9 @@
 import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
 import { getHouseCells } from '../../houseCells'
-import { areSameColCells, areSameRowCells, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
+import { areSameBlockCells, areSameCells, areSameColCells, areSameRowCells, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
-import { LEG_TYPES } from './constants'
+import { LEG_TYPES, XWING_TYPES } from './constants'
 import { getUIHighlightData } from './uiHighlightData'
 import { getCrossHouseType, categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells } from './utils'
 
@@ -95,25 +95,97 @@ export const isFinnedXWing = (perfectLegHostCells, finnedLegHostCells) => {
     })
 }
 
-//  TODO: change names for above types of X-Wings as well
-export const isSashimiFinnedXWing = (legA, legB) => {
+export const getAlignedCellInPerfectLeg = (perfectLegCells, otherLegCells) => {
+    return perfectLegCells.find((perfectLegCell) => {
+        return otherLegCells.some((otherLegCell) => {
+            const cellsPair = [perfectLegCell, otherLegCell]
+            return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
+        })
+    })
+}
+
+export const categorizeSashimiPerfectLegCells = (perfectLegCells, otherLegCells) => {
+    const result = {}
+    perfectLegCells.forEach((perfectLegCell) => {
+        // TODO: this below loop is repeating again and again
+        // extract it
+        const isAligned = otherLegCells.some((otherLegCell) => {
+            const cellsPair = [perfectLegCell, otherLegCell]
+            return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
+        })
+        if (isAligned) result.perfectAligned = perfectLegCell
+        else result.sashimiAligned = perfectLegCell
+    })
+    return result
+}
+
+export const getSashimiCell = (perfectLegSashimiAlignedCell, otherLegCells, xWingHouseType) => {
+    if (xWingHouseType === HOUSE_TYPE.ROW) {
+        return {
+            row: otherLegCells[0].row,
+            col: perfectLegSashimiAlignedCell.col,
+        }
+    } else {
+        return {
+            row: perfectLegSashimiAlignedCell.row,
+            col: otherLegCells[0].col,
+        }
+    }
+}
+
+export const isSashimiFinnedXWing = (perfectLeg, otherLeg, xWingHouseType) => {
+
+    if (otherLeg.type === LEG_TYPES.PERFECT) {
+        return isSashimiFinnedXWing(perfectLeg, { ...Object.assign({}, otherLeg), type: LEG_TYPES.FINNED }, xWingHouseType)
+            || isSashimiFinnedXWing(otherLeg, { ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }, xWingHouseType)
+    }
+
+    const { perfectAligned, sashimiAligned } = categorizeSashimiPerfectLegCells(perfectLeg.cells, otherLeg.cells)
+    if (!perfectAligned || !sashimiAligned) return false
+
+    const sashimiCell = getSashimiCell(sashimiAligned, otherLeg.cells, xWingHouseType)
+    // TODO: check if the order of these cells is relevant or not
+    const sashimiFinnedLegCells = [...otherLeg.cells, sashimiCell]
+    if (isFinnedLeg(sashimiFinnedLegCells)) {
+        const finns = sashimiFinnedLegCells.filter((cell) => {
+            if (areSameCells(cell, sashimiCell)) return false
+            if (areSameColCells([cell, perfectAligned]) || areSameRowCells([cell, perfectAligned])) return false
+            return true
+        })
+        return finns.every((finn) => {
+            return areSameBlockCells([sashimiCell, finn])
+        })
+    }
+
     return false
 }
 
 // TODO: this func must have test-cases
 // these legs belong to same candidate and from same houseType
-// TODO: make this func return types of X-Wing instead of bool values
-
-const getXWingType = (legA, legB) => {
-    if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return LEG_TYPES.INVALID
+// TODO: use XWING_TYPES for xwing types instead of legTypes just like below func
+const getXWingType = (legA, legB, xWingHouseType) => {
+    if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return XWING_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
 
     // TODO: make changes here for sashimi-finned X-Wing as well
-    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) return LEG_TYPES.PERFECT
-    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return LEG_TYPES.FINNED
+    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.PERFECT
+    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.FINNED
 
-    return LEG_TYPES.INVALID
+    // return XWING_TYPES.INVALID
+
+    // we know if we are going to use perfect or finned set of legs. use that knowledge
+    if (isSashimiFinnedXWing(legA, legB, xWingHouseType)) {
+
+        console.log('legA', legA)
+        console.log('legB', legB)
+        consoleLog(xWingHouseType)
+
+        return XWING_TYPES.INVALID
+        // return XWING_TYPES.SASHIMI_FINNED
+    }
+
+    return XWING_TYPES.INVALID
 
     // instead of cells. pass legs here
     // TODO: re-implement validity checker
@@ -210,11 +282,10 @@ export const getAllXWings = (mainNumbers, notesData) => {
                 for (let j = i + 1; j < candidateXWingLegsInHouses.length; j++) {
                     const firstLeg = candidateXWingLegsInHouses[i]
                     const secondLeg = candidateXWingLegsInHouses[j]
-                    const xWingType = getXWingType(firstLeg, secondLeg)
-                    if (xWingType !== LEG_TYPES.INVALID) {
+                    const xWingType = getXWingType(firstLeg, secondLeg, houseType)
+                    if (xWingType !== XWING_TYPES.INVALID) {
                         result.push({
                             houseType,
-                            // TODO: categorize it as well for sashimi-finned type X-Wing
                             type: xWingType,
                             legs: [firstLeg, secondLeg],
                         })
