@@ -9,9 +9,9 @@ import { getCrossHouseType, categorizeLegs, categorizeFinnedLegCells, getFinnedX
 
 const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
     return getHouseCells(houseType, houseNum)
-    .filter((cell) => {
-        return isCellEmpty(cell, mainNumbers)
-    })
+        .filter((cell) => {
+            return isCellEmpty(cell, mainNumbers)
+        })
 }
 
 // we can use this func for our purpose below
@@ -51,13 +51,13 @@ const isPerfectXWingRemovesNotes = ({ legs, houseType }, notesData) => {
         .some(removableNotesPresent => removableNotesPresent)
 }
 
-// FIXME: this func is wrong
+// FIXME: this func is wrong. why is it wrong ??
 export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => {
     return getFinnedXWingRemovableNotesHostCells({ houseType, legs })
-    .some(cell => {
-        const cellNotes = notesData[cell.row][cell.col]
-        return isCellNoteVisible(legs[0].candidate, cellNotes)
-    })
+        .some(cell => {
+            const cellNotes = notesData[cell.row][cell.col]
+            return isCellNoteVisible(legs[0].candidate, cellNotes)
+        })
 }
 
 const removableNotesInCrossHouse = ({ houseType, legs }, notesData) => {
@@ -65,14 +65,15 @@ const removableNotesInCrossHouse = ({ houseType, legs }, notesData) => {
     const { otherLeg } = categorizeLegs(...legs)
 
     if (otherLeg.type === LEG_TYPES.PERFECT) return isPerfectXWingRemovesNotes({ houseType, legs }, notesData)
-    if (otherLeg.type === LEG_TYPES.FINNED) return isFinnedXWingRemovesNotes({houseType, legs}, notesData)
-    if (otherLeg.type === LEG_TYPES.SAHIMI) {}
+    if (otherLeg.type === LEG_TYPES.FINNED) return isFinnedXWingRemovesNotes({ houseType, legs }, notesData)
+    // TODO: re-implement this
+    if (otherLeg.type === LEG_TYPES.SAHIMI) return false
 
     return false
 }
 
 // change it's name to perfectXWingLegs
-export const areXWingCells = (perfectLegHostCells, otherLegHostCells) => {
+export const isPerfectXWing = (perfectLegHostCells, otherLegHostCells) => {
     return perfectLegHostCells.every((perfectLegCell) => {
         return otherLegHostCells.some((otherLegCell) => {
             const cellsPair = [perfectLegCell, otherLegCell]
@@ -81,8 +82,10 @@ export const areXWingCells = (perfectLegHostCells, otherLegHostCells) => {
     })
 }
 
-export const areFinnedXWingLegs = (perfectLegHostCells, finnedLegHostCells) => {
-    if (!areXWingCells(perfectLegHostCells, finnedLegHostCells)) return false
+// we are calling it after isPerfectXWing func only, 
+// confirm it once and remove the check. doesn't break tests though
+export const isFinnedXWing = (perfectLegHostCells, finnedLegHostCells) => {
+    if (!isPerfectXWing(perfectLegHostCells, finnedLegHostCells)) return false
 
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLegHostCells, finnedLegHostCells)
     return finns.every(finnCell => {
@@ -92,17 +95,25 @@ export const areFinnedXWingLegs = (perfectLegHostCells, finnedLegHostCells) => {
     })
 }
 
+//  TODO: change names for above types of X-Wings as well
+export const isSashimiFinnedXWing = (legA, legB) => {
+    return false
+}
+
 // TODO: this func must have test-cases
 // these legs belong to same candidate and from same houseType
+// TODO: make this func return types of X-Wing instead of bool values
 const areValidXWingLegs = (legA, legB) => {
     if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return false
 
     const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
 
-    if (otherLeg.type === LEG_TYPES.PERFECT) return areXWingCells(perfectLeg.cells, otherLeg.cells)
-    if (otherLeg.type === LEG_TYPES.FINNED) return areFinnedXWingLegs(perfectLeg.cells, otherLeg.cells)
+    // TODO: make changes here for sashimi-finned X-Wing as well
+    if (otherLeg.type === LEG_TYPES.PERFECT) return isPerfectXWing(perfectLeg.cells, otherLeg.cells)
+    if (otherLeg.type === LEG_TYPES.FINNED) return isFinnedXWing(perfectLeg.cells, otherLeg.cells)
 
     return true
+
     // instead of cells. pass legs here
     // TODO: re-implement validity checker
     // const xWing = {
@@ -112,7 +123,7 @@ const areValidXWingLegs = (legA, legB) => {
     // }    
 
     // TODO: "isHintValid" has to be updated as well for finned and sashimi X-Wings
-    // return areXWingCells(perfectLeg.cells, otherLeg.cells) // && (isHintValid({ type: HINTS_IDS.X_WING, data: xWing }) || true)
+    // return isPerfectXWing(perfectLeg.cells, otherLeg.cells) // && (isHintValid({ type: HINTS_IDS.X_WING, data: xWing }) || true)
 }
 
 const isPerfectLeg = (candidateHostCells) => {
@@ -143,14 +154,12 @@ export const isFinnedLeg = (hostCells) => {
 
 const getXWingLegType = (candidateHostCells) => {
     if (candidateHostCells.length < 2) return LEG_TYPES.INVALID
-
     if (isPerfectLeg(candidateHostCells)) return LEG_TYPES.PERFECT
     if (isFinnedLeg(candidateHostCells)) return LEG_TYPES.FINNED
 
     return LEG_TYPES.INVALID
 }
 
-// covering only perfect legs right now
 export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     const result = []
 
@@ -161,7 +170,7 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
         mainNumbers,
     )
 
-    for (let note=1;note<=9;note++) {
+    for (let note = 1; note <= 9; note++) {
         if (!candidatesHostCells[note]) continue
         const legType = getXWingLegType(candidatesHostCells[note])
         if ([LEG_TYPES.PERFECT, LEG_TYPES.FINNED].includes(legType)) {
@@ -179,8 +188,8 @@ const addCandidateXWingLeg = ({ candidate, cells, type: legType }, houseType, ca
 }
 
 const getXWingType = (legAType, legBType) => {
-    if (legAType !==  LEG_TYPES.PERFECT) return legAType
-    if (legBType !==  LEG_TYPES.PERFECT) return legBType
+    if (legAType !== LEG_TYPES.PERFECT) return legAType
+    if (legBType !== LEG_TYPES.PERFECT) return legBType
     return LEG_TYPES.PERFECT
 }
 
@@ -202,13 +211,14 @@ export const getAllXWings = (mainNumbers, notesData) => {
     for (const candidate in candidateXWingLegs) {
         for (const houseType in candidateXWingLegs[candidate]) {
             const candidateXWingLegsInHouses = candidateXWingLegs[candidate]?.[houseType] || []
-            for (let i=0;i<candidateXWingLegsInHouses.length;i++) {
-                for (let j=i+1;j<candidateXWingLegsInHouses.length;j++) {
+            for (let i = 0; i < candidateXWingLegsInHouses.length; i++) {
+                for (let j = i + 1; j < candidateXWingLegsInHouses.length; j++) {
                     const firstLeg = candidateXWingLegsInHouses[i]
                     const secondLeg = candidateXWingLegsInHouses[j]
                     if (areValidXWingLegs(firstLeg, secondLeg)) {
                         result.push({
                             houseType,
+                            // TODO: categorize it as well for sashimi-finned type X-Wing
                             type: getXWingType(firstLeg.type, secondLeg.type),
                             legs: [firstLeg, secondLeg],
                         })
@@ -226,5 +236,5 @@ export const getXWingHints = (mainNumbers, notesData) => {
         return removableNotesInCrossHouse(xWing, notesData)
     })
 
-    return getUIHighlightData (xWings, notesData)
+    return getUIHighlightData(xWings, notesData)
 }
