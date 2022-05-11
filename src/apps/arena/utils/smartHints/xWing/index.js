@@ -103,16 +103,17 @@ export const isSashimiFinnedXWing = (legA, legB) => {
 // TODO: this func must have test-cases
 // these legs belong to same candidate and from same houseType
 // TODO: make this func return types of X-Wing instead of bool values
-const areValidXWingLegs = (legA, legB) => {
-    if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return false
+
+const getXWingType = (legA, legB) => {
+    if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return LEG_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
 
     // TODO: make changes here for sashimi-finned X-Wing as well
-    if (otherLeg.type === LEG_TYPES.PERFECT) return isPerfectXWing(perfectLeg.cells, otherLeg.cells)
-    if (otherLeg.type === LEG_TYPES.FINNED) return isFinnedXWing(perfectLeg.cells, otherLeg.cells)
+    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) return LEG_TYPES.PERFECT
+    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return LEG_TYPES.FINNED
 
-    return true
+    return LEG_TYPES.INVALID
 
     // instead of cells. pass legs here
     // TODO: re-implement validity checker
@@ -187,12 +188,6 @@ const addCandidateXWingLeg = ({ candidate, cells, type: legType }, houseType, ca
     candidateXWingLegs[candidate][houseType].push({ candidate, cells, type: legType })
 }
 
-const getXWingType = (legAType, legBType) => {
-    if (legAType !== LEG_TYPES.PERFECT) return legAType
-    if (legBType !== LEG_TYPES.PERFECT) return legBType
-    return LEG_TYPES.PERFECT
-}
-
 export const getAllXWings = (mainNumbers, notesData) => {
     const result = []
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
@@ -215,11 +210,12 @@ export const getAllXWings = (mainNumbers, notesData) => {
                 for (let j = i + 1; j < candidateXWingLegsInHouses.length; j++) {
                     const firstLeg = candidateXWingLegsInHouses[i]
                     const secondLeg = candidateXWingLegsInHouses[j]
-                    if (areValidXWingLegs(firstLeg, secondLeg)) {
+                    const xWingType = getXWingType(firstLeg, secondLeg)
+                    if (xWingType !== LEG_TYPES.INVALID) {
                         result.push({
                             houseType,
                             // TODO: categorize it as well for sashimi-finned type X-Wing
-                            type: getXWingType(firstLeg.type, secondLeg.type),
+                            type: xWingType,
                             legs: [firstLeg, secondLeg],
                         })
                     }
