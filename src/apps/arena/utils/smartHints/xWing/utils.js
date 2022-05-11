@@ -1,8 +1,8 @@
-import { LEG_TYPES } from "./constants"
+import { LEG_TYPES } from './constants'
 import { areSameColCells, areSameRowCells, isCellExists } from '../../util'
-import { HOUSE_TYPE } from "../constants"
-import { getHouseCells } from "../../houseCells"
-import { getBlockAndBoxNum } from "../../../../../utils/util"
+import { HOUSE_TYPE } from '../constants'
+import { getHouseCells } from '../../houseCells'
+import { getBlockAndBoxNum } from '../../../../../utils/util'
 
 // TODO: won't work for sashimi-finned X-wing
 export const categorizeLegs = (legA, legB) => {
@@ -17,7 +17,6 @@ export const categorizeLegs = (legA, legB) => {
 
 // TODO: it will work fine for sashimi-finned type as well
 export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells) => {
-
     const perfectCells = finnedLegHostCells.filter(finnedLegCell => {
         return perfectLegHostCells.some(perfectLegCell => {
             const cellsPair = [finnedLegCell, perfectLegCell]
@@ -42,13 +41,12 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }) => {
     const crossHouseType = getCrossHouseType(houseType)
 
     const xWingBaseCells = [...otherLeg.cells, ...perfectLeg.cells]
-    return getHouseCells(HOUSE_TYPE.BLOCK, getBlockAndBoxNum(finns[0]).blockNum)
-        .filter((cell) => {
-            if (isCellExists(cell, xWingBaseCells)) return false
-            return perfectCells.some(perfectCell => {
-                const cellsPair = [cell, perfectCell]
-                if (crossHouseType === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
-                return areSameColCells(cellsPair)
-            })
+    return getHouseCells(HOUSE_TYPE.BLOCK, getBlockAndBoxNum(finns[0]).blockNum).filter(cell => {
+        if (isCellExists(cell, xWingBaseCells)) return false
+        return perfectCells.some(perfectCell => {
+            const cellsPair = [cell, perfectCell]
+            if (crossHouseType === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
+            return areSameColCells(cellsPair)
         })
+    })
 }

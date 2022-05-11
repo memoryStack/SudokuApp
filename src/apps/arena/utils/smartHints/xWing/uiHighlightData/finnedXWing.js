@@ -41,14 +41,9 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     // TODO: weird bug. we have to declare this array first. else it doesn't work
     const xWingHousesNum = [firstHouseNum, secondHouseNum]
     xWingHousesNum.forEach(houseNum => {
-        getHouseCells(houseType, houseNum)
-            .forEach(cell =>
-                setCellDataInHintResult(
-                    cell,
-                    { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT },
-                    cellsToFocusData,
-                ),
-            )
+        getHouseCells(houseType, houseNum).forEach(cell =>
+            setCellDataInHintResult(cell, { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }, cellsToFocusData),
+        )
     })
 }
 
@@ -58,14 +53,13 @@ const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData)
     const crossHousesNum = [firstCrossHouseNum, secondCrossHouseNum]
     crossHousesNum.forEach(houseNum => {
         const crossHouseType = getCrossHouseType(houseType)
-        getHouseCells(crossHouseType, houseNum)
-            .forEach(cell => {
-                const cellHighlightData = {
-                    bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
-                }
+        getHouseCells(crossHouseType, houseNum).forEach(cell => {
+            const cellHighlightData = {
+                bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+            }
 
-                setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
-            })
+            setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+        })
     })
 }
 
@@ -93,7 +87,7 @@ const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
     finnCells.forEach(({ row, col }) => {
         const cellHighlightData = {
             bgColor: {
-                backgroundColor: DIAGONAL_CELLS_COLORS.FINN
+                backgroundColor: DIAGONAL_CELLS_COLORS.FINN,
             },
             notesToHighlightData: {
                 [candidate]: { fontColor: 'green' },
@@ -103,20 +97,21 @@ const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
     })
 }
 
-const highlightRemovableNotesHostCells = (hostCells, candidate,  notesData, cellsToFocusData) => {
-
-    hostCells.filter((cell) => {
-        const cellNotes = notesData[cell.row][cell.col]
-        return isCellNoteVisible(candidate, cellNotes)
-    }).forEach((cell) => {
-        const cellHighlightData = {
-            bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
-            notesToHighlightData: {
-                [candidate]: { fontColor: 'red' },
-            },
-        }
-        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
-    })
+const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cellsToFocusData) => {
+    hostCells
+        .filter(cell => {
+            const cellNotes = notesData[cell.row][cell.col]
+            return isCellNoteVisible(candidate, cellNotes)
+        })
+        .forEach(cell => {
+            const cellHighlightData = {
+                bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+                notesToHighlightData: {
+                    [candidate]: { fontColor: 'red' },
+                },
+            }
+            setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+        })
 }
 
 export const getFinnedXWingUIData = ({ legs, houseType }, notesData) => {
@@ -124,15 +119,23 @@ export const getFinnedXWingUIData = ({ legs, houseType }, notesData) => {
 
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
 
-    const { perfect: finnedLegPerfectCells, finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
+    const { perfect: finnedLegPerfectCells, finns: finnCells } = categorizeFinnedLegCells(
+        perfectLeg.cells,
+        finnedLeg.cells,
+    )
 
     const cellsToFocusData = {}
-    
-    defaultHighlightHouseCells( { houseType, cells: [ perfectLeg.cells, finnedLegPerfectCells ] },  cellsToFocusData)
-    defaultHighlightCrossHouseCells({ houseType, cells: [ perfectLeg.cells, finnedLegPerfectCells ] }, cellsToFocusData)
-    highlightXWingCells([ ...perfectLeg.cells, ...finnedLegPerfectCells ], candidate, cellsToFocusData)
+
+    defaultHighlightHouseCells({ houseType, cells: [perfectLeg.cells, finnedLegPerfectCells] }, cellsToFocusData)
+    defaultHighlightCrossHouseCells({ houseType, cells: [perfectLeg.cells, finnedLegPerfectCells] }, cellsToFocusData)
+    highlightXWingCells([...perfectLeg.cells, ...finnedLegPerfectCells], candidate, cellsToFocusData)
     highlightFinnCells(finnCells, candidate, cellsToFocusData)
-    highlightRemovableNotesHostCells(getFinnedXWingRemovableNotesHostCells({houseType, legs}), candidate, notesData, cellsToFocusData)
+    highlightRemovableNotesHostCells(
+        getFinnedXWingRemovableNotesHostCells({ houseType, legs }),
+        candidate,
+        notesData,
+        cellsToFocusData,
+    )
 
     return {
         cellsToFocusData,

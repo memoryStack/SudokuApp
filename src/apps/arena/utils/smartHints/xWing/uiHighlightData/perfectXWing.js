@@ -100,7 +100,7 @@ export const getPerfectXWingUIData = ({ legs, houseType }, notesData) => {
     const cells = legs.map(leg => leg.cells)
 
     const xWingCells = [...cells[0], ...cells[1]]
-    
+
     const cellsToFocusData = {}
     highlightXWingCells(xWingCells, candidate, cellsToFocusData)
     highlightHouseCells({ houseType, cells }, cellsToFocusData)

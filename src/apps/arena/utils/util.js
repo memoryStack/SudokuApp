@@ -271,13 +271,13 @@ export const getHousePossibleNotes = (house, mainNumbers) => {
 
     const possibleNotes = new Array(10).fill(true)
     possibleNotes[0] = false
-    houseCells.forEach((cell) => {
+    houseCells.forEach(cell => {
         const cellValue = mainNumbers[cell.row][cell.col].value
         if (cellValue) possibleNotes[cellValue] = false
     })
 
     const result = []
-    for(let num=1;num<=9;num++){
+    for (let num = 1; num <= 9; num++) {
         if (possibleNotes[num]) result.push(num)
     }
     return result
