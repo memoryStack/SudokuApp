@@ -1,6 +1,6 @@
 import { isPerfectXWing, getAllXWings, getHouseXWingLegs, isFinnedLeg, isFinnedXWing, isFinnedXWingRemovesNotes, isSashimiFinnedXWing, categorizeSashimiPerfectLegCells, getAlignedCellInPerfectLeg, getSashimiCell } from '.'
 import { HOUSE_TYPE } from '../constants'
-import { LEG_TYPES } from './constants'
+import { LEG_TYPES, XWING_TYPES } from './constants'
 import { categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getCrossHouseType } from './utils'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -38,7 +38,6 @@ test('perfect xWing', () => {
                 }
             ]
         },
-
         {
             type: LEG_TYPES.FINNED,
             houseType: HOUSE_TYPE.COL,
@@ -71,6 +70,23 @@ test('perfect xWing', () => {
             }
             ]
         },
+        {
+            houseType: HOUSE_TYPE.COL,
+            type: XWING_TYPES.SASHIMI_FINNED,
+            legs: [
+                {
+                    candidate: 5,
+                    cells: [{ row: 3, col: 4 }, { row: 5, col: 4 }],
+                    type: LEG_TYPES.PERFECT
+                },
+                {
+                    candidate: 5,
+                    cells: [{ row: 3, col: 8 }, { row: 4, col: 8 }],
+                    type: LEG_TYPES.PERFECT
+                }
+            ],
+        },
+
         {
             type: LEG_TYPES.FINNED,
             houseType: HOUSE_TYPE.ROW,

@@ -162,28 +162,14 @@ export const isSashimiFinnedXWing = (perfectLeg, otherLeg, xWingHouseType) => {
 
 // TODO: this func must have test-cases
 // these legs belong to same candidate and from same houseType
-// TODO: use XWING_TYPES for xwing types instead of legTypes just like below func
 const getXWingType = (legA, legB, xWingHouseType) => {
     if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return XWING_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
 
-    // TODO: make changes here for sashimi-finned X-Wing as well
     if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.PERFECT
     if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.FINNED
-
-    // return XWING_TYPES.INVALID
-
-    // we know if we are going to use perfect or finned set of legs. use that knowledge
-    if (isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)) {
-
-        console.log('legA', legA)
-        console.log('legB', legB)
-        consoleLog(xWingHouseType)
-
-        return XWING_TYPES.INVALID
-        // return XWING_TYPES.SASHIMI_FINNED
-    }
+    if (isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)) return XWING_TYPES.SASHIMI_FINNED
 
     return XWING_TYPES.INVALID
 
