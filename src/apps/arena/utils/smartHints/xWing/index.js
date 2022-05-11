@@ -71,14 +71,15 @@ export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => {
     })
 }
 
-const removableNotesInCrossHouse = ({ houseType, legs }, notesData) => {
+const removableNotesInCrossHouse = ({ type, houseType, legs }, notesData) => {
     // TODO: re-implement for finned and sashimi as well along with perfect X-Wings
     const { otherLeg } = categorizeLegs(...legs)
 
-    if (otherLeg.type === LEG_TYPES.PERFECT) return isPerfectXWingRemovesNotes({ houseType, legs }, notesData)
-    if (otherLeg.type === LEG_TYPES.FINNED) return isFinnedXWingRemovesNotes({ houseType, legs }, notesData)
-    // TODO: re-implement this
-    if (otherLeg.type === LEG_TYPES.SAHIMI) return false
+    if (otherLeg.type === XWING_TYPES.PERFECT) return isPerfectXWingRemovesNotes({ houseType, legs }, notesData)
+    if (otherLeg.type === XWING_TYPES.FINNED) return isFinnedXWingRemovesNotes({ houseType, legs }, notesData)
+
+    // TODO: implement logic for sashimi
+    if (type === XWING_TYPES.SASHIMI_FINNED) return false
 
     return false
 }
@@ -96,7 +97,7 @@ export const isPerfectXWing = (perfectLegHostCells, otherLegHostCells) => {
 // we are calling it after isPerfectXWing func only,
 // confirm it once and remove the check. doesn't break tests though
 export const isFinnedXWing = (perfectLegHostCells, finnedLegHostCells) => {
-    if (!isPerfectXWing(perfectLegHostCells, finnedLegHostCells)) return false
+    // if (!isPerfectXWing(perfectLegHostCells, finnedLegHostCells)) return false
 
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLegHostCells, finnedLegHostCells)
     return finns.every(finnCell => {
@@ -146,6 +147,7 @@ export const getSashimiCell = (perfectLegSashimiAlignedCell, otherLegCells, xWin
 
 export const isSashimiFinnedXWing = (perfectLeg, otherLeg, xWingHouseType) => {
     if (otherLeg.type === LEG_TYPES.PERFECT) {
+        // TODO: prettier destroys readibility here. plan to remove it
         return (
             isSashimiFinnedXWing(
                 perfectLeg,
@@ -163,11 +165,7 @@ export const isSashimiFinnedXWing = (perfectLeg, otherLeg, xWingHouseType) => {
     // TODO: check if the order of these cells is relevant or not
     const sashimiFinnedLegCells = [...otherLeg.cells, sashimiCell]
     if (isFinnedLeg(sashimiFinnedLegCells)) {
-        const finns = sashimiFinnedLegCells.filter(cell => {
-            if (areSameCells(cell, sashimiCell)) return false
-            if (areSameColCells([cell, perfectAligned]) || areSameRowCells([cell, perfectAligned])) return false
-            return true
-        })
+        const { finns } = categorizeFinnedLegCells(perfectLeg.cells, sashimiFinnedLegCells)
         return finns.every(finn => {
             return areSameBlockCells([sashimiCell, finn])
         })

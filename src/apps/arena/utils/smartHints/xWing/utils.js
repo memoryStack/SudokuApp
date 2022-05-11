@@ -4,7 +4,6 @@ import { HOUSE_TYPE } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { getBlockAndBoxNum } from '../../../../../utils/util'
 
-// TODO: won't work for sashimi-finned X-wing
 export const categorizeLegs = (legA, legB) => {
     const perfectLeg = legA.type === LEG_TYPES.PERFECT ? legA : legB
     const otherLeg = perfectLeg === legA ? legB : legA
@@ -15,7 +14,6 @@ export const categorizeLegs = (legA, legB) => {
     }
 }
 
-// TODO: it will work fine for sashimi-finned type as well
 export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells) => {
     const perfectCells = finnedLegHostCells.filter(finnedLegCell => {
         return perfectLegHostCells.some(perfectLegCell => {
