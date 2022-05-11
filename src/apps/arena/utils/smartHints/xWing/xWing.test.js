@@ -552,7 +552,6 @@ describe('isSashimiFinnedXWing()', () => {
         expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(false)
     })
 
-    // will fail
     test('returns false for 1 perfect leg and 1 finned leg for column houseType with valid finned leg but sashimi cell will be without finns', () => {
         const perfectLeg = {
             candidate: 4,
@@ -608,6 +607,22 @@ describe('isSashimiFinnedXWing()', () => {
             candidate: 4,
             cells: [{ row: 6, col: 6 }, { row: 7, col: 6 }],
             type: LEG_TYPES.PERFECT,
+        }
+        const xWingHouseType = HOUSE_TYPE.COL
+        expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(false)
+    })
+
+    // surprisingly this test fixed the argument issue in implementation
+    test('fixed arguments issue in implementation', () => {
+        const perfectLeg = {
+            candidate: 9,
+            cells: [{ row: 5, col: 5 }, { row: 7, col: 5 }],
+            type: LEG_TYPES.PERFECT,
+        }
+        const otherLeg = {
+            candidate: 9,
+            cells: [{ row: 4, col: 3 }, { row: 5, col: 3 }, { row: 6, col: 3 }],
+            type: LEG_TYPES.FINNED,
         }
         const xWingHouseType = HOUSE_TYPE.COL
         expect(isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)).toBe(false)

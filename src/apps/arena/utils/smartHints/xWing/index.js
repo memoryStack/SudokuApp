@@ -175,7 +175,7 @@ const getXWingType = (legA, legB, xWingHouseType) => {
     // return XWING_TYPES.INVALID
 
     // we know if we are going to use perfect or finned set of legs. use that knowledge
-    if (isSashimiFinnedXWing(legA, legB, xWingHouseType)) {
+    if (isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)) {
 
         console.log('legA', legA)
         console.log('legB', legB)
