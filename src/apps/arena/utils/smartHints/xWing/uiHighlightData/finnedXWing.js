@@ -3,6 +3,7 @@ import { isCellExists, isCellNoteVisible } from '../../../util'
 import { setCellDataInHintResult } from '../../util'
 import { getHouseCells } from '../../../houseCells'
 import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells } from '../utils'
+import { XWING_TYPES } from '../constants'
 
 // export it to constants
 const DIAGONAL_CELLS_COLORS = {
@@ -38,7 +39,6 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     const firstHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].row : cells[0][0].col
     const secondHouseNum = houseType === HOUSE_TYPE.ROW ? cells[1][0].row : cells[1][0].col
 
-    // TODO: weird bug. we have to declare this array first. else it doesn't work
     const xWingHousesNum = [firstHouseNum, secondHouseNum]
     xWingHousesNum.forEach(houseNum => {
         getHouseCells(houseType, houseNum).forEach(cell =>
@@ -47,6 +47,7 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     })
 }
 
+// fully usable by sashimi  as well
 const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     const firstCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].col : cells[0][0].row
     const secondCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][1].col : cells[0][1].row
@@ -63,6 +64,7 @@ const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData)
     })
 }
 
+// sahimi can use it fully
 const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
@@ -83,6 +85,7 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
     })
 }
 
+// most of it can be used by sashimi
 const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
     finnCells.forEach(({ row, col }) => {
         const cellHighlightData = {
@@ -97,6 +100,7 @@ const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
     })
 }
 
+// sashimi-finned can also use it completely
 const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cellsToFocusData) => {
     hostCells
         .filter(cell => {
@@ -114,7 +118,7 @@ const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cells
         })
 }
 
-export const getFinnedXWingUIData = ({ legs, houseType }, notesData) => {
+export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType }, notesData) => {
     const candidate = legs[0].candidate
 
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
@@ -140,7 +144,7 @@ export const getFinnedXWingUIData = ({ legs, houseType }, notesData) => {
     return {
         cellsToFocusData,
         techniqueInfo: {
-            title: 'Finned X-Wing',
+            title: finnedXWingType === XWING_TYPES.FINNED ? 'Finned X-Wing' : 'Sashimi Finned X-Wing',
             logic: getTechniqueExplaination({ houseType, candidate }),
         },
     }

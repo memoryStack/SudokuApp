@@ -1,5 +1,6 @@
 # Project
 node_modules
+.vscode/settings.json
 
 # Xcode / iOS
 ios/xcuserdata

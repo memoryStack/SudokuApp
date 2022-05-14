@@ -676,7 +676,7 @@ describe(' check if finned X-Wing removes notes or not ', () => {
                 },
             ],
         }
-        expect(isFinnedXWingRemovesNotes(data, notesData)).toBe(false)
+        expect(isFinnedXWingRemovesNotes(data, notesData)).toBe(true)
     })
 
 })
