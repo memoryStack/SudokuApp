@@ -9,10 +9,12 @@ import {
     categorizeSashimiPerfectLegCells,
     getAlignedCellInPerfectLeg,
     getSashimiCell,
+    transformSashimiXWingLeg,
+    getXWingType,
 } from '.'
 import { HOUSE_TYPE } from '../constants'
 import { LEG_TYPES, XWING_TYPES } from './constants'
-import { categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getCrossHouseType } from './utils'
+import { categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getCrossHouseType, addCellInXWingLeg } from './utils'
 
 jest.mock('../../../../../redux/dispatch.helpers')
 jest.mock('../../../store/selectors/board.selectors')
@@ -110,9 +112,10 @@ test('perfect xWing', () => {
                     candidate: 5,
                     cells: [
                         { row: 3, col: 4 },
+                        { row: 4, col: 4 },
                         { row: 5, col: 4 },
                     ],
-                    type: LEG_TYPES.PERFECT,
+                    type: LEG_TYPES.SASHIMI_FINNED,
                 },
                 {
                     candidate: 5,
@@ -607,6 +610,7 @@ describe(' check if finned X-Wing removes notes or not ', () => {
         // test cases i have doesn't have Finned X-Wing which will remove some notes.
         // so artificially creating one
 
+        // CHECK: will it create some side-effect ??
         notesData[4][1][6].show = true
 
         /** */
@@ -637,6 +641,44 @@ describe(' check if finned X-Wing removes notes or not ', () => {
         }
         expect(isFinnedXWingRemovesNotes(data, notesData)).toBe(true)
     })
+
+    test('returns false for sashimi-finned x-wing when no notes to remove', () => {
+        const { notesData } = require('./testData')
+        // test cases i have doesn't have Sashimi-Finned X-Wing which will remove some notes.
+        // so artificially creating one
+
+        notesData[3][5][4].show = true
+
+        /** */
+
+        mockBoardSelectors(notesData)
+
+        const data = {
+            houseType: HOUSE_TYPE.COL,
+            type: XWING_TYPES.SASHIMI_FINNED,
+            legs: [
+                {
+                    candidate: 5,
+                    cells: [
+                        { row: 3, col: 4 },
+                        { row: 4, col: 4 },
+                        { row: 5, col: 4 },
+                    ],
+                    type: LEG_TYPES.SASHIMI_FINNED,
+                },
+                {
+                    candidate: 5,
+                    cells: [
+                        { row: 3, col: 8 },
+                        { row: 4, col: 8 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+            ],
+        }
+        expect(isFinnedXWingRemovesNotes(data, notesData)).toBe(false)
+    })
+
 })
 
 describe(' removable notes host cells for finned X-Wing ', () => {
@@ -998,5 +1040,99 @@ describe('getSashimiCell()', () => {
         ]
         const expectedResult = { row: 7, col: 8 }
         expect(getSashimiCell(sashimiAlignedCell, otherLegCells, xWingHouseType)).toStrictEqual(expectedResult)
+    })
+})
+
+describe('addCellInXWingLeg()', () => {
+    test('adds new cell in front in row type X-Wing in sorted order', () => {
+        const xWingHouseType = HOUSE_TYPE.ROW
+        const cellToInsert = { row: 3, col: 2 }
+        const legCells = [{ row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }]
+        const expectedResult = [{ row: 3, col: 2 }, { row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }]
+        addCellInXWingLeg(cellToInsert, legCells, xWingHouseType)
+        expect(legCells).toStrictEqual(expectedResult)
+    })
+
+    test('adds new cell in last in column type X-Wing in sorted order', () => {
+        const xWingHouseType = HOUSE_TYPE.COL
+        const cellToInsert = { row: 6, col: 2 }
+        const legCells = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 4, col: 2 }]
+        const expectedResult = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 4, col: 2 }, { row: 6, col: 2 }]
+        addCellInXWingLeg(cellToInsert, legCells, xWingHouseType)
+        expect(legCells).toStrictEqual(expectedResult)
+    })
+
+    test('adds new cell in middle in column type X-Wing in sorted order', () => {
+        const xWingHouseType = HOUSE_TYPE.COL
+        const cellToInsert = { row: 4, col: 2 }
+        const legCells = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 6, col: 2 }]
+        const expectedResult = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 4, col: 2 }, { row: 6, col: 2 }]
+        addCellInXWingLeg(cellToInsert, legCells, xWingHouseType)
+        expect(legCells).toStrictEqual(expectedResult)
+    })
+})
+
+describe('transformSashimiXWingLeg()', () => {
+    test('adds sashimi cell in already finned leg and changes the leg type to SASHIMI_FINNED', () => {
+        const legA = {
+            candidate: 4,
+            cells: [
+                { row: 7, col: 5 },
+                { row: 7, col: 8 },
+            ],
+            type: LEG_TYPES.PERFECT,
+        }
+        const legB = {
+            candidate: 4,
+            cells: [
+                { row: 3, col: 3 },
+                { row: 3, col: 4 },
+                { row: 3, col: 8 },
+            ],
+            type: LEG_TYPES.FINNED,
+        }
+        const houseType = HOUSE_TYPE.ROW
+
+        const expectedResult = [
+            legA,
+            {
+                candidate: 4,
+                cells: [
+                    { row: 3, col: 3 },
+                    { row: 3, col: 4 },
+                    { row: 3, col: 5 },
+                    { row: 3, col: 8 },
+                ],
+                type: LEG_TYPES.SASHIMI_FINNED,
+            }
+        ]
+
+        expect(transformSashimiXWingLeg(legA, legB, houseType)).toStrictEqual(expectedResult)
+    })
+
+})
+
+// TODO: add more test-cses for this func
+describe('getXWingType()', () => {
+    test('returns XWING_TYPES.FINNED for 1 perfect leg and 1 finned leg and perfect host cells are aligned for perfect leg', () => {
+        const houseType = HOUSE_TYPE.COL
+        const legA = {
+            candidate: 5,
+            cells: [
+                { row: 3, col: 2 },
+                { row: 4, col: 2 },
+                { row: 5, col: 2 },
+            ],
+            type: LEG_TYPES.FINNED,
+        }
+        const legB = {
+            candidate: 5,
+            cells: [
+                { row: 3, col: 4 },
+                { row: 5, col: 4 },
+            ],
+            type: LEG_TYPES.PERFECT,
+        }
+        expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.FINNED)
     })
 })

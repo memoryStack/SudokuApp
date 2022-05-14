@@ -32,7 +32,6 @@ export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells
 
 export const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
-// work absolutely fine for sashimi-finned as well
 export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
@@ -46,5 +45,13 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }) => {
             if (crossHouseType === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
             return areSameColCells(cellsPair)
         })
+    })
+}
+
+export const addCellInXWingLeg = (cell, legCells, houseType) => {
+    const crossHouseType = getCrossHouseType(houseType)
+    legCells.push(cell)
+    legCells.sort((cellA, cellB) => {
+        return cellA[crossHouseType] - cellB[crossHouseType]
     })
 }
