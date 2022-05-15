@@ -5,14 +5,16 @@ import { getHouseCells } from '../../../houseCells'
 import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells } from '../utils'
 import { XWING_TYPES } from '../constants'
 
-// export it to constants
+
+// TODO: come up with a better color scheme
+// TODO: RENAME IT
 const DIAGONAL_CELLS_COLORS = {
     TOP_LEFT_BOTTOM_RIGHT: 'orange',
     BOTTOM_LEFT_TOP_RIGHT: 'pink',
-    FINN: '#dfe5f0',
+    FINN: 'rgb(255, 245, 187)'
 }
 
-// TODO: come up with a better color scheme
+// export it to constants
 const HOUSE_TYPE_VOCABOLARY = {
     [HOUSE_TYPE.ROW]: {
         FULL_NAME: 'row',
@@ -24,14 +26,50 @@ const HOUSE_TYPE_VOCABOLARY = {
     },
 }
 
+const HOUSE_ORDER_KEYS = {
+    FIRST: 'first',
+    SECOND: 'second'
+}
+
+const LEGS_LOCATION_TEXT = {
+    [HOUSE_TYPE.ROW]: {
+        first: 'upper',
+        second: 'lower'
+    },
+    [HOUSE_TYPE.COL]: {
+        first: 'left',
+        second: 'right'
+    },
+}
+
 const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
-const getTechniqueExplaination = ({ houseType, candidate }) => {
-    return 'some logic is coming soon'
-    // const crossHouseType = getCrossHouseType(houseType)
-    // const houseFullName = HOUSE_TYPE_VOCABOLARY[houseType].FULL_NAME_PLURAL
-    // const crossHouseFullName = HOUSE_TYPE_VOCABOLARY[crossHouseType].FULL_NAME_PLURAL
-    // return `In the two highlighted ${houseFullName}, number ${candidate} is a possible solution for only two cells. notice that the cells in these ${houseFullName} where ${candidate} can come are present in the same ${crossHouseFullName} as well. this rectangular arrangement of these 4 cells highlighted in ${DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT} and ${DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT} colors make a X-Wing. now only ways ${candidate} can be placed in these two ${houseFullName} correctly are if either ${candidate} comes in both ${DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT} cells or both ${DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT} cells. in these both ways ${candidate} can't be placed in the cells where it is highlighted in red in these two ${crossHouseFullName}. so we can remove these red highlghted notes safely.`
+const getLegsLocation = (houseType, { perfectLeg, finnedLeg }) => {
+    const perfectLegHouseNum = perfectLeg.cells[0][houseType]
+    const finnedLegHouseNum = finnedLeg.cells[0][houseType]
+
+    const perfectHouseKey = perfectLegHouseNum < finnedLegHouseNum ? HOUSE_ORDER_KEYS.FIRST : HOUSE_ORDER_KEYS.SECOND
+    const finnedHouseKey = perfectHouseKey === HOUSE_ORDER_KEYS.SECOND ? HOUSE_ORDER_KEYS.FIRST : HOUSE_ORDER_KEYS.SECOND
+
+    return {
+        perfect: LEGS_LOCATION_TEXT[houseType][perfectHouseKey],
+        finned: LEGS_LOCATION_TEXT[houseType][finnedHouseKey],
+    }
+}
+
+// TODO: learn RegExes and write a better versio the func mentioned in the below link
+// https://stackoverflow.com/questions/40672651/es6-multiline-template-strings-with-no-new-lines-and-allow-indents
+const getTechniqueExplaination = ({ houseType, legs }) => {
+    const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, legs)
+    const candidate = legs.perfectLeg.candidate
+
+    return `If you don't know about X-Wing then you won't be able to understand this hint.\n`
+        + `Finned X-Wing is basically X-Wing with finns.`
+        + `Finn cells are extra cells in the same block as one of the orange/pink colored cell which have same candidate we focus on in X-Wing.`
+        + `Finns are cells highlighted in yellow color which have ${candidate} present in them.`
+        + `Only one of these 4 cells in orange/pink color can have finns to make it a valid Finned X-Wing.\n`
+        + `In the ${perfectHouseLocation} ${houseType} it doesn't matter where we place ${candidate}, in the ${finnedHouseLocation} ${houseType} ${candidate} will`
+        + `be placed such that ${candidate} note highlighted in red color will always be eliminated. so it's safe to remove it from there.`
 }
 
 // doing 2 things
@@ -145,7 +183,7 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
         cellsToFocusData,
         techniqueInfo: {
             title: finnedXWingType === XWING_TYPES.FINNED ? 'Finned X-Wing' : 'Sashimi Finned X-Wing',
-            logic: getTechniqueExplaination({ houseType, candidate }),
+            logic: getTechniqueExplaination({ houseType, legs: { perfectLeg, finnedLeg } }),
         },
     }
 }
