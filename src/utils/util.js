@@ -785,3 +785,10 @@ if (Array.prototype.sameArrays === undefined) {
 export const consoleLog = (...args) => {
     __DEV__ && console.log(...args)
 }
+
+// TODO: fix it as per my requirements
+function noWhiteSpace(strings, ...placeholders) {
+    let withSpace = strings.reduce((result, string, i) => (result + placeholders[i - 1] + string));
+    let withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ');
+    return withoutSpace;
+}
