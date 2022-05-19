@@ -75,7 +75,7 @@ const resetInitialState = () => {
 resetInitialState()
 
 const handleInit = ({ setState }) => {
-    setState({ ...initBoardData(), validPuzzleFilled: false })
+    setState({ ...initBoardData() })
 }
 
 const handleInputNumberClick = ({ setState, getState, params: number }) => {
@@ -174,10 +174,8 @@ const handlePlay = ({ setState, getState, params: { snackBarRenderer, ref: custo
     if (isMultipleSolutionsExist) {
         showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer })
     } else {
-        setState({ validPuzzleFilled: true }, () => {
-            startCustomPuzzle(mainNumbers)
-            handleOnClose({ params: customPuzzleHCRef })
-        })
+        startCustomPuzzle(mainNumbers)
+        handleOnClose({ params: customPuzzleHCRef })
     }
 }
 

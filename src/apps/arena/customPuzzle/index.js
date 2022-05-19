@@ -58,7 +58,6 @@ const CustomPuzzle_ = ({
     notesInfo,
     parentHeight,
     onCustomPuzzleClosed,
-    validPuzzleFilled = false,
     onAction,
 }) => {
     const customPuzzleRef = useRef(null)
@@ -72,8 +71,8 @@ const CustomPuzzle_ = ({
     }, [mainNumbers])
 
     const onHCClosed = useCallback(() => {
-        onCustomPuzzleClosed(validPuzzleFilled)
-    }, [validPuzzleFilled])
+        onCustomPuzzleClosed()
+    }, [])
 
     const snackBarRenderer = msg => {
         return (

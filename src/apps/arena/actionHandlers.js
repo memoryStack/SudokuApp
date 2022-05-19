@@ -200,9 +200,8 @@ const resumePreviousGame = previousGameData => {
     })
 }
 
+// TODO: SF wise men say not to use switch statements. how to handle this thing then ??
 const handleMenuItemPress = ({ setState, params: menuItem }) => {
-    updateGameState(GAME_STATE.GAME_SELECT)
-
     switch (menuItem) {
         case LEVEL_DIFFICULTIES.EASY:
         case LEVEL_DIFFICULTIES.MEDIUM:
@@ -232,9 +231,8 @@ const handleStartCustomPuzzle = ({ params: mainNumbers }) => {
     startNewGame({ mainNumbers, difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE })
 }
 
-const handleCustomPuzzleHCClose = ({ setState, params: { puzzleFilled, previousGameState } }) => {
+const handleCustomPuzzleHCClose = ({ setState }) => {
     setState({ showCustomPuzzleHC: false })
-    if (!puzzleFilled) updateGameState(previousGameState)
 }
 
 const handleSharePuzzle = () => {
@@ -271,7 +269,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,

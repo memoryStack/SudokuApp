@@ -27,6 +27,8 @@ import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 import { updateGameState } from './store/actions/gameState.actions'
 import { usePrevious, useToggle } from '../../utils/customHooks/commonUtility'
 import { consoleLog } from '../../utils/util'
+import { Button } from '../../components/button'
+import { fillPuzzle } from './store/actions/board.actions'
 
 const MAX_AVAILABLE_HINTS = 3
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
@@ -87,7 +89,6 @@ const styles = StyleSheet.create({
 const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     const [pageHeight, setPageHeight] = useState(0)
 
-    // TODO: this should be determined by the game-state
     const [showGameSolvedCard, setGameSolvedCard] = useToggle(false)
 
     const [showNextGameMenu, toggleNextGameMenu] = useToggle(false)
@@ -95,6 +96,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     const gameState = useSelector(getGameState)
 
     const previousGameState = usePrevious(gameState)
+
+    const fadeAnim = useRef(new Animated.Value(0)).current
 
     useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
@@ -107,18 +110,25 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         }
     }, [route, onAction])
 
-    // for game over halfcard animation
-    const fadeAnim = useRef(new Animated.Value(0)).current
-
-    // show game over card
     useEffect(() => {
-        if (isGameOver(gameState)) setGameSolvedCard(true)
+        if (isGameOver(gameState)) {
+            setGameSolvedCard(true)
+            setTimeout(() => {
+                Animated.timing(fadeAnim, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }).start()
+            })
+        }
     }, [gameState])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
         setPageHeight(height)
     }, [])
 
+    // how is this helpful ??
+    // what are we achieving by it ??
     useEffect(() => {
         return () => {
             updateGameState(GAME_STATE.GAME_SELECT)
@@ -126,45 +136,32 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     }, [])
 
     // shfit these to actionHandlers later
-    // TODO: put "showCustomPuzzleHC" and "showNextGameMenu" as GAME_SELECT state
-    // and use an array here to determine this condition easier way
     const handleGameInFocus = useCallback(() => {
-        if (gameState !== GAME_STATE.INACTIVE || showCustomPuzzleHC || showNextGameMenu) return
+        if (gameState !== GAME_STATE.INACTIVE) return
         updateGameState(GAME_STATE.ACTIVE)
-    }, [gameState, showCustomPuzzleHC, showNextGameMenu, showGameSolvedCard])
+    }, [gameState])
 
     const handleGameOutOfFocus = useCallback(() => {
         if (gameState !== GAME_STATE.ACTIVE) return
         updateGameState(GAME_STATE.INACTIVE)
     }, [gameState])
 
-    const fadeOut = () => {
+    const hideCongratsModal = useCallback(() => {
         Animated.timing(fadeAnim, {
             toValue: 0,
             duration: 200,
             useNativeDriver: true,
         }).start(() => {
             setGameSolvedCard(false)
-            setTimeout(() => toggleNextGameMenu(true), 100) // just so that sb kuch fast fast sa na ho
+            setTimeout(() => {
+                toggleNextGameMenu(true)
+                updateGameState(GAME_STATE.GAME_SELECT)
+            }, 100)
         })
-    }
-
-    useEffect(() => {
-        if (showGameSolvedCard) {
-            Animated.timing(fadeAnim, {
-                toValue: 1,
-                duration: 300,
-                useNativeDriver: true,
-            }).start()
-        }
-    }, [showGameSolvedCard])
-
-    const hideCongratsModal = useCallback(() => {
-        fadeOut()
     }, [])
 
     const handleSharePuzzleClick = useCallback(() => {
-        if ([GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].indexOf(gameState) === -1) return
+        if (![GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(gameState)) return
         onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
     }, [gameState])
 
@@ -172,6 +169,16 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         onAction({
             type: ACTION_TYPES.ON_BACK_PRESS,
         })
+    }
+
+    const renderFillPuzzleBtn = () => {
+        if (!__DEV__) return null
+        return (
+            <Button
+                text={'Fill'}
+                onClick={fillPuzzle}
+            />
+        )
     }
 
     const header = useMemo(() => {
@@ -184,6 +191,9 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
                 >
                     <LeftArrow width={HEADER_ICON_DIMENSION} height={HEADER_ICON_DIMENSION} fill={HEADER_ICON_FILL} />
                 </Touchable>
+
+                {renderFillPuzzleBtn()}
+
                 <Touchable
                     touchable={TouchableTypes.opacity}
                     onPress={handleSharePuzzleClick}
@@ -204,31 +214,18 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
 
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
-
     const time = useSelector(getTime)
 
-    const onStartCustomPuzzle = useCallback(
-        mainNumbers => {
-            onAction({
-                type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
-                payload: mainNumbers,
-            })
-        },
-        [onAction],
-    )
+    const onStartCustomPuzzle = useCallback(mainNumbers => {
+        onAction({
+            type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
+            payload: mainNumbers,
+        })
+    }, [onAction])
 
-    // know if puzzle was created or not
-    // if not then fallback to the previous state
-    const onCustomPuzzleHCClosed = useCallback(
-        puzzleFilled => {
-            consoleLog('@@@@@@ puzzleFilled', puzzleFilled)
-            onAction({
-                type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE,
-                payload: { puzzleFilled, previousGameState },
-            })
-        },
-        [onAction, previousGameState],
-    )
+    const onCustomPuzzleHCClosed = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
+    }, [onAction])
 
     const renderCustomPuzzleHC = () => {
         if (!(pageHeight && showCustomPuzzleHC)) return null
