@@ -258,6 +258,16 @@ const handleSharePuzzle = () => {
         })
 }
 
+const handleScreenOutOfFocus = ({ params: gameState }) => {
+    if (gameState !== GAME_STATE.ACTIVE) return
+    updateGameState(GAME_STATE.INACTIVE)
+}
+
+const handleScreenInFocus = ({ params: gameState }) => {
+    if (gameState !== GAME_STATE.INACTIVE) return
+    updateGameState(GAME_STATE.ACTIVE)
+}
+
 const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
     ON_BACK_PRESS: 'ON_BACK_PRESS',
@@ -266,6 +276,8 @@ const ACTION_TYPES = {
     ON_NEW_GAME_MENU_ITEM_PRESS: 'ON_NEW_GAME_MENU_ITEM_PRESS',
     ON_START_CUSTOM_PUZZLE: 'ON_START_CUSTOM_PUZZLE',
     ON_CUSTOM_PUZZLE_HC_CLOSE: 'ON_CUSTOM_PUZZLE_HC_CLOSE',
+    ON_OUT_OF_FOCUS: 'ON_OUT_OF_FOCUS',
+    ON_IN_FOCUS: 'ON_IN_FOCUS',
 }
 
 const ACTION_HANDLERS = {
@@ -276,6 +288,8 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS]: handleMenuItemPress,
     [ACTION_TYPES.ON_START_CUSTOM_PUZZLE]: handleStartCustomPuzzle,
     [ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE]: handleCustomPuzzleHCClose,
+    [ACTION_TYPES.ON_OUT_OF_FOCUS]: handleScreenOutOfFocus,
+    [ACTION_TYPES.ON_IN_FOCUS]: handleScreenInFocus,
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }

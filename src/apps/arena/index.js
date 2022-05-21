@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
+import { useSelector } from 'react-redux'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { GAME_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
@@ -12,7 +13,6 @@ import { fonts } from '../../resources/fonts/font'
 import { ShareIcon } from '../../resources/svgIcons/share'
 import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 import { HintsMenu } from './hintsMenu'
-import { useSelector } from 'react-redux'
 import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
@@ -135,16 +135,13 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         }
     }, [])
 
-    // shfit these to actionHandlers later
     const handleGameInFocus = useCallback(() => {
-        if (gameState !== GAME_STATE.INACTIVE) return
-        updateGameState(GAME_STATE.ACTIVE)
-    }, [gameState])
+        onAction({ type: ACTION_TYPES.ON_IN_FOCUS, payload: gameState })
+    }, [onAction, gameState])
 
     const handleGameOutOfFocus = useCallback(() => {
-        if (gameState !== GAME_STATE.ACTIVE) return
-        updateGameState(GAME_STATE.INACTIVE)
-    }, [gameState])
+        onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
+    }, [onAction, gameState])
 
     const hideCongratsModal = useCallback(() => {
         Animated.timing(fadeAnim, {
