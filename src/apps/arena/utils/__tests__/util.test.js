@@ -12,6 +12,8 @@ import {
     getCellsCommonHouses,
     areSameCellsSets,
     getHousePossibleNotes,
+    forCellEachNote,
+    forEachCell,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
@@ -379,5 +381,21 @@ describe('all possible notes in house', () => {
         const house = { type: HOUSE_TYPE.BLOCK, num: 8 }
         const expectedPossibleNotes = [1, 6, 7, 8, 9]
         expect(getHousePossibleNotes(house, mainNumbers)).toStrictEqual(expectedPossibleNotes)
+    })
+})
+
+describe('forCellEachNote()', () => {
+    test('calls the callback 9 times, once for each note', () => {
+        const mockCallback = jest.fn();
+        forCellEachNote(mockCallback)
+        expect(mockCallback.mock.calls.length).toBe(9);
+    })
+})
+
+describe('forEachCell()', () => {
+    test('calls the callback 81 times, oncefor each cell', () => {
+        const mockCallback = jest.fn();
+        forEachCell(mockCallback)
+        expect(mockCallback.mock.calls.length).toBe(81);
     })
 })

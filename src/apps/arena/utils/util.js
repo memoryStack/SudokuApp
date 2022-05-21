@@ -290,3 +290,11 @@ export const forEachCell = (callback) => {
         }
     }
 }
+
+export const forCellEachNote = (callback) => {
+    for (let note = 1; note <= 9; note++) {
+        const noteValue = note
+        const noteIndx = note - 1
+        callback(noteValue, noteIndx)
+    }
+}
