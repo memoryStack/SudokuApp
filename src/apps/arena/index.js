@@ -99,6 +99,12 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
 
     const fadeAnim = useRef(new Animated.Value(0)).current
 
+    const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
+
+    const mistakes = useSelector(getMistakes)
+    const difficultyLevel = useSelector(getDifficultyLevel)
+    const time = useSelector(getTime)
+
     useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
     useEffect(() => {
@@ -140,6 +146,16 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
     }, [onAction, gameState])
 
+    const onStartCustomPuzzle = useCallback(mainNumbers => {
+        onAction({
+            type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
+            payload: mainNumbers,
+        })
+    }, [onAction])
+
+    const onCustomPuzzleHCClosed = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
+    }, [onAction])
 
     // NEXT: put it in action handler file
     const hideCongratsModal = useCallback(() => {
@@ -166,6 +182,10 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
             type: ACTION_TYPES.ON_BACK_PRESS,
         })
     }
+
+    const onNewGameMenuItemClick = useCallback(item => {
+        onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
+    }, [onAction])
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
@@ -201,27 +221,10 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         )
     }, [handleSharePuzzleClick])
 
-    const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
-
     const renderHintsMenu = () => {
         if (!showHintsMenu) return null
         return <HintsMenu />
     }
-
-    const mistakes = useSelector(getMistakes)
-    const difficultyLevel = useSelector(getDifficultyLevel)
-    const time = useSelector(getTime)
-
-    const onStartCustomPuzzle = useCallback(mainNumbers => {
-        onAction({
-            type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
-            payload: mainNumbers,
-        })
-    }, [onAction])
-
-    const onCustomPuzzleHCClosed = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
-    }, [onAction])
 
     const renderCustomPuzzleHC = () => {
         if (!(pageHeight && showCustomPuzzleHC)) return null
@@ -233,13 +236,6 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
             />
         )
     }
-
-    const onNewGameMenuItemClick = useCallback(
-        item => {
-            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
-        },
-        [onAction],
-    )
 
     const renderNextGameMenu = () => {
         if (!(pageHeight && showNextGameMenu)) return null
