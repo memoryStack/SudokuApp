@@ -1,13 +1,21 @@
+import { GAME_STATE } from '../../../resources/constants'
 import { hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
+import { updateGameState } from '../store/actions/gameState.actions'
 import { showHints } from '../store/actions/smartHintHC.actions'
 
 const handleCloseHintsMenu = () => {
     hintsMenuVisibilityAction(false)
 }
 
-const handleMenuItemPress = ({ params: id }) => {
+const handleMenuItemPress = async ({ params: id }) => {
     handleCloseHintsMenu()
-    showHints(id)
+    const hintAvailable = await showHints(id)
+    if (!hintAvailable) updateGameState(GAME_STATE.ACTIVE)
+}
+
+const handleOverlayPress = () => {
+    handleCloseHintsMenu()
+    updateGameState(GAME_STATE.ACTIVE)
 }
 
 const ACTION_TYPES = {
@@ -16,7 +24,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS]: handleCloseHintsMenu,
+    [ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS]: handleOverlayPress,
     [ACTION_TYPES.ON_MENU_ITEM_PRESS]: handleMenuItemPress,
 }
 

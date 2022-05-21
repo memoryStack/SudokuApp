@@ -21,22 +21,24 @@ const getNoHintsFoundMsg = id => {
     return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
 }
 
-export const showHints = hintId => {
+export const showHints = async hintId => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
 
-    getSmartHint(mainNumbers, notesInfo, hintId)
+    return getSmartHint(mainNumbers, notesInfo, hintId)
         .then(hints => {
             consoleLog('@@@@ hintInfo', JSON.stringify(hints))
             if (hints) {
                 invokeDispatch(setHints(hints))
-                updateGameState(GAME_STATE.DISPLAY_HINT)
+                return true
             } else {
                 emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
                     msg: getNoHintsFoundMsg(hintId),
                     visibleTime: 5000,
                 })
+                return false
             }
+
         })
         .catch(error => {
             // TODO: make the popup scrollable for very long systraces
@@ -47,6 +49,7 @@ export const showHints = hintId => {
                     visibleTime: 10000,
                 })
             }
+            return false
         })
 }
 

@@ -91,6 +91,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 
     const gameState = useSelector(getGameState)
 
+    consoleLog('@@@@@ gs', gameState)
+
     const previousGameState = usePrevious(gameState)
 
     const fadeAnim = useRef(new Animated.Value(0)).current
