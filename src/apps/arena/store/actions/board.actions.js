@@ -2,7 +2,7 @@ import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helper
 import { PENCIL_STATE } from '../../../../resources/constants'
 import { getBlockAndBoxNum, initMainNumbers } from '../../../../utils/util'
 import { HOUSE_TYPE } from '../../utils/smartHints/constants'
-import { duplicacyPresent, forAllCells, getCellHousesInfo, initNotes, isCellEmpty } from '../../utils/util'
+import { duplicacyPresent, forEachCell, getCellHousesInfo, initNotes, isCellEmpty } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
@@ -341,7 +341,7 @@ export const resetStoreState = () => {
 export const fillPuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
-    forAllCells((cell) => {
+    forEachCell((cell) => {
         if (isCellEmpty(cell, mainNumbers))
             invokeDispatch(setCellMainNumber({ cell, number: mainNumbers[cell.row][cell.col].solutionValue }))
     })

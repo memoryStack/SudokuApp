@@ -283,7 +283,7 @@ export const getHousePossibleNotes = (house, mainNumbers) => {
     return result
 }
 
-export const forAllCells = (callback) => {
+export const forEachCell = (callback) => {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             callback({ row, col })

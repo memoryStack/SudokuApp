@@ -38,7 +38,6 @@ export const showHints = async hintId => {
                 })
                 return false
             }
-
         })
         .catch(error => {
             // TODO: make the popup scrollable for very long systraces
