@@ -1,13 +1,11 @@
-import { getHouseCells } from '../../houseCells'
-import { getCellHouseInfo } from '../../util'
+import { forHouseEachCell, getCellHouseInfo } from '../../util'
 
-export const isValidHiddenSingle = ({ type, cell, candidate }, _, possibleNotes) => {
-    const { num: houseNum, type: houseType } = getCellHouseInfo(type, cell)
-    const houseCells = getHouseCells(houseType, houseNum)
+export const isValidHiddenSingle = ({ type: hostHouseType, cell, candidate }, _, possibleNotes) => {
+    let candidatePossibleNotesCount = 0
 
-    let candidatePossibleNotes = 0
-    houseCells.forEach(({ row, col }) => {
-        if (possibleNotes[row][col][candidate - 1].show) candidatePossibleNotes++
+    forHouseEachCell(getCellHouseInfo(hostHouseType, cell), ({ row, col }) => {
+        if (possibleNotes[row][col][candidate - 1].show) candidatePossibleNotesCount++
     })
-    return candidatePossibleNotes === 1
+
+    return candidatePossibleNotesCount === 1
 }

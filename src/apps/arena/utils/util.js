@@ -283,6 +283,8 @@ export const getHousePossibleNotes = (house, mainNumbers) => {
     return result
 }
 
+/* Board Iterators */
+
 export const forEachCell = (callback) => {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -297,4 +299,10 @@ export const forCellEachNote = (callback) => {
         const noteIndx = note - 1
         callback(noteValue, noteIndx)
     }
+}
+
+export const forHouseEachCell = ({ type, num }, callback) => {
+    getHouseCells(type, num).forEach((cell) => {
+        callback(cell)
+    })
 }
