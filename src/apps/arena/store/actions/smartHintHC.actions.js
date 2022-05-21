@@ -5,9 +5,17 @@ import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog } from '../../../../utils/util'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
-import { removeHints, setNextHint, setPrevHint, setHints, resetState } from '../reducers/smartHintHC.reducers'
+import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
 import { updateGameState } from './gameState.actions'
+
+const {
+    removeHints,
+    setNextHint,
+    setPrevHint,
+    setHints,
+    resetState,
+} = smartHintHCActions
 
 const getNoHintsFoundMsg = id => {
     return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`

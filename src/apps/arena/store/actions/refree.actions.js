@@ -1,19 +1,18 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { GAME_STATE } from '../../../../resources/constants'
-import { consoleLog } from '../../../../utils/util'
-import { isGameOver } from '../../utils/util'
-import { setGameState } from '../reducers/gameState.reducers'
+import { refreeActions } from '../reducers/refree.reducers'
+import { getGameState } from '../selectors/gameState.selectors'
+import { getTime } from '../selectors/refree.selectors'
+import { updateGameState } from './gameState.actions'
 
-import {
+const {
     resetMistakes,
     increaseMistakes,
     setMistakes,
     setDifficultylevel,
     setTime,
     resetState,
-} from '../reducers/refree.reducers'
-import { getGameState } from '../selectors/gameState.selectors'
-import { getTime } from '../selectors/refree.selectors'
+} = refreeActions
 
 export const clearMistakes = () => invokeDispatch(resetMistakes())
 
@@ -30,7 +29,7 @@ export const timerClick = () => {
     const gameState = getGameState(getStoreState())
     if (!(gameState === GAME_STATE.ACTIVE || gameState === GAME_STATE.INACTIVE)) return
     const newGameState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
-    invokeDispatch(setGameState(newGameState))
+    updateGameState(newGameState)
 }
 
 // TODO: are we sure these funcs belong in the actions file ??

@@ -11,4 +11,4 @@ export const boardControllerSlice = createSlice({
 
 export default boardControllerSlice.reducer
 
-export const { setPencil, decreaseHint, setHints, setHintsMenu, resetState } = boardControllerSlice.actions
+export const boardControllerActions = boardControllerSlice.actions

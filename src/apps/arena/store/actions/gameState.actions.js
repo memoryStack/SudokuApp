@@ -1,6 +1,8 @@
 import { invokeDispatch } from '../../../../redux/dispatch.helpers'
 
-import { setGameState } from '../reducers/gameState.reducers'
+import { gameStateActions } from '../reducers/gameState.reducers'
+
+const { setGameState } = gameStateActions
 
 export const updateGameState = newState => {
     invokeDispatch(setGameState(newState))

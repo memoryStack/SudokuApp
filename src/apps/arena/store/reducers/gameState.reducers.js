@@ -12,4 +12,4 @@ export const gameStateSlice = createSlice({
 
 export default gameStateSlice.reducer
 
-export const { setGameState } = gameStateSlice.actions
+export const gameStateActions = gameStateSlice.actions

@@ -1,7 +1,13 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
-import { setPencil, setHintsMenu, resetState } from '../reducers/boardController.reducers'
+import { boardControllerActions } from '../reducers/boardController.reducers'
 import { getPencilStatus } from '../selectors/boardController.selectors'
+
+const {
+    setPencil,
+    setHintsMenu,
+    resetState,
+} = boardControllerActions
 
 const getNewPencilState = currentState => {
     if (!currentState) return PENCIL_STATE.INACTIVE
