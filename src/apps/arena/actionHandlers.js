@@ -1,3 +1,4 @@
+import { Animated } from 'react-native'
 import Share from 'react-native-share'
 import {
     LEVEL_DIFFICULTIES,
@@ -268,6 +269,34 @@ const handleScreenInFocus = ({ params: gameState }) => {
     updateGameState(GAME_STATE.ACTIVE)
 }
 
+const handleHideGameOverCard = ({ setState, params: fadeAnim }) => {
+    Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+    }).start(() => {
+        setState({ showGameSolvedCard: false })
+        setTimeout(() => {
+            setState({ showNextGameMenu: true })
+            updateGameState(GAME_STATE.GAME_SELECT)
+        }, 100)
+    })
+}
+
+const handleNewGameMenuClose = ({ setState }) => {
+    setState({ showNextGameMenu: false })
+}
+
+const handleGameOver = ({ setState, params: fadeAnim }) => {
+    setState({ showGameSolvedCard: true }, () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start()
+    })
+}
+
 const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
     ON_BACK_PRESS: 'ON_BACK_PRESS',
@@ -278,6 +307,9 @@ const ACTION_TYPES = {
     ON_CUSTOM_PUZZLE_HC_CLOSE: 'ON_CUSTOM_PUZZLE_HC_CLOSE',
     ON_OUT_OF_FOCUS: 'ON_OUT_OF_FOCUS',
     ON_IN_FOCUS: 'ON_IN_FOCUS',
+    ON_HIDE_GAME_OVER_CARD: 'ON_HIDE_GAME_OVER_CARD',
+    ON_NEW_GAME_MENU_CLOSE: 'ON_NEW_GAME_MENU_CLOSE',
+    ON_GAME_OVER: 'ON_GAME_OVER',
 }
 
 const ACTION_HANDLERS = {
@@ -290,6 +322,9 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE]: handleCustomPuzzleHCClose,
     [ACTION_TYPES.ON_OUT_OF_FOCUS]: handleScreenOutOfFocus,
     [ACTION_TYPES.ON_IN_FOCUS]: handleScreenInFocus,
+    [ACTION_TYPES.ON_HIDE_GAME_OVER_CARD]: handleHideGameOverCard,
+    [ACTION_TYPES.ON_NEW_GAME_MENU_CLOSE]: handleNewGameMenuClose,
+    [ACTION_TYPES.ON_GAME_OVER]: handleGameOver,
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }

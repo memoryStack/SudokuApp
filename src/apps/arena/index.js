@@ -86,12 +86,8 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
+const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu }) => {
     const [pageHeight, setPageHeight] = useState(0)
-
-    const [showGameSolvedCard, setGameSolvedCard] = useToggle(false)
-
-    const [showNextGameMenu, toggleNextGameMenu] = useToggle(false)
 
     const gameState = useSelector(getGameState)
 
@@ -117,25 +113,17 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     }, [route, onAction])
 
     useEffect(() => {
-        if (isGameOver(gameState)) {
-            setGameSolvedCard(true)
-            setTimeout(() => {
-                Animated.timing(fadeAnim, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: true,
-                }).start()
-            })
-        }
-    }, [gameState])
+        if (isGameOver(gameState))
+            onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim })
+    }, [gameState, onAction])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
         setPageHeight(height)
     }, [])
 
     useEffect(() => {
-        const setInitialGameState = () => updateGameState(GAME_STATE.GAME_SELECT)
-        return setInitialGameState
+        const resetGameState = () => updateGameState(GAME_STATE.GAME_SELECT)
+        return resetGameState
     }, [])
 
     const handleGameInFocus = useCallback(() => {
@@ -157,19 +145,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
     }, [onAction])
 
-    // NEXT: put it in action handler file
     const hideCongratsModal = useCallback(() => {
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 200,
-            useNativeDriver: true,
-        }).start(() => {
-            setGameSolvedCard(false)
-            setTimeout(() => {
-                toggleNextGameMenu(true)
-                updateGameState(GAME_STATE.GAME_SELECT)
-            }, 100)
-        })
+        onAction({ type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD, payload: fadeAnim })
     }, [])
 
     const handleSharePuzzleClick = useCallback(() => {
@@ -181,6 +158,10 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
 
     const onNewGameMenuItemClick = useCallback(item => {
         onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
+    }, [onAction])
+
+    const onNewGameMenuClosed = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_CLOSE })
     }, [onAction])
 
     const renderFillPuzzleBtn = () => {
@@ -238,7 +219,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         return (
             <NextGameMenu
                 parentHeight={pageHeight}
-                onMenuClosed={toggleNextGameMenu}
+                onMenuClosed={onNewGameMenuClosed}
                 menuItemClick={onNewGameMenuItemClick}
             />
         )
