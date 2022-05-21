@@ -127,12 +127,9 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         setPageHeight(height)
     }, [])
 
-    // how is this helpful ??
-    // what are we achieving by it ??
     useEffect(() => {
-        return () => {
-            updateGameState(GAME_STATE.GAME_SELECT)
-        }
+        const setInitialGameState = () => updateGameState(GAME_STATE.GAME_SELECT)
+        return setInitialGameState
     }, [])
 
     const handleGameInFocus = useCallback(() => {
@@ -143,6 +140,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
         onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
     }, [onAction, gameState])
 
+
+    // NEXT: put it in action handler file
     const hideCongratsModal = useCallback(() => {
         Animated.timing(fadeAnim, {
             toValue: 0,
