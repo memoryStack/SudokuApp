@@ -1,12 +1,12 @@
-export const isValidNakedSingle = ({ cell }, userNotesInput, possibleNotes) => {
-    const userInputCellNotes = userNotesInput[cell.row][cell.col]
-    const possibleCellNotes = possibleNotes[cell.row][cell.col]
+import { forCellEachNote } from "../../util"
 
-    let visibleNotesCount = 0
-    for (let note = 1; note <= 9; note++) {
-        if (userInputCellNotes[note - 1].show !== possibleCellNotes[note - 1].show) return false
-        if (possibleCellNotes[note - 1].show) visibleNotesCount++
-    }
+export const isValidNakedSingle = ({ cell }, _, possibleNotes) => {
+    const cellPossibleNotes = possibleNotes[cell.row][cell.col]
 
-    return visibleNotesCount === 1
+    let possibleNotesCount = 0
+    forCellEachNote((_, noteIndx) => {
+        if (cellPossibleNotes[noteIndx].show) possibleNotesCount++
+    })
+
+    return possibleNotesCount === 1
 }

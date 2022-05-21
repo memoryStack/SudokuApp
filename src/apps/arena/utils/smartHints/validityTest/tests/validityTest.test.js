@@ -17,14 +17,13 @@ const mockBoardSelectors = mockedNotes => {
 }
 
 describe('isValidNakedSingle()', () => {
-    test('returns true for only one possible note in given cell', () => {
+    test('returns true for only one possible note in given cell and user also input one note in cell', () => {
         const { notesInfo } = require('./testData')
         expect(isValidNakedSingle({ cell: { row: 8, col: 2 } }, notesInfo, notesInfo)).toBe(true)
     })
 
-    test('returns false for multiple possible notes in given cell', () => {
+    test('returns false for multiple possible notes in given cell but user input only one of the notes', () => {
         const { notesInfo } = require('./testData')
         expect(isValidNakedSingle({ cell: { row: 5, col: 3 } }, notesInfo, notesInfo)).toBe(false)
     })
-
 })
