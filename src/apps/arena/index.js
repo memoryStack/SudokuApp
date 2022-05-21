@@ -173,15 +173,11 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC }) => {
     }, [])
 
     const handleSharePuzzleClick = useCallback(() => {
-        if (![GAME_STATE.ACTIVE, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(gameState)) return
-        onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
-    }, [gameState])
+        const puzzleAvailableToShare = gameState === GAME_STATE.ACTIVE || (gameState === GAME_STATE.GAME_SELECT && isGameOver(previousGameState))
+        if (puzzleAvailableToShare) onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
+    }, [gameState, previousGameState])
 
-    const handleBackPress = () => {
-        onAction({
-            type: ACTION_TYPES.ON_BACK_PRESS,
-        })
-    }
+    const handleBackPress = () => onAction({ type: ACTION_TYPES.ON_BACK_PRESS })
 
     const onNewGameMenuItemClick = useCallback(item => {
         onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
