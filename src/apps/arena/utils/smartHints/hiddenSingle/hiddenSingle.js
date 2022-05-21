@@ -47,7 +47,8 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData) => {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             const cell = { row, col }
-            if (!isCellEmpty(cell, mainNumbers)) continue
+            const skipCheckingHiddenSingle = !isCellEmpty(cell, mainNumbers) || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
+            if (skipCheckingHiddenSingle) continue
 
             const { present, type, mainNumber } = getCellHiddenSingle(cell, notesData)
             if (present) result.push({ cell, mainNumber, type })
