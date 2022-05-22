@@ -51,7 +51,7 @@ describe('isValidHiddenSingle()', () => {
 
 })
 
-describe('isValidNakedGroup()', () => {
+describe('isValidNakedGroup(), naked double', () => {
     // one more instance of writing test-cases. in the "isValidNakedGroup" func, till now groupCandidates
     // were received in an array of strings and it was undetected for 4 months and was working in prod.
     // correct implementation is that is should have been an array of numbers
@@ -71,6 +71,27 @@ describe('isValidNakedGroup()', () => {
             hostCells: [{ row: 0, col: 1 }, { row: 0, col: 3 }],
         }
         expect(isValidNakedGroup(nakedDouble, notesInfo, notesInfo)).toBe(false)
+    })
+})
+
+describe('isValidNakedGroup(), naked tripple', () => {
+
+    test('returns true for only 3 same candidates in three cells of block house, cells can have two candidates as well from group-set', () => {
+        const { notesInfo } = require('./testData')
+        const nakedTripple = {
+            groupCandidates: [5, 6, 7],
+            hostCells: [{ row: 6, col: 3 }, { row: 6, col: 5 }, { row: 7, col: 3 }],
+        }
+        expect(isValidNakedGroup(nakedTripple, notesInfo, notesInfo)).toBe(true)
+    })
+
+    test('returns false for 3 candidates input by user in 3 cells of block house candidates in three cells of block house but cells have extra candidates possible as well', () => {
+        const { notesInfo } = require('./testData')
+        const nakedTripple = {
+            groupCandidates: [6, 7, 8],
+            hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }, { row: 7, col: 1 }],
+        }
+        expect(isValidNakedGroup(nakedTripple, notesInfo, notesInfo)).toBe(false)
     })
 
 })
