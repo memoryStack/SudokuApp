@@ -251,13 +251,15 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                     }
                 }
 
-                consoleLog('@@@@ naked double', houseAllBoxes, selectedBoxes, groupCandidates)
-
                 const isValidNakedGroup = isHintValid({
                     type: GROUPS.NAKED_GROUP,
-                    data: { groupCandidates, hostCells: selectedBoxes },
+                    data: {
+                        groupCandidates: groupCandidates.map((candidate) => parseInt(candidate, 10)),
+                        hostCells: selectedBoxes
+                    },
                 })
                 if (isValidNakedGroup) {
+                    consoleLog('@@@@ naked double', selectedBoxes, groupCandidates)
                     hints.push(
                         prepareNakedDublesOrTriplesHintData(
                             noOfInstances,
