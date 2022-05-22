@@ -170,30 +170,20 @@ export const isSashimiFinnedXWing = (perfectLeg, otherLeg, xWingHouseType) => {
     return false
 }
 
-// TODO: this func must have test-cases
-// these legs belong to same candidate and from same houseType
 export const getXWingType = (legA, legB, xWingHouseType) => {
     if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return XWING_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
 
-    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
-        return XWING_TYPES.PERFECT
-    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.FINNED
-    if (isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)) return XWING_TYPES.SASHIMI_FINNED
+    let result = XWING_TYPES.INVALID
+    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.PERFECT
+    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.FINNED
+    if (isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)) result = XWING_TYPES.SASHIMI_FINNED
 
-    return XWING_TYPES.INVALID
+    const hintValidityCheckerPayload = { legs: [legA, legB], houseType: xWingHouseType }
+    if (result !== XWING_TYPES.INVALID && !isHintValid({ type: HINTS_IDS.X_WING, data: hintValidityCheckerPayload })) result = XWING_TYPES.INVALID
 
-    // instead of cells. pass legs here
-    // TODO: re-implement validity checker
-    // const xWing = {
-    //     cells: [perfectLeg.cells, otherLeg.cells],
-    //     candidate: perfectLeg.candidate,
-    //     type: perfectLeg.house.type,
-    // }
-
-    // TODO: "isHintValid" has to be updated as well for finned and sashimi X-Wings
-    // return isPerfectXWing(perfectLeg.cells, otherLeg.cells) // && (isHintValid({ type: HINTS_IDS.X_WING, data: xWing }) || true)
+    return result
 }
 
 const isPerfectLeg = candidateHostCells => {
