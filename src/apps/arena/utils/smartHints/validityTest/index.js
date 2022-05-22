@@ -8,6 +8,9 @@ import { isValidHiddenGroup } from './hiddenGroup'
 import { isValidXWing } from './xWing'
 import { isValidOmission } from './omission'
 
+// Y-Wing's verification is done in the file itself
+// i like the way it's done there. would like to use that
+// method to reduce the complexity in other type of hints as well
 const HINT_TYPE_VS_VALIDITY_CHECKER = {
     [HINTS_IDS.NAKED_SINGLE]: isValidNakedSingle,
     [HINTS_IDS.HIDDEN_SINGLE]: isValidHiddenSingle,
