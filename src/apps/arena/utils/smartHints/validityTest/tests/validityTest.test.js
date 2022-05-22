@@ -24,12 +24,12 @@ const mockBoardSelectors = mockedNotes => {
 describe('isValidNakedSingle()', () => {
     test('returns true for only one possible note in given cell and user also input one note in cell', () => {
         const { notesInfo } = require('./testData')
-        expect(isValidNakedSingle({ cell: { row: 8, col: 2 } }, notesInfo, notesInfo)).toBe(true)
+        expect(isValidNakedSingle({ cell: { row: 8, col: 2 } }, notesInfo)).toBe(true)
     })
 
     test('returns false for multiple possible notes in given cell but user input only one of the notes', () => {
         const { notesInfo } = require('./testData')
-        expect(isValidNakedSingle({ cell: { row: 5, col: 3 } }, notesInfo, notesInfo)).toBe(false)
+        expect(isValidNakedSingle({ cell: { row: 5, col: 3 } }, notesInfo)).toBe(false)
     })
 })
 
@@ -38,19 +38,19 @@ describe('isValidHiddenSingle()', () => {
     test('returns true for valid hidden single in block', () => {
         const { notesInfo } = require('./testData')
         const detectedHiddenSingle = { type: HOUSE_TYPE.BLOCK, cell: { row: 0, col: 2 }, candidate: 9 }
-        expect(isValidHiddenSingle(detectedHiddenSingle, notesInfo, notesInfo)).toBe(true)
+        expect(isValidHiddenSingle(detectedHiddenSingle, notesInfo)).toBe(true)
     })
 
     test('returns true for valid hidden single in column', () => {
         const { notesInfo } = require('./testData')
         const detectedHiddenSingle = { type: HOUSE_TYPE.COL, cell: { row: 1, col: 6 }, candidate: 3 }
-        expect(isValidHiddenSingle(detectedHiddenSingle, notesInfo, notesInfo)).toBe(true)
+        expect(isValidHiddenSingle(detectedHiddenSingle, notesInfo)).toBe(true)
     })
 
     test('returns false for candidate which appears multiple times in house', () => {
         const { notesInfo } = require('./testData')
         const detectedHiddenSingle = { type: HOUSE_TYPE.COL, cell: { row: 0, col: 1 }, candidate: 1 }
-        expect(isValidHiddenSingle(detectedHiddenSingle, notesInfo, notesInfo)).toBe(false)
+        expect(isValidHiddenSingle(detectedHiddenSingle, notesInfo)).toBe(false)
     })
 
 })
@@ -65,7 +65,7 @@ describe('isValidNakedGroup(), naked double', () => {
             groupCandidates: [4, 8],
             hostCells: [{ row: 3, col: 5 }, { row: 4, col: 5 }],
         }
-        expect(isValidNakedGroup(nakedDouble, notesInfo, notesInfo)).toBe(true)
+        expect(isValidNakedGroup(nakedDouble, notesInfo)).toBe(true)
     })
 
     test('returns false for when user input only two same candidates in two cells but one of the cell cell has an extra possible candidate', () => {
@@ -74,7 +74,7 @@ describe('isValidNakedGroup(), naked double', () => {
             groupCandidates: [5, 7],
             hostCells: [{ row: 0, col: 1 }, { row: 0, col: 3 }],
         }
-        expect(isValidNakedGroup(nakedDouble, notesInfo, notesInfo)).toBe(false)
+        expect(isValidNakedGroup(nakedDouble, notesInfo)).toBe(false)
     })
 })
 
@@ -86,7 +86,7 @@ describe('isValidNakedGroup(), naked tripple', () => {
             groupCandidates: [5, 6, 7],
             hostCells: [{ row: 6, col: 3 }, { row: 6, col: 5 }, { row: 7, col: 3 }],
         }
-        expect(isValidNakedGroup(nakedTripple, notesInfo, notesInfo)).toBe(true)
+        expect(isValidNakedGroup(nakedTripple, notesInfo)).toBe(true)
     })
 
     test('returns false for 3 candidates input by user in 3 cells of block house but one of the cells have extra candidates possible as well', () => {
@@ -95,7 +95,7 @@ describe('isValidNakedGroup(), naked tripple', () => {
             groupCandidates: [6, 7, 8],
             hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }, { row: 7, col: 1 }],
         }
-        expect(isValidNakedGroup(nakedTripple, notesInfo, notesInfo)).toBe(false)
+        expect(isValidNakedGroup(nakedTripple, notesInfo)).toBe(false)
     })
 
 })
@@ -109,7 +109,7 @@ describe('isValidHiddenGroup(), hidden double', () => {
             groupCandidates: [8, 9],
             hostCells: [{ row: 0, col: 4 }, { row: 2, col: 5 }],
         }
-        expect(isValidHiddenGroup(hiddenDouble, notesInfo, notesInfo)).toBe(true)
+        expect(isValidHiddenGroup(hiddenDouble, notesInfo)).toBe(true)
     })
 
     test('returns false for 2 same candidates input by user in 2 cells of block house but one of the candidate is also possible in one of other cells of the same house', () => {
@@ -118,7 +118,7 @@ describe('isValidHiddenGroup(), hidden double', () => {
             groupCandidates: [7, 8],
             hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }],
         }
-        expect(isValidNakedGroup(hiddenDouble, notesInfo, notesInfo)).toBe(false)
+        expect(isValidNakedGroup(hiddenDouble, notesInfo)).toBe(false)
     })
 
 })
@@ -132,7 +132,7 @@ describe('isValidOmission()', () => {
             houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1), // TODO: is it a good thing to pass the required data like this ??
             userNotesHostCells: [{ row: 0, col: 3 }, { row: 0, col: 4 }],
         }
-        expect(isValidOmission(omission, notesInfo, notesInfo)).toBe(true)
+        expect(isValidOmission(omission, notesInfo)).toBe(true)
     })
 
     test('returns false when omission is detected by user input but all the possible cells for note in the house were not filled by user', () => {
@@ -142,7 +142,7 @@ describe('isValidOmission()', () => {
             houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1),
             userNotesHostCells: [{ row: 1, col: 5 }, { row: 2, col: 5 }],
         }
-        expect(isValidOmission(omission, notesInfo, notesInfo)).toBe(false)
+        expect(isValidOmission(omission, notesInfo)).toBe(false)
     })
 
 })
@@ -168,7 +168,7 @@ describe('isValidXWing()', () => {
             ]
         }
 
-        expect(isValidXWing(xWing, notesInfo, notesInfo)).toBe(true)
+        expect(isValidXWing(xWing, notesInfo)).toBe(true)
     })
 
     test(`returns false for perfect x-wing detected where candidate is possible in the cells other than x-wing host cells but user didn't enter them`, () => {
@@ -190,7 +190,7 @@ describe('isValidXWing()', () => {
             ]
         }
 
-        expect(isValidXWing(xWing, notesInfo, notesInfo)).toBe(false)
+        expect(isValidXWing(xWing, notesInfo)).toBe(false)
     })
 
 })

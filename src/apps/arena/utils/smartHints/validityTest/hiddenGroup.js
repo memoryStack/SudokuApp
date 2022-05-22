@@ -1,6 +1,6 @@
 import { filterHouseCells, getCellHouseInfo, isCellExists } from '../../util'
 
-export const isValidHiddenGroup = ({ houseType, groupCandidates, hostCells }, _, possibleNotes) => {
+export const isValidHiddenGroup = ({ houseType, groupCandidates, hostCells }, possibleNotes) => {
     const { num: houseNum } = getCellHouseInfo(houseType, hostCells[0])
     const isAnyNotePresentInOtherCell = filterHouseCells({ type: houseType, num: houseNum }, (cell) => {
         return !isCellExists(cell, hostCells)

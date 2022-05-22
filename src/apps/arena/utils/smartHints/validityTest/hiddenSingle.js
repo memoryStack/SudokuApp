@@ -1,6 +1,6 @@
 import { forHouseEachCell, getCellHouseInfo } from '../../util'
 
-export const isValidHiddenSingle = ({ type: hostHouseType, cell, candidate }, _, possibleNotes) => {
+export const isValidHiddenSingle = ({ type: hostHouseType, cell, candidate }, possibleNotes) => {
     let candidatePossibleNotesCount = 0
 
     forHouseEachCell(getCellHouseInfo(hostHouseType, cell), ({ row, col }) => {

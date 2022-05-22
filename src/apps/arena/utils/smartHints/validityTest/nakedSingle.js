@@ -1,6 +1,6 @@
 import { forCellEachNote } from "../../util"
 
-export const isValidNakedSingle = ({ cell }, _, possibleNotes) => {
+export const isValidNakedSingle = ({ cell }, possibleNotes) => {
     const cellPossibleNotes = possibleNotes[cell.row][cell.col]
 
     let possibleNotesCount = 0

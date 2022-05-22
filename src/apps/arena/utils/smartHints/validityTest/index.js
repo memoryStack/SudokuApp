@@ -1,5 +1,5 @@
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getNotesInfo, getPossibleNotes } from '../../../store/selectors/board.selectors'
+import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import { GROUPS, HINTS_IDS } from '../constants'
 import { isValidHiddenSingle } from './hiddenSingle'
 import { isValidNakedSingle } from './nakedSingle'
@@ -24,6 +24,5 @@ export const isHintValid = ({ type, data }) => {
     if (!validityChecker) return true // default is true
 
     const possibleNotes = getPossibleNotes(getStoreState())
-    const userNotesInput = getNotesInfo(getStoreState())
-    return validityChecker(data, userNotesInput, possibleNotes)
+    return validityChecker(data, possibleNotes)
 }
