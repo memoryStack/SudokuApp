@@ -1,17 +1,13 @@
-import { getHouseCells } from '../../houseCells'
-import { getCellHouseInfo, isCellExists } from '../../util'
+import { filterHouseCells, getCellHouseInfo, isCellExists } from '../../util'
 
-export const isValidXWing = ({ cells, candidate, type: houseType }, _, possibleNotes) => {
-    const candidatePossibleInInvalidCellInAnyHouse = cells.some(houseXWingCells => {
-        const { num: houseNum } = getCellHouseInfo(houseType, houseXWingCells[0])
-        const houseCells = getHouseCells(houseType, houseNum)
-        const cellsWithoutXWingCells = houseCells.filter(cell => {
-            return !isCellExists(cell, houseXWingCells)
-        })
-        return cellsWithoutXWingCells.some(({ row, col }) => {
+export const isValidXWing = ({ legs, houseType }, _, possibleNotes) => {
+    const candidatePossibleInOtherThanHostCells = legs.some(({ candidate, cells: hostCells }) => {
+        return filterHouseCells(getCellHouseInfo(houseType, hostCells[0]), (cell) => {
+            return !isCellExists(cell, hostCells)
+        }).some(({ row, col }) => {
             return possibleNotes[row][col][candidate - 1].show
         })
     })
 
-    return !candidatePossibleInInvalidCellInAnyHouse
+    return !candidatePossibleInOtherThanHostCells
 }

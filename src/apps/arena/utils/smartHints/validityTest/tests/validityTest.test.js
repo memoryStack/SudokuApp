@@ -3,8 +3,11 @@ import { isValidHiddenSingle } from '../hiddenSingle'
 import { isValidNakedGroup } from '../nakedGroup'
 import { isValidHiddenGroup } from '../hiddenGroup'
 import { isValidOmission } from '../omission'
+import { isValidXWing } from '../xWing'
+
 import { HOUSE_TYPE } from '../../constants'
 import { getHouseCells } from '../../../houseCells'
+import { LEG_TYPES } from '../../xWing/constants'
 
 jest.mock('../../../../../../redux/dispatch.helpers')
 jest.mock('../../../../store/selectors/board.selectors')
@@ -140,6 +143,54 @@ describe('isValidOmission()', () => {
             userNotesHostCells: [{ row: 1, col: 5 }, { row: 2, col: 5 }],
         }
         expect(isValidOmission(omission, notesInfo, notesInfo)).toBe(false)
+    })
+
+})
+
+describe('isValidXWing()', () => {
+    // same validity check logic for all the types of X-Wings
+    test('returns true for sashimi-finned x-wing detected where candidate is not possible in the cells other than x-wing host cells', () => {
+        const { notesInfo } = require('./testData')
+
+        const xWing = {
+            houseType: HOUSE_TYPE.COL,
+            legs: [
+                {
+                    candidate: 5,
+                    cells: [{ row: 0, col: 2 }, { row: 8, col: 2 }],
+                    type: LEG_TYPES.PERFECT,
+                },
+                {
+                    candidate: 5,
+                    cells: [{ row: 0, col: 3 }, { row: 6, col: 3 }, { row: 7, col: 3 }],
+                    type: LEG_TYPES.SASHIMI_FINNED,
+                },
+            ]
+        }
+
+        expect(isValidXWing(xWing, notesInfo, notesInfo)).toBe(true)
+    })
+
+    test(`returns false for perfect x-wing detected where candidate is possible in the cells other than x-wing host cells but user didn't enter them`, () => {
+        const { notesInfo } = require('./testData')
+
+        const xWing = {
+            houseType: HOUSE_TYPE.ROW,
+            legs: [
+                {
+                    candidate: 5,
+                    cells: [{ row: 0, col: 1 }, { row: 0, col: 2 }],
+                    type: LEG_TYPES.PERFECT,
+                },
+                {
+                    candidate: 5,
+                    cells: [{ row: 8, col: 1 }, { row: 8, col: 2 }],
+                    type: LEG_TYPES.PERFECT,
+                },
+            ]
+        }
+
+        expect(isValidXWing(xWing, notesInfo, notesInfo)).toBe(false)
     })
 
 })
