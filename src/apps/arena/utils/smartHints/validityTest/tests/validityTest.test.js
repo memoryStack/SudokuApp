@@ -1,7 +1,7 @@
 import { isValidNakedSingle } from '../nakedSingle'
 import { isValidHiddenSingle } from '../hiddenSingle'
 import { isValidNakedGroup } from '../nakedGroup'
-// import { isValidNakedSingle } from '../nakedSingle'
+import { isValidHiddenGroup } from '../hiddenGroup'
 // import { isValidNakedSingle } from '../nakedSingle'
 import { HOUSE_TYPE } from '../../constants'
 
@@ -85,13 +85,36 @@ describe('isValidNakedGroup(), naked tripple', () => {
         expect(isValidNakedGroup(nakedTripple, notesInfo, notesInfo)).toBe(true)
     })
 
-    test('returns false for 3 candidates input by user in 3 cells of block house candidates in three cells of block house but cells have extra candidates possible as well', () => {
+    test('returns false for 3 candidates input by user in 3 cells of block house but one of the cells have extra candidates possible as well', () => {
         const { notesInfo } = require('./testData')
         const nakedTripple = {
             groupCandidates: [6, 7, 8],
             hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }, { row: 7, col: 1 }],
         }
         expect(isValidNakedGroup(nakedTripple, notesInfo, notesInfo)).toBe(false)
+    })
+
+})
+
+describe('isValidHiddenGroup(), naked double', () => {
+
+    test('returns true for only two same possible cells for 2 same candidates in block houseType', () => {
+        const { notesInfo } = require('./testData')
+        const hiddenDouble = {
+            houseType: HOUSE_TYPE.BLOCK,
+            groupCandidates: [8, 9],
+            hostCells: [{ row: 0, col: 4 }, { row: 2, col: 5 }],
+        }
+        expect(isValidHiddenGroup(hiddenDouble, notesInfo, notesInfo)).toBe(true)
+    })
+
+    test('returns false for 2 same candidates input by user in 2 cells of block house but one of the candidate is also possible in one of other cells of the same house', () => {
+        const { notesInfo } = require('./testData')
+        const hiddenDouble = {
+            groupCandidates: [7, 8],
+            hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }],
+        }
+        expect(isValidNakedGroup(hiddenDouble, notesInfo, notesInfo)).toBe(false)
     })
 
 })
