@@ -2,8 +2,9 @@ import { isValidNakedSingle } from '../nakedSingle'
 import { isValidHiddenSingle } from '../hiddenSingle'
 import { isValidNakedGroup } from '../nakedGroup'
 import { isValidHiddenGroup } from '../hiddenGroup'
-// import { isValidNakedSingle } from '../nakedSingle'
+import { isValidOmission } from '../omission'
 import { HOUSE_TYPE } from '../../constants'
+import { getHouseCells } from '../../../houseCells'
 
 jest.mock('../../../../../../redux/dispatch.helpers')
 jest.mock('../../../../store/selectors/board.selectors')
@@ -96,7 +97,7 @@ describe('isValidNakedGroup(), naked tripple', () => {
 
 })
 
-describe('isValidHiddenGroup(), naked double', () => {
+describe('isValidHiddenGroup(), hidden double', () => {
 
     test('returns true for only two same possible cells for 2 same candidates in block houseType', () => {
         const { notesInfo } = require('./testData')
@@ -115,6 +116,30 @@ describe('isValidHiddenGroup(), naked double', () => {
             hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }],
         }
         expect(isValidNakedGroup(hiddenDouble, notesInfo, notesInfo)).toBe(false)
+    })
+
+})
+
+describe('isValidOmission()', () => {
+
+    test('returns true when all possible cells of a note were input by user in one house and those cells also happens to be the cells of another house', () => {
+        const { notesInfo } = require('./testData')
+        const omission = {
+            note: 7,
+            houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1),
+            userNotesHostCells: [{ row: 0, col: 3 }, { row: 0, col: 4 }],
+        }
+        expect(isValidOmission(omission, notesInfo, notesInfo)).toBe(true)
+    })
+
+    test('returns false when omission is detected by user input but all the possible cells for note in the house were not filled by user', () => {
+        const { notesInfo } = require('./testData')
+        const omission = {
+            note: 5,
+            houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1),
+            userNotesHostCells: [{ row: 1, col: 5 }, { row: 2, col: 5 }],
+        }
+        expect(isValidOmission(omission, notesInfo, notesInfo)).toBe(false)
     })
 
 })
