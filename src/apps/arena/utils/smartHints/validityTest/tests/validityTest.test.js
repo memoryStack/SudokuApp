@@ -126,7 +126,7 @@ describe('isValidOmission()', () => {
         const { notesInfo } = require('./testData')
         const omission = {
             note: 7,
-            houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1),
+            houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1), // TODO: is it a good thing to pass the required data like this ??
             userNotesHostCells: [{ row: 0, col: 3 }, { row: 0, col: 4 }],
         }
         expect(isValidOmission(omission, notesInfo, notesInfo)).toBe(true)
