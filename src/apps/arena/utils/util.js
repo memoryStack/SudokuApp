@@ -306,3 +306,9 @@ export const forHouseEachCell = ({ type, num }, callback) => {
         callback(cell)
     })
 }
+
+export const filterHouseCells = ({ type, num }, filterCallback) => {
+    return getHouseCells(type, num).filter((cell) => {
+        return filterCallback(cell)
+    })
+}
