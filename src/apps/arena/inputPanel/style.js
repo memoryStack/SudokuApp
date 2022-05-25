@@ -32,5 +32,9 @@ export const getStyles = CELL_WIDTH => {
             textAlign: 'center',
             fontFamily: fonts.regular,
         },
+        eraser: {
+            width: '50%',
+            height: '50%',
+        }
     })
 }

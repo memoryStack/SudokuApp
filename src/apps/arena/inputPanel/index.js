@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import { getStyles } from './style'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { CloseIcon } from '../../../resources/svgIcons/close'
@@ -28,8 +28,12 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
                 onPress={onEraserClick}
                 touchable={TouchableTypes.opacity}
                 key={'erase_cell'}
-            >
-                <CloseIcon height={CLOSE_ICON_DIMENSION} width={CLOSE_ICON_DIMENSION} fill={'rgb(40, 90, 163)'} />
+            >   
+                <Image
+                    style={styles.eraser}
+                    source={require('../../../resources/assets/eraser.png')}
+                />
+                {/* <CloseIcon height={CLOSE_ICON_DIMENSION} width={CLOSE_ICON_DIMENSION} fill={'rgb(40, 90, 163)'} /> */}
             </Touchable>
         )
     }
