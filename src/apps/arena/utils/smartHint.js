@@ -19,7 +19,7 @@ const hintsHandlerMap = {
         return getAllNakedSingles(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.HIDDEN_SINGLE]: function (mainNumbers, notesData) {
-        return getAllHiddenSingles(mainNumbers, notesData)
+        return getAllHiddenSingles(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.NAKED_DOUBLE]: function (mainNumbers, notesData) {
         return hintsHandlerMap[GROUPS.NAKED_GROUP](2, mainNumbers, notesData)

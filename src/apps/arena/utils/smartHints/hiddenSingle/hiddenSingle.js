@@ -2,6 +2,7 @@ import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 import { isCellEmpty } from '../../util'
 import { getUIHighlightData } from './uiHighlightData'
 import { isHintValid } from '../validityTest'
+import { maxHintsLimitReached } from '../util'
 
 const getCellHiddenSingle = (cell, notesData) => {
     const { row, col } = cell
@@ -42,10 +43,16 @@ const getCellHiddenSingle = (cell, notesData) => {
     }
 }
 
-const getHiddenSinglesRawInfo = (mainNumbers, notesData) => {
+const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
+    
+    hintsSearchLoop:
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
+            if (maxHintsLimitReached(result, maxHintsThreshold)) {
+                break hintsSearchLoop
+            }
+
             const cell = { row, col }
             const skipCheckingHiddenSingle = !isCellEmpty(cell, mainNumbers) || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
             if (skipCheckingHiddenSingle) continue
@@ -57,8 +64,8 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData) => {
     return result
 }
 
-const getAllHiddenSingles = (mainNumbers, notesData) => {
-    const singles = getHiddenSinglesRawInfo(mainNumbers, notesData)
+const getAllHiddenSingles = (mainNumbers, notesData, maxHintsThreshold) => {
+    const singles = getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)
     return getUIHighlightData(singles, mainNumbers)
 }
 

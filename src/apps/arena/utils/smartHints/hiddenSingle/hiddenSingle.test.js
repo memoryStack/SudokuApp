@@ -35,5 +35,6 @@ test('hidden singles', () => {
         { cell: { row: 7, col: 2 }, mainNumber: 1, type: HIDDEN_SINGLE_TYPES.BLOCK },
         { cell: { row: 7, col: 6 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.BLOCK },
     ]
-    expect(getHiddenSinglesRawInfo(mainNumbers, notesData)).toStrictEqual(hiddenSingles)
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(hiddenSingles)
 })

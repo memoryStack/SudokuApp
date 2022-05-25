@@ -55,7 +55,7 @@ const getHouseType = (cell, mainNumbers) => {
     return NAKED_SINGLE_TYPES.MIX
 }
 
-const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold = 1) => {
+const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
     const result = []
 
     hintsSearchLoop:
