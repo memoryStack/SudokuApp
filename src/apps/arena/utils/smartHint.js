@@ -38,6 +38,7 @@ const hintsHandlerMap = {
             candidatesCount,
             notesData,
             mainNumbers,
+            UI_HINTS_COUNT_THRESHOLD,
         )
         if (nakedGroupFound) return returnData
         return null

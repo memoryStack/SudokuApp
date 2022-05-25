@@ -2,7 +2,7 @@ import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells } fro
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, SMART_HINTS_CELLS_BG_COLOR } from './constants'
-import { setCellDataInHintResult } from './util'
+import { maxHintsLimitReached, setCellDataInHintResult } from './util'
 import { isHintValid } from './validityTest'
 
 // TODO: write test case for it and refactor it properly
@@ -96,7 +96,7 @@ const getHouseCellsNum = (cells, houseType) => {
 
 // TODO: break this file
 // TODO: think over the namings harder. i see a lot of in-consistencies
-export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard) => {
+export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard, maxHintsThreshold) => {
     const houseType = ['block', 'row', 'col']
 
     const groupsFoundInHouses = {
@@ -106,6 +106,8 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
     }
 
     const hints = []
+
+    hintsSearchLoop:
     for (let j = 0; j < houseType.length; j++) {
         for (let i = 0; i < 9; i++) {
             const houseNum = {
@@ -153,6 +155,10 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
             const possibleSelections = N_CHOOSE_K[validBoxesCount][noOfInstances]
 
             for (let k = 0; k < possibleSelections.length; k++) {
+                if (maxHintsLimitReached(hints, maxHintsThreshold)) {
+                    break hintsSearchLoop
+                }
+
                 const selectedBoxes = []
                 for (let x = 0; x < possibleSelections[k].length; x++) {
                     const selectedIndex = possibleSelections[k][x]
