@@ -59,6 +59,25 @@ const prepareNakedDublesOrTriplesHintData = (
     const hintMessage = () =>
         `In the highlighted region, ${groupCellsCountEnglishText} cells have exactly same candidates ${getGroupCandidatesListText()} highlighted in green color. ${getCellsHostingText()} So ${getGroupCandidatesListText()} highlighted in red color can't appear there and we can erase these instances from these cells`
 
+    const hintList = [
+        `A Naked Pair is a set of two candidate numbers filled in two cells that belong to at least one unit in common. That is, they reside in the same row, column or box.\nNote: these two cells can't have more than 2 different set of candidates`,
+        `${groupCandidates[0]} and ${groupCandidates[1]} make a naked double in the highlighted region. in the solution ${groupCandidates[0]} and ${groupCandidates[1]} will be placed in Naked Double cells only and all the candidates of ${groupCandidates[0]} and ${groupCandidates[1]} can be removed from other cells of the highlighted region. ${groupCandidates[0]} and ${groupCandidates[1]} will go in exactly which Naked Pair cell is yet not clear.`,
+        `let's say that ${groupCandidates[0]} can't come in any of Naked Pair cells then ${groupCandidates[1]} has to come in both Naked Pair cells, if we do so then solution will be invalid. we can try it with the ${groupCandidates[1]} as well but solution will be invalid in both the cases.`,
+        `try out`
+    ]
+
+    return hintList.map((hintChunk) => {
+        return {
+            cellsToFocusData,
+            techniqueInfo: {
+                title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
+                logic: hintChunk,
+            },
+        }
+    })
+
+
+    // return an araay from here in multistep
     return {
         cellsToFocusData,
         techniqueInfo: {
@@ -267,7 +286,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 if (isValidNakedGroup) {
                     consoleLog('@@@@ naked double', selectedBoxes, groupCandidates)
                     hints.push(
-                        prepareNakedDublesOrTriplesHintData(
+                        ...prepareNakedDublesOrTriplesHintData( // an array of hints pieces will be returned
                             noOfInstances,
                             houseAllBoxes,
                             selectedBoxes,
