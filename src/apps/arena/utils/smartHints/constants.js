@@ -1,5 +1,7 @@
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../../gameBoard/style'
 
+const UI_HINTS_COUNT_THRESHOLD = 1;
+
 const HOUSE_TYPE = {
     ROW: 'row',
     COL: 'col',
@@ -124,4 +126,5 @@ export {
     HINTS_IDS,
     INDEPENDENT_HINTS_MENU_ITEMS,
     NO_HINTS_FOUND_POPUP_TEXT,
+    UI_HINTS_COUNT_THRESHOLD,
 }

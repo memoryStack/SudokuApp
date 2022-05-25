@@ -2,7 +2,12 @@ import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
 import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
-import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS } from './smartHints/constants'
+import {
+    GROUPS,
+    HINTS_IDS,
+    INDEPENDENT_HINTS_MENU_ITEMS,
+    UI_HINTS_COUNT_THRESHOLD
+} from './smartHints/constants'
 import { getXWingHints } from './smartHints/xWing'
 import { getYWingsHints } from './smartHints/yWing/yWing'
 import { getOmissionHints } from './smartHints/omission/omission'
@@ -11,7 +16,7 @@ import { getOmissionHints } from './smartHints/omission/omission'
 // sorts of things from it's dependent modules
 const hintsHandlerMap = {
     [HINTS_IDS.NAKED_SINGLE]: function (mainNumbers, notesData) {
-        return getAllNakedSingles(mainNumbers, notesData)
+        return getAllNakedSingles(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.HIDDEN_SINGLE]: function (mainNumbers, notesData) {
         return getAllHiddenSingles(mainNumbers, notesData)

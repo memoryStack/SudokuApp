@@ -3,4 +3,11 @@ const setCellDataInHintResult = (cell, highlightData, cellsToFocusData) => {
     cellsToFocusData[cell.row][cell.col] = highlightData
 }
 
-export { setCellDataInHintResult }
+const maxHintsLimitReached = (hints, maxHintsThreshold) => {
+    return hints.length === maxHintsThreshold
+}
+
+export {
+    setCellDataInHintResult,
+    maxHintsLimitReached,
+}

@@ -1,6 +1,7 @@
 import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
 import { isCellEmpty } from '../../util'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
+import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
 
@@ -54,23 +55,34 @@ const getHouseType = (cell, mainNumbers) => {
     return NAKED_SINGLE_TYPES.MIX
 }
 
-const getNakedSinglesRawInfo = (mainNumbers, notesInfo) => {
+const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold = 1) => {
     const result = []
+
+    hintsSearchLoop:
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
-            if (mainNumbers[row][col].value) continue
+            if (mainNumbers[row][col].value) {
+                continue
+            }
+            if (maxHintsLimitReached(result, maxHintsThreshold)) {
+                break hintsSearchLoop
+            }
+
             const cell = { row, col }
             // TODO: change "mainNumber" field name. it doesn't feel right.
             const { present, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
             const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
-            if (present && isValid) result.push({ cell, mainNumber, type: getHouseType(cell, mainNumbers) })
+            if (present && isValid) {
+                result.push({ cell, mainNumber, type: getHouseType(cell, mainNumbers) })
+            }
         }
     }
+
     return result
 }
 
-const getAllNakedSingles = (mainNumbers, notesInfo) => {
-    const singles = getNakedSinglesRawInfo(mainNumbers, notesInfo)
+const getAllNakedSingles = (mainNumbers, notesInfo, maxHintsThreshold) => {
+    const singles = getNakedSinglesRawInfo(mainNumbers, notesInfo, maxHintsThreshold)
     return getUIHighlightData(singles, mainNumbers)
 }
 

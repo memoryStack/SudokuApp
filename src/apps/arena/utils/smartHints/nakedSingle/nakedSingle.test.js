@@ -29,5 +29,6 @@ test('naked singles', () => {
         { cell: { row: 8, col: 4 }, mainNumber: 5, type: NAKED_SINGLE_TYPES.MIX },
         { cell: { row: 8, col: 5 }, mainNumber: 6, type: NAKED_SINGLE_TYPES.MIX },
     ]
-    expect(getNakedSinglesRawInfo(mainNumbersTestOne, notesDataTestOne)).toStrictEqual(nakedSinglesData)
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getNakedSinglesRawInfo(mainNumbersTestOne, notesDataTestOne, maxHintsThreshold)).toStrictEqual(nakedSinglesData)
 })
