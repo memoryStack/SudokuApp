@@ -50,7 +50,8 @@ test('yWing', () => {
             wingsCommonNote: 7,
         },
     ]
-    expect(getAllYWings(mainNumbers, notesData)).toStrictEqual(expectedYWings)
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getAllYWings(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedYWings)
 })
 
 test('all valid yWing cells', () => {

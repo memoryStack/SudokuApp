@@ -12,6 +12,7 @@ import {
     areSameCellsSets,
 } from '../../util'
 import { HOUSE_TYPE } from '../constants'
+import { maxHintsLimitReached } from '../util'
 import { getYWingHintUIHighlightData } from './uiHighlightData'
 
 const VALID_NOTES_COUNT_IN_CELL = 2
@@ -183,18 +184,21 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
     return result
 }
 
-export const getAllYWings = (mainNumbers, notesData) => {
+export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData))
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     allHouses.forEach(houseType => {
         for (let houseNum = 0; houseNum < 9; houseNum++) {
+            if (maxHintsLimitReached(result, maxHintsThreshold)) break
+
             const houseYWings = getHouseYWings({ type: houseType, num: houseNum }, housesYWingEligibleCells).filter(
                 newYWing => {
                     return !isDuplicateYWing(newYWing, result)
                 },
-            )
+            ).slice(0, maxHintsThreshold)
+
             result.push(...houseYWings)
         }
     })
@@ -202,8 +206,8 @@ export const getAllYWings = (mainNumbers, notesData) => {
     return result
 }
 
-export const getYWingsHints = (mainNumbers, notesData) => {
-    const rawYWings = getAllYWings(mainNumbers, notesData)
+export const getYWingsHints = (mainNumbers, notesData, maxHintsThreshold) => {
+    const rawYWings = getAllYWings(mainNumbers, notesData, maxHintsThreshold)
 
     if (!rawYWings.length) return null
 
