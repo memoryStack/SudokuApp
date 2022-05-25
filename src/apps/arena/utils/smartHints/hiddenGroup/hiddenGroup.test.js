@@ -70,7 +70,8 @@ test('hidden doubles', () => {
             ],
         },
     ]
-    expect(getAllHiddenGroups(2, notesData, mainNumbers)).toStrictEqual(expectedResult)
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getAllHiddenGroups(2, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples', () => {
@@ -92,7 +93,8 @@ test('hidden tripples', () => {
             ],
         },
     ]
-    expect(getAllHiddenGroups(3, notesData, mainNumbers)).toStrictEqual(expectedResult)
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getAllHiddenGroups(3, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples duplicate houses with same group cells', () => {
@@ -134,5 +136,6 @@ test('hidden tripples duplicate houses with same group cells', () => {
             ],
         },
     ]
-    expect(getAllHiddenGroups(3, multipleHousesHiddenGroupNotesData, mainNumbers)).toStrictEqual(expectedResult)
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getAllHiddenGroups(3, multipleHousesHiddenGroupNotesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
 })

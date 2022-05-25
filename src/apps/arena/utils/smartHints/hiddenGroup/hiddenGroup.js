@@ -5,6 +5,7 @@ import { areSameCells, isCellEmpty, isCellExists } from '../../util'
 import { getGroupUIHighlightData } from './uiHighlightData'
 import { getHouseCells } from '../../houseCells'
 import { isHintValid } from '../validityTest'
+import { maxHintsLimitReached } from '../util'
 
 const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
     if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount
@@ -105,11 +106,13 @@ const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCou
     return result
 }
 
-const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
+const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const result = []
     const houseIterationOrder = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     houseIterationOrder.forEach(houseType => {
         for (let houseNum = 0; houseNum < 9; houseNum++) {
+            if (maxHintsLimitReached(result, maxHintsThreshold)) break
+
             const validCandidatesWithLocations = validCandidatesInHouseAndTheirLocations(
                 houseType,
                 houseNum,
@@ -150,8 +153,8 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
     return result
 }
 
-const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers) => {
-    const groupsRawData = getAllHiddenGroups(groupCandidatesCount, notesData, mainNumbers)
+const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+    const groupsRawData = getAllHiddenGroups(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
 
     consoleLog('@@@@@@@ groupsRawData', JSON.stringify(groupsRawData))
 

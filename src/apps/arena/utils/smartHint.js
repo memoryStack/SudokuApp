@@ -44,7 +44,7 @@ const hintsHandlerMap = {
         return null
     },
     [GROUPS.HIDDEN_GROUP]: function (candidatesCount, mainNumbers, notesData) {
-        const { present, returnData } = highlightHiddenGroups(candidatesCount, notesData, mainNumbers)
+        const { present, returnData } = highlightHiddenGroups(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD)
         if (present) return returnData
         return null
     },
