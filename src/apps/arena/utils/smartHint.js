@@ -49,7 +49,7 @@ const hintsHandlerMap = {
         return null
     },
     [HINTS_IDS.X_WING]: function (mainNumbers, notesData) {
-        return getXWingHints(mainNumbers, notesData)
+        return getXWingHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.Y_WING]: function (mainNumbers, notesData) {
         const yWingsData = getYWingsHints(mainNumbers, notesData)

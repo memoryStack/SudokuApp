@@ -311,10 +311,10 @@ export const getAllXWings = (mainNumbers, notesData) => {
     return result
 }
 
-export const getXWingHints = (mainNumbers, notesData) => {
+export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const xWings = getAllXWings(mainNumbers, notesData).filter(xWing => {
         return removableNotesInCrossHouse(xWing, notesData)
-    })
+    }).slice(0, maxHintsThreshold)
 
     return getUIHighlightData(xWings, notesData)
 }
