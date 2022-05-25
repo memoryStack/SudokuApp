@@ -176,12 +176,15 @@ export const getXWingType = (legA, legB, xWingHouseType) => {
     const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
 
     let result = XWING_TYPES.INVALID
-    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.PERFECT
-    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.FINNED
+    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
+        result = XWING_TYPES.PERFECT
+    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells))
+        result = XWING_TYPES.FINNED
     if (isSashimiFinnedXWing(perfectLeg, otherLeg, xWingHouseType)) result = XWING_TYPES.SASHIMI_FINNED
 
     const hintValidityCheckerPayload = { legs: [legA, legB], houseType: xWingHouseType }
-    if (result !== XWING_TYPES.INVALID && !isHintValid({ type: HINTS_IDS.X_WING, data: hintValidityCheckerPayload })) result = XWING_TYPES.INVALID
+    if (result !== XWING_TYPES.INVALID && !isHintValid({ type: HINTS_IDS.X_WING, data: hintValidityCheckerPayload }))
+        result = XWING_TYPES.INVALID
 
     return result
 }
@@ -296,7 +299,10 @@ export const getAllXWings = (mainNumbers, notesData) => {
                     const secondLeg = candidateXWingLegsInHouses[j]
                     const xWingType = getXWingType(firstLeg, secondLeg, houseType)
                     if (xWingType !== XWING_TYPES.INVALID) {
-                        const xWingLegs = (xWingType === XWING_TYPES.SASHIMI_FINNED) ? transformSashimiXWingLeg(firstLeg, secondLeg, houseType) : [firstLeg, secondLeg]
+                        const xWingLegs =
+                            xWingType === XWING_TYPES.SASHIMI_FINNED
+                                ? transformSashimiXWingLeg(firstLeg, secondLeg, houseType)
+                                : [firstLeg, secondLeg]
                         result.push({
                             houseType,
                             type: xWingType,
@@ -312,9 +318,11 @@ export const getAllXWings = (mainNumbers, notesData) => {
 }
 
 export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const xWings = getAllXWings(mainNumbers, notesData).filter(xWing => {
-        return removableNotesInCrossHouse(xWing, notesData)
-    }).slice(0, maxHintsThreshold)
+    const xWings = getAllXWings(mainNumbers, notesData)
+        .filter(xWing => {
+            return removableNotesInCrossHouse(xWing, notesData)
+        })
+        .slice(0, maxHintsThreshold)
 
     return getUIHighlightData(xWings, notesData)
 }

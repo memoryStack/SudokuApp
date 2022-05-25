@@ -107,8 +107,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
 
     const hints = []
 
-    hintsSearchLoop:
-    for (let j = 0; j < houseType.length; j++) {
+    hintsSearchLoop: for (let j = 0; j < houseType.length; j++) {
         for (let i = 0; i < 9; i++) {
             const houseNum = {
                 row: i,
@@ -260,8 +259,8 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 const isValidNakedGroup = isHintValid({
                     type: GROUPS.NAKED_GROUP,
                     data: {
-                        groupCandidates: groupCandidates.map((candidate) => parseInt(candidate, 10)),
-                        hostCells: selectedBoxes
+                        groupCandidates: groupCandidates.map(candidate => parseInt(candidate, 10)),
+                        hostCells: selectedBoxes,
                     },
                 })
                 if (isValidNakedGroup) {

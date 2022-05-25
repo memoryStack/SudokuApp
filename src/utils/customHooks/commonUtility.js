@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
-const usePrevious = (value) => {
-    const currentRef = useRef(value);
-    const previousRef = useRef();
+const usePrevious = value => {
+    const currentRef = useRef(value)
+    const previousRef = useRef()
 
     if (currentRef.current !== value) {
-        previousRef.current = currentRef.current;
-        currentRef.current = value;
+        previousRef.current = currentRef.current
+        currentRef.current = value
     }
 
-    return previousRef.current;
+    return previousRef.current
 }
 
 const usePreviousRenderValue = value => {

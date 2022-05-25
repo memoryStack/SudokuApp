@@ -14,7 +14,12 @@ import {
 } from '.'
 import { HOUSE_TYPE } from '../constants'
 import { LEG_TYPES, XWING_TYPES } from './constants'
-import { categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getCrossHouseType, addCellInXWingLeg } from './utils'
+import {
+    categorizeFinnedLegCells,
+    getFinnedXWingRemovableNotesHostCells,
+    getCrossHouseType,
+    addCellInXWingLeg,
+} from './utils'
 
 jest.mock('../../../../../redux/dispatch.helpers')
 jest.mock('../../../store/selectors/board.selectors')
@@ -678,7 +683,6 @@ describe(' check if finned X-Wing removes notes or not ', () => {
         }
         expect(isFinnedXWingRemovesNotes(data, notesData)).toBe(true)
     })
-
 })
 
 describe(' removable notes host cells for finned X-Wing ', () => {
@@ -1047,8 +1051,17 @@ describe('addCellInXWingLeg()', () => {
     test('adds new cell in front in row type X-Wing in sorted order', () => {
         const xWingHouseType = HOUSE_TYPE.ROW
         const cellToInsert = { row: 3, col: 2 }
-        const legCells = [{ row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }]
-        const expectedResult = [{ row: 3, col: 2 }, { row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 8 }]
+        const legCells = [
+            { row: 3, col: 3 },
+            { row: 3, col: 4 },
+            { row: 3, col: 8 },
+        ]
+        const expectedResult = [
+            { row: 3, col: 2 },
+            { row: 3, col: 3 },
+            { row: 3, col: 4 },
+            { row: 3, col: 8 },
+        ]
         addCellInXWingLeg(cellToInsert, legCells, xWingHouseType)
         expect(legCells).toStrictEqual(expectedResult)
     })
@@ -1056,8 +1069,17 @@ describe('addCellInXWingLeg()', () => {
     test('adds new cell in last in column type X-Wing in sorted order', () => {
         const xWingHouseType = HOUSE_TYPE.COL
         const cellToInsert = { row: 6, col: 2 }
-        const legCells = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 4, col: 2 }]
-        const expectedResult = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 4, col: 2 }, { row: 6, col: 2 }]
+        const legCells = [
+            { row: 1, col: 2 },
+            { row: 3, col: 2 },
+            { row: 4, col: 2 },
+        ]
+        const expectedResult = [
+            { row: 1, col: 2 },
+            { row: 3, col: 2 },
+            { row: 4, col: 2 },
+            { row: 6, col: 2 },
+        ]
         addCellInXWingLeg(cellToInsert, legCells, xWingHouseType)
         expect(legCells).toStrictEqual(expectedResult)
     })
@@ -1065,8 +1087,17 @@ describe('addCellInXWingLeg()', () => {
     test('adds new cell in middle in column type X-Wing in sorted order', () => {
         const xWingHouseType = HOUSE_TYPE.COL
         const cellToInsert = { row: 4, col: 2 }
-        const legCells = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 6, col: 2 }]
-        const expectedResult = [{ row: 1, col: 2 }, { row: 3, col: 2 }, { row: 4, col: 2 }, { row: 6, col: 2 }]
+        const legCells = [
+            { row: 1, col: 2 },
+            { row: 3, col: 2 },
+            { row: 6, col: 2 },
+        ]
+        const expectedResult = [
+            { row: 1, col: 2 },
+            { row: 3, col: 2 },
+            { row: 4, col: 2 },
+            { row: 6, col: 2 },
+        ]
         addCellInXWingLeg(cellToInsert, legCells, xWingHouseType)
         expect(legCells).toStrictEqual(expectedResult)
     })
@@ -1104,12 +1135,11 @@ describe('transformSashimiXWingLeg()', () => {
                     { row: 3, col: 8 },
                 ],
                 type: LEG_TYPES.SASHIMI_FINNED,
-            }
+            },
         ]
 
         expect(transformSashimiXWingLeg(legA, legB, houseType)).toStrictEqual(expectedResult)
     })
-
 })
 
 // TODO: add more test-cses for this func

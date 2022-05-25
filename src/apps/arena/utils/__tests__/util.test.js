@@ -386,16 +386,16 @@ describe('all possible notes in house', () => {
 
 describe('forCellEachNote()', () => {
     test('calls the callback 9 times, once for each note', () => {
-        const mockCallback = jest.fn();
+        const mockCallback = jest.fn()
         forCellEachNote(mockCallback)
-        expect(mockCallback.mock.calls.length).toBe(9);
+        expect(mockCallback.mock.calls.length).toBe(9)
     })
 })
 
 describe('forEachCell()', () => {
     test('calls the callback 81 times, oncefor each cell', () => {
-        const mockCallback = jest.fn();
+        const mockCallback = jest.fn()
         forEachCell(mockCallback)
-        expect(mockCallback.mock.calls.length).toBe(81);
+        expect(mockCallback.mock.calls.length).toBe(81)
     })
 })

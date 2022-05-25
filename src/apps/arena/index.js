@@ -115,8 +115,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [route, onAction])
 
     useEffect(() => {
-        if (isGameOver(gameState))
-            onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim })
+        if (isGameOver(gameState)) onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim })
     }, [gameState, onAction])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
@@ -136,12 +135,15 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
     }, [onAction, gameState])
 
-    const onStartCustomPuzzle = useCallback(mainNumbers => {
-        onAction({
-            type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
-            payload: mainNumbers,
-        })
-    }, [onAction])
+    const onStartCustomPuzzle = useCallback(
+        mainNumbers => {
+            onAction({
+                type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
+                payload: mainNumbers,
+            })
+        },
+        [onAction],
+    )
 
     const onCustomPuzzleHCClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
@@ -152,15 +154,19 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [])
 
     const handleSharePuzzleClick = useCallback(() => {
-        const puzzleAvailableToShare = gameState === GAME_STATE.ACTIVE || (gameState === GAME_STATE.GAME_SELECT && isGameOver(previousGameState))
+        const puzzleAvailableToShare =
+            gameState === GAME_STATE.ACTIVE || (gameState === GAME_STATE.GAME_SELECT && isGameOver(previousGameState))
         if (puzzleAvailableToShare) onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
     }, [gameState, previousGameState])
 
     const handleBackPress = () => onAction({ type: ACTION_TYPES.ON_BACK_PRESS })
 
-    const onNewGameMenuItemClick = useCallback(item => {
-        onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
-    }, [onAction])
+    const onNewGameMenuItemClick = useCallback(
+        item => {
+            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
+        },
+        [onAction],
+    )
 
     const onNewGameMenuClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_CLOSE })
@@ -168,12 +174,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
-        return (
-            <Button
-                text={'Fill'}
-                onClick={fillPuzzle}
-            />
-        )
+        return <Button text={'Fill'} onClick={fillPuzzle} />
     }
 
     const header = useMemo(() => {

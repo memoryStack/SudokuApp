@@ -113,9 +113,11 @@ export const getAllOmissions = (mainNumbers, notesData) => {
 }
 
 export const getOmissionHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const omissions = getAllOmissions(mainNumbers, notesData, maxHintsThreshold).filter(newOmission => {
-        return removesNotes(newOmission, mainNumbers, notesData)
-    }).slice(0, maxHintsThreshold)
+    const omissions = getAllOmissions(mainNumbers, notesData, maxHintsThreshold)
+        .filter(newOmission => {
+            return removesNotes(newOmission, mainNumbers, notesData)
+        })
+        .slice(0, maxHintsThreshold)
 
     return omissions.map(omission => {
         return getUIHighlightData(omission, notesData)

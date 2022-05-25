@@ -3,11 +3,7 @@ import { PENCIL_STATE } from '../../../../resources/constants'
 import { boardControllerActions } from '../reducers/boardController.reducers'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 
-const {
-    setPencil,
-    setHintsMenu,
-    resetState,
-} = boardControllerActions
+const { setPencil, setHintsMenu, resetState } = boardControllerActions
 
 const getNewPencilState = currentState => {
     if (!currentState) return PENCIL_STATE.INACTIVE

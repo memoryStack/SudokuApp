@@ -7,7 +7,4 @@ const maxHintsLimitReached = (hints, maxHintsThreshold) => {
     return hints.length >= maxHintsThreshold
 }
 
-export {
-    setCellDataInHintResult,
-    maxHintsLimitReached,
-}
+export { setCellDataInHintResult, maxHintsLimitReached }
