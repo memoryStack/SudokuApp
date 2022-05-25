@@ -1,4 +1,4 @@
-import { forCellEachNote } from "../../util"
+import { forCellEachNote } from '../../util'
 
 export const isValidNakedSingle = ({ cell }, possibleNotes) => {
     const cellPossibleNotes = possibleNotes[cell.row][cell.col]

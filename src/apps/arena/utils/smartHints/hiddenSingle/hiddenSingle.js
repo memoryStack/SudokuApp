@@ -45,16 +45,16 @@ const getCellHiddenSingle = (cell, notesData) => {
 
 const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
-    
-    hintsSearchLoop:
-    for (let row = 0; row < 9; row++) {
+
+    hintsSearchLoop: for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (maxHintsLimitReached(result, maxHintsThreshold)) {
                 break hintsSearchLoop
             }
 
             const cell = { row, col }
-            const skipCheckingHiddenSingle = !isCellEmpty(cell, mainNumbers) || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
+            const skipCheckingHiddenSingle =
+                !isCellEmpty(cell, mainNumbers) || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
             if (skipCheckingHiddenSingle) continue
 
             const { present, type, mainNumber } = getCellHiddenSingle(cell, notesData)

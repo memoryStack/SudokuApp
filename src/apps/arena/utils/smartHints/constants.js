@@ -1,6 +1,6 @@
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../../gameBoard/style'
 
-const UI_HINTS_COUNT_THRESHOLD = 1;
+const UI_HINTS_COUNT_THRESHOLD = 1
 
 const HOUSE_TYPE = {
     ROW: 'row',

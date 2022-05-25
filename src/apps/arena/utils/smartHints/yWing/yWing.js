@@ -193,11 +193,11 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
         for (let houseNum = 0; houseNum < 9; houseNum++) {
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
-            const houseYWings = getHouseYWings({ type: houseType, num: houseNum }, housesYWingEligibleCells).filter(
-                newYWing => {
+            const houseYWings = getHouseYWings({ type: houseType, num: houseNum }, housesYWingEligibleCells)
+                .filter(newYWing => {
                     return !isDuplicateYWing(newYWing, result)
-                },
-            ).slice(0, maxHintsThreshold)
+                })
+                .slice(0, maxHintsThreshold)
 
             result.push(...houseYWings)
         }

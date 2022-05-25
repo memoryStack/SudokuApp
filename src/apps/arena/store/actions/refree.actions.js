@@ -5,14 +5,7 @@ import { getGameState } from '../selectors/gameState.selectors'
 import { getTime } from '../selectors/refree.selectors'
 import { updateGameState } from './gameState.actions'
 
-const {
-    resetMistakes,
-    increaseMistakes,
-    setMistakes,
-    setDifficultylevel,
-    setTime,
-    resetState,
-} = refreeActions
+const { resetMistakes, increaseMistakes, setMistakes, setDifficultylevel, setTime, resetState } = refreeActions
 
 export const clearMistakes = () => invokeDispatch(resetMistakes())
 

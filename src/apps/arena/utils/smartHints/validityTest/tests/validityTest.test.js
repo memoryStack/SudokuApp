@@ -34,7 +34,6 @@ describe('isValidNakedSingle()', () => {
 })
 
 describe('isValidHiddenSingle()', () => {
-
     test('returns true for valid hidden single in block', () => {
         const { notesInfo } = require('./testData')
         const detectedHiddenSingle = { type: HOUSE_TYPE.BLOCK, cell: { row: 0, col: 2 }, candidate: 9 }
@@ -52,7 +51,6 @@ describe('isValidHiddenSingle()', () => {
         const detectedHiddenSingle = { type: HOUSE_TYPE.COL, cell: { row: 0, col: 1 }, candidate: 1 }
         expect(isValidHiddenSingle(detectedHiddenSingle, notesInfo)).toBe(false)
     })
-
 })
 
 describe('isValidNakedGroup(), naked double', () => {
@@ -63,7 +61,10 @@ describe('isValidNakedGroup(), naked double', () => {
         const { notesInfo } = require('./testData')
         const nakedDouble = {
             groupCandidates: [4, 8],
-            hostCells: [{ row: 3, col: 5 }, { row: 4, col: 5 }],
+            hostCells: [
+                { row: 3, col: 5 },
+                { row: 4, col: 5 },
+            ],
         }
         expect(isValidNakedGroup(nakedDouble, notesInfo)).toBe(true)
     })
@@ -72,19 +73,25 @@ describe('isValidNakedGroup(), naked double', () => {
         const { notesInfo } = require('./testData')
         const nakedDouble = {
             groupCandidates: [5, 7],
-            hostCells: [{ row: 0, col: 1 }, { row: 0, col: 3 }],
+            hostCells: [
+                { row: 0, col: 1 },
+                { row: 0, col: 3 },
+            ],
         }
         expect(isValidNakedGroup(nakedDouble, notesInfo)).toBe(false)
     })
 })
 
 describe('isValidNakedGroup(), naked tripple', () => {
-
     test('returns true for only 3 same candidates in three cells of block house, cells can have two candidates as well from group-set', () => {
         const { notesInfo } = require('./testData')
         const nakedTripple = {
             groupCandidates: [5, 6, 7],
-            hostCells: [{ row: 6, col: 3 }, { row: 6, col: 5 }, { row: 7, col: 3 }],
+            hostCells: [
+                { row: 6, col: 3 },
+                { row: 6, col: 5 },
+                { row: 7, col: 3 },
+            ],
         }
         expect(isValidNakedGroup(nakedTripple, notesInfo)).toBe(true)
     })
@@ -93,21 +100,26 @@ describe('isValidNakedGroup(), naked tripple', () => {
         const { notesInfo } = require('./testData')
         const nakedTripple = {
             groupCandidates: [6, 7, 8],
-            hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }, { row: 7, col: 1 }],
+            hostCells: [
+                { row: 6, col: 0 },
+                { row: 7, col: 0 },
+                { row: 7, col: 1 },
+            ],
         }
         expect(isValidNakedGroup(nakedTripple, notesInfo)).toBe(false)
     })
-
 })
 
 describe('isValidHiddenGroup(), hidden double', () => {
-
     test('returns true for only two same possible cells for 2 same candidates in block houseType', () => {
         const { notesInfo } = require('./testData')
         const hiddenDouble = {
             houseType: HOUSE_TYPE.BLOCK,
             groupCandidates: [8, 9],
-            hostCells: [{ row: 0, col: 4 }, { row: 2, col: 5 }],
+            hostCells: [
+                { row: 0, col: 4 },
+                { row: 2, col: 5 },
+            ],
         }
         expect(isValidHiddenGroup(hiddenDouble, notesInfo)).toBe(true)
     })
@@ -116,21 +128,25 @@ describe('isValidHiddenGroup(), hidden double', () => {
         const { notesInfo } = require('./testData')
         const hiddenDouble = {
             groupCandidates: [7, 8],
-            hostCells: [{ row: 6, col: 0 }, { row: 7, col: 0 }],
+            hostCells: [
+                { row: 6, col: 0 },
+                { row: 7, col: 0 },
+            ],
         }
         expect(isValidNakedGroup(hiddenDouble, notesInfo)).toBe(false)
     })
-
 })
 
 describe('isValidOmission()', () => {
-
     test('returns true when all possible cells of a note were input by user in one house and those cells also happens to be the cells of another house', () => {
         const { notesInfo } = require('./testData')
         const omission = {
             note: 7,
             houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1), // TODO: is it a good thing to pass the required data like this ??
-            userNotesHostCells: [{ row: 0, col: 3 }, { row: 0, col: 4 }],
+            userNotesHostCells: [
+                { row: 0, col: 3 },
+                { row: 0, col: 4 },
+            ],
         }
         expect(isValidOmission(omission, notesInfo)).toBe(true)
     })
@@ -140,11 +156,13 @@ describe('isValidOmission()', () => {
         const omission = {
             note: 5,
             houseCells: getHouseCells(HOUSE_TYPE.BLOCK, 1),
-            userNotesHostCells: [{ row: 1, col: 5 }, { row: 2, col: 5 }],
+            userNotesHostCells: [
+                { row: 1, col: 5 },
+                { row: 2, col: 5 },
+            ],
         }
         expect(isValidOmission(omission, notesInfo)).toBe(false)
     })
-
 })
 
 describe('isValidXWing()', () => {
@@ -157,15 +175,22 @@ describe('isValidXWing()', () => {
             legs: [
                 {
                     candidate: 5,
-                    cells: [{ row: 0, col: 2 }, { row: 8, col: 2 }],
+                    cells: [
+                        { row: 0, col: 2 },
+                        { row: 8, col: 2 },
+                    ],
                     type: LEG_TYPES.PERFECT,
                 },
                 {
                     candidate: 5,
-                    cells: [{ row: 0, col: 3 }, { row: 6, col: 3 }, { row: 7, col: 3 }],
+                    cells: [
+                        { row: 0, col: 3 },
+                        { row: 6, col: 3 },
+                        { row: 7, col: 3 },
+                    ],
                     type: LEG_TYPES.SASHIMI_FINNED,
                 },
-            ]
+            ],
         }
 
         expect(isValidXWing(xWing, notesInfo)).toBe(true)
@@ -179,18 +204,23 @@ describe('isValidXWing()', () => {
             legs: [
                 {
                     candidate: 5,
-                    cells: [{ row: 0, col: 1 }, { row: 0, col: 2 }],
+                    cells: [
+                        { row: 0, col: 1 },
+                        { row: 0, col: 2 },
+                    ],
                     type: LEG_TYPES.PERFECT,
                 },
                 {
                     candidate: 5,
-                    cells: [{ row: 8, col: 1 }, { row: 8, col: 2 }],
+                    cells: [
+                        { row: 8, col: 1 },
+                        { row: 8, col: 2 },
+                    ],
                     type: LEG_TYPES.PERFECT,
                 },
-            ]
+            ],
         }
 
         expect(isValidXWing(xWing, notesInfo)).toBe(false)
     })
-
 })

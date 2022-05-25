@@ -137,5 +137,7 @@ test('hidden tripples duplicate houses with same group cells', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getAllHiddenGroups(3, multipleHousesHiddenGroupNotesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
+    expect(getAllHiddenGroups(3, multipleHousesHiddenGroupNotesData, mainNumbers, maxHintsThreshold)).toStrictEqual(
+        expectedResult,
+    )
 })

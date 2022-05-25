@@ -2,12 +2,7 @@ import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
 import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
 import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
-import {
-    GROUPS,
-    HINTS_IDS,
-    INDEPENDENT_HINTS_MENU_ITEMS,
-    UI_HINTS_COUNT_THRESHOLD
-} from './smartHints/constants'
+import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHOLD } from './smartHints/constants'
 import { getXWingHints } from './smartHints/xWing'
 import { getYWingsHints } from './smartHints/yWing/yWing'
 import { getOmissionHints } from './smartHints/omission/omission'
@@ -44,7 +39,12 @@ const hintsHandlerMap = {
         return null
     },
     [GROUPS.HIDDEN_GROUP]: function (candidatesCount, mainNumbers, notesData) {
-        const { present, returnData } = highlightHiddenGroups(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD)
+        const { present, returnData } = highlightHiddenGroups(
+            candidatesCount,
+            notesData,
+            mainNumbers,
+            UI_HINTS_COUNT_THRESHOLD,
+        )
         if (present) return returnData
         return null
     },

@@ -58,8 +58,7 @@ const getHouseType = (cell, mainNumbers) => {
 const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
     const result = []
 
-    hintsSearchLoop:
-    for (let row = 0; row < 9; row++) {
+    hintsSearchLoop: for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (mainNumbers[row][col].value) {
                 continue
