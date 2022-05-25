@@ -4,7 +4,7 @@ const setCellDataInHintResult = (cell, highlightData, cellsToFocusData) => {
 }
 
 const maxHintsLimitReached = (hints, maxHintsThreshold) => {
-    return hints.length === maxHintsThreshold
+    return hints.length >= maxHintsThreshold
 }
 
 export {

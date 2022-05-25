@@ -57,7 +57,7 @@ const hintsHandlerMap = {
         return yWingsData
     },
     [HINTS_IDS.OMISSION]: function (mainNumbers, notesData) {
-        const omissionData = getOmissionHints(mainNumbers, notesData)
+        const omissionData = getOmissionHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
         if (!omissionData || !omissionData.length) return null
         return omissionData
     },

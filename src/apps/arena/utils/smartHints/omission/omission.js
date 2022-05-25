@@ -8,6 +8,7 @@ import {
     isCellExists,
 } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
+import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
 
@@ -101,7 +102,6 @@ export const getAllOmissions = (mainNumbers, notesData) => {
     allHouses.forEach(houseType => {
         for (let houseNum = 0; houseNum < 9; houseNum++) {
             const house = { type: houseType, num: houseNum }
-
             const newOmissions = getHouseOmissions(house, mainNumbers, notesData).filter(newOmission => {
                 return !isDuplicateOmission(newOmission, result)
             })
@@ -112,10 +112,10 @@ export const getAllOmissions = (mainNumbers, notesData) => {
     return result
 }
 
-export const getOmissionHints = (mainNumbers, notesData) => {
-    const omissions = getAllOmissions(mainNumbers, notesData).filter(newOmission => {
+export const getOmissionHints = (mainNumbers, notesData, maxHintsThreshold) => {
+    const omissions = getAllOmissions(mainNumbers, notesData, maxHintsThreshold).filter(newOmission => {
         return removesNotes(newOmission, mainNumbers, notesData)
-    })
+    }).slice(0, maxHintsThreshold)
 
     return omissions.map(omission => {
         return getUIHighlightData(omission, notesData)
