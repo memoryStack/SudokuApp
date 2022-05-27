@@ -19,7 +19,7 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
+const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onCellClick }) => {
     const showCellContent = [
         GAME_STATE.ACTIVE,
         GAME_STATE.DISPLAY_HINT,
@@ -96,14 +96,17 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
-    const onCellClick = useCallback(
-        cell => {
-            const isCellFocused = smartHintCellsHighlightInfo[cell.row]?.[cell.col]
-            if (showSmartHint && !isCellFocused) return
-            onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-        },
-        [onAction, smartHintCellsHighlightInfo, showSmartHint],
-    )
+    // container should pass this callback as logic is getting 
+    // different here for puzzle and custom puzzle screens
+    // const onCellClick = useCallback(
+    //     cell => {
+    //         const isCellFocused = smartHintCellsHighlightInfo[cell.row]?.[cell.col]
+    //         // TODO: add one more check. do it when try-out step is shown
+    //         if (showSmartHint && !isCellFocused) return
+    //         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    //     },
+    //     [onAction, smartHintCellsHighlightInfo, showSmartHint],
+    // )
 
     const renderRow = (row, key) => {
         let rowElementsKeyCounter = 0

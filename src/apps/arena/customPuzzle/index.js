@@ -82,6 +82,10 @@ const CustomPuzzle_ = ({
         )
     }
 
+    const onCellClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    }, [onAction])
+
     return (
         <BottomDragger
             parentHeight={parentHeight}
@@ -105,7 +109,7 @@ const CustomPuzzle_ = ({
                     mainNumbers={mainNumbers}
                     notesInfo={notesInfo}
                     selectedCell={selectedCell}
-                    onAction={onAction}
+                    onCellClick={onCellClick}
                 />
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel onAction={onAction} />

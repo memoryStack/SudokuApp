@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { SCREEN_NAME } from '../../../resources/constants'
 import withActions from '../../../utils/hocs/withActions'
@@ -29,6 +29,14 @@ const PuzzleBoard_ = ({ onAction }) => {
         })
     }, [mainNumbers])
 
+    const onCellClick = useCallback(() => {
+        // const isCellFocused = smartHintCellsHighlightInfo[cell.row]?.[cell.col]
+        // TODO: add one more check. do it when try-out step is shown
+        // if (showSmartHint && !isCellFocused) return
+
+        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    }, [onAction])
+
     const dataToCache = {
         mainNumbers,
         notesInfo,
@@ -44,7 +52,7 @@ const PuzzleBoard_ = ({ onAction }) => {
             mainNumbers={mainNumbers}
             notesInfo={notesInfo}
             selectedCell={selectedCell}
-            onAction={onAction}
+            onCellClick={onCellClick}
         />
     )
 }
