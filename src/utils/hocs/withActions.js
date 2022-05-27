@@ -4,7 +4,7 @@ const DEFAULT_OPTIONS = {
     shouldForwardAction: false,
 }
 
-const withActions = (actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS) =>
+const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS }) =>
     function wrapComponent(WrappedComponent) {
         class WithActions extends PureComponent {
             state = initialState

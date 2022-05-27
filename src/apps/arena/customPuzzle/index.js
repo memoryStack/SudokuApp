@@ -120,4 +120,4 @@ const CustomPuzzle_ = ({
     )
 }
 
-export const CustomPuzzle = React.memo(withActions(ACTION_HANDLERS, INITIAL_STATE)(CustomPuzzle_))
+export const CustomPuzzle = React.memo(withActions({ actionHandlers: ACTION_HANDLERS, initialState: INITIAL_STATE })(CustomPuzzle_))

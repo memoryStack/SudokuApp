@@ -63,4 +63,4 @@ const BoardController_ = ({ onAction }) => {
     )
 }
 
-export const BoardController = React.memo(withActions(ACTION_HANDLERS)(BoardController_))
+export const BoardController = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_))

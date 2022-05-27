@@ -29,7 +29,7 @@ const PuzzleBoard_ = ({ onAction }) => {
         })
     }, [mainNumbers])
 
-    const onCellClick = useCallback(() => {
+    const onCellClick = useCallback((cell) => {
         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
     }, [onAction])
 
@@ -53,4 +53,4 @@ const PuzzleBoard_ = ({ onAction }) => {
     )
 }
 
-export const PuzzleBoard = React.memo(withActions(ACTION_HANDLERS)(PuzzleBoard_))
+export const PuzzleBoard = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(PuzzleBoard_))

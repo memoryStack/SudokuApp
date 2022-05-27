@@ -36,4 +36,4 @@ const GameInputPanel_ = ({ onAction }) => {
     return <Inputpanel numbersVisible={numbersVisible} onAction={onAction} />
 }
 
-export const GameInputPanel = React.memo(withActions(ACTION_HANDLERS)(GameInputPanel_))
+export const GameInputPanel = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(GameInputPanel_))

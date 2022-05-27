@@ -121,4 +121,4 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     )
 }
 
-export default React.memo(withActions(ACTION_HANDLERS)(SmartHintHC_))
+export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(SmartHintHC_))

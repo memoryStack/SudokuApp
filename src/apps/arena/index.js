@@ -268,4 +268,4 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     )
 }
 
-export const Arena = React.memo(withActions(ACTION_HANDLERS)(Arena_))
+export const Arena = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(Arena_))

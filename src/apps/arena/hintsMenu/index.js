@@ -59,4 +59,4 @@ const HintsMenu_ = ({ onAction }) => {
     )
 }
 
-export const HintsMenu = React.memo(withActions(ACTION_HANDLERS)(HintsMenu_))
+export const HintsMenu = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(HintsMenu_))

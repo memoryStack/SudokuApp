@@ -72,4 +72,4 @@ const _Refree = ({ onAction }) => {
     )
 }
 
-export default React.memo(withActions(ACTION_HANDLERS)(_Refree))
+export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(_Refree))
