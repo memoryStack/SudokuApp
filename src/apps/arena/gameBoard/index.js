@@ -98,9 +98,11 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
     const onCellClick = useCallback(
         cell => {
+            const isCellFocused = smartHintCellsHighlightInfo[cell.row]?.[cell.col]
+            if (showSmartHint && !isCellFocused) return
             onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
         },
-        [onAction],
+        [onAction, smartHintCellsHighlightInfo, showSmartHint],
     )
 
     const renderRow = (row, key) => {
