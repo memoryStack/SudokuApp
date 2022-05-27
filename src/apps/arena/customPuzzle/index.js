@@ -82,7 +82,7 @@ const CustomPuzzle_ = ({
         )
     }
 
-    const onCellClick = useCallback(() => {
+    const onCellClick = useCallback((cell) => {
         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
     }, [onAction])
 
