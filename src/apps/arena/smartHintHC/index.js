@@ -74,6 +74,53 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     if (!showSmartHint) return null
 
+    const renderHeader = () => {
+        return (
+            <View style={styles.headerContainer}>
+                <View style={styles.hintTitleContainer}>
+                    <Text style={styles.hintTitle}>{title}</Text>
+                    {totalHintsCount > 1 ? (
+                        <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
+                    ) : null}
+                </View>
+                <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
+                    <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
+                </Touchable>
+            </View>
+        )
+    }
+
+    const renderHintText = () => {
+        return (
+            <ScrollView style={styles.logicContainer} ref={scrollViewRef} onScroll={handleOnScroll}>
+                <Text style={styles.hintLogicText}>{logic}</Text>
+            </ScrollView>
+        )
+    }
+
+    const renderFooter = () => {
+        if (!displayFooter) return null
+
+        return (
+            <View style={styles.footerContainer}>
+                <Button
+                    text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
+                    onClick={displayPrevButton ? onPrevClick : noOperationFunction}
+                    avoidDefaultContainerStyles={true}
+                    textStyles={styles.footerButtonText}
+                    hitSlop={HITSLOP}
+                />
+                <Button
+                    text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
+                    onClick={displayNextButton ? onNextClick : noOperationFunction}
+                    avoidDefaultContainerStyles={true}
+                    textStyles={styles.footerButtonText}
+                    hitSlop={HITSLOP}
+                />
+            </View>
+        )
+    }
+
     return (
         <BottomDragger
             ref={smartHintHCRef}
@@ -84,38 +131,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             animateBackgroundOverlayOnClose={false}
         >
             <View style={containerStyles}>
-                <View style={styles.headerContainer}>
-                    <View style={styles.hintTitleContainer}>
-                        <Text style={styles.hintTitle}>{title}</Text>
-                        {totalHintsCount > 1 ? (
-                            <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
-                        ) : null}
-                    </View>
-                    <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
-                        <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
-                    </Touchable>
-                </View>
-                <ScrollView style={styles.logicContainer} ref={scrollViewRef} onScroll={handleOnScroll}>
-                    <Text style={styles.hintLogicText}>{logic}</Text>
-                </ScrollView>
-                {displayFooter ? (
-                    <View style={styles.footerContainer}>
-                        <Button
-                            text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
-                            onClick={displayPrevButton ? onPrevClick : noOperationFunction}
-                            avoidDefaultContainerStyles={true}
-                            textStyles={styles.footerButtonText}
-                            hitSlop={HITSLOP}
-                        />
-                        <Button
-                            text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
-                            onClick={displayNextButton ? onNextClick : noOperationFunction}
-                            avoidDefaultContainerStyles={true}
-                            textStyles={styles.footerButtonText}
-                            hitSlop={HITSLOP}
-                        />
-                    </View>
-                ) : null}
+                {renderHeader()}
+                {renderHintText()}
+                {renderFooter()}
             </View>
         </BottomDragger>
     )
