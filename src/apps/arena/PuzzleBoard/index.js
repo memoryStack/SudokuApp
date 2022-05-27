@@ -30,10 +30,6 @@ const PuzzleBoard_ = ({ onAction }) => {
     }, [mainNumbers])
 
     const onCellClick = useCallback(() => {
-        // const isCellFocused = smartHintCellsHighlightInfo[cell.row]?.[cell.col]
-        // TODO: add one more check. do it when try-out step is shown
-        // if (showSmartHint && !isCellFocused) return
-
         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
     }, [onAction])
 
