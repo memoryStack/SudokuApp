@@ -66,6 +66,8 @@ const prepareNakedDublesOrTriplesHintData = (
         `try out`
     ]
 
+    // TODO: add support for enabling only the input panel numbers
+    // which are relevant for the hint
     // TODO: Handle it properly
     return hintList.map((hintChunk) => {
         const isTryOut = hintChunk === 'try out'

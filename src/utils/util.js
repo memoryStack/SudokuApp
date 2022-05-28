@@ -792,3 +792,8 @@ function noWhiteSpace(strings, ...placeholders) {
     let withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ');
     return withoutSpace;
 }
+
+// TODO: update this func to make it efficient
+export const getClonedValue = (data) => {
+    return JSON.parse(JSON.stringify(data))
+}

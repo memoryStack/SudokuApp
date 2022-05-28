@@ -11,15 +11,21 @@ import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { ACTION_TYPES, ACTION_HANDLERS } from './actionHandlers'
 import { ACTION_HANDLERS as SMART_HINT_ACTION_HANDLERS } from '../smartHintHC/actionHandlers'
 import { useCellFocus, useIsHintTryOutStep } from '../utils/smartHints/hooks'
+import { getTryOutSelectedCell, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
 
 const useGameBoardData = (isHintTryOut) => {
+    const selectedCellSelector = isHintTryOut ? getTryOutSelectedCell : getSelectedCell
+    const mainNumbersSelector = isHintTryOut ? getTryOutMainNumbers : getMainNumbers
+    const notesSelector = isHintTryOut ? getTryOutNotes : getNotesInfo
     
-    const mainNumbers = useSelector(getMainNumbers)
-    const selectedCell = useSelector(getSelectedCell)
+    const selectedCell = useSelector(selectedCellSelector)
+    const mainNumbers = useSelector(mainNumbersSelector)
+    const notesInfo = useSelector(notesSelector)
 
     return {
-        mainNumbers,
         selectedCell,
+        mainNumbers,
+        notesInfo,
     }
 }
 
@@ -28,14 +34,11 @@ const PuzzleBoard_ = ({ onAction, ...restProps }) => {
     const isHintTryOut = useIsHintTryOutStep()
     const isCellFocusedInSmartHint = useCellFocus()
 
-    const smartHintTryOutOnAction = restProps['smartHintTryOutOnAction']
-
-    const { mainNumbers, selectedCell } = useGameBoardData(isHintTryOut)
+    const { mainNumbers, selectedCell, notesInfo } = useGameBoardData(isHintTryOut)
     const gameState = useSelector(getGameState)
-    const notesInfo = useSelector(getNotesInfo)
     const moves = useSelector(getMoves)
 
-    
+    const smartHintTryOutOnAction = restProps['smartHintTryOutOnAction']
 
     useEffect(() => {
         return () => {
@@ -73,6 +76,7 @@ const PuzzleBoard_ = ({ onAction, ...restProps }) => {
             notesInfo={notesInfo}
             selectedCell={selectedCell}
             onCellClick={onCellClick}
+            isHintTryOut={isHintTryOut}
         />
     )
 }

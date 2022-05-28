@@ -2,7 +2,7 @@ import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { GAME_STATE } from '../../../../resources/constants'
 import { emit } from '../../../../utils/GlobalEventBus'
-import { consoleLog } from '../../../../utils/util'
+import { consoleLog, getClonedValue } from '../../../../utils/util'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
@@ -15,6 +15,7 @@ const {
     setPrevHint,
     setHints,
     resetState,
+    setTryOutSelectedCell,
 } = smartHintHCActions
 
 const getNoHintsFoundMsg = id => {
@@ -31,7 +32,12 @@ export const showHints = async hintId => {
         .then(hints => {
             consoleLog('@@@@ hintInfo', JSON.stringify(hints))
             if (hints) {
-                invokeDispatch(setHints(hints))
+                const hintsData = {
+                    mainNumbers: getClonedValue(mainNumbers),
+                    notesInfo: getClonedValue(notesInfo),
+                    hints,
+                }
+                invokeDispatch(setHints(hintsData))
                 return true
             } else {
                 emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
@@ -73,4 +79,20 @@ export const resetStoreState = () => {
         hints: [],
     }
     invokeDispatch(resetState(newState))
+}
+
+/* Try Out actions */
+
+export const updateTryOutSelectedCell = (cell) => {
+    invokeDispatch(setTryOutSelectedCell(cell))
+}
+
+export const inputTryOutNumber = (number) => {
+    // update UI data
+    // analyze data and return result
+}
+
+export const eraseTryOutNumber = () => {
+    // update UI data
+    // analyze data and return result
 }

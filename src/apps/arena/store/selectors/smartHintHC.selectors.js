@@ -11,3 +11,15 @@ export const getHintHCInfo = state => {
         hint: state.smartHintHC.hints[currentHintNum - 1],
     }
 }
+
+export const getTryOutSelectedCell = (state) => {
+    return state.smartHintHC.tryOut.selectedCell
+}
+
+export const getTryOutMainNumbers = (state) => {
+    return state.smartHintHC.tryOut.mainNumbers
+}
+
+export const getTryOutNotes = (state) => {
+    return state.smartHintHC.tryOut.notesInfo
+}

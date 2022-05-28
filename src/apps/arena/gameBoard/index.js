@@ -13,6 +13,7 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors';
 
 import { getStyles } from './style'
 import { Cell } from './cell'
+import { areSameCells } from '../utils/util'
 
 const looper = []
 const bordersLooper = []
@@ -21,7 +22,7 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onCellClick }) => {
+const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onCellClick, isHintTryOut }) => {
     const showCellContent = [
         GAME_STATE.ACTIVE,
         GAME_STATE.DISPLAY_HINT,
@@ -61,6 +62,8 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const getSmartHintActiveBgColor = cell => {
+        if (isHintTryOut && areSameCells(cell, selectedCell)) return Styles.selectedCellBGColor
+        
         const { row, col } = cell
         return (
             (smartHintCellsHighlightInfo[row] &&
@@ -72,15 +75,13 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
     // this is going to get complicated, i guess it's better to break it
     const getBoxBackgroundColor = cell => {
-        const { row, col } = cell
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
 
         if (!showCellContent) return null
-        const { row: selectedCellRow = 0, col: selectedCellCol = 0 } = selectedCell
-        const isSelected = selectedCellRow === row && selectedCellCol === col
-
-        if (isSelected) return Styles.selectedCellBGColor
-        const isSameHouseAsSelected = sameHouseAsSelected(cell, { row: selectedCellRow, col: selectedCellCol })
+        
+        if (areSameCells(cell, selectedCell)) return Styles.selectedCellBGColor
+        
+        const isSameHouseAsSelected = sameHouseAsSelected(cell, selectedCell)
         const isSameValueAsSelected = sameValueAsSelectedBox(cell)
         if (isSameHouseAsSelected && isSameValueAsSelected) return Styles.sameHouseSameValueBGColor
         if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells

@@ -1,7 +1,7 @@
 import { GAME_STATE } from '../../../resources/constants'
 import { updateSelectedCell } from '../store/actions/board.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
-import { clearHints, showNextHint, showPrevHint, resetStoreState } from '../store/actions/smartHintHC.actions'
+import { clearHints, showNextHint, showPrevHint, resetStoreState, updateTryOutSelectedCell, inputTryOutNumber, eraseTryOutNumber } from '../store/actions/smartHintHC.actions'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { consoleLog } from '../../../utils/util'
@@ -23,14 +23,15 @@ const handleResetStoreState = () => {
 }
 
 const handleCellClick = ({ params: cell }) => {
-    consoleLog('@@@@ cell clicked', cell)
+    updateTryOutSelectedCell(cell)
 }
 
 const handleNumberClick = ({ params: number }) => {
-    consoleLog('@@@@ number clicked', number)
+    inputTryOutNumber(number)
 }
 
 const handleEraserClick = () => {
+    eraseTryOutNumber()
     consoleLog('@@@@ eraser clicked')
 }
 
