@@ -10,6 +10,7 @@ import { noOperationFunction } from '../../../utils/util'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import HintTryOutInputpanel from './inputPanel'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -21,6 +22,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
+    
+    // TODO: implement this
+    const isHintTryOut = true
 
     useEffect(() => {
         return () => {
@@ -98,6 +102,11 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         )
     }
 
+    // TODO: prepare onAction and numberVisibleLogic for this comp.
+    const renderInputPanel = () => {
+        return <HintTryOutInputpanel />
+    }
+
     const renderFooter = () => {
         if (!displayFooter) return null
 
@@ -132,7 +141,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         >
             <View style={containerStyles}>
                 {renderHeader()}
-                {renderHintText()}
+                {isHintTryOut ? renderInputPanel() : renderHintText()}
                 {renderFooter()}
             </View>
         </BottomDragger>
