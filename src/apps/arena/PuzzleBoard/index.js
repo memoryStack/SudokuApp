@@ -22,9 +22,11 @@ const useGameBoardData = (isHintTryOut) => {
     }
 }
 
-const PuzzleBoard_ = ({ onAction, ...rest }) => {
+const PuzzleBoard_ = ({ onAction, ...restProps }) => {
 
-    const isHintTryOut = false
+    const isHintTryOut = true
+
+    const smartHintTryOutOnAction = restProps['smartHintTryOutOnAction']
 
     const { mainNumbers, selectedCell } = useGameBoardData(isHintTryOut)
     const gameState = useSelector(getGameState)
@@ -45,8 +47,9 @@ const PuzzleBoard_ = ({ onAction, ...rest }) => {
     }, [mainNumbers])
 
     const onCellClick = useCallback((cell) => {
-        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction])
+        const actionHandler = isHintTryOut ? smartHintTryOutOnAction : onAction
+        actionHandler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    }, [onAction, isHintTryOut])
 
     const dataToCache = {
         mainNumbers,
@@ -68,17 +71,15 @@ const PuzzleBoard_ = ({ onAction, ...rest }) => {
     )
 }
 
+// TODO: seperate it out
 const ACTION_HANDLERS_CONFIG = [
     {
         actionHandlers: ACTION_HANDLERS
     },
     {
-        onActionPropAlias: 'smartHintTryOutOnAction',
+        onActionPropAlias: 'smartHintTryOutOnAction', // TODO: make it as as constant
         actionHandlers: SMART_HINT_ACTION_HANDLERS,
     }
 ]
 
-export const PuzzleBoard = React.memo(
-    withActions({ actionHandlers: ACTION_HANDLERS_CONFIG })
-    (PuzzleBoard_)
-)
+export const PuzzleBoard = React.memo(withActions({ actionHandlers: ACTION_HANDLERS_CONFIG })(PuzzleBoard_))

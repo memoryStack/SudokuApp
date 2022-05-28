@@ -22,8 +22,8 @@ const handleResetStoreState = () => {
     resetStoreState()
 }
 
-const handleCellClick = () => {
-
+const handleCellClick = ({ params: cell }) => {
+    consoleLog('@@@@ cell clicked', cell)
 }
 
 const handleNumberClick = ({ params: number }) => {
