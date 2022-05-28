@@ -1,16 +1,18 @@
 import React, { useMemo } from 'react'
 import { View } from 'react-native'
-import { getStyles } from './style'
-import { Cell } from './cell'
+import { useSelector } from 'react-redux'
+
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
-import { useSelector } from 'react-redux'
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import { ACTION_TYPES } from './actionTypes'
+
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors';
+
+import { getStyles } from './style'
+import { Cell } from './cell'
 
 const looper = []
 const bordersLooper = []
@@ -95,18 +97,6 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
             smartHintCellsHighlightInfo[cell.row][cell.col].inhabitable
         )
     }
-
-    // container should pass this callback as logic is getting 
-    // different here for puzzle and custom puzzle screens
-    // const onCellClick = useCallback(
-    //     cell => {
-    //         const isCellFocused = smartHintCellsHighlightInfo[cell.row]?.[cell.col]
-    //         // TODO: add one more check. do it when try-out step is shown
-    //         if (showSmartHint && !isCellFocused) return
-    //         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    //     },
-    //     [onAction, smartHintCellsHighlightInfo, showSmartHint],
-    // )
 
     const renderRow = (row, key) => {
         let rowElementsKeyCounter = 0

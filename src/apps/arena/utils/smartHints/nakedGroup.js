@@ -66,8 +66,11 @@ const prepareNakedDublesOrTriplesHintData = (
         `try out`
     ]
 
+    // TODO: Handle it properly
     return hintList.map((hintChunk) => {
+        const isTryOut = hintChunk === 'try out'
         return {
+            key: isTryOut ? 'TRY_OUT' : '',
             cellsToFocusData,
             techniqueInfo: {
                 title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',

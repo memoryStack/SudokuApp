@@ -11,6 +11,7 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import HintTryOutInputpanel from './inputPanel'
+import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -23,26 +24,13 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         totalHintsCount,
     } = useSelector(getHintHCInfo)
     
-    // TODO: implement this
-    const isHintTryOut = true
+    const isHintTryOut = useIsHintTryOutStep()
 
     useEffect(() => {
         return () => {
             onAction({ type: ACTION_TYPES.ON_UNMOUNT })
         }
     }, [])
-
-    const onNextClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_NEXT_CLICK })
-    }, [onAction])
-
-    const onPrevClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
-    }, [onAction])
-
-    const onClosed = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
-    }, [onAction, selectCellOnClose])
 
     const smartHintHCRef = useRef(null)
 
@@ -59,6 +47,19 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: previousScrollPosition, animated: true })
         }
     }, [currentHintNum])
+
+    const onNextClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_NEXT_CLICK })
+    }, [onAction])
+
+    const onPrevClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
+    }, [onAction])
+
+    const onClosed = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
+    }, [onAction, selectCellOnClose])
+
 
     const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } } = {} } = {}) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
@@ -102,7 +103,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         )
     }
 
-    // TODO: prepare onAction and numberVisibleLogic for this comp.
+    // TODO: numberVisibleLogic for this comp.
     const renderInputPanel = () => {
         return <HintTryOutInputpanel />
     }

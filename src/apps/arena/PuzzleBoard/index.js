@@ -10,6 +10,7 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { ACTION_TYPES, ACTION_HANDLERS } from './actionHandlers'
 import { ACTION_HANDLERS as SMART_HINT_ACTION_HANDLERS } from '../smartHintHC/actionHandlers'
+import { useCellFocus, useIsHintTryOutStep } from '../utils/smartHints/hooks'
 
 const useGameBoardData = (isHintTryOut) => {
     
@@ -24,7 +25,8 @@ const useGameBoardData = (isHintTryOut) => {
 
 const PuzzleBoard_ = ({ onAction, ...restProps }) => {
 
-    const isHintTryOut = true
+    const isHintTryOut = useIsHintTryOutStep()
+    const isCellFocusedInSmartHint = useCellFocus()
 
     const smartHintTryOutOnAction = restProps['smartHintTryOutOnAction']
 
@@ -32,6 +34,8 @@ const PuzzleBoard_ = ({ onAction, ...restProps }) => {
     const gameState = useSelector(getGameState)
     const notesInfo = useSelector(getNotesInfo)
     const moves = useSelector(getMoves)
+
+    
 
     useEffect(() => {
         return () => {
@@ -47,6 +51,8 @@ const PuzzleBoard_ = ({ onAction, ...restProps }) => {
     }, [mainNumbers])
 
     const onCellClick = useCallback((cell) => {
+        if (isHintTryOut && !isCellFocusedInSmartHint(cell)) return
+        
         const actionHandler = isHintTryOut ? smartHintTryOutOnAction : onAction
         actionHandler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
     }, [onAction, isHintTryOut])
