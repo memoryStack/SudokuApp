@@ -55,8 +55,3 @@ const ACTION_HANDLERS = {
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }
-
-/*
-    try-out store
-        make a sub-tree in smartHintHC store only
-*/

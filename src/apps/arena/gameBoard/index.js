@@ -14,6 +14,7 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors';
 import { getStyles } from './style'
 import { Cell } from './cell'
 import { areSameCells } from '../utils/util'
+import { useCellFocus } from '../utils/smartHints/hooks'
 
 const looper = []
 const bordersLooper = []
@@ -23,14 +24,6 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onCellClick, isHintTryOut }) => {
-    const showCellContent = [
-        GAME_STATE.ACTIVE,
-        GAME_STATE.DISPLAY_HINT,
-        GAME_STATE.OVER.SOLVED,
-        GAME_STATE.OVER.UNSOLVED,
-    ].includes(gameState)
-
-    const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
         useSelector(getHintHCInfo)
@@ -40,6 +33,10 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const Styles = useMemo(() => {
         return getStyles({ GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH })
     }, [GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT])
+
+    const isCellFocusedInSmartHint = useCellFocus()
+
+    const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
     const sameValueAsSelectedBox = cell =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
@@ -62,7 +59,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const getSmartHintActiveBgColor = cell => {
-        if (isHintTryOut && areSameCells(cell, selectedCell)) return Styles.selectedCellBGColor
+        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) return Styles.selectedCellBGColor
         
         const { row, col } = cell
         return (
@@ -73,6 +70,9 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
+    const showCellContent = [GAME_STATE.ACTIVE,GAME_STATE.DISPLAY_HINT,GAME_STATE.OVER.SOLVED,GAME_STATE.OVER.UNSOLVED]
+        .includes(gameState)
+    
     // this is going to get complicated, i guess it's better to break it
     const getBoxBackgroundColor = cell => {
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
