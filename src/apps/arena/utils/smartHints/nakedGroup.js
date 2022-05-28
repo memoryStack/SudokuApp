@@ -66,12 +66,18 @@ const prepareNakedDublesOrTriplesHintData = (
         `try out`
     ]
 
+    const getTryOutInputPanelNumbersVisibility = () => {
+        const numbersVisibility = new Array(10).fill(false)
+        groupCandidates.forEach((candidate) => numbersVisibility[candidate] = true)
+        return numbersVisibility
+    }
+
     // TODO: add support for enabling only the input panel numbers
     // which are relevant for the hint
     // TODO: Handle it properly
     return hintList.map((hintChunk) => {
         const isTryOut = hintChunk === 'try out'
-        return {
+        const hintStepData = {
             key: isTryOut ? 'TRY_OUT' : '',
             cellsToFocusData,
             techniqueInfo: {
@@ -79,6 +85,10 @@ const prepareNakedDublesOrTriplesHintData = (
                 logic: hintChunk,
             },
         }
+
+        if (isTryOut) hintStepData.inputPanelNumbersVisibility = getTryOutInputPanelNumbersVisibility()
+
+        return hintStepData
     })
 
 

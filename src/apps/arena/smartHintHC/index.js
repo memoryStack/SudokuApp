@@ -10,8 +10,8 @@ import { noOperationFunction } from '../../../utils/util'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import HintTryOutInputpanel from './inputPanel'
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
+import { Inputpanel } from '../inputPanel'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -19,7 +19,7 @@ const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
         show: showSmartHint,
-        hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose } = {},
+        hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
@@ -103,9 +103,8 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         )
     }
 
-    // TODO: numberVisibleLogic for this comp.
     const renderInputPanel = () => {
-        return <HintTryOutInputpanel />
+        return <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} />
     }
 
     const renderFooter = () => {

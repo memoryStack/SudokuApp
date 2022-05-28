@@ -32,6 +32,8 @@ export const showHints = async hintId => {
         .then(hints => {
             consoleLog('@@@@ hintInfo', JSON.stringify(hints))
             if (hints) {
+                // TODO: not all hints will have try-put steps.
+                // avoid this cloning of mainNumbers and notesInfo
                 const hintsData = {
                     mainNumbers: getClonedValue(mainNumbers),
                     notesInfo: getClonedValue(notesInfo),
