@@ -5,14 +5,15 @@ const DEFAULT_OPTIONS = {
     shouldForwardAction: false,
 }
 
-const withActions = ({ actionHandlers = {}, onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, initialState = {}, options = DEFAULT_OPTIONS }) =>
-    function wrapComponent(WrappedComponent) {
+// TODO: add arguments type here for ease of use
+const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS }) => {
+    return function wrapComponent(WrappedComponent) {
         class WithActions extends PureComponent {
             state = initialState
 
             getState = () => ({ ...this.props, ...this.state })
 
-            handleAction = (action = {}) => {
+            handleAction = (action = {}, actionHandlers) => {
                 const handler = actionHandlers[action.type]
                 const { onAction, shouldForwardAction } = this.props
 
@@ -30,14 +31,20 @@ const withActions = ({ actionHandlers = {}, onActionPropAlias = DEFAULT_ON_ACTIO
                     result = onAction(action, result)
                 }
 
-                const test = 'zzz'
-
                 return result
             }
 
+            // TODO: "actionHandlers" is gettin confusing right now. MUST refactore it
             getOnActionProp = () => {
+                if (Array.isArray(actionHandlers)) {
+                    return actionHandlers.reduce((prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
+                        prev[onActionPropAlias] = (action) => this.handleAction(action, actionHandlers)
+                        return prev
+                    }, {})
+                }
+
                 return {
-                    [onActionPropAlias]: this.handleAction
+                    [DEFAULT_ON_ACTION_PROP_NAME]: (action) => this.handleAction(action, actionHandlers)
                 }
             }
 
@@ -54,5 +61,6 @@ const withActions = ({ actionHandlers = {}, onActionPropAlias = DEFAULT_ON_ACTIO
 
         return WithActions
     }
+}
 
 export default withActions
