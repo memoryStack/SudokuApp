@@ -5,6 +5,12 @@ import { GROUPS, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import { maxHintsLimitReached, setCellDataInHintResult } from './util'
 import { isHintValid } from './validityTest'
 
+const tryOutAnalyser = (cellsToFocusData, groupCandidates) => {
+    return (...args) => {
+        return 'Verdict: some logic is coming soon'
+    }
+}
+
 // TODO: write test case for it and refactor it properly
 const prepareNakedDublesOrTriplesHintData = (
     noOfInstances,
@@ -86,7 +92,10 @@ const prepareNakedDublesOrTriplesHintData = (
             },
         }
 
-        if (isTryOut) hintStepData.inputPanelNumbersVisibility = getTryOutInputPanelNumbersVisibility()
+        if (isTryOut) {
+            hintStepData.inputPanelNumbersVisibility = getTryOutInputPanelNumbersVisibility()
+            hintStepData.tryOutAnalyser = tryOutAnalyser(cellsToFocusData, groupCandidates)
+        }
 
         return hintStepData
     })

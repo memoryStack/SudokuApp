@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
@@ -9,7 +9,7 @@ import { Button } from '../../../components/button'
 import { noOperationFunction } from '../../../utils/util'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
 
@@ -17,14 +17,28 @@ const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
+    // TODO: get the dataAnalyser as well from the redux for each hint
+    // EXERCISE: i guess it's not good to store the function in redux.
+    //          redux is only for the data/state. find out this thoughts's validity
+    //          i was right, functions are non-serilizable. so can't store them in state.
+    //          plan to remove it.
     const {
         show: showSmartHint,
-        hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility } = {},
+        hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, tryOutAnalyser = noOperationFunction } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
-    
+
+    const [ tryOutMessage, setTryOutMessage ] = useState('')
+    const mainNumbers = useSelector(getTryOutMainNumbers)
+    const notesInfo = useSelector(getTryOutNotes)
     const isHintTryOut = useIsHintTryOutStep()
+
+    useEffect(() => {
+        if (!isHintTryOut) return
+        // TODO: run the dataAnalyser for verdict message
+        setTryOutMessage(tryOutAnalyser(mainNumbers, notesInfo))
+    }, [isHintTryOut, mainNumbers, notesInfo])
 
     useEffect(() => {
         return () => {
@@ -58,6 +72,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const onClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
+        setTryOutMessage('')
     }, [onAction, selectCellOnClose])
 
 
@@ -104,7 +119,13 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }
 
     const renderInputPanel = () => {
-        return <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} />
+        // TODO: message styles
+        return (
+            <>
+                <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} />
+                <Text>{tryOutMessage}</Text>
+            </>
+        )
     }
 
     const renderFooter = () => {
