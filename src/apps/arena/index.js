@@ -29,6 +29,7 @@ import { usePrevious, useToggle } from '../../utils/customHooks/commonUtility'
 import { consoleLog } from '../../utils/util'
 import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
+import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 
 const MAX_AVAILABLE_HINTS = 3
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
@@ -98,6 +99,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     const fadeAnim = useRef(new Animated.Value(0)).current
 
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
+
+    const { show: showSmartHint } = useSelector(getHintHCInfo)
 
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
@@ -235,6 +238,11 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         )
     }
 
+    const renderSmartHintHC = () => {
+        if (!(pageHeight && showSmartHint)) return null
+        return <SmartHintHC parentHeight={pageHeight} />
+    }
+    
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
@@ -261,7 +269,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
                         </Animated.View>
                     </Touchable>
                 ) : null}
-                <SmartHintHC parentHeight={pageHeight} />
+                {renderSmartHintHC()}
                 {renderHintsMenu()}
             </View>
         </Page>
