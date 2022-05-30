@@ -6,6 +6,10 @@ import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constant
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { consoleLog } from '../../../utils/util'
 
+const handleOnInit = ({ setState, params: { focusedCells } }) => {
+    setState({ focusedCells })
+}
+
 const handleOnClose = ({ params: newCellToSelect }) => {
     if (newCellToSelect) updateSelectedCell(newCellToSelect)
     clearHints()
@@ -26,8 +30,9 @@ const handleCellClick = ({ params: cell }) => {
     updateTryOutSelectedCell(cell)
 }
 
-const handleNumberClick = ({ params: number }) => {
-    inputTryOutNumber(number)
+const handleNumberClick = ({ getState,  params: number }) => {
+    const { focusedCells } = getState()
+    inputTryOutNumber(number, focusedCells)
 }
 
 const handleEraserClick = () => {
@@ -36,15 +41,17 @@ const handleEraserClick = () => {
 }
 
 const ACTION_TYPES = {
+    ON_INIT: 'ON_INIT',
+    ON_UNMOUNT: 'ON_UNMOUNT',
     ON_CLOSE: 'ON_CLOSE',
     ON_NEXT_CLICK: 'ON_NEXT_CLICK',
     ON_PREV_CLICK: 'ON_PREV_CLICK',
-    ON_UNMOUNT: 'ON_UNMOUNT',
     ...INPUT_PANEL_ACTION_TYPES,
     ...BOARD_GENERIC_ACTION_TYPES,
 }
 
 const ACTION_HANDLERS = {
+    [ACTION_TYPES.ON_INIT]: handleOnInit,
     [ACTION_TYPES.ON_CLOSE]: handleOnClose,
     [ACTION_TYPES.ON_NEXT_CLICK]: handleNextClick,
     [ACTION_TYPES.ON_PREV_CLICK]: handlePrevClick,

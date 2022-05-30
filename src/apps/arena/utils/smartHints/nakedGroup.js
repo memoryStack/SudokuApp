@@ -85,6 +85,7 @@ const prepareNakedDublesOrTriplesHintData = (
         const isTryOut = hintChunk === 'try out'
         const hintStepData = {
             key: isTryOut ? 'TRY_OUT' : '',
+            focusedCells: toBeHighlightedCells, // TODO: simplify these two types of cells. it's getting confusing.
             cellsToFocusData,
             techniqueInfo: {
                 title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',

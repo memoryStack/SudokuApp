@@ -23,8 +23,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     //          i was right, functions are non-serilizable. so can't store them in state.
     //          plan to remove it.
     const {
-        show: showSmartHint,
-        hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, tryOutAnalyser = noOperationFunction } = {},
+        hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, tryOutAnalyser = noOperationFunction } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
@@ -41,6 +40,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }, [isHintTryOut, mainNumbers, notesInfo])
 
     useEffect(() => {
+        onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells } })
         return () => {
             onAction({ type: ACTION_TYPES.ON_UNMOUNT })
         }
@@ -92,7 +92,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const containerStyles = getContainerStyles(windowHeight, displayFooter)
 
-    if (!showSmartHint) return null
+    
 
     const renderHeader = () => {
         return (

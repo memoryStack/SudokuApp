@@ -89,7 +89,8 @@ export const updateTryOutSelectedCell = (cell) => {
     invokeDispatch(setTryOutSelectedCell(cell))
 }
 
-export const inputTryOutNumber = (number) => {
+export const inputTryOutNumber = (number, focusedCells) => {
+    console.log('@@@@@@@ try-out number clicked', number, focusedCells)
     // update UI data
     // analyze data and return result
 }
