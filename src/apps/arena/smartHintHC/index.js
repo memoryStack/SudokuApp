@@ -71,10 +71,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }, [onAction])
 
     const onClosed = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
         setTryOutMessage('')
+        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
     }, [onAction, selectCellOnClose])
-
 
     const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } } = {} } = {}) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
