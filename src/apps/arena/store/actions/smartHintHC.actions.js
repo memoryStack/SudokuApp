@@ -3,6 +3,7 @@ import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helper
 import { GAME_STATE } from '../../../../resources/constants'
 import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog, getClonedValue } from '../../../../utils/util'
+import { cellHasTryOutInput } from '../../smartHintHC/helpers'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
 import { areCommonHouseCells, areSameCells, getCellVisibleNotes, isCellEmpty, isCellNoteVisible } from '../../utils/util'
@@ -137,13 +138,6 @@ export const eraseTryOutNumber = (focusedCells) => {
 
     const notesToEnterHostCellsData = getNotesToEnterHostCells(focusedCells)
     invokeDispatch(updateBoardDataOnTryOutErase(notesToEnterHostCellsData))
-}
-
-const cellHasTryOutInput = () => {
-    const selectedCell = getTryOutSelectedCell(getStoreState())
-    const actualMainNumbers = getMainNumbers(getStoreState())
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return isCellEmpty(selectedCell, actualMainNumbers) && !isCellEmpty(selectedCell, tryOutMainNumbers)
 }
 
 const getNotesToEnterHostCells = (focusedCells) => {

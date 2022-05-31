@@ -15,6 +15,7 @@ import { getStyles } from './style'
 import { Cell } from './cell'
 import { areSameCells } from '../utils/util'
 import { useCellFocus } from '../utils/smartHints/hooks'
+import { cellHasTryOutInput } from '../smartHintHC/helpers'
 
 const looper = []
 const bordersLooper = []
@@ -52,6 +53,10 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         const { row, col } = cell
         if (!mainNumbers[row][col].value) return null
         if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return getCustomPuzzleMainNumFontColor(cell)
+
+        // TODO: decide the proper color
+        if (isHintTryOut && cellHasTryOutInput(cell)) return { color: '#FF9900' }
+
         const isWronglyPlaced = mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue
         if (isWronglyPlaced) return Styles.wronglyFilledNumColor
         if (!mainNumbers[row][col].isClue) return Styles.userFilledNumColor
