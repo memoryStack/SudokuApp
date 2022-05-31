@@ -11,6 +11,12 @@ const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT
         class WithActions extends PureComponent {
             state = initialState
 
+            constructor(props) {
+                super(props)
+
+                this.onActions = this.getOnActionProp()
+            }
+
             getState = () => ({ ...this.props, ...this.state })
 
             handleAction = (action = {}, actionHandlers) => {
@@ -53,7 +59,7 @@ const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT
                     <WrappedComponent
                         {...this.props}
                         {...this.state}
-                        {...this.getOnActionProp()}
+                        {...this.onActions}
                     />
                 )
             }
