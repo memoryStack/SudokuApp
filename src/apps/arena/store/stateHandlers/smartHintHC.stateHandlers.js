@@ -16,6 +16,7 @@ const stateHandlers = {
             mainNumbers,
             notesInfo,
             selectedCell: { row: 0, col: 0 },
+            notesErasedOnInput: {},
         }
     },
     removeHints: (state, action) => {
@@ -47,7 +48,7 @@ const stateHandlers = {
     },
     updateBoardDataOnTryOutErase: (state, { payload }) => {
         const notesToEnterHostCellsData = payload
-        
+
         const selectedCell = state.tryOut.selectedCell
         state.tryOut.mainNumbers[selectedCell.row][selectedCell.col].value = 0
 

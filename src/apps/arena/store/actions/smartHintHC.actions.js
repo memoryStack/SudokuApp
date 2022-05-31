@@ -6,7 +6,7 @@ import { consoleLog, getClonedValue } from '../../../../utils/util'
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
-import { areCommonHouseCells, areSameCells, getCellVisibleNotes, isCellEmpty, isCellNoteVisible } from '../../utils/util'
+import { areCommonHouseCells, areSameCells, duplicacyPresent, getCellVisibleNotes, isCellEmpty, isCellNoteVisible } from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes, getTryOutSelectedCell } from '../selectors/smartHintHC.selectors'
@@ -98,6 +98,9 @@ export const inputTryOutNumber = (number, focusedCells) => {
     // NUDGE: show nudge in future
     if (!isValidInputNumberClick(number)) return
     const removalbeNotesHostCellsData = getRemovalbeNotesHostCells(number, focusedCells)
+
+    
+
     invokeDispatch(updateBoardDataOnTryOutNumberInput({removalbeNotesHostCellsData, number}))
 }
 
@@ -147,6 +150,10 @@ const getNotesToEnterHostCells = (focusedCells) => {
     
     const numberToBeErased = tryOutMainNumbers[selectedCell.row][selectedCell.col].value
 
+    // TODO: make it efficient
+    const mainNumbersStateAfterErase = JSON.parse(JSON.stringify(tryOutMainNumbers))
+    mainNumbersStateAfterErase[selectedCell.row][selectedCell.col].value = 0
+
     const result = []
     focusedCells.forEach((cell) => {
         if (areSameCells(cell, selectedCell)) {
@@ -155,7 +162,7 @@ const getNotesToEnterHostCells = (focusedCells) => {
                 notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col])
             })
         } else {
-            if (noteErasedInTryOut(numberToBeErased, cell)) {
+            if (shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)) {
                 result.push({
                     cell,
                     notes: [numberToBeErased]
@@ -167,9 +174,10 @@ const getNotesToEnterHostCells = (focusedCells) => {
     return result
 }
 
-const noteErasedInTryOut = (note, cell) => {
+const shouldSpawnNoteInCell = (note, cell, mainNumbersStateAfterErase) => {
     const actualNotesInfo = getNotesInfo(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
     return isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col])
         && !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col])
+        && !duplicacyPresent(note, mainNumbersStateAfterErase, cell)
 }
