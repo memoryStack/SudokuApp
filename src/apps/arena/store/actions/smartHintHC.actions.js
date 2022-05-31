@@ -5,8 +5,10 @@ import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog, getClonedValue } from '../../../../utils/util'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
+import { areCommonHouseCells, areSameCells, getCellVisibleNotes, isCellEmpty, isCellNoteVisible } from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
+import { getTryOutMainNumbers, getTryOutNotes, getTryOutSelectedCell } from '../selectors/smartHintHC.selectors'
 import { updateGameState } from './gameState.actions'
 
 const {
@@ -16,6 +18,8 @@ const {
     setHints,
     resetState,
     setTryOutSelectedCell,
+    updateBoardDataOnTryOutNumberInput,
+    updateBoardDataOnTryOutErase,
 } = smartHintHCActions
 
 const getNoHintsFoundMsg = id => {
@@ -90,12 +94,88 @@ export const updateTryOutSelectedCell = (cell) => {
 }
 
 export const inputTryOutNumber = (number, focusedCells) => {
-    console.log('@@@@@@@ try-out number clicked', number, focusedCells)
-    // update UI data
-    // analyze data and return result
+    // NUDGE: show nudge in future
+    if (!isValidInputNumberClick(number)) return
+    const removalbeNotesHostCellsData = getRemovalbeNotesHostCells(number, focusedCells)
+    invokeDispatch(updateBoardDataOnTryOutNumberInput({removalbeNotesHostCellsData, number}))
 }
 
-export const eraseTryOutNumber = () => {
-    // update UI data
-    // analyze data and return result
+const isValidInputNumberClick = (number) => {
+    const selectedCell = getTryOutSelectedCell(getStoreState())
+    const mainNumbers = getTryOutMainNumbers(getStoreState())
+    const notesInfo = getTryOutNotes(getStoreState())
+    return isCellEmpty(selectedCell, mainNumbers) && isCellNoteVisible(number, notesInfo[selectedCell.row][selectedCell.col])
+}
+
+const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
+    const result = []
+    
+    const selectedCell = getTryOutSelectedCell(getStoreState())
+    const notesInfo = getTryOutNotes(getStoreState())
+    focusedCells.forEach(cell => {
+        if (areSameCells(cell, selectedCell)) {
+            result.push({
+                cell,
+                notes: getCellVisibleNotes(notesInfo[cell.row][cell.col])
+            })
+        } else {
+            // TODO: can make it better
+            if (isCellNoteVisible(inputNumber, notesInfo[cell.row][cell.col]) && areCommonHouseCells(cell, selectedCell)) {
+                result.push({
+                    cell,
+                    notes: [inputNumber]
+                })
+            }
+        }
+    })
+
+    return result
+}
+
+export const eraseTryOutNumber = (focusedCells) => {
+    if (!cellHasTryOutInput()) return
+
+    const notesToEnterHostCellsData = getNotesToEnterHostCells(focusedCells)
+    invokeDispatch(updateBoardDataOnTryOutErase(notesToEnterHostCellsData))
+}
+
+const cellHasTryOutInput = () => {
+    const selectedCell = getTryOutSelectedCell(getStoreState())
+    const actualMainNumbers = getMainNumbers(getStoreState())
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    return isCellEmpty(selectedCell, actualMainNumbers) && !isCellEmpty(selectedCell, tryOutMainNumbers)
+}
+
+const getNotesToEnterHostCells = (focusedCells) => {
+    const selectedCell = getTryOutSelectedCell(getStoreState())
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const actualNotesInfo = getNotesInfo(getStoreState())
+    
+    const numberToBeErased = tryOutMainNumbers[selectedCell.row][selectedCell.col].value
+
+    const result = []
+    focusedCells.forEach((cell) => {
+        if (areSameCells(cell, selectedCell)) {
+            result.push({
+                cell,
+                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col])
+            })
+        } else {
+            if (noteErasedInTryOut(numberToBeErased, cell)) {
+                result.push({
+                    cell,
+                    notes: [numberToBeErased]
+                })
+            }
+        }        
+    })    
+
+    return result
+}
+
+const noteErasedInTryOut = (note, cell) => {
+    const actualNotesInfo = getNotesInfo(getStoreState())
+    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+    return isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col])
+        && !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col])
 }

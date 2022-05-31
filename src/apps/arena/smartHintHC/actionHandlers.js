@@ -35,9 +35,9 @@ const handleNumberClick = ({ getState,  params: number }) => {
     inputTryOutNumber(number, focusedCells)
 }
 
-const handleEraserClick = () => {
-    eraseTryOutNumber()
-    consoleLog('@@@@ eraser clicked')
+const handleEraserClick = ({ getState }) => {
+    const { focusedCells } =  getState()
+    eraseTryOutNumber(focusedCells)
 }
 
 const ACTION_TYPES = {
