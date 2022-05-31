@@ -216,6 +216,11 @@ export const getPairCellsCommonHouses = (cellA, cellB) => {
     return result
 }
 
+export const areCommonHouseCells = (cellA, cellB) => {
+    const cellsPairCommonHouses = getPairCellsCommonHouses(cellA, cellB)
+    return  Object.values(cellsPairCommonHouses).some(isCommonHouse => isCommonHouse)
+}
+
 export const getCellVisibleNotes = notes => {
     const result = []
     notes.forEach(({ noteValue, show }) => {
