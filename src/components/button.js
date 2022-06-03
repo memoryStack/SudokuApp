@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, StyleSheet } from 'react-native'
 import { Touchable, TouchableTypes } from '../apps/components/Touchable'
-import { noOperationFunction } from '../utils/util'
+import { noop } from '../utils/util'
 import { fonts } from '../resources/fonts/font'
 
 const styles = StyleSheet.create({
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 // TODO: make the tuchable configurable as well when in need
 // TODO: add support for touchable hitslops as well
 const Button_ = ({
-    onClick = noOperationFunction,
+    onClick = noop,
     containerStyle = null,
     text = '',
     textStyles = null,

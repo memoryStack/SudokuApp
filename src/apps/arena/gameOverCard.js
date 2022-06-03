@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Touchable, TouchableTypes } from '../components/Touchable'
-import { noOperationFunction } from '../../utils/util'
+import { noop } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
 import { GAME_STATE } from '../../resources/constants'
 import { getTimeComponentString } from './utils/util'
@@ -111,7 +111,7 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
         <Touchable
             touchable={TouchableTypes.opacity}
             activeOpacity={1}
-            onPress={noOperationFunction}
+            onPress={noop}
             style={styles.container}
         >
             {gameSolved ? getGameSolvedView() : gameUnsolved ? getGameUnsolvedView() : null}

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { GAME_STATE } from '../../../resources/constants'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { getTimeComponentString } from '../utils/util'
-import { noOperationFunction } from '../../../utils/util'
+import { noop } from '../../../utils/util'
 import { fonts } from '../../../resources/fonts/font'
 import { useSelector } from 'react-redux'
 import { getGameState } from '../store/selectors/gameState.selectors'
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
 const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
-const Timer_ = ({ onClick = noOperationFunction, time }) => {
+const Timer_ = ({ onClick = noop, time }) => {
     const gameState = useSelector(getGameState)
 
     const getPauseTimerIcon = () => {

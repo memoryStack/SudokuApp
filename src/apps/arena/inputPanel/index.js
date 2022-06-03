@@ -4,7 +4,7 @@ import { getStyles } from './style'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
-import { noOperationFunction } from '../../../utils/util'
+import { noop } from '../../../utils/util'
 import { ACTION_TYPES } from './constants'
 
 const CLOSE_ICON_DIMENSION = 28
@@ -38,7 +38,7 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
         return (
             <Touchable
                 style={styles.numberButtonContainer}
-                onPress={numbersVisible[number] ? () => onNumberClicked(number) : noOperationFunction}
+                onPress={numbersVisible[number] ? () => onNumberClicked(number) : noop}
                 touchable={TouchableTypes.opacity}
                 key={`${number}`}
             >

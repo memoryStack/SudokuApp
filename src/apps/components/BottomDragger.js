@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
 import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler } from 'react-native'
 import { Touchable } from '../components/Touchable'
-import { rgba, noOperationFunction } from '../../utils/util'
+import { rgba, noop } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { EVENTS } from '../../constants/events'
 
@@ -55,8 +55,8 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         headerText = '',
         bottomMostPositionRatio = DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
         children,
-        onDraggerOpened = noOperationFunction,
-        onDraggerClosed = noOperationFunction,
+        onDraggerOpened = noop,
+        onDraggerClosed = noop,
         stopBackgroundClickClose = false,
         showBackgroundOverlay = true,
         animateBackgroundOverlayOnClose = true,

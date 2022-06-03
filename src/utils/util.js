@@ -746,7 +746,7 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
     // printBoardState()
 }
 
-export const noOperationFunction = minisculePerfBoost => minisculePerfBoost && undefined
+export const noop = minisculePerfBoost => minisculePerfBoost && undefined
 
 export const rgba = function (hex, opacity) {
     hex = hex.replace('#', '')

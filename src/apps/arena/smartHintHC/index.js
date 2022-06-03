@@ -6,7 +6,7 @@ import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Button } from '../../../components/button'
-import { noOperationFunction } from '../../../utils/util'
+import { noop } from '../../../utils/util'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
 import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
@@ -23,7 +23,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     //          i was right, functions are non-serilizable. so can't store them in state.
     //          plan to remove it.
     const {
-        hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, tryOutAnalyser = noOperationFunction } = {},
+        hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, tryOutAnalyser = noop } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
@@ -134,14 +134,14 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             <View style={styles.footerContainer}>
                 <Button
                     text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
-                    onClick={displayPrevButton ? onPrevClick : noOperationFunction}
+                    onClick={displayPrevButton ? onPrevClick : noop}
                     avoidDefaultContainerStyles={true}
                     textStyles={styles.footerButtonText}
                     hitSlop={HITSLOP}
                 />
                 <Button
                     text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
-                    onClick={displayNextButton ? onNextClick : noOperationFunction}
+                    onClick={displayNextButton ? onNextClick : noop}
                     avoidDefaultContainerStyles={true}
                     textStyles={styles.footerButtonText}
                     hitSlop={HITSLOP}
