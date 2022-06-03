@@ -42,6 +42,7 @@ const initNotesInstancesInfo = () => {
 // TODO: remove it from this utils file to arena utils or to board/utils. that's the right plae for it.
 export const initMainNumbers = () => {
     const sudokuBoard = new Array(9)
+    // BOARD_LOOPER: 14
     for (let i = 0; i < 9; i++) {
         const rowData = new Array(9)
         for (let j = 0; j < 9; j++) {
@@ -77,6 +78,7 @@ const getFirstFilledPosition = cells => {
 // it will be used in "sudokuSolver" before using recursion technique
 const findSingles = () => {
     // naked singles
+    // BOARD_LOOPER: 15
     for (let row = 0; row < 9; row++) for (let col = 0; col < 9; col++) updateNakedSingles({ row, col })
 
     // find hidden singles
@@ -490,6 +492,7 @@ const fillRecursionIndependentBoxes = () => {
 const getBoxToStartRecursionFrom = () => {
     let row = -1,
         col = -1
+    // BOARD_LOOPER: 16
     for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++) if (!sudokuBoard[i][j].value) return { row: i, col: j }
     return { row, col }
 }
@@ -553,6 +556,7 @@ const initializeDuplicacyCheckerStore = () => {
         blocks.push(new Array(9).fill(0))
     }
 
+    // BOARD_LOOPER: 17
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             let cellNum = sudokuBoard[row][col].value
@@ -573,6 +577,7 @@ const initializeDuplicacyCheckerStore = () => {
 
 const initNotesData = () => {
     notesData = new Array(9)
+    // BOARD_LOOPER: 18
     for (let i = 0; i < 9; i++) {
         const rowNotes = []
         for (let j = 0; j < 9; j++) {
@@ -606,6 +611,7 @@ const generateClues = clues => {
     // all good till this point. our duplicacy checker is working absolutely fine
 
     const filledCells = new Array()
+    // BOARD_LOOPER: 19
     for (let row = 0; row < 9; row++)
         for (let col = 0; col < 9; col++) if (sudokuBoard[row][col].value) filledCells.push(row * 9 + col)
 
@@ -699,6 +705,7 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
     initializeDuplicacyCheckerStore()
 
     // TODO: do some research if below piece of code can be optimized or not
+    // BOARD_LOOPER: 20
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             const numChoices = []
@@ -721,6 +728,7 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
 
     // just write loops with {} body to avoid the prettier issue
     // fully solved puzzle is ready and store the solution at this point
+    // BOARD_LOOPER: 21
     for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++) sudokuSolution[i][j].value = sudokuBoard[i][j].value
 
     // remove numbers to generate the puzzle
@@ -729,6 +737,7 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
     // console.log('@@@@@ required clues are', clues)
 
     // let count=0
+    // BOARD_LOOPER: 22
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
             if (sudokuBoard[i][j].value) {

@@ -239,6 +239,7 @@ const handleCustomPuzzleHCClose = ({ setState }) => {
 const handleSharePuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
+    // BOARD_LOOPER: 4
     let puzzleString = ''
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {

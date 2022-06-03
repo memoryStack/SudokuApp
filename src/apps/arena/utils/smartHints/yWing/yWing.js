@@ -34,6 +34,7 @@ export const isValidYWingCell = (userInputNotes, allPossibleNotes) => {
 export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
     const possibleNotes = getPossibleNotes(getStoreState())
 
+    // BOARD_LOOPER: 10
     const result = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {

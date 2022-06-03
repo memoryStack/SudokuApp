@@ -14,6 +14,7 @@ const handleCellPress = ({ params: cell }) => {
 
 const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
     let correctlyFilledCells = 0
+    // BOARD_LOOPER: 3
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             const cellMainNumber = mainNumbers[row][col]

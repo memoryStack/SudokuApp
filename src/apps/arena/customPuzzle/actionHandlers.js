@@ -136,6 +136,7 @@ const handleCellClick = ({ setState, getState, params: cell }) => {
 
 const getCluesCount = mainNumbers => {
     let cluesCount = 0
+    // BOARD_LOOPER: 5
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (mainNumbers[row][col].value) cluesCount++

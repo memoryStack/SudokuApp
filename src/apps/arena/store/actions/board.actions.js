@@ -58,6 +58,7 @@ export const fastPencilAction = () => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
 
+    // BOARD_LOOPER: 6
     const bunch = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -226,6 +227,7 @@ export const eraseAction = () => {
 export const initPossibleNotes = mainNumbers => {
     setTimeout(() => {
         const notes = initNotes()
+        // BOARD_LOOPER: 7
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)

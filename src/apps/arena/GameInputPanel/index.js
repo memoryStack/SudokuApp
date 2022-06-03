@@ -11,6 +11,7 @@ const GameInputPanel_ = ({ onAction }) => {
 
     useEffect(() => {
         const instancesCountAfterUpdate = new Array(10).fill(0)
+        // BOARD_LOOPER: 2
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const value = mainNumbers[row][col].value

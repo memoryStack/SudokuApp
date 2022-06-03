@@ -45,6 +45,7 @@ const checkDuplicateSolutions = (mainNumbers, cell) => {
     const { row, col } = cell
     if (row === 9) {
         if (++numOfSolutions > 1) return
+        // BOARD_LOOPER: 1
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const cellValue = mainNumbers[row][col].value
@@ -71,6 +72,7 @@ export const getNumberOfSolutions = mainNumbers => {
     numOfSolutions = 0
     checkDuplicateSolutions(mainNumbers, { row: 0, col: 0 })
     if (numOfSolutions === 1) {
+        // BOARD_LOOPER: 11
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 mainNumbers[row][col].isClue = mainNumbers[row][col].value !== 0
@@ -119,6 +121,7 @@ export const isCellExists = (cell, store) => store.some(storedCell => areSameCel
 
 export const initNotes = () => {
     const notesInfo = new Array(9)
+    // BOARD_LOOPER: 12
     for (let i = 0; i < 9; i++) {
         const rowNotes = []
         for (let j = 0; j < 9; j++) {
@@ -189,6 +192,7 @@ export const isDuplicateEntry = (mainNumbers, cell, number) => {
 }
 
 export const duplicatesInPuzzle = mainNumbers => {
+    // BOARD_LOOPER: 13
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (isCellEmpty({ row, col }, mainNumbers)) continue
