@@ -13,7 +13,7 @@ import {
     areSameCellsSets,
     getHousePossibleNotes,
     forCellEachNote,
-    forEachCell,
+    forBoardEachCell,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
@@ -392,10 +392,10 @@ describe('forCellEachNote()', () => {
     })
 })
 
-describe('forEachCell()', () => {
+describe('forBoardEachCell()', () => {
     test('calls the callback 81 times, oncefor each cell', () => {
         const mockCallback = jest.fn();
-        forEachCell(mockCallback)
+        forBoardEachCell(mockCallback)
         expect(mockCallback.mock.calls.length).toBe(81);
     })
 })
