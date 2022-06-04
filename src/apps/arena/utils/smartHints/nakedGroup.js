@@ -1,15 +1,137 @@
-import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells } from '../util'
+import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import { maxHintsLimitReached, setCellDataInHintResult } from './util'
 import { isHintValid } from './validityTest'
+import { getMainNumbers, getNotesInfo } from '../../store/selectors/board.selectors'
+import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 
-const tryOutAnalyser = (cellsToFocusData, groupCandidates) => {
-    return (...args) => {
-        return 'Verdict: some logic is coming soon'
+// TODO: move it to utils for other hints to use
+// TODO: don't pass the global data in the args like tryOutMainNumbers
+const noInputInTryOut = (tryOutMainNumbers, focusedCells) => {
+    const actualMainNumbers = getMainNumbers(getStoreState())
+
+    const result = []
+    focusedCells.forEach((cell) => {
+        const isCellFilledInTryOut = isCellEmpty(cell, actualMainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
+        if (isCellFilledInTryOut) {
+            result.push({
+                cell,
+                number: tryOutMainNumbers[cell.row][cell.col].value
+            })
+        }
+    })
+
+    return result.length === 0
+}
+
+const getTryOutErrorType = (tryOutMainNumbers, tryOutNotesInfo, groupCandidates, focusedCells) => {
+    // these errors can be put in utils individually
+    const cellWithoutAnyCandidates = focusedCells.some((cell) => {
+        return isCellEmpty(cell, tryOutMainNumbers) && (getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0)
+    })
+    if (cellWithoutAnyCandidates) {
+        return 'EMPTY_CELL_IN_SOLUTION'
+    }
+
+    const candidatesNakedSingleInMultipleCells = groupCandidates.filter((candidate) => {
+        const candidateNakedSingleHostCells = focusedCells.filter((cell) => {
+            return isCellNoteVisible(candidate, tryOutNotesInfo[cell.row][cell.col])
+                && (getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1)
+        })
+        return candidateNakedSingleHostCells.length > 1
+    })
+    if (candidatesNakedSingleInMultipleCells.length) {
+        return 'MULTIPLE_CELLS_NAKED_SINGLE'
+    }
+
+    return ''
+}
+
+const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
+    const result = []
+    groupCells.forEach((cell) => {
+        if (!isCellEmpty(cell, tryOutMainNumbers)) {
+            result.push( tryOutMainNumbers[cell.row][cell.col].value)
+        }
+    })
+    return result
+}
+
+const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
+    return groupCandidates.map((candidate) => {
+        return parseInt(candidate, 10)
+    }).filter((groupCandidate) => {
+        return !correctlyFilledGroupCandidates.includes(groupCandidate)
+    })
+}
+
+// every hint constructor should pass try-out needed data seperately in the state
+const tryOutAnalyser = (cellsToFocusData, groupCandidates, focusedCells, groupCells) => {
+
+    const getCandidatesListForTryOutMsg = () => {
+        const isNakedDoubles = groupCandidates.length === 2
+        return isNakedDoubles
+            ? `${groupCandidates[0]} or ${groupCandidates[1]}`
+            : `${groupCandidates[0]}, ${groupCandidates[1]} or ${groupCandidates[2]}`
+    }
+
+    return (tryOutMainNumbers, tryOutNotesInfo) => {
+        if (noInputInTryOut(tryOutMainNumbers, focusedCells)) {
+            return `try filling ${getCandidatesListForTryOutMsg()} in the cells where`
+            + ` it is highlighted in red or green color to see how this hint works`
+        }
+
+        const tryOutErrorType = getTryOutErrorType(tryOutMainNumbers, tryOutNotesInfo, groupCandidates, focusedCells)
+
+        // switch kind of handling
+        // display these kind of messages in red color
+        if (tryOutErrorType === 'EMPTY_CELL_IN_SOLUTION') {
+            return `one or more cells have no candidates in them. undo your move.`
+        } else if (tryOutErrorType === 'MULTIPLE_CELLS_NAKED_SINGLE') {
+            return `candidate highlighted in green color can't be naked single for more than 1 cell in a house. undo your move.`
+        }
+
+        // one or more candidates are filled in correct place. prepare messages for this state.
+
+        const getFilledCandidatesListForGreenState = (candidates) => {
+            if (candidates.length === 1) return `${candidates[0]}`
+
+            return candidates.reduce((prevValue, currentCandidate, currentIndex) => {
+                if (currentIndex === 0) return currentCandidate
+
+                const isLastElement = currentIndex === candidates.length - 1
+                const joint = isLastElement ? ' and ' : ', '
+                return prevValue + joint + currentCandidate
+            }, '')
+        }
+
+        // highlight this message in green color
+        // hinting user that it is the one of the right path
+        const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
+        
+        if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
+            // all the candidates are filed in their cells in some order.
+            // tell user that this arrangement can be a valid solution in the final solved solution.
+            return `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)} are filled in the`
+                + ` cells without getting into any invalid state for the highlighted region.`
+                + ` we don't know the exact solution for these cells yet but we are sure`
+                + ` that ${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
+                + ` will belong to these cells only in the highlighted region and not anywhere else.`
+        } else { 
+            const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
+            console.log('@@@@@@ candidatesToBeFilled', candidatesToBeFilled)
+            return `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
+                + ` ${correctlyFilledGroupCandidates.length === 1 ? 'is' : 'are'} filled properly.`
+                + ` fill ${getFilledCandidatesListForGreenState(candidatesToBeFilled)} as well`
+                + ` to find where these numbers can come in the highlighted region.`
+        }
     }
 }
+
+// seperate the above code in it's file
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // TODO: write test case for it and refactor it properly
 const prepareNakedDublesOrTriplesHintData = (
@@ -95,7 +217,7 @@ const prepareNakedDublesOrTriplesHintData = (
 
         if (isTryOut) {
             hintStepData.inputPanelNumbersVisibility = getTryOutInputPanelNumbersVisibility()
-            hintStepData.tryOutAnalyser = tryOutAnalyser(cellsToFocusData, groupCandidates)
+            hintStepData.tryOutAnalyser = tryOutAnalyser(cellsToFocusData, groupCandidates, toBeHighlightedCells, groupCells)
         }
 
         return hintStepData
