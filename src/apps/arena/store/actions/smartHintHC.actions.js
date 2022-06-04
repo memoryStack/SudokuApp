@@ -98,9 +98,6 @@ export const inputTryOutNumber = (number, focusedCells) => {
     // NUDGE: show nudge in future
     if (!isValidInputNumberClick(number)) return
     const removalbeNotesHostCellsData = getRemovalbeNotesHostCells(number, focusedCells)
-
-    
-
     invokeDispatch(updateBoardDataOnTryOutNumberInput({removalbeNotesHostCellsData, number}))
 }
 
@@ -159,7 +156,9 @@ const getNotesToEnterHostCells = (focusedCells) => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col])
+                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col]).filter((note) => {
+                    return shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)
+                })
             })
         } else {
             if (shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)) {
