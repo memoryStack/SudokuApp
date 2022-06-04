@@ -125,20 +125,17 @@ const tryOutAnalyser = (cellsToFocusData, groupCandidates, focusedCells, groupCe
         const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)        
         if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
             return {
-                msg: `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)} are filled in the`
-                    + ` cells without getting into any invalid state for the highlighted region.`
-                    + ` we don't know the exact solution for these cells yet but we are sure`
+                msg: `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)} are filled in`
+                    +` these cells without any error. now we are sure`
                     + ` that ${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
-                    + ` will belong to these cells only in the highlighted region and not anywhere else.`,
+                    + ` can't come in cells where these were highlighted in red`,
                 state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
             }
         } else { 
             const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
             return {
-                msg: `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
-                    + ` ${correctlyFilledGroupCandidates.length === 1 ? 'is' : 'are'} filled properly.`
-                    + ` fill ${getFilledCandidatesListForGreenState(candidatesToBeFilled)} as well`
-                    + ` to find where these numbers can come in the highlighted region.`,
+                msg: `fill ${getFilledCandidatesListForGreenState(candidatesToBeFilled)} as well`
+                    + ` to find where these numbers can't come in the highlighted region.`,
                 state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
             }
         }
