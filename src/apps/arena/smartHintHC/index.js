@@ -28,15 +28,21 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         totalHintsCount,
     } = useSelector(getHintHCInfo)
 
-    const [ tryOutMessage, setTryOutMessage ] = useState('')
+    // put it somewhere globally
+    const TRY_OUT_RESULT_STATES = {
+        START: 'START',
+        ERROR: 'ERROR',
+        VALID_PROGRESS: 'VALID_PROGRESS'
+    }
+
+    const [ tryOutResult, setTryOutResult ] = useState({})
     const mainNumbers = useSelector(getTryOutMainNumbers)
     const notesInfo = useSelector(getTryOutNotes)
     const isHintTryOut = useIsHintTryOutStep()
 
     useEffect(() => {
         if (!isHintTryOut) return
-        // TODO: run the dataAnalyser for verdict message
-        setTryOutMessage(tryOutAnalyser(mainNumbers, notesInfo))
+        setTryOutResult(tryOutAnalyser(mainNumbers, notesInfo))
     }, [isHintTryOut, mainNumbers, notesInfo])
 
     useEffect(() => {
@@ -71,7 +77,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }, [onAction])
 
     const onClosed = useCallback(() => {
-        setTryOutMessage('')
+        setTryOutResult({})
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
     }, [onAction, selectCellOnClose])
 
@@ -90,8 +96,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const displayFooter = displayNextButton || displayPrevButton
 
     const containerStyles = getContainerStyles(windowHeight, displayFooter)
-
-    
 
     const renderHeader = () => {
         return (
@@ -118,15 +122,23 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }
     
     const renderInputPanel = () => {
-        // TODO: message styles
+        // TODO: refactor
+        let resultFontColor = 'black'
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) {
+            resultFontColor = 'green'
+        }
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.ERROR ) {
+            resultFontColor = 'red'
+        }
+        
         return (
             <>
                 <Inputpanel
                     numbersVisible={inputPanelNumbersVisibility}
                     onAction={onAction}
                 />
-                <Text style={styles.tryOutResult}>
-                    {tryOutMessage}
+                <Text style={[styles.tryOutResult, { color: resultFontColor } ]}>
+                    {tryOutResult.msg}
                 </Text>
             </>
         )

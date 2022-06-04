@@ -70,6 +70,12 @@ const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates
 // every hint constructor should pass try-out needed data seperately in the state
 const tryOutAnalyser = (cellsToFocusData, groupCandidates, focusedCells, groupCells) => {
 
+    const TRY_OUT_RESULT_STATES = {
+        START: 'START',
+        ERROR: 'ERROR',
+        VALID_PROGRESS: 'VALID_PROGRESS'
+    }
+
     const getCandidatesListForTryOutMsg = () => {
         const isNakedDoubles = groupCandidates.length === 2
         return isNakedDoubles
@@ -79,8 +85,11 @@ const tryOutAnalyser = (cellsToFocusData, groupCandidates, focusedCells, groupCe
 
     return (tryOutMainNumbers, tryOutNotesInfo) => {
         if (noInputInTryOut(tryOutMainNumbers, focusedCells)) {
-            return `try filling ${getCandidatesListForTryOutMsg()} in the cells where`
-            + ` it is highlighted in red or green color to see how this hint works`
+            return {
+                msg: `try filling ${getCandidatesListForTryOutMsg()} in the cells where`
+                    + ` it is highlighted in red or green color to see how this hint works`,
+                state: TRY_OUT_RESULT_STATES.START,
+            }
         }
 
         const tryOutErrorType = getTryOutErrorType(tryOutMainNumbers, tryOutNotesInfo, groupCandidates, focusedCells)
@@ -88,9 +97,15 @@ const tryOutAnalyser = (cellsToFocusData, groupCandidates, focusedCells, groupCe
         // switch kind of handling
         // display these kind of messages in red color
         if (tryOutErrorType === 'EMPTY_CELL_IN_SOLUTION') {
-            return `one or more cells have no candidates in them. undo your move.`
+            return {
+                msg: `one or more cells have no candidates in them. undo your move.`,
+                state: TRY_OUT_RESULT_STATES.ERROR,
+            }
         } else if (tryOutErrorType === 'MULTIPLE_CELLS_NAKED_SINGLE') {
-            return `candidate highlighted in green color can't be naked single for more than 1 cell in a house. undo your move.`
+            return {
+                msg: `candidate highlighted in green color can't be naked single for more than 1 cell in a house. undo your move.`,
+                state: TRY_OUT_RESULT_STATES.ERROR,
+            }
         }
 
         // one or more candidates are filled in correct place. prepare messages for this state.
@@ -107,25 +122,25 @@ const tryOutAnalyser = (cellsToFocusData, groupCandidates, focusedCells, groupCe
             }, '')
         }
 
-        // highlight this message in green color
-        // hinting user that it is the one of the right path
-        const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
-        
+        const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)        
         if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-            // all the candidates are filed in their cells in some order.
-            // tell user that this arrangement can be a valid solution in the final solved solution.
-            return `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)} are filled in the`
-                + ` cells without getting into any invalid state for the highlighted region.`
-                + ` we don't know the exact solution for these cells yet but we are sure`
-                + ` that ${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
-                + ` will belong to these cells only in the highlighted region and not anywhere else.`
+            return {
+                msg: `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)} are filled in the`
+                    + ` cells without getting into any invalid state for the highlighted region.`
+                    + ` we don't know the exact solution for these cells yet but we are sure`
+                    + ` that ${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
+                    + ` will belong to these cells only in the highlighted region and not anywhere else.`,
+                state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+            }
         } else { 
             const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
-            console.log('@@@@@@ candidatesToBeFilled', candidatesToBeFilled)
-            return `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
-                + ` ${correctlyFilledGroupCandidates.length === 1 ? 'is' : 'are'} filled properly.`
-                + ` fill ${getFilledCandidatesListForGreenState(candidatesToBeFilled)} as well`
-                + ` to find where these numbers can come in the highlighted region.`
+            return {
+                msg: `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
+                    + ` ${correctlyFilledGroupCandidates.length === 1 ? 'is' : 'are'} filled properly.`
+                    + ` fill ${getFilledCandidatesListForGreenState(candidatesToBeFilled)} as well`
+                    + ` to find where these numbers can come in the highlighted region.`,
+                state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+            }
         }
     }
 }
