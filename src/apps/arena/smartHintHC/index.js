@@ -111,7 +111,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const renderHintText = () => {
         return (
-            <ScrollView style={styles.logicContainer} ref={scrollViewRef} onScroll={handleOnScroll}>
+            <ScrollView ref={scrollViewRef} onScroll={handleOnScroll}>
                 <Text style={styles.hintLogicText}>{logic}</Text>
             </ScrollView>
         )
@@ -125,7 +125,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                     numbersVisible={inputPanelNumbersVisibility}
                     onAction={onAction}
                 />
-                <Text>{tryOutMessage}</Text>
+                <Text style={styles.tryOutResult}>
+                    {tryOutMessage}
+                </Text>
             </>
         )
     }
@@ -164,7 +166,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         >
             <View style={containerStyles}>
                 {renderHeader()}
-                {isHintTryOut ? renderInputPanel() : renderHintText()}
+                <View style={styles.bodyContainer}>
+                    {isHintTryOut ? renderInputPanel() : renderHintText()}
+                </View>
                 {renderFooter()}
             </View>
         </BottomDragger>
