@@ -6,10 +6,15 @@ import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
 import { noop } from '../../../utils/util'
 import { ACTION_TYPES } from './constants'
+import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 
-const CLOSE_ICON_DIMENSION = 28
 const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) => {
+
+    const isHintTryOut = useIsHintTryOutStep()
+
     const { CELL_WIDTH } = useBoardElementsDimensions()
+
+    const CLOSE_ICON_DIMENSION = CELL_WIDTH * (3 / 4)
 
     const styles = useMemo(() => {
         return getStyles(CELL_WIDTH)
@@ -51,9 +56,11 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
         const rows = []
 
         let row = []
-        for (let i = 1; i <= 9; i++) {
-            row.push(renderInputNumber(i))
-            if (i === 5) {
+        for (let i = 1; i <= 9; i++) {// TODO: note or number looper. refactore it
+            if (!isHintTryOut || isHintTryOut && numbersVisible[i]) {
+                row.push(renderInputNumber(i))
+            }
+            if (row.length >= 5) {
                 rows.push(
                     <View key={'rowOne'} style={styles.rowContainer}>
                         {row}

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
@@ -12,6 +11,7 @@ import withActions from '../../../utils/hocs/withActions'
 import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
+import { getContainerStyles, styles } from './styles'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -116,12 +116,15 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             </ScrollView>
         )
     }
-
+    
     const renderInputPanel = () => {
         // TODO: message styles
         return (
             <>
-                <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} />
+                <Inputpanel
+                    numbersVisible={inputPanelNumbersVisibility}
+                    onAction={onAction}
+                />
                 <Text>{tryOutMessage}</Text>
             </>
         )
