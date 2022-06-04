@@ -161,7 +161,7 @@ const getNotesToEnterHostCells = (focusedCells) => {
                 })
             })
         } else {
-            if (shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)) {
+            if (isCellEmpty(cell, tryOutMainNumbers) && shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)) {
                 result.push({
                     cell,
                     notes: [numberToBeErased]
@@ -169,7 +169,7 @@ const getNotesToEnterHostCells = (focusedCells) => {
             }
         }        
     })    
-
+ 
     return result
 }
 
