@@ -38,6 +38,15 @@ export const styles = StyleSheet.create({
     tryOutResult: {
         marginTop: 12,
         marginBottom: 4,
+    },
+    tryOutDefaultResult: {
+        color: 'black',
+    },
+    tryOutErrorResult: {
+        color: 'red',
+    },
+    tryOutProgressResult: {
+        color: 'green',
     }
 })
 

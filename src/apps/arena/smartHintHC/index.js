@@ -108,23 +108,27 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         )
     }
     
-    const renderInputPanel = () => {
-        // TODO: refactor
-        let resultFontColor = 'black'
-        if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) {
-            resultFontColor = 'green'
-        }
-        if (tryOutResult.state === TRY_OUT_RESULT_STATES.ERROR ) {
-            resultFontColor = 'red'
-        }
+    const getTryOutResultTextStyle = () => {
+        let result = styles.tryOutDefaultResult
         
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) {
+            result = styles.tryOutProgressResult
+        }
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.ERROR) {
+            result = styles.tryOutErrorResult
+        }
+
+        return result
+    }
+
+    const renderTryOutContent = () => {
         return (
             <>
                 <Inputpanel
                     numbersVisible={inputPanelNumbersVisibility}
                     onAction={onAction}
                 />
-                <Text style={[styles.tryOutResult, { color: resultFontColor } ]}>
+                <Text style={[styles.tryOutResult, getTryOutResultTextStyle() ]}>
                     {tryOutResult.msg}
                 </Text>
             </>
@@ -166,7 +170,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             <View style={containerStyles}>
                 {renderHeader()}
                 <View style={styles.bodyContainer}>
-                    {isHintTryOut ? renderInputPanel() : renderHintText()}
+                    {isHintTryOut ? renderTryOutContent() : renderHintText()}
                 </View>
                 {renderFooter()}
             </View>
