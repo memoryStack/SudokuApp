@@ -7,6 +7,7 @@ import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElem
 import { noop } from '../../../utils/util'
 import { ACTION_TYPES } from './constants'
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
+import { forCellEachNote as forEachInputNumber } from '../utils/util'
 
 const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) => {
 
@@ -56,9 +57,9 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
         const rows = []
 
         let row = []
-        for (let i = 1; i <= 9; i++) {// TODO: note or number looper. refactore it
-            if (!isHintTryOut || isHintTryOut && numbersVisible[i]) {
-                row.push(renderInputNumber(i))
+        forEachInputNumber((number) => {
+            if (!isHintTryOut || isHintTryOut && numbersVisible[number]) {
+                row.push(renderInputNumber(number))
             }
             if (row.length >= 5) {
                 rows.push(
@@ -68,7 +69,8 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
                 )
                 row = []
             }
-        }
+        })
+
         row.push(renderEraser())
         rows.push(<View key={'hori_seperator'} style={styles.horizontalSeperator} />)
         rows.push(
