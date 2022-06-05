@@ -2,18 +2,18 @@ import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { SCREEN_NAME } from '../../../resources/constants'
 import withActions from '../../../utils/hocs/withActions'
-import { consoleLog } from '../../../utils/util'
 import { Board } from '../gameBoard'
 import { useCacheGameState } from '../hooks/useCacheGameState'
 import { getMoves } from '../store/selectors/board.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { ACTION_TYPES, ACTION_HANDLERS } from './actionHandlers'
-import { ACTION_HANDLERS as SMART_HINT_ACTION_HANDLERS } from '../smartHintHC/actionHandlers'
+import { ACTION_TYPES } from './actionHandlers'
 import { useCellFocus, useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
+import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
+import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 
-const PuzzleBoard_ = ({ onAction, ...restProps }) => {
+const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
 
     const isHintTryOut = useIsHintTryOutStep()
     const isCellFocusedInSmartHint = useCellFocus()
@@ -21,8 +21,6 @@ const PuzzleBoard_ = ({ onAction, ...restProps }) => {
     const { mainNumbers, selectedCell, notesInfo } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
     const moves = useSelector(getMoves)
-
-    const smartHintTryOutOnAction = restProps['smartHintTryOutOnAction']
 
     useEffect(() => {
         return () => {
@@ -64,16 +62,5 @@ const PuzzleBoard_ = ({ onAction, ...restProps }) => {
         />
     )
 }
-
-// TODO: seperate it out
-const ACTION_HANDLERS_CONFIG = [
-    {
-        actionHandlers: ACTION_HANDLERS
-    },
-    {
-        onActionPropAlias: 'smartHintTryOutOnAction', // TODO: make it as as constant
-        actionHandlers: SMART_HINT_ACTION_HANDLERS,
-    }
-]
 
 export const PuzzleBoard = React.memo(withActions({ actionHandlers: ACTION_HANDLERS_CONFIG })(PuzzleBoard_))
