@@ -1,88 +1,21 @@
-import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible } from '../../util'
-import { getMainNumbers } from '../../../store/selectors/board.selectors'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
+import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
+import { isCellEmpty } from '../../util'
+import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
+import { noInputInTryOut, getTryOutErrorType } from './helpers'
 
-// TODO: move it to utils for other hints to use
-// TODO: don't pass the global data in the args like tryOutMainNumbers
-const noInputInTryOut = (tryOutMainNumbers, focusedCells) => {
-    const actualMainNumbers = getMainNumbers(getStoreState())
-
-    const result = []
-    focusedCells.forEach((cell) => {
-        const isCellFilledInTryOut = isCellEmpty(cell, actualMainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
-        if (isCellFilledInTryOut) {
-            result.push({
-                cell,
-                number: tryOutMainNumbers[cell.row][cell.col].value
-            })
-        }
-    })
-
-    return result.length === 0
-}
-
-const getTryOutErrorType = (tryOutMainNumbers, tryOutNotesInfo, groupCandidates, focusedCells) => {
-    // these errors can be put in utils individually
-    const cellWithoutAnyCandidates = focusedCells.some((cell) => {
-        return isCellEmpty(cell, tryOutMainNumbers) && (getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0)
-    })
-    if (cellWithoutAnyCandidates) {
-        return TRY_OUT_ERROR_TYPES.EMPTY_CELL_IN_SOLUTION
-    }
-
-    const candidatesNakedSingleInMultipleCells = groupCandidates.filter((candidate) => {
-        const candidateNakedSingleHostCells = focusedCells.filter((cell) => {
-            return isCellNoteVisible(candidate, tryOutNotesInfo[cell.row][cell.col])
-                && (getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1)
-        })
-        return candidateNakedSingleHostCells.length > 1
-    })
-    if (candidatesNakedSingleInMultipleCells.length) {
-        return TRY_OUT_ERROR_TYPES.MULTIPLE_CELLS_NAKED_SINGLE
-    }
-
-    return ''
-}
-
-const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
-    const result = []
-    groupCells.forEach((cell) => {
-        if (!isCellEmpty(cell, tryOutMainNumbers)) {
-            result.push( tryOutMainNumbers[cell.row][cell.col].value)
-        }
-    })
-    return result
-}
-
-const getTryOutErrorResult = (errorType) => {
-    return {
-        msg: TRY_OUT_ERROR_TYPES_VS_ERROR_MSG[errorType],
-        state: TRY_OUT_RESULT_STATES.ERROR,
-    }
-}
-
- const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
+const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
 
-    const getCandidatesListForTryOutMsg = () => {
-        const isNakedDoubles = groupCandidates.length === 2
-        return isNakedDoubles
-            ? `${groupCandidates[0]} or ${groupCandidates[1]}`
-            : `${groupCandidates[0]}, ${groupCandidates[1]} or ${groupCandidates[2]}`
-    }
-
-    if (noInputInTryOut(tryOutMainNumbers, focusedCells)) {
+    if (noInputInTryOut(focusedCells)) {
         return {
-            msg: `try filling ${getCandidatesListForTryOutMsg()} in the cells where`
+            msg: `try filling ${getCandidatesListForTryOutMsg(groupCandidates)} in the cells where`
                 + ` it is highlighted in red or green color to see how this hint works`,
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
 
-    const tryOutErrorType = getTryOutErrorType(tryOutMainNumbers, tryOutNotesInfo, groupCandidates, focusedCells)
+    const tryOutErrorType = getTryOutErrorType(groupCandidates, focusedCells)
     if (tryOutErrorType) {
         return getTryOutErrorResult(tryOutErrorType)
     }
@@ -117,6 +50,30 @@ const getTryOutErrorResult = (errorType) => {
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
+}
+
+const getCandidatesListForTryOutMsg = (candidates) => {
+    const isNakedDoubles = candidates.length === 2
+    return isNakedDoubles
+        ? `${candidates[0]} or ${candidates[1]}`
+        : `${candidates[0]}, ${candidates[1]} or ${candidates[2]}`
+}
+
+const getTryOutErrorResult = (errorType) => {
+    return {
+        msg: TRY_OUT_ERROR_TYPES_VS_ERROR_MSG[errorType],
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
+    const result = []
+    groupCells.forEach((cell) => {
+        if (!isCellEmpty(cell, tryOutMainNumbers)) {
+            result.push( tryOutMainNumbers[cell.row][cell.col].value)
+        }
+    })
+    return result
 }
 
 const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
