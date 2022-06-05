@@ -1,7 +1,8 @@
 import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible } from '../../util'
-import { getMainNumbers, getNotesInfo } from '../../../store/selectors/board.selectors'
+import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
-import { getStoreState, invokeDispatch } from '../../../../../redux/dispatch.helpers'
+import { getStoreState } from '../../../../../redux/dispatch.helpers'
+import { TRY_OUT_RESULT_STATES } from './constants'
 
 // TODO: move it to utils for other hints to use
 // TODO: don't pass the global data in the args like tryOutMainNumbers
@@ -66,18 +67,6 @@ const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates
  const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
-
-    /*
-        groupCandidates,
-        focusedCells,
-        groupCells,
-    */
-
-    const TRY_OUT_RESULT_STATES = {
-        START: 'START',
-        ERROR: 'ERROR',
-        VALID_PROGRESS: 'VALID_PROGRESS'
-    }
 
     const getCandidatesListForTryOutMsg = () => {
         const isNakedDoubles = groupCandidates.length === 2

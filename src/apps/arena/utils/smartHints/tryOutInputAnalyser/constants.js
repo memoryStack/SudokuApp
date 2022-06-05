@@ -1,0 +1,5 @@
+export const TRY_OUT_RESULT_STATES = {
+    START: 'START',
+    ERROR: 'ERROR',
+    VALID_PROGRESS: 'VALID_PROGRESS'
+}

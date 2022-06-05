@@ -12,6 +12,7 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
 import { getContainerStyles, styles } from './styles'
+import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -27,13 +28,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
-
-    // put it somewhere globally
-    const TRY_OUT_RESULT_STATES = {
-        START: 'START',
-        ERROR: 'ERROR',
-        VALID_PROGRESS: 'VALID_PROGRESS'
-    }
 
     const tryOutResult = useHintTryOutAnalyserResult()
 
