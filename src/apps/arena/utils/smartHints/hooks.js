@@ -5,8 +5,8 @@ import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../../store
 import { analyseTryOutInput } from '../../utils/smartHints/tryOutInputAnalyser'
 
 const useIsHintTryOutStep = () => {
-    const {hint: { key: stepKey } = {}} = useSelector(getHintHCInfo)
-    return stepKey === 'TRY_OUT'
+    const { hint: { isTryOut = false } = {} } = useSelector(getHintHCInfo)
+    return isTryOut
 }
 
 const useCellFocus = () => {
