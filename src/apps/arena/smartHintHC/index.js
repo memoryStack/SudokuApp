@@ -12,6 +12,7 @@ import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../store/se
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
 import { getContainerStyles, styles } from './styles'
+import { analyseTryOutInput } from '../utils/smartHints/tryOutInputAnalyser'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -23,7 +24,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     //          i was right, functions are non-serilizable. so can't store them in state.
     //          plan to remove it.
     const {
-        hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, tryOutAnalyser = noop } = {},
+        hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, hintId, tryOutAnalyserData } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
@@ -35,6 +36,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         VALID_PROGRESS: 'VALID_PROGRESS'
     }
 
+    // TODO: hook it out the try-out result logic in it's seperate file/hook
     const [ tryOutResult, setTryOutResult ] = useState({})
     const mainNumbers = useSelector(getTryOutMainNumbers)
     const notesInfo = useSelector(getTryOutNotes)
@@ -42,8 +44,8 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     useEffect(() => {
         if (!isHintTryOut) return
-        setTryOutResult(tryOutAnalyser(mainNumbers, notesInfo))
-    }, [isHintTryOut, mainNumbers, notesInfo])
+        setTryOutResult(analyseTryOutInput({type: hintId, data: tryOutAnalyserData}))
+    }, [isHintTryOut, mainNumbers, notesInfo, tryOutAnalyserData, hintId])
 
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells } })
