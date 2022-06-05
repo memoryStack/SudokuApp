@@ -2,7 +2,7 @@ import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible } from '../../
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES } from './constants'
+import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 
 // TODO: move it to utils for other hints to use
 // TODO: don't pass the global data in the args like tryOutMainNumbers
@@ -56,12 +56,11 @@ const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
     return result
 }
 
-const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
-    return groupCandidates.map((candidate) => {
-        return parseInt(candidate, 10)
-    }).filter((groupCandidate) => {
-        return !correctlyFilledGroupCandidates.includes(groupCandidate)
-    })
+const getTryOutErrorResult = (errorType) => {
+    return {
+        msg: TRY_OUT_ERROR_TYPES_VS_ERROR_MSG[errorType],
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
 }
 
  const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
@@ -84,23 +83,11 @@ const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates
     }
 
     const tryOutErrorType = getTryOutErrorType(tryOutMainNumbers, tryOutNotesInfo, groupCandidates, focusedCells)
-
-    // switch kind of handling
-    // display these kind of messages in red color
-    if (tryOutErrorType === MULTIPLE_CELLS_NAKED_SINGLE.EMPTY_CELL_IN_SOLUTION) {
-        return {
-            msg: `one or more cells have no candidates in them. undo your move.`,
-            state: TRY_OUT_RESULT_STATES.ERROR,
-        }
-    } else if (tryOutErrorType ===  MULTIPLE_CELLS_NAKED_SINGLE.MULTIPLE_CELLS_NAKED_SINGLE) {
-        return {
-            msg: `candidate highlighted in green color can't be naked single for more than 1 cell in a house. undo your move.`,
-            state: TRY_OUT_RESULT_STATES.ERROR,
-        }
+    if (tryOutErrorType) {
+        return getTryOutErrorResult(tryOutErrorType)
     }
 
     // one or more candidates are filled in correct place. prepare messages for this state.
-
     const getFilledCandidatesListForGreenState = (candidates) => {
         if (candidates.length === 1) return `${candidates[0]}`
 
@@ -130,6 +117,14 @@ const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
+}
+
+const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
+    return groupCandidates.map((candidate) => {
+        return parseInt(candidate, 10)
+    }).filter((groupCandidate) => {
+        return !correctlyFilledGroupCandidates.includes(groupCandidate)
+    })
 }
 
 export default tryOutAnalyser
