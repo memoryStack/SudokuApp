@@ -5,6 +5,39 @@ import { GROUPS, HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import { maxHintsLimitReached, setCellDataInHintResult } from './util'
 import { isHintValid } from './validityTest'
 
+// TODO: this msg needs to be simplified for tripple case [{1,2}, {1,2,3}, {2, 3}]
+// this case doesn't fit exactly in the below explaination
+// TODO: turn it into multistep
+const getNakedTrippleHintData = ({ groupCandidates, toBeHighlightedCells }) => {
+    const isNakedDoubles = groupCandidates.length === 2
+    const groupCellsCountEnglishText = isNakedDoubles ? 'two' : 'three'
+    
+    const getGroupCandidatesListText = () => {
+        return isNakedDoubles
+            ? `${groupCandidates[0]} and ${groupCandidates[1]}`
+            : `${groupCandidates[0]}, ${groupCandidates[1]} and ${groupCandidates[2]}`
+    }
+    
+    const getCellsHostingText = () => {
+        const groupCandidatesText = isNakedDoubles
+            ? `${groupCandidates[0]}, and another one ${groupCandidates[1]}`
+            : `${groupCandidates[0]}, another ${groupCandidates[1]}, and the last ${groupCandidates[2]}`
+
+        return `So one of the squares has to be ${groupCandidatesText} (which is which is yet unknown).`
+    }
+
+    const hintMessage = () => `In the highlighted region, ${groupCellsCountEnglishText} cells have exactly same candidates ${getGroupCandidatesListText()} highlighted in green color. ${getCellsHostingText()} So ${getGroupCandidatesListText()} highlighted in red color can't appear there and we can erase these instances from these cells`
+
+    return [{
+        focusedCells: toBeHighlightedCells,
+        cellsToFocusData,
+        techniqueInfo: {
+            title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
+            logic: hintMessage(),
+        },
+    }]
+}
+
 // TODO: write test case for it and refactor it properly
 const prepareNakedDublesOrTriplesHintData = (
     noOfInstances,
@@ -39,8 +72,9 @@ const prepareNakedDublesOrTriplesHintData = (
         setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
     })
 
-    // TODO: this msg needs to be simplified for tripple case [{1,2}, {1,2,3}, {2, 3}]
-    // this case doesn't fit exactly in the below explaination
+    if (!isNakedDoubles) {
+        return getNakedTrippleHintData()
+    }
 
     // TODO: write explaination for naked tripple as well
     const hintList = [
