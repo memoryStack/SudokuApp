@@ -1,6 +1,5 @@
 import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
-import { GAME_STATE } from '../../../../resources/constants'
 import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog, getClonedValue } from '../../../../utils/util'
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
@@ -10,7 +9,6 @@ import { areCommonHouseCells, areSameCells, duplicacyPresent, getCellVisibleNote
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes, getTryOutSelectedCell } from '../selectors/smartHintHC.selectors'
-import { updateGameState } from './gameState.actions'
 
 const {
     removeHints,
@@ -95,8 +93,10 @@ export const updateTryOutSelectedCell = (cell) => {
 }
 
 export const inputTryOutNumber = (number, focusedCells) => {
-    // NUDGE: show nudge in future
-    if (!isValidInputNumberClick(number)) return
+    if (!isValidInputNumberClick(number)) {
+        showSnackBar({ msg: `try filling cell which is empty and has ${number} as a candidate there` })
+        return
+    }
     const removalbeNotesHostCellsData = getRemovalbeNotesHostCells(number, focusedCells)
     invokeDispatch(updateBoardDataOnTryOutNumberInput({removalbeNotesHostCellsData, number}))
 }
@@ -106,6 +106,13 @@ const isValidInputNumberClick = (number) => {
     const mainNumbers = getTryOutMainNumbers(getStoreState())
     const notesInfo = getTryOutNotes(getStoreState())
     return isCellEmpty(selectedCell, mainNumbers) && isCellNoteVisible(number, notesInfo[selectedCell.row][selectedCell.col])
+}
+
+const showSnackBar = ({ msg }) => {
+    emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
+        msg,
+        visibleTime: 4000,
+    })
 }
 
 const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
@@ -134,7 +141,10 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
 }
 
 export const eraseTryOutNumber = (focusedCells) => {
-    if (!cellHasTryOutInput()) return
+    if (!cellHasTryOutInput()) {
+        showSnackBar({ msg: 'you can only erase from cells which were filled after this hint is displayed' })
+        return
+    }
 
     const notesToEnterHostCellsData = getNotesToEnterHostCells(focusedCells)
     invokeDispatch(updateBoardDataOnTryOutErase(notesToEnterHostCellsData))

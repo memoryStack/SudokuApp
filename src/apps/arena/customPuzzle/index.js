@@ -74,6 +74,8 @@ const CustomPuzzle_ = ({
         onCustomPuzzleClosed()
     }, [])
 
+    // TODO: why do we have this custom renderer which looks almost exactly like
+    // the main snackBar globally ??
     const snackBarRenderer = msg => {
         return (
             <View style={styles.snackBarContainer}>
