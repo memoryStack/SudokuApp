@@ -5,8 +5,15 @@ const DEFAULT_OPTIONS = {
     shouldForwardAction: false,
 }
 
-// TODO: add arguments type here for ease of use
 const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS }) => {
+
+    // TODO: is doing this transform fine ??
+    //      looks wrong that a variable can be object and also array
+    let actionHandlersConfig = actionHandlers
+    if (!Array.isArray(actionHandlers)) {
+        actionHandlersConfig = [{ actionHandlers }]
+    }
+
     return function wrapComponent(WrappedComponent) {
         class WithActions extends PureComponent {
             state = initialState
@@ -40,18 +47,11 @@ const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT
                 return result
             }
 
-            // TODO: "actionHandlers" is gettin confusing right now. MUST refactore it
             getOnActionProp = () => {
-                if (Array.isArray(actionHandlers)) {
-                    return actionHandlers.reduce((prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
-                        prev[onActionPropAlias] = (action) => this.handleAction(action, actionHandlers)
-                        return prev
-                    }, {})
-                }
-
-                return {
-                    [DEFAULT_ON_ACTION_PROP_NAME]: (action) => this.handleAction(action, actionHandlers)
-                }
+                return actionHandlersConfig.reduce((prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
+                    prev[onActionPropAlias] = (action) => this.handleAction(action, actionHandlers)
+                    return prev
+                }, {})
             }
 
             render() {
