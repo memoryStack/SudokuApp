@@ -18,11 +18,6 @@ const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
-    // TODO: get the dataAnalyser as well from the redux for each hint
-    // EXERCISE: i guess it's not good to store the function in redux.
-    //          redux is only for the data/state. find out this thoughts's validity
-    //          i was right, functions are non-serilizable. so can't store them in state.
-    //          plan to remove it.
     const {
         hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility } = {},
         currentHintNum,
