@@ -5,36 +5,20 @@ import withActions from '../../../utils/hocs/withActions'
 import { consoleLog } from '../../../utils/util'
 import { Board } from '../gameBoard'
 import { useCacheGameState } from '../hooks/useCacheGameState'
-import { getMainNumbers, getMoves, getNotesInfo, getSelectedCell } from '../store/selectors/board.selectors'
+import { getMoves } from '../store/selectors/board.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { ACTION_TYPES, ACTION_HANDLERS } from './actionHandlers'
 import { ACTION_HANDLERS as SMART_HINT_ACTION_HANDLERS } from '../smartHintHC/actionHandlers'
 import { useCellFocus, useIsHintTryOutStep } from '../utils/smartHints/hooks'
-import { getTryOutSelectedCell, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
-
-const useGameBoardData = (isHintTryOut) => {
-    const selectedCellSelector = isHintTryOut ? getTryOutSelectedCell : getSelectedCell
-    const mainNumbersSelector = isHintTryOut ? getTryOutMainNumbers : getMainNumbers
-    const notesSelector = isHintTryOut ? getTryOutNotes : getNotesInfo
-    
-    const selectedCell = useSelector(selectedCellSelector)
-    const mainNumbers = useSelector(mainNumbersSelector)
-    const notesInfo = useSelector(notesSelector)
-
-    return {
-        selectedCell,
-        mainNumbers,
-        notesInfo,
-    }
-}
+import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 
 const PuzzleBoard_ = ({ onAction, ...restProps }) => {
 
     const isHintTryOut = useIsHintTryOutStep()
     const isCellFocusedInSmartHint = useCellFocus()
 
-    const { mainNumbers, selectedCell, notesInfo } = useGameBoardData(isHintTryOut)
+    const { mainNumbers, selectedCell, notesInfo } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
     const moves = useSelector(getMoves)
 
