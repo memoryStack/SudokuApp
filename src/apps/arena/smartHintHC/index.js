@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
+import { useSelector } from 'react-redux'
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
@@ -8,11 +8,10 @@ import { Button } from '../../../components/button'
 import { noop } from '../../../utils/util'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
-import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
-import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
 import { getContainerStyles, styles } from './styles'
-import { analyseTryOutInput } from '../utils/smartHints/tryOutInputAnalyser'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -24,7 +23,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     //          i was right, functions are non-serilizable. so can't store them in state.
     //          plan to remove it.
     const {
-        hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility, hintId, tryOutAnalyserData } = {},
+        hint: { focusedCells, techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose, inputPanelNumbersVisibility } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
@@ -36,16 +35,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         VALID_PROGRESS: 'VALID_PROGRESS'
     }
 
-    // TODO: hook it out the try-out result logic in it's seperate file/hook
-    const [ tryOutResult, setTryOutResult ] = useState({})
-    const mainNumbers = useSelector(getTryOutMainNumbers)
-    const notesInfo = useSelector(getTryOutNotes)
-    const isHintTryOut = useIsHintTryOutStep()
+    const tryOutResult = useHintTryOutAnalyserResult()
 
-    useEffect(() => {
-        if (!isHintTryOut) return
-        setTryOutResult(analyseTryOutInput({type: hintId, data: tryOutAnalyserData}))
-    }, [isHintTryOut, mainNumbers, notesInfo, tryOutAnalyserData, hintId])
+    const isHintTryOut = useIsHintTryOutStep()
 
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells } })
@@ -79,7 +71,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }, [onAction])
 
     const onClosed = useCallback(() => {
-        setTryOutResult({})
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
     }, [onAction, selectCellOnClose])
 
