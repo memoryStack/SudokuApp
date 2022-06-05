@@ -2,7 +2,7 @@ import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible } from '../../
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { TRY_OUT_RESULT_STATES } from './constants'
+import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES } from './constants'
 
 // TODO: move it to utils for other hints to use
 // TODO: don't pass the global data in the args like tryOutMainNumbers
@@ -29,7 +29,7 @@ const getTryOutErrorType = (tryOutMainNumbers, tryOutNotesInfo, groupCandidates,
         return isCellEmpty(cell, tryOutMainNumbers) && (getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0)
     })
     if (cellWithoutAnyCandidates) {
-        return 'EMPTY_CELL_IN_SOLUTION'
+        return TRY_OUT_ERROR_TYPES.EMPTY_CELL_IN_SOLUTION
     }
 
     const candidatesNakedSingleInMultipleCells = groupCandidates.filter((candidate) => {
@@ -40,7 +40,7 @@ const getTryOutErrorType = (tryOutMainNumbers, tryOutNotesInfo, groupCandidates,
         return candidateNakedSingleHostCells.length > 1
     })
     if (candidatesNakedSingleInMultipleCells.length) {
-        return 'MULTIPLE_CELLS_NAKED_SINGLE'
+        return TRY_OUT_ERROR_TYPES.MULTIPLE_CELLS_NAKED_SINGLE
     }
 
     return ''
@@ -87,12 +87,12 @@ const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates
 
     // switch kind of handling
     // display these kind of messages in red color
-    if (tryOutErrorType === 'EMPTY_CELL_IN_SOLUTION') {
+    if (tryOutErrorType === MULTIPLE_CELLS_NAKED_SINGLE.EMPTY_CELL_IN_SOLUTION) {
         return {
             msg: `one or more cells have no candidates in them. undo your move.`,
             state: TRY_OUT_RESULT_STATES.ERROR,
         }
-    } else if (tryOutErrorType === 'MULTIPLE_CELLS_NAKED_SINGLE') {
+    } else if (tryOutErrorType ===  MULTIPLE_CELLS_NAKED_SINGLE.MULTIPLE_CELLS_NAKED_SINGLE) {
         return {
             msg: `candidate highlighted in green color can't be naked single for more than 1 cell in a house. undo your move.`,
             state: TRY_OUT_RESULT_STATES.ERROR,
