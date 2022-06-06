@@ -339,8 +339,5 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
         }
     }
 
-    return {
-        present: hints.length > 0,
-        returnData: hints,
-    }
+    return hints.length !== 0 ? hints : null
 }

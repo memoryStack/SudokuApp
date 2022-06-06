@@ -316,5 +316,7 @@ export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
         return removableNotesInCrossHouse(xWing, notesData)
     }).slice(0, maxHintsThreshold)
 
+    if (!xWings.length) return null
+    
     return getUIHighlightData(xWings, notesData)
 }

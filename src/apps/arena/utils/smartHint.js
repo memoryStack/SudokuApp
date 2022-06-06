@@ -34,33 +34,26 @@ const hintsHandlerMap = {
         return hintsHandlerMap[GROUPS.HIDDEN_GROUP](3, mainNumbers, notesData)
     },
     [GROUPS.NAKED_GROUP]: function (candidatesCount, mainNumbers, notesData) {
-        const { present: nakedGroupFound, returnData } = highlightNakedDoublesOrTriples(
+        return highlightNakedDoublesOrTriples(
             candidatesCount,
             notesData,
             mainNumbers,
             UI_HINTS_COUNT_THRESHOLD,
         )
-        if (nakedGroupFound) return returnData
-        return null
     },
     [GROUPS.HIDDEN_GROUP]: function (candidatesCount, mainNumbers, notesData) {
-        const { present, returnData } = highlightHiddenGroups(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD)
-        if (present) return returnData
-        return null
+        return highlightHiddenGroups(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.X_WING]: function (mainNumbers, notesData) {
         return getXWingHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.Y_WING]: function (mainNumbers, notesData) {
-        const yWingsData = getYWingsHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
-        if (!yWingsData || !yWingsData.length) return null
-        return yWingsData
+        return getYWingsHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.OMISSION]: function (mainNumbers, notesData) {
-        const omissionData = getOmissionHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
-        if (!omissionData || !omissionData.length) return null
-        return omissionData
+        return getOmissionHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
+    // TODO: will remove it in near future
     [HINTS_IDS.ALL]: function (mainNumbers, notesData) {
         const result = []
         INDEPENDENT_HINTS_MENU_ITEMS.forEach(({ id }) => {
