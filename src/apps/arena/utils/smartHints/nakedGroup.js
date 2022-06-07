@@ -28,14 +28,13 @@ const getNakedTrippleHintData = ({ groupCandidates, toBeHighlightedCells }) => {
 
     const hintMessage = () => `In the highlighted region, ${groupCellsCountEnglishText} cells have exactly same candidates ${getGroupCandidatesListText()} highlighted in green color. ${getCellsHostingText()} So ${getGroupCandidatesListText()} highlighted in red color can't appear there and we can erase these instances from these cells`
 
-    return [{
-        focusedCells: toBeHighlightedCells,
+    return {
         cellsToFocusData,
         techniqueInfo: {
             title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
             logic: hintMessage(),
         },
-    }]
+    }
 }
 
 // TODO: write test case for it and refactor it properly
@@ -89,42 +88,28 @@ const prepareNakedDublesOrTriplesHintData = (
         return numbersVisibility
     }
     
-    const result = hintList.map((hintChunk) => {
-        const hintStepData = {
-            // TODO: focusedCells is given at two places now. this needs to be fixed
-            focusedCells: toBeHighlightedCells, // TODO: simplify these two types of cells. it's getting confusing.
-            cellsToFocusData,
-            techniqueInfo: {
-                title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
-                logic: hintChunk,
-            },
-        }
-
-        return hintStepData
+    const explainationSteps = hintList.map((hintChunk) => {
+        return { text: hintChunk }
+    })
+    explainationSteps.push({
+        isTryOut: true,
+        text: 'try out',
     })
 
-    const addTryOutStep = () => {
-        const hintStepData = {
-            isTryOut: true,
+    return {
+        hasTryOut: true,
+        focusedCells: toBeHighlightedCells,
+        cellsToFocusData,
+        id: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
+        title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
+        tryOutAnalyserData: {
+            groupCandidates,
             focusedCells: toBeHighlightedCells,
-            cellsToFocusData,
-            techniqueInfo: {
-                title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
-                logic: '',
-            },
-            inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(),
-            hintId: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
-            tryOutAnalyserData: {
-                groupCandidates,
-                focusedCells: toBeHighlightedCells,
-                groupCells,
-            }
-        }
-        result.push(hintStepData)
+            groupCells,
+        },
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(),
+        steps: explainationSteps,
     }
-    addTryOutStep()
-
-    return result
 }
 
 // TODO: there can be multiple doubles and triples in the highlighted region
@@ -326,7 +311,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 if (isValidNakedGroup) {
                     consoleLog('@@@@ naked double', selectedBoxes, groupCandidates)
                     hints.push(
-                        ...prepareNakedDublesOrTriplesHintData( // an array of hints pieces will be returned
+                        prepareNakedDublesOrTriplesHintData(
                             noOfInstances,
                             houseAllBoxes,
                             selectedBoxes,
