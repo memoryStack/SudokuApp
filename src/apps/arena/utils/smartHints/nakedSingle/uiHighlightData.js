@@ -99,10 +99,8 @@ const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
 
     return {
         cellsToFocusData,
-        techniqueInfo: {
-            title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
-            logic,
-        },
+        title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
+        logic,
         selectCellOnClose: { row, col },
     }
 }

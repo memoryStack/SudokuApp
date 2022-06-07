@@ -30,10 +30,8 @@ const getNakedTrippleHintData = ({ groupCandidates, toBeHighlightedCells }) => {
 
     return {
         cellsToFocusData,
-        techniqueInfo: {
-            title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
-            logic: hintMessage(),
-        },
+        title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
+        logic: hintMessage(),
     }
 }
 

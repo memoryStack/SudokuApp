@@ -57,9 +57,7 @@ const getHintExplaination = omission => {
 export const getUIHighlightData = (omission, notesData) => {
     return {
         cellsToFocusData: getUICellsToFocusData(omission, notesData),
-        techniqueInfo: {
-            title: 'Omission',
-            logic: getHintExplaination(omission),
-        },
+        title: 'Omission',
+        logic: getHintExplaination(omission),
     }
 }
