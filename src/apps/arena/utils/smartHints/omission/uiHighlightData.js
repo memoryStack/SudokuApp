@@ -58,6 +58,6 @@ export const getUIHighlightData = (omission, notesData) => {
     return {
         cellsToFocusData: getUICellsToFocusData(omission, notesData),
         title: 'Omission',
-        logic: getHintExplaination(omission),
+        steps: [{ text: getHintExplaination(omission) }],
     }
 }

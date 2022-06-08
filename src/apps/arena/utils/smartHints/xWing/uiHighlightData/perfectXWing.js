@@ -109,6 +109,6 @@ export const getPerfectXWingUIData = ({ legs, houseType }, notesData) => {
     return {
         cellsToFocusData,
         title: 'X-Wing',
-        logic: getTechniqueExplaination({ houseType, candidate }),
+        steps: [{ text: getTechniqueExplaination({ houseType, candidate }) }],
     }
 }

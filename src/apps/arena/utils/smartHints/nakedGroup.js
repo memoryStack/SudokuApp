@@ -8,7 +8,7 @@ import { isHintValid } from './validityTest'
 // TODO: this msg needs to be simplified for tripple case [{1,2}, {1,2,3}, {2, 3}]
 // this case doesn't fit exactly in the below explaination
 // TODO: turn it into multistep
-const getNakedTrippleHintData = ({ groupCandidates, toBeHighlightedCells }) => {
+const getNakedTrippleHintData = ({ groupCandidates, cellsToFocusData }) => {
     const isNakedDoubles = groupCandidates.length === 2
     const groupCellsCountEnglishText = isNakedDoubles ? 'two' : 'three'
     
@@ -31,7 +31,7 @@ const getNakedTrippleHintData = ({ groupCandidates, toBeHighlightedCells }) => {
     return {
         cellsToFocusData,
         title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
-        logic: hintMessage(),
+        steps: [{ text: hintMessage() }],
     }
 }
 
@@ -70,7 +70,7 @@ const prepareNakedDublesOrTriplesHintData = (
     })
 
     if (!isNakedDoubles) {
-        return getNakedTrippleHintData()
+        return getNakedTrippleHintData({ groupCandidates, cellsToFocusData })
     }
 
     // TODO: write explaination for naked tripple as well

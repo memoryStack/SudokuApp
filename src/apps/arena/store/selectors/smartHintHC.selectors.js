@@ -10,15 +10,15 @@ export const getHintHCInfo = state => {
     const getHintInfo = () => {
         return {
             id: state.smartHintHC.hints[0].id,
-            title: state.smartHintHC.hints[0].title || state.smartHintHC.hints[0].title,
-            logic: (state.smartHintHC.hints[0].steps && state.smartHintHC.hints[0].steps[currentHintNum-1].text) || state.smartHintHC.hints[0].logic,
+            title: state.smartHintHC.hints[0].title,
+            logic: state.smartHintHC.hints[0].steps[currentHintNum-1].text,
 
             focusedCells: state.smartHintHC.hints[0].focusedCells,
             cellsToFocusData: state.smartHintHC.hints[0].cellsToFocusData,
             selectCellOnClose: state.smartHintHC.hints[0].selectCellOnClose,
 
             inputPanelNumbersVisibility: state.smartHintHC.hints[0].inputPanelNumbersVisibility,
-            isTryOut: (state.smartHintHC.hints[0].steps && state.smartHintHC.hints[0].steps[currentHintNum-1].isTryOut) || false,            
+            isTryOut: state.smartHintHC.hints[0].steps[currentHintNum-1].isTryOut || false,            
             tryOutAnalyserData: state.smartHintHC.hints[0].tryOutAnalyserData,
         }
     }

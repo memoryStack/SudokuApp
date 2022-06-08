@@ -407,7 +407,7 @@ const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
     return {
         cellsToFocusData,
         title: HINT_TITLE,
-        logic: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue),
+        steps: [{ text: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue) }],
         selectCellOnClose: cell,
     }
 }
