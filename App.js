@@ -30,20 +30,17 @@ const App = () => {
         })
     }, [])
 
-    const [snackbarMsg, setSnackBarMsg] = useState('')
-    const [snackbar, setSnackBarView] = useState(null)
+    const [ snackBar, setSnackBar ] = useState({show: false, view: null, msg: '', customStyles: null})
 
     // added pretty raw implementation for snackbars right now
     // later on after finalizing a robust implementation i can make
     // an HOC so that tis snackbar can be re-used for each view
     useEffect(() => {
-        const handler = ({ snackbarView = null, msg = '', visibleTime = 3000 }) => {
+        const handler = ({ snackbarView = null, msg = '', visibleTime = 3000, customStyles = null }) => {
             if (!snackbarView && !msg) return
-            if (msg) setSnackBarMsg(msg)
-            else setSnackBarView(snackbarView)
+            setSnackBar({ show: true, view: snackbarView, msg, customStyles })
             setTimeout(() => {
-                if (msg) setSnackBarMsg('')
-                else setSnackBarView(null)
+                setSnackBar({ show: false, view: null, msg: '', customStyles: null })
             }, visibleTime)
         }
         addListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
@@ -51,6 +48,19 @@ const App = () => {
             removeListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
         }
     }, [])
+
+    const renderSnackBar = () => {
+        if (!snackBar.show) return null
+        return (
+            <>
+                {snackBar.view}
+                <SnackBar
+                    msg={snackBar.msg}
+                    customStyles={snackBar.customStyles}
+                />
+            </>
+        )
+    }
 
     // TODO: why putting here alignItems to center make everything invisible ??
     return (
@@ -63,8 +73,7 @@ const App = () => {
                 }}
             >
                 <NavigationContainer>{getNavigator()}</NavigationContainer>
-                {snackbar}
-                {snackbarMsg ? <SnackBar msg={snackbarMsg} /> : null}
+                {renderSnackBar()}
             </View>
         </Provider>
     )

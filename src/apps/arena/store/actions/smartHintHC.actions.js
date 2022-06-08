@@ -91,9 +91,12 @@ export const updateTryOutSelectedCell = (cell) => {
     invokeDispatch(setTryOutSelectedCell(cell))
 }
 
-export const inputTryOutNumber = (number, focusedCells) => {
+export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) => {
     if (!isValidInputNumberClick(number)) {
-        showSnackBar({ msg: `try filling cell which is empty and has ${number} as a candidate there` })
+        showSnackBar({
+            msg: `try filling cell which is empty and has ${number} as a candidate there`,
+            customStyles: snackBarCustomStyles
+        })
         return
     }
     const removalbeNotesHostCellsData = getRemovalbeNotesHostCells(number, focusedCells)
@@ -107,10 +110,11 @@ const isValidInputNumberClick = (number) => {
     return isCellEmpty(selectedCell, mainNumbers) && isCellNoteVisible(number, notesInfo[selectedCell.row][selectedCell.col])
 }
 
-const showSnackBar = ({ msg }) => {
+const showSnackBar = ({ msg, customStyles }) => {
     emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
         msg,
         visibleTime: 4000,
+        customStyles,
     })
 }
 
@@ -139,9 +143,12 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
     return result
 }
 
-export const eraseTryOutNumber = (focusedCells) => {
+export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles) => {
     if (!cellHasTryOutInput()) {
-        showSnackBar({ msg: 'you can only erase from cells which were filled after this hint is displayed' })
+        showSnackBar({
+            msg: 'you can only erase from cells which were filled after this hint is displayed',
+            customStyles: snackBarCustomStyles
+        })
         return
     }
 

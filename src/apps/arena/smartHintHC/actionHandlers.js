@@ -6,8 +6,8 @@ import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constant
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { consoleLog } from '../../../utils/util'
 
-const handleOnInit = ({ setState, params: { focusedCells } }) => {
-    setState({ focusedCells })
+const handleOnInit = ({ setState, params: { focusedCells, styles } }) => {
+    setState({ focusedCells, styles })
 }
 
 const handleOnClose = ({ params: newCellToSelect }) => {
@@ -31,13 +31,13 @@ const handleCellClick = ({ params: cell }) => {
 }
 
 const handleNumberClick = ({ getState,  params: number }) => {
-    const { focusedCells } = getState()
-    inputTryOutNumber(number, focusedCells)
+    const { focusedCells, styles } = getState()
+    inputTryOutNumber(number, focusedCells, styles.snackBar)
 }
 
 const handleEraserClick = ({ getState }) => {
-    const { focusedCells } =  getState()
-    eraseTryOutNumber(focusedCells)
+    const { focusedCells, styles } =  getState()
+    eraseTryOutNumber(focusedCells, styles.snackBar)
 }
 
 const ACTION_TYPES = {

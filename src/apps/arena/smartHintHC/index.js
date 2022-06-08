@@ -29,7 +29,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const isHintTryOut = useIsHintTryOutStep()
 
     useEffect(() => {
-        onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells } })
+        onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells, styles } })
         return () => {
             onAction({ type: ACTION_TYPES.ON_UNMOUNT })
         }

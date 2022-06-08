@@ -22,12 +22,13 @@ const styles = StyleSheet.create({
     },
 })
 
-const SnackBar_ = ({ msg }) => {
-    return msg ? (
-        <View style={styles.container}>
+const SnackBar_ = ({ msg = '', customStyles = null }) => {
+    console.log('@@@@@@', customStyles)
+    return (
+        <View style={[styles.container, customStyles]}>
             <Text style={styles.msgTextStyle}>{msg}</Text>
         </View>
-    ) : null
+    )
 }
 
 export const SnackBar = React.memo(SnackBar_)

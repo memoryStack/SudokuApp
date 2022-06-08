@@ -47,6 +47,9 @@ export const styles = StyleSheet.create({
     },
     tryOutProgressResult: {
         color: 'green',
+    },
+    snackBar: {
+        bottom: 200,
     }
 })
 
