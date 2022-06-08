@@ -98,7 +98,7 @@ const prepareNakedDublesOrTriplesHintData = (
         hasTryOut: true,
         focusedCells: toBeHighlightedCells,
         cellsToFocusData,
-        id: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
+        type: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
         title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
         tryOutAnalyserData: {
             groupCandidates,

@@ -8,10 +8,10 @@ const tryOutAnalysers = {
 }
 
 export const analyseTryOutInput = ({
-    type: hintId,
+    hintType,
     data
 }) => {
-    const handler = tryOutAnalysers[hintId]
+    const handler = tryOutAnalysers[hintType]
     if (handler) {
         return handler(data)
     }

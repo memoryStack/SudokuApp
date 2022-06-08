@@ -21,7 +21,7 @@ const useCellFocus = () => {
 }
 
 const useHintTryOutAnalyserResult = () => {
-    const { hint: { hintId, tryOutAnalyserData } = {} } = useSelector(getHintHCInfo)
+    const { hint: { type: hintType , tryOutAnalyserData } = {} } = useSelector(getHintHCInfo)
 
     const [ tryOutResult, setTryOutResult ] = useState({})
     const mainNumbers = useSelector(getTryOutMainNumbers)
@@ -30,8 +30,8 @@ const useHintTryOutAnalyserResult = () => {
 
     useEffect(() => {
         if (!isHintTryOut) return
-        setTryOutResult(analyseTryOutInput({type: hintId, data: tryOutAnalyserData}))
-    }, [isHintTryOut, mainNumbers, notesInfo, tryOutAnalyserData, hintId])
+        setTryOutResult(analyseTryOutInput({hintType, data: tryOutAnalyserData}))
+    }, [isHintTryOut, mainNumbers, notesInfo, tryOutAnalyserData, hintType])
 
     return tryOutResult
 }

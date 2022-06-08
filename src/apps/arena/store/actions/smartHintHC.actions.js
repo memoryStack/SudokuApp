@@ -35,11 +35,10 @@ export const showHints = async hintId => {
         .then(hints => {
             consoleLog('@@@@ hintInfo', JSON.stringify(hints))
             if (hints) {
-                // TODO: not all hints will have try-put steps.
-                // avoid this cloning of mainNumbers and notesInfo
+                const hasTryOut = hints[0].hasTryOut
                 const hintsData = {
-                    mainNumbers: getClonedValue(mainNumbers),
-                    notesInfo: getClonedValue(notesInfo),
+                    mainNumbers: hasTryOut ? getClonedValue(mainNumbers) : null,
+                    notesInfo: hasTryOut ? getClonedValue(notesInfo) : null,
                     hints,
                 }
                 invokeDispatch(setHints(hintsData))

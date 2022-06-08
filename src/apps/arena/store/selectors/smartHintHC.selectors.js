@@ -9,7 +9,7 @@ export const getHintHCInfo = state => {
     // will break it before moving on to next feature
     const getHintInfo = () => {
         return {
-            id: state.smartHintHC.hints[0].id,
+            type: state.smartHintHC.hints[0].type,
             title: state.smartHintHC.hints[0].title,
             logic: state.smartHintHC.hints[0].steps[currentHintNum-1].text,
 
