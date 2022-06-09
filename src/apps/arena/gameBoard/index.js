@@ -159,7 +159,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const renderAxisText = (label) => {
-        return <Text style={[styles.axisText, showSmartHint ? styles.smartHintAxisTextColor : null]}>{label}</Text>
+        return <Text style={showSmartHint ? styles.smartHintAxisText : styles.axisText}>{label}</Text>
     }
 
     const yAxis = useMemo(() => {
