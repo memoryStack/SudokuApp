@@ -6,7 +6,6 @@ const DEFAULT_OPTIONS = {
 }
 
 const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS }) => {
-
     // TODO: is doing this transform fine ??
     //      looks wrong that a variable can be object and also array
     let actionHandlersConfig = actionHandlers
@@ -48,20 +47,17 @@ const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT
             }
 
             getOnActionProp = () => {
-                return actionHandlersConfig.reduce((prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
-                    prev[onActionPropAlias] = (action) => this.handleAction(action, actionHandlers)
-                    return prev
-                }, {})
+                return actionHandlersConfig.reduce(
+                    (prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
+                        prev[onActionPropAlias] = action => this.handleAction(action, actionHandlers)
+                        return prev
+                    },
+                    {},
+                )
             }
 
             render() {
-                return (
-                    <WrappedComponent
-                        {...this.props}
-                        {...this.state}
-                        {...this.onActions}
-                    />
-                )
+                return <WrappedComponent {...this.props} {...this.state} {...this.onActions} />
             }
         }
 

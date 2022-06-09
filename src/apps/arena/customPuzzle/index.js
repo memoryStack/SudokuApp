@@ -77,9 +77,12 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
         )
     }
 
-    const onCellClick = useCallback((cell) => {
-        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction])
+    const onCellClick = useCallback(
+        cell => {
+            onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+        },
+        [onAction],
+    )
 
     return (
         <BottomDragger
@@ -115,4 +118,6 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
     )
 }
 
-export const CustomPuzzle = React.memo(withActions({ actionHandlers: ACTION_HANDLERS, initialState: INITIAL_STATE })(CustomPuzzle_))
+export const CustomPuzzle = React.memo(
+    withActions({ actionHandlers: ACTION_HANDLERS, initialState: INITIAL_STATE })(CustomPuzzle_),
+)

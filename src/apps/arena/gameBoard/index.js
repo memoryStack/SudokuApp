@@ -9,7 +9,7 @@ import {
     INNER_THICK_BORDER_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
 
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors';
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 import { getStyles } from './style'
 import { Cell } from './cell'
@@ -25,7 +25,6 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onCellClick, isHintTryOut }) => {
-
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
         useSelector(getHintHCInfo)
 
@@ -63,8 +62,9 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const getSmartHintActiveBgColor = cell => {
-        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) return styles.selectedCellBGColor
-        
+        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell))
+            return styles.selectedCellBGColor
+
         const { row, col } = cell
         return (
             (smartHintCellsHighlightInfo[row] &&
@@ -74,17 +74,21 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
-    const showCellContent = [GAME_STATE.ACTIVE,GAME_STATE.DISPLAY_HINT,GAME_STATE.OVER.SOLVED,GAME_STATE.OVER.UNSOLVED]
-        .includes(gameState)
-    
+    const showCellContent = [
+        GAME_STATE.ACTIVE,
+        GAME_STATE.DISPLAY_HINT,
+        GAME_STATE.OVER.SOLVED,
+        GAME_STATE.OVER.UNSOLVED,
+    ].includes(gameState)
+
     // this is going to get complicated, i guess it's better to break it
     const getBoxBackgroundColor = cell => {
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
 
         if (!showCellContent) return null
-        
+
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
-        
+
         const isSameHouseAsSelected = sameHouseAsSelected(cell, selectedCell)
         const isSameValueAsSelected = sameValueAsSelectedBox(cell)
         if (isSameHouseAsSelected && isSameValueAsSelected) return styles.sameHouseSameValueBGColor

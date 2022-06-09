@@ -35,6 +35,6 @@ export const getStyles = CELL_WIDTH => {
         eraser: {
             width: '50%',
             height: '50%',
-        }
+        },
     })
 }

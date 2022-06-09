@@ -11,13 +11,13 @@ import { isHintValid } from './validityTest'
 const getNakedTrippleHintData = ({ groupCandidates, cellsToFocusData }) => {
     const isNakedDoubles = groupCandidates.length === 2
     const groupCellsCountEnglishText = isNakedDoubles ? 'two' : 'three'
-    
+
     const getGroupCandidatesListText = () => {
         return isNakedDoubles
             ? `${groupCandidates[0]} and ${groupCandidates[1]}`
             : `${groupCandidates[0]}, ${groupCandidates[1]} and ${groupCandidates[2]}`
     }
-    
+
     const getCellsHostingText = () => {
         const groupCandidatesText = isNakedDoubles
             ? `${groupCandidates[0]}, and another one ${groupCandidates[1]}`
@@ -26,7 +26,8 @@ const getNakedTrippleHintData = ({ groupCandidates, cellsToFocusData }) => {
         return `So one of the squares has to be ${groupCandidatesText} (which is which is yet unknown).`
     }
 
-    const hintMessage = () => `In the highlighted region, ${groupCellsCountEnglishText} cells have exactly same candidates ${getGroupCandidatesListText()} highlighted in green color. ${getCellsHostingText()} So ${getGroupCandidatesListText()} highlighted in red color can't appear there and we can erase these instances from these cells`
+    const hintMessage = () =>
+        `In the highlighted region, ${groupCellsCountEnglishText} cells have exactly same candidates ${getGroupCandidatesListText()} highlighted in green color. ${getCellsHostingText()} So ${getGroupCandidatesListText()} highlighted in red color can't appear there and we can erase these instances from these cells`
 
     return {
         cellsToFocusData,
@@ -82,11 +83,11 @@ const prepareNakedDublesOrTriplesHintData = (
 
     const getTryOutInputPanelNumbersVisibility = () => {
         const numbersVisibility = new Array(10).fill(false)
-        groupCandidates.forEach((candidate) => numbersVisibility[candidate] = true)
+        groupCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
         return numbersVisibility
     }
-    
-    const explainationSteps = hintList.map((hintChunk) => {
+
+    const explainationSteps = hintList.map(hintChunk => {
         return { text: hintChunk }
     })
     explainationSteps.push({

@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     },
     snackBar: {
         bottom: 200,
-    }
+    },
 })
 
 export const getContainerStyles = (windowHeight, displayFooter) => {

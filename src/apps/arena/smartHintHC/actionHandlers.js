@@ -1,7 +1,15 @@
 import { GAME_STATE } from '../../../resources/constants'
 import { updateSelectedCell } from '../store/actions/board.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
-import { clearHints, showNextHint, showPrevHint, resetStoreState, updateTryOutSelectedCell, inputTryOutNumber, eraseTryOutNumber } from '../store/actions/smartHintHC.actions'
+import {
+    clearHints,
+    showNextHint,
+    showPrevHint,
+    resetStoreState,
+    updateTryOutSelectedCell,
+    inputTryOutNumber,
+    eraseTryOutNumber,
+} from '../store/actions/smartHintHC.actions'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { consoleLog } from '../../../utils/util'
@@ -30,13 +38,13 @@ const handleCellClick = ({ params: cell }) => {
     updateTryOutSelectedCell(cell)
 }
 
-const handleNumberClick = ({ getState,  params: number }) => {
+const handleNumberClick = ({ getState, params: number }) => {
     const { focusedCells, styles } = getState()
     inputTryOutNumber(number, focusedCells, styles.snackBar)
 }
 
 const handleEraserClick = ({ getState }) => {
-    const { focusedCells, styles } =  getState()
+    const { focusedCells, styles } = getState()
     eraseTryOutNumber(focusedCells, styles.snackBar)
 }
 

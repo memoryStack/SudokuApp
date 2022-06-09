@@ -30,7 +30,7 @@ const App = () => {
         })
     }, [])
 
-    const [ snackBar, setSnackBar ] = useState({show: false, view: null, msg: '', customStyles: null})
+    const [snackBar, setSnackBar] = useState({ show: false, view: null, msg: '', customStyles: null })
 
     // added pretty raw implementation for snackbars right now
     // later on after finalizing a robust implementation i can make
@@ -54,10 +54,7 @@ const App = () => {
         return (
             <>
                 {snackBar.view}
-                <SnackBar
-                    msg={snackBar.msg}
-                    customStyles={snackBar.customStyles}
-                />
+                <SnackBar msg={snackBar.msg} customStyles={snackBar.customStyles} />
             </>
         )
     }

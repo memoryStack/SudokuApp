@@ -36,8 +36,8 @@ export const COLOR_SCHEME_STYLES = {
         color: 'rgb(12, 25, 22)',
     },
     tryOutInputColor: {
-        color: '#FF9900'
-    }
+        color: '#FF9900',
+    },
 }
 
 export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {

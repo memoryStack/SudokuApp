@@ -10,7 +10,6 @@ import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
 
 const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) => {
-
     const isHintTryOut = useIsHintTryOutStep()
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
@@ -34,11 +33,8 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
                 onPress={onEraserClick}
                 touchable={TouchableTypes.opacity}
                 key={'erase_cell'}
-            >   
-                <Image
-                    style={styles.eraser}
-                    source={require('../../../resources/assets/eraser.png')}
-                />
+            >
+                <Image style={styles.eraser} source={require('../../../resources/assets/eraser.png')} />
                 {/* <CloseIcon height={CLOSE_ICON_DIMENSION} width={CLOSE_ICON_DIMENSION} fill={'rgb(40, 90, 163)'} /> */}
             </Touchable>
         )
@@ -61,8 +57,8 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
         const rows = []
 
         let row = []
-        forEachInputNumber((number) => {
-            if (!isHintTryOut || isHintTryOut && numbersVisible[number]) {
+        forEachInputNumber(number => {
+            if (!isHintTryOut || (isHintTryOut && numbersVisible[number])) {
                 row.push(renderInputNumber(number))
             }
             if (row.length >= 5) {

@@ -797,12 +797,12 @@ export const consoleLog = (...args) => {
 
 // TODO: fix it as per my requirements
 function noWhiteSpace(strings, ...placeholders) {
-    let withSpace = strings.reduce((result, string, i) => (result + placeholders[i - 1] + string));
-    let withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ');
-    return withoutSpace;
+    let withSpace = strings.reduce((result, string, i) => result + placeholders[i - 1] + string)
+    let withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ')
+    return withoutSpace
 }
 
 // TODO: update this func to make it efficient
-export const getClonedValue = (data) => {
+export const getClonedValue = data => {
     return JSON.parse(JSON.stringify(data))
 }

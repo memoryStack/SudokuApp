@@ -102,10 +102,10 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             </ScrollView>
         )
     }
-    
+
     const getTryOutResultTextStyle = () => {
         let result = styles.tryOutDefaultResult
-        
+
         if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) {
             result = styles.tryOutProgressResult
         }
@@ -119,13 +119,8 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const renderTryOutContent = () => {
         return (
             <>
-                <Inputpanel
-                    numbersVisible={inputPanelNumbersVisibility}
-                    onAction={onAction}
-                />
-                <Text style={[styles.tryOutResult, getTryOutResultTextStyle() ]}>
-                    {tryOutResult.msg}
-                </Text>
+                <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} />
+                <Text style={[styles.tryOutResult, getTryOutResultTextStyle()]}>{tryOutResult.msg}</Text>
             </>
         )
     }
@@ -164,9 +159,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         >
             <View style={containerStyles}>
                 {renderHeader()}
-                <View style={styles.bodyContainer}>
-                    {isHintTryOut ? renderTryOutContent() : renderHintText()}
-                </View>
+                <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText()}</View>
                 {renderFooter()}
             </View>
         </BottomDragger>

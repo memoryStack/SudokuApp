@@ -209,6 +209,8 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
 
 export const getYWingsHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const rawYWings = getAllYWings(mainNumbers, notesData, maxHintsThreshold)
-    const yWingHintsUIData = rawYWings.map(yWing => getYWingHintUIHighlightData(yWing, notesData)).filter(yWingHint => !!yWingHint)
+    const yWingHintsUIData = rawYWings
+        .map(yWing => getYWingHintUIHighlightData(yWing, notesData))
+        .filter(yWingHint => !!yWingHint)
     return yWingHintsUIData.length !== 0 ? yWingHintsUIData : null
 }

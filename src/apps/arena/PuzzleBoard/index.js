@@ -14,7 +14,6 @@ import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
-
     const isHintTryOut = useIsHintTryOutStep()
     const isCellFocusedInSmartHint = useCellFocus()
 
@@ -35,12 +34,15 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         })
     }, [mainNumbers])
 
-    const onCellClick = useCallback((cell) => {
-        if (isHintTryOut && !isCellFocusedInSmartHint(cell)) return
-        
-        const actionHandler = isHintTryOut ? smartHintTryOutOnAction : onAction
-        actionHandler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction, isHintTryOut])
+    const onCellClick = useCallback(
+        cell => {
+            if (isHintTryOut && !isCellFocusedInSmartHint(cell)) return
+
+            const actionHandler = isHintTryOut ? smartHintTryOutOnAction : onAction
+            actionHandler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+        },
+        [onAction, isHintTryOut],
+    )
 
     const dataToCache = {
         mainNumbers,

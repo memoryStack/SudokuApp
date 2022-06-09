@@ -29,12 +29,7 @@ const hintsHandlerMap = {
         return hintsHandlerMap[GROUPS.HIDDEN_GROUP](3, mainNumbers, notesData)
     },
     [GROUPS.NAKED_GROUP]: function (candidatesCount, mainNumbers, notesData) {
-        return highlightNakedDoublesOrTriples(
-            candidatesCount,
-            notesData,
-            mainNumbers,
-            UI_HINTS_COUNT_THRESHOLD,
-        )
+        return highlightNakedDoublesOrTriples(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD)
     },
     [GROUPS.HIDDEN_GROUP]: function (candidatesCount, mainNumbers, notesData) {
         return highlightHiddenGroups(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD)

@@ -343,7 +343,7 @@ export const resetStoreState = () => {
 export const fillPuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
-    forBoardEachCell((cell) => {
+    forBoardEachCell(cell => {
         if (isCellEmpty(cell, mainNumbers))
             invokeDispatch(setCellMainNumber({ cell, number: mainNumbers[cell.row][cell.col].solutionValue }))
     })

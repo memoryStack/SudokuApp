@@ -11,14 +11,14 @@ export const getHintHCInfo = state => {
         return {
             type: state.smartHintHC.hints[0].type,
             title: state.smartHintHC.hints[0].title,
-            logic: state.smartHintHC.hints[0].steps[currentHintNum-1].text,
+            logic: state.smartHintHC.hints[0].steps[currentHintNum - 1].text,
 
             focusedCells: state.smartHintHC.hints[0].focusedCells,
             cellsToFocusData: state.smartHintHC.hints[0].cellsToFocusData,
             selectCellOnClose: state.smartHintHC.hints[0].selectCellOnClose,
 
             inputPanelNumbersVisibility: state.smartHintHC.hints[0].inputPanelNumbersVisibility,
-            isTryOut: state.smartHintHC.hints[0].steps[currentHintNum-1].isTryOut || false,            
+            isTryOut: state.smartHintHC.hints[0].steps[currentHintNum - 1].isTryOut || false,
             tryOutAnalyserData: state.smartHintHC.hints[0].tryOutAnalyserData,
         }
     }
@@ -31,14 +31,14 @@ export const getHintHCInfo = state => {
     }
 }
 
-export const getTryOutSelectedCell = (state) => {
+export const getTryOutSelectedCell = state => {
     return state.smartHintHC.tryOut.selectedCell
 }
 
-export const getTryOutMainNumbers = (state) => {
+export const getTryOutMainNumbers = state => {
     return state.smartHintHC.tryOut.mainNumbers
 }
 
-export const getTryOutNotes = (state) => {
+export const getTryOutNotes = state => {
     return state.smartHintHC.tryOut.notesInfo
 }

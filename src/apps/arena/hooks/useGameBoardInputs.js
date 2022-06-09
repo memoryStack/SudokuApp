@@ -10,7 +10,7 @@ export const useGameBoardInputs = () => {
     const selectedCellSelector = isHintTryOut ? getTryOutSelectedCell : getSelectedCell
     const mainNumbersSelector = isHintTryOut ? getTryOutMainNumbers : getMainNumbers
     const notesSelector = isHintTryOut ? getTryOutNotes : getNotesInfo
-    
+
     const selectedCell = useSelector(selectedCellSelector)
     const mainNumbers = useSelector(mainNumbersSelector)
     const notesInfo = useSelector(notesSelector)

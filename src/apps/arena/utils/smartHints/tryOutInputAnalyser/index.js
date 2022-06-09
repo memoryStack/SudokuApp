@@ -7,10 +7,7 @@ const tryOutAnalysers = {
     [HINTS_IDS.NAKED_TRIPPLE]: nakedGroupTryOutAnalyser,
 }
 
-export const analyseTryOutInput = ({
-    hintType,
-    data
-}) => {
+export const analyseTryOutInput = ({ hintType, data }) => {
     const handler = tryOutAnalysers[hintType]
     if (handler) {
         return handler(data)

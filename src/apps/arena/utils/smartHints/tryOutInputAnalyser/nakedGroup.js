@@ -9,8 +9,9 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
 
     if (noInputInTryOut(focusedCells)) {
         return {
-            msg: `try filling ${getCandidatesListForTryOutMsg(groupCandidates)} in the cells where`
-                + ` it is highlighted in red or green color to see how this hint works`,
+            msg:
+                `try filling ${getCandidatesListForTryOutMsg(groupCandidates)} in the cells where` +
+                ` it is highlighted in red or green color to see how this hint works`,
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
@@ -21,7 +22,7 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     }
 
     // one or more candidates are filled in correct place. prepare messages for this state.
-    const getFilledCandidatesListForGreenState = (candidates) => {
+    const getFilledCandidatesListForGreenState = candidates => {
         if (candidates.length === 1) return `${candidates[0]}`
 
         return candidates.reduce((prevValue, currentCandidate, currentIndex) => {
@@ -36,30 +37,32 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         return {
-            msg: `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)} are filled in`
-                +` these cells without any error. now we are sure`
-                + ` that ${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}`
-                + ` can't come in cells where these were highlighted in red`,
+            msg:
+                `${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)} are filled in` +
+                ` these cells without any error. now we are sure` +
+                ` that ${getFilledCandidatesListForGreenState(correctlyFilledGroupCandidates)}` +
+                ` can't come in cells where these were highlighted in red`,
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     } else {
         const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
         return {
-            msg: `fill ${getFilledCandidatesListForGreenState(candidatesToBeFilled)} as well`
-                + ` to find where these numbers can't come in the highlighted region.`,
+            msg:
+                `fill ${getFilledCandidatesListForGreenState(candidatesToBeFilled)} as well` +
+                ` to find where these numbers can't come in the highlighted region.`,
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
 }
 
-const getCandidatesListForTryOutMsg = (candidates) => {
+const getCandidatesListForTryOutMsg = candidates => {
     const isNakedDoubles = candidates.length === 2
     return isNakedDoubles
         ? `${candidates[0]} or ${candidates[1]}`
         : `${candidates[0]}, ${candidates[1]} or ${candidates[2]}`
 }
 
-const getTryOutErrorResult = (errorType) => {
+const getTryOutErrorResult = errorType => {
     return {
         msg: TRY_OUT_ERROR_TYPES_VS_ERROR_MSG[errorType],
         state: TRY_OUT_RESULT_STATES.ERROR,
@@ -68,20 +71,22 @@ const getTryOutErrorResult = (errorType) => {
 
 const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
     const result = []
-    groupCells.forEach((cell) => {
+    groupCells.forEach(cell => {
         if (!isCellEmpty(cell, tryOutMainNumbers)) {
-            result.push( tryOutMainNumbers[cell.row][cell.col].value)
+            result.push(tryOutMainNumbers[cell.row][cell.col].value)
         }
     })
     return result
 }
 
 const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
-    return groupCandidates.map((candidate) => {
-        return parseInt(candidate, 10)
-    }).filter((groupCandidate) => {
-        return !correctlyFilledGroupCandidates.includes(groupCandidate)
-    })
+    return groupCandidates
+        .map(candidate => {
+            return parseInt(candidate, 10)
+        })
+        .filter(groupCandidate => {
+            return !correctlyFilledGroupCandidates.includes(groupCandidate)
+        })
 }
 
 export default tryOutAnalyser

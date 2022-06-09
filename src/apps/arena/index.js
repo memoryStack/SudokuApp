@@ -243,7 +243,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         if (!(pageHeight && showSmartHint)) return null
         return <SmartHintHC parentHeight={pageHeight} />
     }
-    
+
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>

@@ -12,13 +12,7 @@ const styles = StyleSheet.create({
 
 const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
-const Page_ = ({
-    children,
-    onLayout = noop,
-    onFocus = noop,
-    onBlur = noop,
-    navigation,
-}) => {
+const Page_ = ({ children, onLayout = noop, onFocus = noop, onBlur = noop, navigation }) => {
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')
 
     const handleFocus = useCallback(() => {

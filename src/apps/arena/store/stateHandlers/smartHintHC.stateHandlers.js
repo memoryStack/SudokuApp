@@ -8,7 +8,9 @@ const stateHandlers = {
         state.hints = hints
     },
     setHints: (state, action) => {
-        const { payload: { hints, mainNumbers, notesInfo } } = action
+        const {
+            payload: { hints, mainNumbers, notesInfo },
+        } = action
         state.show = true
         state.currentHintNum = 1
         state.hints = hints
@@ -36,13 +38,13 @@ const stateHandlers = {
     },
     updateBoardDataOnTryOutNumberInput: (state, { payload }) => {
         const { removalbeNotesHostCellsData, number } = payload
-        
+
         const selectedCell = state.tryOut.selectedCell
         state.tryOut.mainNumbers[selectedCell.row][selectedCell.col].value = number
 
         removalbeNotesHostCellsData.forEach(({ cell, notes }) => {
-            notes.forEach((note) => {
-                state.tryOut.notesInfo[cell.row][cell.col][note-1].show = 0
+            notes.forEach(note => {
+                state.tryOut.notesInfo[cell.row][cell.col][note - 1].show = 0
             })
         })
     },
@@ -53,11 +55,11 @@ const stateHandlers = {
         state.tryOut.mainNumbers[selectedCell.row][selectedCell.col].value = 0
 
         notesToEnterHostCellsData.forEach(({ cell, notes }) => {
-            notes.forEach((note) => {
-                state.tryOut.notesInfo[cell.row][cell.col][note-1].show = 1
+            notes.forEach(note => {
+                state.tryOut.notesInfo[cell.row][cell.col][note - 1].show = 1
             })
         })
-    }
+    },
 }
 
 export default stateHandlers

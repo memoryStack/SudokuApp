@@ -47,8 +47,7 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     // BOARD_LOOPER: 8
-    hintsSearchLoop:
-    for (let row = 0; row < 9; row++) {
+    hintsSearchLoop: for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (maxHintsLimitReached(result, maxHintsThreshold)) {
                 break hintsSearchLoop

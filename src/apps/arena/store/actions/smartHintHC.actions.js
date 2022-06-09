@@ -5,7 +5,14 @@ import { consoleLog, getClonedValue } from '../../../../utils/util'
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
-import { areCommonHouseCells, areSameCells, duplicacyPresent, getCellVisibleNotes, isCellEmpty, isCellNoteVisible } from '../../utils/util'
+import {
+    areCommonHouseCells,
+    areSameCells,
+    duplicacyPresent,
+    getCellVisibleNotes,
+    isCellEmpty,
+    isCellNoteVisible,
+} from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes, getTryOutSelectedCell } from '../selectors/smartHintHC.selectors'
@@ -87,7 +94,7 @@ export const resetStoreState = () => {
 
 /* Try Out actions */
 
-export const updateTryOutSelectedCell = (cell) => {
+export const updateTryOutSelectedCell = cell => {
     invokeDispatch(setTryOutSelectedCell(cell))
 }
 
@@ -95,7 +102,7 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
     if (!isValidInputNumberClick(number)) {
         showSnackBar({
             msg: `try filling cell which is empty and has ${number} as a candidate there`,
-            customStyles: snackBarCustomStyles
+            customStyles: snackBarCustomStyles,
         })
         return
     }
@@ -103,11 +110,14 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
     invokeDispatch(updateBoardDataOnTryOutNumberInput({ removalbeNotesHostCellsData, number }))
 }
 
-const isValidInputNumberClick = (number) => {
+const isValidInputNumberClick = number => {
     const selectedCell = getTryOutSelectedCell(getStoreState())
     const mainNumbers = getTryOutMainNumbers(getStoreState())
     const notesInfo = getTryOutNotes(getStoreState())
-    return isCellEmpty(selectedCell, mainNumbers) && isCellNoteVisible(number, notesInfo[selectedCell.row][selectedCell.col])
+    return (
+        isCellEmpty(selectedCell, mainNumbers) &&
+        isCellNoteVisible(number, notesInfo[selectedCell.row][selectedCell.col])
+    )
 }
 
 const showSnackBar = ({ msg, customStyles }) => {
@@ -127,14 +137,17 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: getCellVisibleNotes(notesInfo[cell.row][cell.col])
+                notes: getCellVisibleNotes(notesInfo[cell.row][cell.col]),
             })
         } else {
             // TODO: can make it better
-            if (isCellNoteVisible(inputNumber, notesInfo[cell.row][cell.col]) && areCommonHouseCells(cell, selectedCell)) {
+            if (
+                isCellNoteVisible(inputNumber, notesInfo[cell.row][cell.col]) &&
+                areCommonHouseCells(cell, selectedCell)
+            ) {
                 result.push({
                     cell,
-                    notes: [inputNumber]
+                    notes: [inputNumber],
                 })
             }
         }
@@ -147,7 +160,7 @@ export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles) => {
     if (!cellHasTryOutInput()) {
         showSnackBar({
             msg: 'you can only erase from cells which were filled after this hint is displayed',
-            customStyles: snackBarCustomStyles
+            customStyles: snackBarCustomStyles,
         })
         return
     }
@@ -156,7 +169,7 @@ export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles) => {
     invokeDispatch(updateBoardDataOnTryOutErase(notesToEnterHostCellsData))
 }
 
-const getNotesToEnterHostCells = (focusedCells) => {
+const getNotesToEnterHostCells = focusedCells => {
     const selectedCell = getTryOutSelectedCell(getStoreState())
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const actualNotesInfo = getNotesInfo(getStoreState())
@@ -168,19 +181,22 @@ const getNotesToEnterHostCells = (focusedCells) => {
     mainNumbersStateAfterErase[selectedCell.row][selectedCell.col].value = 0
 
     const result = []
-    focusedCells.forEach((cell) => {
+    focusedCells.forEach(cell => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col]).filter((note) => {
+                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col]).filter(note => {
                     return shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)
-                })
+                }),
             })
         } else {
-            if (isCellEmpty(cell, tryOutMainNumbers) && shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)) {
+            if (
+                isCellEmpty(cell, tryOutMainNumbers) &&
+                shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)
+            ) {
                 result.push({
                     cell,
-                    notes: [numberToBeErased]
+                    notes: [numberToBeErased],
                 })
             }
         }
@@ -192,7 +208,9 @@ const getNotesToEnterHostCells = (focusedCells) => {
 const shouldSpawnNoteInCell = (note, cell, mainNumbersStateAfterErase) => {
     const actualNotesInfo = getNotesInfo(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    return isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col])
-        && !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col])
-        && !duplicacyPresent(note, mainNumbersStateAfterErase, cell)
+    return (
+        isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col]) &&
+        !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col]) &&
+        !duplicacyPresent(note, mainNumbersStateAfterErase, cell)
+    )
 }

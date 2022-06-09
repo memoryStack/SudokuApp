@@ -108,12 +108,7 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     )
 
     return (
-        <Touchable
-            touchable={TouchableTypes.opacity}
-            activeOpacity={1}
-            onPress={noop}
-            style={styles.container}
-        >
+        <Touchable touchable={TouchableTypes.opacity} activeOpacity={1} onPress={noop} style={styles.container}>
             {gameSolved ? getGameSolvedView() : gameUnsolved ? getGameUnsolvedView() : null}
             <Button onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} text={NEW_GAME} />
         </Touchable>

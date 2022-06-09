@@ -427,9 +427,8 @@ describe('forCellEachNote()', () => {
 
 describe('forBoardEachCell()', () => {
     test('calls the callback 81 times, oncefor each cell', () => {
-        const mockCallback = jest.fn();
+        const mockCallback = jest.fn()
         forBoardEachCell(mockCallback)
-        expect(mockCallback.mock.calls.length).toBe(81);
+        expect(mockCallback.mock.calls.length).toBe(81)
     })
 })
-
