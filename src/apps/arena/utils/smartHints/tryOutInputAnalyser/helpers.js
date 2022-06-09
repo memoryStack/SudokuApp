@@ -4,7 +4,7 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/s
 import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible } from '../../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
 import { getCandidatesListText } from '../util'
-import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES } from './constants'
+import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 
 export const noInputInTryOut = focusedCells => {
     const actualMainNumbers = getMainNumbers(getStoreState())
@@ -69,5 +69,12 @@ export const getNakedGroupNoTryOutInputResult = (groupCandidates) => {
             `try filling ${candidatesListText} in the cells where` +
             ` it is highlighted in red or green color to see why this hint works`,
         state: TRY_OUT_RESULT_STATES.START,
+    }
+}
+
+export const getTryOutErrorResult = errorType => {
+    return {
+        msg: TRY_OUT_ERROR_TYPES_VS_ERROR_MSG[errorType],
+        state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }

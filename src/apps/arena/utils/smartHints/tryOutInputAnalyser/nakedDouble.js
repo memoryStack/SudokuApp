@@ -1,8 +1,8 @@
 import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { isCellEmpty } from '../../util'
-import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
-import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult } from './helpers'
+import { TRY_OUT_RESULT_STATES } from './constants'
+import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult } from './helpers'
 
 const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
 
@@ -47,13 +47,6 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
                 ` to find where these numbers can't come in the highlighted region.`,
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
-    }
-}
-
-const getTryOutErrorResult = errorType => {
-    return {
-        msg: TRY_OUT_ERROR_TYPES_VS_ERROR_MSG[errorType],
-        state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
 
