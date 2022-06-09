@@ -5,18 +5,34 @@ import { GROUPS, HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import { maxHintsLimitReached, setCellDataInHintResult } from './util'
 import { isHintValid } from './validityTest'
 
-// TODO: this msg needs to be simplified for tripple case [{1,2}, {1,2,3}, {2, 3}]
-// this case doesn't fit exactly in the below explaination
-// TODO: turn it into multistep
-const getNakedTrippleHintData = ({ groupCandidates, cellsToFocusData }) => {
-    const isNakedDoubles = groupCandidates.length === 2
-    const groupCellsCountEnglishText = isNakedDoubles ? 'two' : 'three'
+// put it in utils for other smart hints as well
+const getHintExplanationSteps = (hintChunks) => {
+    const result = hintChunks.map((hintChunk) => {
+        return { text: hintChunk }
+    })
+    result.push({
+        isTryOut: true,
+        text: 'try out',
+    })
+    return result
+}
 
-    const getGroupCandidatesListText = () => {
-        return isNakedDoubles
-            ? `${groupCandidates[0]} and ${groupCandidates[1]}`
-            : `${groupCandidates[0]}, ${groupCandidates[1]} and ${groupCandidates[2]}`
-    }
+// put it in utils for other smart hints as well
+const getTryOutInputPanelNumbersVisibility = (allowedCandidates) => {
+    const numbersVisibility = new Array(10).fill(false)
+    allowedCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
+    return numbersVisibility
+}
+
+// this can go in utils as well
+const getCandidatesListText = (candidates) => {
+    if (candidates.length === 1) return `${candidates[0]}`
+    const allCandidatesExceptLast = candidates.slice(0, candidates.length - 1);
+    return allCandidatesExceptLast.join(', ') + ` and ${candidates[candidates.length - 1]}`
+}
+
+const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
+    const isNakedDoubles = groupCandidates.length === 2
 
     const getCellsHostingText = () => {
         const groupCandidatesText = isNakedDoubles
@@ -26,13 +42,25 @@ const getNakedTrippleHintData = ({ groupCandidates, cellsToFocusData }) => {
         return `So one of the squares has to be ${groupCandidatesText} (which is which is yet unknown).`
     }
 
-    const hintMessage = () =>
-        `In the highlighted region, ${groupCellsCountEnglishText} cells have exactly same candidates ${getGroupCandidatesListText()} highlighted in green color. ${getCellsHostingText()} So ${getGroupCandidatesListText()} highlighted in red color can't appear there and we can erase these instances from these cells`
+    // TODO: explore if we can use the below array for naked double and naked tripple as well
+    const hintChunks = [
+        `A Naked Tripple is a set of three candidates filled in three cells that are part of same row, column or box.\nNote: these three cells collectively can't have more than 3 different candidates`,
+        `${getCandidatesListText(groupCandidates)} make a naked tripple in the highlighted region. in the solution ${getCandidatesListText(groupCandidates)} will be placed in Naked Tripple cells only and all the candidates of these numbers can be removed from other cells of the highlighted region. ${getCandidatesListText(groupCandidates)} will go in exactly which Naked Tripple cell is yet not clear.`,
+    ]
 
     return {
+        hasTryOut: true,
         cellsToFocusData,
+        focusedCells,
+        type: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
         title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
-        steps: [{ text: hintMessage() }],
+        steps: getHintExplanationSteps(hintChunks),
+        tryOutAnalyserData: {
+            groupCandidates,
+            focusedCells,
+            groupCells,
+        },
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates),
     }
 }
 
@@ -71,29 +99,13 @@ const prepareNakedDublesOrTriplesHintData = (
     })
 
     if (!isNakedDoubles) {
-        return getNakedTrippleHintData({ groupCandidates, cellsToFocusData })
+        return getNakedTrippleHintData({ groupCandidates, cellsToFocusData, focusedCells: toBeHighlightedCells, groupCells })
     }
 
-    // TODO: write explaination for naked tripple as well
-    const hintList = [
-        `A Naked Pair is a set of two candidate numbers filled in two cells that belong to at least one unit in common. That is, they reside in the same row, column or box.\nNote: these two cells can't have more than 2 different set of candidates`,
-        `${groupCandidates[0]} and ${groupCandidates[1]} make a naked double in the highlighted region. in the solution ${groupCandidates[0]} and ${groupCandidates[1]} will be placed in Naked Double cells only and all the candidates of ${groupCandidates[0]} and ${groupCandidates[1]} can be removed from other cells of the highlighted region. ${groupCandidates[0]} and ${groupCandidates[1]} will go in exactly which Naked Pair cell is yet not clear.`,
-        `let's say that ${groupCandidates[0]} can't come in any of Naked Pair cells then ${groupCandidates[1]} has to come in both Naked Pair cells, if we do so then solution will be invalid. we can try it with the ${groupCandidates[1]} as well but solution will be invalid in both the cases.`,
+    const hintChunks = [
+        `A Naked Double is a set of two candidates filled in two cells that are part of same row, column or box.\nNote: these two cells can't have more than 2 different set of candidates`,
+        `${getCandidatesListText(groupCandidates)} make a naked double in the highlighted region. in the solution ${getCandidatesListText(groupCandidates)} will be placed in Naked Double cells only and all the candidates of ${getCandidatesListText(groupCandidates)} can be removed from other cells of the highlighted region. ${getCandidatesListText(groupCandidates)} will go in exactly which Naked Double cell is yet not clear.`,
     ]
-
-    const getTryOutInputPanelNumbersVisibility = () => {
-        const numbersVisibility = new Array(10).fill(false)
-        groupCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
-        return numbersVisibility
-    }
-
-    const explainationSteps = hintList.map(hintChunk => {
-        return { text: hintChunk }
-    })
-    explainationSteps.push({
-        isTryOut: true,
-        text: 'try out',
-    })
 
     return {
         hasTryOut: true,
@@ -106,8 +118,8 @@ const prepareNakedDublesOrTriplesHintData = (
             focusedCells: toBeHighlightedCells,
             groupCells,
         },
-        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(),
-        steps: explainationSteps,
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates),
+        steps: getHintExplanationSteps(hintChunks),
     }
 }
 

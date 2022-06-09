@@ -11,7 +11,7 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
         return {
             msg:
                 `try filling ${getCandidatesListForTryOutMsg(groupCandidates)} in the cells where` +
-                ` it is highlighted in red or green color to see how this hint works`,
+                ` it is highlighted in red or green color to see why this hint works`,
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
