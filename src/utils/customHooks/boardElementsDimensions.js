@@ -10,7 +10,7 @@ export const INNER_THICK_BORDER_WIDTH = 3,
 const getGameBoardWidth = windowWidth => {
     let result = Math.floor(windowWidth * GRID_WINDOW_WIDTH_RATIO)
     const extraPixels = (result - (2 * INNER_THICK_BORDER_WIDTH + 2 * GRID_THIN_BORDERS_WIDTH)) % CELLS_IN_HOUSE
-    result -= (extraPixels + BOARD_AXIS_WIDTH)
+    result -= extraPixels + BOARD_AXIS_WIDTH
     return result
 }
 

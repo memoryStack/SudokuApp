@@ -6,8 +6,8 @@ import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText } 
 import { isHintValid } from './validityTest'
 
 // put it in utils for other smart hints as well
-const getHintExplanationSteps = (hintChunks) => {
-    const result = hintChunks.map((hintChunk) => {
+const getHintExplanationSteps = hintChunks => {
+    const result = hintChunks.map(hintChunk => {
         return { text: hintChunk }
     })
     result.push({
@@ -18,7 +18,7 @@ const getHintExplanationSteps = (hintChunks) => {
 }
 
 // put it in utils for other smart hints as well
-const getTryOutInputPanelNumbersVisibility = (allowedCandidates) => {
+const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
     const numbersVisibility = new Array(10).fill(false)
     allowedCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
     return numbersVisibility
@@ -92,7 +92,12 @@ const prepareNakedDublesOrTriplesHintData = (
     })
 
     if (!isNakedDoubles) {
-        return getNakedTrippleHintData({ groupCandidates, cellsToFocusData, focusedCells: toBeHighlightedCells, groupCells })
+        return getNakedTrippleHintData({
+            groupCandidates,
+            cellsToFocusData,
+            focusedCells: toBeHighlightedCells,
+            groupCells,
+        })
     }
 
     const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)

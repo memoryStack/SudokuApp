@@ -96,6 +96,6 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {
         smartHintAxisText: {
             color: 'white',
             zIndex: 100, // TODO: make a constant with name like max_possible z_index
-        }
+        },
     })
 }
