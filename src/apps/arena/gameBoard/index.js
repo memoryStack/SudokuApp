@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
@@ -7,6 +7,7 @@ import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
+    BOARD_AXIS_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
@@ -158,6 +159,45 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
+    const renderYAxis = () => {
+        const yAxis = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+        return (
+            <View style={{
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                width: 12,
+                marginRight: 4,
+            }}>
+                {
+                    yAxis.map((label) => {
+                        return <Text>{label}</Text>
+                    })
+                }
+            </View>
+        )
+    }
+
+    const renderXAxis = () => {
+        // TODO: this thing can be done using enums as well.
+        // explore that just for fun
+        const yAxis = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+        return (
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                width: GAME_BOARD_WIDTH + 0,
+                marginBottom: 4,
+                marginLeft: 16,
+            }}>
+                {
+                    yAxis.map((label) => {
+                        return <Text>{label}</Text>
+                    })
+                }
+            </View>
+        )
+    }
+
     const renderBoard = () => {
         let keyCounter = 0
         return (
@@ -169,7 +209,15 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
-    return renderBoard()
+    return (
+        <>
+            {renderXAxis()}
+            <View style={{ flexDirection: 'row' }}>
+                {renderYAxis()}
+                {renderBoard()}
+            </View>
+        </>
+    )
 }
 
 export const Board = React.memo(Board_)
