@@ -6,8 +6,8 @@ import { maxHintsLimitReached, setCellDataInHintResult } from './util'
 import { isHintValid } from './validityTest'
 
 // put it in utils for other smart hints as well
-const getHintExplanationSteps = (hintChunks) => {
-    const result = hintChunks.map((hintChunk) => {
+const getHintExplanationSteps = hintChunks => {
+    const result = hintChunks.map(hintChunk => {
         return { text: hintChunk }
     })
     result.push({
@@ -18,16 +18,16 @@ const getHintExplanationSteps = (hintChunks) => {
 }
 
 // put it in utils for other smart hints as well
-const getTryOutInputPanelNumbersVisibility = (allowedCandidates) => {
+const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
     const numbersVisibility = new Array(10).fill(false)
     allowedCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
     return numbersVisibility
 }
 
 // this can go in utils as well
-const getCandidatesListText = (candidates) => {
+const getCandidatesListText = candidates => {
     if (candidates.length === 1) return `${candidates[0]}`
-    const allCandidatesExceptLast = candidates.slice(0, candidates.length - 1);
+    const allCandidatesExceptLast = candidates.slice(0, candidates.length - 1)
     return allCandidatesExceptLast.join(', ') + ` and ${candidates[candidates.length - 1]}`
 }
 
@@ -45,7 +45,13 @@ const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, ce
     // TODO: explore if we can use the below array for naked double and naked tripple as well
     const hintChunks = [
         `A Naked Tripple is a set of three candidates filled in three cells that are part of same row, column or box.\nNote: these three cells collectively can't have more than 3 different candidates`,
-        `${getCandidatesListText(groupCandidates)} make a naked tripple in the highlighted region. in the solution ${getCandidatesListText(groupCandidates)} will be placed in Naked Tripple cells only and all the candidates of these numbers can be removed from other cells of the highlighted region. ${getCandidatesListText(groupCandidates)} will go in exactly which Naked Tripple cell is yet not clear.`,
+        `${getCandidatesListText(
+            groupCandidates,
+        )} make a naked tripple in the highlighted region. in the solution ${getCandidatesListText(
+            groupCandidates,
+        )} will be placed in Naked Tripple cells only and all the candidates of these numbers can be removed from other cells of the highlighted region. ${getCandidatesListText(
+            groupCandidates,
+        )} will go in exactly which Naked Tripple cell is yet not clear.`,
     ]
 
     return {
@@ -99,12 +105,25 @@ const prepareNakedDublesOrTriplesHintData = (
     })
 
     if (!isNakedDoubles) {
-        return getNakedTrippleHintData({ groupCandidates, cellsToFocusData, focusedCells: toBeHighlightedCells, groupCells })
+        return getNakedTrippleHintData({
+            groupCandidates,
+            cellsToFocusData,
+            focusedCells: toBeHighlightedCells,
+            groupCells,
+        })
     }
 
     const hintChunks = [
         `A Naked Double is a set of two candidates filled in two cells that are part of same row, column or box.\nNote: these two cells can't have more than 2 different set of candidates`,
-        `${getCandidatesListText(groupCandidates)} make a naked double in the highlighted region. in the solution ${getCandidatesListText(groupCandidates)} will be placed in Naked Double cells only and all the candidates of ${getCandidatesListText(groupCandidates)} can be removed from other cells of the highlighted region. ${getCandidatesListText(groupCandidates)} will go in exactly which Naked Double cell is yet not clear.`,
+        `${getCandidatesListText(
+            groupCandidates,
+        )} make a naked double in the highlighted region. in the solution ${getCandidatesListText(
+            groupCandidates,
+        )} will be placed in Naked Double cells only and all the candidates of ${getCandidatesListText(
+            groupCandidates,
+        )} can be removed from other cells of the highlighted region. ${getCandidatesListText(
+            groupCandidates,
+        )} will go in exactly which Naked Double cell is yet not clear.`,
     ]
 
     return {

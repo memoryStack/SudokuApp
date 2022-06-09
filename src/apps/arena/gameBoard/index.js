@@ -158,7 +158,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
-    const renderAxisText = (label) => {
+    const renderAxisText = label => {
         return <Text style={showSmartHint ? styles.smartHintAxisText : styles.axisText}>{label}</Text>
     }
 
@@ -166,11 +166,9 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         const yAxisTexts = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
         return (
             <View style={styles.yAxis}>
-                {
-                    yAxisTexts.map((label) => {
-                        return renderAxisText(label)
-                    })
-                }
+                {yAxisTexts.map(label => {
+                    return renderAxisText(label)
+                })}
             </View>
         )
     }, [showSmartHint])
@@ -179,11 +177,9 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         const xAxisTexts = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
         return (
             <View style={styles.xAxis}>
-                {
-                    xAxisTexts.map((label) => {
-                        return renderAxisText(label)
-                    })
-                }
+                {xAxisTexts.map(label => {
+                    return renderAxisText(label)
+                })}
             </View>
         )
     }, [showSmartHint])
