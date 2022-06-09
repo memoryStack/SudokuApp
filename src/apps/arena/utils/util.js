@@ -321,3 +321,10 @@ export const filterHouseCells = ({ type, num }, filterCallback) => {
         return filterCallback(cell)
     })
 }
+
+export const getCellAxesValues = (cell) => {
+    // TODO: use these from a central place
+    const yAxisTexts = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+    const xAxisTexts = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    return `${yAxisTexts[cell.row]}${xAxisTexts[cell.col]}`
+}

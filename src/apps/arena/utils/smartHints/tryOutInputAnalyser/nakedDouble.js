@@ -16,6 +16,7 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     }
 
     // one or more candidates are filled in correct place. prepare messages for this state.
+    // TODO: replace it with the newly added helper func for this purpose
     const getFilledCandidatesListForGreenState = candidates => {
         if (candidates.length === 1) return `${candidates[0]}`
 
