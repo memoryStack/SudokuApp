@@ -3,8 +3,6 @@ import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { isCellEmpty } from '../../util'
 import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult } from './helpers'
-import { getCandidatesListText } from '../util'
-import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
 
 const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
 
@@ -50,14 +48,6 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
-}
-
-// TODO: put it globally now. and use it in the naked group as well
-const getCandidatesListForTryOutMsg = candidates => {
-    const isNakedDoubles = candidates.length === 2
-    return isNakedDoubles
-        ? `${candidates[0]} or ${candidates[1]}`
-        : `${candidates[0]}, ${candidates[1]} or ${candidates[2]}`
 }
 
 const getTryOutErrorResult = errorType => {
