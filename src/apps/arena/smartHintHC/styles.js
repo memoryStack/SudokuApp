@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: fonts.regular,
     },
-    logicContainer: {
+    bodyContainer: {
         flex: 1,
         width: '100%',
     },
@@ -28,13 +28,29 @@ export const styles = StyleSheet.create({
     hintsCountText: { marginLeft: 8, fontSize: 20 },
     footerContainer: {
         flexDirection: 'row',
-        height: FOOTER_HEIGHT,
-        width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
+        height: FOOTER_HEIGHT,
+        width: '100%',
         marginTop: 8,
     },
     footerButtonText: { color: '#4088da' },
+    tryOutResult: {
+        marginTop: 12,
+        marginBottom: 4,
+    },
+    tryOutDefaultResult: {
+        color: 'black',
+    },
+    tryOutErrorResult: {
+        color: 'red',
+    },
+    tryOutProgressResult: {
+        color: 'green',
+    },
+    snackBar: {
+        bottom: 200,
+    }
 })
 
 export const getContainerStyles = (windowHeight, displayFooter) => {

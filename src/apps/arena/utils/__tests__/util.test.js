@@ -13,7 +13,8 @@ import {
     areSameCellsSets,
     getHousePossibleNotes,
     forCellEachNote,
-    forEachCell,
+    forBoardEachCell,
+    areCommonHouseCells,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
@@ -229,6 +230,38 @@ test('pair cells common houses', () => {
     expect(getPairCellsCommonHouses(testTwo.cellA, testTwo.cellB)).toStrictEqual(testTwoExpectedResult)
 })
 
+describe('areCommonHouseCells()', () => {
+    test('return true when cells have common block and common row', () => {
+        const cellA = { row: 0, col: 2 }
+        const cellB = { row: 0, col: 1 }
+        expect(areCommonHouseCells(cellA, cellB)).toBe(true)
+    })
+
+    test('return true when cells have common block only', () => {
+        const cellA = { row: 4, col: 4 }
+        const cellB = { row: 3, col: 3 }
+        expect(areCommonHouseCells(cellA, cellB)).toBe(true)
+    })
+
+    test('return true when cells have only row house as common', () => {
+        const cellA = { row: 0, col: 2 }
+        const cellB = { row: 0, col: 3 }
+        expect(areCommonHouseCells(cellA, cellB)).toBe(true)
+    })
+
+    test('return false when cells have no common house in them ', () => {
+        const cellA = { row: 0, col: 2 }
+        const cellB = { row: 4, col: 4 }
+        expect(areCommonHouseCells(cellA, cellB)).toBe(false)
+    })
+
+    test('return false when cells have no common house in them', () => {
+        const cellA = { row: 0, col: 0 }
+        const cellB = { row: 3, col: 2 }
+        expect(areCommonHouseCells(cellA, cellB)).toBe(false)
+    })
+})
+
 test('get cell visible notes ', () => {
     const cellNotesTestOne = [
         { noteValue: 1, show: 0 },
@@ -392,10 +425,11 @@ describe('forCellEachNote()', () => {
     })
 })
 
-describe('forEachCell()', () => {
+describe('forBoardEachCell()', () => {
     test('calls the callback 81 times, oncefor each cell', () => {
-        const mockCallback = jest.fn()
-        forEachCell(mockCallback)
-        expect(mockCallback.mock.calls.length).toBe(81)
+        const mockCallback = jest.fn();
+        forBoardEachCell(mockCallback)
+        expect(mockCallback.mock.calls.length).toBe(81);
     })
 })
+

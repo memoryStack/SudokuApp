@@ -1,44 +1,39 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
-import { getContainerStyles, styles } from './styles'
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
+import { useSelector } from 'react-redux'
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Button } from '../../../components/button'
-import { noOperationFunction } from '../../../utils/util'
+import { noop } from '../../../utils/util'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
+import { Inputpanel } from '../inputPanel'
+import { getContainerStyles, styles } from './styles'
+import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
-        show: showSmartHint,
-        hint: { techniqueInfo: { title = '', logic = '' } = {}, selectCellOnClose } = {},
+        hint: { focusedCells, title = '', logic = '', selectCellOnClose, inputPanelNumbersVisibility } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
 
+    const tryOutResult = useHintTryOutAnalyserResult()
+
+    const isHintTryOut = useIsHintTryOutStep()
+
     useEffect(() => {
+        onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells, styles } })
         return () => {
             onAction({ type: ACTION_TYPES.ON_UNMOUNT })
         }
     }, [])
-
-    const onNextClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_NEXT_CLICK })
-    }, [onAction])
-
-    const onPrevClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
-    }, [onAction])
-
-    const onClosed = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
-    }, [onAction, selectCellOnClose])
 
     const smartHintHCRef = useRef(null)
 
@@ -56,6 +51,18 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         }
     }, [currentHintNum])
 
+    const onNextClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_NEXT_CLICK })
+    }, [onAction])
+
+    const onPrevClick = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
+    }, [onAction])
+
+    const onClosed = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
+    }, [onAction, selectCellOnClose])
+
     const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } } = {} } = {}) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
     }
@@ -72,7 +79,79 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const containerStyles = getContainerStyles(windowHeight, displayFooter)
 
-    if (!showSmartHint) return null
+    const renderHeader = () => {
+        return (
+            <View style={styles.headerContainer}>
+                <View style={styles.hintTitleContainer}>
+                    <Text style={styles.hintTitle}>{title}</Text>
+                    {totalHintsCount > 1 ? (
+                        <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
+                    ) : null}
+                </View>
+                <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
+                    <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
+                </Touchable>
+            </View>
+        )
+    }
+
+    const renderHintText = () => {
+        return (
+            <ScrollView ref={scrollViewRef} onScroll={handleOnScroll}>
+                <Text style={styles.hintLogicText}>{logic}</Text>
+            </ScrollView>
+        )
+    }
+    
+    const getTryOutResultTextStyle = () => {
+        let result = styles.tryOutDefaultResult
+        
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) {
+            result = styles.tryOutProgressResult
+        }
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.ERROR) {
+            result = styles.tryOutErrorResult
+        }
+
+        return result
+    }
+
+    const renderTryOutContent = () => {
+        return (
+            <>
+                <Inputpanel
+                    numbersVisible={inputPanelNumbersVisibility}
+                    onAction={onAction}
+                />
+                <Text style={[styles.tryOutResult, getTryOutResultTextStyle() ]}>
+                    {tryOutResult.msg}
+                </Text>
+            </>
+        )
+    }
+
+    const renderFooter = () => {
+        if (!displayFooter) return null
+
+        return (
+            <View style={styles.footerContainer}>
+                <Button
+                    text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
+                    onClick={displayPrevButton ? onPrevClick : noop}
+                    avoidDefaultContainerStyles={true}
+                    textStyles={styles.footerButtonText}
+                    hitSlop={HITSLOP}
+                />
+                <Button
+                    text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
+                    onClick={displayNextButton ? onNextClick : noop}
+                    avoidDefaultContainerStyles={true}
+                    textStyles={styles.footerButtonText}
+                    hitSlop={HITSLOP}
+                />
+            </View>
+        )
+    }
 
     return (
         <BottomDragger
@@ -84,41 +163,14 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             animateBackgroundOverlayOnClose={false}
         >
             <View style={containerStyles}>
-                <View style={styles.headerContainer}>
-                    <View style={styles.hintTitleContainer}>
-                        <Text style={styles.hintTitle}>{title}</Text>
-                        {totalHintsCount > 1 ? (
-                            <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
-                        ) : null}
-                    </View>
-                    <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
-                        <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
-                    </Touchable>
+                {renderHeader()}
+                <View style={styles.bodyContainer}>
+                    {isHintTryOut ? renderTryOutContent() : renderHintText()}
                 </View>
-                <ScrollView style={styles.logicContainer} ref={scrollViewRef} onScroll={handleOnScroll}>
-                    <Text style={styles.hintLogicText}>{logic}</Text>
-                </ScrollView>
-                {displayFooter ? (
-                    <View style={styles.footerContainer}>
-                        <Button
-                            text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
-                            onClick={displayPrevButton ? onPrevClick : noOperationFunction}
-                            avoidDefaultContainerStyles={true}
-                            textStyles={styles.footerButtonText}
-                            hitSlop={HITSLOP}
-                        />
-                        <Button
-                            text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
-                            onClick={displayNextButton ? onNextClick : noOperationFunction}
-                            avoidDefaultContainerStyles={true}
-                            textStyles={styles.footerButtonText}
-                            hitSlop={HITSLOP}
-                        />
-                    </View>
-                ) : null}
+                {renderFooter()}
             </View>
         </BottomDragger>
     )
 }
 
-export default React.memo(withActions(ACTION_HANDLERS)(SmartHintHC_))
+export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(SmartHintHC_))

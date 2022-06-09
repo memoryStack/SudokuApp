@@ -159,11 +159,7 @@ const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, max
     consoleLog('@@@@@@@ groupsRawData', JSON.stringify(groupsRawData))
 
     const groupsUIHighlightData = groupsRawData.map(group => getGroupUIHighlightData(group, mainNumbers, notesData))
-
-    return {
-        present: groupsUIHighlightData.length,
-        returnData: groupsUIHighlightData,
-    }
+    return groupsUIHighlightData.length !== 0 ? groupsUIHighlightData : null
 }
 
 export { getAllHiddenGroups, highlightHiddenGroups }

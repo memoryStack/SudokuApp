@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { SafeAreaView, StyleSheet, AppState, Platform } from 'react-native'
 import { EVENTS } from '../../constants/events'
-import { noOperationFunction } from '../../utils/util'
+import { noop } from '../../utils/util'
 
 const styles = StyleSheet.create({
     safeAreaView: {
@@ -14,9 +14,9 @@ const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
 const Page_ = ({
     children,
-    onLayout = noOperationFunction,
-    onFocus = noOperationFunction,
-    onBlur = noOperationFunction,
+    onLayout = noop,
+    onFocus = noop,
+    onBlur = noop,
     navigation,
 }) => {
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')

@@ -4,12 +4,18 @@ import { getStyles } from './style'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
-import { noOperationFunction } from '../../../utils/util'
+import { noop } from '../../../utils/util'
 import { ACTION_TYPES } from './constants'
+import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
+import { forCellEachNote as forEachInputNumber } from '../utils/util'
 
-const CLOSE_ICON_DIMENSION = 28
 const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) => {
+
+    const isHintTryOut = useIsHintTryOutStep()
+
     const { CELL_WIDTH } = useBoardElementsDimensions()
+
+    const CLOSE_ICON_DIMENSION = CELL_WIDTH * (3 / 4)
 
     const styles = useMemo(() => {
         return getStyles(CELL_WIDTH)
@@ -42,7 +48,7 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
         return (
             <Touchable
                 style={styles.numberButtonContainer}
-                onPress={numbersVisible[number] ? () => onNumberClicked(number) : noOperationFunction}
+                onPress={numbersVisible[number] ? () => onNumberClicked(number) : noop}
                 touchable={TouchableTypes.opacity}
                 key={`${number}`}
             >
@@ -55,9 +61,11 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
         const rows = []
 
         let row = []
-        for (let i = 1; i <= 9; i++) {
-            row.push(renderInputNumber(i))
-            if (i === 5) {
+        forEachInputNumber((number) => {
+            if (!isHintTryOut || isHintTryOut && numbersVisible[number]) {
+                row.push(renderInputNumber(number))
+            }
+            if (row.length >= 5) {
                 rows.push(
                     <View key={'rowOne'} style={styles.rowContainer}>
                         {row}
@@ -65,7 +73,8 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
                 )
                 row = []
             }
-        }
+        })
+
         row.push(renderEraser())
         rows.push(<View key={'hori_seperator'} style={styles.horizontalSeperator} />)
         rows.push(

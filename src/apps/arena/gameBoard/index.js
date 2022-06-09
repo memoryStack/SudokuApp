@@ -1,16 +1,21 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { View } from 'react-native'
-import { getStyles } from './style'
-import { Cell } from './cell'
+import { useSelector } from 'react-redux'
+
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
-import { useSelector } from 'react-redux'
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import { ACTION_TYPES } from './actionTypes'
+
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors';
+
+import { getStyles } from './style'
+import { Cell } from './cell'
+import { areSameCells } from '../utils/util'
+import { useCellFocus } from '../utils/smartHints/hooks'
+import { cellHasTryOutInput } from '../smartHintHC/helpers'
 
 const looper = []
 const bordersLooper = []
@@ -19,72 +24,74 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onAction }) => {
-    const showCellContent = [
-        GAME_STATE.ACTIVE,
-        GAME_STATE.DISPLAY_HINT,
-        GAME_STATE.OVER.SOLVED,
-        GAME_STATE.OVER.UNSOLVED,
-    ].includes(gameState)
-
-    const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
+const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onCellClick, isHintTryOut }) => {
 
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
         useSelector(getHintHCInfo)
 
     const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT } = useBoardElementsDimensions()
 
-    const Styles = useMemo(() => {
+    const styles = useMemo(() => {
         return getStyles({ GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH })
     }, [GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT])
+
+    const isCellFocusedInSmartHint = useCellFocus()
+
+    const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
     const sameValueAsSelectedBox = cell =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
 
     const getCustomPuzzleMainNumFontColor = cell => {
         const isWronglyPlaced = mainNumbers[cell.row][cell.col].wronglyPlaced
-        if (isWronglyPlaced) return Styles.wronglyFilledNumColor
+        if (isWronglyPlaced) return styles.wronglyFilledNumColor
         // consider any other number as clue
-        return Styles.clueNumColor
+        return styles.clueNumColor
     }
 
     const getMainNumFontColor = cell => {
         const { row, col } = cell
         if (!mainNumbers[row][col].value) return null
         if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return getCustomPuzzleMainNumFontColor(cell)
+
+        if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
+
         const isWronglyPlaced = mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue
-        if (isWronglyPlaced) return Styles.wronglyFilledNumColor
-        if (!mainNumbers[row][col].isClue) return Styles.userFilledNumColor
-        return Styles.clueNumColor
+        if (isWronglyPlaced) return styles.wronglyFilledNumColor
+        if (!mainNumbers[row][col].isClue) return styles.userFilledNumColor
+        return styles.clueNumColor
     }
 
     const getSmartHintActiveBgColor = cell => {
+        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) return styles.selectedCellBGColor
+        
         const { row, col } = cell
         return (
             (smartHintCellsHighlightInfo[row] &&
                 smartHintCellsHighlightInfo[row][col] &&
                 smartHintCellsHighlightInfo[row][col].bgColor) ||
-            Styles.smartHintOutOfFocusBGColor
+            styles.smartHintOutOfFocusBGColor
         )
     }
 
+    const showCellContent = [GAME_STATE.ACTIVE,GAME_STATE.DISPLAY_HINT,GAME_STATE.OVER.SOLVED,GAME_STATE.OVER.UNSOLVED]
+        .includes(gameState)
+    
     // this is going to get complicated, i guess it's better to break it
     const getBoxBackgroundColor = cell => {
-        const { row, col } = cell
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
 
         if (!showCellContent) return null
-        const { row: selectedCellRow = 0, col: selectedCellCol = 0 } = selectedCell
-        const isSelected = selectedCellRow === row && selectedCellCol === col
-
-        if (isSelected) return Styles.selectedCellBGColor
-        const isSameHouseAsSelected = sameHouseAsSelected(cell, { row: selectedCellRow, col: selectedCellCol })
+        
+        if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
+        
+        const isSameHouseAsSelected = sameHouseAsSelected(cell, selectedCell)
         const isSameValueAsSelected = sameValueAsSelectedBox(cell)
-        if (isSameHouseAsSelected && isSameValueAsSelected) return Styles.sameHouseSameValueBGColor
+        if (isSameHouseAsSelected && isSameValueAsSelected) return styles.sameHouseSameValueBGColor
         if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells
-        if (isSameHouseAsSelected) return Styles.sameHouseCellBGColor
-        if (!isSameHouseAsSelected && isSameValueAsSelected) return Styles.diffHouseSameValueBGColor
-        return Styles.defaultCellBGColor
+        if (isSameHouseAsSelected) return styles.sameHouseCellBGColor
+        if (!isSameHouseAsSelected && isSameValueAsSelected) return styles.diffHouseSameValueBGColor
+        return styles.defaultCellBGColor
     }
 
     const shouldMarkCellAsInhabitable = cell => {
@@ -96,22 +103,15 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
-    const onCellClick = useCallback(
-        cell => {
-            onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-        },
-        [onAction],
-    )
-
     const renderRow = (row, key) => {
         let rowElementsKeyCounter = 0
         return (
-            <View style={Styles.rowStyle} key={key}>
+            <View style={styles.rowStyle} key={key}>
                 {looper.map(col => {
                     const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
                     const cell = { row, col }
                     return (
-                        <View style={Styles.cellContainer} key={`${rowElementsKeyCounter++}`}>
+                        <View style={styles.cellContainer} key={`${rowElementsKeyCounter++}`}>
                             <Cell
                                 row={row}
                                 col={col}
@@ -136,7 +136,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const getGrid = orientation => {
         const isVertical = orientation === 'vertical'
         const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
-        const normalBorderStyle = isVertical ? Styles.verticalBars : Styles.horizontalBars
+        const normalBorderStyle = isVertical ? styles.verticalBars : styles.horizontalBars
         const thickNessStyleField = isVertical ? 'width' : 'height'
         const thickBorderStyle = {
             ...normalBorderStyle,
@@ -144,7 +144,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         }
 
         return (
-            <View style={[Styles.gridBorderContainer, orientationBasedStyles]} pointerEvents={'none'}>
+            <View style={[styles.gridBorderContainer, orientationBasedStyles]} pointerEvents={'none'}>
                 {bordersLooper.map(borderNum => {
                     const boldBorder = borderNum === 3 || borderNum === 6
                     const borderViewStyle = boldBorder ? thickBorderStyle : normalBorderStyle
@@ -157,7 +157,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const renderBoard = () => {
         let keyCounter = 0
         return (
-            <View style={[Styles.board, showSmartHint ? { zIndex: 1 } : null]}>
+            <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
                 {looper.map(row => renderRow(row, `${keyCounter++}`))}
                 {getGrid('horizontal')}
                 {getGrid('vertical')}

@@ -39,7 +39,7 @@ const initBoardData = () => {
     // omissions
     // const str = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
 
-    if (__DEV__) {
+    if (__DEV__ && false) {
         for (let i = 0; i < str.length; i++) {
             const row = Math.floor(i / 9)
             const col = i % 9
@@ -136,6 +136,7 @@ const handleCellClick = ({ setState, getState, params: cell }) => {
 
 const getCluesCount = mainNumbers => {
     let cluesCount = 0
+    // BOARD_LOOPER: 5
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (mainNumbers[row][col].value) cluesCount++

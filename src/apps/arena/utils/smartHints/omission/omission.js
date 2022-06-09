@@ -119,6 +119,8 @@ export const getOmissionHints = (mainNumbers, notesData, maxHintsThreshold) => {
         })
         .slice(0, maxHintsThreshold)
 
+    if (!omissions.length) return null
+
     return omissions.map(omission => {
         return getUIHighlightData(omission, notesData)
     })

@@ -67,6 +67,8 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
         onCustomPuzzleClosed()
     }, [])
 
+    // TODO: why do we have this custom renderer which looks almost exactly like
+    // the main snackBar globally ??
     const snackBarRenderer = msg => {
         return (
             <View style={styles.snackBarContainer}>
@@ -74,6 +76,10 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
             </View>
         )
     }
+
+    const onCellClick = useCallback((cell) => {
+        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    }, [onAction])
 
     return (
         <BottomDragger
@@ -98,7 +104,7 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
                     mainNumbers={mainNumbers}
                     notesInfo={notesInfo}
                     selectedCell={selectedCell}
-                    onAction={onAction}
+                    onCellClick={onCellClick}
                 />
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel onAction={onAction} />
@@ -109,4 +115,4 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
     )
 }
 
-export const CustomPuzzle = React.memo(withActions(ACTION_HANDLERS, INITIAL_STATE)(CustomPuzzle_))
+export const CustomPuzzle = React.memo(withActions({ actionHandlers: ACTION_HANDLERS, initialState: INITIAL_STATE })(CustomPuzzle_))

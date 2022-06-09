@@ -324,5 +324,7 @@ export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
         })
         .slice(0, maxHintsThreshold)
 
+    if (!xWings.length) return null
+    
     return getUIHighlightData(xWings, notesData)
 }

@@ -34,6 +34,7 @@ export const isValidYWingCell = (userInputNotes, allPossibleNotes) => {
 export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
     const possibleNotes = getPossibleNotes(getStoreState())
 
+    // BOARD_LOOPER: 10
     const result = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -208,8 +209,6 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
 
 export const getYWingsHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const rawYWings = getAllYWings(mainNumbers, notesData, maxHintsThreshold)
-
-    if (!rawYWings.length) return null
-
-    return rawYWings.map(yWing => getYWingHintUIHighlightData(yWing, notesData)).filter(yWingHint => !!yWingHint)
+    const yWingHintsUIData = rawYWings.map(yWing => getYWingHintUIHighlightData(yWing, notesData)).filter(yWingHint => !!yWingHint)
+    return yWingHintsUIData.length !== 0 ? yWingHintsUIData : null
 }

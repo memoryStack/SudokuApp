@@ -107,9 +107,7 @@ export const getYWingHintUIHighlightData = (yWing, notesData) => {
 
     return {
         cellsToFocusData,
-        techniqueInfo: {
-            title: 'Y Wing',
-            logic: getHintExplaination({ pivotNotes: pivot.notes, commonNoteInWings }),
-        },
+        title: 'Y Wing',
+        steps: [{ text: getHintExplaination({ pivotNotes: pivot.notes, commonNoteInWings }) }],
     }
 }

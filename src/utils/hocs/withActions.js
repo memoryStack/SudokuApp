@@ -1,17 +1,32 @@
 import React, { PureComponent } from 'react'
 
+const DEFAULT_ON_ACTION_PROP_NAME = 'onAction'
 const DEFAULT_OPTIONS = {
     shouldForwardAction: false,
 }
 
-const withActions = (actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS) =>
-    function wrapComponent(WrappedComponent) {
+const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT_OPTIONS }) => {
+
+    // TODO: is doing this transform fine ??
+    //      looks wrong that a variable can be object and also array
+    let actionHandlersConfig = actionHandlers
+    if (!Array.isArray(actionHandlers)) {
+        actionHandlersConfig = [{ actionHandlers }]
+    }
+
+    return function wrapComponent(WrappedComponent) {
         class WithActions extends PureComponent {
             state = initialState
 
+            constructor(props) {
+                super(props)
+
+                this.onActions = this.getOnActionProp()
+            }
+
             getState = () => ({ ...this.props, ...this.state })
 
-            handleAction = (action = {}) => {
+            handleAction = (action = {}, actionHandlers) => {
                 const handler = actionHandlers[action.type]
                 const { onAction, shouldForwardAction } = this.props
 
@@ -32,12 +47,26 @@ const withActions = (actionHandlers = {}, initialState = {}, options = DEFAULT_O
                 return result
             }
 
+            getOnActionProp = () => {
+                return actionHandlersConfig.reduce((prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
+                    prev[onActionPropAlias] = (action) => this.handleAction(action, actionHandlers)
+                    return prev
+                }, {})
+            }
+
             render() {
-                return <WrappedComponent {...this.props} {...this.state} onAction={this.handleAction} />
+                return (
+                    <WrappedComponent
+                        {...this.props}
+                        {...this.state}
+                        {...this.onActions}
+                    />
+                )
             }
         }
 
         return WithActions
     }
+}
 
 export default withActions

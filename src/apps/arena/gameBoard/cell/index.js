@@ -77,7 +77,7 @@ const Cell_ = ({
                 </View>
             )
         })
-        return <>{cellNotesRows}</>
+        return cellNotesRows
     }
 
     const getCellContent = () => {

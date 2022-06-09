@@ -3,8 +3,6 @@ import { getFinnedXWingUIData } from './finnedXWing'
 import { getPerfectXWingUIData } from './perfectXWing'
 
 export const getUIHighlightData = (xWings, notesData) => {
-    if (!xWings.length) return null
-
     return xWings.map(({ type, houseType, legs }) => {
         if (type === XWING_TYPES.PERFECT) return getPerfectXWingUIData({ houseType, legs }, notesData)
         // TODO: seperate ui-highlight logic for finned and sashimi-finned xWings

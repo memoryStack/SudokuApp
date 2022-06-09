@@ -194,9 +194,7 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
 
     return {
         cellsToFocusData,
-        techniqueInfo: {
-            title: finnedXWingType === XWING_TYPES.FINNED ? 'Finned X-Wing' : 'Sashimi Finned X-Wing',
-            logic: getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } }),
-        },
+        title: finnedXWingType === XWING_TYPES.FINNED ? 'Finned X-Wing' : 'Sashimi Finned X-Wing',
+        steps: [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } }) }],
     }
 }

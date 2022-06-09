@@ -21,7 +21,7 @@ import {
     CUSTOMIZE_YOUR_PUZZLE_TITLE,
 } from '../../resources/stringLiterals'
 import { updateGameState } from './store/actions/gameState.actions'
-import { consoleLog, noOperationFunction } from '../../utils/util'
+import { consoleLog, noop } from '../../utils/util'
 import {
     updateMainNumbers,
     updateMoves,
@@ -239,6 +239,7 @@ const handleCustomPuzzleHCClose = ({ setState }) => {
 const handleSharePuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
+    // BOARD_LOOPER: 4
     let puzzleString = ''
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -252,7 +253,7 @@ const handleSharePuzzle = () => {
         url: `${DEEPLINK_HOST_NAME}${puzzleString}`,
     }
     Share.open(options)
-        .then(noOperationFunction, noOperationFunction)
+        .then(noop, noop)
         .catch(error => {
             consoleLog(error)
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: SOMETHING_WENT_WRONG })

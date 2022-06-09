@@ -2,7 +2,7 @@ import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helper
 import { PENCIL_STATE } from '../../../../resources/constants'
 import { getBlockAndBoxNum, initMainNumbers } from '../../../../utils/util'
 import { HOUSE_TYPE } from '../../utils/smartHints/constants'
-import { duplicacyPresent, forEachCell, getCellHousesInfo, initNotes, isCellEmpty } from '../../utils/util'
+import { duplicacyPresent, forBoardEachCell, getCellHousesInfo, initNotes, isCellEmpty } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
@@ -58,6 +58,7 @@ export const fastPencilAction = () => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
 
+    // BOARD_LOOPER: 6
     const bunch = []
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -226,6 +227,7 @@ export const eraseAction = () => {
 export const initPossibleNotes = mainNumbers => {
     setTimeout(() => {
         const notes = initNotes()
+        // BOARD_LOOPER: 7
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)
@@ -341,7 +343,7 @@ export const resetStoreState = () => {
 export const fillPuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
-    forEachCell(cell => {
+    forBoardEachCell((cell) => {
         if (isCellEmpty(cell, mainNumbers))
             invokeDispatch(setCellMainNumber({ cell, number: mainNumbers[cell.row][cell.col].solutionValue }))
     })

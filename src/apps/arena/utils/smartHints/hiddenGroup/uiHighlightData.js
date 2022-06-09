@@ -183,10 +183,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     return {
         cellsToFocusData,
-        techniqueInfo: {
-            title: HIDDEN_GROUP_TYPE[group.groupCandidates.length],
-            logic: primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic,
-        },
+        title: HIDDEN_GROUP_TYPE[group.groupCandidates.length],
+        steps: [{ text: primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic }],
     }
 }
 
