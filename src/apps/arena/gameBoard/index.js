@@ -7,14 +7,13 @@ import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
-    BOARD_AXIS_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 import { getStyles } from './style'
 import { Cell } from './cell'
-import { areSameCells } from '../utils/util'
+import { areSameCells, forCellEachNote as forEachColumn } from '../utils/util'
 import { useCellFocus } from '../utils/smartHints/hooks'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
 
@@ -159,44 +158,35 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         )
     }
 
-    const renderYAxis = () => {
-        const yAxis = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-        return (
-            <View style={{
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                width: 12,
-                marginRight: 4,
-            }}>
-                {
-                    yAxis.map((label) => {
-                        return <Text>{label}</Text>
-                    })
-                }
-            </View>
-        )
+    const renderAxisText = (label) => {
+        return <Text style={[styles.axisText, showSmartHint ? styles.smartHintAxisTextColor : null]}>{label}</Text>
     }
 
-    const renderXAxis = () => {
-        // TODO: this thing can be done using enums as well.
-        // explore that just for fun
-        const yAxis = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    const yAxis = useMemo(() => {
+        const yAxisTexts = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
         return (
-            <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                width: GAME_BOARD_WIDTH + 0,
-                marginBottom: 4,
-                marginLeft: 16,
-            }}>
+            <View style={styles.yAxis}>
                 {
-                    yAxis.map((label) => {
-                        return <Text>{label}</Text>
+                    yAxisTexts.map((label) => {
+                        return renderAxisText(label)
                     })
                 }
             </View>
         )
-    }
+    }, [showSmartHint])
+
+    const xAxis = useMemo(() => {
+        const xAxisTexts = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+        return (
+            <View style={styles.xAxis}>
+                {
+                    xAxisTexts.map((label) => {
+                        return renderAxisText(label)
+                    })
+                }
+            </View>
+        )
+    }, [showSmartHint])
 
     const renderBoard = () => {
         let keyCounter = 0
@@ -211,9 +201,9 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
     return (
         <>
-            {renderXAxis()}
+            {xAxis}
             <View style={{ flexDirection: 'row' }}>
-                {renderYAxis()}
+                {yAxis}
                 {renderBoard()}
             </View>
         </>

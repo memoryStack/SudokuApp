@@ -77,5 +77,25 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {
             height: '100%',
         },
         ...COLOR_SCHEME_STYLES,
+        yAxis: {
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            width: 12,
+            marginRight: 4,
+        },
+        xAxis: {
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            width: GAME_BOARD_WIDTH,
+            marginBottom: 4,
+            marginLeft: 16,
+        },
+        axisText: {
+            zIndex: 100, // TODO: make a constant with name like max_possible z_index
+            color: 'black',
+        },
+        smartHintAxisTextColor: {
+            color: 'white',
+        }
     })
 }
