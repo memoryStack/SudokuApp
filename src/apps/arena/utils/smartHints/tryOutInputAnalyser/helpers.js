@@ -2,7 +2,9 @@ import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible } from '../../util'
-import { TRY_OUT_ERROR_TYPES } from './constants'
+import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
+import { getCandidatesListText } from '../util'
+import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES } from './constants'
 
 export const noInputInTryOut = focusedCells => {
     const actualMainNumbers = getMainNumbers(getStoreState())
@@ -58,4 +60,14 @@ const multipleNakedSinglesBySomeCandidate = (groupCandidates, focusedCells) => {
     })
 
     return !!candidatesNakedSingleInMultipleCells.length
+}
+
+export const getNakedGroupNoTryOutInputResult = (groupCandidates) => {
+    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.OR)
+    return {
+        msg:
+            `try filling ${candidatesListText} in the cells where` +
+            ` it is highlighted in red or green color to see why this hint works`,
+        state: TRY_OUT_RESULT_STATES.START,
+    }
 }

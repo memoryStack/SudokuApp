@@ -2,18 +2,14 @@ import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selec
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { isCellEmpty } from '../../util'
 import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
-import { noInputInTryOut, getTryOutErrorType } from './helpers'
+import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult } from './helpers'
+import { getCandidatesListText } from '../util'
+import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
 
 const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
 
     if (noInputInTryOut(focusedCells)) {
-        return {
-            msg:
-                `try filling ${getCandidatesListForTryOutMsg(groupCandidates)} in the cells where` +
-                ` it is highlighted in red or green color to see why this hint works`,
-            state: TRY_OUT_RESULT_STATES.START,
-        }
+        return getNakedGroupNoTryOutInputResult(groupCandidates)
     }
 
     const tryOutErrorType = getTryOutErrorType(groupCandidates, focusedCells)
@@ -34,6 +30,7 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
         }, '')
     }
 
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         return {
@@ -55,6 +52,7 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     }
 }
 
+// TODO: put it globally now. and use it in the naked group as well
 const getCandidatesListForTryOutMsg = candidates => {
     const isNakedDoubles = candidates.length === 2
     return isNakedDoubles

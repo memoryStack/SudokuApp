@@ -1,10 +1,11 @@
 import { HINTS_IDS } from '../constants'
 
-import nakedGroupTryOutAnalyser from './nakedGroup'
+import nakedDoubleTryOutAnalyser from './nakedDouble'
+import nakedTrippleTryOutAnalyser from './nakedTripple'
 
 const tryOutAnalysers = {
-    [HINTS_IDS.NAKED_DOUBLE]: nakedGroupTryOutAnalyser,
-    [HINTS_IDS.NAKED_TRIPPLE]: nakedGroupTryOutAnalyser,
+    [HINTS_IDS.NAKED_DOUBLE]: nakedDoubleTryOutAnalyser,
+    [HINTS_IDS.NAKED_TRIPPLE]: nakedTrippleTryOutAnalyser,
 }
 
 export const analyseTryOutInput = ({ hintType, data }) => {
