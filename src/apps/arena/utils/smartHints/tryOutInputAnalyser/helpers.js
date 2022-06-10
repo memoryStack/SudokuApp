@@ -78,3 +78,23 @@ export const getTryOutErrorResult = errorType => {
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
+
+export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
+    const result = []
+    groupCells.forEach(cell => {
+        if (!isCellEmpty(cell, tryOutMainNumbers)) {
+            result.push(tryOutMainNumbers[cell.row][cell.col].value)
+        }
+    })
+    return result
+}
+
+export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
+    return groupCandidates
+        .map(candidate => {
+            return parseInt(candidate, 10)
+        })
+        .filter(groupCandidate => {
+            return !correctlyFilledGroupCandidates.includes(groupCandidate)
+        })
+}

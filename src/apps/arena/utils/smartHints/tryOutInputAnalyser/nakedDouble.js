@@ -2,7 +2,7 @@ import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selec
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { isCellEmpty } from '../../util'
 import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult } from './helpers'
+import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from './helpers'
 
 const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
 
@@ -49,26 +49,6 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
-}
-
-const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
-    const result = []
-    groupCells.forEach(cell => {
-        if (!isCellEmpty(cell, tryOutMainNumbers)) {
-            result.push(tryOutMainNumbers[cell.row][cell.col].value)
-        }
-    })
-    return result
-}
-
-const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
-    return groupCandidates
-        .map(candidate => {
-            return parseInt(candidate, 10)
-        })
-        .filter(groupCandidate => {
-            return !correctlyFilledGroupCandidates.includes(groupCandidate)
-        })
 }
 
 export default tryOutAnalyser

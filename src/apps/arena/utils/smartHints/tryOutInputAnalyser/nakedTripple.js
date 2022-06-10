@@ -59,6 +59,8 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
 
     // handle progress step
 
+
+
     return {
         msg: 'some logic is coming soon',
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
