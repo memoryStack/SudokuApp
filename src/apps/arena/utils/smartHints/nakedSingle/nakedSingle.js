@@ -5,7 +5,8 @@ import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
 import { getUIHighlightData } from './uiHighlightData'
 
-const isNakedSinglePresent = cellNotes => {
+// TODO: put it in utils and refactore it with unit test cases
+export const isNakedSinglePresent = cellNotes => {
     let possibleCandidatesCount = 0
     let mainNumber = -1
 
