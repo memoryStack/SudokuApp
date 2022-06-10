@@ -2,7 +2,7 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/s
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getCellAxesValues, getCellVisibleNotes, isCellEmpty, isCellExists } from '../../util'
 import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
-import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult } from './helpers'
+import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from './helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { getNotesInfo } from '../../../store/selectors/board.selectors'
 import { getCandidatesListText } from '../util'
@@ -59,13 +59,27 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
 
     // handle progress step
 
-
-
-    return {
-        msg: 'some logic is coming soon',
-        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
+    if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
+        const filledCandidatesListText = getCandidatesListText(correctlyFilledGroupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+        return {
+            msg:
+                `${filledCandidatesListText} are filled in` +
+                ` these cells without any error. now we are sure` +
+                ` that ${filledCandidatesListText} can't come in cells where these were highlighted in red`,
+            state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+        }
+    } else {
+        const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
+        const candidatesListText = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+        return {
+            msg:
+                `try fill ${candidatesListText} as well` +
+                ` to find where these numbers can't come in the highlighted region.`,
+            state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+        }
     }
-
 }
 
 // this func should have test-cases
