@@ -1,12 +1,12 @@
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getCellAxesValues, getCellVisibleNotes, isCellEmpty, isCellExists } from '../../util'
+import { getCellAxesValues, getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellExists } from '../../util'
 import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from './helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { getNotesInfo } from '../../../store/selectors/board.selectors'
 import { getCandidatesListText } from '../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
+import { consoleLog } from '../../../../../utils/util'
 
 export default ({ groupCandidates, focusedCells, groupCells, }) => {
 
@@ -23,6 +23,8 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
     // check if 2 cells make naked double or not and makes third cell empty completely
 
     if (allGroupCellsEmpty(groupCells)) {
+
+
 
         const tryOutNotesInfo = getTryOutNotes(getStoreState())
         const invalidCombination = N_CHOOSE_K[3][2].find((combination) => {
@@ -47,11 +49,27 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
             const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
             const notChosenCell = getNotChosenCell(chosenCells, groupCells)
             const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
+
+            const isThirdCellHasNakedSingle = getCellVisibleNotesCount(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]) === 1
+            consoleLog('@@@@ notChosenCellNotes', notChosenCellNotes)
+            consoleLog('@@@@@@ isThirdCellHasNakedSingle', isThirdCellHasNakedSingle)
+
+            let chosenCellsPotentialMultipleNakedSingleCandidate
+            if (isThirdCellHasNakedSingle) {
+                chosenCellsPotentialMultipleNakedSingleCandidate = notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
+            }
+
+            const resultMsg = isThirdCellHasNakedSingle ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this`
+                + ` ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} will have`
+                + ` ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single in them, which will result in invalid solution`
+
+                : `${getCandidatesListText(aChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} make a Naked Double`
+                + ` in ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} cells. because of this rule`
+                + ` ${getCandidatesListText(notChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} can't come in ${getCellAxesValues(notChosenCell)}`
+                + ` and it will be empty`
+
             return {
-                msg: `${getCandidatesListText(aChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} make a Naked Double`
-                    + ` in ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} cells. because of this rule`
-                    + ` ${getCandidatesListText(notChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} can't come in ${getCellAxesValues(notChosenCell)}`
-                    + ` and it will be empty`,
+                msg: resultMsg,
                 state: TRY_OUT_RESULT_STATES.ERROR,
             }
         }
