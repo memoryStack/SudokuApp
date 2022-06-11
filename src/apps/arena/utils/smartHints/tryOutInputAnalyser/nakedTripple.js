@@ -21,7 +21,7 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
     }
 
     if (allGroupCellsEmpty(groupCells)) {
-        const nakedSinglePairCellError = getNakedSinglePairCellsErrorResult(groupCells)
+        const nakedSinglePairCellError = getNakedSinglePairCellsErrorResultIfExist(groupCells)
         if (nakedSinglePairCellError) return nakedSinglePairCellError
 
         const nakedDoublePairCellError = getNakedDoublePairCellsErrorResult(groupCells)
@@ -61,10 +61,21 @@ const getNotChosenCell = (chosenCells, allCells) => {
 
 // two cells have naked single in them because of that third one
 // will have no candidate in them
-const getNakedSinglePairCellsErrorResult = (groupCells) => {
+const getNakedSinglePairCellsErrorResultIfExist = (groupCells) => {
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    // checking if naked singles in two chosen cells empties the third cell
-    const invalidNakedSingleCellsCombination = N_CHOOSE_K[3][2].find((combination) => {
+    const invalidNakedSingleCellsCombination = getNakedSinglesInvalidCombination(groupCells)
+    if (invalidNakedSingleCellsCombination) {
+        const chosenCells = getChosenCells(invalidNakedSingleCellsCombination, groupCells)
+        const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+        return getNakedSinglePairErrorResult(chosenCells, notChosenCell, tryOutNotesInfo)
+    }
+
+    return null
+}
+
+const getNakedSinglesInvalidCombination = (groupCells) => {
+    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+    return N_CHOOSE_K[3][2].find((combination) => {
         const chosenCells = getChosenCells(combination, groupCells)
 
         // bug in this func. 
@@ -84,32 +95,30 @@ const getNakedSinglePairCellsErrorResult = (groupCells) => {
 
         return false
     })
-
-    if (invalidNakedSingleCellsCombination) {
-        const chosenCells = getChosenCells(invalidNakedSingleCellsCombination, groupCells)
-        const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-
-        const chosenCellWithNote = chosenCells.map((cell) => {
-            return {
-                note: getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0],
-                cell,
-            }
-        }).sort((cellAWithNote, cellBWithNote) => {
-            return cellAWithNote.note - cellBWithNote.note
-        })
-
-        return {
-            msg: `${chosenCellWithNote[0].note} and ${chosenCellWithNote[1].note} are Naked Singles in`
-                + ` ${getCellAxesValues(chosenCellWithNote[0].cell)} and ${getCellAxesValues(chosenCellWithNote[1].cell)} respectively.`
-                + ` because of this ${getCellAxesValues(notChosenCell)} can't have ${chosenCellWithNote[0].note} or ${chosenCellWithNote[1].note}`
-                + ` and it will be empty, which is invalid`,
-            state: TRY_OUT_RESULT_STATES.ERROR,
-        }
-    }
-
-    return null
 }
 
+const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
+    // TODO: this func needs some refactoring
+    const chosenCellWithNote = chosenCells.map((cell) => {
+        return {
+            note: getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0],
+            cell,
+        }
+    }).sort((cellAWithNote, cellBWithNote) => {
+        return cellAWithNote.note - cellBWithNote.note
+    })
+
+    return {
+        msg: `${chosenCellWithNote[0].note} and ${chosenCellWithNote[1].note} are Naked Singles in`
+            + ` ${getCellAxesValues(chosenCellWithNote[0].cell)} and ${getCellAxesValues(chosenCellWithNote[1].cell)} respectively.`
+            + ` because of this ${getCellAxesValues(notChosenCell)} can't have ${chosenCellWithNote[0].note} or ${chosenCellWithNote[1].note}`
+            + ` and it will be empty, which is invalid`,
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+// two cells have naked double in them because of that third one
+// will have no candidate in it
 const getNakedDoublePairCellsErrorResult = (groupCells) => {
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
 
