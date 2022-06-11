@@ -1,7 +1,7 @@
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getCellAxesValues, getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellExists } from '../../util'
-import { TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
+import { TRY_OUT_RESULT_STATES } from './constants'
 import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from './helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { getCandidatesListText } from '../util'
@@ -115,29 +115,7 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
         }
     }
 
-    // handle progress step
-
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
-    if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-        const filledCandidatesListText = getCandidatesListText(correctlyFilledGroupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
-        return {
-            msg:
-                `${filledCandidatesListText} are filled in` +
-                ` these cells without any error. now we are sure` +
-                ` that ${filledCandidatesListText} can't come in cells where these were highlighted in red`,
-            state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
-        }
-    } else {
-        const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
-        const candidatesListText = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
-        return {
-            msg:
-                `try fill ${candidatesListText} as well` +
-                ` to find where these numbers can't come in the highlighted region.`,
-            state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
-        }
-    }
+    return getValidProgressResult(groupCandidates, groupCells)
 }
 
 // this func should have test-cases
@@ -166,4 +144,37 @@ const getNotChosenCell = (chosenCells, allCells) => {
     return allCells.find((cell) => {
         return !isCellExists(cell, chosenCells)
     })
+}
+
+const getValidProgressResult = (groupCandidates, groupCells) => {
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
+    if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
+        return getAllInputsFilledResult(groupCandidates)
+    } else {
+        const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
+        return getPartialCorrectlyFilledResult(candidatesToBeFilled)
+    }
+}
+
+// TODO: check if we can re-use these below funcs or not for naked double as well
+const getAllInputsFilledResult = (groupCandidates) => {
+    const filledCandidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    return {
+        msg:
+            `${filledCandidatesListText} are filled in` +
+            ` these cells without any error. now we are sure` +
+            ` that ${filledCandidatesListText} can't come in cells where these were highlighted in red`,
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
+}
+
+const getPartialCorrectlyFilledResult = (candidatesToBeFilled) => {
+    const candidatesListText = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    return {
+        msg:
+            `fill ${candidatesListText} as well` +
+            ` to find where these numbers can't come in the highlighted region.`,
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
 }
