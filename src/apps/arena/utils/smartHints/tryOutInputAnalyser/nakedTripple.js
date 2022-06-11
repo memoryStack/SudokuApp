@@ -19,59 +19,13 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
     if (tryOutErrorType) {
         return getTryOutErrorResult(tryOutErrorType)
     }
-    // till here the handling is same for naked double and tripple
-
-    // check if 2 cells make naked double or not and makes third cell empty completely
 
     if (allGroupCellsEmpty(groupCells)) {
         const nakedSinglePairCellError = getNakedSinglePairCellsErrorResult(groupCells)
         if (nakedSinglePairCellError) return nakedSinglePairCellError
 
-        // checking if naked double empties the third cell
-        const invalidNakedDoubleCellsCombination = N_CHOOSE_K[3][2].find((combination) => {
-            const chosenCells = getChosenCells(combination, groupCells)
-
-            if (areNakedDoubleHostCells(chosenCells, tryOutNotesInfo)) {
-                const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-
-                const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
-                const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
-                const notChosenCellWillHaveCandidate = notChosenCellNotes.some((notChosenCellNote) => {
-                    return !aChosenCellNotes.includes(notChosenCellNote)
-                })
-                return !notChosenCellWillHaveCandidate
-            }
-            return false
-        })
-
-        if (invalidNakedDoubleCellsCombination) {
-            // prepare the naked double msg here
-            const chosenCells = getChosenCells(invalidNakedDoubleCellsCombination, groupCells)
-            const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
-            const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-            const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
-
-            const isThirdCellHasNakedSingle = getCellVisibleNotesCount(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]) === 1
-
-            let chosenCellsPotentialMultipleNakedSingleCandidate
-            if (isThirdCellHasNakedSingle) {
-                chosenCellsPotentialMultipleNakedSingleCandidate = notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
-            }
-
-            const resultMsg = isThirdCellHasNakedSingle ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this`
-                + ` ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} will have`
-                + ` ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single in them, which will result in invalid solution`
-
-                : `${getCandidatesListText(aChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} make a Naked Double`
-                + ` in ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} cells. because of this rule`
-                + ` ${getCandidatesListText(notChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} can't come in ${getCellAxesValues(notChosenCell)}`
-                + ` and it will be empty`
-
-            return {
-                msg: resultMsg,
-                state: TRY_OUT_RESULT_STATES.ERROR,
-            }
-        }
+        const nakedDoublePairCellError = getNakedDoublePairCellsErrorResult(groupCells)
+        if (nakedDoublePairCellError) return nakedDoublePairCellError
     }
 
     return getValidProgressResult(groupCandidates, groupCells)
@@ -113,8 +67,10 @@ const getNakedSinglePairCellsErrorResult = (groupCells) => {
     const invalidNakedSingleCellsCombination = N_CHOOSE_K[3][2].find((combination) => {
         const chosenCells = getChosenCells(combination, groupCells)
 
-        const allChosenCellsHaveNakedSingle = chosenCells.some((cell) => {
-            return isNakedSinglePresent(tryOutNotesInfo[cell.row][cell.col]).present
+        // bug in this func. 
+        // i again wish i had implemented this using TDD
+        const allChosenCellsHaveNakedSingle = !chosenCells.some((cell) => {
+            return !isNakedSinglePresent(tryOutNotesInfo[cell.row][cell.col]).present
         })
 
         if (allChosenCellsHaveNakedSingle) {
@@ -132,6 +88,7 @@ const getNakedSinglePairCellsErrorResult = (groupCells) => {
     if (invalidNakedSingleCellsCombination) {
         const chosenCells = getChosenCells(invalidNakedSingleCellsCombination, groupCells)
         const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+
         const chosenCellWithNote = chosenCells.map((cell) => {
             return {
                 note: getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0],
@@ -151,6 +108,55 @@ const getNakedSinglePairCellsErrorResult = (groupCells) => {
     }
 
     return null
+}
+
+const getNakedDoublePairCellsErrorResult = (groupCells) => {
+    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+
+    const invalidNakedDoubleCellsCombination = N_CHOOSE_K[3][2].find((combination) => {
+        const chosenCells = getChosenCells(combination, groupCells)
+
+        if (areNakedDoubleHostCells(chosenCells, tryOutNotesInfo)) {
+            const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+
+            const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
+            const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
+            const notChosenCellWillHaveCandidate = notChosenCellNotes.some((notChosenCellNote) => {
+                return !aChosenCellNotes.includes(notChosenCellNote)
+            })
+            return !notChosenCellWillHaveCandidate
+        }
+        return false
+    })
+
+    if (invalidNakedDoubleCellsCombination) {
+        // prepare the naked double msg here
+        const chosenCells = getChosenCells(invalidNakedDoubleCellsCombination, groupCells)
+        const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
+        const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+        const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
+
+        const isThirdCellHasNakedSingle = getCellVisibleNotesCount(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]) === 1
+
+        let chosenCellsPotentialMultipleNakedSingleCandidate
+        if (isThirdCellHasNakedSingle) {
+            chosenCellsPotentialMultipleNakedSingleCandidate = notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
+        }
+
+        const resultMsg = isThirdCellHasNakedSingle ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this`
+            + ` ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} will have`
+            + ` ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single in them, which will result in invalid solution`
+
+            : `${getCandidatesListText(aChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} make a Naked Double`
+            + ` in ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} cells. because of this rule`
+            + ` ${getCandidatesListText(notChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} can't come in ${getCellAxesValues(notChosenCell)}`
+            + ` and it will be empty`
+
+        return {
+            msg: resultMsg,
+            state: TRY_OUT_RESULT_STATES.ERROR,
+        }
+    }
 }
 
 const getValidProgressResult = (groupCandidates, groupCells) => {
