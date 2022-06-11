@@ -24,47 +24,8 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
     // check if 2 cells make naked double or not and makes third cell empty completely
 
     if (allGroupCellsEmpty(groupCells)) {
-        const tryOutNotesInfo = getTryOutNotes(getStoreState())
-        // checking if naked singles in two chosen cells empties the third cell
-        const invalidNakedSingleCellsCombination = N_CHOOSE_K[3][2].find((combination) => {
-            const chosenCells = getChosenCells(combination, groupCells)
-
-            const allChosenCellsHaveNakedSingle = chosenCells.some((cell) => {
-                return isNakedSinglePresent(tryOutNotesInfo[cell.row][cell.col]).present
-            })
-
-            if (allChosenCellsHaveNakedSingle) {
-                const chosenCellNotes = chosenCells.map((cell) => {
-                    return getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0]
-                }).sort()
-                const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-                const notChosenCellWillNotHaveCandidate = chosenCellNotes.sameArrays(getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]))
-                return notChosenCellWillNotHaveCandidate
-            }
-
-            return false
-        })
-
-        if (invalidNakedSingleCellsCombination) {
-            const chosenCells = getChosenCells(invalidNakedSingleCellsCombination, groupCells)
-            const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-            const chosenCellWithNote = chosenCells.map((cell) => {
-                return {
-                    note: getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0],
-                    cell,
-                }
-            }).sort((cellAWithNote, cellBWithNote) => {
-                return cellAWithNote.note - cellBWithNote.note
-            })
-
-            return {
-                msg: `${chosenCellWithNote[0].note} and ${chosenCellWithNote[1].note} are Naked Singles in`
-                    + ` ${getCellAxesValues(chosenCellWithNote[0].cell)} and ${getCellAxesValues(chosenCellWithNote[1].cell)} respectively.`
-                    + ` because of this ${getCellAxesValues(notChosenCell)} can't have ${chosenCellWithNote[0].note} or ${chosenCellWithNote[1].note}`
-                    + ` and it will be empty, which is invalid`,
-                state: TRY_OUT_RESULT_STATES.ERROR,
-            }
-        }
+        const nakedSinglePairCellError = getNakedSinglePairCellsErrorResult(groupCells)
+        if (nakedSinglePairCellError) return nakedSinglePairCellError
 
         // checking if naked double empties the third cell
         const invalidNakedDoubleCellsCombination = N_CHOOSE_K[3][2].find((combination) => {
@@ -91,8 +52,6 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
             const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
 
             const isThirdCellHasNakedSingle = getCellVisibleNotesCount(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]) === 1
-            consoleLog('@@@@ notChosenCellNotes', notChosenCellNotes)
-            consoleLog('@@@@@@ isThirdCellHasNakedSingle', isThirdCellHasNakedSingle)
 
             let chosenCellsPotentialMultipleNakedSingleCandidate
             if (isThirdCellHasNakedSingle) {
@@ -144,6 +103,54 @@ const getNotChosenCell = (chosenCells, allCells) => {
     return allCells.find((cell) => {
         return !isCellExists(cell, chosenCells)
     })
+}
+
+// two cells have naked single in them because of that third one
+// will have no candidate in them
+const getNakedSinglePairCellsErrorResult = (groupCells) => {
+    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+    // checking if naked singles in two chosen cells empties the third cell
+    const invalidNakedSingleCellsCombination = N_CHOOSE_K[3][2].find((combination) => {
+        const chosenCells = getChosenCells(combination, groupCells)
+
+        const allChosenCellsHaveNakedSingle = chosenCells.some((cell) => {
+            return isNakedSinglePresent(tryOutNotesInfo[cell.row][cell.col]).present
+        })
+
+        if (allChosenCellsHaveNakedSingle) {
+            const chosenCellNotes = chosenCells.map((cell) => {
+                return getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0]
+            }).sort()
+            const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+            const notChosenCellWillNotHaveCandidate = chosenCellNotes.sameArrays(getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]))
+            return notChosenCellWillNotHaveCandidate
+        }
+
+        return false
+    })
+
+    if (invalidNakedSingleCellsCombination) {
+        const chosenCells = getChosenCells(invalidNakedSingleCellsCombination, groupCells)
+        const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+        const chosenCellWithNote = chosenCells.map((cell) => {
+            return {
+                note: getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0],
+                cell,
+            }
+        }).sort((cellAWithNote, cellBWithNote) => {
+            return cellAWithNote.note - cellBWithNote.note
+        })
+
+        return {
+            msg: `${chosenCellWithNote[0].note} and ${chosenCellWithNote[1].note} are Naked Singles in`
+                + ` ${getCellAxesValues(chosenCellWithNote[0].cell)} and ${getCellAxesValues(chosenCellWithNote[1].cell)} respectively.`
+                + ` because of this ${getCellAxesValues(notChosenCell)} can't have ${chosenCellWithNote[0].note} or ${chosenCellWithNote[1].note}`
+                + ` and it will be empty, which is invalid`,
+            state: TRY_OUT_RESULT_STATES.ERROR,
+        }
+    }
+
+    return null
 }
 
 const getValidProgressResult = (groupCandidates, groupCells) => {
