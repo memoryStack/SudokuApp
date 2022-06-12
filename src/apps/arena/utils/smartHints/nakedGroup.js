@@ -27,13 +27,6 @@ const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
 const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
     const isNakedDoubles = groupCandidates.length === 2
 
-    // const getCellsHostingText = () => {
-    //     const groupCandidatesText = isNakedDoubles
-    //         ? `${groupCandidates[0]}, and another one ${groupCandidates[1]}`
-    //         : `${groupCandidates[0]}, another ${groupCandidates[1]}, and the last ${groupCandidates[2]}`
-    //     return `So one of the squares has to be ${groupCandidatesText} (which is which is yet unknown).`
-    // }
-
     // TODO: explore if we can use the below array for naked double and naked tripple as well in same way
     const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
     const hintChunks = [
