@@ -2,7 +2,7 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/s
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getCellAxesValues, getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellExists } from '../../util'
 import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from './helpers'
+import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled, getNakedSingleCellsWithNoteInAscOrder, getNotesListTextFromCellsWithNotes } from './helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { getCandidatesListText } from '../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
@@ -89,20 +89,15 @@ const getNotChosenCell = (chosenCells, allCells) => {
 }
 
 const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
-    // TODO: this func needs some refactoring
-    const chosenCellWithNote = chosenCells.map((cell) => {
-        return {
-            note: getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0],
-            cell,
-        }
-    }).sort((cellAWithNote, cellBWithNote) => {
-        return cellAWithNote.note - cellBWithNote.note
-    })
+    const chosenCellWithNote = getNakedSingleCellsWithNoteInAscOrder(chosenCells, tryOutNotesInfo)
+
+    const notesListWithAndConjugation = getNotesListTextFromCellsWithNotes(chosenCellWithNote, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const notesListWithORConjugation = getNotesListTextFromCellsWithNotes(chosenCellWithNote, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.OR)
 
     return {
-        msg: `${chosenCellWithNote[0].note} and ${chosenCellWithNote[1].note} are Naked Singles in`
+        msg: `${notesListWithAndConjugation} are Naked Singles in`
             + ` ${getCellAxesValues(chosenCellWithNote[0].cell)} and ${getCellAxesValues(chosenCellWithNote[1].cell)} respectively.`
-            + ` because of this ${getCellAxesValues(notChosenCell)} can't have ${chosenCellWithNote[0].note} or ${chosenCellWithNote[1].note}`
+            + ` because of this ${getCellAxesValues(notChosenCell)} can't have ${notesListWithORConjugation}`
             + ` and it will be empty, which is invalid`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }

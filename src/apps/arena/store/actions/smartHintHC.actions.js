@@ -37,6 +37,7 @@ export const showHints = async hintId => {
     const notesInfo = getNotesInfo(getStoreState())
 
     consoleLog('@@@@@@ notes', JSON.stringify(notesInfo))
+    consoleLog('@@@@@@ mainNumbers', JSON.stringify(mainNumbers))
 
     return getSmartHint(mainNumbers, notesInfo, hintId)
         .then(hints => {
