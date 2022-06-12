@@ -31,31 +31,10 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
     return getValidProgressResult(groupCandidates, groupCells)
 }
 
-// this func should have test-cases
-const areNakedDoubleHostCells = (cells, notesInfo) => {
-    // TODO: refactor it
-    const [cellA, cellB] = cells
-    const cellANotes = getCellVisibleNotes(notesInfo[cellA.row][cellA.col])
-    const cellBNotes = getCellVisibleNotes(notesInfo[cellB.row][cellB.col])
-    return cellANotes.sameArrays(cellBNotes)
-}
-
 const allGroupCellsEmpty = (groupCells) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     return !groupCells.some((cell) => {
         return !isCellEmpty(cell, tryOutMainNumbers)
-    })
-}
-
-const getChosenCells = (combination, groupCells) => {
-    return combination.map((idx) => {
-        return groupCells[idx]
-    })
-}
-
-const getNotChosenCell = (chosenCells, allCells) => {
-    return allCells.find((cell) => {
-        return !isCellExists(cell, chosenCells)
     })
 }
 
@@ -94,6 +73,18 @@ const getNakedSinglesInvalidCombination = (groupCells) => {
         }
 
         return false
+    })
+}
+
+const getChosenCells = (combination, groupCells) => {
+    return combination.map((idx) => {
+        return groupCells[idx]
+    })
+}
+
+const getNotChosenCell = (chosenCells, allCells) => {
+    return allCells.find((cell) => {
+        return !isCellExists(cell, chosenCells)
     })
 }
 
@@ -147,6 +138,15 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => {
         }
         return false
     })
+}
+
+// this func should have test-cases
+const areNakedDoubleHostCells = (cells, notesInfo) => {
+    // TODO: refactor it
+    const [cellA, cellB] = cells
+    const cellANotes = getCellVisibleNotes(notesInfo[cellA.row][cellA.col])
+    const cellBNotes = getCellVisibleNotes(notesInfo[cellB.row][cellB.col])
+    return cellANotes.sameArrays(cellBNotes)
 }
 
 const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
