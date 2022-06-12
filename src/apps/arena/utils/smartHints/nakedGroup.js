@@ -1,4 +1,4 @@
-import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, isCellExists } from '../util'
+import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, isCellExists, getCellVisibleNotesCount } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
@@ -135,17 +135,6 @@ const prepareNakedDublesOrTriplesHintData = (
     }
 }
 
-// TODO: there can be multiple doubles and triples in the highlighted region
-//         how to tackle those cases so that user get most benefit ??
-// TODO: for yWing hint have added such a function. use that and replace this func
-const getVisibileNotesCount = ({ row, col }, notesData) => {
-    let result = 0
-    for (let note = 1; note <= 9; note++) {
-        if (notesData[row][col][note - 1].show) result++
-    }
-    return result
-}
-
 // this func is used for a very special case in below func
 const getHouseCellsNum = (cells, houseType) => {
     let result = []
@@ -205,7 +194,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 if (sudokuBoard[row][col].value) continue
 
                 // i guess we can store info for notes here only and then use that down below. What is this ??
-                const boxVisibleNotesCount = getVisibileNotesCount({ row, col }, notesData)
+                const boxVisibleNotesCount = getCellVisibleNotesCount(notesData[row][col])
                 const MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD = 2
                 if (
                     boxVisibleNotesCount >= MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD &&
