@@ -1,7 +1,7 @@
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
-import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible, getCellVisibleNotes } from '../../util'
+import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible, getCellVisibleNotes, getCellAxesValues } from '../../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
 import { getCandidatesListText } from '../util'
 import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
@@ -121,3 +121,20 @@ export const getNotesFromCellsWithNotes = (cellsWithNotes) => {
     return cellsWithNotes.map(({ note }) => note)
 }
 
+export const getCellsFromCellsWithNote = (cellsWithNotes) => {
+    return cellsWithNotes.map(({ cell }) => cell)
+}
+
+export const getCellsAxesValuesListText = (cells, lastCellConjugation) => {
+    if (cells.length === 1) return getCellAxesValues(cells[0])
+
+    const allCellsExceptLast = cells.slice(0, cells.length - 1)
+    const cellsAxesList = getCellsAxesList(allCellsExceptLast)
+    return cellsAxesList.join(', ') + ` ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1])}`
+}
+
+export const getCellsAxesList = (cells) => {
+    return cells.map((cell) => {
+        return getCellAxesValues(cell)
+    })
+}

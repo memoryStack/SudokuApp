@@ -2,7 +2,7 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/s
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getCellAxesValues, getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellExists } from '../../util'
 import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled, getNakedSingleCellsWithNoteInAscOrder, getNotesListTextFromCellsWithNotes } from './helpers'
+import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled, getNakedSingleCellsWithNoteInAscOrder, getNotesListTextFromCellsWithNotes, getCellsAxesValuesListText, getCellsFromCellsWithNote } from './helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { getCandidatesListText } from '../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
@@ -93,11 +93,12 @@ const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
 
     const notesListWithAndConjugation = getNotesListTextFromCellsWithNotes(chosenCellWithNote, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
     const notesListWithORConjugation = getNotesListTextFromCellsWithNotes(chosenCellWithNote, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.OR)
+    const chosenCellsAxesText = getCellsAxesValuesListText(getCellsFromCellsWithNote(chosenCellWithNote), HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
 
     return {
         msg: `${notesListWithAndConjugation} are Naked Singles in`
-            + ` ${getCellAxesValues(chosenCellWithNote[0].cell)} and ${getCellAxesValues(chosenCellWithNote[1].cell)} respectively.`
-            + ` because of this ${getCellAxesValues(notChosenCell)} can't have ${notesListWithORConjugation}`
+            + ` ${chosenCellsAxesText} respectively. because of`
+            + ` this ${getCellAxesValues(notChosenCell)} can't have ${notesListWithORConjugation}`
             + ` and it will be empty, which is invalid`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }

@@ -1,4 +1,4 @@
-import { getNakedSingleCellsWithNoteInAscOrder, getNotesFromCellsWithNotes } from "./helpers";
+import { getNakedSingleCellsWithNoteInAscOrder, getNotesFromCellsWithNotes, getCellsFromCellsWithNote, getCellsAxesList } from "./helpers";
 
 describe('getNakedSingleCellsWithNoteInAscOrder()', () => {
 
@@ -26,6 +26,35 @@ describe('getNotesFromCellsWithNote()', () => {
         ]
         const expectedResult = [1, 9]
         expect(getNotesFromCellsWithNotes(cellsWithNotes)).toStrictEqual(expectedResult)
+    })
+
+})
+
+describe('getCellsFromCellsWithNote()', () => {
+
+    test('returns list of cells from each entry in same order', () => {
+        const cellsWithNotes = [
+            { cell: { row: 3, col: 8 }, note: 1 },
+            { cell: { row: 1, col: 7 }, note: 9 },
+        ]
+        const expectedResult = [
+            { row: 3, col: 8 },
+            { row: 1, col: 7 },
+        ]
+        expect(getCellsFromCellsWithNote(cellsWithNotes)).toStrictEqual(expectedResult)
+    })
+
+})
+
+describe('getCellsAxesList()', () => {
+
+    test('returns list of cells axes values', () => {
+        const cells = [
+            { row: 3, col: 8 },
+            { row: 1, col: 7 },
+        ]
+        const expectedResult = ['D9', 'B8']
+        expect(getCellsAxesList(cells)).toStrictEqual(expectedResult)
     })
 
 })
