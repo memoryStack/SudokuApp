@@ -156,13 +156,16 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
         chosenCellsPotentialMultipleNakedSingleCandidate = notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
     }
 
-    const resultMsg = isThirdCellHasNakedSingle ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this`
-        + ` ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} will have`
-        + ` ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single in them, which will result in invalid solution`
-
-        : `${getCandidatesListText(aChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} make a Naked Double`
-        + ` in ${getCellAxesValues(chosenCells[0])} and ${getCellAxesValues(chosenCells[1])} cells. because of this rule`
-        + ` ${getCandidatesListText(notChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)} can't come in ${getCellAxesValues(notChosenCell)}`
+    const chosenCellsAxesText = getCellsAxesValuesListText(chosenCells, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const chosenCellsCandidatesList = getCandidatesListText(aChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const notChosenCellCandidatesListText = getCandidatesListText(notChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const resultMsg = isThirdCellHasNakedSingle ?
+        `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this`
+        + ` ${chosenCellsAxesText} will have ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single`
+        + ` in them, which will result in invalid solution`
+        :
+        `${chosenCellsCandidatesList} make a Naked Double in ${chosenCellsAxesText} cells.`
+        + ` because of this rule ${notChosenCellCandidatesListText} can't come in ${getCellAxesValues(notChosenCell)}`
         + ` and it will be empty`
 
     return {
