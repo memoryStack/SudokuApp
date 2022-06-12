@@ -137,7 +137,7 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => {
 }
 
 // this func should have test-cases
-const areNakedDoubleHostCells = (cells, notesInfo) => {
+export const areNakedDoubleHostCells = (cells, notesInfo) => {
     // TODO: refactor it
     const [cellA, cellB] = cells
     const cellANotes = getCellVisibleNotes(notesInfo[cellA.row][cellA.col])
