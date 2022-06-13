@@ -445,8 +445,10 @@ describe('is finned X-Wing legs ', () => {
     })
 })
 
-describe('are finned X-Wing cells', () => {
-    test('test 1', () => {
+describe('isFinnedXWing()', () => {
+    // Note: in order for "isFinnedXWing" to work properly, the
+    // otherLegHostCells must return true from isFinnedLeg func
+    test('returns true when all perfectLeg cells are aligned with the otherLeg and finns share block with exactly one plerfectly aligned cell of otherLeg', () => {
         const perfectLegHostCells = [
             { row: 2, col: 5 },
             { row: 2, col: 8 },
@@ -459,8 +461,7 @@ describe('are finned X-Wing cells', () => {
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(true)
     })
 
-    // perfect cells don't match at all
-    test('test 2', () => {
+    test('returns false when all perfectLeg cells are not aligned with the otherLeg cells', () => {
         const perfectLegHostCells = [
             { row: 6, col: 3 },
             { row: 6, col: 8 },
@@ -473,8 +474,7 @@ describe('are finned X-Wing cells', () => {
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
     })
 
-    // perfect leg cells are aligned but all finned cells are in another block
-    test('test 3', () => {
+    test(`returns false when all perfectLeg cells are aligned but the finns doesn't share a common block with any otherLeg cell which are aligned with perfectLeg cells`, () => {
         const perfectLegHostCells = [
             { row: 4, col: 3 },
             { row: 5, col: 3 },
@@ -488,20 +488,20 @@ describe('are finned X-Wing cells', () => {
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
     })
 
-    test('test 4', () => {
+    test(`returns false when all perfectLeg cells are aligned but the finns doesn't share a common block with any otherLeg cell which are aligned with perfectLeg cells`, () => {
         const perfectLegHostCells = [
             { row: 4, col: 3 },
             { row: 4, col: 6 },
         ]
         const otherLegHostCells = [
+            { row: 6, col: 2 },
             { row: 6, col: 3 },
             { row: 6, col: 6 },
-            { row: 6, col: 2 },
         ]
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
     })
 
-    test('test 5', () => {
+    test('returns true when all perfectLeg cells are aligned with the otherLeg and finns share block with exactly one plerfectly aligned cell of otherLeg', () => {
         const perfectLegHostCells = [
             { row: 4, col: 3 },
             { row: 4, col: 6 },
@@ -515,8 +515,7 @@ describe('are finned X-Wing cells', () => {
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(true)
     })
 
-    // where one finn is in perfect cells block but another in whole different block
-    test('test 6', () => {
+    test('returns false when perfectLeg cells are aligned and only one finn shares block with the otherLeg cell which is aligned with the perfectLeg cells', () => {
         const perfectLegHostCells = [
             { row: 4, col: 3 },
             { row: 4, col: 5 },
@@ -529,6 +528,20 @@ describe('are finned X-Wing cells', () => {
         ]
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
     })
+
+    test('returns false when in finned leg there is only one cell which is aligned with the perfect leg cells', () => {
+        const perfectLegHostCells = [
+            { row: 3, col: 2 },
+            { row: 3, col: 4 },
+        ]
+        const otherLegHostCells = [
+            { row: 6, col: 3 },
+            { row: 6, col: 4 },
+            { row: 6, col: 5 },
+        ]
+        expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
+    })
+
 })
 
 describe('categorize finned leg cells for X-Wing where perfect leg cells are aligned with non-perfect X-Wing legs', () => {

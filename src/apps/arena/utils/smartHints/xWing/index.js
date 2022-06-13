@@ -88,12 +88,9 @@ export const isPerfectXWing = (perfectLegHostCells, otherLegHostCells) => {
     })
 }
 
-// we are calling it after isPerfectXWing func only,
-// confirm it once and remove the check. doesn't break tests though
 export const isFinnedXWing = (perfectLegHostCells, finnedLegHostCells) => {
-    // if (!isPerfectXWing(perfectLegHostCells, finnedLegHostCells)) return false
-
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLegHostCells, finnedLegHostCells)
+    if (perfectCells.length !== 2) return false
     return finns.every(finnCell => {
         return perfectCells.some(perfectCell => {
             return getBlockAndBoxNum(finnCell).blockNum === getBlockAndBoxNum(perfectCell).blockNum
