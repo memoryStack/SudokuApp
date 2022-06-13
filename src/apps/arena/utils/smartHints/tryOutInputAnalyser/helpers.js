@@ -39,32 +39,39 @@ export const getTryOutErrorType = (groupCandidates, focusedCells) => {
     return ''
 }
 
-// todo: refactor it
 export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCells) => {
-    let errorMsg = ''
-
     const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
     if (cellsWithNoCandidates.length) {
-        const emptyCellsListText = getCellsAxesValuesListText(cellsWithNoCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
-        errorMsg = `${emptyCellsListText} have no candidate left. in the final`
-            + ` solution no cell can be empty so, the current arrangement of numbers is invalid`
-    } else {
-        const multipleCellsNakedSingleCandidates = getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells)
-        if (multipleCellsNakedSingleCandidates.length) {
-            const firstCandidate = multipleCellsNakedSingleCandidates[0]
-            const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
-            const emptyCellsListText = getCellsAxesValuesListText(firstCandidateHostCells, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
-            const pluralRestOfCells = firstCandidateHostCells.length > 2
-            errorMsg = `${firstCandidate} is Naked Single for ${emptyCellsListText}. if we try to fill it in one of these cells`
-                + ` then other cell${pluralRestOfCells ? 's' : ''} will have to be empty.`
-                + ` so the current arrangement of numbers is wrong`
-        }
+        return getEmptyCellsErrorResult(cellsWithNoCandidates)
     }
 
-    if (!errorMsg) return null
+    const multipleCellsNakedSingleCandidates = getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells)
+    if (multipleCellsNakedSingleCandidates.length) {
+        return getMultipleCellsNakedSinglesErrorResult(multipleCellsNakedSingleCandidates, focusedCells)
+    }
+
+    return null
+}
+
+const getEmptyCellsErrorResult = (cellsWithNoCandidates) => {
+    const emptyCellsListText = getCellsAxesValuesListText(cellsWithNoCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    return {
+        msg: `${emptyCellsListText} have no candidate left. in the final`
+            + ` solution no cell can be empty so, the current arrangement of numbers is invalid`,
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells) => {
+    const firstCandidate = multipleCellsNakedSingleCandidates[0]
+    const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
+    const emptyCellsListText = getCellsAxesValuesListText(firstCandidateHostCells, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const pluralRestOfCells = firstCandidateHostCells.length > 2
 
     return {
-        msg: errorMsg,
+        msg: `${firstCandidate} is Naked Single for ${emptyCellsListText}. if we try to fill it in one of these cells`
+            + ` then other cell${pluralRestOfCells ? 's' : ''} will have to be empty.`
+            + ` so the current arrangement of numbers is wrong`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
