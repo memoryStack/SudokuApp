@@ -1,8 +1,12 @@
-import { getNakedSingleCellsWithNoteInAscOrder, getNotesFromCellsWithNotes, getCellsFromCellsWithNote, getCellsAxesList } from "./helpers";
-import { areNakedDoubleHostCells } from "./nakedTripple";
+import {
+    getNakedSingleCellsWithNoteInAscOrder,
+    getNotesFromCellsWithNotes,
+    getCellsFromCellsWithNote,
+    getCellsAxesList,
+} from './helpers'
+import { areNakedDoubleHostCells } from './nakedTripple'
 
 describe('getNakedSingleCellsWithNoteInAscOrder()', () => {
-
     test('returns an array of objects with cell and note as keys and in sorted order wrt note value', () => {
         const { boardNotes } = require('./testData')
         const cells = [
@@ -15,11 +19,9 @@ describe('getNakedSingleCellsWithNoteInAscOrder()', () => {
         ]
         expect(getNakedSingleCellsWithNoteInAscOrder(cells, boardNotes)).toStrictEqual(expectedResult)
     })
-
 })
 
 describe('getNotesFromCellsWithNote()', () => {
-
     test('returns list of notes from each entry in same order', () => {
         const cellsWithNotes = [
             { cell: { row: 3, col: 8 }, note: 1 },
@@ -28,11 +30,9 @@ describe('getNotesFromCellsWithNote()', () => {
         const expectedResult = [1, 9]
         expect(getNotesFromCellsWithNotes(cellsWithNotes)).toStrictEqual(expectedResult)
     })
-
 })
 
 describe('getCellsFromCellsWithNote()', () => {
-
     test('returns list of cells from each entry in same order', () => {
         const cellsWithNotes = [
             { cell: { row: 3, col: 8 }, note: 1 },
@@ -44,11 +44,9 @@ describe('getCellsFromCellsWithNote()', () => {
         ]
         expect(getCellsFromCellsWithNote(cellsWithNotes)).toStrictEqual(expectedResult)
     })
-
 })
 
 describe('getCellsAxesList()', () => {
-
     test('returns list of cells axes values', () => {
         const cells = [
             { row: 3, col: 8 },
@@ -57,11 +55,9 @@ describe('getCellsAxesList()', () => {
         const expectedResult = ['D9', 'B8']
         expect(getCellsAxesList(cells)).toStrictEqual(expectedResult)
     })
-
 })
 
 describe('areNakedDoubleHostCells()', () => {
-
     test('returns true when two cells have two same possible candidates only in them, [5, 6] and [5, 6] in this case', () => {
         const { boardNotes } = require('./testData')
         const cells = [
@@ -97,5 +93,4 @@ describe('areNakedDoubleHostCells()', () => {
         ]
         expect(areNakedDoubleHostCells(cells, boardNotes)).toBe(false)
     })
-
 })

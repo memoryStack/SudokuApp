@@ -1,4 +1,11 @@
-import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, isCellExists, getCellVisibleNotesCount } from '../util'
+import {
+    areSameCells,
+    areSameRowCells,
+    areSameColCells,
+    areSameBlockCells,
+    isCellExists,
+    getCellVisibleNotesCount,
+} from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
@@ -50,9 +57,9 @@ const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, ce
     }
 }
 
-const removeDuplicteCells = (cells) => {
+const removeDuplicteCells = cells => {
     const result = []
-    cells.forEach((cell) => {
+    cells.forEach(cell => {
         if (!isCellExists(cell, result)) result.push(cell)
     })
     return result
@@ -66,7 +73,6 @@ const prepareNakedDublesOrTriplesHintData = (
     groupCandidates,
     notesData,
 ) => {
-
     // TODO: found an issue while testing tryOut analyser for naked tripple.
     // i wish has developed it using TDD
     const toBeHighlightedCells = removeDuplicteCells(cellsHighlightable)

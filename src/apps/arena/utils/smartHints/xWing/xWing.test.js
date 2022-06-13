@@ -541,7 +541,6 @@ describe('isFinnedXWing()', () => {
         ]
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
     })
-
 })
 
 describe('categorize finned leg cells for X-Wing where perfect leg cells are aligned with non-perfect X-Wing legs', () => {

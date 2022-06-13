@@ -1,7 +1,13 @@
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
-import { isCellEmpty, getCellVisibleNotesCount, isCellNoteVisible, getCellVisibleNotes, getCellAxesValues } from '../../util'
+import {
+    isCellEmpty,
+    getCellVisibleNotesCount,
+    isCellNoteVisible,
+    getCellVisibleNotes,
+    getCellAxesValues,
+} from '../../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
 import { getCandidatesListText } from '../util'
 import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
@@ -53,11 +59,15 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCell
     return null
 }
 
-const getEmptyCellsErrorResult = (cellsWithNoCandidates) => {
-    const emptyCellsListText = getCellsAxesValuesListText(cellsWithNoCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+const getEmptyCellsErrorResult = cellsWithNoCandidates => {
+    const emptyCellsListText = getCellsAxesValuesListText(
+        cellsWithNoCandidates,
+        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND,
+    )
     return {
-        msg: `${emptyCellsListText} have no candidate left. in the final`
-            + ` solution no cell can be empty so, the current arrangement of numbers is invalid`,
+        msg:
+            `${emptyCellsListText} have no candidate left. in the final` +
+            ` solution no cell can be empty so, the current arrangement of numbers is invalid`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -65,13 +75,17 @@ const getEmptyCellsErrorResult = (cellsWithNoCandidates) => {
 const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells) => {
     const firstCandidate = multipleCellsNakedSingleCandidates[0]
     const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
-    const emptyCellsListText = getCellsAxesValuesListText(firstCandidateHostCells, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const emptyCellsListText = getCellsAxesValuesListText(
+        firstCandidateHostCells,
+        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND,
+    )
     const pluralRestOfCells = firstCandidateHostCells.length > 2
 
     return {
-        msg: `${firstCandidate} is Naked Single for ${emptyCellsListText}. if we try to fill it in one of these cells`
-            + ` then other cell${pluralRestOfCells ? 's' : ''} will have to be empty.`
-            + ` so the current arrangement of numbers is wrong`,
+        msg:
+            `${firstCandidate} is Naked Single for ${emptyCellsListText}. if we try to fill it in one of these cells` +
+            ` then other cell${pluralRestOfCells ? 's' : ''} will have to be empty.` +
+            ` so the current arrangement of numbers is wrong`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -104,7 +118,7 @@ export const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
     })
 }
 
-export const getNakedGroupNoTryOutInputResult = (groupCandidates) => {
+export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.OR)
     return {
         msg:
@@ -144,14 +158,16 @@ export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCan
 /* below some funcs will work on CellWithNotes DS specially for try-out ananlysers */
 // TODO: should i handle it using the class based implementation ??
 export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => {
-    return cells.map((cell) => {
-        return {
-            note: getCellVisibleNotes(boardNotes[cell.row][cell.col])[0],
-            cell,
-        }
-    }).sort(({ note: noteA }, { note: noteB }) => {
-        return noteA - noteB
-    })
+    return cells
+        .map(cell => {
+            return {
+                note: getCellVisibleNotes(boardNotes[cell.row][cell.col])[0],
+                cell,
+            }
+        })
+        .sort(({ note: noteA }, { note: noteB }) => {
+            return noteA - noteB
+        })
 }
 
 export const getNotesListTextFromCellsWithNotes = (cellsWithNotes, lastNoteConjugation) => {
@@ -159,11 +175,11 @@ export const getNotesListTextFromCellsWithNotes = (cellsWithNotes, lastNoteConju
     return getCandidatesListText(notes, lastNoteConjugation)
 }
 
-export const getNotesFromCellsWithNotes = (cellsWithNotes) => {
+export const getNotesFromCellsWithNotes = cellsWithNotes => {
     return cellsWithNotes.map(({ note }) => note)
 }
 
-export const getCellsFromCellsWithNote = (cellsWithNotes) => {
+export const getCellsFromCellsWithNote = cellsWithNotes => {
     return cellsWithNotes.map(({ cell }) => cell)
 }
 
@@ -175,8 +191,8 @@ export const getCellsAxesValuesListText = (cells, lastCellConjugation) => {
     return cellsAxesList.join(', ') + ` ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1])}`
 }
 
-export const getCellsAxesList = (cells) => {
-    return cells.map((cell) => {
+export const getCellsAxesList = cells => {
+    return cells.map(cell => {
         return getCellAxesValues(cell)
     })
 }
