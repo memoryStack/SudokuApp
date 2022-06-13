@@ -1,7 +1,7 @@
 import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from './helpers'
+import { TRY_OUT_RESULT_STATES, } from './constants'
+import { noInputInTryOut, getNakedGroupNoTryOutInputResult, getCorrectFilledTryOutCandidates, getNakedGroupTryOutInputErrorResult, getCandidatesToBeFilled, } from './helpers'
 import { getCandidatesListText } from '../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
 
@@ -11,9 +11,9 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
         return getNakedGroupNoTryOutInputResult(groupCandidates)
     }
 
-    const tryOutErrorType = getTryOutErrorType(groupCandidates, focusedCells)
-    if (tryOutErrorType) {
-        return getTryOutErrorResult(tryOutErrorType)
+    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, focusedCells)
+    if (tryOutErrorResult) {
+        return tryOutErrorResult
     }
 
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())

@@ -2,11 +2,10 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/s
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getCellAxesValues, getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellExists } from '../../util'
 import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut, getTryOutErrorType, getNakedGroupNoTryOutInputResult, getTryOutErrorResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled, getNakedSingleCellsWithNoteInAscOrder, getNotesListTextFromCellsWithNotes, getCellsAxesValuesListText, getCellsFromCellsWithNote } from './helpers'
+import { noInputInTryOut, getNakedGroupNoTryOutInputResult, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled, getNakedSingleCellsWithNoteInAscOrder, getNotesListTextFromCellsWithNotes, getCellsAxesValuesListText, getCellsFromCellsWithNote, getNakedGroupTryOutInputErrorResult } from './helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { getCandidatesListText } from '../util'
 import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
-import { consoleLog } from '../../../../../utils/util'
 import { isNakedSinglePresent } from '../nakedSingle/nakedSingle'
 
 export default ({ groupCandidates, focusedCells, groupCells, }) => {
@@ -15,9 +14,9 @@ export default ({ groupCandidates, focusedCells, groupCells, }) => {
         return getNakedGroupNoTryOutInputResult(groupCandidates)
     }
 
-    const tryOutErrorType = getTryOutErrorType(groupCandidates, focusedCells)
-    if (tryOutErrorType) {
-        return getTryOutErrorResult(tryOutErrorType)
+    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, focusedCells)
+    if (tryOutErrorResult) {
+        return tryOutErrorResult
     }
 
     if (allGroupCellsEmpty(groupCells)) {

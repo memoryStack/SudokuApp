@@ -24,42 +24,77 @@ export const noInputInTryOut = focusedCells => {
     return result.length === 0
 }
 
+// this will be removed in future most likely
+// but let's not remove it right away
 export const getTryOutErrorType = (groupCandidates, focusedCells) => {
-    if (cellWithNoCandidates(focusedCells)) {
+    const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
+    if (cellsWithNoCandidates) {
         return TRY_OUT_ERROR_TYPES.EMPTY_CELL_IN_SOLUTION
     }
 
-    if (multipleNakedSinglesBySomeCandidate(groupCandidates, focusedCells)) {
+    if (getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells).length) {
         return TRY_OUT_ERROR_TYPES.MULTIPLE_CELLS_NAKED_SINGLE
     }
 
     return ''
 }
 
-const cellWithNoCandidates = focusedCells => {
+// todo: refactor it
+export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCells) => {
+    let errorMsg = ''
+
+    const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
+    if (cellsWithNoCandidates.length) {
+        const emptyCellsListText = getCellsAxesValuesListText(cellsWithNoCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+        errorMsg = `${emptyCellsListText} have no candidate left. in the final`
+            + ` solution no cell can be empty so, the current arrangement of numbers is invalid`
+    } else {
+        const multipleCellsNakedSingleCandidates = getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells)
+        if (multipleCellsNakedSingleCandidates.length) {
+            const firstCandidate = multipleCellsNakedSingleCandidates[0]
+            const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
+            const emptyCellsListText = getCellsAxesValuesListText(firstCandidateHostCells, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+            const pluralRestOfCells = firstCandidateHostCells.length > 2
+            errorMsg = `${firstCandidate} is Naked Single for ${emptyCellsListText}. if we try to fill it in one of these cells`
+                + ` then other cell${pluralRestOfCells ? 's' : ''} will have to be empty.`
+                + ` so the current arrangement of numbers is wrong`
+        }
+    }
+
+    if (!errorMsg) return null
+
+    return {
+        msg: errorMsg,
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+export const getCellsWithNoCandidates = focusedCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    return focusedCells.some(cell => {
+    return focusedCells.filter(cell => {
         return (
             isCellEmpty(cell, tryOutMainNumbers) && getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0
         )
     })
 }
 
-const multipleNakedSinglesBySomeCandidate = (groupCandidates, focusedCells) => {
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
-
-    const candidatesNakedSingleInMultipleCells = groupCandidates.filter(candidate => {
-        const candidateNakedSingleHostCells = focusedCells.filter(cell => {
-            return (
-                isCellNoteVisible(candidate, tryOutNotesInfo[cell.row][cell.col]) &&
-                getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1
-            )
-        })
+export const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells) => {
+    return groupCandidates.filter(candidate => {
+        const candidateNakedSingleHostCells = getCandidateNakedSingleHostCells(candidate, focusedCells)
         return candidateNakedSingleHostCells.length > 1
     })
+}
 
-    return !!candidatesNakedSingleInMultipleCells.length
+export const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
+    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+
+    return focusedCells.filter(cell => {
+        return (
+            isCellNoteVisible(candidate, tryOutNotesInfo[cell.row][cell.col]) &&
+            getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1
+        )
+    })
 }
 
 export const getNakedGroupNoTryOutInputResult = (groupCandidates) => {
