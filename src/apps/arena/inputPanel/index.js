@@ -9,7 +9,7 @@ import { ACTION_TYPES } from './constants'
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
 
-const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) => {
+const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction, singleRow = false }) => {
     const isHintTryOut = useIsHintTryOutStep()
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
@@ -48,7 +48,12 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
                 touchable={TouchableTypes.opacity}
                 key={`${number}`}
             >
-                <Text style={styles.textStyle}>{numbersVisible[number] ? number : ''}</Text>
+                <Text
+                    adjustsFontSizeToFit
+                    style={styles.textStyle}
+                >
+                    {numbersVisible[number] ? number : ''}
+                </Text>
             </Touchable>
         )
     }
@@ -61,7 +66,7 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction }) =>
             if (!isHintTryOut || (isHintTryOut && numbersVisible[number])) {
                 row.push(renderInputNumber(number))
             }
-            if (row.length >= 5) {
+            if (row.length >= 5 && !singleRow) {
                 rows.push(
                     <View key={'rowOne'} style={styles.rowContainer}>
                         {row}
