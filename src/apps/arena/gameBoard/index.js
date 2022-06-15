@@ -7,6 +7,7 @@ import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
+    GRID_THIN_BORDERS_WIDTH,
 } from '../../../utils/customHooks/boardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
@@ -28,11 +29,11 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
         useSelector(getHintHCInfo)
 
-    const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT } = useBoardElementsDimensions()
+    const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
     const styles = useMemo(() => {
-        return getStyles({ GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH })
-    }, [GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT])
+        return getStyles({ GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, CELL_WIDTH })
+    }, [GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH])
 
     const isCellFocusedInSmartHint = useCellFocus()
 
@@ -109,27 +110,41 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
     const renderRow = (row, key) => {
         let rowElementsKeyCounter = 0
+
+        const rowAdditionalStyles = {
+            marginTop: row === 3 || row === 6 ? INNER_THICK_BORDER_WIDTH : GRID_THIN_BORDERS_WIDTH,
+            marginBottom: row === 8 ? GRID_THIN_BORDERS_WIDTH : 0
+        }
+
         return (
-            <View style={styles.rowStyle} key={key}>
+            <View style={[styles.rowStyle, rowAdditionalStyles]} key={key}>
                 {looper.map(col => {
                     const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
                     const cell = { row, col }
+
+                    const cellAdditionalStyles = {
+                        marginLeft: col === 3 || col === 6 ? INNER_THICK_BORDER_WIDTH : GRID_THIN_BORDERS_WIDTH,
+                        marginRight: col === 8 ? GRID_THIN_BORDERS_WIDTH : 0
+                    }
+
                     return (
-                        <View style={styles.cellContainer} key={`${rowElementsKeyCounter++}`}>
-                            <Cell
-                                row={row}
-                                col={col}
-                                cellBGColor={getBoxBackgroundColor(cell)}
-                                mainValueFontColor={getMainNumFontColor(cell)}
-                                cellMainValue={mainNumbers[row][col].value}
-                                cellNotes={notesInfo[row][col]}
-                                onCellClick={onCellClick}
-                                displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
-                                smartHintData={smartHintData}
-                                selectedMainNumber={selectedCellMainValue}
-                                showSmartHint={showSmartHint}
-                                showCellContent={showCellContent}
-                            />
+                        <View style={{ flexDirection: 'row' }} >
+                            <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${rowElementsKeyCounter++}`}>
+                                <Cell
+                                    row={row}
+                                    col={col}
+                                    cellBGColor={getBoxBackgroundColor(cell)}
+                                    mainValueFontColor={getMainNumFontColor(cell)}
+                                    cellMainValue={mainNumbers[row][col].value}
+                                    cellNotes={notesInfo[row][col]}
+                                    onCellClick={onCellClick}
+                                    displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
+                                    smartHintData={smartHintData}
+                                    selectedMainNumber={selectedCellMainValue}
+                                    showSmartHint={showSmartHint}
+                                    showCellContent={showCellContent}
+                                />
+                            </View>
                         </View>
                     )
                 })}

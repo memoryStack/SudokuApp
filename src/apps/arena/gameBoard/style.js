@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { GRID_THIN_BORDERS_WIDTH } from '../../../utils/customHooks/boardElementsDimensions'
+import { BOARD_AXIS_WIDTH, GRID_THIN_BORDERS_WIDTH } from '../../../utils/customHooks/boardElementsDimensions'
 import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
 
 // TODO: think of a better color scheme mechanism
@@ -40,13 +40,12 @@ export const COLOR_SCHEME_STYLES = {
     },
 }
 
-export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {
+export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH }) => {
     return StyleSheet.create({
         board: {
             display: 'flex',
             height: GAME_BOARD_HEIGHT,
             width: GAME_BOARD_WIDTH,
-            marginHorizontal: 'auto',
             backgroundColor: 'white',
         },
         gridBorderContainer: {
@@ -69,26 +68,27 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT }) => {
         rowStyle: {
             display: 'flex',
             flexDirection: 'row',
-            flex: 1,
-            width: '100%',
+            height: CELL_WIDTH,
+            width: GAME_BOARD_WIDTH,
+            backgroundColor: 'white',
         },
         cellContainer: {
-            flex: 1,
-            height: '100%',
+            width: CELL_WIDTH,
+            height: CELL_WIDTH,
         },
         ...COLOR_SCHEME_STYLES,
         yAxis: {
             justifyContent: 'space-around',
             alignItems: 'center',
-            width: 12,
-            marginRight: 4,
+            width: BOARD_AXIS_WIDTH,
         },
         xAxis: {
             flexDirection: 'row',
             justifyContent: 'space-around',
+            alignItems: 'center',
             width: GAME_BOARD_WIDTH,
-            marginBottom: 4,
-            marginLeft: 16,
+            height: BOARD_AXIS_WIDTH,
+            marginLeft: BOARD_AXIS_WIDTH,
         },
         axisText: {
             color: 'black',
