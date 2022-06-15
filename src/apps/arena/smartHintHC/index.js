@@ -13,7 +13,6 @@ import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smart
 import { Inputpanel } from '../inputPanel'
 import { getContainerStyles, styles } from './styles'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
-import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
