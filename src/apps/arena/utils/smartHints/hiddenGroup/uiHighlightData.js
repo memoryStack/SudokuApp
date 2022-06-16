@@ -1,10 +1,26 @@
-import { getBlockAndBoxNum } from '../../../../../utils/util'
-import { HOUSE_TYPE } from '../../smartHints/constants'
+import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
+import { HINTS_IDS, HOUSE_TYPE } from '../../smartHints/constants'
 import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCellExists } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { HIDDEN_GROUP_TYPE, NUMBER_TO_TEXT } from '../constants'
-import { setCellDataInHintResult } from '../util'
+import { getHintExplanationStepsFromHintChunks, setCellDataInHintResult, getTryOutInputPanelNumbersVisibility } from '../util'
+
+// TODO: refactor the candidates and groupCandidates confusion from this file
+// write it in the test-cases
+const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
+    const result = []
+    hostCells.forEach((cell) => {
+        const cellNotes = notesData[cell.row][cell.col]
+        const cellRemovableNotes = cellNotes.filter(({ show, noteValue }) => {
+            return show && !groupCandidates.includes(noteValue)
+        }).map(({ noteValue }) => {
+            return noteValue
+        })
+        result.push(...cellRemovableNotes)
+    })
+    return result.filter(onlyUnique).sort()
+}
 
 const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
     const result = {}
@@ -135,6 +151,11 @@ const getPrimaryHouseHintExplaination = (houseType, groupCandidates) => {
         )} are present and the numbers highlighted in red color in these cells can be removed safely.`
 }
 
+const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
+    const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notes)
+    return [...groupCandidates, ...removableCandidates].sort()
+}
+
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
@@ -176,10 +197,24 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         ? getSecondaryHouseHintExplaination(secondaryHostHouse.type, candidates)
         : ''
 
+    const hintChunks = [
+        primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic
+    ]
+
+    const isHiddenDoubles = candidates.length === 2
+    const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(candidates, hostCells, notesData)
     return {
-        cellsToFocusData,
+        hasTryOut: true,
+        type: isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE,
         title: HIDDEN_GROUP_TYPE[group.groupCandidates.length],
-        steps: [{ text: primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic }],
+        steps: getHintExplanationStepsFromHintChunks(hintChunks),
+        cellsToFocusData,
+        tryOutAnalyserData: { // it need more work
+            groupCandidates: candidates,
+            // focusedCells,
+            groupCells: hostCells,
+        },
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
     }
 }
 
