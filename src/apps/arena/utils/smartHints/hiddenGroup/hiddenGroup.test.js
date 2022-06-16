@@ -1,5 +1,6 @@
 import { HOUSE_TYPE } from '../../smartHints/constants'
 import { getAllHiddenGroups, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
+import { getRemovableCandidates } from './uiHighlightData'
 
 jest.mock('../../../../../redux/dispatch.helpers')
 jest.mock('../../../store/selectors/board.selectors')
@@ -56,6 +57,8 @@ test('hidden doubles valid candidates test 2', () => {
 })
 
 test('hidden doubles', () => {
+    // TODO: doesn't look like the notesData is related to the mainNumbers in the file
+    // the notesData here is actually from this hiddenTrippleTestData file
     const { mainNumbers, notesData } = require('./testData')
     mockBoardSelectors(notesData)
     // TODO: order of records is coupled with the algorithm implementation
@@ -140,4 +143,14 @@ test('hidden tripples duplicate houses with same group cells', () => {
     expect(getAllHiddenGroups(3, multipleHousesHiddenGroupNotesData, mainNumbers, maxHintsThreshold)).toStrictEqual(
         expectedResult,
     )
+})
+
+describe('getRemovableCandidates()', () => {
+    test('returns the notes which will be removed because of hidden tripple in the host cells', () => {
+        const { notesData } = require('./hiddenTrippleTestData')
+        const hostCells = [{ row: 0, col: 2 }, { row: 2, col: 2 }, { row: 6, col: 2 }]
+        const groupCandidates = [1, 3, 8]
+        const expectedResult = [2, 6, 7]
+        expect(getRemovableCandidates(hostCells, groupCandidates, notesData)).toStrictEqual(expectedResult)
+    })
 })
