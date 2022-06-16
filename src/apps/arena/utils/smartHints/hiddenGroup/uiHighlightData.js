@@ -116,28 +116,23 @@ const getGroupCandidatesListForMessage = candidates => {
 
 const getSecondaryHouseHintExplaination = (houseType, groupCandidates) => {
     const candidatesCount = groupCandidates.length
-    return ` Since the cells where ${
-        HIDDEN_GROUP_TYPE[candidatesCount]
-    } is formed are also the part of the highlighted ${houseType}. Now because ${getGroupCandidatesListForMessage(
-        groupCandidates,
-    )} will be present in one of these ${
-        NUMBER_TO_TEXT[candidatesCount]
-    } cells for sure (which is which is yet unknown). We can remove ${getGroupCandidatesListForMessage(
-        groupCandidates,
-    )} highlighted in red color in this ${houseType}.`
+    return ` Since the cells where ${HIDDEN_GROUP_TYPE[candidatesCount]
+        } is formed are also the part of the highlighted ${houseType}. Now because ${getGroupCandidatesListForMessage(
+            groupCandidates,
+        )} will be present in one of these ${NUMBER_TO_TEXT[candidatesCount]
+        } cells for sure (which is which is yet unknown). We can remove ${getGroupCandidatesListForMessage(
+            groupCandidates,
+        )} highlighted in red color in this ${houseType}.`
 }
 
 const getPrimaryHouseHintExplaination = (houseType, groupCandidates) => {
     const candidatesCount = groupCandidates.length
-    return `In the highlighted ${houseType}, ${
-        NUMBER_TO_TEXT[candidatesCount]
-    } numbers ${getGroupCandidatesListForMessage(groupCandidates)} highlighted in green color are present only in ${
-        NUMBER_TO_TEXT[candidatesCount]
-    } cells. this arrangement forms a ${
-        HIDDEN_GROUP_TYPE[candidatesCount]
-    }, so in this ${houseType} no other candidate can appear in the cells where ${getGroupCandidatesListForMessage(
-        groupCandidates,
-    )} are present and the numbers highlighted in red color in these cells can be removed safely.`
+    return `In the highlighted ${houseType}, ${NUMBER_TO_TEXT[candidatesCount]
+        } numbers ${getGroupCandidatesListForMessage(groupCandidates)} highlighted in green color are present only in ${NUMBER_TO_TEXT[candidatesCount]
+        } cells. this arrangement forms a ${HIDDEN_GROUP_TYPE[candidatesCount]
+        }, so in this ${houseType} no other candidate can appear in the cells where ${getGroupCandidatesListForMessage(
+            groupCandidates,
+        )} are present and the numbers highlighted in red color in these cells can be removed safely.`
 }
 
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
