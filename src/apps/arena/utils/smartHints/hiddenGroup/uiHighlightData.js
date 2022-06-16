@@ -4,19 +4,26 @@ import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCel
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { HIDDEN_GROUP_TYPE, NUMBER_TO_TEXT } from '../constants'
-import { getHintExplanationStepsFromHintChunks, setCellDataInHintResult, getTryOutInputPanelNumbersVisibility, removeDuplicteCells } from '../util'
+import {
+    getHintExplanationStepsFromHintChunks,
+    setCellDataInHintResult,
+    getTryOutInputPanelNumbersVisibility,
+    removeDuplicteCells,
+} from '../util'
 
 // TODO: refactor the candidates and groupCandidates confusion from this file
 // write it in the test-cases
 const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
-    hostCells.forEach((cell) => {
+    hostCells.forEach(cell => {
         const cellNotes = notesData[cell.row][cell.col]
-        const cellRemovableNotes = cellNotes.filter(({ show, noteValue }) => {
-            return show && !groupCandidates.includes(noteValue)
-        }).map(({ noteValue }) => {
-            return noteValue
-        })
+        const cellRemovableNotes = cellNotes
+            .filter(({ show, noteValue }) => {
+                return show && !groupCandidates.includes(noteValue)
+            })
+            .map(({ noteValue }) => {
+                return noteValue
+            })
         result.push(...cellRemovableNotes)
     })
     return result.filter(onlyUnique).sort()
@@ -132,23 +139,28 @@ const getGroupCandidatesListForMessage = candidates => {
 
 const getSecondaryHouseHintExplaination = (houseType, groupCandidates) => {
     const candidatesCount = groupCandidates.length
-    return ` Since the cells where ${HIDDEN_GROUP_TYPE[candidatesCount]
-        } is formed are also the part of the highlighted ${houseType}. Now because ${getGroupCandidatesListForMessage(
-            groupCandidates,
-        )} will be present in one of these ${NUMBER_TO_TEXT[candidatesCount]
-        } cells for sure (which is which is yet unknown). We can remove ${getGroupCandidatesListForMessage(
-            groupCandidates,
-        )} highlighted in red color in this ${houseType}.`
+    return ` Since the cells where ${
+        HIDDEN_GROUP_TYPE[candidatesCount]
+    } is formed are also the part of the highlighted ${houseType}. Now because ${getGroupCandidatesListForMessage(
+        groupCandidates,
+    )} will be present in one of these ${
+        NUMBER_TO_TEXT[candidatesCount]
+    } cells for sure (which is which is yet unknown). We can remove ${getGroupCandidatesListForMessage(
+        groupCandidates,
+    )} highlighted in red color in this ${houseType}.`
 }
 
 const getPrimaryHouseHintExplaination = (houseType, groupCandidates) => {
     const candidatesCount = groupCandidates.length
-    return `In the highlighted ${houseType}, ${NUMBER_TO_TEXT[candidatesCount]
-        } numbers ${getGroupCandidatesListForMessage(groupCandidates)} highlighted in green color are present only in ${NUMBER_TO_TEXT[candidatesCount]
-        } cells. this arrangement forms a ${HIDDEN_GROUP_TYPE[candidatesCount]
-        }, so in this ${houseType} no other candidate can appear in the cells where ${getGroupCandidatesListForMessage(
-            groupCandidates,
-        )} are present and the numbers highlighted in red color in these cells can be removed safely.`
+    return `In the highlighted ${houseType}, ${
+        NUMBER_TO_TEXT[candidatesCount]
+    } numbers ${getGroupCandidatesListForMessage(groupCandidates)} highlighted in green color are present only in ${
+        NUMBER_TO_TEXT[candidatesCount]
+    } cells. this arrangement forms a ${
+        HIDDEN_GROUP_TYPE[candidatesCount]
+    }, so in this ${houseType} no other candidate can appear in the cells where ${getGroupCandidatesListForMessage(
+        groupCandidates,
+    )} are present and the numbers highlighted in red color in these cells can be removed safely.`
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
@@ -201,9 +213,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         ? getSecondaryHouseHintExplaination(secondaryHostHouse.type, candidates)
         : ''
 
-    const hintChunks = [
-        primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic
-    ]
+    const hintChunks = [primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic]
 
     const isHiddenDoubles = candidates.length === 2
     const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(candidates, hostCells, notesData)
@@ -215,7 +225,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         cellsToFocusData,
         focusedCells,
-        tryOutAnalyserData: { // it need more work
+        tryOutAnalyserData: {
+            // it need more work
             groupCandidates: candidates,
             focusedCells,
             groupCells: hostCells,

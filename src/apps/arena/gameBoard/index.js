@@ -113,7 +113,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
         const rowAdditionalStyles = {
             marginTop: row === 3 || row === 6 ? INNER_THICK_BORDER_WIDTH : GRID_THIN_BORDERS_WIDTH,
-            marginBottom: row === 8 ? GRID_THIN_BORDERS_WIDTH : 0
+            marginBottom: row === 8 ? GRID_THIN_BORDERS_WIDTH : 0,
         }
 
         return (
@@ -124,12 +124,15 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
                     const cellAdditionalStyles = {
                         marginLeft: col === 3 || col === 6 ? INNER_THICK_BORDER_WIDTH : GRID_THIN_BORDERS_WIDTH,
-                        marginRight: col === 8 ? GRID_THIN_BORDERS_WIDTH : 0
+                        marginRight: col === 8 ? GRID_THIN_BORDERS_WIDTH : 0,
                     }
 
                     return (
-                        <View style={{ flexDirection: 'row' }} >
-                            <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${rowElementsKeyCounter++}`}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View
+                                style={[styles.cellContainer, cellAdditionalStyles]}
+                                key={`${rowElementsKeyCounter++}`}
+                            >
                                 <Cell
                                     row={row}
                                     col={col}

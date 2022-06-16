@@ -119,11 +119,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const renderTryOutContent = () => {
         return (
             <>
-                <Inputpanel
-                    numbersVisible={inputPanelNumbersVisibility}
-                    onAction={onAction}
-                    singleRow
-                />
+                <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} singleRow />
                 <Text style={[styles.tryOutResult, getTryOutResultTextStyle()]}>{tryOutResult.msg}</Text>
             </>
         )

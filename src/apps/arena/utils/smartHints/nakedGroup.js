@@ -1,14 +1,15 @@
-import {
-    areSameCells,
-    areSameRowCells,
-    areSameColCells,
-    areSameBlockCells,
-    getCellVisibleNotesCount,
-} from '../util'
+import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, getCellVisibleNotesCount } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
-import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, removeDuplicteCells } from './util'
+import {
+    maxHintsLimitReached,
+    setCellDataInHintResult,
+    getCandidatesListText,
+    getHintExplanationStepsFromHintChunks,
+    getTryOutInputPanelNumbersVisibility,
+    removeDuplicteCells,
+} from './util'
 import { isHintValid } from './validityTest'
 
 const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {

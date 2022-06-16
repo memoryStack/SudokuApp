@@ -48,10 +48,7 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction, sing
                 touchable={TouchableTypes.opacity}
                 key={`${number}`}
             >
-                <Text
-                    adjustsFontSizeToFit
-                    style={styles.textStyle}
-                >
+                <Text adjustsFontSizeToFit style={styles.textStyle}>
                     {numbersVisible[number] ? number : ''}
                 </Text>
             </Touchable>

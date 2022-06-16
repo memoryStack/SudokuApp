@@ -1,4 +1,4 @@
-import { isCellExists } from "../util"
+import { isCellExists } from '../util'
 
 const setCellDataInHintResult = (cell, highlightData, cellsToFocusData) => {
     if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
@@ -32,7 +32,7 @@ const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
     return numbersVisibility
 }
 
-const removeDuplicteCells = (cells) => {
+const removeDuplicteCells = cells => {
     const result = []
     cells.forEach(cell => {
         if (!isCellExists(cell, result)) result.push(cell)
@@ -40,4 +40,11 @@ const removeDuplicteCells = (cells) => {
     return result
 }
 
-export { setCellDataInHintResult, maxHintsLimitReached, getCandidatesListText, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, removeDuplicteCells }
+export {
+    setCellDataInHintResult,
+    maxHintsLimitReached,
+    getCandidatesListText,
+    getHintExplanationStepsFromHintChunks,
+    getTryOutInputPanelNumbersVisibility,
+    removeDuplicteCells,
+}

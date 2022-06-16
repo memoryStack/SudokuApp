@@ -808,5 +808,5 @@ export const getClonedValue = data => {
 }
 
 export const onlyUnique = (value, index, self) => {
-    return self.indexOf(value) === index;
+    return self.indexOf(value) === index
 }
