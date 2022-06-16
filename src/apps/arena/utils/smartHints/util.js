@@ -24,4 +24,10 @@ const getHintExplanationStepsFromHintChunks = hintChunks => {
     return result
 }
 
-export { setCellDataInHintResult, maxHintsLimitReached, getCandidatesListText, getHintExplanationStepsFromHintChunks }
+const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
+    const numbersVisibility = new Array(10).fill(false)
+    allowedCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
+    return numbersVisibility
+}
+
+export { setCellDataInHintResult, maxHintsLimitReached, getCandidatesListText, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility }

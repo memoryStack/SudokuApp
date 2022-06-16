@@ -9,15 +9,8 @@ import {
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
-import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText, getHintExplanationStepsFromHintChunks } from './util'
+import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility } from './util'
 import { isHintValid } from './validityTest'
-
-// put it in utils for other smart hints as well
-const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
-    const numbersVisibility = new Array(10).fill(false)
-    allowedCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
-    return numbersVisibility
-}
 
 const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
     const isNakedDoubles = groupCandidates.length === 2
