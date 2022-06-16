@@ -9,20 +9,8 @@ import {
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
-import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText } from './util'
+import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText, getHintExplanationStepsFromHintChunks } from './util'
 import { isHintValid } from './validityTest'
-
-// put it in utils for other smart hints as well
-const getHintExplanationSteps = hintChunks => {
-    const result = hintChunks.map(hintChunk => {
-        return { text: hintChunk }
-    })
-    result.push({
-        isTryOut: true,
-        text: 'try out',
-    })
-    return result
-}
 
 // put it in utils for other smart hints as well
 const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
@@ -47,7 +35,7 @@ const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, ce
         focusedCells,
         type: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
         title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
-        steps: getHintExplanationSteps(hintChunks),
+        steps: getHintExplanationStepsFromHintChunks(hintChunks),
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
@@ -130,7 +118,7 @@ const prepareNakedDublesOrTriplesHintData = (
             groupCells,
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates),
-        steps: getHintExplanationSteps(hintChunks),
+        steps: getHintExplanationStepsFromHintChunks(hintChunks),
     }
 }
 

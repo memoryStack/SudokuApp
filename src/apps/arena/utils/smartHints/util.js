@@ -13,4 +13,15 @@ const getCandidatesListText = (candidates, lastCandidateConjugation) => {
     return allCandidatesExceptLast.join(', ') + ` ${lastCandidateConjugation} ${candidates[candidates.length - 1]}`
 }
 
-export { setCellDataInHintResult, maxHintsLimitReached, getCandidatesListText }
+const getHintExplanationStepsFromHintChunks = hintChunks => {
+    const result = hintChunks.map(hintChunk => {
+        return { text: hintChunk }
+    })
+    result.push({
+        isTryOut: true,
+        text: 'try out',
+    })
+    return result
+}
+
+export { setCellDataInHintResult, maxHintsLimitReached, getCandidatesListText, getHintExplanationStepsFromHintChunks }
