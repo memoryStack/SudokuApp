@@ -4,7 +4,7 @@ import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCel
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { HIDDEN_GROUP_TYPE, NUMBER_TO_TEXT } from '../constants'
-import { getHintExplanationStepsFromHintChunks, setCellDataInHintResult, getTryOutInputPanelNumbersVisibility } from '../util'
+import { getHintExplanationStepsFromHintChunks, setCellDataInHintResult, getTryOutInputPanelNumbersVisibility, removeDuplicteCells } from '../util'
 
 // TODO: refactor the candidates and groupCandidates confusion from this file
 // write it in the test-cases
@@ -167,6 +167,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     highlightPrimaryHouseCells(houseType, houseNum, candidates, hostCells, notesData, cellsToFocusData)
 
+    let focusedCells = getHouseCells(houseType, houseNum)
+
     const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
     let secondaryHouseEligibleForHighlight
@@ -190,6 +192,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
                 notesData,
                 cellsToFocusData,
             )
+        focusedCells.push(...secondaryHouseCells)
+        focusedCells = removeDuplicteCells(focusedCells)
     }
 
     const primaryHouseNotesEliminationLogic = getPrimaryHouseHintExplaination(houseType, candidates)
@@ -203,15 +207,17 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     const isHiddenDoubles = candidates.length === 2
     const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(candidates, hostCells, notesData)
+
     return {
         hasTryOut: true,
         type: isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE,
         title: HIDDEN_GROUP_TYPE[group.groupCandidates.length],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         cellsToFocusData,
+        focusedCells,
         tryOutAnalyserData: { // it need more work
             groupCandidates: candidates,
-            // focusedCells,
+            focusedCells,
             groupCells: hostCells,
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),

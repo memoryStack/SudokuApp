@@ -3,13 +3,12 @@ import {
     areSameRowCells,
     areSameColCells,
     areSameBlockCells,
-    isCellExists,
     getCellVisibleNotesCount,
 } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
-import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility } from './util'
+import { maxHintsLimitReached, setCellDataInHintResult, getCandidatesListText, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, removeDuplicteCells } from './util'
 import { isHintValid } from './validityTest'
 
 const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
@@ -36,14 +35,6 @@ const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, ce
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates),
     }
-}
-
-const removeDuplicteCells = cells => {
-    const result = []
-    cells.forEach(cell => {
-        if (!isCellExists(cell, result)) result.push(cell)
-    })
-    return result
 }
 
 // TODO: write test case for it and refactor it properly

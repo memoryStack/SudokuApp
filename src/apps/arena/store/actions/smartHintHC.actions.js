@@ -121,7 +121,7 @@ const isValidInputNumberClick = number => {
     )
 }
 
-const showSnackBar = ({ msg, customStyles }) => {
+const showSnackBar = ({ msg, customStyles = {} }) => {
     emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
         msg,
         visibleTime: 4000,
