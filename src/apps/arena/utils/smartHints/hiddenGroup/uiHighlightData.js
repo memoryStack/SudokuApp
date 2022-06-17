@@ -1,5 +1,5 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
-import { HINTS_IDS, HOUSE_TYPE } from '../../smartHints/constants'
+import { HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, HOUSE_TYPE } from '../../smartHints/constants'
 import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCellExists } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
@@ -9,6 +9,7 @@ import {
     setCellDataInHintResult,
     getTryOutInputPanelNumbersVisibility,
     removeDuplicteCells,
+    getCandidatesListText,
 } from '../util'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
@@ -130,31 +131,23 @@ const highlightSecondaryHouseCells = (
     })
 }
 
-// TODO: use util func for it
-const getGroupCandidatesListForMessage = groupCandidates => {
-    if (groupCandidates.length === 2) return `${groupCandidates[0]} and ${groupCandidates[1]}`
-    return `${groupCandidates[0]}, ${groupCandidates[1]} and ${groupCandidates[2]}`
-}
-
 const getSecondaryHouseHintExplaination = (houseType, groupCandidates) => {
     const candidatesCount = groupCandidates.length
-    return ` Since the cells where ${HIDDEN_GROUP_TYPE[candidatesCount]
-        } is formed are also the part of the highlighted ${houseType}. Now because ${getGroupCandidatesListForMessage(
-            groupCandidates,
-        )} will be present in one of these ${NUMBER_TO_TEXT[candidatesCount]
-        } cells for sure (which is which is yet unknown). We can remove ${getGroupCandidatesListForMessage(
-            groupCandidates,
-        )} highlighted in red color in this ${houseType}.`
+    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    return ` Since the cells where ${HIDDEN_GROUP_TYPE[candidatesCount]} is formed are also`
+        + ` the part of the highlighted ${houseType}. Now because ${candidatesListText} will be present`
+        + ` in one of these ${NUMBER_TO_TEXT[candidatesCount]} cells for sure (which is which is yet unknown).`
+        + ` We can remove ${candidatesListText} highlighted in red color in this ${houseType}.`
 }
 
 const getPrimaryHouseHintExplaination = (houseType, groupCandidates) => {
     const candidatesCount = groupCandidates.length
-    return `In the highlighted ${houseType}, ${NUMBER_TO_TEXT[candidatesCount]
-        } numbers ${getGroupCandidatesListForMessage(groupCandidates)} highlighted in green color are present only in ${NUMBER_TO_TEXT[candidatesCount]
-        } cells. this arrangement forms a ${HIDDEN_GROUP_TYPE[candidatesCount]
-        }, so in this ${houseType} no other candidate can appear in the cells where ${getGroupCandidatesListForMessage(
-            groupCandidates,
-        )} are present and the numbers highlighted in red color in these cells can be removed safely.`
+    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    return `In the highlighted ${houseType}, ${NUMBER_TO_TEXT[candidatesCount]} numbers ${candidatesListText}`
+        + ` highlighted in green color are present only in ${NUMBER_TO_TEXT[candidatesCount]} cells.`
+        + ` this arrangement forms a ${HIDDEN_GROUP_TYPE[candidatesCount]}, so in this ${houseType} no`
+        + ` other candidate can appear in the cells where ${candidatesListText} are present and the`
+        + ` numbers highlighted in red color in these cells can be removed safely.`
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
