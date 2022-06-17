@@ -11,7 +11,6 @@ import {
     removeDuplicteCells,
 } from '../util'
 
-// TODO: refactor the candidates and groupCandidates confusion from this file
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
     hostCells.forEach(cell => {
@@ -28,7 +27,7 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
     return result.filter(onlyUnique).sort()
 }
 
-const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
+const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) => {
     const result = {}
 
     // put these color in the color scheme and replace for naked group as well
@@ -38,7 +37,7 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
     }
     cellNotes.forEach(({ show, noteValue }) => {
         if (show) {
-            const isGroupCandidate = candidates.includes(noteValue)
+            const isGroupCandidate = groupCandidates.includes(noteValue)
             result[noteValue] = {
                 fontColor: isGroupCandidate ? NOTES_COLOR_SCHEME.candidate : NOTES_COLOR_SCHEME.nonCandidate,
             }
@@ -47,7 +46,7 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, candidates) => {
     return result
 }
 
-const highlightPrimaryHouseCells = (houseType, houseNum, candidates, groupHostCells, notesData, cellsToFocusData) => {
+const highlightPrimaryHouseCells = (houseType, houseNum, groupCandidates, groupHostCells, notesData, cellsToFocusData) => {
     const primaryHouseCells = getHouseCells(houseType, houseNum)
     primaryHouseCells.forEach(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
@@ -57,7 +56,7 @@ const highlightPrimaryHouseCells = (houseType, houseNum, candidates, groupHostCe
             cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
                 isPrimaryHouse,
                 notesData[cell.row][cell.col],
-                candidates,
+                groupCandidates,
             )
         }
         // TODO: improve the naming of this func
@@ -131,9 +130,10 @@ const highlightSecondaryHouseCells = (
     })
 }
 
-const getGroupCandidatesListForMessage = candidates => {
-    if (candidates.length === 2) return `${candidates[0]} and ${candidates[1]}`
-    return `${candidates[0]}, ${candidates[1]} and ${candidates[2]}`
+// TODO: use util func for it
+const getGroupCandidatesListForMessage = groupCandidates => {
+    if (groupCandidates.length === 2) return `${groupCandidates[0]} and ${groupCandidates[1]}`
+    return `${groupCandidates[0]}, ${groupCandidates[1]} and ${groupCandidates[2]}`
 }
 
 const getSecondaryHouseHintExplaination = (houseType, groupCandidates) => {
@@ -165,13 +165,13 @@ const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes)
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
-        groupCandidates: candidates,
+        groupCandidates: groupCandidates,
         groupCells: hostCells,
     } = group
 
     const cellsToFocusData = {}
 
-    highlightPrimaryHouseCells(houseType, houseNum, candidates, hostCells, notesData, cellsToFocusData)
+    highlightPrimaryHouseCells(houseType, houseNum, groupCandidates, hostCells, notesData, cellsToFocusData)
 
     let focusedCells = getHouseCells(houseType, houseNum)
 
@@ -185,7 +185,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         secondaryHouseEligibleForHighlight = shouldHighlightSecondaryHouseCells(
             secondaryHouseCells,
             hostCells,
-            candidates,
+            groupCandidates,
             mainNumbers,
             notesData,
         )
@@ -193,7 +193,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             highlightSecondaryHouseCells(
                 secondaryHouseCells,
                 hostCells,
-                candidates,
+                groupCandidates,
                 mainNumbers,
                 notesData,
                 cellsToFocusData,
@@ -202,15 +202,15 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         focusedCells = removeDuplicteCells(focusedCells)
     }
 
-    const primaryHouseNotesEliminationLogic = getPrimaryHouseHintExplaination(houseType, candidates)
+    const primaryHouseNotesEliminationLogic = getPrimaryHouseHintExplaination(houseType, groupCandidates)
     const secondaryHouseNotesEliminationLogic = secondaryHouseEligibleForHighlight
-        ? getSecondaryHouseHintExplaination(secondaryHostHouse.type, candidates)
+        ? getSecondaryHouseHintExplaination(secondaryHostHouse.type, groupCandidates)
         : ''
 
     const hintChunks = [primaryHouseNotesEliminationLogic + secondaryHouseNotesEliminationLogic]
 
-    const isHiddenDoubles = candidates.length === 2
-    const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(candidates, hostCells, notesData)
+    const isHiddenDoubles = groupCandidates.length === 2
+    const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(groupCandidates, hostCells, notesData)
 
     return {
         hasTryOut: true,
@@ -220,8 +220,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         cellsToFocusData,
         focusedCells,
         tryOutAnalyserData: {
-            // it need more work
-            groupCandidates: candidates,
+            // TODO: it need more work for try-out
+            groupCandidates,
             focusedCells,
             groupCells: hostCells,
         },
