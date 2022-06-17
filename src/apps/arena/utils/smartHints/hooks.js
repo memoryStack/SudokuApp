@@ -9,6 +9,7 @@ const useIsHintTryOutStep = () => {
     return isTryOut
 }
 
+// TODO: this can be handled by simple handler func
 const useCellFocus = () => {
     const { hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } = useSelector(getHintHCInfo)
 

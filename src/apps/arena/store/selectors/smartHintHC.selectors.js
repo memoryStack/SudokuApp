@@ -42,3 +42,7 @@ export const getTryOutMainNumbers = state => {
 export const getTryOutNotes = state => {
     return state.smartHintHC.tryOut.notesInfo
 }
+
+export const getTryOutClickableCells = (state) => {
+    return state.smartHintHC.hints[0].clickableCells || []
+}
