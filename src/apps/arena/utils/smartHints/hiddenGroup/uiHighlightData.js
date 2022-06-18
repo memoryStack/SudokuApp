@@ -1,6 +1,6 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
 import { HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, HOUSE_TYPE } from '../../smartHints/constants'
-import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCellExists } from '../../util'
+import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { HIDDEN_GROUP_TYPE, NUMBER_TO_TEXT } from '../constants'
@@ -167,7 +167,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     highlightPrimaryHouseCells(houseType, houseNum, groupCandidates, hostCells, notesData, cellsToFocusData)
 
     let focusedCells = getHouseCells(houseType, houseNum)
-
+    let removableGroupCandidatesHostCells = []
     const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
     let secondaryHouseEligibleForHighlight
@@ -193,6 +193,13 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             )
         focusedCells.push(...secondaryHouseCells)
         focusedCells = removeDuplicteCells(focusedCells)
+
+        removableGroupCandidatesHostCells = secondaryHouseCells.filter((cell) => {
+            if (isCellExists(cell, hostCells)) return false
+            return groupCandidates.some((groupCandidate) => {
+                return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
+            })
+        })
     }
 
     const primaryHouseNotesEliminationLogic = getPrimaryHouseHintExplaination(houseType, groupCandidates)
@@ -220,7 +227,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             removableCandidates: getRemovableCandidates(hostCells, groupCandidates, notesData),
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
-        clickableCells: JSON.parse(JSON.stringify(hostCells)),
+        clickableCells: JSON.parse(JSON.stringify([...hostCells, ...removableGroupCandidatesHostCells])),
     }
 }
 
