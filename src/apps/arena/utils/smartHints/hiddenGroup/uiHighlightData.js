@@ -1,6 +1,6 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
 import { HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, HOUSE_TYPE } from '../../smartHints/constants'
-import { areSameBlockCells, areSameColCells, areSameRowCells, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
+import { areSameBlockCells, areSameColCells, areSameRowCells, getCellAxesValues, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { HIDDEN_GROUP_TYPE, NUMBER_TO_TEXT } from '../constants'
@@ -155,6 +155,18 @@ const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes)
     return [...groupCandidates, ...removableCandidates].sort()
 }
 
+const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (removableGroupCandidatesHostCells, groupCandidates, notes) => {
+    return removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
+        const restrictedInputsForCell = notes[cell.row][cell.col].filter(({ show, noteValue }) => {
+            return show && !groupCandidates.includes(noteValue)
+        }).map(({ noteValue }) => noteValue)
+        if (restrictedInputsForCell.length) {
+            prevValue[getCellAxesValues(cell)] = restrictedInputsForCell
+        }
+        return prevValue
+    }, {})
+}
+
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
         house: { type: houseType, num: houseNum },
@@ -230,6 +242,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
         clickableCells: JSON.parse(JSON.stringify([...hostCells, ...removableGroupCandidatesHostCells])),
+        cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(removableGroupCandidatesHostCells, groupCandidates, notesData),
+        restrictedNumberInputMsg: 'input the numbers which are highlighted in red color in this cell. other numbers don\'t help in learning this hint.',
     }
 }
 

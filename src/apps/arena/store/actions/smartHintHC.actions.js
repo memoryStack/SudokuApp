@@ -9,13 +9,14 @@ import {
     areCommonHouseCells,
     areSameCells,
     duplicacyPresent,
+    getCellAxesValues,
     getCellVisibleNotes,
     isCellEmpty,
     isCellNoteVisible,
 } from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
-import { getTryOutMainNumbers, getTryOutNotes, getTryOutSelectedCell } from '../selectors/smartHintHC.selectors'
+import { getTryOutCellsRestrictedNumberInputs, getTryOutCellsRestrictedNumberInputsMsg, getTryOutMainNumbers, getTryOutNotes, getTryOutSelectedCell } from '../selectors/smartHintHC.selectors'
 
 const {
     removeHints,
@@ -107,6 +108,15 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
         })
         return
     }
+
+    if (isRestrictedInputClick(number)) {
+        showSnackBar({
+            msg: getTryOutCellsRestrictedNumberInputsMsg(getStoreState()),
+            customStyles: snackBarCustomStyles,
+        })
+        return
+    }
+
     const removalbeNotesHostCellsData = getRemovalbeNotesHostCells(number, focusedCells)
     invokeDispatch(updateBoardDataOnTryOutNumberInput({ removalbeNotesHostCellsData, number }))
 }
@@ -119,6 +129,13 @@ const isValidInputNumberClick = number => {
         isCellEmpty(selectedCell, mainNumbers) &&
         isCellNoteVisible(number, notesInfo[selectedCell.row][selectedCell.col])
     )
+}
+
+const isRestrictedInputClick = (inputNumber) => {
+    const cellsRestrictedNumberInputs = getTryOutCellsRestrictedNumberInputs(getStoreState())
+    const selectedCell = getTryOutSelectedCell(getStoreState())
+    const selectedCellAxesValue = getCellAxesValues(selectedCell)
+    return (cellsRestrictedNumberInputs[selectedCellAxesValue] || []).includes(inputNumber)
 }
 
 const showSnackBar = ({ msg, customStyles = {} }) => {
