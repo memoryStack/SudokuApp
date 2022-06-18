@@ -225,6 +225,8 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             focusedCells,
             groupCells: hostCells,
             removableCandidates: getRemovableCandidates(hostCells, groupCandidates, notesData),
+            removableGroupCandidatesHostCells,
+            primaryHouse: group.house,
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
         clickableCells: JSON.parse(JSON.stringify([...hostCells, ...removableGroupCandidatesHostCells])),
