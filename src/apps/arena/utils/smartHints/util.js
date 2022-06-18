@@ -11,6 +11,11 @@ const maxHintsLimitReached = (hints, maxHintsThreshold) => {
 
 const getCandidatesListText = (candidates, lastCandidateConjugation) => {
     if (candidates.length === 1) return `${candidates[0]}`
+
+    if (!lastCandidateConjugation) {
+        return candidates.join(', ')
+    }
+
     const allCandidatesExceptLast = candidates.slice(0, candidates.length - 1)
     return allCandidatesExceptLast.join(', ') + ` ${lastCandidateConjugation} ${candidates[candidates.length - 1]}`
 }
