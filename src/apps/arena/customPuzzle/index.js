@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     inputPanelContainer: {
+        width: '100%',
         marginVertical: 24,
     },
     playButtonContainer: {
