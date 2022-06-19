@@ -128,6 +128,10 @@ const HOUSE_TYPE_VS_FULL_NAMES = {
         FULL_NAME: 'column',
         FULL_NAME_PLURAL: 'columns',
     },
+    [HOUSE_TYPE.BLOCK]: {
+        FULL_NAME: 'block',
+        FULL_NAME_PLURAL: 'blocks',
+    },
 }
 
 export {
