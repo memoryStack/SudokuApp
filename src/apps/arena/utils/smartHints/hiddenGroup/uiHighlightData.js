@@ -1,6 +1,14 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
 import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
-import { areSameBlockCells, areSameColCells, areSameRowCells, getCellAxesValues, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
+import {
+    areSameBlockCells,
+    areSameColCells,
+    areSameRowCells,
+    getCellAxesValues,
+    isCellEmpty,
+    isCellExists,
+    isCellNoteVisible,
+} from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { HIDDEN_GROUP_TYPE } from '../constants'
@@ -48,7 +56,14 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) =
     return result
 }
 
-const highlightPrimaryHouseCells = (houseType, houseNum, groupCandidates, groupHostCells, notesData, cellsToFocusData) => {
+const highlightPrimaryHouseCells = (
+    houseType,
+    houseNum,
+    groupCandidates,
+    groupHostCells,
+    notesData,
+    cellsToFocusData,
+) => {
     const primaryHouseCells = getHouseCells(houseType, houseNum)
     primaryHouseCells.forEach(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
@@ -133,13 +148,16 @@ const highlightSecondaryHouseCells = (
 }
 
 const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHostCells, notesData) => {
-    return removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
-        const cellNotes = notesData[cell.row][cell.col]
-        const groupCandidatesPresentInCell = groupCandidates.filter((groupCandidate) => {
-            return isCellNoteVisible(groupCandidate, cellNotes)
-        })
-        return [...prevValue, ...groupCandidatesPresentInCell]
-    }, []).filter(onlyUnique).sort()
+    return removableGroupCandidatesHostCells
+        .reduce((prevValue, cell) => {
+            const cellNotes = notesData[cell.row][cell.col]
+            const groupCandidatesPresentInCell = groupCandidates.filter(groupCandidate => {
+                return isCellNoteVisible(groupCandidate, cellNotes)
+            })
+            return [...prevValue, ...groupCandidatesPresentInCell]
+        }, [])
+        .filter(onlyUnique)
+        .sort()
 }
 
 const getPrimaryHouseHintExplaination = (houseType, groupCandidates, groupCells, removableCandidates) => {
@@ -148,24 +166,37 @@ const getPrimaryHouseHintExplaination = (houseType, groupCandidates, groupCells,
     const cellsListText = getCellsAxesValuesListText(groupCells)
     const isHiddenDoubles = groupCandidates.length === 2
     const houseName = HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME
-    return `In the highlighted ${houseName}, ${isHiddenDoubles ? 'two' : 'three'} numbers`
-        + ` ${candidatesListText} in green color can come in exactly ${isHiddenDoubles ? 'two' : 'three'} cells`
-        + ` ${cellsListText}. so in this ${houseName} in ${cellsListText} only ${candidatesListText} stays`
-        + ` and ${removableCandidatesListText} can be removed.`
+    return (
+        `In the highlighted ${houseName}, ${isHiddenDoubles ? 'two' : 'three'} numbers` +
+        ` ${candidatesListText} in green color can come in exactly ${isHiddenDoubles ? 'two' : 'three'} cells` +
+        ` ${cellsListText}. so in this ${houseName} in ${cellsListText} only ${candidatesListText} stays` +
+        ` and ${removableCandidatesListText} can be removed.`
+    )
 }
 
-const getSecondaryHouseHintExplaination = (houseType, groupCandidates, groupCells, removableCandidates, removableGroupCandidatesHostCells, notes) => {
+const getSecondaryHouseHintExplaination = (
+    houseType,
+    groupCandidates,
+    groupCells,
+    removableCandidates,
+    removableGroupCandidatesHostCells,
+    notes,
+) => {
     const isHiddenDouble = groupCandidates.length === 2
     const candidatesListText = getCandidatesListText(groupCandidates)
     const groupCellsAxesListText = getCellsAxesValuesListText(groupCells)
     const removableCandidatesListText = getCandidatesListText(removableCandidates)
     const removableGroupCandidatesHostCellsListText = getCellsAxesValuesListText(removableGroupCandidatesHostCells)
-    const removableGroupCandidatesListText = getCandidatesListText(getRemovableGroupCandidates(groupCandidates, removableGroupCandidatesHostCells, notes))
-    return `once we remove ${removableCandidatesListText} from ${groupCellsAxesListText} then in the`
-        + ` highlighted ${HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME} ${candidatesListText} will`
-        + ` make a ${isHiddenDouble ? 'Naked Double' : 'Naked Tripple'} and because of that`
-        + ` ${removableGroupCandidatesListText} can't come in ${removableGroupCandidatesHostCellsListText}.`
-        + ` so we can remove these as well.`
+    const removableGroupCandidatesListText = getCandidatesListText(
+        getRemovableGroupCandidates(groupCandidates, removableGroupCandidatesHostCells, notes),
+    )
+    return (
+        `once we remove ${removableCandidatesListText} from ${groupCellsAxesListText} then in the` +
+        ` highlighted ${HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME} ${candidatesListText} will` +
+        ` make a ${isHiddenDouble ? 'Naked Double' : 'Naked Tripple'} and because of that` +
+        ` ${removableGroupCandidatesListText} can't come in ${removableGroupCandidatesHostCellsListText}.` +
+        ` so we can remove these as well.`
+    )
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
@@ -173,11 +204,17 @@ const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes)
     return [...groupCandidates, ...removableCandidates].sort()
 }
 
-const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (removableGroupCandidatesHostCells, groupCandidates, notes) => {
+const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
+    removableGroupCandidatesHostCells,
+    groupCandidates,
+    notes,
+) => {
     return removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
-        const restrictedInputsForCell = notes[cell.row][cell.col].filter(({ show, noteValue }) => {
-            return show && !groupCandidates.includes(noteValue)
-        }).map(({ noteValue }) => noteValue)
+        const restrictedInputsForCell = notes[cell.row][cell.col]
+            .filter(({ show, noteValue }) => {
+                return show && !groupCandidates.includes(noteValue)
+            })
+            .map(({ noteValue }) => noteValue)
         if (restrictedInputsForCell.length) {
             prevValue[getCellAxesValues(cell)] = restrictedInputsForCell
         }
@@ -224,9 +261,9 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         focusedCells.push(...secondaryHouseCells)
         focusedCells = removeDuplicteCells(focusedCells)
 
-        removableGroupCandidatesHostCells = secondaryHouseCells.filter((cell) => {
+        removableGroupCandidatesHostCells = secondaryHouseCells.filter(cell => {
             if (isCellExists(cell, hostCells)) return false
-            return groupCandidates.some((groupCandidate) => {
+            return groupCandidates.some(groupCandidate => {
                 return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
             })
         })
@@ -235,11 +272,24 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notesData)
     const hintChunks = [getPrimaryHouseHintExplaination(houseType, groupCandidates, hostCells, removableCandidates)]
     if (secondaryHouseEligibleForHighlight) {
-        hintChunks.push(getSecondaryHouseHintExplaination(secondaryHostHouse.type, groupCandidates, hostCells, removableCandidates, removableGroupCandidatesHostCells, notesData))
+        hintChunks.push(
+            getSecondaryHouseHintExplaination(
+                secondaryHostHouse.type,
+                groupCandidates,
+                hostCells,
+                removableCandidates,
+                removableGroupCandidatesHostCells,
+                notesData,
+            ),
+        )
     }
 
     const isHiddenDoubles = groupCandidates.length === 2
-    const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(groupCandidates, hostCells, notesData)
+    const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(
+        groupCandidates,
+        hostCells,
+        notesData,
+    )
 
     return {
         hasTryOut: true,
@@ -258,8 +308,13 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
         clickableCells: JSON.parse(JSON.stringify([...hostCells, ...removableGroupCandidatesHostCells])),
-        cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(removableGroupCandidatesHostCells, groupCandidates, notesData),
-        restrictedNumberInputMsg: 'input the numbers which are highlighted in red color in this cell. other numbers don\'t help in learning this hint.',
+        cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(
+            removableGroupCandidatesHostCells,
+            groupCandidates,
+            notesData,
+        ),
+        restrictedNumberInputMsg:
+            "input the numbers which are highlighted in red color in this cell. other numbers don't help in learning this hint.",
     }
 }
 

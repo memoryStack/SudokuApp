@@ -13,7 +13,6 @@ const DIAGONAL_CELLS_COLORS = {
     FINN: 'rgb(255, 245, 187)',
 }
 
-
 const HOUSE_ORDER_KEYS = {
     FIRST: 'first',
     SECOND: 'second',

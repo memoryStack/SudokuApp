@@ -43,14 +43,14 @@ export const getTryOutNotes = state => {
     return state.smartHintHC.tryOut.notesInfo
 }
 
-export const getTryOutClickableCells = (state) => {
+export const getTryOutClickableCells = state => {
     return state.smartHintHC.hints[0].clickableCells || []
 }
 
-export const getTryOutCellsRestrictedNumberInputs = (state) => {
+export const getTryOutCellsRestrictedNumberInputs = state => {
     return state.smartHintHC.hints[0].cellsRestrictedNumberInputs || []
 }
 
-export const getTryOutCellsRestrictedNumberInputsMsg = (state) => {
+export const getTryOutCellsRestrictedNumberInputsMsg = state => {
     return state.smartHintHC.hints[0].restrictedNumberInputMsg || 'oh!, something unexpected happen'
 }

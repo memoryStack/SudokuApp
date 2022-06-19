@@ -1,6 +1,10 @@
 import { getStoreState } from '../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../store/selectors/board.selectors'
-import { getTryOutMainNumbers, getTryOutSelectedCell, getTryOutClickableCells } from '../store/selectors/smartHintHC.selectors'
+import {
+    getTryOutMainNumbers,
+    getTryOutSelectedCell,
+    getTryOutClickableCells,
+} from '../store/selectors/smartHintHC.selectors'
 import { isCellEmpty, isCellExists } from '../utils/util'
 
 export const cellHasTryOutInput = cell => {
@@ -10,7 +14,7 @@ export const cellHasTryOutInput = cell => {
     return isCellEmpty(selectedCell, actualMainNumbers) && !isCellEmpty(selectedCell, tryOutMainNumbers)
 }
 
-export const isCellTryOutClickable = (cell) => {
+export const isCellTryOutClickable = cell => {
     const clickableCells = getTryOutClickableCells(getStoreState())
     if (clickableCells.length === 0) return true
     return isCellExists(cell, clickableCells)

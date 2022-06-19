@@ -16,7 +16,13 @@ import {
 } from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
-import { getTryOutCellsRestrictedNumberInputs, getTryOutCellsRestrictedNumberInputsMsg, getTryOutMainNumbers, getTryOutNotes, getTryOutSelectedCell } from '../selectors/smartHintHC.selectors'
+import {
+    getTryOutCellsRestrictedNumberInputs,
+    getTryOutCellsRestrictedNumberInputsMsg,
+    getTryOutMainNumbers,
+    getTryOutNotes,
+    getTryOutSelectedCell,
+} from '../selectors/smartHintHC.selectors'
 
 const {
     removeHints,
@@ -131,7 +137,7 @@ const isValidInputNumberClick = number => {
     )
 }
 
-const isRestrictedInputClick = (inputNumber) => {
+const isRestrictedInputClick = inputNumber => {
     const cellsRestrictedNumberInputs = getTryOutCellsRestrictedNumberInputs(getStoreState())
     const selectedCell = getTryOutSelectedCell(getStoreState())
     const selectedCellAxesValue = getCellAxesValues(selectedCell)

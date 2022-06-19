@@ -12,7 +12,7 @@ import {
 } from './util'
 import { isHintValid } from './validityTest'
 
-// TODO: fix this parsing issue. at a lot of places we are 
+// TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
 const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
     const isNakedDoubles = groupCandidates.length === 2
@@ -295,7 +295,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 })
                 if (isValidNakedGroup) {
                     consoleLog('@@@@ naked group', selectedBoxes, groupCandidates)
-                    const groupCandidatesInInt = groupCandidates.map((groupCandidate) => parseInt(groupCandidate, 10))
+                    const groupCandidatesInInt = groupCandidates.map(groupCandidate => parseInt(groupCandidate, 10))
                     hints.push(
                         prepareNakedDublesOrTriplesHintData(
                             noOfInstances,
