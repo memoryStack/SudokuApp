@@ -20,7 +20,6 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells, removableCa
         }
     }
 
-    // HOUSE_TYPE_VS_FULL_NAMES
     const primaryHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME
     if (removableGroupCandidatesFilledHostCells(removableGroupCandidatesHostCells).length) {
         const filledCellsWithNumbers = getRemovableGroupCandidatesFilledCellsWithNumbers(removableGroupCandidatesHostCells)
@@ -59,17 +58,26 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells, removableCa
         }
     }
 
-    // const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    // const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
-    // if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-    //     // return getAllInputsFilledResult(groupCandidates)
-    // } else {
-    //     const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
-    //     // return getPartialCorrectlyFilledResult(candidatesToBeFilled)
-    // }
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
+    let progressMsg = ''
+    if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
+        const candidatesListText = getCandidatesListText(groupCandidates)
+        const groupCellsAxesListText = getCellsAxesValuesListText(groupCells)
+        progressMsg = `${candidatesListText} are filled in ${groupCellsAxesListText} cells without any`
+            + ` error. so only ${candidatesListText} highlighted in green color stays`
+            + ` and other red highlighted numbers can be removed.`
+    } else {
+        const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, [...groupCandidates, ...removableCandidates])
+        const candidatesListText = getCandidatesListText(candidatesToBeFilled)
+        const pluralCandidatesToBeFilled = candidatesToBeFilled.length > 1
+        progressMsg = `try filling ${candidatesListText} as well where ${pluralCandidatesToBeFilled ? 'these' : 'this'}`
+            + ` ${pluralCandidatesToBeFilled ? 'are' : 'is'} highlighted to find out in which cells ${candidatesListText}`
+            + ` can and can't come.`
+    }
 
     return {
-        msg: 'LOGIC COMING SOON',
+        msg: progressMsg,
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

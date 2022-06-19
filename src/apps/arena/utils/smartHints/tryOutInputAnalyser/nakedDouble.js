@@ -46,7 +46,7 @@ const getAllInputsFilledResult = groupCandidates => {
 const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
     const candidatesList = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
     return {
-        msg: `fill ${candidatesList} as well to find where` + ` these numbers can't come in the highlighted region.`,
+        msg: `fill ${candidatesList} as well to find where these numbers can't come in the highlighted region.`,
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }
