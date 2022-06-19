@@ -140,7 +140,6 @@ export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) 
     return result
 }
 
-// TODO: fix this parsing issue from the nakedGroups
 export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
     return groupCandidates
         .map(candidate => {
