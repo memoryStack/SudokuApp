@@ -11,5 +11,7 @@ export const cellHasTryOutInput = cell => {
 }
 
 export const isCellTryOutClickable = (cell) => {
-    return isCellExists(cell, getTryOutClickableCells(getStoreState()))
+    const clickableCells = getTryOutClickableCells(getStoreState())
+    if (clickableCells.length === 0) return true
+    return isCellExists(cell, clickableCells)
 }

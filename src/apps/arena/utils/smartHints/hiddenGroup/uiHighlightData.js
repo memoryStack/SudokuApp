@@ -1,9 +1,9 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
+import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
 import { areSameBlockCells, areSameColCells, areSameRowCells, getCellAxesValues, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
-import { HIDDEN_GROUP_TYPE, NUMBER_TO_TEXT } from '../constants'
+import { HIDDEN_GROUP_TYPE } from '../constants'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
@@ -11,7 +11,7 @@ import {
     removeDuplicteCells,
     getCandidatesListText,
 } from '../util'
-import { getCellsAxesList, getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
+import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
