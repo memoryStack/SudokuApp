@@ -12,6 +12,8 @@ import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
 import { getCandidatesListText } from '../util'
 import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 
+// TODO: this is running overly
+// use early return
 export const noInputInTryOut = focusedCells => {
     const actualMainNumbers = getMainNumbers(getStoreState())
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
@@ -135,6 +137,8 @@ export const getTryOutErrorResult = errorType => {
     }
 }
 
+// NOTE: run it only when we are sure that there is no cell
+// which is filled wrongly in the try-out step
 export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
     const result = []
     groupCells.forEach(cell => {
@@ -145,6 +149,7 @@ export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) 
     return result
 }
 
+// TODO: fix this parsing issue from the nakedGroups
 export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
     return groupCandidates
         .map(candidate => {

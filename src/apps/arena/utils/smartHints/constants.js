@@ -119,6 +119,17 @@ const HINT_TEXT_CANDIDATES_JOIN_CONJUGATION = {
     OR: 'or',
 }
 
+const HOUSE_TYPE_VS_FULL_NAMES = {
+    [HOUSE_TYPE.ROW]: {
+        FULL_NAME: 'row',
+        FULL_NAME_PLURAL: 'rows',
+    },
+    [HOUSE_TYPE.COL]: {
+        FULL_NAME: 'column',
+        FULL_NAME_PLURAL: 'columns',
+    },
+}
+
 export {
     NAKED_SINGLE_TYPES,
     HIDDEN_SINGLE_TYPES,
@@ -133,4 +144,5 @@ export {
     NO_HINTS_FOUND_POPUP_TEXT,
     UI_HINTS_COUNT_THRESHOLD,
     HINT_TEXT_CANDIDATES_JOIN_CONJUGATION,
+    HOUSE_TYPE_VS_FULL_NAMES,
 }

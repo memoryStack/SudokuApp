@@ -13,17 +13,6 @@ const DIAGONAL_CELLS_COLORS = {
     FINN: 'rgb(255, 245, 187)',
 }
 
-// export it to constants
-const HOUSE_TYPE_VOCABOLARY = {
-    [HOUSE_TYPE.ROW]: {
-        FULL_NAME: 'row',
-        FULL_NAME_PLURAL: 'rows',
-    },
-    [HOUSE_TYPE.COL]: {
-        FULL_NAME: 'column',
-        FULL_NAME_PLURAL: 'columns',
-    },
-}
 
 const HOUSE_ORDER_KEYS = {
     FIRST: 'first',
