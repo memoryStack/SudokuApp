@@ -1,6 +1,6 @@
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selectors'
-import { isCellEmpty } from '../../util'
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
+import { isCellEmpty, isCellNoteVisible } from '../../util'
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { getCandidatesListText } from '../util'
 import { TRY_OUT_RESULT_STATES } from './constants'
@@ -84,15 +84,18 @@ const someGroupCellWronglyFilled = (groupCells, groupCandidates) => {
 }
 
 const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse) => {
-    const emptyGroupCells = getEmptyGroupCells(groupCells)
-    const groupCandidatesToBeFilled = getGroupCandidatesToBeFilled(groupCells, groupCandidates)
-    const candidatesListText = getCandidatesListText(groupCandidatesToBeFilled)
-    const primaryHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME
     let errorMsg
-    if (emptyGroupCells.length === 0) {
+    const primaryHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME
+    const groupCandidatesToBeFilled = getGroupCandidatesToBeFilled(groupCells, groupCandidates)
+
+    const groupCandidatesToBeFilledWithoutHostCells = getGroupCandidatesToBeFilledWithoutHostCells(groupCandidatesToBeFilled, groupCells)
+    if (groupCandidatesToBeFilledWithoutHostCells.length !== 0) {
+        const candidatesListText = getCandidatesListText(groupCandidatesToBeFilledWithoutHostCells)
         errorMsg = `in the highlighted ${primaryHouseFullName}, there is no cell where ${candidatesListText} can come.`
-            + ` try different numbers to fill the cells.`
     } else {
+        const emptyGroupCells = getEmptyGroupCells(groupCells)
+
+        const candidatesListText = getCandidatesListText(groupCandidatesToBeFilled)
         const emptyCellsAxesListText = getCellsAxesValuesListText(emptyGroupCells)
         const candidatesCountWithoutCells = groupCandidatesToBeFilled.length - emptyGroupCells.length
         errorMsg = `${groupCandidatesToBeFilled.length} numbers ${candidatesListText} need to be filled`
@@ -106,6 +109,15 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
         msg: errorMsg,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
+}
+
+const getGroupCandidatesToBeFilledWithoutHostCells = (groupCandidatesToBeFilled, groupCells) => {
+    const tryOutNotes = getTryOutNotes(getStoreState())
+    return groupCandidatesToBeFilled.filter((groupCandidate) => {
+        return !groupCells.some((cell) => {
+            return isCellNoteVisible(groupCandidate, tryOutNotes[cell.row][cell.col])
+        })
+    })
 }
 
 const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableCandidates) => {
