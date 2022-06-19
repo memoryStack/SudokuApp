@@ -9,7 +9,7 @@ import {
     getCandidatesToBeFilled,
 } from './helpers'
 import { getCandidatesListText } from '../util'
-import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../constants'
 
 const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     if (noInputInTryOut(focusedCells)) {
@@ -32,7 +32,7 @@ const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
 }
 
 const getAllInputsFilledResult = groupCandidates => {
-    const candidatesList = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const candidatesList = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     return {
         msg:
             `${candidatesList} are filled in` +
@@ -44,7 +44,7 @@ const getAllInputsFilledResult = groupCandidates => {
 }
 
 const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
-    const candidatesList = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const candidatesList = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     return {
         msg: `fill ${candidatesList} as well to find where these numbers can't come in the highlighted region.`,
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,

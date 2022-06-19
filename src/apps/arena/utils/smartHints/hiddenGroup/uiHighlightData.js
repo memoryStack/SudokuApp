@@ -1,5 +1,5 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
-import { HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
 import { areSameBlockCells, areSameColCells, areSameRowCells, getCellAxesValues, isCellEmpty, isCellExists, isCellNoteVisible } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'

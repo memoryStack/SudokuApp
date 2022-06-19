@@ -1,7 +1,7 @@
 import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, getCellVisibleNotesCount } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
-import { GROUPS, HINTS_IDS, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
+import { GROUPS, HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import {
     maxHintsLimitReached,
     setCellDataInHintResult,
@@ -16,7 +16,7 @@ const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, ce
     const isNakedDoubles = groupCandidates.length === 2
 
     // TODO: explore if we can use the below array for naked double and naked tripple as well in same way
-    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     const hintChunks = [
         `A Naked Tripple is a set of three candidates filled in three cells that are part of same row, column or box.\nNote: these three cells collectively can't have more than 3 different candidates`,
         `${candidatesListText} make a naked tripple in the highlighted region. in the solution ${candidatesListText} will be placed in Naked Tripple cells only and all the candidates of these numbers can be removed from other cells of the highlighted region. ${candidatesListText} will go in exactly which Naked Tripple cell is yet not clear.`,
@@ -85,7 +85,7 @@ const prepareNakedDublesOrTriplesHintData = (
         })
     }
 
-    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     const hintChunks = [
         `A Naked Double is a set of two candidates filled in two cells that are part of same row, column or box.\nNote: these two cells can't have more than 2 different set of candidates`,
         `${candidatesListText} make a naked double in the highlighted region. in the solution ${candidatesListText} will be placed in Naked Double cells only and all the candidates of ${candidatesListText} can be removed from other cells of the highlighted region. ${candidatesListText} will go in exactly which Naked Double cell is yet not clear.`,

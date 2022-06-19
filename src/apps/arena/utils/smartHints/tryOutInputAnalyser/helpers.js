@@ -8,7 +8,7 @@ import {
     getCellVisibleNotes,
     getCellAxesValues,
 } from '../../util'
-import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../constants'
 import { getCandidatesListText } from '../util'
 import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 
@@ -64,7 +64,7 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCell
 const getEmptyCellsErrorResult = cellsWithNoCandidates => {
     const emptyCellsListText = getCellsAxesValuesListText(
         cellsWithNoCandidates,
-        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
     return {
         msg:
@@ -79,7 +79,7 @@ const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandida
     const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
     const emptyCellsListText = getCellsAxesValuesListText(
         firstCandidateHostCells,
-        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
     const pluralRestOfCells = firstCandidateHostCells.length > 2
 
@@ -121,7 +121,7 @@ export const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
 }
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
-    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.OR)
+    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
     return {
         msg:
             `try filling ${candidatesListText} in the cells where` +

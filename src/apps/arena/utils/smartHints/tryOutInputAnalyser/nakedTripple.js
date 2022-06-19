@@ -15,7 +15,7 @@ import {
 } from './helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { getCandidatesListText } from '../util'
-import { HINT_TEXT_CANDIDATES_JOIN_CONJUGATION } from '../constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../constants'
 import { isNakedSinglePresent } from '../nakedSingle/nakedSingle'
 
 export default ({ groupCandidates, focusedCells, groupCells }) => {
@@ -105,15 +105,15 @@ const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
 
     const notesListWithAndConjugation = getNotesListTextFromCellsWithNotes(
         chosenCellWithNote,
-        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
     const notesListWithORConjugation = getNotesListTextFromCellsWithNotes(
         chosenCellWithNote,
-        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.OR,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
     )
     const chosenCellsAxesText = getCellsAxesValuesListText(
         getCellsFromCellsWithNote(chosenCellWithNote),
-        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
 
     return {
@@ -178,11 +178,11 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
             notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
     }
 
-    const chosenCellsAxesText = getCellsAxesValuesListText(chosenCells, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
-    const chosenCellsCandidatesList = getCandidatesListText(aChosenCellNotes, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const chosenCellsAxesText = getCellsAxesValuesListText(chosenCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+    const chosenCellsCandidatesList = getCandidatesListText(aChosenCellNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     const notChosenCellCandidatesListText = getCandidatesListText(
         notChosenCellNotes,
-        HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
     const resultMsg = isThirdCellHasNakedSingle
         ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this` +
@@ -211,7 +211,7 @@ const getValidProgressResult = (groupCandidates, groupCells) => {
 
 // TODO: check if we can re-use these below funcs or not for naked double as well
 const getAllInputsFilledResult = groupCandidates => {
-    const filledCandidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const filledCandidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     return {
         msg:
             `${filledCandidatesListText} are filled in` +
@@ -222,7 +222,7 @@ const getAllInputsFilledResult = groupCandidates => {
 }
 
 const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
-    const candidatesListText = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_CANDIDATES_JOIN_CONJUGATION.AND)
+    const candidatesListText = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     return {
         msg:
             `fill ${candidatesListText} as well` + ` to find where these numbers can't come in the highlighted region.`,
