@@ -12,24 +12,15 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../constants'
 import { getCandidatesListText } from '../util'
 import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 
-// TODO: this is running overly
-// use early return
 export const noInputInTryOut = focusedCells => {
     const actualMainNumbers = getMainNumbers(getStoreState())
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
 
-    const result = []
-    focusedCells.forEach(cell => {
-        const isCellFilledInTryOut = isCellEmpty(cell, actualMainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
-        if (isCellFilledInTryOut) {
-            result.push({
-                cell,
-                number: tryOutMainNumbers[cell.row][cell.col].value,
-            })
-        }
+    const someCellsFilledInTryOut = focusedCells.some(cell => {
+        return isCellEmpty(cell, actualMainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
     })
 
-    return result.length === 0
+    return !someCellsFilledInTryOut
 }
 
 // this will be removed in future most likely
