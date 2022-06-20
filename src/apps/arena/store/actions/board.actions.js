@@ -224,15 +224,13 @@ export const eraseAction = () => {
 export const initPossibleNotes = mainNumbers => {
     setTimeout(() => {
         const notes = initNotes()
-        // BOARD_LOOPER: 7
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
-                const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)
-                cellNotes.forEach(({ note }) => {
-                    notes[row][col][note - 1].show = 1
-                })
-            }
-        }
+
+        forBoardEachCell(({ row, col }) => {
+            const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)
+            cellNotes.forEach(({ note }) => {
+                notes[row][col][note - 1].show = 1
+            })
+        })
 
         invokeDispatch(setPossibleNotes(notes))
     })
