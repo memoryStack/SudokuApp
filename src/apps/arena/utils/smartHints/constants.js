@@ -90,7 +90,7 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
     {
         label: 'Y-Wing',
         id: HINTS_IDS.Y_WING,
-    }
+    },
 ]
 
 const HINTS_MENU_ITEMS = [

@@ -51,11 +51,10 @@ const getUICellsToFocusData = (omission, notesData) => {
 }
 
 export const getHouseNoteHostCells = (note, house, notes) => {
-    return getHouseCells(house.type, house.num)
-        .filter((cell) => {
-            const cellNotes = notes[cell.row][cell.col]
-            return isCellNoteVisible(note, cellNotes)
-        })
+    return getHouseCells(house.type, house.num).filter(cell => {
+        const cellNotes = notes[cell.row][cell.col]
+        return isCellNoteVisible(note, cellNotes)
+    })
 }
 
 // extract it out if this func is needed
@@ -63,20 +62,27 @@ export const getHouseNoteHostCells = (note, house, notes) => {
 const getHintExplaination = (omission, notes) => {
     const { hostHouse, removableNotesHostHouse, note } = omission
     const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
-    const removableNotesHostCells = getHouseNoteHostCells(note, removableNotesHostHouse, notes)
-        .filter((cell) => {
-            return !isCellExists(cell, hostHouseHostCells)
-        })
+    const removableNotesHostCells = getHouseNoteHostCells(note, removableNotesHostHouse, notes).filter(cell => {
+        return !isCellExists(cell, hostHouseHostCells)
+    })
 
-    const hostHouseHostCellsListText = getCellsAxesValuesListText(hostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
-    const hostHouseHostCellsListTextOrJoined = getCellsAxesValuesListText(hostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
+    const hostHouseHostCellsListText = getCellsAxesValuesListText(
+        hostHouseHostCells,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+    )
+    const hostHouseHostCellsListTextOrJoined = getCellsAxesValuesListText(
+        hostHouseHostCells,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
+    )
     const removableNotesHostCellsListText = getCellsAxesValuesListText(removableNotesHostCells)
     const hostHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME
     const removableNotesHostHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME
-    return `In the highlighted ${hostHouseFullName}, ${note} is present`
-        + ` only in ${hostHouseHostCellsListText} and these cells are also part of the`
-        + ` highlighted ${removableNotesHostHouseFullName}. so ${note} in ${removableNotesHostCellsListText}`
-        + ` will be removed when it will be filled in the ${hostHouseFullName} in one of ${hostHouseHostCellsListTextOrJoined}.`
+    return (
+        `In the highlighted ${hostHouseFullName}, ${note} is present` +
+        ` only in ${hostHouseHostCellsListText} and these cells are also part of the` +
+        ` highlighted ${removableNotesHostHouseFullName}. so ${note} in ${removableNotesHostCellsListText}` +
+        ` will be removed when it will be filled in the ${hostHouseFullName} in one of ${hostHouseHostCellsListTextOrJoined}.`
+    )
 }
 
 export const getUIHighlightData = (omission, notesData) => {
