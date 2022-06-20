@@ -1,7 +1,7 @@
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { initMainNumbers, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
-import { areSameCells, duplicatesInPuzzle, isDuplicateEntry } from '../utils/util'
+import { areSameCells, duplicatesInPuzzle, forBoardEachCell, isDuplicateEntry } from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
@@ -142,12 +142,9 @@ const handleCellClick = ({ setState, getState, params: cell }) => {
 
 const getCluesCount = mainNumbers => {
     let cluesCount = 0
-    // BOARD_LOOPER: 5
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            if (mainNumbers[row][col].value) cluesCount++
-        }
-    }
+    forBoardEachCell(({ row, col }) => {
+        if (mainNumbers[row][col].value) cluesCount++
+    })
     return cluesCount
 }
 
