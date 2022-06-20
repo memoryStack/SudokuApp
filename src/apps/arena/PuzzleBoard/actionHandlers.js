@@ -4,6 +4,7 @@ import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionT
 import { updateGameState } from '../store/actions/gameState.actions'
 import { GAME_STATE } from '../../../resources/constants'
 import { resetStoreState } from '../store/actions/board.actions'
+import { forBoardEachCell } from '../utils/util'
 
 const handleCellPress = ({ params: cell }) => {
     // TODO: some improvements can be done here like
@@ -14,14 +15,13 @@ const handleCellPress = ({ params: cell }) => {
 
 const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
     let correctlyFilledCells = 0
-    // BOARD_LOOPER: 3
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            const cellMainNumber = mainNumbers[row][col]
-            if (cellMainNumber.solutionValue && cellMainNumber.solutionValue === cellMainNumber.value)
-                correctlyFilledCells++
-        }
-    }
+
+    forBoardEachCell(({ row, col }) => {
+        const cellMainNumber = mainNumbers[row][col]
+        if (cellMainNumber.solutionValue && cellMainNumber.solutionValue === cellMainNumber.value)
+            correctlyFilledCells++
+    })
+
     if (correctlyFilledCells === 81) updateGameState(GAME_STATE.OVER.SOLVED)
 }
 
