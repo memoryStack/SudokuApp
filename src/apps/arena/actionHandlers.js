@@ -9,7 +9,7 @@ import {
     PENCIL_STATE,
 } from '../../resources/constants'
 import { emit } from '../../utils/GlobalEventBus'
-import { duplicatesInPuzzle, getNumberOfSolutions, initNotes } from './utils/util'
+import { duplicatesInPuzzle, forBoardEachCell, getNumberOfSolutions, initNotes } from './utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '../../utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
@@ -239,14 +239,11 @@ const handleCustomPuzzleHCClose = ({ setState }) => {
 const handleSharePuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
-    // BOARD_LOOPER: 4
     let puzzleString = ''
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            const num = mainNumbers[row][col].isClue ? mainNumbers[row][col].value : 0
-            puzzleString = `${puzzleString}${num}`
-        }
-    }
+    forBoardEachCell(({ row, col }) => {
+        const num = mainNumbers[row][col].isClue ? mainNumbers[row][col].value : 0
+        puzzleString = `${puzzleString}${num}`
+    })
 
     const options = {
         message: 'Solve This Sudoku Challenge',
@@ -314,7 +311,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
