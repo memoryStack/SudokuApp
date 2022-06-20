@@ -58,20 +58,17 @@ export const fastPencilAction = () => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
 
-    // BOARD_LOOPER: 6
     const bunch = []
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            if (!mainNumbers[row][col].value) {
-                for (let num = 1; num <= 9; num++) {
-                    const { show } = notesInfo[row][col][num - 1]
-                    if (!show && !duplicacyPresent(num, mainNumbers, { row, col })) {
-                        bunch.push({ cell: { row, col }, note: num })
-                    }
+    forBoardEachCell(({ row, col }) => {
+        if (!mainNumbers[row][col].value) {
+            for (let num = 1; num <= 9; num++) {
+                const { show } = notesInfo[row][col][num - 1]
+                if (!show && !duplicacyPresent(num, mainNumbers, { row, col })) {
+                    bunch.push({ cell: { row, col }, note: num })
                 }
             }
         }
-    }
+    })
 
     if (!bunch.length) return
 
