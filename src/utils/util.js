@@ -3,6 +3,8 @@
  * these should be there not in global utils
  */
 
+import { forBoardEachCell } from "../apps/arena/utils/util"
+
 let sudokuSolution
 let highlightedSinglesInfo = []
 const notesInstancesPlacesInfo = {}
@@ -705,26 +707,23 @@ export const generateNewSudokuPuzzle = async (clues, originalSudokuBoard) => {
     initializeDuplicacyCheckerStore()
 
     // TODO: do some research if below piece of code can be optimized or not
-    // BOARD_LOOPER: 20
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            const numChoices = []
-            for (let num = 1; num <= 9; num++) numChoices.push(num)
-            while (!sudokuBoard[row][col].value) {
-                let numIndex = Math.floor(Math.random() * numChoices.length)
-                let numToFill = numChoices[numIndex]
-                numChoices.splice(numIndex, 1)
-                const cell = { row, col }
-                if (duplicacyPresent(numToFill, cell)) continue
-                sudokuBoard[row][col].value = numToFill
+    forBoardEachCell(({ row, col }) => {
+        const numChoices = []
+        for (let num = 1; num <= 9; num++) numChoices.push(num)
+        while (!sudokuBoard[row][col].value) {
+            let numIndex = Math.floor(Math.random() * numChoices.length)
+            let numToFill = numChoices[numIndex]
+            numChoices.splice(numIndex, 1)
+            const cell = { row, col }
+            if (duplicacyPresent(numToFill, cell)) continue
+            sudokuBoard[row][col].value = numToFill
+            updateDuplicacyCheckerStore(cell, numToFill)
+            if (!recursionForSolvedGridGen({ row: 0, col: 0 })) {
+                sudokuBoard[row][col].value = 0
                 updateDuplicacyCheckerStore(cell, numToFill)
-                if (!recursionForSolvedGridGen({ row: 0, col: 0 })) {
-                    sudokuBoard[row][col].value = 0
-                    updateDuplicacyCheckerStore(cell, numToFill)
-                }
             }
         }
-    }
+    })
 
     // just write loops with {} body to avoid the prettier issue
     // fully solved puzzle is ready and store the solution at this point
