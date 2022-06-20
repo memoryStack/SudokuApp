@@ -64,6 +64,10 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
         id: HINTS_IDS.HIDDEN_SINGLE,
     },
     {
+        label: 'Omission',
+        id: HINTS_IDS.OMISSION,
+    },
+    {
         label: 'Naked\nDouble',
         id: HINTS_IDS.NAKED_DOUBLE,
     },
@@ -86,11 +90,7 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
     {
         label: 'Y-Wing',
         id: HINTS_IDS.Y_WING,
-    },
-    {
-        label: 'Omission',
-        id: HINTS_IDS.OMISSION,
-    },
+    }
 ]
 
 const HINTS_MENU_ITEMS = [
