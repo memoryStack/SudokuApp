@@ -1,6 +1,7 @@
 import { getHouseCells } from '../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../util'
-import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { setCellDataInHintResult } from '../util'
 
 const COLORS = {
@@ -59,22 +60,29 @@ export const getHouseNoteHostCells = (note, house, notes) => {
 
 // extract it out if this func is needed
 // at other places as well
-const getHintExplaination = omission => {
+const getHintExplaination = (omission, notes) => {
     const { hostHouse, removableNotesHostHouse, note } = omission
-    // hostHouse
-    // removableNotesHostHouse
-    // hostCells
-    // removableNotesHostCells
+    const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
+    const removableNotesHostCells = getHouseNoteHostCells(note, removableNotesHostHouse, notes)
+        .filter((cell) => {
+            return !isCellExists(cell, hostHouseHostCells)
+        })
 
-
-
-    return `In the highlight ${hostHouse.type}, ${note} can appear in one of the cells where it's highlighted in green. because of this we can remove ${note} highlighted in red color in the highlighted ${removableNotesHostHouse.type}`
+    const hostHouseHostCellsListText = getCellsAxesValuesListText(hostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+    const hostHouseHostCellsListTextOrJoined = getCellsAxesValuesListText(hostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
+    const removableNotesHostCellsListText = getCellsAxesValuesListText(removableNotesHostCells)
+    const hostHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME
+    const removableNotesHostHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME
+    return `In the highlighted ${hostHouseFullName}, ${note} is present`
+        + ` only in ${hostHouseHostCellsListText} and these cells are also part of the`
+        + ` highlighted ${removableNotesHostHouseFullName}. so ${note} in ${removableNotesHostCellsListText}`
+        + ` will be removed when it will be filled in the ${hostHouseFullName} in one of ${hostHouseHostCellsListTextOrJoined}.`
 }
 
 export const getUIHighlightData = (omission, notesData) => {
     return {
         cellsToFocusData: getUICellsToFocusData(omission, notesData),
         title: 'Omission',
-        steps: [{ text: getHintExplaination(omission) }],
+        steps: [{ text: getHintExplaination(omission, notesData) }],
     }
 }
