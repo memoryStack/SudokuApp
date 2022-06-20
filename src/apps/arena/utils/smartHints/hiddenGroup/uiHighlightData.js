@@ -1,4 +1,5 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
+import cloneDeep from '../../../../../utils/utilities/cloneDeep'
 import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
 import {
     areSameBlockCells,
@@ -307,7 +308,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
             primaryHouse: group.house,
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
-        clickableCells: JSON.parse(JSON.stringify([...hostCells, ...removableGroupCandidatesHostCells])),
+        clickableCells: cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
         cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(
             removableGroupCandidatesHostCells,
             groupCandidates,

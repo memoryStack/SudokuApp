@@ -802,11 +802,6 @@ function noWhiteSpace(strings, ...placeholders) {
     return withoutSpace
 }
 
-// TODO: update this func to make it efficient
-export const getClonedValue = data => {
-    return JSON.parse(JSON.stringify(data))
-}
-
 export const onlyUnique = (value, index, self) => {
     return self.indexOf(value) === index
 }

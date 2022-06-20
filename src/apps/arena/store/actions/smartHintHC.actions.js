@@ -1,7 +1,8 @@
 import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { emit } from '../../../../utils/GlobalEventBus'
-import { consoleLog, getClonedValue } from '../../../../utils/util'
+import { consoleLog } from '../../../../utils/util'
+import cloneDeep from '../../../../utils/utilities/cloneDeep'
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
 import { getSmartHint } from '../../utils/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
@@ -52,8 +53,8 @@ export const showHints = async hintId => {
             if (hints) {
                 const hasTryOut = hints[0].hasTryOut
                 const hintsData = {
-                    mainNumbers: hasTryOut ? getClonedValue(mainNumbers) : null,
-                    notesInfo: hasTryOut ? getClonedValue(notesInfo) : null,
+                    mainNumbers: hasTryOut ? cloneDeep(mainNumbers) : null,
+                    notesInfo: hasTryOut ? cloneDeep(notesInfo) : null,
                     hints,
                 }
                 invokeDispatch(setHints(hintsData))
@@ -201,7 +202,8 @@ const getNotesToEnterHostCells = focusedCells => {
     const numberToBeErased = tryOutMainNumbers[selectedCell.row][selectedCell.col].value
 
     // TODO: make it efficient
-    const mainNumbersStateAfterErase = JSON.parse(JSON.stringify(tryOutMainNumbers))
+
+    const mainNumbersStateAfterErase = cloneDeep(tryOutMainNumbers)
     mainNumbersStateAfterErase[selectedCell.row][selectedCell.col].value = 0
 
     const result = []

@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^1.8.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "fast-sudoku-puzzles": "https://memoryStack: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@github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
+    "lodash": "^4.17.21",
     "prettier": "^2.4.1",
     "react": "17.0.1",
     "react-native": "0.64.0",

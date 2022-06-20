@@ -1,4 +1,5 @@
 import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
+import cloneDeep from '../../../../../utils/utilities/cloneDeep'
 import { getHouseCells } from '../../houseCells'
 import {
     areSameBlockCells,
@@ -258,8 +259,8 @@ const getValidSashimiXWingSashimiLeg = (legA, legB, houseType) => {
 
 export const transformSashimiXWingLeg = (legA, legB, houseType) => {
     // TODO:figure out the efficient way to clone the object
-    const firstLeg = JSON.parse(JSON.stringify(legA))
-    const secondLeg = JSON.parse(JSON.stringify(legB))
+    const firstLeg = cloneDeep(legA)
+    const secondLeg = cloneDeep(legB)
 
     const sashimiLeg = getValidSashimiXWingSashimiLeg(firstLeg, secondLeg, houseType)
     sashimiLeg.type = LEG_TYPES.SASHIMI_FINNED
