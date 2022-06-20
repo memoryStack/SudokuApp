@@ -49,8 +49,25 @@ const getUICellsToFocusData = (omission, notesData) => {
     return cellsToFocusData
 }
 
+export const getHouseNoteHostCells = (note, house, notes) => {
+    return getHouseCells(house.type, house.num)
+        .filter((cell) => {
+            const cellNotes = notes[cell.row][cell.col]
+            return isCellNoteVisible(note, cellNotes)
+        })
+}
+
+// extract it out if this func is needed
+// at other places as well
 const getHintExplaination = omission => {
     const { hostHouse, removableNotesHostHouse, note } = omission
+    // hostHouse
+    // removableNotesHostHouse
+    // hostCells
+    // removableNotesHostCells
+
+
+
     return `In the highlight ${hostHouse.type}, ${note} can appear in one of the cells where it's highlighted in green. because of this we can remove ${note} highlighted in red color in the highlighted ${removableNotesHostHouse.type}`
 }
 
