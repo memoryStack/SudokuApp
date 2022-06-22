@@ -10,6 +10,7 @@ import {
     getCellVisibleNotes,
     getCellVisibleNotesCount,
     areSameCellsSets,
+    forBoardEachCell,
 } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
@@ -34,18 +35,15 @@ export const isValidYWingCell = (userInputNotes, allPossibleNotes) => {
 export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
     const possibleNotes = getPossibleNotes(getStoreState())
 
-    // BOARD_LOOPER: 10
     const result = []
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            if (!isCellEmpty({ row, col }, mainNumbers)) continue
-            const cellUserInputNotes = userInputNotes[row][col]
-            const cellAllPossibleNotes = possibleNotes[row][col]
-            if (isValidYWingCell(cellUserInputNotes, cellAllPossibleNotes)) {
-                result.push({ cell: { row, col }, notes: getCellVisibleNotes(cellUserInputNotes) })
-            }
+    forBoardEachCell(({ row, col }) => {
+        if (!isCellEmpty({ row, col }, mainNumbers)) return
+        const cellUserInputNotes = userInputNotes[row][col]
+        const cellAllPossibleNotes = possibleNotes[row][col]
+        if (isValidYWingCell(cellUserInputNotes, cellAllPossibleNotes)) {
+            result.push({ cell: { row, col }, notes: getCellVisibleNotes(cellUserInputNotes) })
         }
-    }
+    })
 
     return result
 }
