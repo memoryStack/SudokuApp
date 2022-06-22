@@ -45,13 +45,10 @@ const checkDuplicateSolutions = (mainNumbers, cell) => {
     const { row, col } = cell
     if (row === 9) {
         if (++numOfSolutions > 1) return
-        // BOARD_LOOPER: 1
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
-                const cellValue = mainNumbers[row][col].value
-                mainNumbers[row][col].solutionValue = cellValue
-            }
-        }
+        forBoardEachCell(({ row, col }) => {
+            const cellValue = mainNumbers[row][col].value
+            mainNumbers[row][col].solutionValue = cellValue
+        })
         return
     }
     if (col === 9) return checkDuplicateSolutions(mainNumbers, { row: row + 1, col: 0 })
@@ -72,13 +69,10 @@ export const getNumberOfSolutions = mainNumbers => {
     numOfSolutions = 0
     checkDuplicateSolutions(mainNumbers, { row: 0, col: 0 })
     if (numOfSolutions === 1) {
-        // BOARD_LOOPER: 11
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
-                mainNumbers[row][col].isClue = mainNumbers[row][col].value !== 0
-                delete mainNumbers[row][col].wronglyPlaced
-            }
-        }
+        forBoardEachCell(({ row, col }) => {
+            mainNumbers[row][col].isClue = mainNumbers[row][col].value !== 0
+            delete mainNumbers[row][col].wronglyPlaced
+        })
     }
     return numOfSolutions
 }
@@ -192,18 +186,16 @@ export const isDuplicateEntry = (mainNumbers, cell, number) => {
 }
 
 export const duplicatesInPuzzle = mainNumbers => {
-    // BOARD_LOOPER: 13
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            if (isCellEmpty({ row, col }, mainNumbers)) continue
-            if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
-                return {
-                    present: true,
-                    cell: { row, col },
-                }
+    forBoardEachCell(({ row, col }) => {
+        if (isCellEmpty({ row, col }, mainNumbers)) return
+        if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
+            return {
+                present: true,
+                cell: { row, col },
             }
         }
-    }
+    })
+
     return { present: false }
 }
 
