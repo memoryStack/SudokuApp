@@ -13,7 +13,7 @@ const usePrevious = value => {
 }
 
 const usePreviousRenderValue = value => {
-    const ref = useRef(null)
+    const ref = useRef()
     useEffect(() => {
         ref.current = value
     }, [value])
