@@ -8,9 +8,11 @@ describe('usePrevious()', () => {
             initialProps: { value: 9 }
         })
 
-        expect(result.current).toBe(undefined)
+        expect(result.current).toBeUndefined()
         rerender({ value: 9 })
-        expect(result.current).toBe(undefined)
+        expect(result.current).toBeUndefined()
+        rerender({ value: 9 })
+        expect(result.current).toBeUndefined()
     })
 
     test('returns 9 when input value is changed from 9 to 10', () => {
