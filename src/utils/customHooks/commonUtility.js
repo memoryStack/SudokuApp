@@ -17,11 +17,10 @@ const usePreviousRenderValue = value => {
     useEffect(() => {
         ref.current = value
     }, [value])
-    // Return previous value (happens before update in useEffect above)
     return ref.current
 }
 
-const useToggle = defaultValue => {
+const useToggle = (defaultValue = false) => {
     const [value, setValue] = useState(defaultValue)
 
     const toggleValue = useCallback(value => {
