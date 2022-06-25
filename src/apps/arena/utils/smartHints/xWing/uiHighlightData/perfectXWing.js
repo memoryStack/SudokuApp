@@ -1,5 +1,5 @@
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
-import { isCellExists } from '../../../util'
+import { isCellExists, isCellNoteVisible } from '../../../util'
 import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData } from '../../util'
 import { getHouseCells } from '../../../houseCells'
 import { getCrossHouseType } from '../utils'
@@ -95,7 +95,14 @@ const getTechniqueExplaination = ({ houseType, candidate }) => {
     return `In the two highlighted ${houseFullName}, number ${candidate} is a possible solution for only two cells. notice that the cells in these ${houseFullName} where ${candidate} can come are present in the same ${crossHouseFullName} as well. this rectangular arrangement of these 4 cells highlighted in ${DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT} and ${DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT} colors make a X-Wing. now only ways ${candidate} can be placed in these two ${houseFullName} correctly are if either ${candidate} comes in both ${DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT} cells or both ${DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT} cells. in these both ways ${candidate} can't be placed in the cells where it is highlighted in red in these two ${crossHouseFullName}. so we can remove these red highlghted notes safely.`
 }
 
-export const getPerfectXWingUIData = ({ legs, houseType }, notesData) => {
+const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => {
+    return focusedCells.filter((cell) => {
+        return !isCellExists(cell, xWingCells) && isCellNoteVisible(candidate, notes[cell.row][cell.col])
+    })
+}
+
+export const getPerfectXWingUIData = (xWing, notesData) => {
+    const { legs, houseType } = xWing
     const candidate = legs[0].candidate
     const cells = legs.map(leg => leg.cells)
 
@@ -106,17 +113,24 @@ export const getPerfectXWingUIData = ({ legs, houseType }, notesData) => {
     highlightHouseCells({ houseType, cells }, cellsToFocusData)
     highlightCrossHouseCells({ houseType, cells, candidate }, notesData, cellsToFocusData)
 
-    const tryOutInputPanelAllowedCandidates = [1]
+    const tryOutInputPanelAllowedCandidates = [candidate]
     const hintChunks = [getTechniqueExplaination({ houseType, candidate })]
+
+    const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
+    const removableNotesHostCells = getRemovableNotesHostCells(xWingCells, candidate, focusedCells, notesData)
     return {
         hasTryOut: true,
         type: HINTS_IDS.PERFECT_X_WING,
         title: 'X-Wing',
         cellsToFocusData,
-        focusedCells: getCellsFromCellsToFocusedData(cellsToFocusData),
+        focusedCells,
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
-        tryOutAnalyserData: {}
+        tryOutAnalyserData: {
+            xWingCells,
+            removableNotesHostCells,
+            xWing,
+        }
     }
 }
 
