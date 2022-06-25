@@ -68,11 +68,7 @@ const filterFilledCells = (removableNotesHostCells) => {
 const getRemovableNoteHostCellFilledResult = (xWing, xWingCells, removableNotesHostCells) => {
     const removableNotesHostCellsFilledCount = filterFilledCells(removableNotesHostCells).length
     if (removableNotesHostCellsFilledCount === 2) {
-        // both houses will be without the candidate
-        return {
-            msg: 'dono hi glt h re budhbuk',
-            state: TRY_OUT_RESULT_STATES.ERROR,
-        }
+        return getBothHouseWithoutCandidateErrorResult(xWing)
     }
 
     const xWingFilledCellsCount = filterFilledCells(xWingCells).length
@@ -88,6 +84,16 @@ const getRemovableNoteHostCellFilledResult = (xWing, xWingCells, removableNotesH
 
     return {
         msg: '1 glti kiya ntkht',
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+const getBothHouseWithoutCandidateErrorResult = (xWing) => {
+    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
+    const candidate = getXWingCandidate(xWing)
+    const houseFullName = HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
+    return {
+        msg: `there is no cell in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} where ${candidate} can come`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
