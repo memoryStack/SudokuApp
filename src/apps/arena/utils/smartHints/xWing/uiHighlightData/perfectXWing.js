@@ -1,6 +1,6 @@
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
 import { isCellExists } from '../../../util'
-import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility } from '../../util'
+import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData } from '../../util'
 import { getHouseCells } from '../../../houseCells'
 import { getCrossHouseType } from '../utils'
 
@@ -113,7 +113,7 @@ export const getPerfectXWingUIData = ({ legs, houseType }, notesData) => {
         type: HINTS_IDS.PERFECT_X_WING,
         title: 'X-Wing',
         cellsToFocusData,
-        focusedCells: [], // TODO: implement this
+        focusedCells: getCellsFromCellsToFocusedData(cellsToFocusData),
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
         tryOutAnalyserData: {}

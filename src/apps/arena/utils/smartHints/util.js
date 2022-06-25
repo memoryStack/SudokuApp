@@ -45,6 +45,19 @@ const removeDuplicteCells = cells => {
     return result
 }
 
+const getCellsFromCellsToFocusedData = (cellsToFocusData) => {
+    const result = []
+    const rows = Object.keys(cellsToFocusData).map((row) => parseInt(row, 10))
+    rows.forEach((row) => {
+        const columns = Object.keys(cellsToFocusData[row]).map((row) => parseInt(row, 10))
+        const rowCells = columns.map((column) => {
+            return { row, col: column }
+        })
+        result.push(...rowCells)
+    })
+    return result
+}
+
 export {
     setCellDataInHintResult,
     maxHintsLimitReached,
@@ -52,4 +65,5 @@ export {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     removeDuplicteCells,
+    getCellsFromCellsToFocusedData,
 }
