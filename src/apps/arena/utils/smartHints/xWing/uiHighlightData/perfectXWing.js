@@ -1,6 +1,6 @@
-import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
 import { isCellExists } from '../../../util'
-import { setCellDataInHintResult } from '../../util'
+import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility } from '../../util'
 import { getHouseCells } from '../../../houseCells'
 import { getCrossHouseType } from '../utils'
 
@@ -106,9 +106,25 @@ export const getPerfectXWingUIData = ({ legs, houseType }, notesData) => {
     highlightHouseCells({ houseType, cells }, cellsToFocusData)
     highlightCrossHouseCells({ houseType, cells, candidate }, notesData, cellsToFocusData)
 
+    const tryOutInputPanelAllowedCandidates = [1]
+    const hintChunks = [getTechniqueExplaination({ houseType, candidate })]
     return {
-        cellsToFocusData,
+        hasTryOut: true,
+        type: HINTS_IDS.PERFECT_X_WING,
         title: 'X-Wing',
-        steps: [{ text: getTechniqueExplaination({ houseType, candidate }) }],
+        cellsToFocusData,
+        focusedCells: [], // TODO: implement this
+        steps: getHintExplanationStepsFromHintChunks(hintChunks),
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
+        tryOutAnalyserData: {}
     }
 }
+
+//     clickableCells: cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
+//         cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(
+//             removableGroupCandidatesHostCells,
+//             groupCandidates,
+//             notesData,
+//         ),
+//             restrictedNumberInputMsg:
+// "input the numbers which are highlighted in red color in this cell. other numbers don't help in learning this hint.",
