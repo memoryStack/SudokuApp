@@ -41,21 +41,18 @@ const getXWingCandidate = (xWing) => {
 }
 
 const getXWingHousesTexts = (houseType, xWingLegs) => {
-    const houseNumKey = houseType === HOUSE_TYPE.ROW ? 'row' : 'col' // TODO: this can be refactored. we have utils for this
-    const houseANum = xWingLegs[0].cells[0][houseNumKey]
-    const houseBNum = xWingLegs[1].cells[0][houseNumKey]
-    const houseAAxesValue = getHouseAxesValue({ type: houseType, num: houseANum })
-    const houseBAxesValue = getHouseAxesValue({ type: houseType, num: houseBNum })
-
-    if (houseType === HOUSE_TYPE.COL) {
-        return {
-            houseAAxesValue: toOrdinal(parseInt(houseAAxesValue, 10)),
-            houseBAxesValue: toOrdinal(parseInt(houseBAxesValue, 10)),
-        }
-    }
+    const { houseANum, houseBNum, } = getXWingHousesNums(houseType, xWingLegs)
     return {
-        houseAAxesValue,
-        houseBAxesValue,
+        houseAAxesValue: getHouseAxesText({ type: houseType, num: houseANum }),
+        houseBAxesValue: getHouseAxesText({ type: houseType, num: houseBNum }),
+    }
+}
+
+const getXWingHousesNums = (houseType, xWingLegs) => {
+    const houseInfoGetterHandler = houseType === HOUSE_TYPE.ROW ? getCellRowHouseInfo : getCellColHouseInfo
+    return {
+        houseANum: houseInfoGetterHandler(xWingLegs[0].cells[0]).num,
+        houseBNum: houseInfoGetterHandler(xWingLegs[1].cells[0]).num,
     }
 }
 
@@ -82,7 +79,7 @@ const getRemovableNoteHostCellFilledResult = (xWing, xWingCells, removableNotesH
     }
 
     // write a func to extract xWing cells from xWing to reduce the number of args from here
-    return xx_get(xWing, xWingCells)
+    return getOneRemovableNoteCellFilledErrorResult(xWing, xWingCells)
 }
 
 const getBothHouseWithoutCandidateErrorResult = (xWing) => {
@@ -95,27 +92,22 @@ const getBothHouseWithoutCandidateErrorResult = (xWing) => {
     }
 }
 
-const xx_get = (xWing, xWingCells) => {
-    // identify xWingCells have candidate in them even now
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
-
+const getOneRemovableNoteCellFilledErrorResult = (xWing, xWingCells) => {
     const candidate = getXWingCandidate(xWing)
-
-    const houseFullName = HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
-
-    const crossHouseType = getCrossHouseType(xWing.houseType)
-    const crossHouseTypeFullName = HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME
 
     const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(xWingCells, candidate)
     const xWingHostCellsTexts = getCellsAxesValuesListText(xWingCellsWithCandidateAsNote, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
 
+    const crossHouseType = getCrossHouseType(xWing.houseType)
     const crossHouse = crossHouseType === HOUSE_TYPE.ROW ? getCellRowHouseInfo(xWingCellsWithCandidateAsNote[0]) :
         getCellColHouseInfo(xWingCellsWithCandidateAsNote[0])
-    const crossHouseAxesText = getHouseAxesText(crossHouse)
 
+    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
     return {
-        msg: `now to fill ${candidate} in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} we have two cells ${xWingHostCellsTexts}`
-            + ` but both of these cells are in same ${crossHouseAxesText} ${crossHouseTypeFullName}.`,
+        msg: `now to fill ${candidate} in ${houseAAxesValue} and ${houseBAxesValue}`
+            + ` ${HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL} we have`
+            + ` two cells ${xWingHostCellsTexts} but both of these cells are in`
+            + ` same ${getHouseAxesText(crossHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME}.`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -130,5 +122,5 @@ const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
 const getHouseAxesText = (house) => {
     const houseAxesValue = getHouseAxesValue(house)
     if (house.type === HOUSE_TYPE.ROW) return houseAxesValue
-    return toOrdinal(parseInt(crossHouseNum), 10)
+    return toOrdinal(parseInt(houseAxesValue), 10)
 }
