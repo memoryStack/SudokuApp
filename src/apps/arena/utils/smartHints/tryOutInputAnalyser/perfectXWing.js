@@ -3,6 +3,7 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAM
 import { TRY_OUT_RESULT_STATES } from "./constants"
 import { getCellsAxesList, noInputInTryOut, getCellsAxesValuesListText } from "./helpers"
 import { toOrdinal } from "../../../../../utils/utilities/toOrdinal"
+import _flatten from "../../../../../utils/utilities/flatten"
 import { getTryOutMainNumbers, getTryOutNotes } from "../../../store/selectors/smartHintHC.selectors"
 import { getStoreState } from "../../../../../redux/dispatch.helpers"
 import { getCrossHouseType } from "../xWing/utils"
@@ -14,7 +15,7 @@ export default ({ xWing, xWingCells, removableNotesHostCells }) => {
     }
 
     if (filterFilledCells(removableNotesHostCells).length) {
-        return getRemovableNoteHostCellFilledResult(xWing, xWingCells, removableNotesHostCells)
+        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
     }
 
     //  todo: one or two correct cells are filled
@@ -63,7 +64,8 @@ const filterFilledCells = (removableNotesHostCells) => {
     })
 }
 
-const getRemovableNoteHostCellFilledResult = (xWing, xWingCells, removableNotesHostCells) => {
+const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
+    const xWingCells = getXWingCells(xWing.legs)
     const removableNotesHostCellsFilledCount = filterFilledCells(removableNotesHostCells).length
     if (removableNotesHostCellsFilledCount === 2) {
         return getBothHouseWithoutCandidateErrorResult(xWing)
@@ -78,8 +80,11 @@ const getRemovableNoteHostCellFilledResult = (xWing, xWingCells, removableNotesH
         }
     }
 
-    // write a func to extract xWing cells from xWing to reduce the number of args from here
-    return getOneRemovableNoteCellFilledErrorResult(xWing, xWingCells)
+    return getOneRemovableNoteCellFilledErrorResult(xWing)
+}
+
+const getXWingCells = (xWingLegs) => {
+    return _flatten(xWingLegs.map(leg => leg.cells))
 }
 
 const getBothHouseWithoutCandidateErrorResult = (xWing) => {
@@ -92,7 +97,8 @@ const getBothHouseWithoutCandidateErrorResult = (xWing) => {
     }
 }
 
-const getOneRemovableNoteCellFilledErrorResult = (xWing, xWingCells) => {
+const getOneRemovableNoteCellFilledErrorResult = (xWing) => {
+    const xWingCells = getXWingCells(xWing.legs)
     const candidate = getXWingCandidate(xWing)
 
     const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(xWingCells, candidate)
