@@ -1,7 +1,7 @@
-import { getCellAxesValues, getHouseAxesValue, isCellEmpty, isCellNoteVisible, getCellRowHouseInfo, getCellColHouseInfo, getCellHouseInfo } from "../../util"
+import { getHouseAxesValue, isCellEmpty, isCellNoteVisible, getCellRowHouseInfo, getCellColHouseInfo, getCellHouseInfo } from "../../util"
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from "../constants"
 import { TRY_OUT_RESULT_STATES } from "./constants"
-import { getCellsAxesList, noInputInTryOut, getCellsAxesValuesListText } from "./helpers"
+import { noInputInTryOut, getCellsAxesValuesListText } from "./helpers"
 import { toOrdinal } from "../../../../../utils/utilities/toOrdinal"
 import _flatten from "../../../../../utils/utilities/flatten"
 import { getTryOutMainNumbers, getTryOutNotes } from "../../../store/selectors/smartHintHC.selectors"
@@ -18,12 +18,7 @@ export default ({ xWing, xWingCells, removableNotesHostCells }) => {
         return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
     }
 
-    //  todo: one or two correct cells are filled
-
-    return {
-        msg: 'karya pragati path per h',
-        state: TRY_OUT_RESULT_STATES.START,
-    }
+    return getXWingCellsFilledResult(xWing)
 }
 
 const getNoInputResult = (xWing) => {
@@ -79,6 +74,40 @@ const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) =>
     return getOneRemovableNoteCellFilledErrorResult(xWing)
 }
 
+const getXWingCellsFilledResult = (xWing) => {
+    const xWingCells = getXWingCells(xWing.legs)
+    const filledXWingCells = filterFilledCells(xWingCells)
+
+    if (filledXWingCells.length === 1) {
+        return getOneCornorFilledResult(xWing, filledXWingCells)
+    }
+    return getBothCornorsFilledResult(xWing)
+}
+
+const getOneCornorFilledResult = (xWing, filledXWingCells) => {
+    const candidate = getXWingCandidate(xWing)
+    const houseFullName = getXWingHouseFullName(xWing)
+
+    const filledLegHouse = getCellHouseInfo(xWing.houseType, filledXWingCells[0])
+    const houseAxesText = getHouseAxesText(filledLegHouse)
+    return {
+        msg: `${candidate} is filled in ${houseAxesText} ${houseFullName} without any error, try filling it`
+            + ` in other places as well where it is highlighted in red or green color`,
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
+}
+
+const getBothCornorsFilledResult = (xWing) => {
+    const candidate = getXWingCandidate(xWing)
+    const houseFullName = getXWingHouseFullNamePlural(xWing)
+    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
+    return {
+        msg: `${candidate} is filled in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} without`
+            + ` any error, and all the ${candidate} highlighted in red color are removed`,
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
+}
+
 const getXWingCells = (xWingLegs) => {
     return _flatten(xWingLegs.map(leg => leg.cells))
 }
@@ -98,7 +127,7 @@ const getOneXWingCellAndOneRemovableNoteHostCellFilled = (xWing) => {
     const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(xWing.legs)
     const inhabitableHouseAxesText = getHouseAxesText(getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]))
     return {
-        msg: `there is no cell in ${inhabitableHouseAxesText} ${getXWingHouseFullName(xWing)}`
+        msg: `there is no cell in ${inhabitableHouseAxesText} ${getXWingHouseFullNamePlural(xWing)}`
             + ` where ${candidate} can come`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
@@ -114,9 +143,14 @@ const getCandidateInhabitableLeg = (xWingLegs) => {
     })
 }
 
-const getXWingHouseFullName = (xWing) => {
+const getXWingHouseFullNamePlural = (xWing) => {
     return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
 }
+
+const getXWingHouseFullName = (xWing) => {
+    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME
+}
+
 
 const getOneRemovableNoteCellFilledErrorResult = (xWing) => {
     const xWingCells = getXWingCells(xWing.legs)
