@@ -1,4 +1,4 @@
-import { getCellAxesValues, getHouseAxesValue, isCellEmpty, isCellNoteVisible, getCellRowHouseInfo, getCellColHouseInfo } from "../../util"
+import { getCellAxesValues, getHouseAxesValue, isCellEmpty, isCellNoteVisible, getCellRowHouseInfo, getCellColHouseInfo, getCellHouseInfo } from "../../util"
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from "../constants"
 import { TRY_OUT_RESULT_STATES } from "./constants"
 import { getCellsAxesList, noInputInTryOut, getCellsAxesValuesListText } from "./helpers"
@@ -73,11 +73,7 @@ const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) =>
 
     const xWingFilledCellsCount = filterFilledCells(xWingCells).length
     if (xWingFilledCellsCount) {
-        // 1 wrong filled and 1 correctly filled
-        return {
-            msg: 'ek sahi or ek glt h',
-            state: TRY_OUT_RESULT_STATES.ERROR,
-        }
+        return getOneXWingCellAndOneRemovableNoteHostCellFilled(xWing)
     }
 
     return getOneRemovableNoteCellFilledErrorResult(xWing)
@@ -97,6 +93,31 @@ const getBothHouseWithoutCandidateErrorResult = (xWing) => {
     }
 }
 
+const getOneXWingCellAndOneRemovableNoteHostCellFilled = (xWing) => {
+    const candidate = getXWingCandidate(xWing)
+    const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(xWing.legs)
+    const inhabitableHouseAxesText = getHouseAxesText(getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]))
+    return {
+        msg: `there is no cell in ${inhabitableHouseAxesText} ${getXWingHouseFullName(xWing)}`
+            + ` where ${candidate} can come`,
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+const getCandidateInhabitableLeg = (xWingLegs) => {
+    const mainNumbers = getTryOutMainNumbers(getStoreState())
+    const notes = getTryOutNotes(getStoreState())
+    return xWingLegs.find(({ cells: legXWingCells }) => {
+        return legXWingCells.every((xWingCell) => {
+            return isCellEmpty(xWingCell, mainNumbers) && !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
+        })
+    })
+}
+
+const getXWingHouseFullName = (xWing) => {
+    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
+}
+
 const getOneRemovableNoteCellFilledErrorResult = (xWing) => {
     const xWingCells = getXWingCells(xWing.legs)
     const candidate = getXWingCandidate(xWing)
@@ -105,7 +126,7 @@ const getOneRemovableNoteCellFilledErrorResult = (xWing) => {
     const xWingHostCellsTexts = getCellsAxesValuesListText(xWingCellsWithCandidateAsNote, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
 
     const crossHouseType = getCrossHouseType(xWing.houseType)
-    const crossHouse = crossHouseType === HOUSE_TYPE.ROW ? getCellRowHouseInfo(xWingCellsWithCandidateAsNote[0]) :
+    const crossHouse = crossHouseType === HOUSE_TYPE.ROW ? getCellRowHouseInfo(xWingCellsWithCandidateAsNote[0]) : // refactor this
         getCellColHouseInfo(xWingCellsWithCandidateAsNote[0])
 
     const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
