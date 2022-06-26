@@ -1,4 +1,4 @@
-import { getHouseAxesValue, isCellEmpty, isCellNoteVisible, getCellRowHouseInfo, getCellColHouseInfo, getCellHouseInfo } from "../../util"
+import { getHouseAxesValue, isCellEmpty, isCellNoteVisible, getCellHouseInfo } from "../../util"
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from "../constants"
 import { TRY_OUT_RESULT_STATES } from "./constants"
 import { noInputInTryOut, getCellsAxesValuesListText } from "./helpers"
@@ -45,10 +45,9 @@ const getXWingHousesTexts = (houseType, xWingLegs) => {
 }
 
 const getXWingHousesNums = (houseType, xWingLegs) => {
-    const houseInfoGetterHandler = houseType === HOUSE_TYPE.ROW ? getCellRowHouseInfo : getCellColHouseInfo
     return {
-        houseANum: houseInfoGetterHandler(xWingLegs[0].cells[0]).num,
-        houseBNum: houseInfoGetterHandler(xWingLegs[1].cells[0]).num,
+        houseANum: getCellHouseInfo(houseType, xWingLegs[0].cells[0]).num,
+        houseBNum: getCellHouseInfo(houseType, xWingLegs[1].cells[0]).num,
     }
 }
 
@@ -151,7 +150,6 @@ const getXWingHouseFullName = (xWing) => {
     return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME
 }
 
-
 const getOneRemovableNoteCellFilledErrorResult = (xWing) => {
     const xWingCells = getXWingCells(xWing.legs)
     const candidate = getXWingCandidate(xWing)
@@ -160,15 +158,14 @@ const getOneRemovableNoteCellFilledErrorResult = (xWing) => {
     const xWingHostCellsTexts = getCellsAxesValuesListText(xWingCellsWithCandidateAsNote, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
 
     const crossHouseType = getCrossHouseType(xWing.houseType)
-    const crossHouse = crossHouseType === HOUSE_TYPE.ROW ? getCellRowHouseInfo(xWingCellsWithCandidateAsNote[0]) : // refactor this
-        getCellColHouseInfo(xWingCellsWithCandidateAsNote[0])
+    const crossHouse = getCellHouseInfo(crossHouseType, xWingCellsWithCandidateAsNote[0])
 
     const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
     return {
         msg: `now to fill ${candidate} in ${houseAAxesValue} and ${houseBAxesValue}`
             + ` ${HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL} we have`
             + ` two cells ${xWingHostCellsTexts} but both of these cells are in`
-            + ` same ${getHouseAxesText(crossHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME}.`,
+            + ` same ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME} which is ${getHouseAxesText(crossHouse)}`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
