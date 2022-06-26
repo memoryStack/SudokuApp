@@ -1,12 +1,11 @@
-import { getHouseAxesValue, isCellEmpty, isCellNoteVisible, getCellHouseInfo } from "../../util"
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from "../constants"
+import { isCellEmpty, isCellNoteVisible, getCellHouseInfo } from "../../util"
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from "../constants"
 import { TRY_OUT_RESULT_STATES } from "./constants"
 import { noInputInTryOut, getCellsAxesValuesListText } from "./helpers"
-import { toOrdinal } from "../../../../../utils/utilities/toOrdinal"
 import _flatten from "../../../../../utils/utilities/flatten"
 import { getTryOutMainNumbers, getTryOutNotes } from "../../../store/selectors/smartHintHC.selectors"
 import { getStoreState } from "../../../../../redux/dispatch.helpers"
-import { getCrossHouseType } from "../xWing/utils"
+import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate } from "../xWing/utils"
 
 export default ({ xWing, xWingCells, removableNotesHostCells }) => {
 
@@ -29,25 +28,6 @@ const getNoInputResult = (xWing) => {
         msg: `try filling ${candidate} in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName}`
             + ` to understand why ${candidate} highlighted in red colors can't come there and is safe to remove`,
         state: TRY_OUT_RESULT_STATES.START,
-    }
-}
-
-const getXWingCandidate = (xWing) => {
-    return xWing.legs[0].candidate
-}
-
-const getXWingHousesTexts = (houseType, xWingLegs) => {
-    const { houseANum, houseBNum, } = getXWingHousesNums(houseType, xWingLegs)
-    return {
-        houseAAxesValue: getHouseAxesText({ type: houseType, num: houseANum }),
-        houseBAxesValue: getHouseAxesText({ type: houseType, num: houseBNum }),
-    }
-}
-
-const getXWingHousesNums = (houseType, xWingLegs) => {
-    return {
-        houseANum: getCellHouseInfo(houseType, xWingLegs[0].cells[0]).num,
-        houseBNum: getCellHouseInfo(houseType, xWingLegs[1].cells[0]).num,
     }
 }
 
@@ -175,10 +155,4 @@ const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
     return cells.filter((cell) => {
         return isCellNoteVisible(candidate, notes[cell.row][cell.col])
     })
-}
-
-const getHouseAxesText = (house) => {
-    const houseAxesValue = getHouseAxesValue(house)
-    if (house.type === HOUSE_TYPE.ROW) return houseAxesValue
-    return toOrdinal(parseInt(houseAxesValue), 10)
 }
