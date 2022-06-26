@@ -123,7 +123,7 @@ const getBothHouseWithoutCandidateErrorResult = (xWing) => {
 
 const getOneXWingCellAndOneRemovableNoteHostCellFilled = (xWing) => {
     const candidate = getXWingCandidate(xWing)
-    const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(xWing.legs)
+    const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs)
     const inhabitableHouseAxesText = getHouseAxesText(getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]))
     return {
         msg: `there is no cell in ${inhabitableHouseAxesText} ${getXWingHouseFullNamePlural(xWing)}`
@@ -132,7 +132,7 @@ const getOneXWingCellAndOneRemovableNoteHostCellFilled = (xWing) => {
     }
 }
 
-const getCandidateInhabitableLeg = (xWingLegs) => {
+const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
     const mainNumbers = getTryOutMainNumbers(getStoreState())
     const notes = getTryOutNotes(getStoreState())
     return xWingLegs.find(({ cells: legXWingCells }) => {
