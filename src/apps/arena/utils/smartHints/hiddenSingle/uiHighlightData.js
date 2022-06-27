@@ -1,10 +1,8 @@
-import { HIDDEN_SINGLE_TYPES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+import { HIDDEN_SINGLE_TYPES, HINTS_IDS, HINT_ID_VS_TITLES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { HOUSE_TYPE } from '../../smartHints/constants'
 import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
 import { isCellEmpty, areSameCells } from '../../util'
 import { setCellDataInHintResult } from '../util'
-
-const HINT_TITLE = 'Hidden Single'
 
 const getInhabitableCellData = () => {
     return {
@@ -406,7 +404,7 @@ const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
 
     return {
         cellsToFocusData,
-        title: HINT_TITLE,
+        title: HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_SINGLE],
         steps: [{ text: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue) }],
         selectCellOnClose: cell,
     }

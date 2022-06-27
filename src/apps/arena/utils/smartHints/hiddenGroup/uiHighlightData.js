@@ -1,6 +1,6 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
 import cloneDeep from '../../../../../utils/utilities/cloneDeep'
-import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
+import { HINTS_IDS, HINT_ID_VS_TITLES, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
 import {
     areSameBlockCells,
     areSameColCells,
@@ -12,7 +12,6 @@ import {
 } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getHouseCells } from '../../houseCells'
-import { HIDDEN_GROUP_TYPE } from '../constants'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
@@ -295,7 +294,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     return {
         hasTryOut: true,
         type: isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE,
-        title: HIDDEN_GROUP_TYPE[group.groupCandidates.length],
+        title: isHiddenDoubles ? HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_DOUBLE] : HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_TRIPPLE],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         cellsToFocusData,
         focusedCells,

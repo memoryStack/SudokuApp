@@ -1,4 +1,4 @@
-import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
+import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS, HINT_ID_VS_TITLES } from '../../constants'
 import { isCellExists, isCellNoteVisible } from '../../../util'
 import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData } from '../../util'
 import { getHouseCells } from '../../../houseCells'
@@ -140,7 +140,7 @@ export const getPerfectXWingUIData = (xWing, notesData) => {
     return {
         hasTryOut: true,
         type: HINTS_IDS.PERFECT_X_WING,
-        title: 'X-Wing',
+        title: HINT_ID_VS_TITLES[HINTS_IDS.PERFECT_X_WING],
         cellsToFocusData,
         focusedCells,
         steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing, removableNotesHostCells)),

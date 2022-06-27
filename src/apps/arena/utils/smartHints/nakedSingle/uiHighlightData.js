@@ -1,5 +1,5 @@
 import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
-import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES } from '../constants'
+import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES, HINT_ID_VS_TITLES, HINTS_IDS } from '../constants'
 import { setCellDataInHintResult } from '../util'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue) =>
@@ -10,7 +10,7 @@ const getMultipleHousesNakeSingleDescription = solutionValue =>
 
 const SMART_HINTS_TECHNIQUES = {
     NAKED_SINGLE: {
-        TITLE: 'Naked Single',
+        TITLE: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_SINGLE],
         DESCRIPTION: {
             getSingleHouseMsg: (houseType, solutionValue) =>
                 getSingleHouseNakedSingleDescription(houseType, solutionValue),

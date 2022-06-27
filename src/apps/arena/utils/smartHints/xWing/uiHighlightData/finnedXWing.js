@@ -1,4 +1,4 @@
-import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINTS_IDS, HINT_ID_VS_TITLES, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { isCellExists, isCellNoteVisible } from '../../../util'
 import { setCellDataInHintResult } from '../../util'
 import { getHouseCells } from '../../../houseCells'
@@ -182,7 +182,7 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
 
     return {
         cellsToFocusData,
-        title: finnedXWingType === XWING_TYPES.FINNED ? 'Finned X-Wing' : 'Sashimi Finned X-Wing',
+        title: finnedXWingType === XWING_TYPES.FINNED ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING] : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
         steps: [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } }) }],
     }
 }

@@ -1,6 +1,6 @@
 import { getHouseCells } from '../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+import { HINTS_IDS, HINT_ID_VS_TITLES, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { setCellDataInHintResult } from '../util'
 
@@ -88,7 +88,7 @@ const getHintExplaination = (omission, notes) => {
 export const getUIHighlightData = (omission, notesData) => {
     return {
         cellsToFocusData: getUICellsToFocusData(omission, notesData),
-        title: 'Omission',
+        title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],
         steps: [{ text: getHintExplaination(omission, notesData) }],
     }
 }

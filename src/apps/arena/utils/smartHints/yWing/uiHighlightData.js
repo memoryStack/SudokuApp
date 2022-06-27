@@ -1,6 +1,6 @@
 import { getHouseCells } from '../../houseCells'
 import { getCellHousesInfo, isCellNoteVisible, convertBoardCellToNum, convertBoardCellNumToCell } from '../../util'
-import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+import { HINTS_IDS, HINT_ID_VS_TITLES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { setCellDataInHintResult } from '../util'
 
 const YWING_CELLS_TYPES = {
@@ -107,7 +107,7 @@ export const getYWingHintUIHighlightData = (yWing, notesData) => {
 
     return {
         cellsToFocusData,
-        title: 'Y Wing',
+        title: HINT_ID_VS_TITLES[HINTS_IDS.Y_WING],
         steps: [{ text: getHintExplaination({ pivotNotes: pivot.notes, commonNoteInWings }) }],
     }
 }

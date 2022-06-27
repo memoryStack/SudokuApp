@@ -1,7 +1,7 @@
 import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, getCellVisibleNotesCount } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
-import { GROUPS, HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
+import { GROUPS, HINTS_IDS, HINT_ID_VS_TITLES, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import {
     maxHintsLimitReached,
     setCellDataInHintResult,
@@ -29,7 +29,7 @@ const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, ce
         cellsToFocusData,
         focusedCells,
         type: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
-        title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
+        title: isNakedDoubles ? HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE] : HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         tryOutAnalyserData: {
             groupCandidates,
