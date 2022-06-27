@@ -17,6 +17,7 @@ import { Cell } from './cell'
 import { areSameCells } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
+import { BOARD_AXES_VALUES } from '../constants'
 
 const looper = []
 const bordersLooper = []
@@ -179,7 +180,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const yAxis = useMemo(() => {
-        const yAxisTexts = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+        const yAxisTexts = BOARD_AXES_VALUES.Y_AXIS
         return (
             <View style={styles.yAxis}>
                 {yAxisTexts.map(label => {
@@ -190,7 +191,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }, [showSmartHint])
 
     const xAxis = useMemo(() => {
-        const xAxisTexts = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+        const xAxisTexts = BOARD_AXES_VALUES.X_AXIS
         return (
             <View style={styles.xAxis}>
                 {xAxisTexts.map(label => {

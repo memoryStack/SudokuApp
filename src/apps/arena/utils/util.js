@@ -4,6 +4,7 @@ import { getKey } from '../../../utils/storage'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
+import { BOARD_AXES_VALUES } from '../constants'
 
 const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
 let numOfSolutions = 0
@@ -315,16 +316,15 @@ export const filterHouseCells = ({ type, num }, filterCallback) => {
 }
 
 export const getCellAxesValues = cell => {
-    // TODO: use these from a central place
-    const yAxisTexts = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-    const xAxisTexts = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    const yAxisTexts = BOARD_AXES_VALUES.Y_AXIS
+    const xAxisTexts = BOARD_AXES_VALUES.X_AXIS
     return `${yAxisTexts[cell.row]}${xAxisTexts[cell.col]}`
 }
 
 export const getHouseAxesValue = ({ type, num }) => {
     const HOUSE_TYPE_VS_AXES_VALUES = {
-        [HOUSE_TYPE.ROW]: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
-        [HOUSE_TYPE.COL]: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        [HOUSE_TYPE.ROW]: BOARD_AXES_VALUES.Y_AXIS,
+        [HOUSE_TYPE.COL]: BOARD_AXES_VALUES.X_AXIS,
     }
     return HOUSE_TYPE_VS_AXES_VALUES[type][num]
 }
