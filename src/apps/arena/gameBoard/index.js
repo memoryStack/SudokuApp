@@ -14,8 +14,8 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 import { getStyles } from './style'
 import { Cell } from './cell'
-import { areSameCells, forCellEachNote as forEachColumn } from '../utils/util'
-import { useCellFocus } from '../utils/smartHints/hooks'
+import { areSameCells } from '../utils/util'
+import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
 
 const looper = []
@@ -34,8 +34,6 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const styles = useMemo(() => {
         return getStyles({ GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, CELL_WIDTH })
     }, [GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH])
-
-    const isCellFocusedInSmartHint = useCellFocus()
 
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 

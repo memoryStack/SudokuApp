@@ -9,17 +9,6 @@ const useIsHintTryOutStep = () => {
     return isTryOut
 }
 
-// TODO: this can be handled by simple handler func
-const useCellFocus = () => {
-    const { hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } = useSelector(getHintHCInfo)
-
-    const isCellFocused = cell => {
-        return !!smartHintCellsHighlightInfo[cell.row]?.[cell.col]
-    }
-
-    return isCellFocused
-}
-
 const useHintTryOutAnalyserResult = () => {
     const { hint: { type: hintType, tryOutAnalyserData } = {} } = useSelector(getHintHCInfo)
 
@@ -36,4 +25,4 @@ const useHintTryOutAnalyserResult = () => {
     return tryOutResult
 }
 
-export { useIsHintTryOutStep, useCellFocus, useHintTryOutAnalyserResult }
+export { useIsHintTryOutStep, useHintTryOutAnalyserResult }
