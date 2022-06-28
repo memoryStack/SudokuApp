@@ -87,18 +87,17 @@ const prepareNakedDublesOrTriplesHintData = (
         })
     }
 
-    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
-    const hintChunks = [
-        `A Naked Double is a set of two candidates filled in two cells that are part of same row, column or box.\nNote: these two cells can't have more than 2 different set of candidates`,
-        `${candidatesListText} make a naked double in the highlighted region. in the solution ${candidatesListText} will be placed in Naked Double cells only and all the candidates of ${candidatesListText} can be removed from other cells of the highlighted region. ${candidatesListText} will go in exactly which Naked Double cell is yet not clear.`,
-    ]
+    const msgPlaceholdersValues = { candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND) }
+    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_DOUBLE].map((hintChunkTemplate) => {
+        return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
+    })
 
     return {
         hasTryOut: true,
         focusedCells: toBeHighlightedCells,
         cellsToFocusData,
-        type: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
-        title: isNakedDoubles ? 'Naked Double' : 'Naked Tripple',
+        type: HINTS_IDS.NAKED_DOUBLE,
+        title: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE],
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells: toBeHighlightedCells,
