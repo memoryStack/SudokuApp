@@ -1,9 +1,10 @@
 import { HIDDEN_SINGLE_TYPES, HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { HINT_ID_VS_TITLES } from '../stringLiterals'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 import { HOUSE_TYPE } from '../../smartHints/constants'
 import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
 import { isCellEmpty, areSameCells } from '../../util'
 import { setCellDataInHintResult } from '../util'
+import { dynamicInterpolation } from '../../../../../utils/utilities/dynamicInterpolation'
 
 const getInhabitableCellData = () => {
     return {
@@ -393,8 +394,10 @@ const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
     return cellsToFocusData
 }
 
-const getHiddenSingleLogic = (type, value) => {
-    return `in the highlighted ${type}, ${value} can't appear in crossed cells due to the highlighted instances of same number. So it has only one place where it can come`
+const getHiddenSingleLogic = (houseType, solutionValue) => {
+    const msgPlaceholdersValues = { houseType, solutionValue }
+    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.HIDDEN_SINGLE]
+    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
 const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {

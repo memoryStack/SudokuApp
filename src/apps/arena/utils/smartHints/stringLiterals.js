@@ -19,5 +19,6 @@ export const HINT_EXPLANATION_TEXTS = {
     [HINTS_IDS.NAKED_SINGLE]: {
         SINGLE_HOUSE: `in this {{houseType}} only the selected cell is empty so from 1-9 only one number can come in this cell which is {{solutionValue}}`,
         MULTIPLE_HOUSE: `except {{solutionValue}} every other number from 1-9 is preset in the row, col and block of this highlighted cell so only number that can appear in this cell is {{solutionValue}}`
-    }
+    },
+    [HINTS_IDS.HIDDEN_SINGLE]: `in the highlighted {{houseType}}, {{solutionValue}} can't appear in crossed cells due to the highlighted instances of same number. So it has only one place where it can come`
 }
