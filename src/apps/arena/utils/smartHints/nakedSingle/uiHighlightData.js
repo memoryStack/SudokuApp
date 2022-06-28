@@ -1,34 +1,19 @@
 import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
 import { dynamicInterpolation } from '../../../../../utils/utilities/dynamicInterpolation'
 import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES, HINTS_IDS } from '../constants'
-import { HINT_ID_VS_TITLES } from '../stringLiterals'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 import { setCellDataInHintResult } from '../util'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue) => {
-
-    const msgValues = {
-        houseType,
-        solutionValue,
-    }
-
-    const msgPlaceholder = `in this {{houseType}} only the selected cell is empty so from 1-9 only one number can come in this cell which is {{solutionValue}}`
-
-    return dynamicInterpolation(msgPlaceholder, msgValues)
-
-    return `in this ${houseType} only the selected cell is empty so from 1-9 only one number can come in this cell which is ${solutionValue}`
+    const msgPlaceholdersValues = { houseType, solutionValue, }
+    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE].SINGLE_HOUSE
+    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
 const getMultipleHousesNakeSingleDescription = solutionValue => {
-
-    const msgValues = {
-        solutionValue,
-    }
-
-    const msgPlaceholder = `except {{solutionValue}} every other number from 1-9 is preset in the row, col and block of this highlighted cell so only number that can appear in this cell is {{solutionValue}}`
-
-    return dynamicInterpolation(msgPlaceholder, msgValues)
-
-    return `except ${solutionValue} every other number from 1-9 is preset in the row, col and block of this highlighted cell so only number that can appear in this cell is ${solutionValue}`
+    const msgPlaceholdersValues = { solutionValue }
+    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE].MULTIPLE_HOUSE
+    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
 const SMART_HINTS_TECHNIQUES = {
