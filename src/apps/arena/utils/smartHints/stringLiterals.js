@@ -37,4 +37,16 @@ export const HINT_EXPLANATION_TEXTS = {
     ],
     [HINTS_IDS.HIDDEN_DOUBLE]: HIDDEN_GROUP_HINT_EXPLANATION_TEXT,
     [HINTS_IDS.HIDDEN_TRIPPLE]: HIDDEN_GROUP_HINT_EXPLANATION_TEXT,
+    [HINTS_IDS.PERFECT_X_WING]: [
+        `in X-Wing we focus on a candidate which is possible in exactly 2 cells of 2 rows or 2 columns.`
+        + ` these cells must behave like the corners of a rectangle or square when connected`,
+        `if the candidate is found in exactly 2 cells in rows then all the other occurences of candidate in columns`
+        + ` can be removed and same is true when candidate is found in exactly 2 cells in columns then it can be removed`
+        + ` from other cells in the rows`,
+        `notice in highlighted area in the board\n{{candidate}} is present in exactly 2 cells in`
+        + ` {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} forming a {{rectangleCornersText}}`
+        + ` rectangle. now in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} {{candidate}} can be`
+        + ` filled either in {{topDownDiagonalText}} or {{bottomUpDiagonalText}} cells and it will result in removing`
+        + ` {{candidate}} from {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullName}} {{cellsAxesListText}} cells`
+    ]
 }
