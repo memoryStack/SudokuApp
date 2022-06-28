@@ -1,19 +1,18 @@
-import { getCellsFromCellsToFocusedData } from "./util"
+import { getCellsFromCellsToFocusedData } from './util'
 
 describe('getCellsFromCellsToFocusedData()', () => {
     test('returns cells which are basically the keys mentioned in the cellsToFocusData, first level keys are row numbers and second levels keys are column numbers in each row', () => {
-
         const cellsToFocusData = {
-            '0': {
-                '0': {},
-                '1': {},
-                '2': {},
+            0: {
+                0: {},
+                1: {},
+                2: {},
             },
-            '2': {
-                '4': {},
-                '7': {},
-                '8': {},
-            }
+            2: {
+                4: {},
+                7: {},
+                8: {},
+            },
         }
         const expectedResult = [
             { row: 0, col: 0 },

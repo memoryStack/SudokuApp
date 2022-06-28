@@ -10,7 +10,7 @@ const tryOutAnalysers = {
     [HINTS_IDS.NAKED_TRIPPLE]: nakedTrippleTryOutAnalyser,
     [HINTS_IDS.HIDDEN_DOUBLE]: hiddenGroupTryOutAnalyser,
     [HINTS_IDS.HIDDEN_TRIPPLE]: hiddenGroupTryOutAnalyser,
-    [HINTS_IDS.PERFECT_X_WING]: perfectXWingTryOutAnalyser
+    [HINTS_IDS.PERFECT_X_WING]: perfectXWingTryOutAnalyser,
 }
 
 export const analyseTryOutInput = ({ hintType, data }) => {

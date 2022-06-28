@@ -47,12 +47,12 @@ const removeDuplicteCells = cells => {
     return result
 }
 
-const getCellsFromCellsToFocusedData = (cellsToFocusData) => {
+const getCellsFromCellsToFocusedData = cellsToFocusData => {
     const result = []
-    const rows = Object.keys(cellsToFocusData).map((row) => parseInt(row, 10))
-    rows.forEach((row) => {
-        const columns = Object.keys(cellsToFocusData[row]).map((row) => parseInt(row, 10))
-        const rowCells = columns.map((column) => {
+    const rows = Object.keys(cellsToFocusData).map(row => parseInt(row, 10))
+    rows.forEach(row => {
+        const columns = Object.keys(cellsToFocusData[row]).map(row => parseInt(row, 10))
+        const rowCells = columns.map(column => {
             return { row, col: column }
         })
         result.push(...rowCells)
@@ -60,7 +60,7 @@ const getCellsFromCellsToFocusedData = (cellsToFocusData) => {
     return result
 }
 
-const isCellFocusedInSmartHint = (cell) => {
+const isCellFocusedInSmartHint = cell => {
     const { hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } = getHintHCInfo(getStoreState())
     return !!smartHintCellsHighlightInfo[cell.row]?.[cell.col]
 }

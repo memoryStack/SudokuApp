@@ -58,14 +58,14 @@ export const addCellInXWingLeg = (cell, legCells, houseType) => {
     })
 }
 
-export const getXWingCandidate = (xWing) => {
+export const getXWingCandidate = xWing => {
     return xWing.legs[0].candidate
 }
 
 /* hint text helpers */
 
 export const getXWingHousesTexts = (houseType, xWingLegs) => {
-    const { houseANum, houseBNum, } = getXWingHousesNums(houseType, xWingLegs)
+    const { houseANum, houseBNum } = getXWingHousesNums(houseType, xWingLegs)
     return {
         houseAAxesValue: getHouseAxesText({ type: houseType, num: houseANum }),
         houseBAxesValue: getHouseAxesText({ type: houseType, num: houseBNum }),
@@ -79,13 +79,13 @@ const getXWingHousesNums = (houseType, xWingLegs) => {
     }
 }
 
-export const getHouseAxesText = (house) => {
+export const getHouseAxesText = house => {
     const houseAxesValue = getHouseAxesValue(house)
     if (house.type === HOUSE_TYPE.ROW) return houseAxesValue
     return toOrdinal(parseInt(houseAxesValue), 10)
 }
 
-export const getCrossHouseAxesText = (xWing) => {
+export const getCrossHouseAxesText = xWing => {
     const crossHouseType = getCrossHouseType(xWing.houseType)
     const { crossHouseANum, crossHouseBNum } = getCrossHousesNums(xWing)
     return {
@@ -94,7 +94,7 @@ export const getCrossHouseAxesText = (xWing) => {
     }
 }
 
-const getCrossHousesNums = (xWing) => {
+const getCrossHousesNums = xWing => {
     const crossHouseType = getCrossHouseType(xWing.houseType)
     return {
         crossHouseANum: getCellHouseInfo(crossHouseType, xWing.legs[0].cells[0]).num,
@@ -102,13 +102,13 @@ const getCrossHousesNums = (xWing) => {
     }
 }
 
-export const getXWingRectangleCornersAxesText = (xWingLegs) => {
+export const getXWingRectangleCornersAxesText = xWingLegs => {
     const cornersList = [...xWingLegs[0].cells, xWingLegs[1].cells[1], xWingLegs[1].cells[0]]
     cornersList.push(cornersList[0])
     return getCellsAxesValuesListText(cornersList)
 }
 
-export const getDiagonalsCornersAxesTexts = (xWing) => {
+export const getDiagonalsCornersAxesTexts = xWing => {
     const { topLeft, topRight, bottomLeft, bottomRight } = getXWingCornerCells(xWing)
     return {
         topDown: getCellsAxesValuesListText([topLeft, bottomRight]),
@@ -116,7 +116,7 @@ export const getDiagonalsCornersAxesTexts = (xWing) => {
     }
 }
 
-const getXWingCornerCells = (xWing) => {
+const getXWingCornerCells = xWing => {
     const houseType = xWing.houseType
     const xWingLegs = xWing.legs
     return {

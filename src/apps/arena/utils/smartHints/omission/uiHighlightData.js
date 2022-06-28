@@ -1,8 +1,13 @@
 import { dynamicInterpolation } from '../../../../../utils/utilities/dynamicInterpolation'
 import { getHouseCells } from '../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../util'
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES, } from '../stringLiterals'
+import {
+    HINTS_IDS,
+    HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
+    HOUSE_TYPE_VS_FULL_NAMES,
+    SMART_HINTS_CELLS_BG_COLOR,
+} from '../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { setCellDataInHintResult } from '../util'
 

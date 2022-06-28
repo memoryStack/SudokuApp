@@ -183,7 +183,10 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
 
     return {
         cellsToFocusData,
-        title: finnedXWingType === XWING_TYPES.FINNED ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING] : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
+        title:
+            finnedXWingType === XWING_TYPES.FINNED
+                ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING]
+                : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
         steps: [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } }) }],
     }
 }

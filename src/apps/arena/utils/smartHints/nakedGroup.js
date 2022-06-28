@@ -18,9 +18,11 @@ import { dynamicInterpolation } from '../../../../utils/utilities/dynamicInterpo
 // parsing the groupCandidates into their int form
 const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
     // TODO: explore if we can use the below array for naked double and naked tripple as well in same way
-    const msgPlaceholdersValues = { candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND) }
+    const msgPlaceholdersValues = {
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+    }
 
-    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_TRIPPLE].map((hintChunkTemplate) => {
+    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_TRIPPLE].map(hintChunkTemplate => {
         return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
     })
 
@@ -87,8 +89,10 @@ const prepareNakedDublesOrTriplesHintData = (
         })
     }
 
-    const msgPlaceholdersValues = { candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND) }
-    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_DOUBLE].map((hintChunkTemplate) => {
+    const msgPlaceholdersValues = {
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+    }
+    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_DOUBLE].map(hintChunkTemplate => {
         return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
     })
 

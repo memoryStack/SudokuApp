@@ -5,7 +5,7 @@ import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 import { setCellDataInHintResult } from '../util'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue) => {
-    const msgPlaceholdersValues = { houseType, solutionValue, }
+    const msgPlaceholdersValues = { houseType, solutionValue }
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE].SINGLE_HOUSE
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }

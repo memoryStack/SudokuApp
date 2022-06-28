@@ -1,9 +1,21 @@
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { isCellExists, isCellNoteVisible } from '../../../util'
-import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData } from '../../util'
+import {
+    setCellDataInHintResult,
+    getHintExplanationStepsFromHintChunks,
+    getTryOutInputPanelNumbersVisibility,
+    getCellsFromCellsToFocusedData,
+} from '../../util'
 import { getHouseCells } from '../../../houseCells'
-import { getCrossHouseType, getXWingCandidate, getXWingHousesTexts, getXWingRectangleCornersAxesText, getDiagonalsCornersAxesTexts, getCrossHouseAxesText } from '../utils'
+import {
+    getCrossHouseType,
+    getXWingCandidate,
+    getXWingHousesTexts,
+    getXWingRectangleCornersAxesText,
+    getDiagonalsCornersAxesTexts,
+    getCrossHouseAxesText,
+} from '../utils'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
 import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
 
@@ -107,13 +119,13 @@ const getHintChunks = (xWing, removableNotesHostCells) => {
     }
 
     const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.PERFECT_X_WING]
-    return msgTemplates.map((template) => {
+    return msgTemplates.map(template => {
         return dynamicInterpolation(template, msgPlaceholdersValues)
     })
 }
 
 const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => {
-    return focusedCells.filter((cell) => {
+    return focusedCells.filter(cell => {
         return !isCellExists(cell, xWingCells) && isCellNoteVisible(candidate, notes[cell.row][cell.col])
     })
 }
@@ -132,7 +144,6 @@ export const getPerfectXWingUIData = (xWing, notesData) => {
 
     const tryOutInputPanelAllowedCandidates = [candidate]
 
-
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
     const removableNotesHostCells = getRemovableNotesHostCells(xWingCells, candidate, focusedCells, notesData)
 
@@ -148,6 +159,6 @@ export const getPerfectXWingUIData = (xWing, notesData) => {
             xWingCells,
             removableNotesHostCells,
             xWing,
-        }
+        },
     }
 }

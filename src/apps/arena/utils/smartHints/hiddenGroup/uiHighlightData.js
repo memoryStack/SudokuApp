@@ -194,9 +194,11 @@ const getSecondaryHouseHintExplaination = (
         groupCellsAxesListText: getCellsAxesValuesListText(groupCells),
         houseName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         candidatesListText: getCandidatesListText(groupCandidates),
-        complementaryHintTitle: isHiddenDouble ? HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE] : HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
+        complementaryHintTitle: isHiddenDouble
+            ? HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE]
+            : HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
         removableGroupCandidatesListText,
-        removableGroupCandidatesHostCellsListText: getCellsAxesValuesListText(removableGroupCandidatesHostCells)
+        removableGroupCandidatesHostCellsListText: getCellsAxesValuesListText(removableGroupCandidatesHostCells),
     }
 
     const hintId = isHiddenDouble ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
@@ -299,7 +301,9 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     return {
         hasTryOut: true,
         type: isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE,
-        title: isHiddenDoubles ? HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_DOUBLE] : HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_TRIPPLE],
+        title: isHiddenDoubles
+            ? HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_DOUBLE]
+            : HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_TRIPPLE],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         cellsToFocusData,
         focusedCells,
