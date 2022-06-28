@@ -1,7 +1,7 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
 import cloneDeep from '../../../../../utils/utilities/cloneDeep'
 import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
-import { HINT_ID_VS_TITLES } from '../../smartHints/stringLiterals'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../smartHints/stringLiterals'
 import {
     areSameBlockCells,
     areSameColCells,
@@ -21,6 +21,7 @@ import {
     getCandidatesListText,
 } from '../util'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
+import { dynamicInterpolation } from '../../../../../utils/utilities/dynamicInterpolation'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
@@ -162,17 +163,18 @@ const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHo
 }
 
 const getPrimaryHouseHintExplaination = (houseType, groupCandidates, groupCells, removableCandidates) => {
-    const candidatesListText = getCandidatesListText(groupCandidates)
-    const removableCandidatesListText = getCandidatesListText(removableCandidates)
-    const cellsListText = getCellsAxesValuesListText(groupCells)
     const isHiddenDoubles = groupCandidates.length === 2
-    const houseName = HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME
-    return (
-        `In the highlighted ${houseName}, ${isHiddenDoubles ? 'two' : 'three'} numbers` +
-        ` ${candidatesListText} in green color can come in exactly ${isHiddenDoubles ? 'two' : 'three'} cells` +
-        ` ${cellsListText}. so in this ${houseName} in ${cellsListText} only ${candidatesListText} stays` +
-        ` and ${removableCandidatesListText} can be removed.`
-    )
+    const msgPlaceholdersValues = {
+        houseName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
+        candidatesCountText: isHiddenDoubles ? 'two' : 'three', // TODO: do something with it
+        cellsCountText: isHiddenDoubles ? 'two' : 'three',
+        candidatesListText: getCandidatesListText(groupCandidates),
+        cellsListText: getCellsAxesValuesListText(groupCells),
+        removableCandidatesListText: getCandidatesListText(removableCandidates),
+    }
+    const hintId = isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
+    const msgTemplate = HINT_EXPLANATION_TEXTS[hintId].PRIMARY_HOUSE
+    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
 const getSecondaryHouseHintExplaination = (
@@ -184,20 +186,22 @@ const getSecondaryHouseHintExplaination = (
     notes,
 ) => {
     const isHiddenDouble = groupCandidates.length === 2
-    const candidatesListText = getCandidatesListText(groupCandidates)
-    const groupCellsAxesListText = getCellsAxesValuesListText(groupCells)
-    const removableCandidatesListText = getCandidatesListText(removableCandidates)
-    const removableGroupCandidatesHostCellsListText = getCellsAxesValuesListText(removableGroupCandidatesHostCells)
     const removableGroupCandidatesListText = getCandidatesListText(
         getRemovableGroupCandidates(groupCandidates, removableGroupCandidatesHostCells, notes),
     )
-    return (
-        `once we remove ${removableCandidatesListText} from ${groupCellsAxesListText} then in the` +
-        ` highlighted ${HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME} ${candidatesListText} will` +
-        ` make a ${isHiddenDouble ? 'Naked Double' : 'Naked Tripple'} and because of that` +
-        ` ${removableGroupCandidatesListText} can't come in ${removableGroupCandidatesHostCellsListText}.` +
-        ` so we can remove these as well.`
-    )
+    const msgPlaceholdersValues = {
+        removableCandidatesListText: getCandidatesListText(removableCandidates),
+        groupCellsAxesListText: getCellsAxesValuesListText(groupCells),
+        houseName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
+        candidatesListText: getCandidatesListText(groupCandidates),
+        complementaryHintTitle: isHiddenDouble ? HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE] : HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
+        removableGroupCandidatesListText,
+        removableGroupCandidatesHostCellsListText: getCellsAxesValuesListText(removableGroupCandidatesHostCells)
+    }
+
+    const hintId = isHiddenDouble ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
+    const msgTemplate = HINT_EXPLANATION_TEXTS[hintId].SECONDARY_HOUSE
+    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {

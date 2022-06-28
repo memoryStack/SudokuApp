@@ -15,6 +15,11 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.ALL]: 'hints',
 }
 
+const HIDDEN_GROUP_HINT_EXPLANATION_TEXT = {
+    PRIMARY_HOUSE: `In the highlighted {{houseName}}, {{candidatesCountText}} numbers {{candidatesListText}} in green color can come in exactly {{cellsCountText}} cells {{cellsListText}}. so in this {{houseName}} in {{cellsListText}} only {{candidatesListText}} stays and {{removableCandidatesListText}} can be removed.`,
+    SECONDARY_HOUSE: `once we remove {{removableCandidatesListText}} from {{groupCellsAxesListText}} then in the highlighted {{houseName}} {{candidatesListText}} will make a {{complementaryHintTitle}} and because of that {{removableGroupCandidatesListText}} can't come in {{removableGroupCandidatesHostCellsListText}}. so we can remove these as well.`
+}
+
 export const HINT_EXPLANATION_TEXTS = {
     [HINTS_IDS.NAKED_SINGLE]: {
         SINGLE_HOUSE: `in this {{houseType}} only the selected cell is empty so from 1-9 only one number can come in this cell which is {{solutionValue}}`,
@@ -28,5 +33,7 @@ export const HINT_EXPLANATION_TEXTS = {
     [HINTS_IDS.NAKED_TRIPPLE]: [
         `A Naked Tripple is a set of three candidates filled in three cells that are part of same row, column or box.\nNote: these three cells collectively can't have more than 3 different candidates`,
         `{{candidatesListText}} make a naked tripple in the highlighted region. in the solution {{candidatesListText}} will be placed in Naked Tripple cells only and all the candidates of these numbers can be removed from other cells of the highlighted region. {{candidatesListText}} will go in exactly which Naked Tripple cell is yet not clear.`
-    ]
+    ],
+    [HINTS_IDS.HIDDEN_DOUBLE]: HIDDEN_GROUP_HINT_EXPLANATION_TEXT,
+    [HINTS_IDS.HIDDEN_TRIPPLE]: HIDDEN_GROUP_HINT_EXPLANATION_TEXT,
 }
