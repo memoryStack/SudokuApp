@@ -26,6 +26,7 @@ export const HINT_EXPLANATION_TEXTS = {
         MULTIPLE_HOUSE: `except {{solutionValue}} every other number from 1-9 is preset in the row, col and block of this highlighted cell so only number that can appear in this cell is {{solutionValue}}`
     },
     [HINTS_IDS.HIDDEN_SINGLE]: `in the highlighted {{houseType}}, {{solutionValue}} can't appear in crossed cells due to the highlighted instances of same number. So it has only one place where it can come`,
+    [HINTS_IDS.OMISSION]: `In the highlighted {{hostHouseFullName}}, {{note}} is present only in {{hostHouseHostCellsListText}} and these cells are also part of the highlighted {{removableNotesHostHouseFullName}}. so {{note}} in {{removableNotesHostCellsListText}} will be removed when it will be filled in the {{hostHouseFullName}} in one of {{hostHouseHostCellsListTextOrJoined}}.`,
     [HINTS_IDS.NAKED_DOUBLE]: [
         `A Naked Double is a set of two candidates filled in two cells that are part of same row, column or box.\nNote: these two cells can't have more than 2 different set of candidates`,
         `{{candidatesListText}} make a naked double in the highlighted region. in the solution {{candidatesListText}} will be placed in Naked Double cells only and all the candidates of {{candidatesListText}} can be removed from other cells of the highlighted region. {{candidatesListText}} will go in exactly which Naked Double cell is yet not clear.`,

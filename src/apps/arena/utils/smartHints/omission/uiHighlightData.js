@@ -1,7 +1,8 @@
+import { dynamicInterpolation } from '../../../../../utils/utilities/dynamicInterpolation'
 import { getHouseCells } from '../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../util'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { HINT_ID_VS_TITLES, } from '../stringLiterals'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES, } from '../stringLiterals'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { setCellDataInHintResult } from '../util'
 
@@ -75,15 +76,18 @@ const getHintExplaination = (omission, notes) => {
         hostHouseHostCells,
         HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
     )
-    const removableNotesHostCellsListText = getCellsAxesValuesListText(removableNotesHostCells)
-    const hostHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME
-    const removableNotesHostHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME
-    return (
-        `In the highlighted ${hostHouseFullName}, ${note} is present` +
-        ` only in ${hostHouseHostCellsListText} and these cells are also part of the` +
-        ` highlighted ${removableNotesHostHouseFullName}. so ${note} in ${removableNotesHostCellsListText}` +
-        ` will be removed when it will be filled in the ${hostHouseFullName} in one of ${hostHouseHostCellsListTextOrJoined}.`
-    )
+
+    const msgPlaceholdersValues = {
+        note,
+        hostHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME,
+        hostHouseHostCellsListText,
+        removableNotesHostHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME,
+        removableNotesHostCellsListText: getCellsAxesValuesListText(removableNotesHostCells),
+        hostHouseHostCellsListTextOrJoined,
+    }
+
+    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.OMISSION]
+    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
 export const getUIHighlightData = (omission, notesData) => {
