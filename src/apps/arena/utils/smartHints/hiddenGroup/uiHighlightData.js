@@ -1,6 +1,7 @@
 import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
 import cloneDeep from '../../../../../utils/utilities/cloneDeep'
-import { HINTS_IDS, HINT_ID_VS_TITLES, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
+import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
+import { HINT_ID_VS_TITLES } from '../../smartHints/stringLiterals'
 import {
     areSameBlockCells,
     areSameColCells,

@@ -1,4 +1,5 @@
-import { HINTS_IDS, HINT_ID_VS_TITLES, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINTS_IDS, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { isCellExists, isCellNoteVisible } from '../../../util'
 import { setCellDataInHintResult } from '../../util'
 import { getHouseCells } from '../../../houseCells'

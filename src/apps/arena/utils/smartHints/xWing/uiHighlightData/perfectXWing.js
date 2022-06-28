@@ -1,4 +1,5 @@
-import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS, HINT_ID_VS_TITLES } from '../../constants'
+import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
+import { HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { isCellExists, isCellNoteVisible } from '../../../util'
 import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData } from '../../util'
 import { getHouseCells } from '../../../houseCells'

@@ -132,21 +132,6 @@ const HOUSE_TYPE_VS_FULL_NAMES = {
     },
 }
 
-const HINT_ID_VS_TITLES = {
-    [HINTS_IDS.NAKED_SINGLE]: 'Naked Single',
-    [HINTS_IDS.HIDDEN_SINGLE]: 'Hidden Single',
-    [HINTS_IDS.NAKED_DOUBLE]: 'Naked Double',
-    [HINTS_IDS.NAKED_TRIPPLE]: 'Naked Tripple',
-    [HINTS_IDS.HIDDEN_DOUBLE]: 'Hidden Double',
-    [HINTS_IDS.HIDDEN_TRIPPLE]: 'Hidden Tripple',
-    [HINTS_IDS.PERFECT_X_WING]: 'X-Wing',
-    [HINTS_IDS.FINNED_X_WING]: 'Finned X-Wing',
-    [HINTS_IDS.SASHIMI_FINNED_X_WING]: 'Sashimi Finned X-Wing',
-    [HINTS_IDS.Y_WING]: 'Y Wing',
-    [HINTS_IDS.OMISSION]: 'Omission',
-    [HINTS_IDS.ALL]: 'hints',
-}
-
 export {
     NAKED_SINGLE_TYPES,
     HIDDEN_SINGLE_TYPES,
@@ -161,5 +146,4 @@ export {
     UI_HINTS_COUNT_THRESHOLD,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
     HOUSE_TYPE_VS_FULL_NAMES,
-    HINT_ID_VS_TITLES,
 }

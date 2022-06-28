@@ -1,6 +1,7 @@
 import { getHouseCells } from '../../houseCells'
 import { getCellHousesInfo, isCellNoteVisible, convertBoardCellToNum, convertBoardCellNumToCell } from '../../util'
-import { HINTS_IDS, HINT_ID_VS_TITLES, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+import { HINT_ID_VS_TITLES } from '../stringLiterals'
 import { setCellDataInHintResult } from '../util'
 
 const YWING_CELLS_TYPES = {
