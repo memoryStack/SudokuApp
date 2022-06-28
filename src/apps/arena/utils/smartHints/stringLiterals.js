@@ -20,5 +20,9 @@ export const HINT_EXPLANATION_TEXTS = {
         SINGLE_HOUSE: `in this {{houseType}} only the selected cell is empty so from 1-9 only one number can come in this cell which is {{solutionValue}}`,
         MULTIPLE_HOUSE: `except {{solutionValue}} every other number from 1-9 is preset in the row, col and block of this highlighted cell so only number that can appear in this cell is {{solutionValue}}`
     },
-    [HINTS_IDS.HIDDEN_SINGLE]: `in the highlighted {{houseType}}, {{solutionValue}} can't appear in crossed cells due to the highlighted instances of same number. So it has only one place where it can come`
+    [HINTS_IDS.HIDDEN_SINGLE]: `in the highlighted {{houseType}}, {{solutionValue}} can't appear in crossed cells due to the highlighted instances of same number. So it has only one place where it can come`,
+    [HINTS_IDS.NAKED_TRIPPLE]: [
+        `A Naked Tripple is a set of three candidates filled in three cells that are part of same row, column or box.\nNote: these three cells collectively can't have more than 3 different candidates`,
+        `{{candidatesListText}} make a naked tripple in the highlighted region. in the solution {{candidatesListText}} will be placed in Naked Tripple cells only and all the candidates of these numbers can be removed from other cells of the highlighted region. {{candidatesListText}} will go in exactly which Naked Tripple cell is yet not clear.`
+    ]
 }

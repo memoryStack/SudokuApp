@@ -2,7 +2,7 @@ import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, getC
 import { N_CHOOSE_K } from '../../../../resources/constants'
 import { consoleLog, getBlockAndBoxNum, getRowAndCol } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
-import { HINT_ID_VS_TITLES } from './stringLiterals'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from './stringLiterals'
 import {
     maxHintsLimitReached,
     setCellDataInHintResult,
@@ -12,25 +12,24 @@ import {
     removeDuplicteCells,
 } from './util'
 import { isHintValid } from './validityTest'
+import { dynamicInterpolation } from '../../../../utils/utilities/dynamicInterpolation'
 
 // TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
 const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
-    const isNakedDoubles = groupCandidates.length === 2
-
     // TODO: explore if we can use the below array for naked double and naked tripple as well in same way
-    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
-    const hintChunks = [
-        `A Naked Tripple is a set of three candidates filled in three cells that are part of same row, column or box.\nNote: these three cells collectively can't have more than 3 different candidates`,
-        `${candidatesListText} make a naked tripple in the highlighted region. in the solution ${candidatesListText} will be placed in Naked Tripple cells only and all the candidates of these numbers can be removed from other cells of the highlighted region. ${candidatesListText} will go in exactly which Naked Tripple cell is yet not clear.`,
-    ]
+    const msgPlaceholdersValues = { candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND) }
+
+    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_TRIPPLE].map((hintChunkTemplate) => {
+        return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
+    })
 
     return {
         hasTryOut: true,
         cellsToFocusData,
         focusedCells,
-        type: isNakedDoubles ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE,
-        title: isNakedDoubles ? HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE] : HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
+        type: HINTS_IDS.NAKED_TRIPPLE,
+        title: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         tryOutAnalyserData: {
             groupCandidates,
