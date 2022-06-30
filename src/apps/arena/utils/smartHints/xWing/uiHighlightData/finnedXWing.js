@@ -1,10 +1,11 @@
 import { HINTS_IDS, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
-import { HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { isCellExists, isCellNoteVisible } from '../../../util'
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult, getHintExplanationStepsFromHintChunks, } from '../../util'
 import { getHouseCells } from '../../../houseCells'
 import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells } from '../utils'
 import { XWING_TYPES } from '../constants'
+import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
 
 // TODO: come up with a better color scheme
 // TODO: RENAME IT
@@ -46,31 +47,19 @@ const getLegsLocation = (houseType, { perfectLeg, finnedLeg }) => {
     }
 }
 
-// TODO: learn RegExes and write a better versio the func mentioned in the below link
-// https://stackoverflow.com/questions/40672651/es6-multiline-template-strings-with-no-new-lines-and-allow-indents
 const getTechniqueExplaination = ({ finnedXWingType, houseType, legs }) => {
     const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, legs)
-    const candidate = legs.perfectLeg.candidate
+    const candidate = legs.perfectLeg.candidate // refactore it using the utils
+    const msgPlaceholdersValues = {
+        candidate,
+        houseType,
+        perfectHouseLocation,
+        finnedHouseLocation,
+    }
     if (finnedXWingType === XWING_TYPES.FINNED) {
-        return (
-            `If you don't know about X-Wing then you won't be able to understand this hint.\n` +
-            `Finned X-Wing is basically X-Wing with finns.` +
-            ` Finn cells are extra cells in the same block as one of the orange/pink colored cell which have same candidate we focus on in X-Wing.` +
-            ` Finns are cells highlighted in yellow color which have ${candidate} present in them.` +
-            ` Only one of these 4 cells in orange/pink color can have finns to make it a valid Finned X-Wing.\n` +
-            `In the ${perfectHouseLocation} ${houseType} it doesn't matter where we place ${candidate}, in the ${finnedHouseLocation} ${houseType} ${candidate} will` +
-            ` be placed such that ${candidate} note highlighted in red color will always be eliminated. so it's safe to remove it from there.`
-        )
+        return dynamicInterpolation(HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING], msgPlaceholdersValues)
     } else {
-        return (
-            `If you don't know about "Finned X-Wing" then you won't be able to understand this hint.\n` +
-            `Sashimi Finned X-Wing is basically Finned X-Wing but here one cell is allowed to not have the candidate which we are targeting in X-Wing. And the cell which doesn't have` +
-            ` targetted candidate in that will have finn cell in it's block. This arrangement of any number makes a Sashimi Finned X-Wing.` +
-            ` As we can see here in the ${finnedHouseLocation} ${houseType} one cell highlighted in orange/pink color doesn't have ${candidate} but has has finn cells in the block.` +
-            ` Now just like Finned X-Wing, we can claim that all the ${candidate} highlighted in the red color can be eliminated.\n` +
-            `In the ${perfectHouseLocation} ${houseType} it doesn't matter where we place ${candidate}, in the ${finnedHouseLocation} ${houseType} ${candidate} will` +
-            ` be placed such that ${candidate} note highlighted in red color will always be eliminated. so it's safe to remove it from there.`
-        )
+        return dynamicInterpolation(HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING], msgPlaceholdersValues)
     }
 }
 
@@ -182,17 +171,23 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
     )
 
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
-
-    return {
+    const tryOutProps = finnedXWingType === XWING_TYPES.FINNED ? {
         hasTryOut: true,
         type: HINTS_IDS.FINNED_X_WING,
+        focusedCells,
+        tryOutAnalyserData: {}
+    } : {}
+
+    const hintSteps = finnedXWingType === XWING_TYPES.FINNED ?
+        getHintExplanationStepsFromHintChunks([getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } })])
+        : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } }) }]
+    return {
         cellsToFocusData,
         title:
             finnedXWingType === XWING_TYPES.FINNED
                 ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING]
                 : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
-        steps: getHintExplanationStepsFromHintChunks([getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } })]),
-        focusedCells,
-        tryOutAnalyserData: {},
+        steps: hintSteps,
+        ...tryOutProps
     }
 }
