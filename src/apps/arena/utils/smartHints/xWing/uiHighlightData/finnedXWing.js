@@ -1,7 +1,7 @@
 import { HINTS_IDS, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { isCellExists, isCellNoteVisible } from '../../../util'
-import { setCellDataInHintResult } from '../../util'
+import { getCellsFromCellsToFocusedData, setCellDataInHintResult, getHintExplanationStepsFromHintChunks, } from '../../util'
 import { getHouseCells } from '../../../houseCells'
 import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells } from '../utils'
 import { XWING_TYPES } from '../constants'
@@ -181,12 +181,18 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
         cellsToFocusData,
     )
 
+    const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
+
     return {
+        hasTryOut: true,
+        type: HINTS_IDS.FINNED_X_WING,
         cellsToFocusData,
         title:
             finnedXWingType === XWING_TYPES.FINNED
                 ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING]
                 : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
-        steps: [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } }) }],
+        steps: getHintExplanationStepsFromHintChunks([getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg } })]),
+        focusedCells,
+        tryOutAnalyserData: {},
     }
 }
