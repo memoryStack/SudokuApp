@@ -35,7 +35,7 @@ const mockBoardSelectors = mockedNotes => {
 
 // all the types of X-Wings. whether removes notes or not
 test('perfect xWing', () => {
-    const { mainNumbers, notesData } = require('./testData')
+    const { mainNumbers, notesData } = require('./testData/perfectXWing')
     mockBoardSelectors(notesData)
 
     const expectedXWings = [
@@ -261,7 +261,7 @@ describe('xWing isPerfectXWing', () => {
 // change this test for supporting finned and sashimis as well
 // after fixing this. fix X-Wings test on top
 describe('house XWing perfect Legs', () => {
-    const { mainNumbers, notesData } = require('./testData')
+    const { mainNumbers, notesData } = require('./testData/perfectXWing')
     mockBoardSelectors(notesData)
 
     test('test 1', () => {
@@ -592,9 +592,10 @@ describe('categorize finned leg cells for X-Wing where perfect leg cells are ali
     })
 })
 
+// TODO: these test-cases are failing, accomodate these
 describe(' check if finned X-Wing removes notes or not ', () => {
     test('test 1', () => {
-        const { notesData } = require('./testData')
+        const { notesData } = require('./testData/perfectXWing')
         mockBoardSelectors(notesData)
 
         const data = {
@@ -623,7 +624,7 @@ describe(' check if finned X-Wing removes notes or not ', () => {
     })
 
     test('test 2', () => {
-        const { notesData } = require('./testData')
+        const { notesData } = require('./testData/perfectXWing')
         // test cases i have doesn't have Finned X-Wing which will remove some notes.
         // so artificially creating one
 
@@ -660,7 +661,7 @@ describe(' check if finned X-Wing removes notes or not ', () => {
     })
 
     test('returns false for sashimi-finned x-wing when no notes to remove', () => {
-        const { notesData } = require('./testData')
+        const { notesData } = require('./testData/perfectXWing')
         // test cases i have doesn't have Sashimi-Finned X-Wing which will remove some notes.
         // so artificially creating one
 
@@ -698,13 +699,14 @@ describe(' check if finned X-Wing removes notes or not ', () => {
 })
 
 describe(' removable notes host cells for finned X-Wing ', () => {
-    // perfect cells of finned leg are in seperate blocks
-    test('test 1', () => {
+    test('returns cells from cross house which have candidate present in them and shares same block with finn cells', () => {
+        const { notesData } = require('./testData/finnedXWing')
+
         const data = {
             houseType: HOUSE_TYPE.ROW,
             legs: [
                 {
-                    candidate: 3,
+                    candidate: 7,
                     cells: [
                         { row: 2, col: 5 },
                         { row: 2, col: 8 },
@@ -712,86 +714,20 @@ describe(' removable notes host cells for finned X-Wing ', () => {
                     type: LEG_TYPES.PERFECT,
                 },
                 {
-                    candidate: 3,
+                    candidate: 7,
                     cells: [
-                        { row: 3, col: 3 },
-                        { row: 3, col: 5 },
-                        { row: 3, col: 8 },
+                        { row: 6, col: 5 },
+                        { row: 6, col: 6 },
+                        { row: 6, col: 7 },
+                        { row: 6, col: 8 },
                     ],
                     type: LEG_TYPES.FINNED,
                 },
             ],
         }
 
-        const expectedResult = [
-            { row: 4, col: 5 },
-            { row: 5, col: 5 },
-        ]
-        expect(getFinnedXWingRemovableNotesHostCells(data)).toStrictEqual(expectedResult)
-    })
-
-    // perfect and finn legs are in same block
-    test('test 2', () => {
-        const data = {
-            houseType: HOUSE_TYPE.COL,
-            legs: [
-                {
-                    candidate: 3,
-                    cells: [
-                        { row: 3, col: 3 },
-                        { row: 4, col: 3 },
-                        { row: 5, col: 3 },
-                    ],
-                    type: LEG_TYPES.FINNED,
-                },
-                {
-                    candidate: 3,
-                    cells: [
-                        { row: 3, col: 6 },
-                        { row: 5, col: 6 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
-        }
-
-        const expectedResult = [
-            { row: 3, col: 4 },
-            { row: 3, col: 5 },
-            { row: 5, col: 4 },
-            { row: 5, col: 5 },
-        ]
-        expect(getFinnedXWingRemovableNotesHostCells(data)).toStrictEqual(expectedResult)
-    })
-
-    // was added after finding a bug
-    test('test 3', () => {
-        const data = {
-            houseType: HOUSE_TYPE.COL,
-            legs: [
-                {
-                    candidate: 3,
-                    cells: [
-                        { row: 1, col: 5 },
-                        { row: 3, col: 5 },
-                        { row: 4, col: 5 },
-                        { row: 5, col: 5 },
-                    ],
-                    type: LEG_TYPES.FINNED,
-                },
-                {
-                    candidate: 3,
-                    cells: [
-                        { row: 1, col: 3 },
-                        { row: 5, col: 3 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
-        }
-
-        const expectedResult = [{ row: 5, col: 4 }]
-        expect(getFinnedXWingRemovableNotesHostCells(data)).toStrictEqual(expectedResult)
+        const expectedResult = [{ row: 7, col: 8 }]
+        expect(getFinnedXWingRemovableNotesHostCells(data, notesData)).toStrictEqual(expectedResult)
     })
 })
 

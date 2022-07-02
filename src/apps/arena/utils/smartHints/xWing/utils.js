@@ -1,8 +1,8 @@
 import { LEG_TYPES } from './constants'
-import { areSameColCells, areSameRowCells, getCellHouseInfo, getHouseAxesValue, isCellExists } from '../../util'
+import { areSameColCells, areSameRowCells, getCellHouseInfo, getHouseAxesValue, isCellExists, isCellNoteVisible } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { getHouseCells } from '../../houseCells'
-import { getBlockAndBoxNum } from '../../../../../utils/util'
+import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
 import { toOrdinal } from '../../../../../utils/utilities/toOrdinal'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 
@@ -34,14 +34,14 @@ export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells
 
 export const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
-export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }) => {
+export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notesData) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
     const crossHouseType = getCrossHouseType(houseType)
-
+    const candidate = perfectLeg.candidate
     const xWingBaseCells = [...otherLeg.cells, ...perfectLeg.cells]
     return getHouseCells(HOUSE_TYPE.BLOCK, getBlockAndBoxNum(finns[0]).blockNum).filter(cell => {
-        if (isCellExists(cell, xWingBaseCells)) return false
+        if (isCellExists(cell, xWingBaseCells) || !isCellNoteVisible(candidate, notesData[cell.row][cell.col])) return false
         return perfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]
             if (crossHouseType === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
