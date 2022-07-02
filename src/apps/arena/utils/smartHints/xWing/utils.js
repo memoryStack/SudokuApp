@@ -50,6 +50,16 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     })
 }
 
+// TODO: get the raw legs and this func will figure out to categorize them
+export const getPerfectCellsInFinnedBlock = (legs) => {
+    const { perfect: perfectCells, finns } = categorizeFinnedLegCells(legs.perfectLeg.cells, legs.finnedLeg.cells)
+    return perfectCells.filter((perfectCell) => {
+        return finns.some(finnCell => {
+            return getBlockAndBoxNum(finnCell).blockNum === getBlockAndBoxNum(perfectCell).blockNum
+        })
+    })
+}
+
 export const addCellInXWingLeg = (cell, legCells, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)
     legCells.push(cell)

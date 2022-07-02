@@ -67,7 +67,7 @@ const isPerfectXWingRemovesNotes = ({ legs, houseType }, notesData) => {
 
 // FIXME: this func is wrong. why is it wrong ??
 export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => {
-    return getFinnedXWingRemovableNotesHostCells({ houseType, legs }).some(cell => {
+    return getFinnedXWingRemovableNotesHostCells({ houseType, legs }, notesData).some(cell => {
         return isCellNoteVisible(legs[0].candidate, notesData[cell.row][cell.col])
     })
 }
