@@ -72,6 +72,12 @@ export const getXWingCandidate = xWing => {
     return xWing.legs[0].candidate
 }
 
+export const getXWingHosuesInOrder = (xWing) => {
+    return xWing.legs.map(({ cells }) => {
+        return getCellHouseInfo(xWing.houseType, cells[0])
+    })
+}
+
 /* hint text helpers */
 
 export const getXWingHousesTexts = (houseType, xWingLegs) => {

@@ -3,7 +3,7 @@ import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellHouseInfo, isCellExists, isCellNoteVisible } from '../../../util'
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult, getHintExplanationStepsFromHintChunks, } from '../../util'
 import { getHouseCells } from '../../../houseCells'
-import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getHouseAxesText, getPerfectCellsInFinnedBlock, getXWingCandidate } from '../utils'
+import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getHouseAxesText, getPerfectCellsInFinnedBlock, getXWingCandidate, getXWingHousesNums, getXWingHosuesInOrder } from '../utils'
 import { XWING_TYPES } from '../constants'
 import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
@@ -49,11 +49,12 @@ const getLegsLocation = (houseType, { perfectLeg, finnedLeg }) => {
 }
 
 const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableNotesHostCells }) => {
+    const xWing = { type: finnedXWingType, houseType, legs }
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
 
     const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, { perfectLeg, finnedLeg })
 
-    const candidate = getXWingCandidate({ type: finnedXWingType, houseType, legs })
+    const candidate = getXWingCandidate(xWing)
 
     const { perfect: finnedLegPerfectCells, finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
 
@@ -61,6 +62,8 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
     const perfectLegHouse = getCellHouseInfo(houseType, perfectLeg.cells[0])
 
     const finnedBlockPerfectCells = getPerfectCellsInFinnedBlock(legs)
+
+    const xWingHouses = getXWingHosuesInOrder(xWing)
 
     const msgPlaceholdersValues = {
         candidate,
@@ -76,7 +79,7 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
         shareVerbGrammaticalText: finnCells.length === 1 ? 'shares' : 'share',
         finnedBlockPerfectCellsAxesText: getCellsAxesValuesListText(finnedBlockPerfectCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
         finnedBlockPerfectCellsEnglishText: finnedBlockPerfectCells.length === 1 ? 'cell' : 'cells',
-        hostHousesAxesListText: `${getHouseAxesText(finnedLegHouse)}, ${getHouseAxesText(perfectLegHouse)}`, // todo: do this in ordering as done in below func
+        hostHousesAxesListText: `${getHouseAxesText(xWingHouses[0])}, ${getHouseAxesText(xWingHouses[1])}`,
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
         removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells),
         removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',

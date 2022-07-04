@@ -20,6 +20,7 @@ import {
     getCrossHouseType,
     addCellInXWingLeg,
     getPerfectCellsInFinnedBlock,
+    getXWingHosuesInOrder,
 } from './utils'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -1174,4 +1175,38 @@ describe('getPerfectCellsInFinnedBlock()', () => {
         expect(getPerfectCellsInFinnedBlock(xWing.legs)).toStrictEqual(expectedResult)
     })
 
+})
+
+describe('getXWingHosuesInOrder()', () => {
+    test('returns X-Wing houses info sorted in first come order in board', () => {
+        const xWing = {
+            houseType: HOUSE_TYPE.ROW,
+            legs: [
+                {
+                    candidate: 7,
+                    cells: [
+                        { row: 2, col: 5 },
+                        { row: 2, col: 8 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+                {
+                    candidate: 7,
+                    cells: [
+                        { row: 6, col: 5 },
+                        { row: 6, col: 6 },
+                        { row: 6, col: 7 },
+                        { row: 6, col: 8 },
+                    ],
+                    type: LEG_TYPES.FINNED,
+                },
+            ],
+        }
+
+        const expectedResult = [
+            { type: HOUSE_TYPE.ROW, num: 2 },
+            { type: HOUSE_TYPE.ROW, num: 6 }
+        ]
+        expect(getXWingHosuesInOrder(xWing)).toStrictEqual(expectedResult)
+    })
 })
