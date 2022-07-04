@@ -1,9 +1,27 @@
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import {
+    HINTS_IDS,
+    HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
+    HOUSE_TYPE,
+    HOUSE_TYPE_VS_FULL_NAMES,
+    SMART_HINTS_CELLS_BG_COLOR,
+} from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellHouseInfo, isCellExists, isCellNoteVisible } from '../../../util'
-import { getCellsFromCellsToFocusedData, setCellDataInHintResult, getHintExplanationStepsFromHintChunks, } from '../../util'
+import {
+    getCellsFromCellsToFocusedData,
+    setCellDataInHintResult,
+    getHintExplanationStepsFromHintChunks,
+} from '../../util'
 import { getHouseCells } from '../../../houseCells'
-import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getHouseAxesText, getPerfectCellsInFinnedBlock, getXWingCandidate, getXWingHosuesInOrder } from '../utils'
+import {
+    categorizeLegs,
+    categorizeFinnedLegCells,
+    getFinnedXWingRemovableNotesHostCells,
+    getHouseAxesText,
+    getPerfectCellsInFinnedBlock,
+    getXWingCandidate,
+    getXWingHosuesInOrder,
+} from '../utils'
 import { XWING_TYPES } from '../constants'
 import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
@@ -52,7 +70,10 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
     const xWing = { type: finnedXWingType, houseType, legs }
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
 
-    const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, { perfectLeg, finnedLeg })
+    const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, {
+        perfectLeg,
+        finnedLeg,
+    })
 
     const candidate = getXWingCandidate(xWing)
 
@@ -76,7 +97,10 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
         finnCellsAxesListText: getCellsAxesValuesListText(finnCells),
         finnCellEnglishText: finnCells.length === 1 ? 'cell' : 'cells',
         shareVerbGrammaticalText: finnCells.length === 1 ? 'shares' : 'share',
-        finnedBlockPerfectCellsAxesText: getCellsAxesValuesListText(finnedBlockPerfectCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        finnedBlockPerfectCellsAxesText: getCellsAxesValuesListText(
+            finnedBlockPerfectCells,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        ),
         finnedBlockPerfectCellsEnglishText: finnedBlockPerfectCells.length === 1 ? 'cell' : 'cells',
         hostHousesAxesListText: `${getHouseAxesText(xWingHouses[0])}, ${getHouseAxesText(xWingHouses[1])}`,
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
@@ -86,7 +110,7 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
 
     if (finnedXWingType === XWING_TYPES.FINNED) {
         const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING]
-        return msgTemplates.map((template) => {
+        return msgTemplates.map(template => {
             return dynamicInterpolation(template, msgPlaceholdersValues)
         })
     } else {
@@ -196,25 +220,25 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
     defaultHighlightCrossHouseCells({ houseType, cells: [perfectLeg.cells, finnedLegPerfectCells] }, cellsToFocusData)
     highlightXWingCells([...perfectLeg.cells, ...finnedLegPerfectCells], candidate, cellsToFocusData)
     highlightFinnCells(finnCells, candidate, cellsToFocusData)
-    highlightRemovableNotesHostCells(
-        removableNotesHostCells,
-        candidate,
-        notesData,
-        cellsToFocusData,
-    )
+    highlightRemovableNotesHostCells(removableNotesHostCells, candidate, notesData, cellsToFocusData)
 
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
-    const tryOutProps = finnedXWingType === XWING_TYPES.FINNED ? {
-        hasTryOut: true,
-        type: HINTS_IDS.FINNED_X_WING,
-        focusedCells,
-        tryOutAnalyserData: {}
-    } : {}
+    const tryOutProps =
+        finnedXWingType === XWING_TYPES.FINNED
+            ? {
+                  hasTryOut: true,
+                  type: HINTS_IDS.FINNED_X_WING,
+                  focusedCells,
+                  tryOutAnalyserData: {},
+              }
+            : {}
 
-
-    const hintSteps = finnedXWingType === XWING_TYPES.FINNED ?
-        getHintExplanationStepsFromHintChunks(getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }))
-        : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }) }]
+    const hintSteps =
+        finnedXWingType === XWING_TYPES.FINNED
+            ? getHintExplanationStepsFromHintChunks(
+                  getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
+              )
+            : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }) }]
     return {
         cellsToFocusData,
         title:
@@ -222,6 +246,6 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
                 ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING]
                 : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
         steps: hintSteps,
-        ...tryOutProps
+        ...tryOutProps,
     }
 }

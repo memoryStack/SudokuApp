@@ -1,5 +1,12 @@
 import { LEG_TYPES } from './constants'
-import { areSameColCells, areSameRowCells, getCellHouseInfo, getHouseAxesValue, isCellExists, isCellNoteVisible } from '../../util'
+import {
+    areSameColCells,
+    areSameRowCells,
+    getCellHouseInfo,
+    getHouseAxesValue,
+    isCellExists,
+    isCellNoteVisible,
+} from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
@@ -41,7 +48,8 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     const candidate = perfectLeg.candidate
     const xWingBaseCells = [...otherLeg.cells, ...perfectLeg.cells]
     return getHouseCells(HOUSE_TYPE.BLOCK, getBlockAndBoxNum(finns[0]).blockNum).filter(cell => {
-        if (isCellExists(cell, xWingBaseCells) || !isCellNoteVisible(candidate, notesData[cell.row][cell.col])) return false
+        if (isCellExists(cell, xWingBaseCells) || !isCellNoteVisible(candidate, notesData[cell.row][cell.col]))
+            return false
         return perfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]
             if (crossHouseType === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
@@ -50,10 +58,10 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     })
 }
 
-export const getPerfectCellsInFinnedBlock = (legs) => {
+export const getPerfectCellsInFinnedBlock = legs => {
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
-    return perfectCells.filter((perfectCell) => {
+    return perfectCells.filter(perfectCell => {
         return finns.some(finnCell => {
             return getBlockAndBoxNum(finnCell).blockNum === getBlockAndBoxNum(perfectCell).blockNum
         })
@@ -72,7 +80,7 @@ export const getXWingCandidate = xWing => {
     return xWing.legs[0].candidate
 }
 
-export const getXWingHosuesInOrder = (xWing) => {
+export const getXWingHosuesInOrder = xWing => {
     return xWing.legs.map(({ cells }) => {
         return getCellHouseInfo(xWing.houseType, cells[0])
     })

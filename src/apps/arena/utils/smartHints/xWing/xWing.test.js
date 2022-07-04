@@ -1171,10 +1171,12 @@ describe('getPerfectCellsInFinnedBlock()', () => {
             ],
         }
 
-        const expectedResult = [{ row: 6, col: 6 }, { row: 6, col: 8 }]
+        const expectedResult = [
+            { row: 6, col: 6 },
+            { row: 6, col: 8 },
+        ]
         expect(getPerfectCellsInFinnedBlock(xWing.legs)).toStrictEqual(expectedResult)
     })
-
 })
 
 describe('getXWingHosuesInOrder()', () => {
@@ -1205,7 +1207,7 @@ describe('getXWingHosuesInOrder()', () => {
 
         const expectedResult = [
             { type: HOUSE_TYPE.ROW, num: 2 },
-            { type: HOUSE_TYPE.ROW, num: 6 }
+            { type: HOUSE_TYPE.ROW, num: 6 },
         ]
         expect(getXWingHosuesInOrder(xWing)).toStrictEqual(expectedResult)
     })
