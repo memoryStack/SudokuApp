@@ -19,6 +19,7 @@ import {
     getFinnedXWingRemovableNotesHostCells,
     getCrossHouseType,
     addCellInXWingLeg,
+    getPerfectCellsInFinnedBlock,
 } from './utils'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -1113,4 +1114,64 @@ describe('getXWingType()', () => {
         }
         expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.FINNED)
     })
+})
+
+describe('getPerfectCellsInFinnedBlock()', () => {
+    test('returns all the perfect cells from finned legs which shares its block with finn cells', () => {
+        const xWing = {
+            houseType: HOUSE_TYPE.ROW,
+            legs: [
+                {
+                    candidate: 7,
+                    cells: [
+                        { row: 2, col: 5 },
+                        { row: 2, col: 8 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+                {
+                    candidate: 7,
+                    cells: [
+                        { row: 6, col: 5 },
+                        { row: 6, col: 6 },
+                        { row: 6, col: 7 },
+                        { row: 6, col: 8 },
+                    ],
+                    type: LEG_TYPES.FINNED,
+                },
+            ],
+        }
+
+        const expectedResult = [{ row: 6, col: 8 }]
+        expect(getPerfectCellsInFinnedBlock(xWing.legs)).toStrictEqual(expectedResult)
+    })
+
+    test('returns all the perfect cells from finned legs which shares its block with finn cells', () => {
+        const xWing = {
+            houseType: HOUSE_TYPE.ROW,
+            legs: [
+                {
+                    candidate: 7,
+                    cells: [
+                        { row: 2, col: 6 },
+                        { row: 2, col: 8 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+                {
+                    candidate: 7,
+                    cells: [
+                        { row: 6, col: 6 },
+                        { row: 6, col: 7 },
+                        { row: 6, col: 8 },
+                    ],
+                    type: LEG_TYPES.FINNED,
+                },
+            ],
+        }
+
+        const expectedResult = [{ row: 6, col: 6 }, { row: 6, col: 8 }]
+        expect(getPerfectCellsInFinnedBlock(xWing.legs)).toStrictEqual(expectedResult)
+    })
+
 })

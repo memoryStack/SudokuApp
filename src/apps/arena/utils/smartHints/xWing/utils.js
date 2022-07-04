@@ -50,7 +50,6 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     })
 }
 
-// TODO:  write test cases for this func
 export const getPerfectCellsInFinnedBlock = (legs) => {
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
