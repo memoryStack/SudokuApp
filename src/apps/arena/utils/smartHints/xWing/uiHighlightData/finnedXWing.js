@@ -3,7 +3,7 @@ import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellHouseInfo, isCellExists, isCellNoteVisible } from '../../../util'
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult, getHintExplanationStepsFromHintChunks, } from '../../util'
 import { getHouseCells } from '../../../houseCells'
-import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getHouseAxesText, getPerfectCellsInFinnedBlock, getXWingCandidate, getXWingHousesNums, getXWingHosuesInOrder } from '../utils'
+import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getHouseAxesText, getPerfectCellsInFinnedBlock, getXWingCandidate, getXWingHosuesInOrder } from '../utils'
 import { XWING_TYPES } from '../constants'
 import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
@@ -56,10 +56,9 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
 
     const candidate = getXWingCandidate(xWing)
 
-    const { perfect: finnedLegPerfectCells, finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
+    const { finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
 
     const finnedLegHouse = getCellHouseInfo(houseType, finnedLeg.cells[0])
-    const perfectLegHouse = getCellHouseInfo(houseType, perfectLeg.cells[0])
 
     const finnedBlockPerfectCells = getPerfectCellsInFinnedBlock(legs)
 
