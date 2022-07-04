@@ -56,7 +56,7 @@ export const HINT_EXPLANATION_TEXTS = {
 
         `only one row or column can have these finn cells and in that row or column all of the finn cells must be in the same block with one of the main cells\n` +
         `notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} wasn't present in {{finnCellsAxesListText}}(finn {{finnCellEnglishText}}) then it would be a perfect X-Wing.` +
-        ` {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedLegHostCellsAndConcatenated}} main {{finnedMainCellGrammaticalText}}\n`,
+        ` {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} main {{finnedBlockPerfectCellsEnglishText}}\n`,
 
         `in Finned X-Wing we can remove {{candidate}} only from cells which share block with finn cells\n` +
         `because here in the {{hostHousesAxesListText}} {{hostHousePluralName}} it doesn't matter where {{candidate}} comes in the final solution,` +

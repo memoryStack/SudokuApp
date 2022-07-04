@@ -3,7 +3,7 @@ import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellHouseInfo, isCellExists, isCellNoteVisible } from '../../../util'
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult, getHintExplanationStepsFromHintChunks, } from '../../util'
 import { getHouseCells } from '../../../houseCells'
-import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getHouseAxesText, getPerfectCellsInFinnedBlock } from '../utils'
+import { categorizeLegs, categorizeFinnedLegCells, getFinnedXWingRemovableNotesHostCells, getHouseAxesText, getPerfectCellsInFinnedBlock, getXWingCandidate } from '../utils'
 import { XWING_TYPES } from '../constants'
 import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
@@ -49,46 +49,39 @@ const getLegsLocation = (houseType, { perfectLeg, finnedLeg }) => {
 }
 
 const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableNotesHostCells }) => {
-    const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, legs)
-    const candidate = legs.perfectLeg.candidate // refactore it using the utils
+    const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
 
-    /*
+    const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, { perfectLeg, finnedLeg })
 
-        ` notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} wasn't present in {{finnCellsAxesListText}}(finn {{finnCellEnglishText}}) 
-        then it would be a perfect X-Wing.` +
-        ` {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedLegHostCellsAndConcatenated}} main {{finnedMainCellGrammaticalText}}\n` +
-        ` in this type of X-Wing we can remove {{candidate}} from some specific cells`,
+    const candidate = getXWingCandidate({ type: finnedXWingType, houseType, legs })
 
-        ` in the {{hostHousesAxesListText}} {{hostHousePluralName}} it doesn't matter where {{candidate}} comes in the final solution, we can say for sure that` +
-        ` {{candidate}} won't come in {{removableNotesHostCells}} cells. try it yourself to better understand the reason behind it` +
-    
-    */
+    const { perfect: finnedLegPerfectCells, finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
 
-    const { perfect: finnedLegPerfectCells, finns: finnCells } = categorizeFinnedLegCells(legs.perfectLeg.cells, legs.finnedLeg.cells)
+    const finnedLegHouse = getCellHouseInfo(houseType, finnedLeg.cells[0])
+    const perfectLegHouse = getCellHouseInfo(houseType, perfectLeg.cells[0])
 
-    const finnedLegHouse = getCellHouseInfo(houseType, legs.finnedLeg.cells[0])
-    const perfectLegHouse = getCellHouseInfo(houseType, legs.perfectLeg.cells[0])
+    const finnedBlockPerfectCells = getPerfectCellsInFinnedBlock(legs)
 
     const msgPlaceholdersValues = {
         candidate,
         houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         perfectHouseLocation,
         finnedHouseLocation,
-        // new msg placeholder values
 
+        // new msg placeholder values
         finnedLegAxesText: getHouseAxesText(finnedLegHouse),
         finnedLegHouseText: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         finnCellsAxesListText: getCellsAxesValuesListText(finnCells),
         finnCellEnglishText: finnCells.length === 1 ? 'cell' : 'cells',
         shareVerbGrammaticalText: finnCells.length === 1 ? 'shares' : 'share',
-        // below pass only the cells which share block with the finn cells
-        finnedLegHostCellsAndConcatenated: getCellsAxesValuesListText(getPerfectCellsInFinnedBlock(legs), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        finnedMainCellGrammaticalText: getPerfectCellsInFinnedBlock(legs).length === 1 ? 'cell' : 'cells',
-        hostHousesAxesListText: `${getHouseAxesText(finnedLegHouse)}, ${getHouseAxesText(perfectLegHouse)}`, // do this in ordering as done in below func
+        finnedBlockPerfectCellsAxesText: getCellsAxesValuesListText(finnedBlockPerfectCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        finnedBlockPerfectCellsEnglishText: finnedBlockPerfectCells.length === 1 ? 'cell' : 'cells',
+        hostHousesAxesListText: `${getHouseAxesText(finnedLegHouse)}, ${getHouseAxesText(perfectLegHouse)}`, // todo: do this in ordering as done in below func
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
         removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells),
         removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',
     }
+
     if (finnedXWingType === XWING_TYPES.FINNED) {
         const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING]
         return msgTemplates.map((template) => {
@@ -218,8 +211,8 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
 
 
     const hintSteps = finnedXWingType === XWING_TYPES.FINNED ?
-        getHintExplanationStepsFromHintChunks(getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg }, removableNotesHostCells }))
-        : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs: { perfectLeg, finnedLeg }, removableNotesHostCells }) }]
+        getHintExplanationStepsFromHintChunks(getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }))
+        : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }) }]
     return {
         cellsToFocusData,
         title:
