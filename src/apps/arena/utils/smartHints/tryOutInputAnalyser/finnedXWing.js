@@ -6,6 +6,7 @@ import _flatten from '../../../../../utils/utilities/flatten'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate, getCellsFromXWingLegs, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult } from '../xWing/utils'
+import _isEmpty from '../../../../../utils/utilities/isEmpty'
 
 export default ({ xWing, removableNotesHostCells }) => {
     const xWingCells = getCellsFromXWingLegs(xWing.legs)
@@ -14,7 +15,7 @@ export default ({ xWing, removableNotesHostCells }) => {
         return getNoInputResult(xWing)
     }
 
-    if (filterFilledCells(removableNotesHostCells).length) {
+    if (!_isEmpty(filterFilledCells(removableNotesHostCells)) && _isEmpty(filterFilledCells(xWingCells))) {
         return getSameCrossHouseCandidatePossibilitiesResult(xWing)
     }
 
