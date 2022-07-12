@@ -4,14 +4,18 @@ import {
     areSameRowCells,
     getCellHouseInfo,
     getHouseAxesValue,
+    isCellEmpty,
     isCellExists,
     isCellNoteVisible,
 } from '../../util'
-import { HOUSE_TYPE } from '../constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
 import { toOrdinal } from '../../../../../utils/utilities/toOrdinal'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
+import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
+import { getStoreState } from '../../../../../redux/dispatch.helpers'
 
 export const categorizeLegs = (legA, legB) => {
     const perfectLeg = legA.type === LEG_TYPES.PERFECT ? legA : legB
@@ -86,7 +90,13 @@ export const getXWingHosuesInOrder = xWing => {
     })
 }
 
-/* hint text helpers */
+export const getCellsFromXWingLegs = (legs) => {
+    const cells = legs.map(leg => leg.cells)
+    return [...cells[0], ...cells[1]]
+}
+
+/* hint text and try-out helpers */
+// TODO: move these helpers to separate file
 
 export const getXWingHousesTexts = (houseType, xWingLegs) => {
     const { houseANum, houseBNum } = getXWingHousesNums(houseType, xWingLegs)
@@ -149,4 +159,55 @@ const getXWingCornerCells = xWing => {
         bottomLeft: houseType === HOUSE_TYPE.COL ? xWingLegs[0].cells[1] : xWingLegs[1].cells[0],
         bottomRight: xWingLegs[1].cells[1],
     }
+}
+
+export const getNoInputResult = xWing => {
+    const candidate = getXWingCandidate(xWing)
+    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
+    const houseFullName = HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
+    return {
+        msg:
+            `try filling ${candidate} in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName}` +
+            ` to understand why all ${candidate} highlighted in red color can't come there and is safe to remove`,
+        state: TRY_OUT_RESULT_STATES.START,
+    }
+}
+
+export const filterFilledCells = cells => {
+    const mainNumbers = getTryOutMainNumbers(getStoreState())
+    return cells.filter(cell => {
+        return !isCellEmpty(cell, mainNumbers)
+    })
+}
+
+// TODO: change it's name to make it more compact and descriptive
+export const getSameCrossHouseCandidatePossibilitiesResult = (xWing) => {
+    const xWingCells = getCellsFromXWingLegs(xWing.legs)
+    const candidate = getXWingCandidate(xWing)
+
+    const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(xWingCells, candidate)
+    const xWingHostCellsTexts = getCellsAxesValuesListText(
+        xWingCellsWithCandidateAsNote,
+        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+    )
+
+    const crossHouseType = getCrossHouseType(xWing.houseType)
+    const crossHouse = getCellHouseInfo(crossHouseType, xWingCellsWithCandidateAsNote[0])
+
+    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
+    return {
+        msg:
+            `now to fill ${candidate} in ${houseAAxesValue} and ${houseBAxesValue}` +
+            ` ${HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL} we have` +
+            ` two cells ${xWingHostCellsTexts} but both of these cells are in` +
+            ` same ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME} which is ${getHouseAxesText(crossHouse)}`,
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
+    const notes = getTryOutNotes(getStoreState())
+    return cells.filter(cell => {
+        return isCellNoteVisible(candidate, notes[cell.row][cell.col])
+    })
 }

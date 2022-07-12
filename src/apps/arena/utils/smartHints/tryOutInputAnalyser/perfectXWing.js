@@ -5,7 +5,7 @@ import { noInputInTryOut, getCellsAxesValuesListText } from './helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate } from '../xWing/utils'
+import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult } from '../xWing/utils'
 
 export default ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
@@ -17,25 +17,6 @@ export default ({ xWing, xWingCells, removableNotesHostCells }) => {
     }
 
     return getXWingCellsFilledResult(xWing)
-}
-
-const getNoInputResult = xWing => {
-    const candidate = getXWingCandidate(xWing)
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
-    const houseFullName = HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
-    return {
-        msg:
-            `try filling ${candidate} in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName}` +
-            ` to understand why ${candidate} highlighted in red colors can't come there and is safe to remove`,
-        state: TRY_OUT_RESULT_STATES.START,
-    }
-}
-
-const filterFilledCells = removableNotesHostCells => {
-    const mainNumbers = getTryOutMainNumbers(getStoreState())
-    return removableNotesHostCells.filter(cell => {
-        return !isCellEmpty(cell, mainNumbers)
-    })
 }
 
 const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
@@ -50,7 +31,7 @@ const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) =>
         return getOneXWingCellAndOneRemovableNoteHostCellFilled(xWing)
     }
 
-    return getOneRemovableNoteCellFilledErrorResult(xWing)
+    return getSameCrossHouseCandidatePossibilitiesResult(xWing)
 }
 
 const getXWingCellsFilledResult = xWing => {
@@ -89,6 +70,8 @@ const getBothCornorsFilledResult = xWing => {
     }
 }
 
+// TODO: re-implemented in utils
+// use this approach in other places
 const getXWingCells = xWingLegs => {
     return _flatten(xWingLegs.map(leg => leg.cells))
 }
@@ -136,35 +119,4 @@ const getXWingHouseFullNamePlural = xWing => {
 
 const getXWingHouseFullName = xWing => {
     return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME
-}
-
-const getOneRemovableNoteCellFilledErrorResult = xWing => {
-    const xWingCells = getXWingCells(xWing.legs)
-    const candidate = getXWingCandidate(xWing)
-
-    const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(xWingCells, candidate)
-    const xWingHostCellsTexts = getCellsAxesValuesListText(
-        xWingCellsWithCandidateAsNote,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-    )
-
-    const crossHouseType = getCrossHouseType(xWing.houseType)
-    const crossHouse = getCellHouseInfo(crossHouseType, xWingCellsWithCandidateAsNote[0])
-
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
-    return {
-        msg:
-            `now to fill ${candidate} in ${houseAAxesValue} and ${houseBAxesValue}` +
-            ` ${HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL} we have` +
-            ` two cells ${xWingHostCellsTexts} but both of these cells are in` +
-            ` same ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME} which is ${getHouseAxesText(crossHouse)}`,
-        state: TRY_OUT_RESULT_STATES.ERROR,
-    }
-}
-
-const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
-    const notes = getTryOutNotes(getStoreState())
-    return cells.filter(cell => {
-        return isCellNoteVisible(candidate, notes[cell.row][cell.col])
-    })
 }

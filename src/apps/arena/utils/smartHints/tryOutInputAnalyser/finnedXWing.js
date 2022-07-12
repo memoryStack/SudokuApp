@@ -5,20 +5,21 @@ import { noInputInTryOut, getCellsAxesValuesListText } from './helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate } from '../xWing/utils'
+import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate, getCellsFromXWingLegs, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult } from '../xWing/utils'
 
-export default () => {
+export default ({ xWing, removableNotesHostCells }) => {
+    const xWingCells = getCellsFromXWingLegs(xWing.legs)
+
+    if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
+        return getNoInputResult(xWing)
+    }
+
+    if (filterFilledCells(removableNotesHostCells).length) {
+        return getSameCrossHouseCandidatePossibilitiesResult(xWing)
+    }
+
     return {
-        msg: 'msg aayega re baba',
+        msg: 'implementation is yet to be done',
         state: TRY_OUT_RESULT_STATES.START,
     }
-    // if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
-    //     return getNoInputResult(xWing)
-    // }
-
-    // if (filterFilledCells(removableNotesHostCells).length) {
-    //     return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
-    // }
-
-    // return getXWingCellsFilledResult(xWing)
 }

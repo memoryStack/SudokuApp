@@ -202,7 +202,8 @@ const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cells
         })
 }
 
-export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType }, notesData) => {
+export const getFinnedXWingUIData = (xWing, notesData) => {
+    const { type: finnedXWingType, legs, houseType } = xWing
     const candidate = legs[0].candidate
 
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
@@ -222,22 +223,27 @@ export const getFinnedXWingUIData = ({ type: finnedXWingType, legs, houseType },
     highlightFinnCells(finnCells, candidate, cellsToFocusData)
     highlightRemovableNotesHostCells(removableNotesHostCells, candidate, notesData, cellsToFocusData)
 
+
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
     const tryOutProps =
         finnedXWingType === XWING_TYPES.FINNED
             ? {
-                  hasTryOut: true,
-                  type: HINTS_IDS.FINNED_X_WING,
-                  focusedCells,
-                  tryOutAnalyserData: {},
-              }
+                hasTryOut: true,
+                type: HINTS_IDS.FINNED_X_WING,
+                focusedCells,
+                tryOutAnalyserData: { // pass data here whatever is required by analyser
+                    xWing,
+                    // xWingCells, // this we can calculate in the try-out analyser only
+                    removableNotesHostCells
+                },
+            }
             : {}
 
     const hintSteps =
         finnedXWingType === XWING_TYPES.FINNED
             ? getHintExplanationStepsFromHintChunks(
-                  getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
-              )
+                getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
+            )
             : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }) }]
     return {
         cellsToFocusData,

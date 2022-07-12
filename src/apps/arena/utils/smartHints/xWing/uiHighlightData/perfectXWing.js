@@ -15,6 +15,7 @@ import {
     getXWingRectangleCornersAxesText,
     getDiagonalsCornersAxesTexts,
     getCrossHouseAxesText,
+    getCellsFromXWingLegs,
 } from '../utils'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
 import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
@@ -135,8 +136,7 @@ export const getPerfectXWingUIData = (xWing, notesData) => {
     const { legs, houseType } = xWing
     const candidate = legs[0].candidate
     const cells = legs.map(leg => leg.cells)
-
-    const xWingCells = [...cells[0], ...cells[1]]
+    const xWingCells = getCellsFromXWingLegs(xWing.legs)
 
     const cellsToFocusData = {}
     highlightXWingCells(xWingCells, candidate, cellsToFocusData)
