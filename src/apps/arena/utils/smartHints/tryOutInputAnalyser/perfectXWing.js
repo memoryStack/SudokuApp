@@ -5,7 +5,7 @@ import { noInputInTryOut, getCellsAxesValuesListText } from './helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult } from '../xWing/utils'
+import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult, getXWingHouseFullNamePlural, getXWingHouseFullName, getOneLegWithNoCandidateResult } from '../xWing/utils'
 
 export default ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
@@ -28,7 +28,7 @@ const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) =>
 
     const xWingFilledCellsCount = filterFilledCells(xWingCells).length
     if (xWingFilledCellsCount) {
-        return getOneXWingCellAndOneRemovableNoteHostCellFilled(xWing)
+        return getOneLegWithNoCandidateResult(xWing)
     }
 
     return getSameCrossHouseCandidatePossibilitiesResult(xWing)
@@ -84,39 +84,4 @@ const getBothHouseWithoutCandidateErrorResult = xWing => {
         msg: `there is no cell in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} where ${candidate} can come`,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
-}
-
-const getOneXWingCellAndOneRemovableNoteHostCellFilled = xWing => {
-    const candidate = getXWingCandidate(xWing)
-    const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs)
-    const inhabitableHouseAxesText = getHouseAxesText(
-        getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
-    )
-    return {
-        msg:
-            `there is no cell in ${inhabitableHouseAxesText} ${getXWingHouseFullNamePlural(xWing)}` +
-            ` where ${candidate} can come`,
-        state: TRY_OUT_RESULT_STATES.ERROR,
-    }
-}
-
-const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
-    const mainNumbers = getTryOutMainNumbers(getStoreState())
-    const notes = getTryOutNotes(getStoreState())
-    return xWingLegs.find(({ cells: legXWingCells }) => {
-        return legXWingCells.every(xWingCell => {
-            return (
-                isCellEmpty(xWingCell, mainNumbers) &&
-                !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
-            )
-        })
-    })
-}
-
-const getXWingHouseFullNamePlural = xWing => {
-    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
-}
-
-const getXWingHouseFullName = xWing => {
-    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME
 }

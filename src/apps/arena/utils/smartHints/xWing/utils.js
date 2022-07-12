@@ -211,3 +211,38 @@ const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
         return isCellNoteVisible(candidate, notes[cell.row][cell.col])
     })
 }
+
+export const getOneLegWithNoCandidateResult = xWing => {
+    const candidate = getXWingCandidate(xWing)
+    const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs)
+    const inhabitableHouseAxesText = getHouseAxesText(
+        getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
+    )
+    return {
+        msg:
+            `there is no cell in ${inhabitableHouseAxesText} ${getXWingHouseFullName(xWing)}` +
+            ` where ${candidate} can come`,
+        state: TRY_OUT_RESULT_STATES.ERROR,
+    }
+}
+
+const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
+    const mainNumbers = getTryOutMainNumbers(getStoreState())
+    const notes = getTryOutNotes(getStoreState())
+    return xWingLegs.find(({ cells: legXWingCells }) => {
+        return legXWingCells.every(xWingCell => {
+            return (
+                isCellEmpty(xWingCell, mainNumbers) &&
+                !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
+            )
+        })
+    })
+}
+
+export const getXWingHouseFullName = xWing => {
+    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME
+}
+
+export const getXWingHouseFullNamePlural = xWing => {
+    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
+}
