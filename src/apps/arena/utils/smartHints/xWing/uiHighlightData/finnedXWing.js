@@ -235,7 +235,6 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
                 inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]),
                 tryOutAnalyserData: { // pass data here whatever is required by analyser
                     xWing,
-                    // xWingCells, // this we can calculate in the try-out analyser only
                     removableNotesHostCells
                 },
             }

@@ -1,15 +1,11 @@
-import { isCellEmpty, isCellNoteVisible, getCellHouseInfo } from '../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut, getCellsAxesValuesListText } from './helpers'
+import { noInputInTryOut } from './helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
-import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate, getCellsFromXWingLegs, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult, getOneLegWithNoCandidateResult } from '../xWing/utils'
+import { getXWingCells, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult, getOneLegWithNoCandidateResult, getLegsFilledWithoutErrorResult } from '../xWing/utils'
 import _isEmpty from '../../../../../utils/utilities/isEmpty'
 
 export default ({ xWing, removableNotesHostCells }) => {
-    const xWingCells = getCellsFromXWingLegs(xWing.legs)
+    const xWingCells = getXWingCells(xWing.legs)
 
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
         return getNoInputResult(xWing)
@@ -23,8 +19,14 @@ export default ({ xWing, removableNotesHostCells }) => {
         return getOneLegWithNoCandidateResult(xWing)
     }
 
+    if (!_isEmpty(filterFilledCells(xWingCells))) {
+        return getLegsFilledWithoutErrorResult(xWing)
+    }
+
+    // TODO: i should know about this state through some backend api setup
+    // it's a bug if execution reaches here
     return {
-        msg: 'implementation is yet to be done',
+        msg: 'not sure how we reached here',
         state: TRY_OUT_RESULT_STATES.START,
     }
 }

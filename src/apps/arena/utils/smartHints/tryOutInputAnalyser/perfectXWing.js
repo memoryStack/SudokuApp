@@ -1,11 +1,8 @@
-import { isCellEmpty, isCellNoteVisible, getCellHouseInfo } from '../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
+import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut, getCellsAxesValuesListText } from './helpers'
+import { noInputInTryOut } from './helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
-import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getCrossHouseType, getXWingHousesTexts, getHouseAxesText, getXWingCandidate, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult, getXWingHouseFullNamePlural, getXWingHouseFullName, getOneLegWithNoCandidateResult } from '../xWing/utils'
+import { getXWingHousesTexts, getXWingCandidate, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult, getOneLegWithNoCandidateResult, getXWingCells, getLegsFilledWithoutErrorResult } from '../xWing/utils'
 
 export default ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
@@ -16,7 +13,7 @@ export default ({ xWing, xWingCells, removableNotesHostCells }) => {
         return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
     }
 
-    return getXWingCellsFilledResult(xWing)
+    return getLegsFilledWithoutErrorResult(xWing)
 }
 
 const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
@@ -32,48 +29,6 @@ const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) =>
     }
 
     return getSameCrossHouseCandidatePossibilitiesResult(xWing)
-}
-
-const getXWingCellsFilledResult = xWing => {
-    const xWingCells = getXWingCells(xWing.legs)
-    const filledXWingCells = filterFilledCells(xWingCells)
-
-    if (filledXWingCells.length === 1) {
-        return getOneCornorFilledResult(xWing, filledXWingCells)
-    }
-    return getBothCornorsFilledResult(xWing)
-}
-
-const getOneCornorFilledResult = (xWing, filledXWingCells) => {
-    const candidate = getXWingCandidate(xWing)
-    const houseFullName = getXWingHouseFullName(xWing)
-
-    const filledLegHouse = getCellHouseInfo(xWing.houseType, filledXWingCells[0])
-    const houseAxesText = getHouseAxesText(filledLegHouse)
-    return {
-        msg:
-            `${candidate} is filled in ${houseAxesText} ${houseFullName} without any error, try filling it` +
-            ` in other places as well where it is highlighted in red or green color`,
-        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
-    }
-}
-
-const getBothCornorsFilledResult = xWing => {
-    const candidate = getXWingCandidate(xWing)
-    const houseFullName = getXWingHouseFullNamePlural(xWing)
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
-    return {
-        msg:
-            `${candidate} is filled in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} without` +
-            ` any error, and all the ${candidate} highlighted in red color are removed`,
-        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
-    }
-}
-
-// TODO: re-implemented in utils
-// use this approach in other places
-const getXWingCells = xWingLegs => {
-    return _flatten(xWingLegs.map(leg => leg.cells))
 }
 
 const getBothHouseWithoutCandidateErrorResult = xWing => {

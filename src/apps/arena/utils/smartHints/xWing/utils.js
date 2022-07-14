@@ -16,6 +16,7 @@ import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
+import _flatten from '../../../../../utils/utilities/flatten'
 
 export const categorizeLegs = (legA, legB) => {
     const perfectLeg = legA.type === LEG_TYPES.PERFECT ? legA : legB
@@ -90,9 +91,8 @@ export const getXWingHosuesInOrder = xWing => {
     })
 }
 
-export const getCellsFromXWingLegs = (legs) => {
-    const cells = legs.map(leg => leg.cells)
-    return [...cells[0], ...cells[1]]
+export const getXWingCells = (xWingLegs) => {
+    return _flatten(xWingLegs.map(leg => leg.cells))
 }
 
 /* hint text and try-out helpers */
@@ -182,7 +182,7 @@ export const filterFilledCells = cells => {
 
 // TODO: change it's name to make it more compact and descriptive
 export const getSameCrossHouseCandidatePossibilitiesResult = (xWing) => {
-    const xWingCells = getCellsFromXWingLegs(xWing.legs)
+    const xWingCells = getXWingCells(xWing.legs)
     const candidate = getXWingCandidate(xWing)
 
     const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(xWingCells, candidate)
@@ -245,4 +245,42 @@ export const getXWingHouseFullName = xWing => {
 
 export const getXWingHouseFullNamePlural = xWing => {
     return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
+}
+
+export const getLegsFilledWithoutErrorResult = xWing => {
+    const xWingCells = getXWingCells(xWing.legs)
+    const filledXWingCells = filterFilledCells(xWingCells)
+
+    if (filledXWingCells.length === 1) {
+        return getOneLegFilledWithoutErrorResult(xWing)
+    }
+    return getBothLegsFilledWithoutErrorResult(xWing)
+}
+
+const getOneLegFilledWithoutErrorResult = (xWing) => {
+    const candidate = getXWingCandidate(xWing)
+    const houseFullName = getXWingHouseFullName(xWing)
+
+    const filledXWingCells = filterFilledCells(getXWingCells(xWing.legs))
+
+    const filledLegHouse = getCellHouseInfo(xWing.houseType, filledXWingCells[0])
+    const houseAxesText = getHouseAxesText(filledLegHouse)
+    return {
+        msg:
+            `${candidate} is filled in ${houseAxesText} ${houseFullName} without any error, try filling it` +
+            ` in other places as well where it is highlighted in red or green color`,
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
+}
+
+const getBothLegsFilledWithoutErrorResult = xWing => {
+    const candidate = getXWingCandidate(xWing)
+    const houseFullName = getXWingHouseFullNamePlural(xWing)
+    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
+    return {
+        msg:
+            `${candidate} is filled in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} without error` +
+            ` and all the red colored ${candidate}s are also removed.`,
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
 }
