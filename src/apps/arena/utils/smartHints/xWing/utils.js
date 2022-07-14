@@ -91,7 +91,7 @@ export const getXWingHosuesInOrder = xWing => {
     })
 }
 
-export const getXWingCells = (xWingLegs) => {
+export const getXWingCells = xWingLegs => {
     return _flatten(xWingLegs.map(leg => leg.cells))
 }
 
@@ -181,7 +181,7 @@ export const filterFilledCells = cells => {
 }
 
 // TODO: change it's name to make it more compact and descriptive
-export const getSameCrossHouseCandidatePossibilitiesResult = (xWing) => {
+export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
     const xWingCells = getXWingCells(xWing.legs)
     const candidate = getXWingCandidate(xWing)
 
@@ -257,7 +257,7 @@ export const getLegsFilledWithoutErrorResult = xWing => {
     return getBothLegsFilledWithoutErrorResult(xWing)
 }
 
-const getOneLegFilledWithoutErrorResult = (xWing) => {
+const getOneLegFilledWithoutErrorResult = xWing => {
     const candidate = getXWingCandidate(xWing)
     const houseFullName = getXWingHouseFullName(xWing)
 

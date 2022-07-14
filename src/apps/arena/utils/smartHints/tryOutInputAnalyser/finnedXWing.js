@@ -1,7 +1,14 @@
 import { TRY_OUT_RESULT_STATES } from './constants'
 import { noInputInTryOut } from './helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
-import { getXWingCells, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult, getOneLegWithNoCandidateResult, getLegsFilledWithoutErrorResult } from '../xWing/utils'
+import {
+    getXWingCells,
+    getNoInputResult,
+    filterFilledCells,
+    getSameCrossHouseCandidatePossibilitiesResult,
+    getOneLegWithNoCandidateResult,
+    getLegsFilledWithoutErrorResult,
+} from '../xWing/utils'
 import _isEmpty from '../../../../../utils/utilities/isEmpty'
 
 export default ({ xWing, removableNotesHostCells }) => {

@@ -224,27 +224,27 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
     highlightFinnCells(finnCells, candidate, cellsToFocusData)
     highlightRemovableNotesHostCells(removableNotesHostCells, candidate, notesData, cellsToFocusData)
 
-
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
     const tryOutProps =
         finnedXWingType === XWING_TYPES.FINNED
             ? {
-                hasTryOut: true,
-                type: HINTS_IDS.FINNED_X_WING,
-                focusedCells,
-                inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]),
-                tryOutAnalyserData: { // pass data here whatever is required by analyser
-                    xWing,
-                    removableNotesHostCells
-                },
-            }
+                  hasTryOut: true,
+                  type: HINTS_IDS.FINNED_X_WING,
+                  focusedCells,
+                  inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]),
+                  tryOutAnalyserData: {
+                      // pass data here whatever is required by analyser
+                      xWing,
+                      removableNotesHostCells,
+                  },
+              }
             : {}
 
     const hintSteps =
         finnedXWingType === XWING_TYPES.FINNED
             ? getHintExplanationStepsFromHintChunks(
-                getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
-            )
+                  getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
+              )
             : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }) }]
     return {
         cellsToFocusData,

@@ -2,7 +2,16 @@ import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { TRY_OUT_RESULT_STATES } from './constants'
 import { noInputInTryOut } from './helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
-import { getXWingHousesTexts, getXWingCandidate, getNoInputResult, filterFilledCells, getSameCrossHouseCandidatePossibilitiesResult, getOneLegWithNoCandidateResult, getXWingCells, getLegsFilledWithoutErrorResult } from '../xWing/utils'
+import {
+    getXWingHousesTexts,
+    getXWingCandidate,
+    getNoInputResult,
+    filterFilledCells,
+    getSameCrossHouseCandidatePossibilitiesResult,
+    getOneLegWithNoCandidateResult,
+    getXWingCells,
+    getLegsFilledWithoutErrorResult,
+} from '../xWing/utils'
 
 export default ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
