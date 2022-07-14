@@ -11,6 +11,7 @@ import {
     getCellsFromCellsToFocusedData,
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,
+    getTryOutInputPanelNumbersVisibility,
 } from '../../util'
 import { getHouseCells } from '../../../houseCells'
 import {
@@ -231,6 +232,7 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
                 hasTryOut: true,
                 type: HINTS_IDS.FINNED_X_WING,
                 focusedCells,
+                inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]),
                 tryOutAnalyserData: { // pass data here whatever is required by analyser
                     xWing,
                     // xWingCells, // this we can calculate in the try-out analyser only
