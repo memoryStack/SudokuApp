@@ -264,12 +264,14 @@ export const getOneLegWithNoCandidateResult = xWing => {
 }
 
 const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
-    const mainNumbers = getTryOutMainNumbers(getStoreState())
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const mainNumbers = getMainNumbers(getStoreState())
     const notes = getTryOutNotes(getStoreState())
     return xWingLegs.find(({ cells: legXWingCells }) => {
         return legXWingCells.every(xWingCell => {
+            // handles sashimi finned x-wing as well
             return (
-                isCellEmpty(xWingCell, mainNumbers) &&
+                (isCellEmpty(xWingCell, tryOutMainNumbers) || !isCellEmpty(xWingCell, mainNumbers)) &&
                 !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
             )
         })
