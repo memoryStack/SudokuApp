@@ -184,7 +184,6 @@ export const filterFilledCells = cells => {
     })
 }
 
-// TODO: use this finally everywhere
 export const getSashimiCell = (xWing) => {
     const { houseType, legs } = xWing
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
