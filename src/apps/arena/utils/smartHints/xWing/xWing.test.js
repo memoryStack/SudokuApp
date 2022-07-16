@@ -1168,31 +1168,37 @@ describe('transformSashimiXWingLeg()', () => {
 })
 
 // TODO: add more test-cses for this func
-// this test suite is not proper. need to mock notes here as required by HintValidator
 describe('getXWingType()', () => {
+
+    beforeEach(() => {
+        const { notes } = require('./testData/sashimiFinnedXWing')
+        mockBoardSelectors(notes)
+
+    })
+
     test('returns XWING_TYPES.FINNED for 1 perfect leg and 1 finned leg and perfect host cells are aligned for perfect leg', () => {
         const houseType = HOUSE_TYPE.COL
         const legA = {
-            candidate: 5,
+            candidate: 4,
             cells: [
-                { row: 3, col: 2 },
-                { row: 4, col: 2 },
-                { row: 5, col: 2 },
+                { row: 3, col: 4 },
+                { row: 5, col: 4 },
+                { row: 6, col: 4 },
             ],
             type: LEG_TYPES.FINNED,
         }
         const legB = {
-            candidate: 5,
+            candidate: 4,
             cells: [
-                { row: 3, col: 4 },
-                { row: 5, col: 4 },
+                { row: 5, col: 7 },
+                { row: 6, col: 7 },
             ],
             type: LEG_TYPES.PERFECT,
         }
         expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.FINNED)
     })
 
-    test.skip('newly added test', () => {
+    test('returns XWING_TYPES.SASHIMI_FINNED for 1 perfect leg and 1 finned leg but only one cells pair between these legs is aligned', () => {
         const houseType = HOUSE_TYPE.ROW
         const legA = {
             candidate: 4,

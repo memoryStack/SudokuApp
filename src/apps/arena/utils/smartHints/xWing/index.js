@@ -170,8 +170,7 @@ export const getXWingType = (legA, legB, xWingHouseType) => {
         result = XWING_TYPES.FINNED
     if (isSashimiFinnedXWing(xWing)) result = XWING_TYPES.SASHIMI_FINNED
 
-    const hintValidityCheckerPayload = { legs: [legA, legB], houseType: xWingHouseType }
-    if (result !== XWING_TYPES.INVALID && !isHintValid({ type: HINTS_IDS.X_WING, data: hintValidityCheckerPayload }))
+    if (result !== XWING_TYPES.INVALID && !isHintValid({ type: HINTS_IDS.X_WING, data: xWing }))
         result = XWING_TYPES.INVALID
 
     return result
@@ -310,8 +309,6 @@ export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const xWings = getAllXWings(mainNumbers, notesData)
         .filter(xWing => {
             return removableNotesInCrossHouse(xWing, notesData)
-                && xWing.type === XWING_TYPES.SASHIMI_FINNED
-                && xWing.legs[0].candidate === 4
         })
         .slice(0, maxHintsThreshold)
 
