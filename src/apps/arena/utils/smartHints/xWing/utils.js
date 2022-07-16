@@ -1,5 +1,6 @@
-import { LEG_TYPES } from './constants'
+import { LEG_TYPES, XWING_TYPES } from './constants'
 import {
+    areSameCells,
     areSameColCells,
     areSameRowCells,
     getCellHouseInfo,
@@ -17,6 +18,7 @@ import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import _flatten from '../../../../../utils/utilities/flatten'
+import { getMainNumbers } from '../../../store/selectors/board.selectors'
 
 export const categorizeLegs = (legA, legB) => {
     const perfectLeg = legA.type === LEG_TYPES.PERFECT ? legA : legB
@@ -174,10 +176,46 @@ export const getNoInputResult = xWing => {
 }
 
 export const filterFilledCells = cells => {
-    const mainNumbers = getTryOutMainNumbers(getStoreState())
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const mainNumbers = getMainNumbers(getStoreState())
+
     return cells.filter(cell => {
-        return !isCellEmpty(cell, mainNumbers)
+        return isCellEmpty(cell, mainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
     })
+}
+
+// TODO: use this finally everywhere
+export const getSashimiCell = (xWing) => {
+    const { houseType, legs } = xWing
+    const { perfectLeg, otherLeg } = categorizeLegs(...legs)
+    const { sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
+
+    if (houseType === HOUSE_TYPE.ROW) {
+        return {
+            row: otherLeg.cells[0].row,
+            col: sashimiAligned.col,
+        }
+    } else {
+        return {
+            row: sashimiAligned.row,
+            col: otherLeg.cells[0].col,
+        }
+    }
+}
+
+export const categorizeSashimiXWingPerfectLegCells = (perfectLegCells, otherLegCells) => {
+    const result = {}
+    perfectLegCells.forEach(perfectLegCell => {
+        // TODO: this below loop is repeating again and again
+        // extract it
+        const isAligned = otherLegCells.some(otherLegCell => {
+            const cellsPair = [perfectLegCell, otherLegCell]
+            return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
+        })
+        if (isAligned) result.perfectAligned = perfectLegCell
+        else result.sashimiAligned = perfectLegCell
+    })
+    return result
 }
 
 // TODO: change it's name to make it more compact and descriptive
@@ -200,7 +238,7 @@ export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
             `now to fill ${candidate} in ${houseAAxesValue} and ${houseBAxesValue}` +
             ` ${HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL} we have` +
             ` two cells ${xWingHostCellsTexts} but both of these cells are in` +
-            ` same ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME} which is ${getHouseAxesText(crossHouse)}`,
+            ` ${getHouseAxesText(crossHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME} `,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }

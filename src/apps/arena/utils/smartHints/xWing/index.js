@@ -20,6 +20,7 @@ import {
     categorizeFinnedLegCells,
     getFinnedXWingRemovableNotesHostCells,
     addCellInXWingLeg,
+    categorizeSashimiXWingPerfectLegCells,
 } from './utils'
 
 const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
@@ -108,21 +109,7 @@ export const getAlignedCellInPerfectLeg = (perfectLegCells, otherLegCells) => {
     })
 }
 
-export const categorizeSashimiPerfectLegCells = (perfectLegCells, otherLegCells) => {
-    const result = {}
-    perfectLegCells.forEach(perfectLegCell => {
-        // TODO: this below loop is repeating again and again
-        // extract it
-        const isAligned = otherLegCells.some(otherLegCell => {
-            const cellsPair = [perfectLegCell, otherLegCell]
-            return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
-        })
-        if (isAligned) result.perfectAligned = perfectLegCell
-        else result.sashimiAligned = perfectLegCell
-    })
-    return result
-}
-
+// TODO: move it to utils
 export const getSashimiCell = (perfectLegSashimiAlignedCell, otherLegCells, xWingHouseType) => {
     if (xWingHouseType === HOUSE_TYPE.ROW) {
         return {
@@ -151,7 +138,7 @@ export const isSashimiFinnedXWing = (perfectLeg, otherLeg, xWingHouseType) => {
         )
     }
 
-    const { perfectAligned, sashimiAligned } = categorizeSashimiPerfectLegCells(perfectLeg.cells, otherLeg.cells)
+    const { perfectAligned, sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
     if (!perfectAligned || !sashimiAligned) return false
 
     const sashimiCell = getSashimiCell(sashimiAligned, otherLeg.cells, xWingHouseType)
@@ -266,7 +253,7 @@ export const transformSashimiXWingLeg = (legA, legB, houseType) => {
     sashimiLeg.type = LEG_TYPES.SASHIMI_FINNED
 
     const { perfectLeg, otherLeg } = categorizeLegs(firstLeg, secondLeg)
-    const { sashimiAligned } = categorizeSashimiPerfectLegCells(perfectLeg.cells, otherLeg.cells)
+    const { sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
 
     addCellInXWingLeg(getSashimiCell(sashimiAligned, otherLeg.cells, houseType), sashimiLeg.cells, houseType)
 
@@ -282,6 +269,7 @@ export const getAllXWings = (mainNumbers, notesData) => {
         for (let houseNum = 0; houseNum < 9; houseNum++) {
             const house = { type: houseType, num: houseNum }
             const housePossibleXWingLegs = getHouseXWingLegs(house, mainNumbers, notesData)
+
             housePossibleXWingLegs.forEach(xWingLeg => {
                 addCandidateXWingLeg({ ...xWingLeg }, houseType, candidateXWingLegs)
             })
@@ -318,8 +306,12 @@ export const getAllXWings = (mainNumbers, notesData) => {
 export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const xWings = getAllXWings(mainNumbers, notesData)
         .filter(xWing => {
+
+            console.log('@@@@@@ xwing', xWing)
+
             return removableNotesInCrossHouse(xWing, notesData)
-            // return xWing.type === XWING_TYPES.SASHIMI_FINNED
+                && xWing.type === XWING_TYPES.SASHIMI_FINNED
+                && xWing.legs[0].candidate === 4
         })
         .slice(0, maxHintsThreshold)
 

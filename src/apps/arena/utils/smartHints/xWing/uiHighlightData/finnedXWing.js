@@ -116,7 +116,7 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
             return dynamicInterpolation(template, msgPlaceholdersValues)
         })
     } else {
-        return dynamicInterpolation(HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING], msgPlaceholdersValues)
+        return [dynamicInterpolation(HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING], msgPlaceholdersValues)]
     }
 }
 
@@ -226,27 +226,21 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
     highlightRemovableNotesHostCells(removableNotesHostCells, candidate, notesData, cellsToFocusData)
 
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
-    const tryOutProps =
-        finnedXWingType === XWING_TYPES.FINNED
-            ? {
-                hasTryOut: true,
-                type: HINTS_IDS.FINNED_X_WING,
-                focusedCells,
-                inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]),
-                clickableCells: [...removableNotesHostCells, ...getXWingCells(xWing.legs)],
-                tryOutAnalyserData: {
-                    xWing,
-                    removableNotesHostCells,
-                },
-            }
-            : {}
+    const tryOutProps = {
+        hasTryOut: true,
+        type: HINTS_IDS.FINNED_X_WING,
+        focusedCells,
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]),
+        clickableCells: [...removableNotesHostCells, ...getXWingCells(xWing.legs)],
+        tryOutAnalyserData: {
+            xWing,
+            removableNotesHostCells,
+        },
+    }
 
-    const hintSteps =
-        finnedXWingType === XWING_TYPES.FINNED
-            ? getHintExplanationStepsFromHintChunks(
-                getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
-            )
-            : [{ text: getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }) }]
+    const hintSteps = getHintExplanationStepsFromHintChunks(
+        getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
+    )
     return {
         cellsToFocusData,
         title:

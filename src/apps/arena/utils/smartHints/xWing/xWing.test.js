@@ -6,9 +6,7 @@ import {
     isFinnedXWing,
     isFinnedXWingRemovesNotes,
     isSashimiFinnedXWing,
-    categorizeSashimiPerfectLegCells,
     getAlignedCellInPerfectLeg,
-    getSashimiCell,
     transformSashimiXWingLeg,
     getXWingType,
 } from '.'
@@ -21,6 +19,8 @@ import {
     addCellInXWingLeg,
     getPerfectCellsInFinnedBlock,
     getXWingHosuesInOrder,
+    categorizeSashimiXWingPerfectLegCells,
+    getSashimiCell,
 } from './utils'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -952,7 +952,7 @@ describe('getAlignedCellInPerfectLeg()', () => {
     })
 })
 
-describe('categorizeSashimiPerfectLegCells()', () => {
+describe('categorizeSashimiXWingPerfectLegCells()', () => {
     test('sepertes sashimi aligned cell and cell aligned with perfect part of finned-sashimi', () => {
         const perfectLegCells = [
             { row: 7, col: 5 },
@@ -967,33 +967,66 @@ describe('categorizeSashimiPerfectLegCells()', () => {
             perfectAligned: { row: 7, col: 8 },
             sashimiAligned: { row: 7, col: 5 },
         }
-        expect(categorizeSashimiPerfectLegCells(perfectLegCells, otherLegCells)).toStrictEqual(expectedResult)
+        expect(categorizeSashimiXWingPerfectLegCells(perfectLegCells, otherLegCells)).toStrictEqual(expectedResult)
     })
 })
 
 describe('getSashimiCell()', () => {
+    // note don't pass sashimi cell already in the cells array for the SASHIMI_FINNED leg
     test('returns sashimi cell for row house type sashimi-finned XWing', () => {
-        const xWingHouseType = HOUSE_TYPE.ROW
-        const sashimiAlignedCell = { row: 7, col: 5 }
-        const otherLegCells = [
-            { row: 3, col: 3 },
-            { row: 3, col: 4 },
-            { row: 3, col: 8 },
-        ]
+        const xWing = {
+            houseType: HOUSE_TYPE.ROW,
+            legs: [
+                {
+                    candidate: 2,
+                    cells: [
+                        { row: 3, col: 3 },
+                        { row: 3, col: 4 },
+                        { row: 3, col: 8 },
+                    ],
+                    type: LEG_TYPES.SASHIMI_FINNED,
+                },
+                {
+                    candidate: 2,
+                    cells: [
+                        { row: 7, col: 5 },
+                        { row: 7, col: 8 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                }
+            ]
+        }
+
         const expectedResult = { row: 3, col: 5 }
-        expect(getSashimiCell(sashimiAlignedCell, otherLegCells, xWingHouseType)).toStrictEqual(expectedResult)
+        expect(getSashimiCell(xWing)).toStrictEqual(expectedResult)
     })
 
     test('returns sashimi cell for col house type sashimi-finned XWing', () => {
-        const xWingHouseType = HOUSE_TYPE.COL
-        const sashimiAlignedCell = { row: 7, col: 5 }
-        const otherLegCells = [
-            { row: 3, col: 8 },
-            { row: 6, col: 8 },
-            { row: 8, col: 8 },
-        ]
+        const xWing = {
+            houseType: HOUSE_TYPE.COL,
+            legs: [
+                {
+                    candidate: 2,
+                    cells: [
+                        { row: 3, col: 8 },
+                        { row: 6, col: 8 },
+                        { row: 8, col: 8 },
+                    ],
+                    type: LEG_TYPES.SASHIMI_FINNED,
+                },
+                {
+                    candidate: 2,
+                    cells: [
+                        { row: 3, col: 5 },
+                        { row: 7, col: 5 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                }
+            ]
+        }
+
         const expectedResult = { row: 7, col: 8 }
-        expect(getSashimiCell(sashimiAlignedCell, otherLegCells, xWingHouseType)).toStrictEqual(expectedResult)
+        expect(getSashimiCell(xWing)).toStrictEqual(expectedResult)
     })
 })
 
@@ -1093,6 +1126,7 @@ describe('transformSashimiXWingLeg()', () => {
 })
 
 // TODO: add more test-cses for this func
+// this test suite is not proper. need to mock notes here as required by HintValidator
 describe('getXWingType()', () => {
     test('returns XWING_TYPES.FINNED for 1 perfect leg and 1 finned leg and perfect host cells are aligned for perfect leg', () => {
         const houseType = HOUSE_TYPE.COL
@@ -1115,6 +1149,29 @@ describe('getXWingType()', () => {
         }
         expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.FINNED)
     })
+
+    test.skip('newly added test', () => {
+        const houseType = HOUSE_TYPE.ROW
+        const legA = {
+            candidate: 4,
+            cells: [
+                { row: 3, col: 3 },
+                { row: 3, col: 4 },
+                { row: 3, col: 8 },
+            ],
+            type: LEG_TYPES.FINNED,
+        }
+        const legB = {
+            candidate: 4,
+            cells: [
+                { row: 7, col: 5 },
+                { row: 7, col: 8 },
+            ],
+            type: LEG_TYPES.PERFECT,
+        }
+        expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.SASHIMI_FINNED)
+    })
+
 })
 
 describe('getPerfectCellsInFinnedBlock()', () => {
