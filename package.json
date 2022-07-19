@@ -17,7 +17,7 @@
         "@reduxjs/toolkit": "^1.8.0",
         "eslint-plugin-react-hooks": "^4.2.0",
         "fast-sudoku-puzzles": "https://memoryStack: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@github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
-        "lodash": "^4.17.21",
+        "lodash": "https://github.com/memoryStack/lodash.git",
         "prettier": "^2.4.1",
         "react": "17.0.1",
         "react-native": "0.64.0",
@@ -39,8 +39,5 @@
         "jest": "^26.6.3",
         "metro-react-native-babel-preset": "^0.64.0",
         "react-test-renderer": "17.0.1"
-    },
-    "jest": {
-        "preset": "react-native"
     }
 }

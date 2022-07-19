@@ -1,1 +1,1 @@
-export { default } from 'lodash/flatten'
+export { default } from 'lodash/src/utils/flatten'

@@ -1,1 +1,1 @@
-export { default } from 'lodash/isEmpty'
+export { default } from 'lodash/src/utils/isEmpty'
