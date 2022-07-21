@@ -39,35 +39,36 @@ export const HINT_EXPLANATION_TEXTS = {
     [HINTS_IDS.HIDDEN_TRIPPLE]: HIDDEN_GROUP_HINT_EXPLANATION_TEXT,
     [HINTS_IDS.PERFECT_X_WING]: [
         `in X-Wing we focus on a candidate which is possible in exactly 2 cells of 2 rows or 2 columns.` +
-            ` these cells must behave like the corners of a rectangle or square when connected`,
+        ` these cells must behave like the corners of a rectangle or square when connected`,
         `if the candidate is found in exactly 2 cells in rows then all the other occurences of candidate in columns` +
-            ` can be removed and same is true when candidate is found in exactly 2 cells in columns then it can be removed` +
-            ` from other cells in the rows`,
+        ` can be removed and same is true when candidate is found in exactly 2 cells in columns then it can be removed` +
+        ` from other cells in the rows`,
         `notice in highlighted area in the board\n{{candidate}} is present in exactly 2 cells in` +
-            ` {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} forming a {{rectangleCornersText}}` +
-            ` rectangle. now in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} {{candidate}} can be` +
-            ` filled either in {{topDownDiagonalText}} or {{bottomUpDiagonalText}} cells and it will result in removing` +
-            ` {{candidate}} from {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullName}} {{cellsAxesListText}} cells`,
+        ` {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} forming a {{rectangleCornersText}}` +
+        ` rectangle. now in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} {{candidate}} can be` +
+        ` filled either in {{topDownDiagonalText}} or {{bottomUpDiagonalText}} cells and it will result in removing` +
+        ` {{candidate}} from {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullName}} {{cellsAxesListText}} cells`,
     ],
     [HINTS_IDS.FINNED_X_WING]: [
         `If you don't know about X-Wing then you won't be able to understand this hint.\n` +
-            `Finned X-Wing is basically X-Wing with Finn cells. when the candidate is present in more than 2 cells in row or` +
-            ` column then the extra cells are known as finn cells.`,
+        `Finned X-Wing is basically X-Wing with Finn cells. when the candidate is present in more than 2 cells in row or` +
+        ` column then the extra cells are known as finn cells.`,
 
         `only one row or column can have these finn cells and in that row or column all of the finn cells must be in the same block with one of the main cells\n` +
-            `notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} wasn't present in {{finnCellsAxesListText}}(finn {{finnCellEnglishText}}) then it would be a perfect X-Wing.` +
-            ` {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} main {{finnedBlockPerfectCellsEnglishText}}\n`,
+        `notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} wasn't present in {{finnCellsAxesListText}}(finn {{finnCellEnglishText}}) then it would be a perfect X-Wing.` +
+        ` {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} main {{finnedBlockPerfectCellsEnglishText}}\n`,
 
         `in Finned X-Wing we can remove {{candidate}} only from cells which share block with finn cells\n` +
-            `because here in the {{hostHousesAxesListText}} {{hostHousePluralName}} it doesn't matter where {{candidate}} comes in the final solution,` +
-            ` {{candidate}} won't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}. try it yourself to better understand the reason behind it`,
+        `because here in the {{hostHousesAxesListText}} {{hostHousePluralName}} it doesn't matter where {{candidate}} comes in the final solution,` +
+        ` {{candidate}} won't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}. try it yourself to better understand the reason behind it`,
     ],
-    [HINTS_IDS.SASHIMI_FINNED_X_WING]:
+    [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
         `If you don't know about "Finned X-Wing" then you won't be able to understand this hint.\n` +
         `Sashimi Finned X-Wing is basically Finned X-Wing but here one cell is allowed to not have the candidate which we are targeting in X-Wing. And the cell which doesn't have` +
         ` targetted candidate in that will have finn cell in it's block. This arrangement of any number makes a Sashimi Finned X-Wing.` +
         ` As we can see here in the {{finnedHouseLocation}} {{houseType}} one cell highlighted in orange/pink color doesn't have {{candidate}} but has has finn cells in the block.` +
         ` Now just like Finned X-Wing, we can claim that all the {{candidate}} highlighted in the red color can be eliminated.\n` +
         `In the {{perfectHouseLocation}} {{houseType}} it doesn't matter where we place {{candidate}}, in the {{finnedHouseLocation}} {{houseType}} {{candidate}} will` +
-        ` be placed such that {{candidate}} note highlighted in red color will always be eliminated. so it's safe to remove it from there.`,
+        ` be placed such that {{candidate}} note highlighted in red color will always be eliminated. so it's safe to remove it from there.`
+    ]
 }

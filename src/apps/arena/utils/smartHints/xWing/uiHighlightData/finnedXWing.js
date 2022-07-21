@@ -110,14 +110,10 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
         removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',
     }
 
-    if (finnedXWingType === XWING_TYPES.FINNED) {
-        const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING]
-        return msgTemplates.map(template => {
-            return dynamicInterpolation(template, msgPlaceholdersValues)
-        })
-    } else {
-        return [dynamicInterpolation(HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING], msgPlaceholdersValues)]
-    }
+    const msgTemplates = finnedXWingType === XWING_TYPES.FINNED ? HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING] : HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING]
+    return msgTemplates.map(template => {
+        return dynamicInterpolation(template, msgPlaceholdersValues)
+    })
 }
 
 // doing 2 things

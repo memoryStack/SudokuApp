@@ -308,7 +308,7 @@ export const getAllXWings = (mainNumbers, notesData) => {
 export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const xWings = getAllXWings(mainNumbers, notesData)
         .filter(xWing => {
-            return removableNotesInCrossHouse(xWing, notesData)
+            return removableNotesInCrossHouse(xWing, notesData) && xWing.type === XWING_TYPES.SASHIMI_FINNED
         })
         .slice(0, maxHintsThreshold)
 
