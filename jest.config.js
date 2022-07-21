@@ -1,4 +1,4 @@
 module.exports = {
-    preset: "react-native",
-    transformIgnorePatterns: []
+    preset: 'react-native',
+    transformIgnorePatterns: [],
 }

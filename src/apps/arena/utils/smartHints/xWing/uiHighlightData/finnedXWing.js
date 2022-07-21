@@ -78,7 +78,7 @@ const getSashimiCell = (xWing, notes) => {
     const { otherLeg: finnedLeg } = categorizeLegs(...legs)
 
     const candidate = getXWingCandidate(xWing)
-    return finnedLeg.cells.find((cell) => {
+    return finnedLeg.cells.find(cell => {
         return !isCellNoteVisible(candidate, notes[cell.row][cell.col])
     })
 }
@@ -86,7 +86,7 @@ const getSashimiCell = (xWing, notes) => {
 const getSashimiFinnedHintChunks = (xWing, removableNotesHostCells, notes) => {
     const placeholdersValues = {
         ...getPlaceholdersValues(xWing, removableNotesHostCells),
-        sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes))
+        sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes)),
     }
 
     return HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING].map(template => {
@@ -208,8 +208,10 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
         },
     }
 
-    const hintChunks = finnedXWingType === XWING_TYPES.FINNED ? getFinnedXWingHintChunks(xWing, removableNotesHostCells)
-        : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData)
+    const hintChunks =
+        finnedXWingType === XWING_TYPES.FINNED
+            ? getFinnedXWingHintChunks(xWing, removableNotesHostCells)
+            : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData)
 
     return {
         cellsToFocusData,

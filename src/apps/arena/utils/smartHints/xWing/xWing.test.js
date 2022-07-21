@@ -754,8 +754,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 7, col: 8 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(true)
@@ -781,8 +781,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 7, col: 6 },
                     ],
                     type: LEG_TYPES.FINNED,
-                }
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(true)
@@ -808,8 +808,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 7, col: 5 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(false)
@@ -835,8 +835,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 8, col: 5 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(false)
@@ -861,8 +861,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 7, col: 6 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(true)
@@ -887,8 +887,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 7, col: 5 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(false)
@@ -913,8 +913,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 7, col: 6 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(false)
@@ -941,9 +941,8 @@ describe('isSashimiFinnedXWing()', () => {
                         { row: 7, col: 5 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-
-            ]
+                },
+            ],
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(false)
@@ -1035,8 +1034,8 @@ describe('getSashimiCell()', () => {
                         { row: 7, col: 8 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         const expectedResult = { row: 3, col: 5 }
@@ -1063,8 +1062,8 @@ describe('getSashimiCell()', () => {
                         { row: 7, col: 5 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         const expectedResult = { row: 7, col: 8 }
@@ -1169,11 +1168,9 @@ describe('transformSashimiXWingLeg()', () => {
 
 // TODO: add more test-cses for this func
 describe('getXWingType()', () => {
-
     beforeEach(() => {
         const { notes } = require('./testData/sashimiFinnedXWing')
         mockBoardSelectors(notes)
-
     })
 
     test('returns XWING_TYPES.FINNED for 1 perfect leg and 1 finned leg and perfect host cells are aligned for perfect leg', () => {
@@ -1219,7 +1216,6 @@ describe('getXWingType()', () => {
         }
         expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.SASHIMI_FINNED)
     })
-
 })
 
 describe('getPerfectCellsInFinnedBlock()', () => {

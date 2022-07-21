@@ -21,7 +21,7 @@ import {
     getFinnedXWingRemovableNotesHostCells,
     addCellInXWingLeg,
     categorizeSashimiXWingPerfectLegCells,
-    getSashimiCell
+    getSashimiCell,
 } from './utils'
 
 const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
@@ -110,7 +110,7 @@ export const getAlignedCellInPerfectLeg = (perfectLegCells, otherLegCells) => {
     })
 }
 
-export const isSashimiFinnedXWing = (xWing) => {
+export const isSashimiFinnedXWing = xWing => {
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
 
     if (otherLeg.type === LEG_TYPES.PERFECT) {
@@ -119,19 +119,12 @@ export const isSashimiFinnedXWing = (xWing) => {
         return (
             isSashimiFinnedXWing({
                 houseType: xWing.houseType,
-                legs: [
-                    perfectLeg,
-                    { ...Object.assign({}, otherLeg), type: LEG_TYPES.FINNED }
-                ]
+                legs: [perfectLeg, { ...Object.assign({}, otherLeg), type: LEG_TYPES.FINNED }],
             }) ||
-            isSashimiFinnedXWing(
-                {
-                    houseType: xWing.houseType,
-                    legs: [
-                        otherLeg,
-                        { ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }
-                    ]
-                })
+            isSashimiFinnedXWing({
+                houseType: xWing.houseType,
+                legs: [otherLeg, { ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }],
+            })
         )
     }
 
@@ -153,10 +146,9 @@ export const isSashimiFinnedXWing = (xWing) => {
 }
 
 export const getXWingType = (legA, legB, xWingHouseType) => {
-
     const xWing = {
         houseType: xWingHouseType,
-        legs: [legA, legB]
+        legs: [legA, legB],
     }
 
     if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return XWING_TYPES.INVALID
@@ -238,7 +230,7 @@ const getValidSashimiXWingSashimiLeg = (legA, legB, houseType) => {
 
     const isPerfectLegAlsoSashimiLeg = isSashimiFinnedXWing({
         houseType,
-        legs: [{ ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }, otherLeg]
+        legs: [{ ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }, otherLeg],
     })
     if (isPerfectLegAlsoSashimiLeg) return perfectLeg
 
@@ -253,11 +245,7 @@ export const transformSashimiXWingLeg = (legA, legB, houseType) => {
     sashimiLeg.type = LEG_TYPES.SASHIMI_FINNED
 
     const { perfectLeg, otherLeg } = categorizeLegs(firstLeg, secondLeg)
-    addCellInXWingLeg(
-        getSashimiCell({ houseType, legs: [perfectLeg, otherLeg] })
-        , sashimiLeg.cells
-        , houseType
-    )
+    addCellInXWingLeg(getSashimiCell({ houseType, legs: [perfectLeg, otherLeg] }), sashimiLeg.cells, houseType)
 
     return [firstLeg, secondLeg]
 }
