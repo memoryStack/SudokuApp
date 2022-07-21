@@ -6,7 +6,7 @@ import {
     SMART_HINTS_CELLS_BG_COLOR,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { getCellAxesValues, getCellHouseInfo, isCellExists, isCellNoteVisible } from '../../../util'
+import { getCellAxesValues, getCellHouseInfo, isCellNoteVisible } from '../../../util'
 import {
     getCellsFromCellsToFocusedData,
     setCellDataInHintResult,
@@ -36,70 +36,18 @@ const DIAGONAL_CELLS_COLORS = {
     FINN: 'rgb(255, 245, 187)',
 }
 
-const HOUSE_ORDER_KEYS = {
-    FIRST: 'first',
-    SECOND: 'second',
-}
-
-const LEGS_LOCATION_TEXT = {
-    [HOUSE_TYPE.ROW]: {
-        first: 'upper',
-        second: 'lower',
-    },
-    [HOUSE_TYPE.COL]: {
-        first: 'left',
-        second: 'right',
-    },
-}
-
 const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
-const getLegsLocation = (houseType, { perfectLeg, finnedLeg }) => {
-    const perfectLegHouseNum = perfectLeg.cells[0][houseType]
-    const finnedLegHouseNum = finnedLeg.cells[0][houseType]
-
-    const perfectHouseKey = perfectLegHouseNum < finnedLegHouseNum ? HOUSE_ORDER_KEYS.FIRST : HOUSE_ORDER_KEYS.SECOND
-    const finnedHouseKey =
-        perfectHouseKey === HOUSE_ORDER_KEYS.SECOND ? HOUSE_ORDER_KEYS.FIRST : HOUSE_ORDER_KEYS.SECOND
-
-    return {
-        perfect: LEGS_LOCATION_TEXT[houseType][perfectHouseKey],
-        finned: LEGS_LOCATION_TEXT[houseType][finnedHouseKey],
-    }
-}
-
-// TODO: refactor it
-const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableNotesHostCells, notes }) => {
-    const xWing = { type: finnedXWingType, houseType, legs }
+const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
+    const { houseType, legs } = xWing
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
-
-    const { perfect: perfectHouseLocation, finned: finnedHouseLocation } = getLegsLocation(houseType, {
-        perfectLeg,
-        finnedLeg,
-    })
-
-    const candidate = getXWingCandidate(xWing)
-
     const { finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
-
-    const finnedLegHouse = getCellHouseInfo(houseType, finnedLeg.cells[0])
-
     const finnedBlockPerfectCells = getPerfectCellsInFinnedBlock(legs)
-
     const xWingHouses = getXWingHosuesInOrder(xWing)
 
-    const sashimiCell = finnedLeg.cells.find((cell) => {
-        return !isCellNoteVisible(candidate, notes[cell.row][cell.col])
-    })
-
-    const msgPlaceholdersValues = {
-        candidate,
-        houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
-        perfectHouseLocation,
-        finnedHouseLocation,
-
-        // new msg placeholder values
-        finnedLegAxesText: getHouseAxesText(finnedLegHouse),
+    return {
+        candidate: getXWingCandidate(xWing),
+        finnedLegAxesText: getHouseAxesText(getCellHouseInfo(houseType, finnedLeg.cells[0])),
         finnedLegHouseText: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         finnCellsAxesListText: getCellsAxesValuesListText(finnCells),
         finnCellEnglishText: finnCells.length === 1 ? 'cell' : 'cells',
@@ -113,14 +61,36 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
         removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells),
         removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',
+    }
+}
 
-        // sashimi x-wing extra placeholders
-        sashimiCellAxesText: getCellAxesValues(sashimiCell)
+const getFinnedXWingHintChunks = (xWing, removableNotesHostCells) => {
+    const msgPlaceholdersValues = getPlaceholdersValues(xWing, removableNotesHostCells)
+
+    return HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING].map(template => {
+        return dynamicInterpolation(template, msgPlaceholdersValues)
+    })
+}
+
+// this implementation is different from utils implementation
+const getSashimiCell = (xWing, notes) => {
+    const { legs } = xWing
+    const { otherLeg: finnedLeg } = categorizeLegs(...legs)
+
+    const candidate = getXWingCandidate(xWing)
+    return finnedLeg.cells.find((cell) => {
+        return !isCellNoteVisible(candidate, notes[cell.row][cell.col])
+    })
+}
+
+const getSashimiFinnedHintChunks = (xWing, removableNotesHostCells, notes) => {
+    const placeholdersValues = {
+        ...getPlaceholdersValues(xWing, removableNotesHostCells),
+        sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes))
     }
 
-    const msgTemplates = finnedXWingType === XWING_TYPES.FINNED ? HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING] : HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING]
-    return msgTemplates.map(template => {
-        return dynamicInterpolation(template, msgPlaceholdersValues)
+    return HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING].map(template => {
+        return dynamicInterpolation(template, placeholdersValues)
     })
 }
 
@@ -137,7 +107,6 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     })
 }
 
-// fully usable by sashimi  as well
 const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     const firstCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].col : cells[0][0].row
     const secondCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][1].col : cells[0][1].row
@@ -154,7 +123,6 @@ const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData)
     })
 }
 
-// sahimi can use it fully
 const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
@@ -175,7 +143,6 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
     })
 }
 
-// most of it can be used by sashimi
 const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
     finnCells.forEach(({ row, col }) => {
         const cellHighlightData = {
@@ -190,7 +157,6 @@ const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
     })
 }
 
-// sashimi-finned can also use it completely
 const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cellsToFocusData) => {
     hostCells
         .filter(cell => {
@@ -242,16 +208,16 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
         },
     }
 
-    const hintSteps = getHintExplanationStepsFromHintChunks(
-        getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells, notes: notesData }),
-    )
+    const hintChunks = finnedXWingType === XWING_TYPES.FINNED ? getFinnedXWingHintChunks(xWing, removableNotesHostCells)
+        : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData)
+
     return {
         cellsToFocusData,
         title:
             finnedXWingType === XWING_TYPES.FINNED
                 ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING]
                 : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
-        steps: hintSteps,
+        steps: getHintExplanationStepsFromHintChunks(hintChunks),
         ...tryOutProps,
     }
 }
