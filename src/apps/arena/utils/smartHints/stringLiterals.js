@@ -56,19 +56,21 @@ export const HINT_EXPLANATION_TEXTS = {
 
         `only one row or column can have these finn cells and in that row or column all of the finn cells must be in the same block with one of the main cells\n` +
         `notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} wasn't present in {{finnCellsAxesListText}}(finn {{finnCellEnglishText}}) then it would be a perfect X-Wing.` +
-        ` {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} main {{finnedBlockPerfectCellsEnglishText}}\n`,
+        ` {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} main {{finnedBlockPerfectCellsEnglishText}}`,
 
+        // TODO: this text has incomplete information, it doesn't tell from which house the candidates will be removed
         `in Finned X-Wing we can remove {{candidate}} only from cells which share block with finn cells\n` +
         `because here in the {{hostHousesAxesListText}} {{hostHousePluralName}} it doesn't matter where {{candidate}} comes in the final solution,` +
         ` {{candidate}} won't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}. try it yourself to better understand the reason behind it`,
     ],
+
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
-        `If you don't know about "Finned X-Wing" then you won't be able to understand this hint.\n` +
-        `Sashimi Finned X-Wing is basically Finned X-Wing but here one cell is allowed to not have the candidate which we are targeting in X-Wing. And the cell which doesn't have` +
-        ` targetted candidate in that will have finn cell in it's block. This arrangement of any number makes a Sashimi Finned X-Wing.` +
-        ` As we can see here in the {{finnedHouseLocation}} {{houseType}} one cell highlighted in orange/pink color doesn't have {{candidate}} but has has finn cells in the block.` +
-        ` Now just like Finned X-Wing, we can claim that all the {{candidate}} highlighted in the red color can be eliminated.\n` +
-        `In the {{perfectHouseLocation}} {{houseType}} it doesn't matter where we place {{candidate}}, in the {{finnedHouseLocation}} {{houseType}} {{candidate}} will` +
-        ` be placed such that {{candidate}} note highlighted in red color will always be eliminated. so it's safe to remove it from there.`
-    ]
+        `If you don't know about Finned X-Wing then you won't be able to understand this hint.\n` +
+        `When Finned X-Wing is missing candidate in finned block then it is known as Sashimi Finned X-Wing.` +
+        ` notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} {{candidate}} isn't present in {{sashimiCellAxesText}} and we {{candidate}} in {{finnCellsAxesListText}}(finn {{finnCellEnglishText}}).`,
+
+        `now just like Finned X-Wing in Sashimi X-Wing also we can remove {{candidate}} only from cells which share block with finn cells` +
+        ` because here in the {{hostHousesAxesListText}} {{hostHousePluralName}} it doesn't matter where {{candidate}} comes in the final solution,` +
+        ` {{candidate}} won't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}. try it yourself to better understand the reason behind it`
+    ],
 }

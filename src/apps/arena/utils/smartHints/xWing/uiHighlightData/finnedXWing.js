@@ -6,7 +6,7 @@ import {
     SMART_HINTS_CELLS_BG_COLOR,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { getCellHouseInfo, isCellExists, isCellNoteVisible } from '../../../util'
+import { getCellAxesValues, getCellHouseInfo, isCellExists, isCellNoteVisible } from '../../../util'
 import {
     getCellsFromCellsToFocusedData,
     setCellDataInHintResult,
@@ -68,7 +68,8 @@ const getLegsLocation = (houseType, { perfectLeg, finnedLeg }) => {
     }
 }
 
-const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableNotesHostCells }) => {
+// TODO: refactor it
+const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableNotesHostCells, notes }) => {
     const xWing = { type: finnedXWingType, houseType, legs }
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
 
@@ -86,6 +87,10 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
     const finnedBlockPerfectCells = getPerfectCellsInFinnedBlock(legs)
 
     const xWingHouses = getXWingHosuesInOrder(xWing)
+
+    const sashimiCell = finnedLeg.cells.find((cell) => {
+        return !isCellNoteVisible(candidate, notes[cell.row][cell.col])
+    })
 
     const msgPlaceholdersValues = {
         candidate,
@@ -108,6 +113,9 @@ const getTechniqueExplaination = ({ finnedXWingType, houseType, legs, removableN
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
         removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells),
         removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',
+
+        // sashimi x-wing extra placeholders
+        sashimiCellAxesText: getCellAxesValues(sashimiCell)
     }
 
     const msgTemplates = finnedXWingType === XWING_TYPES.FINNED ? HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING] : HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING]
@@ -235,7 +243,7 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
     }
 
     const hintSteps = getHintExplanationStepsFromHintChunks(
-        getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells }),
+        getTechniqueExplaination({ finnedXWingType, houseType, legs, removableNotesHostCells, notes: notesData }),
     )
     return {
         cellsToFocusData,
