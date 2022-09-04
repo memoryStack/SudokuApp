@@ -25,28 +25,6 @@ import {
     getSashimiCell,
 } from './utils'
 
-const getEmptyCellsInHouse = (house, mainNumbers) => {
-    return getHouseCells(house.type, house.num).filter(cell => {
-        return isCellEmpty(cell, mainNumbers)
-    })
-}
-
-// we can use this func for our purpose below
-const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {
-    const emptyCellsInHouse = getEmptyCellsInHouse(house, mainNumbers)
-    const result = {}
-    emptyCellsInHouse.forEach(cell => {
-        const cellNotes = notesData[cell.row][cell.col]
-        cellNotes
-            .filter(({ show }) => show)
-            .forEach(({ noteValue }) => {
-                if (!result[noteValue]) result[noteValue] = []
-                result[noteValue].push(cell)
-            })
-    })
-    return result
-}
-
 const isPerfectXWingRemovesNotes = ({ legs, houseType }, notesData) => {
     const MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVING_XWING = 3
 
@@ -169,6 +147,26 @@ export const getXWingType = (legA, legB, xWingHouseType) => {
     return result
 }
 
+const getEmptyCellsInHouse = (house, mainNumbers) => {
+    return getHouseCells(house.type, house.num).filter(cell => {
+        return isCellEmpty(cell, mainNumbers)
+    })
+}
+
+// we can use this func for our purpose below
+const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {
+    const result = {}
+    getEmptyCellsInHouse(house, mainNumbers).forEach(cell => {
+        const cellNotes = notesData[cell.row][cell.col]
+        cellNotes.filter(({ show }) => show)
+            .forEach(({ noteValue }) => {
+                if (!result[noteValue]) result[noteValue] = []
+                result[noteValue].push(cell)
+            })
+    })
+    return result
+}
+
 const isPerfectLeg = candidateHostCells => {
     return candidateHostCells.length === 2
 }
@@ -207,7 +205,6 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     const result = []
 
     const candidatesHostCells = getAllCandidatesOccurencesInHouse(house, notesData, mainNumbers)
-
     for (let note = 1; note <= 9; note++) {
         if (!candidatesHostCells[note]) continue
         const legType = getXWingLegType(candidatesHostCells[note])
