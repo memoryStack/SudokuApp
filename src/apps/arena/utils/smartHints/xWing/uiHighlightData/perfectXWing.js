@@ -18,7 +18,7 @@ import {
     getXWingCells,
 } from '../utils'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
-import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
 const DIAGONAL_CELLS_COLORS = {
     TOP_LEFT_BOTTOM_RIGHT: 'orange',

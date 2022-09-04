@@ -12,12 +12,12 @@ import {
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { getHouseCells } from '../../houseCells'
 import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
-import { toOrdinal } from '../../../../../utils/utilities/toOrdinal'
+import { toOrdinal } from 'lodash/src/utils/toOrdinal'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import _flatten from '../../../../../utils/utilities/flatten'
+import _flatten from 'lodash/src/utils/flatten'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 
 export const categorizeLegs = (legA, legB) => {

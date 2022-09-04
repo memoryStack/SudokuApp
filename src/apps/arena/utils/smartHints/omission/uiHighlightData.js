@@ -1,4 +1,4 @@
-import { dynamicInterpolation } from '../../../../../utils/utilities/dynamicInterpolation'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import { getHouseCells } from '../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../util'
 import {

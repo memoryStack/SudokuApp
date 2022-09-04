@@ -4,7 +4,7 @@ import { HOUSE_TYPE } from '../../smartHints/constants'
 import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
 import { isCellEmpty, areSameCells } from '../../util'
 import { setCellDataInHintResult } from '../util'
-import { dynamicInterpolation } from '../../../../../utils/utilities/dynamicInterpolation'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
 const getInhabitableCellData = () => {
     return {

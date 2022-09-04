@@ -1,5 +1,5 @@
 import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
-import cloneDeep from '../../../../../utils/utilities/cloneDeep'
+import cloneDeep from 'lodash/src/utils/cloneDeep'
 import { getHouseCells } from '../../houseCells'
 import {
     areSameBlockCells,

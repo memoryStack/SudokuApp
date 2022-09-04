@@ -1,6 +1,6 @@
-import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut } from './helpers'
-import _flatten from '../../../../../utils/utilities/flatten'
+import _flatten from 'lodash/src/utils/flatten'
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import {
     getXWingCells,
     getNoInputResult,
@@ -9,7 +9,9 @@ import {
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
 } from '../xWing/utils'
-import _isEmpty from '../../../../../utils/utilities/isEmpty'
+
+import { TRY_OUT_RESULT_STATES } from './constants'
+import { noInputInTryOut } from './helpers'
 
 export default ({ xWing, removableNotesHostCells }) => {
     const xWingCells = getXWingCells(xWing.legs)

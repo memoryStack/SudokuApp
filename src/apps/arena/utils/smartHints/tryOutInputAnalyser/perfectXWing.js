@@ -1,7 +1,7 @@
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { TRY_OUT_RESULT_STATES } from './constants'
 import { noInputInTryOut } from './helpers'
-import _flatten from '../../../../../utils/utilities/flatten'
+import _flatten from 'lodash/src/utils/flatten'
 import {
     getXWingHousesTexts,
     getXWingCandidate,

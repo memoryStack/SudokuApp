@@ -25,7 +25,7 @@ import {
     getXWingCells,
 } from '../utils'
 import { XWING_TYPES } from '../constants'
-import { dynamicInterpolation } from '../../../../../../utils/utilities/dynamicInterpolation'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
 
 // TODO: come up with a better color scheme

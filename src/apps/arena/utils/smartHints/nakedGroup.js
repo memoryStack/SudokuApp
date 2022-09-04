@@ -12,7 +12,7 @@ import {
     removeDuplicteCells,
 } from './util'
 import { isHintValid } from './validityTest'
-import { dynamicInterpolation } from '../../../../utils/utilities/dynamicInterpolation'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
 // TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
