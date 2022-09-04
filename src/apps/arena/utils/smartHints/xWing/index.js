@@ -1,15 +1,13 @@
-import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
+import { getBlockAndBoxNum } from '../../../../../utils/util'
 import cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
 import { getHouseCells } from '../../houseCells'
 import {
     areSameBlockCells,
-    areSameCells,
     areSameColCells,
     areSameRowCells,
     forEachHouse,
     isCellEmpty,
-    isCellExists,
     isCellNoteVisible,
 } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
@@ -24,28 +22,26 @@ import {
     addCellInXWingLeg,
     categorizeSashimiXWingPerfectLegCells,
     getSashimiCell,
+    getXWingCandidate,
 } from './utils'
 
-// NEXT 2 NEXT
-const isPerfectXWingRemovesNotes = ({ legs, houseType }, notesData) => {
-    const MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVING_XWING = 3
+const getCrossHouseCells = (cell, houseType) => {
+    const crossHouseType = getCrossHouseType(houseType)
+    const crossHouseNum = crossHouseType === HOUSE_TYPE.ROW ? cell.row : cell.col
+    return getHouseCells(crossHouseType, crossHouseNum)
+}
 
-    const anyCellOfEachHouse = legs[0].cells
-    const candidate = legs[0].candidate
-    return anyCellOfEachHouse
-        .map(({ row, col }) => {
-            const crossHouseType = getCrossHouseType(houseType)
-            const crossHouseNum = crossHouseType === HOUSE_TYPE.ROW ? row : col
-            const crossHouseCells = getHouseCells(crossHouseType, crossHouseNum)
+const isPerfectXWingRemovesNotes = (xWing, notesData) => {
+    const MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVER_XWING = 3
 
+    return xWing.legs[0].cells
+        .some((mainHouseCell) => {
             let candidateInstancesCount = 0
-            crossHouseCells.forEach(({ row, col }) => {
-                if (notesData[row][col][candidate - 1].show) candidateInstancesCount++
+            getCrossHouseCells(mainHouseCell, xWing.houseType).forEach(({ row, col }) => {
+                if (notesData[row][col][getXWingCandidate(xWing) - 1].show) candidateInstancesCount++
             })
-
-            return candidateInstancesCount >= MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVING_XWING
+            return candidateInstancesCount >= MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVER_XWING
         })
-        .some(removableNotesPresent => removableNotesPresent)
 }
 
 // FIXME: this func is wrong. why is it wrong ??
@@ -200,10 +196,10 @@ export const isFinnedLeg = hostCells => {
     if (invalidOccurrences) return false
 
     const hostCellsGroupsByBlock = getHostCellsGroupByBlock(hostCells)
-
     const groupsCount = Object.keys(hostCellsGroupsByBlock).length
     if (groupsCount > 2) return false
     if (groupsCount === 1 || hostCells.length === 3) return true
+
     for (const blockNum in hostCellsGroupsByBlock) {
         if (hostCellsGroupsByBlock[blockNum].length === 1) return true
     }
