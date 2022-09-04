@@ -90,39 +90,54 @@ export const getAlignedCellInPerfectLeg = (perfectLegCells, otherLegCells) => {
     })
 }
 
-export const isSashimiFinnedXWing = xWing => {
+const arePerfectNonAlignedLegsSashimiFinnedXWing = (xWing) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
+    return (
+        isSashimiFinnedXWing({
+            houseType: xWing.houseType,
+            legs: [perfectLeg, { ...Object.assign({}, otherLeg), type: LEG_TYPES.FINNED }],
+        }) ||
+        isSashimiFinnedXWing({
+            houseType: xWing.houseType,
+            legs: [otherLeg, { ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }],
+        })
+    )
+}
 
-    if (otherLeg.type === LEG_TYPES.PERFECT) {
-        // TODO: prettier destroys readibility here. plan to remove it
-        // have to mark a leg as finned actually and add sashimi cell as well in that
-        return (
-            isSashimiFinnedXWing({
-                houseType: xWing.houseType,
-                legs: [perfectLeg, { ...Object.assign({}, otherLeg), type: LEG_TYPES.FINNED }],
-            }) ||
-            isSashimiFinnedXWing({
-                houseType: xWing.houseType,
-                legs: [otherLeg, { ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }],
-            })
-        )
-    }
+const allFinnsShareBlockWithSashimiCell = (sashimiCell, legsCells) => {
+    const { perfectLegCells, sashimiFinnedLegCells } = legsCells
+    const { finns } = categorizeFinnedLegCells(perfectLegCells, sashimiFinnedLegCells)
+    return finns.every(finn => {
+        return areSameBlockCells([sashimiCell, finn])
+    })
+}
 
-    const { perfectAligned, sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
-    if (!perfectAligned || !sashimiAligned) return false
+const perfectLegAlignsWithFinnedLegForSashimiXWing = (perfectLegCells, finnedLegCells) => {
+    const { perfectAligned, sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLegCells, finnedLegCells)
+    return perfectAligned && sashimiAligned
+}
 
+const isValidSashimiXWingAfterAddingSashimiCell = (xWing) => {
+    const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
     const sashimiCell = getSashimiCell(xWing)
     const sashimiFinnedLegCells = [...otherLeg.cells]
     addCellInXWingLeg(sashimiCell, sashimiFinnedLegCells, xWing.houseType)
 
     if (isFinnedLeg(sashimiFinnedLegCells)) {
-        const { finns } = categorizeFinnedLegCells(perfectLeg.cells, sashimiFinnedLegCells)
-        return finns.every(finn => {
-            return areSameBlockCells([sashimiCell, finn])
-        })
+        return allFinnsShareBlockWithSashimiCell(
+            sashimiCell,
+            { perfectLegCells: perfectLeg.cells, sashimiFinnedLegCells }
+        )
     }
 
     return false
+}
+
+export const isSashimiFinnedXWing = xWing => {
+    const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
+    if (otherLeg.type === LEG_TYPES.PERFECT) return arePerfectNonAlignedLegsSashimiFinnedXWing(xWing)
+    if (!perfectLegAlignsWithFinnedLegForSashimiXWing(perfectLeg.cells, otherLeg.cells)) return false
+    return isValidSashimiXWingAfterAddingSashimiCell(xWing)
 }
 
 export const getXWingType = (legA, legB, xWingHouseType) => {
@@ -217,17 +232,19 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     return result
 }
 
+const getSashimiLegFromNonAllignedPerfectLegs = (houseType, legA, legB) => {
+    const isLegAValidSashimiLeg = isSashimiFinnedXWing({
+        houseType,
+        legs: [{ ...Object.assign({}, legA), type: LEG_TYPES.FINNED }, legB],
+    })
+    return isLegAValidSashimiLeg ? legA : legB
+}
+
 const getValidSashimiXWingSashimiLeg = (legA, legB, houseType) => {
-    const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
+    const { otherLeg } = categorizeLegs(legA, legB)
     if (otherLeg.type !== LEG_TYPES.PERFECT) return otherLeg
 
-    const isPerfectLegAlsoSashimiLeg = isSashimiFinnedXWing({
-        houseType,
-        legs: [{ ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }, otherLeg],
-    })
-    if (isPerfectLegAlsoSashimiLeg) return perfectLeg
-
-    return otherLeg
+    return getSashimiLegFromNonAllignedPerfectLegs(houseType, legA, legB)
 }
 
 export const transformSashimiXWingLeg = (legA, legB, houseType) => {
