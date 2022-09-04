@@ -145,7 +145,7 @@ const noLegIsPerfect = (xWing) => {
     return legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT
 }
 
-const xx_getXWingType = (xWing) => {
+export const getXWingType = (xWing) => {
     if (noLegIsPerfect(xWing)) return XWING_TYPES.INVALID
 
     const candidateAllNotesNotFilledInLegs = !isHintValid({ type: HINTS_IDS.X_WING, data: xWing })
@@ -158,15 +158,6 @@ const xx_getXWingType = (xWing) => {
     if (isSashimiFinnedXWing(xWing)) result = XWING_TYPES.SASHIMI_FINNED
 
     return result
-}
-
-// TODO: PROPOGATE THE CHANGED SIGNATURE THROUGH OUT THE USECASES
-export const getXWingType = (legA, legB, xWingHouseType) => {
-    const xWing = {
-        houseType: xWingHouseType,
-        legs: [legA, legB],
-    }
-    return xx_getXWingType(xWing)
 }
 
 const getEmptyCellsInHouse = (house, mainNumbers) => {
@@ -299,7 +290,11 @@ const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses) => {
         for (let j = i + 1; j < candidateXWingLegsInHouses.length; j++) {
             const firstLeg = candidateXWingLegsInHouses[i]
             const secondLeg = candidateXWingLegsInHouses[j]
-            const xWingType = getXWingType(firstLeg, secondLeg, houseType)
+
+            const xWingType = getXWingType({
+                houseType,
+                legs: [firstLeg, secondLeg],
+            })
 
             if (xWingType !== XWING_TYPES.INVALID) {
                 result.push({

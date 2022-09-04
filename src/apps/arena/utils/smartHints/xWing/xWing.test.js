@@ -1174,47 +1174,57 @@ describe('getXWingType()', () => {
     })
 
     test('returns XWING_TYPES.FINNED for 1 perfect leg and 1 finned leg and perfect host cells are aligned for perfect leg', () => {
-        const houseType = HOUSE_TYPE.COL
-        const legA = {
-            candidate: 4,
-            cells: [
-                { row: 3, col: 4 },
-                { row: 5, col: 4 },
-                { row: 6, col: 4 },
-            ],
-            type: LEG_TYPES.FINNED,
+        const xWing = {
+            houseType: HOUSE_TYPE.COL,
+            legs: [
+                {
+                    candidate: 4,
+                    cells: [
+                        { row: 3, col: 4 },
+                        { row: 5, col: 4 },
+                        { row: 6, col: 4 },
+                    ],
+                    type: LEG_TYPES.FINNED,
+                },
+                {
+                    candidate: 4,
+                    cells: [
+                        { row: 5, col: 7 },
+                        { row: 6, col: 7 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                }
+            ]
         }
-        const legB = {
-            candidate: 4,
-            cells: [
-                { row: 5, col: 7 },
-                { row: 6, col: 7 },
-            ],
-            type: LEG_TYPES.PERFECT,
-        }
-        expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.FINNED)
+
+        expect(getXWingType(xWing)).toBe(XWING_TYPES.FINNED)
     })
 
     test('returns XWING_TYPES.SASHIMI_FINNED for 1 perfect leg and 1 finned leg but only one cells pair between these legs is aligned', () => {
-        const houseType = HOUSE_TYPE.ROW
-        const legA = {
-            candidate: 4,
-            cells: [
-                { row: 3, col: 3 },
-                { row: 3, col: 4 },
-                { row: 3, col: 8 },
-            ],
-            type: LEG_TYPES.FINNED,
+        const xWing = {
+            houseType: HOUSE_TYPE.ROW,
+            legs: [
+                {
+                    candidate: 4,
+                    cells: [
+                        { row: 3, col: 3 },
+                        { row: 3, col: 4 },
+                        { row: 3, col: 8 },
+                    ],
+                    type: LEG_TYPES.FINNED,
+                },
+                {
+                    candidate: 4,
+                    cells: [
+                        { row: 7, col: 5 },
+                        { row: 7, col: 8 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                }
+            ]
         }
-        const legB = {
-            candidate: 4,
-            cells: [
-                { row: 7, col: 5 },
-                { row: 7, col: 8 },
-            ],
-            type: LEG_TYPES.PERFECT,
-        }
-        expect(getXWingType(legA, legB, houseType)).toBe(XWING_TYPES.SASHIMI_FINNED)
+
+        expect(getXWingType(xWing)).toBe(XWING_TYPES.SASHIMI_FINNED)
     })
 })
 
