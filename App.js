@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import CodePush from 'react-native-code-push'
 import { Provider } from 'react-redux'
 
-import { addListener, removeListener } from './src/utils/GlobalEventBus'
+import { addListener, emit, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
 import { EVENTS } from './src/constants/events'
 import { NavigationContainer } from '@react-navigation/native'
@@ -31,17 +31,20 @@ const App = () => {
     }, [])
 
     const [snackBar, setSnackBar] = useState({ show: false, view: null, msg: '', customStyles: null })
-
+    const snackBarTimerID = useRef(null)
     // added pretty raw implementation for snackbars right now
     // later on after finalizing a robust implementation i can make
     // an HOC so that tis snackbar can be re-used for each view
+
+    const hideSnackBar = () => {
+        setSnackBar({ show: false, view: null, msg: '', customStyles: null })
+    }
+
     useEffect(() => {
         const handler = ({ snackbarView = null, msg = '', visibleTime = 3000, customStyles = null }) => {
             if (!snackbarView && !msg) return
             setSnackBar({ show: true, view: snackbarView, msg, customStyles })
-            setTimeout(() => {
-                setSnackBar({ show: false, view: null, msg: '', customStyles: null })
-            }, visibleTime)
+            snackBarTimerID.current = setTimeout(hideSnackBar, visibleTime)
         }
         addListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
         return () => {
@@ -49,12 +52,21 @@ const App = () => {
         }
     }, [])
 
+    const onCloseSnackBar = useCallback(() => {
+        snackBarTimerID.current && clearTimeout(snackBarTimerID.current)
+        hideSnackBar()
+    }, [])
+
     const renderSnackBar = () => {
         if (!snackBar.show) return null
         return (
             <>
                 {snackBar.view}
-                <SnackBar msg={snackBar.msg} customStyles={snackBar.customStyles} />
+                <SnackBar
+                    msg={snackBar.msg}
+                    customStyles={snackBar.customStyles}
+                    onClose={onCloseSnackBar}
+                />
             </>
         )
     }
@@ -77,4 +89,3 @@ const App = () => {
 }
 
 export default CodePush(CODE_PUSH_OPTIONS)(App)
-// export default App
