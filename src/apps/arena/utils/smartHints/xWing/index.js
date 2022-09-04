@@ -25,15 +25,15 @@ import {
     getSashimiCell,
 } from './utils'
 
-const getEmptyCellsInHouse = (houseNum, houseType, mainNumbers) => {
-    return getHouseCells(houseType, houseNum).filter(cell => {
+const getEmptyCellsInHouse = (house, mainNumbers) => {
+    return getHouseCells(house.type, house.num).filter(cell => {
         return isCellEmpty(cell, mainNumbers)
     })
 }
 
 // we can use this func for our purpose below
-const getAllCandidatesOccurencesInHouse = (houseNum, houseType, notesData, mainNumbers) => {
-    const emptyCellsInHouse = getEmptyCellsInHouse(houseNum, houseType, mainNumbers)
+const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {
+    const emptyCellsInHouse = getEmptyCellsInHouse(house, mainNumbers)
     const result = {}
     emptyCellsInHouse.forEach(cell => {
         const cellNotes = notesData[cell.row][cell.col]
@@ -206,7 +206,7 @@ const getXWingLegType = candidateHostCells => {
 export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     const result = []
 
-    const candidatesHostCells = getAllCandidatesOccurencesInHouse(house.num, house.type, notesData, mainNumbers)
+    const candidatesHostCells = getAllCandidatesOccurencesInHouse(house, notesData, mainNumbers)
 
     for (let note = 1; note <= 9; note++) {
         if (!candidatesHostCells[note]) continue
@@ -258,11 +258,10 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
     searchableHouses.forEach(houseType => {
         forEachHouse((houseNum) => {
             const house = { type: houseType, num: houseNum }
-            const housePossibleXWingLegs = getHouseXWingLegs(house, mainNumbers, notesData)
-
-            housePossibleXWingLegs.forEach(xWingLeg => {
-                addCandidateXWingLeg({ ...xWingLeg }, houseType, result)
-            })
+            getHouseXWingLegs(house, mainNumbers, notesData)
+                .forEach(xWingLeg => {
+                    addCandidateXWingLeg({ ...xWingLeg }, houseType, result)
+                })
         })
     })
     return result
