@@ -328,3 +328,7 @@ export const getHouseAxesValue = ({ type, num }) => {
     }
     return HOUSE_TYPE_VS_AXES_VALUES[type][num]
 }
+
+export const forEachHouse = (callback) => {
+    for (let houseNum = 0; houseNum < 9; houseNum++) callback(houseNum)
+}

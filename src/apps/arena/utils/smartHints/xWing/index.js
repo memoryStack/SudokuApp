@@ -6,6 +6,7 @@ import {
     areSameCells,
     areSameColCells,
     areSameRowCells,
+    forEachHouse,
     isCellEmpty,
     isCellExists,
     isCellNoteVisible,
@@ -255,14 +256,14 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
 
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
     searchableHouses.forEach(houseType => {
-        for (let houseNum = 0; houseNum < 9; houseNum++) {
+        forEachHouse((houseNum) => {
             const house = { type: houseType, num: houseNum }
             const housePossibleXWingLegs = getHouseXWingLegs(house, mainNumbers, notesData)
 
             housePossibleXWingLegs.forEach(xWingLeg => {
                 addCandidateXWingLeg({ ...xWingLeg }, houseType, result)
             })
-        }
+        })
     })
     return result
 }
@@ -270,8 +271,6 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
 export const getAllXWings = (mainNumbers, notesData) => {
     const result = []
 
-    // this is creating a DS which basically tracks which candidates are
-    // eligible for x-wing legs in which houses
     const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData)
 
     for (const candidate in candidateXWingLegs) {
