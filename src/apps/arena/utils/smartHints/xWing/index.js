@@ -26,6 +26,7 @@ import {
     getSashimiCell,
 } from './utils'
 
+// NEXT 2 NEXT
 const isPerfectXWingRemovesNotes = ({ legs, houseType }, notesData) => {
     const MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVING_XWING = 3
 
@@ -184,23 +185,27 @@ const isPerfectLeg = candidateHostCells => {
     return candidateHostCells.length === 2
 }
 
-export const isFinnedLeg = hostCells => {
-    if (hostCells.length > 4 || hostCells.length <= 2) return false
-
-    const groupHostCellsByBlock = {}
+const getHostCellsGroupByBlock = (hostCells) => {
+    const result = {}
     hostCells.forEach(cell => {
         const { blockNum } = getBlockAndBoxNum(cell)
-        if (!groupHostCellsByBlock[blockNum]) groupHostCellsByBlock[blockNum] = []
-        groupHostCellsByBlock[blockNum].push(cell)
+        if (!result[blockNum]) result[blockNum] = []
+        result[blockNum].push(cell)
     })
+    return result
+}
 
-    const groupsCount = Object.keys(groupHostCellsByBlock).length
+export const isFinnedLeg = hostCells => {
+    const invalidOccurrences = hostCells.length > 4 || hostCells.length <= 2
+    if (invalidOccurrences) return false
+
+    const hostCellsGroupsByBlock = getHostCellsGroupByBlock(hostCells)
+
+    const groupsCount = Object.keys(hostCellsGroupsByBlock).length
     if (groupsCount > 2) return false
-    if (groupsCount === 1) return true
-
-    // 2 blocks distribution. one block must have only 1 hostCell
-    for (const blockNum in groupHostCellsByBlock) {
-        if (groupHostCellsByBlock[blockNum].length === 1) return true
+    if (groupsCount === 1 || hostCells.length === 3) return true
+    for (const blockNum in hostCellsGroupsByBlock) {
+        if (hostCellsGroupsByBlock[blockNum].length === 1) return true
     }
 
     return false
