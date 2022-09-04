@@ -51,15 +51,13 @@ export const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HO
 export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notesData) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
-    const crossHouseType = getCrossHouseType(houseType)
-    const candidate = perfectLeg.candidate
     const xWingBaseCells = [...otherLeg.cells, ...perfectLeg.cells]
     return getHouseCells(HOUSE_TYPE.BLOCK, getBlockAndBoxNum(finns[0]).blockNum).filter(cell => {
-        if (isCellExists(cell, xWingBaseCells) || !isCellNoteVisible(candidate, notesData[cell.row][cell.col]))
+        if (isCellExists(cell, xWingBaseCells) || !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col]))
             return false
         return perfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]
-            if (crossHouseType === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
+            if (getCrossHouseType(houseType) === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
             return areSameColCells(cellsPair)
         })
     })
