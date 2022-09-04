@@ -1,5 +1,6 @@
 import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
 import cloneDeep from 'lodash/src/utils/cloneDeep'
+import _get from 'lodash/src/utils/get'
 import { getHouseCells } from '../../houseCells'
 import {
     areSameBlockCells,
@@ -216,12 +217,6 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     return result
 }
 
-const addCandidateXWingLeg = ({ candidate, cells, type: legType }, houseType, candidateXWingLegs) => {
-    if (!candidateXWingLegs[candidate]) candidateXWingLegs[candidate] = {}
-    if (!candidateXWingLegs[candidate][houseType]) candidateXWingLegs[candidate][houseType] = []
-    candidateXWingLegs[candidate][houseType].push({ candidate, cells, type: legType })
-}
-
 const getValidSashimiXWingSashimiLeg = (legA, legB, houseType) => {
     const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
     if (otherLeg.type !== LEG_TYPES.PERFECT) return otherLeg
@@ -248,6 +243,12 @@ export const transformSashimiXWingLeg = (legA, legB, houseType) => {
     return [firstLeg, secondLeg]
 }
 
+const addCandidateXWingLeg = ({ candidate, cells, type: legType }, houseType, candidateXWingLegs) => {
+    if (!candidateXWingLegs[candidate]) candidateXWingLegs[candidate] = {}
+    if (!candidateXWingLegs[candidate][houseType]) candidateXWingLegs[candidate][houseType] = []
+    candidateXWingLegs[candidate][houseType].push({ candidate, cells, type: legType }) // TODO: we don't need to add candidate here
+}
+
 const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
     const result = {}
 
@@ -257,10 +258,35 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
             const house = { type: houseType, num: houseNum }
             getHouseXWingLegs(house, mainNumbers, notesData)
                 .forEach(xWingLeg => {
-                    addCandidateXWingLeg({ ...xWingLeg }, houseType, result)
+                    addCandidateXWingLeg(xWingLeg, houseType, result)
                 })
         })
     })
+    return result
+}
+
+const transformValidXWingLegs = (xWingType, { firstLeg, secondLeg }, houseType) => {
+    if (xWingType === XWING_TYPES.SASHIMI_FINNED) return transformSashimiXWingLeg(firstLeg, secondLeg, houseType)
+    return [firstLeg, secondLeg]
+}
+
+const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses) => {
+    const result = []
+    for (let i = 0; i < candidateXWingLegsInHouses.length; i++) {
+        for (let j = i + 1; j < candidateXWingLegsInHouses.length; j++) {
+            const firstLeg = candidateXWingLegsInHouses[i]
+            const secondLeg = candidateXWingLegsInHouses[j]
+            const xWingType = getXWingType(firstLeg, secondLeg, houseType)
+
+            if (xWingType !== XWING_TYPES.INVALID) {
+                result.push({
+                    houseType,
+                    type: xWingType,
+                    legs: transformValidXWingLegs(xWingType, { firstLeg, secondLeg }, houseType),
+                })
+            }
+        }
+    }
     return result
 }
 
@@ -268,28 +294,9 @@ export const getAllXWings = (mainNumbers, notesData) => {
     const result = []
 
     const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData)
-
     for (const candidate in candidateXWingLegs) {
         for (const houseType in candidateXWingLegs[candidate]) {
-            const candidateXWingLegsInHouses = candidateXWingLegs[candidate]?.[houseType] || []
-            for (let i = 0; i < candidateXWingLegsInHouses.length; i++) {
-                for (let j = i + 1; j < candidateXWingLegsInHouses.length; j++) {
-                    const firstLeg = candidateXWingLegsInHouses[i]
-                    const secondLeg = candidateXWingLegsInHouses[j]
-                    const xWingType = getXWingType(firstLeg, secondLeg, houseType)
-                    if (xWingType !== XWING_TYPES.INVALID) {
-                        const xWingLegs =
-                            xWingType === XWING_TYPES.SASHIMI_FINNED
-                                ? transformSashimiXWingLeg(firstLeg, secondLeg, houseType)
-                                : [firstLeg, secondLeg]
-                        result.push({
-                            houseType,
-                            type: xWingType,
-                            legs: xWingLegs,
-                        })
-                    }
-                }
-            }
+            result.push(...getCandidateValidXWings(houseType, _get(candidateXWingLegs, [candidate, houseType], [])))
         }
     }
 
