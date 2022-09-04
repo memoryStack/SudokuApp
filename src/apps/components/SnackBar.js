@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         width: 20,
         borderRadius: 10,
         backgroundColor: 'black',
-    }
+    },
 })
 
 const SnackBar_ = ({ msg, customStyles, onClose }) => {
@@ -50,11 +50,7 @@ const SnackBar_ = ({ msg, customStyles, onClose }) => {
                 onPress={onClose}
                 hitSlop={CLOSE_ICON_TOUCHABLE_HIT_SLOP} // TODO: there is an issue with the hitslop. looks like it only works inside the parent element area
             >
-                <CloseIcon
-                    height={10}
-                    width={10}
-                    fill={'white'}
-                />
+                <CloseIcon height={10} width={10} fill={'white'} />
             </Touchable>
         </View>
     )

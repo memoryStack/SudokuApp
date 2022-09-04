@@ -53,7 +53,10 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
     const xWingBaseCells = [...otherLeg.cells, ...perfectLeg.cells]
     return getHouseCells(HOUSE_TYPE.BLOCK, getBlockAndBoxNum(finns[0]).blockNum).filter(cell => {
-        if (isCellExists(cell, xWingBaseCells) || !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col]))
+        if (
+            isCellExists(cell, xWingBaseCells) ||
+            !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col])
+        )
             return false
         return perfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]

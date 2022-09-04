@@ -62,11 +62,7 @@ const App = () => {
         return (
             <>
                 {snackBar.view}
-                <SnackBar
-                    msg={snackBar.msg}
-                    customStyles={snackBar.customStyles}
-                    onClose={onCloseSnackBar}
-                />
+                <SnackBar msg={snackBar.msg} customStyles={snackBar.customStyles} onClose={onCloseSnackBar} />
             </>
         )
     }

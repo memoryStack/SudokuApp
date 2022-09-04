@@ -1193,8 +1193,8 @@ describe('getXWingType()', () => {
                         { row: 6, col: 7 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(getXWingType(xWing)).toBe(XWING_TYPES.FINNED)
@@ -1220,8 +1220,8 @@ describe('getXWingType()', () => {
                         { row: 7, col: 8 },
                     ],
                     type: LEG_TYPES.PERFECT,
-                }
-            ]
+                },
+            ],
         }
 
         expect(getXWingType(xWing)).toBe(XWING_TYPES.SASHIMI_FINNED)

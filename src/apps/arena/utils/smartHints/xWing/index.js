@@ -34,14 +34,13 @@ const getCrossHouseCells = (cell, houseType) => {
 const isPerfectXWingRemovesNotes = (xWing, notesData) => {
     const MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVER_XWING = 3
 
-    return xWing.legs[0].cells
-        .some((mainHouseCell) => {
-            let candidateInstancesCount = 0
-            getCrossHouseCells(mainHouseCell, xWing.houseType).forEach(({ row, col }) => {
-                if (notesData[row][col][getXWingCandidate(xWing) - 1].show) candidateInstancesCount++
-            })
-            return candidateInstancesCount >= MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVER_XWING
+    return xWing.legs[0].cells.some(mainHouseCell => {
+        let candidateInstancesCount = 0
+        getCrossHouseCells(mainHouseCell, xWing.houseType).forEach(({ row, col }) => {
+            if (notesData[row][col][getXWingCandidate(xWing) - 1].show) candidateInstancesCount++
         })
+        return candidateInstancesCount >= MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVER_XWING
+    })
 }
 
 export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => {
@@ -86,7 +85,7 @@ export const getAlignedCellInPerfectLeg = (perfectLegCells, otherLegCells) => {
     })
 }
 
-const arePerfectNonAlignedLegsSashimiFinnedXWing = (xWing) => {
+const arePerfectNonAlignedLegsSashimiFinnedXWing = xWing => {
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
     return (
         isSashimiFinnedXWing({
@@ -113,17 +112,17 @@ const perfectLegAlignsWithFinnedLegForSashimiXWing = (perfectLegCells, finnedLeg
     return perfectAligned && sashimiAligned
 }
 
-const isValidSashimiXWingAfterAddingSashimiCell = (xWing) => {
+const isValidSashimiXWingAfterAddingSashimiCell = xWing => {
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
     const sashimiCell = getSashimiCell(xWing)
     const sashimiFinnedLegCells = [...otherLeg.cells]
     addCellInXWingLeg(sashimiCell, sashimiFinnedLegCells, xWing.houseType)
 
     if (isFinnedLeg(sashimiFinnedLegCells)) {
-        return allFinnsShareBlockWithSashimiCell(
-            sashimiCell,
-            { perfectLegCells: perfectLeg.cells, sashimiFinnedLegCells }
-        )
+        return allFinnsShareBlockWithSashimiCell(sashimiCell, {
+            perfectLegCells: perfectLeg.cells,
+            sashimiFinnedLegCells,
+        })
     }
 
     return false
@@ -136,12 +135,12 @@ export const isSashimiFinnedXWing = xWing => {
     return isValidSashimiXWingAfterAddingSashimiCell(xWing)
 }
 
-const noLegIsPerfect = (xWing) => {
+const noLegIsPerfect = xWing => {
     const [legA, legB] = xWing.legs
     return legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT
 }
 
-export const getXWingType = (xWing) => {
+export const getXWingType = xWing => {
     if (noLegIsPerfect(xWing)) return XWING_TYPES.INVALID
 
     const candidateAllNotesNotFilledInLegs = !isHintValid({ type: HINTS_IDS.X_WING, data: xWing })
@@ -149,8 +148,10 @@ export const getXWingType = (xWing) => {
 
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
     let result = XWING_TYPES.INVALID
-    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.PERFECT
-    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.FINNED
+    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
+        result = XWING_TYPES.PERFECT
+    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells))
+        result = XWING_TYPES.FINNED
     if (isSashimiFinnedXWing(xWing)) result = XWING_TYPES.SASHIMI_FINNED
 
     return result
@@ -167,7 +168,8 @@ const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {
     const result = {}
     getEmptyCellsInHouse(house, mainNumbers).forEach(cell => {
         const cellNotes = notesData[cell.row][cell.col]
-        cellNotes.filter(({ show }) => show)
+        cellNotes
+            .filter(({ show }) => show)
             .forEach(({ noteValue }) => {
                 if (!result[noteValue]) result[noteValue] = []
                 result[noteValue].push(cell)
@@ -180,7 +182,7 @@ const isPerfectLeg = candidateHostCells => {
     return candidateHostCells.length === 2
 }
 
-const getHostCellsGroupByBlock = (hostCells) => {
+const getHostCellsGroupByBlock = hostCells => {
     const result = {}
     hostCells.forEach(cell => {
         const { blockNum } = getBlockAndBoxNum(cell)
@@ -268,12 +270,11 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
 
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
     searchableHouses.forEach(houseType => {
-        forEachHouse((houseNum) => {
+        forEachHouse(houseNum => {
             const house = { type: houseType, num: houseNum }
-            getHouseXWingLegs(house, mainNumbers, notesData)
-                .forEach(xWingLeg => {
-                    addCandidateXWingLeg(xWingLeg, houseType, result)
-                })
+            getHouseXWingLegs(house, mainNumbers, notesData).forEach(xWingLeg => {
+                addCandidateXWingLeg(xWingLeg, houseType, result)
+            })
         })
     })
     return result
