@@ -74,7 +74,7 @@ export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => {
     })
 }
 
-const removableNotesInCrossHouse = ({ houseType, legs }, notesData) => {
+const removableNotesPresentInCrossHouse = ({ houseType, legs }, notesData) => {
     const { otherLeg } = categorizeLegs(...legs)
 
     if (otherLeg.type === XWING_TYPES.PERFECT) return isPerfectXWingRemovesNotes({ houseType, legs }, notesData)
@@ -250,21 +250,29 @@ export const transformSashimiXWingLeg = (legA, legB, houseType) => {
     return [firstLeg, secondLeg]
 }
 
-export const getAllXWings = (mainNumbers, notesData) => {
-    const result = []
-    const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
+const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
+    const result = {}
 
-    const candidateXWingLegs = {}
+    const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
     searchableHouses.forEach(houseType => {
         for (let houseNum = 0; houseNum < 9; houseNum++) {
             const house = { type: houseType, num: houseNum }
             const housePossibleXWingLegs = getHouseXWingLegs(house, mainNumbers, notesData)
 
             housePossibleXWingLegs.forEach(xWingLeg => {
-                addCandidateXWingLeg({ ...xWingLeg }, houseType, candidateXWingLegs)
+                addCandidateXWingLeg({ ...xWingLeg }, houseType, result)
             })
         }
     })
+    return result
+}
+
+export const getAllXWings = (mainNumbers, notesData) => {
+    const result = []
+
+    // this is creating a DS which basically tracks which candidates are
+    // eligible for x-wing legs in which houses
+    const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData)
 
     for (const candidate in candidateXWingLegs) {
         for (const houseType in candidateXWingLegs[candidate]) {
@@ -296,9 +304,9 @@ export const getAllXWings = (mainNumbers, notesData) => {
 export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const xWings = getAllXWings(mainNumbers, notesData)
         .filter(xWing => {
-            return removableNotesInCrossHouse(xWing, notesData)
-            // return removableNotesInCrossHouse(xWing, notesData) && xWing.type === XWING_TYPES.SASHIMI_FINNED
-            // return removableNotesInCrossHouse(xWing, notesData) && xWing.type === XWING_TYPES.FINNED
+            return removableNotesPresentInCrossHouse(xWing, notesData)
+            // return removableNotesPresentInCrossHouse(xWing, notesData) && xWing.type === XWING_TYPES.SASHIMI_FINNED
+            // return removableNotesPresentInCrossHouse(xWing, notesData) && xWing.type === XWING_TYPES.FINNED
         })
         .slice(0, maxHintsThreshold)
 
