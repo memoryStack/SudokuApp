@@ -140,27 +140,33 @@ export const isSashimiFinnedXWing = xWing => {
     return isValidSashimiXWingAfterAddingSashimiCell(xWing)
 }
 
+const noLegIsPerfect = (xWing) => {
+    const [legA, legB] = xWing.legs
+    return legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT
+}
+
+const xx_getXWingType = (xWing) => {
+    if (noLegIsPerfect(xWing)) return XWING_TYPES.INVALID
+
+    const candidateAllNotesNotFilledInLegs = !isHintValid({ type: HINTS_IDS.X_WING, data: xWing })
+    if (candidateAllNotesNotFilledInLegs) return XWING_TYPES.INVALID
+
+    const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
+    let result = XWING_TYPES.INVALID
+    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.PERFECT
+    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) result = XWING_TYPES.FINNED
+    if (isSashimiFinnedXWing(xWing)) result = XWING_TYPES.SASHIMI_FINNED
+
+    return result
+}
+
+// TODO: PROPOGATE THE CHANGED SIGNATURE THROUGH OUT THE USECASES
 export const getXWingType = (legA, legB, xWingHouseType) => {
     const xWing = {
         houseType: xWingHouseType,
         legs: [legA, legB],
     }
-
-    if (legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT) return XWING_TYPES.INVALID
-
-    const { perfectLeg, otherLeg } = categorizeLegs(legA, legB)
-
-    let result = XWING_TYPES.INVALID
-    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
-        result = XWING_TYPES.PERFECT
-    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells))
-        result = XWING_TYPES.FINNED
-    if (isSashimiFinnedXWing(xWing)) result = XWING_TYPES.SASHIMI_FINNED
-
-    if (result !== XWING_TYPES.INVALID && !isHintValid({ type: HINTS_IDS.X_WING, data: xWing }))
-        result = XWING_TYPES.INVALID
-
-    return result
+    return xx_getXWingType(xWing)
 }
 
 const getEmptyCellsInHouse = (house, mainNumbers) => {
