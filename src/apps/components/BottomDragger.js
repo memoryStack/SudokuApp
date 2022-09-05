@@ -167,8 +167,8 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     useImperativeHandle(
         ref,
         () => ({
-            openDragger: (data) => moveDragger(topMostPosition, data),
-            closeDragger: (data) => moveDragger(bottomMostPosition, data),
+            openDragger: data => moveDragger(topMostPosition, data),
+            closeDragger: data => moveDragger(bottomMostPosition, data),
         }),
         [
             isFullView,

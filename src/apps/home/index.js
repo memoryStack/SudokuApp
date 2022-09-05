@@ -172,5 +172,5 @@ Home_.propTypes = {
 }
 
 Home_.defaultProps = {
-    navigation: {}
+    navigation: {},
 }

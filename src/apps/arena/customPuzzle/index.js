@@ -62,14 +62,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const CustomPuzzle_ = ({
-    mainNumbers,
-    selectedCell,
-    notesInfo,
-    parentHeight,
-    onCustomPuzzleClosed,
-    onAction,
-}) => {
+const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onCustomPuzzleClosed, onAction }) => {
     const customPuzzleRef = useRef(null)
 
     const handleOnClose = useCallback(() => {
