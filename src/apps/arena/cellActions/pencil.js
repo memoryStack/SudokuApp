@@ -1,9 +1,17 @@
 import React from 'react'
+
 import { Text } from 'react-native'
-import { Styles, INACTIVE_ICON_FILL } from './style'
-import { PencilIcon } from '../../../resources/svgIcons/pencil'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { PENCIL_STATE } from '../../../resources/constants'
+import { PencilIcon } from '../../../resources/svgIcons/pencil'
+
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+
+import { Styles, INACTIVE_ICON_FILL } from './style'
 
 const ACTIVE_PENCIL_FILL = 'rgb(57, 91, 158)'
 
@@ -22,3 +30,15 @@ const Pencil_ = ({ iconBoxSize, pencilState, onClick }) => {
 }
 
 export const Pencil = React.memo(Pencil_)
+
+Pencil_.propTypes = {
+    iconBoxSize: PropTypes.number,
+    onClick: PropTypes.func,
+    pencilState: PropTypes.string,
+}
+
+Pencil_.defaultProps = {
+    iconBoxSize: 40,
+    onClick: _noop,
+    pencilState: PENCIL_STATE.INACTIVE,
+}

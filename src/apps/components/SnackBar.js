@@ -58,13 +58,13 @@ const SnackBar_ = ({ msg, customStyles, onClose }) => {
 
 export const SnackBar = React.memo(SnackBar_)
 
-SnackBar.propTypes = {
+SnackBar_.propTypes = {
     msg: PropTypes.string,
     customStyles: PropTypes.object,
     onClose: PropTypes.func,
 }
 
-SnackBar.defaultProps = {
+SnackBar_.defaultProps = {
     msg: '',
     customStyles: null,
     onClose: _noop,

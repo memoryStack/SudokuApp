@@ -1,12 +1,21 @@
 import React from 'react'
+
 import { View, Text, StyleSheet } from 'react-native'
+
+import { useSelector } from 'react-redux'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { GAME_STATE } from '../../../resources/constants'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { getTimeComponentString } from '../utils/util'
 import { noop } from '../../../utils/util'
 import { fonts } from '../../../resources/fonts/font'
-import { useSelector } from 'react-redux'
+
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+
 import { getGameState } from '../store/selectors/gameState.selectors'
+import { getTimeComponentString } from '../utils/util'
 
 const hitSlop = { left: 8, right: 8, bottom: 8, top: 8 }
 const styles = StyleSheet.create({
@@ -73,3 +82,13 @@ const Timer_ = ({ onClick = noop, time }) => {
 }
 
 export const Timer = React.memo(Timer_)
+
+Timer_.propTypes = {
+    time: PropTypes.number,
+    onClick: PropTypes.func,
+}
+
+Timer_.defaultProps = {
+    time: { hours: 0, minutes: 0, seconds: 0 },
+    onClick: _noop,
+}

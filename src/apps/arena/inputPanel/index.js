@@ -1,15 +1,23 @@
 import React, { useCallback, useMemo } from 'react'
+
 import { View, Text, Image } from 'react-native'
-import { getStyles } from './style'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../utils/customHooks/boardElementsDimensions'
-import { noop } from '../../../utils/util'
-import { ACTION_TYPES } from './constants'
+
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
 
-const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction, singleRow = false }) => {
+import { getStyles } from './style'
+import { ACTION_TYPES } from './constants'
+
+const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
     const isHintTryOut = useIsHintTryOutStep()
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
@@ -44,7 +52,7 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction, sing
         return (
             <Touchable
                 style={styles.numberButtonContainer}
-                onPress={numbersVisible[number] ? () => onNumberClicked(number) : noop}
+                onPress={numbersVisible[number] ? () => onNumberClicked(number) : _noop}
                 touchable={TouchableTypes.opacity}
                 key={`${number}`}
             >
@@ -87,3 +95,15 @@ const Inputpanel_ = ({ numbersVisible = new Array(10).fill(true), onAction, sing
 }
 
 export const Inputpanel = React.memo(Inputpanel_)
+
+Inputpanel_.propTypes = {
+    numbersVisible: PropTypes.array,
+    onAction: PropTypes.func,
+    singleRow: PropTypes.bool,
+}
+
+Inputpanel_.defaultProps = {
+    numbersVisible: new Array(10).fill(true),
+    onAction: _noop,
+    singleRow: false,
+}

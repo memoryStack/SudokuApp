@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
 import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler } from 'react-native'
-import { Touchable, TouchableTypes } from '../components/Touchable'
-import { rgba, noop } from '../../utils/util'
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
+import { rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { EVENTS } from '../../constants/events'
+
+import { Touchable, TouchableTypes } from '../components/Touchable'
 
 const ANIMATION_DURATION = 150
 let HEADER_HEIGHT = 50
@@ -52,14 +57,14 @@ const styles = StyleSheet.create({
 const BottomDragger_ = React.forwardRef((props, ref) => {
     const {
         parentHeight,
-        headerText = '',
-        bottomMostPositionRatio = DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
+        headerText,
+        bottomMostPositionRatio,
         children,
-        onDraggerOpened = noop,
-        onDraggerClosed = noop,
-        stopBackgroundClickClose = false,
-        showBackgroundOverlay = true,
-        animateBackgroundOverlayOnClose = true,
+        onDraggerOpened,
+        onDraggerClosed,
+        stopBackgroundClickClose,
+        showBackgroundOverlay,
+        animateBackgroundOverlayOnClose,
     } = props
 
     // consider children as full screen height later on set it to it's real height
@@ -254,3 +259,27 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
 })
 
 export const BottomDragger = React.memo(BottomDragger_)
+
+BottomDragger_.propTypes = {
+    parentHeight: PropTypes.number,
+    headerText: PropTypes.string,
+    bottomMostPositionRatio: PropTypes.number,
+    children: PropTypes.element,
+    onDraggerOpened: PropTypes.func,
+    onDraggerClosed: PropTypes.func,
+    stopBackgroundClickClose: PropTypes.bool,
+    showBackgroundOverlay: PropTypes.bool,
+    animateBackgroundOverlayOnClose: PropTypes.bool,
+}
+
+BottomDragger_.defaultProps = {
+    parentHeight: 0,
+    headerText: '',
+    bottomMostPositionRatio: DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
+    children: null,
+    onDraggerOpened: _noop,
+    onDraggerClosed: _noop,
+    stopBackgroundClickClose: false,
+    showBackgroundOverlay: false,
+    animateBackgroundOverlayOnClose: false,
+}

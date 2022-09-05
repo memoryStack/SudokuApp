@@ -1,10 +1,19 @@
 import React, { useCallback } from 'react'
+
 import { View, Text } from 'react-native'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { styles } from './style'
-import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import withActions from '../../../utils/hocs/withActions'
+
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+
+import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
+
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { styles } from './style'
 
 const COLUMNS_COUNT = 3
 
@@ -60,3 +69,11 @@ const HintsMenu_ = ({ onAction }) => {
 }
 
 export const HintsMenu = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(HintsMenu_))
+
+HintsMenu_.propTypes = {
+    onAction: PropTypes.func,
+}
+
+HintsMenu_.defaultProps = {
+    onAction: _noop,
+}

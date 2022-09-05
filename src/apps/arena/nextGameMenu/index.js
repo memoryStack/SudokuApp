@@ -1,13 +1,20 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { BottomDragger } from '../../components/BottomDragger'
+
+import PropTypes from 'prop-types'
 import { Svg, Path } from 'react-native-svg'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { RestartIcon } from '../../../resources/svgIcons/restart'
 import { PersonalizePuzzleIcon } from '../../../resources/svgIcons/personalizePuzzle'
 import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '../../../resources/constants'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { fonts } from '../../../resources/fonts/font'
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '../../../resources/stringLiterals'
+
+import { BottomDragger } from '../../components/BottomDragger'
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+
 import { previousInactiveGameExists } from '../utils/util'
 
 const LEVEL_ICON_DIMENSION = 24
@@ -163,3 +170,17 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
 }
 
 export const NextGameMenu = React.memo(NextGameMenu_)
+
+NextGameMenu_.propTypes = {
+    screenName: PropTypes.string,
+    parentHeight: PropTypes.number,
+    menuItemClick: PropTypes.func,
+    onMenuClosed: PropTypes.func,
+}
+
+NextGameMenu_.defaultProps = {
+    screenName: '',
+    parentHeight: 0,
+    menuItemClick: _noop,
+    onMenuClosed: _noop,
+}

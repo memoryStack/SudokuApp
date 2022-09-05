@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { SCREEN_NAME } from '../../../resources/constants'
 import withActions from '../../../utils/hocs/withActions'
 import { Board } from '../gameBoard'
@@ -70,3 +75,13 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
 }
 
 export const PuzzleBoard = React.memo(withActions({ actionHandlers: ACTION_HANDLERS_CONFIG })(PuzzleBoard_))
+
+PuzzleBoard_.propTypes = {
+    onAction: PropTypes.func,
+    [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: PropTypes.func,
+}
+
+PuzzleBoard_.defaultProps = {
+    onAction: _noop,
+    [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: _noop,
+}

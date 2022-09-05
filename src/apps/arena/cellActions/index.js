@@ -1,15 +1,24 @@
 import React, { useCallback, useEffect } from 'react'
+
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
+
+import { useSelector } from 'react-redux'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
+import withActions from '../../../utils/hocs/withActions'
+
+import { getPencilStatus } from '../store/selectors/boardController.selectors'
+import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
+import { useCacheGameState } from '../hooks/useCacheGameState'
+
 import { Undo } from './undo'
 import { Pencil } from './pencil'
 import { FastPencil } from './fastPencil'
 import { Hint } from './hint'
-import withActions from '../../../utils/hocs/withActions'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { useSelector } from 'react-redux'
-import { getPencilStatus } from '../store/selectors/boardController.selectors'
-import { useCacheGameState } from '../hooks/useCacheGameState'
-import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 
 const styles = StyleSheet.create({
     cellActionsContainer: {
@@ -64,3 +73,11 @@ const BoardController_ = ({ onAction }) => {
 }
 
 export const BoardController = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_))
+
+BoardController_.propTypes = {
+    onAction: PropTypes.func,
+}
+
+BoardController_.defaultProps = {
+    onAction: _noop,
+}

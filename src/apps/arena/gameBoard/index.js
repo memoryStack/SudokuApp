@@ -1,9 +1,15 @@
 import React, { useMemo } from 'react'
+
 import { View, Text } from 'react-native'
+
 import { useSelector } from 'react-redux'
 
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { consoleLog, sameHouseAsSelected } from '../../../utils/util'
+import { sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
@@ -11,13 +17,13 @@ import {
 } from '../../../utils/customHooks/boardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-
-import { getStyles } from './style'
-import { Cell } from './cell'
 import { areSameCells } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
 import { BOARD_AXES_VALUES } from '../constants'
+
+import { getStyles } from './style'
+import { Cell } from './cell'
 
 const looper = []
 const bordersLooper = []
@@ -224,3 +230,21 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 }
 
 export const Board = React.memo(Board_)
+
+Board_.propTypes = {
+    mainNumbers: PropTypes.array,
+    notesInfo: PropTypes.array,
+    screenName: PropTypes.string,
+    gameState: PropTypes.string,
+    selectedCell: PropTypes.object,
+    onCellClick: PropTypes.func,
+    isHintTryOut: PropTypes.bool,
+}
+
+Board_.defaultProps = {
+    screenName: '',
+    gameState: GAME_STATE.INACTIVE,
+    selectedCell: {},
+    onCellClick: _noop,
+    isHintTryOut: false,
+}

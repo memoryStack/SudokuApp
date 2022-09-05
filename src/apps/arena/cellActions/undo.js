@@ -1,16 +1,34 @@
 import React from 'react'
+
 import { Text } from 'react-native'
-import { Styles, INACTIVE_ICON_FILL } from './style'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { UndoIcon } from '../../../resources/svgIcons/undo'
+
 import { Touchable, TouchableTypes } from '../../components/Touchable'
+
+import { Styles, INACTIVE_ICON_FILL } from './style'
 
 const Undo_ = ({ iconBoxSize, onClick }) => {
     return (
         <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
             <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-            <Text style={Styles.actionText}>{`Undo`}</Text>
+            <Text style={Styles.actionText}>{'Undo'}</Text>
         </Touchable>
     )
 }
 
 export const Undo = React.memo(Undo_)
+
+Undo_.propTypes = {
+    iconBoxSize: PropTypes.number,
+    onClick: PropTypes.func,
+}
+
+Undo_.defaultProps = {
+    iconBoxSize: 40,
+    onClick: _noop,
+}

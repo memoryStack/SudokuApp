@@ -1,18 +1,27 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+
 import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
+
 import { useSelector } from 'react-redux'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Button } from '../../../components/button'
-import { noop } from '../../../utils/util'
-import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '../../../utils/hocs/withActions'
+
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
-import { getContainerStyles, styles } from './styles'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
+
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { getContainerStyles, styles } from './styles'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
@@ -132,14 +141,14 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             <View style={styles.footerContainer}>
                 <Button
                     text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
-                    onClick={displayPrevButton ? onPrevClick : noop}
+                    onClick={displayPrevButton ? onPrevClick : _noop}
                     avoidDefaultContainerStyles={true}
                     textStyles={styles.footerButtonText}
                     hitSlop={HITSLOP}
                 />
                 <Button
                     text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
-                    onClick={displayNextButton ? onNextClick : noop}
+                    onClick={displayNextButton ? onNextClick : _noop}
                     avoidDefaultContainerStyles={true}
                     textStyles={styles.footerButtonText}
                     hitSlop={HITSLOP}
@@ -167,3 +176,13 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 }
 
 export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(SmartHintHC_))
+
+SmartHintHC_.propTypes = {
+    parentHeight: PropTypes.number,
+    onAction: PropTypes.func,
+}
+
+SmartHintHC_.defaultProps = {
+    parentHeight: 0,
+    onAction: _noop,
+}

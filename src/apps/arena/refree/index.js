@@ -1,16 +1,24 @@
 import React, { useCallback, useEffect } from 'react'
 
 import { View, Text, StyleSheet } from 'react-native'
+
 import { useSelector } from 'react-redux'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { GAME_STATE } from '../../../resources/constants'
 import { fonts } from '../../../resources/fonts/font'
 import withActions from '../../../utils/hocs/withActions'
+
 import { useCacheGameState } from '../hooks/useCacheGameState'
 import { startTimer, stopTimer } from '../store/actions/refree.actions'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit } from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
+
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
 const styles = StyleSheet.create({
@@ -28,7 +36,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const _Refree = ({ onAction }) => {
+const Refree_ = ({ onAction }) => {
     const maxMistakesLimit = useSelector(getMaxMistakesLimit)
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
@@ -72,4 +80,12 @@ const _Refree = ({ onAction }) => {
     )
 }
 
-export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(_Refree))
+export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(Refree_))
+
+Refree_.propTypes = {
+    onAction: PropTypes.func,
+}
+
+Refree_.defaultProps = {
+    onAction: _noop,
+}

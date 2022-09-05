@@ -1,15 +1,23 @@
 import React from 'react'
+
 import { View, Text, StyleSheet } from 'react-native'
-import { Touchable, TouchableTypes } from '../components/Touchable'
+
+import { useSelector } from 'react-redux'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { noop } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
 import { GAME_STATE } from '../../resources/constants'
-import { getTimeComponentString } from './utils/util'
 import { Button } from '../../components/button'
 import { NEW_GAME } from '../../resources/stringLiterals'
 import { fonts } from '../../resources/fonts/font'
-import { useSelector } from 'react-redux'
+import { Touchable, TouchableTypes } from '../components/Touchable'
+
 import { getGameState } from './store/selectors/gameState.selectors'
+import { getTimeComponentString } from './utils/util'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
@@ -116,3 +124,13 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
 }
 
 export const GameOverCard = React.memo(GameOverCard_)
+
+GameOverCard_.propTypes = {
+    stats: PropTypes.object,
+    openNextGameMenu: PropTypes.func,
+}
+
+GameOverCard_.defaultProps = {
+    stats: {},
+    openNextGameMenu: _noop,
+}

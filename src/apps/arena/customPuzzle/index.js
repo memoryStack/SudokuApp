@@ -1,16 +1,25 @@
 import React, { useCallback, useRef } from 'react'
+
 import { View, Text, StyleSheet } from 'react-native'
-import { BottomDragger } from '../../components/BottomDragger'
-import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
-import { Board } from '../gameBoard'
-import { Button } from '../../../components/button'
-import { Inputpanel } from '../inputPanel'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { PLAY } from '../../../resources/stringLiterals'
 import { fonts } from '../../../resources/fonts/font'
-import { ACTION_HANDLERS, ACTION_TYPES, INITIAL_STATE } from './actionHandlers'
+import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import withActions from '../../../utils/hocs/withActions'
+import { Button } from '../../../components/button'
+
+import { BottomDragger } from '../../components/BottomDragger'
+import { Touchable, TouchableTypes } from '../../components/Touchable'
+
+import { Board } from '../gameBoard'
+import { Inputpanel } from '../inputPanel'
+
+import { ACTION_HANDLERS, ACTION_TYPES, INITIAL_STATE } from './actionHandlers'
 
 const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const styles = StyleSheet.create({
@@ -53,7 +62,14 @@ const styles = StyleSheet.create({
     },
 })
 
-const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onCustomPuzzleClosed, onAction }) => {
+const CustomPuzzle_ = ({
+    mainNumbers,
+    selectedCell,
+    notesInfo,
+    parentHeight,
+    onCustomPuzzleClosed,
+    onAction,
+}) => {
     const customPuzzleRef = useRef(null)
 
     const handleOnClose = useCallback(() => {
@@ -122,3 +138,17 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
 export const CustomPuzzle = React.memo(
     withActions({ actionHandlers: ACTION_HANDLERS, initialState: INITIAL_STATE })(CustomPuzzle_),
 )
+
+CustomPuzzle_.propTypes = {
+    onAction: PropTypes.func,
+    onCustomPuzzleClosed: PropTypes.func,
+    selectedCell: PropTypes.object,
+    parentHeight: PropTypes.number,
+}
+
+CustomPuzzle_.defaultProps = {
+    onAction: _noop,
+    onCustomPuzzleClosed: _noop,
+    parentHeight: 0,
+    selectedCell: {},
+}

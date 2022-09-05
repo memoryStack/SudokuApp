@@ -1,6 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { Touchable, TouchableTypes } from '../components/Touchable'
 import { GAME_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
@@ -278,3 +282,21 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 }
 
 export const Arena = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(Arena_))
+
+Arena_.propTypes = {
+    navigation: PropTypes.object,
+    route: PropTypes.object,
+    onAction: PropTypes.func,
+    showCustomPuzzleHC: PropTypes.bool,
+    showGameSolvedCard: PropTypes.bool,
+    showNextGameMenu: PropTypes.bool,
+}
+
+Arena_.defaultProps = {
+    navigation: {},
+    route: {},
+    onAction: _noop,
+    showCustomPuzzleHC: false,
+    showGameSolvedCard: false,
+    showNextGameMenu: false,
+}

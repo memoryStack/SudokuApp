@@ -1,7 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react'
+
 import { SafeAreaView, StyleSheet, AppState, Platform } from 'react-native'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { EVENTS } from '../../constants/events'
-import { noop } from '../../utils/util'
 
 const styles = StyleSheet.create({
     safeAreaView: {
@@ -12,7 +17,13 @@ const styles = StyleSheet.create({
 
 const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
-const Page_ = ({ children, onLayout = noop, onFocus = noop, onBlur = noop, navigation }) => {
+const Page_ = ({
+    children,
+    onLayout,
+    onFocus,
+    onBlur,
+    navigation,
+}) => {
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')
 
     const handleFocus = useCallback(() => {
@@ -66,3 +77,19 @@ const Page_ = ({ children, onLayout = noop, onFocus = noop, onBlur = noop, navig
 }
 
 export const Page = React.memo(Page_)
+
+Page_.propTypes = {
+    children: PropTypes.element,
+    onLayout: PropTypes.func,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
+    navigation: PropTypes.object,
+}
+
+Page_.defaultProps = {
+    children: null,
+    onLayout: _noop,
+    onFocus: _noop,
+    onBlur: _noop,
+    navigation: {},
+}

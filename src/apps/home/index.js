@@ -1,11 +1,16 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react'
+
 import { View, StyleSheet, Linking, Image, Text } from 'react-native'
-import { NextGameMenu } from '../arena/nextGameMenu'
+
+import PropTypes from 'prop-types'
+
 import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { rgba } from '../../utils/util'
 import { useBoardElementsDimensions } from '../../utils/customHooks/boardElementsDimensions'
 import { EVENTS } from '../../constants/events'
+
+import { NextGameMenu } from '../arena/nextGameMenu'
 
 const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
 
@@ -161,3 +166,11 @@ const Home_ = ({ navigation }) => {
 }
 
 export const Home = React.memo(Home_)
+
+Home_.propTypes = {
+    navigation: PropTypes.object,
+}
+
+Home_.defaultProps = {
+    navigation: {}
+}

@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react'
+
 import { useSelector } from 'react-redux'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import withActions from '../../../utils/hocs/withActions'
+
 import { Inputpanel } from '../inputPanel'
 import { getMainNumbers } from '../store/selectors/board.selectors'
 import { forBoardEachCell } from '../utils/util'
+
 import { ACTION_HANDLERS } from './actionHandlers'
 
 const GameInputPanel_ = ({ onAction }) => {
@@ -36,3 +44,11 @@ const GameInputPanel_ = ({ onAction }) => {
 }
 
 export const GameInputPanel = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(GameInputPanel_))
+
+GameInputPanel_.propTypes = {
+    onAction: PropTypes.func,
+}
+
+GameInputPanel_.defaultProps = {
+    onAction: _noop,
+}

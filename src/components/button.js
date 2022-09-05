@@ -1,5 +1,11 @@
 import React from 'react'
+
 import { Text, StyleSheet } from 'react-native'
+
+import PropTypes from 'prop-types'
+
+import _noop from 'lodash/src/utils/noop'
+
 import { Touchable, TouchableTypes } from '../apps/components/Touchable'
 import { noop } from '../utils/util'
 import { fonts } from '../resources/fonts/font'
@@ -43,3 +49,19 @@ const Button_ = ({
 }
 
 export const Button = React.memo(Button_)
+
+Button_.propTypes = {
+    onClick: PropTypes.func,
+    containerStyle: PropTypes.object,
+    text: PropTypes.string,
+    textStyles: PropTypes.object,
+    avoidDefaultContainerStyles: PropTypes.bool,
+}
+
+Button_.defaultProps = {
+    onClick: noop,
+    containerStyle: null,
+    text: '',
+    textStyles: null,
+    avoidDefaultContainerStyles: false,
+}
