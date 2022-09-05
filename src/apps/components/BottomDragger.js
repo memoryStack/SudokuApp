@@ -280,6 +280,6 @@ BottomDragger_.defaultProps = {
     onDraggerOpened: _noop,
     onDraggerClosed: _noop,
     stopBackgroundClickClose: false,
-    showBackgroundOverlay: false,
-    animateBackgroundOverlayOnClose: false,
+    showBackgroundOverlay: true,
+    animateBackgroundOverlayOnClose: true,
 }
