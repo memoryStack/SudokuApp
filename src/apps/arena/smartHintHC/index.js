@@ -67,7 +67,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
     }
 
-    const closeView = () => smartHintHCRef.current && smartHintHCRef.current.closeDragger(true)
+    const closeView = () => smartHintHCRef.current && smartHintHCRef.current.closeDragger()
 
     const isOnlyHint = totalHintsCount <= 1
     const isLastHint = currentHintNum === totalHintsCount

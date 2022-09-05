@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
 import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler } from 'react-native'
-import { Touchable } from '../components/Touchable'
+import { Touchable, TouchableTypes } from '../components/Touchable'
 import { rgba, noop } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { EVENTS } from '../../constants/events'
@@ -142,16 +142,13 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         )
     }, [topMostPosition, bottomMostPosition, transformValue, isFullView, onDraggerOpened, onDraggerClosed])
 
-    // TODO: add constants for these events to put them in one place
     useEffect(() => {
         const handler = () => {
             moveDragger()
             return true
         }
         const backHandler = BackHandler.addEventListener(EVENTS.HARDWARE_BACK_PRESS, handler)
-        return () => {
-            backHandler.remove()
-        }
+        return () => backHandler.remove()
     }, [
         isFullView,
         isDraggerActive,
@@ -162,13 +159,11 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         transformValue,
     ])
 
-    // TODO: i had to add "onDraggerOpened" and "onDraggerClosed" in the dependency array here
-    // after that in "NextGameMenu" onDraggerOpened callback is reading correct game state. (revise this concept again)
     useImperativeHandle(
         ref,
         () => ({
-            openDragger: (data = undefined) => moveDragger(topMostPosition, data),
-            closeDragger: (data = undefined) => moveDragger(bottomMostPosition, data),
+            openDragger: (data) => moveDragger(topMostPosition, data),
+            closeDragger: (data) => moveDragger(bottomMostPosition, data),
         }),
         [
             isFullView,
@@ -181,7 +176,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         ],
     )
 
-    const moveDragger = (toValue = bottomMostPosition, data = undefined) => {
+    const moveDragger = (toValue = bottomMostPosition, data) => {
         // parent component might open the dragger. so mark dragger as active
         if (!isDraggerActive) setIsDraggerActive(true)
         Animated.timing(transformValue, {
@@ -215,9 +210,6 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         }
     }, [])
 
-    // i can use a memo hook here
-    // or i can leave it as well because it's very unlikely that user will actually play with this dragger
-    // and not the game. lol
     const renderHeader = () => {
         return (
             <View style={styles.header} {...panResponder.panHandlers}>
@@ -227,17 +219,22 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         )
     }
 
+    const renderBackgroundOverlay = () => {
+        if (!isDraggerActive) return null
+        return (
+            <Touchable
+                touchable={TouchableTypes.withoutFeedBack}
+                onPress={() => !stopBackgroundClickClose && moveDragger(bottomMostPosition)}
+            >
+                <Animated.View style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]} />
+            </Touchable>
+        )
+    }
+
     if (!children) return null
     return (
         <>
-            {isDraggerActive ? ( // either fully opened or moving
-                <Touchable
-                    touchable={'withoutFeedBack'}
-                    onPress={() => !stopBackgroundClickClose && moveDragger(bottomMostPosition)}
-                >
-                    <Animated.View style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]} />
-                </Touchable>
-            ) : null}
+            {renderBackgroundOverlay()}
             <Animated.View
                 style={[
                     styles.subView,

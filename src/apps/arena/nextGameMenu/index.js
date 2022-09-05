@@ -94,7 +94,7 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
         )
     }
 
-    const closeView = () => nextGameMenuRef.current && nextGameMenuRef.current.closeDragger(true)
+    const closeView = () => nextGameMenuRef.current && nextGameMenuRef.current.closeDragger()
 
     const nextGameMenuItemClicked = useCallback(
         item => {
@@ -153,7 +153,6 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
     return (
         <BottomDragger
             parentHeight={parentHeight}
-            // onDraggerOpened={onNewGameMenuOpened}
             onDraggerClosed={onMenuClosed}
             ref={nextGameMenuRef}
             bottomMostPositionRatio={1.1}
