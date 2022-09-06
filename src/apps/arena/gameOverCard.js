@@ -17,6 +17,7 @@ import { Touchable, TouchableTypes } from '../components/Touchable'
 
 import { getTimeComponentString } from './utils/util'
 import { GameState } from './utils/classes/gameState'
+import { getGameState } from './store/selectors/gameState.selectors'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
