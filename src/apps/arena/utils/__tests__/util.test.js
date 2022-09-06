@@ -1,6 +1,5 @@
 import {
     getTimeComponentString,
-    isGameOver,
     shouldSaveGameState,
     areSameCells,
     areSameBlockCells,
@@ -30,24 +29,6 @@ describe('time component value formatter', () => {
 
     test('getTimeComponentString test 3', () => {
         expect(getTimeComponentString(1)).toBe('01')
-    })
-})
-
-describe('is game over', () => {
-    test('isGameOver test 1', () => {
-        expect(isGameOver(GAME_STATE.ACTIVE)).toBe(false)
-    })
-
-    test('isGameOver test 2', () => {
-        expect(isGameOver(GAME_STATE.INACTIVE)).toBe(false)
-    })
-
-    test('isGameOver test 3', () => {
-        expect(isGameOver(GAME_STATE.OVER.SOLVED)).toBe(true)
-    })
-
-    test('isGameOver test 4', () => {
-        expect(isGameOver(GAME_STATE.OVER.UNSOLVED)).toBe(true)
     })
 })
 

@@ -10,7 +10,6 @@ import { GAME_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
-import { isGameOver } from './utils/util'
 import { CustomPuzzle } from './customPuzzle'
 import SmartHintHC from './smartHintHC'
 import { fonts } from '../../resources/fonts/font'
@@ -29,11 +28,12 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { useCacheGameState } from './hooks/useCacheGameState'
 import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 import { updateGameState } from './store/actions/gameState.actions'
-import { usePrevious, useToggle } from '../../utils/customHooks/commonUtility'
+import { usePrevious } from '../../utils/customHooks/commonUtility'
 import { consoleLog } from '../../utils/util'
 import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
+import { GameState } from './utils/classes/gameState'
 
 const MAX_AVAILABLE_HINTS = 3
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
@@ -122,7 +122,9 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [route, onAction])
 
     useEffect(() => {
-        if (isGameOver(gameState)) onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim })
+        if (new GameState(gameState).isGameOver()) {
+            onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim })
+        }
     }, [gameState, onAction])
 
     const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
@@ -163,7 +165,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 
     const handleSharePuzzleClick = useCallback(() => {
         const puzzleAvailableToShare =
-            gameState === GAME_STATE.ACTIVE || (gameState === GAME_STATE.GAME_SELECT && isGameOver(previousGameState))
+            gameState === GAME_STATE.ACTIVE || (gameState === GAME_STATE.GAME_SELECT && (new GameState(previousGameState).isGameOver()))
         if (puzzleAvailableToShare) onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
     }, [gameState, previousGameState])
 

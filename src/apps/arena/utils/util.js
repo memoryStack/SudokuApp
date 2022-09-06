@@ -7,12 +7,7 @@ import { getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES } from '../constants'
 import { GameState } from './classes/gameState'
 
-const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
 let numOfSolutions = 0
-
-export const isGameOver = gameState => {
-    return gameOverStates.indexOf(gameState) !== -1
-}
 
 export const getTimeComponentString = value => {
     if (value > 9) return `${value}`
