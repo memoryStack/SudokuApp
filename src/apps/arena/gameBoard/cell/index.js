@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { GAME_STATE } from '../../../../resources/constants'
 import { CloseIcon } from '../../../../resources/svgIcons/close'
 import { useBoardElementsDimensions } from '../../../../utils/customHooks/boardElementsDimensions'
 import { fonts } from '../../../../resources/fonts/font'

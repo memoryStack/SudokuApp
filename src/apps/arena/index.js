@@ -129,6 +129,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         setPageHeight(height)
     }, [])
 
+    // What is it doing and why ?
     useEffect(() => {
         const resetGameState = () => updateGameState(GAME_STATE.GAME_SELECT)
         return resetGameState

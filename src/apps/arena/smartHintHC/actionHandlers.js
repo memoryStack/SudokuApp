@@ -12,7 +12,6 @@ import {
 } from '../store/actions/smartHintHC.actions'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
-import { consoleLog } from '../../../utils/util'
 
 const handleOnInit = ({ setState, params: { focusedCells, styles } }) => {
     setState({ focusedCells, styles })
