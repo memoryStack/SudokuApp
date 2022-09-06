@@ -257,13 +257,13 @@ const handleSharePuzzle = () => {
         })
 }
 
-const handleScreenOutOfFocus = ({ params: gameState }) => {
-    if (gameState !== GAME_STATE.ACTIVE) return
+const handleScreenOutOfFocus = ({ params: gameStateObj }) => {
+    if (!gameStateObj.isGameActive()) return
     updateGameState(GAME_STATE.INACTIVE)
 }
 
-const handleScreenInFocus = ({ params: gameState }) => {
-    if (gameState !== GAME_STATE.INACTIVE) return
+const handleScreenInFocus = ({ params: gameStateObj }) => {
+    if (!gameStateObj.isGameInactive()) return
     updateGameState(GAME_STATE.ACTIVE)
 }
 
@@ -311,7 +311,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
