@@ -165,8 +165,10 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 
     const isPuzzlePresent = (currentGameState, previousGameState) => {
         const currentGameStateObj = new GameState(currentGameState)
-        return currentGameStateObj.isGameActive()
-            || (currentGameStateObj.isGameSelecting() && (new GameState(previousGameState).isGameOver()))
+        return (
+            currentGameStateObj.isGameActive() ||
+            (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
+        )
     }
 
     const handleSharePuzzleClick = useCallback(() => {

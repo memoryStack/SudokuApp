@@ -73,10 +73,7 @@ const Timer_ = ({ onClick = noop, time }) => {
     }
 
     const renderTimerStateIcon = () => {
-        return (
-            new GameState(gameState).isGameActive() ? getPauseTimerIcon()
-                : getStartTimerIcon()
-        )
+        return new GameState(gameState).isGameActive() ? getPauseTimerIcon() : getStartTimerIcon()
     }
 
     return (

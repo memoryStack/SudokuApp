@@ -120,13 +120,7 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     }
 
     const renderNewGameButton = () => {
-        return (
-            <Button
-                text={NEW_GAME}
-                onClick={openNextGameMenu}
-                containerStyle={styles.newGameButtonContainer}
-            />
-        )
+        return <Button text={NEW_GAME} onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
     }
 
     return (
