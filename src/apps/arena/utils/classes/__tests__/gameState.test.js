@@ -49,4 +49,10 @@ describe('GameState class', () => {
         expect(new GameState(GAME_STATE.INACTIVE).isGameSelecting()).toBeFalsy()
     })
 
+    test('isGameOver method returns true when game is over', () => {
+        expect(new GameState(GAME_STATE.OVER.UNSOLVED).isGameOver()).toBeTruthy()
+        expect(new GameState(GAME_STATE.OVER.SOLVED).isGameOver()).toBeTruthy()
+        expect(new GameState(GAME_STATE.INACTIVE).isGameOver()).toBeFalsy()
+    })
+
 })

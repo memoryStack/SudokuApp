@@ -46,4 +46,8 @@ export class GameState {
         return this.#state === GAME_STATE.GAME_SELECT
     }
 
+    isGameOver() {
+        return [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(this.#state)
+    }
+
 }
