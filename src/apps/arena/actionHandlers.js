@@ -35,6 +35,7 @@ import { SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
 import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
+import { GameState } from './utils/classes/gameState'
 
 const getMainNumbersFromString = puzzle => {
     const result = new Array(9)
@@ -257,13 +258,13 @@ const handleSharePuzzle = () => {
         })
 }
 
-const handleScreenOutOfFocus = ({ params: gameStateObj }) => {
-    if (!gameStateObj.isGameActive()) return
+const handleScreenOutOfFocus = ({ params: gameState }) => {
+    if (!new GameState(gameState).isGameActive()) return
     updateGameState(GAME_STATE.INACTIVE)
 }
 
-const handleScreenInFocus = ({ params: gameStateObj }) => {
-    if (!gameStateObj.isGameInactive()) return
+const handleScreenInFocus = ({ params: gameState }) => {
+    if (!new GameState(gameState).isGameInactive()) return
     updateGameState(GAME_STATE.ACTIVE)
 }
 

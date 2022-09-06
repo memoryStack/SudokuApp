@@ -19,7 +19,7 @@ import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 import { HintsMenu } from './hintsMenu'
 import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
-import { getGameState, getGameStateObj } from './store/selectors/gameState.selectors'
+import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
 import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
 import { GameInputPanel } from './GameInputPanel'
@@ -95,12 +95,10 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     const [pageHeight, setPageHeight] = useState(0)
 
     const gameState = useSelector(getGameState)
-    const gameStateObj = useSelector(getGameStateObj)
 
-    consoleLog('@@@@@ gs', gameState, gameStateObj)
+    consoleLog('@@@@@ gs', gameState)
 
     const previousGameState = usePrevious(gameState)
-    const previousGameStateObj = usePrevious(gameStateObj)
 
     const fadeAnim = useRef(new Animated.Value(0)).current
 
@@ -138,14 +136,12 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [])
 
     const handleGameInFocus = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_IN_FOCUS, payload: gameStateObj })
-    }, [onAction, gameStateObj])
+        onAction({ type: ACTION_TYPES.ON_IN_FOCUS, payload: gameState })
+    }, [onAction, gameState])
 
     const handleGameOutOfFocus = useCallback(() => {
-        console.log('@@@@@ gameStateObj', gameStateObj)
-
-        onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameStateObj })
-    }, [onAction, gameStateObj])
+        onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
+    }, [onAction, gameState])
 
     const onStartCustomPuzzle = useCallback(
         mainNumbers => {

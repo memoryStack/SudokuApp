@@ -5,6 +5,7 @@ import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES } from '../constants'
+import { GameState } from './classes/gameState'
 
 const gameOverStates = [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED]
 let numOfSolutions = 0
@@ -19,7 +20,7 @@ export const getTimeComponentString = value => {
 }
 
 export const shouldSaveGameState = (currentGameState, previousGameState) => {
-    return currentGameState !== GAME_STATE.ACTIVE && previousGameState === GAME_STATE.ACTIVE
+    return new GameState(previousGameState).isGameActive() && !new GameState(currentGameState).isGameActive()
 }
 
 export const duplicacyPresent = (num, mainNumbers, cell) => {

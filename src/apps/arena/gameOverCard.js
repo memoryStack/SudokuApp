@@ -15,8 +15,8 @@ import { NEW_GAME } from '../../resources/stringLiterals'
 import { fonts } from '../../resources/fonts/font'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 
-import { getGameStateObj } from './store/selectors/gameState.selectors'
 import { getTimeComponentString } from './utils/util'
+import { GameState } from './utils/classes/gameState'
 
 const TROPHY_ICON_DIMENSION = 60
 const styles = StyleSheet.create({
@@ -74,10 +74,10 @@ const getTimeView = (timeTaken = {}) => {
 const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     const { mistakes, difficultyLevel, time, hintsUsed } = stats
 
-    const gameStateObj = useSelector(getGameStateObj)
+    const gameState = useSelector(getGameState)
 
     const getGameSolvedView = () => {
-        if (!gameStateObj.isGameSolved()) return null
+        if (!new GameState(gameState).isGameSolved()) return null
 
         return (
             <>
@@ -110,8 +110,7 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     }
 
     const getGameUnsolvedView = () => {
-        if (!gameStateObj.isGameUnsolved()) return null
-
+        if (!new GameState(gameState).isGameUnsolved()) return null
         return (
             <Text style={styles.gameUnsolvedMsg}>
                 {'you have reached the maximum mistakes limit\nGood Luck Next Time'}
