@@ -54,5 +54,4 @@ describe('GameState class', () => {
         expect(new GameState(GAME_STATE.OVER.SOLVED).isGameOver()).toBeTruthy()
         expect(new GameState(GAME_STATE.INACTIVE).isGameOver()).toBeFalsy()
     })
-
 })

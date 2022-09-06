@@ -1,4 +1,4 @@
-import { GAME_STATE } from "../../../../resources/constants"
+import { GAME_STATE } from '../../../../resources/constants'
 
 export class GameState {
     #state
@@ -6,7 +6,7 @@ export class GameState {
         if (GameState.isValidValue(value)) {
             this.#state = value
         } else {
-            throw new Error(`<${value}> is invalid value for Game State`);
+            throw new Error(`<${value}> is invalid value for Game State`)
         }
     }
 
@@ -49,5 +49,4 @@ export class GameState {
     isGameOver() {
         return [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(this.#state)
     }
-
 }
