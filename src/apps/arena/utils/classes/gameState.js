@@ -3,11 +3,7 @@ import { GAME_STATE } from "../../../../resources/constants"
 export class GameState {
     #state
     constructor(value) {
-        if (GameState.isValidValue(value)) {
-            this.#state = value
-        } else {
-            throw new Error(`<${value}> is invalid value for Game State`);
-        }
+        this.#state = value
     }
 
     static isValidValue(value) {
