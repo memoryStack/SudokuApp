@@ -8,12 +8,12 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { GAME_STATE } from '../../../resources/constants'
 import { HintIcon } from '../../../resources/svgIcons/hint'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
+import { GameState } from '../utils/classes/gameState'
 
 import { Styles, INACTIVE_ICON_FILL } from './style'
 
@@ -26,7 +26,8 @@ const Hint_ = ({ iconBoxSize, hints, onClick }) => {
 
     const renderTickerIcon = () => {
         return null
-        if (gameState !== GAME_STATE.ACTIVE) return null
+        if (!new GameState(gameState).isGameActive()) return null
+
         return (
             <View style={Styles.hintsTickerBox}>
                 <Text style={Styles.hintsTickerText}>{hints}</Text>

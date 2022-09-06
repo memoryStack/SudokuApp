@@ -8,7 +8,6 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { GAME_STATE } from '../../../resources/constants'
 import { fonts } from '../../../resources/fonts/font'
 import withActions from '../../../utils/hocs/withActions'
 
@@ -18,6 +17,7 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit } from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
+import { GameState } from '../utils/classes/gameState'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 
@@ -60,7 +60,7 @@ const Refree_ = ({ onAction }) => {
 
     // TODO: check what happens when back button is pressed
     useEffect(() => {
-        if (gameState === GAME_STATE.ACTIVE) startTimer()
+        if (new GameState(gameState).isGameActive()) startTimer()
         else stopTimer()
         return () => stopTimer()
     }, [gameState])

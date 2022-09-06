@@ -16,6 +16,7 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { getTimeComponentString } from '../utils/util'
+import { GameState } from '../utils/classes/gameState'
 
 const hitSlop = { left: 8, right: 8, bottom: 8, top: 8 }
 const styles = StyleSheet.create({
@@ -57,10 +58,10 @@ const styles = StyleSheet.create({
     },
 })
 
-const getStartTimerIcon = () => <View style={styles.triangleShape} />
-
 const Timer_ = ({ onClick = noop, time }) => {
     const gameState = useSelector(getGameState)
+
+    const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
     const getPauseTimerIcon = () => {
         return (
@@ -71,12 +72,19 @@ const Timer_ = ({ onClick = noop, time }) => {
         )
     }
 
+    const renderTimerStateIcon = () => {
+        return (
+            new GameState(gameState).isGameActive() ? getPauseTimerIcon()
+                : getStartTimerIcon()
+        )
+    }
+
     return (
         <Touchable style={styles.timeCounter} onPress={onClick} touchable={TouchableTypes.opacity} hitSlop={hitSlop}>
             <Text style={styles.textStyles}>{`${getTimeComponentString(time.hours)}:`}</Text>
             <Text style={styles.textStyles}>{`${getTimeComponentString(time.minutes)}:`}</Text>
             <Text style={styles.textStyles}>{`${getTimeComponentString(time.seconds)}`}</Text>
-            {gameState === GAME_STATE.ACTIVE ? getPauseTimerIcon() : getStartTimerIcon()}
+            {renderTimerStateIcon()}
         </Touchable>
     )
 }
