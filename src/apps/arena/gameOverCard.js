@@ -10,13 +10,12 @@ import _noop from 'lodash/src/utils/noop'
 
 import { noop } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
-import { GAME_STATE } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { NEW_GAME } from '../../resources/stringLiterals'
 import { fonts } from '../../resources/fonts/font'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 
-import { getGameState } from './store/selectors/gameState.selectors'
+import { getGameStateObj } from './store/selectors/gameState.selectors'
 import { getTimeComponentString } from './utils/util'
 
 const TROPHY_ICON_DIMENSION = 60
@@ -75,12 +74,11 @@ const getTimeView = (timeTaken = {}) => {
 const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     const { mistakes, difficultyLevel, time, hintsUsed } = stats
 
-    const gameState = useSelector(getGameState)
-
-    const gameSolved = gameState === GAME_STATE.OVER.SOLVED
-    const gameUnsolved = gameState === GAME_STATE.OVER.UNSOLVED
+    const gameStateObj = useSelector(getGameStateObj)
 
     const getGameSolvedView = () => {
+        if (!gameStateObj.isGameSolved()) return null
+
         return (
             <>
                 {/* 
@@ -111,14 +109,31 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
         )
     }
 
-    const getGameUnsolvedView = () => (
-        <Text style={styles.gameUnsolvedMsg}>{'you have reached the maximum mistakes limit\nGood Luck Next Time'}</Text>
-    )
+    const getGameUnsolvedView = () => {
+        if (!gameStateObj.isGameUnsolved()) return null
+
+        return (
+            <Text style={styles.gameUnsolvedMsg}>
+                {'you have reached the maximum mistakes limit\nGood Luck Next Time'}
+            </Text>
+        )
+    }
+
+    const renderNewGameButton = () => {
+        return (
+            <Button
+                text={NEW_GAME}
+                onClick={openNextGameMenu}
+                containerStyle={styles.newGameButtonContainer}
+            />
+        )
+    }
 
     return (
         <Touchable touchable={TouchableTypes.opacity} activeOpacity={1} onPress={noop} style={styles.container}>
-            {gameSolved ? getGameSolvedView() : gameUnsolved ? getGameUnsolvedView() : null}
-            <Button onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} text={NEW_GAME} />
+            {getGameSolvedView()}
+            {getGameUnsolvedView()}
+            {renderNewGameButton()}
         </Touchable>
     )
 }
