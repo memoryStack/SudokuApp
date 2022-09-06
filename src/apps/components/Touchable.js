@@ -3,10 +3,10 @@ import {
     StyleSheet,
     TouchableHighlight,
     TouchableNativeFeedback,
-    Platform,
     TouchableOpacity,
     TouchableWithoutFeedback,
 } from 'react-native'
+import { Platform } from '../../utils/classes/platform'
 // import { TouchableNativeFeedback as NewTouchableNativeFeedback } from 'react-native-gesture-handler'
 // will fix error related to this later
 
@@ -34,7 +34,7 @@ const TouchablesMap = {
     // newNativeFeedBack: NewTouchableNativeFeedback,
 }
 
-const defaultTouchable = Platform.OS === 'ios' ? 'highLight' : 'nativeFeedBack'
+const defaultTouchable = Platform.isIOS() ? 'highLight' : 'nativeFeedBack'
 
 const defaultProps = {
     touchable: defaultTouchable,
@@ -46,7 +46,7 @@ const defaultProps = {
 
 const getTouchable = touchable => {
     if (!touchable) touchable = defaultTouchable
-    touchable = touchable.toLowerCase().includes('nativefeedback') && Platform.OS === 'ios' ? 'highLight' : touchable
+    touchable = touchable.toLowerCase().includes('nativefeedback') && Platform.isIOS() ? 'highLight' : touchable
     return TouchablesMap[touchable]
 }
 
