@@ -1,5 +1,6 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { GAME_STATE } from '../../../../resources/constants'
+import { GameState } from '../../utils/classes/gameState'
 import { refreeActions } from '../reducers/refree.reducers'
 import { getGameState } from '../selectors/gameState.selectors'
 import { getTime } from '../selectors/refree.selectors'
@@ -20,8 +21,9 @@ export const updateDifficultylevel = level => invokeDispatch(setDifficultylevel(
 
 export const timerClick = () => {
     const gameState = getGameState(getStoreState())
-    if (!(gameState === GAME_STATE.ACTIVE || gameState === GAME_STATE.INACTIVE)) return
-    const newGameState = gameState === GAME_STATE.ACTIVE ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
+    const gameStateObj = new GameState(gameState)
+    if (!(gameStateObj.isGameActive() || gameStateObj.isGameInactive())) return
+    const newGameState = gameStateObj.isGameActive() ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
     updateGameState(newGameState)
 }
 
