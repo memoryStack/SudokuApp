@@ -163,10 +163,16 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         onAction({ type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD, payload: fadeAnim })
     }, [])
 
+    const isPuzzlePresent = (currentGameState, previousGameState) => {
+        const currentGameStateObj = new GameState(currentGameState)
+        return currentGameStateObj.isGameActive()
+            || (currentGameStateObj.isGameSelecting() && (new GameState(previousGameState).isGameOver()))
+    }
+
     const handleSharePuzzleClick = useCallback(() => {
-        const puzzleAvailableToShare =
-            gameState === GAME_STATE.ACTIVE || (gameState === GAME_STATE.GAME_SELECT && (new GameState(previousGameState).isGameOver()))
-        if (puzzleAvailableToShare) onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
+        if (isPuzzlePresent(gameState, previousGameState)) {
+            onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
+        }
     }, [gameState, previousGameState])
 
     const handleBackPress = () => onAction({ type: ACTION_TYPES.ON_BACK_PRESS })
