@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 
-import { SafeAreaView, StyleSheet, AppState } from 'react-native'
+import { SafeAreaView, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -9,6 +9,8 @@ import _noop from 'lodash/src/utils/noop'
 import { EVENTS } from '../../constants/events'
 
 import { Platform } from '../../utils/classes/platform'
+
+import { AppState } from '../../utils/classes/appState'
 
 const styles = StyleSheet.create({
     safeAreaView: {
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
 const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
 const Page_ = ({ children, onLayout, onFocus, onBlur, navigation }) => {
-    const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState === 'active')
+    const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState() === 'active')
 
     const handleFocus = useCallback(() => {
         if (isPageInFocus) return
@@ -54,17 +56,17 @@ const Page_ = ({ children, onLayout, onFocus, onBlur, navigation }) => {
     }, [navigation, handleFocus, handleBlur])
 
     useEffect(() => {
-        AppState.addEventListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
+        AppState.addListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
         if (Platform.isAndroid()) {
-            AppState.addEventListener(EVENTS.APP_STATE.FOCUS, handleFocus)
-            AppState.addEventListener(EVENTS.APP_STATE.BLUR, handleBlur)
+            AppState.addListener(EVENTS.APP_STATE.FOCUS, handleFocus)
+            AppState.addListener(EVENTS.APP_STATE.BLUR, handleBlur)
         }
 
         return () => {
-            AppState.removeEventListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
+            AppState.removeListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
             if (Platform.isAndroid()) {
-                AppState.removeEventListener(EVENTS.APP_STATE.FOCUS, handleFocus)
-                AppState.removeEventListener(EVENTS.APP_STATE.BLUR, handleBlur)
+                AppState.removeListener(EVENTS.APP_STATE.FOCUS, handleFocus)
+                AppState.removeListener(EVENTS.APP_STATE.BLUR, handleBlur)
             }
         }
     }, [handleAppStateChange, handleFocus, handleBlur, navigation])
