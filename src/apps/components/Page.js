@@ -6,11 +6,9 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { EVENTS } from '../../constants/events'
-
 import { Platform } from '../../utils/classes/platform'
-
 import { AppState } from '../../utils/classes/appState'
+import { EVENTS } from '../../constants/events'
 
 const styles = StyleSheet.create({
     safeAreaView: {
