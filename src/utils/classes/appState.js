@@ -1,9 +1,8 @@
+import { AppState as NativeAppState } from 'react-native'
 
-import { AppState as NativeAppState } from "react-native";
+import { EVENTS } from '../../constants/events'
 
-import { EVENTS } from "../../constants/events";
-
-import { Platform } from "./platform";
+import { Platform } from './platform'
 
 const COMMON_EVENTS = [EVENTS.APP_STATE.CHANGE]
 
