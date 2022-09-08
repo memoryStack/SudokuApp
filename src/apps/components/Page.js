@@ -44,20 +44,24 @@ const Page_ = ({ children, onLayout, onFocus, onBlur, navigation }) => {
         [isPageInFocus, handleFocus, handleBlur],
     )
 
-    // all the events for knowing that page is actually in focus or not
     useEffect(() => {
-        AppState.addEventListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
         const unsubNavigation = [
             navigation && navigation.addListener(EVENTS.NAVIGATION.FOCUS, handleFocus),
             navigation && navigation.addListener(EVENTS.NAVIGATION.BLUR, handleBlur),
         ]
+
+        return () => unsubNavigation.forEach(unsub => unsub && unsub())
+    }, [navigation, handleFocus, handleBlur])
+
+    useEffect(() => {
+        AppState.addEventListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
         if (Platform.isAndroid()) {
             AppState.addEventListener(EVENTS.APP_STATE.FOCUS, handleFocus)
             AppState.addEventListener(EVENTS.APP_STATE.BLUR, handleBlur)
         }
+
         return () => {
             AppState.removeEventListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
-            unsubNavigation.forEach(unsub => unsub && unsub())
             if (Platform.isAndroid()) {
                 AppState.removeEventListener(EVENTS.APP_STATE.FOCUS, handleFocus)
                 AppState.removeEventListener(EVENTS.APP_STATE.BLUR, handleBlur)

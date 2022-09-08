@@ -1,11 +1,10 @@
-import { Platform } from "react-native";
-
+import { Platform as NativePlatform } from "react-native";
 export class Platform {
-    static isAndriod() {
-        return Platform.OS === 'android'
+    static isAndroid() {
+        return NativePlatform.OS === 'android'
     }
 
     static isIOS() {
-        return Platform.OS === 'ios'
+        return NativePlatform.OS === 'ios'
     }
 }
