@@ -7,4 +7,8 @@ export class Platform {
     static isIOS() {
         return NativePlatform.OS === 'ios'
     }
+
+    static OS() {
+        return NativePlatform.OS
+    }
 }
