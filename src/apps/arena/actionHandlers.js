@@ -1,5 +1,10 @@
 import { Animated } from 'react-native'
 import Share from 'react-native-share'
+
+import _isEmpty from 'lodash/src/utils/isEmpty'
+import _findIndex from 'lodash/src/utils/findIndex'
+import _isInteger from 'lodash/src/utils/isInteger'
+
 import {
     LEVEL_DIFFICULTIES,
     GAME_STATE,
@@ -36,6 +41,7 @@ import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
+import { BOARD_CELLS_COUNT, DEEPLINK_PUZZLE_URL_ERRORS } from './constants'
 
 const getMainNumbersFromString = puzzle => {
     const result = new Array(9)
@@ -62,20 +68,29 @@ const getMainNumbersFromString = puzzle => {
     return result
 }
 
-const getUrlFormatError = url => {
-    if (!url) return INVALID_DEEPLINK_PUZZLE
-    const FORMAT_ERROR = `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}`
-    const startIndex = url.indexOf(DEEPLINK_HOST_NAME)
-    if (startIndex === -1) return FORMAT_ERROR
+const getSharedPuzzleNumbersFromUrl = (url) => {
+    const firstNumberIndex = _findIndex(url, (char) => {
+        return _isInteger(parseInt(char, 10))
+    })
+    return url.substring(firstNumberIndex)
+}
 
-    const puzzleNumbers = url.substring(DEEPLINK_HOST_NAME.length)
-    if (puzzleNumbers.length !== 81) return FORMAT_ERROR
+const areInvalidNumbersCountInSharedPuzzle = (url) => {
+    return getSharedPuzzleNumbersFromUrl(url).length !== BOARD_CELLS_COUNT
+}
 
+const areInvalidCharactersInSharedPuzzle = (url) => {
+    const puzzleNumbers = getSharedPuzzleNumbersFromUrl(url)
     for (let i = 0; i < puzzleNumbers.length; i++) {
-        const clueIntValue = parseInt(puzzleNumbers[i], 10)
-        if (isNaN(clueIntValue)) return FORMAT_ERROR
+        if (!_isInteger(parseInt(puzzleNumbers[i], 10))) return true
     }
+    return false
+}
 
+const getSharedPuzzleError = url => {
+    if (_isEmpty(url)) return DEEPLINK_PUZZLE_URL_ERRORS.EMPTY_URL
+    if (areInvalidNumbersCountInSharedPuzzle(url)) return DEEPLINK_PUZZLE_URL_ERRORS.INCOMPLETE_NUMBERS
+    if (areInvalidCharactersInSharedPuzzle(url)) return DEEPLINK_PUZZLE_URL_ERRORS.INVALID_CHARACTERS
     return ''
 }
 
@@ -123,15 +138,14 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
 }
 
 const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
-    const urlFormatError = getUrlFormatError(puzzleUrl)
+    const urlFormatError = getSharedPuzzleError(puzzleUrl)
     if (urlFormatError) {
-        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: urlFormatError })
+        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${urlFormatError}. ${LAUNCHING_DEFAULT_PUZZLE}` })
         generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
         return
     }
 
-    const puzzleNumbers = puzzleUrl.substring(DEEPLINK_HOST_NAME.length)
-    const mainNumbers = getMainNumbersFromString(puzzleNumbers)
+    const mainNumbers = getMainNumbersFromString(getSharedPuzzleNumbersFromUrl(puzzleUrl))
 
     if (duplicatesInPuzzle(mainNumbers).present) {
         // TODO: give option to correct the puzzle if user can
@@ -312,7 +326,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
