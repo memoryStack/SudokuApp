@@ -61,8 +61,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
         if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
 
-        const isWronglyPlaced = mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue
-        if (isWronglyPlaced) return styles.wronglyFilledNumColor
+        if (mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue) return styles.wronglyFilledNumColor
         if (!mainNumbers[row][col].isClue) return styles.userFilledNumColor
         return styles.clueNumColor
     }

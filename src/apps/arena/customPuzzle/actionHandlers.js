@@ -42,7 +42,9 @@ const initBoardData = () => {
     // const str = '400000107305800406080406320043050070000000940801003002004530708500070204018004030'
 
     // finned x-wing bug
-    const str = '040059000259000308001000250430805610805006432600430000503000170020010003076003000'
+    // const str = '040059000259000308001000250430805610805006432600430000503000170020010003076003000'
+
+    const str = ''
 
     if (__DEV__) {
         for (let i = 0; i < str.length; i++) {
@@ -86,32 +88,21 @@ const handleInit = ({ setState }) => {
     setState({ ...initBoardData() })
 }
 
-const handleInputNumberClick = ({ setState, getState, params: number }) => {
+const handleInputNumberClick = ({ setState, getState, params: newInputValue }) => {
     const { selectedCell, mainNumbers } = getState()
 
     const { row, col } = selectedCell
-    const initialValue = mainNumbers[row][col].value
-    mainNumbers[row][col].value = number
-    mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, selectedCell, number)
 
-    if (initialValue && initialValue !== number) {
-        // reset "wronglyPlaced" flag for the values which might be
-        // converted from wronglyPlaced to correctly placed due to input in this cell
-        for (let col = 0; col < 9; col++) {
-            if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
-        }
-        for (let row = 0; row < 9; row++) {
-            if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
-        }
-        const { blockNum } = getBlockAndBoxNum(selectedCell)
-        for (let box = 0; box < 9; box++) {
-            const { row, col } = getRowAndCol(blockNum, box)
-            if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === initialValue)
-                mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, initialValue)
-        }
+    if (newInputValue === mainNumbers[row][col].value) return
+
+    const oldInputValue = mainNumbers[row][col].value
+    mainNumbers[row][col].value = newInputValue
+    mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, selectedCell, newInputValue)
+
+    if (oldInputValue && oldInputValue !== newInputValue) {
+        updateWronglyPlacedNumbersStatusInHouses(oldInputValue, selectedCell, mainNumbers)
     }
+
     setState({ mainNumbers: [...mainNumbers] })
 
     if (!mainNumbers[row][col].wronglyPlaced) {
@@ -124,6 +115,29 @@ const handleInputNumberClick = ({ setState, getState, params: number }) => {
             }
             if (nextRow !== 9) setState({ selectedCell: { row: nextRow, col: nextCol } })
         }, 0)
+    }
+}
+
+const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbers) => {
+    const { row, col } = cell
+
+    for (let col = 0; col < 9; col++) {
+        if (isCellEligibleForStatusUpdate(row, col))
+            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)
+    }
+    for (let row = 0; row < 9; row++) {
+        if (isCellEligibleForStatusUpdate(row, col))
+            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)
+    }
+    const { blockNum } = getBlockAndBoxNum(cell)
+    for (let box = 0; box < 9; box++) {
+        const { row, col } = getRowAndCol(blockNum, box)
+        if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue)
+            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)
+    }
+
+    function isCellEligibleForStatusUpdate(row, col) {
+        return mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue
     }
 }
 
