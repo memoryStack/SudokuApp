@@ -60,6 +60,8 @@ const Cell_ = ({
     }
 
     const getCellNotes = () => {
+        if (!shouldRenderNotes()) return null
+
         const cellNotesRows = looper.map(row => {
             const cellNotesRow = looper.map(col => {
                 const noteNum = row * 3 + col
@@ -87,22 +89,28 @@ const Cell_ = ({
         return cellNotesRows
     }
 
-    const getCellContent = () => {
-        if (displayCrossIcon) {
-            return (
-                <CloseIcon
-                    height={CROSS_ICON_DIMENSION}
-                    width={CROSS_ICON_DIMENSION}
-                    fill={boardColorStyles.wronglyFilledNumColor.color}
-                />
-            )
-        }
+    const getCellCrossIcon = () => {
+        return (
+            <CloseIcon
+                height={CROSS_ICON_DIMENSION}
+                width={CROSS_ICON_DIMENSION}
+                fill={boardColorStyles.wronglyFilledNumColor.color}
+            />
+        )
+    }
 
-        return cellMainValue ? (
-            <Text style={[styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
-        ) : shouldRenderNotes() ? (
-            getCellNotes()
-        ) : null
+    const renderCellMainValue = () => {
+        return (<Text style={[styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>)
+    }
+
+    const getCellNumberView = () => {
+        if (cellMainValue) return renderCellMainValue()
+        return getCellNotes()
+    }
+
+    const getCellContent = () => {
+        if (displayCrossIcon) return getCellCrossIcon()
+        else return getCellNumberView()
     }
 
     return (
