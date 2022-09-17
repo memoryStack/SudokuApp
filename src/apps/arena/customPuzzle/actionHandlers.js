@@ -167,32 +167,33 @@ const handleOnClose = ({ params: ref }) => {
     resetInitialState()
 }
 
-const showSnackBar = ({ snackBarRenderer, msg }) => {
+const showSnackBar = ({ msg }) => {
     emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-        snackbarView: snackBarRenderer(msg),
+        msg,
         visibleTime: 5000,
     })
 }
 
-const handlePlay = ({ setState, getState, params: { snackBarRenderer, ref: customPuzzleHCRef } }) => {
+const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) => {
     const { mainNumbers, startCustomPuzzle } = getState()
 
     if (getCluesCount(mainNumbers) < 18) {
-        showSnackBar({ msg: 'clues are less than 18', snackBarRenderer })
+        showSnackBar({ msg: 'clues are less than 18' })
         return
     }
 
     const duplicateNumber = duplicatesInPuzzle(mainNumbers)
     if (duplicateNumber.present) {
-        setState({ selectedCell: duplicateNumber.cell })
-        showSnackBar({ msg: 'puzzle has multiple numbers in same house', snackBarRenderer })
+        const { cell } = duplicateNumber
+        setState({ selectedCell: cell })
+        showSnackBar({ msg: `puzzle has multiple instances of ${mainNumbers[cell.row][cell.col].value} in same house` })
         return
     }
 
     const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) > 1
     console.log('@@@@@@ mainNumbers after puzzle', JSON.stringify(mainNumbers))
     if (isMultipleSolutionsExist) {
-        showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle', snackBarRenderer })
+        showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
     } else {
         startCustomPuzzle(mainNumbers)
         handleOnClose({ params: customPuzzleHCRef })

@@ -185,15 +185,19 @@ export const isDuplicateEntry = (mainNumbers, cell, number) => {
 }
 
 export const duplicatesInPuzzle = mainNumbers => {
-    forBoardEachCell(({ row, col }) => {
-        if (isCellEmpty({ row, col }, mainNumbers)) return
-        if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
-            return {
-                present: true,
-                cell: { row, col },
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (isCellEmpty({ row, col }, mainNumbers)) continue
+
+            if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
+                return {
+                    present: true,
+                    cell: { row, col },
+                }
             }
+
         }
-    })
+    }
 
     return { present: false }
 }

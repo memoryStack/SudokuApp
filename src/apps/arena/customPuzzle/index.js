@@ -70,22 +70,12 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
     }, [onAction])
 
     const handlePlayClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef, snackBarRenderer } })
+        onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef } })
     }, [mainNumbers])
 
     const onHCClosed = useCallback(() => {
         onCustomPuzzleClosed()
     }, [])
-
-    // TODO: why do we have this custom renderer which looks almost exactly like
-    // the main snackBar globally ??
-    const snackBarRenderer = msg => {
-        return (
-            <View style={styles.snackBarContainer}>
-                <Text style={styles.snackBarText}>{msg}</Text>
-            </View>
-        )
-    }
 
     const onCellClick = useCallback(
         cell => {
