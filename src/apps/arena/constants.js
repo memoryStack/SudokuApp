@@ -4,6 +4,7 @@ export const BOARD_AXES_VALUES = {
 }
 
 export const BOARD_CELLS_COUNT = 81
+export const MAX_INSTANCES_OF_NUMBER = 9
 
 export const DEEPLINK_PUZZLE_URL_ERRORS = {
     EMPTY_URL: 'Invaild Url',

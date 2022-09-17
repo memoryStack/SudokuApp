@@ -11,6 +11,7 @@ import withActions from '../../../utils/hocs/withActions'
 import { Inputpanel } from '../inputPanel'
 import { getMainNumbers } from '../store/selectors/board.selectors'
 import { forBoardEachCell } from '../utils/util'
+import { MAX_INSTANCES_OF_NUMBER } from '../constants'
 
 import { ACTION_HANDLERS } from './actionHandlers'
 
@@ -18,26 +19,28 @@ const GameInputPanel_ = ({ onAction }) => {
     const mainNumbers = useSelector(getMainNumbers)
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
 
-    useEffect(() => {
-        const instancesCountAfterUpdate = new Array(10).fill(0)
+    const getInstancesCounts = (mainNumbers) => {
+        const instancesCount = new Array(10).fill(0)
         forBoardEachCell(({ row, col }) => {
             const value = mainNumbers[row][col].value
             if (value === mainNumbers[row][col].solutionValue) {
-                instancesCountAfterUpdate[value]++
+                instancesCount[value]++
             }
         })
+        return instancesCount
+    }
 
-        const numbersVisibilityStatusAfterUpdate = [false]
-        for (let i = 1; i <= 9; i++) {
-            numbersVisibilityStatusAfterUpdate.push(instancesCountAfterUpdate[i] !== 9)
-        }
+    const getNumbersVisibilityStatus = (instancesCount) => {
+        const numbersVisibility = [true]
+        for (let i = 1; i <= MAX_INSTANCES_OF_NUMBER; i++)
+            numbersVisibility.push(instancesCount[i] !== MAX_INSTANCES_OF_NUMBER)
+        return numbersVisibility
+    }
 
-        for (let i = 1; i <= 9; i++) {
-            if (numbersVisible[i] !== numbersVisibilityStatusAfterUpdate[i]) {
-                setNumbersVisibility(numbersVisibilityStatusAfterUpdate)
-                break
-            }
-        }
+    useEffect(() => {
+        const instancesNewCount = getInstancesCounts(mainNumbers)
+        const numbersNewVisibility = getNumbersVisibilityStatus(instancesNewCount)
+        if (!numbersVisible.sameArrays(numbersNewVisibility)) setNumbersVisibility(numbersNewVisibility)
     }, [mainNumbers, numbersVisible])
 
     return <Inputpanel numbersVisible={numbersVisible} onAction={onAction} />
