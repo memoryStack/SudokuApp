@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
+import _get from 'lodash/src/utils/get'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'
@@ -51,13 +53,13 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const scrollViewRef = useRef(null)
     const hintsScrollPositions = useRef({})
 
+    const scrollHintView = (newVerticalPosition) => {
+        scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: newVerticalPosition, animated: true })
+    }
+
     useEffect(() => {
-        if (hintsScrollPositions.current && hintsScrollPositions.current[currentHintNum] === undefined) {
-            scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true })
-        } else {
-            const previousScrollPosition = hintsScrollPositions.current && hintsScrollPositions.current[currentHintNum]
-            scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: previousScrollPosition, animated: true })
-        }
+        const newVerticalPosition = _get(hintsScrollPositions.current, [currentHintNum], 0)
+        scrollHintView(newVerticalPosition)
     }, [currentHintNum])
 
     const onNextClick = useCallback(() => {
