@@ -40,15 +40,19 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         })
     }, [mainNumbers])
 
+    const isCellClickable = (cell) => {
+        return isHintTryOut && !(isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell))
+    }
+
     const onCellClick = useCallback(
         cell => {
-            if (isHintTryOut && !(isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell))) {
+            if (!isCellClickable(cell)) {
                 // TODO: snow a snackBar to communicate the user about what is happening
                 return
             }
 
-            const actionHandler = isHintTryOut ? smartHintTryOutOnAction : onAction
-            actionHandler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+            const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
+            handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
         },
         [onAction, isHintTryOut],
     )
