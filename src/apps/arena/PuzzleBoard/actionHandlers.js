@@ -5,6 +5,7 @@ import { updateGameState } from '../store/actions/gameState.actions'
 import { GAME_STATE } from '../../../resources/constants'
 import { resetStoreState } from '../store/actions/board.actions'
 import { forBoardEachCell } from '../utils/util'
+import { BOARD_CELLS_COUNT } from '../constants'
 
 const handleCellPress = ({ params: cell }) => {
     // TODO: some improvements can be done here like
@@ -22,7 +23,7 @@ const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
             correctlyFilledCells++
     })
 
-    if (correctlyFilledCells === 81) updateGameState(GAME_STATE.OVER.SOLVED)
+    if (correctlyFilledCells === BOARD_CELLS_COUNT) updateGameState(GAME_STATE.OVER.SOLVED)
 }
 
 const handleOnUnmount = () => {
