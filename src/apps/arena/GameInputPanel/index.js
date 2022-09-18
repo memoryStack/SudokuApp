@@ -38,8 +38,7 @@ const GameInputPanel_ = ({ onAction }) => {
     }
 
     useEffect(() => {
-        const instancesNewCount = getInstancesCounts(mainNumbers)
-        const numbersNewVisibility = getNumbersVisibilityStatus(instancesNewCount)
+        const numbersNewVisibility = getNumbersVisibilityStatus(getInstancesCounts(mainNumbers))
         if (!numbersVisible.sameArrays(numbersNewVisibility)) setNumbersVisibility(numbersNewVisibility)
     }, [mainNumbers, numbersVisible])
 
