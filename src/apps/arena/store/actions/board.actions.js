@@ -183,9 +183,10 @@ export const inputNumberAction = number => {
     else inputMainNumber(number)
 }
 
-const removeCellNotes = cell => {
+const removeCellNotes = () => {
+    const selectedCell = getSelectedCell(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
-    const notesBunch = getVisibileNotesBunchInCell(cell, notesInfo)
+    const notesBunch = getVisibileNotesBunchInCell(selectedCell, notesInfo)
     if (!notesBunch.length) return
 
     invokeDispatch(eraseNotesBunch(notesBunch))
@@ -214,18 +215,25 @@ const eraseMainNumber = () => {
     invokeDispatch(addMove(constructMove(move)))
 }
 
-export const eraseAction = () => { // refactore this
+export const eraseAction = () => {
+    if (isMainNumberEligibleToErase()) {
+        eraseMainNumber()
+    } else {
+        removeCellNotesIfEmptyCell()
+    }
+}
+
+const isMainNumberEligibleToErase = () => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
-
     const cellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value
-    const shouldEraseMainValue =
-        cellMainValue && cellMainValue !== mainNumbers[selectedCell.row][selectedCell.col].solutionValue
-    if (shouldEraseMainValue) {
-        eraseMainNumber()
-    } else if (!cellMainValue) {
-        removeCellNotes(selectedCell)
-    }
+    return cellMainValue && cellMainValue !== mainNumbers[selectedCell.row][selectedCell.col].solutionValue
+}
+
+const removeCellNotesIfEmptyCell = () => {
+    const mainNumbers = getMainNumbers(getStoreState())
+    const selectedCell = getSelectedCell(getStoreState())
+    if (isCellEmpty(selectedCell, mainNumbers)) removeCellNotes()
 }
 
 export const initPossibleNotes = mainNumbers => {
