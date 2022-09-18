@@ -63,32 +63,30 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
             })
     }, [screenName])
 
-    const getBar = (barNum, level) => {
-        const pathD = [
-            'M',
-            75 + 100 * barNum,
-            '450',
-            'L',
-            75 + 100 * barNum,
-            350 - 100 * barNum,
-            'A 25 25 0 0 1',
-            125 + 100 * barNum,
-            350 - 100 * barNum,
-            'L',
-            125 + 100 * barNum,
-            '450',
-            'A 25 25 0 0 1',
-            75 + 100 * barNum,
-            '450',
+    const getBarPath = (barNum) => {
+        return [
+            'M', 75 + 100 * barNum, '450', 'L', 75 + 100 * barNum, 350 - 100 * barNum,
+            'A 25 25 0 0 1', 125 + 100 * barNum, 350 - 100 * barNum, 'L', 125 + 100 * barNum,
+            '450', 'A 25 25 0 0 1', 75 + 100 * barNum, '450',
         ].join(' ')
+    }
 
-        let stroke
-        let fill
-        if (barNum <= level) stroke = 'rgba(0, 0, 0, .5)'
-        else stroke = 'black'
-        if (barNum > level) fill = 'none'
-        else fill = 'black'
-        return <Path key={`${barNum}`} d={pathD} stroke={stroke} fill={fill} strokeWidth={5} />
+    const getBarStrokeAndFillProps = (barNum, difficultyLevelIndex) => {
+        return {
+            stroke: barNum <= difficultyLevelIndex ? 'rgba(0, 0, 0, .5)' : 'black',
+            fill: barNum <= difficultyLevelIndex ? 'black' : 'none'
+        }
+    }
+
+    const getBar = (barNum, level) => {
+        return (
+            <Path
+                key={`${barNum}`}
+                d={getBarPath(barNum)}
+                {...getBarStrokeAndFillProps(barNum, level)}
+                strokeWidth={5}
+            />
+        )
     }
 
     const getLevelIcon = level => {
