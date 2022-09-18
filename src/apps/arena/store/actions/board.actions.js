@@ -1,7 +1,6 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
-import { getBlockAndBoxNum, initMainNumbers } from '../../../../utils/util'
-import { HOUSE_TYPE } from '../../utils/smartHints/constants'
+import { initMainNumbers } from '../../../../utils/util'
 import { duplicacyPresent, forBoardEachCell, getCellHousesInfo, initNotes, isCellEmpty } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
@@ -215,7 +214,7 @@ const eraseMainNumber = () => {
     invokeDispatch(addMove(constructMove(move)))
 }
 
-export const eraseAction = () => {
+export const eraseAction = () => { // refactore this
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
 
