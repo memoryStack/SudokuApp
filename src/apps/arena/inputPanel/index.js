@@ -63,35 +63,40 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
         )
     }
 
-    const getPanelView = () => {
-        const rows = []
+    const isNumberEligibleToAddInPanel = (number) => {
+        return !isHintTryOut || (isHintTryOut && numbersVisible[number])
+    }
 
-        let row = []
+    const addNumberInPanelRowIfEligible = (number, rowItems) => {
+        if (isNumberEligibleToAddInPanel(number)) rowItems.push(renderInputNumber(number))
+    }
+
+    const renderHorizontalSeparator = () => {
+        return <View key={'hori_seperator'} style={styles.horizontalSeperator} />
+    }
+
+    const renderPanelRow = (rowItems, key) => {
+        return (<View key={key} style={styles.rowContainer}>{rowItems}</View>)
+    }
+
+    const renderPanelView = () => {
+        const rows = []
+        let rowItems = []
         forEachInputNumber(number => {
-            if (!isHintTryOut || (isHintTryOut && numbersVisible[number])) {
-                row.push(renderInputNumber(number))
-            }
-            if (row.length >= 5 && !singleRow) {
-                rows.push(
-                    <View key={'rowOne'} style={styles.rowContainer}>
-                        {row}
-                    </View>,
-                )
-                row = []
+            addNumberInPanelRowIfEligible(number, rowItems)
+            if (rowItems.length >= 5 && !singleRow) {
+                rows.push(renderPanelRow(rowItems, 'rowOne'))
+                rowItems = []
             }
         })
 
-        row.push(renderEraser())
-        rows.push(<View key={'hori_seperator'} style={styles.horizontalSeperator} />)
-        rows.push(
-            <View key={'rowTwo'} style={styles.rowContainer}>
-                {row}
-            </View>,
-        )
+        rowItems.push(renderEraser())
+        rows.push(renderHorizontalSeparator())
+        rows.push(renderPanelRow(rowItems, 'rowTwo'))
         return rows
     }
 
-    return <View style={styles.container}>{getPanelView()}</View>
+    return <View style={styles.container}>{renderPanelView()}</View>
 }
 
 export const Inputpanel = React.memo(Inputpanel_)
