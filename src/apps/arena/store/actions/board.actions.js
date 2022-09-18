@@ -55,32 +55,40 @@ export const updateMoves = moves => {
 }
 
 export const fastPencilAction = () => {
+    const newNotesBunchToAdd = getNewNotesBunchToShow()
+
+    if (!newNotesBunchToAdd.length) return
+
+    invokeDispatch(setNotesBunch(newNotesBunchToAdd))
+
+    const move = {
+        notes: {
+            action: MOVES_TYPES.ADD,
+            bunch: newNotesBunchToAdd,
+        },
+    }
+    invokeDispatch(addMove(constructMove(move)))
+}
+
+const getNewNotesBunchToShow = () => {
+    const result = []
+
     const mainNumbers = getMainNumbers(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
 
-    const bunch = []
     forBoardEachCell(({ row, col }) => {
         if (!mainNumbers[row][col].value) {
             for (let num = 1; num <= 9; num++) {
                 const { show } = notesInfo[row][col][num - 1]
-                if (!show && !duplicacyPresent(num, mainNumbers, { row, col })) {
-                    bunch.push({ cell: { row, col }, note: num })
+                const isValidNewNote = !show && !duplicacyPresent(num, mainNumbers, { row, col })
+                if (isValidNewNote) {
+                    result.push({ cell: { row, col }, note: num })
                 }
             }
         }
     })
 
-    if (!bunch.length) return
-
-    invokeDispatch(setNotesBunch(bunch))
-
-    const move = {
-        notes: {
-            action: MOVES_TYPES.ADD,
-            bunch,
-        },
-    }
-    invokeDispatch(addMove(constructMove(move)))
+    return result
 }
 
 const MOVES_TYPES = {
