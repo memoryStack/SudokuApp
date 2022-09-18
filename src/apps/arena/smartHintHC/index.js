@@ -113,16 +113,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }
 
     const getTryOutResultTextStyle = () => {
-        let result = styles.tryOutDefaultResult
-
-        if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) {
-            result = styles.tryOutProgressResult
-        }
-        if (tryOutResult.state === TRY_OUT_RESULT_STATES.ERROR) {
-            result = styles.tryOutErrorResult
-        }
-
-        return result
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) return styles.tryOutProgressResult
+        if (tryOutResult.state === TRY_OUT_RESULT_STATES.ERROR) return styles.tryOutErrorResult
+        return styles.tryOutDefaultResult
     }
 
     const renderTryOutContent = () => {
