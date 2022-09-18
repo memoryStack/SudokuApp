@@ -39,30 +39,53 @@ const HintsMenu_ = ({ onAction }) => {
         )
     }
 
-    const rows = []
-    let row = []
+    const renderVerticalSeparator = (key) => {
+        return <View style={styles.verticalSeperator} key={key} />
+    }
+
+    const renderHorizontalSeparator = (key) => {
+        return <View style={styles.horizontalSeperator} key={key} />
+    }
+
+    const menuRows = []
+    let menuRow = []
+
+    const isLastMenuItem = (index) => {
+        return index === HINTS_MENU_ITEMS.length - 1
+    }
+
+    const isRowLastItem = (index) => {
+        return index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastMenuItem(index)
+    }
+
+    const addMenuItemInRow = (item, index) => {
+        menuRow.push(renderMenuItem(item))
+        if (!isRowLastItem(index)) menuRow.push(renderVerticalSeparator(`verticalSep_${index}`))
+    }
+
+    const renderMenuRow = () => {
+        return (
+            <View style={styles.menuRowContainer} key={`row_${menuRows.length}`}>
+                {menuRow}
+            </View>
+        )
+    }
+
+    const addMenuRow = () => {
+        if (menuRows.length) menuRows.push(renderHorizontalSeparator(`horizoSep_${menuRows.length}`))
+        menuRows.push(renderMenuRow())
+        menuRow = []
+    }
+
     HINTS_MENU_ITEMS.forEach((item, index) => {
-        const isLastItem = index === HINTS_MENU_ITEMS.length - 1
-        const isLastColumn = index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastItem
-
-        if (row.length) row.push(<View style={styles.verticalSeperator} key={`verticalSep_${index}`} />)
-        row.push(renderMenuItem(item))
-
-        if (isLastColumn) {
-            if (rows.length) rows.push(<View style={styles.horizontalSeperator} key={`horizoSep_${index}`} />)
-            rows.push(
-                <View style={styles.menuRowContainer} key={`row_${index}`}>
-                    {row}
-                </View>,
-            )
-            row = []
-        }
+        addMenuItemInRow(item, index)
+        if (isRowLastItem(index)) addMenuRow()
     })
 
     return (
         <Touchable onPress={onOverlayContainerClick}>
             <View style={styles.overlayContainer}>
-                <View style={styles.container}>{rows}</View>
+                <View style={styles.container}>{menuRows}</View>
             </View>
         </Touchable>
     )
