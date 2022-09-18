@@ -15,15 +15,16 @@ const handleCellPress = ({ params: cell }) => {
 }
 
 const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
-    let correctlyFilledCells = 0
+    if (getCorrectlyFilledCells(mainNumbers) === BOARD_CELLS_COUNT) updateGameState(GAME_STATE.OVER.SOLVED)
+}
 
+const getCorrectlyFilledCells = (mainNumbers) => {
+    let result = 0
     forBoardEachCell(({ row, col }) => {
-        const cellMainNumber = mainNumbers[row][col]
-        if (cellMainNumber.solutionValue && cellMainNumber.solutionValue === cellMainNumber.value)
-            correctlyFilledCells++
+        const { solutionValue, value: inputValue } = mainNumbers[row][col]
+        if (solutionValue === inputValue) result++
     })
-
-    if (correctlyFilledCells === BOARD_CELLS_COUNT) updateGameState(GAME_STATE.OVER.SOLVED)
+    return result
 }
 
 const handleOnUnmount = () => {
