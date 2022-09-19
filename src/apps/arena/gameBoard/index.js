@@ -70,14 +70,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const getSmartHintActiveBgColor = cell => {
         if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell))
             return styles.selectedCellBGColor
-
-        const { row, col } = cell
-        return (
-            (smartHintCellsHighlightInfo[row] &&
-                smartHintCellsHighlightInfo[row][col] &&
-                smartHintCellsHighlightInfo[row][col].bgColor) ||
-            styles.smartHintOutOfFocusBGColor
-        )
+        return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
     }
 
     const showCellContent = [
