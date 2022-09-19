@@ -292,49 +292,42 @@ export const undoAction = () => {
     if (!moves.length) return
 
     const previousMove = moves[moves.length - 1]
-
-    undoSelectedCell()
-    undoMainNumber()
-    undoNotes()
-
+    updateSelectedCell(previousMove.selectedCell)
+    undoMainNumber(previousMove)
+    undoNotes(previousMove)
     invokeDispatch(popMove())
+}
 
-    function undoSelectedCell() {
-        const previousSelectedCell = previousMove.selectedCell
-        updateSelectedCell(previousSelectedCell)
+const undoMainNumber = (previousMove) => {
+    const mainNumberMove = previousMove.mainNumber
+    if (!mainNumberMove.action) return
+
+    if (mainNumberMove.action === MOVES_TYPES.ADD) {
+        const cell = previousMove.selectedCell
+        const mainNumbersBeforeErase = getMainNumbers(getStoreState())
+        invokeDispatch(eraseCellMainValue(cell))
+
+        // TODO: may be we can extract this check and make it a util func
+        const wasCorrectValue =
+            mainNumbersBeforeErase[cell.row][cell.col].value ===
+            mainNumbersBeforeErase[cell.row][cell.col].solutionValue
+        const mainNumbersAfterErase = getMainNumbers(getStoreState())
+        addPossibleNotesOnMainNumberErased(cell, wasCorrectValue, mainNumbersAfterErase)
+    } else {
+        // this will be executed only for the mistake made.
+        // correct filled numbers are anyway not erasable.
+        invokeDispatch(setCellMainNumber({ cell: previousMove.selectedCell, number: mainNumberMove.value }))
     }
+}
 
-    function undoMainNumber() {
-        const mainNumberMove = previousMove.mainNumber
-        if (!mainNumberMove.action) return
+const undoNotes = (previousMove) => {
+    const notesMove = previousMove.notes
+    if (!notesMove.action) return
 
-        if (mainNumberMove.action === MOVES_TYPES.ADD) {
-            const cell = previousMove.selectedCell
-            const mainNumbersBeforeErase = getMainNumbers(getStoreState())
-            invokeDispatch(eraseCellMainValue(cell))
-
-            // TODO: may be we can extract this check and make it a util func
-            const wasCorrectValue =
-                mainNumbersBeforeErase[cell.row][cell.col].value ===
-                mainNumbersBeforeErase[cell.row][cell.col].solutionValue
-            const mainNumbersAfterErase = getMainNumbers(getStoreState())
-            addPossibleNotesOnMainNumberErased(cell, wasCorrectValue, mainNumbersAfterErase)
-        } else {
-            // this will be executed only for the mistake made.
-            // correct filled numbers are anyway not erasable.
-            invokeDispatch(setCellMainNumber({ cell: previousMove.selectedCell, number: mainNumberMove.value }))
-        }
-    }
-
-    function undoNotes() {
-        const notesMove = previousMove.notes
-        if (!notesMove.action) return
-
-        if (notesMove.action === MOVES_TYPES.ADD) {
-            invokeDispatch(eraseNotesBunch(notesMove.bunch))
-        } else {
-            invokeDispatch(setNotesBunch(notesMove.bunch))
-        }
+    if (notesMove.action === MOVES_TYPES.ADD) {
+        invokeDispatch(eraseNotesBunch(notesMove.bunch))
+    } else {
+        invokeDispatch(setNotesBunch(notesMove.bunch))
     }
 }
 
