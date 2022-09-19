@@ -1,7 +1,7 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
 import { initMainNumbers } from '../../../../utils/util'
-import { duplicacyPresent, forBoardEachCell, getCellHousesInfo, initNotes, isCellEmpty } from '../../utils/util'
+import { duplicacyPresent, forBoardEachCell, getCellHousesInfo, initNotes, isCellCorrectlyFilled, isCellEmpty } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
@@ -307,10 +307,9 @@ const undoMainNumber = (previousMove) => {
         const mainNumbersBeforeErase = getMainNumbers(getStoreState())
         invokeDispatch(eraseCellMainValue(cell))
 
-        // TODO: may be we can extract this check and make it a util func
-        const wasCorrectValue =
-            mainNumbersBeforeErase[cell.row][cell.col].value ===
-            mainNumbersBeforeErase[cell.row][cell.col].solutionValue
+        // TODO: check how this is working correctly ??
+        // is data updated in store immediately and only UI is rendered async ??
+        const wasCorrectValue = isCellCorrectlyFilled(mainNumbersBeforeErase[cell.row][cell.col])
         const mainNumbersAfterErase = getMainNumbers(getStoreState())
         addPossibleNotesOnMainNumberErased(cell, wasCorrectValue, mainNumbersAfterErase)
     } else {
