@@ -1,3 +1,5 @@
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import { GAME_STATE } from '../../../resources/constants'
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
@@ -333,4 +335,9 @@ export const getHouseAxesValue = ({ type, num }) => {
 
 export const forEachHouse = callback => {
     for (let houseNum = 0; houseNum < 9; houseNum++) callback(houseNum)
+}
+
+export const isCellCorrectlyFilled = ({ solutionValue, value } = {}) => {
+    if (_isEmpty(value) || _isEmpty(solutionValue) || solutionValue === 0 || value === 0) return false
+    return value === solutionValue
 }
