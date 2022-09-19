@@ -213,16 +213,14 @@ const getNotesToEnterHostCells = focusedCells => {
                     return shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)
                 }),
             })
-        } else {
-            if (
-                isCellEmpty(cell, tryOutMainNumbers) &&
-                shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)
-            ) {
-                result.push({
-                    cell,
-                    notes: [numberToBeErased],
-                })
-            }
+        } else if (
+            isCellEmpty(cell, tryOutMainNumbers) &&
+            shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)
+        ) {
+            result.push({
+                cell,
+                notes: [numberToBeErased],
+            })
         }
     })
 
