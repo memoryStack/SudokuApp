@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
+import _get from 'lodash/src/utils/get'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { sameHouseAsSelected } from '../../../utils/util'
@@ -105,11 +106,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
     const shouldMarkCellAsInhabitable = cell => {
         if (!showSmartHint) return false
-        return !!(
-            smartHintCellsHighlightInfo[cell.row] &&
-            smartHintCellsHighlightInfo[cell.row][cell.col] &&
-            smartHintCellsHighlightInfo[cell.row][cell.col].inhabitable
-        )
+        return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'inhabitable'], false)
     }
 
     const renderRow = (row, key) => {
@@ -185,10 +182,9 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const yAxis = useMemo(() => {
-        const yAxisTexts = BOARD_AXES_VALUES.Y_AXIS
         return (
             <View style={styles.yAxis}>
-                {yAxisTexts.map(label => {
+                {BOARD_AXES_VALUES.Y_AXIS.map(label => {
                     return renderAxisText(label)
                 })}
             </View>
@@ -196,21 +192,21 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }, [showSmartHint])
 
     const xAxis = useMemo(() => {
-        const xAxisTexts = BOARD_AXES_VALUES.X_AXIS
         return (
             <View style={styles.xAxis}>
-                {xAxisTexts.map(label => {
-                    return renderAxisText(label)
-                })}
+                {
+                    BOARD_AXES_VALUES.X_AXIS.map(label => {
+                        return renderAxisText(label)
+                    })
+                }
             </View>
         )
     }, [showSmartHint])
 
     const renderBoard = () => {
-        let keyCounter = 0
         return (
             <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
-                {looper.map(row => renderRow(row, `${keyCounter++}`))}
+                {looper.map((row, index) => renderRow(row, `${index}`))}
                 {getGrid('horizontal')}
                 {getGrid('vertical')}
             </View>
