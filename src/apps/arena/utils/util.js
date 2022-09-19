@@ -158,22 +158,17 @@ export const getCellHousesInfo = cell => {
 
 // TODO: merge duplicacyPresent and isDuplicateEntry functions into one
 export const isDuplicateEntry = (mainNumbers, cell, number) => {
-    const { row, col } = cell
-    let houseCount = 0
-    for (let col = 0; col < 9; col++) if (mainNumbers[row][col].value === number) houseCount++
-    if (houseCount > 1) return true
+    return multipleNumberInstancesExistInAnyHouseOfCell(number, cell, mainNumbers)
+}
 
-    houseCount = 0
-    for (let row = 0; row < 9; row++) if (mainNumbers[row][col].value === number) houseCount++
-    if (houseCount > 1) return true
-
-    houseCount = 0
-    const { blockNum } = getBlockAndBoxNum(cell)
-    for (let box = 0; box < 9; box++) {
-        const { row, col } = getRowAndCol(blockNum, box)
-        if (mainNumbers[row][col].value === number) houseCount++
-    }
-    return houseCount > 1
+const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => {
+    return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some((houseType) => {
+        const numberHostCellsInHouse = getHouseCells(houseType, cell.row)
+            .filter(({ row, col }) => {
+                return mainNumbers[row][col].value === number
+            })
+        return numberHostCellsInHouse.length > 1
+    })
 }
 
 export const duplicatesInPuzzle = mainNumbers => {
