@@ -74,12 +74,9 @@ export const getNumberOfSolutions = mainNumbers => {
 // how can i test this function's behaviour ??
 export const previousInactiveGameExists = async () => {
     const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
-    let result = false
-    if (previousGameData) {
-        const state = previousGameData[GAME_DATA_KEYS.STATE]
-        if ([GAME_STATE.INACTIVE, GAME_STATE.DISPLAY_HINT].includes(state)) result = true
-    }
-    return result
+    if (!previousGameData) return false
+
+    return [GAME_STATE.INACTIVE, GAME_STATE.DISPLAY_HINT].includes(previousGameData[GAME_DATA_KEYS.STATE])
 }
 
 export const areSameCells = (cellA, cellB) => cellA.row === cellB.row && cellA.col === cellB.col
