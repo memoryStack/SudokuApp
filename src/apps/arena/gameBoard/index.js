@@ -55,10 +55,14 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         return styles.clueNumColor
     }
 
+    const isCustomPuzleScreen = () => {
+        return screen === SCREEN_NAME.CUSTOM_PUZZLE
+    }
+
     const getMainNumFontColor = cell => {
         const { row, col } = cell
         if (!mainNumbers[row][col].value) return null
-        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return getCustomPuzzleMainNumFontColor(cell)
+        if (isCustomPuzleScreen()) return getCustomPuzzleMainNumFontColor(cell)
 
         if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
 
@@ -73,28 +77,41 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
     }
 
-    const showCellContent = [
-        GAME_STATE.ACTIVE,
-        GAME_STATE.DISPLAY_HINT,
-        GAME_STATE.OVER.SOLVED,
-        GAME_STATE.OVER.UNSOLVED,
-    ].includes(gameState)
+    const shouldShowCellContent = () => {
+        return [
+            GAME_STATE.ACTIVE,
+            GAME_STATE.DISPLAY_HINT,
+            GAME_STATE.OVER.SOLVED,
+            GAME_STATE.OVER.UNSOLVED,
+        ].includes(gameState)
+    }
 
-    // this is going to get complicated, i guess it's better to break it
-    const getBoxBackgroundColor = cell => {
-        if (showSmartHint) return getSmartHintActiveBgColor(cell)
+    const hasSameValueInSameHouseAsSelectedCell = (cell) => {
+        return sameHouseAsSelected(cell, selectedCell) && sameValueAsSelectedBox(cell)
+    }
 
-        if (!showCellContent) return null
-
+    const getCustomPuzzleBoardCellBgColor = (cell) => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
+        if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
+        return null
+    }
+
+    const getActiveGameBoardCellBgCell = (cell) => {
+        if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
+        if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
 
         const isSameHouseAsSelected = sameHouseAsSelected(cell, selectedCell)
         const isSameValueAsSelected = sameValueAsSelectedBox(cell)
-        if (isSameHouseAsSelected && isSameValueAsSelected) return styles.sameHouseSameValueBGColor
-        if (screenName === SCREEN_NAME.CUSTOM_PUZZLE) return null // won't show backgorund color for the below type of cells
         if (isSameHouseAsSelected) return styles.sameHouseCellBGColor
         if (!isSameHouseAsSelected && isSameValueAsSelected) return styles.diffHouseSameValueBGColor
         return styles.defaultCellBGColor
+    }
+
+    const getBoxBackgroundColor = cell => {
+        if (!shouldShowCellContent()) return null
+        if (showSmartHint) return getSmartHintActiveBgColor(cell)
+        if (isCustomPuzleScreen()) return getCustomPuzzleBoardCellBgColor(cell)
+        return getActiveGameBoardCellBgCell(cell)
     }
 
     const shouldMarkCellAsInhabitable = cell => {
@@ -103,8 +120,6 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const renderRow = (row, key) => {
-        let rowElementsKeyCounter = 0
-
         const rowAdditionalStyles = {
             marginTop: row === 3 || row === 6 ? INNER_THICK_BORDER_WIDTH : GRID_THIN_BORDERS_WIDTH,
             marginBottom: row === 8 ? GRID_THIN_BORDERS_WIDTH : 0,
@@ -112,7 +127,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
         return (
             <View style={[styles.rowStyle, rowAdditionalStyles]} key={key}>
-                {looper.map(col => {
+                {looper.map((col, index) => {
                     const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
                     const cell = { row, col }
 
@@ -125,7 +140,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
                         <View style={{ flexDirection: 'row' }}>
                             <View
                                 style={[styles.cellContainer, cellAdditionalStyles]}
-                                key={`${rowElementsKeyCounter++}`}
+                                key={`${index}`}
                             >
                                 <Cell
                                     row={row}
@@ -139,7 +154,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
                                     smartHintData={smartHintData}
                                     selectedMainNumber={selectedCellMainValue}
                                     showSmartHint={showSmartHint}
-                                    showCellContent={showCellContent}
+                                    showCellContent={shouldShowCellContent()}
                                 />
                             </View>
                         </View>
