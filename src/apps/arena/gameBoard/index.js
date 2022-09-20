@@ -78,25 +78,22 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const shouldShowCellContent = () => {
-        return [
-            GAME_STATE.ACTIVE,
-            GAME_STATE.DISPLAY_HINT,
-            GAME_STATE.OVER.SOLVED,
-            GAME_STATE.OVER.UNSOLVED,
-        ].includes(gameState)
+        return [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(
+            gameState,
+        )
     }
 
-    const hasSameValueInSameHouseAsSelectedCell = (cell) => {
+    const hasSameValueInSameHouseAsSelectedCell = cell => {
         return sameHouseAsSelected(cell, selectedCell) && sameValueAsSelectedBox(cell)
     }
 
-    const getCustomPuzzleBoardCellBgColor = (cell) => {
+    const getCustomPuzzleBoardCellBgColor = cell => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
         if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
         return null
     }
 
-    const getActiveGameBoardCellBgCell = (cell) => {
+    const getActiveGameBoardCellBgCell = cell => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
         if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
 
@@ -138,10 +135,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
                     return (
                         <View style={{ flexDirection: 'row' }}>
-                            <View
-                                style={[styles.cellContainer, cellAdditionalStyles]}
-                                key={`${index}`}
-                            >
+                            <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${index}`}>
                                 <Cell
                                     row={row}
                                     col={col}
@@ -202,11 +196,9 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const xAxis = useMemo(() => {
         return (
             <View style={styles.xAxis}>
-                {
-                    BOARD_AXES_VALUES.X_AXIS.map(label => {
-                        return renderAxisText(label)
-                    })
-                }
+                {BOARD_AXES_VALUES.X_AXIS.map(label => {
+                    return renderAxisText(label)
+                })}
             </View>
         )
     }, [showSmartHint])

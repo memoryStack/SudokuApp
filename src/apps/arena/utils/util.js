@@ -27,12 +27,11 @@ export const duplicacyPresent = (num, mainNumbers, cell) => {
 }
 
 const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => {
-    return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some((houseType) => {
+    return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
         const { num: houseNum } = getCellHouseInfo(houseType, cell)
-        return getHouseCells(houseType, houseNum)
-            .some(({ row, col }) => {
-                return mainNumbers[row][col].value === number
-            })
+        return getHouseCells(houseType, houseNum).some(({ row, col }) => {
+            return mainNumbers[row][col].value === number
+        })
     })
 }
 
@@ -163,12 +162,11 @@ export const isDuplicateEntry = (mainNumbers, cell, number) => {
 }
 
 const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => {
-    return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some((houseType) => {
+    return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
         const { num: houseNum } = getCellHouseInfo(houseType, cell)
-        const numberHostCellsInHouse = getHouseCells(houseType, houseNum)
-            .filter(({ row, col }) => {
-                return mainNumbers[row][col].value === number
-            })
+        const numberHostCellsInHouse = getHouseCells(houseType, houseNum).filter(({ row, col }) => {
+            return mainNumbers[row][col].value === number
+        })
         return numberHostCellsInHouse.length > 1
     })
 }
@@ -184,7 +182,6 @@ export const duplicatesInPuzzle = mainNumbers => {
                     cell: { row, col },
                 }
             }
-
         }
     }
 

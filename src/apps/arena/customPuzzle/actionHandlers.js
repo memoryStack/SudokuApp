@@ -123,17 +123,29 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
 
     for (let col = 0; col < 9; col++) {
         if (isCellEligibleForStatusUpdate(row, col))
-            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)
+            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
+                mainNumbers,
+                { row, col },
+                mainNumbers[row][col].value,
+            )
     }
     for (let row = 0; row < 9; row++) {
         if (isCellEligibleForStatusUpdate(row, col))
-            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)
+            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
+                mainNumbers,
+                { row, col },
+                mainNumbers[row][col].value,
+            )
     }
     const { blockNum } = getBlockAndBoxNum(cell)
     for (let box = 0; box < 9; box++) {
         const { row, col } = getRowAndCol(blockNum, box)
         if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue)
-            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)
+            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
+                mainNumbers,
+                { row, col },
+                mainNumbers[row][col].value,
+            )
     }
 
     function isCellEligibleForStatusUpdate(row, col) {

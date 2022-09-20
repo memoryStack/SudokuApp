@@ -51,11 +51,13 @@ export const showHints = async hintId => {
         .then(hints => {
             consoleLog('@@@@ hintInfo', JSON.stringify(hints))
             if (hints) {
-                invokeDispatch(setHints({
-                    mainNumbers: hints[0].hasTryOut ? cloneDeep(mainNumbers) : null,
-                    notesInfo: hints[0].hasTryOut ? cloneDeep(notesInfo) : null,
-                    hints,
-                }))
+                invokeDispatch(
+                    setHints({
+                        mainNumbers: hints[0].hasTryOut ? cloneDeep(mainNumbers) : null,
+                        notesInfo: hints[0].hasTryOut ? cloneDeep(notesInfo) : null,
+                        hints,
+                    }),
+                )
                 return true
             } else {
                 emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {

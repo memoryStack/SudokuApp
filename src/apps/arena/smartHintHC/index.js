@@ -53,7 +53,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const scrollViewRef = useRef(null)
     const hintsScrollPositions = useRef({})
 
-    const scrollHintView = (newVerticalPosition) => {
+    const scrollHintView = newVerticalPosition => {
         scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: newVerticalPosition, animated: true })
     }
 

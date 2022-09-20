@@ -1,7 +1,14 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
 import { initMainNumbers } from '../../../../utils/util'
-import { duplicacyPresent, forBoardEachCell, getCellHousesInfo, initNotes, isCellCorrectlyFilled, isCellEmpty } from '../../utils/util'
+import {
+    duplicacyPresent,
+    forBoardEachCell,
+    getCellHousesInfo,
+    initNotes,
+    isCellCorrectlyFilled,
+    isCellEmpty,
+} from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
@@ -298,7 +305,7 @@ export const undoAction = () => {
     invokeDispatch(popMove())
 }
 
-const undoMainNumber = (previousMove) => {
+const undoMainNumber = previousMove => {
     const mainNumberMove = previousMove.mainNumber
     if (!mainNumberMove.action) return
 
@@ -319,7 +326,7 @@ const undoMainNumber = (previousMove) => {
     }
 }
 
-const undoNotes = (previousMove) => {
+const undoNotes = previousMove => {
     const notesMove = previousMove.notes
     if (!notesMove.action) return
 

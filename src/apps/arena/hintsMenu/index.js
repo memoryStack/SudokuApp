@@ -39,22 +39,22 @@ const HintsMenu_ = ({ onAction }) => {
         )
     }
 
-    const renderVerticalSeparator = (key) => {
+    const renderVerticalSeparator = key => {
         return <View style={styles.verticalSeperator} key={key} />
     }
 
-    const renderHorizontalSeparator = (key) => {
+    const renderHorizontalSeparator = key => {
         return <View style={styles.horizontalSeperator} key={key} />
     }
 
     const menuRows = []
     let menuRow = []
 
-    const isLastMenuItem = (index) => {
+    const isLastMenuItem = index => {
         return index === HINTS_MENU_ITEMS.length - 1
     }
 
-    const isRowLastItem = (index) => {
+    const isRowLastItem = index => {
         return index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastMenuItem(index)
     }
 

@@ -431,5 +431,4 @@ describe('isCellCorrectlyFilled()', () => {
         expect(isCellCorrectlyFilled({ value: 0, solutionValue: 0, isClue: false })).toBeFalsy()
         expect(isCellCorrectlyFilled()).toBeFalsy()
     })
-
 })

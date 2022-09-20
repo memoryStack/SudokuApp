@@ -63,18 +63,30 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
             })
     }, [screenName])
 
-    const getBarPath = (barNum) => {
+    const getBarPath = barNum => {
         return [
-            'M', 75 + 100 * barNum, '450', 'L', 75 + 100 * barNum, 350 - 100 * barNum,
-            'A 25 25 0 0 1', 125 + 100 * barNum, 350 - 100 * barNum, 'L', 125 + 100 * barNum,
-            '450', 'A 25 25 0 0 1', 75 + 100 * barNum, '450',
+            'M',
+            75 + 100 * barNum,
+            '450',
+            'L',
+            75 + 100 * barNum,
+            350 - 100 * barNum,
+            'A 25 25 0 0 1',
+            125 + 100 * barNum,
+            350 - 100 * barNum,
+            'L',
+            125 + 100 * barNum,
+            '450',
+            'A 25 25 0 0 1',
+            75 + 100 * barNum,
+            '450',
         ].join(' ')
     }
 
     const getBarStrokeAndFillProps = (barNum, difficultyLevelIndex) => {
         return {
             stroke: barNum <= difficultyLevelIndex ? 'rgba(0, 0, 0, .5)' : 'black',
-            fill: barNum <= difficultyLevelIndex ? 'black' : 'none'
+            fill: barNum <= difficultyLevelIndex ? 'black' : 'none',
         }
     }
 

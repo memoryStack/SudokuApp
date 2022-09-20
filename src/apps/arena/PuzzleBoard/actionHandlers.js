@@ -18,7 +18,7 @@ const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
     if (getCorrectlyFilledCells(mainNumbers) === BOARD_CELLS_COUNT) updateGameState(GAME_STATE.OVER.SOLVED)
 }
 
-const getCorrectlyFilledCells = (mainNumbers) => {
+const getCorrectlyFilledCells = mainNumbers => {
     let result = 0
     forBoardEachCell(({ row, col }) => {
         const { solutionValue, value: inputValue } = mainNumbers[row][col]

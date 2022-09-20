@@ -100,7 +100,7 @@ const Cell_ = ({
     }
 
     const renderCellMainValue = () => {
-        return (<Text style={[styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>)
+        return <Text style={[styles.mainNumberText, mainValueFontColor]}> {`${cellMainValue}`} </Text>
     }
 
     const getCellNumberView = () => {

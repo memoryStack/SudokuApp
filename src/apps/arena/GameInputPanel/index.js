@@ -19,7 +19,7 @@ const GameInputPanel_ = ({ onAction }) => {
     const mainNumbers = useSelector(getMainNumbers)
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
 
-    const getInstancesCounts = (mainNumbers) => {
+    const getInstancesCounts = mainNumbers => {
         const instancesCount = new Array(10).fill(0)
         forBoardEachCell(({ row, col }) => {
             const value = mainNumbers[row][col].value
@@ -30,7 +30,7 @@ const GameInputPanel_ = ({ onAction }) => {
         return instancesCount
     }
 
-    const getNumbersVisibilityStatus = (instancesCount) => {
+    const getNumbersVisibilityStatus = instancesCount => {
         const numbersVisibility = [true]
         for (let i = 1; i <= MAX_INSTANCES_OF_NUMBER; i++)
             numbersVisibility.push(instancesCount[i] !== MAX_INSTANCES_OF_NUMBER)

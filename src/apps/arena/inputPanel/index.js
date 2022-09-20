@@ -63,7 +63,7 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
         )
     }
 
-    const isNumberEligibleToAddInPanel = (number) => {
+    const isNumberEligibleToAddInPanel = number => {
         return !isHintTryOut || (isHintTryOut && numbersVisible[number])
     }
 
@@ -76,7 +76,11 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
     }
 
     const renderPanelRow = (rowItems, key) => {
-        return (<View key={key} style={styles.rowContainer}>{rowItems}</View>)
+        return (
+            <View key={key} style={styles.rowContainer}>
+                {rowItems}
+            </View>
+        )
     }
 
     const renderPanelView = () => {

@@ -68,18 +68,18 @@ const getMainNumbersFromString = puzzle => {
     return result
 }
 
-const getSharedPuzzleNumbersFromUrl = (url) => {
-    const firstNumberIndex = _findIndex(url, (char) => {
+const getSharedPuzzleNumbersFromUrl = url => {
+    const firstNumberIndex = _findIndex(url, char => {
         return _isInteger(parseInt(char, 10))
     })
     return url.substring(firstNumberIndex)
 }
 
-const areInvalidNumbersCountInSharedPuzzle = (url) => {
+const areInvalidNumbersCountInSharedPuzzle = url => {
     return getSharedPuzzleNumbersFromUrl(url).length !== BOARD_CELLS_COUNT
 }
 
-const areInvalidCharactersInSharedPuzzle = (url) => {
+const areInvalidCharactersInSharedPuzzle = url => {
     const puzzleNumbers = getSharedPuzzleNumbersFromUrl(url)
     for (let i = 0; i < puzzleNumbers.length; i++) {
         if (!_isInteger(parseInt(puzzleNumbers[i], 10))) return true
@@ -326,7 +326,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
