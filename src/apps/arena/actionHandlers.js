@@ -4,6 +4,7 @@ import Share from 'react-native-share'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 import _findIndex from 'lodash/src/utils/findIndex'
 import _isInteger from 'lodash/src/utils/isInteger'
+import _noop from 'lodash/src/utils/noop'
 
 import {
     LEVEL_DIFFICULTIES,
@@ -26,7 +27,7 @@ import {
     CUSTOMIZE_YOUR_PUZZLE_TITLE,
 } from '../../resources/stringLiterals'
 import { updateGameState } from './store/actions/gameState.actions'
-import { consoleLog, noop } from '../../utils/util'
+import { consoleLog } from '../../utils/util'
 import {
     updateMainNumbers,
     updateMoves,
@@ -265,7 +266,7 @@ const handleSharePuzzle = () => {
         url: `${DEEPLINK_HOST_NAME}${puzzleString}`,
     }
     Share.open(options)
-        .then(noop, noop)
+        .then(_noop, _noop)
         .catch(error => {
             consoleLog(error)
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: SOMETHING_WENT_WRONG })
@@ -326,7 +327,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,

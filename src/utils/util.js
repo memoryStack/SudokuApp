@@ -32,8 +32,6 @@ export const getRowAndCol = (blockNum, boxNum) => {
     return { row, col }
 }
 
-export const noop = minisculePerfBoost => minisculePerfBoost && undefined
-
 export const rgba = function (hex, opacity) {
     hex = hex.replace('#', '')
     const r = parseInt(hex.substring(0, 2), 16)

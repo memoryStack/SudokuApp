@@ -8,7 +8,6 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { noop } from '../../utils/util'
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
 import { Button } from '../../components/button'
 import { NEW_GAME } from '../../resources/stringLiterals'
@@ -124,7 +123,11 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     }
 
     return (
-        <Touchable touchable={TouchableTypes.opacity} activeOpacity={1} onPress={noop} style={styles.container}>
+        <Touchable
+            touchable={TouchableTypes.opacity}
+            activeOpacity={1}
+            onPress={_noop}
+            style={styles.container}>
             {getGameSolvedView()}
             {getGameUnsolvedView()}
             {renderNewGameButton()}
