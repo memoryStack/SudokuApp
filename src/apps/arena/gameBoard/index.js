@@ -10,7 +10,6 @@ import _noop from 'lodash/src/utils/noop'
 import _get from 'lodash/src/utils/get'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { sameHouseAsSelected } from '../../../utils/util'
 import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
@@ -18,7 +17,7 @@ import {
 } from '../../../utils/customHooks/boardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import { areSameCells } from '../utils/util'
+import { areSameCells, sameHouseAsSelected } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
 import { BOARD_AXES_VALUES } from '../constants'

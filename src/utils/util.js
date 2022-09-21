@@ -10,13 +10,6 @@ const duplicacyCheckerStore = {}
 let notesData
 let sudokuBoard
 
-export const sameHouseAsSelected = (cell, selectedCell) => {
-    if (cell.row === selectedCell.row || cell.col === selectedCell.col) return true
-    const normalBoxBlockInfo = getBlockAndBoxNum(cell)
-    const selectedBoxBlockInfo = getBlockAndBoxNum(selectedCell)
-    return normalBoxBlockInfo.blockNum === selectedBoxBlockInfo.blockNum
-}
-
 const getEmptyInstanceInfo = () => {
     const info = {
         rows: new Array(),

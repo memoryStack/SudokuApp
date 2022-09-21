@@ -15,6 +15,7 @@ import {
     forBoardEachCell,
     areCommonHouseCells,
     isCellCorrectlyFilled,
+    sameHouseAsSelected,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
@@ -432,3 +433,24 @@ describe('isCellCorrectlyFilled()', () => {
         expect(isCellCorrectlyFilled()).toBeFalsy()
     })
 })
+
+describe('sameHouseAsSelected()', () => {
+    test('returns true when cell belongs to same block as selected cell', () => {
+        expect(sameHouseAsSelected({ row: 0, col: 0 }, { row: 1, col: 1 })).toBe(true)
+    })
+
+    test('returns true when cell belongs to same row as selected cell', () => {
+        expect(sameHouseAsSelected({ row: 0, col: 0 }, { row: 0, col: 8 })).toBe(true)
+    })
+
+    test('returns true when cell belongs to same col as selected cell', () => {
+        expect(sameHouseAsSelected({ row: 2, col: 4 }, { row: 6, col: 4 })).toBe(true)
+    })
+
+    test(`returns false when cell doesn't have any common house as selected cell`, () => {
+        expect(sameHouseAsSelected({ row: 0, col: 0 }, { row: 6, col: 4 })).toBe(false)
+        expect(sameHouseAsSelected({ row: 0, col: 0 }, { row: 3, col: 3 })).toBe(false)
+        expect(sameHouseAsSelected({ row: 2, col: 2 }, { row: 3, col: 3 })).toBe(false)
+    })
+})
+

@@ -3,7 +3,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import { GAME_STATE } from '../../../resources/constants'
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
-import { getBlockAndBoxNum, getRowAndCol } from '../../../utils/util'
+import { getBlockAndBoxNum } from '../../../utils/util'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES } from '../constants'
@@ -324,4 +324,11 @@ export const forEachHouse = callback => {
 export const isCellCorrectlyFilled = ({ solutionValue, value } = {}) => {
     if (_isEmpty(value) || _isEmpty(solutionValue) || solutionValue === 0 || value === 0) return false
     return value === solutionValue
+}
+
+export const sameHouseAsSelected = (cell, selectedCell) => {
+    if (cell.row === selectedCell.row || cell.col === selectedCell.col) return true
+    const normalBoxBlockInfo = getBlockAndBoxNum(cell)
+    const selectedBoxBlockInfo = getBlockAndBoxNum(selectedCell)
+    return normalBoxBlockInfo.blockNum === selectedBoxBlockInfo.blockNum
 }
