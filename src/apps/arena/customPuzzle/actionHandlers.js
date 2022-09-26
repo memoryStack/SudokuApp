@@ -52,7 +52,8 @@ const initBoardData = () => {
     // finned x-wing bug
     // const str = '040059000259000308001000250430805610805006432600430000503000170020010003076003000'
 
-    const str = ''
+    // puzzle with duplicate solutions
+    const str = '906070403000400200070003010500000100040208060003000005030700050007005000405010708'
 
     if (__DEV__) {
         for (let i = 0; i < str.length; i++) {

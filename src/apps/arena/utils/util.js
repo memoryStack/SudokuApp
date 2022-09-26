@@ -7,8 +7,7 @@ import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { GameState } from './classes/gameState'
-
-let numOfSolutions = 0
+import { consoleLog } from '../../../utils/util'
 
 export const getTimeComponentString = value => {
     if (value > 9) return `${value}`
@@ -34,44 +33,44 @@ const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => {
     })
 }
 
-const checkDuplicateSolutions = (mainNumbers, cell) => {
-    const { row, col } = cell
-    if (row === 9) {
-        if (++numOfSolutions > 1) return
+const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) => {
+    const isPuzzleSolved = row === 9
+    if (isPuzzleSolved) {
         forBoardEachCell(({ row, col }) => {
             const cellValue = mainNumbers[row][col].value
             mainNumbers[row][col].solutionValue = cellValue
         })
-        return
+        return 1
     }
-    if (col === 9) return checkDuplicateSolutions(mainNumbers, { row: row + 1, col: 0 })
-    if (mainNumbers[row][col].value) return checkDuplicateSolutions(mainNumbers, { row, col: col + 1 })
 
+    const isRowComplete = col === 9
+    if (isRowComplete) return getSolutionsCountForPuzzleType(mainNumbers, { row: row + 1, col: 0 })
+
+    if (!isCellEmpty({ row, col }, mainNumbers)) return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
+
+    let result = 0
     for (let num = 1; num <= 9; num++) {
-        if (numOfSolutions > 1) break
+        if (result > 1) break
         if (!duplicacyPresent(num, mainNumbers, { row, col })) {
             mainNumbers[row][col].value = num
-            checkDuplicateSolutions(mainNumbers, { row, col: col + 1 })
+            result += getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
             mainNumbers[row][col].value = 0
         }
     }
+    return result
 }
 
 export const getPuzzleSolutionType = (mainNumbers) => {
-    numOfSolutions = 0
+    const solutionsCount = getSolutionsCountForPuzzleType(mainNumbers)
 
-    checkDuplicateSolutions(mainNumbers, { row: 0, col: 0 })
+    if (solutionsCount === 0) return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
+    if (solutionsCount > 1) return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
 
-    if (numOfSolutions === 1) {
-        forBoardEachCell(({ row, col }) => {
-            mainNumbers[row][col].isClue = mainNumbers[row][col].value !== 0
-            delete mainNumbers[row][col].wronglyPlaced
-        })
-        return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
-    }
-
-    if (numOfSolutions === 0) return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
-    if (numOfSolutions > 1) return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
+    forBoardEachCell(({ row, col }) => {
+        mainNumbers[row][col].isClue = !isCellEmpty({ row, col }, mainNumbers)
+        delete mainNumbers[row][col].wronglyPlaced
+    })
+    return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
 }
 
 // how can i test this function's behaviour ??
