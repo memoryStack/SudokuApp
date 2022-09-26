@@ -1,5 +1,5 @@
-import { getBlockAndBoxNum, getRowAndCol } from '../../../../../utils/util'
-import { isCellEmpty } from '../../util'
+import { getBlockAndBoxNum } from '../../../../../utils/util'
+import { isCellEmpty, getRowAndCol } from '../../util'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'

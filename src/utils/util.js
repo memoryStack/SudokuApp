@@ -1,4 +1,3 @@
-
 // TODO: move to arena utils and write test cases for it
 // TODO: check if here solutionValue can be 0 instead of empty string
 // TODO: remove it from this utils file to arena utils or to board/utils. that's the right plae for it.
@@ -22,14 +21,6 @@ export const getBlockAndBoxNum = cell => {
     const blockNum = row - (row % 3) + (col - (col % 3)) / 3
     const boxNum = (row % 3) * 3 + (col % 3)
     return { blockNum, boxNum }
-}
-
-// TODO: move to arena utils
-export const getRowAndCol = (blockNum, boxNum) => {
-    const addToRow = (boxNum - (boxNum % 3)) / 3
-    const row = blockNum - (blockNum % 3) + addToRow
-    const col = (blockNum % 3) * 3 + (boxNum % 3)
-    return { row, col }
 }
 
 export const rgba = function (hex, opacity) {

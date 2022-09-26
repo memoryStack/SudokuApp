@@ -1,20 +1,4 @@
-import { getRowAndCol, getBlockAndBoxNum } from '../util'
-
-// tests for converting block's cell to board's cell i.e get row, col from blockNum and boxNum
-test('getRowAndCol test 1', () => {
-    const output = { row: 2, col: 1 }
-    expect(getRowAndCol(0, 7)).toStrictEqual(output)
-})
-
-test('getRowAndCol test 2', () => {
-    const output = { row: 3, col: 4 }
-    expect(getRowAndCol(4, 1)).toStrictEqual(output)
-})
-
-test('getRowAndCol test 3', () => {
-    const output = { row: 8, col: 8 }
-    expect(getRowAndCol(8, 8)).toStrictEqual(output)
-})
+import { getBlockAndBoxNum } from '../util'
 
 // tests for converting board's cell to block's cell i.e get blockNum and boxNum from row, col
 test('getBlockAndBoxNum test 1', () => {

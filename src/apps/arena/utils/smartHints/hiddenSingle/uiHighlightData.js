@@ -1,8 +1,8 @@
 import { HIDDEN_SINGLE_TYPES, HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 import { HOUSE_TYPE } from '../../smartHints/constants'
-import { getRowAndCol, getBlockAndBoxNum } from '../../../../../utils/util'
-import { isCellEmpty, areSameCells } from '../../util'
+import { getBlockAndBoxNum } from '../../../../../utils/util'
+import { isCellEmpty, areSameCells, getRowAndCol } from '../../util'
 import { setCellDataInHintResult } from '../util'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
