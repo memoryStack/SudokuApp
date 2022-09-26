@@ -1,4 +1,3 @@
-
 import _isArray from 'lodash/src/utils/isArray'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
@@ -487,7 +486,7 @@ describe('initMainNumbers()', () => {
     test('returned value is a grid of 9*9', () => {
         const mainNumbers = initMainNumbers()
         expect(mainNumbers.length).toBe(9)
-        mainNumbers.forEach((rowMainNumbers) => {
+        mainNumbers.forEach(rowMainNumbers => {
             expect(_isArray(rowMainNumbers)).toBeTruthy()
             expect(rowMainNumbers.length).toBe(9)
         })
