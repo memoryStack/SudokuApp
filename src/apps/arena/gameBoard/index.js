@@ -55,7 +55,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const isCustomPuzleScreen = () => {
-        return screen === SCREEN_NAME.CUSTOM_PUZZLE
+        return screenName === SCREEN_NAME.CUSTOM_PUZZLE
     }
 
     const getMainNumFontColor = cell => {
