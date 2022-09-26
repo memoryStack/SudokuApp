@@ -58,7 +58,7 @@ const getMainNumbersFromString = puzzle => {
             }
             rowData[col] = {
                 value: clueIntValue,
-                solutionValue: '',
+                solutionValue: 0,
                 isClue: clueIntValue !== 0,
             }
             cellNo++
@@ -327,7 +327,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
