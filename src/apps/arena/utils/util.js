@@ -57,7 +57,7 @@ const checkDuplicateSolutions = (mainNumbers, cell) => {
     }
 }
 
-export const getNumberOfSolutions = mainNumbers => {
+export const getPuzzleSolutionType = (mainNumbers) => {
     numOfSolutions = 0
 
     checkDuplicateSolutions(mainNumbers, { row: 0, col: 0 })

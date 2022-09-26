@@ -9,7 +9,7 @@ import {
     getBlockAndBoxNum,
     initMainNumbers,
 } from '../utils/util'
-import { getNumberOfSolutions } from '../utils/util'
+import { getPuzzleSolutionType } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
 import { PUZZLE_SOLUTION_TYPES } from '../constants'
@@ -210,9 +210,9 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
         return
     }
 
-    const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
+    const hasMultipleSolutions = getPuzzleSolutionType(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
     console.log('@@@@@@ mainNumbers after puzzle', JSON.stringify(mainNumbers))
-    if (isMultipleSolutionsExist) {
+    if (hasMultipleSolutions) {
         showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
     } else {
         startCustomPuzzle(mainNumbers)

@@ -15,7 +15,7 @@ import {
     PENCIL_STATE,
 } from '../../resources/constants'
 import { emit } from '../../utils/GlobalEventBus'
-import { duplicatesInPuzzle, forBoardEachCell, getNumberOfSolutions, initNotes } from './utils/util'
+import { duplicatesInPuzzle, forBoardEachCell, getPuzzleSolutionType, initNotes } from './utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '../../utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
@@ -155,7 +155,7 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
         return
     }
 
-    switch (getNumberOfSolutions(mainNumbers)) {
+    switch (getPuzzleSolutionType(mainNumbers)) {
         case PUZZLE_SOLUTION_TYPES.NO_SOLUTION:
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${DEEPLINK_PUZZLE_NO_SOLUTIONS} ${LAUNCHING_DEFAULT_PUZZLE}` })
             generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
@@ -326,7 +326,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
