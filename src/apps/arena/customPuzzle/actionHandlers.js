@@ -59,7 +59,7 @@ const initBoardData = () => {
             const col = i % 9
             if (str[i]) {
                 mainNumbers[row][col].value = parseInt(str[i], 10)
-                mainNumbers[row][col].isClue = 1
+                mainNumbers[row][col].isClue = true
             }
         }
     }
