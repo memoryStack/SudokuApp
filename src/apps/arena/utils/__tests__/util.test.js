@@ -471,4 +471,3 @@ describe('getBlockAndBoxNum()', () => {
         expect(getBlockAndBoxNum({ row: 4, col: 6 })).toStrictEqual({ blockNum: 5, boxNum: 3 })
     })
 })
-

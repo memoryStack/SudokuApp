@@ -25,8 +25,6 @@ import {
     getXWingCandidate,
 } from './utils'
 
-
-
 const getCrossHouseCells = (cell, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)
     const crossHouseNum = crossHouseType === HOUSE_TYPE.ROW ? cell.row : cell.col

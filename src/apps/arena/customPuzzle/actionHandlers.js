@@ -1,7 +1,14 @@
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { initMainNumbers } from '../../../utils/util'
-import { areSameCells, duplicatesInPuzzle, forBoardEachCell, isDuplicateEntry, getRowAndCol, getBlockAndBoxNum } from '../utils/util'
+import {
+    areSameCells,
+    duplicatesInPuzzle,
+    forBoardEachCell,
+    isDuplicateEntry,
+    getRowAndCol,
+    getBlockAndBoxNum,
+} from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
