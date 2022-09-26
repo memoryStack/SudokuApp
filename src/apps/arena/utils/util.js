@@ -346,17 +346,16 @@ export const getBlockAndBoxNum = cell => {
     return { blockNum, boxNum }
 }
 
-// TODO: move to arena utils and write test cases for it
-// TODO: check if here solutionValue can be 0 instead of empty string
-// TODO: remove it from this utils file to arena utils or to board/utils. that's the right plae for it.
 export const initMainNumbers = () => {
     const result = new Array(9)
     for (let i = 0; i < 9; i++) {
         const rowData = new Array(9)
         for (let j = 0; j < 9; j++) {
-            rowData[j] = { value: 0, solutionValue: '', isClue: 0 } // can we use fill here ?? yess
+            rowData[j] = getCellMainNumberDefaultValue()
         }
         result[i] = rowData
     }
     return result
 }
+
+const getCellMainNumberDefaultValue = () => ({ value: 0, solutionValue: 0, isClue: false })

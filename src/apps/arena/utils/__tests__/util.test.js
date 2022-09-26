@@ -1,3 +1,7 @@
+
+import _isArray from 'lodash/src/utils/isArray'
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import {
     getTimeComponentString,
     shouldSaveGameState,
@@ -18,9 +22,11 @@ import {
     sameHouseAsSelected,
     getRowAndCol,
     getBlockAndBoxNum,
+    initMainNumbers,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
+import { consoleLog } from '../../../../utils/util'
 
 describe('time component value formatter', () => {
     test('getTimeComponentString test 1', () => {
@@ -469,5 +475,28 @@ describe('getBlockAndBoxNum()', () => {
         expect(getBlockAndBoxNum({ row: 2, col: 7 })).toStrictEqual({ blockNum: 2, boxNum: 7 })
         expect(getBlockAndBoxNum({ row: 4, col: 4 })).toStrictEqual({ blockNum: 4, boxNum: 4 })
         expect(getBlockAndBoxNum({ row: 4, col: 6 })).toStrictEqual({ blockNum: 5, boxNum: 3 })
+    })
+})
+
+describe('initMainNumbers()', () => {
+    test('returns an array which contains 9 other arrays in init', () => {
+        const mainNumbers = initMainNumbers()
+        expect(_isArray(mainNumbers)).toBeTruthy()
+    })
+
+    test('returned value is a grid of 9*9', () => {
+        const mainNumbers = initMainNumbers()
+        expect(mainNumbers.length).toBe(9)
+        mainNumbers.forEach((rowMainNumbers) => {
+            expect(_isArray(rowMainNumbers)).toBeTruthy()
+            expect(rowMainNumbers.length).toBe(9)
+        })
+    })
+
+    test('initializes default main number values for each 9*9 cells in board', () => {
+        const mainNumbers = initMainNumbers()
+        forBoardEachCell(({ row, col }) => {
+            expect(_isEmpty(mainNumbers[row][col])).toBeFalsy()
+        })
     })
 })
