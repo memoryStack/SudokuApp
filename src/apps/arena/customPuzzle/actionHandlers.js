@@ -12,6 +12,7 @@ import {
 import { getNumberOfSolutions } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
+import { PUZZLE_SOLUTION_TYPES } from '../constants'
 
 const initBoardData = () => {
     const mainNumbers = initMainNumbers()
@@ -209,7 +210,7 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
         return
     }
 
-    const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) > 1
+    const isMultipleSolutionsExist = getNumberOfSolutions(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
     console.log('@@@@@@ mainNumbers after puzzle', JSON.stringify(mainNumbers))
     if (isMultipleSolutionsExist) {
         showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })

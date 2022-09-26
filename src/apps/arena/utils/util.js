@@ -5,7 +5,7 @@ import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
-import { BOARD_AXES_VALUES } from '../constants'
+import { BOARD_AXES_VALUES, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { GameState } from './classes/gameState'
 
 let numOfSolutions = 0
@@ -57,17 +57,21 @@ const checkDuplicateSolutions = (mainNumbers, cell) => {
     }
 }
 
-// TODO: it's name should be changed. it is not returning number of solutions exactly
 export const getNumberOfSolutions = mainNumbers => {
     numOfSolutions = 0
+
     checkDuplicateSolutions(mainNumbers, { row: 0, col: 0 })
+
     if (numOfSolutions === 1) {
         forBoardEachCell(({ row, col }) => {
             mainNumbers[row][col].isClue = mainNumbers[row][col].value !== 0
             delete mainNumbers[row][col].wronglyPlaced
         })
+        return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
     }
-    return numOfSolutions
+
+    if (numOfSolutions === 0) return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
+    if (numOfSolutions > 1) return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
 }
 
 // how can i test this function's behaviour ??

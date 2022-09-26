@@ -11,3 +11,9 @@ export const DEEPLINK_PUZZLE_URL_ERRORS = {
     INCOMPLETE_NUMBERS: `Puzzle doesn't have ${BOARD_CELLS_COUNT} numbers`,
     INVALID_CHARACTERS: 'Puzzle has invalid characters other than 0-9',
 }
+
+export const PUZZLE_SOLUTION_TYPES = {
+    NO_SOLUTION: 'NO_SOLUTION',
+    UNIQUE_SOLUTION: 'UNIQUE_SOLUTION',
+    MULTIPLE_SOLUTIONS: 'MULTIPLE_SOLUTIONS',
+}

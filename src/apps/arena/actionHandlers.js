@@ -42,7 +42,7 @@ import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
-import { BOARD_CELLS_COUNT, DEEPLINK_PUZZLE_URL_ERRORS } from './constants'
+import { BOARD_CELLS_COUNT, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES } from './constants'
 
 const getMainNumbersFromString = puzzle => {
     const result = new Array(9)
@@ -155,16 +155,15 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
         return
     }
 
-    const numberOfSolutions = getNumberOfSolutions(mainNumbers)
-    switch (true) {
-        case numberOfSolutions === 0:
+    switch (getNumberOfSolutions(mainNumbers)) {
+        case PUZZLE_SOLUTION_TYPES.NO_SOLUTION:
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${DEEPLINK_PUZZLE_NO_SOLUTIONS} ${LAUNCHING_DEFAULT_PUZZLE}` })
             generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
             break
-        case numberOfSolutions === 1:
+        case PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION:
             startNewGame({ difficultyLevel: 'Shared Puzzle', mainNumbers })
             break
-        case numberOfSolutions >= 1:
+        case PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS:
         default:
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `Puzzle has multiple solutions. ${LAUNCHING_DEFAULT_PUZZLE}` })
             generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
