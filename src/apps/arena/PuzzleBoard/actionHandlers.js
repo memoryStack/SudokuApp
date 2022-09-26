@@ -4,8 +4,9 @@ import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionT
 import { updateGameState } from '../store/actions/gameState.actions'
 import { GAME_STATE } from '../../../resources/constants'
 import { resetStoreState } from '../store/actions/board.actions'
-import { forBoardEachCell } from '../utils/util'
+import { forBoardEachCell, isCellCorrectlyFilled } from '../utils/util'
 import { BOARD_CELLS_COUNT } from '../constants'
+import { consoleLog } from '../../../utils/util'
 
 const handleCellPress = ({ params: cell }) => {
     // TODO: some improvements can be done here like
@@ -21,8 +22,7 @@ const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
 const getCorrectlyFilledCells = mainNumbers => {
     let result = 0
     forBoardEachCell(({ row, col }) => {
-        const { solutionValue, value: inputValue } = mainNumbers[row][col]
-        if (solutionValue === inputValue) result++
+        if (isCellCorrectlyFilled(mainNumbers[row][col])) result++
     })
     return result
 }
