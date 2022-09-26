@@ -3,7 +3,6 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import { GAME_STATE } from '../../../resources/constants'
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
-import { getBlockAndBoxNum } from '../../../utils/util'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES } from '../constants'
@@ -338,4 +337,11 @@ export const getRowAndCol = (blockNum, boxNum) => {
     const row = blockNum - (blockNum % 3) + addToRow
     const col = (blockNum % 3) * 3 + (boxNum % 3)
     return { row, col }
+}
+
+export const getBlockAndBoxNum = cell => {
+    const { row, col } = cell
+    const blockNum = row - (row % 3) + (col - (col % 3)) / 3
+    const boxNum = (row % 3) * 3 + (col % 3)
+    return { blockNum, boxNum }
 }

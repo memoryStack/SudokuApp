@@ -1,4 +1,4 @@
-import { getBlockAndBoxNum, onlyUnique } from '../../../../../utils/util'
+import { onlyUnique } from '../../../../../utils/util'
 import cloneDeep from 'lodash/src/utils/cloneDeep'
 import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../smartHints/stringLiterals'
@@ -6,6 +6,7 @@ import {
     areSameBlockCells,
     areSameColCells,
     areSameRowCells,
+    getBlockAndBoxNum,
     getCellAxesValues,
     isCellEmpty,
     isCellExists,

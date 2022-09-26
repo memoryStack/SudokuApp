@@ -1,6 +1,6 @@
-import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, getCellVisibleNotesCount, getRowAndCol } from '../util'
+import { areSameCells, areSameRowCells, areSameColCells, areSameBlockCells, getCellVisibleNotesCount, getRowAndCol, getBlockAndBoxNum } from '../util'
 import { N_CHOOSE_K } from '../../../../resources/constants'
-import { consoleLog, getBlockAndBoxNum } from '../../../../utils/util'
+import { consoleLog } from '../../../../utils/util'
 import { GROUPS, HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from './stringLiterals'
 import {

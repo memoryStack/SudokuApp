@@ -17,6 +17,7 @@ import {
     isCellCorrectlyFilled,
     sameHouseAsSelected,
     getRowAndCol,
+    getBlockAndBoxNum,
 } from '../util'
 import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
@@ -462,3 +463,12 @@ describe('getRowAndCol()', () => {
         expect(getRowAndCol(8, 8)).toStrictEqual({ row: 8, col: 8 })
     })
 })
+
+describe('getBlockAndBoxNum()', () => {
+    test('returns cell block and box number upon passing cell row and col numbers', () => {
+        expect(getBlockAndBoxNum({ row: 2, col: 7 })).toStrictEqual({ blockNum: 2, boxNum: 7 })
+        expect(getBlockAndBoxNum({ row: 4, col: 4 })).toStrictEqual({ blockNum: 4, boxNum: 4 })
+        expect(getBlockAndBoxNum({ row: 4, col: 6 })).toStrictEqual({ blockNum: 5, boxNum: 3 })
+    })
+})
+

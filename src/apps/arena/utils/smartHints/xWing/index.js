@@ -1,4 +1,3 @@
-import { getBlockAndBoxNum } from '../../../../../utils/util'
 import cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
 import { getHouseCells } from '../../houseCells'
@@ -9,6 +8,7 @@ import {
     forEachHouse,
     isCellEmpty,
     isCellNoteVisible,
+    getBlockAndBoxNum,
 } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
@@ -24,6 +24,8 @@ import {
     getSashimiCell,
     getXWingCandidate,
 } from './utils'
+
+
 
 const getCrossHouseCells = (cell, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)

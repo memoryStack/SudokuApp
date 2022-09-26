@@ -8,10 +8,10 @@ import {
     isCellEmpty,
     isCellExists,
     isCellNoteVisible,
+    getBlockAndBoxNum,
 } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 import { getHouseCells } from '../../houseCells'
-import { consoleLog, getBlockAndBoxNum } from '../../../../../utils/util'
 import { toOrdinal } from 'lodash/src/utils/toOrdinal'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'

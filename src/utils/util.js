@@ -14,15 +14,6 @@ export const initMainNumbers = () => {
     return sudokuBoard
 }
 
-// TODO: move to arena utils
-// TODO: write a test case that this func shouldn't change anything in input
-export const getBlockAndBoxNum = cell => {
-    const { row, col } = cell
-    const blockNum = row - (row % 3) + (col - (col % 3)) / 3
-    const boxNum = (row % 3) * 3 + (col % 3)
-    return { blockNum, boxNum }
-}
-
 export const rgba = function (hex, opacity) {
     hex = hex.replace('#', '')
     const r = parseInt(hex.substring(0, 2), 16)
