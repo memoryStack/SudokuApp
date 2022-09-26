@@ -216,9 +216,17 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
     if (hasMultipleSolutions) {
         showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
     } else {
+        transformMainNumbersForValidPuzzle(mainNumbers)
         startCustomPuzzle(mainNumbers)
         handleOnClose({ params: customPuzzleHCRef })
     }
+}
+
+const transformMainNumbersForValidPuzzle = (mainNumbers) => {
+    forBoardEachCell(({ row, col }) => {
+        mainNumbers[row][col].isClue = !isCellEmpty({ row, col }, mainNumbers)
+        delete mainNumbers[row][col].wronglyPlaced
+    })
 }
 
 const ACTION_TYPES = {

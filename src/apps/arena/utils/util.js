@@ -62,15 +62,9 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
 
 export const getPuzzleSolutionType = (mainNumbers) => {
     const solutionsCount = getSolutionsCountForPuzzleType(mainNumbers)
-
-    if (solutionsCount === 0) return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
-    if (solutionsCount > 1) return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
-
-    forBoardEachCell(({ row, col }) => {
-        mainNumbers[row][col].isClue = !isCellEmpty({ row, col }, mainNumbers)
-        delete mainNumbers[row][col].wronglyPlaced
-    })
-    return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
+    if (solutionsCount === 0) return PUZZLE_SOLUTION_TYPES.NO_SOLUTION
+    if (solutionsCount === 1) return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
+    return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
 }
 
 // how can i test this function's behaviour ??
