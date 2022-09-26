@@ -45,7 +45,8 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
     const isRowComplete = col === 9
     if (isRowComplete) return getSolutionsCountForPuzzleType(mainNumbers, { row: row + 1, col: 0 })
 
-    if (!isCellEmpty({ row, col }, mainNumbers)) return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
+    if (!isCellEmpty({ row, col }, mainNumbers))
+        return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
 
     let result = 0
     for (let num = 1; num <= 9; num++) {
@@ -59,7 +60,7 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
     return result
 }
 
-export const getPuzzleSolutionType = (mainNumbers) => {
+export const getPuzzleSolutionType = mainNumbers => {
     const solutionsCount = getSolutionsCountForPuzzleType(mainNumbers)
     if (solutionsCount === 0) return PUZZLE_SOLUTION_TYPES.NO_SOLUTION
     if (solutionsCount === 1) return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION

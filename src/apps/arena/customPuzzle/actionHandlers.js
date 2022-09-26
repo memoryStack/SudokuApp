@@ -223,7 +223,7 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
     }
 }
 
-const transformMainNumbersForValidPuzzle = (mainNumbers) => {
+const transformMainNumbersForValidPuzzle = mainNumbers => {
     forBoardEachCell(({ row, col }) => {
         mainNumbers[row][col].isClue = !isCellEmpty({ row, col }, mainNumbers)
         delete mainNumbers[row][col].wronglyPlaced
