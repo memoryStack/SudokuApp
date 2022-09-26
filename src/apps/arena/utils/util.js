@@ -7,7 +7,6 @@ import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { GameState } from './classes/gameState'
-import { consoleLog } from '../../../utils/util'
 
 export const getTimeComponentString = value => {
     if (value > 9) return `${value}`
@@ -317,8 +316,8 @@ export const forEachHouse = callback => {
     for (let houseNum = 0; houseNum < 9; houseNum++) callback(houseNum)
 }
 
-export const isCellCorrectlyFilled = ({ solutionValue, value } = {}) => {
-    if (_isEmpty(value) || _isEmpty(solutionValue) || solutionValue === 0 || value === 0) return false
+export const isCellCorrectlyFilled = ({ solutionValue = 0, value = 0 } = {}) => {
+    if (solutionValue === 0 || value === 0) return false
     return value === solutionValue
 }
 

@@ -431,7 +431,7 @@ describe('isCellCorrectlyFilled()', () => {
 
     test('returns true when input value is same as solution value', () => {
         const cellData = { value: 5, solutionValue: 5, isClue: false }
-        expect(isCellCorrectlyFilled(cellData)).toBeFalsy()
+        expect(isCellCorrectlyFilled(cellData)).toBeTruthy()
     })
 
     test('returns false for bad data', () => {
