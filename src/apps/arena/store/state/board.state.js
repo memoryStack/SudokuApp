@@ -1,5 +1,4 @@
-import { initMainNumbers } from '../../../../utils/util'
-import { initNotes } from '../../utils/util'
+import { initNotes, initMainNumbers } from '../../utils/util'
 
 export const INITIAL_STATE = {
     mainNumbers: initMainNumbers(),

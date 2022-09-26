@@ -1,6 +1,5 @@
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
-import { initMainNumbers } from '../../../../utils/util'
 import {
     duplicacyPresent,
     forBoardEachCell,
@@ -8,6 +7,7 @@ import {
     initNotes,
     isCellCorrectlyFilled,
     isCellEmpty,
+    initMainNumbers,
 } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'

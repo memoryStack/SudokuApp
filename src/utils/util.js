@@ -1,19 +1,3 @@
-// TODO: move to arena utils and write test cases for it
-// TODO: check if here solutionValue can be 0 instead of empty string
-// TODO: remove it from this utils file to arena utils or to board/utils. that's the right plae for it.
-export const initMainNumbers = () => {
-    const sudokuBoard = new Array(9)
-    // BOARD_LOOPER: 14
-    for (let i = 0; i < 9; i++) {
-        const rowData = new Array(9)
-        for (let j = 0; j < 9; j++) {
-            rowData[j] = { value: 0, solutionValue: '', isClue: 0 }
-        }
-        sudokuBoard[i] = rowData
-    }
-    return sudokuBoard
-}
-
 export const rgba = function (hex, opacity) {
     hex = hex.replace('#', '')
     const r = parseInt(hex.substring(0, 2), 16)

@@ -1,6 +1,5 @@
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
-import { initMainNumbers } from '../../../utils/util'
 import {
     areSameCells,
     duplicatesInPuzzle,
@@ -8,6 +7,7 @@ import {
     isDuplicateEntry,
     getRowAndCol,
     getBlockAndBoxNum,
+    initMainNumbers,
 } from '../utils/util'
 import { getNumberOfSolutions } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
