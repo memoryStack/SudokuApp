@@ -358,4 +358,4 @@ export const initMainNumbers = () => {
     return result
 }
 
-const getCellMainNumberDefaultValue = () => ({ value: 0, solutionValue: 0, isClue: false })
+const getCellMainNumberDefaultValue = () => ({ value: 0, solutionValue: '', isClue: false })
