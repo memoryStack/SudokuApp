@@ -8,6 +8,7 @@ import {
     getRowAndCol,
     getBlockAndBoxNum,
     initMainNumbers,
+    isCellEmpty,
 } from '../utils/util'
 import { getPuzzleSolutionType } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
