@@ -8,7 +8,7 @@ import { getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { GameState } from './classes/gameState'
 
-export const addLeadingZeroIfEligible = (value) => {
+export const addLeadingZeroIfEligible = value => {
     if (value > 9) return `${value}`
     else return `0${value}`
 }

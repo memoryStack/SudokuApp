@@ -113,7 +113,10 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
     const renderRow = (row, key) => {
         const rowAdditionalStyles = {
-            marginTop: row === 3 || row === 6 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
+            marginTop:
+                row === 3 || row === 6
+                    ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH
+                    : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
             marginBottom: row === 8 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH : 0,
         }
 
@@ -124,7 +127,10 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
                     const cell = { row, col }
 
                     const cellAdditionalStyles = {
-                        marginLeft: col === 3 || col === 6 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
+                        marginLeft:
+                            col === 3 || col === 6
+                                ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH
+                                : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
                         marginRight: col === 8 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH : 0,
                     }
 
