@@ -2,14 +2,27 @@ import { useWindowDimensions } from 'react-native'
 import {
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
     CELLS_IN_HOUSE,
-    GRID_TO_WINDOW_WIDTH_RATIO,
+    BOARD_TO_WINDOW_WIDTH_RATIO,
     THICK_BORDER_COUNT,
     THIN_BORDER_COUNT,
 } from '../../apps/arena/constants'
 import { roundToNearestPixel } from '../util'
 
-const getGameBoardWidth = windowWidth => {
-    return windowWidth * GRID_TO_WINDOW_WIDTH_RATIO - STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH
+export const useBoardElementsDimensions = () => {
+    const { width: windowWidth } = useWindowDimensions()
+    const cellWidth = getCellWidth(windowWidth)
+    const boardGridWidth = cellWidth * CELLS_IN_HOUSE + getAllBordersTotalSpace()
+    return {
+        BOARD_GRID_WIDTH: boardGridWidth,
+        BOARD_GRID_HEIGHT: boardGridWidth,
+        CELL_WIDTH: cellWidth,
+        CELL_HEIGHT: cellWidth,
+    }
+}
+
+const getCellWidth = (windowWidth) => {
+    const cellWidth = (getBoardGridWidth(windowWidth) - getAllBordersTotalSpace()) / CELLS_IN_HOUSE
+    return roundToNearestPixel(cellWidth)
 }
 
 const getAllBordersTotalSpace = () => {
@@ -18,17 +31,7 @@ const getAllBordersTotalSpace = () => {
     return roundToNearestPixel(thickBordersSpace + thinBordersSpace)
 }
 
-export const useBoardElementsDimensions = () => {
-    const { width: windowWidth } = useWindowDimensions()
-
-    const rawGameBoardWidth = getGameBoardWidth(windowWidth)
-    const cellWidth = roundToNearestPixel((rawGameBoardWidth - getAllBordersTotalSpace()) / CELLS_IN_HOUSE)
-
-    const pixelPerfectGameBoardWidth = cellWidth * CELLS_IN_HOUSE + getAllBordersTotalSpace()
-    return {
-        GAME_BOARD_WIDTH: pixelPerfectGameBoardWidth,
-        GAME_BOARD_HEIGHT: pixelPerfectGameBoardWidth,
-        CELL_WIDTH: cellWidth,
-        CELL_HEIGHT: cellWidth,
-    }
+const getBoardGridWidth = windowWidth => {
+    const boardWidth = windowWidth * BOARD_TO_WINDOW_WIDTH_RATIO
+    return boardWidth - STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH
 }

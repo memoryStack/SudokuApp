@@ -40,28 +40,28 @@ export const COLOR_SCHEME_STYLES = {
     },
 }
 
-export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH }) => {
+export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }) => {
     return StyleSheet.create({
         board: {
             display: 'flex',
-            height: GAME_BOARD_HEIGHT,
-            width: GAME_BOARD_WIDTH,
+            height: BOARD_GRID_HEIGHT,
+            width: BOARD_GRID_WIDTH,
             backgroundColor: 'white',
         },
         gridBorderContainer: {
             position: 'absolute',
-            height: GAME_BOARD_HEIGHT,
-            width: GAME_BOARD_WIDTH,
+            height: BOARD_GRID_HEIGHT,
+            width: BOARD_GRID_WIDTH,
             justifyContent: 'space-between',
             zIndex: 1,
         },
         verticalBars: {
-            height: GAME_BOARD_HEIGHT,
+            height: BOARD_GRID_HEIGHT,
             width: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
             backgroundColor: 'rgba(0, 0, 0, .9)',
         },
         horizontalBars: {
-            width: GAME_BOARD_WIDTH,
+            width: BOARD_GRID_WIDTH,
             height: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
             backgroundColor: 'rgba(0, 0, 0, .9)',
         },
@@ -69,7 +69,7 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH }) =
             display: 'flex',
             flexDirection: 'row',
             height: CELL_WIDTH,
-            width: GAME_BOARD_WIDTH,
+            width: BOARD_GRID_WIDTH,
             backgroundColor: 'white',
         },
         cellContainer: {
@@ -86,7 +86,7 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH }) =
             flexDirection: 'row',
             justifyContent: 'space-around',
             alignItems: 'center',
-            width: GAME_BOARD_WIDTH,
+            width: BOARD_GRID_WIDTH,
             height: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
             marginLeft: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
         },

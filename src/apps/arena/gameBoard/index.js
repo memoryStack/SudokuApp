@@ -32,11 +32,11 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
         useSelector(getHintHCInfo)
 
-    const { GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
+    const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
     const styles = useMemo(() => {
-        return getStyles({ GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, CELL_WIDTH })
-    }, [GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH])
+        return getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH })
+    }, [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
 
     const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
 
