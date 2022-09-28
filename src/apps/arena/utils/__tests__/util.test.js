@@ -2,7 +2,7 @@ import _isArray from 'lodash/src/utils/isArray'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import {
-    getTimeComponentString,
+    addLeadingZeroIfEligible,
     shouldSaveGameState,
     areSameCells,
     areSameBlockCells,
@@ -28,16 +28,16 @@ import { HOUSE_TYPE } from '../smartHints/constants'
 import { consoleLog } from '../../../../utils/util'
 
 describe('time component value formatter', () => {
-    test('getTimeComponentString test 1', () => {
-        expect(getTimeComponentString(0)).toBe('00')
+    test('addLeadingZeroIfEligible test 1', () => {
+        expect(addLeadingZeroIfEligible(0)).toBe('00')
     })
 
-    test('getTimeComponentString test 2', () => {
-        expect(getTimeComponentString(11)).toBe('11')
+    test('addLeadingZeroIfEligible test 2', () => {
+        expect(addLeadingZeroIfEligible(11)).toBe('11')
     })
 
-    test('getTimeComponentString test 3', () => {
-        expect(getTimeComponentString(1)).toBe('01')
+    test('addLeadingZeroIfEligible test 3', () => {
+        expect(addLeadingZeroIfEligible(1)).toBe('01')
     })
 })
 

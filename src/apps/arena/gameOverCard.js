@@ -14,7 +14,7 @@ import { NEW_GAME } from '../../resources/stringLiterals'
 import { fonts } from '../../resources/fonts/font'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 
-import { getTimeComponentString } from './utils/util'
+import { addLeadingZeroIfEligible } from './utils/util'
 import { GameState } from './utils/classes/gameState'
 import { getGameState } from './store/selectors/gameState.selectors'
 
@@ -64,8 +64,8 @@ const getTimeView = (timeTaken = {}) => {
     return (
         <View style={styles.timeStatContainer}>
             {hours ? <Text style={styles.statText}>{hours}</Text> : null}
-            <Text style={styles.statText}>{`${getTimeComponentString(minutes)}:`}</Text>
-            <Text style={styles.statText}>{getTimeComponentString(seconds)}</Text>
+            <Text style={styles.statText}>{`${addLeadingZeroIfEligible(minutes)}:`}</Text>
+            <Text style={styles.statText}>{addLeadingZeroIfEligible(seconds)}</Text>
         </View>
     )
 }
