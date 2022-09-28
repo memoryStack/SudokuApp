@@ -16,7 +16,7 @@ import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { areSameCells, sameHouseAsSelected } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
-import { BOARD_AXES_VALUES, STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
+import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 
 import { getStyles } from './style'
 import { Cell } from './cell'
@@ -24,7 +24,7 @@ import { Cell } from './cell'
 const looper = []
 const bordersLooper = []
 for (let i = 0; i < 10; i++) {
-    if (i < 9) looper.push(i) // 9 cells are there in a row
+    if (i < CELLS_IN_HOUSE) looper.push(i)
     bordersLooper.push(i) // 10 borders will be drawn
 }
 

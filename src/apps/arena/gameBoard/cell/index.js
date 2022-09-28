@@ -43,10 +43,7 @@ const Cell_ = ({
         return getStyles(CELL_HEIGHT)
     }, [CELL_HEIGHT])
 
-    const shouldRenderNotes = () => {
-        for (let noteNum = 0; noteNum < 9; noteNum++) if (cellNotes[noteNum].show) return 1
-        return 0
-    }
+    const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
     const getNotesFontColor = noteValue => {
         if (showSmartHint) {

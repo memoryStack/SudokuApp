@@ -1,3 +1,5 @@
+import _filter from 'lodash/src/utils/filter'
+
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
 import {
@@ -83,14 +85,12 @@ const getNewNotesBunchToShow = () => {
     const notesInfo = getNotesInfo(getStoreState())
 
     forBoardEachCell(({ row, col }) => {
-        if (!mainNumbers[row][col].value) {
-            for (let num = 1; num <= 9; num++) {
-                const { show } = notesInfo[row][col][num - 1]
-                const isValidNewNote = !show && !duplicacyPresent(num, mainNumbers, { row, col })
-                if (isValidNewNote) {
-                    result.push({ cell: { row, col }, note: num })
-                }
-            }
+        if (isCellEmpty({ row, col }, mainNumbers)) {
+            _filter(notesInfo[row][col], ({ noteValue, show }) => {
+                return !show && !duplicacyPresent(noteValue, mainNumbers, { row, col })
+            }).forEach(({ noteValue }) => {
+                result.push({ cell: { row, col }, note: noteValue })
+            })
         }
     })
 
