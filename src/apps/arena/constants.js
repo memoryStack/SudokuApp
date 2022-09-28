@@ -7,6 +7,10 @@ export const BOARD_AXES_VALUES = {
 
 export const BOARD_CELLS_COUNT = 81
 export const MAX_INSTANCES_OF_NUMBER = 9
+export const CELLS_IN_HOUSE = 9
+export const GRID_TO_WINDOW_WIDTH_RATIO = 0.94
+export const THICK_BORDER_COUNT = 2
+export const THIN_BORDER_COUNT = 8
 
 export const STATIC_BOARD_ELEMENTS_DIMENSIONS = {
     THICK_BORDER_WIDTH: roundToNearestPixel(3),
