@@ -1,3 +1,4 @@
+import { CELLS_IN_HOUSE } from '../../../constants'
 import { isCellEmpty, getRowAndCol, getBlockAndBoxNum } from '../../util'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 import { maxHintsLimitReached } from '../util'
@@ -25,7 +26,7 @@ export const isNakedSinglePresent = cellNotes => {
 
 const isOnlyEmptyCellInRow = (cell, mainNumbers) => {
     let cellsFilled = 0
-    for (let col = 0; col < 9; col++) {
+    for (let col = 0; col < CELLS_IN_HOUSE; col++) {
         if (!isCellEmpty({ row: cell.row, col }, mainNumbers)) cellsFilled++
     }
     return cellsFilled === 8
@@ -33,7 +34,7 @@ const isOnlyEmptyCellInRow = (cell, mainNumbers) => {
 
 const isOnlyEmptyCellInCol = (cell, mainNumbers) => {
     let cellsFilled = 0
-    for (let row = 0; row < 9; row++) {
+    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         if (!isCellEmpty({ row, col: cell.col }, mainNumbers)) cellsFilled++
     }
     return cellsFilled === 8
@@ -42,7 +43,7 @@ const isOnlyEmptyCellInCol = (cell, mainNumbers) => {
 const isOnlyEmptyCellInBlock = (cell, mainNumbers) => {
     let cellsFilled = 0
     const { blockNum } = getBlockAndBoxNum(cell)
-    for (let boxNum = 0; boxNum < 9; boxNum++) {
+    for (let boxNum = 0; boxNum < CELLS_IN_HOUSE; boxNum++) {
         if (!isCellEmpty(getRowAndCol(blockNum, boxNum), mainNumbers)) cellsFilled++
     }
     return cellsFilled === 8
@@ -59,8 +60,8 @@ const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
     const result = []
 
     // BOARD_LOOPER: 9
-    hintsSearchLoop: for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
+    hintsSearchLoop: for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
             if (mainNumbers[row][col].value) {
                 continue
             }

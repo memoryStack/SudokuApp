@@ -1,5 +1,6 @@
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
+import { HOUSES_COUNT } from '../../../constants'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import {
     getCellHousesInfo,
@@ -189,7 +190,7 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
     const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData))
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     allHouses.forEach(houseType => {
-        for (let houseNum = 0; houseNum < 9; houseNum++) {
+        for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const houseYWings = getHouseYWings({ type: houseType, num: houseNum }, housesYWingEligibleCells)

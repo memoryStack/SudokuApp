@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
+import { NUMBERS_IN_HOUSE } from '../../../constants'
 import { getHouseCells } from '../../houseCells'
 import {
     areSameBlockCells,
@@ -220,7 +221,7 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     const result = []
 
     const candidatesHostCells = getAllCandidatesOccurencesInHouse(house, notesData, mainNumbers)
-    for (let note = 1; note <= 9; note++) {
+    for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
         if (!candidatesHostCells[note]) continue
         const legType = getXWingLegType(candidatesHostCells[note])
         if ([LEG_TYPES.PERFECT, LEG_TYPES.FINNED].includes(legType)) {

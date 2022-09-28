@@ -3,6 +3,7 @@ import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES, HINTS_IDS } from '../co
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 import { setCellDataInHintResult } from '../util'
 import { getRowAndCol, getBlockAndBoxNum } from '../../util'
+import { CELLS_IN_HOUSE } from '../../../constants'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue) => {
     const msgPlaceholdersValues = { houseType, solutionValue }
@@ -28,7 +29,7 @@ const SMART_HINTS_TECHNIQUES = {
 }
 
 const nakedSingleRowDataToHighlight = (cell, cellsToFocusData = {}) => {
-    for (let col = 0; col < 9; col++) {
+    for (let col = 0; col < CELLS_IN_HOUSE; col++) {
         const cellHighlightData = {
             bgColor:
                 col === cell.col ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
@@ -39,7 +40,7 @@ const nakedSingleRowDataToHighlight = (cell, cellsToFocusData = {}) => {
 }
 
 const nakedSingleColDataToHighlight = (cell, cellsToFocusData = {}) => {
-    for (let row = 0; row < 9; row++) {
+    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         const cellHighlightData = {
             bgColor:
                 row === cell.row ? SMART_HINTS_CELLS_BG_COLOR.SELECTED : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
@@ -51,7 +52,7 @@ const nakedSingleColDataToHighlight = (cell, cellsToFocusData = {}) => {
 
 const nakedSingleBlockDataToHighlight = (hostCell, cellsToFocusData = {}) => {
     const { blockNum } = getBlockAndBoxNum(hostCell)
-    for (let cell = 0; cell < 9; cell++) {
+    for (let cell = 0; cell < CELLS_IN_HOUSE; cell++) {
         const { row, col } = getRowAndCol(blockNum, cell)
         const cellHighlightData = {
             bgColor:

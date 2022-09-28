@@ -1,3 +1,4 @@
+import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 import { getHouseCells } from '../../houseCells'
 import {
     getCellsCommonHouses,
@@ -56,7 +57,7 @@ const getRemovableNotesHostHouse = (hostCells, hostHouse) => {
 
 export const getHouseOmissions = (house, mainNumbers, notesData) => {
     const result = []
-    for (let note = 1; note <= 9; note++) {
+    for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
         const { present, hostCells } = isNoteHaveOmissionInHouse(note, house, mainNumbers, notesData)
         if (present) {
             result.push({
@@ -100,7 +101,7 @@ export const getAllOmissions = (mainNumbers, notesData) => {
 
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     allHouses.forEach(houseType => {
-        for (let houseNum = 0; houseNum < 9; houseNum++) {
+        for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
             const house = { type: houseType, num: houseNum }
             const newOmissions = getHouseOmissions(house, mainNumbers, notesData).filter(newOmission => {
                 return !isDuplicateOmission(newOmission, result)
