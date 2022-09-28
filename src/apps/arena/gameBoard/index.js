@@ -14,7 +14,7 @@ import {
     useBoardElementsDimensions,
     INNER_THICK_BORDER_WIDTH,
     GRID_THIN_BORDERS_WIDTH,
-} from '../../../utils/customHooks/boardElementsDimensions'
+} from '../../../utils/customHooks/useBoardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { areSameCells, sameHouseAsSelected } from '../utils/util'

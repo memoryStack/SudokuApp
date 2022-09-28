@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { BOARD_AXIS_WIDTH, GRID_THIN_BORDERS_WIDTH } from '../../../utils/customHooks/boardElementsDimensions'
+import { BOARD_AXIS_WIDTH, GRID_THIN_BORDERS_WIDTH } from '../../../utils/customHooks/useBoardElementsDimensions'
 import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
 
 // TODO: think of a better color scheme mechanism

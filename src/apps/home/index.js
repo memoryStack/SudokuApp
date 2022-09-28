@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { rgba } from '../../utils/util'
-import { useBoardElementsDimensions } from '../../utils/customHooks/boardElementsDimensions'
+import { useBoardElementsDimensions } from '../../utils/customHooks'
 import { EVENTS } from '../../constants/events'
 
 import { NextGameMenu } from '../arena/nextGameMenu'
