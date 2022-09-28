@@ -14,7 +14,7 @@ import {
 import { getPuzzleSolutionType } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
-import { PUZZLE_SOLUTION_TYPES } from '../constants'
+import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 
 const initBoardData = () => {
     const mainNumbers = initMainNumbers()
@@ -52,10 +52,10 @@ const initBoardData = () => {
     // const str = '400000107305800406080406320043050070000000940801003002004530708500070204018004030'
 
     // finned x-wing bug
-    // const str = '040059000259000308001000250430805610805006432600430000503000170020010003076003000'
+    const str = '040059000259000308001000250430805610805006432600430000503000170020010003076003000'
 
     // puzzle with duplicate solutions
-    const str = '906070403000400200070003010500000100040208060003000005030700050007005000405010708'
+    // const str = '906070403000400200070003010500000100040208060003000005030700050007005000405010708'
 
     if (__DEV__) {
         for (let i = 0; i < str.length; i++) {
@@ -65,15 +65,18 @@ const initBoardData = () => {
         }
     }
 
-    const notesInfo = new Array(9)
-    for (let i = 0; i < 9; i++) {
+    const notesInfo = []
+    for (let i = 0; i < CELLS_IN_HOUSE; i++) {
         const rowNotes = []
-        for (let j = 0; j < 9; j++) {
-            const boxNotes = new Array(9)
-            for (let k = 1; k <= 9; k++) boxNotes[k - 1] = { noteValue: k, show: 0 } // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
+        for (let j = 0; j < CELLS_IN_HOUSE; j++) {
+            const boxNotes = []
+            for (let k = 1; k <= NUMBERS_IN_HOUSE; k++) {
+                // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
+                boxNotes.push({ noteValue: k, show: 0 })
+            }
             rowNotes.push(boxNotes)
         }
-        notesInfo[i] = rowNotes
+        notesInfo.push(rowNotes)
     }
 
     return {
