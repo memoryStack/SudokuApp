@@ -1,3 +1,5 @@
+import { roundToNearestPixel } from "../../utils/util"
+
 export const BOARD_AXES_VALUES = {
     Y_AXIS: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
     X_AXIS: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
@@ -5,6 +7,12 @@ export const BOARD_AXES_VALUES = {
 
 export const BOARD_CELLS_COUNT = 81
 export const MAX_INSTANCES_OF_NUMBER = 9
+
+export const STATIC_BOARD_ELEMENTS_DIMENSIONS = {
+    THICK_BORDER_WIDTH: roundToNearestPixel(3),
+    THIN_BORDER_WIDTH: roundToNearestPixel(1),
+    AXIS_WIDTH: roundToNearestPixel(20),
+}
 
 export const DEEPLINK_PUZZLE_URL_ERRORS = {
     EMPTY_URL: 'Invaild Url',

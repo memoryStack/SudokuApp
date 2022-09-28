@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
-import { BOARD_AXIS_WIDTH, GRID_THIN_BORDERS_WIDTH } from '../../../utils/customHooks/useBoardElementsDimensions'
 import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
+import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 
 // TODO: think of a better color scheme mechanism
 export const COLOR_SCHEME_STYLES = {
@@ -57,12 +57,12 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH }) =
         },
         verticalBars: {
             height: GAME_BOARD_HEIGHT,
-            width: GRID_THIN_BORDERS_WIDTH,
+            width: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
             backgroundColor: 'rgba(0, 0, 0, .9)',
         },
         horizontalBars: {
             width: GAME_BOARD_WIDTH,
-            height: GRID_THIN_BORDERS_WIDTH,
+            height: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
             backgroundColor: 'rgba(0, 0, 0, .9)',
         },
         rowStyle: {
@@ -80,15 +80,15 @@ export const getStyles = ({ GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, CELL_WIDTH }) =
         yAxis: {
             justifyContent: 'space-around',
             alignItems: 'center',
-            width: BOARD_AXIS_WIDTH,
+            width: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
         },
         xAxis: {
             flexDirection: 'row',
             justifyContent: 'space-around',
             alignItems: 'center',
             width: GAME_BOARD_WIDTH,
-            height: BOARD_AXIS_WIDTH,
-            marginLeft: BOARD_AXIS_WIDTH,
+            height: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
+            marginLeft: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
         },
         axisText: {
             color: 'black',

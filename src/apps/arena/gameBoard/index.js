@@ -10,17 +10,13 @@ import _noop from 'lodash/src/utils/noop'
 import _get from 'lodash/src/utils/get'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import {
-    useBoardElementsDimensions,
-    INNER_THICK_BORDER_WIDTH,
-    GRID_THIN_BORDERS_WIDTH,
-} from '../../../utils/customHooks/useBoardElementsDimensions'
+import { useBoardElementsDimensions } from '../../../utils/customHooks'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { areSameCells, sameHouseAsSelected } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
-import { BOARD_AXES_VALUES } from '../constants'
+import { BOARD_AXES_VALUES, STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 
 import { getStyles } from './style'
 import { Cell } from './cell'
@@ -117,8 +113,8 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
 
     const renderRow = (row, key) => {
         const rowAdditionalStyles = {
-            marginTop: row === 3 || row === 6 ? INNER_THICK_BORDER_WIDTH : GRID_THIN_BORDERS_WIDTH,
-            marginBottom: row === 8 ? GRID_THIN_BORDERS_WIDTH : 0,
+            marginTop: row === 3 || row === 6 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
+            marginBottom: row === 8 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH : 0,
         }
 
         return (
@@ -128,8 +124,8 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
                     const cell = { row, col }
 
                     const cellAdditionalStyles = {
-                        marginLeft: col === 3 || col === 6 ? INNER_THICK_BORDER_WIDTH : GRID_THIN_BORDERS_WIDTH,
-                        marginRight: col === 8 ? GRID_THIN_BORDERS_WIDTH : 0,
+                        marginLeft: col === 3 || col === 6 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
+                        marginRight: col === 8 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH : 0,
                     }
 
                     return (
@@ -164,7 +160,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         const thickNessStyleField = isVertical ? 'width' : 'height'
         const thickBorderStyle = {
             ...normalBorderStyle,
-            [thickNessStyleField]: INNER_THICK_BORDER_WIDTH,
+            [thickNessStyleField]: STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH,
         }
 
         return (
