@@ -278,9 +278,7 @@ function erasePossibleNotesOnNumberInput(number, selectedCell) {
     invokeDispatch(erasePossibleNotesBunch(possibleNotesBunch))
 }
 
-const addPossibleNotesOnMainNumberErased = (selectedCell, wasCorrectValue, mainNumbers) => {
-    if (!wasCorrectValue) return
-
+const addPossibleNotesOnMainNumberErased = (selectedCell, mainNumbers) => {
     const numberRemoved = mainNumbers[selectedCell.row][selectedCell.col].solutionValue
     const possibleNotesBunch = [...getCellAllPossibleNotes(selectedCell, mainNumbers)]
 
@@ -315,12 +313,11 @@ const undoMainNumber = previousMove => {
         const cell = previousMove.selectedCell
         const mainNumbersBeforeErase = getMainNumbers(getStoreState())
         invokeDispatch(eraseCellMainValue(cell))
-
-        // TODO: check how this is working correctly ??
-        // is data updated in store immediately and only UI is rendered async ??
         const wasCorrectValue = isCellCorrectlyFilled(mainNumbersBeforeErase[cell.row][cell.col])
-        const mainNumbersAfterErase = getMainNumbers(getStoreState())
-        addPossibleNotesOnMainNumberErased(cell, wasCorrectValue, mainNumbersAfterErase)
+        if (wasCorrectValue) {
+            const mainNumbersAfterErase = getMainNumbers(getStoreState())
+            addPossibleNotesOnMainNumberErased(cell, mainNumbersAfterErase)
+        }
     } else {
         // this will be executed only for the mistake made.
         // correct filled numbers are anyway not erasable.
