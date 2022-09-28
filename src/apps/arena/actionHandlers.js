@@ -20,7 +20,6 @@ import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '../../utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
 import {
-    INVALID_DEEPLINK_PUZZLE,
     LAUNCHING_DEFAULT_PUZZLE,
     DEEPLINK_PUZZLE_NO_SOLUTIONS,
     RESUME,
@@ -166,20 +165,19 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
 }
 
 const transformNativeGeneratedPuzzle = (clues, solution) => {
-    const mainNumbers = new Array(9)
-    let cellNo = 0
-    for (let row = 0; row < 9; row++) {
-        const rowData = new Array(9)
-        for (let col = 0; col < 9; col++) {
+    const mainNumbers = []
+    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+        const rowData = []
+        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
+            const cellNo = convertBoardCellToNum({ row, col })
             const cellvalue = clues[cellNo]
-            rowData[col] = {
+            rowData.push({
                 value: cellvalue,
                 solutionValue: solution[cellNo],
                 isClue: cellvalue !== 0,
-            }
-            cellNo++
+            })
         }
-        mainNumbers[row] = rowData
+        mainNumbers.push(rowData)
     }
     return mainNumbers
 }
