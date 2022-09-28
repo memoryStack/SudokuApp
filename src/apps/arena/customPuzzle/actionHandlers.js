@@ -9,6 +9,7 @@ import {
     getBlockAndBoxNum,
     initMainNumbers,
     isCellEmpty,
+    convertBoardCellNumToCell,
 } from '../utils/util'
 import { getPuzzleSolutionType } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
@@ -58,12 +59,9 @@ const initBoardData = () => {
 
     if (__DEV__) {
         for (let i = 0; i < str.length; i++) {
-            const row = Math.floor(i / 9)
-            const col = i % 9
-            if (str[i]) {
-                mainNumbers[row][col].value = parseInt(str[i], 10)
-                mainNumbers[row][col].isClue = true
-            }
+            const { row, col } = convertBoardCellNumToCell(i)
+            mainNumbers[row][col].value = parseInt(str[i], 10)
+            mainNumbers[row][col].isClue = true
         }
     }
 
