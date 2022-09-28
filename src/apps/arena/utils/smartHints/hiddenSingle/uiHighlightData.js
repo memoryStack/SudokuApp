@@ -5,6 +5,7 @@ import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum } from '../.
 import { setCellDataInHintResult } from '../util'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import { CELLS_IN_HOUSE, HOUSES_COUNT } from '../../../constants'
+import { getHouseCells } from '../../houseCells'
 
 const getInhabitableCellData = () => {
     return {
@@ -218,26 +219,10 @@ const getNextNeighbourBlock = (currentBlockNum, type) => {
     return neighbourBlockNum
 }
 
-const getCandidateInstanceCoordinatesInRow = (candidate, row, mainNumbers) => {
-    for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-        if (mainNumbers[row][col].value === candidate) return { row, col }
-    }
-    return null
-}
-
-const getCandidateInstanceCoordinatesInCol = (candidate, col, mainNumbers) => {
-    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
-        if (mainNumbers[row][col].value === candidate) return { row, col }
-    }
-    return null
-}
-
-const getCandidateInstanceCoordinatesInBlock = (candidate, block, mainNumbers) => {
-    for (let cell = 0; cell < CELLS_IN_HOUSE; cell++) {
-        const { row, col } = getRowAndCol(block, cell)
-        if (mainNumbers[row][col].value === candidate) return { row, col }
-    }
-    return null
+const getCandidateInstanceCordinatesInHouse = (candidate, house, mainNumbers) => {
+    return _find(getHouseCells(house.type, house.num), ({ row, col }) => {
+        return mainNumbers[row][col].value === candidate
+    })
 }
 
 const shouldHighlightWinnerCandidateInstanceInBlock = (hostCell, blockNum, singleType, mainNumbers) => {
@@ -273,11 +258,9 @@ const hiddenSingleInRowHighlightBlockCells = ({
         if (col === selectedCol) continue
         if (!mainNumbers[selectedRow][col].value) {
             if (!candidateCordinatesInBlock) {
-                const { row: instanceRow, col: instanceCol } = getCandidateInstanceCoordinatesInCol(
-                    winnerCandidate,
-                    col,
-                    mainNumbers,
-                )
+                const { row: instanceRow, col: instanceCol } =
+                    getCandidateInstanceCordinatesInHouse(winnerCandidate, { type: HOUSE_TYPE.COL, num: col }, mainNumbers)
+
                 const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
                 setCellDataInHintResult({ row: instanceRow, col: instanceCol }, cellHighlightData, cellsToFocusData)
             }
@@ -304,11 +287,9 @@ const hiddenSingleInColHighlightBlockCells = ({
         if (row === selectedRow) continue
         if (!mainNumbers[row][selectedCol].value) {
             if (!candidateCordinatesInBlock) {
-                const { row: instanceRow, col: instanceCol } = getCandidateInstanceCoordinatesInRow(
-                    winnerCandidate,
-                    row,
-                    mainNumbers,
-                )
+                const { row: instanceRow, col: instanceCol } =
+                    getCandidateInstanceCordinatesInHouse(winnerCandidate, { type: HOUSE_TYPE.ROW, num: row }, mainNumbers)
+
                 const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
                 setCellDataInHintResult({ row: instanceRow, col: instanceCol }, cellHighlightData, cellsToFocusData)
             }
@@ -323,7 +304,8 @@ const hiddenSingleInColHighlightBlockCells = ({
 const highlightBlockCells = ({ selectedRow, selectedCol, blockNum, mainNumbers, cellsToFocusData, singleType }) => {
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
 
-    const candidateCordinatesInBlock = getCandidateInstanceCoordinatesInBlock(winnerCandidate, blockNum, mainNumbers)
+    const candidateCordinatesInBlock =
+        getCandidateInstanceCordinatesInHouse(winnerCandidate, { type: HOUSE_TYPE.BLOCK, num: block }, mainNumbers)
     if (
         shouldHighlightWinnerCandidateInstanceInBlock(
             { row: selectedRow, col: selectedCol },
