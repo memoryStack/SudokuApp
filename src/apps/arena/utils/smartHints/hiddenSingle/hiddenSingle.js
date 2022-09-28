@@ -3,6 +3,7 @@ import { isCellEmpty } from '../../util'
 import { getUIHighlightData } from './uiHighlightData'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
+import { CELLS_IN_HOUSE } from '../../../constants'
 
 const getCellHiddenSingle = (cell, notesData) => {
     const { row, col } = cell
@@ -47,8 +48,8 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     // BOARD_LOOPER: 8
-    hintsSearchLoop: for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
+    hintsSearchLoop: for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
             if (maxHintsLimitReached(result, maxHintsThreshold)) {
                 break hintsSearchLoop
             }

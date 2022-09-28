@@ -4,6 +4,7 @@ import { HOUSE_TYPE } from '../../smartHints/constants'
 import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum } from '../../util'
 import { setCellDataInHintResult } from '../util'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import { CELLS_IN_HOUSE, HOUSES_COUNT } from '../../../constants'
 
 const getInhabitableCellData = () => {
     return {
@@ -26,7 +27,7 @@ const getNewHighlightableInstanceHouseType = ({ row, col }, neighbourRows, neigh
 
 const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, neighbourRows) => {
     const getWinnerInstancePosInRow = () => {
-        for (let col = 0; col < 9; col++) {
+        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
             if (mainNumbers[firstCell.row][col].value === winnerCandidate) return col
         }
         return -1
@@ -54,7 +55,7 @@ const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, nei
 
 const getWinnerInstanceInfoInCol = (firstCell, winnerCandidate, mainNumbers, neighbourCols) => {
     const getWinnerInstancePosInCol = () => {
-        for (let row = 0; row < 9; row++) {
+        for (let row = 0; row < CELLS_IN_HOUSE; row++) {
             if (mainNumbers[row][firstCell.col].value === winnerCandidate) return row
         }
         return -1
@@ -174,7 +175,7 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
         cols: getMustHighlightableNeighbourCols(neighbourCols, hostCell, mainNumbers, cellsToFocusData),
     }
 
-    for (let cellNo = 0; cellNo < 9; cellNo++) {
+    for (let cellNo = 0; cellNo < CELLS_IN_HOUSE; cellNo++) {
         const { row, col } = getRowAndCol(hostBlockNum, cellNo)
 
         if (!isCellEmpty({ row, col }, mainNumbers)) {
@@ -212,27 +213,27 @@ const getNextNeighbourBlock = (currentBlockNum, type) => {
         neighbourBlockNum = currentBlockNum + 1
         if (neighbourBlockNum % 3 === 0) neighbourBlockNum -= 3
     } else if (type === HIDDEN_SINGLE_TYPES.COL) {
-        neighbourBlockNum = (currentBlockNum + 3) % 9
+        neighbourBlockNum = (currentBlockNum + 3) % HOUSES_COUNT
     }
     return neighbourBlockNum
 }
 
 const getCandidateInstanceCoordinatesInRow = (candidate, row, mainNumbers) => {
-    for (let col = 0; col < 9; col++) {
+    for (let col = 0; col < CELLS_IN_HOUSE; col++) {
         if (mainNumbers[row][col].value === candidate) return { row, col }
     }
     return null
 }
 
 const getCandidateInstanceCoordinatesInCol = (candidate, col, mainNumbers) => {
-    for (let row = 0; row < 9; row++) {
+    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         if (mainNumbers[row][col].value === candidate) return { row, col }
     }
     return null
 }
 
 const getCandidateInstanceCoordinatesInBlock = (candidate, block, mainNumbers) => {
-    for (let cell = 0; cell < 9; cell++) {
+    for (let cell = 0; cell < CELLS_IN_HOUSE; cell++) {
         const { row, col } = getRowAndCol(block, cell)
         if (mainNumbers[row][col].value === candidate) return { row, col }
     }
