@@ -10,6 +10,7 @@ import {
     isCellCorrectlyFilled,
     isCellEmpty,
     initMainNumbers,
+    forCellEachNote,
 } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
@@ -103,12 +104,14 @@ const MOVES_TYPES = {
 }
 
 const getVisibileNotesBunchInCell = (cell, notesInfo) => {
-    const result = []
-    for (let note = 0; note < 9; note++) {
-        const { show } = notesInfo[cell.row][cell.col][note]
-        if (show) result.push({ cell, note: note + 1 })
-    }
-    return result
+    return _filter(notesInfo[cell.row][cell.col], ({ show }) => {
+        return show
+    }).map(({ noteValue }) => {
+        return {
+            cell,
+            note: noteValue
+        }
+    })
 }
 
 const getNotesToRemoveAfterMainNumberInput = (number, cell, notesInfo) => {
@@ -262,11 +265,11 @@ const getCellAllPossibleNotes = (cell, mainNumbers) => {
     const result = []
     if (!isCellEmpty(cell, mainNumbers)) return result
 
-    for (let num = 1; num <= 9; num++) {
-        if (!duplicacyPresent(num, mainNumbers, cell)) {
-            result.push({ cell, note: num })
-        }
-    }
+    forCellEachNote((note) => {
+        if (!duplicacyPresent(num, mainNumbers, cell))
+            result.push({ cell, note })
+    })
+
     return result
 }
 
