@@ -1,4 +1,3 @@
-
 import _filter from 'lodash/src/utils/filter'
 
 import { CELLS_IN_HOUSE } from '../../../constants'
@@ -36,7 +35,7 @@ const getNakedSingleType = (cell, mainNumbers) => {
 }
 
 const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
-    const emptyCellsInHouse = _filter(getHouseCells(house.type, house.num), (cell) => {
+    const emptyCellsInHouse = _filter(getHouseCells(house.type, house.num), cell => {
         return isCellEmpty(cell, mainNumbers)
     })
     return emptyCellsInHouse.length === 1

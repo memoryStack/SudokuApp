@@ -214,13 +214,13 @@ export const getNextNeighbourBlock = (currentBlockNumIdx, direction) => {
     return -1
 }
 
-const getNextBlockInRow = (currentBlockNumIdx) => {
+const getNextBlockInRow = currentBlockNumIdx => {
     let result = currentBlockNumIdx + 1
     if (result % BLOCKS_COUNT_IN_ROW === 0) result -= BLOCKS_COUNT_IN_ROW
     return result
 }
 
-const getNextBlockInCol = (currentBlockNumIdx) => {
+const getNextBlockInCol = currentBlockNumIdx => {
     return (currentBlockNumIdx + BLOCKS_COUNT_IN_ROW) % HOUSES_COUNT
 }
 
@@ -390,7 +390,7 @@ const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
     return cellsToFocusData
 }
 
-const getNextBlockSearchDirection = (hiddenSingleType) => {
+const getNextBlockSearchDirection = hiddenSingleType => {
     return hiddenSingleType === HIDDEN_SINGLE_TYPES.ROW ? GRID_TRAVERSALS.ROW : GRID_TRAVERSALS.COL
 }
 

@@ -41,12 +41,11 @@ test('hidden singles', () => {
     expect(getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(hiddenSingles)
 })
 
-
 describe('getNextNeighbourBlock()', () => {
     test('takes two arguments ', () => {
         getNextNeighbourBlock(
             1, // current block number in [0..n] format
-            GRID_TRAVERSALS.ROW // direction to search in for next block
+            GRID_TRAVERSALS.ROW, // direction to search in for next block
         )
     })
 

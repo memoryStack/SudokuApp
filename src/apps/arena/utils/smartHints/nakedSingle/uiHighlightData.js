@@ -31,9 +31,10 @@ const SMART_HINTS_TECHNIQUES = {
 }
 
 const dataToHighlightHouseCells = (house, nakedSingleHostCell, cellsToFocusData = {}) => {
-    _forEach(getHouseCells(house.type, house.num), (cell) => {
+    _forEach(getHouseCells(house.type, house.num), cell => {
         const cellHighlightData = {
-            bgColor: areSameCells(cell, nakedSingleHostCell) ? SMART_HINTS_CELLS_BG_COLOR.SELECTED
+            bgColor: areSameCells(cell, nakedSingleHostCell)
+                ? SMART_HINTS_CELLS_BG_COLOR.SELECTED
                 : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
