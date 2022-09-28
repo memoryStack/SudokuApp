@@ -19,7 +19,7 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Board } from '../gameBoard'
 import { Inputpanel } from '../inputPanel'
 
-import { ACTION_HANDLERS, ACTION_TYPES, INITIAL_STATE } from './actionHandlers'
+import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
 
 const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const styles = StyleSheet.create({
@@ -119,7 +119,7 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
 }
 
 export const CustomPuzzle = React.memo(
-    withActions({ actionHandlers: ACTION_HANDLERS, initialState: INITIAL_STATE })(CustomPuzzle_),
+    withActions({ actionHandlers: ACTION_HANDLERS, initialState: getInitialState() })(CustomPuzzle_),
 )
 
 CustomPuzzle_.propTypes = {

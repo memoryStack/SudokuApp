@@ -49,10 +49,10 @@ const initBoardData = () => {
     // const str = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
 
     // try-out analyser helper funcs
-    // const str = '400000107305800406080406320043050070000000940801003002004530708500070204018004030'
+    const str = '400000107305800406080406320043050070000000940801003002004530708500070204018004030'
 
     // finned x-wing bug
-    const str = '040059000259000308001000250430805610805006432600430000503000170020010003076003000'
+    // const str = '040059000259000308001000250430805610805006432600430000503000170020010003076003000'
 
     // puzzle with duplicate solutions
     // const str = '906070403000400200070003010500000100040208060003000005030700050007005000405010708'
@@ -86,14 +86,7 @@ const initBoardData = () => {
     }
 }
 
-let INITIAL_STATE = {}
-const resetInitialState = () => {
-    const { mainNumbers, notesInfo, selectedCell } = initBoardData()
-    INITIAL_STATE.mainNumbers = mainNumbers
-    INITIAL_STATE.notesInfo = notesInfo
-    INITIAL_STATE.selectedCell = selectedCell
-}
-resetInitialState()
+export const getInitialState = () => initBoardData()
 
 const handleInit = ({ setState }) => {
     setState({ ...initBoardData() })
@@ -187,7 +180,6 @@ const getCluesCount = mainNumbers => {
 const handleOnClose = ({ params: ref }) => {
     if (!ref) return
     ref.current && ref.current.closeDragger()
-    resetInitialState()
 }
 
 const showSnackBar = ({ msg }) => {
@@ -249,4 +241,4 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_PLAY]: handlePlay,
 }
 
-export { INITIAL_STATE, ACTION_TYPES, ACTION_HANDLERS }
+export { ACTION_TYPES, ACTION_HANDLERS }
