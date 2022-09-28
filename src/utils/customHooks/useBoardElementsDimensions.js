@@ -19,13 +19,13 @@ export const useBoardElementsDimensions = () => {
     const { width: windowWidth } = useWindowDimensions()
 
     const rawGameBoardWidth = getGameBoardWidth(windowWidth)
-    const CELL_WIDTH = roundToNearestPixel((rawGameBoardWidth - BORDERS_TOTAL_THICKNESS) / CELLS_IN_HOUSE)
+    const cellWidth = roundToNearestPixel((rawGameBoardWidth - BORDERS_TOTAL_THICKNESS) / CELLS_IN_HOUSE)
 
-    const pixelPerfectGameBoardWidth = CELL_WIDTH * CELLS_IN_HOUSE + BORDERS_TOTAL_THICKNESS
+    const pixelPerfectGameBoardWidth = cellWidth * CELLS_IN_HOUSE + BORDERS_TOTAL_THICKNESS
     return {
         GAME_BOARD_WIDTH: pixelPerfectGameBoardWidth,
         GAME_BOARD_HEIGHT: pixelPerfectGameBoardWidth,
-        CELL_WIDTH,
-        CELL_HEIGHT: CELL_WIDTH,
+        CELL_WIDTH: cellWidth,
+        CELL_HEIGHT: cellWidth,
     }
 }
