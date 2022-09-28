@@ -119,7 +119,7 @@ const getXWingHousesNums = (houseType, xWingLegs) => {
 export const getHouseAxesText = house => {
     const houseAxesValue = getHouseAxesValue(house)
     if (house.type === HOUSE_TYPE.ROW) return houseAxesValue
-    return toOrdinal(parseInt(houseAxesValue), 10)
+    return toOrdinal(parseInt(houseAxesValue, 10))
 }
 
 export const getCrossHouseAxesText = xWing => {
