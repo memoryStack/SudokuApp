@@ -6,6 +6,7 @@ import { getGroupUIHighlightData } from './uiHighlightData'
 import { getHouseCells } from '../../houseCells'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
+import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
 const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
     if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount
@@ -36,7 +37,7 @@ export const validCandidatesInHouseAndTheirLocations = (
     })
 
     const result = []
-    for (let candidate = 1; candidate <= 9; candidate++) {
+    for (let candidate = 1; candidate <= NUMBERS_IN_HOUSE; candidate++) {
         const candidateOccurencesCount = (candidatesHostCells[candidate] || []).length
         if (isValidCandidate(candidateOccurencesCount, groupCandidatesCount)) {
             result.push({
@@ -110,7 +111,7 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHin
     const result = []
     const houseIterationOrder = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     houseIterationOrder.forEach(houseType => {
-        for (let houseNum = 0; houseNum < 9; houseNum++) {
+        for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const validCandidatesWithLocations = validCandidatesInHouseAndTheirLocations(
