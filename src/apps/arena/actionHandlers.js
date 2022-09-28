@@ -52,10 +52,6 @@ const getMainNumbersFromString = puzzle => {
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {
             const cellNo = convertBoardCellToNum({ row, col })
             const clueIntValue = parseInt(puzzle[cellNo], 10)
-            if (isNaN(clueIntValue)) {
-                emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}` })
-                throw 'invalid puzzle'
-            }
             rowData.push({
                 value: clueIntValue,
                 solutionValue: 0,
@@ -138,9 +134,9 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
 }
 
 const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
-    const urlFormatError = getSharedPuzzleError(puzzleUrl)
-    if (urlFormatError) {
-        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${urlFormatError}. ${LAUNCHING_DEFAULT_PUZZLE}` })
+    const sharedPuzzleError = getSharedPuzzleError(puzzleUrl)
+    if (sharedPuzzleError) {
+        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${sharedPuzzleError}. ${LAUNCHING_DEFAULT_PUZZLE}` })
         generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
         return
     }
