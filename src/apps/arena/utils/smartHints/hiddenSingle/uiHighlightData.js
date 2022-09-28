@@ -258,8 +258,11 @@ const hiddenSingleInRowHighlightBlockCells = ({
         if (col === selectedCol) continue
         if (!mainNumbers[selectedRow][col].value) {
             if (!candidateCordinatesInBlock) {
-                const { row: instanceRow, col: instanceCol } =
-                    getCandidateInstanceCordinatesInHouse(winnerCandidate, { type: HOUSE_TYPE.COL, num: col }, mainNumbers)
+                const { row: instanceRow, col: instanceCol } = getCandidateInstanceCordinatesInHouse(
+                    winnerCandidate,
+                    { type: HOUSE_TYPE.COL, num: col },
+                    mainNumbers,
+                )
 
                 const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
                 setCellDataInHintResult({ row: instanceRow, col: instanceCol }, cellHighlightData, cellsToFocusData)
@@ -287,8 +290,11 @@ const hiddenSingleInColHighlightBlockCells = ({
         if (row === selectedRow) continue
         if (!mainNumbers[row][selectedCol].value) {
             if (!candidateCordinatesInBlock) {
-                const { row: instanceRow, col: instanceCol } =
-                    getCandidateInstanceCordinatesInHouse(winnerCandidate, { type: HOUSE_TYPE.ROW, num: row }, mainNumbers)
+                const { row: instanceRow, col: instanceCol } = getCandidateInstanceCordinatesInHouse(
+                    winnerCandidate,
+                    { type: HOUSE_TYPE.ROW, num: row },
+                    mainNumbers,
+                )
 
                 const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
                 setCellDataInHintResult({ row: instanceRow, col: instanceCol }, cellHighlightData, cellsToFocusData)
@@ -304,8 +310,11 @@ const hiddenSingleInColHighlightBlockCells = ({
 const highlightBlockCells = ({ selectedRow, selectedCol, blockNum, mainNumbers, cellsToFocusData, singleType }) => {
     const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
 
-    const candidateCordinatesInBlock =
-        getCandidateInstanceCordinatesInHouse(winnerCandidate, { type: HOUSE_TYPE.BLOCK, num: block }, mainNumbers)
+    const candidateCordinatesInBlock = getCandidateInstanceCordinatesInHouse(
+        winnerCandidate,
+        { type: HOUSE_TYPE.BLOCK, num: block },
+        mainNumbers,
+    )
     if (
         shouldHighlightWinnerCandidateInstanceInBlock(
             { row: selectedRow, col: selectedCol },
