@@ -109,7 +109,7 @@ const getVisibileNotesBunchInCell = (cell, notesInfo) => {
     }).map(({ noteValue }) => {
         return {
             cell,
-            note: noteValue
+            note: noteValue,
         }
     })
 }
@@ -265,9 +265,8 @@ const getCellAllPossibleNotes = (cell, mainNumbers) => {
     const result = []
     if (!isCellEmpty(cell, mainNumbers)) return result
 
-    forCellEachNote((note) => {
-        if (!duplicacyPresent(note, mainNumbers, cell))
-            result.push({ cell, note })
+    forCellEachNote(note => {
+        if (!duplicacyPresent(note, mainNumbers, cell)) result.push({ cell, note })
     })
 
     return result
