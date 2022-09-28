@@ -1,11 +1,8 @@
-import { useWindowDimensions, PixelRatio } from 'react-native'
+import { useWindowDimensions } from 'react-native'
+import { roundToNearestPixel } from '../util'
 
-// let's keep it here for now shift in
-// utils if needed at other places as well
-const roundToNearestPixel = sizeInDp => {
-    return PixelRatio.roundToNearestPixel(sizeInDp)
-}
-
+// move these constants in constants file
+// what to move from here
 export const INNER_THICK_BORDER_WIDTH = roundToNearestPixel(3),
     GRID_THIN_BORDERS_WIDTH = roundToNearestPixel(1),
     BOARD_AXIS_WIDTH = roundToNearestPixel(20)

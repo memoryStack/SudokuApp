@@ -1,3 +1,5 @@
+import { PixelRatio } from 'react-native'
+
 export const rgba = function (hex, opacity) {
     hex = hex.replace('#', '')
     const r = parseInt(hex.substring(0, 2), 16)
@@ -45,4 +47,8 @@ function noWhiteSpace(strings, ...placeholders) {
 
 export const onlyUnique = (value, index, self) => {
     return self.indexOf(value) === index
+}
+
+export const roundToNearestPixel = sizeInDp => {
+    return PixelRatio.roundToNearestPixel(sizeInDp)
 }
