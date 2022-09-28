@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { usePreviousRenderValue } from '../../../utils/customHooks/commonUtility'
+import { usePreviousRenderValue } from '../../../utils/customHooks'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { cacheGameData } from '../utils/cacheGameHandler'
