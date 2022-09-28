@@ -1,5 +1,9 @@
+
+import _filter from 'lodash/src/utils/filter'
+
 import { CELLS_IN_HOUSE } from '../../../constants'
-import { isCellEmpty, getRowAndCol, getBlockAndBoxNum } from '../../util'
+import { getHouseCells } from '../../houseCells'
+import { isCellEmpty, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from '../../util'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
@@ -24,36 +28,18 @@ export const isNakedSinglePresent = cellNotes => {
     }
 }
 
-const isOnlyEmptyCellInRow = (cell, mainNumbers) => {
-    let cellsFilled = 0
-    for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-        if (!isCellEmpty({ row: cell.row, col }, mainNumbers)) cellsFilled++
-    }
-    return cellsFilled === 8
-}
-
-const isOnlyEmptyCellInCol = (cell, mainNumbers) => {
-    let cellsFilled = 0
-    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
-        if (!isCellEmpty({ row, col: cell.col }, mainNumbers)) cellsFilled++
-    }
-    return cellsFilled === 8
-}
-
-const isOnlyEmptyCellInBlock = (cell, mainNumbers) => {
-    let cellsFilled = 0
-    const { blockNum } = getBlockAndBoxNum(cell)
-    for (let boxNum = 0; boxNum < CELLS_IN_HOUSE; boxNum++) {
-        if (!isCellEmpty(getRowAndCol(blockNum, boxNum), mainNumbers)) cellsFilled++
-    }
-    return cellsFilled === 8
-}
-
-const getHouseType = (cell, mainNumbers) => {
-    if (isOnlyEmptyCellInRow(cell, mainNumbers)) return NAKED_SINGLE_TYPES.ROW
-    if (isOnlyEmptyCellInCol(cell, mainNumbers)) return NAKED_SINGLE_TYPES.COL
-    if (isOnlyEmptyCellInBlock(cell, mainNumbers)) return NAKED_SINGLE_TYPES.BLOCK
+const getNakedSingleType = (cell, mainNumbers) => {
+    if (isOnlyOneCellEmptyInHouse(getCellRowHouseInfo(cell), mainNumbers)) return NAKED_SINGLE_TYPES.ROW
+    if (isOnlyOneCellEmptyInHouse(getCellColHouseInfo(cell), mainNumbers)) return NAKED_SINGLE_TYPES.COL
+    if (isOnlyOneCellEmptyInHouse(getCellBlockHouseInfo(cell), mainNumbers)) return NAKED_SINGLE_TYPES.BLOCK
     return NAKED_SINGLE_TYPES.MIX
+}
+
+const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
+    const emptyCellsInHouse = _filter(getHouseCells(house.type, house.num), (cell) => {
+        return isCellEmpty(cell, mainNumbers)
+    })
+    return emptyCellsInHouse.length === 1
 }
 
 const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
@@ -74,7 +60,7 @@ const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
             const { present, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
             const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
             if (present && isValid) {
-                result.push({ cell, mainNumber, type: getHouseType(cell, mainNumbers) })
+                result.push({ cell, mainNumber, type: getNakedSingleType(cell, mainNumbers) })
             }
         }
     }
