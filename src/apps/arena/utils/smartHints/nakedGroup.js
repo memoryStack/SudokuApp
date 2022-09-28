@@ -21,6 +21,7 @@ import {
 } from './util'
 import { isHintValid } from './validityTest'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../constants'
 
 // TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
@@ -149,7 +150,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
     const hints = []
 
     hintsSearchLoop: for (let j = 0; j < houseType.length; j++) {
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < HOUSES_COUNT; i++) {
             const houseNum = {
                 row: i,
                 col: i,
@@ -158,7 +159,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
 
             const houseAllBoxes = [] // all the house boxes
             const validBoxes = [] // all  the boxes with favorable number of instances in them
-            for (let box = 0; box < 9; box++) {
+            for (let box = 0; box < CELLS_IN_HOUSE; box++) {
                 let row
                 let col
                 if (houseType[j] === 'row') {
@@ -221,7 +222,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
                 for (let x = 0; x < selectedBoxes.length; x++) {
                     const { row, col } = selectedBoxes[x]
-                    for (let note = 1; note <= 9; note++) {
+                    for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
                         if (notesData[row][col][note - 1].show) {
                             if (!eachVisibleNotesInfo[note]) eachVisibleNotesInfo[note] = 1
                             else eachVisibleNotesInfo[note]++
@@ -245,7 +246,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 // if house is row or col
                 if ((houseType[j] === 'row' || houseType[j] === 'col') && areSameBlockCells(selectedBoxes)) {
                     const { blockNum } = getBlockAndBoxNum(selectedBoxes[0])
-                    for (let boxNum = 0; boxNum < 9; boxNum++) {
+                    for (let boxNum = 0; boxNum < CELLS_IN_HOUSE; boxNum++) {
                         const { row, col } = getRowAndCol(blockNum, boxNum)
                         if (
                             (houseType[j] === 'row' && row !== houseNum[houseType[j]]) ||
@@ -256,13 +257,13 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 } else {
                     if (areSameRowCells(selectedBoxes)) {
                         const { row } = selectedBoxes[0]
-                        for (let col = 0; col < 9; col++) {
+                        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
                             const { blockNum } = getBlockAndBoxNum({ row, col })
                             if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
                         }
                     } else if (areSameColCells(selectedBoxes)) {
                         const { col } = selectedBoxes[0]
-                        for (let row = 0; row < 9; row++) {
+                        for (let row = 0; row < CELLS_IN_HOUSE; row++) {
                             const { blockNum } = getBlockAndBoxNum({ row, col })
                             if (houseNum[houseType[j]] !== blockNum) houseAllBoxes.push({ row, col })
                         }
