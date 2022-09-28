@@ -4,7 +4,7 @@ import { HOUSE_TYPE } from '../../smartHints/constants'
 import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum } from '../../util'
 import { setCellDataInHintResult } from '../util'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import { CELLS_IN_HOUSE, HOUSES_COUNT } from '../../../constants'
+import { BLOCKS_COUNT_IN_ROW, CELLS_IN_HOUSE, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../constants'
 import { getHouseCells } from '../../houseCells'
 
 const getInhabitableCellData = () => {
@@ -208,15 +208,20 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     return cellsToFocusData
 }
 
-const getNextNeighbourBlock = (currentBlockNum, type) => {
-    let neighbourBlockNum = -1
-    if (type === HIDDEN_SINGLE_TYPES.ROW) {
-        neighbourBlockNum = currentBlockNum + 1
-        if (neighbourBlockNum % 3 === 0) neighbourBlockNum -= 3
-    } else if (type === HIDDEN_SINGLE_TYPES.COL) {
-        neighbourBlockNum = (currentBlockNum + 3) % HOUSES_COUNT
-    }
-    return neighbourBlockNum
+export const getNextNeighbourBlock = (currentBlockNumIdx, direction) => {
+    if (direction === GRID_TRAVERSALS.ROW) return getNextBlockInRow(currentBlockNumIdx)
+    if (direction === GRID_TRAVERSALS.COL) return getNextBlockInCol(currentBlockNumIdx)
+    return -1
+}
+
+const getNextBlockInRow = (currentBlockNumIdx) => {
+    let result = currentBlockNumIdx + 1
+    if (result % BLOCKS_COUNT_IN_ROW === 0) result -= BLOCKS_COUNT_IN_ROW
+    return result
+}
+
+const getNextBlockInCol = (currentBlockNumIdx) => {
+    return (currentBlockNumIdx + BLOCKS_COUNT_IN_ROW) % HOUSES_COUNT
 }
 
 const getCandidateInstanceCordinatesInHouse = (candidate, house, mainNumbers) => {
@@ -370,7 +375,8 @@ const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
 
     // check in 2 neighbour blocks
     let neighboursBlocks = 2
-    let neighbourBlockNum = getNextNeighbourBlock(currentBlockNum, type)
+    const nextBlockSearchDirection = type === HIDDEN_SINGLE_TYPES.ROW ? GRID_TRAVERSALS.ROW : GRID_TRAVERSALS.COL
+    let neighbourBlockNum = getNextNeighbourBlock(currentBlockNum, nextBlockSearchDirection)
     while (neighboursBlocks--) {
         highlightBlockCells({
             selectedRow: hostRow,
@@ -380,7 +386,7 @@ const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
             cellsToFocusData,
             singleType: type,
         })
-        neighbourBlockNum = getNextNeighbourBlock(neighbourBlockNum, type)
+        neighbourBlockNum = getNextNeighbourBlock(neighbourBlockNum, nextBlockSearchDirection)
     }
     return cellsToFocusData
 }

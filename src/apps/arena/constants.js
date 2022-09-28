@@ -13,6 +13,13 @@ export const HOUSES_COUNT = 9
 export const BOARD_TO_WINDOW_WIDTH_RATIO = 0.94
 export const THICK_BORDER_COUNT = 2
 export const THIN_BORDER_COUNT = 8
+export const BLOCKS_COUNT_IN_ROW = 3
+
+export const GRID_TRAVERSALS = {
+    ROW: 'ROW',
+    COL: 'COL',
+    BLOCK: 'BLOCK',
+}
 
 export const STATIC_BOARD_ELEMENTS_DIMENSIONS = {
     THICK_BORDER_WIDTH: roundToNearestPixel(3),
