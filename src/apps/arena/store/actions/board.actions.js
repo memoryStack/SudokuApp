@@ -266,7 +266,7 @@ const getCellAllPossibleNotes = (cell, mainNumbers) => {
     if (!isCellEmpty(cell, mainNumbers)) return result
 
     forCellEachNote((note) => {
-        if (!duplicacyPresent(num, mainNumbers, cell))
+        if (!duplicacyPresent(note, mainNumbers, cell))
             result.push({ cell, note })
     })
 

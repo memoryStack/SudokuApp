@@ -5,7 +5,7 @@ import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
-import { BOARD_AXES_VALUES, PUZZLE_SOLUTION_TYPES } from '../constants'
+import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { GameState } from './classes/gameState'
 
 export const addLeadingZeroIfEligible = value => {
@@ -33,7 +33,7 @@ const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => {
 }
 
 const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) => {
-    const isPuzzleSolved = row === 9
+    const isPuzzleSolved = row === CELLS_IN_HOUSE
     if (isPuzzleSolved) {
         forBoardEachCell(({ row, col }) => {
             const cellValue = mainNumbers[row][col].value
@@ -42,14 +42,14 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
         return 1
     }
 
-    const isRowComplete = col === 9
+    const isRowComplete = col === CELLS_IN_HOUSE
     if (isRowComplete) return getSolutionsCountForPuzzleType(mainNumbers, { row: row + 1, col: 0 })
 
     if (!isCellEmpty({ row, col }, mainNumbers))
         return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
 
     let result = 0
-    for (let num = 1; num <= 9; num++) {
+    for (let num = 1; num <= NUMBERS_IN_HOUSE; num++) {
         if (result > 1) break
         if (!duplicacyPresent(num, mainNumbers, { row, col })) {
             mainNumbers[row][col].value = num
@@ -101,20 +101,20 @@ export const isCellEmpty = ({ row, col }, mainNumbers) => {
 export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
 export const initNotes = () => {
-    const notesInfo = new Array(9)
+    const notesInfo = []
     // BOARD_LOOPER: 12
-    for (let i = 0; i < 9; i++) {
+    for (let row = 0; row < HOUSES_COUNT; row++) {
         const rowNotes = []
-        for (let j = 0; j < 9; j++) {
-            const boxNotes = new Array(9)
-            for (let k = 1; k <= 9; k++) {
+        for (let col = 0; col < HOUSES_COUNT; col++) {
+            const boxNotes = []
+            for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
                 // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0]
                 //  represenstion. but let's ignore it for now
-                boxNotes[k - 1] = { noteValue: k, show: 0 }
+                boxNotes.push({ noteValue: note, show: 0 })
             }
             rowNotes.push(boxNotes)
         }
-        notesInfo[i] = rowNotes
+        notesInfo.push(rowNotes)
     }
     return notesInfo
 }
@@ -168,8 +168,8 @@ const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers)
 }
 
 export const duplicatesInPuzzle = mainNumbers => {
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
+    for (let row = 0; row < HOUSES_COUNT; row++) {
+        for (let col = 0; col < HOUSES_COUNT; col++) {
             if (isCellEmpty({ row, col }, mainNumbers)) continue
 
             if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
@@ -219,13 +219,13 @@ export const isCellNoteVisible = (note, cellNotes) => {
 }
 
 export const convertBoardCellToNum = ({ row, col }) => {
-    return row * 9 + col
+    return row * HOUSES_COUNT + col
 }
 
 export const convertBoardCellNumToCell = cellNum => {
     return {
-        row: Math.floor(cellNum / 9),
-        col: cellNum % 9,
+        row: Math.floor(cellNum / HOUSES_COUNT),
+        col: cellNum % HOUSES_COUNT,
     }
 }
 
@@ -263,7 +263,7 @@ export const getHousePossibleNotes = (house, mainNumbers) => {
     })
 
     const result = []
-    for (let num = 1; num <= 9; num++) {
+    for (let num = 1; num <= NUMBERS_IN_HOUSE; num++) {
         if (possibleNotes[num]) result.push(num)
     }
     return result
@@ -272,15 +272,15 @@ export const getHousePossibleNotes = (house, mainNumbers) => {
 /* Board Iterators */
 
 export const forBoardEachCell = callback => {
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
+    for (let row = 0; row < HOUSES_COUNT; row++) {
+        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
             callback({ row, col })
         }
     }
 }
 
 export const forCellEachNote = callback => {
-    for (let note = 1; note <= 9; note++) {
+    for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
         const noteValue = note
         const noteIndx = note - 1
         callback(noteValue, noteIndx)
@@ -314,7 +314,7 @@ export const getHouseAxesValue = ({ type, num }) => {
 }
 
 export const forEachHouse = callback => {
-    for (let houseNum = 0; houseNum < 9; houseNum++) callback(houseNum)
+    for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) callback(houseNum)
 }
 
 export const isCellCorrectlyFilled = ({ solutionValue = 0, value = 0 } = {}) => {
@@ -344,13 +344,13 @@ export const getBlockAndBoxNum = cell => {
 }
 
 export const initMainNumbers = () => {
-    const result = new Array(9)
-    for (let i = 0; i < 9; i++) {
-        const rowData = new Array(9)
-        for (let j = 0; j < 9; j++) {
-            rowData[j] = getCellMainNumberDefaultValue()
+    const result = []
+    for (let i = 0; i < HOUSES_COUNT; i++) {
+        const rowData = []
+        for (let j = 0; j < CELLS_IN_HOUSE; j++) {
+            rowData.push(getCellMainNumberDefaultValue())
         }
-        result[i] = rowData
+        result.push(rowData)
     }
     return result
 }
