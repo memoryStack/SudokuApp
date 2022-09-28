@@ -375,8 +375,7 @@ const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
 
     // check in 2 neighbour blocks
     let neighboursBlocks = 2
-    const nextBlockSearchDirection = type === HIDDEN_SINGLE_TYPES.ROW ? GRID_TRAVERSALS.ROW : GRID_TRAVERSALS.COL
-    let neighbourBlockNum = getNextNeighbourBlock(currentBlockNum, nextBlockSearchDirection)
+    let neighbourBlockNum = getNextNeighbourBlock(currentBlockNum, getNextBlockSearchDirection(type))
     while (neighboursBlocks--) {
         highlightBlockCells({
             selectedRow: hostRow,
@@ -386,9 +385,13 @@ const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
             cellsToFocusData,
             singleType: type,
         })
-        neighbourBlockNum = getNextNeighbourBlock(neighbourBlockNum, nextBlockSearchDirection)
+        neighbourBlockNum = getNextNeighbourBlock(neighbourBlockNum, getNextBlockSearchDirection(type))
     }
     return cellsToFocusData
+}
+
+const getNextBlockSearchDirection = (hiddenSingleType) => {
+    return hiddenSingleType === HIDDEN_SINGLE_TYPES.ROW ? GRID_TRAVERSALS.ROW : GRID_TRAVERSALS.COL
 }
 
 const getHiddenSingleLogic = (houseType, solutionValue) => {
