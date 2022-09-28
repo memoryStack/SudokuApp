@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import { usePrevious } from '../commonUtility'
+import { usePrevious } from '../usePrevious'
 
 describe('usePrevious()', () => {
     test('return undefined until input value is not changed because undefined is the previous value and 9 is the current value', () => {

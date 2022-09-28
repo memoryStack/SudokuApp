@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 
-import { useToggle } from '../commonUtility'
+import { useToggle } from '../useToggle'
 
 describe('useToggle()', () => {
     test('returns an array of boolean (toggle state) and function (staste update callback)', () => {

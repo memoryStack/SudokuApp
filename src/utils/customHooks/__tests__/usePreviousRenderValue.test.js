@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import { usePreviousRenderValue } from '../commonUtility'
+import { usePreviousRenderValue } from '../usePreviousRenderValue'
 
 describe('usePreviousRenderValue()', () => {
     test('return undefined after first render', () => {
