@@ -15,7 +15,7 @@ import {
     PENCIL_STATE,
 } from '../../resources/constants'
 import { emit } from '../../utils/GlobalEventBus'
-import { duplicatesInPuzzle, forBoardEachCell, getPuzzleSolutionType, initNotes } from './utils/util'
+import { convertBoardCellToNum, duplicatesInPuzzle, forBoardEachCell, getPuzzleSolutionType, initNotes } from './utils/util'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '../../utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
@@ -42,28 +42,27 @@ import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
-import { BOARD_CELLS_COUNT, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES } from './constants'
+import { BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES } from './constants'
 
 const getMainNumbersFromString = puzzle => {
-    const result = new Array(9)
+    const result = []
 
-    let cellNo = 0
-    for (let row = 0; row < 9; row++) {
-        const rowData = new Array(9)
-        for (let col = 0; col < 9; col++) {
+    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+        const rowData = []
+        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
+            const cellNo = convertBoardCellToNum({ row, col })
             const clueIntValue = parseInt(puzzle[cellNo], 10)
             if (isNaN(clueIntValue)) {
                 emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${INVALID_DEEPLINK_PUZZLE} ${LAUNCHING_DEFAULT_PUZZLE}` })
                 throw 'invalid puzzle'
             }
-            rowData[col] = {
+            rowData.push({
                 value: clueIntValue,
                 solutionValue: 0,
                 isClue: clueIntValue !== 0,
-            }
-            cellNo++
+            })
         }
-        result[row] = rowData
+        result.push(rowData)
     }
 
     return result
@@ -326,7 +325,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
