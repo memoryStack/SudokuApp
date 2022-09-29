@@ -1,4 +1,4 @@
-import { getHouseCells } from '../../houseCells'
+import { xx_getHouseCells } from '../../houseCells'
 import { getCellHousesInfo, isCellNoteVisible, convertBoardCellToNum, convertBoardCellNumToCell } from '../../util'
 import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
 import { HINT_ID_VS_TITLES } from '../stringLiterals'
@@ -18,8 +18,8 @@ const COLORS = {
 
 const getHousesCellsNum = cell => {
     const result = {}
-    getCellHousesInfo(cell).forEach(({ type, num }) => {
-        getHouseCells(type, num).forEach(cell => {
+    getCellHousesInfo(cell).forEach((house) => {
+        xx_getHouseCells(house).forEach(cell => {
             const cellNum = convertBoardCellToNum(cell)
             result[cellNum] = true
         })

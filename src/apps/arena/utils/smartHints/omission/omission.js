@@ -1,5 +1,5 @@
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
-import { getHouseCells } from '../../houseCells'
+import { xx_getHouseCells } from '../../houseCells'
 import {
     getCellsCommonHouses,
     isCellEmpty,
@@ -29,7 +29,7 @@ export const areValidOmissionHostCells = hostCells => {
 // let's come back to this some time later and see if
 // it should be made simple or not
 export const isNoteHaveOmissionInHouse = (note, house, mainNumbers, notesData) => {
-    const houseCells = getHouseCells(house.type, house.num)
+    const houseCells = xx_getHouseCells(house)
 
     const hostCells = houseCells
         .filter(cell => {
@@ -81,7 +81,7 @@ const isDuplicateOmission = (newOmission, allOmissions) => {
 
 export const removesNotes = (omission, mainNumbers, notesData) => {
     const { removableNotesHostHouse } = omission
-    const houseCells = getHouseCells(removableNotesHostHouse.type, removableNotesHostHouse.num)
+    const houseCells = xx_getHouseCells(removableNotesHostHouse)
 
     return houseCells
         .filter(cell => {

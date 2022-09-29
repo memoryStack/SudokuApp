@@ -1,7 +1,7 @@
 import _filter from 'lodash/src/utils/filter'
 
 import { CELLS_IN_HOUSE } from '../../../constants'
-import { getHouseCells } from '../../houseCells'
+import { xx_getHouseCells } from '../../houseCells'
 import { isCellEmpty, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from '../../util'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 import { maxHintsLimitReached } from '../util'
@@ -35,7 +35,7 @@ const getNakedSingleType = (cell, mainNumbers) => {
 }
 
 const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
-    const emptyCellsInHouse = _filter(getHouseCells(house.type, house.num), cell => {
+    const emptyCellsInHouse = _filter(xx_getHouseCells(house), cell => {
         return isCellEmpty(cell, mainNumbers)
     })
     return emptyCellsInHouse.length === 1

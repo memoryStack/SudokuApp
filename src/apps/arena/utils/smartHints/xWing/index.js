@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
 import { NUMBERS_IN_HOUSE } from '../../../constants'
-import { getHouseCells } from '../../houseCells'
+import { xx_getHouseCells } from '../../houseCells'
 import {
     areSameBlockCells,
     areSameColCells,
@@ -29,7 +29,10 @@ import {
 const getCrossHouseCells = (cell, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)
     const crossHouseNum = crossHouseType === HOUSE_TYPE.ROW ? cell.row : cell.col
-    return getHouseCells(crossHouseType, crossHouseNum)
+    return xx_getHouseCells({
+        type: crossHouseType,
+        num: crossHouseNum,
+    })
 }
 
 const isPerfectXWingRemovesNotes = (xWing, notesData) => {
@@ -159,7 +162,7 @@ export const getXWingType = xWing => {
 }
 
 const getEmptyCellsInHouse = (house, mainNumbers) => {
-    return getHouseCells(house.type, house.num).filter(cell => {
+    return xx_getHouseCells(house).filter(cell => {
         return isCellEmpty(cell, mainNumbers)
     })
 }
