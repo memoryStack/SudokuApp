@@ -59,13 +59,7 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) =
     return result
 }
 
-const highlightPrimaryHouseCells = (
-    house,
-    groupCandidates,
-    groupHostCells,
-    notesData,
-    cellsToFocusData,
-) => {
+const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, notesData, cellsToFocusData) => {
     const primaryHouseCells = getHouseCells(house)
     primaryHouseCells.forEach(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }

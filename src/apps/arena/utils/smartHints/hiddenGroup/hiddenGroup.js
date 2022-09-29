@@ -14,12 +14,7 @@ const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
         return candidateOccurencesCount >= 2 && candidateOccurencesCount <= groupCandidatesCount
 }
 
-export const validCandidatesInHouseAndTheirLocations = (
-    house,
-    groupCandidatesCount,
-    mainNumbers,
-    notesData,
-) => {
+export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCount, mainNumbers, notesData) => {
     const houseCells = getHouseCells(house)
     const candidatesHostCells = {}
     houseCells.forEach(cell => {
