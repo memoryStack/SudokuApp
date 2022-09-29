@@ -1,4 +1,5 @@
 import _filter from 'lodash/src/utils/filter'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
@@ -313,8 +314,7 @@ const undoMainNumber = previousMove => {
         const cell = previousMove.selectedCell
         const mainNumbersBeforeErase = getMainNumbers(getStoreState())
         invokeDispatch(eraseCellMainValue(cell))
-        const wasCorrectValue = isCellCorrectlyFilled(mainNumbersBeforeErase[cell.row][cell.col])
-        if (wasCorrectValue) {
+        if (isCellCorrectlyFilled(mainNumbersBeforeErase[cell.row][cell.col])) {
             const mainNumbersAfterErase = getMainNumbers(getStoreState())
             addPossibleNotesOnMainNumberErased(cell, mainNumbersAfterErase)
         }
@@ -327,7 +327,7 @@ const undoMainNumber = previousMove => {
 
 const undoNotes = previousMove => {
     const notesMove = previousMove.notes
-    if (!notesMove.action) return
+    if (_isEmpty(notesMove)) return
 
     if (notesMove.action === MOVES_TYPES.ADD) {
         invokeDispatch(eraseNotesBunch(notesMove.bunch))
