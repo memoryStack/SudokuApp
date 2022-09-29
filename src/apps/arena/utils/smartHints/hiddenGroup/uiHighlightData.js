@@ -60,14 +60,13 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) =
 }
 
 const highlightPrimaryHouseCells = (
-    houseType,
-    houseNum,
+    house,
     groupCandidates,
     groupHostCells,
     notesData,
     cellsToFocusData,
 ) => {
-    const primaryHouseCells = getHouseCells({ type: houseType, num: houseNum })
+    const primaryHouseCells = getHouseCells(house)
     primaryHouseCells.forEach(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         const isHostCell = isCellExists(cell, groupHostCells)
@@ -235,13 +234,11 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     const cellsToFocusData = {}
 
-    const { type: houseType, num: houseNum } = house
-
-    highlightPrimaryHouseCells(houseType, houseNum, groupCandidates, hostCells, notesData, cellsToFocusData)
+    highlightPrimaryHouseCells(house, groupCandidates, hostCells, notesData, cellsToFocusData)
 
     let focusedCells = getHouseCells(house)
     let removableGroupCandidatesHostCells = []
-    const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
+    const secondaryHostHouse = getSecondaryHostHouse(house.type, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
     let secondaryHouseEligibleForHighlight
     if (secondaryHostHouse.type) {
@@ -276,7 +273,7 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     }
 
     const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notesData)
-    const hintChunks = [getPrimaryHouseHintExplaination(houseType, groupCandidates, hostCells, removableCandidates)]
+    const hintChunks = [getPrimaryHouseHintExplaination(house.type, groupCandidates, hostCells, removableCandidates)]
     if (secondaryHouseEligibleForHighlight) {
         hintChunks.push(
             getSecondaryHouseHintExplaination(
