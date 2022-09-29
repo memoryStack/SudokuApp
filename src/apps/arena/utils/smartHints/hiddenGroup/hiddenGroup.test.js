@@ -27,7 +27,7 @@ test('hidden doubles valid candidates test 1', () => {
             ],
         },
     ]
-    expect(validCandidatesInHouseAndTheirLocations(HOUSE_TYPE.BLOCK, 4, 2, mainNumbers, notesData)).toStrictEqual(
+    expect(validCandidatesInHouseAndTheirLocations({ type: HOUSE_TYPE.BLOCK, num: 4 }, 2, mainNumbers, notesData)).toStrictEqual(
         expectedResult,
     )
 })
@@ -51,7 +51,7 @@ test('hidden doubles valid candidates test 2', () => {
             ],
         },
     ]
-    expect(validCandidatesInHouseAndTheirLocations(HOUSE_TYPE.BLOCK, 3, 2, mainNumbers, notesData)).toStrictEqual(
+    expect(validCandidatesInHouseAndTheirLocations({ type: HOUSE_TYPE.BLOCK, num: 3 }, 2, mainNumbers, notesData)).toStrictEqual(
         expectedResult,
     )
 })

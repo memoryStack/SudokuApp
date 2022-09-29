@@ -15,13 +15,12 @@ const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
 }
 
 export const validCandidatesInHouseAndTheirLocations = (
-    houseType,
-    houseNum,
+    house,
     groupCandidatesCount,
     mainNumbers,
     notesData,
 ) => {
-    const houseCells = getHouseCells({ type: houseType, num: houseNum })
+    const houseCells = getHouseCells(house)
     const candidatesHostCells = {}
     houseCells.forEach(cell => {
         if (isCellEmpty(cell, mainNumbers)) {
@@ -115,8 +114,7 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHin
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const validCandidatesWithLocations = validCandidatesInHouseAndTheirLocations(
-                houseType,
-                houseNum,
+                { type: houseType, num: houseNum },
                 groupCandidatesCount,
                 mainNumbers,
                 notesData,
