@@ -26,18 +26,11 @@ const getBlockHouseCells = houseNum => {
     return result
 }
 
-const getHouseCells = (houseType, houseNum) => {
-    return xx_getHouseCells({
-        type: houseType,
-        num: houseNum,
-    })
-}
-
-const xx_getHouseCells = ({ type, num }) => {
+const getHouseCells = ({ type, num }) => {
     if (type === HOUSE_TYPE.ROW) return getRowHouseCells(num)
     if (type === HOUSE_TYPE.COL) return getColHouseCells(num)
     if (type === HOUSE_TYPE.BLOCK) return getBlockHouseCells(num)
     throw 'invalid house type'
 }
 
-export { getHouseCells, xx_getHouseCells }
+export { getHouseCells }

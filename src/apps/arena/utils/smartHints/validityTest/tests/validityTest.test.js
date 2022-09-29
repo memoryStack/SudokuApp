@@ -6,7 +6,7 @@ import { isValidOmission } from '../omission'
 import { isValidXWing } from '../xWing'
 
 import { HOUSE_TYPE } from '../../constants'
-import { xx_getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '../../../houseCells'
 import { LEG_TYPES } from '../../xWing/constants'
 
 jest.mock('../../../../../../redux/dispatch.helpers')
@@ -142,7 +142,7 @@ describe('isValidOmission()', () => {
         const { notesInfo } = require('./testData')
         const omission = {
             note: 7,
-            houseCells: xx_getHouseCells({ type: HOUSE_TYPE.BLOCK, num: 1 }), // TODO: is it a good thing to pass the required data like this ??
+            houseCells: getHouseCells({ type: HOUSE_TYPE.BLOCK, num: 1 }), // TODO: is it a good thing to pass the required data like this ??
             userNotesHostCells: [
                 { row: 0, col: 3 },
                 { row: 0, col: 4 },
@@ -155,7 +155,7 @@ describe('isValidOmission()', () => {
         const { notesInfo } = require('./testData')
         const omission = {
             note: 5,
-            houseCells: xx_getHouseCells({ type: HOUSE_TYPE.BLOCK, num: 1 }),
+            houseCells: getHouseCells({ type: HOUSE_TYPE.BLOCK, num: 1 }),
             userNotesHostCells: [
                 { row: 1, col: 5 },
                 { row: 2, col: 5 },

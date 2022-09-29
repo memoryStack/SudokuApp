@@ -12,7 +12,7 @@ import {
     getCellBlockHouseInfo,
 } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
-import { xx_getHouseCells } from '../../houseCells'
+import { getHouseCells } from '../../houseCells'
 import { toOrdinal } from 'lodash/src/utils/toOrdinal'
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'
@@ -54,7 +54,7 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
     const xWingBaseCells = [...otherLeg.cells, ...perfectLeg.cells]
 
-    return xx_getHouseCells(getCellBlockHouseInfo(finns[0])).filter(cell => {
+    return getHouseCells(getCellBlockHouseInfo(finns[0])).filter(cell => {
         if (
             isCellExists(cell, xWingBaseCells) ||
             !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col])

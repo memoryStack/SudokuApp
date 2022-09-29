@@ -5,7 +5,7 @@ import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES, HINTS_IDS } from '../co
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 import { setCellDataInHintResult } from '../util'
 import { areSameCells, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from '../../util'
-import { xx_getHouseCells } from '../../houseCells'
+import { getHouseCells } from '../../houseCells'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue) => {
     const msgPlaceholdersValues = { houseType, solutionValue }
@@ -31,7 +31,7 @@ const SMART_HINTS_TECHNIQUES = {
 }
 
 const dataToHighlightHouseCells = (house, nakedSingleHostCell, cellsToFocusData = {}) => {
-    _forEach(xx_getHouseCells(house), cell => {
+    _forEach(getHouseCells(house), cell => {
         const cellHighlightData = {
             bgColor: areSameCells(cell, nakedSingleHostCell)
                 ? SMART_HINTS_CELLS_BG_COLOR.SELECTED

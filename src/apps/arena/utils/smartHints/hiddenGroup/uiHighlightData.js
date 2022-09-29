@@ -13,7 +13,7 @@ import {
     isCellNoteVisible,
 } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { xx_getHouseCells } from '../../houseCells'
+import { getHouseCells } from '../../houseCells'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
@@ -67,7 +67,7 @@ const highlightPrimaryHouseCells = (
     notesData,
     cellsToFocusData,
 ) => {
-    const primaryHouseCells = xx_getHouseCells({ type: houseType, num: houseNum })
+    const primaryHouseCells = getHouseCells({ type: houseType, num: houseNum })
     primaryHouseCells.forEach(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         const isHostCell = isCellExists(cell, groupHostCells)
@@ -243,13 +243,13 @@ const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
 
     highlightPrimaryHouseCells(houseType, houseNum, groupCandidates, hostCells, notesData, cellsToFocusData)
 
-    let focusedCells = xx_getHouseCells(house)
+    let focusedCells = getHouseCells(house)
     let removableGroupCandidatesHostCells = []
     const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
     let secondaryHouseEligibleForHighlight
     if (secondaryHostHouse.type) {
-        const secondaryHouseCells = xx_getHouseCells(secondaryHostHouse)
+        const secondaryHouseCells = getHouseCells(secondaryHostHouse)
         // TODO: this logic is of eligibility check for highlighting secondary house cells is wrong
         // will come up with the usecase for it later
         secondaryHouseEligibleForHighlight = shouldHighlightSecondaryHouseCells(

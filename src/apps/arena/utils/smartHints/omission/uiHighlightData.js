@@ -1,5 +1,5 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import { xx_getHouseCells } from '../../houseCells'
+import { getHouseCells } from '../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../util'
 import {
     HINTS_IDS,
@@ -20,7 +20,7 @@ const COLORS = {
 const addHostHouseHighlightData = (omission, cellsToFocusData) => {
     const { hostHouse, note, hostCells } = omission
 
-    xx_getHouseCells(hostHouse).forEach(cell => {
+    getHouseCells(hostHouse).forEach(cell => {
         const cellHighlightData = { bgColor: COLORS.CELL }
         if (isCellExists(cell, hostCells)) {
             cellHighlightData.notesToHighlightData = {
@@ -33,7 +33,7 @@ const addHostHouseHighlightData = (omission, cellsToFocusData) => {
 
 const addRemovableNotesHouseHighlightData = (omission, notesData, cellsToFocusData) => {
     const { removableNotesHostHouse, note, hostCells } = omission
-    const cellsToHighlight = xx_getHouseCells(removableNotesHostHouse).filter(cell => {
+    const cellsToHighlight = getHouseCells(removableNotesHostHouse).filter(cell => {
         // not filtering out the cells which are highlighted by hostHouse already
         // becoz won't make a difference
         return !isCellExists(cell, hostCells)
@@ -58,7 +58,7 @@ const getUICellsToFocusData = (omission, notesData) => {
 }
 
 export const getHouseNoteHostCells = (note, house, notes) => {
-    return xx_getHouseCells(house).filter(cell => {
+    return getHouseCells(house).filter(cell => {
         const cellNotes = notes[cell.row][cell.col]
         return isCellNoteVisible(note, cellNotes)
     })

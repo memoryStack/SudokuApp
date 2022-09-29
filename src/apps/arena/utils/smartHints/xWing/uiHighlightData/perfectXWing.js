@@ -7,7 +7,7 @@ import {
     getTryOutInputPanelNumbersVisibility,
     getCellsFromCellsToFocusedData,
 } from '../../util'
-import { xx_getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '../../../houseCells'
 import {
     getCrossHouseType,
     getXWingCandidate,
@@ -67,7 +67,7 @@ const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     // TODO: weird bug. we have to declare this array first. else it doesn't work
     const xWingHousesNum = [firstHouseNum, secondHouseNum]
     xWingHousesNum.forEach(houseNum => {
-        xx_getHouseCells({ type: houseType, num: houseNum })
+        getHouseCells({ type: houseType, num: houseNum })
             .filter(cell => !isCellExists(cell, xWingCells))
             .forEach(cell =>
                 setCellDataInHintResult(
@@ -86,7 +86,7 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
     const crossHousesNum = [firstCrossHouseNum, secondCrossHouseNum]
     crossHousesNum.forEach(houseNum => {
         const crossHouseType = getCrossHouseType(houseType)
-        xx_getHouseCells({ type: crossHouseType, num: houseNum })
+        getHouseCells({ type: crossHouseType, num: houseNum })
             .filter(cell => !isCellExists(cell, xWingCells))
             .forEach(cell => {
                 const cellHighlightData = {

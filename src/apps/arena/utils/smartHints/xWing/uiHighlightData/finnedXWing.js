@@ -13,7 +13,7 @@ import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
 } from '../../util'
-import { xx_getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '../../../houseCells'
 import {
     categorizeLegs,
     categorizeFinnedLegCells,
@@ -101,7 +101,7 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
 
     const xWingHousesNum = [firstHouseNum, secondHouseNum]
     xWingHousesNum.forEach(houseNum => {
-        xx_getHouseCells({ type: houseType, num: houseNum }).forEach(cell =>
+        getHouseCells({ type: houseType, num: houseNum }).forEach(cell =>
             setCellDataInHintResult(cell, { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }, cellsToFocusData),
         )
     })
@@ -113,7 +113,7 @@ const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData)
     const crossHousesNum = [firstCrossHouseNum, secondCrossHouseNum]
     crossHousesNum.forEach(houseNum => {
         const crossHouseType = getCrossHouseType(houseType)
-        xx_getHouseCells({ type: crossHouseType, num: houseNum }).forEach(cell => {
+        getHouseCells({ type: crossHouseType, num: houseNum }).forEach(cell => {
             const cellHighlightData = {
                 bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
             }
