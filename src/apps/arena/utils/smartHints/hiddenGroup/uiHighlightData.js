@@ -231,11 +231,7 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
 }
 
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
-    const {
-        house,
-        groupCandidates: groupCandidates,
-        groupCells: hostCells,
-    } = group
+    const { house, groupCandidates: groupCandidates, groupCells: hostCells } = group
 
     const cellsToFocusData = {}
 

@@ -18,7 +18,7 @@ const COLORS = {
 
 const getHousesCellsNum = cell => {
     const result = {}
-    getCellHousesInfo(cell).forEach((house) => {
+    getCellHousesInfo(cell).forEach(house => {
         getHouseCells(house).forEach(cell => {
             const cellNum = convertBoardCellToNum(cell)
             result[cellNum] = true
