@@ -5,7 +5,7 @@ import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum } from '../.
 import { setCellDataInHintResult } from '../util'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import { BLOCKS_COUNT_IN_ROW, CELLS_IN_HOUSE, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../constants'
-import { getHouseCells } from '../../houseCells'
+import { xx_getHouseCells } from '../../houseCells'
 
 const getInhabitableCellData = () => {
     return {
@@ -225,7 +225,7 @@ const getNextBlockInCol = currentBlockNumIdx => {
 }
 
 const getCandidateInstanceCordinatesInHouse = (candidate, house, mainNumbers) => {
-    return _find(getHouseCells(house.type, house.num), ({ row, col }) => {
+    return _find(xx_getHouseCells(house), ({ row, col }) => {
         return mainNumbers[row][col].value === candidate
     })
 }

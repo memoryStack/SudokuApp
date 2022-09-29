@@ -4,7 +4,7 @@ import { GAME_STATE } from '../../../resources/constants'
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
 import { HOUSE_TYPE } from './smartHints/constants'
-import { getHouseCells } from './houseCells'
+import { xx_getHouseCells } from './houseCells'
 import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { GameState } from './classes/gameState'
 
@@ -25,8 +25,7 @@ export const duplicacyPresent = (num, mainNumbers, cell) => {
 
 const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => {
     return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
-        const { num: houseNum } = getCellHouseInfo(houseType, cell)
-        return getHouseCells(houseType, houseNum).some(({ row, col }) => {
+        return xx_getHouseCells(getCellHouseInfo(houseType, cell)).some(({ row, col }) => {
             return mainNumbers[row][col].value === number
         })
     })
@@ -159,8 +158,7 @@ export const isDuplicateEntry = (mainNumbers, cell, number) => {
 
 const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => {
     return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
-        const { num: houseNum } = getCellHouseInfo(houseType, cell)
-        const numberHostCellsInHouse = getHouseCells(houseType, houseNum).filter(({ row, col }) => {
+        const numberHostCellsInHouse = xx_getHouseCells(getCellHouseInfo(houseType, cell)).filter(({ row, col }) => {
             return mainNumbers[row][col].value === number
         })
         return numberHostCellsInHouse.length > 1
@@ -253,11 +251,9 @@ export const areSameCellsSets = (setA, setB) => {
 }
 
 export const getHousePossibleNotes = (house, mainNumbers) => {
-    const houseCells = getHouseCells(house.type, house.num)
-
     const possibleNotes = new Array(10).fill(true)
     possibleNotes[0] = false
-    houseCells.forEach(cell => {
+    xx_getHouseCells(house).forEach(cell => {
         const cellValue = mainNumbers[cell.row][cell.col].value
         if (cellValue) possibleNotes[cellValue] = false
     })
@@ -287,14 +283,14 @@ export const forCellEachNote = callback => {
     }
 }
 
-export const forHouseEachCell = ({ type, num }, callback) => {
-    getHouseCells(type, num).forEach(cell => {
+export const forHouseEachCell = (house, callback) => {
+    xx_getHouseCells(house).forEach(cell => {
         callback(cell)
     })
 }
 
-export const filterHouseCells = ({ type, num }, filterCallback) => {
-    return getHouseCells(type, num).filter(cell => {
+export const filterHouseCells = (house, filterCallback) => {
+    return xx_getHouseCells(house).filter(cell => {
         return filterCallback(cell)
     })
 }

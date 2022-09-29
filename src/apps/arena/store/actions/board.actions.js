@@ -17,7 +17,7 @@ import { boardActions } from '../reducers/board.reducers'
 import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
-import { getHouseCells } from '../../utils/houseCells'
+import { xx_getHouseCells } from '../../utils/houseCells'
 
 const {
     setMainNumbers,
@@ -120,8 +120,8 @@ const getNotesToRemoveAfterMainNumberInput = (number, cell, notesInfo) => {
     result.push(...getVisibileNotesBunchInCell(cell, notesInfo))
 
     const cellHouses = getCellHousesInfo(cell)
-    cellHouses.forEach(({ type, num }) => {
-        getHouseCells(type, num).forEach(({ row, col }) => {
+    cellHouses.forEach((house) => {
+        xx_getHouseCells(house).forEach(({ row, col }) => {
             const { show } = notesInfo[row][col][number - 1]
             if (show) result.push({ cell: { row, col }, note: number })
         })
@@ -284,8 +284,8 @@ const addPossibleNotesOnMainNumberErased = (selectedCell, mainNumbers) => {
     const possibleNotesBunch = [...getCellAllPossibleNotes(selectedCell, mainNumbers)]
 
     const cellHouses = getCellHousesInfo(selectedCell)
-    cellHouses.forEach(({ type, num: houseNum }) => {
-        getHouseCells(type, houseNum).forEach(cell => {
+    cellHouses.forEach((house) => {
+        xx_getHouseCells(house).forEach(cell => {
             if (!mainNumbers[cell.row][cell.col].value && !duplicacyPresent(numberRemoved, mainNumbers, cell)) {
                 possibleNotesBunch.push({ cell, note: numberRemoved })
             }

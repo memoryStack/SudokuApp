@@ -40,4 +40,4 @@ const xx_getHouseCells = ({ type, num }) => {
     throw 'invalid house type'
 }
 
-export { getHouseCells }
+export { getHouseCells, xx_getHouseCells }

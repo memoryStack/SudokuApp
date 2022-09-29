@@ -3,7 +3,7 @@ import { consoleLog } from '../../../../../utils/util'
 import { GROUPS, HOUSE_TYPE } from '../../smartHints/constants'
 import { areSameCells, isCellEmpty, isCellExists } from '../../util'
 import { getGroupUIHighlightData } from './uiHighlightData'
-import { getHouseCells } from '../../houseCells'
+import { xx_getHouseCells } from '../../houseCells'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
@@ -21,7 +21,7 @@ export const validCandidatesInHouseAndTheirLocations = (
     mainNumbers,
     notesData,
 ) => {
-    const houseCells = getHouseCells(houseType, houseNum)
+    const houseCells = xx_getHouseCells({ type: houseType, num: houseNum })
     const candidatesHostCells = {}
     houseCells.forEach(cell => {
         if (isCellEmpty(cell, mainNumbers)) {

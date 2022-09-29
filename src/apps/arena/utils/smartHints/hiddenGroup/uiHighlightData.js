@@ -13,7 +13,7 @@ import {
     isCellNoteVisible,
 } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { getHouseCells } from '../../houseCells'
+import { xx_getHouseCells } from '../../houseCells'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
@@ -67,7 +67,7 @@ const highlightPrimaryHouseCells = (
     notesData,
     cellsToFocusData,
 ) => {
-    const primaryHouseCells = getHouseCells(houseType, houseNum)
+    const primaryHouseCells = xx_getHouseCells({ type: houseType, num: houseNum })
     primaryHouseCells.forEach(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         const isHostCell = isCellExists(cell, groupHostCells)
@@ -232,22 +232,24 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
 
 const getGroupUIHighlightData = (group, mainNumbers, notesData) => {
     const {
-        house: { type: houseType, num: houseNum },
+        house,
         groupCandidates: groupCandidates,
         groupCells: hostCells,
     } = group
 
     const cellsToFocusData = {}
 
+    const { type: houseType, num: houseNum } = house
+
     highlightPrimaryHouseCells(houseType, houseNum, groupCandidates, hostCells, notesData, cellsToFocusData)
 
-    let focusedCells = getHouseCells(houseType, houseNum)
+    let focusedCells = xx_getHouseCells(house)
     let removableGroupCandidatesHostCells = []
     const secondaryHostHouse = getSecondaryHostHouse(houseType, hostCells)
     // TODO: add a utility to check if the returned object is empty or not for cases like this
     let secondaryHouseEligibleForHighlight
     if (secondaryHostHouse.type) {
-        const secondaryHouseCells = getHouseCells(secondaryHostHouse.type, secondaryHostHouse.num)
+        const secondaryHouseCells = xx_getHouseCells(secondaryHostHouse)
         // TODO: this logic is of eligibility check for highlighting secondary house cells is wrong
         // will come up with the usecase for it later
         secondaryHouseEligibleForHighlight = shouldHighlightSecondaryHouseCells(
