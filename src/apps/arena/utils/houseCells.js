@@ -27,9 +27,16 @@ const getBlockHouseCells = houseNum => {
 }
 
 const getHouseCells = (houseType, houseNum) => {
-    if (houseType === HOUSE_TYPE.ROW) return getRowHouseCells(houseNum)
-    if (houseType === HOUSE_TYPE.COL) return getColHouseCells(houseNum)
-    if (houseType === HOUSE_TYPE.BLOCK) return getBlockHouseCells(houseNum)
+    return xx_getHouseCells({
+        type: houseType,
+        num: houseNum,
+    })
+}
+
+const xx_getHouseCells = ({ type, num }) => {
+    if (type === HOUSE_TYPE.ROW) return getRowHouseCells(num)
+    if (type === HOUSE_TYPE.COL) return getColHouseCells(num)
+    if (type === HOUSE_TYPE.BLOCK) return getBlockHouseCells(num)
     throw 'invalid house type'
 }
 
