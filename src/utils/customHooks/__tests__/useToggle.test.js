@@ -40,8 +40,7 @@ describe('useToggle()', () => {
         })
 
         act(() => {
-            const toggler = result.current[1]
-            toggler(true)
+            result.current[1](true)
         })
         expect(result.current[0]).toBe(true)
 
@@ -58,20 +57,17 @@ describe('useToggle()', () => {
         })
 
         act(() => {
-            const toggler = result.current[1]
-            toggler(123)
+            result.current[1](123)
         })
         expect(result.current[0]).toBe(true)
 
         act(() => {
-            const toggler = result.current[1]
-            toggler('a string')
+            result.current[1]('a string')
         })
         expect(result.current[0]).toBe(false)
 
         act(() => {
-            const toggler = result.current[1]
-            toggler()
+            result.current[1]()
         })
         expect(result.current[0]).toBe(true)
     })
