@@ -66,7 +66,6 @@ export const getPuzzleSolutionType = mainNumbers => {
     return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
 }
 
-// how can i test this function's behaviour ??
 export const previousInactiveGameExists = async () => {
     const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
     if (!previousGameData) return false

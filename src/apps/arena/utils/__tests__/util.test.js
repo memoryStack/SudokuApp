@@ -1,6 +1,9 @@
 import _isArray from 'lodash/src/utils/isArray'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
+import { GAME_STATE } from '../../../../resources/constants'
+import { getStoragePromise } from '../../../../utils/testingBoilerplate/storage'
+
 import {
     addLeadingZeroIfEligible,
     shouldSaveGameState,
@@ -22,10 +25,12 @@ import {
     getRowAndCol,
     getBlockAndBoxNum,
     initMainNumbers,
+    previousInactiveGameExists,
 } from '../util'
-import { GAME_STATE } from '../../../../resources/constants'
 import { HOUSE_TYPE } from '../smartHints/constants'
-import { consoleLog } from '../../../../utils/util'
+import { GAME_DATA_KEYS } from '../cacheGameHandler'
+
+jest.mock('../../../../utils/storage')
 
 describe('time component value formatter', () => {
     test('addLeadingZeroIfEligible test 1', () => {
@@ -497,5 +502,29 @@ describe('initMainNumbers()', () => {
         forBoardEachCell(({ row, col }) => {
             expect(_isEmpty(mainNumbers[row][col])).toBeFalsy()
         })
+    })
+})
+
+describe('previousInactiveGameExists()', () => {
+    const { getKey } = require('../../../../utils/storage')
+    getKey.mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.INACTIVE }))
+        .mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.DISPLAY_HINT }))
+        .mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.ACTIVE }))
+        .mockReturnValueOnce(getStoragePromise(null))
+
+    test('returns true for game states INACTIVE and DISPLAY_HINT', () => {
+        expect.assertions(2)
+        expect(previousInactiveGameExists()).resolves.toBe(true)
+        return expect(previousInactiveGameExists()).resolves.toBe(true)
+    })
+
+    test('returns false for game states other than above', () => {
+        expect.assertions(1)
+        return expect(previousInactiveGameExists()).resolves.toBe(false)
+    })
+
+    test('returns false if there is no game data', () => {
+        expect.assertions(1)
+        return expect(previousInactiveGameExists()).resolves.toBe(false)
     })
 })

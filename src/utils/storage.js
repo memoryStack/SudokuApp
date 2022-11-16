@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-// TODO: explore about if there is a limit on the number of "keys" we can store in the DB underneath
-// what's the max size of the DB underneath and how to configure that
 const getKey = async KEY => {
     if (!KEY) return null
     try {
