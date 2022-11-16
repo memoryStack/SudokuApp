@@ -529,7 +529,6 @@ describe('previousInactiveGameExists()', () => {
     })
 
     test('storage handler is invoked 4 times', () => {
-        expect.assertions(1)
-        return expect(getKey).toHaveBeenCalledTimes(4)
+        expect(getKey).toHaveBeenCalledTimes(4)
     })
 })
