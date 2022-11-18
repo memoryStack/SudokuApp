@@ -1,13 +1,9 @@
-import { setKey } from '../../../utils/storage'
+import { setKey } from '../../../../utils/storage'
 
-const PREVIOUS_GAME_DATA_KEY = 'PREVIOUS_GAME'
-
-const GAME_DATA_KEYS = {
-    STATE: 'state',
-    REFEREE: 'referee',
-    BOARD_DATA: 'boardData',
-    CELL_ACTIONS: 'cellActionsData',
-}
+import {
+    PREVIOUS_GAME_DATA_KEY,
+    GAME_DATA_KEYS,
+} from './constants'
 
 const dataToBeCached = {
     [GAME_DATA_KEYS.STATE]: null,
@@ -43,4 +39,4 @@ const cacheGameData = (key, data) => {
     }
 }
 
-export { cacheGameData, GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY }
+export { cacheGameData }

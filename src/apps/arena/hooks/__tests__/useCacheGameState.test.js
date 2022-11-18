@@ -4,9 +4,9 @@ import { testStoreWrapper } from '../../../../utils/testingBoilerplate/reduxStor
 import { makeTestStore } from '../../../../utils/testingBoilerplate/makeReduxStore';
 import { GAME_STATE } from '../../../../resources/constants';
 
-import { GAME_DATA_KEYS } from '../../utils/cacheGameHandler';
+import { GAME_DATA_KEYS } from '../../utils/cacheGameHandler/constants';
 import gameStateReducers, { gameStateActions } from '../../store/reducers/gameState.reducers';
-const gameCacheUtils = require('../../utils/cacheGameHandler')
+const gameCacheUtils = require('../../utils/cacheGameHandler/cacheGameHandler')
 
 import { useCacheGameState } from '../useCacheGameState';
 
