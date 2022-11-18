@@ -1,15 +1,14 @@
-
 import { act, renderHook } from '@testing-library/react-hooks';
 
-import { testStoreWrapper } from '../../../utils/testingBoilerplate/reduxStoreWrapper';
-import { makeTestStore } from '../../../utils/testingBoilerplate/makeReduxStore';
-import { GAME_STATE } from '../../../resources/constants';
+import { testStoreWrapper } from '../../../../utils/testingBoilerplate/reduxStoreWrapper';
+import { makeTestStore } from '../../../../utils/testingBoilerplate/makeReduxStore';
+import { GAME_STATE } from '../../../../resources/constants';
 
-import { GAME_DATA_KEYS } from '../utils/cacheGameHandler';
-import gameStateReducers, { gameStateActions } from '../store/reducers/gameState.reducers';
-const gameCacheUtils = require('../utils/cacheGameHandler')
+import { GAME_DATA_KEYS } from '../../utils/cacheGameHandler';
+import gameStateReducers, { gameStateActions } from '../../store/reducers/gameState.reducers';
+const gameCacheUtils = require('../../utils/cacheGameHandler')
 
-import { useCacheGameState } from './useCacheGameState';
+import { useCacheGameState } from '../useCacheGameState';
 
 const { setGameState } = gameStateActions
 
@@ -19,7 +18,7 @@ describe('useCacheGameState()', () => {
 
         store.dispatch(setGameState(GAME_STATE.ACTIVE))
 
-        const spy = jest.spyOn(gameCacheUtils, 'cacheGameData').mockImplementation(() => { })
+        const cacheHandlerSpy = jest.spyOn(gameCacheUtils, 'cacheGameData').mockImplementation(() => { })
 
         renderHook(({ key, data }) => useCacheGameState(key, data), {
             wrapper: testStoreWrapper,
@@ -29,12 +28,12 @@ describe('useCacheGameState()', () => {
                 store,
             }
         })
-        expect(spy).toHaveBeenCalledTimes(0)
+        expect(cacheHandlerSpy).toHaveBeenCalledTimes(0)
 
         act(() => { store.dispatch(setGameState(GAME_STATE.GAME_SELECT)) })
-        expect(spy).toHaveBeenCalledTimes(1)
+        expect(cacheHandlerSpy).toHaveBeenCalledTimes(1)
 
         act(() => { store.dispatch(setGameState(GAME_STATE.INACTIVE)) })
-        expect(spy).toHaveBeenCalledTimes(1)
+        expect(cacheHandlerSpy).toHaveBeenCalledTimes(1)
     })
 })
