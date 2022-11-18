@@ -6,7 +6,7 @@ import { getStoragePromise } from '../../../../utils/testingBoilerplate/storage'
 
 import {
     addLeadingZeroIfEligible,
-    shouldSaveGameState,
+    shouldSaveDataOnGameStateChange,
     areSameCells,
     areSameBlockCells,
     areSameRowCells,
@@ -47,24 +47,24 @@ describe('time component value formatter', () => {
 })
 
 describe('should cache game data', () => {
-    test('shouldSaveGameState test 1', () => {
-        expect(shouldSaveGameState(GAME_STATE.OVER.SOLVED, GAME_STATE.ACTIVE)).toBe(true)
+    test('shouldSaveDataOnGameStateChange test 1', () => {
+        expect(shouldSaveDataOnGameStateChange(GAME_STATE.OVER.SOLVED, GAME_STATE.ACTIVE)).toBe(true)
     })
 
-    test('shouldSaveGameState test 2', () => {
-        expect(shouldSaveGameState(GAME_STATE.OVER.UNSOLVED, GAME_STATE.ACTIVE)).toBe(true)
+    test('shouldSaveDataOnGameStateChange test 2', () => {
+        expect(shouldSaveDataOnGameStateChange(GAME_STATE.OVER.UNSOLVED, GAME_STATE.ACTIVE)).toBe(true)
     })
 
-    test('shouldSaveGameState test 3', () => {
-        expect(shouldSaveGameState(GAME_STATE.ACTIVE, GAME_STATE.INACTIVE)).toBe(false)
+    test('shouldSaveDataOnGameStateChange test 3', () => {
+        expect(shouldSaveDataOnGameStateChange(GAME_STATE.ACTIVE, GAME_STATE.INACTIVE)).toBe(false)
     })
 
-    test('shouldSaveGameState test 4', () => {
-        expect(shouldSaveGameState(GAME_STATE.INACTIVE, GAME_STATE.ACTIVE)).toBe(true)
+    test('shouldSaveDataOnGameStateChange test 4', () => {
+        expect(shouldSaveDataOnGameStateChange(GAME_STATE.INACTIVE, GAME_STATE.ACTIVE)).toBe(true)
     })
 
-    test('shouldSaveGameState test 2', () => {
-        expect(shouldSaveGameState(GAME_STATE.DISPLAY_HINT, GAME_STATE.ACTIVE)).toBe(true)
+    test('shouldSaveDataOnGameStateChange test 2', () => {
+        expect(shouldSaveDataOnGameStateChange(GAME_STATE.DISPLAY_HINT, GAME_STATE.ACTIVE)).toBe(true)
     })
 })
 

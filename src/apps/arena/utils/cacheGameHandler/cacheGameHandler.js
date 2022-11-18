@@ -12,7 +12,7 @@ const dataToBeCached = {
     [GAME_DATA_KEYS.CELL_ACTIONS]: null,
 }
 
-const shouldCacheData = () => {
+const dataReadyForCache = () => {
     const keys = Object.keys(dataToBeCached)
     for (const key of keys) if (!dataToBeCached[key]) return false
     return true
@@ -27,7 +27,7 @@ const cacheGameData = (key, data) => {
     if (!key) return
 
     dataToBeCached[key] = data
-    if (shouldCacheData()) {
+    if (dataReadyForCache()) {
         setKey(PREVIOUS_GAME_DATA_KEY, dataToBeCached)
             .then(() => {
                 resetDataToBeCached()

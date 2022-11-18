@@ -6,6 +6,7 @@ describe('GameState class', () => {
         expect(new GameState(GAME_STATE.ACTIVE)).toBeInstanceOf(GameState)
     })
 
+    // TODO: why this exception throw test is skipped ??
     test.skip('throws exception when initialized with invalid value', () => {
         expect(() => new GameState('sleeping')).toThrow(Error)
     })

@@ -6,14 +6,14 @@ import { usePreviousRenderValue } from '../../../utils/customHooks'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { cacheGameData } from '../utils/cacheGameHandler'
-import { shouldSaveGameState } from '../utils/util'
+import { shouldSaveDataOnGameStateChange } from '../utils/util'
 
 export const useCacheGameState = (key, data) => {
     const gameState = useSelector(getGameState)
     const previousGameState = usePreviousRenderValue(gameState)
 
     useEffect(() => {
-        if (shouldSaveGameState(gameState, previousGameState)) {
+        if (shouldSaveDataOnGameStateChange(gameState, previousGameState)) {
             cacheGameData(key, data)
         }
     }, [key, data, gameState])

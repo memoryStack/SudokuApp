@@ -13,10 +13,9 @@ export const addLeadingZeroIfEligible = value => {
     else return `0${value}`
 }
 
-export const shouldSaveGameState = (currentGameState, previousGameState) => {
-    const wasPreviousStateActive = new GameState(previousGameState).isGameActive()
-    const isCurrentStateNotActive = !new GameState(currentGameState).isGameActive()
-    return wasPreviousStateActive && isCurrentStateNotActive
+export const shouldSaveDataOnGameStateChange = (currentState, previousState) => {
+    return new GameState(previousState).isGameActive()
+        && !new GameState(currentState).isGameActive()
 }
 
 export const duplicacyPresent = (num, mainNumbers, cell) => {
