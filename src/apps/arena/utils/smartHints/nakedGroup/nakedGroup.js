@@ -1,10 +1,12 @@
 import _filter from 'lodash/src/utils/filter'
 import _map from 'lodash/src/utils/map'
+import _forEach from 'lodash/src/utils/forEach'
+import _every from 'lodash/src/utils/every'
 
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { consoleLog, inRange } from '../../../../../utils/util'
 
-import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
+import { CELLS_IN_HOUSE, HOUSES_COUNT, MAX_INSTANCES_OF_NUMBER, NUMBERS_IN_HOUSE } from '../../../constants'
 
 import {
     areSameCells,
@@ -15,7 +17,9 @@ import {
     getRowAndCol,
     getBlockAndBoxNum,
     isCellEmpty,
-    areSameCellsSets,
+    forCellEachNote,
+    isCellNoteVisible,
+    getCellVisibleNotes,
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -33,6 +37,7 @@ import { getHouseCells } from '../../houseCells'
 // parsing the groupCandidates into their int form
 
 // TODO: move these constants 
+const VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT = 2
 const VALID_CELL_MINIMUM_NOTES_COUNT = 2
 const MAX_VALID_CELLS_COUNT = 6
 
@@ -58,6 +63,29 @@ const getDefaultGroupsFoundInHouses = () => {
         [HOUSE_TYPE.COL]: {},
         [HOUSE_TYPE.BLOCK]: {},
     }
+}
+
+const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
+    const result = {}
+    _forEach(cells, ({ row, col }) => {
+        _forEach(getCellVisibleNotes(notesData[row][col]), (note) => {
+            if (!result[note]) result[note] = 1
+            else result[note]++
+        })
+    })
+    return result
+}
+
+const areValidNakedGroupCells = (cells, notesData, groupCandidatesCount) => {
+    const groupVisibleNotesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
+    const groupCandidates = Object.keys(groupVisibleNotesInstancesCount)
+
+    return groupCandidates.length === groupCandidatesCount && _every(groupCandidates, (groupCandidate) => {
+        return inRange(
+            groupVisibleNotesInstancesCount[groupCandidate],
+            { start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT, end: groupCandidatesCount }
+        )
+    })
 }
 
 // TODO: think over the namings harder. i see a lot of in-consistencies
@@ -88,6 +116,7 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 const selectedCells = _map(possibleSelections[k], (selectionIndex) => validCells[selectionIndex])
 
                 // check these boxes if they are covered or not already
+                // QUES -> why are we not doing it for block house as well ?? 
                 if (Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) {
                     // TODO: let's wrap this condition into a func
                     // QUES -> why are we assuming that only one group is possible in a house ??
@@ -96,29 +125,12 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                     if (houseCellsProcessed.sameArrays(selectedCellsNum)) continue
                 }
 
-                const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
-                for (let x = 0; x < selectedCells.length; x++) {
-                    const { row, col } = selectedCells[x]
-                    for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
-                        if (notesData[row][col][note - 1].show) {
-                            if (!eachVisibleNotesInfo[note]) eachVisibleNotesInfo[note] = 1
-                            else eachVisibleNotesInfo[note]++
-                        }
-                    }
-                }
+                const validNakedGroup = areValidNakedGroupCells(selectedCells, notesData, groupCandidatesCount)
+                if (!validNakedGroup) continue
 
+                // start refactoring from here
+                const eachVisibleNotesInfo = getCellsVisibleNotesInstancesCount(selectedCells, notesData)
                 const groupCandidates = Object.keys(eachVisibleNotesInfo)
-                let shouldAbort = groupCandidates.length !== groupCandidatesCount
-                for (let x = 0; x < groupCandidates.length; x++) {
-                    const count = eachVisibleNotesInfo[groupCandidates[x]]
-                    if (!(count >= 2 && count <= groupCandidatesCount)) {
-                        // TODO: this needs to be checked again
-                        shouldAbort = true
-                        break
-                    }
-                }
-
-                if (shouldAbort) continue // analyze some other combination of cells
 
                 // if house is row or col
                 if ((Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) && areSameBlockCells(selectedCells)) {
