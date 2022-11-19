@@ -1,7 +1,7 @@
 import _filter from 'lodash/src/utils/filter'
 
 import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { consoleLog } from '../../../../../utils/util'
+import { consoleLog, inRange } from '../../../../../utils/util'
 
 import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
@@ -46,10 +46,22 @@ const getHouseCellsNum = (cells, houseType) => {
     return result.sort()
 }
 
+const filterValidCellsInHouse = (houseCells, groupCandidatesCount, mainNumbers, notesData) => {
+    return _filter(houseCells, (cell) => {
+        if (!isCellEmpty(cell, mainNumbers)) return false
+
+        const VALID_CELL_MINIMUM_NOTES_COUNT = 2
+        return inRange(
+            getCellVisibleNotesCount(notesData[cell.row][cell.col]),
+            { start: VALID_CELL_MINIMUM_NOTES_COUNT, end: groupCandidatesCount, }
+        )
+    })
+}
+
 // TODO: break this file
 // TODO: think over the namings harder. i see a lot of in-consistencies
 // around 200 lines long function 
-export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard, maxHintsThreshold) => {
+export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
     const groupsFoundInHouses = {
@@ -65,22 +77,13 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
 
             const houseAllBoxes = getHouseCells({ type: houseType[j], num: houseNum })
 
-            const validBoxes = _filter(houseAllBoxes, (cell) => {
-                if (!isCellEmpty(cell, sudokuBoard)) return false
-
-                // i guess we can store info for notes here only and then use that down below. What is this ??
-                const boxVisibleNotesCount = getCellVisibleNotesCount(notesData[cell.row][cell.col])
-                const MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD = 2
-
-                return boxVisibleNotesCount >= MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD &&
-                    boxVisibleNotesCount <= noOfInstances
-            })
+            const validBoxes = filterValidCellsInHouse(houseAllBoxes, groupCandidatesCount, mainNumbers, notesData)
 
             const validBoxesCount = validBoxes.length
             // TODO: check the below threshold for naked multiple cases.
             const VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH = 6 // to avoid computing 7C2 and 7C3, because that might be heavy
-            if (validBoxesCount > VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH || validBoxesCount < noOfInstances) continue
-            const possibleSelections = N_CHOOSE_K[validBoxesCount][noOfInstances]
+            if (validBoxesCount > VALID_BOXES_COUNT_THRESHOLD_TO_SEARCH || validBoxesCount < groupCandidatesCount) continue
+            const possibleSelections = N_CHOOSE_K[validBoxesCount][groupCandidatesCount]
 
             for (let k = 0; k < possibleSelections.length; k++) {
                 if (maxHintsLimitReached(hints, maxHintsThreshold)) {
@@ -118,10 +121,10 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 }
 
                 const groupCandidates = Object.keys(eachVisibleNotesInfo)
-                let shouldAbort = groupCandidates.length !== noOfInstances
+                let shouldAbort = groupCandidates.length !== groupCandidatesCount
                 for (let x = 0; x < groupCandidates.length; x++) {
                     const count = eachVisibleNotesInfo[groupCandidates[x]]
-                    if (!(count >= 2 && count <= noOfInstances)) {
+                    if (!(count >= 2 && count <= groupCandidatesCount)) {
                         // TODO: this needs to be checked again
                         shouldAbort = true
                         break
@@ -197,7 +200,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                     const groupCandidatesInInt = groupCandidates.map(groupCandidate => parseInt(groupCandidate, 10))
                     hints.push(
                         prepareNakedDublesOrTriplesHintData(
-                            noOfInstances,
+                            groupCandidatesCount,
                             houseAllBoxes,
                             selectedBoxes,
                             groupCandidatesInInt,

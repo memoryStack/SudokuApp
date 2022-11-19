@@ -52,3 +52,5 @@ export const onlyUnique = (value, index, self) => {
 export const roundToNearestPixel = sizeInDp => {
     return PixelRatio.roundToNearestPixel(sizeInDp)
 }
+
+export const inRange = (value, { start, end }) => value >= start && value <= end
