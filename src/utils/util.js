@@ -34,6 +34,14 @@ if (Array.prototype.sameArrays === undefined) {
     }
 }
 
+if (Array.prototype.sortNumbers === undefined) {
+    Array.prototype.sortNumbers = function () {
+        return this.sort(function (a, b) {
+            return a - b;
+        });
+    }
+}
+
 export const consoleLog = (...args) => {
     __DEV__ && console.log(...args)
 }

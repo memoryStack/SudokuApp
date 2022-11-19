@@ -532,3 +532,4 @@ describe('previousInactiveGameExists()', () => {
         expect(getKey).toHaveBeenCalledTimes(4)
     })
 })
+

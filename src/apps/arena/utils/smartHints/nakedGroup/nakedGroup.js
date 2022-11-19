@@ -15,6 +15,7 @@ import {
     getRowAndCol,
     getBlockAndBoxNum,
     isCellEmpty,
+    areSameCellsSets,
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -35,20 +36,9 @@ import { getHouseCells } from '../../houseCells'
 const VALID_CELL_MINIMUM_NOTES_COUNT = 2
 const MAX_VALID_CELLS_COUNT = 6
 
-// this func is used for a very special case in below func
-const getHouseCellsNum = (cells, houseType) => {
-    let result = []
-
-    if (Houses.isRowHouse(houseType) || Houses.isColHouse(houseType)) { // this block is not doing anything useful
-        const cellNumKey = Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.COL
-        result = cells.map(cell => cell[cellNumKey])
-    }
-    result = cells.map(cell => {
-        const { boxNum } = getBlockAndBoxNum(cell)
-        return boxNum
-    })
-    // the result will container numbers [0...9] so normal sort works
-    return result.sort()
+const getHouseCellsNum = (cells) => {
+    return cells.map(cell => getBlockAndBoxNum(cell).boxNum)
+        .sortNumbers()
 }
 
 export const filterValidCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
@@ -62,15 +52,19 @@ export const filterValidCellsInHouse = (house, groupCandidatesCount, mainNumbers
     })
 }
 
-// TODO: think over the namings harder. i see a lot of in-consistencies
-export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
-
-    const groupsFoundInHouses = {
+const getDefaultGroupsFoundInHouses = () => {
+    return {
         [HOUSE_TYPE.ROW]: {},
         [HOUSE_TYPE.COL]: {},
         [HOUSE_TYPE.BLOCK]: {},
     }
+}
+
+// TODO: think over the namings harder. i see a lot of in-consistencies
+export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+    const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
+
+    const groupsFoundInHouses = getDefaultGroupsFoundInHouses()
 
     const hints = []
 
@@ -96,13 +90,10 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 // check these boxes if they are covered or not already
                 if (Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) {
                     // TODO: let's wrap this condition into a func
-                    const selectedCellsNum = getHouseCellsNum(selectedCells, houseType[j])
-                    const houseCellsProcessed = groupsFoundInHouses[houseType[j]][`${houseNum}`] || []
-                    let cellsProcessedAlready = houseCellsProcessed.length === selectedCellsNum.length
-                    // run loop and check one by one
-                    for (let idx = 0; idx < selectedCellsNum.length && cellsProcessedAlready; idx++)
-                        cellsProcessedAlready = houseCellsProcessed[idx] === selectedCellsNum[idx]
-                    if (cellsProcessedAlready) continue
+                    // QUES -> why are we assuming that only one group is possible in a house ??
+                    const selectedCellsNum = getHouseCellsNum(selectedCells, house.type)
+                    const houseCellsProcessed = groupsFoundInHouses[house.type][`${houseNum}`] || []
+                    if (houseCellsProcessed.sameArrays(selectedCellsNum)) continue
                 }
 
                 const eachVisibleNotesInfo = {} // will store the visible notes info from all the selected boxes
@@ -172,15 +163,15 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 if (!groupWillRemoveCandidates) continue
 
                 // Note: the correctness of this DS depends on entries order in "houseType"
-                groupsFoundInHouses[houseType[j]][`${houseNum}`] = getHouseCellsNum(selectedCells, houseType[j])
+                groupsFoundInHouses[house.type][`${houseNum}`] = getHouseCellsNum(selectedCells, house.type)
                 if (houseAllCells.length === 15) {
                     // group cells belong to 2 houses, one is block for sure and another one can be either row or col
                     if (areSameRowCells(selectedCells)) {
                         const { row } = selectedCells[0]
-                        groupsFoundInHouses['row'][`${row}`] = getHouseCellsNum(selectedCells, 'row')
+                        groupsFoundInHouses[HOUSE_TYPE.ROW][`${row}`] = getHouseCellsNum(selectedCells, HOUSE_TYPE.ROW)
                     } else {
                         const { col } = selectedCells[0]
-                        groupsFoundInHouses['col'][`${col}`] = getHouseCellsNum(selectedCells, 'col')
+                        groupsFoundInHouses[HOUSE_TYPE.COL][`${col}`] = getHouseCellsNum(selectedCells, HOUSE_TYPE.COL)
                     }
                 }
 
