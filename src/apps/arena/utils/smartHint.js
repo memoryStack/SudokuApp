@@ -1,6 +1,6 @@
 import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
 import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
-import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup'
+import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup/nakedGroup'
 import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
 import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHOLD } from './smartHints/constants'
 import { getXWingHints } from './smartHints/xWing'

@@ -1,9 +1,9 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { N_CHOOSE_K } from '../../../../resources/constants'
-import { consoleLog } from '../../../../utils/util'
+import { N_CHOOSE_K } from '../../../../../resources/constants'
+import { consoleLog } from '../../../../../utils/util'
 
-import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../constants'
+import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
 import {
     areSameCells,
@@ -13,9 +13,9 @@ import {
     getCellVisibleNotesCount,
     getRowAndCol,
     getBlockAndBoxNum,
-} from '../util'
+} from '../../util'
 
-import { isHintValid } from './validityTest'
+import { isHintValid } from '../validityTest'
 import {
     maxHintsLimitReached,
     setCellDataInHintResult,
@@ -23,13 +23,13 @@ import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     removeDuplicteCells,
-} from './util'
+} from '../util'
 import {
     GROUPS, HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
     SMART_HINTS_CELLS_BG_COLOR
-} from './constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from './stringLiterals'
+} from '../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
 
 // TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
