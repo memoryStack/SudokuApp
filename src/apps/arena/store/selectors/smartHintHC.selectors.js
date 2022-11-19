@@ -7,6 +7,8 @@ export const getHintHCInfo = state => {
 
     // TODO: let's keep this all data in one big structure right now.
     // will break it before moving on to next feature
+    // NOTE: i said i will do it before moving on to next feature but
+    //       i didn't do it. this is how tech debt piles up
     const getHintInfo = () => {
         return {
             type: state.smartHintHC.hints[0].type,
