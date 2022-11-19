@@ -1,3 +1,10 @@
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+
+import { N_CHOOSE_K } from '../../../../resources/constants'
+import { consoleLog } from '../../../../utils/util'
+
+import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../constants'
+
 import {
     areSameCells,
     areSameRowCells,
@@ -7,10 +14,8 @@ import {
     getRowAndCol,
     getBlockAndBoxNum,
 } from '../util'
-import { N_CHOOSE_K } from '../../../../resources/constants'
-import { consoleLog } from '../../../../utils/util'
-import { GROUPS, HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from './constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from './stringLiterals'
+
+import { isHintValid } from './validityTest'
 import {
     maxHintsLimitReached,
     setCellDataInHintResult,
@@ -19,9 +24,12 @@ import {
     getTryOutInputPanelNumbersVisibility,
     removeDuplicteCells,
 } from './util'
-import { isHintValid } from './validityTest'
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../constants'
+import {
+    GROUPS, HINTS_IDS,
+    HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
+    SMART_HINTS_CELLS_BG_COLOR
+} from './constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from './stringLiterals'
 
 // TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
@@ -138,6 +146,7 @@ const getHouseCellsNum = (cells, houseType) => {
 
 // TODO: break this file
 // TODO: think over the namings harder. i see a lot of in-consistencies
+// around 200 lines long function 
 export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard, maxHintsThreshold) => {
     const houseType = ['block', 'row', 'col']
 
