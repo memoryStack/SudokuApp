@@ -123,6 +123,24 @@ const addSharedHouseCellsIfExists = (mainHouse, selectedCells, houseAllCells) =>
     })
 }
 
+const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) => {
+    // TODO: might have to extract this into a function
+    const groupCandidates = Object.keys(getCellsVisibleNotesInstancesCount(selectedCells, notesData))
+        .map(groupCandidate => parseInt(groupCandidate, 10))
+
+    return houseAllCells.some(cell => {
+        const isSelectedCell = selectedCells.some(selectedCell => {
+            return areSameCells(cell, selectedCell)
+        })
+        return (
+            !isSelectedCell &&
+            groupCandidates.some(groupCandidate => {
+                return notesData[cell.row][cell.col][groupCandidate - 1].show
+            })
+        )
+    })
+}
+
 // TODO: think over the namings harder. i see a lot of in-consistencies
 export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
@@ -167,20 +185,7 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 const groupCandidates = Object.keys(getCellsVisibleNotesInstancesCount(selectedCells, notesData))
 
-                const groupWillRemoveCandidates = houseAllCells.some(cell => {
-                    const isSelectedCell = selectedCells.some(selectedCell => {
-                        return areSameCells(cell, selectedCell)
-                    })
-                    return (
-                        !isSelectedCell &&
-                        groupCandidates.some(groupCandidate => {
-                            const groupCandidateNum = parseInt(groupCandidate, 10)
-                            return notesData[cell.row][cell.col][groupCandidateNum - 1].show
-                        })
-                    )
-                })
-
-                if (!groupWillRemoveCandidates) continue
+                if (!isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)) continue
 
                 // Note: the correctness of this DS depends on entries order in "houseType"
                 groupsFoundInHouses[house.type][`${houseNum}`] = getHouseCellsNum(selectedCells, house.type)
