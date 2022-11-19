@@ -1,6 +1,7 @@
 import { makeTestStore } from "../../../../../utils/testingBoilerplate/makeReduxStore"
 import boardReducers, { boardActions } from "../../../store/reducers/board.reducers"
-import { highlightNakedDoublesOrTriples } from "./nakedGroup"
+import { HOUSE_TYPE } from "../constants"
+import { filterValidCellsInHouse, highlightNakedDoublesOrTriples } from "./nakedGroup"
 import { mainNumbers, notesData } from "./nakedGroup.testData"
 
 const { setPossibleNotes } = boardActions
@@ -202,5 +203,20 @@ describe('highlightNakedDoublesOrTriples()', () => {
         store.dispatch(setPossibleNotes(notesData))
 
         expect(highlightNakedDoublesOrTriples(2, notesData, mainNumbers, 1)).toStrictEqual(fullHintData)
+    })
+})
+
+describe('filterValidCellsInHouse()', () => {
+    test('returns valid cells in first row for Naked Double', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 0 }
+        const expectedValidCells = [{ row: 0, col: 1 }, { row: 0, col: 2 }]
+        const groupCandidatesCount = 2
+        expect(filterValidCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)).toStrictEqual(expectedValidCells)
+    })
+
+    test('returns empty array if there are no valid cells in house', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 2 }
+        const groupCandidatesCount = 2
+        expect(filterValidCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)).toStrictEqual([])
     })
 })

@@ -46,8 +46,8 @@ const getHouseCellsNum = (cells, houseType) => {
     return result.sort()
 }
 
-const filterValidCellsInHouse = (houseCells, groupCandidatesCount, mainNumbers, notesData) => {
-    return _filter(houseCells, (cell) => {
+export const filterValidCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
+    return _filter(getHouseCells(house), (cell) => {
         if (!isCellEmpty(cell, mainNumbers)) return false
 
         const VALID_CELL_MINIMUM_NOTES_COUNT = 2
@@ -73,11 +73,11 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
     const hints = []
 
     hintsSearchLoop: for (let j = 0; j < houseType.length; j++) {
-        for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) { // iterate on all houses from each houseType
+        for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
+            const house = { type: houseType[j], num: houseNum }
+            const houseAllBoxes = getHouseCells(house)
 
-            const houseAllBoxes = getHouseCells({ type: houseType[j], num: houseNum })
-
-            const validBoxes = filterValidCellsInHouse(houseAllBoxes, groupCandidatesCount, mainNumbers, notesData)
+            const validBoxes = filterValidCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)
 
             const validBoxesCount = validBoxes.length
             // TODO: check the below threshold for naked multiple cases.
