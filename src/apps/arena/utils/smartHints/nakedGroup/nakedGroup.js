@@ -114,6 +114,15 @@ const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     return null
 }
 
+const addSharedHouseCellsIfExists = (mainHouse, selectedCells, houseAllCells) => {
+    const sharedHouse = getAnotherSharedHouse(mainHouse, selectedCells)
+    if (!sharedHouse) return
+
+    _forEach(getHouseCells(sharedHouse), (cell) => {
+        if (!isCellExists(cell, houseAllCells)) houseAllCells.push(cell)
+    })
+}
+
 // TODO: think over the namings harder. i see a lot of in-consistencies
 export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
@@ -154,14 +163,9 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 const validNakedGroup = areValidNakedGroupCells(selectedCells, notesData, groupCandidatesCount)
                 if (!validNakedGroup) continue
 
-                const groupCandidates = Object.keys(getCellsVisibleNotesInstancesCount(selectedCells, notesData))
+                addSharedHouseCellsIfExists(house, selectedCells, houseAllCells)
 
-                const sharedHouse = getAnotherSharedHouse(house, selectedCells)
-                if (sharedHouse) {
-                    _forEach(getHouseCells(sharedHouse), (cell) => {
-                        if (!isCellExists(cell, houseAllCells)) houseAllCells.push(cell)
-                    })
-                }
+                const groupCandidates = Object.keys(getCellsVisibleNotesInstancesCount(selectedCells, notesData))
 
                 const groupWillRemoveCandidates = houseAllCells.some(cell => {
                     const isSelectedCell = selectedCells.some(selectedCell => {
