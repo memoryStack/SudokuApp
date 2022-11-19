@@ -21,6 +21,7 @@ import {
     GROUPS, HOUSE_TYPE,
 } from '../constants'
 import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
+import { Houses } from '../../classes/houses'
 
 // TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
@@ -28,7 +29,8 @@ import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
 // this func is used for a very special case in below func
 const getHouseCellsNum = (cells, houseType) => {
     let result = []
-    if (houseType === 'row' || houseType === 'col') { // this block is not doing anything useful
+
+    if (Houses.isRowHouse(houseType) || Houses.isColHouse(houseType)) { // this block is not doing anything useful
         const cellNumKey = houseType === 'row' ? 'col' : 'row'
         result = cells.map(cell => cell[cellNumKey])
     }
@@ -67,15 +69,16 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
             for (let box = 0; box < CELLS_IN_HOUSE; box++) {
                 let row
                 let col
-                if (houseType[j] === 'row') { // can put check like these inside a class with static methods
+
+                if (Houses.isRowHouse(houseType[j])) {
                     row = houseNum.row
                     col = box
                 }
-                if (houseType[j] === 'col') {
+                if (Houses.isColHouse(houseType[j])) {
                     row = box
                     col = houseNum.col
                 }
-                if (houseType[j] === 'block') {
+                if (Houses.isBlockHouse(houseType[j])) {
                     const obj = getRowAndCol(houseNum.block, box)
                     row = obj.row
                     col = obj.col
@@ -113,7 +116,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 }
 
                 // check these boxes if they are covered or not already
-                if (houseType[j] === 'row' || houseType[j] === 'col') {
+                if (Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) {
                     // TODO: let's wrap this condition into a func
                     const selectedCellsNum = getHouseCellsNum(selectedBoxes, houseType[j])
                     const houseCellsProcessed = groupsFoundInHouses[houseType[j]][`${i}`] || []
@@ -149,13 +152,13 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
                 if (shouldAbort) continue // analyze some other combination of cells
 
                 // if house is row or col
-                if ((houseType[j] === 'row' || houseType[j] === 'col') && areSameBlockCells(selectedBoxes)) {
+                if ((Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) && areSameBlockCells(selectedBoxes)) {
                     const { blockNum } = getBlockAndBoxNum(selectedBoxes[0])
                     for (let boxNum = 0; boxNum < CELLS_IN_HOUSE; boxNum++) {
                         const { row, col } = getRowAndCol(blockNum, boxNum)
                         if (
-                            (houseType[j] === 'row' && row !== houseNum[houseType[j]]) ||
-                            (houseType[j] === 'col' && col !== houseNum[houseType[j]])
+                            (Houses.isRowHouse(houseType[j]) && row !== houseNum[houseType[j]]) ||
+                            (Houses.isColHouse(houseType[j]) && col !== houseNum[houseType[j]])
                         )
                             houseAllBoxes.push({ row, col })
                     }
