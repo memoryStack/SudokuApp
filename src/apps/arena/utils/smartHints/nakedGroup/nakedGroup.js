@@ -20,6 +20,7 @@ import {
     forCellEachNote,
     isCellNoteVisible,
     getCellVisibleNotes,
+    isCellExists,
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -88,6 +89,31 @@ const areValidNakedGroupCells = (cells, notesData, groupCandidatesCount) => {
     })
 }
 
+const getAnotherSharedHouse = (mainHouse, selectedCells) => {
+    if ((Houses.isRowHouse(mainHouse.type) || Houses.isColHouse(mainHouse.type)) && areSameBlockCells(selectedCells)) {
+        return {
+            type: HOUSE_TYPE.BLOCK,
+            num: getBlockAndBoxNum(selectedCells[0]).blockNum
+        }
+    }
+
+    if (areSameRowCells(selectedCells)) {
+        return {
+            type: HOUSE_TYPE.ROW,
+            num: selectedCells[0].row
+        }
+    }
+
+    if (areSameColCells(selectedCells)) {
+        return {
+            type: HOUSE_TYPE.COL,
+            num: selectedCells[0].col
+        }
+    }
+
+    return null
+}
+
 // TODO: think over the namings harder. i see a lot of in-consistencies
 export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
@@ -128,35 +154,13 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 const validNakedGroup = areValidNakedGroupCells(selectedCells, notesData, groupCandidatesCount)
                 if (!validNakedGroup) continue
 
-                // start refactoring from here
-                const eachVisibleNotesInfo = getCellsVisibleNotesInstancesCount(selectedCells, notesData)
-                const groupCandidates = Object.keys(eachVisibleNotesInfo)
+                const groupCandidates = Object.keys(getCellsVisibleNotesInstancesCount(selectedCells, notesData))
 
-                // if house is row or col
-                if ((Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) && areSameBlockCells(selectedCells)) {
-                    const { blockNum } = getBlockAndBoxNum(selectedCells[0])
-                    for (let boxNum = 0; boxNum < CELLS_IN_HOUSE; boxNum++) {
-                        const { row, col } = getRowAndCol(blockNum, boxNum)
-                        if (
-                            (Houses.isRowHouse(houseType[j]) && row !== houseNum) ||
-                            (Houses.isColHouse(houseType[j]) && col !== houseNum)
-                        )
-                            houseAllCells.push({ row, col })
-                    }
-                } else {
-                    if (areSameRowCells(selectedCells)) {
-                        const { row } = selectedCells[0]
-                        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-                            const { blockNum } = getBlockAndBoxNum({ row, col })
-                            if (houseNum !== blockNum) houseAllCells.push({ row, col })
-                        }
-                    } else if (areSameColCells(selectedCells)) {
-                        const { col } = selectedCells[0]
-                        for (let row = 0; row < CELLS_IN_HOUSE; row++) {
-                            const { blockNum } = getBlockAndBoxNum({ row, col })
-                            if (houseNum !== blockNum) houseAllCells.push({ row, col })
-                        }
-                    }
+                const sharedHouse = getAnotherSharedHouse(house, selectedCells)
+                if (sharedHouse) {
+                    _forEach(getHouseCells(sharedHouse), (cell) => {
+                        if (!isCellExists(cell, houseAllCells)) houseAllCells.push(cell)
+                    })
                 }
 
                 const groupWillRemoveCandidates = houseAllCells.some(cell => {
