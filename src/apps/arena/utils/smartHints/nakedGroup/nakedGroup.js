@@ -1,3 +1,5 @@
+import _filter from 'lodash/src/utils/filter'
+
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { consoleLog } from '../../../../../utils/util'
 
@@ -11,6 +13,7 @@ import {
     getCellVisibleNotesCount,
     getRowAndCol,
     getBlockAndBoxNum,
+    isCellEmpty,
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -22,6 +25,7 @@ import {
 } from '../constants'
 import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
 import { Houses } from '../../classes/houses'
+import { getHouseCells } from '../../houseCells'
 
 // TODO: fix this parsing issue. at a lot of places we are
 // parsing the groupCandidates into their int form
@@ -59,38 +63,18 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
     hintsSearchLoop: for (let j = 0; j < houseType.length; j++) {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) { // iterate on all houses from each houseType
 
-            const houseAllBoxes = []
-            const validBoxes = [] // all  the boxes with favorable number of instances in them
-            for (let box = 0; box < CELLS_IN_HOUSE; box++) {
-                let row
-                let col
+            const houseAllBoxes = getHouseCells({ type: houseType[j], num: houseNum })
 
-                if (Houses.isRowHouse(houseType[j])) {
-                    row = houseNum
-                    col = box
-                }
-                if (Houses.isColHouse(houseType[j])) {
-                    row = box
-                    col = houseNum
-                }
-                if (Houses.isBlockHouse(houseType[j])) {
-                    const obj = getRowAndCol(houseNum, box)
-                    row = obj.row
-                    col = obj.col
-                }
-                houseAllBoxes.push({ row, col })
-
-                if (sudokuBoard[row][col].value) continue
+            const validBoxes = _filter(houseAllBoxes, (cell) => {
+                if (!isCellEmpty(cell, sudokuBoard)) return false
 
                 // i guess we can store info for notes here only and then use that down below. What is this ??
-                const boxVisibleNotesCount = getCellVisibleNotesCount(notesData[row][col])
+                const boxVisibleNotesCount = getCellVisibleNotesCount(notesData[cell.row][cell.col])
                 const MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD = 2
-                if (
-                    boxVisibleNotesCount >= MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD &&
+
+                return boxVisibleNotesCount >= MINIMUM_INSTANCES_IN_MULTIPLE_THRESHOLD &&
                     boxVisibleNotesCount <= noOfInstances
-                )
-                    validBoxes.push({ row, col })
-            }
+            })
 
             const validBoxesCount = validBoxes.length
             // TODO: check the below threshold for naked multiple cases.
