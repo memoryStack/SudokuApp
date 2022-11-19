@@ -18,7 +18,7 @@ import {
     maxHintsLimitReached,
 } from '../util'
 import {
-    GROUPS,
+    GROUPS, HOUSE_TYPE,
 } from '../constants'
 import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
 
@@ -44,12 +44,12 @@ const getHouseCellsNum = (cells, houseType) => {
 // TODO: think over the namings harder. i see a lot of in-consistencies
 // around 200 lines long function 
 export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuBoard, maxHintsThreshold) => {
-    const houseType = ['block', 'row', 'col']
+    const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
     const groupsFoundInHouses = {
-        row: {},
-        col: {},
-        block: {},
+        [HOUSE_TYPE.ROW]: {},
+        [HOUSE_TYPE.COL]: {},
+        [HOUSE_TYPE.BLOCK]: {},
     }
 
     const hints = []
@@ -67,7 +67,7 @@ export const highlightNakedDoublesOrTriples = (noOfInstances, notesData, sudokuB
             for (let box = 0; box < CELLS_IN_HOUSE; box++) {
                 let row
                 let col
-                if (houseType[j] === 'row') {
+                if (houseType[j] === 'row') { // can put check like these inside a class with static methods
                     row = houseNum.row
                     col = box
                 }
