@@ -187,19 +187,22 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 if (!isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)) continue
 
+                // TODO: start refactoring from here now
                 // Note: the correctness of this DS depends on entries order in "houseType"
-                groupsFoundInHouses[house.type][`${houseNum}`] = getHouseCellsNum(selectedCells, house.type)
+                groupsFoundInHouses[house.type][house.num] = getHouseCellsNum(selectedCells, house.type)
                 if (houseAllCells.length === 15) {
                     // group cells belong to 2 houses, one is block for sure and another one can be either row or col
                     if (areSameRowCells(selectedCells)) {
                         const { row } = selectedCells[0]
-                        groupsFoundInHouses[HOUSE_TYPE.ROW][`${row}`] = getHouseCellsNum(selectedCells, HOUSE_TYPE.ROW)
+                        groupsFoundInHouses[HOUSE_TYPE.ROW][row] = getHouseCellsNum(selectedCells, HOUSE_TYPE.ROW)
                     } else {
                         const { col } = selectedCells[0]
-                        groupsFoundInHouses[HOUSE_TYPE.COL][`${col}`] = getHouseCellsNum(selectedCells, HOUSE_TYPE.COL)
+                        groupsFoundInHouses[HOUSE_TYPE.COL][col] = getHouseCellsNum(selectedCells, HOUSE_TYPE.COL)
                     }
                 }
 
+                // TODO: this step must be a lot earlier. just at the moment 
+                // when candidates are marked as valid
                 const isValidNakedGroup = isHintValid({
                     type: GROUPS.NAKED_GROUP,
                     data: {
@@ -207,6 +210,9 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                         hostCells: selectedCells,
                     },
                 })
+
+
+
                 if (isValidNakedGroup) {
                     consoleLog('@@@@ naked group', selectedCells, groupCandidates)
                     const groupCandidatesInInt = groupCandidates.map(groupCandidate => parseInt(groupCandidate, 10))
