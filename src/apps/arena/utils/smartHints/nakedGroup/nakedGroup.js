@@ -37,7 +37,6 @@ import {
     MAX_VALID_CELLS_COUNT
 } from './nakedGroup.constants'
 
-// Five
 export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
     return _filter(getHouseCells(house), (cell) => {
         if (!isCellEmpty(cell, mainNumbers)) return false
@@ -57,9 +56,7 @@ const getDefaultGroupsFoundInHouses = () => {
     }
 }
 
-// FOUR
-// this should be out in utils
-const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
+export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     const result = {}
     _forEach(cells, ({ row, col }) => {
         _forEach(getCellVisibleNotes(notesData[row][col]), (note) => {

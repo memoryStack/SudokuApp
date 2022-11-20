@@ -1,7 +1,11 @@
 import { makeTestStore } from "../../../../../utils/testingBoilerplate/makeReduxStore"
 import boardReducers, { boardActions } from "../../../store/reducers/board.reducers"
 import { HOUSE_TYPE } from "../constants"
-import { filterNakedGroupEligibleCellsInHouse, getNakedGroupRawData } from "./nakedGroup"
+import {
+    filterNakedGroupEligibleCellsInHouse,
+    getNakedGroupRawData,
+    getCellsVisibleNotesInstancesCount,
+} from "./nakedGroup"
 import { mainNumbers, notesData } from "./nakedGroup.testData"
 
 const { setPossibleNotes } = boardActions
@@ -27,5 +31,24 @@ describe('filterNakedGroupEligibleCellsInHouse()', () => {
         const house = { type: HOUSE_TYPE.ROW, num: 2 }
         const groupCandidatesCount = 2
         expect(filterNakedGroupEligibleCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)).toStrictEqual([])
+    })
+})
+
+describe('getCellsVisibleNotesInstancesCount()', () => {
+    test('returns map of note with its instances count in row cells', () => {
+        const cells = [{ row: 0, col: 1 }, { row: 3, col: 1 }]
+        const expectedResult = { '5': 1, '4': 1, '8': 2, }
+        expect(getCellsVisibleNotesInstancesCount(cells, notesData)).toStrictEqual(expectedResult)
+    })
+
+    test('returns map of note with its instances count in block cells', () => {
+        const cells = [{ row: 5, col: 3 }, { row: 3, col: 4 }]
+        const expectedResult = { '2': 1, '4': 2, '5': 1, '6': 1, '8': 2, '9': 1 }
+        expect(getCellsVisibleNotesInstancesCount(cells, notesData)).toStrictEqual(expectedResult)
+    })
+
+    test('returns empty object if there are no notes in any cell', () => {
+        const cells = [{ row: 0, col: 3 }, { row: 0, col: 4 }]
+        expect(getCellsVisibleNotesInstancesCount(cells, notesData)).toStrictEqual({})
     })
 })
