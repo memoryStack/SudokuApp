@@ -101,8 +101,7 @@ export const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     return null
 }
 
-// ONE
-const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
+export const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
     const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
     return getHousesCellsSharedByCells(selectedCells).some(cell => {
         return (

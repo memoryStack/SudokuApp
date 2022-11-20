@@ -7,6 +7,7 @@ import {
     getCellsVisibleNotesInstancesCount,
     selectedCellsMakeGroup,
     getAnotherSharedHouse,
+    isHintRemovesNotesFromCells,
 } from "./nakedGroup"
 import { mainNumbers, notesData } from "./nakedGroup.testData"
 
@@ -86,5 +87,17 @@ describe('getAnotherSharedHouse()', () => {
         const cells = [{ row: 4, col: 5 }, { row: 4, col: 6 }]
         const mainHouse = { type: HOUSE_TYPE.ROW, num: 4 }
         expect(getAnotherSharedHouse(mainHouse, cells)).toBeNull()
+    })
+})
+
+describe('isHintRemovesNotesFromCells()', () => {
+    test('returns true when Valid Naked Group removes some notes in house', () => {
+        const cells = [{ row: 0, col: 1 }, { row: 0, col: 2 }]
+        expect(isHintRemovesNotesFromCells(cells, notesData)).toBeTruthy()
+    })
+
+    test('returns true when Valid Naked Group doesnt removes notes in house', () => {
+        const cells = [{ row: 1, col: 8 }, { row: 2, col: 8 }, { row: 2, col: 7 }]
+        expect(isHintRemovesNotesFromCells(cells, notesData)).toBeFalsy()
     })
 })
