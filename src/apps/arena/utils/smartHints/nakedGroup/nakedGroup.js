@@ -144,19 +144,13 @@ const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) =>
 }
 
 const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHouses) => {
-    // check these boxes if they are covered or not already
-    // QUES -> why are we not doing it for block house as well ?? 
-    // because we are processing block house first
-    // this is again couples with the order of houseType loop iteration
-
     if (Houses.isBlockHouse(house.type)) return false
 
     // TODO: let's wrap this condition into a func
     // QUES -> why are we assuming that only one group is possible in a house ??
     const houseCellsProcessed = groupsFoundInHouses[house.type][house.num] || []
-    if (areSameCellsSets(selectedCells, houseCellsProcessed)) return true
 
-    return false
+    return areSameCellsSets(selectedCells, houseCellsProcessed)
 }
 
 const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses, notesData) => {
@@ -169,12 +163,9 @@ const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoun
             hostCells: selectedCells,
         },
     })
-
     if (!allPossibleNotesPresent) return false
 
-    if (!isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)) return false
-
-    return true
+    return isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)
 }
 
 const cacheProcessedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses) => {
@@ -228,7 +219,7 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses, notesData)
                 if (!newAndValidNakedGroup) continue
 
-                consoleLog('@@@@ naked group', selectedCells, getGroupCandidatesFromCells(selectedCells, notesData),)
+                // consoleLog('@@@@ naked group', selectedCells, getGroupCandidatesFromCells(selectedCells, notesData),)
                 hints.push(
                     prepareNakedDublesOrTriplesHintData(
                         groupCandidatesCount,
