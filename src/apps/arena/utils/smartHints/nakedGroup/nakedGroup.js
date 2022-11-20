@@ -190,7 +190,6 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 hints.push(
                     prepareNakedDublesOrTriplesHintData(
-                        groupCandidatesCount,
                         houseAllCells,
                         selectedCells,
                         getUniqueNotesFromCells(selectedCells, notesData),

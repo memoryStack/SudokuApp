@@ -13,6 +13,7 @@ import {
     getCellVisibleNotesCount,
     getRowAndCol,
     getBlockAndBoxNum,
+    isCellExists,
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -26,7 +27,7 @@ import {
 } from '../util'
 
 import {
-    GROUPS, HINTS_IDS,
+    HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
     SMART_HINTS_CELLS_BG_COLOR
 } from '../constants'
@@ -58,8 +59,31 @@ export const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCe
     }
 }
 
+const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) => {
+    const result = {}
+
+    cells.forEach(({ row, col }) => {
+        const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+
+        const notesToHighlightData = {}
+        let notesWillBeHighlighted = false
+        groupCandidates.forEach(groupCandidate => {
+            const groupCandidateNum = parseInt(groupCandidate, 10)
+            if (notesData[row][col][groupCandidateNum - 1].show) {
+                if (isCellExists({ row, col }, groupCells)) notesToHighlightData[groupCandidate] = { fontColor: 'green' }
+                else notesToHighlightData[groupCandidate] = { fontColor: 'red' }
+                notesWillBeHighlighted = true
+            }
+        })
+
+        if (notesWillBeHighlighted) cellHighlightData.notesToHighlightData = notesToHighlightData
+        setCellDataInHintResult({ row, col }, cellHighlightData, result)
+    })
+
+    return result
+}
+
 export const prepareNakedDublesOrTriplesHintData = (
-    noOfInstances,
     cellsHighlightable,
     groupCells,
     groupCandidates,
@@ -69,31 +93,9 @@ export const prepareNakedDublesOrTriplesHintData = (
     // i wish has developed it using TDD
     const toBeHighlightedCells = removeDuplicteCells(cellsHighlightable)
 
-    const isNakedDoubles = noOfInstances === 2
-    const cellsToFocusData = {}
+    const isNakedDoubles = groupCandidates.length === 2
 
-    const isGroupHostCell = cell => groupCells.some(groupCell => areSameCells(groupCell, cell))
-
-    toBeHighlightedCells.forEach(({ row, col }) => {
-        const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-
-        const notesToHighlightData = {}
-        let notesWillBeHighlighted = false
-        groupCandidates.forEach(groupCandidate => {
-            const groupCandidateNum = parseInt(groupCandidate, 10)
-            if (notesData[row][col][groupCandidateNum - 1].show) {
-                if (isGroupHostCell({ row, col })) {
-                    notesToHighlightData[groupCandidate] = { fontColor: 'green' }
-                } else {
-                    notesToHighlightData[groupCandidate] = { fontColor: 'red' }
-                }
-                notesWillBeHighlighted = true
-            }
-        })
-
-        if (notesWillBeHighlighted) cellHighlightData.notesToHighlightData = notesToHighlightData
-        setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
-    })
+    const cellsToFocusData = getCellsHighlightData(toBeHighlightedCells, groupCells, groupCandidates, notesData)
 
     if (!isNakedDoubles) {
         return getNakedTrippleHintData({
