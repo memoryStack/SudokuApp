@@ -80,11 +80,12 @@ const getGroupCandidatesFromCells = (cells, notesData) => {
         .map(groupCandidate => parseInt(groupCandidate, 10))
 }
 
-// TODO: valid in what context ??
-// function name doesn't express that
-const areValidNakedGroupCells = (cells, notesData, groupCandidatesCount) => {
+const selectedCellsHaveCorrectNotesInstances = (cells, notesData, groupCandidatesCount) => {
     const groupVisibleNotesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const groupCandidates = Object.keys(groupVisibleNotesInstancesCount)
+
+    // checking if candidates in cells have correct count of instances or not
+    // 
 
     return groupCandidates.length === groupCandidatesCount && _every(groupCandidates, (groupCandidate) => {
         return inRange(
@@ -119,7 +120,7 @@ const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     return null
 }
 
-const addSharedHouseCellsIfExists = (mainHouse, selectedCells, houseAllCells) => {
+const addCellsIfSharedHouseExists = (mainHouse, selectedCells, houseAllCells) => {
     const sharedHouse = getAnotherSharedHouse(mainHouse, selectedCells)
     if (!sharedHouse) return
 
@@ -142,6 +143,40 @@ const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) =>
             })
         )
     })
+}
+
+const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHouses) => {
+    // check these boxes if they are covered or not already
+    // QUES -> why are we not doing it for block house as well ?? 
+    // because we are processing block house first
+    // this is again couples with the order of houseType loop iteration
+
+    if (Houses.isBlockHouse(house.type)) return false
+
+    // TODO: let's wrap this condition into a func
+    // QUES -> why are we assuming that only one group is possible in a house ??
+    const houseCellsProcessed = groupsFoundInHouses[house.type][house.num] || []
+    if (areSameCellsSets(selectedCells, houseCellsProcessed)) return true
+
+    return false
+}
+
+const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses, notesData) => {
+    if (isCellsSelectionAlreadyProcessed(selectedCells, house, groupsFoundInHouses)) return false
+
+    const allPossibleNotesPresent = isHintValid({
+        type: GROUPS.NAKED_GROUP,
+        data: {
+            groupCandidates: getGroupCandidatesFromCells(selectedCells, notesData),
+            hostCells: selectedCells,
+        },
+    })
+
+    if (!allPossibleNotesPresent) return false
+
+    if (!isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)) return false
+
+    return true
 }
 
 // TODO: think over the namings harder. i see a lot of in-consistencies
@@ -171,36 +206,12 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 const selectedCells = _map(possibleSelections[k], (selectionIndex) => validCells[selectionIndex])
 
+                if (!selectedCellsHaveCorrectNotesInstances(selectedCells, notesData, groupCandidatesCount)) continue
 
+                addCellsIfSharedHouseExists(house, selectedCells, houseAllCells)
 
-                // check these boxes if they are covered or not already
-                // QUES -> why are we not doing it for block house as well ?? 
-                if (Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) {
-                    // TODO: let's wrap this condition into a func
-                    // QUES -> why are we assuming that only one group is possible in a house ??
-                    const houseCellsProcessed = groupsFoundInHouses[house.type][`${houseNum}`] || []
-                    if (areSameCellsSets(selectedCells, houseCellsProcessed)) continue
-                }
-
-                const groupCandidates = getGroupCandidatesFromCells(selectedCells, notesData)
-
-
-                // todo: extract all this validity logic into a separate dedicated function
-                const validNakedGroup = areValidNakedGroupCells(selectedCells, notesData, groupCandidatesCount)
-                    && isHintValid({
-                        type: GROUPS.NAKED_GROUP,
-                        data: {
-                            groupCandidates,
-                            hostCells: selectedCells,
-                        },
-                    })
-                if (!validNakedGroup) continue
-
-                addSharedHouseCellsIfExists(house, selectedCells, houseAllCells)
-
-
-
-                if (!isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)) continue
+                const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses, notesData)
+                if (!newAndValidNakedGroup) continue
 
                 // TODO: start refactoring from here now
                 // Note: the correctness of this DS depends on iterating order of "houseType" loop
@@ -218,14 +229,13 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                     }
                 }
 
-                consoleLog('@@@@ naked group', selectedCells, groupCandidates)
-                const groupCandidatesInInt = groupCandidates.map(groupCandidate => parseInt(groupCandidate, 10))
+                consoleLog('@@@@ naked group', selectedCells, getGroupCandidatesFromCells(selectedCells, notesData),)
                 hints.push(
                     prepareNakedDublesOrTriplesHintData(
                         groupCandidatesCount,
                         houseAllCells,
                         selectedCells,
-                        groupCandidatesInInt,
+                        getGroupCandidatesFromCells(selectedCells, notesData),
                         notesData,
                     ),
                 )
