@@ -16,7 +16,7 @@
         "@react-navigation/stack": "^6.0.11",
         "@reduxjs/toolkit": "^1.8.0",
         "eslint-plugin-react-hooks": "^4.2.0",
-        "fast-sudoku-puzzles": "https://memoryStack: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@github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
+        "fast-sudoku-puzzles": "https://memoryStack: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@github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
         "lodash": "https://github.com/memoryStack/lodash.git",
         "prettier": "^2.4.1",
         "react": "17.0.1",
