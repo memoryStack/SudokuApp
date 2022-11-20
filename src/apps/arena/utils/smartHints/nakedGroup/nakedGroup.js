@@ -2,6 +2,7 @@ import _filter from 'lodash/src/utils/filter'
 import _map from 'lodash/src/utils/map'
 import _forEach from 'lodash/src/utils/forEach'
 import _every from 'lodash/src/utils/every'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { consoleLog, inRange } from '../../../../../utils/util'
@@ -72,6 +73,15 @@ const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     return result
 }
 
+// TODO: we can make it a more general util
+// like getUniqueVisibleNotesInCells and move it to another places
+const getGroupCandidatesFromCells = (cells, notesData) => {
+    return Object.keys(getCellsVisibleNotesInstancesCount(cells, notesData))
+        .map(groupCandidate => parseInt(groupCandidate, 10))
+}
+
+// TODO: valid in what context ??
+// function name doesn't express that
 const areValidNakedGroupCells = (cells, notesData, groupCandidatesCount) => {
     const groupVisibleNotesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const groupCandidates = Object.keys(groupVisibleNotesInstancesCount)
@@ -119,9 +129,7 @@ const addSharedHouseCellsIfExists = (mainHouse, selectedCells, houseAllCells) =>
 }
 
 const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) => {
-    // TODO: might have to extract this into a function
-    const groupCandidates = Object.keys(getCellsVisibleNotesInstancesCount(selectedCells, notesData))
-        .map(groupCandidate => parseInt(groupCandidate, 10))
+    const groupCandidates = getGroupCandidatesFromCells(selectedCells, notesData)
 
     return houseAllCells.some(cell => {
         const isSelectedCell = selectedCells.some(selectedCell => {
@@ -163,6 +171,8 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 const selectedCells = _map(possibleSelections[k], (selectionIndex) => validCells[selectionIndex])
 
+
+
                 // check these boxes if they are covered or not already
                 // QUES -> why are we not doing it for block house as well ?? 
                 if (Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) {
@@ -172,17 +182,30 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                     if (areSameCellsSets(selectedCells, houseCellsProcessed)) continue
                 }
 
+                const groupCandidates = getGroupCandidatesFromCells(selectedCells, notesData)
+
+
+                // todo: extract all this validity logic into a separate dedicated function
                 const validNakedGroup = areValidNakedGroupCells(selectedCells, notesData, groupCandidatesCount)
+                    && isHintValid({
+                        type: GROUPS.NAKED_GROUP,
+                        data: {
+                            groupCandidates,
+                            hostCells: selectedCells,
+                        },
+                    })
                 if (!validNakedGroup) continue
 
                 addSharedHouseCellsIfExists(house, selectedCells, houseAllCells)
 
-                const groupCandidates = Object.keys(getCellsVisibleNotesInstancesCount(selectedCells, notesData))
+
 
                 if (!isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)) continue
 
                 // TODO: start refactoring from here now
-                // Note: the correctness of this DS depends on entries order in "houseType"
+                // Note: the correctness of this DS depends on iterating order of "houseType" loop
+                // the below block looks useless
+                // well it makes sense because we are finding first in block. YUCKKK
                 groupsFoundInHouses[house.type][house.num] = selectedCells
                 if (houseAllCells.length === 15) {
                     // group cells belong to 2 houses, one is block for sure and another one can be either row or col
@@ -195,34 +218,20 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                     }
                 }
 
-                // TODO: this step must be a lot earlier. just at the moment 
-                // when candidates are marked as valid
-                const isValidNakedGroup = isHintValid({
-                    type: GROUPS.NAKED_GROUP,
-                    data: {
-                        groupCandidates: groupCandidates.map(candidate => parseInt(candidate, 10)),
-                        hostCells: selectedCells,
-                    },
-                })
-
-
-
-                if (isValidNakedGroup) {
-                    consoleLog('@@@@ naked group', selectedCells, groupCandidates)
-                    const groupCandidatesInInt = groupCandidates.map(groupCandidate => parseInt(groupCandidate, 10))
-                    hints.push(
-                        prepareNakedDublesOrTriplesHintData(
-                            groupCandidatesCount,
-                            houseAllCells,
-                            selectedCells,
-                            groupCandidatesInInt,
-                            notesData,
-                        ),
-                    )
-                }
+                consoleLog('@@@@ naked group', selectedCells, groupCandidates)
+                const groupCandidatesInInt = groupCandidates.map(groupCandidate => parseInt(groupCandidate, 10))
+                hints.push(
+                    prepareNakedDublesOrTriplesHintData(
+                        groupCandidatesCount,
+                        houseAllCells,
+                        selectedCells,
+                        groupCandidatesInInt,
+                        notesData,
+                    ),
+                )
             }
         }
     }
 
-    return hints.length !== 0 ? hints : null
+    return _isEmpty(hints) ? null : hints
 }
