@@ -131,11 +131,8 @@ const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) =>
     const groupCandidates = getGroupCandidatesFromCells(selectedCells, notesData)
 
     return houseAllCells.some(cell => {
-        const isSelectedCell = selectedCells.some(selectedCell => {
-            return areSameCells(cell, selectedCell)
-        })
         return (
-            !isSelectedCell &&
+            !isCellExists(cell, selectedCells) &&
             groupCandidates.some(groupCandidate => {
                 return notesData[cell.row][cell.col][groupCandidate - 1].show
             })
@@ -168,21 +165,23 @@ const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoun
     return isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)
 }
 
-const cacheProcessedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses) => {
-    // Note: the correctness of this DS depends on iterating order of "houseType" loop
-    // the below block looks useless
-    // well it makes sense because we are finding first in block. YUCKKK
-    groupsFoundInHouses[house.type][house.num] = selectedCells
-    if (houseAllCells.length === 15) {
-        // group cells belong to 2 houses, one is block for sure and another one can be either row or col
-        if (areSameRowCells(selectedCells)) {
-            const { row } = selectedCells[0]
-            groupsFoundInHouses[HOUSE_TYPE.ROW][row] = selectedCells
-        } else {
-            const { col } = selectedCells[0]
-            groupsFoundInHouses[HOUSE_TYPE.COL][col] = selectedCells
-        }
+const getSharedHouse = (selectedCells) => {
+    const sameRowCells = areSameRowCells(selectedCells)
+    return {
+        type: sameRowCells ? HOUSE_TYPE.ROW : HOUSE_TYPE.COL,
+        num: sameRowCells ? selectedCells[0].row : selectedCells[0].col
     }
+}
+
+const cacheProcessedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses) => {
+    // Note/Issue: the correctness of this DS depends on iterating order of "houseType" loop
+    groupsFoundInHouses[house.type][house.num] = selectedCells
+
+    const nakedGroupSharedInMultipleHouses = houseAllCells.length === 15 // 9+6 cells
+    if (!nakedGroupSharedInMultipleHouses) return
+
+    const sharedHouse = getSharedHouse(selectedCells)
+    groupsFoundInHouses[sharedHouse.type][sharedHouse.num] = selectedCells
 }
 
 // TODO: think over the namings harder. i see a lot of in-consistencies
