@@ -3,14 +3,14 @@ import _map from 'lodash/src/utils/map'
 import _forEach from 'lodash/src/utils/forEach'
 import _every from 'lodash/src/utils/every'
 import _isEmpty from 'lodash/src/utils/isEmpty'
+import _isNull from 'lodash/src/utils/isNull'
 
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { consoleLog, inRange } from '../../../../../utils/util'
 
-import { CELLS_IN_HOUSE, HOUSES_COUNT, MAX_INSTANCES_OF_NUMBER, NUMBERS_IN_HOUSE } from '../../../constants'
+import { HOUSES_COUNT, } from '../../../constants'
 
 import {
-    areSameCells,
     areSameRowCells,
     areSameColCells,
     areSameBlockCells,
@@ -94,7 +94,7 @@ const selectedCellsHaveCorrectNotesInstances = (cells, notesData, groupCandidate
 }
 
 const getAnotherSharedHouse = (mainHouse, selectedCells) => {
-    if ((Houses.isRowHouse(mainHouse.type) || Houses.isColHouse(mainHouse.type)) && areSameBlockCells(selectedCells)) {
+    if (!Houses.isBlockHouse(mainHouse.type) && areSameBlockCells(selectedCells)) {
         return {
             type: HOUSE_TYPE.BLOCK,
             num: getBlockAndBoxNum(selectedCells[0]).blockNum
@@ -120,9 +120,8 @@ const getAnotherSharedHouse = (mainHouse, selectedCells) => {
 
 const addCellsIfSharedHouseExists = (mainHouse, selectedCells, houseAllCells) => {
     const sharedHouse = getAnotherSharedHouse(mainHouse, selectedCells)
-    if (!sharedHouse) return
 
-    _forEach(getHouseCells(sharedHouse), (cell) => {
+    !_isNull(sharedHouse) && _forEach(getHouseCells(sharedHouse), (cell) => {
         if (!isCellExists(cell, houseAllCells)) houseAllCells.push(cell)
     })
 }
@@ -142,11 +141,8 @@ const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) =>
 
 const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHouses) => {
     if (Houses.isBlockHouse(house.type)) return false
-
-    // TODO: let's wrap this condition into a func
     // QUES -> why are we assuming that only one group is possible in a house ??
     const houseCellsProcessed = groupsFoundInHouses[house.type][house.num] || []
-
     return areSameCellsSets(selectedCells, houseCellsProcessed)
 }
 
@@ -165,23 +161,12 @@ const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoun
     return isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)
 }
 
-const getSharedHouse = (selectedCells) => {
-    const sameRowCells = areSameRowCells(selectedCells)
-    return {
-        type: sameRowCells ? HOUSE_TYPE.ROW : HOUSE_TYPE.COL,
-        num: sameRowCells ? selectedCells[0].row : selectedCells[0].col
-    }
-}
-
-const cacheProcessedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses) => {
+const cacheProcessedGroup = (house, selectedCells, groupsFoundInHouses) => {
     // Note/Issue: the correctness of this DS depends on iterating order of "houseType" loop
     groupsFoundInHouses[house.type][house.num] = selectedCells
 
-    const nakedGroupSharedInMultipleHouses = houseAllCells.length === 15 // 9+6 cells
-    if (!nakedGroupSharedInMultipleHouses) return
-
-    const sharedHouse = getSharedHouse(selectedCells)
-    groupsFoundInHouses[sharedHouse.type][sharedHouse.num] = selectedCells
+    const sharedHouse = getAnotherSharedHouse(house, selectedCells)
+    !_isNull(sharedHouse) && (groupsFoundInHouses[sharedHouse.type][sharedHouse.num] = selectedCells)
 }
 
 // TODO: think over the namings harder. i see a lot of in-consistencies
@@ -229,7 +214,7 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                     ),
                 )
 
-                cacheProcessedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses)
+                cacheProcessedGroup(house, selectedCells, groupsFoundInHouses)
             }
         }
     }
