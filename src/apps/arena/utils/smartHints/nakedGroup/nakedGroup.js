@@ -6,7 +6,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import _isNull from 'lodash/src/utils/isNull'
 
 import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { inRange } from '../../../../../utils/util'
+import { consoleLog, inRange } from '../../../../../utils/util'
 
 import { HOUSES_COUNT, } from '../../../constants'
 
@@ -146,7 +146,7 @@ const cacheProcessedGroup = (house, selectedCells, groupsFoundInHouses) => {
     !_isNull(sharedHouse) && (groupsFoundInHouses[sharedHouse.type][sharedHouse.num] = selectedCells)
 }
 
-const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
     const groupsFoundInHouses = getDefaultGroupsFoundInHouses()
@@ -195,6 +195,7 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
     if (_isEmpty(groupsRawData)) return null
 
     return _map(groupsRawData, ({ selectedCells }) => {
+        consoleLog(selectedCells)
         return getUIHighlightData(selectedCells, notesData)
     })
 }
