@@ -29,7 +29,7 @@ import { isHintValid } from '../validityTest'
 import { GROUPS, HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
 
-import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
+import { getUIHighlightData } from './uiHighlightData'
 import {
     VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
     VALID_CELL_MINIMUM_NOTES_COUNT,
@@ -189,7 +189,7 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 if (!newAndValidNakedGroup) continue
 
                 hints.push(
-                    prepareNakedDublesOrTriplesHintData(
+                    getUIHighlightData(
                         houseAllCells,
                         selectedCells,
                         getUniqueNotesFromCells(selectedCells, notesData),

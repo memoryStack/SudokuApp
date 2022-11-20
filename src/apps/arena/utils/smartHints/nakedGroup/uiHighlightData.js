@@ -1,30 +1,6 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { consoleLog } from '../../../../../utils/util'
-
-import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
-
-import {
-    areSameCells,
-    areSameRowCells,
-    areSameColCells,
-    areSameBlockCells,
-    getCellVisibleNotesCount,
-    getRowAndCol,
-    getBlockAndBoxNum,
-    isCellExists,
-} from '../../util'
-
-import { isHintValid } from '../validityTest'
-import {
-    maxHintsLimitReached,
-    setCellDataInHintResult,
-    getCandidatesListText,
-    getHintExplanationStepsFromHintChunks,
-    getTryOutInputPanelNumbersVisibility,
-    removeDuplicteCells,
-} from '../util'
+import { isCellExists } from '../../util'
 
 import {
     HINTS_IDS,
@@ -32,24 +8,23 @@ import {
     SMART_HINTS_CELLS_BG_COLOR
 } from '../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
+import {
+    setCellDataInHintResult,
+    getCandidatesListText,
+    getHintExplanationStepsFromHintChunks,
+    getTryOutInputPanelNumbersVisibility,
+    removeDuplicteCells,
+} from '../util'
 
-export const getNakedTrippleHintData = ({ groupCandidates, groupCells, focusedCells, cellsToFocusData }) => {
-    // TODO: explore if we can use the below array for naked double and naked tripple as well in same way
-    const msgPlaceholdersValues = {
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-    }
-
-    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_TRIPPLE].map(hintChunkTemplate => {
-        return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
-    })
-
+export const getUIHighlightData = (focusedCells, groupCells, groupCandidates, notesData) => {
+    focusedCells = removeDuplicteCells(focusedCells)
     return {
         hasTryOut: true,
-        cellsToFocusData,
+        cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData),
         focusedCells,
-        type: HINTS_IDS.NAKED_TRIPPLE,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
-        steps: getHintExplanationStepsFromHintChunks(hintChunks),
+        type: getHintId(groupCandidates),
+        title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
+        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates)),
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
@@ -68,8 +43,7 @@ const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) =>
         const notesToHighlightData = {}
         let notesWillBeHighlighted = false
         groupCandidates.forEach(groupCandidate => {
-            const groupCandidateNum = parseInt(groupCandidate, 10)
-            if (notesData[row][col][groupCandidateNum - 1].show) {
+            if (notesData[row][col][groupCandidate - 1].show) {
                 if (isCellExists({ row, col }, groupCells)) notesToHighlightData[groupCandidate] = { fontColor: 'green' }
                 else notesToHighlightData[groupCandidate] = { fontColor: 'red' }
                 notesWillBeHighlighted = true
@@ -83,48 +57,14 @@ const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) =>
     return result
 }
 
-export const prepareNakedDublesOrTriplesHintData = (
-    cellsHighlightable,
-    groupCells,
-    groupCandidates,
-    notesData,
-) => {
-    // TODO: found an issue while testing tryOut analyser for naked tripple.
-    // i wish has developed it using TDD
-    const toBeHighlightedCells = removeDuplicteCells(cellsHighlightable)
-
-    const isNakedDoubles = groupCandidates.length === 2
-
-    const cellsToFocusData = getCellsHighlightData(toBeHighlightedCells, groupCells, groupCandidates, notesData)
-
-    if (!isNakedDoubles) {
-        return getNakedTrippleHintData({
-            groupCandidates,
-            cellsToFocusData,
-            focusedCells: toBeHighlightedCells,
-            groupCells,
-        })
-    }
-
+const getHintChunks = (groupCandidates) => {
     const msgPlaceholdersValues = {
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     }
-    const hintChunks = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_DOUBLE].map(hintChunkTemplate => {
+    return HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)].map(hintChunkTemplate => {
         return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
     })
-
-    return {
-        hasTryOut: true,
-        focusedCells: toBeHighlightedCells,
-        cellsToFocusData,
-        type: HINTS_IDS.NAKED_DOUBLE,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE],
-        tryOutAnalyserData: {
-            groupCandidates,
-            focusedCells: toBeHighlightedCells,
-            groupCells,
-        },
-        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates),
-        steps: getHintExplanationStepsFromHintChunks(hintChunks),
-    }
 }
+
+const getHintId = (groupCandidates) =>
+    groupCandidates.length === 2 ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE
