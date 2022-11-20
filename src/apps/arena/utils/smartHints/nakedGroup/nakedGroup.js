@@ -67,8 +67,7 @@ export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     return result
 }
 
-// THREE
-const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
+export const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
     const notesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const candidates = Object.keys(notesInstancesCount)
     return candidates.length === groupCandidatesCount && _every(candidates, (candidate) => {
@@ -79,14 +78,10 @@ const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
     })
 }
 
-// has potential to be a re-usable util
-// TWO
-const getAnotherSharedHouse = (mainHouse, selectedCells) => {
-    if (!Houses.isBlockHouse(mainHouse.type) && areSameBlockCells(selectedCells)) {
-        return {
-            type: HOUSE_TYPE.BLOCK,
-            num: getBlockAndBoxNum(selectedCells[0]).blockNum
-        }
+export const getAnotherSharedHouse = (mainHouse, selectedCells) => {
+    if (!Houses.isBlockHouse(mainHouse.type)) {
+        return areSameBlockCells(selectedCells) ? { type: HOUSE_TYPE.BLOCK, num: getBlockAndBoxNum(selectedCells[0]).blockNum }
+            : null
     }
 
     if (areSameRowCells(selectedCells)) {
