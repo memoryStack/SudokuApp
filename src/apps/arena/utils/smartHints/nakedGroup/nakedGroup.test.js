@@ -198,10 +198,9 @@ const fullHintData = [
 ]
 
 describe('highlightNakedDoublesOrTriples()', () => {
+    const store = makeTestStore({ board: boardReducers })
+    store.dispatch(setPossibleNotes(notesData))
     test('', () => {
-        const store = makeTestStore({ board: boardReducers })
-        store.dispatch(setPossibleNotes(notesData))
-
         expect(highlightNakedDoublesOrTriples(2, notesData, mainNumbers, 1)).toStrictEqual(fullHintData)
     })
 })

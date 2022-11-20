@@ -22,7 +22,8 @@ import {
     getCellVisibleNotes,
     isCellExists,
     areSameCellsSets,
-    getUniqueNotesFromCells
+    getUniqueNotesFromCells,
+    getHousesCellsSharedByCells
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -103,18 +104,9 @@ const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     return null
 }
 
-const addCellsIfSharedHouseExists = (mainHouse, selectedCells, houseAllCells) => {
-    const sharedHouse = getAnotherSharedHouse(mainHouse, selectedCells)
-
-    !_isNull(sharedHouse) && _forEach(getHouseCells(sharedHouse), (cell) => {
-        if (!isCellExists(cell, houseAllCells)) houseAllCells.push(cell)
-    })
-}
-
-const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) => {
+const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
     const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
-
-    return houseAllCells.some(cell => {
+    return getHousesCellsSharedByCells(selectedCells).some(cell => {
         return (
             !isCellExists(cell, selectedCells) &&
             groupCandidates.some(groupCandidate => {
@@ -131,8 +123,10 @@ const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHou
     return areSameCellsSets(selectedCells, houseCellsProcessed)
 }
 
-const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses, notesData) => {
+const isNewAndValidNakedGroup = (house, selectedCells, groupsFoundInHouses, notesData) => {
     if (isCellsSelectionAlreadyProcessed(selectedCells, house, groupsFoundInHouses)) return false
+
+
 
     const allPossibleNotesPresent = isHintValid({
         type: GROUPS.NAKED_GROUP,
@@ -143,7 +137,7 @@ const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoun
     })
     if (!allPossibleNotesPresent) return false
 
-    return isHintRemovesNotesFromCells(selectedCells, houseAllCells, notesData)
+    return isHintRemovesNotesFromCells(selectedCells, notesData)
 }
 
 const cacheProcessedGroup = (house, selectedCells, groupsFoundInHouses) => {
@@ -154,18 +148,16 @@ const cacheProcessedGroup = (house, selectedCells, groupsFoundInHouses) => {
     !_isNull(sharedHouse) && (groupsFoundInHouses[sharedHouse.type][sharedHouse.num] = selectedCells)
 }
 
-// TODO: think over the namings harder. i see a lot of in-consistencies
-export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
     const groupsFoundInHouses = getDefaultGroupsFoundInHouses()
 
-    const hints = []
+    const result = []
 
     hintsSearchLoop: for (let j = 0; j < houseType.length; j++) {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
             const house = { type: houseType[j], num: houseNum }
-            const houseAllCells = getHouseCells(house)
             const validCells = filterValidCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)
 
             // to avoid computing 7C2 and 7C3, because that might be heavy but it's open for research
@@ -175,7 +167,7 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
             for (let k = 0; k < possibleSelections.length; k++) {
                 // finding for new conbination of cells or numbers
-                if (maxHintsLimitReached(hints, maxHintsThreshold)) {
+                if (maxHintsLimitReached(result, maxHintsThreshold)) {
                     break hintsSearchLoop
                 }
 
@@ -183,24 +175,32 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 if (!selectedCellsMakeGroup(selectedCells, notesData, groupCandidatesCount)) continue
 
-                addCellsIfSharedHouseExists(house, selectedCells, houseAllCells)
 
-                const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses, notesData)
+
+                const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, groupsFoundInHouses, notesData)
                 if (!newAndValidNakedGroup) continue
 
-                hints.push(
-                    getUIHighlightData(
-                        houseAllCells,
-                        selectedCells,
-                        getUniqueNotesFromCells(selectedCells, notesData),
-                        notesData,
-                    ),
-                )
+                result.push({ selectedCells })
 
                 cacheProcessedGroup(house, selectedCells, groupsFoundInHouses)
             }
         }
     }
 
-    return _isEmpty(hints) ? null : hints
+    return result
+}
+
+// TODO: think over the namings harder. i see a lot of in-consistencies
+export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+    const groupsRawData = getNakedGroupRawData(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
+
+    if (_isEmpty(groupsRawData)) return null
+
+    return _map(groupsRawData, ({ selectedCells }) => {
+        return getUIHighlightData(
+            selectedCells,
+            getUniqueNotesFromCells(selectedCells, notesData),
+            notesData
+        )
+    })
 }

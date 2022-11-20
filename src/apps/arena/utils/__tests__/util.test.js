@@ -26,6 +26,7 @@ import {
     getBlockAndBoxNum,
     initMainNumbers,
     previousInactiveGameExists,
+    getHousesCellsSharedByCells,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -533,3 +534,43 @@ describe('previousInactiveGameExists()', () => {
     })
 })
 
+describe('getHousesCellsSharedByCells()', () => {
+    test('returns row cells when only common houses is row', () => {
+        const cells = [{ row: 0, col: 1 }, { row: 0, col: 4 }]
+        const expectedResult = [
+            { row: 0, col: 0 },
+            { row: 0, col: 1 },
+            { row: 0, col: 2 },
+            { row: 0, col: 3 },
+            { row: 0, col: 4 },
+            { row: 0, col: 5 },
+            { row: 0, col: 6 },
+            { row: 0, col: 7 },
+            { row: 0, col: 8 },
+        ]
+        expect(getHousesCellsSharedByCells(cells)).toStrictEqual(expectedResult)
+    })
+
+    test('returns unique column and block cells when cells are shared by column and block', () => {
+        const cells = [{ row: 3, col: 1 }, { row: 4, col: 1 }]
+        const expectedResult = [
+            { row: 0, col: 1 },
+            { row: 1, col: 1 },
+            { row: 2, col: 1 },
+            { row: 3, col: 1 },
+            { row: 4, col: 1 },
+            { row: 5, col: 1 },
+            { row: 6, col: 1 },
+            { row: 7, col: 1 },
+            { row: 8, col: 1 },
+            { row: 3, col: 0 },
+            { row: 4, col: 0 },
+            { row: 5, col: 0 },
+            { row: 3, col: 2 },
+            { row: 4, col: 2 },
+            { row: 5, col: 2 },
+        ]
+        const returnedResultAsExpected = areSameCellsSets(getHousesCellsSharedByCells(cells), expectedResult)
+        expect(returnedResultAsExpected).toBeTruthy()
+    })
+})

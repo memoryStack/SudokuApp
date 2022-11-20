@@ -1,6 +1,6 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { isCellExists } from '../../util'
+import { getHousesCellsSharedByCells, isCellExists } from '../../util'
 
 import {
     HINTS_IDS,
@@ -13,11 +13,10 @@ import {
     getCandidatesListText,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
-    removeDuplicteCells,
 } from '../util'
 
-export const getUIHighlightData = (focusedCells, groupCells, groupCandidates, notesData) => {
-    focusedCells = removeDuplicteCells(focusedCells)
+export const getUIHighlightData = (groupCells, groupCandidates, notesData) => {
+    const focusedCells = getHousesCellsSharedByCells(groupCells)
     return {
         hasTryOut: true,
         cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData),

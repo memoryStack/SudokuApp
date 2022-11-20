@@ -369,3 +369,18 @@ export const initMainNumbers = () => {
 }
 
 const getCellMainNumberDefaultValue = () => ({ value: 0, solutionValue: 0, isClue: false })
+
+export const getHousesCellsSharedByCells = (cells) => {
+    const result = []
+
+    const commonHouses = getCellsCommonHouses(cells)
+    for (const houseType in commonHouses) {
+        if (!commonHouses[houseType]) continue
+        const commonHouseCells = getHouseCells(getCellHouseInfo(houseType, cells[0]))
+        _forEach(commonHouseCells, (cell) => {
+            if (!isCellExists(cell, result)) result.push(cell)
+        })
+    }
+
+    return result
+}
