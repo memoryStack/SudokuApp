@@ -1,11 +1,21 @@
 import _isEmpty from 'lodash/src/utils/isEmpty'
+import _forEach from 'lodash/src/utils/forEach'
 
 import { GAME_STATE } from '../../../resources/constants'
-import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { getKey } from '../../../utils/storage'
+import { onlyUnique } from '../../../utils/util'
+
+import {
+    BOARD_AXES_VALUES,
+    CELLS_IN_HOUSE,
+    HOUSES_COUNT,
+    NUMBERS_IN_HOUSE,
+    PUZZLE_SOLUTION_TYPES
+} from '../constants'
+
+import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
-import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { GameState } from './classes/gameState'
 
 export const addLeadingZeroIfEligible = value => {
@@ -196,6 +206,15 @@ export const getPairCellsCommonHouses = (cellA, cellB) => {
 export const areCommonHouseCells = (cellA, cellB) => {
     const cellsPairCommonHouses = getPairCellsCommonHouses(cellA, cellB)
     return Object.values(cellsPairCommonHouses).some(isCommonHouse => isCommonHouse)
+}
+
+export const getUniqueNotesFromCells = (cells, notesData) => {
+    const result = []
+    _forEach(cells, (cell) => {
+        result.push(...getCellVisibleNotes(notesData[cell.row][cell.col]))
+    })
+
+    return result.filter(onlyUnique).sortNumbers()
 }
 
 export const getCellVisibleNotes = notes => {

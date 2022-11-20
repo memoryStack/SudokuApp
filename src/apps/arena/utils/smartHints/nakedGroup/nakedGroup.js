@@ -10,33 +10,26 @@ import { consoleLog, inRange } from '../../../../../utils/util'
 
 import { HOUSES_COUNT, } from '../../../constants'
 
+import { Houses } from '../../classes/houses'
+import { getHouseCells } from '../../houseCells'
 import {
     areSameRowCells,
     areSameColCells,
     areSameBlockCells,
     getCellVisibleNotesCount,
-
     getBlockAndBoxNum,
     isCellEmpty,
-
     getCellVisibleNotes,
     isCellExists,
     areSameCellsSets,
+    getUniqueNotesFromCells
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
-import {
-    maxHintsLimitReached,
-} from '../util'
-import {
-    GROUPS, HOUSE_TYPE,
-} from '../constants'
-import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
-import { Houses } from '../../classes/houses'
-import { getHouseCells } from '../../houseCells'
+import { GROUPS, HOUSE_TYPE } from '../constants'
+import { maxHintsLimitReached } from '../util'
 
-// TODO: fix this parsing issue. at a lot of places we are
-// parsing the groupCandidates into their int form
+import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
 
 // TODO: move these constants 
 const VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT = 2
@@ -73,21 +66,12 @@ const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     return result
 }
 
-// TODO: we can make it a more general util
-// like getUniqueVisibleNotesInCells and move it to another places
-const getGroupCandidatesFromCells = (cells, notesData) => {
-    return Object.keys(getCellsVisibleNotesInstancesCount(cells, notesData))
-        .map(groupCandidate => parseInt(groupCandidate, 10))
-}
-
-// TODO: can rename it but later before closing refactoring
-const selectedCellsHaveCorrectNotesInstances = (cells, notesData, groupCandidatesCount) => {
-    const groupVisibleNotesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
-    const groupCandidates = Object.keys(groupVisibleNotesInstancesCount)
-
-    return groupCandidates.length === groupCandidatesCount && _every(groupCandidates, (groupCandidate) => {
+const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
+    const notesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
+    const candidates = Object.keys(notesInstancesCount)
+    return candidates.length === groupCandidatesCount && _every(candidates, (candidate) => {
         return inRange(
-            groupVisibleNotesInstancesCount[groupCandidate],
+            notesInstancesCount[candidate],
             { start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT, end: groupCandidatesCount }
         )
     })
@@ -127,7 +111,7 @@ const addCellsIfSharedHouseExists = (mainHouse, selectedCells, houseAllCells) =>
 }
 
 const isHintRemovesNotesFromCells = (selectedCells, houseAllCells, notesData) => {
-    const groupCandidates = getGroupCandidatesFromCells(selectedCells, notesData)
+    const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
 
     return houseAllCells.some(cell => {
         return (
@@ -152,7 +136,7 @@ const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoun
     const allPossibleNotesPresent = isHintValid({
         type: GROUPS.NAKED_GROUP,
         data: {
-            groupCandidates: getGroupCandidatesFromCells(selectedCells, notesData),
+            groupCandidates: getUniqueNotesFromCells(selectedCells, notesData),
             hostCells: selectedCells,
         },
     })
@@ -196,20 +180,20 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 const selectedCells = _map(possibleSelections[k], (selectionIndex) => validCells[selectionIndex])
 
-                if (!selectedCellsHaveCorrectNotesInstances(selectedCells, notesData, groupCandidatesCount)) continue
+                if (!selectedCellsMakeGroup(selectedCells, notesData, groupCandidatesCount)) continue
 
                 addCellsIfSharedHouseExists(house, selectedCells, houseAllCells)
 
                 const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses, notesData)
                 if (!newAndValidNakedGroup) continue
 
-                // consoleLog('@@@@ naked group', selectedCells, getGroupCandidatesFromCells(selectedCells, notesData),)
+                // consoleLog('@@@@ naked group', selectedCells, getUniqueNotesFromCells(selectedCells, notesData),)
                 hints.push(
                     prepareNakedDublesOrTriplesHintData(
                         groupCandidatesCount,
                         houseAllCells,
                         selectedCells,
-                        getGroupCandidatesFromCells(selectedCells, notesData),
+                        getUniqueNotesFromCells(selectedCells, notesData),
                         notesData,
                     ),
                 )

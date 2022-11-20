@@ -53,6 +53,7 @@ function noWhiteSpace(strings, ...placeholders) {
     return withoutSpace
 }
 
+// TODO: make it explicit here that this is a callback to Array.filter
 export const onlyUnique = (value, index, self) => {
     return self.indexOf(value) === index
 }
