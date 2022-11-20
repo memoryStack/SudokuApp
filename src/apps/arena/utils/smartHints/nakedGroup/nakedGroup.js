@@ -37,7 +37,8 @@ import {
     MAX_VALID_CELLS_COUNT
 } from './nakedGroup.constants'
 
-export const filterValidCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
+// Five
+export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
     return _filter(getHouseCells(house), (cell) => {
         if (!isCellEmpty(cell, mainNumbers)) return false
 
@@ -56,6 +57,8 @@ const getDefaultGroupsFoundInHouses = () => {
     }
 }
 
+// FOUR
+// this should be out in utils
 const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     const result = {}
     _forEach(cells, ({ row, col }) => {
@@ -67,6 +70,7 @@ const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     return result
 }
 
+// THREE
 const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
     const notesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const candidates = Object.keys(notesInstancesCount)
@@ -79,6 +83,7 @@ const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
 }
 
 // has potential to be a re-usable util
+// TWO
 const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     if (!Houses.isBlockHouse(mainHouse.type) && areSameBlockCells(selectedCells)) {
         return {
@@ -104,6 +109,7 @@ const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     return null
 }
 
+// ONE
 const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
     const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
     return getHousesCellsSharedByCells(selectedCells).some(cell => {
@@ -156,7 +162,7 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
     hintsSearchLoop: for (let j = 0; j < houseType.length; j++) {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
             const house = { type: houseType[j], num: houseNum }
-            const validCells = filterValidCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)
+            const validCells = filterNakedGroupEligibleCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)
 
             // to avoid computing 7C2 and 7C3, because that might be heavy but it's open for research
             if (!inRange(validCells.length, { start: groupCandidatesCount, end: MAX_VALID_CELLS_COUNT })) continue
@@ -188,7 +194,6 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
     return result
 }
 
-// TODO: think over the namings harder. i see a lot of in-consistencies
 export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const groupsRawData = getNakedGroupRawData(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
 
