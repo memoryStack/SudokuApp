@@ -14,13 +14,13 @@ import {
     areSameColCells,
     areSameBlockCells,
     getCellVisibleNotesCount,
-    getRowAndCol,
+
     getBlockAndBoxNum,
     isCellEmpty,
-    forCellEachNote,
-    isCellNoteVisible,
+
     getCellVisibleNotes,
     isCellExists,
+    areSameCellsSets,
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -41,11 +41,6 @@ import { getHouseCells } from '../../houseCells'
 const VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT = 2
 const VALID_CELL_MINIMUM_NOTES_COUNT = 2
 const MAX_VALID_CELLS_COUNT = 6
-
-const getHouseCellsNum = (cells) => {
-    return cells.map(cell => getBlockAndBoxNum(cell).boxNum)
-        .sortNumbers()
-}
 
 export const filterValidCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
     return _filter(getHouseCells(house), (cell) => {
@@ -173,9 +168,8 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 if (Houses.isRowHouse(houseType[j]) || Houses.isColHouse(houseType[j])) {
                     // TODO: let's wrap this condition into a func
                     // QUES -> why are we assuming that only one group is possible in a house ??
-                    const selectedCellsNum = getHouseCellsNum(selectedCells)
                     const houseCellsProcessed = groupsFoundInHouses[house.type][`${houseNum}`] || []
-                    if (houseCellsProcessed.sameArrays(selectedCellsNum)) continue
+                    if (areSameCellsSets(selectedCells, houseCellsProcessed)) continue
                 }
 
                 const validNakedGroup = areValidNakedGroupCells(selectedCells, notesData, groupCandidatesCount)
@@ -189,15 +183,15 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
 
                 // TODO: start refactoring from here now
                 // Note: the correctness of this DS depends on entries order in "houseType"
-                groupsFoundInHouses[house.type][house.num] = getHouseCellsNum(selectedCells)
+                groupsFoundInHouses[house.type][house.num] = selectedCells
                 if (houseAllCells.length === 15) {
                     // group cells belong to 2 houses, one is block for sure and another one can be either row or col
                     if (areSameRowCells(selectedCells)) {
                         const { row } = selectedCells[0]
-                        groupsFoundInHouses[HOUSE_TYPE.ROW][row] = getHouseCellsNum(selectedCells)
+                        groupsFoundInHouses[HOUSE_TYPE.ROW][row] = selectedCells
                     } else {
                         const { col } = selectedCells[0]
-                        groupsFoundInHouses[HOUSE_TYPE.COL][col] = getHouseCellsNum(selectedCells)
+                        groupsFoundInHouses[HOUSE_TYPE.COL][col] = selectedCells
                     }
                 }
 
