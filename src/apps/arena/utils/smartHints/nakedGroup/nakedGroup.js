@@ -6,7 +6,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import _isNull from 'lodash/src/utils/isNull'
 
 import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { consoleLog, inRange } from '../../../../../utils/util'
+import { inRange } from '../../../../../utils/util'
 
 import { HOUSES_COUNT, } from '../../../constants'
 
@@ -30,11 +30,11 @@ import { GROUPS, HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
 
 import { prepareNakedDublesOrTriplesHintData } from './uiHighlightData'
-
-// TODO: move these constants 
-const VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT = 2
-const VALID_CELL_MINIMUM_NOTES_COUNT = 2
-const MAX_VALID_CELLS_COUNT = 6
+import {
+    VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
+    VALID_CELL_MINIMUM_NOTES_COUNT,
+    MAX_VALID_CELLS_COUNT
+} from './nakedGroup.constants'
 
 export const filterValidCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
     return _filter(getHouseCells(house), (cell) => {
@@ -77,6 +77,7 @@ const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
     })
 }
 
+// has potential to be a re-usable util
 const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     if (!Houses.isBlockHouse(mainHouse.type) && areSameBlockCells(selectedCells)) {
         return {
@@ -187,7 +188,6 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses, notesData)
                 if (!newAndValidNakedGroup) continue
 
-                // consoleLog('@@@@ naked group', selectedCells, getUniqueNotesFromCells(selectedCells, notesData),)
                 hints.push(
                     prepareNakedDublesOrTriplesHintData(
                         groupCandidatesCount,
