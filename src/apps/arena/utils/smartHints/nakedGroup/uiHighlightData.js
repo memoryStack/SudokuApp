@@ -1,6 +1,6 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { getHousesCellsSharedByCells, isCellExists } from '../../util'
+import { getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists } from '../../util'
 
 import {
     HINTS_IDS,
@@ -14,9 +14,12 @@ import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
 } from '../util'
+import { NAKED_DOUBLE_CANDIDATES_COUNT } from './nakedGroup.constants'
 
-export const getUIHighlightData = (groupCells, groupCandidates, notesData) => {
+export const getUIHighlightData = (groupCells, notesData) => {
     const focusedCells = getHousesCellsSharedByCells(groupCells)
+    const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)
+
     return {
         hasTryOut: true,
         cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData),
@@ -66,4 +69,4 @@ const getHintChunks = (groupCandidates) => {
 }
 
 const getHintId = (groupCandidates) =>
-    groupCandidates.length === 2 ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE
+    groupCandidates.length === NAKED_DOUBLE_CANDIDATES_COUNT ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE

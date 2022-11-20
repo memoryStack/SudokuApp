@@ -126,8 +126,6 @@ const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHou
 const isNewAndValidNakedGroup = (house, selectedCells, groupsFoundInHouses, notesData) => {
     if (isCellsSelectionAlreadyProcessed(selectedCells, house, groupsFoundInHouses)) return false
 
-
-
     const allPossibleNotesPresent = isHintValid({
         type: GROUPS.NAKED_GROUP,
         data: {
@@ -197,10 +195,6 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
     if (_isEmpty(groupsRawData)) return null
 
     return _map(groupsRawData, ({ selectedCells }) => {
-        return getUIHighlightData(
-            selectedCells,
-            getUniqueNotesFromCells(selectedCells, notesData),
-            notesData
-        )
+        return getUIHighlightData(selectedCells, notesData)
     })
 }
