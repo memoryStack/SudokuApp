@@ -80,12 +80,10 @@ const getGroupCandidatesFromCells = (cells, notesData) => {
         .map(groupCandidate => parseInt(groupCandidate, 10))
 }
 
+// TODO: can rename it but later before closing refactoring
 const selectedCellsHaveCorrectNotesInstances = (cells, notesData, groupCandidatesCount) => {
     const groupVisibleNotesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const groupCandidates = Object.keys(groupVisibleNotesInstancesCount)
-
-    // checking if candidates in cells have correct count of instances or not
-    // 
 
     return groupCandidates.length === groupCandidatesCount && _every(groupCandidates, (groupCandidate) => {
         return inRange(
@@ -179,6 +177,23 @@ const isNewAndValidNakedGroup = (house, selectedCells, houseAllCells, groupsFoun
     return true
 }
 
+const cacheProcessedGroup = (house, selectedCells, houseAllCells, groupsFoundInHouses) => {
+    // Note: the correctness of this DS depends on iterating order of "houseType" loop
+    // the below block looks useless
+    // well it makes sense because we are finding first in block. YUCKKK
+    groupsFoundInHouses[house.type][house.num] = selectedCells
+    if (houseAllCells.length === 15) {
+        // group cells belong to 2 houses, one is block for sure and another one can be either row or col
+        if (areSameRowCells(selectedCells)) {
+            const { row } = selectedCells[0]
+            groupsFoundInHouses[HOUSE_TYPE.ROW][row] = selectedCells
+        } else {
+            const { col } = selectedCells[0]
+            groupsFoundInHouses[HOUSE_TYPE.COL][col] = selectedCells
+        }
+    }
+}
+
 // TODO: think over the namings harder. i see a lot of in-consistencies
 export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
@@ -213,22 +228,6 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                 const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses, notesData)
                 if (!newAndValidNakedGroup) continue
 
-                // TODO: start refactoring from here now
-                // Note: the correctness of this DS depends on iterating order of "houseType" loop
-                // the below block looks useless
-                // well it makes sense because we are finding first in block. YUCKKK
-                groupsFoundInHouses[house.type][house.num] = selectedCells
-                if (houseAllCells.length === 15) {
-                    // group cells belong to 2 houses, one is block for sure and another one can be either row or col
-                    if (areSameRowCells(selectedCells)) {
-                        const { row } = selectedCells[0]
-                        groupsFoundInHouses[HOUSE_TYPE.ROW][row] = selectedCells
-                    } else {
-                        const { col } = selectedCells[0]
-                        groupsFoundInHouses[HOUSE_TYPE.COL][col] = selectedCells
-                    }
-                }
-
                 consoleLog('@@@@ naked group', selectedCells, getGroupCandidatesFromCells(selectedCells, notesData),)
                 hints.push(
                     prepareNakedDublesOrTriplesHintData(
@@ -239,6 +238,8 @@ export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, 
                         notesData,
                     ),
                 )
+
+                cacheProcessedGroup(house, selectedCells, houseAllCells, groupsFoundInHouses)
             }
         }
     }
