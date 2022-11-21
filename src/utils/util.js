@@ -1,4 +1,7 @@
+
 import { PixelRatio } from 'react-native'
+
+import _inRange from 'lodash/src/utils/inRange'
 
 export const rgba = function (hex, opacity) {
     hex = hex.replace('#', '')
@@ -62,4 +65,4 @@ export const roundToNearestPixel = sizeInDp => {
     return PixelRatio.roundToNearestPixel(sizeInDp)
 }
 
-export const inRange = (value, { start, end }) => value >= start && value <= end
+export const inRange = (value, { start, end }) => _inRange(value, start, end + 1)
