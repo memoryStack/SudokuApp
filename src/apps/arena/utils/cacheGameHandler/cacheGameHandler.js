@@ -1,9 +1,6 @@
 import { setKey } from '../../../../utils/storage'
 
-import {
-    PREVIOUS_GAME_DATA_KEY,
-    GAME_DATA_KEYS,
-} from './constants'
+import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './constants'
 
 const dataToBeCached = {
     [GAME_DATA_KEYS.STATE]: null,

@@ -508,7 +508,8 @@ describe('initMainNumbers()', () => {
 
 describe('previousInactiveGameExists()', () => {
     const { getKey } = require('../../../../utils/storage')
-    getKey.mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.INACTIVE }))
+    getKey
+        .mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.INACTIVE }))
         .mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.DISPLAY_HINT }))
         .mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.ACTIVE }))
         .mockReturnValueOnce(getStoragePromise(null))
@@ -536,7 +537,10 @@ describe('previousInactiveGameExists()', () => {
 
 describe('getHousesCellsSharedByCells()', () => {
     test('returns row cells when only common houses is row', () => {
-        const cells = [{ row: 0, col: 1 }, { row: 0, col: 4 }]
+        const cells = [
+            { row: 0, col: 1 },
+            { row: 0, col: 4 },
+        ]
         const expectedResult = [
             { row: 0, col: 0 },
             { row: 0, col: 1 },
@@ -552,7 +556,10 @@ describe('getHousesCellsSharedByCells()', () => {
     })
 
     test('returns unique column and block cells when cells are shared by column and block', () => {
-        const cells = [{ row: 3, col: 1 }, { row: 4, col: 1 }]
+        const cells = [
+            { row: 3, col: 1 },
+            { row: 4, col: 1 },
+        ]
         const expectedResult = [
             { row: 0, col: 1 },
             { row: 1, col: 1 },

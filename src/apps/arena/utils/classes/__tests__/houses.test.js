@@ -1,5 +1,5 @@
-import { HOUSE_TYPE } from "../../smartHints/constants";
-import { Houses } from "../houses";
+import { HOUSE_TYPE } from '../../smartHints/constants'
+import { Houses } from '../houses'
 
 describe('Houses Class', () => {
     test('isRowHouse() class method verifies if passed houseType is row or not', () => {

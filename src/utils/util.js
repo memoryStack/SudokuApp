@@ -37,8 +37,8 @@ if (Array.prototype.sameArrays === undefined) {
 if (Array.prototype.sortNumbers === undefined) {
     Array.prototype.sortNumbers = function () {
         return this.sort(function (a, b) {
-            return a - b;
-        });
+            return a - b
+        })
     }
 }
 

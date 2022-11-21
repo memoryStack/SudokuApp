@@ -7,7 +7,4 @@ const GAME_DATA_KEYS = {
     CELL_ACTIONS: 'cellActionsData',
 }
 
-export {
-    PREVIOUS_GAME_DATA_KEY,
-    GAME_DATA_KEYS,
-}
+export { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS }

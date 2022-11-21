@@ -1,14 +1,14 @@
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react-hooks'
 
-import { testStoreWrapper } from "../../../../../utils/testingBoilerplate/reduxStoreWrapper";
-import { makeTestStore } from "../../../../../utils/testingBoilerplate/makeReduxStore";
-import smartHintHCReducers, { smartHintHCActions } from "../../../store/reducers/smartHintHC.reducers";
+import { testStoreWrapper } from '../../../../../utils/testingBoilerplate/reduxStoreWrapper'
+import { makeTestStore } from '../../../../../utils/testingBoilerplate/makeReduxStore'
+import smartHintHCReducers, { smartHintHCActions } from '../../../store/reducers/smartHintHC.reducers'
 
-import { useIsHintTryOutStep } from "../hooks";
-import { mainNumbers, notesData } from '../hiddenGroup/testData';
-import { HINTS_IDS } from '../constants';
-import { getSmartHint } from '../../smartHint';
-import boardReducers, { boardActions } from '../../../store/reducers/board.reducers';
+import { useIsHintTryOutStep } from '../hooks'
+import { mainNumbers, notesData } from '../hiddenGroup/testData'
+import { HINTS_IDS } from '../constants'
+import { getSmartHint } from '../../smartHint'
+import boardReducers, { boardActions } from '../../../store/reducers/board.reducers'
 
 const { setHints, setNextHint } = smartHintHCActions
 
@@ -24,7 +24,7 @@ describe('useIsHintTryOutStep()', () => {
 
         const { result } = renderHook(() => useIsHintTryOutStep(), {
             wrapper: testStoreWrapper,
-            initialProps: { store }
+            initialProps: { store },
         })
         expect(result.current).toBeFalsy()
 
@@ -33,15 +33,14 @@ describe('useIsHintTryOutStep()', () => {
             store.dispatch(setHints({ hints }))
         })
 
-        act((() => {
+        act(() => {
             store.dispatch(setNextHint())
-        }))
+        })
         expect(result.current).toBeFalsy()
 
-        act((() => {
+        act(() => {
             store.dispatch(setNextHint())
-        }))
+        })
         expect(result.current).toBeTruthy()
-
     })
 })

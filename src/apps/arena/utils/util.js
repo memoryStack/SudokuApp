@@ -5,13 +5,7 @@ import { GAME_STATE } from '../../../resources/constants'
 import { getKey } from '../../../utils/storage'
 import { onlyUnique } from '../../../utils/util'
 
-import {
-    BOARD_AXES_VALUES,
-    CELLS_IN_HOUSE,
-    HOUSES_COUNT,
-    NUMBERS_IN_HOUSE,
-    PUZZLE_SOLUTION_TYPES
-} from '../constants'
+import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSE_TYPE } from './smartHints/constants'
@@ -24,8 +18,7 @@ export const addLeadingZeroIfEligible = value => {
 }
 
 export const shouldSaveDataOnGameStateChange = (currentState, previousState) => {
-    return new GameState(previousState).isGameActive()
-        && !new GameState(currentState).isGameActive()
+    return new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
 }
 
 export const duplicacyPresent = (num, mainNumbers, cell) => {
@@ -210,7 +203,7 @@ export const areCommonHouseCells = (cellA, cellB) => {
 
 export const getUniqueNotesFromCells = (cells, notesData) => {
     const result = []
-    _forEach(cells, (cell) => {
+    _forEach(cells, cell => {
         result.push(...getCellVisibleNotes(notesData[cell.row][cell.col]))
     })
 
@@ -370,14 +363,14 @@ export const initMainNumbers = () => {
 
 const getCellMainNumberDefaultValue = () => ({ value: 0, solutionValue: 0, isClue: false })
 
-export const getHousesCellsSharedByCells = (cells) => {
+export const getHousesCellsSharedByCells = cells => {
     const result = []
 
     const commonHouses = getCellsCommonHouses(cells)
     for (const houseType in commonHouses) {
         if (!commonHouses[houseType]) continue
         const commonHouseCells = getHouseCells(getCellHouseInfo(houseType, cells[0]))
-        _forEach(commonHouseCells, (cell) => {
+        _forEach(commonHouseCells, cell => {
             if (!isCellExists(cell, result)) result.push(cell)
         })
     }

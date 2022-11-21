@@ -1,7 +1,6 @@
 import { HOUSE_TYPE } from '../smartHints/constants'
 
 export class Houses {
-
     static isRowHouse(houseType) {
         return houseType === HOUSE_TYPE.ROW
     }
@@ -13,5 +12,4 @@ export class Houses {
     static isBlockHouse(houseType) {
         return houseType === HOUSE_TYPE.BLOCK
     }
-
 }

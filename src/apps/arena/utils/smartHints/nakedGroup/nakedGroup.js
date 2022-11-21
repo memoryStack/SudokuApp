@@ -8,7 +8,7 @@ import _isNull from 'lodash/src/utils/isNull'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { consoleLog, inRange } from '../../../../../utils/util'
 
-import { HOUSES_COUNT, } from '../../../constants'
+import { HOUSES_COUNT } from '../../../constants'
 
 import { Houses } from '../../classes/houses'
 import { getHouseCells } from '../../houseCells'
@@ -23,7 +23,7 @@ import {
     isCellExists,
     areSameCellsSets,
     getUniqueNotesFromCells,
-    getHousesCellsSharedByCells
+    getHousesCellsSharedByCells,
 } from '../../util'
 
 import { isHintValid } from '../validityTest'
@@ -34,17 +34,17 @@ import { getUIHighlightData } from './uiHighlightData'
 import {
     VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
     VALID_CELL_MINIMUM_NOTES_COUNT,
-    MAX_VALID_CELLS_COUNT
+    MAX_VALID_CELLS_COUNT,
 } from './nakedGroup.constants'
 
 export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
-    return _filter(getHouseCells(house), (cell) => {
+    return _filter(getHouseCells(house), cell => {
         if (!isCellEmpty(cell, mainNumbers)) return false
 
-        return inRange(
-            getCellVisibleNotesCount(notesData[cell.row][cell.col]),
-            { start: VALID_CELL_MINIMUM_NOTES_COUNT, end: groupCandidatesCount, }
-        )
+        return inRange(getCellVisibleNotesCount(notesData[cell.row][cell.col]), {
+            start: VALID_CELL_MINIMUM_NOTES_COUNT,
+            end: groupCandidatesCount,
+        })
     })
 }
 
@@ -59,7 +59,7 @@ const getDefaultGroupsFoundInHouses = () => {
 export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     const result = {}
     _forEach(cells, ({ row, col }) => {
-        _forEach(getCellVisibleNotes(notesData[row][col]), (note) => {
+        _forEach(getCellVisibleNotes(notesData[row][col]), note => {
             if (!result[note]) result[note] = 1
             else result[note]++
         })
@@ -70,31 +70,35 @@ export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
 export const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
     const notesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const candidates = Object.keys(notesInstancesCount)
-    return candidates.length === groupCandidatesCount && _every(candidates, (candidate) => {
-        return inRange(
-            notesInstancesCount[candidate],
-            { start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT, end: groupCandidatesCount }
-        )
-    })
+    return (
+        candidates.length === groupCandidatesCount &&
+        _every(candidates, candidate => {
+            return inRange(notesInstancesCount[candidate], {
+                start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
+                end: groupCandidatesCount,
+            })
+        })
+    )
 }
 
 export const getAnotherSharedHouse = (mainHouse, selectedCells) => {
     if (!Houses.isBlockHouse(mainHouse.type)) {
-        return areSameBlockCells(selectedCells) ? { type: HOUSE_TYPE.BLOCK, num: getBlockAndBoxNum(selectedCells[0]).blockNum }
+        return areSameBlockCells(selectedCells)
+            ? { type: HOUSE_TYPE.BLOCK, num: getBlockAndBoxNum(selectedCells[0]).blockNum }
             : null
     }
 
     if (areSameRowCells(selectedCells)) {
         return {
             type: HOUSE_TYPE.ROW,
-            num: selectedCells[0].row
+            num: selectedCells[0].row,
         }
     }
 
     if (areSameColCells(selectedCells)) {
         return {
             type: HOUSE_TYPE.COL,
-            num: selectedCells[0].col
+            num: selectedCells[0].col,
         }
     }
 
@@ -166,13 +170,16 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
                     break hintsSearchLoop
                 }
 
-                const selectedCells = _map(possibleSelections[k], (selectionIndex) => validCells[selectionIndex])
+                const selectedCells = _map(possibleSelections[k], selectionIndex => validCells[selectionIndex])
 
                 if (!selectedCellsMakeGroup(selectedCells, notesData, groupCandidatesCount)) continue
 
-
-
-                const newAndValidNakedGroup = isNewAndValidNakedGroup(house, selectedCells, groupsFoundInHouses, notesData)
+                const newAndValidNakedGroup = isNewAndValidNakedGroup(
+                    house,
+                    selectedCells,
+                    groupsFoundInHouses,
+                    notesData,
+                )
                 if (!newAndValidNakedGroup) continue
 
                 result.push({ selectedCells })
