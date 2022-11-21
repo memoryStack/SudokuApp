@@ -1,4 +1,3 @@
-
 import { PixelRatio } from 'react-native'
 
 import _inRange from 'lodash/src/utils/inRange'

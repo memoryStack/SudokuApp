@@ -29,7 +29,8 @@ jobs:
         with:
           node-version: "14.18.2"
       - run: git config --global credential.helper store
-      - run: npm ci
+      - run: npm install # TODO: find out why "npm ci" doesn't install lodash dependency
+      - run: npm run test
       - run: npm run prettier
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
