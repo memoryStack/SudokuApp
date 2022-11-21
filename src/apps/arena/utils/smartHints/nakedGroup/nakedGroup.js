@@ -28,7 +28,6 @@ import {
 
 import { isHintValid } from '../validityTest'
 import { GROUPS, HOUSE_TYPE } from '../constants'
-import { maxHintsLimitReached } from '../util'
 
 import { getUIHighlightData } from './uiHighlightData'
 import {
@@ -148,15 +147,15 @@ const cacheProcessedGroup = (house, selectedCells, groupsFoundInHouses) => {
 }
 
 export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    const houseType = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
+    const houseTypes = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
     const groupsFoundInHouses = getDefaultGroupsFoundInHouses()
 
     const result = []
 
-    hintsSearchLoop: for (let j = 0; j < houseType.length; j++) {
+    for (const houseType of houseTypes) {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
-            const house = { type: houseType[j], num: houseNum }
+            const house = { type: houseType, num: houseNum }
             const validCells = filterNakedGroupEligibleCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)
 
             // to avoid computing 7C2 and 7C3, because that might be heavy but it's open for research
@@ -165,11 +164,6 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
             const possibleSelections = N_CHOOSE_K[validCells.length][groupCandidatesCount]
 
             for (let k = 0; k < possibleSelections.length; k++) {
-                // finding for new conbination of cells or numbers
-                if (maxHintsLimitReached(result, maxHintsThreshold)) {
-                    break hintsSearchLoop
-                }
-
                 const selectedCells = _map(possibleSelections[k], selectionIndex => validCells[selectionIndex])
 
                 if (!selectedCellsMakeGroup(selectedCells, notesData, groupCandidatesCount)) continue
@@ -182,7 +176,8 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
                 )
                 if (!newAndValidNakedGroup) continue
 
-                result.push({ selectedCells })
+                const nakedGroupsCount = result.push({ selectedCells })
+                if (nakedGroupsCount >= maxHintsThreshold) return result
 
                 cacheProcessedGroup(house, selectedCells, groupsFoundInHouses)
             }
