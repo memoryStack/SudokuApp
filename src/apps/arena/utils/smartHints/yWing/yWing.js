@@ -82,7 +82,7 @@ export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
     const expectedNotes = pivotNotes
         .concat(firstWingNotes)
         .filter(note => note !== commonNote)
-        .sort()
+        .sortNumbers()
     return expectedNotes
 }
 

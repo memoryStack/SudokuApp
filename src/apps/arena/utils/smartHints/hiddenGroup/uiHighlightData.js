@@ -37,7 +37,7 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
             })
         result.push(...cellRemovableNotes)
     })
-    return result.filter(onlyUnique).sort()
+    return result.filter(onlyUnique).sortNumbers()
 }
 
 const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) => {
@@ -153,7 +153,7 @@ const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHo
             return [...prevValue, ...groupCandidatesPresentInCell]
         }, [])
         .filter(onlyUnique)
-        .sort()
+        .sortNumbers()
 }
 
 const getPrimaryHouseHintExplaination = (houseType, groupCandidates, groupCells, removableCandidates) => {
@@ -202,7 +202,7 @@ const getSecondaryHouseHintExplaination = (
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
     const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notes)
-    return [...groupCandidates, ...removableCandidates].sort()
+    return [...groupCandidates, ...removableCandidates].sortNumbers()
 }
 
 const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
