@@ -20,7 +20,13 @@ import {
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
 
-import { CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG, CANDIDATE_MIN_OCCURENCES_IN_FINNED_LEG, FINNED_LEG_MAX_HOST_BLOCKS_COUNT, LEG_TYPES, XWING_TYPES } from './constants'
+import {
+    CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG,
+    CANDIDATE_MIN_OCCURENCES_IN_FINNED_LEG,
+    FINNED_LEG_MAX_HOST_BLOCKS_COUNT,
+    LEG_TYPES,
+    XWING_TYPES,
+} from './constants'
 import { getUIHighlightData } from './uiHighlightData'
 import {
     getCrossHouseType,
@@ -145,7 +151,7 @@ export const isSashimiFinnedXWing = xWing => {
     return isValidSashimiXWingAfterAddingSashimiCell(xWing)
 }
 
-const noLegIsPerfect = xWing => _every(xWing.legs, (leg) => !isPerfectLegType(leg))
+const noLegIsPerfect = xWing => _every(xWing.legs, leg => !isPerfectLegType(leg))
 
 export const getXWingType = xWing => {
     if (noLegIsPerfect(xWing)) return XWING_TYPES.INVALID
@@ -154,8 +160,7 @@ export const getXWingType = xWing => {
     if (candidateAllNotesNotFilledInLegs) return XWING_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
-    if (isPerfectLegType(otherLeg) && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
-        return XWING_TYPES.PERFECT
+    if (isPerfectLegType(otherLeg) && isPerfectXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.PERFECT
     if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.FINNED
     if (isSashimiFinnedXWing(xWing)) return XWING_TYPES.SASHIMI_FINNED
 
@@ -196,7 +201,7 @@ const getHostCellsGroupByBlock = hostCells => {
 export const isFinnedLeg = hostCells => {
     const candidateOccurencesInValidRange = inRange(hostCells.length, {
         start: CANDIDATE_MIN_OCCURENCES_IN_FINNED_LEG,
-        end: CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG
+        end: CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG,
     })
     if (!candidateOccurencesInValidRange) return false
 

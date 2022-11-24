@@ -20,11 +20,17 @@ export default ({ xWing, removableNotesHostCells }) => {
         return getNoInputResult(xWing)
     }
 
-    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) && _isEmpty(filterFilledCellsInTryOut(xWingCells))) {
+    if (
+        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) &&
+        _isEmpty(filterFilledCellsInTryOut(xWingCells))
+    ) {
         return getSameCrossHouseCandidatePossibilitiesResult(xWing)
     }
 
-    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) && !_isEmpty(filterFilledCellsInTryOut(xWingCells))) {
+    if (
+        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) &&
+        !_isEmpty(filterFilledCellsInTryOut(xWingCells))
+    ) {
         return getOneLegWithNoCandidateResult(xWing)
     }
 
