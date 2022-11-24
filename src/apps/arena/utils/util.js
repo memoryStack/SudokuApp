@@ -75,7 +75,10 @@ export const previousInactiveGameExists = async () => {
     return [GAME_STATE.INACTIVE, GAME_STATE.DISPLAY_HINT].includes(previousGameData[GAME_DATA_KEYS.STATE])
 }
 
-export const areSameCells = (cellA, cellB) => cellA.row === cellB.row && cellA.col === cellB.col
+export const areSameCells = (cellA, cellB) => {
+    if (_isEmpty(cellA) || _isEmpty(cellB)) return false
+    return cellA.row === cellB.row && cellA.col === cellB.col
+}
 
 export const areSameBlockCells = cells => {
     const cellsBlockNum = cells.map(cell => {
@@ -329,10 +332,10 @@ export const isCellCorrectlyFilled = ({ solutionValue = 0, value = 0 } = {}) => 
 }
 
 export const sameHouseAsSelected = (cell, selectedCell) => {
-    if (cell.row === selectedCell.row || cell.col === selectedCell.col) return true
-    const normalBoxBlockInfo = getBlockAndBoxNum(cell)
-    const selectedBoxBlockInfo = getBlockAndBoxNum(selectedCell)
-    return normalBoxBlockInfo.blockNum === selectedBoxBlockInfo.blockNum
+    if (_isEmpty(cell) || _isEmpty(selectedCell)) return false
+
+    const cells = [cell, selectedCell]
+    return areSameRowCells(cells) || areSameColCells(cells) || areSameBlockCells(cells)
 }
 
 export const getRowAndCol = (blockNum, boxNum) => {

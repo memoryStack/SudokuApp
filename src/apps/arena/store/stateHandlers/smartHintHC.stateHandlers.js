@@ -17,7 +17,6 @@ const stateHandlers = {
         state.tryOut = {
             mainNumbers,
             notesInfo,
-            selectedCell: { row: 0, col: 0 },
             notesErasedOnInput: {},
         }
     },

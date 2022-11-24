@@ -21,7 +21,6 @@ import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } f
 import { getStyles } from './style'
 import { Cell } from './cell'
 
-
 const looper = []
 const bordersLooper = []
 for (let i = 0; i < 10; i++) {
@@ -39,7 +38,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         return getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH })
     }, [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
 
-    const selectedCellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value || 0
+    const selectedCellMainValue = _get(mainNumbers, [selectedCell.row, selectedCell.col, 'value'], 0)
 
     const sameValueAsSelectedBox = cell =>
         selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value

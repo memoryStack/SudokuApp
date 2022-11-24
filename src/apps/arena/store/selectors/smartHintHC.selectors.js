@@ -33,10 +33,6 @@ export const getHintHCInfo = state => {
     }
 }
 
-export const getTryOutSelectedCell = state => {
-    return state.smartHintHC.tryOut.selectedCell
-}
-
 export const getTryOutMainNumbers = state => {
     return state.smartHintHC.tryOut.mainNumbers
 }
