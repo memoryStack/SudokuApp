@@ -183,8 +183,7 @@ export const filterFilledCellsInTryOut = cells => {
     })
 }
 
-export const getSashimiCell = xWing => {
-    const { houseType, legs } = xWing
+export const getSashimiCell = ({ houseType, legs }) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
 
@@ -193,11 +192,11 @@ export const getSashimiCell = xWing => {
             row: otherLeg.cells[0].row,
             col: sashimiAligned.col,
         }
-    } else {
-        return {
-            row: sashimiAligned.row,
-            col: otherLeg.cells[0].col,
-        }
+    }
+
+    return {
+        row: sashimiAligned.row,
+        col: otherLeg.cells[0].col,
     }
 }
 
