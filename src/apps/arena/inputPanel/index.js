@@ -20,8 +20,6 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
-    const CLOSE_ICON_DIMENSION = CELL_WIDTH * (3 / 4)
-
     const styles = useMemo(() => {
         return getStyles(CELL_WIDTH)
     }, [CELL_WIDTH])
@@ -41,7 +39,6 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
                 key={'erase_cell'}
             >
                 <Image style={styles.eraser} source={require('../../../resources/assets/eraser.png')} />
-                {/* <CloseIcon height={CLOSE_ICON_DIMENSION} width={CLOSE_ICON_DIMENSION} fill={'rgb(40, 90, 163)'} /> */}
             </Touchable>
         )
     }
