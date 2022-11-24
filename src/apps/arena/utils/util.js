@@ -200,6 +200,8 @@ export const getPairCellsCommonHouses = (cellA, cellB) => {
 }
 
 export const areCommonHouseCells = (cellA, cellB) => {
+    if (_isEmpty(cellA) || _isEmpty(cellB)) return false
+
     const cellsPairCommonHouses = getPairCellsCommonHouses(cellA, cellB)
     return Object.values(cellsPairCommonHouses).some(isCommonHouse => isCommonHouse)
 }
@@ -329,13 +331,6 @@ export const forEachHouse = callback => {
 export const isCellCorrectlyFilled = ({ solutionValue = 0, value = 0 } = {}) => {
     if (solutionValue === 0 || value === 0) return false
     return value === solutionValue
-}
-
-export const sameHouseAsSelected = (cell, selectedCell) => {
-    if (_isEmpty(cell) || _isEmpty(selectedCell)) return false
-
-    const cells = [cell, selectedCell]
-    return areSameRowCells(cells) || areSameColCells(cells) || areSameBlockCells(cells)
 }
 
 export const getRowAndCol = (blockNum, boxNum) => {

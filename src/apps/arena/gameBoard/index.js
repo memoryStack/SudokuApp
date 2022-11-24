@@ -13,7 +13,7 @@ import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import { areSameCells, sameHouseAsSelected } from '../utils/util'
+import { areSameCells, areCommonHouseCells } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
 import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
@@ -79,7 +79,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
     }
 
     const hasSameValueInSameHouseAsSelectedCell = cell => {
-        return sameHouseAsSelected(cell, selectedCell) && sameValueAsSelectedBox(cell)
+        return areCommonHouseCells(cell, selectedCell) && sameValueAsSelectedBox(cell)
     }
 
     const getCustomPuzzleBoardCellBgColor = cell => {
@@ -92,7 +92,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
         if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
 
-        const isSameHouseAsSelected = sameHouseAsSelected(cell, selectedCell)
+        const isSameHouseAsSelected = areCommonHouseCells(cell, selectedCell)
         const isSameValueAsSelected = sameValueAsSelectedBox(cell)
         if (isSameHouseAsSelected) return styles.sameHouseCellBGColor
         if (!isSameHouseAsSelected && isSameValueAsSelected) return styles.diffHouseSameValueBGColor
