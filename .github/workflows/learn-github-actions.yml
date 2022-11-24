@@ -1,13 +1,18 @@
 name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+run-name: ${{ github.actor }} is learning GitHub Actions # what is it's use ??
+on: [push] # event for triggering this workflow
 jobs:
-  check-bats-version:
+  check-bats-version: # 1st job name
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+    steps: # groups all the steps for check-bats-version job
+      # You should use the checkout action any time your
+      # workflow will run against the repository's code.
+      - uses: actions/checkout@v3 
+      # it's an action to install the specified version of the Node.js
+      # This puts both the node and npm commands in your PATH.
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
+      # The run keyword tells the job to execute a command on the runner. 
       - run: npm install -g bats
       - run: bats -v
