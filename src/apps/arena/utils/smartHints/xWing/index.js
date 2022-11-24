@@ -1,6 +1,8 @@
-import cloneDeep from 'lodash/src/utils/cloneDeep'
+import _cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
+
 import { NUMBERS_IN_HOUSE } from '../../../constants'
+
 import { getHouseCells } from '../../houseCells'
 import {
     areSameBlockCells,
@@ -11,8 +13,10 @@ import {
     isCellNoteVisible,
     getBlockAndBoxNum,
 } from '../../util'
+
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
+
 import { LEG_TYPES, XWING_TYPES } from './constants'
 import { getUIHighlightData } from './uiHighlightData'
 import {
@@ -235,26 +239,29 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     return result
 }
 
-const getSashimiLegFromNonAllignedPerfectLegs = (houseType, legA, legB) => {
+const getSashimiLegFromNonAllignedPerfectLegs = (xWing) => {
+    const { legs: [legA, legB] } = xWing
+
     const isLegAValidSashimiLeg = isSashimiFinnedXWing({
-        houseType,
+        ...xWing,
         legs: [{ ...Object.assign({}, legA), type: LEG_TYPES.FINNED }, legB],
     })
     return isLegAValidSashimiLeg ? legA : legB
 }
 
-const getValidSashimiXWingSashimiLeg = (legA, legB, houseType) => {
-    const { otherLeg } = categorizeLegs(legA, legB)
+const getValidSashimiXWingSashimiLeg = (xWing) => {
+    const { otherLeg } = categorizeLegs(...xWing.legs)
     if (otherLeg.type !== LEG_TYPES.PERFECT) return otherLeg
 
-    return getSashimiLegFromNonAllignedPerfectLegs(houseType, legA, legB)
+    return getSashimiLegFromNonAllignedPerfectLegs(xWing)
 }
 
-export const transformSashimiXWingLeg = (legA, legB, houseType) => {
-    const firstLeg = cloneDeep(legA)
-    const secondLeg = cloneDeep(legB)
+export const transformSashimiXWingLeg = (xWing) => {
+    const { houseType, legs } = xWing
+    const firstLeg = _cloneDeep(legs[0])
+    const secondLeg = _cloneDeep(legs[1])
 
-    const sashimiLeg = getValidSashimiXWingSashimiLeg(firstLeg, secondLeg, houseType)
+    const sashimiLeg = getValidSashimiXWingSashimiLeg({ houseType, legs: [firstLeg, secondLeg] })
     sashimiLeg.type = LEG_TYPES.SASHIMI_FINNED
 
     const { perfectLeg, otherLeg } = categorizeLegs(firstLeg, secondLeg)
@@ -284,9 +291,10 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
     return result
 }
 
-const transformValidXWingLegs = (xWingType, { firstLeg, secondLeg }, houseType) => {
-    if (xWingType === XWING_TYPES.SASHIMI_FINNED) return transformSashimiXWingLeg(firstLeg, secondLeg, houseType)
-    return [firstLeg, secondLeg]
+const transformValidXWingLegs = (xWing) => {
+    const { legs } = xWing
+    if (xWing.type === XWING_TYPES.SASHIMI_FINNED) return transformSashimiXWingLeg(xWing)
+    return legs
 }
 
 const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses) => {
@@ -302,10 +310,14 @@ const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses) => {
             })
 
             if (xWingType !== XWING_TYPES.INVALID) {
-                result.push({
+                const xWing = {
                     houseType,
                     type: xWingType,
-                    legs: transformValidXWingLegs(xWingType, { firstLeg, secondLeg }, houseType),
+                    legs: [firstLeg, secondLeg]
+                }
+                result.push({
+                    ...xWing,
+                    legs: transformValidXWingLegs(xWing),
                 })
             }
         }

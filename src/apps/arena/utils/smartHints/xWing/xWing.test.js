@@ -1162,7 +1162,7 @@ describe('transformSashimiXWingLeg()', () => {
             },
         ]
 
-        expect(transformSashimiXWingLeg(legA, legB, houseType)).toStrictEqual(expectedResult)
+        expect(transformSashimiXWingLeg({ houseType, legs: [legA, legB] })).toStrictEqual(expectedResult)
     })
 })
 
