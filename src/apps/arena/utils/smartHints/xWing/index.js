@@ -155,14 +155,13 @@ export const getXWingType = xWing => {
     if (candidateAllNotesNotFilledInLegs) return XWING_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
-    let result = XWING_TYPES.INVALID
     if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
-        result = XWING_TYPES.PERFECT
+        return XWING_TYPES.PERFECT
     if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells))
-        result = XWING_TYPES.FINNED
-    if (isSashimiFinnedXWing(xWing)) result = XWING_TYPES.SASHIMI_FINNED
+        return XWING_TYPES.FINNED
+    if (isSashimiFinnedXWing(xWing)) return XWING_TYPES.SASHIMI_FINNED
 
-    return result
+    return XWING_TYPES.INVALID
 }
 
 const getEmptyCellsInHouse = (house, mainNumbers) => {
