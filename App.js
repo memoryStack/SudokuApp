@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         backgroundColor: 'white',
-    }
+    },
 })
 
 const App = () => {
@@ -68,21 +68,13 @@ const App = () => {
     const renderSnackBar = () => {
         if (!snackBar.show) return null
         if (snackBar.view) return snackBar.view
-        return (
-            <SnackBar
-                msg={snackBar.msg}
-                customStyles={snackBar.customStyles}
-                onClose={onCloseSnackBar}
-            />
-        )
+        return <SnackBar msg={snackBar.msg} customStyles={snackBar.customStyles} onClose={onCloseSnackBar} />
     }
 
     return (
         <Provider store={store}>
             <View style={styles.container}>
-                <NavigationContainer>
-                    {getNavigator()}
-                </NavigationContainer>
+                <NavigationContainer>{getNavigator()}</NavigationContainer>
                 {renderSnackBar()}
             </View>
         </Provider>

@@ -157,8 +157,7 @@ export const getXWingType = xWing => {
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
     if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
         return XWING_TYPES.PERFECT
-    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells))
-        return XWING_TYPES.FINNED
+    if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.FINNED
     if (isSashimiFinnedXWing(xWing)) return XWING_TYPES.SASHIMI_FINNED
 
     return XWING_TYPES.INVALID
@@ -238,8 +237,10 @@ export const getHouseXWingLegs = (house, mainNumbers, notesData) => {
     return result
 }
 
-const getSashimiLegFromNonAllignedPerfectLegs = (xWing) => {
-    const { legs: [legA, legB] } = xWing
+const getSashimiLegFromNonAllignedPerfectLegs = xWing => {
+    const {
+        legs: [legA, legB],
+    } = xWing
 
     const isLegAValidSashimiLeg = isSashimiFinnedXWing({
         ...xWing,
@@ -248,14 +249,14 @@ const getSashimiLegFromNonAllignedPerfectLegs = (xWing) => {
     return isLegAValidSashimiLeg ? legA : legB
 }
 
-const getValidSashimiXWingSashimiLeg = (xWing) => {
+const getValidSashimiXWingSashimiLeg = xWing => {
     const { otherLeg } = categorizeLegs(...xWing.legs)
     if (otherLeg.type !== LEG_TYPES.PERFECT) return otherLeg
 
     return getSashimiLegFromNonAllignedPerfectLegs(xWing)
 }
 
-export const transformSashimiXWingLeg = (xWing) => {
+export const transformSashimiXWingLeg = xWing => {
     const { houseType, legs } = xWing
     const firstLeg = _cloneDeep(legs[0])
     const secondLeg = _cloneDeep(legs[1])
@@ -290,7 +291,7 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
     return result
 }
 
-const transformValidXWingLegs = (xWing) => {
+const transformValidXWingLegs = xWing => {
     const { legs } = xWing
     if (xWing.type === XWING_TYPES.SASHIMI_FINNED) return transformSashimiXWingLeg(xWing)
     return legs
@@ -312,7 +313,7 @@ const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses) => {
                 const xWing = {
                     houseType,
                     type: xWingType,
-                    legs: [firstLeg, secondLeg]
+                    legs: [firstLeg, secondLeg],
                 }
                 result.push({
                     ...xWing,
