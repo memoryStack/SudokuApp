@@ -1,5 +1,6 @@
 import _cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
+import _every from 'lodash/src/utils/every'
 
 import { NUMBERS_IN_HOUSE } from '../../../constants'
 
@@ -28,6 +29,7 @@ import {
     categorizeSashimiXWingPerfectLegCells,
     getSashimiCell,
     getXWingCandidate,
+    isPerfectLegType,
 } from './utils'
 
 const getCrossHouseCells = (cell, houseType) => {
@@ -138,15 +140,12 @@ const isValidSashimiXWingAfterAddingSashimiCell = xWing => {
 
 export const isSashimiFinnedXWing = xWing => {
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
-    if (otherLeg.type === LEG_TYPES.PERFECT) return arePerfectNonAlignedLegsSashimiFinnedXWing(xWing)
+    if (isPerfectLegType(otherLeg)) return arePerfectNonAlignedLegsSashimiFinnedXWing(xWing)
     if (!perfectLegAlignsWithFinnedLegForSashimiXWing(perfectLeg.cells, otherLeg.cells)) return false
     return isValidSashimiXWingAfterAddingSashimiCell(xWing)
 }
 
-const noLegIsPerfect = xWing => {
-    const [legA, legB] = xWing.legs
-    return legA.type !== LEG_TYPES.PERFECT && legB.type !== LEG_TYPES.PERFECT
-}
+const noLegIsPerfect = xWing => _every(xWing.legs, (leg) => !isPerfectLegType(leg))
 
 export const getXWingType = xWing => {
     if (noLegIsPerfect(xWing)) return XWING_TYPES.INVALID
@@ -155,7 +154,7 @@ export const getXWingType = xWing => {
     if (candidateAllNotesNotFilledInLegs) return XWING_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
-    if (otherLeg.type === LEG_TYPES.PERFECT && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
+    if (isPerfectLegType(otherLeg) && isPerfectXWing(perfectLeg.cells, otherLeg.cells))
         return XWING_TYPES.PERFECT
     if (otherLeg.type === LEG_TYPES.FINNED && isFinnedXWing(perfectLeg.cells, otherLeg.cells)) return XWING_TYPES.FINNED
     if (isSashimiFinnedXWing(xWing)) return XWING_TYPES.SASHIMI_FINNED
@@ -251,7 +250,7 @@ const getSashimiLegFromNonAllignedPerfectLegs = xWing => {
 
 const getValidSashimiXWingSashimiLeg = xWing => {
     const { otherLeg } = categorizeLegs(...xWing.legs)
-    if (otherLeg.type !== LEG_TYPES.PERFECT) return otherLeg
+    if (!isPerfectLegType(otherLeg)) return otherLeg
 
     return getSashimiLegFromNonAllignedPerfectLegs(xWing)
 }

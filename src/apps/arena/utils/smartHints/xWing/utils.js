@@ -25,13 +25,14 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAM
 
 import { LEG_TYPES } from './constants'
 
-export const categorizeLegs = (legA, legB) => {
-    const perfectLeg = legA.type === LEG_TYPES.PERFECT ? legA : legB
-    const otherLeg = perfectLeg === legA ? legB : legA
+export const isPerfectLegType = (leg) =>
+    leg.type === LEG_TYPES.PERFECT
 
+export const categorizeLegs = (legA, legB) => {
+    const perfectLeg = isPerfectLegType(legA) ? legA : legB
     return {
         perfectLeg,
-        otherLeg,
+        otherLeg: perfectLeg === legA ? legB : legA,
     }
 }
 
