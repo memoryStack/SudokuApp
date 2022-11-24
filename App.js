@@ -1,25 +1,34 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react'
-import { View } from 'react-native'
-import CodePush from 'react-native-code-push'
+
+import { View, StyleSheet } from 'react-native'
+
 import { Provider } from 'react-redux'
 
-import { addListener, emit, removeListener } from './src/utils/GlobalEventBus'
+import CodePush from 'react-native-code-push'
+
+import { NavigationContainer } from '@react-navigation/native'
+
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
+import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
 import { EVENTS } from './src/constants/events'
-import { NavigationContainer } from '@react-navigation/native'
 import { getNavigator } from './src/navigation/navigator'
 
 import store from './src/redux/store'
 
-// initialize the event bus
-
-/**
- * right now it will contain the arena screen. later on will add proper screenNavigations logic n all
- */
-
 const CODE_PUSH_OPTIONS = {
     checkFrequency: CodePush.CheckFrequency.ON_APP_START,
 }
+
+const styles = StyleSheet.create({
+    // TODO: why putting here alignItems to center make everything invisible ??
+    container: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'white',
+    }
+})
 
 const App = () => {
     // TODO: codepush is giving some error for ios
@@ -42,14 +51,13 @@ const App = () => {
 
     useEffect(() => {
         const handler = ({ snackbarView = null, msg = '', visibleTime = 3000, customStyles = null }) => {
-            if (!snackbarView && !msg) return
+            if (_isEmpty(snackbarView) && _isEmpty(msg)) return
+
             setSnackBar({ show: true, view: snackbarView, msg, customStyles })
             snackBarTimerID.current = setTimeout(hideSnackBar, visibleTime)
         }
         addListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
-        return () => {
-            removeListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
-        }
+        return () => removeListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
     }, [])
 
     const onCloseSnackBar = useCallback(() => {
@@ -59,25 +67,22 @@ const App = () => {
 
     const renderSnackBar = () => {
         if (!snackBar.show) return null
+        if (snackBar.view) return snackBar.view
         return (
-            <>
-                {snackBar.view}
-                <SnackBar msg={snackBar.msg} customStyles={snackBar.customStyles} onClose={onCloseSnackBar} />
-            </>
+            <SnackBar
+                msg={snackBar.msg}
+                customStyles={snackBar.customStyles}
+                onClose={onCloseSnackBar}
+            />
         )
     }
 
-    // TODO: why putting here alignItems to center make everything invisible ??
     return (
         <Provider store={store}>
-            <View
-                style={{
-                    height: '100%',
-                    width: '100%',
-                    backgroundColor: 'white',
-                }}
-            >
-                <NavigationContainer>{getNavigator()}</NavigationContainer>
+            <View style={styles.container}>
+                <NavigationContainer>
+                    {getNavigator()}
+                </NavigationContainer>
                 {renderSnackBar()}
             </View>
         </Provider>
