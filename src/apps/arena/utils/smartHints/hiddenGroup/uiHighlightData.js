@@ -1,6 +1,6 @@
 import { onlyUnique } from '../../../../../utils/util'
 import cloneDeep from 'lodash/src/utils/cloneDeep'
-import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../smartHints/constants'
+import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, NUMBER_TO_TEXT } from '../../smartHints/constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../smartHints/stringLiterals'
 import {
     areSameBlockCells,
@@ -157,17 +157,16 @@ const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHo
 }
 
 const getPrimaryHouseHintExplaination = (houseType, groupCandidates, groupCells, removableCandidates) => {
-    const isHiddenDoubles = groupCandidates.length === 2
+    const hintId = groupCandidates.length === 2 ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
+    const msgTemplate = HINT_EXPLANATION_TEXTS[hintId].PRIMARY_HOUSE
     const msgPlaceholdersValues = {
         houseName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
-        candidatesCountText: isHiddenDoubles ? 'two' : 'three', // TODO: do something with it
-        cellsCountText: isHiddenDoubles ? 'two' : 'three',
+        candidatesCountText: NUMBER_TO_TEXT[groupCandidates.length],
+        cellsCountText: NUMBER_TO_TEXT[groupCandidates.length],
         candidatesListText: getCandidatesListText(groupCandidates),
         cellsListText: getCellsAxesValuesListText(groupCells),
         removableCandidatesListText: getCandidatesListText(removableCandidates),
     }
-    const hintId = isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
-    const msgTemplate = HINT_EXPLANATION_TEXTS[hintId].PRIMARY_HOUSE
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
