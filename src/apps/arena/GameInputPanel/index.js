@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-import { useSelector } from 'react-redux'
-
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
@@ -9,14 +7,14 @@ import _noop from 'lodash/src/utils/noop'
 import withActions from '../../../utils/hocs/withActions'
 
 import { Inputpanel } from '../inputPanel'
-import { getMainNumbers } from '../store/selectors/board.selectors'
 import { forBoardEachCell } from '../utils/util'
 import { MAX_INSTANCES_OF_NUMBER } from '../constants'
+import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 
 import { ACTION_HANDLERS } from './actionHandlers'
 
 const GameInputPanel_ = ({ onAction }) => {
-    const mainNumbers = useSelector(getMainNumbers)
+    const { mainNumbers } = useGameBoardInputs()
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
 
     const getInstancesCounts = mainNumbers => {
