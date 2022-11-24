@@ -25,8 +25,7 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAM
 
 import { LEG_TYPES } from './constants'
 
-export const isPerfectLegType = (leg) =>
-    leg.type === LEG_TYPES.PERFECT
+export const isPerfectLegType = (leg) => leg.type === LEG_TYPES.PERFECT
 
 export const categorizeLegs = (legA, legB) => {
     const perfectLeg = isPerfectLegType(legA) ? legA : legB
@@ -44,11 +43,9 @@ export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells
         })
     })
 
-    const finnCells = finnedLegHostCells.filter(cell => !isCellExists(cell, perfectCells))
-
     return {
         perfect: perfectCells,
-        finns: finnCells,
+        finns: finnedLegHostCells.filter(cell => !isCellExists(cell, perfectCells)),
     }
 }
 
@@ -57,11 +54,10 @@ export const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HO
 export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notesData) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
-    const xWingBaseCells = [...otherLeg.cells, ...perfectLeg.cells]
 
     return getHouseCells(getCellBlockHouseInfo(finns[0])).filter(cell => {
         if (
-            isCellExists(cell, xWingBaseCells) ||
+            isCellExists(cell, getXWingCells(legs)) ||
             !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col])
         )
             return false

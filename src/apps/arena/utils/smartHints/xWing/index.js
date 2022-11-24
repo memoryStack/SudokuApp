@@ -2,6 +2,8 @@ import _cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
 import _every from 'lodash/src/utils/every'
 
+import { inRange } from '../../../../../utils/util'
+
 import { NUMBERS_IN_HOUSE } from '../../../constants'
 
 import { getHouseCells } from '../../houseCells'
@@ -18,7 +20,7 @@ import {
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
 
-import { LEG_TYPES, XWING_TYPES } from './constants'
+import { CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG, CANDIDATE_MIN_OCCURENCES_IN_FINNED_LEG, FINNED_LEG_MAX_HOST_BLOCKS_COUNT, LEG_TYPES, XWING_TYPES } from './constants'
 import { getUIHighlightData } from './uiHighlightData'
 import {
     getCrossHouseType,
@@ -183,10 +185,6 @@ const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {
     return result
 }
 
-const isPerfectLeg = candidateHostCells => {
-    return candidateHostCells.length === 2
-}
-
 const getHostCellsGroupByBlock = hostCells => {
     const result = {}
     hostCells.forEach(cell => {
@@ -198,13 +196,18 @@ const getHostCellsGroupByBlock = hostCells => {
 }
 
 export const isFinnedLeg = hostCells => {
-    const invalidOccurrences = hostCells.length > 4 || hostCells.length <= 2
-    if (invalidOccurrences) return false
+    const candidateOccurencesInValidRange = inRange(hostCells.length, {
+        start: CANDIDATE_MIN_OCCURENCES_IN_FINNED_LEG,
+        end: CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG
+    })
+    if (!candidateOccurencesInValidRange) return false
 
     const hostCellsGroupsByBlock = getHostCellsGroupByBlock(hostCells)
-    const groupsCount = Object.keys(hostCellsGroupsByBlock).length
-    if (groupsCount > 2) return false
-    if (groupsCount === 1 || hostCells.length === 3) return true
+    const uniqueHostBlocksCount = Object.keys(hostCellsGroupsByBlock).length
+
+    if (uniqueHostBlocksCount > FINNED_LEG_MAX_HOST_BLOCKS_COUNT) return false
+
+    if (uniqueHostBlocksCount === 1 || hostCells.length === 3) return true
 
     for (const blockNum in hostCellsGroupsByBlock) {
         if (hostCellsGroupsByBlock[blockNum].length === 1) return true
@@ -214,10 +217,8 @@ export const isFinnedLeg = hostCells => {
 }
 
 const getXWingLegType = candidateHostCells => {
-    if (candidateHostCells.length < 2) return LEG_TYPES.INVALID
-    if (isPerfectLeg(candidateHostCells)) return LEG_TYPES.PERFECT
+    if (candidateHostCells.length === 2) return LEG_TYPES.PERFECT
     if (isFinnedLeg(candidateHostCells)) return LEG_TYPES.FINNED
-
     return LEG_TYPES.INVALID
 }
 

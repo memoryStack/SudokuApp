@@ -8,3 +8,7 @@ export const LEG_TYPES = {
 export const XWING_TYPES = {
     ...LEG_TYPES,
 }
+
+export const CANDIDATE_MIN_OCCURENCES_IN_FINNED_LEG = 3
+export const CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG = 4
+export const FINNED_LEG_MAX_HOST_BLOCKS_COUNT = 2
