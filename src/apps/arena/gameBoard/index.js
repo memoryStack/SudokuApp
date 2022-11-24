@@ -10,7 +10,7 @@ import _noop from 'lodash/src/utils/noop'
 import _get from 'lodash/src/utils/get'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { useBoardElementsDimensions } from '../../../utils/customHooks'
+import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { areSameCells, sameHouseAsSelected } from '../utils/util'
@@ -20,6 +20,7 @@ import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } f
 
 import { getStyles } from './style'
 import { Cell } from './cell'
+
 
 const looper = []
 const bordersLooper = []

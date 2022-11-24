@@ -1,12 +1,14 @@
 import { useWindowDimensions } from 'react-native'
+
+import { roundToNearestPixel } from '../../../utils/util'
+
 import {
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
     CELLS_IN_HOUSE,
     BOARD_TO_WINDOW_WIDTH_RATIO,
     THICK_BORDER_COUNT,
     THIN_BORDER_COUNT,
-} from '../../apps/arena/constants'
-import { roundToNearestPixel } from '../util'
+} from '../constants'
 
 export const useBoardElementsDimensions = () => {
     const { width: windowWidth } = useWindowDimensions()

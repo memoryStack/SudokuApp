@@ -7,10 +7,9 @@ import PropTypes from 'prop-types'
 import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { rgba } from '../../utils/util'
-import { useBoardElementsDimensions } from '../../utils/customHooks'
 import { EVENTS } from '../../constants/events'
-
 import { NextGameMenu } from '../arena/nextGameMenu'
+import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimensions'
 
 const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
 

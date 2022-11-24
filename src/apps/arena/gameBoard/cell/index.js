@@ -7,10 +7,11 @@ import PropTypes from 'prop-types'
 import _noop from 'lodash/src/utils/noop'
 
 import { CloseIcon } from '../../../../resources/svgIcons/close'
-import { useBoardElementsDimensions } from '../../../../utils/customHooks'
 import { fonts } from '../../../../resources/fonts/font'
 
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
+
+import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensions'
 
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../style'
 

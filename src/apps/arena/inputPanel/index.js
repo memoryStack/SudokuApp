@@ -6,13 +6,11 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { CloseIcon } from '../../../resources/svgIcons/close'
-import { useBoardElementsDimensions } from '../../../utils/customHooks'
-
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
+import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { getStyles } from './style'
 import { ACTION_TYPES } from './constants'
