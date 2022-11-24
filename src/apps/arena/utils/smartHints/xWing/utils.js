@@ -1,6 +1,13 @@
-import { LEG_TYPES, XWING_TYPES } from './constants'
+import { toOrdinal } from 'lodash/src/utils/toOrdinal'
+import _flatten from 'lodash/src/utils/flatten'
+
+import { getStoreState } from '../../../../../redux/dispatch.helpers'
+
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
+import { getMainNumbers } from '../../../store/selectors/board.selectors'
+
+import { getHouseCells } from '../../houseCells'
 import {
-    areSameCells,
     areSameColCells,
     areSameRowCells,
     getCellHouseInfo,
@@ -11,15 +18,12 @@ import {
     getBlockAndBoxNum,
     getCellBlockHouseInfo,
 } from '../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
-import { getHouseCells } from '../../houseCells'
-import { toOrdinal } from 'lodash/src/utils/toOrdinal'
+
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
 import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
-import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import _flatten from 'lodash/src/utils/flatten'
-import { getMainNumbers } from '../../../store/selectors/board.selectors'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
+
+import { LEG_TYPES } from './constants'
 
 export const categorizeLegs = (legA, legB) => {
     const perfectLeg = legA.type === LEG_TYPES.PERFECT ? legA : legB
