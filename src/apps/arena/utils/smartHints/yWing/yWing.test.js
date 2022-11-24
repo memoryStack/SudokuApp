@@ -4,7 +4,6 @@ import {
     isValidYWingCell,
     isValidYWingCellsPair,
     getSecondWingExpectedNotes,
-    isCellsShareHouse,
 } from './yWing'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -19,70 +18,74 @@ const mockBoardSelectors = mockedNotes => {
     getStoreState.mockReturnValue({})
 }
 
-test('yWing', () => {
-    const { mainNumbers, notesData } = require('./testData')
+describe('getAllYWings()', () => {
+    test('returns row data for all yWings in puzzle', () => {
+        const { mainNumbers, notesData } = require('./testData')
 
-    mockBoardSelectors(notesData)
+        mockBoardSelectors(notesData)
 
-    const expectedYWings = [
-        {
-            pivot: { cell: { row: 1, col: 0 }, notes: [2, 7] },
-            wings: [
-                { cell: { row: 0, col: 2 }, notes: [5, 7] },
-                { cell: { row: 1, col: 5 }, notes: [2, 5] },
-            ],
-            wingsCommonNote: 5,
-        },
-        {
-            pivot: { cell: { row: 0, col: 2 }, notes: [5, 7] },
-            wings: [
-                { cell: { row: 1, col: 0 }, notes: [2, 7] },
-                { cell: { row: 0, col: 5 }, notes: [2, 5] },
-            ],
-            wingsCommonNote: 2,
-        },
-        {
-            pivot: { cell: { row: 1, col: 1 }, notes: [4, 5] },
-            wings: [
-                { cell: { row: 0, col: 2 }, notes: [5, 7] },
-                { cell: { row: 1, col: 3 }, notes: [4, 7] },
-            ],
-            wingsCommonNote: 7,
-        },
-    ]
-    const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getAllYWings(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedYWings)
+        const expectedYWings = [
+            {
+                pivot: { cell: { row: 1, col: 0 }, notes: [2, 7] },
+                wings: [
+                    { cell: { row: 0, col: 2 }, notes: [5, 7] },
+                    { cell: { row: 1, col: 5 }, notes: [2, 5] },
+                ],
+                wingsCommonNote: 5,
+            },
+            {
+                pivot: { cell: { row: 0, col: 2 }, notes: [5, 7] },
+                wings: [
+                    { cell: { row: 1, col: 0 }, notes: [2, 7] },
+                    { cell: { row: 0, col: 5 }, notes: [2, 5] },
+                ],
+                wingsCommonNote: 2,
+            },
+            {
+                pivot: { cell: { row: 1, col: 1 }, notes: [4, 5] },
+                wings: [
+                    { cell: { row: 0, col: 2 }, notes: [5, 7] },
+                    { cell: { row: 1, col: 3 }, notes: [4, 7] },
+                ],
+                wingsCommonNote: 7,
+            },
+        ]
+        const maxHintsThreshold = Number.POSITIVE_INFINITY
+        expect(getAllYWings(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedYWings)
+    })
 })
 
-test('all valid yWing cells', () => {
-    const { mainNumbers, notesData } = require('./testData')
+describe('getAllValidYWingCells()', () => {
+    test('returns all valid yWing cells in board based on the notes present in them', () => {
+        const { mainNumbers, notesData } = require('./testData')
 
-    mockBoardSelectors(notesData)
+        mockBoardSelectors(notesData)
 
-    const expectedValidYWingCells = [
-        { cell: { row: 0, col: 2 }, notes: [5, 7] },
-        { cell: { row: 0, col: 5 }, notes: [2, 5] },
-        { cell: { row: 0, col: 8 }, notes: [1, 2] },
-        { cell: { row: 1, col: 0 }, notes: [2, 7] },
-        { cell: { row: 1, col: 1 }, notes: [4, 5] },
-        { cell: { row: 1, col: 3 }, notes: [4, 7] },
-        { cell: { row: 1, col: 5 }, notes: [2, 5] },
-        { cell: { row: 2, col: 3 }, notes: [4, 7] },
-        { cell: { row: 2, col: 6 }, notes: [2, 4] },
-        { cell: { row: 7, col: 6 }, notes: [2, 4] },
-        { cell: { row: 7, col: 7 }, notes: [1, 4] },
-        { cell: { row: 7, col: 8 }, notes: [1, 2] },
-        { cell: { row: 8, col: 0 }, notes: [1, 7] },
-        { cell: { row: 8, col: 1 }, notes: [1, 5] },
-        { cell: { row: 8, col: 2 }, notes: [5, 7] },
-    ]
+        const expectedValidYWingCells = [
+            { cell: { row: 0, col: 2 }, notes: [5, 7] },
+            { cell: { row: 0, col: 5 }, notes: [2, 5] },
+            { cell: { row: 0, col: 8 }, notes: [1, 2] },
+            { cell: { row: 1, col: 0 }, notes: [2, 7] },
+            { cell: { row: 1, col: 1 }, notes: [4, 5] },
+            { cell: { row: 1, col: 3 }, notes: [4, 7] },
+            { cell: { row: 1, col: 5 }, notes: [2, 5] },
+            { cell: { row: 2, col: 3 }, notes: [4, 7] },
+            { cell: { row: 2, col: 6 }, notes: [2, 4] },
+            { cell: { row: 7, col: 6 }, notes: [2, 4] },
+            { cell: { row: 7, col: 7 }, notes: [1, 4] },
+            { cell: { row: 7, col: 8 }, notes: [1, 2] },
+            { cell: { row: 8, col: 0 }, notes: [1, 7] },
+            { cell: { row: 8, col: 1 }, notes: [1, 5] },
+            { cell: { row: 8, col: 2 }, notes: [5, 7] },
+        ]
 
-    expect(getAllValidYWingCells(mainNumbers, notesData)).toStrictEqual(expectedValidYWingCells)
+        expect(getAllValidYWingCells(mainNumbers, notesData)).toStrictEqual(expectedValidYWingCells)
+    })
 })
 
-test('valid yWing cell', () => {
-    const testOne = {
-        cellUserInputNotes: [
+describe('isValidYWingCell()', () => {
+    test('returns true when cell has correct set of notes for being YWing cell', () => {
+        const cellUserInputNotes = [
             { noteValue: 1, show: 0 },
             { noteValue: 2, show: 0 },
             { noteValue: 3, show: 1 },
@@ -92,8 +95,8 @@ test('valid yWing cell', () => {
             { noteValue: 7, show: 0 },
             { noteValue: 8, show: 0 },
             { noteValue: 9, show: 0 },
-        ],
-        cellAllPossibleNotes: [
+        ]
+        const cellAllPossibleNotes = [
             { noteValue: 1, show: 0 },
             { noteValue: 2, show: 0 },
             { noteValue: 3, show: 1 },
@@ -103,11 +106,13 @@ test('valid yWing cell', () => {
             { noteValue: 7, show: 0 },
             { noteValue: 8, show: 0 },
             { noteValue: 9, show: 0 },
-        ],
-    }
+        ]
 
-    const testTwo = {
-        cellUserInputNotes: [
+        expect(isValidYWingCell(cellUserInputNotes, cellAllPossibleNotes)).toBe(true)
+    })
+
+    test('returns false when cell has wrong set of notes for being YWing cell', () => {
+        const cellUserInputNotes = [
             { noteValue: 1, show: 0 },
             { noteValue: 2, show: 0 },
             { noteValue: 3, show: 0 },
@@ -117,8 +122,8 @@ test('valid yWing cell', () => {
             { noteValue: 7, show: 1 },
             { noteValue: 8, show: 1 },
             { noteValue: 9, show: 0 },
-        ],
-        cellAllPossibleNotes: [
+        ]
+        const cellAllPossibleNotes = [
             { noteValue: 1, show: 0 },
             { noteValue: 2, show: 0 },
             { noteValue: 3, show: 1 },
@@ -128,62 +133,45 @@ test('valid yWing cell', () => {
             { noteValue: 7, show: 0 },
             { noteValue: 8, show: 0 },
             { noteValue: 9, show: 0 },
-        ],
-    }
+        ]
 
-    expect(isValidYWingCell(testOne.cellUserInputNotes, testOne.cellAllPossibleNotes)).toBe(true)
-    expect(isValidYWingCell(testTwo.cellUserInputNotes, testTwo.cellAllPossibleNotes)).toBe(false)
+        expect(isValidYWingCell(cellUserInputNotes, cellAllPossibleNotes)).toBe(false)
+    })
 })
 
-test('valid YWingCellPair', () => {
-    const testOne = {
-        firstCell: { cell: { row: 0, col: 5 }, notes: [2, 5] },
-        secondCell: { cell: { row: 1, col: 5 }, notes: [2, 6] },
-    }
-    expect(isValidYWingCellsPair(testOne.firstCell, testOne.secondCell)).toBe(true)
+describe('isValidYWingCellsPair()', () => {
+    test('returns true when these two cells are 2 out of 3 valid yWing cells', () => {
+        const cellA = { cell: { row: 0, col: 5 }, notes: [2, 5] }
+        const cellB = { cell: { row: 1, col: 5 }, notes: [2, 6] }
+        expect(isValidYWingCellsPair(cellA, cellB)).toBeTruthy()
+    })
 
-    const testTwo = {
-        firstCell: { cell: { row: 0, col: 5 }, notes: [2, 5] },
-        secondCell: { cell: { row: 1, col: 5 }, notes: [2, 5] },
-    }
-    expect(isValidYWingCellsPair(testTwo.firstCell, testTwo.secondCell)).toBe(false)
+    test('returns false when these two cells together can never make a valid yWing', () => {
+        const cellA = { cell: { row: 0, col: 5 }, notes: [2, 5] }
+        const cellB = { cell: { row: 1, col: 5 }, notes: [2, 5] }
+        expect(isValidYWingCellsPair(cellA, cellB)).toBeFalsy()
+    })
 })
 
-test('expected notes in second wing', () => {
-    const testOne = {
-        pivotNotes: [2, 5],
-        firstWingNotes: [1, 5],
-    }
-    const testOneExpectedResult = [1, 2]
-    expect(getSecondWingExpectedNotes(testOne.pivotNotes, testOne.firstWingNotes)).toStrictEqual(testOneExpectedResult)
+describe('isValidYWingCellsPair()', () => {
+    test('returns expected notes for second wing once pivot and first wing are decided', () => {
+        const pivotNotes = [2, 5]
+        const firstWingNotes = [1, 5]
+        const expectedResult = [1, 2]
+        expect(getSecondWingExpectedNotes(pivotNotes, firstWingNotes)).toStrictEqual(expectedResult)
+    })
 
-    const testTwo = {
-        pivotNotes: [2, 8],
-        firstWingNotes: [5, 8],
-    }
-    const testTwoExpectedResult = [2, 5]
-    expect(getSecondWingExpectedNotes(testTwo.pivotNotes, testTwo.firstWingNotes)).toStrictEqual(testTwoExpectedResult)
+    test('returns expected notes for second wing once pivot and first wing are decided', () => {
+        const pivotNotes = [2, 8]
+        const firstWingNotes = [5, 8]
+        const expectedResult = [2, 5]
+        expect(getSecondWingExpectedNotes(pivotNotes, firstWingNotes)).toStrictEqual(expectedResult)
+    })
 
-    const testThree = {
-        pivotNotes: [1, 2],
-        firstWingNotes: [2, 4],
-    }
-    const testThreeExpectedResult = [1, 4]
-    expect(getSecondWingExpectedNotes(testThree.pivotNotes, testThree.firstWingNotes)).toStrictEqual(
-        testThreeExpectedResult,
-    )
-})
-
-test('any common house in cells pairs', () => {
-    const testOne = {
-        cellA: { row: 2, col: 5 },
-        cellB: { row: 1, col: 5 },
-    }
-    expect(isCellsShareHouse(testOne.cellA, testOne.cellB)).toBe(true)
-
-    const testTwo = {
-        cellA: { row: 0, col: 0 },
-        cellB: { row: 1, col: 5 },
-    }
-    expect(isCellsShareHouse(testTwo.cellA, testTwo.cellB)).toBe(false)
+    test('returns expected notes for second wing once pivot and first wing are decided', () => {
+        const pivotNotes = [1, 2]
+        const firstWingNotes = [2, 4]
+        const expectedResult = [1, 4]
+        expect(getSecondWingExpectedNotes(pivotNotes, firstWingNotes)).toStrictEqual(expectedResult)
+    })
 })

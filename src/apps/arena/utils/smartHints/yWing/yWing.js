@@ -6,12 +6,12 @@ import {
     getCellHousesInfo,
     getCellHouseInfo,
     isCellEmpty,
-    isCellExists,
     getPairCellsCommonHouses,
     getCellVisibleNotes,
     getCellVisibleNotesCount,
     areSameCellsSets,
     forBoardEachCell,
+    areCommonHouseCells,
 } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
@@ -84,11 +84,6 @@ export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
         .filter(note => note !== commonNote)
         .sortNumbers()
     return expectedNotes
-}
-
-export const isCellsShareHouse = (cellA, cellB) => {
-    const commonHouses = getPairCellsCommonHouses(cellA, cellB)
-    return Object.values(commonHouses).includes(true)
 }
 
 const extractYWingCellsFromYWing = yWing => {
@@ -168,7 +163,7 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
                         housesYWingEligibleCells[secondWingHouseType][secondWingHouseNum],
                     )
                         .filter(eligibleSecondWing => {
-                            return !isCellsShareHouse(firstWing.cell, eligibleSecondWing.cell)
+                            return !areCommonHouseCells(firstWing.cell, eligibleSecondWing.cell)
                         })
                         .forEach(secondWing => {
                             result.push({
