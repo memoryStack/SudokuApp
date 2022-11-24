@@ -82,9 +82,7 @@ export const isFinnedXWing = (perfectLegHostCells, finnedLegHostCells) => {
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLegHostCells, finnedLegHostCells)
     if (perfectCells.length !== 2) return false
     return finns.every(finnCell => {
-        return perfectCells.some(perfectCell => {
-            return getBlockAndBoxNum(finnCell).blockNum === getBlockAndBoxNum(perfectCell).blockNum
-        })
+        return perfectCells.some(perfectCell => areSameBlockCells([perfectCell, finnCell]))
     })
 }
 

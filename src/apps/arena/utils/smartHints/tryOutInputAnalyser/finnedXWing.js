@@ -4,7 +4,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import {
     getXWingCells,
     getNoInputResult,
-    filterFilledCells,
+    filterFilledCellsInTryOut,
     getSameCrossHouseCandidatePossibilitiesResult,
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
@@ -20,15 +20,15 @@ export default ({ xWing, removableNotesHostCells }) => {
         return getNoInputResult(xWing)
     }
 
-    if (!_isEmpty(filterFilledCells(removableNotesHostCells)) && _isEmpty(filterFilledCells(xWingCells))) {
+    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) && _isEmpty(filterFilledCellsInTryOut(xWingCells))) {
         return getSameCrossHouseCandidatePossibilitiesResult(xWing)
     }
 
-    if (!_isEmpty(filterFilledCells(removableNotesHostCells)) && !_isEmpty(filterFilledCells(xWingCells))) {
+    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) && !_isEmpty(filterFilledCellsInTryOut(xWingCells))) {
         return getOneLegWithNoCandidateResult(xWing)
     }
 
-    if (!_isEmpty(filterFilledCells(xWingCells))) {
+    if (!_isEmpty(filterFilledCellsInTryOut(xWingCells))) {
         return getLegsFilledWithoutErrorResult(xWing)
     }
 

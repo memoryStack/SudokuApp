@@ -6,7 +6,7 @@ import {
     getXWingHousesTexts,
     getXWingCandidate,
     getNoInputResult,
-    filterFilledCells,
+    filterFilledCellsInTryOut,
     getSameCrossHouseCandidatePossibilitiesResult,
     getOneLegWithNoCandidateResult,
     getXWingCells,
@@ -18,7 +18,7 @@ export default ({ xWing, xWingCells, removableNotesHostCells }) => {
         return getNoInputResult(xWing)
     }
 
-    if (filterFilledCells(removableNotesHostCells).length) {
+    if (filterFilledCellsInTryOut(removableNotesHostCells).length) {
         return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
     }
 
@@ -27,12 +27,12 @@ export default ({ xWing, xWingCells, removableNotesHostCells }) => {
 
 const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
     const xWingCells = getXWingCells(xWing.legs)
-    const removableNotesHostCellsFilledCount = filterFilledCells(removableNotesHostCells).length
+    const removableNotesHostCellsFilledCount = filterFilledCellsInTryOut(removableNotesHostCells).length
     if (removableNotesHostCellsFilledCount === 2) {
         return getBothHouseWithoutCandidateErrorResult(xWing)
     }
 
-    const xWingFilledCellsCount = filterFilledCells(xWingCells).length
+    const xWingFilledCellsCount = filterFilledCellsInTryOut(xWingCells).length
     if (xWingFilledCellsCount) {
         return getOneLegWithNoCandidateResult(xWing)
     }

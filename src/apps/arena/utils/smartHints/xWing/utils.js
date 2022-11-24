@@ -17,6 +17,7 @@ import {
     isCellNoteVisible,
     getBlockAndBoxNum,
     getCellBlockHouseInfo,
+    areSameBlockCells,
 } from '../../util'
 
 import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
@@ -53,7 +54,7 @@ export const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HO
 
 export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notesData) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
-    const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
+    const { perfect: finnedLegPerfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
 
     return getHouseCells(getCellBlockHouseInfo(finns[0])).filter(cell => {
         if (
@@ -61,7 +62,7 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
             !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col])
         )
             return false
-        return perfectCells.some(perfectCell => {
+        return finnedLegPerfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]
             if (getCrossHouseType(houseType) === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
             return areSameColCells(cellsPair)
@@ -73,9 +74,7 @@ export const getPerfectCellsInFinnedBlock = legs => {
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
     return perfectCells.filter(perfectCell => {
-        return finns.some(finnCell => {
-            return getBlockAndBoxNum(finnCell).blockNum === getBlockAndBoxNum(perfectCell).blockNum
-        })
+        return finns.some(finnCell => areSameBlockCells([finnCell, perfectCell]))
     })
 }
 
@@ -87,9 +86,7 @@ export const addCellInXWingLeg = (cell, legCells, houseType) => {
     })
 }
 
-export const getXWingCandidate = xWing => {
-    return xWing.legs[0].candidate
-}
+export const getXWingCandidate = xWing => xWing.legs[0].candidate
 
 export const getXWingHosuesInOrder = xWing => {
     return xWing.legs.map(({ cells }) => {
@@ -97,9 +94,7 @@ export const getXWingHosuesInOrder = xWing => {
     })
 }
 
-export const getXWingCells = xWingLegs => {
-    return _flatten(xWingLegs.map(leg => leg.cells))
-}
+export const getXWingCells = xWingLegs => _flatten(xWingLegs.map(leg => leg.cells))
 
 /* hint text and try-out helpers */
 // TODO: move these helpers to separate file
@@ -179,7 +174,7 @@ export const getNoInputResult = xWing => {
     }
 }
 
-export const filterFilledCells = cells => {
+export const filterFilledCellsInTryOut = cells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
 
@@ -300,7 +295,7 @@ export const getXWingCrossHouseFullNamePlural = xWing => {
 
 export const getLegsFilledWithoutErrorResult = xWing => {
     const xWingCells = getXWingCells(xWing.legs)
-    const filledXWingCells = filterFilledCells(xWingCells)
+    const filledXWingCells = filterFilledCellsInTryOut(xWingCells)
 
     if (filledXWingCells.length === 1) {
         return getOneLegFilledWithoutErrorResult(xWing)
@@ -312,7 +307,7 @@ const getOneLegFilledWithoutErrorResult = xWing => {
     const candidate = getXWingCandidate(xWing)
     const houseFullName = getXWingHouseFullName(xWing)
 
-    const filledXWingCells = filterFilledCells(getXWingCells(xWing.legs))
+    const filledXWingCells = filterFilledCellsInTryOut(getXWingCells(xWing.legs))
 
     const filledLegHouse = getCellHouseInfo(xWing.houseType, filledXWingCells[0])
     const houseAxesText = getHouseAxesText(filledLegHouse)
