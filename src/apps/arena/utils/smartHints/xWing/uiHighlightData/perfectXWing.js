@@ -1,13 +1,18 @@
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+
+import { getHouseCells } from '../../../houseCells'
+import { isCellExists, isCellNoteVisible } from '../../../util'
+
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { isCellExists, isCellNoteVisible } from '../../../util'
 import {
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     getCellsFromCellsToFocusedData,
 } from '../../util'
-import { getHouseCells } from '../../../houseCells'
+import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
+
 import {
     getCrossHouseType,
     getXWingCandidate,
@@ -16,25 +21,14 @@ import {
     getDiagonalsCornersAxesTexts,
     getCrossHouseAxesText,
     getXWingCells,
+    getXWingHouseFullName,
+    getXWingCrossHouseFullNamePlural,
 } from '../utils'
-import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
+// TODO: come up with a better color scheme
 const DIAGONAL_CELLS_COLORS = {
     TOP_LEFT_BOTTOM_RIGHT: 'orange',
     BOTTOM_LEFT_TOP_RIGHT: 'pink',
-}
-
-// TODO: come up with a better color scheme
-const HOUSE_TYPE_VOCABOLARY = {
-    [HOUSE_TYPE.ROW]: {
-        FULL_NAME: 'row',
-        FULL_NAME_PLURAL: 'rows',
-    },
-    [HOUSE_TYPE.COL]: {
-        FULL_NAME: 'column',
-        FULL_NAME_PLURAL: 'columns',
-    },
 }
 
 const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
@@ -106,17 +100,16 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
 }
 
 const getHintChunks = (xWing, removableNotesHostCells) => {
-    const crossHouseType = getCrossHouseType(xWing.houseType)
     const { topDown: topDownDiagonalText, bottomUp: bottomUpDiagonalText } = getDiagonalsCornersAxesTexts(xWing)
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
         ...getXWingHousesTexts(xWing.houseType, xWing.legs),
-        houseFullName: HOUSE_TYPE_VOCABOLARY[xWing.houseType].FULL_NAME_PLURAL,
+        houseFullName: getXWingHouseFullName(xWing),
         rectangleCornersText: getXWingRectangleCornersAxesText(xWing.legs),
         topDownDiagonalText,
         bottomUpDiagonalText,
         ...getCrossHouseAxesText(xWing),
-        crossHouseFullName: HOUSE_TYPE_VOCABOLARY[crossHouseType].FULL_NAME_PLURAL,
+        crossHouseFullName: getXWingCrossHouseFullNamePlural(xWing),
         cellsAxesListText: getCellsAxesValuesListText(removableNotesHostCells),
     }
 
