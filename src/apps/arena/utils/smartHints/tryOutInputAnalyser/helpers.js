@@ -15,7 +15,6 @@ import { getCellsAxesValuesListText } from '../uiHighlightData.helpers'
 import { getCandidatesListText } from '../util'
 
 import {
-    TRY_OUT_ERROR_TYPES,
     TRY_OUT_RESULT_STATES,
     TRY_OUT_ERROR_TYPES_VS_ERROR_MSG,
 } from './constants'
@@ -31,21 +30,7 @@ export const filterFilledCellsInTryOut = cells => {
 
 export const noInputInTryOut = focusedCells => _isEmpty(filterFilledCellsInTryOut(focusedCells))
 
-// this will be removed in future most likely
-// but let's not remove it right away
-export const getTryOutErrorType = (groupCandidates, focusedCells) => {
-    const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
-    if (cellsWithNoCandidates) {
-        return TRY_OUT_ERROR_TYPES.EMPTY_CELL_IN_SOLUTION
-    }
-
-    if (getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells).length) {
-        return TRY_OUT_ERROR_TYPES.MULTIPLE_CELLS_NAKED_SINGLE
-    }
-
-    return ''
-}
-
+// TODO: it will be better if we move it to nakedGroup files only
 export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCells) => {
     const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
     if (cellsWithNoCandidates.length) {
@@ -60,6 +45,18 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCell
     return null
 }
 
+// move it with above handler
+const getCellsWithNoCandidates = focusedCells => {
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+    return focusedCells.filter(cell => {
+        return (
+            isCellEmpty(cell, tryOutMainNumbers) && getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0
+        )
+    })
+}
+
+// move it with above handler
 const getEmptyCellsErrorResult = cellsWithNoCandidates => {
     const emptyCellsListText = getCellsAxesValuesListText(
         cellsWithNoCandidates,
@@ -73,6 +70,15 @@ const getEmptyCellsErrorResult = cellsWithNoCandidates => {
     }
 }
 
+// move it with above handler
+const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells) => {
+    return groupCandidates.filter(candidate => {
+        const candidateNakedSingleHostCells = getCandidateNakedSingleHostCells(candidate, focusedCells)
+        return candidateNakedSingleHostCells.length > 1
+    })
+}
+
+// move it with above handler
 const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells) => {
     const firstCandidate = multipleCellsNakedSingleCandidates[0]
     const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
@@ -91,24 +97,8 @@ const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandida
     }
 }
 
-export const getCellsWithNoCandidates = focusedCells => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    return focusedCells.filter(cell => {
-        return (
-            isCellEmpty(cell, tryOutMainNumbers) && getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0
-        )
-    })
-}
-
-export const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells) => {
-    return groupCandidates.filter(candidate => {
-        const candidateNakedSingleHostCells = getCandidateNakedSingleHostCells(candidate, focusedCells)
-        return candidateNakedSingleHostCells.length > 1
-    })
-}
-
-export const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
+// move it with above handler
+const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
 
     return focusedCells.filter(cell => {
@@ -119,7 +109,8 @@ export const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
     })
 }
 
-export const getNakedGroupNoTryOutInputResult = groupCandidates => {
+// move it to naked group handler file only
+const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
     return {
         msg:
@@ -129,12 +120,6 @@ export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     }
 }
 
-export const getTryOutErrorResult = errorType => {
-    return {
-        msg: TRY_OUT_ERROR_TYPES_VS_ERROR_MSG[errorType],
-        state: TRY_OUT_RESULT_STATES.ERROR,
-    }
-}
 
 // NOTE: run it only when we are sure that there is no cell
 // which is filled wrongly in the try-out step
@@ -158,6 +143,7 @@ export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCan
         })
 }
 
+// move it to naked groups helpers
 /* below some funcs will work on CellWithNotes DS specially for try-out ananlysers */
 // TODO: should i handle it using the class based implementation ??
 export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => {
@@ -173,15 +159,18 @@ export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => {
         })
 }
 
+// move it to naked groups helpers
 export const getNotesListTextFromCellsWithNotes = (cellsWithNotes, lastNoteConjugation) => {
     const notes = getNotesFromCellsWithNotes(cellsWithNotes)
     return getCandidatesListText(notes, lastNoteConjugation)
 }
 
+// move it to naked groups helpers
 export const getNotesFromCellsWithNotes = cellsWithNotes => {
     return cellsWithNotes.map(({ note }) => note)
 }
 
+// move it to naked groups helpers
 export const getCellsFromCellsWithNote = cellsWithNotes => {
     return cellsWithNotes.map(({ cell }) => cell)
 }
