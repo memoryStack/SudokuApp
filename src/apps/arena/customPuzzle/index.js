@@ -1,6 +1,6 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useEffect } from 'react'
 
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -64,6 +64,10 @@ const styles = StyleSheet.create({
 
 const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onCustomPuzzleClosed, onAction }) => {
     const customPuzzleRef = useRef(null)
+
+    useEffect(() => {
+        onAction({ type: ACTION_TYPES.ON_INIT })
+    }, [])
 
     const handleOnClose = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: customPuzzleRef })

@@ -206,7 +206,7 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
     }
 
     const hasMultipleSolutions = getPuzzleSolutionType(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
-    console.log('@@@@@@ mainNumbers after puzzle', JSON.stringify(mainNumbers))
+
     if (hasMultipleSolutions) {
         showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
     } else {
