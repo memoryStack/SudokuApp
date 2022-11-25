@@ -2,7 +2,6 @@ import {
     getNakedSingleCellsWithNoteInAscOrder,
     getNotesFromCellsWithNotes,
     getCellsFromCellsWithNote,
-    getCellsAxesList,
 } from './helpers'
 import { areNakedDoubleHostCells } from './nakedTripple'
 
@@ -43,17 +42,6 @@ describe('getCellsFromCellsWithNote()', () => {
             { row: 1, col: 7 },
         ]
         expect(getCellsFromCellsWithNote(cellsWithNotes)).toStrictEqual(expectedResult)
-    })
-})
-
-describe('getCellsAxesList()', () => {
-    test('returns list of cells axes values', () => {
-        const cells = [
-            { row: 3, col: 8 },
-            { row: 1, col: 7 },
-        ]
-        const expectedResult = ['D9', 'B8']
-        expect(getCellsAxesList(cells)).toStrictEqual(expectedResult)
     })
 })
 

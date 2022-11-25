@@ -6,24 +6,30 @@ import { getTryOutMainNumbers, getTryOutNotes } from "../../../../store/selector
 import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from "../../../util"
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from "../../constants"
-import { getXWingHouseFullName, getXWingHouseFullNamePlural } from "../../xWing/uiHighlightData/helpers"
+import { getCellsAxesValuesListText } from "../../uiHighlightData.helpers"
+import {
+    getHouseAxesText,
+    getXWingHouseFullName,
+    getXWingHouseFullNamePlural,
+    getXWingHousesTexts,
+} from "../../xWing/uiHighlightData/helpers"
 import {
     getCrossHouseType,
     getXWingCandidate,
     getXWingCells,
-    getXWingHousesTexts,
-    getHouseAxesText,
 } from "../../xWing/utils"
 
 import { TRY_OUT_RESULT_STATES } from "../constants"
 // TODO: do something about this handler. looks like it's not in right place
-import { getCellsAxesValuesListText, filterFilledCellsInTryOut } from "../helpers"
+import {
+
+    filterFilledCellsInTryOut,
+} from "../helpers"
 
 export const getNoInputResult = xWing => {
     const candidate = getXWingCandidate(xWing)
     const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
-    // TODO: use already made util for this
-    const houseFullName = HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
+    const houseFullName = getXWingHouseFullNamePlural(xWing)
     return {
         msg:
             `try filling ${candidate} in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName}` +
@@ -93,7 +99,6 @@ const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
     })
 }
 
-// used in try-out ananlysers
 export const getLegsFilledWithoutErrorResult = xWing => {
     const xWingCells = getXWingCells(xWing.legs)
     const filledXWingCells = filterFilledCellsInTryOut(xWingCells)
@@ -104,7 +109,6 @@ export const getLegsFilledWithoutErrorResult = xWing => {
     return getBothLegsFilledWithoutErrorResult(xWing)
 }
 
-// move with above handler
 const getOneLegFilledWithoutErrorResult = xWing => {
     const candidate = getXWingCandidate(xWing)
     const houseFullName = getXWingHouseFullName(xWing)

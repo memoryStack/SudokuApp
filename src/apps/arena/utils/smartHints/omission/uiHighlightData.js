@@ -8,7 +8,7 @@ import {
     SMART_HINTS_CELLS_BG_COLOR,
 } from '../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
-import { getCellsAxesValuesListText } from '../tryOutInputAnalyser/helpers'
+import { getCellsAxesValuesListText } from '../uiHighlightData.helpers'
 import { setCellDataInHintResult } from '../util'
 
 const COLORS = {

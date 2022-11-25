@@ -1,3 +1,7 @@
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+
+import { getHouseCells } from '../../../houseCells'
+
 import {
     HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
@@ -13,20 +17,20 @@ import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
 } from '../../util'
-import { getHouseCells } from '../../../houseCells'
+import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+
 import {
     categorizeLegs,
     categorizeFinnedLegCells,
     getFinnedXWingRemovableNotesHostCells,
-    getHouseAxesText,
     getPerfectCellsInFinnedBlock,
     getXWingCandidate,
     getXWingHosuesInOrder,
     getXWingCells,
 } from '../utils'
 import { XWING_TYPES } from '../constants'
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
+
+import { getHouseAxesText } from './helpers'
 
 // TODO: come up with a better color scheme
 // TODO: RENAME IT

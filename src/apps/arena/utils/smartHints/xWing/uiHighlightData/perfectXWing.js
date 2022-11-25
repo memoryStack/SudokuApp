@@ -5,25 +5,28 @@ import { isCellExists, isCellNoteVisible } from '../../../util'
 
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
 import {
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     getCellsFromCellsToFocusedData,
 } from '../../util'
-import { getCellsAxesValuesListText } from '../../tryOutInputAnalyser/helpers'
 
 import {
     getCrossHouseType,
     getXWingCandidate,
-    getXWingHousesTexts,
-    getXWingRectangleCornersAxesText,
-    getDiagonalsCornersAxesTexts,
-    getCrossHouseAxesText,
     getXWingCells,
 } from '../utils'
 
-import { getXWingHouseFullName, getXWingCrossHouseFullNamePlural } from './helpers'
+import {
+    getXWingHouseFullName,
+    getXWingCrossHouseFullNamePlural,
+    getXWingRectangleCornersAxesText,
+    getXWingHousesTexts,
+    getCrossHouseAxesText,
+    getDiagonalsCornersAxesTexts,
+} from './helpers'
 
 // TODO: come up with a better color scheme
 const DIAGONAL_CELLS_COLORS = {

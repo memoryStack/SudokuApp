@@ -1,7 +1,7 @@
 import _flatten from 'lodash/src/utils/flatten'
 
+import { getXWingHousesTexts } from '../../xWing/uiHighlightData/helpers'
 import {
-    getXWingHousesTexts,
     getXWingCandidate,
     getXWingCells,
 } from '../../xWing/utils'
