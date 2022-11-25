@@ -1,7 +1,5 @@
-import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
-import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut } from './helpers'
 import _flatten from 'lodash/src/utils/flatten'
+
 import {
     getXWingHousesTexts,
     getXWingCandidate,
@@ -11,9 +9,14 @@ import {
     getOneLegWithNoCandidateResult,
     getXWingCells,
     getLegsFilledWithoutErrorResult,
-} from '../xWing/utils'
+} from '../../xWing/utils'
 
-export default ({ xWing, xWingCells, removableNotesHostCells }) => {
+import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+
+import { TRY_OUT_RESULT_STATES } from '../constants'
+import { noInputInTryOut } from '../helpers'
+
+export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
         return getNoInputResult(xWing)
     }

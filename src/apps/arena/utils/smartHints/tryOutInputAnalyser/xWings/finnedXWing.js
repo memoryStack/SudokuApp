@@ -8,12 +8,12 @@ import {
     getSameCrossHouseCandidatePossibilitiesResult,
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
-} from '../xWing/utils'
+} from '../../xWing/utils'
 
-import { TRY_OUT_RESULT_STATES } from './constants'
-import { noInputInTryOut } from './helpers'
+import { TRY_OUT_RESULT_STATES } from '../constants'
+import { noInputInTryOut } from '../helpers'
 
-export default ({ xWing, removableNotesHostCells }) => {
+export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) => {
     const xWingCells = getXWingCells(xWing.legs)
 
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
