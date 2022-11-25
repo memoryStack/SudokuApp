@@ -1,17 +1,17 @@
 import _flatten from 'lodash/src/utils/flatten'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
+import { getXWingCells } from '../../xWing/utils'
+
+import { TRY_OUT_RESULT_STATES } from '../constants'
+import { noInputInTryOut, filterFilledCellsInTryOut, } from '../helpers'
+
 import {
-    getXWingCells,
     getNoInputResult,
-    filterFilledCellsInTryOut,
     getSameCrossHouseCandidatePossibilitiesResult,
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
-} from '../../xWing/utils'
-
-import { TRY_OUT_RESULT_STATES } from '../constants'
-import { noInputInTryOut } from '../helpers'
+} from './helpers'
 
 export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) => {
     const xWingCells = getXWingCells(xWing.legs)

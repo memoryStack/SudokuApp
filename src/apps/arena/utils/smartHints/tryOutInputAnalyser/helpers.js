@@ -1,3 +1,6 @@
+import _filter from 'lodash/src/utils/filter'
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
@@ -12,16 +15,16 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../constants'
 import { getCandidatesListText } from '../util'
 import { TRY_OUT_ERROR_TYPES, TRY_OUT_RESULT_STATES, TRY_OUT_ERROR_TYPES_VS_ERROR_MSG } from './constants'
 
-export const noInputInTryOut = focusedCells => {
-    const actualMainNumbers = getMainNumbers(getStoreState())
+export const filterFilledCellsInTryOut = cells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const mainNumbers = getMainNumbers(getStoreState())
 
-    const someCellsFilledInTryOut = focusedCells.some(cell => {
-        return isCellEmpty(cell, actualMainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
+    return _filter(cells, (cell) => {
+        return isCellEmpty(cell, mainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
     })
-
-    return !someCellsFilledInTryOut
 }
+
+export const noInputInTryOut = focusedCells => _isEmpty(filterFilledCellsInTryOut(focusedCells))
 
 // this will be removed in future most likely
 // but let's not remove it right away
