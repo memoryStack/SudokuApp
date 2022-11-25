@@ -6,14 +6,13 @@ import { getTryOutMainNumbers, getTryOutNotes } from "../../../../store/selector
 import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from "../../../util"
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from "../../constants"
+import { getXWingHouseFullName, getXWingHouseFullNamePlural } from "../../xWing/uiHighlightData/helpers"
 import {
     getCrossHouseType,
     getXWingCandidate,
     getXWingCells,
     getXWingHousesTexts,
     getHouseAxesText,
-    getXWingHouseFullName,
-    getXWingHouseFullNamePlural,
 } from "../../xWing/utils"
 
 import { TRY_OUT_RESULT_STATES } from "../constants"

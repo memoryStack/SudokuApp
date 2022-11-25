@@ -21,9 +21,9 @@ import {
     getDiagonalsCornersAxesTexts,
     getCrossHouseAxesText,
     getXWingCells,
-    getXWingHouseFullName,
-    getXWingCrossHouseFullNamePlural,
 } from '../utils'
+
+import { getXWingHouseFullName, getXWingCrossHouseFullNamePlural } from './helpers'
 
 // TODO: come up with a better color scheme
 const DIAGONAL_CELLS_COLORS = {
