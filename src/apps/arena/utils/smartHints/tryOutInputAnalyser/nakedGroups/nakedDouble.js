@@ -3,13 +3,17 @@ import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import {
     noInputInTryOut,
-    getNakedGroupNoTryOutInputResult,
     getCorrectFilledTryOutCandidates,
-    getNakedGroupTryOutInputErrorResult,
+
     getCandidatesToBeFilled,
 } from '../helpers'
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
+
+import {
+    getNakedGroupNoTryOutInputResult,
+    getNakedGroupTryOutInputErrorResult,
+} from './helpers'
 
 export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     if (noInputInTryOut(focusedCells)) {

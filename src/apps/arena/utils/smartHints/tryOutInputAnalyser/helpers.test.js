@@ -1,8 +1,8 @@
 import {
-    getNakedSingleCellsWithNoteInAscOrder,
-    getNotesFromCellsWithNotes,
     getCellsFromCellsWithNote,
-} from './helpers'
+    getNotesFromCellsWithNotes,
+    getNakedSingleCellsWithNoteInAscOrder,
+} from './nakedGroups/helpers'
 import { areNakedDoubleHostCells } from './nakedGroups/nakedTripple'
 
 describe('getNakedSingleCellsWithNoteInAscOrder()', () => {

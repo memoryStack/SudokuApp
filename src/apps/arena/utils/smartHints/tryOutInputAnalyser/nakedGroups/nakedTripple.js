@@ -4,19 +4,22 @@ import { getCellAxesValues, getCellVisibleNotes, getCellVisibleNotesCount, isCel
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import {
     noInputInTryOut,
-    getNakedGroupNoTryOutInputResult,
     getCorrectFilledTryOutCandidates,
     getCandidatesToBeFilled,
-    getNakedSingleCellsWithNoteInAscOrder,
-    getNotesListTextFromCellsWithNotes,
-    getCellsFromCellsWithNote,
-    getNakedGroupTryOutInputErrorResult,
 } from '../helpers'
 import { N_CHOOSE_K } from '../../../../../../resources/constants'
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { isNakedSinglePresent } from '../../nakedSingle/nakedSingle'
 import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+
+import {
+    getNakedGroupNoTryOutInputResult,
+    getCellsFromCellsWithNote,
+    getNotesListTextFromCellsWithNotes,
+    getNakedSingleCellsWithNoteInAscOrder,
+    getNakedGroupTryOutInputErrorResult,
+} from './helpers'
 
 export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     if (noInputInTryOut(focusedCells)) {
