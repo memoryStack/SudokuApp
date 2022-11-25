@@ -4,7 +4,6 @@ import { TRY_OUT_RESULT_STATES } from '../constants'
 import {
     noInputInTryOut,
     getCorrectFilledTryOutCandidates,
-
     getCandidatesToBeFilled,
 } from '../helpers'
 import { getCandidatesListText } from '../../util'
