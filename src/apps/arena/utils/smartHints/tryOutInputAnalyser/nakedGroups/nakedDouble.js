@@ -1,17 +1,17 @@
-import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selectors'
-import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { TRY_OUT_RESULT_STATES } from './constants'
+import { getTryOutMainNumbers } from '../../../../store/selectors/smartHintHC.selectors'
+import { getStoreState } from '../../../../../../redux/dispatch.helpers'
+import { TRY_OUT_RESULT_STATES } from '../constants'
 import {
     noInputInTryOut,
     getNakedGroupNoTryOutInputResult,
     getCorrectFilledTryOutCandidates,
     getNakedGroupTryOutInputErrorResult,
     getCandidatesToBeFilled,
-} from './helpers'
-import { getCandidatesListText } from '../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../constants'
+} from '../helpers'
+import { getCandidatesListText } from '../../util'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
-const tryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
+export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     if (noInputInTryOut(focusedCells)) {
         return getNakedGroupNoTryOutInputResult(groupCandidates)
     }
@@ -51,4 +51,4 @@ const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
     }
 }
 
-export default tryOutAnalyser
+

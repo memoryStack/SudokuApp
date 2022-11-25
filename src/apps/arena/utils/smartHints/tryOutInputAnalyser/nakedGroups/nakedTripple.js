@@ -18,7 +18,7 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../constants'
 import { isNakedSinglePresent } from '../nakedSingle/nakedSingle'
 import { getCellsAxesValuesListText } from '../uiHighlightData.helpers'
 
-export default ({ groupCandidates, focusedCells, groupCells }) => {
+export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     if (noInputInTryOut(focusedCells)) {
         return getNakedGroupNoTryOutInputResult(groupCandidates)
     }

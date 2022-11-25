@@ -1,9 +1,8 @@
 import { HINTS_IDS } from '../constants'
 
-import nakedDoubleTryOutAnalyser from './nakedDouble'
-import nakedTrippleTryOutAnalyser from './nakedTripple'
 import hiddenGroupTryOutAnalyser from './hiddenGroup'
 import { perfectXWingTryOutAnalyser, finnedXWingTryOutAnalyser } from './xWings'
+import { nakedDoubleTryOutAnalyser, nakedTrippleTryOutAnalyser } from './nakedGroups'
 
 const tryOutAnalysers = {
     [HINTS_IDS.NAKED_DOUBLE]: nakedDoubleTryOutAnalyser,
