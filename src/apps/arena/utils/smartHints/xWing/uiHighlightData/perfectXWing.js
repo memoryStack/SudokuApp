@@ -13,11 +13,7 @@ import {
     getCellsFromCellsToFocusedData,
 } from '../../util'
 
-import {
-    getCrossHouseType,
-    getXWingCandidate,
-    getXWingCells,
-} from '../utils'
+import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../utils'
 
 import {
     getXWingHouseFullName,

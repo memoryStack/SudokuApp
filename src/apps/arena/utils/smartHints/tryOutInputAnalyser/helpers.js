@@ -10,7 +10,7 @@ export const filterFilledCellsInTryOut = cells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
 
-    return _filter(cells, (cell) => {
+    return _filter(cells, cell => {
         return isCellEmpty(cell, mainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
     })
 }

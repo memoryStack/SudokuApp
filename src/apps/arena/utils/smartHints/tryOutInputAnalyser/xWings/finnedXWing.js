@@ -4,7 +4,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import { getXWingCells } from '../../xWing/utils'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
-import { noInputInTryOut, filterFilledCellsInTryOut, } from '../helpers'
+import { noInputInTryOut, filterFilledCellsInTryOut } from '../helpers'
 
 import {
     getNoInputResult,

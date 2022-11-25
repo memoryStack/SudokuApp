@@ -1,12 +1,12 @@
-import { getCellVisibleNotes, getCellVisibleNotesCount } from "../../../util"
+import { getCellVisibleNotes, getCellVisibleNotesCount } from '../../../util'
 
-import { getCandidatesListText } from "../../util"
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from "../../constants"
+import { getCandidatesListText } from '../../util'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
-import { TRY_OUT_RESULT_STATES } from "../constants"
+import { TRY_OUT_RESULT_STATES } from '../constants'
 
 import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
-import { getTryOutMainNumbers, getTryOutNotes } from "../../../../store/selectors/smartHintHC.selectors"
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)

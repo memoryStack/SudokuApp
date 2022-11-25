@@ -1,4 +1,4 @@
-import { getCellsAxesList } from "./uiHighlightData.helpers"
+import { getCellsAxesList } from './uiHighlightData.helpers'
 
 describe('getCellsAxesList()', () => {
     test('returns list of cells axes values', () => {

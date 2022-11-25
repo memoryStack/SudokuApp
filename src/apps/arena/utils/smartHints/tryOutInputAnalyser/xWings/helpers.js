@@ -1,30 +1,23 @@
-import { getStoreState } from "../../../../../../redux/dispatch.helpers"
+import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
-import { getMainNumbers } from "../../../../store/selectors/board.selectors"
-import { getTryOutMainNumbers, getTryOutNotes } from "../../../../store/selectors/smartHintHC.selectors"
+import { getMainNumbers } from '../../../../store/selectors/board.selectors'
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from "../../../util"
+import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from '../../../util'
 
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from "../../constants"
-import { getCellsAxesValuesListText } from "../../uiHighlightData.helpers"
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
 import {
     getHouseAxesText,
     getXWingHouseFullName,
     getXWingHouseFullNamePlural,
     getXWingHousesTexts,
-} from "../../xWing/uiHighlightData/helpers"
-import {
-    getCrossHouseType,
-    getXWingCandidate,
-    getXWingCells,
-} from "../../xWing/utils"
+} from '../../xWing/uiHighlightData/helpers'
+import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../xWing/utils'
 
-import { TRY_OUT_RESULT_STATES } from "../constants"
+import { TRY_OUT_RESULT_STATES } from '../constants'
 // TODO: do something about this handler. looks like it's not in right place
-import {
-
-    filterFilledCellsInTryOut,
-} from "../helpers"
+import { filterFilledCellsInTryOut } from '../helpers'
 
 export const getNoInputResult = xWing => {
     const candidate = getXWingCandidate(xWing)
