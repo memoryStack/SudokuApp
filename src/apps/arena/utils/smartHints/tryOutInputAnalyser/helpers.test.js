@@ -3,7 +3,7 @@ import {
     getNotesFromCellsWithNotes,
     getCellsFromCellsWithNote,
 } from './helpers'
-import { areNakedDoubleHostCells } from './nakedTripple'
+import { areNakedDoubleHostCells } from './nakedGroups/nakedTripple'
 
 describe('getNakedSingleCellsWithNoteInAscOrder()', () => {
     test('returns an array of objects with cell and note as keys and in sorted order wrt note value', () => {
