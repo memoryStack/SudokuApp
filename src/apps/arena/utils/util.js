@@ -1,6 +1,7 @@
 import _isEmpty from 'lodash/src/utils/isEmpty'
 import _forEach from 'lodash/src/utils/forEach'
 import _every from 'lodash/src/utils/every'
+import _filter from 'lodash/src/utils/filter'
 
 import { GAME_STATE } from '../../../resources/constants'
 import { getKey } from '../../../utils/storage'
@@ -98,9 +99,7 @@ export const areSameColCells = cells => {
     return cellsCol.allValuesSame()
 }
 
-export const isCellEmpty = ({ row, col }, mainNumbers) => {
-    return mainNumbers[row][col].value === 0
-}
+export const isCellEmpty = ({ row, col }, mainNumbers) => mainNumbers[row][col].value === 0
 
 export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
@@ -383,3 +382,5 @@ export const areSameNotesInCells = (cells, notesInfo) => {
     })
     return _every(cellsNotes, (aCellNotes) => aCellNotes.sameArrays(cellsNotes[0]))
 }
+
+export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => isCellEmpty(cell, mainNumbers))

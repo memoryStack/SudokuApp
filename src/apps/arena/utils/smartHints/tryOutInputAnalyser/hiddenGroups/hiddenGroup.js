@@ -2,7 +2,7 @@ import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { isCellEmpty, isCellNoteVisible } from '../../../util'
+import { filterEmptyCells, isCellEmpty, isCellNoteVisible } from '../../../util'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
@@ -112,7 +112,7 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
         const candidatesListText = getCandidatesListText(groupCandidatesToBeFilledWithoutHostCells)
         errorMsg = `in the highlighted ${primaryHouseFullName}, there is no cell where ${candidatesListText} can come.`
     } else {
-        const emptyGroupCells = getEmptyGroupCells(groupCells)
+        const emptyGroupCells = filterEmptyCells(groupCells, getTryOutMainNumbers(getStoreState()))
 
         const candidatesListText = getCandidatesListText(groupCandidatesToBeFilled)
         const emptyCellsAxesListText = getCellsAxesValuesListText(emptyGroupCells)
@@ -171,14 +171,6 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableC
     }
 }
 
-// this might be pulled globally in utils
-const getEmptyGroupCells = groupCells => {
-    return groupCells.filter(cell => {
-        const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-        return isCellEmpty(cell, tryOutMainNumbers)
-    })
-}
-
 const getGroupCandidatesToBeFilled = (groupCells, groupCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const filledCellsNumbers = groupCells.map(cell => {
@@ -186,5 +178,3 @@ const getGroupCandidatesToBeFilled = (groupCells, groupCandidates) => {
     })
     return getCandidatesToBeFilled(filledCellsNumbers, groupCandidates)
 }
-
-
