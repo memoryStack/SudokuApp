@@ -4,7 +4,7 @@ import { testStoreWrapper } from '../../../../../utils/testingBoilerplate/reduxS
 import { makeTestStore } from '../../../../../utils/testingBoilerplate/makeReduxStore'
 import smartHintHCReducers, { smartHintHCActions } from '../../../store/reducers/smartHintHC.reducers'
 
-import { useIsHintTryOutStep } from '../hooks'
+import { useIsHintTryOutStep } from '.'
 import { mainNumbers, notesData } from '../hiddenGroup/testData'
 import { HINTS_IDS } from '../constants'
 import { getSmartHint } from '..'
