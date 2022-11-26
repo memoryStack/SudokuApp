@@ -1,3 +1,5 @@
+import _every from 'lodash/src/utils/every'
+
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
@@ -149,7 +151,7 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => {
     return N_CHOOSE_K[3][2].find(combination => {
         const chosenCells = getChosenCells(combination, groupCells)
 
-        if (areNakedDoubleHostCells(chosenCells, tryOutNotesInfo)) {
+        if (areSameNotesInCells(chosenCells, tryOutNotesInfo)) {
             const notChosenCell = getNotChosenCell(chosenCells, groupCells)
 
             const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
@@ -163,11 +165,11 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => {
     })
 }
 
-export const areNakedDoubleHostCells = (cells, notesInfo) => {
-    const [cellANotes, cellBNotes] = cells.map(cell => {
+export const areSameNotesInCells = (cells, notesInfo) => {
+    const cellsNotes = cells.map(cell => {
         return getCellVisibleNotes(notesInfo[cell.row][cell.col])
     })
-    return cellANotes.sameArrays(cellBNotes)
+    return _every(cellsNotes, (aCellNotes) => aCellNotes.sameArrays(cellsNotes[0]))
 }
 
 const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
@@ -191,11 +193,11 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
     )
     const resultMsg = isThirdCellHasNakedSingle
         ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this` +
-          ` ${chosenCellsAxesText} will have ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single` +
-          ` in them, which will result in invalid solution`
+        ` ${chosenCellsAxesText} will have ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single` +
+        ` in them, which will result in invalid solution`
         : `${chosenCellsCandidatesList} make a Naked Double in ${chosenCellsAxesText} cells.` +
-          ` because of this rule ${notChosenCellCandidatesListText} can't come in ${getCellAxesValues(notChosenCell)}` +
-          ` and it will be empty`
+        ` because of this rule ${notChosenCellCandidatesListText} can't come in ${getCellAxesValues(notChosenCell)}` +
+        ` and it will be empty`
 
     return {
         msg: resultMsg,
