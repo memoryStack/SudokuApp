@@ -1,5 +1,3 @@
-import _every from 'lodash/src/utils/every'
-
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
@@ -8,6 +6,7 @@ import {
     getCellVisibleNotesCount,
     isCellEmpty,
     isCellExists,
+    areSameNotesInCells,
 } from '../../../util'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { noInputInTryOut, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from '../helpers'
@@ -163,13 +162,6 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => {
         }
         return false
     })
-}
-
-export const areSameNotesInCells = (cells, notesInfo) => {
-    const cellsNotes = cells.map(cell => {
-        return getCellVisibleNotes(notesInfo[cell.row][cell.col])
-    })
-    return _every(cellsNotes, (aCellNotes) => aCellNotes.sameArrays(cellsNotes[0]))
 }
 
 const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {

@@ -1,5 +1,6 @@
 import _isEmpty from 'lodash/src/utils/isEmpty'
 import _forEach from 'lodash/src/utils/forEach'
+import _every from 'lodash/src/utils/every'
 
 import { GAME_STATE } from '../../../resources/constants'
 import { getKey } from '../../../utils/storage'
@@ -374,4 +375,11 @@ export const getHousesCellsSharedByCells = cells => {
     }
 
     return result
+}
+
+export const areSameNotesInCells = (cells, notesInfo) => {
+    const cellsNotes = cells.map(cell => {
+        return getCellVisibleNotes(notesInfo[cell.row][cell.col])
+    })
+    return _every(cellsNotes, (aCellNotes) => aCellNotes.sameArrays(cellsNotes[0]))
 }
