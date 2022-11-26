@@ -1,6 +1,6 @@
 import { HINTS_IDS } from '../constants'
 
-import hiddenGroupTryOutAnalyser from './hiddenGroup'
+import { hiddenGroupTryOutAnalyser } from './hiddenGroups'
 import { perfectXWingTryOutAnalyser, finnedXWingTryOutAnalyser } from './xWings'
 import { nakedDoubleTryOutAnalyser, nakedTrippleTryOutAnalyser } from './nakedGroups'
 
