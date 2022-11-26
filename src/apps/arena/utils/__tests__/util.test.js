@@ -566,7 +566,7 @@ describe('areSameNotesInCells()', () => {
     // TODO: take care of this file import
     // it's long way from home
     test('returns true when two cells have two same possible candidates only in them, [5, 6] and [5, 6] in this case', () => {
-        const { boardNotes } = require('../../utils/smartHints/tryOutInputAnalyser/testData')
+        const { boardNotes } = require('../smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 5, col: 6 },
             { row: 5, col: 7 },
@@ -575,7 +575,7 @@ describe('areSameNotesInCells()', () => {
     })
 
     test('returns true when two cells have two same possible candidates only in them, [5, 9] and [5, 9] in this case', () => {
-        const { boardNotes } = require('../../utils/smartHints/tryOutInputAnalyser/testData')
+        const { boardNotes } = require('../smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 2, col: 8 },
             { row: 8, col: 8 },
@@ -584,7 +584,7 @@ describe('areSameNotesInCells()', () => {
     })
 
     test('returns false when two cells have two possible candidates only in them but are different set of candidates, [5, 6] and [5, 9] in this case', () => {
-        const { boardNotes } = require('../../utils/smartHints/tryOutInputAnalyser/testData')
+        const { boardNotes } = require('../smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 8, col: 6 },
             { row: 8, col: 8 },
@@ -593,7 +593,7 @@ describe('areSameNotesInCells()', () => {
     })
 
     test('returns false always when atleast one of the two cells have more than two possible candidates in it, [5, 9] and [5, 8, 9] in this case', () => {
-        const { boardNotes } = require('../../utils/smartHints/tryOutInputAnalyser/testData')
+        const { boardNotes } = require('../smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 0, col: 7 },
             { row: 2, col: 8 },

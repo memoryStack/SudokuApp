@@ -2,7 +2,7 @@ import {
     getCellsFromCellsWithNote,
     getNotesFromCellsWithNotes,
     getNakedSingleCellsWithNoteInAscOrder,
-} from './nakedGroups/helpers'
+} from './helpers'
 
 describe('getNakedSingleCellsWithNoteInAscOrder()', () => {
     test('returns an array of objects with cell and note as keys and in sorted order wrt note value', () => {
