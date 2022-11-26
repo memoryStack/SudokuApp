@@ -1,4 +1,5 @@
 import _filter from 'lodash/src/utils/filter'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { CELLS_IN_HOUSE } from '../../../constants'
 import { getHouseCells } from '../../houseCells'
@@ -6,7 +7,7 @@ import { isCellEmpty, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHous
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
-import { getUIHighlightData } from './uiHighlightData'
+import { getNakedSingleTechniqueToFocus } from './uiHighlightData'
 
 // TODO: put it in utils and refactore it with unit test cases
 export const isNakedSinglePresent = cellNotes => {
@@ -68,8 +69,10 @@ const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
 }
 
 const getAllNakedSingles = (mainNumbers, notesInfo, maxHintsThreshold) => {
-    const singles = getNakedSinglesRawInfo(mainNumbers, notesInfo, maxHintsThreshold)
-    return getUIHighlightData(singles, mainNumbers)
+    const rawHints = getNakedSinglesRawInfo(mainNumbers, notesInfo, maxHintsThreshold)
+    if (_isEmpty(rawHints)) return null
+
+    return rawHints.map((rawHint) => getNakedSingleTechniqueToFocus({ rawHint, mainNumbers }))
 }
 
 export { getAllNakedSingles, getNakedSinglesRawInfo }

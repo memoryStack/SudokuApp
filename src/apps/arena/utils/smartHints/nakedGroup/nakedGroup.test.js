@@ -19,7 +19,7 @@ describe('getNakedGroupRawData()', () => {
     test('returns selected cells of naked group in an array', () => {
         const expectedResult = [
             {
-                selectedCells: [
+                groupCells: [
                     { row: 0, col: 2 },
                     { row: 0, col: 1 },
                 ],

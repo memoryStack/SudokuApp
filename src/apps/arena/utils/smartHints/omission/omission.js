@@ -1,3 +1,5 @@
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 import { getHouseCells } from '../../houseCells'
 import {
@@ -114,15 +116,14 @@ export const getAllOmissions = (mainNumbers, notesData) => {
 }
 
 export const getOmissionHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const omissions = getAllOmissions(mainNumbers, notesData, maxHintsThreshold)
-        .filter(newOmission => {
-            return removesNotes(newOmission, mainNumbers, notesData)
-        })
+    const rawHints = getAllOmissions(mainNumbers, notesData)
+        .filter(newOmission => removesNotes(newOmission, mainNumbers, notesData))
         .slice(0, maxHintsThreshold)
 
-    if (!omissions.length) return null
+    if (_isEmpty(rawHints)) return null
 
-    return omissions.map(omission => {
-        return getUIHighlightData(omission, notesData)
+    // raw data and notesData
+    return rawHints.map(rawHint => {
+        return getUIHighlightData({ rawHint, notesData })
     })
 }

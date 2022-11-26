@@ -6,7 +6,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import _isNull from 'lodash/src/utils/isNull'
 
 import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { consoleLog, inRange } from '../../../../../utils/util'
+import { inRange } from '../../../../../utils/util'
 
 import { HOUSES_COUNT } from '../../../constants'
 
@@ -176,7 +176,7 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
                 )
                 if (!newAndValidNakedGroup) continue
 
-                const nakedGroupsCount = result.push({ selectedCells })
+                const nakedGroupsCount = result.push({ groupCells: selectedCells })
                 if (nakedGroupsCount >= maxHintsThreshold) return result
 
                 cacheProcessedGroup(house, selectedCells, groupsFoundInHouses)
@@ -188,12 +188,8 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
 }
 
 export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    const groupsRawData = getNakedGroupRawData(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
+    const rawHints = getNakedGroupRawData(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
+    if (_isEmpty(rawHints)) return null
 
-    if (_isEmpty(groupsRawData)) return null
-
-    return _map(groupsRawData, ({ selectedCells }) => {
-        consoleLog(selectedCells)
-        return getUIHighlightData(selectedCells, notesData)
-    })
+    return _map(rawHints, (rawHint) => getUIHighlightData({ rawHint, notesData }))
 }

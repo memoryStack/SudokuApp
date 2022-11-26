@@ -95,7 +95,7 @@ const getHintExplaination = (omission, notes) => {
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
-export const getUIHighlightData = (omission, notesData) => {
+export const getUIHighlightData = ({ rawHint: omission, notesData }) => {
     return {
         cellsToFocusData: getUICellsToFocusData(omission, notesData),
         title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],

@@ -1,3 +1,5 @@
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { HOUSES_COUNT } from '../../../constants'
@@ -16,6 +18,7 @@ import {
 import { HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { getYWingHintUIHighlightData } from './uiHighlightData'
+import { getEliminatableNotesCells } from './utils'
 
 const VALID_NOTES_COUNT_IN_CELL = 2
 const VALID_NOTES_COUNT_IN_CELLS_PAIR = 3
@@ -179,6 +182,8 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
     return result
 }
 
+const yWingRemovesNotes = (yWing, notesData) => !_isEmpty(getEliminatableNotesCells(yWing, notesData))
+
 export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
@@ -189,11 +194,9 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const houseYWings = getHouseYWings({ type: houseType, num: houseNum }, housesYWingEligibleCells)
-                .filter(newYWing => {
-                    return !isDuplicateYWing(newYWing, result)
-                })
+                .filter(newYWing => !isDuplicateYWing(newYWing, result))
+                .filter(newYWing => yWingRemovesNotes(newYWing, notesData))
                 .slice(0, maxHintsThreshold)
-
             result.push(...houseYWings)
         }
     })
@@ -202,9 +205,8 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
 }
 
 export const getYWingsHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const rawYWings = getAllYWings(mainNumbers, notesData, maxHintsThreshold)
-    const yWingHintsUIData = rawYWings
-        .map(yWing => getYWingHintUIHighlightData(yWing, notesData))
-        .filter(yWingHint => !!yWingHint)
-    return yWingHintsUIData.length !== 0 ? yWingHintsUIData : null
+    const rawHints = getAllYWings(mainNumbers, notesData, maxHintsThreshold)
+    if (_isEmpty(rawHints)) return null
+
+    return rawHints.map(rawHint => getYWingHintUIHighlightData({ rawHint, notesData }))
 }

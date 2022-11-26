@@ -1,5 +1,4 @@
 import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { consoleLog } from '../../../../../utils/util'
 import { GROUPS, HOUSE_TYPE } from '../../smartHints/constants'
 import { areSameCells, isCellEmpty, isCellExists } from '../../util'
 import { getGroupUIHighlightData } from './uiHighlightData'
@@ -148,11 +147,8 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHin
 }
 
 const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    const groupsRawData = getAllHiddenGroups(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
-
-    consoleLog('@@@@@@@ groupsRawData', JSON.stringify(groupsRawData))
-
-    const groupsUIHighlightData = groupsRawData.map(group => getGroupUIHighlightData(group, mainNumbers, notesData))
+    const rawHints = getAllHiddenGroups(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
+    const groupsUIHighlightData = rawHints.map(rawHint => getGroupUIHighlightData({ rawHint, mainNumbers, notesData }))
     return groupsUIHighlightData.length !== 0 ? groupsUIHighlightData : null
 }
 

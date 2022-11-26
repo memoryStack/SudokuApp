@@ -49,7 +49,9 @@ const nakedSingleMixHousesDataToHighlight = cell => {
     return cellsToFocusData
 }
 
-const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
+export const getNakedSingleTechniqueToFocus = ({ rawHint, mainNumbers }) => {
+    const { type, cell } = rawHint
+
     const { row, col } = cell
     let cellsToFocusData = null
     let logic = ''
@@ -89,12 +91,3 @@ const getNakedSingleTechniqueToFocus = (type, mainNumbers, cell) => {
         selectCellOnClose: { row, col },
     }
 }
-
-const getUIHighlightData = (singles, mainNumbers) => {
-    if (!singles.length) return null
-    return singles.map(({ cell, type }) => {
-        return getNakedSingleTechniqueToFocus(type, mainNumbers, cell)
-    })
-}
-
-export { getUIHighlightData }

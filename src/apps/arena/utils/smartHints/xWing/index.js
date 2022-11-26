@@ -1,6 +1,7 @@
 import _cloneDeep from 'lodash/src/utils/cloneDeep'
 import _get from 'lodash/src/utils/get'
 import _every from 'lodash/src/utils/every'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { inRange } from '../../../../../utils/util'
 
@@ -342,15 +343,11 @@ export const getAllXWings = (mainNumbers, notesData) => {
 }
 
 export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const xWings = getAllXWings(mainNumbers, notesData)
-        .filter(xWing => {
-            return removableNotesPresentInCrossHouse(xWing, notesData)
-            // return removableNotesPresentInCrossHouse(xWing, notesData) && xWing.type === XWING_TYPES.SASHIMI_FINNED
-            // return removableNotesPresentInCrossHouse(xWing, notesData) && xWing.type === XWING_TYPES.FINNED
-        })
+    const rawHints = getAllXWings(mainNumbers, notesData)
+        .filter(xWing => removableNotesPresentInCrossHouse(xWing, notesData))
         .slice(0, maxHintsThreshold)
+    if (_isEmpty(rawHints)) return null
 
-    if (!xWings.length) return null
-
-    return getUIHighlightData(xWings, notesData)
+    // raw data and notesData
+    return getUIHighlightData({ rawHints, notesData })
 }

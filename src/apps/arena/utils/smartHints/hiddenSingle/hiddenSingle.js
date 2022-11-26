@@ -1,6 +1,8 @@
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 import { isCellEmpty } from '../../util'
-import { getUIHighlightData } from './uiHighlightData'
+import { getHiddenSingleTechniqueInfo } from './uiHighlightData'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
 import { CELLS_IN_HOUSE } from '../../../constants'
@@ -67,8 +69,10 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
 }
 
 const getAllHiddenSingles = (mainNumbers, notesData, maxHintsThreshold) => {
-    const singles = getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)
-    return getUIHighlightData(singles, mainNumbers)
+    const rawHints = getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)
+    if (_isEmpty(rawHints)) return null
+
+    return rawHints.map((rawHint) => getHiddenSingleTechniqueInfo({ mainNumbers, rawHint }))
 }
 
 export { getAllHiddenSingles, getHiddenSinglesRawInfo }

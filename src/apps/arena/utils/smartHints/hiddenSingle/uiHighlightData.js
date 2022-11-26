@@ -317,7 +317,7 @@ const highlightBlockCells = ({ selectedRow, selectedCol, blockNum, mainNumbers, 
 
     const candidateCordinatesInBlock = getCandidateInstanceCordinatesInHouse(
         winnerCandidate,
-        { type: HOUSE_TYPE.BLOCK, num: block },
+        { type: HOUSE_TYPE.BLOCK, num: blockNum },
         mainNumbers,
     )
     if (
@@ -400,7 +400,9 @@ const getHiddenSingleLogic = (houseType, solutionValue) => {
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
-const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
+export const getHiddenSingleTechniqueInfo = ({ rawHint, mainNumbers }) => {
+    const { cell, type } = rawHint
+
     let cellsToFocusData =
         type === HIDDEN_SINGLE_TYPES.BLOCK
             ? getHiddenSingleInBlockData(cell, mainNumbers)
@@ -413,12 +415,3 @@ const getHiddenSingleTechniqueInfo = (cell, type, mainNumbers) => {
         selectCellOnClose: cell,
     }
 }
-
-const getUIHighlightData = (singlesInfo, mainNumbers) => {
-    if (!singlesInfo.length) return null
-    return singlesInfo.map(({ cell, type }) => {
-        return getHiddenSingleTechniqueInfo(cell, type, mainNumbers)
-    })
-}
-
-export { getUIHighlightData, getHiddenSingleTechniqueInfo }
