@@ -4,7 +4,7 @@ import { emit } from '../../../../utils/GlobalEventBus'
 import { consoleLog } from '../../../../utils/util'
 import cloneDeep from 'lodash/src/utils/cloneDeep'
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
-import { getSmartHint } from '../../utils/smartHint'
+import { getSmartHint } from '../../utils/smartHints/smartHint'
 import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
 import {
     areCommonHouseCells,

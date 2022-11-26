@@ -1,11 +1,11 @@
-import { getAllNakedSingles } from './smartHints/nakedSingle/nakedSingle'
-import { getAllHiddenSingles } from './smartHints/hiddenSingle/hiddenSingle'
-import { highlightNakedDoublesOrTriples } from './smartHints/nakedGroup/nakedGroup'
-import { highlightHiddenGroups } from './smartHints/hiddenGroup/hiddenGroup'
-import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHOLD } from './smartHints/constants'
-import { getXWingHints } from './smartHints/xWing'
-import { getYWingsHints } from './smartHints/yWing/yWing'
-import { getOmissionHints } from './smartHints/omission/omission'
+import { getAllNakedSingles } from './nakedSingle/nakedSingle'
+import { getAllHiddenSingles } from './hiddenSingle/hiddenSingle'
+import { highlightNakedDoublesOrTriples } from './nakedGroup/nakedGroup'
+import { highlightHiddenGroups } from './hiddenGroup/hiddenGroup'
+import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHOLD } from './constants'
+import { getXWingHints } from './xWing'
+import { getYWingsHints } from './yWing/yWing'
+import { getOmissionHints } from './omission/omission'
 
 // TODO: fix the contract of this module. it returns null and receiving all
 // sorts of things from it's dependent modules

@@ -7,7 +7,7 @@ import smartHintHCReducers, { smartHintHCActions } from '../../../store/reducers
 import { useIsHintTryOutStep } from '../hooks'
 import { mainNumbers, notesData } from '../hiddenGroup/testData'
 import { HINTS_IDS } from '../constants'
-import { getSmartHint } from '../../smartHint'
+import { getSmartHint } from '../smartHint'
 import boardReducers, { boardActions } from '../../../store/reducers/board.reducers'
 
 const { setHints, setNextHint } = smartHintHCActions
