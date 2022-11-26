@@ -1,4 +1,12 @@
-import { getCellVisibleNotes, getCellVisibleNotesCount } from '../../../util'
+import { getStoreState } from '../../../../../../redux/dispatch.helpers'
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
+
+import {
+    getCellVisibleNotes,
+    getCellVisibleNotesCount,
+    isCellEmpty,
+    isCellNoteVisible,
+} from '../../../util'
 
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
@@ -6,7 +14,6 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 
 import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
