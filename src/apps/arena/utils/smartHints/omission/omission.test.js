@@ -1,5 +1,5 @@
 import {
-    getAllOmissions,
+    getOmissionRawHints,
     getHouseOmissions,
     isNoteHaveOmissionInHouse,
     areValidOmissionHostCells,
@@ -26,67 +26,13 @@ test('all omissions', () => {
 
     const expectedOmissions = [
         {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 0 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.ROW, num: 2 },
-            note: 6,
-            hostCells: [
-                { row: 2, col: 0 },
-                { row: 2, col: 1 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 0 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.COL, num: 1 },
-            note: 9,
-            hostCells: [
-                { row: 0, col: 1 },
-                { row: 2, col: 1 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 1 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.ROW, num: 0 },
-            note: 3,
-            hostCells: [
-                { row: 0, col: 3 },
-                { row: 0, col: 4 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 1 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.COL, num: 4 },
-            note: 9,
-            hostCells: [
-                { row: 0, col: 4 },
-                { row: 2, col: 4 },
-            ],
-        },
-        {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 2 },
             removableNotesHostHouse: { type: HOUSE_TYPE.COL, num: 8 },
             note: 5,
             hostCells: [
                 { row: 1, col: 8 },
-                { row: 2, col: 8 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 3 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.COL, num: 2 },
-            note: 3,
-            hostCells: [
-                { row: 3, col: 2 },
-                { row: 4, col: 2 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 4 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.ROW, num: 4 },
-            note: 6,
-            hostCells: [
-                { row: 4, col: 3 },
-                { row: 4, col: 4 },
-            ],
+                { row: 2, col: 8 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 4 },
@@ -94,44 +40,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 4, col: 4 },
-                { row: 4, col: 5 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 5 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.ROW, num: 5 },
-            note: 2,
-            hostCells: [
-                { row: 5, col: 6 },
-                { row: 5, col: 8 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 6 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.ROW, num: 6 },
-            note: 2,
-            hostCells: [
-                { row: 6, col: 1 },
-                { row: 6, col: 2 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 6 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.COL, num: 2 },
-            note: 4,
-            hostCells: [
-                { row: 6, col: 2 },
-                { row: 8, col: 2 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 7 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.COL, num: 3 },
-            note: 5,
-            hostCells: [
-                { row: 6, col: 3 },
-                { row: 7, col: 3 },
-            ],
+                { row: 4, col: 5 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 7 },
@@ -139,8 +49,8 @@ test('all omissions', () => {
             note: 6,
             hostCells: [
                 { row: 7, col: 3 },
-                { row: 7, col: 4 },
-            ],
+                { row: 7, col: 4 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 7 },
@@ -148,8 +58,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 6, col: 4 },
-                { row: 7, col: 4 },
-            ],
+                { row: 7, col: 4 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 8 },
@@ -157,8 +67,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 6, col: 6 },
-                { row: 7, col: 6 },
-            ],
+                { row: 7, col: 6 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.ROW, num: 0 },
@@ -166,8 +76,8 @@ test('all omissions', () => {
             note: 2,
             hostCells: [
                 { row: 0, col: 1 },
-                { row: 0, col: 2 },
-            ],
+                { row: 0, col: 2 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.ROW, num: 3 },
@@ -175,8 +85,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 3, col: 6 },
-                { row: 3, col: 7 },
-            ],
+                { row: 3, col: 7 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.COL, num: 7 },
@@ -184,8 +94,8 @@ test('all omissions', () => {
             note: 5,
             hostCells: [
                 { row: 4, col: 7 },
-                { row: 5, col: 7 },
-            ],
+                { row: 5, col: 7 }
+            ]
         },
         {
             hostHouse: { type: HOUSE_TYPE.COL, num: 7 },
@@ -193,12 +103,13 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 3, col: 7 },
-                { row: 4, col: 7 },
-            ],
-        },
+                { row: 4, col: 7 }
+            ]
+        }
     ]
 
-    expect(getAllOmissions(mainNumbers, notesData)).toStrictEqual(expectedOmissions)
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getOmissionRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedOmissions)
 })
 
 test('all Row 1 omissions', () => {

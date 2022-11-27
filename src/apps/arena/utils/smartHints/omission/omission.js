@@ -1,6 +1,7 @@
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
+
 import { getHouseCells } from '../../houseCells'
 import {
     getCellsCommonHouses,
@@ -10,10 +11,10 @@ import {
     getCellHousesInfo,
     isCellExists,
 } from '../../util'
-import { HINTS_IDS, HOUSE_TYPE } from '../constants'
+
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
-import { getUIHighlightData } from '../rawHintTransformers/omission/omission'
+import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 
 const HOST_CELLS_COMMON_HOUSES_COUNT = 2
 
@@ -94,29 +95,21 @@ export const removesNotes = (omission, mainNumbers, notesData) => {
         })
 }
 
-/**
-    Note: naked groups will also contribute to this hint
-    should i seperate these or let it stay as it is ?
- */
-export const getAllOmissions = (mainNumbers, notesData) => {
+export const getOmissionRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     allHouses.forEach(houseType => {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
+            if (maxHintsLimitReached(result, maxHintsThreshold)) break
+
             const house = { type: houseType, num: houseNum }
             const newOmissions = getHouseOmissions(house, mainNumbers, notesData).filter(newOmission => {
-                return !isDuplicateOmission(newOmission, result)
+                return !isDuplicateOmission(newOmission, result) && removesNotes(newOmission, mainNumbers, notesData)
             })
             result.push(...newOmissions)
         }
     })
 
     return result
-}
-
-export const getOmissionRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    return getAllOmissions(mainNumbers, notesData)
-        .filter(newOmission => removesNotes(newOmission, mainNumbers, notesData))
-        .slice(0, maxHintsThreshold)
 }
