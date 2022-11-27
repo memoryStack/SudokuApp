@@ -2,11 +2,13 @@ import _filter from 'lodash/src/utils/filter'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { CELLS_IN_HOUSE } from '../../../constants'
+
 import { getHouseCells } from '../../houseCells'
 import { isCellEmpty, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from '../../util'
-import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
+
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
+import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 
 // TODO: put it in utils and refactore it with unit test cases
 export const isNakedSinglePresent = cellNotes => {
@@ -47,18 +49,14 @@ export const getNakedSingleRawHints = (mainNumbers, notesInfo, maxHintsThreshold
     // BOARD_LOOPER: 9
     hintsSearchLoop: for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-            if (mainNumbers[row][col].value) {
-                continue
-            }
-            if (maxHintsLimitReached(result, maxHintsThreshold)) {
-                break hintsSearchLoop
-            }
+            if (maxHintsLimitReached(result, maxHintsThreshold)) break hintsSearchLoop
+            if (!isCellEmpty({ row, col }, mainNumbers)) continue
 
             const cell = { row, col }
             // TODO: change "mainNumber" field name. it doesn't feel right.
             const { present, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
             const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
-            if (present && isValid) {
+            if (isValid) {
                 result.push({ cell, mainNumber, type: getNakedSingleType(cell, mainNumbers) })
             }
         }
