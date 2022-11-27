@@ -66,7 +66,7 @@ const isGroupCellsExist = (newHiddenGroupCells, allHiddenGroups) => {
     })
 }
 
-const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCount, houseType, houseNum, notesData) => {
+const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCount, houseType, houseNum, notesData, maxHintsThreshold) => {
     // TODO: put some thought into this condition here
     if (validCandidates.length > 6)
         throw `to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`
@@ -75,7 +75,12 @@ const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCou
     const N = validCandidates.length
     const K = groupCandidatesCount
 
-    N_CHOOSE_K[N][K].forEach(selection => {
+    const allSelections = N_CHOOSE_K[N][K]
+
+    for (let i = 0; i < allSelections.length; i++) {
+        if (maxHintsLimitReached(result, maxHintsThreshold)) break
+
+        const selection = allSelections[i]
         const groupCandidates = []
         const groupCells = []
         selection.forEach(idx => {
@@ -96,7 +101,8 @@ const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCou
                 groupCells,
             })
         }
-    })
+    }
+
     return result
 }
 
@@ -121,12 +127,12 @@ export const getHiddenGroupRawHints = (groupCandidatesCount, notesData, mainNumb
                     houseType,
                     houseNum,
                     notesData,
+                    maxHintsThreshold,
                 )
 
                 const newHiddenGroups = hiddenGroupsInHouse.filter(group => {
-                    const groupAlreadyPicked = isGroupCellsExist(group.groupCells, result)
                     return (
-                        !groupAlreadyPicked &&
+                        !isGroupCellsExist(group.groupCells, result) &&
                         isHintValid({
                             type: GROUPS.HIDDEN_GROUP,
                             data: {
