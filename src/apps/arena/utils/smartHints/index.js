@@ -9,13 +9,15 @@ import { getXWingRawHints } from './xWing'
 import { getYWingRawHints } from './yWing/yWing'
 import { getOmissionRawHints } from './omission/omission'
 
-import { transformNakedSingleRawHint } from './rawHintTransformers/nakedSingle'
-import { transformHiddenSingleRawHint } from './rawHintTransformers/hiddenSingle'
-import { transformNakedGroupRawHint } from './rawHintTransformers/nakedGroup'
-import { transformHiddenGroupRawHint } from './rawHintTransformers/hiddenGroup'
-import { transformXWingRawHint } from './rawHintTransformers/xWing'
-import { transformYWingRawHint } from './rawHintTransformers/yWing/yWing'
-import { transformOmissionRawHint } from './rawHintTransformers/omission'
+import {
+    transformNakedSingleRawHint,
+    transformHiddenSingleRawHint,
+    transformNakedGroupRawHint,
+    transformHiddenGroupRawHint,
+    transformXWingRawHint,
+    transformYWingRawHint,
+    transformOmissionRawHint,
+} from './rawHintTransformers'
 
 import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHOLD } from './constants'
 
