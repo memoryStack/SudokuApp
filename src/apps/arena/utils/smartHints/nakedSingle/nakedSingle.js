@@ -7,7 +7,6 @@ import { isCellEmpty, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHous
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
-import { getNakedSingleTechniqueToFocus } from './uiHighlightData'
 
 // TODO: put it in utils and refactore it with unit test cases
 export const isNakedSinglePresent = cellNotes => {
@@ -42,7 +41,7 @@ const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
     return emptyCellsInHouse.length === 1
 }
 
-const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
+export const getNakedSingleRawHints = (mainNumbers, notesInfo, maxHintsThreshold) => {
     const result = []
 
     // BOARD_LOOPER: 9
@@ -67,10 +66,3 @@ const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
 
     return result
 }
-
-// TODO: remove this wrapper
-const getAllNakedSingles = (mainNumbers, notesInfo, maxHintsThreshold) => {
-    return getNakedSinglesRawInfo(mainNumbers, notesInfo, maxHintsThreshold)
-}
-
-export { getAllNakedSingles, getNakedSinglesRawInfo }

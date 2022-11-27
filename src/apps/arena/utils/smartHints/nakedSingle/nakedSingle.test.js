@@ -1,4 +1,4 @@
-import { getNakedSinglesRawInfo } from './nakedSingle'
+import { getNakedSingleRawHints } from './nakedSingle'
 import { NAKED_SINGLE_TYPES } from '../constants'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -30,7 +30,7 @@ test('naked singles', () => {
         { cell: { row: 8, col: 5 }, mainNumber: 6, type: NAKED_SINGLE_TYPES.MIX },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getNakedSinglesRawInfo(mainNumbersTestOne, notesDataTestOne, maxHintsThreshold)).toStrictEqual(
+    expect(getNakedSingleRawHints(mainNumbersTestOne, notesDataTestOne, maxHintsThreshold)).toStrictEqual(
         nakedSinglesData,
     )
 })

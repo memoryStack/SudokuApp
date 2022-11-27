@@ -100,7 +100,7 @@ const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCou
     return result
 }
 
-const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+export const getHiddenGroupRawHints = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const result = []
     const houseIterationOrder = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     houseIterationOrder.forEach(houseType => {
@@ -145,10 +145,3 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHin
 
     return result
 }
-
-// TODO: remove the wrapper
-const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    return getAllHiddenGroups(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
-}
-
-export { getAllHiddenGroups, highlightHiddenGroups }

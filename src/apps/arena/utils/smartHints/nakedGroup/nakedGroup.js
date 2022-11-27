@@ -146,7 +146,7 @@ const cacheProcessedGroup = (house, selectedCells, groupsFoundInHouses) => {
     !_isNull(sharedHouse) && (groupsFoundInHouses[sharedHouse.type][sharedHouse.num] = selectedCells)
 }
 
-export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+export const getNakedGroupRawHints = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
     const houseTypes = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
     const groupsFoundInHouses = getDefaultGroupsFoundInHouses()
@@ -185,9 +185,4 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
     }
 
     return result
-}
-
-// TODO: remove the wrapper and give consistent name to all such wrappers
-export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    return getNakedGroupRawData(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
 }

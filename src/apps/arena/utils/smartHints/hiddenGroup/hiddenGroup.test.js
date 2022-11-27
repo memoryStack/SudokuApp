@@ -1,5 +1,5 @@
 import { HOUSE_TYPE } from '../../smartHints/constants'
-import { getAllHiddenGroups, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
+import { getHiddenGroupRawHints, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
 import { getRemovableCandidates } from './uiHighlightData'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -74,7 +74,7 @@ test('hidden doubles', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getAllHiddenGroups(2, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
+    expect(getHiddenGroupRawHints(2, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples', () => {
@@ -97,7 +97,7 @@ test('hidden tripples', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getAllHiddenGroups(3, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
+    expect(getHiddenGroupRawHints(3, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples duplicate houses with same group cells', () => {
@@ -140,7 +140,7 @@ test('hidden tripples duplicate houses with same group cells', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getAllHiddenGroups(3, multipleHousesHiddenGroupNotesData, mainNumbers, maxHintsThreshold)).toStrictEqual(
+    expect(getHiddenGroupRawHints(3, multipleHousesHiddenGroupNotesData, mainNumbers, maxHintsThreshold)).toStrictEqual(
         expectedResult,
     )
 })

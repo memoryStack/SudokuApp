@@ -184,7 +184,7 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
 
 const yWingRemovesNotes = (yWing, notesData) => !_isEmpty(getEliminatableNotesCells(yWing, notesData))
 
-export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
+export const getYWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData))
@@ -202,9 +202,4 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
     })
 
     return result
-}
-
-// TODO: remove the wrapper and give consistent name to all such wrappers
-export const getYWingsHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    return getAllYWings(mainNumbers, notesData, maxHintsThreshold)
 }

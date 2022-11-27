@@ -342,8 +342,7 @@ export const getAllXWings = (mainNumbers, notesData) => {
     return result
 }
 
-// TODO: remove the wrapper and give consistent name to all such wrappers
-export const getXWingHints = (mainNumbers, notesData, maxHintsThreshold) => {
+export const getXWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     return getAllXWings(mainNumbers, notesData)
         .filter(xWing => removableNotesPresentInCrossHouse(xWing, notesData))
         .slice(0, maxHintsThreshold)

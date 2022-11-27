@@ -1,6 +1,6 @@
 import { GRID_TRAVERSALS } from '../../../constants'
 import { HIDDEN_SINGLE_TYPES } from '../constants'
-import { getHiddenSinglesRawInfo } from './hiddenSingle'
+import { getHiddenSingleRawHints } from './hiddenSingle'
 import { getNextNeighbourBlock } from './uiHighlightData'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -38,7 +38,7 @@ test('hidden singles', () => {
         { cell: { row: 7, col: 6 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.BLOCK },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(hiddenSingles)
+    expect(getHiddenSingleRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(hiddenSingles)
 })
 
 describe('getNextNeighbourBlock()', () => {

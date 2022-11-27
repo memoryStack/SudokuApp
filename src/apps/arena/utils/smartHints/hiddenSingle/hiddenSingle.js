@@ -46,7 +46,7 @@ const getCellHiddenSingle = (cell, notesData) => {
     }
 }
 
-const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
+export const getHiddenSingleRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     // BOARD_LOOPER: 8
@@ -67,10 +67,3 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
     }
     return result
 }
-
-// TODO: remove the wrapper
-const getAllHiddenSingles = (mainNumbers, notesData, maxHintsThreshold) => {
-    return getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)
-}
-
-export { getAllHiddenSingles, getHiddenSinglesRawInfo }

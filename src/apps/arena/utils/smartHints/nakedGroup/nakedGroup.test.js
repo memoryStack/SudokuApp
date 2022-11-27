@@ -3,7 +3,7 @@ import boardReducers, { boardActions } from '../../../store/reducers/board.reduc
 import { HOUSE_TYPE } from '../constants'
 import {
     filterNakedGroupEligibleCellsInHouse,
-    getNakedGroupRawData,
+    getNakedGroupRawHints,
     getCellsVisibleNotesInstancesCount,
     selectedCellsMakeGroup,
     getAnotherSharedHouse,
@@ -13,7 +13,7 @@ import { mainNumbers, notesData } from './nakedGroup.testData'
 
 const { setPossibleNotes } = boardActions
 
-describe('getNakedGroupRawData()', () => {
+describe('getNakedGroupRawHints()', () => {
     const store = makeTestStore({ board: boardReducers })
     store.dispatch(setPossibleNotes(notesData))
     test('returns selected cells of naked group in an array', () => {
@@ -25,7 +25,7 @@ describe('getNakedGroupRawData()', () => {
                 ],
             },
         ]
-        expect(getNakedGroupRawData(2, notesData, mainNumbers, 1)).toStrictEqual(expectedResult)
+        expect(getNakedGroupRawHints(2, notesData, mainNumbers, 1)).toStrictEqual(expectedResult)
     })
 })
 

@@ -1,6 +1,6 @@
 import {
     getAllValidYWingCells,
-    getAllYWings,
+    getYWingRawHints,
     isValidYWingCell,
     isValidYWingCellsPair,
     getSecondWingExpectedNotes,
@@ -18,7 +18,7 @@ const mockBoardSelectors = mockedNotes => {
     getStoreState.mockReturnValue({})
 }
 
-describe('getAllYWings()', () => {
+describe('getYWingRawHints()', () => {
     test('returns row data for all yWings in puzzle', () => {
         const { mainNumbers, notesData } = require('./testData')
 
@@ -51,7 +51,7 @@ describe('getAllYWings()', () => {
             },
         ]
         const maxHintsThreshold = Number.POSITIVE_INFINITY
-        expect(getAllYWings(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedYWings)
+        expect(getYWingRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedYWings)
     })
 })
 
