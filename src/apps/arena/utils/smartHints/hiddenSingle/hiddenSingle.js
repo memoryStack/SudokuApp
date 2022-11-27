@@ -1,4 +1,3 @@
-
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { CELLS_IN_HOUSE } from '../../../constants'

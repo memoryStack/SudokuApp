@@ -31,8 +31,8 @@ test('all omissions', () => {
             note: 5,
             hostCells: [
                 { row: 1, col: 8 },
-                { row: 2, col: 8 }
-            ]
+                { row: 2, col: 8 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 4 },
@@ -40,8 +40,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 4, col: 4 },
-                { row: 4, col: 5 }
-            ]
+                { row: 4, col: 5 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 7 },
@@ -49,8 +49,8 @@ test('all omissions', () => {
             note: 6,
             hostCells: [
                 { row: 7, col: 3 },
-                { row: 7, col: 4 }
-            ]
+                { row: 7, col: 4 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 7 },
@@ -58,8 +58,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 6, col: 4 },
-                { row: 7, col: 4 }
-            ]
+                { row: 7, col: 4 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 8 },
@@ -67,8 +67,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 6, col: 6 },
-                { row: 7, col: 6 }
-            ]
+                { row: 7, col: 6 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.ROW, num: 0 },
@@ -76,8 +76,8 @@ test('all omissions', () => {
             note: 2,
             hostCells: [
                 { row: 0, col: 1 },
-                { row: 0, col: 2 }
-            ]
+                { row: 0, col: 2 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.ROW, num: 3 },
@@ -85,8 +85,8 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 3, col: 6 },
-                { row: 3, col: 7 }
-            ]
+                { row: 3, col: 7 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.COL, num: 7 },
@@ -94,8 +94,8 @@ test('all omissions', () => {
             note: 5,
             hostCells: [
                 { row: 4, col: 7 },
-                { row: 5, col: 7 }
-            ]
+                { row: 5, col: 7 },
+            ],
         },
         {
             hostHouse: { type: HOUSE_TYPE.COL, num: 7 },
@@ -103,9 +103,9 @@ test('all omissions', () => {
             note: 8,
             hostCells: [
                 { row: 3, col: 7 },
-                { row: 4, col: 7 }
-            ]
-        }
+                { row: 4, col: 7 },
+            ],
+        },
     ]
 
     const maxHintsThreshold = Number.POSITIVE_INFINITY

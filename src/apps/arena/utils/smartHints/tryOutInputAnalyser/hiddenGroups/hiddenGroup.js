@@ -61,7 +61,8 @@ const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells,
     return {
         msg:
             `${filledCandidatesListText} ${multipleCellsFilled ? 'are' : 'is'} filled in ${filledCellsAxesListText}` +
-            ` ${multipleCellsFilled ? 'respectively' : ''} because of this there ${multipleCellsFilled ? 'are' : 'is'
+            ` ${multipleCellsFilled ? 'respectively' : ''} because of this there ${
+                multipleCellsFilled ? 'are' : 'is'
             } no` +
             ` cell for ${filledCandidatesListText} in highlighted ${primaryHouseFullName}`,
         state: TRY_OUT_RESULT_STATES.ERROR,
@@ -160,7 +161,8 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableC
         const pluralCandidatesToBeFilled = candidatesToBeFilled.length > 1
         progressMsg =
             `try filling ${candidatesListText} as well where ${pluralCandidatesToBeFilled ? 'these' : 'this'}` +
-            ` ${pluralCandidatesToBeFilled ? 'are' : 'is'
+            ` ${
+                pluralCandidatesToBeFilled ? 'are' : 'is'
             } highlighted to find out in which cells ${candidatesListText}` +
             ` can and can't come.`
     }

@@ -44,43 +44,47 @@ test('perfect xWing', () => {
         {
             houseType: HOUSE_TYPE.COL,
             type: XWING_TYPES.PERFECT,
-            legs: [{
-                candidate: 8,
-                cells: [
-                    { row: 0, col: 1 },
-                    { row: 7, col: 1 }
-                ],
-                type: LEG_TYPES.PERFECT
-            },
-            {
-                candidate: 8,
-                cells: [
-                    { row: 0, col: 6 },
-                    { row: 7, col: 6 }
-                ],
-                type: LEG_TYPES.PERFECT
-            }]
+            legs: [
+                {
+                    candidate: 8,
+                    cells: [
+                        { row: 0, col: 1 },
+                        { row: 7, col: 1 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+                {
+                    candidate: 8,
+                    cells: [
+                        { row: 0, col: 6 },
+                        { row: 7, col: 6 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+            ],
         },
         {
             houseType: HOUSE_TYPE.ROW,
             type: XWING_TYPES.PERFECT,
-            legs: [{
-                candidate: 8,
-                cells: [
-                    { row: 1, col: 2 },
-                    { row: 1, col: 7 }
-                ],
-                type: LEG_TYPES.PERFECT
-            },
-            {
-                candidate: 8,
-                cells: [
-                    { row: 8, col: 2 },
-                    { row: 8, col: 7 }
-                ],
-                type: LEG_TYPES.PERFECT
-            }]
-        }
+            legs: [
+                {
+                    candidate: 8,
+                    cells: [
+                        { row: 1, col: 2 },
+                        { row: 1, col: 7 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+                {
+                    candidate: 8,
+                    cells: [
+                        { row: 8, col: 2 },
+                        { row: 8, col: 7 },
+                    ],
+                    type: LEG_TYPES.PERFECT,
+                },
+            ],
+        },
     ]
 
     const maxHintsThreshold = Number.POSITIVE_INFINITY

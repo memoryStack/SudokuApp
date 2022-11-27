@@ -66,7 +66,14 @@ const isGroupCellsExist = (newHiddenGroupCells, allHiddenGroups) => {
     })
 }
 
-const findHiddenGroupsFromValidCandidates = (validCandidates, groupCandidatesCount, houseType, houseNum, notesData, maxHintsThreshold) => {
+const findHiddenGroupsFromValidCandidates = (
+    validCandidates,
+    groupCandidatesCount,
+    houseType,
+    houseNum,
+    notesData,
+    maxHintsThreshold,
+) => {
     // TODO: put some thought into this condition here
     if (validCandidates.length > 6)
         throw `to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`
