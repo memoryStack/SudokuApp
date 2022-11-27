@@ -29,7 +29,6 @@ import {
 import { isHintValid } from '../validityTest'
 import { GROUPS, HOUSE_TYPE } from '../constants'
 
-import { getUIHighlightData } from './uiHighlightData'
 import {
     VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
     VALID_CELL_MINIMUM_NOTES_COUNT,

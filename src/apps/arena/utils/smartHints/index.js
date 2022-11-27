@@ -11,7 +11,7 @@ import { getOmissionRawHints } from './omission/omission'
 
 import { transformNakedSingleRawHint } from './nakedSingle/uiHighlightData'
 import { transformHiddenSingleRawHint } from './hiddenSingle/uiHighlightData'
-import { transformNakedGroupRawHint } from './nakedGroup/uiHighlightData'
+import { transformNakedGroupRawHint } from './rawHintTransformers/nakedGroup/nakedGroup'
 import { transformHiddenGroupRawHint } from './rawHintTransformers/hiddenGroup/hiddenGroup'
 import { transformXWingRawHint } from './xWing/uiHighlightData'
 import { transformYWingRawHint } from './yWing/uiHighlightData'

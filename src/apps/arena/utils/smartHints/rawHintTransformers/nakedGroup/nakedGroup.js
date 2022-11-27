@@ -1,16 +1,16 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists } from '../../util'
+import { getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists } from '../../../util'
 
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     setCellDataInHintResult,
     getCandidatesListText,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
-} from '../util'
-import { NAKED_DOUBLE_CANDIDATES_COUNT } from './nakedGroup.constants'
+} from '../../util'
+import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.constants'
 
 export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
     const { groupCells } = rawHint
