@@ -64,7 +64,7 @@ const getHintExplainationChunks = ({ pivotNotes, commonNoteInWings }) => {
     return dynamicInterpolation(msgTemplates, msgPlaceholdersValues)
 }
 
-export const getYWingHintUIHighlightData = ({ rawHint: yWing, notesData }) => {
+export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {
     const { pivot, wings } = yWing
 
     const cellsToFocusData = getUICellsToFocusData({

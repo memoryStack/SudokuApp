@@ -224,7 +224,7 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
     }, {})
 }
 
-const getGroupUIHighlightData = ({ rawHint: group, mainNumbers, notesData }) => {
+export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notesData }) => {
     const { house, groupCandidates: groupCandidates, groupCells: hostCells } = group
 
     const cellsToFocusData = {}
@@ -317,5 +317,3 @@ const getGroupUIHighlightData = ({ rawHint: group, mainNumbers, notesData }) => 
             "input the numbers which are highlighted in red color in this cell. other numbers don't help in learning this hint.",
     }
 }
-
-export { getGroupUIHighlightData }

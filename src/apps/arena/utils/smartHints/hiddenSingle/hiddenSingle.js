@@ -2,7 +2,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 import { isCellEmpty } from '../../util'
-import { getHiddenSingleTechniqueInfo } from './uiHighlightData'
+import { transformHiddenSingleRawHint } from './uiHighlightData'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
 import { CELLS_IN_HOUSE } from '../../../constants'

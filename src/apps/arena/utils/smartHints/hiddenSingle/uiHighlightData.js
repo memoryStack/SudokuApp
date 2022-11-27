@@ -400,7 +400,7 @@ const getHiddenSingleLogic = (houseType, solutionValue) => {
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
-export const getHiddenSingleTechniqueInfo = ({ rawHint, mainNumbers }) => {
+export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
     const { cell, type } = rawHint
 
     let cellsToFocusData =

@@ -49,7 +49,7 @@ const nakedSingleMixHousesDataToHighlight = cell => {
     return cellsToFocusData
 }
 
-export const getNakedSingleTechniqueToFocus = ({ rawHint, mainNumbers }) => {
+export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
     const { type, cell } = rawHint
 
     const { row, col } = cell

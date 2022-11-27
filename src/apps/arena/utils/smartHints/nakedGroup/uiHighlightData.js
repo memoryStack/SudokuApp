@@ -12,7 +12,7 @@ import {
 } from '../util'
 import { NAKED_DOUBLE_CANDIDATES_COUNT } from './nakedGroup.constants'
 
-export const getUIHighlightData = ({ rawHint, notesData }) => {
+export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
     const { groupCells } = rawHint
     const focusedCells = getHousesCellsSharedByCells(groupCells)
     const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)

@@ -9,13 +9,13 @@ import { getXWingRawHints } from './xWing'
 import { getYWingRawHints } from './yWing/yWing'
 import { getOmissionRawHints } from './omission/omission'
 
-import { getNakedSingleTechniqueToFocus } from './nakedSingle/uiHighlightData'
-import { getHiddenSingleTechniqueInfo } from './hiddenSingle/uiHighlightData'
-import { getUIHighlightData as getNakedGroupUIHighlightData } from './nakedGroup/uiHighlightData'
-import { getGroupUIHighlightData as getHiddenGroupUIHighlightData } from './hiddenGroup/uiHighlightData'
-import { getUIHighlightData as getXWingUIHighlightData } from './xWing/uiHighlightData'
-import { getYWingHintUIHighlightData } from './yWing/uiHighlightData'
-import { getUIHighlightData as getOmissionUIHighlightData } from './omission/uiHighlightData'
+import { transformNakedSingleRawHint } from './nakedSingle/uiHighlightData'
+import { transformHiddenSingleRawHint } from './hiddenSingle/uiHighlightData'
+import { transformNakedGroupRawHint } from './nakedGroup/uiHighlightData'
+import { transformHiddenGroupRawHint } from './hiddenGroup/uiHighlightData'
+import { transformXWingRawHint } from './xWing/uiHighlightData'
+import { transformYWingRawHint } from './yWing/uiHighlightData'
+import { transformOmissionRawHint } from './omission/uiHighlightData'
 
 import {
     GROUPS,
@@ -30,7 +30,7 @@ export const getSmartHint = async (mainNumbers, notesData, requestedHintId) => {
         const rawHints = handler(mainNumbers, notesData)
         if (_isEmpty(rawHints)) return null
 
-        return _map(rawHints, rawHint => hintUIHighlightDataMap[requestedHintId]({ rawHint, mainNumbers, notesData }))
+        return _map(rawHints, rawHint => rawHintTransformersMap[requestedHintId]({ rawHint, mainNumbers, notesData }))
     }
     throw 'invalid type of selective hint'
 }
@@ -82,14 +82,14 @@ const hintsHandlerMap = {
     },
 }
 
-const hintUIHighlightDataMap = {
-    [HINTS_IDS.NAKED_SINGLE]: getNakedSingleTechniqueToFocus,
-    [HINTS_IDS.HIDDEN_SINGLE]: getHiddenSingleTechniqueInfo,
-    [HINTS_IDS.NAKED_DOUBLE]: getNakedGroupUIHighlightData,
-    [HINTS_IDS.NAKED_TRIPPLE]: getNakedGroupUIHighlightData,
-    [HINTS_IDS.HIDDEN_DOUBLE]: getHiddenGroupUIHighlightData,
-    [HINTS_IDS.HIDDEN_TRIPPLE]: getHiddenGroupUIHighlightData,
-    [HINTS_IDS.X_WING]: getXWingUIHighlightData,
-    [HINTS_IDS.Y_WING]: getYWingHintUIHighlightData,
-    [HINTS_IDS.OMISSION]: getOmissionUIHighlightData,
+const rawHintTransformersMap = {
+    [HINTS_IDS.NAKED_SINGLE]: transformNakedSingleRawHint,
+    [HINTS_IDS.HIDDEN_SINGLE]: transformHiddenSingleRawHint,
+    [HINTS_IDS.NAKED_DOUBLE]: transformNakedGroupRawHint,
+    [HINTS_IDS.NAKED_TRIPPLE]: transformNakedGroupRawHint,
+    [HINTS_IDS.HIDDEN_DOUBLE]: transformHiddenGroupRawHint,
+    [HINTS_IDS.HIDDEN_TRIPPLE]: transformHiddenGroupRawHint,
+    [HINTS_IDS.X_WING]: transformXWingRawHint,
+    [HINTS_IDS.Y_WING]: transformYWingRawHint,
+    [HINTS_IDS.OMISSION]: transformOmissionRawHint,
 }

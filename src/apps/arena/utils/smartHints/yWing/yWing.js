@@ -17,7 +17,7 @@ import {
 } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
-import { getYWingHintUIHighlightData } from './uiHighlightData'
+import { transformYWingRawHint } from './uiHighlightData'
 import { getEliminatableNotesCells } from './utils'
 
 const VALID_NOTES_COUNT_IN_CELL = 2
