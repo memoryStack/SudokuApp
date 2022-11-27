@@ -115,15 +115,9 @@ export const getAllOmissions = (mainNumbers, notesData) => {
     return result
 }
 
+// TODO: remove the wrapper and give consistent name to all such wrappers
 export const getOmissionHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const rawHints = getAllOmissions(mainNumbers, notesData)
+    return getAllOmissions(mainNumbers, notesData)
         .filter(newOmission => removesNotes(newOmission, mainNumbers, notesData))
         .slice(0, maxHintsThreshold)
-
-    if (_isEmpty(rawHints)) return null
-
-    // raw data and notesData
-    return rawHints.map(rawHint => {
-        return getUIHighlightData({ rawHint, notesData })
-    })
 }

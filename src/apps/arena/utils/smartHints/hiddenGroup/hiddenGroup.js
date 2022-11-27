@@ -146,10 +146,9 @@ const getAllHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHin
     return result
 }
 
+// TODO: remove the wrapper
 const highlightHiddenGroups = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    const rawHints = getAllHiddenGroups(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
-    const groupsUIHighlightData = rawHints.map(rawHint => getGroupUIHighlightData({ rawHint, mainNumbers, notesData }))
-    return groupsUIHighlightData.length !== 0 ? groupsUIHighlightData : null
+    return getAllHiddenGroups(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
 }
 
 export { getAllHiddenGroups, highlightHiddenGroups }

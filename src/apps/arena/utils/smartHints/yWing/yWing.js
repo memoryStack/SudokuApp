@@ -204,9 +204,7 @@ export const getAllYWings = (mainNumbers, notesData, maxHintsThreshold) => {
     return result
 }
 
+// TODO: remove the wrapper and give consistent name to all such wrappers
 export const getYWingsHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const rawHints = getAllYWings(mainNumbers, notesData, maxHintsThreshold)
-    if (_isEmpty(rawHints)) return null
-
-    return rawHints.map(rawHint => getYWingHintUIHighlightData({ rawHint, notesData }))
+    return getAllYWings(mainNumbers, notesData, maxHintsThreshold)
 }

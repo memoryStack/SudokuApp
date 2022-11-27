@@ -187,9 +187,7 @@ export const getNakedGroupRawData = (groupCandidatesCount, notesData, mainNumber
     return result
 }
 
+// TODO: remove the wrapper and give consistent name to all such wrappers
 export const highlightNakedDoublesOrTriples = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    const rawHints = getNakedGroupRawData(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
-    if (_isEmpty(rawHints)) return null
-
-    return _map(rawHints, (rawHint) => getUIHighlightData({ rawHint, notesData }))
+    return getNakedGroupRawData(groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold)
 }

@@ -1,3 +1,6 @@
+import _isEmpty from 'lodash/src/utils/isEmpty'
+import _map from 'lodash/src/utils/map'
+
 import { getAllNakedSingles } from './nakedSingle/nakedSingle'
 import { getAllHiddenSingles } from './hiddenSingle/hiddenSingle'
 import { highlightNakedDoublesOrTriples } from './nakedGroup/nakedGroup'
@@ -6,6 +9,24 @@ import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHO
 import { getXWingHints } from './xWing'
 import { getYWingsHints } from './yWing/yWing'
 import { getOmissionHints } from './omission/omission'
+import { getNakedSingleTechniqueToFocus } from './nakedSingle/uiHighlightData'
+import { getHiddenSingleTechniqueInfo } from './hiddenSingle/uiHighlightData'
+import { getUIHighlightData as getNakedGroupUIHighlightData } from './nakedGroup/uiHighlightData'
+import { getGroupUIHighlightData as getHiddenGroupUIHighlightData } from './hiddenGroup/uiHighlightData'
+import { getUIHighlightData as getXWingUIHighlightData } from './xWing/uiHighlightData'
+import { getYWingHintUIHighlightData } from './yWing/uiHighlightData'
+import { getUIHighlightData as getOmissionUIHighlightData } from './omission/uiHighlightData'
+
+export const getSmartHint = async (mainNumbers, notesData, requestedHintId) => {
+    const handler = hintsHandlerMap[requestedHintId]
+    if (handler) {
+        const rawHints = handler(mainNumbers, notesData)
+        if (_isEmpty(rawHints)) return null
+
+        return _map(rawHints, (rawHint) => hintUIHighlightDataMap[requestedHintId]({ rawHint, mainNumbers, notesData }))
+    }
+    throw 'invalid type of selective hint'
+}
 
 // TODO: fix the contract of this module. it returns null and receiving all
 // sorts of things from it's dependent modules
@@ -54,12 +75,14 @@ const hintsHandlerMap = {
     },
 }
 
-const getSmartHint = async (originalMainNumbers, notesData, requestedHintId) => {
-    const handler = hintsHandlerMap[requestedHintId]
-    if (handler) {
-        return handler(originalMainNumbers, notesData)
-    }
-    throw 'invalid type of selective hint'
+const hintUIHighlightDataMap = {
+    [HINTS_IDS.NAKED_SINGLE]: getNakedSingleTechniqueToFocus,
+    [HINTS_IDS.HIDDEN_SINGLE]: getHiddenSingleTechniqueInfo,
+    [HINTS_IDS.NAKED_DOUBLE]: getNakedGroupUIHighlightData,
+    [HINTS_IDS.NAKED_TRIPPLE]: getNakedGroupUIHighlightData,
+    [HINTS_IDS.HIDDEN_DOUBLE]: getHiddenGroupUIHighlightData,
+    [HINTS_IDS.HIDDEN_TRIPPLE]: getHiddenGroupUIHighlightData,
+    [HINTS_IDS.X_WING]: getXWingUIHighlightData,
+    [HINTS_IDS.Y_WING]: getYWingHintUIHighlightData,
+    [HINTS_IDS.OMISSION]: getOmissionUIHighlightData,
 }
-
-export { getSmartHint }

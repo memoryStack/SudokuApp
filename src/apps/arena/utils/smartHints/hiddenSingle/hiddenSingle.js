@@ -68,11 +68,9 @@ const getHiddenSinglesRawInfo = (mainNumbers, notesData, maxHintsThreshold) => {
     return result
 }
 
+// TODO: remove the wrapper
 const getAllHiddenSingles = (mainNumbers, notesData, maxHintsThreshold) => {
-    const rawHints = getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)
-    if (_isEmpty(rawHints)) return null
-
-    return rawHints.map((rawHint) => getHiddenSingleTechniqueInfo({ mainNumbers, rawHint }))
+    return getHiddenSinglesRawInfo(mainNumbers, notesData, maxHintsThreshold)
 }
 
 export { getAllHiddenSingles, getHiddenSinglesRawInfo }

@@ -68,11 +68,9 @@ const getNakedSinglesRawInfo = (mainNumbers, notesInfo, maxHintsThreshold) => {
     return result
 }
 
+// TODO: remove this wrapper
 const getAllNakedSingles = (mainNumbers, notesInfo, maxHintsThreshold) => {
-    const rawHints = getNakedSinglesRawInfo(mainNumbers, notesInfo, maxHintsThreshold)
-    if (_isEmpty(rawHints)) return null
-
-    return rawHints.map((rawHint) => getNakedSingleTechniqueToFocus({ rawHint, mainNumbers }))
+    return getNakedSinglesRawInfo(mainNumbers, notesInfo, maxHintsThreshold)
 }
 
 export { getAllNakedSingles, getNakedSinglesRawInfo }
