@@ -1,11 +1,13 @@
+
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
-import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
+import { CELLS_IN_HOUSE } from '../../../constants'
+
 import { isCellEmpty } from '../../util'
-import { transformHiddenSingleRawHint } from '../rawHintTransformers/hiddenSingle/hiddenSingle'
+
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
-import { CELLS_IN_HOUSE } from '../../../constants'
+import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 
 const getCellHiddenSingle = (cell, notesData) => {
     const { row, col } = cell
@@ -49,12 +51,9 @@ const getCellHiddenSingle = (cell, notesData) => {
 export const getHiddenSingleRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
-    // BOARD_LOOPER: 8
     hintsSearchLoop: for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-            if (maxHintsLimitReached(result, maxHintsThreshold)) {
-                break hintsSearchLoop
-            }
+            if (maxHintsLimitReached(result, maxHintsThreshold)) break hintsSearchLoop
 
             const cell = { row, col }
             const skipCheckingHiddenSingle =
@@ -65,5 +64,6 @@ export const getHiddenSingleRawHints = (mainNumbers, notesData, maxHintsThreshol
             if (present) result.push({ cell, mainNumber, type })
         }
     }
+
     return result
 }
