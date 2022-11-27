@@ -1,10 +1,10 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _map from 'lodash/src/utils/map'
 
-import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
-import { setCellDataInHintResult } from '../util'
-import { getEliminatableNotesCells } from './utils'
+import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { setCellDataInHintResult } from '../../util'
+import { getEliminatableNotesCells } from '../../yWing/utils'
 
 const YWING_CELLS_TYPES = {
     PIVOT: 'PIVOT',
