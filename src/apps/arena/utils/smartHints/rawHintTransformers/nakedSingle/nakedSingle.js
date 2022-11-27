@@ -1,11 +1,11 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _forEach from 'lodash/src/utils/forEach'
 
-import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES, HINTS_IDS } from '../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
-import { setCellDataInHintResult } from '../util'
-import { areSameCells, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from '../../util'
-import { getHouseCells } from '../../houseCells'
+import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES, HINTS_IDS } from '../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { setCellDataInHintResult } from '../../util'
+import { areSameCells, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from '../../../util'
+import { getHouseCells } from '../../../houseCells'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue) => {
     const msgPlaceholdersValues = { houseType, solutionValue }
