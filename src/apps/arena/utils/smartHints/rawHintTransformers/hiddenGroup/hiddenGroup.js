@@ -16,7 +16,7 @@ import {
 } from '../../../util'
 
 import { getHouseCells } from '../../../houseCells'
-import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+import { getCellsAxesValuesListText } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,

@@ -1,4 +1,4 @@
-import { getCellAxesValues } from '../util'
+import { getCellAxesValues } from '../../util'
 
 export const getCellsAxesValuesListText = (cells, lastCellConjugation) => {
     if (cells.length === 1) return getCellAxesValues(cells[0])

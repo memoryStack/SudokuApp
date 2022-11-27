@@ -7,7 +7,7 @@ import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from '../../../util'
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 
-import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 import {
     getHouseAxesText,
     getXWingHouseFullName,

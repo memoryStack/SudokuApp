@@ -18,7 +18,7 @@ import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
 } from '../../../util'
-import { getCellsAxesValuesListText } from '../../../uiHighlightData.helpers'
+import { getCellsAxesValuesListText } from '../../helpers'
 
 import {
     categorizeLegs,

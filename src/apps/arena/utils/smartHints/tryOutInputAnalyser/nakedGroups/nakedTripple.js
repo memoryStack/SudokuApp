@@ -14,7 +14,7 @@ import { N_CHOOSE_K } from '../../../../../../resources/constants'
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { isNakedSinglePresent } from '../../nakedSingle/nakedSingle'
-import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
 import {
     getNakedGroupNoTryOutInputResult,
@@ -185,11 +185,11 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
     )
     const resultMsg = isThirdCellHasNakedSingle
         ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this` +
-          ` ${chosenCellsAxesText} will have ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single` +
-          ` in them, which will result in invalid solution`
+        ` ${chosenCellsAxesText} will have ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single` +
+        ` in them, which will result in invalid solution`
         : `${chosenCellsCandidatesList} make a Naked Double in ${chosenCellsAxesText} cells.` +
-          ` because of this rule ${notChosenCellCandidatesListText} can't come in ${getCellAxesValues(notChosenCell)}` +
-          ` and it will be empty`
+        ` because of this rule ${notChosenCellCandidatesListText} can't come in ${getCellAxesValues(notChosenCell)}` +
+        ` and it will be empty`
 
     return {
         msg: resultMsg,

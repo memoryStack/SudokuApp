@@ -5,7 +5,7 @@ import { isCellExists, isCellNoteVisible } from '../../../../util'
 
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
-import { getCellsAxesValuesListText } from '../../../uiHighlightData.helpers'
+import { getCellsAxesValuesListText } from '../../helpers'
 import {
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,

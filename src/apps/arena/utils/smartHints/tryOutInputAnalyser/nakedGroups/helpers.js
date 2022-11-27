@@ -3,12 +3,12 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selector
 
 import { getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellNoteVisible } from '../../../util'
 
+import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
+
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
-
-import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
