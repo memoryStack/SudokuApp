@@ -39,6 +39,7 @@ import {
     getXWingCandidate,
     isPerfectLegType,
 } from './utils'
+import { maxHintsLimitReached } from '../util'
 
 const getCrossHouseCells = (cell, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)
@@ -295,15 +296,15 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
 }
 
 const transformValidXWingLegs = xWing => {
-    const { legs } = xWing
-    if (xWing.type === XWING_TYPES.SASHIMI_FINNED) return transformSashimiXWingLeg(xWing)
-    return legs
+    return xWing.type === XWING_TYPES.SASHIMI_FINNED ? transformSashimiXWingLeg(xWing) : xWing.legs
 }
 
-const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses) => {
+const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses, notes, maxHintsThreshold) => {
     const result = []
     for (let i = 0; i < candidateXWingLegsInHouses.length; i++) {
         for (let j = i + 1; j < candidateXWingLegsInHouses.length; j++) {
+            if (maxHintsLimitReached(maxHintsThreshold, result)) break
+
             const firstLeg = candidateXWingLegsInHouses[i]
             const secondLeg = candidateXWingLegsInHouses[j]
 
@@ -318,31 +319,26 @@ const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses) => {
                     type: xWingType,
                     legs: [firstLeg, secondLeg],
                 }
-                result.push({
-                    ...xWing,
-                    legs: transformValidXWingLegs(xWing),
-                })
+                xWing.legs = transformValidXWingLegs(xWing)
+                if (removableNotesPresentInCrossHouse(xWing, notes)) result.push(xWing)
             }
         }
     }
     return result
 }
 
-export const getAllXWings = (mainNumbers, notesData) => {
+export const getXWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData)
     for (const candidate in candidateXWingLegs) {
         for (const houseType in candidateXWingLegs[candidate]) {
-            result.push(...getCandidateValidXWings(houseType, _get(candidateXWingLegs, [candidate, houseType], [])))
+            if (maxHintsLimitReached(maxHintsThreshold, result)) return result
+
+            const xWingLegsInHouses = _get(candidateXWingLegs, [candidate, houseType], [])
+            result.push(...getCandidateValidXWings(houseType, xWingLegsInHouses, notesData, maxHintsThreshold))
         }
     }
 
     return result
-}
-
-export const getXWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    return getAllXWings(mainNumbers, notesData)
-        .filter(xWing => removableNotesPresentInCrossHouse(xWing, notesData))
-        .slice(0, maxHintsThreshold)
 }

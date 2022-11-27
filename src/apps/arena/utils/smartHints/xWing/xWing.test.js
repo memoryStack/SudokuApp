@@ -1,6 +1,6 @@
 import {
     isPerfectXWing,
-    getAllXWings,
+    getXWingRawHints,
     getHouseXWingLegs,
     isFinnedLeg,
     isFinnedXWing,
@@ -42,167 +42,49 @@ test('perfect xWing', () => {
 
     const expectedXWings = [
         {
-            type: XWING_TYPES.FINNED,
-            houseType: HOUSE_TYPE.ROW,
-            legs: [
-                {
-                    candidate: 3,
-                    cells: [
-                        { row: 2, col: 5 },
-                        { row: 2, col: 8 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-                {
-                    candidate: 3,
-                    cells: [
-                        { row: 3, col: 3 },
-                        { row: 3, col: 5 },
-                        { row: 3, col: 8 },
-                    ],
-                    type: LEG_TYPES.FINNED,
-                },
-            ],
-        },
-        {
-            type: XWING_TYPES.FINNED,
             houseType: HOUSE_TYPE.COL,
-            legs: [
-                {
-                    candidate: 5,
-                    cells: [
-                        { row: 3, col: 2 },
-                        { row: 4, col: 2 },
-                        { row: 5, col: 2 },
-                    ],
-                    type: LEG_TYPES.FINNED,
-                },
-                {
-                    candidate: 5,
-                    cells: [
-                        { row: 3, col: 4 },
-                        { row: 5, col: 4 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
-        },
-
-        {
-            type: XWING_TYPES.FINNED,
-            houseType: HOUSE_TYPE.COL,
-            legs: [
-                {
-                    candidate: 5,
-                    cells: [
-                        { row: 3, col: 2 },
-                        { row: 4, col: 2 },
-                        { row: 5, col: 2 },
-                    ],
-                    type: LEG_TYPES.FINNED,
-                },
-                {
-                    candidate: 5,
-                    cells: [
-                        { row: 3, col: 8 },
-                        { row: 4, col: 8 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
-        },
-        {
-            houseType: HOUSE_TYPE.COL,
-            type: XWING_TYPES.SASHIMI_FINNED,
-            legs: [
-                {
-                    candidate: 5,
-                    cells: [
-                        { row: 3, col: 4 },
-                        { row: 4, col: 4 },
-                        { row: 5, col: 4 },
-                    ],
-                    type: LEG_TYPES.SASHIMI_FINNED,
-                },
-                {
-                    candidate: 5,
-                    cells: [
-                        { row: 3, col: 8 },
-                        { row: 4, col: 8 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
-        },
-        {
-            type: XWING_TYPES.FINNED,
-            houseType: HOUSE_TYPE.ROW,
-            legs: [
-                {
-                    candidate: 7,
-                    cells: [
-                        { row: 3, col: 1 },
-                        { row: 3, col: 2 },
-                        { row: 3, col: 6 },
-                    ],
-                    type: LEG_TYPES.FINNED,
-                },
-                {
-                    candidate: 7,
-                    cells: [
-                        { row: 7, col: 1 },
-                        { row: 7, col: 6 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
-        },
-        {
             type: XWING_TYPES.PERFECT,
-            houseType: HOUSE_TYPE.COL,
-            legs: [
-                {
-                    candidate: 8,
-                    cells: [
-                        { row: 0, col: 1 },
-                        { row: 7, col: 1 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-                {
-                    candidate: 8,
-                    cells: [
-                        { row: 0, col: 6 },
-                        { row: 7, col: 6 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
+            legs: [{
+                candidate: 8,
+                cells: [
+                    { row: 0, col: 1 },
+                    { row: 7, col: 1 }
+                ],
+                type: LEG_TYPES.PERFECT
+            },
+            {
+                candidate: 8,
+                cells: [
+                    { row: 0, col: 6 },
+                    { row: 7, col: 6 }
+                ],
+                type: LEG_TYPES.PERFECT
+            }]
         },
         {
             houseType: HOUSE_TYPE.ROW,
             type: XWING_TYPES.PERFECT,
-            legs: [
-                {
-                    candidate: 8,
-                    cells: [
-                        { row: 1, col: 2 },
-                        { row: 1, col: 7 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-                {
-                    candidate: 8,
-                    cells: [
-                        { row: 8, col: 2 },
-                        { row: 8, col: 7 },
-                    ],
-                    type: LEG_TYPES.PERFECT,
-                },
-            ],
-        },
+            legs: [{
+                candidate: 8,
+                cells: [
+                    { row: 1, col: 2 },
+                    { row: 1, col: 7 }
+                ],
+                type: LEG_TYPES.PERFECT
+            },
+            {
+                candidate: 8,
+                cells: [
+                    { row: 8, col: 2 },
+                    { row: 8, col: 7 }
+                ],
+                type: LEG_TYPES.PERFECT
+            }]
+        }
     ]
-    expect(getAllXWings(mainNumbers, notesData)).toStrictEqual(expectedXWings)
+
+    const maxHintsThreshold = Number.POSITIVE_INFINITY
+    expect(getXWingRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedXWings)
 })
 
 test('xWing getCrossHouseType', () => {
