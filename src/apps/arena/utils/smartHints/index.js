@@ -13,7 +13,7 @@ import { transformNakedSingleRawHint } from './rawHintTransformers/nakedSingle'
 import { transformHiddenSingleRawHint } from './rawHintTransformers/hiddenSingle'
 import { transformNakedGroupRawHint } from './rawHintTransformers/nakedGroup'
 import { transformHiddenGroupRawHint } from './rawHintTransformers/hiddenGroup'
-import { transformXWingRawHint } from './xWing/uiHighlightData'
+import { transformXWingRawHint } from './rawHintTransformers/xWing'
 import { transformYWingRawHint } from './yWing/uiHighlightData'
 import { transformOmissionRawHint } from './omission/uiHighlightData'
 

@@ -28,7 +28,6 @@ import {
     LEG_TYPES,
     XWING_TYPES,
 } from './constants'
-import { getUIHighlightData } from './uiHighlightData'
 import {
     getCrossHouseType,
     categorizeLegs,

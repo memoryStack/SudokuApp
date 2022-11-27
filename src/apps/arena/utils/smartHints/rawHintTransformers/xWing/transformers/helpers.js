@@ -1,11 +1,10 @@
 import { toOrdinal } from 'lodash/src/utils/toOrdinal'
 
-import { getCellHouseInfo, getHouseAxesValue } from '../../../util'
+import { getCellHouseInfo, getHouseAxesValue } from '../../../../util'
 
-import { HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
-import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
-
-import { getCrossHouseType } from '../utils'
+import { HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
+import { getCrossHouseType } from '../../../xWing/utils'
+import { getCellsAxesValuesListText } from '../../../uiHighlightData.helpers'
 
 export const getXWingHouseFullName = xWing => {
     return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME

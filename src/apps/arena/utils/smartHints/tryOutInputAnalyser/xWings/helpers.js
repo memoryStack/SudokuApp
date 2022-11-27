@@ -6,13 +6,15 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selector
 import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from '../../../util'
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+
 import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
 import {
     getHouseAxesText,
     getXWingHouseFullName,
     getXWingHouseFullNamePlural,
     getXWingHousesTexts,
-} from '../../xWing/uiHighlightData/helpers'
+} from '../../rawHintTransformers/xWing/transformers/helpers'
+
 import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../xWing/utils'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'

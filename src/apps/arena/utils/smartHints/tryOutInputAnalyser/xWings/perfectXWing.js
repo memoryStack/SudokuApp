@@ -1,6 +1,7 @@
 import _flatten from 'lodash/src/utils/flatten'
 
-import { getXWingHousesTexts } from '../../xWing/uiHighlightData/helpers'
+import { getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'
+
 import { getXWingCandidate, getXWingCells } from '../../xWing/utils'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'

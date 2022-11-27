@@ -1,6 +1,6 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '../../../../houseCells'
 
 import {
     HINTS_IDS,
@@ -8,16 +8,17 @@ import {
     HOUSE_TYPE,
     HOUSE_TYPE_VS_FULL_NAMES,
     SMART_HINTS_CELLS_BG_COLOR,
-} from '../../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { getCellAxesValues, getCellHouseInfo, isCellNoteVisible } from '../../../util'
+} from '../../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
+import { getCellAxesValues, getCellHouseInfo, isCellNoteVisible } from '../../../../util'
+
 import {
     getCellsFromCellsToFocusedData,
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
-} from '../../util'
-import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+} from '../../../util'
+import { getCellsAxesValuesListText } from '../../../uiHighlightData.helpers'
 
 import {
     categorizeLegs,
@@ -27,8 +28,8 @@ import {
     getXWingCandidate,
     getXWingHosuesInOrder,
     getXWingCells,
-} from '../utils'
-import { XWING_TYPES } from '../constants'
+} from '../../../xWing/utils'
+import { XWING_TYPES } from '../../../xWing/constants'
 
 import { getHouseAxesText } from './helpers'
 

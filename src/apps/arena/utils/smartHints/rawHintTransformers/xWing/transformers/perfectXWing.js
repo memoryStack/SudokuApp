@@ -1,19 +1,18 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { getHouseCells } from '../../../houseCells'
-import { isCellExists, isCellNoteVisible } from '../../../util'
+import { getHouseCells } from '../../../../houseCells'
+import { isCellExists, isCellNoteVisible } from '../../../../util'
 
-import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
+import { getCellsAxesValuesListText } from '../../../uiHighlightData.helpers'
 import {
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     getCellsFromCellsToFocusedData,
-} from '../../util'
-
-import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../utils'
+} from '../../../util'
+import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../../xWing/utils'
 
 import {
     getXWingHouseFullName,

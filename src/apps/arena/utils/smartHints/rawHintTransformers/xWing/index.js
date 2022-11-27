@@ -1,6 +1,7 @@
-import { XWING_TYPES } from '../constants'
-import { getFinnedXWingUIData } from './finnedXWing'
-import { getPerfectXWingUIData } from './perfectXWing'
+
+import { XWING_TYPES } from '../../xWing/constants'
+import { getFinnedXWingUIData } from './transformers/finnedXWing'
+import { getPerfectXWingUIData } from './transformers/perfectXWing'
 
 export const transformXWingRawHint = ({ rawHint: xWing, notesData }) => {
     const transformHandler = xWing.type === XWING_TYPES.PERFECT ? getPerfectXWingUIData : getFinnedXWingUIData
