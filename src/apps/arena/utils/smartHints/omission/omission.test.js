@@ -6,7 +6,6 @@ import {
     removesNotes as omissionRemovesNotes,
 } from './omission'
 import { HOUSE_TYPE } from '../constants'
-import { getHouseNoteHostCells } from './uiHighlightData'
 
 jest.mock('../../../../../redux/dispatch.helpers')
 jest.mock('../../../store/selectors/board.selectors')
@@ -392,15 +391,3 @@ test('omission removes notes', () => {
     expect(omissionRemovesNotes(testThreeOmission, mainNumbers, notesData)).toBe(true)
 })
 
-describe('getHouseNoteHostCells()', () => {
-    test('returns list of cells from 4th row in first come order where 8 is present as a visible note', () => {
-        const { notesData } = require('./testData')
-        const house = { type: HOUSE_TYPE.ROW, num: 3 }
-        const note = 8
-        const expectedResult = [
-            { row: 3, col: 6 },
-            { row: 3, col: 7 },
-        ]
-        expect(getHouseNoteHostCells(note, house, notesData)).toStrictEqual(expectedResult)
-    })
-})

@@ -1,15 +1,17 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import { getHouseCells } from '../../houseCells'
-import { isCellExists, isCellNoteVisible } from '../../util'
+
+import { getHouseCells } from '../../../houseCells'
+import { isCellExists, isCellNoteVisible } from '../../../util'
+
 import {
     HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
     HOUSE_TYPE_VS_FULL_NAMES,
     SMART_HINTS_CELLS_BG_COLOR,
-} from '../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
-import { getCellsAxesValuesListText } from '../uiHighlightData.helpers'
-import { setCellDataInHintResult } from '../util'
+} from '../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
+import { setCellDataInHintResult } from '../../util'
 
 const COLORS = {
     CELL: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,

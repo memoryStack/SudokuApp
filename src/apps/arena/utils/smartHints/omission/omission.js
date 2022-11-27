@@ -13,7 +13,7 @@ import {
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
-import { getUIHighlightData } from './uiHighlightData'
+import { getUIHighlightData } from '../rawHintTransformers/omission/omission'
 
 const HOST_CELLS_COMMON_HOUSES_COUNT = 2
 

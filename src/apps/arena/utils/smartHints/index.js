@@ -15,7 +15,7 @@ import { transformNakedGroupRawHint } from './rawHintTransformers/nakedGroup'
 import { transformHiddenGroupRawHint } from './rawHintTransformers/hiddenGroup'
 import { transformXWingRawHint } from './rawHintTransformers/xWing'
 import { transformYWingRawHint } from './yWing/uiHighlightData'
-import { transformOmissionRawHint } from './omission/uiHighlightData'
+import { transformOmissionRawHint } from './rawHintTransformers/omission'
 
 import {
     GROUPS,
