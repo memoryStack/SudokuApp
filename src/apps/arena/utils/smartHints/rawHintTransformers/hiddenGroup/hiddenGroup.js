@@ -1,9 +1,9 @@
-import { onlyUnique } from '../../../../../utils/util'
+import { onlyUnique } from '../../../../../../utils/util'
 import cloneDeep from 'lodash/src/utils/cloneDeep'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
-import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, NUMBER_TO_TEXT } from '../../smartHints/constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../smartHints/stringLiterals'
+import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, NUMBER_TO_TEXT } from '../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     areSameBlockCells,
     areSameColCells,
@@ -13,18 +13,18 @@ import {
     isCellEmpty,
     isCellExists,
     isCellNoteVisible,
-} from '../../util'
+} from '../../../util'
 
-import { getHouseCells } from '../../houseCells'
-import { getCellsAxesValuesListText } from '../uiHighlightData.helpers'
+import { getHouseCells } from '../../../houseCells'
+import { getCellsAxesValuesListText } from '../../uiHighlightData.helpers'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
     getTryOutInputPanelNumbersVisibility,
     removeDuplicteCells,
     getCandidatesListText,
-} from '../util'
-import { SMART_HINTS_CELLS_BG_COLOR } from '../constants'
+} from '../../util'
+import { SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
