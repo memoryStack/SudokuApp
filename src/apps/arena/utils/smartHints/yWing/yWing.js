@@ -194,8 +194,7 @@ export const getYWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const houseYWings = getHouseYWings({ type: houseType, num: houseNum }, housesYWingEligibleCells)
-                .filter(newYWing => !isDuplicateYWing(newYWing, result))
-                .filter(newYWing => yWingRemovesNotes(newYWing, notesData))
+                .filter(newYWing => !isDuplicateYWing(newYWing, result) && yWingRemovesNotes(newYWing, notesData))
                 .slice(0, maxHintsThreshold)
             result.push(...houseYWings)
         }
