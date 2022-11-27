@@ -23,7 +23,7 @@ export const getSmartHint = async (mainNumbers, notesData, requestedHintId) => {
         const rawHints = handler(mainNumbers, notesData)
         if (_isEmpty(rawHints)) return null
 
-        return _map(rawHints, (rawHint) => hintUIHighlightDataMap[requestedHintId]({ rawHint, mainNumbers, notesData }))
+        return _map(rawHints, rawHint => hintUIHighlightDataMap[requestedHintId]({ rawHint, mainNumbers, notesData }))
     }
     throw 'invalid type of selective hint'
 }

@@ -77,6 +77,8 @@ export const getYWingHintUIHighlightData = ({ rawHint: yWing, notesData }) => {
     return {
         cellsToFocusData,
         title: HINT_ID_VS_TITLES[HINTS_IDS.Y_WING],
-        steps: [{ text: getHintExplainationChunks({ pivotNotes: pivot.notes, commonNoteInWings: yWing.wingsCommonNote, }) }],
+        steps: [
+            { text: getHintExplainationChunks({ pivotNotes: pivot.notes, commonNoteInWings: yWing.wingsCommonNote }) },
+        ],
     }
 }

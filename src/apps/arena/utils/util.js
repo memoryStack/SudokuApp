@@ -380,7 +380,7 @@ export const areSameNotesInCells = (cells, notesInfo) => {
     const cellsNotes = cells.map(cell => {
         return getCellVisibleNotes(notesInfo[cell.row][cell.col])
     })
-    return _every(cellsNotes, (aCellNotes) => aCellNotes.sameArrays(cellsNotes[0]))
+    return _every(cellsNotes, aCellNotes => aCellNotes.sameArrays(cellsNotes[0]))
 }
 
 export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => isCellEmpty(cell, mainNumbers))

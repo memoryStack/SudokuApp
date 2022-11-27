@@ -1,12 +1,7 @@
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import {
-    getCellVisibleNotes,
-    getCellVisibleNotesCount,
-    isCellEmpty,
-    isCellNoteVisible,
-} from '../../../util'
+import { getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellNoteVisible } from '../../../util'
 
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'

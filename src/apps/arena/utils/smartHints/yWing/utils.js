@@ -1,11 +1,5 @@
-
 import { getHouseCells } from '../../houseCells'
-import {
-    getCellHousesInfo,
-    convertBoardCellNumToCell,
-    convertBoardCellToNum,
-    isCellNoteVisible,
-} from '../../util'
+import { getCellHousesInfo, convertBoardCellNumToCell, convertBoardCellToNum, isCellNoteVisible } from '../../util'
 
 const getHousesCellsNum = cell => {
     const result = {}
