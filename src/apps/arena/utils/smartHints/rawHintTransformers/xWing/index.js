@@ -1,4 +1,3 @@
-
 import { XWING_TYPES } from '../../xWing/constants'
 import { getFinnedXWingUIData } from './transformers/finnedXWing'
 import { getPerfectXWingUIData } from './transformers/perfectXWing'

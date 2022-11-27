@@ -390,4 +390,3 @@ test('omission removes notes', () => {
     }
     expect(omissionRemovesNotes(testThreeOmission, mainNumbers, notesData)).toBe(true)
 })
-

@@ -1,6 +1,6 @@
-import { GRID_TRAVERSALS } from "../../../../constants"
+import { GRID_TRAVERSALS } from '../../../../constants'
 
-import { getNextNeighbourBlock } from "./hiddenSingle"
+import { getNextNeighbourBlock } from './hiddenSingle'
 
 describe('getNextNeighbourBlock()', () => {
     test('takes two arguments ', () => {

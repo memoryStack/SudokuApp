@@ -1,7 +1,6 @@
 import { HIDDEN_SINGLE_TYPES } from '../constants'
 import { getHiddenSingleRawHints } from './hiddenSingle'
 
-
 jest.mock('../../../../../redux/dispatch.helpers')
 jest.mock('../../../store/selectors/board.selectors')
 

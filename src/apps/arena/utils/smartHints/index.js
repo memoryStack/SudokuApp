@@ -17,12 +17,7 @@ import { transformXWingRawHint } from './rawHintTransformers/xWing'
 import { transformYWingRawHint } from './rawHintTransformers/yWing/yWing'
 import { transformOmissionRawHint } from './rawHintTransformers/omission'
 
-import {
-    GROUPS,
-    HINTS_IDS,
-    INDEPENDENT_HINTS_MENU_ITEMS,
-    UI_HINTS_COUNT_THRESHOLD,
-} from './constants'
+import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHOLD } from './constants'
 
 export const getSmartHint = async (mainNumbers, notesData, requestedHintId) => {
     const handler = hintsHandlerMap[requestedHintId]
