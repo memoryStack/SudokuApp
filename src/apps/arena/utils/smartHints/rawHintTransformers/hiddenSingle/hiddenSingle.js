@@ -1,11 +1,11 @@
-import { HIDDEN_SINGLE_TYPES, HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../stringLiterals'
-import { HOUSE_TYPE } from '../../smartHints/constants'
-import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum } from '../../util'
-import { setCellDataInHintResult } from '../util'
+import { HIDDEN_SINGLE_TYPES, HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { HOUSE_TYPE } from '../../constants'
+import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum } from '../../../util'
+import { setCellDataInHintResult } from '../../util'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import { BLOCKS_COUNT_IN_ROW, CELLS_IN_HOUSE, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../constants'
-import { getHouseCells } from '../../houseCells'
+import { BLOCKS_COUNT_IN_ROW, CELLS_IN_HOUSE, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../../constants'
+import { getHouseCells } from '../../../houseCells'
 
 const getInhabitableCellData = () => {
     return {

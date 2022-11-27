@@ -10,7 +10,7 @@ import { getYWingRawHints } from './yWing/yWing'
 import { getOmissionRawHints } from './omission/omission'
 
 import { transformNakedSingleRawHint } from './rawHintTransformers/nakedSingle'
-import { transformHiddenSingleRawHint } from './hiddenSingle/uiHighlightData'
+import { transformHiddenSingleRawHint } from './rawHintTransformers/hiddenSingle'
 import { transformNakedGroupRawHint } from './rawHintTransformers/nakedGroup'
 import { transformHiddenGroupRawHint } from './rawHintTransformers/hiddenGroup'
 import { transformXWingRawHint } from './xWing/uiHighlightData'
