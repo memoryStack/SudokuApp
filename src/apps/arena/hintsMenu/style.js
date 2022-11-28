@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     disabledMenuItem: {
-        backgroundColor: 'rgb(178, 178, 178)'
+        backgroundColor: 'rgb(178, 178, 178)',
     },
     menuItemText: {
         color: 'rgb(49, 90, 163)',

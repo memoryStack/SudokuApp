@@ -41,7 +41,7 @@ const getNoHintsFoundMsg = id => {
 }
 
 export const checkHintAvailability = hintId => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         const mainNumbers = getMainNumbers(getStoreState())
         const notesInfo = getNotesInfo(getStoreState())
         setTimeout(() => {

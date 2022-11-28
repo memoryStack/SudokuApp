@@ -42,9 +42,7 @@ const HintsMenu_ = ({ onAction, hintsAvailable }) => {
                 onPress={isAvailable ? () => onMenuItemClick(id) : _noop}
                 touchable={TouchableTypes.opacity}
             >
-                <Text style={[styles.menuItemText, !isAvailable ? styles.disabledMenuItemText : null]}>
-                    {label}
-                </Text>
+                <Text style={[styles.menuItemText, !isAvailable ? styles.disabledMenuItemText : null]}>{label}</Text>
             </Touchable>
         )
     }
