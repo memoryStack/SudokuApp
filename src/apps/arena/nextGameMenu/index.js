@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
+
 import { Svg, Path } from 'react-native-svg'
 
 import _noop from 'lodash/src/utils/noop'

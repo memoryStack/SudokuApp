@@ -1,5 +1,6 @@
 import React, { memo } from 'react'
-import Svg, { Path, G } from 'react-native-svg'
+import { Svg, Path, G } from 'react-native-svg'
+
 /* SVGR has dropped some elements not supported by react-native-svg: title */
 function SvgComponent(props) {
     return (

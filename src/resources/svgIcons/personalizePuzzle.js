@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import Svg, { Path, G } from 'react-native-svg'
+import { Svg, Path, G } from 'react-native-svg'
 
 function SvgComponent(props) {
     return (
