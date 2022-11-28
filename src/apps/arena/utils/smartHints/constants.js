@@ -52,7 +52,7 @@ const HINTS_IDS = {
     ALL: 'ALL',
 }
 
-const INDEPENDENT_HINTS_MENU_ITEMS = [
+const HINTS_MENU_ITEMS = [
     {
         label: 'Naked\nSingle',
         id: HINTS_IDS.NAKED_SINGLE,
@@ -88,14 +88,6 @@ const INDEPENDENT_HINTS_MENU_ITEMS = [
     {
         label: 'Y-Wing',
         id: HINTS_IDS.Y_WING,
-    },
-]
-
-const HINTS_MENU_ITEMS = [
-    ...INDEPENDENT_HINTS_MENU_ITEMS,
-    {
-        label: 'All',
-        id: HINTS_IDS.ALL,
     },
 ]
 
@@ -141,7 +133,6 @@ export {
     HOUSE_TYPE,
     HINTS_MENU_ITEMS,
     HINTS_IDS,
-    INDEPENDENT_HINTS_MENU_ITEMS,
     NO_HINTS_FOUND_POPUP_TEXT,
     UI_HINTS_COUNT_THRESHOLD,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,

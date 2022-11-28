@@ -40,16 +40,24 @@ const getNoHintsFoundMsg = id => {
     return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
 }
 
+export const checkHintAvailability = hintId => {
+    return new Promise((resolve) => {
+        const mainNumbers = getMainNumbers(getStoreState())
+        const notesInfo = getNotesInfo(getStoreState())
+        setTimeout(() => {
+            getSmartHint(mainNumbers, notesInfo, hintId)
+                .then(hints => resolve(!!hints))
+                .catch(() => resolve(false))
+        })
+    })
+}
+
 export const showHints = async hintId => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notesInfo = getNotesInfo(getStoreState())
 
-    consoleLog('@@@@@@ notes', JSON.stringify(notesInfo))
-    consoleLog('@@@@@@ mainNumbers', JSON.stringify(mainNumbers))
-
     return getSmartHint(mainNumbers, notesInfo, hintId)
         .then(hints => {
-            consoleLog('@@@@ hintInfo', JSON.stringify(hints))
             if (hints) {
                 invokeDispatch(
                     setHints({

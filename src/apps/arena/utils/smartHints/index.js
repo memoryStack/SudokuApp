@@ -68,15 +68,6 @@ const hintsHandlerMap = {
     [HINTS_IDS.OMISSION]: function (mainNumbers, notesData) {
         return getOmissionRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
-    // TODO: will remove it in near future
-    [HINTS_IDS.ALL]: function (mainNumbers, notesData) {
-        const result = []
-        INDEPENDENT_HINTS_MENU_ITEMS.forEach(({ id }) => {
-            const hints = hintsHandlerMap[id](mainNumbers, notesData)
-            if (hints) result.push(...hints)
-        })
-        return result.length ? result : null
-    },
 }
 
 const rawHintTransformersMap = {

@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react'
+import React, { useEffect, useCallback } from 'react'
 
 import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
+import _get from 'lodash/src/utils/get'
 
 import withActions from '../../../utils/hocs/withActions'
 
@@ -17,7 +18,7 @@ import { styles } from './style'
 
 const COLUMNS_COUNT = 3
 
-const HintsMenu_ = ({ onAction }) => {
+const HintsMenu_ = ({ onAction, hintsAvailable }) => {
     const onOverlayContainerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS })
     }, [onAction])
@@ -26,15 +27,24 @@ const HintsMenu_ = ({ onAction }) => {
         onAction({ type: ACTION_TYPES.ON_MENU_ITEM_PRESS, payload: id })
     }
 
+    useEffect(() => {
+        onAction({ type: ACTION_TYPES.ON_INIT })
+    }, [onAction])
+
     const renderMenuItem = ({ label, id }) => {
+        const isAvailable = _get(hintsAvailable, id, false)
+        // can't use disabled prop as it propogates the click event to parent
+        // component. is there way to solve it without this onPress hack ??
         return (
             <Touchable
-                style={styles.menuItem}
-                onPress={() => onMenuItemClick(id)}
-                touchable={TouchableTypes.opacity}
                 key={label}
+                style={[styles.menuItem, !isAvailable ? styles.disabledMenuItem : null]}
+                onPress={isAvailable ? () => onMenuItemClick(id) : _noop}
+                touchable={TouchableTypes.opacity}
             >
-                <Text style={styles.menuItemText}>{label}</Text>
+                <Text style={[styles.menuItemText, !isAvailable ? styles.disabledMenuItemText : null]}>
+                    {label}
+                </Text>
             </Touchable>
         )
     }
@@ -95,8 +105,10 @@ export const HintsMenu = React.memo(withActions({ actionHandlers: ACTION_HANDLER
 
 HintsMenu_.propTypes = {
     onAction: PropTypes.func,
+    hintsAvailable: PropTypes.object,
 }
 
 HintsMenu_.defaultProps = {
     onAction: _noop,
+    hintsAvailable: {},
 }

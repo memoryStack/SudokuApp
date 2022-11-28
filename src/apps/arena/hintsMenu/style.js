@@ -25,10 +25,16 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    disabledMenuItem: {
+        backgroundColor: 'rgb(178, 178, 178)'
+    },
     menuItemText: {
         color: 'rgb(49, 90, 163)',
         fontSize: 20,
         fontFamily: fonts.regular,
+    },
+    disabledMenuItemText: {
+        color: 'rgb(246, 246, 246)',
     },
     menuRowContainer: {
         flex: 1,
