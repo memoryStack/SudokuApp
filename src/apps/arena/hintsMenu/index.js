@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 
 import { View, Text } from 'react-native'
 
@@ -6,33 +6,44 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 import _get from 'lodash/src/utils/get'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
+import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { styles } from './style'
 
 const COLUMNS_COUNT = 3
 
-const HintsMenu_ = ({ onAction, hintsAvailable }) => {
+const HintsMenu_ = ({ onAction, availableRawHints }) => {
+
+    const { mainNumbers, notesInfo } = useGameBoardInputs()
+
+    useEffect(() => {
+        onAction({
+            type: ACTION_TYPES.ON_INIT,
+            payload: { mainNumbers, notesInfo }
+        })
+    }, [])
+
     const onOverlayContainerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS })
     }, [onAction])
 
     const onMenuItemClick = id => {
-        onAction({ type: ACTION_TYPES.ON_MENU_ITEM_PRESS, payload: id })
+        onAction({
+            type: ACTION_TYPES.ON_MENU_ITEM_PRESS,
+            payload: { id, mainNumbers, notesInfo }
+        })
     }
 
-    useEffect(() => {
-        onAction({ type: ACTION_TYPES.ON_INIT })
-    }, [onAction])
-
     const renderMenuItem = ({ label, id }) => {
-        const isAvailable = _get(hintsAvailable, id, false)
+        const isAvailable = !_isEmpty(_get(availableRawHints, id))
         // can't use disabled prop as it propogates the click event to parent
         // component. is there way to solve it without this onPress hack ??
         return (
@@ -103,10 +114,10 @@ export const HintsMenu = React.memo(withActions({ actionHandlers: ACTION_HANDLER
 
 HintsMenu_.propTypes = {
     onAction: PropTypes.func,
-    hintsAvailable: PropTypes.object,
+    availableRawHints: PropTypes.object,
 }
 
 HintsMenu_.defaultProps = {
     onAction: _noop,
-    hintsAvailable: {},
+    availableRawHints: {},
 }

@@ -1,34 +1,57 @@
 import { GAME_STATE } from '../../../resources/constants'
-import { consoleLog } from '../../../utils/util'
+
 import { hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
-import { showHints, checkHintAvailability } from '../store/actions/smartHintHC.actions'
-import { HINTS_IDS, HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
+import { showHintAction } from '../store/actions/smartHintHC.actions'
+import { getRawHints } from '../utils/smartHints'
+
+import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
+
+const onInit = async ({ setState, params: { mainNumbers, notesInfo } }) => {
+    const availableRawHints = {}
+    for (let i = 0; i < HINTS_MENU_ITEMS.length; i++) {
+        const { id: hintId } = HINTS_MENU_ITEMS[i]
+        availableRawHints[hintId] = await rawHintsPromise(hintId, mainNumbers, notesInfo)
+    }
+    setState({ availableRawHints })
+}
+
+// TODO: analyze the asynchronous behaviour of this handler
+// i really need to brush up asynchronous in js
+const rawHintsPromise = (hintId, mainNumbers, notesInfo) => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            getRawHints(hintId, mainNumbers, notesInfo)
+                .then(resolve)
+                .catch((error) => {
+                    consoleLog(hintId, error)
+                    resolve(null)
+                })
+        })
+    })
+}
 
 const handleCloseHintsMenu = () => {
     hintsMenuVisibilityAction(false)
 }
 
-const handleMenuItemPress = async ({ params: id }) => {
+const handleMenuItemPress = ({ getState, params: { id, mainNumbers, notesInfo } }) => {
     handleCloseHintsMenu()
-    const hintAvailable = await showHints(id)
-    if (!hintAvailable) updateGameState(GAME_STATE.ACTIVE)
+    const { availableRawHints } = getState()
+
+    showHintAction(
+        id,
+        availableRawHints[id],
+        mainNumbers,
+        notesInfo
+    )
+
+    updateGameState(GAME_STATE.ACTIVE)
 }
 
 const handleOverlayPress = () => {
     handleCloseHintsMenu()
     updateGameState(GAME_STATE.ACTIVE)
-}
-
-const onInit = async ({ setState }) => {
-    const hintsAvailable = {}
-
-    for (let i = 0; i < HINTS_MENU_ITEMS.length; i++) {
-        const { id: hintId } = HINTS_MENU_ITEMS[i]
-        hintsAvailable[hintId] = await checkHintAvailability(hintId)
-    }
-
-    setState({ hintsAvailable })
 }
 
 const ACTION_TYPES = {

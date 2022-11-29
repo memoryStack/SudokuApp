@@ -1,11 +1,11 @@
+import _cloneDeep from 'lodash/src/utils/cloneDeep'
+
 import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { emit } from '../../../../utils/GlobalEventBus'
-import { consoleLog } from '../../../../utils/util'
-import cloneDeep from 'lodash/src/utils/cloneDeep'
+
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
-import { getSmartHint } from '../../utils/smartHints'
-import { NO_HINTS_FOUND_POPUP_TEXT } from '../../utils/smartHints/constants'
+import { getTransformedRawHints } from '../../utils/smartHints'
 import {
     areCommonHouseCells,
     areSameCells,
@@ -16,7 +16,7 @@ import {
     isCellNoteVisible,
 } from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
-import { getMainNumbers, getNotesInfo } from '../selectors/board.selectors'
+import { getNotesInfo } from '../selectors/board.selectors'
 import {
     getTryOutCellsRestrictedNumberInputs,
     getTryOutCellsRestrictedNumberInputsMsg,
@@ -29,63 +29,22 @@ const {
     removeHints,
     setNextHint,
     setPrevHint,
-    setHints,
     resetState,
+    setHints,
     setTryOutSelectedCell,
     updateBoardDataOnTryOutNumberInput,
     updateBoardDataOnTryOutErase,
 } = smartHintHCActions
 
-const getNoHintsFoundMsg = id => {
-    return `no ${NO_HINTS_FOUND_POPUP_TEXT[id]} found. try other hints or try filling some more guesses.`
-}
-
-export const checkHintAvailability = hintId => {
-    return new Promise(resolve => {
-        const mainNumbers = getMainNumbers(getStoreState())
-        const notesInfo = getNotesInfo(getStoreState())
-        setTimeout(() => {
-            getSmartHint(mainNumbers, notesInfo, hintId)
-                .then(hints => resolve(!!hints))
-                .catch(() => resolve(false))
-        })
-    })
-}
-
-export const showHints = async hintId => {
-    const mainNumbers = getMainNumbers(getStoreState())
-    const notesInfo = getNotesInfo(getStoreState())
-
-    return getSmartHint(mainNumbers, notesInfo, hintId)
-        .then(hints => {
-            if (hints) {
-                invokeDispatch(
-                    setHints({
-                        mainNumbers: hints[0].hasTryOut ? cloneDeep(mainNumbers) : null,
-                        notesInfo: hints[0].hasTryOut ? cloneDeep(notesInfo) : null,
-                        hints,
-                    }),
-                )
-                return true
-            } else {
-                emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-                    msg: getNoHintsFoundMsg(hintId),
-                    visibleTime: 5000,
-                })
-                return false
-            }
-        })
-        .catch(error => {
-            // TODO: make the popup scrollable for very long systraces
-            consoleLog(error)
-            if (__DEV__) {
-                emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-                    msg: JSON.stringify(error.stack),
-                    visibleTime: 10000,
-                })
-            }
-            return false
-        })
+export const showHintAction = (hintId, rawHints, mainNumbers, notesInfo) => {
+    const hints = getTransformedRawHints(hintId, rawHints, mainNumbers, notesInfo)
+    invokeDispatch(
+        setHints({
+            mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
+            notesInfo: hints[0].hasTryOut ? _cloneDeep(notesInfo) : null,
+            hints,
+        }),
+    )
 }
 
 export const clearHints = () => {
@@ -211,7 +170,7 @@ const getNotesToEnterHostCells = focusedCells => {
 
     // TODO: make it efficient
 
-    const mainNumbersStateAfterErase = cloneDeep(tryOutMainNumbers)
+    const mainNumbersStateAfterErase = _cloneDeep(tryOutMainNumbers)
     mainNumbersStateAfterErase[selectedCell.row][selectedCell.col].value = 0
 
     const result = []

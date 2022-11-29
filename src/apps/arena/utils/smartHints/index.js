@@ -19,22 +19,21 @@ import {
     transformOmissionRawHint,
 } from './rawHintTransformers'
 
-import { GROUPS, HINTS_IDS, INDEPENDENT_HINTS_MENU_ITEMS, UI_HINTS_COUNT_THRESHOLD } from './constants'
+import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
 
-export const getSmartHint = async (mainNumbers, notesData, requestedHintId) => {
-    const handler = hintsHandlerMap[requestedHintId]
-    if (handler) {
-        const rawHints = handler(mainNumbers, notesData)
-        if (_isEmpty(rawHints)) return null
+export const getRawHints = async (hintId, mainNumbers, notesData) => {
+    const handler = HINT_ID_VS_HANDLERS[hintId]
+    return handler(mainNumbers, notesData)
+}
 
-        return _map(rawHints, rawHint => rawHintTransformersMap[requestedHintId]({ rawHint, mainNumbers, notesData }))
-    }
-    throw 'invalid type of selective hint'
+export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData) => {
+    if (_isEmpty(rawHints)) return null
+    return _map(rawHints, rawHint => HINT_ID_VS_RAW_HINT_TRANSFORMERS[hintId]({ rawHint, mainNumbers, notesData }))
 }
 
 // TODO: fix the contract of this module. it returns null and receiving all
 // sorts of things from it's dependent modules
-const hintsHandlerMap = {
+const HINT_ID_VS_HANDLERS = {
     [HINTS_IDS.NAKED_SINGLE]: function (mainNumbers, notesData) {
         return getNakedSingleRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
@@ -42,16 +41,16 @@ const hintsHandlerMap = {
         return getHiddenSingleRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD)
     },
     [HINTS_IDS.NAKED_DOUBLE]: function (mainNumbers, notesData) {
-        return hintsHandlerMap[GROUPS.NAKED_GROUP](2, mainNumbers, notesData)
+        return HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](2, mainNumbers, notesData)
     },
     [HINTS_IDS.HIDDEN_DOUBLE]: function (mainNumbers, notesData) {
-        return hintsHandlerMap[GROUPS.HIDDEN_GROUP](2, mainNumbers, notesData)
+        return HINT_ID_VS_HANDLERS[GROUPS.HIDDEN_GROUP](2, mainNumbers, notesData)
     },
     [HINTS_IDS.NAKED_TRIPPLE]: function (mainNumbers, notesData) {
-        return hintsHandlerMap[GROUPS.NAKED_GROUP](3, mainNumbers, notesData)
+        return HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](3, mainNumbers, notesData)
     },
     [HINTS_IDS.HIDDEN_TRIPPLE]: function (mainNumbers, notesData) {
-        return hintsHandlerMap[GROUPS.HIDDEN_GROUP](3, mainNumbers, notesData)
+        return HINT_ID_VS_HANDLERS[GROUPS.HIDDEN_GROUP](3, mainNumbers, notesData)
     },
     [GROUPS.NAKED_GROUP]: function (candidatesCount, mainNumbers, notesData) {
         return getNakedGroupRawHints(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD)
@@ -70,7 +69,7 @@ const hintsHandlerMap = {
     },
 }
 
-const rawHintTransformersMap = {
+const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
     [HINTS_IDS.NAKED_SINGLE]: transformNakedSingleRawHint,
     [HINTS_IDS.HIDDEN_SINGLE]: transformHiddenSingleRawHint,
     [HINTS_IDS.NAKED_DOUBLE]: transformNakedGroupRawHint,
