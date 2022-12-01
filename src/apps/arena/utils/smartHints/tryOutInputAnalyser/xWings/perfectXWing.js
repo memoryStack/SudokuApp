@@ -1,4 +1,5 @@
 import _flatten from 'lodash/src/utils/flatten'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'
 
@@ -21,7 +22,7 @@ export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHo
         return getNoInputResult(xWing)
     }
 
-    if (filterFilledCellsInTryOut(removableNotesHostCells).length) {
+    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))) {
         return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
     }
 
@@ -29,16 +30,13 @@ export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHo
 }
 
 const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
-    const xWingCells = getXWingCells(xWing.legs)
     const removableNotesHostCellsFilledCount = filterFilledCellsInTryOut(removableNotesHostCells).length
     if (removableNotesHostCellsFilledCount === 2) {
         return getBothHouseWithoutCandidateErrorResult(xWing)
     }
 
-    const xWingFilledCellsCount = filterFilledCellsInTryOut(xWingCells).length
-    if (xWingFilledCellsCount) {
-        return getOneLegWithNoCandidateResult(xWing)
-    }
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing)
+    if (noCandidateInALegError) return noCandidateInALegError
 
     return getSameCrossHouseCandidatePossibilitiesResult(xWing)
 }

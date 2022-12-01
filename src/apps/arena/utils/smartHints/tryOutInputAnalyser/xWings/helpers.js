@@ -1,3 +1,5 @@
+import _isEmpty from 'lodash/src/utils/isEmpty'
+
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getMainNumbers } from '../../../../store/selectors/board.selectors'
@@ -67,6 +69,8 @@ const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
 export const getOneLegWithNoCandidateResult = xWing => {
     const candidate = getXWingCandidate(xWing)
     const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs)
+    if (_isEmpty(xWingLegWithCandidateAsInhabitable)) return null
+
     const inhabitableHouseAxesText = getHouseAxesText(
         getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
     )
