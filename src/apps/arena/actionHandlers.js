@@ -100,10 +100,10 @@ const handleBackPress = ({ getState }) => {
     navigation && navigation.goBack()
 }
 
-const startGame = ({ mainNumbers, notesInfo, selectedCell, moves, difficultyLevel, mistakes, time, pencilState }) => {
+const startGame = ({ mainNumbers, notes, selectedCell, moves, difficultyLevel, mistakes, time, pencilState }) => {
     // board state
     updateMainNumbers(mainNumbers)
-    updateNotes(notesInfo)
+    updateNotes(notes)
     updateSelectedCell(selectedCell)
     updateMoves(moves)
     initPossibleNotes(mainNumbers)
@@ -131,7 +131,7 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
 
     startGame({
         mainNumbers,
-        notesInfo: initNotes(),
+        notes: initNotes(),
         selectedCell: { row: 0, col: 0 },
         moves: [],
         ...initRefereeData(),
@@ -325,7 +325,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,

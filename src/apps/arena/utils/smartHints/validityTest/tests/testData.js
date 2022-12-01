@@ -1,5 +1,5 @@
 // const puzzleStr = '300006002086420009402310006007900520000250107524037000093001240001000003000800670'
-export const notesInfo = [
+export const notes = [
     [
         [
             {

@@ -14,13 +14,13 @@ const useHintTryOutAnalyserResult = () => {
 
     const [tryOutResult, setTryOutResult] = useState({})
     const mainNumbers = useSelector(getTryOutMainNumbers)
-    const notesInfo = useSelector(getTryOutNotes)
+    const notes = useSelector(getTryOutNotes)
     const isHintTryOut = useIsHintTryOutStep()
 
     useEffect(() => {
         if (!isHintTryOut) return
         setTryOutResult(analyseTryOutInput({ hintType, data: tryOutAnalyserData }))
-    }, [isHintTryOut, mainNumbers, notesInfo, tryOutAnalyserData, hintType])
+    }, [isHintTryOut, mainNumbers, notes, tryOutAnalyserData, hintType])
 
     return tryOutResult
 }

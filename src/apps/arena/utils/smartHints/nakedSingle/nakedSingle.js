@@ -43,7 +43,7 @@ const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
     return emptyCellsInHouse.length === 1
 }
 
-export const getNakedSingleRawHints = (mainNumbers, notesInfo, maxHintsThreshold) => {
+export const getNakedSingleRawHints = (mainNumbers, notes, maxHintsThreshold) => {
     const result = []
 
     // BOARD_LOOPER: 9
@@ -54,7 +54,7 @@ export const getNakedSingleRawHints = (mainNumbers, notesInfo, maxHintsThreshold
 
             const cell = { row, col }
             // TODO: change "mainNumber" field name. it doesn't feel right.
-            const { present, mainNumber } = isNakedSinglePresent(notesInfo[row][col])
+            const { present, mainNumber } = isNakedSinglePresent(notes[row][col])
             const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
             if (isValid) {
                 result.push({ cell, mainNumber, type: getNakedSingleType(cell, mainNumbers) })

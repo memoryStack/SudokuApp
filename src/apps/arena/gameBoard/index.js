@@ -28,7 +28,7 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, onCellClick, isHintTryOut }) => {
+const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCellClick, isHintTryOut }) => {
     const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
         useSelector(getHintHCInfo)
 
@@ -143,7 +143,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notesInfo, selectedCell, o
                                     cellBGColor={getBoxBackgroundColor(cell)}
                                     mainValueFontColor={getMainNumFontColor(cell)}
                                     cellMainValue={mainNumbers[row][col].value}
-                                    cellNotes={notesInfo[row][col]}
+                                    cellNotes={notes[row][col]}
                                     onCellClick={onCellClick}
                                     displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
                                     smartHintData={smartHintData}
@@ -229,7 +229,7 @@ export const Board = React.memo(Board_)
 
 Board_.propTypes = {
     mainNumbers: PropTypes.array,
-    notesInfo: PropTypes.array,
+    notes: PropTypes.array,
     screenName: PropTypes.string,
     gameState: PropTypes.string,
     selectedCell: PropTypes.object,

@@ -13,12 +13,12 @@ export const useGameBoardInputs = () => {
 
     const selectedCell = useSelector(selectedCellSelector)
     const mainNumbers = useSelector(mainNumbersSelector)
-    // TODO: change notesInfo to notes
-    const notesInfo = useSelector(notesSelector)
+    // TODO: change notes to notes
+    const notes = useSelector(notesSelector)
 
     return {
         selectedCell,
         mainNumbers,
-        notesInfo,
+        notes,
     }
 }

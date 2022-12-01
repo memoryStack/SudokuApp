@@ -23,7 +23,7 @@ import { isCellTryOutClickable } from '../smartHintHC/helpers'
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const isHintTryOut = useIsHintTryOutStep()
 
-    const { mainNumbers, selectedCell, notesInfo } = useGameBoardInputs()
+    const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
     const moves = useSelector(getMoves)
 
@@ -59,7 +59,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
 
     const dataToCache = {
         mainNumbers,
-        notesInfo,
+        notes,
         moves,
         selectedCell,
     }
@@ -70,7 +70,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             sreenName={SCREEN_NAME.ARENA}
             gameState={gameState}
             mainNumbers={mainNumbers}
-            notesInfo={notesInfo}
+            notes={notes}
             selectedCell={selectedCell}
             onCellClick={onCellClick}
             isHintTryOut={isHintTryOut}

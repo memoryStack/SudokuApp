@@ -9,14 +9,14 @@ const stateHandlers = {
     },
     setHints: (state, action) => {
         const {
-            payload: { hints, mainNumbers, notesInfo },
+            payload: { hints, mainNumbers, notes },
         } = action
         state.show = true
         state.currentHintNum = 1
         state.hints = hints
         state.tryOut = {
             mainNumbers,
-            notesInfo,
+            notes,
             notesErasedOnInput: {},
         }
     },
@@ -43,7 +43,7 @@ const stateHandlers = {
 
         removalbeNotesHostCellsData.forEach(({ cell, notes }) => {
             notes.forEach(note => {
-                state.tryOut.notesInfo[cell.row][cell.col][note - 1].show = 0
+                state.tryOut.notes[cell.row][cell.col][note - 1].show = 0
             })
         })
     },
@@ -55,7 +55,7 @@ const stateHandlers = {
 
         notesToEnterHostCellsData.forEach(({ cell, notes }) => {
             notes.forEach(note => {
-                state.tryOut.notesInfo[cell.row][cell.col][note - 1].show = 1
+                state.tryOut.notes[cell.row][cell.col][note - 1].show = 1
             })
         })
     },

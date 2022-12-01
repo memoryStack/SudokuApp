@@ -7,21 +7,21 @@ import { getRawHints } from '../utils/smartHints'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 
-const onInit = async ({ setState, params: { mainNumbers, notesInfo } }) => {
+const onInit = async ({ setState, params: { mainNumbers, notes } }) => {
     const availableRawHints = {}
     for (let i = 0; i < HINTS_MENU_ITEMS.length; i++) {
         const { id: hintId } = HINTS_MENU_ITEMS[i]
-        availableRawHints[hintId] = await rawHintsPromise(hintId, mainNumbers, notesInfo)
+        availableRawHints[hintId] = await rawHintsPromise(hintId, mainNumbers, notes)
     }
     setState({ availableRawHints })
 }
 
 // TODO: analyze the asynchronous behaviour of this handler
 // i really need to brush up asynchronous in js
-const rawHintsPromise = (hintId, mainNumbers, notesInfo) => {
+const rawHintsPromise = (hintId, mainNumbers, notes) => {
     return new Promise(resolve => {
         setTimeout(() => {
-            getRawHints(hintId, mainNumbers, notesInfo)
+            getRawHints(hintId, mainNumbers, notes)
                 .then(resolve)
                 .catch(error => {
                     consoleLog(hintId, error)
@@ -35,11 +35,11 @@ const handleCloseHintsMenu = () => {
     hintsMenuVisibilityAction(false)
 }
 
-const handleMenuItemPress = ({ getState, params: { id, mainNumbers, notesInfo } }) => {
+const handleMenuItemPress = ({ getState, params: { id, mainNumbers, notes } }) => {
     handleCloseHintsMenu()
     const { availableRawHints } = getState()
 
-    showHintAction(id, availableRawHints[id], mainNumbers, notesInfo)
+    showHintAction(id, availableRawHints[id], mainNumbers, notes)
 
     updateGameState(GAME_STATE.ACTIVE)
 }

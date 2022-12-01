@@ -104,7 +104,7 @@ export const isCellEmpty = ({ row, col }, mainNumbers) => mainNumbers[row][col].
 export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
 export const initNotes = () => {
-    const notesInfo = []
+    const notes = []
     // BOARD_LOOPER: 12
     for (let row = 0; row < HOUSES_COUNT; row++) {
         const rowNotes = []
@@ -117,9 +117,9 @@ export const initNotes = () => {
             }
             rowNotes.push(boxNotes)
         }
-        notesInfo.push(rowNotes)
+        notes.push(rowNotes)
     }
-    return notesInfo
+    return notes
 }
 
 export const getCellRowHouseInfo = cell => {
@@ -376,9 +376,9 @@ export const getHousesCellsSharedByCells = cells => {
     return result
 }
 
-export const areSameNotesInCells = (cells, notesInfo) => {
+export const areSameNotesInCells = (cells, notes) => {
     const cellsNotes = cells.map(cell => {
-        return getCellVisibleNotes(notesInfo[cell.row][cell.col])
+        return getCellVisibleNotes(notes[cell.row][cell.col])
     })
     return _every(cellsNotes, aCellNotes => aCellNotes.sameArrays(cellsNotes[0]))
 }

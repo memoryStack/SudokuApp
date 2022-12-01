@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onCustomPuzzleClosed, onAction }) => {
+const CustomPuzzle_ = ({ mainNumbers, selectedCell, notes, parentHeight, onCustomPuzzleClosed, onAction }) => {
     const customPuzzleRef = useRef(null)
 
     useEffect(() => {
@@ -109,7 +109,7 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notesInfo, parentHeight, onC
                     gameState={GAME_STATE.ACTIVE}
                     screenName={SCREEN_NAME.CUSTOM_PUZZLE}
                     mainNumbers={mainNumbers}
-                    notesInfo={notesInfo}
+                    notes={notes}
                     selectedCell={selectedCell}
                     onCellClick={onCellClick}
                 />

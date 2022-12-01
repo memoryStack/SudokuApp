@@ -68,7 +68,7 @@ const initBoardData = () => {
         }
     }
 
-    const notesInfo = []
+    const notes = []
     for (let i = 0; i < CELLS_IN_HOUSE; i++) {
         const rowNotes = []
         for (let j = 0; j < CELLS_IN_HOUSE; j++) {
@@ -79,11 +79,11 @@ const initBoardData = () => {
             }
             rowNotes.push(boxNotes)
         }
-        notesInfo.push(rowNotes)
+        notes.push(rowNotes)
     }
 
     return {
-        notesInfo,
+        notes,
         mainNumbers,
         selectedCell: { row: 0, col: 0 },
     }

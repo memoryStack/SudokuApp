@@ -36,12 +36,12 @@ const {
     updateBoardDataOnTryOutErase,
 } = smartHintHCActions
 
-export const showHintAction = (hintId, rawHints, mainNumbers, notesInfo) => {
-    const hints = getTransformedRawHints(hintId, rawHints, mainNumbers, notesInfo)
+export const showHintAction = (hintId, rawHints, mainNumbers, notes) => {
+    const hints = getTransformedRawHints(hintId, rawHints, mainNumbers, notes)
     invokeDispatch(
         setHints({
             mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
-            notesInfo: hints[0].hasTryOut ? _cloneDeep(notesInfo) : null,
+            notes: hints[0].hasTryOut ? _cloneDeep(notes) : null,
             hints,
         }),
     )
@@ -98,10 +98,10 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
 const isValidInputNumberClick = number => {
     const selectedCell = getTryOutSelectedCell(getStoreState())
     const mainNumbers = getTryOutMainNumbers(getStoreState())
-    const notesInfo = getTryOutNotes(getStoreState())
+    const notes = getTryOutNotes(getStoreState())
     return (
         isCellEmpty(selectedCell, mainNumbers) &&
-        isCellNoteVisible(number, notesInfo[selectedCell.row][selectedCell.col])
+        isCellNoteVisible(number, notes[selectedCell.row][selectedCell.col])
     )
 }
 
@@ -124,17 +124,17 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
     const result = []
 
     const selectedCell = getTryOutSelectedCell(getStoreState())
-    const notesInfo = getTryOutNotes(getStoreState())
+    const notes = getTryOutNotes(getStoreState())
     focusedCells.forEach(cell => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: getCellVisibleNotes(notesInfo[cell.row][cell.col]),
+                notes: getCellVisibleNotes(notes[cell.row][cell.col]),
             })
         } else {
             // TODO: can make it better
             if (
-                isCellNoteVisible(inputNumber, notesInfo[cell.row][cell.col]) &&
+                isCellNoteVisible(inputNumber, notes[cell.row][cell.col]) &&
                 areCommonHouseCells(cell, selectedCell)
             ) {
                 result.push({

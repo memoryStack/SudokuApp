@@ -84,11 +84,11 @@ const getNewNotesBunchToShow = () => {
     const result = []
 
     const mainNumbers = getMainNumbers(getStoreState())
-    const notesInfo = getNotesInfo(getStoreState())
+    const notes = getNotesInfo(getStoreState())
 
     forBoardEachCell(({ row, col }) => {
         if (isCellEmpty({ row, col }, mainNumbers)) {
-            _filter(notesInfo[row][col], ({ noteValue, show }) => {
+            _filter(notes[row][col], ({ noteValue, show }) => {
                 return !show && !duplicacyPresent(noteValue, mainNumbers, { row, col })
             }).forEach(({ noteValue }) => {
                 result.push({ cell: { row, col }, note: noteValue })
@@ -104,8 +104,8 @@ const MOVES_TYPES = {
     REMOVE: 'REMOVE',
 }
 
-const getVisibileNotesBunchInCell = (cell, notesInfo) => {
-    return _filter(notesInfo[cell.row][cell.col], ({ show }) => {
+const getVisibileNotesBunchInCell = (cell, notes) => {
+    return _filter(notes[cell.row][cell.col], ({ show }) => {
         return show
     }).map(({ noteValue }) => {
         return {
@@ -115,14 +115,14 @@ const getVisibileNotesBunchInCell = (cell, notesInfo) => {
     })
 }
 
-const getNotesToRemoveAfterMainNumberInput = (number, cell, notesInfo) => {
+const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
     const result = []
-    result.push(...getVisibileNotesBunchInCell(cell, notesInfo))
+    result.push(...getVisibileNotesBunchInCell(cell, notes))
 
     const cellHouses = getCellHousesInfo(cell)
     cellHouses.forEach(house => {
         getHouseCells(house).forEach(({ row, col }) => {
-            const { show } = notesInfo[row][col][number - 1]
+            const { show } = notes[row][col][number - 1]
             if (show) result.push({ cell: { row, col }, note: number })
         })
     })
@@ -145,8 +145,8 @@ const inputMainNumber = number => {
 
     if (number !== mainNumbers[selectedCell.row][selectedCell.col].solutionValue) addMistake()
     else {
-        const notesInfo = getNotesInfo(getStoreState())
-        const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, notesInfo)
+        const notes = getNotesInfo(getStoreState())
+        const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, notes)
         invokeDispatch(eraseNotesBunch(notesBunch))
 
         erasePossibleNotesOnNumberInput(number, selectedCell)
@@ -166,10 +166,10 @@ const inputNoteNumber = number => {
     const mainNumbers = getMainNumbers(getStoreState())
     if (duplicacyPresent(number, mainNumbers, selectedCell)) return
 
-    const notesInfo = getNotesInfo(getStoreState())
+    const notes = getNotesInfo(getStoreState())
     const notesBunch = [{ cell: selectedCell, note: number }]
 
-    const { show } = notesInfo[selectedCell.row][selectedCell.col][number - 1]
+    const { show } = notes[selectedCell.row][selectedCell.col][number - 1]
     if (show) invokeDispatch(eraseNotesBunch(notesBunch))
     else invokeDispatch(setNotesBunch(notesBunch))
 
@@ -196,8 +196,8 @@ export const inputNumberAction = number => {
 
 const removeCellNotes = () => {
     const selectedCell = getSelectedCell(getStoreState())
-    const notesInfo = getNotesInfo(getStoreState())
-    const notesBunch = getVisibileNotesBunchInCell(selectedCell, notesInfo)
+    const notes = getNotesInfo(getStoreState())
+    const notesBunch = getVisibileNotesBunchInCell(selectedCell, notes)
     if (!notesBunch.length) return
 
     invokeDispatch(eraseNotesBunch(notesBunch))
@@ -341,7 +341,7 @@ export const resetStoreState = () => {
         resetState({
             mainNumbers: initMainNumbers(),
             selectedCell: { row: 0, col: 0 },
-            notesInfo: initNotes(),
+            notes: initNotes(),
             moves: [],
             possibleNotes: initNotes(),
         }),
