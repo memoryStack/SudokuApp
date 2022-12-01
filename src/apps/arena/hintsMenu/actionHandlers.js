@@ -23,7 +23,7 @@ const rawHintsPromise = (hintId, mainNumbers, notesInfo) => {
         setTimeout(() => {
             getRawHints(hintId, mainNumbers, notesInfo)
                 .then(resolve)
-                .catch((error) => {
+                .catch(error => {
                     consoleLog(hintId, error)
                     resolve(null)
                 })
@@ -39,12 +39,7 @@ const handleMenuItemPress = ({ getState, params: { id, mainNumbers, notesInfo } 
     handleCloseHintsMenu()
     const { availableRawHints } = getState()
 
-    showHintAction(
-        id,
-        availableRawHints[id],
-        mainNumbers,
-        notesInfo
-    )
+    showHintAction(id, availableRawHints[id], mainNumbers, notesInfo)
 
     updateGameState(GAME_STATE.ACTIVE)
 }

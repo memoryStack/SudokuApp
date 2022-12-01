@@ -21,13 +21,12 @@ import { styles } from './style'
 const COLUMNS_COUNT = 3
 
 const HintsMenu_ = ({ onAction, availableRawHints }) => {
-
     const { mainNumbers, notesInfo } = useGameBoardInputs()
 
     useEffect(() => {
         onAction({
             type: ACTION_TYPES.ON_INIT,
-            payload: { mainNumbers, notesInfo }
+            payload: { mainNumbers, notesInfo },
         })
     }, [])
 
@@ -38,7 +37,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const onMenuItemClick = id => {
         onAction({
             type: ACTION_TYPES.ON_MENU_ITEM_PRESS,
-            payload: { id, mainNumbers, notesInfo }
+            payload: { id, mainNumbers, notesInfo },
         })
     }
 
