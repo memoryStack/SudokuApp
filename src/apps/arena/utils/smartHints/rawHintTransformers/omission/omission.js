@@ -71,8 +71,9 @@ export const getHouseNoteHostCells = (note, house, notes) => {
 const getRemovableNotesHostCells = (omission, notes) => {
     const { note, hostHouse, removableNotesHostHouse } = omission
     const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
-    return getHouseNoteHostCells(note, removableNotesHostHouse, notes)
-        .filter(cell => !isCellExists(cell, hostHouseHostCells))
+    return getHouseNoteHostCells(note, removableNotesHostHouse, notes).filter(
+        cell => !isCellExists(cell, hostHouseHostCells),
+    )
 }
 
 // extract it out if this func is needed
@@ -99,10 +100,10 @@ const getHintExplaination = (omission, notes) => {
 
 const getApplyHintData = (omission, notes) => {
     const removableNotesHostCells = getRemovableNotesHostCells(omission, notes)
-    return _map(removableNotesHostCells, (cell) => {
+    return _map(removableNotesHostCells, cell => {
         return {
             cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [omission.note] }
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [omission.note] },
         }
     })
 }

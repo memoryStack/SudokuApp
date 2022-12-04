@@ -1,10 +1,22 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _forEach from 'lodash/src/utils/forEach'
 
-import { SMART_HINTS_CELLS_BG_COLOR, NAKED_SINGLE_TYPES, HINTS_IDS, HOUSE_TYPE_VS_FULL_NAMES, HOUSE_TYPE } from '../../constants'
+import {
+    SMART_HINTS_CELLS_BG_COLOR,
+    NAKED_SINGLE_TYPES,
+    HINTS_IDS,
+    HOUSE_TYPE_VS_FULL_NAMES,
+    HOUSE_TYPE,
+} from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { setCellDataInHintResult } from '../../util'
-import { areSameCells, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo, getCellAxesValues } from '../../../util'
+import {
+    areSameCells,
+    getCellRowHouseInfo,
+    getCellColHouseInfo,
+    getCellBlockHouseInfo,
+    getCellAxesValues,
+} from '../../../util'
 import { getHouseCells } from '../../../houseCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 
@@ -12,7 +24,7 @@ const getSingleHouseNakedSingleDescription = (houseType, solutionValue, cell) =>
     const msgPlaceholdersValues = {
         houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         solutionValue,
-        cellAxesText: getCellAxesValues(cell)
+        cellAxesText: getCellAxesValues(cell),
     }
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE].SINGLE_HOUSE
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
@@ -21,7 +33,7 @@ const getSingleHouseNakedSingleDescription = (houseType, solutionValue, cell) =>
 const getMultipleHousesNakeSingleDescription = (solutionValue, cell) => {
     const msgPlaceholdersValues = {
         solutionValue,
-        cellAxesText: getCellAxesValues(cell)
+        cellAxesText: getCellAxesValues(cell),
     }
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE].MULTIPLE_HOUSE
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
@@ -57,13 +69,13 @@ const nakedSingleMixHousesDataToHighlight = cell => {
     return cellsToFocusData
 }
 
-const getApplyHintData = (rawHint) => {
+const getApplyHintData = rawHint => {
     const { cell, mainNumber } = rawHint
     return [
         {
             cell,
-            action: { type: BOARD_MOVES_TYPES.ADD, mainNumber }
-        }
+            action: { type: BOARD_MOVES_TYPES.ADD, mainNumber },
+        },
     ]
 }
 
@@ -111,6 +123,6 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
         title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
         steps: [{ text: logic }],
         selectCellOnClose: { row, col },
-        applyHint: getApplyHintData(rawHint)
+        applyHint: getApplyHintData(rawHint),
     }
 }

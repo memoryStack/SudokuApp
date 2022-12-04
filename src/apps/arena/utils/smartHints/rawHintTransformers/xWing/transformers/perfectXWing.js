@@ -97,13 +97,14 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
     })
 }
 
-const getXWingCornersText = (xWing) => {
+const getXWingCornersText = xWing => {
     const { topLeft, topRight, bottomLeft, bottomRight } = getXWingCornerCells(xWing)
-    return [topLeft, topRight, bottomLeft, bottomRight, topLeft].map((cell) => getCellAxesValues(cell))
-        .join(` ${String.fromCodePoint(0x279D)} `)
+    return [topLeft, topRight, bottomLeft, bottomRight, topLeft]
+        .map(cell => getCellAxesValues(cell))
+        .join(` ${String.fromCodePoint(0x279d)} `)
 }
 
-const getHintChunks = (xWing) => {
+const getHintChunks = xWing => {
     const { topDown: topDownDiagonalText, bottomUp: bottomUpDiagonalText } = getDiagonalsCornersAxesTexts(xWing)
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),

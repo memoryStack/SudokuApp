@@ -26,10 +26,11 @@ const getHintExplanationStepsFromHintChunks = (hintChunks, addTryOutStep = true)
     const result = hintChunks.map(hintChunk => {
         return { text: hintChunk }
     })
-    addTryOutStep && result.push({
-        isTryOut: true,
-        text: 'try out',
-    })
+    addTryOutStep &&
+        result.push({
+            isTryOut: true,
+            text: 'try out',
+        })
     return result
 }
 

@@ -359,7 +359,7 @@ export const fillPuzzle = () => {
     })
 }
 
-export const applyHintAction = (applyHintChanges) => {
+export const applyHintAction = applyHintChanges => {
     /*
         right now if ADD action is present then it will be the only entry.
         so it will not affect in Moves stack as well.
@@ -371,7 +371,7 @@ export const applyHintAction = (applyHintChanges) => {
 
     const notesBunch = []
     _forEach(applyHintChanges, ({ cell, action }) => {
-        notesBunch.push(..._map(_get(action, 'notes'), (note) => ({ cell, note })))
+        notesBunch.push(..._map(_get(action, 'notes'), note => ({ cell, note })))
     })
 
     invokeDispatch(eraseNotesBunch(notesBunch))
@@ -380,7 +380,7 @@ export const applyHintAction = (applyHintChanges) => {
         notes: {
             action: BOARD_MOVES_TYPES.REMOVE,
             bunch: notesBunch,
-        }
+        },
     }
     invokeDispatch(addMove(constructMove(move)))
 }

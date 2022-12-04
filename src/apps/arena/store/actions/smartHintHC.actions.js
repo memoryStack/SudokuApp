@@ -100,8 +100,7 @@ const isValidInputNumberClick = number => {
     const mainNumbers = getTryOutMainNumbers(getStoreState())
     const notes = getTryOutNotes(getStoreState())
     return (
-        isCellEmpty(selectedCell, mainNumbers) &&
-        isCellNoteVisible(number, notes[selectedCell.row][selectedCell.col])
+        isCellEmpty(selectedCell, mainNumbers) && isCellNoteVisible(number, notes[selectedCell.row][selectedCell.col])
     )
 }
 
@@ -133,10 +132,7 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
             })
         } else {
             // TODO: can make it better
-            if (
-                isCellNoteVisible(inputNumber, notes[cell.row][cell.col]) &&
-                areCommonHouseCells(cell, selectedCell)
-            ) {
+            if (isCellNoteVisible(inputNumber, notes[cell.row][cell.col]) && areCommonHouseCells(cell, selectedCell)) {
                 result.push({
                     cell,
                     notes: [inputNumber],

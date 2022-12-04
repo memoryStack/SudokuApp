@@ -90,10 +90,10 @@ export const getXWingCornerCells = xWing => {
 }
 
 export const getApplyHintData = (candidate, removableNotesHostCells) => {
-    return _map(removableNotesHostCells, (cell) => {
+    return _map(removableNotesHostCells, cell => {
         return {
             cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [candidate] }
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [candidate] },
         }
     })
 }

@@ -1,7 +1,12 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _find from 'lodash/src/utils/find'
 
-import { HIDDEN_SINGLE_TYPES, HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import {
+    HIDDEN_SINGLE_TYPES,
+    HINTS_IDS,
+    HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
+    SMART_HINTS_CELLS_BG_COLOR,
+} from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { HOUSE_TYPE } from '../../constants'
 import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues } from '../../../util'
@@ -404,14 +409,16 @@ const getHiddenSingleLogic = (rawHint, solutionValue, filledCellsWithSolutionVal
         houseType,
         solutionValue,
         hostCell: getCellAxesValues(cell),
-        filledCellsWithSolutionValue:
-            getCellsAxesValuesListText(filledCellsWithSolutionValue, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+        filledCellsWithSolutionValue: getCellsAxesValuesListText(
+            filledCellsWithSolutionValue,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        ),
     }
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.HIDDEN_SINGLE]
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
-const getAllCellsToBeHighlighted = (cellsToFocusData) => {
+const getAllCellsToBeHighlighted = cellsToFocusData => {
     const result = []
     for (const row in cellsToFocusData) {
         for (const col in cellsToFocusData[row]) {
@@ -422,13 +429,13 @@ const getAllCellsToBeHighlighted = (cellsToFocusData) => {
     return result
 }
 
-const getApplyHintData = (rawHint) => {
+const getApplyHintData = rawHint => {
     const { cell, mainNumber } = rawHint
     return [
         {
             cell,
-            action: { type: BOARD_MOVES_TYPES.ADD, mainNumber }
-        }
+            action: { type: BOARD_MOVES_TYPES.ADD, mainNumber },
+        },
     ]
 }
 
@@ -442,14 +449,15 @@ export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
 
     const hiddenSingleCellSolutionValue = mainNumbers[cell.row][cell.col].solutionValue
 
-    const filledCellsWithSolutionValue = getAllCellsToBeHighlighted(cellsToFocusData)
-        .filter((cell) => mainNumbers[cell.row][cell.col].value === hiddenSingleCellSolutionValue)
+    const filledCellsWithSolutionValue = getAllCellsToBeHighlighted(cellsToFocusData).filter(
+        cell => mainNumbers[cell.row][cell.col].value === hiddenSingleCellSolutionValue,
+    )
 
     return {
         cellsToFocusData,
         title: HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_SINGLE],
         steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue, filledCellsWithSolutionValue) }],
         selectCellOnClose: cell,
-        applyHint: getApplyHintData(rawHint)
+        applyHint: getApplyHintData(rawHint),
     }
 }

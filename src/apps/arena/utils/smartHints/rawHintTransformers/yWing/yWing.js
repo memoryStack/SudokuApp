@@ -64,18 +64,18 @@ const getHintExplainationChunks = ({ pivotNotes, commonNoteInWings, pivotCell, w
         secondPivotNote: pivotNotes[1],
         commonNoteInWings,
         pivotCell: getCellAxesValues(pivotCell),
-        wingCellsText: getCellsAxesValuesListText(wingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+        wingCellsText: getCellsAxesValuesListText(wingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
 
-    return msgTemplates.map((msgTemplate) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    return msgTemplates.map(msgTemplate => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
 
 const getApplyHintData = (yWing, notesData) => {
     const eliminableNotesCells = getEliminatableNotesCells(yWing, notesData)
-    return _map(eliminableNotesCells, (cell) => {
+    return _map(eliminableNotesCells, cell => {
         return {
             cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [yWing.wingsCommonNote] }
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [yWing.wingsCommonNote] },
         }
     })
 }

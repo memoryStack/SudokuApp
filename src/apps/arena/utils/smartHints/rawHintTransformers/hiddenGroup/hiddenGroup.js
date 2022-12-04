@@ -149,7 +149,7 @@ const highlightSecondaryHouseCells = (
     })
 }
 
-// DEAD CODE ?? 
+// DEAD CODE ??
 const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHostCells, notesData) => {
     return removableGroupCandidatesHostCells
         .reduce((prevValue, cell) => {
@@ -171,7 +171,7 @@ const getHintChunks = (houseType, groupCandidates, groupCells) => {
         candidatesListText: getCandidatesListText(groupCandidates),
         groupCellsText: getCellsAxesValuesListText(groupCells),
     }
-    return msgTemplates.map((msgTemplate) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    return msgTemplates.map(msgTemplate => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
@@ -200,22 +200,23 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
 const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandidatesHostCells, notesData) => {
     const result = []
 
-    _forEach(groupHostCells, (cell) => {
-        const notesToRemove = getCellVisibleNotes(notesData[cell.row][cell.col])
-            .filter((note) => !groupCandidates.includes(note))
+    _forEach(groupHostCells, cell => {
+        const notesToRemove = getCellVisibleNotes(notesData[cell.row][cell.col]).filter(
+            note => !groupCandidates.includes(note),
+        )
         result.push({
             cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: notesToRemove }
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: notesToRemove },
         })
     })
 
-    _forEach(removableGroupCandidatesHostCells, (cell) => {
-        const visibleGroupCandidatesInCell = _filter(groupCandidates, (groupCandidate) => {
+    _forEach(removableGroupCandidatesHostCells, cell => {
+        const visibleGroupCandidatesInCell = _filter(groupCandidates, groupCandidate => {
             return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
         })
         result.push({
             cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: visibleGroupCandidatesInCell }
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: visibleGroupCandidatesInCell },
         })
     })
 

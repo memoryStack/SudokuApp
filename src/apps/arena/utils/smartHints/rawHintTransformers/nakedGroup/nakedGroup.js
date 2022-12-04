@@ -66,9 +66,15 @@ const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) =>
 
 const getHintChunks = (groupCandidates, groupCells) => {
     const msgPlaceholdersValues = {
-        candidatesListTextAndConcatenated: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        candidatesListTextOrConcatenated: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-        groupCellsText: getCellsAxesValuesListText(groupCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+        candidatesListTextAndConcatenated: getCandidatesListText(
+            groupCandidates,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        ),
+        candidatesListTextOrConcatenated: getCandidatesListText(
+            groupCandidates,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
+        ),
+        groupCellsText: getCellsAxesValuesListText(groupCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
     return HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)].map(hintChunkTemplate => {
         return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
@@ -81,18 +87,18 @@ const getHintId = groupCandidates =>
 const getApplyHintData = (focusedCells, groupCells, groupCandidates, notesData) => {
     const result = []
 
-    const cellsWithoutGroupCells = _filter(focusedCells, (cell) => {
+    const cellsWithoutGroupCells = _filter(focusedCells, cell => {
         return !isCellExists(cell, groupCells)
     })
 
-    _forEach(cellsWithoutGroupCells, (cell) => {
-        const groupCandidatesVisible = _filter(groupCandidates, (groupCandidate) => {
+    _forEach(cellsWithoutGroupCells, cell => {
+        const groupCandidatesVisible = _filter(groupCandidates, groupCandidate => {
             return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
         })
         if (!_isEmpty(groupCandidatesVisible)) {
             result.push({
                 cell,
-                action: { type: BOARD_MOVES_TYPES.REMOVE, notes: groupCandidatesVisible }
+                action: { type: BOARD_MOVES_TYPES.REMOVE, notes: groupCandidatesVisible },
             })
         }
     })
