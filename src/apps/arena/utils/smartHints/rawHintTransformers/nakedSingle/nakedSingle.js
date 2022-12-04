@@ -6,6 +6,7 @@ import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { setCellDataInHintResult } from '../../util'
 import { areSameCells, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo, getCellAxesValues } from '../../../util'
 import { getHouseCells } from '../../../houseCells'
+import { BOARD_MOVES_TYPES } from '../../../../constants'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue, cell) => {
     const msgPlaceholdersValues = {
@@ -56,6 +57,16 @@ const nakedSingleMixHousesDataToHighlight = cell => {
     return cellsToFocusData
 }
 
+const getApplyHintData = (rawHint) => {
+    const { cell, mainNumber } = rawHint
+    return [
+        {
+            cell,
+            action: { type: BOARD_MOVES_TYPES.ADD, mainNumber }
+        }
+    ]
+}
+
 export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
     const { type, cell } = rawHint
 
@@ -100,5 +111,6 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
         title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
         steps: [{ text: logic }],
         selectCellOnClose: { row, col },
+        applyHint: getApplyHintData(rawHint)
     }
 }

@@ -37,13 +37,12 @@ const {
 } = smartHintHCActions
 
 export const showHintAction = (hintId, rawHints, mainNumbers, notes) => {
-    const { hints, applyHint } = getTransformedRawHints(hintId, rawHints, mainNumbers, notes)
+    const hints = getTransformedRawHints(hintId, rawHints, mainNumbers, notes)
     invokeDispatch(
         setHints({
             mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
             notes: hints[0].hasTryOut ? _cloneDeep(notes) : null,
             hints,
-            applyHint
         }),
     )
 }

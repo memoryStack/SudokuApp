@@ -422,6 +422,16 @@ const getAllCellsToBeHighlighted = (cellsToFocusData) => {
     return result
 }
 
+const getApplyHintData = (rawHint) => {
+    const { cell, mainNumber } = rawHint
+    return [
+        {
+            cell,
+            action: { type: BOARD_MOVES_TYPES.ADD, mainNumber }
+        }
+    ]
+}
+
 export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
     const { cell, type } = rawHint
 
@@ -440,5 +450,6 @@ export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
         title: HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_SINGLE],
         steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue, filledCellsWithSolutionValue) }],
         selectCellOnClose: cell,
+        applyHint: getApplyHintData(rawHint)
     }
 }

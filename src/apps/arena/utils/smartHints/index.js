@@ -20,11 +20,6 @@ import {
     transformOmissionRawHint,
 } from './rawHintTransformers'
 
-import {
-    nakedSingleApplyHint,
-    hiddenSingleApplyHint
-} from './applyHint'
-
 import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
 
 export const getRawHints = async (hintId, mainNumbers, notesData) => {
@@ -34,11 +29,7 @@ export const getRawHints = async (hintId, mainNumbers, notesData) => {
 
 export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData) => {
     if (_isEmpty(rawHints)) return null
-    return {
-        hints: _map(rawHints, rawHint => HINT_ID_VS_RAW_HINT_TRANSFORMERS[hintId]({ rawHint, mainNumbers, notesData })),
-        // TODO: this just went inconsistent 
-        applyHint: _map(rawHints, rawHint => HINT_IS_VS_APPLY_HINT_CHANGES_HANDLER[hintId]({ rawHint, mainNumbers, notesData }))[0]
-    }
+    return _map(rawHints, rawHint => HINT_ID_VS_RAW_HINT_TRANSFORMERS[hintId]({ rawHint, mainNumbers, notesData }))
 }
 
 // TODO: fix the contract of this module. it returns null and receiving all
@@ -89,16 +80,4 @@ const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
     [HINTS_IDS.X_WING]: transformXWingRawHint,
     [HINTS_IDS.Y_WING]: transformYWingRawHint,
     [HINTS_IDS.OMISSION]: transformOmissionRawHint,
-}
-
-const HINT_IS_VS_APPLY_HINT_CHANGES_HANDLER = {
-    [HINTS_IDS.NAKED_SINGLE]: nakedSingleApplyHint,
-    [HINTS_IDS.HIDDEN_SINGLE]: hiddenSingleApplyHint,
-    [HINTS_IDS.NAKED_DOUBLE]: _noop,
-    [HINTS_IDS.NAKED_TRIPPLE]: _noop,
-    [HINTS_IDS.HIDDEN_DOUBLE]: _noop,
-    [HINTS_IDS.HIDDEN_TRIPPLE]: _noop,
-    [HINTS_IDS.X_WING]: _noop,
-    [HINTS_IDS.Y_WING]: _noop,
-    [HINTS_IDS.OMISSION]: _noop,
 }

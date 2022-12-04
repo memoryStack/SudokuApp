@@ -14,7 +14,6 @@ const stateHandlers = {
         state.show = true
         state.currentHintNum = 1
         state.hints = hints
-        state.applyHint = applyHint
         state.tryOut = {
             mainNumbers,
             notes,
