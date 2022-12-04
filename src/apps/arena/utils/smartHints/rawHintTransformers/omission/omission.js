@@ -1,4 +1,5 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import _map from 'lodash/src/utils/map'
 
 import { getHouseCells } from '../../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../../util'
@@ -12,6 +13,7 @@ import {
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellsAxesValuesListText } from '../helpers'
 import { setCellDataInHintResult } from '../../util'
+import { BOARD_MOVES_TYPES } from '../../../../constants'
 
 const COLORS = {
     CELL: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
@@ -66,14 +68,18 @@ export const getHouseNoteHostCells = (note, house, notes) => {
     })
 }
 
+const getRemovableNotesHostCells = (omission, notes) => {
+    const { note, hostHouse, removableNotesHostHouse } = omission
+    const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
+    return getHouseNoteHostCells(note, removableNotesHostHouse, notes)
+        .filter(cell => !isCellExists(cell, hostHouseHostCells))
+}
+
 // extract it out if this func is needed
 // at other places as well
 const getHintExplaination = (omission, notes) => {
-    const { hostHouse, removableNotesHostHouse, note } = omission
+    const { hostHouse, note } = omission
     const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
-    const removableNotesHostCells = getHouseNoteHostCells(note, removableNotesHostHouse, notes).filter(cell => {
-        return !isCellExists(cell, hostHouseHostCells)
-    })
 
     const hostHouseHostCellsListText = getCellsAxesValuesListText(
         hostHouseHostCells,
@@ -84,11 +90,21 @@ const getHintExplaination = (omission, notes) => {
         note,
         hostHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME,
         hostHouseHostCellsListText,
-        removableNotesHostCellsListText: getCellsAxesValuesListText(removableNotesHostCells),
+        removableNotesHostCellsListText: getCellsAxesValuesListText(getRemovableNotesHostCells(omission, notes)),
     }
 
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.OMISSION]
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+}
+
+const getApplyHintData = (omission, notes) => {
+    const removableNotesHostCells = getRemovableNotesHostCells(omission, notes)
+    return _map(removableNotesHostCells, (cell) => {
+        return {
+            cell,
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [omission.note] }
+        }
+    })
 }
 
 export const transformOmissionRawHint = ({ rawHint: omission, notesData }) => {
@@ -96,5 +112,6 @@ export const transformOmissionRawHint = ({ rawHint: omission, notesData }) => {
         cellsToFocusData: getUICellsToFocusData(omission, notesData),
         title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],
         steps: [{ text: getHintExplaination(omission, notesData) }],
+        applyHint: getApplyHintData(omission, notesData),
     }
 }
