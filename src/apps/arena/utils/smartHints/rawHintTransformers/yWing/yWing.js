@@ -1,10 +1,13 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _map from 'lodash/src/utils/map'
+import { getCellAxesValues } from '../../../util'
 
-import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { setCellDataInHintResult } from '../../util'
+import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks } from '../../util'
 import { getEliminatableNotesCells } from '../../yWing/utils'
+
+import { getCellsAxesValuesListText } from '../helpers'
 
 const YWING_CELLS_TYPES = {
     PIVOT: 'PIVOT',
@@ -52,33 +55,42 @@ const getUICellsToFocusData = ({ commonNoteInWings, pivotCell, wingCells, elimin
     return cellsToFocusData
 }
 
-const getHintExplainationChunks = ({ pivotNotes, commonNoteInWings }) => {
+const getHintExplainationChunks = ({ pivotNotes, commonNoteInWings, pivotCell, wingCells }) => {
     const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.Y_WING]
 
     const msgPlaceholdersValues = {
         firstPivotNote: pivotNotes[0],
         secondPivotNote: pivotNotes[1],
         commonNoteInWings,
+        pivotCell: getCellAxesValues(pivotCell),
+        wingCellsText: getCellsAxesValuesListText(wingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     }
 
-    return dynamicInterpolation(msgTemplates, msgPlaceholdersValues)
+    return msgTemplates.map((msgTemplate) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
 
 export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {
     const { pivot, wings } = yWing
 
+    const wingCells = wings.map(wing => wing.cell)
+
     const cellsToFocusData = getUICellsToFocusData({
         commonNoteInWings: yWing.wingsCommonNote,
         pivotCell: pivot.cell,
-        wingCells: wings.map(wing => wing.cell),
+        wingCells,
         eliminableNotesCells: getEliminatableNotesCells(yWing, notesData),
+    })
+
+    const hintChunks = getHintExplainationChunks({
+        pivotNotes: pivot.notes,
+        commonNoteInWings: yWing.wingsCommonNote,
+        pivotCell: pivot.cell,
+        wingCells,
     })
 
     return {
         cellsToFocusData,
         title: HINT_ID_VS_TITLES[HINTS_IDS.Y_WING],
-        steps: [
-            { text: getHintExplainationChunks({ pivotNotes: pivot.notes, commonNoteInWings: yWing.wingsCommonNote }) },
-        ],
+        steps: getHintExplanationStepsFromHintChunks(hintChunks),
     }
 }

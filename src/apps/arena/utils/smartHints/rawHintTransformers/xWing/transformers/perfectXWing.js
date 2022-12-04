@@ -1,7 +1,7 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
 import { getHouseCells } from '../../../../houseCells'
-import { isCellExists, isCellNoteVisible } from '../../../../util'
+import { getCellAxesValues, isCellExists, isCellNoteVisible } from '../../../../util'
 
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
@@ -21,6 +21,8 @@ import {
     getXWingHousesTexts,
     getCrossHouseAxesText,
     getDiagonalsCornersAxesTexts,
+    getXWingHouseFullNamePlural,
+    getXWingCornerCells,
 } from './helpers'
 
 // TODO: come up with a better color scheme
@@ -97,18 +99,23 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
     })
 }
 
-const getHintChunks = (xWing, removableNotesHostCells) => {
+const getXWingCornersText = (xWing) => {
+    const { topLeft, topRight, bottomLeft, bottomRight } = getXWingCornerCells(xWing)
+    return [topLeft, topRight, bottomLeft, bottomRight, topLeft].map((cell) => getCellAxesValues(cell))
+        .join(` ${String.fromCodePoint(0x279D)} `)
+}
+
+const getHintChunks = (xWing) => {
     const { topDown: topDownDiagonalText, bottomUp: bottomUpDiagonalText } = getDiagonalsCornersAxesTexts(xWing)
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
         ...getXWingHousesTexts(xWing.houseType, xWing.legs),
-        houseFullName: getXWingHouseFullName(xWing),
-        rectangleCornersText: getXWingRectangleCornersAxesText(xWing.legs),
+        houseFullNamePlural: getXWingHouseFullNamePlural(xWing),
+        rectangleCornersText: getXWingCornersText(xWing),
         topDownDiagonalText,
         bottomUpDiagonalText,
         ...getCrossHouseAxesText(xWing),
-        crossHouseFullName: getXWingCrossHouseFullNamePlural(xWing),
-        cellsAxesListText: getCellsAxesValuesListText(removableNotesHostCells),
+        crossHouseFullNamePlural: getXWingCrossHouseFullNamePlural(xWing),
     }
 
     const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.PERFECT_X_WING]
@@ -145,7 +152,7 @@ export const getPerfectXWingUIData = (xWing, notesData) => {
         title: HINT_ID_VS_TITLES[HINTS_IDS.PERFECT_X_WING],
         cellsToFocusData,
         focusedCells,
-        steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing, removableNotesHostCells)),
+        steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing)),
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
         tryOutAnalyserData: {
             xWingCells,

@@ -1,14 +1,15 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _find from 'lodash/src/utils/find'
 
-import { HIDDEN_SINGLE_TYPES, HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HIDDEN_SINGLE_TYPES, HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { HOUSE_TYPE } from '../../constants'
-import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum } from '../../../util'
+import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues } from '../../../util'
 import { setCellDataInHintResult } from '../../util'
 
 import { BLOCKS_COUNT_IN_ROW, CELLS_IN_HOUSE, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../../constants'
 import { getHouseCells } from '../../../houseCells'
+import { getCellsAxesValuesListText } from '../helpers'
 
 const getInhabitableCellData = () => {
     return {
@@ -397,24 +398,47 @@ const getNextBlockSearchDirection = hiddenSingleType => {
     return hiddenSingleType === HIDDEN_SINGLE_TYPES.ROW ? GRID_TRAVERSALS.ROW : GRID_TRAVERSALS.COL
 }
 
-const getHiddenSingleLogic = (houseType, solutionValue) => {
-    const msgPlaceholdersValues = { houseType, solutionValue }
+const getHiddenSingleLogic = (rawHint, solutionValue, filledCellsWithSolutionValue) => {
+    const { type: houseType, cell } = rawHint
+    const msgPlaceholdersValues = {
+        houseType,
+        solutionValue,
+        hostCell: getCellAxesValues(cell),
+        filledCellsWithSolutionValue:
+            getCellsAxesValuesListText(filledCellsWithSolutionValue, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+    }
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.HIDDEN_SINGLE]
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+}
+
+const getAllCellsToBeHighlighted = (cellsToFocusData) => {
+    const result = []
+    for (const row in cellsToFocusData) {
+        for (const col in cellsToFocusData[row]) {
+            result.push({ row, col })
+        }
+    }
+
+    return result
 }
 
 export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
     const { cell, type } = rawHint
 
-    let cellsToFocusData =
+    const cellsToFocusData =
         type === HIDDEN_SINGLE_TYPES.BLOCK
             ? getHiddenSingleInBlockData(cell, mainNumbers)
             : getHiddenSingleInRowOrColData(cell, type, mainNumbers)
 
+    const hiddenSingleCellSolutionValue = mainNumbers[cell.row][cell.col].solutionValue
+
+    const filledCellsWithSolutionValue = getAllCellsToBeHighlighted(cellsToFocusData)
+        .filter((cell) => mainNumbers[cell.row][cell.col].value === hiddenSingleCellSolutionValue)
+
     return {
         cellsToFocusData,
         title: HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_SINGLE],
-        steps: [{ text: getHiddenSingleLogic(type, mainNumbers[cell.row][cell.col].solutionValue) }],
+        steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue, filledCellsWithSolutionValue) }],
         selectCellOnClose: cell,
     }
 }

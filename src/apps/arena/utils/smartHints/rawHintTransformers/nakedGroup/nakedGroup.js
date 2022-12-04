@@ -12,6 +12,8 @@ import {
 } from '../../util'
 import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.constants'
 
+import { getCellsAxesValuesListText } from '../helpers'
+
 export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
     const { groupCells } = rawHint
     const focusedCells = getHousesCellsSharedByCells(groupCells)
@@ -23,7 +25,7 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
         focusedCells,
         type: getHintId(groupCandidates),
         title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
-        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates)),
+        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells)),
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
@@ -57,9 +59,11 @@ const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) =>
     return result
 }
 
-const getHintChunks = groupCandidates => {
+const getHintChunks = (groupCandidates, groupCells) => {
     const msgPlaceholdersValues = {
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        candidatesListTextAndConcatenated: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        candidatesListTextOrConcatenated: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
+        groupCellsText: getCellsAxesValuesListText(groupCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     }
     return HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)].map(hintChunkTemplate => {
         return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)

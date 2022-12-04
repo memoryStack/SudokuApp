@@ -79,18 +79,12 @@ const getHintExplaination = (omission, notes) => {
         hostHouseHostCells,
         HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
-    const hostHouseHostCellsListTextOrJoined = getCellsAxesValuesListText(
-        hostHouseHostCells,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
-    )
 
     const msgPlaceholdersValues = {
         note,
         hostHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME,
         hostHouseHostCellsListText,
-        removableNotesHostHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME,
         removableNotesHostCellsListText: getCellsAxesValuesListText(removableNotesHostCells),
-        hostHouseHostCellsListTextOrJoined,
     }
 
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.OMISSION]

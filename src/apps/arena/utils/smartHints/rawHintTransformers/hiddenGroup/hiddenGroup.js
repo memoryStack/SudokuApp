@@ -158,47 +158,15 @@ const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHo
         .sortNumbers()
 }
 
-const getPrimaryHouseHintExplaination = (houseType, groupCandidates, groupCells, removableCandidates) => {
+const getHintChunks = (houseType, groupCandidates, groupCells) => {
     const hintId = groupCandidates.length === 2 ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
-    const msgTemplate = HINT_EXPLANATION_TEXTS[hintId].PRIMARY_HOUSE
+    const msgTemplates = HINT_EXPLANATION_TEXTS[hintId]
     const msgPlaceholdersValues = {
-        houseName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
-        candidatesCountText: NUMBER_TO_TEXT[groupCandidates.length],
-        cellsCountText: NUMBER_TO_TEXT[groupCandidates.length],
+        houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         candidatesListText: getCandidatesListText(groupCandidates),
-        cellsListText: getCellsAxesValuesListText(groupCells),
-        removableCandidatesListText: getCandidatesListText(removableCandidates),
+        groupCellsText: getCellsAxesValuesListText(groupCells),
     }
-    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
-}
-
-const getSecondaryHouseHintExplaination = (
-    houseType,
-    groupCandidates,
-    groupCells,
-    removableCandidates,
-    removableGroupCandidatesHostCells,
-    notes,
-) => {
-    const isHiddenDouble = groupCandidates.length === 2
-    const removableGroupCandidatesListText = getCandidatesListText(
-        getRemovableGroupCandidates(groupCandidates, removableGroupCandidatesHostCells, notes),
-    )
-    const msgPlaceholdersValues = {
-        removableCandidatesListText: getCandidatesListText(removableCandidates),
-        groupCellsAxesListText: getCellsAxesValuesListText(groupCells),
-        houseName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
-        candidatesListText: getCandidatesListText(groupCandidates),
-        complementaryHintTitle: isHiddenDouble
-            ? HINT_ID_VS_TITLES[HINTS_IDS.NAKED_DOUBLE]
-            : HINT_ID_VS_TITLES[HINTS_IDS.NAKED_TRIPPLE],
-        removableGroupCandidatesListText,
-        removableGroupCandidatesHostCellsListText: getCellsAxesValuesListText(removableGroupCandidatesHostCells),
-    }
-
-    const hintId = isHiddenDouble ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
-    const msgTemplate = HINT_EXPLANATION_TEXTS[hintId].SECONDARY_HOUSE
-    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+    return msgTemplates.map((msgTemplate) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
@@ -268,19 +236,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
     }
 
     const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notesData)
-    const hintChunks = [getPrimaryHouseHintExplaination(house.type, groupCandidates, hostCells, removableCandidates)]
-    if (secondaryHouseEligibleForHighlight) {
-        hintChunks.push(
-            getSecondaryHouseHintExplaination(
-                secondaryHostHouse.type,
-                groupCandidates,
-                hostCells,
-                removableCandidates,
-                removableGroupCandidatesHostCells,
-                notesData,
-            ),
-        )
-    }
+    const hintChunks = getHintChunks(house.type, groupCandidates, hostCells, removableCandidates)
 
     const isHiddenDoubles = groupCandidates.length === 2
     const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(

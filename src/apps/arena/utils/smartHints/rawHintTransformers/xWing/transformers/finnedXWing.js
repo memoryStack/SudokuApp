@@ -31,7 +31,7 @@ import {
 } from '../../../xWing/utils'
 import { XWING_TYPES } from '../../../xWing/constants'
 
-import { getHouseAxesText } from './helpers'
+import { getHouseAxesText, getXWingCrossHouseFullNamePlural } from './helpers'
 
 // TODO: come up with a better color scheme
 // TODO: RENAME IT
@@ -61,7 +61,8 @@ const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
             finnedBlockPerfectCells,
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
         ),
-        finnedBlockPerfectCellsEnglishText: finnedBlockPerfectCells.length === 1 ? 'cell' : 'cells',
+        cornersText: finnedBlockPerfectCells.length === 1 ? 'corner' : 'corners',
+        crossHouseFullNamePlural: getXWingCrossHouseFullNamePlural(xWing),
         hostHousesAxesListText: `${getHouseAxesText(xWingHouses[0])}, ${getHouseAxesText(xWingHouses[1])}`,
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
         removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells),
