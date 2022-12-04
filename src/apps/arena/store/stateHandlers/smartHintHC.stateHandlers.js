@@ -9,11 +9,12 @@ const stateHandlers = {
     },
     setHints: (state, action) => {
         const {
-            payload: { hints, mainNumbers, notes },
+            payload: { hints, mainNumbers, notes, applyHint },
         } = action
         state.show = true
         state.currentHintNum = 1
         state.hints = hints
+        state.applyHint = applyHint
         state.tryOut = {
             mainNumbers,
             notes,

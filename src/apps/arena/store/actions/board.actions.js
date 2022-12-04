@@ -1,5 +1,9 @@
 import _filter from 'lodash/src/utils/filter'
 import _isEmpty from 'lodash/src/utils/isEmpty'
+import _forEach from 'lodash/src/utils/forEach'
+import _get from 'lodash/src/utils/get'
+import _flatten from 'lodash/src/utils/flatten'
+import _map from 'lodash/src/utils/map'
 
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'
@@ -18,6 +22,7 @@ import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCe
 import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
 import { getHouseCells } from '../../utils/houseCells'
+import { BOARD_MOVES_TYPES } from '../../constants'
 
 const {
     setMainNumbers,
@@ -73,7 +78,7 @@ export const fastPencilAction = () => {
 
     const move = {
         notes: {
-            action: MOVES_TYPES.ADD,
+            action: BOARD_MOVES_TYPES.ADD,
             bunch: newNotesBunchToAdd,
         },
     }
@@ -97,11 +102,6 @@ const getNewNotesBunchToShow = () => {
     })
 
     return result
-}
-
-const MOVES_TYPES = {
-    ADD: 'ADD',
-    REMOVE: 'REMOVE',
 }
 
 const getVisibileNotesBunchInCell = (cell, notes) => {
@@ -130,13 +130,14 @@ const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
     return result
 }
 
+// can be used as it is
 const inputMainNumber = number => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
 
     const move = {
         mainNumber: {
-            action: MOVES_TYPES.ADD,
+            action: BOARD_MOVES_TYPES.ADD,
             value: number,
         },
     }
@@ -147,12 +148,13 @@ const inputMainNumber = number => {
     else {
         const notes = getNotesInfo(getStoreState())
         const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, notes)
+
         invokeDispatch(eraseNotesBunch(notesBunch))
 
         erasePossibleNotesOnNumberInput(number, selectedCell)
 
         move.notes = {
-            action: MOVES_TYPES.REMOVE,
+            action: BOARD_MOVES_TYPES.REMOVE,
             bunch: notesBunch,
         }
     }
@@ -175,7 +177,7 @@ const inputNoteNumber = number => {
 
     const move = {
         notes: {
-            action: show ? MOVES_TYPES.REMOVE : MOVES_TYPES.ADD,
+            action: show ? BOARD_MOVES_TYPES.REMOVE : BOARD_MOVES_TYPES.ADD,
             bunch: notesBunch,
         },
     }
@@ -204,7 +206,7 @@ const removeCellNotes = () => {
 
     const move = {
         notes: {
-            action: MOVES_TYPES.REMOVE,
+            action: BOARD_MOVES_TYPES.REMOVE,
             bunch: notesBunch,
         },
     }
@@ -219,7 +221,7 @@ const eraseMainNumber = () => {
 
     const move = {
         mainNumber: {
-            action: MOVES_TYPES.REMOVE,
+            action: BOARD_MOVES_TYPES.REMOVE,
             value: cellMainValue,
         },
     }
@@ -310,7 +312,7 @@ const undoMainNumber = previousMove => {
     const mainNumberMove = previousMove.mainNumber
     if (!mainNumberMove.action) return
 
-    if (mainNumberMove.action === MOVES_TYPES.ADD) {
+    if (mainNumberMove.action === BOARD_MOVES_TYPES.ADD) {
         const cell = previousMove.selectedCell
         const mainNumbersBeforeErase = getMainNumbers(getStoreState())
         invokeDispatch(eraseCellMainValue(cell))
@@ -329,7 +331,7 @@ const undoNotes = previousMove => {
     const notesMove = previousMove.notes
     if (_isEmpty(notesMove)) return
 
-    if (notesMove.action === MOVES_TYPES.ADD) {
+    if (notesMove.action === BOARD_MOVES_TYPES.ADD) {
         invokeDispatch(eraseNotesBunch(notesMove.bunch))
     } else {
         invokeDispatch(setNotesBunch(notesMove.bunch))
@@ -355,4 +357,29 @@ export const fillPuzzle = () => {
         if (isCellEmpty(cell, mainNumbers))
             invokeDispatch(setCellMainNumber({ cell, number: mainNumbers[cell.row][cell.col].solutionValue }))
     })
+}
+
+export const applyHintAction = (applyHintChanges) => {
+    /*
+        right now if ADD action is present then it will be the only entry.
+        so it will not affect in Moves stack as well.
+    */
+    if (applyHintChanges.length === 1 && _get(applyHintChanges, '0.action.type') === BOARD_MOVES_TYPES.ADD) {
+        inputMainNumber(_get(applyHintChanges, '0.action.mainNumber'))
+        return
+    }
+
+    const notesBunch = _flatten(_map(applyHintChanges, ({ cell, action }) => {
+        return _map(_get(action, 'notes'), (note) => { cell, note })
+    }))
+
+    invokeDispatch(eraseNotesBunch(notesBunch))
+
+    const move = {
+        notes: {
+            action: BOARD_MOVES_TYPES.REMOVE,
+            bunch: notesBunch,
+        }
+    }
+    invokeDispatch(addMove(constructMove(move)))
 }

@@ -17,7 +17,7 @@ import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { getApplyHintChanges, getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
@@ -27,6 +27,7 @@ import { getContainerStyles, styles } from './styles'
 
 const NEXT_BUTTON_TEXT = 'Next'
 const PREV_BUTTON_TEXT = 'Prev'
+const APPLY_HINT_TEXT = 'Apply Hint'
 const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
@@ -34,6 +35,8 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
+
+    const applyHintChanges = useSelector(getApplyHintChanges)
 
     const tryOutResult = useHintTryOutAnalyserResult()
 
@@ -70,6 +73,13 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
     }, [onAction])
 
+    const closeView = () => smartHintHCRef.current && smartHintHCRef.current.closeDragger()
+
+    const onApplyHintClick = useCallback(() => {
+        closeView()
+        onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
+    }, [applyHintChanges, onAction])
+
     const onClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
     }, [onAction, selectCellOnClose])
@@ -78,15 +88,13 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
     }
 
-    const closeView = () => smartHintHCRef.current && smartHintHCRef.current.closeDragger()
-
     const isOnlyHint = totalHintsCount <= 1
     const isLastHint = currentHintNum === totalHintsCount
     const isFirstHint = currentHintNum === 1
     const displayNextButton = !(isOnlyHint || isLastHint)
     const displayPrevButton = !(isOnlyHint || isFirstHint)
 
-    const displayFooter = displayNextButton || displayPrevButton
+    const displayFooter = true // displayNextButton || displayPrevButton
 
     const containerStyles = getContainerStyles(windowHeight, displayFooter)
 
@@ -141,9 +149,10 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                     textStyles={styles.footerButtonText}
                     hitSlop={HITSLOP}
                 />
+                {/* TODO: find better way to hide the button.it's wtf right now */}
                 <Button
-                    text={displayNextButton ? NEXT_BUTTON_TEXT : ''} // TODO: find better way to hide the button.it's wtf right now
-                    onClick={displayNextButton ? onNextClick : _noop}
+                    text={displayNextButton ? NEXT_BUTTON_TEXT : APPLY_HINT_TEXT}
+                    onClick={displayNextButton ? onNextClick : onApplyHintClick}
                     avoidDefaultContainerStyles={true}
                     textStyles={styles.footerButtonText}
                     hitSlop={HITSLOP}

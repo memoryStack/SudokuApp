@@ -56,3 +56,5 @@ export const getTryOutCellsRestrictedNumberInputs = state => {
 export const getTryOutCellsRestrictedNumberInputsMsg = state => {
     return state.smartHintHC.hints[0].restrictedNumberInputMsg || 'oh!, something unexpected happen'
 }
+
+export const getApplyHintChanges = (state) => state.smartHintHC.applyHint

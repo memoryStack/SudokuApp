@@ -1,5 +1,5 @@
 import { GAME_STATE } from '../../../resources/constants'
-import { updateSelectedCell } from '../store/actions/board.actions'
+import { applyHintAction, updateSelectedCell } from '../store/actions/board.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
 import {
     clearHints,
@@ -47,12 +47,18 @@ const handleEraserClick = ({ getState }) => {
     eraseTryOutNumber(focusedCells, styles.snackBar)
 }
 
+const handleApplyHintClick = ({ params: applyHintChanges }) => {
+    // FIX_ME: hacky way
+    setTimeout(() => applyHintAction(applyHintChanges), 400)
+}
+
 const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
     ON_UNMOUNT: 'ON_UNMOUNT',
     ON_CLOSE: 'ON_CLOSE',
     ON_NEXT_CLICK: 'ON_NEXT_CLICK',
     ON_PREV_CLICK: 'ON_PREV_CLICK',
+    ON_APPLY_HINT_CLICK: 'ON_APPLY_HINT_CLICK',
     ...INPUT_PANEL_ACTION_TYPES,
     ...BOARD_GENERIC_ACTION_TYPES,
 }
@@ -66,6 +72,7 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_CELL_PRESS]: handleCellClick,
     [ACTION_TYPES.ON_ERASE_CLICK]: handleEraserClick,
     [ACTION_TYPES.ON_NUMBER_CLICK]: handleNumberClick,
+    [ACTION_TYPES.ON_APPLY_HINT_CLICK]: handleApplyHintClick,
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }
