@@ -1,6 +1,9 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import _filter from 'lodash/src/utils/filter'
+import _forEach from 'lodash/src/utils/forEach'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
-import { getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists } from '../../../util'
+import { getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists, isCellNoteVisible } from '../../../util'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
@@ -13,6 +16,7 @@ import {
 import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.constants'
 
 import { getCellsAxesValuesListText } from '../helpers'
+import { BOARD_MOVES_TYPES } from '../../../../constants'
 
 export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
     const { groupCells } = rawHint
@@ -26,6 +30,7 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
         type: getHintId(groupCandidates),
         title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
         steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells)),
+        applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
@@ -72,3 +77,25 @@ const getHintChunks = (groupCandidates, groupCells) => {
 
 const getHintId = groupCandidates =>
     groupCandidates.length === NAKED_DOUBLE_CANDIDATES_COUNT ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE
+
+const getApplyHintData = (focusedCells, groupCells, groupCandidates, notesData) => {
+    const result = []
+
+    const cellsWithoutGroupCells = _filter(focusedCells, (cell) => {
+        return !isCellExists(cell, groupCells)
+    })
+
+    _forEach(cellsWithoutGroupCells, (cell) => {
+        const groupCandidatesVisible = _filter(groupCandidates, (groupCandidate) => {
+            return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
+        })
+        if (!_isEmpty(groupCandidatesVisible)) {
+            result.push({
+                cell,
+                action: { type: BOARD_MOVES_TYPES.REMOVE, notes: groupCandidatesVisible }
+            })
+        }
+    })
+
+    return result
+}

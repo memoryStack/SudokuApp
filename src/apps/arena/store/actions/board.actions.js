@@ -369,9 +369,10 @@ export const applyHintAction = (applyHintChanges) => {
         return
     }
 
-    const notesBunch = _flatten(_map(applyHintChanges, ({ cell, action }) => {
-        return _map(_get(action, 'notes'), (note) => { cell, note })
-    }))
+    const notesBunch = []
+    _forEach(applyHintChanges, ({ cell, action }) => {
+        notesBunch.push(..._map(_get(action, 'notes'), (note) => ({ cell, note })))
+    })
 
     invokeDispatch(eraseNotesBunch(notesBunch))
 
