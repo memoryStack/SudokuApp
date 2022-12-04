@@ -116,6 +116,6 @@ export const HINT_EXPLANATION_TEXTS = {
         `here {{pivotCell}} is the pivot cell and {{wingCellsText}} are wings.` +
         ` now in {{pivotCell}} whatever comes out of {{firstPivotNote}} or {{secondPivotNote}}, one of` +
         ` {{wingCellsText}} will be {{commonNoteInWings}}. so now we can remove {{commonNoteInWings}} from` +
-        ` all the cells which share a row, column or block with both of wing cells.`
+        ` all the cells which share a row, column or block with both wing cells.`
     ],
 }
