@@ -5,7 +5,6 @@ import { getCellAxesValues, isCellExists, isCellNoteVisible } from '../../../../
 
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
-import { getCellsAxesValuesListText } from '../../helpers'
 import {
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,
@@ -15,14 +14,13 @@ import {
 import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../../xWing/utils'
 
 import {
-    getXWingHouseFullName,
     getXWingCrossHouseFullNamePlural,
-    getXWingRectangleCornersAxesText,
     getXWingHousesTexts,
     getCrossHouseAxesText,
     getDiagonalsCornersAxesTexts,
     getXWingHouseFullNamePlural,
     getXWingCornerCells,
+    getApplyHintData,
 } from './helpers'
 
 // TODO: come up with a better color scheme
@@ -153,6 +151,7 @@ export const getPerfectXWingUIData = (xWing, notesData) => {
         cellsToFocusData,
         focusedCells,
         steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing)),
+        applyHint: getApplyHintData(candidate, removableNotesHostCells),
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
         tryOutAnalyserData: {
             xWingCells,

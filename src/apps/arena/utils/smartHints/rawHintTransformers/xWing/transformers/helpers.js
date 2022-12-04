@@ -1,4 +1,7 @@
 import { toOrdinal } from 'lodash/src/utils/toOrdinal'
+import _map from 'lodash/src/utils/map'
+
+import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
 import { getCellHouseInfo, getHouseAxesValue } from '../../../../util'
 
@@ -84,4 +87,13 @@ export const getXWingCornerCells = xWing => {
         bottomLeft: houseType === HOUSE_TYPE.COL ? xWingLegs[0].cells[1] : xWingLegs[1].cells[0],
         bottomRight: xWingLegs[1].cells[1],
     }
+}
+
+export const getApplyHintData = (candidate, removableNotesHostCells) => {
+    return _map(removableNotesHostCells, (cell) => {
+        return {
+            cell,
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [candidate] }
+        }
+    })
 }

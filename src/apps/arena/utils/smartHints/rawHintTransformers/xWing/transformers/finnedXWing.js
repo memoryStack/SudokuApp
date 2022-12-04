@@ -31,7 +31,7 @@ import {
 } from '../../../xWing/utils'
 import { XWING_TYPES } from '../../../xWing/constants'
 
-import { getHouseAxesText, getXWingCrossHouseFullNamePlural } from './helpers'
+import { getApplyHintData, getHouseAxesText, getXWingCrossHouseFullNamePlural } from './helpers'
 
 // TODO: come up with a better color scheme
 // TODO: RENAME IT
@@ -226,6 +226,7 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
                 ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING]
                 : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
+        applyHint: getApplyHintData(candidate, removableNotesHostCells),
         ...tryOutProps,
     }
 }
