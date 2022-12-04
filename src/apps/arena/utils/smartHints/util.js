@@ -22,11 +22,11 @@ const getCandidatesListText = (candidates, lastCandidateConjugation) => {
     return allCandidatesExceptLast.join(', ') + ` ${lastCandidateConjugation} ${candidates[candidates.length - 1]}`
 }
 
-const getHintExplanationStepsFromHintChunks = hintChunks => {
+const getHintExplanationStepsFromHintChunks = (hintChunks, addTryOutStep = true) => {
     const result = hintChunks.map(hintChunk => {
         return { text: hintChunk }
     })
-    result.push({
+    addTryOutStep && result.push({
         isTryOut: true,
         text: 'try out',
     })

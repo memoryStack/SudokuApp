@@ -91,6 +91,6 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {
     return {
         cellsToFocusData,
         title: HINT_ID_VS_TITLES[HINTS_IDS.Y_WING],
-        steps: getHintExplanationStepsFromHintChunks(hintChunks),
+        steps: getHintExplanationStepsFromHintChunks(hintChunks, false),
     }
 }
