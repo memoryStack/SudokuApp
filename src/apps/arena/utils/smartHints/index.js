@@ -20,7 +20,10 @@ import {
     transformOmissionRawHint,
 } from './rawHintTransformers'
 
-import { nakedSingleApplyHint } from './applyHint'
+import {
+    nakedSingleApplyHint,
+    hiddenSingleApplyHint
+} from './applyHint'
 
 import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
 
@@ -90,7 +93,7 @@ const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
 
 const HINT_IS_VS_APPLY_HINT_CHANGES_HANDLER = {
     [HINTS_IDS.NAKED_SINGLE]: nakedSingleApplyHint,
-    [HINTS_IDS.HIDDEN_SINGLE]: _noop,
+    [HINTS_IDS.HIDDEN_SINGLE]: hiddenSingleApplyHint,
     [HINTS_IDS.NAKED_DOUBLE]: _noop,
     [HINTS_IDS.NAKED_TRIPPLE]: _noop,
     [HINTS_IDS.HIDDEN_DOUBLE]: _noop,
