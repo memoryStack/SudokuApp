@@ -1,8 +1,10 @@
 import { onlyUnique } from '../../../../../../utils/util'
-import cloneDeep from 'lodash/src/utils/cloneDeep'
+import _cloneDeep from 'lodash/src/utils/cloneDeep'
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import _forEach from 'lodash/src/utils/forEach'
+import _filter from 'lodash/src/utils/filter'
 
-import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, NUMBER_TO_TEXT } from '../../constants'
+import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     areSameBlockCells,
@@ -10,6 +12,7 @@ import {
     areSameRowCells,
     getBlockAndBoxNum,
     getCellAxesValues,
+    getCellVisibleNotes,
     isCellEmpty,
     isCellExists,
     isCellNoteVisible,
@@ -25,6 +28,7 @@ import {
     getCandidatesListText,
 } from '../../util'
 import { SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { BOARD_MOVES_TYPES } from '../../../../constants'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
@@ -145,6 +149,7 @@ const highlightSecondaryHouseCells = (
     })
 }
 
+// DEAD CODE ?? 
 const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHostCells, notesData) => {
     return removableGroupCandidatesHostCells
         .reduce((prevValue, cell) => {
@@ -190,6 +195,31 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
         }
         return prevValue
     }, {})
+}
+
+const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandidatesHostCells, notesData) => {
+    const result = []
+
+    _forEach(groupHostCells, (cell) => {
+        const notesToRemove = getCellVisibleNotes(notesData[cell.row][cell.col])
+            .filter((note) => !groupCandidates.includes(note))
+        result.push({
+            cell,
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: notesToRemove }
+        })
+    })
+
+    _forEach(removableGroupCandidatesHostCells, (cell) => {
+        const visibleGroupCandidatesInCell = _filter(groupCandidates, (groupCandidate) => {
+            return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
+        })
+        result.push({
+            cell,
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: visibleGroupCandidatesInCell }
+        })
+    })
+
+    return result
 }
 
 export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notesData }) => {
@@ -254,6 +284,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         cellsToFocusData,
         focusedCells,
+        applyHint: getApplyHintData(groupCandidates, hostCells, removableGroupCandidatesHostCells, notesData),
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
@@ -263,7 +294,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
             primaryHouse: group.house,
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
-        clickableCells: cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
+        clickableCells: _cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
         cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(
             removableGroupCandidatesHostCells,
             groupCandidates,
