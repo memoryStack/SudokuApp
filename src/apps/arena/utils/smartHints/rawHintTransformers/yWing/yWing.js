@@ -1,5 +1,6 @@
 import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _map from 'lodash/src/utils/map'
+import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { getCellAxesValues } from '../../../util'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
@@ -69,6 +70,16 @@ const getHintExplainationChunks = ({ pivotNotes, commonNoteInWings, pivotCell, w
     return msgTemplates.map((msgTemplate) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
 
+const getApplyHintData = (yWing, notesData) => {
+    const eliminableNotesCells = getEliminatableNotesCells(yWing, notesData)
+    return _map(eliminableNotesCells, (cell) => {
+        return {
+            cell,
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [yWing.wingsCommonNote] }
+        }
+    })
+}
+
 export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {
     const { pivot, wings } = yWing
 
@@ -92,5 +103,6 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {
         cellsToFocusData,
         title: HINT_ID_VS_TITLES[HINTS_IDS.Y_WING],
         steps: getHintExplanationStepsFromHintChunks(hintChunks, false),
+        applyHint: getApplyHintData(yWing, notesData),
     }
 }
