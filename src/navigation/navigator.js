@@ -2,7 +2,9 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Arena } from '../apps/arena'
 import { Home } from '../apps/home'
+import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
+// TODO: how to dynamically load the screens ??
 const getRoutes = () => {
     return [
         {
@@ -13,6 +15,10 @@ const getRoutes = () => {
             name: 'Arena',
             component: Arena,
         },
+        {
+            name: 'somepage',
+            component: TempScreen,
+        }
     ]
 }
 
