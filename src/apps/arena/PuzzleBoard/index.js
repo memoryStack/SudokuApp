@@ -19,6 +19,7 @@ import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const isHintTryOut = useIsHintTryOutStep()
@@ -26,6 +27,9 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
     const moves = useSelector(getMoves)
+
+    const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
+        useSelector(getHintHCInfo)
 
     useEffect(() => {
         return () => {
@@ -74,6 +78,8 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             selectedCell={selectedCell}
             onCellClick={onCellClick}
             isHintTryOut={isHintTryOut}
+            showSmartHint={showSmartHint}
+            smartHintCellsHighlightInfo={smartHintCellsHighlightInfo}
         />
     )
 }

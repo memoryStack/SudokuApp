@@ -2,8 +2,6 @@ import React, { useMemo } from 'react'
 
 import { View, Text } from 'react-native'
 
-import { useSelector } from 'react-redux'
-
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
@@ -12,7 +10,6 @@ import _get from 'lodash/src/utils/get'
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { areSameCells, areCommonHouseCells } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
@@ -28,9 +25,11 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCellClick, isHintTryOut }) => {
-    const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
-        useSelector(getHintHCInfo)
+const Board_ = ({
+    screenName, gameState, mainNumbers, notes, selectedCell,
+    onCellClick, isHintTryOut, showSmartHint,
+    smartHintCellsHighlightInfo
+}) => {
 
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
@@ -143,7 +142,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
                                     cellBGColor={getBoxBackgroundColor(cell)}
                                     mainValueFontColor={getMainNumFontColor(cell)}
                                     cellMainValue={mainNumbers[row][col].value}
-                                    cellNotes={notes[row][col]}
+                                    cellNotes={_get(notes, [row, col])}
                                     onCellClick={onCellClick}
                                     displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
                                     smartHintData={smartHintData}
@@ -235,6 +234,8 @@ Board_.propTypes = {
     selectedCell: PropTypes.object,
     onCellClick: PropTypes.func,
     isHintTryOut: PropTypes.bool,
+    showSmartHint: PropTypes.bool,
+    smartHintCellsHighlightInfo: PropTypes.object,
 }
 
 Board_.defaultProps = {
@@ -243,4 +244,6 @@ Board_.defaultProps = {
     selectedCell: {},
     onCellClick: _noop,
     isHintTryOut: false,
+    showSmartHint: false,
+    smartHintCellsHighlightInfo: {},
 }
