@@ -1,26 +1,43 @@
-import React, { memo } from 'react'
+import React, { memo, useCallback, useRef } from 'react'
 
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
+
+import _map from 'lodash/src/utils/map'
+
 import { SettingsIcon } from '../../../../resources/svgIcons/settings'
-
 import { useToggle } from '../../../../utils/customHooks'
-import { consoleLog } from '../../../../utils/util'
+
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 
-export const Settings_ = ({ }) => {
+import { MENU_ITEMS } from './settings.config'
+
+export const Settings_ = ({ navigation }) => {
     const [openMenu, toggleMenuVisibility] = useToggle(false)
 
-    /* on opening, show menu */
+    const iconRef = useRef(null)
+
+    const onIconClick = useCallback(() => {
+        // iconRef.current && iconRef.current.measure((x, y, width, height, pageX, pageY) => {
+        //     console.log('@@@@@', x, y, width, height, pageX, pageY)
+        // })
+        toggleMenuVisibility()
+    }, [openMenu])
 
     const renderIcon = () => {
         return (
             <Touchable
                 touchable={TouchableTypes.opacity}
-                onPress={toggleMenuVisibility}
+                onPress={onIconClick}
             >
-                <SettingsIcon iconBoxSize={40} />
+                <View ref={iconRef} collapsable={false}>
+                    <SettingsIcon iconBoxSize={40} />
+                </View>
             </Touchable>
         )
+    }
+
+    const onItemPress = (routeKey) => {
+        navigation.navigate(routeKey)
     }
 
     const renderMenu = () => {
@@ -28,10 +45,27 @@ export const Settings_ = ({ }) => {
 
         return (
             <View style={{
-                width: 100,
-                height: 100,
-                backgroundColor: 'red'
-            }} />
+                display: 'flex',
+                borderWidth: 2,
+                borderColor: 'black'
+            }}>
+                {
+                    _map(MENU_ITEMS, ({ label, routeKey }) => {
+                        return (
+                            <Touchable
+                                touchable={TouchableTypes.opacity}
+                                onPress={() => onItemPress(routeKey)}
+                            >
+                                <Text style={{
+                                    padding: 20
+                                }}>
+                                    {label}
+                                </Text>
+                            </Touchable>
+                        )
+                    })
+                }
+            </View>
         )
     }
 

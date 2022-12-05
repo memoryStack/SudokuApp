@@ -162,8 +162,9 @@ const Home_ = ({ navigation }) => {
             {renderSudokuText()}
             {renderPlayButton()}
             {renderNewGameMenu()}
-            <Settings />
-
+            <View style={{ marginTop: 40 }}>
+                <Settings navigation={navigation} />
+            </View>
         </View>
     )
 }
