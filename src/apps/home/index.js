@@ -11,8 +11,6 @@ import { EVENTS } from '../../constants/events'
 import { NextGameMenu } from '../arena/nextGameMenu'
 import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimensions'
 
-import { ExperimentalText } from './ExperimentalText'
-
 const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
 
 const getStyles = CELL_WIDTH => {
@@ -162,7 +160,6 @@ const Home_ = ({ navigation }) => {
             {renderSudokuText()}
             {renderPlayButton()}
             {renderNewGameMenu()}
-            <ExperimentalText navigation={navigation} />
         </View>
     )
 }
