@@ -1,4 +1,5 @@
 import { GAME_STATE } from '../../../resources/constants'
+import { consoleLog } from '../../../utils/util'
 
 import { hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
