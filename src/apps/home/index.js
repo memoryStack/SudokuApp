@@ -8,9 +8,10 @@ import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { rgba } from '../../utils/util'
 import { EVENTS } from '../../constants/events'
+import { ROUTES } from '../../navigation/route.constants'
+
 import { NextGameMenu } from '../arena/nextGameMenu'
 import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimensions'
-
 import { Settings } from '../header/components/settings/settings'
 
 const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
@@ -89,13 +90,13 @@ const Home_ = ({ navigation }) => {
     const handleMenuItemClicked = useCallback(
         item => {
             setShowNextGameMenu(false)
-            navigation.navigate('Arena', { selectedGameMenuItem: item })
+            navigation.navigate(ROUTES.ARENA, { selectedGameMenuItem: item })
         },
         [navigation],
     )
 
     const launchDeeplinkPuzzle = url => {
-        navigation.navigate('Arena', { puzzleUrl: url })
+        navigation.navigate(ROUTES.ARENA, { puzzleUrl: url })
     }
 
     useEffect(() => {
