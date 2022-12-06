@@ -20,5 +20,8 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         padding: 20,
         lineHeight: 24
+    },
+    axisText: {
+        color: 'black'
     }
 })

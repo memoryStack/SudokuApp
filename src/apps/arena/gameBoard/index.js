@@ -28,7 +28,7 @@ for (let i = 0; i < 10; i++) {
 const Board_ = ({
     screenName, gameState, mainNumbers, notes, selectedCell,
     onCellClick, isHintTryOut, showSmartHint,
-    smartHintCellsHighlightInfo
+    smartHintCellsHighlightInfo, axisTextStyles
 }) => {
 
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
@@ -100,6 +100,7 @@ const Board_ = ({
 
     const getCellBackgroundColor = cell => {
         if (!shouldShowCellContent()) return null
+        // for cells bg color
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
         if (isCustomPuzleScreen()) return getCustomPuzzleBoardCellBgColor(cell)
         return getActiveGameBoardCellBgCell(cell)
@@ -147,6 +148,7 @@ const Board_ = ({
                                     smartHintData={smartHintData}
                                     selectedMainNumber={selectedCellMainValue}
                                     showSmartHint={showSmartHint}
+                                    // to pass to cell component
                                     showCellContent={shouldShowCellContent()}
                                 />
                             </View>
@@ -180,7 +182,7 @@ const Board_ = ({
 
     const renderAxisText = label => {
         return (
-            <Text style={showSmartHint ? styles.smartHintAxisText : styles.axisText}>
+            <Text style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}>
                 {label}
             </Text>
         )
@@ -203,6 +205,8 @@ const Board_ = ({
     }, [showSmartHint])
 
     const renderBoard = () => {
+        // TODO: wouldn't it be better just to elevate the 
+        // cells which should be highlighted ??
         return (
             <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
                 {looper.map((row, index) => renderRow(row, `${index}`))}
@@ -235,6 +239,7 @@ Board_.propTypes = {
     isHintTryOut: PropTypes.bool,
     showSmartHint: PropTypes.bool,
     smartHintCellsHighlightInfo: PropTypes.object,
+    axisTextStyles: PropTypes.object,
 }
 
 Board_.defaultProps = {
@@ -245,4 +250,5 @@ Board_.defaultProps = {
     isHintTryOut: false,
     showSmartHint: false,
     smartHintCellsHighlightInfo: {},
+    axisTextStyles: {}
 }

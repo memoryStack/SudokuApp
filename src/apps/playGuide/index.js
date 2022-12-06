@@ -24,9 +24,10 @@ const PlayGuide_ = () => {
         return (
             <Board
                 mainNumbers={mainNumbers}
-                showSmartHint={true}
+                showSmartHint={true} // this is problamatic, why are we even sending this ??
                 smartHintCellsHighlightInfo={cellsHighlightData} // TODO: fix namings
                 gameState={GAME_STATE.ACTIVE}
+                axisTextStyles={styles.axisText}
             />
         )
     }
