@@ -48,6 +48,9 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }) =
             width: BOARD_GRID_WIDTH,
             backgroundColor: 'white',
         },
+        boardAndYAxisContainer: {
+            flexDirection: 'row'
+        },
         gridBorderContainer: {
             position: 'absolute',
             height: BOARD_GRID_HEIGHT,

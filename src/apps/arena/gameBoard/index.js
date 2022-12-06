@@ -98,7 +98,7 @@ const Board_ = ({
         return styles.defaultCellBGColor
     }
 
-    const getBoxBackgroundColor = cell => {
+    const getCellBackgroundColor = cell => {
         if (!shouldShowCellContent()) return null
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
         if (isCustomPuzleScreen()) return getCustomPuzzleBoardCellBgColor(cell)
@@ -106,7 +106,6 @@ const Board_ = ({
     }
 
     const shouldMarkCellAsInhabitable = cell => {
-        if (!showSmartHint) return false
         return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'inhabitable'], false)
     }
 
@@ -139,7 +138,7 @@ const Board_ = ({
                                 <Cell
                                     row={row}
                                     col={col}
-                                    cellBGColor={getBoxBackgroundColor(cell)}
+                                    cellBGColor={getCellBackgroundColor(cell)}
                                     mainValueFontColor={getMainNumFontColor(cell)}
                                     cellMainValue={mainNumbers[row][col].value}
                                     cellNotes={_get(notes, [row, col])}
@@ -180,15 +179,17 @@ const Board_ = ({
     }
 
     const renderAxisText = label => {
-        return <Text style={showSmartHint ? styles.smartHintAxisText : styles.axisText}>{label}</Text>
+        return (
+            <Text style={showSmartHint ? styles.smartHintAxisText : styles.axisText}>
+                {label}
+            </Text>
+        )
     }
 
     const yAxis = useMemo(() => {
         return (
             <View style={styles.yAxis}>
-                {BOARD_AXES_VALUES.Y_AXIS.map(label => {
-                    return renderAxisText(label)
-                })}
+                {BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}
             </View>
         )
     }, [showSmartHint])
@@ -196,9 +197,7 @@ const Board_ = ({
     const xAxis = useMemo(() => {
         return (
             <View style={styles.xAxis}>
-                {BOARD_AXES_VALUES.X_AXIS.map(label => {
-                    return renderAxisText(label)
-                })}
+                {BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}
             </View>
         )
     }, [showSmartHint])
@@ -216,7 +215,7 @@ const Board_ = ({
     return (
         <>
             {xAxis}
-            <View style={{ flexDirection: 'row' }}>
+            <View style={styles.boardAndYAxisContainer}>
                 {yAxis}
                 {renderBoard()}
             </View>
