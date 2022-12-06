@@ -39,3 +39,5 @@ export const RULES_TEXT_CONFIG = [
         label: '. Study the grid to find the numbers that might fit into each cell.'
     }
 ]
+
+export const PAGE_HEADING = 'Rules'

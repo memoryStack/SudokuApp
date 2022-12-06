@@ -8,11 +8,17 @@ import { Board } from "../arena/gameBoard";
 
 import { mainNumbers, cellsHighlightData } from './boardData'
 
-import { RULES_TEXT_CONFIG } from "./playGuide.config";
+import { RULES_TEXT_CONFIG, PAGE_HEADING } from "./playGuide.constants";
 
 import { styles } from './style'
 
 const PlayGuide_ = () => {
+
+    const renderPageHeading = () => {
+        return (
+            <Text style={styles.heading}>{PAGE_HEADING}</Text>
+        )
+    }
 
     const renderBoard = () => {
         return (
@@ -41,7 +47,7 @@ const PlayGuide_ = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Rules</Text>
+            {renderPageHeading()}
             {renderBoard()}
             {renderRules()}
         </View>
