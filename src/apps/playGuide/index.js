@@ -9,6 +9,7 @@ import { HOUSE_TYPE } from "../arena/utils/smartHints/constants";
 
 import { mainNumbers, cellsHighlightData } from './boardData'
 import { HOUSE_VS_CELLS_BACKGROUND_COLOR } from './boardData/cellsHighlightData'
+import { RULES_TEXT_CONFIG } from "./playGuide.config";
 
 const styles = StyleSheet.create({
     container: {
@@ -42,34 +43,6 @@ const PlayGuide_ = () => {
     }
 
     const renderRules = () => {
-        const rulesTextConfig = [
-            { label: 'A sudoku puzzle begins with a grid in which some of the numbers are already in place. A puzzle is completed when each number from 1 to 9 appears only once in each of the 9 ' },
-            {
-                label: 'rows',
-                styles: {
-                    color: HOUSE_VS_CELLS_BACKGROUND_COLOR[HOUSE_TYPE.ROW],
-                    fontFamily: fonts.bold
-                }
-            },
-            { label: ', ' },
-            {
-                label: 'columns',
-                styles: {
-                    color: HOUSE_VS_CELLS_BACKGROUND_COLOR[HOUSE_TYPE.COL],
-                    fontFamily: fonts.bold
-                }
-            },
-            { label: ', and ' },
-            {
-                label: 'blocks',
-                styles: {
-                    color: HOUSE_VS_CELLS_BACKGROUND_COLOR[HOUSE_TYPE.BLOCK],
-                    fontFamily: fonts.bold
-                }
-            },
-            { label: '. Study the grid to find the numbers that might fit into each cell.' }
-        ]
-
         return (
             <Text style={{
                 padding: 20,
@@ -78,7 +51,7 @@ const PlayGuide_ = () => {
                 lineHeight: 24
             }}>
                 {
-                    rulesTextConfig.map(({ label, styles = {} }) => {
+                    RULES_TEXT_CONFIG.map(({ label, styles = {} }) => {
                         return (
                             <Text style={styles}>{label}</Text>
                         )
