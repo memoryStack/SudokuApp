@@ -5,6 +5,7 @@ import { View, Text } from 'react-native'
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
+import _get from 'lodash/src/utils/get'
 
 import { CloseIcon } from '../../../../resources/svgIcons/close'
 import { fonts } from '../../../../resources/fonts/font'
@@ -48,8 +49,7 @@ const Cell_ = ({
 
     const getNotesFontColor = noteValue => {
         if (showSmartHint) {
-            const { notesToHighlightData: { [`${noteValue}`]: { fontColor = null } = {} } = {} } = smartHintData
-            return fontColor
+            return _get(smartHintData, ['notesToHighlightData', noteValue, 'fontColor'], null)
         }
         // remove it later or make it better for practice sessions
         if (__DEV__ && noteValue === selectedMainNumber) {
