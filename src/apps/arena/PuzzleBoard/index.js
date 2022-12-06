@@ -28,7 +28,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     const gameState = useSelector(getGameState)
     const moves = useSelector(getMoves)
 
-    const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
+    const { show: showSmartHint, hint: { cellsToFocusData = {} } = {} } =
         useSelector(getHintHCInfo)
 
     useEffect(() => {
@@ -79,7 +79,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             onCellClick={onCellClick}
             isHintTryOut={isHintTryOut}
             showSmartHint={showSmartHint}
-            smartHintCellsHighlightInfo={smartHintCellsHighlightInfo}
+            cellsHighlightData={cellsToFocusData}
         />
     )
 }

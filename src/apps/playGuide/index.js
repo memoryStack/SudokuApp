@@ -25,7 +25,7 @@ const PlayGuide_ = () => {
             <Board
                 mainNumbers={mainNumbers}
                 showSmartHint={true} // this is problamatic, why are we even sending this ??
-                smartHintCellsHighlightInfo={cellsHighlightData} // TODO: fix namings
+                cellsHighlightData={cellsHighlightData}
                 gameState={GAME_STATE.ACTIVE}
                 axisTextStyles={styles.axisText}
             />

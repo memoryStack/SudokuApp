@@ -28,7 +28,7 @@ for (let i = 0; i < 10; i++) {
 const Board_ = ({
     screenName, gameState, mainNumbers, notes, selectedCell,
     onCellClick, isHintTryOut, showSmartHint,
-    smartHintCellsHighlightInfo, axisTextStyles
+    cellsHighlightData, axisTextStyles
 }) => {
 
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
@@ -68,7 +68,7 @@ const Board_ = ({
     const getSmartHintActiveBgColor = cell => {
         if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell))
             return styles.selectedCellBGColor
-        return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
+        return _get(cellsHighlightData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
     }
 
     const shouldShowCellContent = () => {
@@ -100,14 +100,13 @@ const Board_ = ({
 
     const getCellBackgroundColor = cell => {
         if (!shouldShowCellContent()) return null
-        // for cells bg color
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
         if (isCustomPuzleScreen()) return getCustomPuzzleBoardCellBgColor(cell)
         return getActiveGameBoardCellBgCell(cell)
     }
 
     const shouldMarkCellAsInhabitable = cell => {
-        return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'inhabitable'], false)
+        return _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false)
     }
 
     const renderRow = (row, key) => {
@@ -122,9 +121,7 @@ const Board_ = ({
         return (
             <View style={[styles.rowStyle, rowAdditionalStyles]} key={key}>
                 {looper.map((col, index) => {
-                    const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
                     const cell = { row, col }
-
                     const cellAdditionalStyles = {
                         marginLeft:
                             col === 3 || col === 6
@@ -145,10 +142,9 @@ const Board_ = ({
                                     cellNotes={_get(notes, [row, col])}
                                     onCellClick={onCellClick}
                                     displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
-                                    smartHintData={smartHintData}
+                                    smartHintData={_get(cellsHighlightData, [row, col])}
                                     selectedMainNumber={selectedCellMainValue}
                                     showSmartHint={showSmartHint}
-                                    // to pass to cell component
                                     showCellContent={shouldShowCellContent()}
                                 />
                             </View>
@@ -238,7 +234,7 @@ Board_.propTypes = {
     onCellClick: PropTypes.func,
     isHintTryOut: PropTypes.bool,
     showSmartHint: PropTypes.bool,
-    smartHintCellsHighlightInfo: PropTypes.object,
+    cellsHighlightData: PropTypes.object,
     axisTextStyles: PropTypes.object,
 }
 
@@ -249,6 +245,6 @@ Board_.defaultProps = {
     onCellClick: _noop,
     isHintTryOut: false,
     showSmartHint: false,
-    smartHintCellsHighlightInfo: {},
+    cellsHighlightData: {},
     axisTextStyles: {}
 }
