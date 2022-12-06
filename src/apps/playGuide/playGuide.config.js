@@ -1,3 +1,9 @@
+import { fonts } from "../../resources/fonts/font";
+
+import { HOUSE_TYPE } from "../arena/utils/smartHints/constants";
+
+import { HOUSE_VS_CELLS_BACKGROUND_COLOR } from './boardData/cellsHighlightData'
+
 export const RULES_TEXT_CONFIG = [
     {
         label: 'A sudoku puzzle begins with a grid in which some of the numbers are already in place. A puzzle is completed when each number from 1 to 9 appears only once in each of the 9 '

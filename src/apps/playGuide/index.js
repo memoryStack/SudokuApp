@@ -5,10 +5,9 @@ import { GAME_STATE } from "../../resources/constants";
 
 import { fonts } from "../../resources/fonts/font";
 import { Board } from "../arena/gameBoard";
-import { HOUSE_TYPE } from "../arena/utils/smartHints/constants";
 
 import { mainNumbers, cellsHighlightData } from './boardData'
-import { HOUSE_VS_CELLS_BACKGROUND_COLOR } from './boardData/cellsHighlightData'
+
 import { RULES_TEXT_CONFIG } from "./playGuide.config";
 
 const styles = StyleSheet.create({
