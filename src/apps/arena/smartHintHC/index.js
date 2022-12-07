@@ -94,9 +94,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const displayNextButton = !(isOnlyHint || isLastHint)
     const displayPrevButton = !(isOnlyHint || isFirstHint)
 
-    const displayFooter = true // displayNextButton || displayPrevButton
-
-    const containerStyles = getContainerStyles(windowHeight, displayFooter)
+    const containerStyles = getContainerStyles(windowHeight)
 
     const renderHeader = () => {
         return (
@@ -138,8 +136,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     }
 
     const renderFooter = () => {
-        if (!displayFooter) return null
-
         return (
             <View style={styles.footerContainer}>
                 <Button

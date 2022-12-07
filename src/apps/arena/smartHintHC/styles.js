@@ -53,13 +53,13 @@ export const styles = StyleSheet.create({
     },
 })
 
-export const getContainerStyles = (windowHeight, displayFooter) => {
+export const getContainerStyles = (windowHeight) => {
     return {
         width: '100%',
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
         backgroundColor: 'white',
         padding: 16,
-        height: windowHeight / 4 + (displayFooter ? FOOTER_HEIGHT : 0),
+        height: windowHeight / 4 + FOOTER_HEIGHT,
     }
 }
