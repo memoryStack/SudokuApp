@@ -65,6 +65,8 @@ const Board_ = ({
 
         if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
 
+        if (showSmartHint) return styles.clueNumColor
+
         if (mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue) return styles.wronglyFilledNumColor
         if (!mainNumbers[row][col].isClue) return styles.userFilledNumColor
         return styles.clueNumColor
