@@ -13,7 +13,12 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import { areSameCells, areCommonHouseCells } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
-import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
+import {
+    BOARD_AXES_VALUES,
+    BOARD_GRID_BORDERS_DIRECTION,
+    CELLS_IN_HOUSE,
+    STATIC_BOARD_ELEMENTS_DIMENSIONS
+} from '../constants'
 
 import { getStyles } from './style'
 import { Cell } from './cell'
@@ -155,8 +160,8 @@ const Board_ = ({
         )
     }
 
-    const getGrid = orientation => {
-        const isVertical = orientation === 'vertical'
+    const renderBordersGrid = orientation => {
+        const isVertical = orientation === BOARD_GRID_BORDERS_DIRECTION.VERTICAL
         const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
         const normalBorderStyle = isVertical ? styles.verticalBars : styles.horizontalBars
         const thickNessStyleField = isVertical ? 'width' : 'height'
@@ -201,13 +206,11 @@ const Board_ = ({
     }, [showSmartHint])
 
     const renderBoard = () => {
-        // TODO: wouldn't it be better just to elevate the 
-        // cells which should be highlighted ??
         return (
             <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
                 {looper.map((row, index) => renderRow(row, `${index}`))}
-                {getGrid('horizontal')}
-                {getGrid('vertical')}
+                {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
+                {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
             </View>
         )
     }
