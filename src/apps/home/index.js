@@ -4,7 +4,6 @@ import { View, StyleSheet, Linking, Image, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { rgba } from '../../utils/util'
 import { EVENTS } from '../../constants/events'
@@ -149,7 +148,6 @@ const Home_ = ({ navigation }) => {
         if (!pageHeight || !showNextGameMenu) return null
         return (
             <NextGameMenu
-                screenName={SCREEN_NAME.HOME}
                 parentHeight={pageHeight}
                 menuItemClick={handleMenuItemClicked}
                 onMenuClosed={onNewGameMenuClosed}
