@@ -1,16 +1,21 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
+import { Svg, Path } from 'react-native-svg'
+
 import _noop from 'lodash/src/utils/noop'
 import _get from 'lodash/src/utils/get'
+import _map from 'lodash/src/utils/map'
+import _isNil from 'lodash/src/utils/isNil'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
-import { areSameCells, areCommonHouseCells } from '../utils/util'
+import { areSameCells, areCommonHouseCells, forBoardEachCell } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
 import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
@@ -18,6 +23,15 @@ import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } f
 import { getStyles } from './style'
 import { Cell } from './cell'
 
+import { roundToNearestPixel } from '../../../utils/util'
+import { getCellOutline, getFocusedCellsOutline } from './focusedCellOutlines/outlinePathNavigator'
+import { getHouseCells } from '../utils/houseCells'
+import { HOUSE_TYPE } from '../utils/smartHints/constants'
+import { usePrevious } from '../../../utils/customHooks'
+
+const SVG_STROKE_WIDTH = roundToNearestPixel(3) // it must be 3 only for now, it's just perfect with pixels
+
+console.log('###### stroke width', SVG_STROKE_WIDTH)
 const looper = []
 const bordersLooper = []
 for (let i = 0; i < 10; i++) {
@@ -28,10 +42,24 @@ for (let i = 0; i < 10; i++) {
 const Board_ = ({
     screenName, gameState, mainNumbers, notes, selectedCell,
     onCellClick, isHintTryOut, showSmartHint,
-    cellsHighlightData, axisTextStyles
+    cellsHighlightData, axisTextStyles, cellSetsToFocus
 }) => {
 
+    const boardRef = useRef(null)
+
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
+
+    const SVG_CONTAINER_WIDTH = (BOARD_GRID_WIDTH + 2 * SVG_STROKE_WIDTH)
+    const SVG_CONTAINER_HEIGHT = (BOARD_GRID_WIDTH + 2 * SVG_STROKE_WIDTH)
+
+    const cellsRef = useMemo(() => {
+        const result = {}
+        forBoardEachCell(({ row, col }) => {
+            if (_isNil(result[row])) result[row] = {}
+            result[row][col] = React.createRef()
+        })
+        return result
+    }, [])
 
     const styles = useMemo(() => {
         return getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH })
@@ -131,23 +159,26 @@ const Board_ = ({
                     }
 
                     return (
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${index}`}>
-                                <Cell
-                                    row={row}
-                                    col={col}
-                                    cellBGColor={getCellBackgroundColor(cell)}
-                                    mainValueFontColor={getMainNumFontColor(cell)}
-                                    cellMainValue={mainNumbers[row][col].value}
-                                    cellNotes={_get(notes, [row, col])}
-                                    onCellClick={onCellClick}
-                                    displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
-                                    smartHintData={_get(cellsHighlightData, [row, col])}
-                                    selectedMainNumber={selectedCellMainValue}
-                                    showSmartHint={showSmartHint}
-                                    showCellContent={shouldShowCellContent()}
-                                />
-                            </View>
+                        <View
+                            key={`${index}`}
+                            style={[styles.cellContainer, cellAdditionalStyles]}
+                            ref={cellsRef[row][col]}
+                            collapsable={false}
+                        >
+                            <Cell
+                                row={row}
+                                col={col}
+                                cellBGColor={getCellBackgroundColor(cell)}
+                                mainValueFontColor={getMainNumFontColor(cell)}
+                                cellMainValue={mainNumbers[row][col].value}
+                                cellNotes={_get(notes, [row, col])}
+                                onCellClick={onCellClick}
+                                displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
+                                smartHintData={_get(cellsHighlightData, [row, col])}
+                                selectedMainNumber={selectedCellMainValue}
+                                showSmartHint={showSmartHint}
+                                showCellContent={shouldShowCellContent()}
+                            />
                         </View>
                     )
                 })}
@@ -200,11 +231,68 @@ const Board_ = ({
         )
     }, [showSmartHint])
 
-    const renderBoard = () => {
-        // TODO: wouldn't it be better just to elevate the 
-        // cells which should be highlighted ??
+    const [outlineState, setPath] = useState({ paths: [], boardYPos: -1, boardXPos: -1 })
+
+    const smartHintVisiblePreviously = usePrevious(showSmartHint)
+
+    // Dropping this plan of focusing cells using outline.
+    // will explore this in future if it makes more sense.
+    useEffect(async () => {
+        return
+        if (!showSmartHint && !smartHintVisiblePreviously) return
+
+        if (!showSmartHint && smartHintVisiblePreviously)
+            setPath({ paths: [], boardYPos: -1, boardXPos: -1 })
+
+        const data = await getFocusedCellsOutline(cellSetsToFocus, SVG_STROKE_WIDTH, cellsRef, boardRef)
+        setPath(data)
+    }, [showSmartHint, smartHintVisiblePreviously, cellSetsToFocus])
+
+    const renderSvgOutline = () => {
+        if (_isEmpty(outlineState.paths)) return null
+
         return (
-            <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
+            <View style={{
+                width: SVG_CONTAINER_WIDTH,
+                height: SVG_CONTAINER_HEIGHT,
+                position: 'absolute',
+                zIndex: 1,
+                overflow: 'visible',
+                top: outlineState.boardYPos - SVG_STROKE_WIDTH,
+                left: outlineState.boardXPos - SVG_STROKE_WIDTH,
+            }}
+                pointerEvents={'none'}
+            >
+                <Svg
+                    viewBox={`0 0 ${SVG_CONTAINER_WIDTH} ${SVG_CONTAINER_HEIGHT}`}
+                    width={SVG_CONTAINER_WIDTH}
+                    height={SVG_CONTAINER_HEIGHT}
+                    overflow='visible'
+                >
+                    {
+                        _map(outlineState.paths, (path) => {
+                            return (
+                                <Path
+                                    d={path}
+                                    stroke={'rgb(152, 3, 252)'}
+                                    fill='rgba(0, 0, 0, 0.2)'
+                                    strokeWidth={SVG_STROKE_WIDTH}
+                                    strokeLinejoin='round'
+                                />
+                            )
+                        })
+                    }
+                </Svg>
+            </View>
+        )
+    }
+
+    const renderBoard = () => {
+        return (
+            <View
+                ref={boardRef}
+                style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}
+            >
                 {looper.map((row, index) => renderRow(row, `${index}`))}
                 {getGrid('horizontal')}
                 {getGrid('vertical')}
@@ -219,6 +307,7 @@ const Board_ = ({
                 {yAxis}
                 {renderBoard()}
             </View>
+            {renderSvgOutline()}
         </>
     )
 }

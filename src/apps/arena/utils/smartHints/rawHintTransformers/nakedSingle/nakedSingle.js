@@ -118,7 +118,18 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
             )
     }
 
+    const getCellsFromCellsToFocusData = () => {
+        const result = []
+        for (const row in cellsToFocusData) {
+            for (const col in cellsToFocusData[row]) {
+                result.push({ row: parseInt(row, 10), col: parseInt(col, 10) })
+            }
+        }
+        return [result]
+    }
+
     return {
+        cellSetsToFocus: getCellsFromCellsToFocusData(), // an array of arrays of cells to focus in group
         cellsToFocusData,
         title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
         steps: [{ text: logic }],

@@ -165,6 +165,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             parentHeight={parentHeight}
             bottomMostPositionRatio={1.1} // TODO: we can make it a default i guess
             animateBackgroundOverlayOnClose={false}
+        // showBackgroundOverlay={false}
         >
             <View style={containerStyles}>
                 {renderHeader()}

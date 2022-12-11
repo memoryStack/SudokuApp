@@ -17,6 +17,8 @@ export const getHintHCInfo = state => {
 
             focusedCells: state.smartHintHC.hints[0].focusedCells,
             cellsToFocusData: state.smartHintHC.hints[0].cellsToFocusData,
+            cellSetsToFocus: state.smartHintHC.hints[0].cellSetsToFocus,
+
             selectCellOnClose: state.smartHintHC.hints[0].selectCellOnClose,
 
             inputPanelNumbersVisibility: state.smartHintHC.hints[0].inputPanelNumbersVisibility,
