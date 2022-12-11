@@ -24,17 +24,16 @@ import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/c
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { getContainerStyles, styles } from './styles'
+import { FOOTER_BUTTONS_TEXT, HITSLOP } from './constants'
 
-const NEXT_BUTTON_TEXT = 'Next'
-const PREV_BUTTON_TEXT = 'Prev'
-const APPLY_HINT_TEXT = 'Apply Hint'
-const HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
         hint: { focusedCells, title = '', logic = '', selectCellOnClose, inputPanelNumbersVisibility } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
+
+    const closeByApplyHintClick = useRef(false)
 
     const applyHintChanges = useSelector(getApplyHintChanges)
 
@@ -77,12 +76,13 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const onApplyHintClick = useCallback(() => {
         closeView()
-        onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
-    }, [applyHintChanges, onAction])
+        closeByApplyHintClick.current = true
+    }, [onAction])
 
     const onClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
-    }, [onAction, selectCellOnClose])
+        closeByApplyHintClick.current && onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
+    }, [onAction, selectCellOnClose, applyHintChanges])
 
     const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } } = {} } = {}) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
@@ -139,7 +139,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         return (
             <View style={styles.footerContainer}>
                 <Button
-                    text={displayPrevButton ? PREV_BUTTON_TEXT : ''}
+                    text={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
                     onClick={displayPrevButton ? onPrevClick : _noop}
                     avoidDefaultContainerStyles={true}
                     textStyles={styles.footerButtonText}
@@ -147,7 +147,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                 />
                 {/* TODO: find better way to hide the button.it's wtf right now */}
                 <Button
-                    text={displayNextButton ? NEXT_BUTTON_TEXT : APPLY_HINT_TEXT}
+                    text={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
                     onClick={displayNextButton ? onNextClick : onApplyHintClick}
                     avoidDefaultContainerStyles={true}
                     textStyles={styles.footerButtonText}
