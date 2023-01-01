@@ -7,6 +7,8 @@ import { Svg, Path } from 'react-native-svg'
 
 import _noop from 'lodash/src/utils/noop'
 
+import { useScreenName } from '../../../utils/customHooks'
+
 import { RestartIcon } from '../../../resources/svgIcons/restart'
 import { PersonalizePuzzleIcon } from '../../../resources/svgIcons/personalizePuzzle'
 import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '../../../resources/constants'
@@ -47,13 +49,18 @@ const styles = StyleSheet.create({
 // TODO: research about using "useMemo" for the functions which are rendering a view in the
 //          functional component
 // TODO: find a good icon for this resume option
-const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClosed }) => {
+const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
+
+    const screenName = useScreenName()
+
+    const isHomeScreen = screenName === SCREEN_NAME.HOME
+
     const nextGameMenuRef = useRef(null)
 
-    const [pendingGame, setPendingGame] = useState({ checkedStatus: screenName !== SCREEN_NAME.HOME, available: false })
+    const [pendingGame, setPendingGame] = useState({ checkedStatus: !isHomeScreen, available: false })
 
     useEffect(() => {
-        if (screenName !== SCREEN_NAME.HOME) return
+        if (!isHomeScreen) return
         previousInactiveGameExists()
             .then(pendingGameAvailable => {
                 setPendingGame({ available: pendingGameAvailable, checkedStatus: true })
@@ -151,7 +158,7 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
                     <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
                     <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
                 </Touchable>
-                {screenName === SCREEN_NAME.HOME && pendingGame.available ? (
+                {isHomeScreen && pendingGame.available ? (
                     <Touchable
                         key={RESUME}
                         style={styles.levelContainer}
@@ -183,14 +190,12 @@ const NextGameMenu_ = ({ screenName = '', parentHeight, menuItemClick, onMenuClo
 export const NextGameMenu = React.memo(NextGameMenu_)
 
 NextGameMenu_.propTypes = {
-    screenName: PropTypes.string,
     parentHeight: PropTypes.number,
     menuItemClick: PropTypes.func,
     onMenuClosed: PropTypes.func,
 }
 
 NextGameMenu_.defaultProps = {
-    screenName: '',
     parentHeight: 0,
     menuItemClick: _noop,
     onMenuClosed: _noop,

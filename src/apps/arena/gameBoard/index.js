@@ -2,8 +2,6 @@ import React, { useMemo } from 'react'
 
 import { View, Text } from 'react-native'
 
-import { useSelector } from 'react-redux'
-
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
@@ -12,11 +10,15 @@ import _get from 'lodash/src/utils/get'
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { areSameCells, areCommonHouseCells } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
-import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
+import {
+    BOARD_AXES_VALUES,
+    BOARD_GRID_BORDERS_DIRECTION,
+    CELLS_IN_HOUSE,
+    STATIC_BOARD_ELEMENTS_DIMENSIONS
+} from '../constants'
 
 import { getStyles } from './style'
 import { Cell } from './cell'
@@ -28,9 +30,11 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCellClick, isHintTryOut }) => {
-    const { show: showSmartHint, hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } =
-        useSelector(getHintHCInfo)
+const Board_ = ({
+    screenName, gameState, mainNumbers, notes, selectedCell,
+    onCellClick, isHintTryOut, showSmartHint,
+    cellsHighlightData, axisTextStyles
+}) => {
 
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
@@ -61,6 +65,8 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
 
         if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
 
+        if (showSmartHint) return styles.clueNumColor
+
         if (mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue) return styles.wronglyFilledNumColor
         if (!mainNumbers[row][col].isClue) return styles.userFilledNumColor
         return styles.clueNumColor
@@ -69,7 +75,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
     const getSmartHintActiveBgColor = cell => {
         if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell))
             return styles.selectedCellBGColor
-        return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
+        return _get(cellsHighlightData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
     }
 
     const shouldShowCellContent = () => {
@@ -99,7 +105,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
         return styles.defaultCellBGColor
     }
 
-    const getBoxBackgroundColor = cell => {
+    const getCellBackgroundColor = cell => {
         if (!shouldShowCellContent()) return null
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
         if (isCustomPuzleScreen()) return getCustomPuzzleBoardCellBgColor(cell)
@@ -107,8 +113,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
     }
 
     const shouldMarkCellAsInhabitable = cell => {
-        if (!showSmartHint) return false
-        return _get(smartHintCellsHighlightInfo, [cell.row, cell.col, 'inhabitable'], false)
+        return _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false)
     }
 
     const renderRow = (row, key) => {
@@ -123,9 +128,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
         return (
             <View style={[styles.rowStyle, rowAdditionalStyles]} key={key}>
                 {looper.map((col, index) => {
-                    const smartHintData = smartHintCellsHighlightInfo[row] && smartHintCellsHighlightInfo[row][col]
                     const cell = { row, col }
-
                     const cellAdditionalStyles = {
                         marginLeft:
                             col === 3 || col === 6
@@ -140,13 +143,13 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
                                 <Cell
                                     row={row}
                                     col={col}
-                                    cellBGColor={getBoxBackgroundColor(cell)}
+                                    cellBGColor={getCellBackgroundColor(cell)}
                                     mainValueFontColor={getMainNumFontColor(cell)}
                                     cellMainValue={mainNumbers[row][col].value}
-                                    cellNotes={notes[row][col]}
+                                    cellNotes={_get(notes, [row, col])}
                                     onCellClick={onCellClick}
                                     displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
-                                    smartHintData={smartHintData}
+                                    smartHintData={_get(cellsHighlightData, [row, col])}
                                     selectedMainNumber={selectedCellMainValue}
                                     showSmartHint={showSmartHint}
                                     showCellContent={shouldShowCellContent()}
@@ -159,8 +162,8 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
         )
     }
 
-    const getGrid = orientation => {
-        const isVertical = orientation === 'vertical'
+    const renderBordersGrid = orientation => {
+        const isVertical = orientation === BOARD_GRID_BORDERS_DIRECTION.VERTICAL
         const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
         const normalBorderStyle = isVertical ? styles.verticalBars : styles.horizontalBars
         const thickNessStyleField = isVertical ? 'width' : 'height'
@@ -181,15 +184,17 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
     }
 
     const renderAxisText = label => {
-        return <Text style={showSmartHint ? styles.smartHintAxisText : styles.axisText}>{label}</Text>
+        return (
+            <Text style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}>
+                {label}
+            </Text>
+        )
     }
 
     const yAxis = useMemo(() => {
         return (
             <View style={styles.yAxis}>
-                {BOARD_AXES_VALUES.Y_AXIS.map(label => {
-                    return renderAxisText(label)
-                })}
+                {BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}
             </View>
         )
     }, [showSmartHint])
@@ -197,9 +202,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
     const xAxis = useMemo(() => {
         return (
             <View style={styles.xAxis}>
-                {BOARD_AXES_VALUES.X_AXIS.map(label => {
-                    return renderAxisText(label)
-                })}
+                {BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}
             </View>
         )
     }, [showSmartHint])
@@ -208,8 +211,8 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
         return (
             <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
                 {looper.map((row, index) => renderRow(row, `${index}`))}
-                {getGrid('horizontal')}
-                {getGrid('vertical')}
+                {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
+                {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
             </View>
         )
     }
@@ -217,7 +220,7 @@ const Board_ = ({ screenName, gameState, mainNumbers, notes, selectedCell, onCel
     return (
         <>
             {xAxis}
-            <View style={{ flexDirection: 'row' }}>
+            <View style={styles.boardAndYAxisContainer}>
                 {yAxis}
                 {renderBoard()}
             </View>
@@ -235,6 +238,9 @@ Board_.propTypes = {
     selectedCell: PropTypes.object,
     onCellClick: PropTypes.func,
     isHintTryOut: PropTypes.bool,
+    showSmartHint: PropTypes.bool,
+    cellsHighlightData: PropTypes.object,
+    axisTextStyles: PropTypes.object,
 }
 
 Board_.defaultProps = {
@@ -243,4 +249,7 @@ Board_.defaultProps = {
     selectedCell: {},
     onCellClick: _noop,
     isHintTryOut: false,
+    showSmartHint: false,
+    cellsHighlightData: {},
+    axisTextStyles: {}
 }

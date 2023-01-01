@@ -4,12 +4,14 @@ import { View, StyleSheet, Linking, Image, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import { SCREEN_NAME } from '../../resources/constants'
 import { Button } from '../../components/button'
 import { rgba } from '../../utils/util'
 import { EVENTS } from '../../constants/events'
+import { ROUTES } from '../../navigation/route.constants'
+
 import { NextGameMenu } from '../arena/nextGameMenu'
 import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimensions'
+import { Settings } from '../header/components/settings/settings'
 
 const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
 
@@ -87,13 +89,13 @@ const Home_ = ({ navigation }) => {
     const handleMenuItemClicked = useCallback(
         item => {
             setShowNextGameMenu(false)
-            navigation.navigate('Arena', { selectedGameMenuItem: item })
+            navigation.navigate(ROUTES.ARENA, { selectedGameMenuItem: item })
         },
         [navigation],
     )
 
     const launchDeeplinkPuzzle = url => {
-        navigation.navigate('Arena', { puzzleUrl: url })
+        navigation.navigate(ROUTES.ARENA, { puzzleUrl: url })
     }
 
     useEffect(() => {
@@ -146,7 +148,6 @@ const Home_ = ({ navigation }) => {
         if (!pageHeight || !showNextGameMenu) return null
         return (
             <NextGameMenu
-                screenName={SCREEN_NAME.HOME}
                 parentHeight={pageHeight}
                 menuItemClick={handleMenuItemClicked}
                 onMenuClosed={onNewGameMenuClosed}
@@ -160,6 +161,9 @@ const Home_ = ({ navigation }) => {
             {renderSudokuText()}
             {renderPlayButton()}
             {renderNewGameMenu()}
+            <View style={{ marginTop: 40 }}>
+                <Settings navigation={navigation} />
+            </View>
         </View>
     )
 }

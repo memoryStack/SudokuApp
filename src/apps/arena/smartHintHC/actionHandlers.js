@@ -1,4 +1,5 @@
 import { GAME_STATE } from '../../../resources/constants'
+
 import { applyHintAction, updateSelectedCell } from '../store/actions/board.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
 import {
@@ -12,6 +13,8 @@ import {
 } from '../store/actions/smartHintHC.actions'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
+
+import { SMART_HINT_CHANGES_APPLY_DELAY } from './constants'
 
 const handleOnInit = ({ setState, params: { focusedCells, styles } }) => {
     setState({ focusedCells, styles })
@@ -48,8 +51,7 @@ const handleEraserClick = ({ getState }) => {
 }
 
 const handleApplyHintClick = ({ params: applyHintChanges }) => {
-    // FIX_ME: hacky way
-    setTimeout(() => applyHintAction(applyHintChanges), 400)
+    setTimeout(() => applyHintAction(applyHintChanges), SMART_HINT_CHANGES_APPLY_DELAY)
 }
 
 const ACTION_TYPES = {

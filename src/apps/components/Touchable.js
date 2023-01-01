@@ -60,4 +60,5 @@ export const Touchable = props => {
     )
 }
 
+// TODO: add proptypes as well for the ease of development
 Touchable.defaultProps = defaultProps

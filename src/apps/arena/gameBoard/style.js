@@ -48,6 +48,9 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }) =
             width: BOARD_GRID_WIDTH,
             backgroundColor: 'white',
         },
+        boardAndYAxisContainer: {
+            flexDirection: 'row'
+        },
         gridBorderContainer: {
             position: 'absolute',
             height: BOARD_GRID_HEIGHT,
@@ -58,12 +61,12 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }) =
         verticalBars: {
             height: BOARD_GRID_HEIGHT,
             width: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
-            backgroundColor: 'rgba(0, 0, 0, .9)',
+            backgroundColor: 'rgba(0, 0, 0, .8)',
         },
         horizontalBars: {
             width: BOARD_GRID_WIDTH,
             height: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
-            backgroundColor: 'rgba(0, 0, 0, .9)',
+            backgroundColor: 'rgba(0, 0, 0, .8)',
         },
         rowStyle: {
             display: 'flex',
