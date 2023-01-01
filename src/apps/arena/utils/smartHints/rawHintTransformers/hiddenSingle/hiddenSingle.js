@@ -12,7 +12,13 @@ import { HOUSE_TYPE } from '../../constants'
 import { isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues } from '../../../util'
 import { setCellDataInHintResult } from '../../util'
 
-import { BLOCKS_COUNT_IN_ROW, BOARD_MOVES_TYPES, CELLS_IN_HOUSE, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../../constants'
+import {
+    BLOCKS_COUNT_IN_ROW,
+    BOARD_MOVES_TYPES,
+    CELLS_IN_HOUSE,
+    GRID_TRAVERSALS,
+    HOUSES_COUNT,
+} from '../../../../constants'
 import { getHouseCells } from '../../../houseCells'
 import { getCellsAxesValuesListText } from '../helpers'
 

@@ -76,7 +76,6 @@ export const updateTryOutSelectedCell = cell => {
 }
 
 export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) => {
-
     const selectedCell = getTryOutSelectedCell(getStoreState())
     if (_isEmpty(selectedCell)) {
         showSnackBar({
