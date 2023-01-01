@@ -1,4 +1,5 @@
 import _cloneDeep from 'lodash/src/utils/cloneDeep'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
@@ -75,6 +76,16 @@ export const updateTryOutSelectedCell = cell => {
 }
 
 export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) => {
+
+    const selectedCell = getTryOutSelectedCell(getStoreState())
+    if (_isEmpty(selectedCell)) {
+        showSnackBar({
+            msg: `please select some cell before filling number`,
+            customStyles: snackBarCustomStyles,
+        })
+        return
+    }
+
     if (!isValidInputNumberClick(number)) {
         showSnackBar({
             msg: `try filling cell which is empty and has ${number} as a candidate there`,

@@ -24,7 +24,9 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
         return getStyles(CELL_WIDTH)
     }, [CELL_WIDTH])
 
-    const onNumberClicked = number => onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
+    const onNumberClicked = number => {
+        onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
+    }
 
     const onEraserClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_ERASE_CLICK })
