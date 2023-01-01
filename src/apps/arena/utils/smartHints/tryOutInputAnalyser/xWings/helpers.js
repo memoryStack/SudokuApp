@@ -1,4 +1,5 @@
 import _isEmpty from 'lodash/src/utils/isEmpty'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
@@ -7,11 +8,12 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selector
 
 import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from '../../../util'
 
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 import {
     getHouseAxesText,
+    getXWingCrossHouseFullName,
     getXWingHouseFullName,
     getXWingHouseFullNamePlural,
     getXWingHousesTexts,
@@ -22,39 +24,38 @@ import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../xWing
 import { TRY_OUT_RESULT_STATES } from '../constants'
 // TODO: do something about this handler. looks like it's not in right place
 import { filterFilledCellsInTryOut } from '../helpers'
+import { XWING } from '../stringLiterals'
 
 export const getNoInputResult = xWing => {
-    const candidate = getXWingCandidate(xWing)
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
-    const houseFullName = getXWingHouseFullNamePlural(xWing)
+    const msgPlaceholdersValues = {
+        candidate: getXWingCandidate(xWing),
+        ...getXWingHousesTexts(xWing.houseType, xWing.legs),
+        houseFullName: getXWingHouseFullNamePlural(xWing)
+    }
     return {
-        msg:
-            `try filling ${candidate} in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName}` +
-            ` to understand why all ${candidate} highlighted in red color can't come there and is safe to remove`,
+        msg: dynamicInterpolation(XWING.NO_INPUT, msgPlaceholdersValues),
         state: TRY_OUT_RESULT_STATES.START,
     }
 }
 
 export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
-    const xWingCells = getXWingCells(xWing.legs)
     const candidate = getXWingCandidate(xWing)
+    const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(getXWingCells(xWing.legs), candidate)
 
-    const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(xWingCells, candidate)
-    const xWingHostCellsTexts = getCellsAxesValuesListText(
-        xWingCellsWithCandidateAsNote,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-    )
+    const msgPlaceholdersValues = {
+        candidate,
+        ...getXWingHousesTexts(xWing.houseType, xWing.legs),
+        houseFullNamePlural: getXWingHouseFullNamePlural(xWing),
+        xWingHostCellsTexts: getCellsAxesValuesListText(
+            xWingCellsWithCandidateAsNote,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        ),
+        crossHouse: getHouseAxesText(getCellHouseInfo(getCrossHouseType(xWing.houseType), xWingCellsWithCandidateAsNote[0])),
+        crossHouseFullName: getXWingCrossHouseFullName(xWing),
+    }
 
-    const crossHouseType = getCrossHouseType(xWing.houseType)
-    const crossHouse = getCellHouseInfo(crossHouseType, xWingCellsWithCandidateAsNote[0])
-
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
     return {
-        msg:
-            `now to fill ${candidate} in ${houseAAxesValue} and ${houseBAxesValue}` +
-            ` ${HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL} we have` +
-            ` two cells ${xWingHostCellsTexts} but both of these cells are in` +
-            ` ${getHouseAxesText(crossHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[crossHouseType].FULL_NAME} `,
+        msg: dynamicInterpolation(XWING.SAME_CROSSHOUSE, msgPlaceholdersValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -71,14 +72,16 @@ export const getOneLegWithNoCandidateResult = xWing => {
     const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs)
     if (_isEmpty(xWingLegWithCandidateAsInhabitable)) return null
 
-    const inhabitableHouseAxesText = getHouseAxesText(
-        getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
-    )
+    const msgPlaceholdersValues = {
+        candidate,
+        houseFullName: getXWingHouseFullName(xWing),
+        inhabitableHouseAxesText: getHouseAxesText(
+            getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
+        )
+    }
 
     return {
-        msg:
-            `there is no cell in ${inhabitableHouseAxesText} ${getXWingHouseFullName(xWing)}` +
-            ` where ${candidate} can come`,
+        msg: dynamicInterpolation(XWING.ONE_LEG_NO_CANDIDATE, msgPlaceholdersValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -108,30 +111,33 @@ export const getLegsFilledWithoutErrorResult = xWing => {
     return getBothLegsFilledWithoutErrorResult(xWing)
 }
 
+// change name of this function
+// it looks like this function returns some error
 const getOneLegFilledWithoutErrorResult = xWing => {
-    const candidate = getXWingCandidate(xWing)
-    const houseFullName = getXWingHouseFullName(xWing)
-
     const filledXWingCells = filterFilledCellsInTryOut(getXWingCells(xWing.legs))
-
     const filledLegHouse = getCellHouseInfo(xWing.houseType, filledXWingCells[0])
     const houseAxesText = getHouseAxesText(filledLegHouse)
+
+    const msgPlaceholdersValues = {
+        candidate: getXWingCandidate(xWing),
+        houseAxesText,
+        houseFullName: getXWingHouseFullName(xWing)
+    }
     return {
-        msg:
-            `${candidate} is filled in ${houseAxesText} ${houseFullName} without any error, try filling it` +
-            ` in other places as well where it is highlighted in red or green color`,
+        msg: dynamicInterpolation(XWING.ONE_LEG_VALID_FILL, msgPlaceholdersValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }
 
 const getBothLegsFilledWithoutErrorResult = xWing => {
-    const candidate = getXWingCandidate(xWing)
-    const houseFullName = getXWingHouseFullNamePlural(xWing)
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
+    const msgPlaceholdersValues = {
+        candidate: getXWingCandidate(xWing),
+        houseFullName: getXWingHouseFullNamePlural(xWing),
+        ...getXWingHousesTexts(xWing.houseType, xWing.legs),
+    }
+
     return {
-        msg:
-            `${candidate} is filled in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} without error` +
-            ` and all the red colored ${candidate}s are also removed.`,
+        msg: dynamicInterpolation(XWING.BOTH_LEG_VALID_FILL, msgPlaceholdersValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

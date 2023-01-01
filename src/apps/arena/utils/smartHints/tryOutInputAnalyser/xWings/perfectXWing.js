@@ -1,11 +1,10 @@
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import _flatten from 'lodash/src/utils/flatten'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
-import { getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'
+import { getXWingHouseFullName, getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'
 
-import { getXWingCandidate, getXWingCells } from '../../xWing/utils'
-
-import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+import { getXWingCandidate } from '../../xWing/utils'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { noInputInTryOut, filterFilledCellsInTryOut } from '../helpers'
@@ -16,6 +15,9 @@ import {
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
 } from './helpers'
+import { XWING } from '../stringLiterals'
+import { XWING_TYPES } from '../../xWing/constants'
+
 
 export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
@@ -42,11 +44,13 @@ const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) =>
 }
 
 const getBothHouseWithoutCandidateErrorResult = xWing => {
-    const { houseAAxesValue, houseBAxesValue } = getXWingHousesTexts(xWing.houseType, xWing.legs)
-    const candidate = getXWingCandidate(xWing)
-    const houseFullName = HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
+    const msgPlaceholderValues = {
+        ...getXWingHousesTexts(xWing.houseType, xWing.legs),
+        candidate: getXWingCandidate(xWing),
+        houseFullName: getXWingHouseFullName(xWing),
+    }
     return {
-        msg: `there is no cell in ${houseAAxesValue} and ${houseBAxesValue} ${houseFullName} where ${candidate} can come`,
+        msg: dynamicInterpolation(XWING[XWING_TYPES.PERFECT].BOTH_LEGS_WITHOUT_CANDIDATE, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }

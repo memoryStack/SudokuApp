@@ -5,6 +5,7 @@ import { getXWingCells } from '../../xWing/utils'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { noInputInTryOut, filterFilledCellsInTryOut } from '../helpers'
+import { UNATTAINABLE_TRY_OUT_STATE } from '../stringLiterals'
 
 import {
     getNoInputResult,
@@ -41,7 +42,7 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
     // TODO: i should know about this state through some backend api setup
     // it's a bug if execution reaches here
     return {
-        msg: 'not sure how we reached here',
+        msg: UNATTAINABLE_TRY_OUT_STATE,
         state: TRY_OUT_RESULT_STATES.START,
     }
 }
