@@ -27,7 +27,7 @@ const getRoutes = () => {
         {
             name: ROUTES.SOME_PAGE,
             component: TempScreen,
-        }
+        },
     ]
 }
 

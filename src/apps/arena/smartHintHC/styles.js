@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     },
 })
 
-export const getContainerStyles = (windowHeight) => {
+export const getContainerStyles = windowHeight => {
     return {
         width: '100%',
         borderTopLeftRadius: 8,

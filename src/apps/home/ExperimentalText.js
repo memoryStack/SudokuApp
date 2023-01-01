@@ -7,8 +7,8 @@ import _noop from 'lodash/src/utils/noop'
 const styles = StyleSheet.create({
     link: {
         color: 'blue',
-        textDecorationLine: 'underline'
-    }
+        textDecorationLine: 'underline',
+    },
 })
 
 export const getLinkTagSubstr = (startIndex, str) => {
@@ -22,15 +22,14 @@ export const getLinkTagSubstr = (startIndex, str) => {
     return str.substring(startIndex, endIndex)
 }
 
-export const getLinkTagData = (tag) => {
+export const getLinkTagData = tag => {
     return {
         routeKey: tag.match(/(?<=#).*?(?=#)/i)[0],
         text: tag.match(/(?<=>).*?(?=<)/i)[0],
     }
 }
 
-export const getTextConfig = (text) => {
-
+export const getTextConfig = text => {
     const result = []
 
     let currentStr = ''
@@ -45,7 +44,7 @@ export const getTextConfig = (text) => {
             const linkTagSubstr = getLinkTagSubstr(i, text)
             result.push({
                 isLink: true,
-                ...getLinkTagData(linkTagSubstr)
+                ...getLinkTagData(linkTagSubstr),
             })
 
             i += linkTagSubstr.length - 1
@@ -61,33 +60,30 @@ export const getTextConfig = (text) => {
 }
 
 export const ExperimentalText = ({ navigation }) => {
-
-    const onLinkPress = (routeKey) => {
+    const onLinkPress = routeKey => {
         console.log('text pressed', routeKey)
         navigation.navigate(routeKey)
     }
 
     const renderExperimentalText = () => {
-        const text = "Please visit <a pageRouteKey=#somepage#>here</a>."
+        const text = 'Please visit <a pageRouteKey=#somepage#>here</a>.'
 
         const textConfig = getTextConfig(text)
 
         return (
             <Text>
-                {
-                    textConfig.map(({ text, isLink, routeKey }) => {
-                        return (
-                            <Text style={[isLink ? styles.link : null]}
-                                onPress={isLink ? () => onLinkPress(routeKey) : _noop}
-                            >
-                                {text}
-                            </Text>
-                        )
-                    })
-                }
+                {textConfig.map(({ text, isLink, routeKey }) => {
+                    return (
+                        <Text
+                            style={[isLink ? styles.link : null]}
+                            onPress={isLink ? () => onLinkPress(routeKey) : _noop}
+                        >
+                            {text}
+                        </Text>
+                    )
+                })}
             </Text>
         )
-
     }
 
     return renderExperimentalText()

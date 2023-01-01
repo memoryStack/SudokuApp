@@ -1,8 +1,8 @@
-import { ROUTES } from "../../../../navigation/route.constants"
+import { ROUTES } from '../../../../navigation/route.constants'
 
 export const MENU_ITEMS = [
     {
         label: 'How to Play?',
-        routeKey: ROUTES.PLAY_GUIDE
-    }
+        routeKey: ROUTES.PLAY_GUIDE,
+    },
 ]

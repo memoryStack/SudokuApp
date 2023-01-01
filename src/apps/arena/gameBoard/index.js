@@ -17,7 +17,7 @@ import {
     BOARD_AXES_VALUES,
     BOARD_GRID_BORDERS_DIRECTION,
     CELLS_IN_HOUSE,
-    STATIC_BOARD_ELEMENTS_DIMENSIONS
+    STATIC_BOARD_ELEMENTS_DIMENSIONS,
 } from '../constants'
 
 import { getStyles } from './style'
@@ -31,11 +31,17 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({
-    screenName, gameState, mainNumbers, notes, selectedCell,
-    onCellClick, isHintTryOut, showSmartHint,
-    cellsHighlightData, axisTextStyles
+    screenName,
+    gameState,
+    mainNumbers,
+    notes,
+    selectedCell,
+    onCellClick,
+    isHintTryOut,
+    showSmartHint,
+    cellsHighlightData,
+    axisTextStyles,
 }) => {
-
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
     const styles = useMemo(() => {
@@ -184,27 +190,15 @@ const Board_ = ({
     }
 
     const renderAxisText = label => {
-        return (
-            <Text style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}>
-                {label}
-            </Text>
-        )
+        return <Text style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}>{label}</Text>
     }
 
     const yAxis = useMemo(() => {
-        return (
-            <View style={styles.yAxis}>
-                {BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}
-            </View>
-        )
+        return <View style={styles.yAxis}>{BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}</View>
     }, [showSmartHint])
 
     const xAxis = useMemo(() => {
-        return (
-            <View style={styles.xAxis}>
-                {BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}
-            </View>
-        )
+        return <View style={styles.xAxis}>{BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}</View>
     }, [showSmartHint])
 
     const renderBoard = () => {
@@ -251,5 +245,5 @@ Board_.defaultProps = {
     isHintTryOut: false,
     showSmartHint: false,
     cellsHighlightData: {},
-    axisTextStyles: {}
+    axisTextStyles: {},
 }

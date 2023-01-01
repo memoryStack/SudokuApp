@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native'
 
-import { fonts } from "../../resources/fonts/font";
+import { fonts } from '../../resources/fonts/font'
 
 export const styles = StyleSheet.create({
     container: {
@@ -18,9 +18,9 @@ export const styles = StyleSheet.create({
     ruleText: {
         fontSize: 18,
         padding: 20,
-        lineHeight: 24
+        lineHeight: 24,
     },
     axisText: {
-        color: 'black'
-    }
+        color: 'black',
+    },
 })

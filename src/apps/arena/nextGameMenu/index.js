@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
 //          functional component
 // TODO: find a good icon for this resume option
 const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
-
     const screenName = useScreenName()
 
     const isHomeScreen = screenName === SCREEN_NAME.HOME

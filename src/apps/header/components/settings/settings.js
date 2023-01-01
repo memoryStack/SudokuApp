@@ -25,10 +25,7 @@ export const Settings_ = ({ navigation }) => {
 
     const renderIcon = () => {
         return (
-            <Touchable
-                touchable={TouchableTypes.opacity}
-                onPress={onIconClick}
-            >
+            <Touchable touchable={TouchableTypes.opacity} onPress={onIconClick}>
                 <View ref={iconRef} collapsable={false}>
                     <SettingsIcon iconBoxSize={40} />
                 </View>
@@ -36,7 +33,7 @@ export const Settings_ = ({ navigation }) => {
         )
     }
 
-    const onItemPress = (routeKey) => {
+    const onItemPress = routeKey => {
         navigation.navigate(routeKey)
     }
 
@@ -44,27 +41,26 @@ export const Settings_ = ({ navigation }) => {
         if (!openMenu) return null
 
         return (
-            <View style={{
-                display: 'flex',
-                borderWidth: 2,
-                borderColor: 'black'
-            }}>
-                {
-                    _map(MENU_ITEMS, ({ label, routeKey }) => {
-                        return (
-                            <Touchable
-                                touchable={TouchableTypes.opacity}
-                                onPress={() => onItemPress(routeKey)}
+            <View
+                style={{
+                    display: 'flex',
+                    borderWidth: 2,
+                    borderColor: 'black',
+                }}
+            >
+                {_map(MENU_ITEMS, ({ label, routeKey }) => {
+                    return (
+                        <Touchable touchable={TouchableTypes.opacity} onPress={() => onItemPress(routeKey)}>
+                            <Text
+                                style={{
+                                    padding: 20,
+                                }}
                             >
-                                <Text style={{
-                                    padding: 20
-                                }}>
-                                    {label}
-                                </Text>
-                            </Touchable>
-                        )
-                    })
-                }
+                                {label}
+                            </Text>
+                        </Touchable>
+                    )
+                })}
             </View>
         )
     }

@@ -1,10 +1,10 @@
 import _isEmpty from 'lodash/src/utils/isEmpty'
 import _get from 'lodash/src/utils/get'
 
-import { getHouseCells } from "../../arena/utils/houseCells"
-import { HOUSE_TYPE } from "../../arena/utils/smartHints/constants"
-import { setCellDataInHintResult } from "../../arena/utils/smartHints/util"
-import { forBoardEachCell } from "../../arena/utils/util"
+import { getHouseCells } from '../../arena/utils/houseCells'
+import { HOUSE_TYPE } from '../../arena/utils/smartHints/constants'
+import { setCellDataInHintResult } from '../../arena/utils/smartHints/util'
+import { forBoardEachCell } from '../../arena/utils/util'
 
 export const HOUSE_VS_CELLS_BACKGROUND_COLOR = {
     [HOUSE_TYPE.ROW]: 'rgba(255, 0, 0, 0.5)',
@@ -13,19 +13,19 @@ export const HOUSE_VS_CELLS_BACKGROUND_COLOR = {
 }
 
 const addHouseCellsHighlightData = (house, cellsHighlightData) => {
-    getHouseCells(house).forEach((cell) => {
+    getHouseCells(house).forEach(cell => {
         const cellHighlightData = {
-            bgColor: { backgroundColor: HOUSE_VS_CELLS_BACKGROUND_COLOR[house.type] }
+            bgColor: { backgroundColor: HOUSE_VS_CELLS_BACKGROUND_COLOR[house.type] },
         }
         // TODO: below function name could be a little generic
         setCellDataInHintResult(cell, cellHighlightData, cellsHighlightData)
     })
 }
 
-const addRemainingCellsHighlightData = (cellsHighlightData) => {
-    forBoardEachCell((cell) => {
+const addRemainingCellsHighlightData = cellsHighlightData => {
+    forBoardEachCell(cell => {
         if (_isEmpty(_get(cellsHighlightData, [cell.row, cell.col]))) {
-            const cellHighlightData = { bgColor: { backgroundColor: "white" } }
+            const cellHighlightData = { bgColor: { backgroundColor: 'white' } }
             setCellDataInHintResult(cell, cellHighlightData, cellsHighlightData)
         }
     })

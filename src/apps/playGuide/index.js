@@ -1,23 +1,19 @@
-import React, { memo } from "react";
+import React, { memo } from 'react'
 
-import { Text, View } from "react-native";
-import { GAME_STATE } from "../../resources/constants";
+import { Text, View } from 'react-native'
+import { GAME_STATE } from '../../resources/constants'
 
-
-import { Board } from "../arena/gameBoard";
+import { Board } from '../arena/gameBoard'
 
 import { mainNumbers, cellsHighlightData } from './boardData'
 
-import { RULES_TEXT_CONFIG, PAGE_HEADING } from "./playGuide.constants";
+import { RULES_TEXT_CONFIG, PAGE_HEADING } from './playGuide.constants'
 
 import { styles } from './style'
 
 const PlayGuide_ = () => {
-
     const renderPageHeading = () => {
-        return (
-            <Text style={styles.heading}>{PAGE_HEADING}</Text>
-        )
+        return <Text style={styles.heading}>{PAGE_HEADING}</Text>
     }
 
     const renderBoard = () => {
@@ -35,13 +31,9 @@ const PlayGuide_ = () => {
     const renderRules = () => {
         return (
             <Text style={styles.ruleText}>
-                {
-                    RULES_TEXT_CONFIG.map(({ label, styles = {} }) => {
-                        return (
-                            <Text style={styles}>{label}</Text>
-                        )
-                    })
-                }
+                {RULES_TEXT_CONFIG.map(({ label, styles = {} }) => {
+                    return <Text style={styles}>{label}</Text>
+                })}
             </Text>
         )
     }

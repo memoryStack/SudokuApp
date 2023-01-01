@@ -49,7 +49,7 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }) =
             backgroundColor: 'white',
         },
         boardAndYAxisContainer: {
-            flexDirection: 'row'
+            flexDirection: 'row',
         },
         gridBorderContainer: {
             position: 'absolute',
