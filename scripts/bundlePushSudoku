@@ -1,4 +1,3 @@
-cd ../
 # TODO: make these inputs configurable or take these from some central place
 if [ "$1" = "p" ]
 then 

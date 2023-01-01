@@ -8,7 +8,9 @@
         "start": "react-native start",
         "test": "jest",
         "lint": "eslint .",
-        "prettier": "prettier --write '**/*.{ts,tsx,js}'"
+        "prettier": "prettier --write '**/*.{ts,tsx,js}'",
+        "pushStage": "./scripts/bundlePushSudoku s 1.5",
+        "pushProd": "./scripts/bundlePushSudoku p 1.6"
     },
     "dependencies": {
         "@react-native-async-storage/async-storage": "^1.15.5",
