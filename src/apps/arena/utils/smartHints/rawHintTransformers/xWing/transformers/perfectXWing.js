@@ -99,7 +99,7 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
 
 const getXWingCornersText = xWing => {
     const { topLeft, topRight, bottomLeft, bottomRight } = getXWingCornerCells(xWing)
-    return [topLeft, topRight, bottomLeft, bottomRight, topLeft]
+    return [topLeft, topRight, bottomRight, bottomLeft, topLeft]
         .map(cell => getCellAxesValues(cell))
         .join(` ${String.fromCodePoint(0x279d)} `)
 }
