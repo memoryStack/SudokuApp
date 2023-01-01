@@ -6,7 +6,7 @@ import { HOUSE_VS_CELLS_BACKGROUND_COLOR } from './boardData/cellsHighlightData'
 
 export const RULES_TEXT_CONFIG = [
     {
-        label: 'A sudoku puzzle begins with a grid in which some of the numbers are already in place. A puzzle is completed when each number from 1 to 9 appears only once in each of the 9 '
+        label: 'A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are already filled.\n\nA puzzle is completed when each number from 1 to 9 appears only once in each of the 9 '
     },
     {
         label: 'rows',
@@ -36,7 +36,7 @@ export const RULES_TEXT_CONFIG = [
         }
     },
     {
-        label: '. Study the grid to find the numbers that might fit into each cell.'
+        label: '.\n\nStudy the grid to find the numbers that might fit into each cell.'
     }
 ]
 

@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
         marginBottom: 40,
     },
     ruleText: {
-        textAlign: 'center',
         fontSize: 18,
         padding: 20,
         lineHeight: 24
