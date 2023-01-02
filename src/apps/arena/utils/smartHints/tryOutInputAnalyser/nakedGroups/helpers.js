@@ -9,13 +9,15 @@ import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import { NAKED_GROUPS } from '../stringLiterals'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
-    const candidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
+    const msgPlaceholderValues = {
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
+    }
     return {
-        msg:
-            `try filling ${candidatesListText} in the cells where` +
-            ` it is highlighted in red or green color to see why this hint works`,
+        msg: dynamicInterpolation(NAKED_GROUPS.NO_INPUT, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.START,
     }
 }
@@ -74,14 +76,14 @@ const getCellsWithNoCandidates = focusedCells => {
 }
 
 const getEmptyCellsErrorResult = cellsWithNoCandidates => {
-    const emptyCellsListText = getCellsAxesValuesListText(
-        cellsWithNoCandidates,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-    )
+    const msgPlaceholderValues = {
+        emptyCellsListText: getCellsAxesValuesListText(
+            cellsWithNoCandidates,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        )
+    }
     return {
-        msg:
-            `${emptyCellsListText} have no candidate left. in the final` +
-            ` solution no cell can be empty so, the current arrangement of numbers is invalid`,
+        msg: dynamicInterpolation(NAKED_GROUPS.EMPTY_GROUP_CELL, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -96,17 +98,17 @@ const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells) =
 const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells) => {
     const firstCandidate = multipleCellsNakedSingleCandidates[0]
     const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
-    const emptyCellsListText = getCellsAxesValuesListText(
-        firstCandidateHostCells,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-    )
-    const pluralRestOfCells = firstCandidateHostCells.length > 2
+    const msgPlaceholderValues = {
+        candidate: firstCandidate,
+        emptyCellsListText: getCellsAxesValuesListText(
+            firstCandidateHostCells,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        ),
+        nakedSingleHostCellNounText: firstCandidateHostCells.length > 2 ? 'cells' : 'cell'
+    }
 
     return {
-        msg:
-            `${firstCandidate} is Naked Single for ${emptyCellsListText}. if we try to fill it in one of these cells` +
-            ` then other cell${pluralRestOfCells ? 's' : ''} will have to be empty.` +
-            ` so the current arrangement of numbers is wrong`,
+        msg: dynamicInterpolation(NAKED_GROUPS.MULTIPLE_CELLS_NAKED_SINGLE, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -120,4 +122,24 @@ const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
             getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1
         )
     })
+}
+
+export const getAllInputsFilledResult = groupCandidates => {
+    const msgPlaceholderValues = {
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+    }
+    return {
+        msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.FULL, msgPlaceholderValues),
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
+}
+
+export const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
+    const msgPlaceholderValues = {
+        candidatesListText: getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+    }
+    return {
+        msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.PARTIAL, msgPlaceholderValues),
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    }
 }

@@ -22,7 +22,11 @@ import {
     getNotesListTextFromCellsWithNotes,
     getNakedSingleCellsWithNoteInAscOrder,
     getNakedGroupTryOutInputErrorResult,
+    getAllInputsFilledResult,
+    getPartialCorrectlyFilledResult,
 } from './helpers'
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import { NAKED_TRIPPLE } from '../stringLiterals'
 
 export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
     if (noInputInTryOut(focusedCells)) {
@@ -108,26 +112,24 @@ const getNotChosenCell = (chosenCells, allCells) => {
 
 const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
     const chosenCellWithNote = getNakedSingleCellsWithNoteInAscOrder(chosenCells, tryOutNotesInfo)
-
-    const notesListWithAndConjugation = getNotesListTextFromCellsWithNotes(
-        chosenCellWithNote,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-    )
-    const notesListWithORConjugation = getNotesListTextFromCellsWithNotes(
-        chosenCellWithNote,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
-    )
-    const chosenCellsAxesText = getCellsAxesValuesListText(
-        getCellsFromCellsWithNote(chosenCellWithNote),
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-    )
+    const msgPlaceholderValues = {
+        futureEmptyCellText: getCellAxesValues(notChosenCell),
+        nakedSingleCandidatesWithAndJoin: getNotesListTextFromCellsWithNotes(
+            chosenCellWithNote,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        ),
+        nakedSingleCandidatesWithOrJoin: getNotesListTextFromCellsWithNotes(
+            chosenCellWithNote,
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
+        ),
+        nakedSingleHostCellsAxesText: getCellsAxesValuesListText(
+            getCellsFromCellsWithNote(chosenCellWithNote),
+            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        )
+    }
 
     return {
-        msg:
-            `${notesListWithAndConjugation} are Naked Singles in` +
-            ` ${chosenCellsAxesText} respectively. because of` +
-            ` this ${getCellAxesValues(notChosenCell)} can't have ${notesListWithORConjugation}` +
-            ` and it will be empty, which is invalid`,
+        msg: dynamicInterpolation(NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_SINGLE_PAIR, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -183,16 +185,28 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
         notChosenCellNotes,
         HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
-    const resultMsg = isThirdCellHasNakedSingle
-        ? `${notChosenCellNotes[0]} is the Naked Single in ${getCellAxesValues(notChosenCell)} because of this` +
-          ` ${chosenCellsAxesText} will have ${chosenCellsPotentialMultipleNakedSingleCandidate} as Naked Single` +
-          ` in them, which will result in invalid solution`
-        : `${chosenCellsCandidatesList} make a Naked Double in ${chosenCellsAxesText} cells.` +
-          ` because of this rule ${notChosenCellCandidatesListText} can't come in ${getCellAxesValues(notChosenCell)}` +
-          ` and it will be empty`
+
+    let msgPlaceholderValues, resultMsg
+    if (isThirdCellHasNakedSingle) {
+        msgPlaceholderValues = {
+            nakedSingleCandidate: notChosenCellNotes[0],
+            nakedSingleHostCell: getCellAxesValues(notChosenCell),
+            nakedPairCellAxesText: chosenCellsAxesText,
+            chosenCellsPotentialMultipleNakedSingleCandidate,
+        }
+        resultMsg = NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_DOUBLE_PAIR.NAKED_SINGLE_IN_THIRD_CELL
+    } else {
+        msgPlaceholderValues = {
+            nakedDoubleCandidatesList: chosenCellsCandidatesList,
+            nakedDoubleHostCellAxesText: chosenCellsAxesText,
+            futureEmptyCellText: getCellAxesValues(notChosenCell),
+            futureEmptyCellCandidatesListText: notChosenCellCandidatesListText,
+        }
+        resultMsg = NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_DOUBLE_PAIR.NAKED_DOUBLE_IN_THIRD_CELL
+    }
 
     return {
-        msg: resultMsg,
+        msg: dynamicInterpolation(resultMsg, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -205,26 +219,5 @@ const getValidProgressResult = (groupCandidates, groupCells) => {
     } else {
         const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
         return getPartialCorrectlyFilledResult(candidatesToBeFilled)
-    }
-}
-
-// TODO: check if we can re-use these below funcs or not for naked double as well
-const getAllInputsFilledResult = groupCandidates => {
-    const filledCandidatesListText = getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
-    return {
-        msg:
-            `${filledCandidatesListText} are filled in` +
-            ` these cells without any error. now we are sure` +
-            ` that ${filledCandidatesListText} can't come in cells where these were highlighted in red`,
-        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
-    }
-}
-
-const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
-    const candidatesListText = getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
-    return {
-        msg:
-            `fill ${candidatesListText} as well` + ` to find where these numbers can't come in the highlighted region.`,
-        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

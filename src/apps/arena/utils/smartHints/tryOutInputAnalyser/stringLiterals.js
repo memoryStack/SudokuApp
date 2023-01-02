@@ -27,6 +27,39 @@ export const HIDDEN_GROUP = {
     }
 }
 
+export const NAKED_GROUPS = {
+    NO_INPUT: `try filling {{candidatesListText}} in the cells where` +
+        ` it is highlighted in red or green color to see why this hint works`,
+    EMPTY_GROUP_CELL: `{{emptyCellsListText}} have no candidate left. in the final` +
+        ` solution no cell can be empty so, the current arrangement of numbers is invalid`,
+    MULTIPLE_CELLS_NAKED_SINGLE: `{{candidate}} is Naked Single for {{emptyCellsListText}}. if we try to fill it in one of these cells` +
+        ` then other {{nakedSingleHostCellNounText}} will have to be empty.` +
+        ` so the current arrangement of numbers is wrong`,
+    VALID_FILL: {
+        FULL: `{{candidatesListText}} are filled in` +
+            ` these cells without any error. now we are sure` +
+            ` that {{candidatesListText}} can't come in cells where these were highlighted in red`,
+        PARTIAL: `fill {{candidatesListText}} as well` + ` to find where these numbers can't come in the highlighted region.`,
+    }
+}
+
+export const NAKED_TRIPPLE = {
+    FUTURE_EMPTY_CELL: {
+        NAKED_SINGLE_PAIR: `{{nakedSingleCandidatesWithAndJoin}} are Naked Singles in` +
+            ` {{nakedSingleHostCellsAxesText}} respectively. because of` +
+            ` this {{futureEmptyCellText}} can't have {{nakedSingleCandidatesWithOrJoin}}` +
+            ` and it will be empty, which is invalid`,
+        NAKED_DOUBLE_PAIR: {
+            NAKED_SINGLE_IN_THIRD_CELL: `{{nakedSingleCandidate}} is the Naked Single in {{nakedSingleHostCell}} because of this` +
+                ` {{nakedPairCellAxesText}} will have {{chosenCellsPotentialMultipleNakedSingleCandidate}} as Naked Single` +
+                ` in them, which will result in invalid solution`,
+            NAKED_DOUBLE_IN_THIRD_CELL: `{{nakedDoubleCandidatesList}} make a Naked Double in {{nakedDoubleHostCellAxesText}} cells.` +
+                ` because of this rule {{futureEmptyCellCandidatesListText}} can't come in {{futureEmptyCellText}}` +
+                ` and it will be empty`
+        }
+    }
+}
+
 export const XWING = {
     NO_INPUT: `try filling {{candidate}} in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}}` +
         ` to understand why all {{candidate}} highlighted in red color can't come there and is safe to remove`,
