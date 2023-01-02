@@ -14,7 +14,7 @@ import { NAKED_GROUPS } from '../stringLiterals'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const msgPlaceholderValues = {
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
     }
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.NO_INPUT, msgPlaceholderValues),
@@ -77,10 +77,7 @@ const getCellsWithNoCandidates = focusedCells => {
 
 const getEmptyCellsErrorResult = cellsWithNoCandidates => {
     const msgPlaceholderValues = {
-        emptyCellsListText: getCellsAxesValuesListText(
-            cellsWithNoCandidates,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-        )
+        emptyCellsListText: getCellsAxesValuesListText(cellsWithNoCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.EMPTY_GROUP_CELL, msgPlaceholderValues),
@@ -104,7 +101,7 @@ const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandida
             firstCandidateHostCells,
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
         ),
-        nakedSingleHostCellNounText: firstCandidateHostCells.length > 2 ? 'cells' : 'cell'
+        nakedSingleHostCellNounText: firstCandidateHostCells.length > 2 ? 'cells' : 'cell',
     }
 
     return {
@@ -126,7 +123,7 @@ const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
 
 export const getAllInputsFilledResult = groupCandidates => {
     const msgPlaceholderValues = {
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.FULL, msgPlaceholderValues),
@@ -136,7 +133,7 @@ export const getAllInputsFilledResult = groupCandidates => {
 
 export const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
     const msgPlaceholderValues = {
-        candidatesListText: getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+        candidatesListText: getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.PARTIAL, msgPlaceholderValues),

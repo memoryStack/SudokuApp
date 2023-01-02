@@ -30,7 +30,7 @@ export const getNoInputResult = xWing => {
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
         ...getXWingHousesTexts(xWing.houseType, xWing.legs),
-        houseFullName: getXWingHouseFullNamePlural(xWing)
+        houseFullName: getXWingHouseFullNamePlural(xWing),
     }
     return {
         msg: dynamicInterpolation(XWING.NO_INPUT, msgPlaceholdersValues),
@@ -50,7 +50,9 @@ export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
             xWingCellsWithCandidateAsNote,
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
         ),
-        crossHouse: getHouseAxesText(getCellHouseInfo(getCrossHouseType(xWing.houseType), xWingCellsWithCandidateAsNote[0])),
+        crossHouse: getHouseAxesText(
+            getCellHouseInfo(getCrossHouseType(xWing.houseType), xWingCellsWithCandidateAsNote[0]),
+        ),
         crossHouseFullName: getXWingCrossHouseFullName(xWing),
     }
 
@@ -77,7 +79,7 @@ export const getOneLegWithNoCandidateResult = xWing => {
         houseFullName: getXWingHouseFullName(xWing),
         inhabitableHouseAxesText: getHouseAxesText(
             getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
-        )
+        ),
     }
 
     return {
@@ -121,7 +123,7 @@ const getOneLegFilledWithoutErrorResult = xWing => {
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
         houseAxesText,
-        houseFullName: getXWingHouseFullName(xWing)
+        houseFullName: getXWingHouseFullName(xWing),
     }
     return {
         msg: dynamicInterpolation(XWING.ONE_LEG_VALID_FILL, msgPlaceholdersValues),

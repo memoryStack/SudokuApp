@@ -111,7 +111,7 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
     if (groupCandidatesToBeFilledWithoutHostCells.length !== 0) {
         msgPlaceholderValues = {
             primaryHouseFullName,
-            candidatesListText: getCandidatesListText(groupCandidatesToBeFilledWithoutHostCells)
+            candidatesListText: getCandidatesListText(groupCandidatesToBeFilledWithoutHostCells),
         }
         errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.NO_HOST_CELL_FOR_GROUP_CANDIDATES
     } else {
@@ -129,7 +129,7 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
             emptyGroupCellsHelpingVerb: emptyGroupCells.length > 1 ? 'are' : 'is',
             primaryHouseFullName,
             candidatesCountWithoutCells,
-            candidatesListText
+            candidatesListText,
         }
         errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.INSUFFICIENT_HOST_CELLS
     }
@@ -158,7 +158,7 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableC
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         msgPlaceholderValues = {
             candidatesListText: getCandidatesListText(groupCandidates),
-            groupCellsAxesListText: getCellsAxesValuesListText(groupCells)
+            groupCellsAxesListText: getCellsAxesValuesListText(groupCells),
         }
         progressMsg = HIDDEN_GROUP.VALID_FILL.FULL
     } else {
@@ -171,7 +171,7 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableC
         msgPlaceholderValues = {
             candidatesListText: getCandidatesListText(candidatesToBeFilled),
             candidatesPronoun: pluralCandidatesToBeFilled ? 'these' : 'this',
-            candidatesHelpingVerb: pluralCandidatesToBeFilled ? 'are' : 'is'
+            candidatesHelpingVerb: pluralCandidatesToBeFilled ? 'are' : 'is',
         }
         progressMsg = HIDDEN_GROUP.VALID_FILL.PARTIAL
     }

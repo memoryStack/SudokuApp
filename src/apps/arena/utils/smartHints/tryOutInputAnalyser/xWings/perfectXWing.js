@@ -18,7 +18,6 @@ import {
 import { XWING } from '../stringLiterals'
 import { XWING_TYPES } from '../../xWing/constants'
 
-
 export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
         return getNoInputResult(xWing)

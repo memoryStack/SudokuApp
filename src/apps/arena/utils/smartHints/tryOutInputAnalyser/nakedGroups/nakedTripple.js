@@ -125,7 +125,7 @@ const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
         nakedSingleHostCellsAxesText: getCellsAxesValuesListText(
             getCellsFromCellsWithNote(chosenCellWithNote),
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-        )
+        ),
     }
 
     return {
