@@ -177,7 +177,7 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableC
     }
 
     return {
-        msg: progressMsg,
+        msg: dynamicInterpolation(progressMsg, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }
