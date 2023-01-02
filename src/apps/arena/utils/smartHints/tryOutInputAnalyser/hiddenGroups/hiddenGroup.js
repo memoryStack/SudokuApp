@@ -1,3 +1,4 @@
+import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
@@ -10,6 +11,7 @@ import { getCandidatesListText } from '../../util'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { getCandidatesToBeFilled, getCorrectFilledTryOutCandidates, noInputInTryOut } from '../helpers'
+import { HIDDEN_GROUP } from '../stringLiterals'
 
 export const hiddenGroupTryOutAnalyser = ({
     groupCandidates,
@@ -37,10 +39,7 @@ export const hiddenGroupTryOutAnalyser = ({
 
 const getNoInputResult = () => {
     return {
-        msg:
-            `try filling these numbers in the cells where these are` +
-            ` highlighted in red or green color to see why green numbers stays` +
-            ` and red numbers will be removed`,
+        msg: HIDDEN_GROUP.NO_INPUT,
         state: TRY_OUT_RESULT_STATES.START,
     }
 }
@@ -54,17 +53,14 @@ const removableGroupCandidatesFilledHostCells = removableGroupCandidatesHostCell
 
 const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse) => {
     const filledCellsWithNumbers = getRemovableGroupCandidatesFilledCellsWithNumbers(removableGroupCandidatesHostCells)
-    const filledCandidatesListText = getCandidatesListText(getNumbersFromCellsWithNumbers(filledCellsWithNumbers))
-    const filledCellsAxesListText = getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers))
-    const multipleCellsFilled = filledCellsWithNumbers.length > 1
-    const primaryHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME
+    const msgPlaceholderValues = {
+        primaryHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME,
+        filledCandidatesListText: getCandidatesListText(getNumbersFromCellsWithNumbers(filledCellsWithNumbers)),
+        filledCellsAxesListText: getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers)),
+        filledInstancesHelpingVerb: filledCellsWithNumbers.length > 1 ? 'are' : 'is',
+    }
     return {
-        msg:
-            `${filledCandidatesListText} ${multipleCellsFilled ? 'are' : 'is'} filled in ${filledCellsAxesListText}` +
-            ` ${multipleCellsFilled ? 'respectively' : ''} because of this there ${
-                multipleCellsFilled ? 'are' : 'is'
-            } no` +
-            ` cell for ${filledCandidatesListText} in highlighted ${primaryHouseFullName}`,
+        msg: dynamicInterpolation(HIDDEN_GROUP.REMOVABLE_GROUP_CANDIDATE_FILLED, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -100,6 +96,7 @@ const someGroupCellWronglyFilled = (groupCells, groupCandidates) => {
     })
 }
 
+// TODO: break down this function
 const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse) => {
     let errorMsg
     const primaryHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME
@@ -109,25 +106,36 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
         groupCandidatesToBeFilled,
         groupCells,
     )
+
+    let msgPlaceholderValues
     if (groupCandidatesToBeFilledWithoutHostCells.length !== 0) {
-        const candidatesListText = getCandidatesListText(groupCandidatesToBeFilledWithoutHostCells)
-        errorMsg = `in the highlighted ${primaryHouseFullName}, there is no cell where ${candidatesListText} can come.`
+        msgPlaceholderValues = {
+            primaryHouseFullName,
+            candidatesListText: getCandidatesListText(groupCandidatesToBeFilledWithoutHostCells)
+        }
+        errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.NO_HOST_CELL_FOR_GROUP_CANDIDATES
     } else {
         const emptyGroupCells = filterEmptyCells(groupCells, getTryOutMainNumbers(getStoreState()))
-
         const candidatesListText = getCandidatesListText(groupCandidatesToBeFilled)
         const emptyCellsAxesListText = getCellsAxesValuesListText(emptyGroupCells)
         const candidatesCountWithoutCells = groupCandidatesToBeFilled.length - emptyGroupCells.length
-        errorMsg =
-            `${groupCandidatesToBeFilled.length} numbers ${candidatesListText} need to be filled` +
-            ` but only ${emptyGroupCells.length} empty ${emptyGroupCells.length > 1 ? 'cells' : 'cell'}` +
-            ` ${emptyCellsAxesListText} ${emptyGroupCells.length > 1 ? 'are' : 'is'} available for these` +
-            ` in the highlighted ${primaryHouseFullName}. so ${candidatesCountWithoutCells} out of ${candidatesListText}` +
-            ` can't be filled in this ${primaryHouseFullName}.`
+
+        msgPlaceholderValues = {
+            candidatesToBeFilledCount: groupCandidatesToBeFilled.length,
+            candidatesListText,
+            emptyGroupCellsCount: emptyGroupCells.length,
+            emptyGroupCellsNounText: emptyGroupCells.length > 1 ? 'cells' : 'cell',
+            emptyCellsAxesListText,
+            emptyGroupCellsHelpingVerb: emptyGroupCells.length > 1 ? 'are' : 'is',
+            primaryHouseFullName,
+            candidatesCountWithoutCells,
+            candidatesListText
+        }
+        errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.INSUFFICIENT_HOST_CELLS
     }
 
     return {
-        msg: errorMsg,
+        msg: dynamicInterpolation(errorMsg, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -141,30 +149,31 @@ const getGroupCandidatesToBeFilledWithoutHostCells = (groupCandidatesToBeFilled,
     })
 }
 
+// TODO: break down this function
 const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     let progressMsg = ''
+    let msgPlaceholderValues
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-        const candidatesListText = getCandidatesListText(groupCandidates)
-        const groupCellsAxesListText = getCellsAxesValuesListText(groupCells)
-        progressMsg =
-            `${candidatesListText} are filled in ${groupCellsAxesListText} cells without any` +
-            ` error. so only ${candidatesListText} highlighted in green color stays` +
-            ` and other red highlighted numbers can be removed.`
+        msgPlaceholderValues = {
+            candidatesListText: getCandidatesListText(groupCandidates),
+            groupCellsAxesListText: getCellsAxesValuesListText(groupCells)
+        }
+        progressMsg = HIDDEN_GROUP.VALID_FILL.FULL
     } else {
         const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, [
             ...groupCandidates,
             ...removableCandidates,
         ])
-        const candidatesListText = getCandidatesListText(candidatesToBeFilled)
         const pluralCandidatesToBeFilled = candidatesToBeFilled.length > 1
-        progressMsg =
-            `try filling ${candidatesListText} as well where ${pluralCandidatesToBeFilled ? 'these' : 'this'}` +
-            ` ${
-                pluralCandidatesToBeFilled ? 'are' : 'is'
-            } highlighted to find out in which cells ${candidatesListText}` +
-            ` can and can't come.`
+
+        msgPlaceholderValues = {
+            candidatesListText: getCandidatesListText(candidatesToBeFilled),
+            candidatesPronoun: pluralCandidatesToBeFilled ? 'these' : 'this',
+            candidatesHelpingVerb: pluralCandidatesToBeFilled ? 'are' : 'is'
+        }
+        progressMsg = HIDDEN_GROUP.VALID_FILL.PARTIAL
     }
 
     return {
