@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { getNavigationOptions } from './navigationOptions'
 import { routes } from './routes'
-
+import { ROUTES } from './route.constants'
 // TODO: how to dynamically load the screens ??
 
 const getScreens = Stack => {
@@ -21,7 +21,10 @@ const getScreens = Stack => {
 export const getNavigator = () => {
     const Stack = createStackNavigator()
     return (
-        <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+            initialRouteName={ROUTES.HOME}
+            screenOptions={{ headerShown: false }}
+        >
             {getScreens(Stack)}
         </Stack.Navigator>
     )
