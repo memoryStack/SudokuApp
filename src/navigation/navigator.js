@@ -23,7 +23,7 @@ export const getNavigator = () => {
     return (
         <Stack.Navigator
             initialRouteName={ROUTES.HOME}
-            screenOptions={{ headerShown: false }}
+            screenOptions={{ headerShown: true }}
         >
             {getScreens(Stack)}
         </Stack.Navigator>

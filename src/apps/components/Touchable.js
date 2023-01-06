@@ -3,9 +3,12 @@ import {
     StyleSheet,
     TouchableHighlight,
     TouchableNativeFeedback,
-    TouchableOpacity,
     TouchableWithoutFeedback,
+    TouchableOpacity
 } from 'react-native'
+
+// import { TouchableOpacity } from 'react-native-gesture-handler'
+
 import { Platform } from '../../utils/classes/platform'
 // import { TouchableNativeFeedback as NewTouchableNativeFeedback } from 'react-native-gesture-handler'
 // will fix error related to this later

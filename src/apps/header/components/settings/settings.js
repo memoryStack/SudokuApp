@@ -9,6 +9,8 @@ import { useToggle } from '../../../../utils/customHooks'
 
 import { Touchable, TouchableTypes } from '../../../components/Touchable'
 
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
 import { MENU_ITEMS } from './settings.config'
 
 export const Settings_ = ({ navigation }) => {
@@ -46,19 +48,21 @@ export const Settings_ = ({ navigation }) => {
                     display: 'flex',
                     borderWidth: 2,
                     borderColor: 'black',
+                    position: 'absolute',
+                    right: 8,
+                    top: 40,
                 }}
             >
                 {_map(MENU_ITEMS, ({ label, routeKey }) => {
                     return (
-                        <Touchable touchable={TouchableTypes.opacity} onPress={() => onItemPress(routeKey)}>
-                            <Text
-                                style={{
-                                    padding: 20,
-                                }}
-                            >
+                        <TouchableOpacity
+                            touchable={TouchableTypes.withoutFeedBack}
+                            onPress={() => onItemPress(routeKey)}
+                        >
+                            <Text style={{ padding: 20 }}>
                                 {label}
                             </Text>
-                        </Touchable>
+                        </TouchableOpacity>
                     )
                 })}
             </View>

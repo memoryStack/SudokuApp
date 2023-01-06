@@ -1,0 +1,17 @@
+import _get from 'lodash/src/utils/get'
+
+import { HEADER_SECTION, ROUTES } from './route.constants'
+import { routesHeaderItems } from './routes'
+
+export const getRouteNameFromRoute = (route) => {
+    return _get(route, 'name', '')
+}
+
+export const isHomeRoute = (route) => {
+    return getRouteNameFromRoute(route) === ROUTES.HOME
+}
+
+export const getHeaderRightItems = (route) => {
+    const routeName = getRouteNameFromRoute(route)
+    return _get(routesHeaderItems, [routeName, HEADER_SECTION.RIGHT], [])
+}

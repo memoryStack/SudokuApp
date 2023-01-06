@@ -4,15 +4,14 @@ import { Home } from '../apps/home'
 import { PlayGuide } from '../apps/playGuide'
 import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
-import { ROUTES } from './route.constants'
+import { HEADER_ITEMS, HEADER_SECTION, ROUTES } from './route.constants'
 
 export const routes = [
     {
         name: ROUTES.HOME,
         component: Home,
         headerItems: {
-            // right header
-            // left header
+            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SETTINGS]
         }
     },
     {
@@ -28,3 +27,10 @@ export const routes = [
         component: TempScreen,
     },
 ]
+
+// TODO: write testcases for it
+export const routesHeaderItems = routes.reduce((acc, route) => {
+    const { name, headerItems } = route
+    acc[name] = headerItems
+    return acc
+}, {})
