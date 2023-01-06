@@ -1,0 +1,6 @@
+cd './android'
+
+./gradlew assembleDebug
+
+# copy the file
+cp ./app/build/outputs/apk/debug/app-armeabi-v7a-debug.apk ~/Desktop/SudokuDebug.apk
