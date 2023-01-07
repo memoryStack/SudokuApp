@@ -1,4 +1,3 @@
-
 import { Arena } from '../apps/arena'
 import { Home } from '../apps/home'
 import { PlayGuide } from '../apps/playGuide'
@@ -11,30 +10,30 @@ export const routes = [
         name: ROUTES.HOME,
         component: Home,
         headerItems: {
-            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SETTINGS]
-        }
+            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SETTINGS],
+        },
     },
     {
         name: ROUTES.ARENA,
         component: Arena,
         headerItems: {
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
-            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SHARE]
-        }
+            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SHARE],
+        },
     },
     {
         name: ROUTES.PLAY_GUIDE,
         component: PlayGuide,
         headerItems: {
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
-        }
+        },
     },
     {
         name: ROUTES.SOME_PAGE,
         component: TempScreen,
         headerItems: {
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
-        }
+        },
     },
 ]
 

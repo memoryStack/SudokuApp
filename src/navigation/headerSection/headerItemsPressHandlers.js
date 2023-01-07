@@ -1,7 +1,7 @@
 import _get from 'lodash/src/utils/get'
 import _noop from 'lodash/src/utils/noop'
 
-import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from "../route.constants"
+import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../route.constants'
 
 const handleBackPress = ({ navigation }) => {
     return () => navigation && navigation.goBack()

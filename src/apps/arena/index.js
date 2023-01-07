@@ -36,8 +36,6 @@ import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
 import { ROUTES, HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_ITEMS } from '../../navigation/route.constants'
 
-
-
 const MAX_AVAILABLE_HINTS = 3
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
 const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
@@ -48,7 +46,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: 'white',
-        paddingTop: 75
+        paddingTop: 75,
     },
     refereeContainer: {
         display: 'flex',
@@ -182,9 +180,10 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [gameState, previousGameState])
 
     useEffect(() => {
-        navigation.isFocused() && navigation.setParams({
-            [HEADER_ITEMS_PRESS_HANDLERS_KEYS[HEADER_ITEMS.SHARE]]: handleSharePuzzleClick
-        })
+        navigation.isFocused() &&
+            navigation.setParams({
+                [HEADER_ITEMS_PRESS_HANDLERS_KEYS[HEADER_ITEMS.SHARE]]: handleSharePuzzleClick,
+            })
     }, [navigation, handleSharePuzzleClick])
 
     const onNewGameMenuItemClick = useCallback(

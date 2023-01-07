@@ -4,7 +4,7 @@ import {
     TouchableHighlight,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native'
 
 // import { TouchableOpacity } from 'react-native-gesture-handler'

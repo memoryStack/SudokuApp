@@ -59,9 +59,7 @@ export const Settings_ = ({ navigation, onPress }) => {
                             touchable={TouchableTypes.withoutFeedBack}
                             onPress={() => onItemPress(routeKey)}
                         >
-                            <Text style={{ padding: 20 }}>
-                                {label}
-                            </Text>
+                            <Text style={{ padding: 20 }}>{label}</Text>
                         </TouchableOpacity>
                     )
                 })}

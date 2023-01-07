@@ -9,22 +9,14 @@ import { ROUTES } from './route.constants'
 
 const getScreens = Stack => {
     return routes.map(({ name, component }) => (
-        <Stack.Screen
-            name={name}
-            key={name}
-            component={component}
-            options={getNavigationOptions}
-        />
+        <Stack.Screen name={name} key={name} component={component} options={getNavigationOptions} />
     ))
 }
 
 export const getNavigator = () => {
     const Stack = createStackNavigator()
     return (
-        <Stack.Navigator
-            initialRouteName={ROUTES.HOME}
-            screenOptions={{ headerShown: true }}
-        >
+        <Stack.Navigator initialRouteName={ROUTES.HOME} screenOptions={{ headerShown: true }}>
             {getScreens(Stack)}
         </Stack.Navigator>
     )
