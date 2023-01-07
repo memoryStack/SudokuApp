@@ -123,7 +123,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         } else {
             onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: selectedGameMenuItem })
         }
-    }, [route, onAction])
+    }, [onAction])
 
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
