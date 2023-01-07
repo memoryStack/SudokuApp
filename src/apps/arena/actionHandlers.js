@@ -95,11 +95,6 @@ const getSharedPuzzleError = url => {
     return ''
 }
 
-const handleBackPress = ({ getState }) => {
-    const { navigation } = getState()
-    navigation && navigation.goBack()
-}
-
 const startGame = ({ mainNumbers, notes, selectedCell, moves, difficultyLevel, mistakes, time, pencilState }) => {
     // board state
     updateMainNumbers(mainNumbers)
@@ -311,7 +306,6 @@ const handleGameOver = ({ setState, params: fadeAnim }) => {
 
 const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
-    ON_BACK_PRESS: 'ON_BACK_PRESS',
     ON_SHARE_CLICK: 'ON_SHARE_CLICK',
     ON_INIT_SHARED_PUZZLE: 'ON_INIT_SHARED_PUZZLE',
     ON_NEW_GAME_MENU_ITEM_PRESS: 'ON_NEW_GAME_MENU_ITEM_PRESS',
@@ -325,8 +319,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
-    [ACTION_TYPES.ON_BACK_PRESS]: handleBackPress,
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
     [ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS]: handleMenuItemPress,

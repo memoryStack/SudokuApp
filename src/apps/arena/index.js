@@ -34,6 +34,9 @@ import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
+import { ROUTES, HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_ITEMS } from '../../navigation/route.constants'
+
+
 
 const MAX_AVAILABLE_HINTS = 3
 const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
@@ -45,6 +48,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: 'white',
+        paddingTop: 75
     },
     refereeContainer: {
         display: 'flex',
@@ -177,7 +181,11 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         }
     }, [gameState, previousGameState])
 
-    const handleBackPress = () => onAction({ type: ACTION_TYPES.ON_BACK_PRESS })
+    useEffect(() => {
+        navigation.isFocused() && navigation.setParams({
+            [HEADER_ITEMS_PRESS_HANDLERS_KEYS[HEADER_ITEMS.SHARE]]: handleSharePuzzleClick
+        })
+    }, [navigation, handleSharePuzzleClick])
 
     const onNewGameMenuItemClick = useCallback(
         item => {
@@ -194,30 +202,6 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         if (!__DEV__) return null
         return <Button text={'Fill'} onClick={fillPuzzle} />
     }
-
-    const header = useMemo(() => {
-        return (
-            <View style={styles.headerButtonsContainer}>
-                <Touchable
-                    touchable={TouchableTypes.opacity}
-                    onPress={handleBackPress}
-                    hitSlop={HEADER_ICONS_TOUCHABLE_HIT_SLOP}
-                >
-                    <LeftArrow width={HEADER_ICON_DIMENSION} height={HEADER_ICON_DIMENSION} fill={HEADER_ICON_FILL} />
-                </Touchable>
-
-                {renderFillPuzzleBtn()}
-
-                <Touchable
-                    touchable={TouchableTypes.opacity}
-                    onPress={handleSharePuzzleClick}
-                    hitSlop={HEADER_ICONS_TOUCHABLE_HIT_SLOP}
-                >
-                    <ShareIcon width={HEADER_ICON_DIMENSION} height={HEADER_ICON_DIMENSION} fill={HEADER_ICON_FILL} />
-                </Touchable>
-            </View>
-        )
-    }, [handleSharePuzzleClick])
 
     const renderHintsMenu = () => {
         if (!showHintsMenu) return null
@@ -262,7 +246,6 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
-                {header}
                 <Refree />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
@@ -287,6 +270,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
                 ) : null}
                 {renderSmartHintHC()}
                 {renderHintsMenu()}
+                {renderFillPuzzleBtn()}
             </View>
         </Page>
     )

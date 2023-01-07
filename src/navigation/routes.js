@@ -17,14 +17,24 @@ export const routes = [
     {
         name: ROUTES.ARENA,
         component: Arena,
+        headerItems: {
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SHARE]
+        }
     },
     {
         name: ROUTES.PLAY_GUIDE,
         component: PlayGuide,
+        headerItems: {
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        }
     },
     {
         name: ROUTES.SOME_PAGE,
         component: TempScreen,
+        headerItems: {
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        }
     },
 ]
 

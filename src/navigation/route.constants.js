@@ -11,5 +11,15 @@ export const HEADER_SECTION = {
 }
 
 export const HEADER_ITEMS = {
-    SETTINGS: 'SETTINGS'
+    BACK: 'BACK',
+    SETTINGS: 'SETTINGS',
+    SHARE: 'SHARE',
+}
+
+// todo: we should change it's name as these keys will be defined in 
+//      navigation params only
+export const HEADER_ITEMS_PRESS_HANDLERS_KEYS = {
+    [HEADER_ITEMS.BACK]: 'ON_BACK_PRESS',
+    [HEADER_ITEMS.SETTINGS]: 'ON_SETTINGS_PRESS',
+    [HEADER_ITEMS.SHARE]: 'ON_SHARE_PRESS',
 }

@@ -15,3 +15,8 @@ export const getHeaderRightItems = (route) => {
     const routeName = getRouteNameFromRoute(route)
     return _get(routesHeaderItems, [routeName, HEADER_SECTION.RIGHT], [])
 }
+
+export const getHeaderLeftItems = (route) => {
+    const routeName = getRouteNameFromRoute(route)
+    return _get(routesHeaderItems, [routeName, HEADER_SECTION.LEFT], [])
+}
