@@ -20,6 +20,7 @@
         "@reduxjs/toolkit": "^1.8.0",
         "fast-sudoku-puzzles": "https://memoryStack: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@github.com/memoryStack/SudokuPuzzleCPPModule.git#master",
         "lodash": "https://github.com/memoryStack/lodash.git",
+        "prop-types": "^15.8.1",
         "react": "17.0.1",
         "react-native": "0.64.4",
         "react-native-code-push": "^7.0.1",
@@ -33,14 +34,17 @@
     "devDependencies": {
         "@babel/core": "^7.12.9",
         "@babel/runtime": "^7.12.5",
-        "@react-native-community/eslint-config": "^2.0.0",
         "@testing-library/react-hooks": "^8.0.1",
         "babel-jest": "^26.6.3",
-        "eslint": "7.14.0",
-        "eslint-plugin-react-hooks": "^4.2.0",
+        "eslint": "^8.31.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-jsx-a11y": "^6.6.1",
+        "eslint-plugin-react": "^7.31.11",
+        "eslint-plugin-react-hooks": "^4.6.0",
         "jest": "^26.6.3",
         "metro-react-native-babel-preset": "^0.64.0",
-        "react-test-renderer": "17.0.1",
-        "prettier": "^2.4.1"
+        "prettier": "^2.4.1",
+        "react-test-renderer": "17.0.1"
     }
 }

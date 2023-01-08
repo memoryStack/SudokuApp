@@ -1,5 +1,9 @@
 {
-  "git.ignoreLimitWarning": true,
-  "eslint.enable": false,
-  "editor.tabSize": 4
+    "git.ignoreLimitWarning": true,
+    "eslint.enable": true,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
 }

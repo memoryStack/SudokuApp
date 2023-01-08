@@ -6,6 +6,7 @@ import _findIndex from 'lodash/src/utils/findIndex'
 import _isInteger from 'lodash/src/utils/isInteger'
 import _noop from 'lodash/src/utils/noop'
 
+import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import {
     LEVEL_DIFFICULTIES,
     GAME_STATE,
@@ -22,7 +23,6 @@ import {
     getPuzzleSolutionType,
     initNotes,
 } from './utils/util'
-import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '../../utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
 import {
@@ -30,6 +30,7 @@ import {
     DEEPLINK_PUZZLE_NO_SOLUTIONS,
     RESUME,
     CUSTOMIZE_YOUR_PUZZLE_TITLE,
+    SOMETHING_WENT_WRONG,
 } from '../../resources/stringLiterals'
 import { updateGameState } from './store/actions/gameState.actions'
 import { consoleLog } from '../../utils/util'
@@ -42,12 +43,13 @@ import {
 } from './store/actions/board.actions'
 import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
-import { SOMETHING_WENT_WRONG } from '../../resources/stringLiterals'
 import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
-import { BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES } from './constants'
+import {
+    BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
+} from './constants'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -70,15 +72,11 @@ const getMainNumbersFromString = puzzle => {
 }
 
 const getSharedPuzzleNumbersFromUrl = url => {
-    const firstNumberIndex = _findIndex(url, char => {
-        return _isInteger(parseInt(char, 10))
-    })
+    const firstNumberIndex = _findIndex(url, char => _isInteger(parseInt(char, 10)))
     return url.substring(firstNumberIndex)
 }
 
-const areInvalidNumbersCountInSharedPuzzle = url => {
-    return getSharedPuzzleNumbersFromUrl(url).length !== BOARD_CELLS_COUNT
-}
+const areInvalidNumbersCountInSharedPuzzle = url => getSharedPuzzleNumbersFromUrl(url).length !== BOARD_CELLS_COUNT
 
 const areInvalidCharactersInSharedPuzzle = url => {
     const puzzleNumbers = getSharedPuzzleNumbersFromUrl(url)
@@ -95,7 +93,9 @@ const getSharedPuzzleError = url => {
     return ''
 }
 
-const startGame = ({ mainNumbers, notes, selectedCell, moves, difficultyLevel, mistakes, time, pencilState }) => {
+const startGame = ({
+    mainNumbers, notes, selectedCell, moves, difficultyLevel, mistakes, time, pencilState,
+}) => {
     // board state
     updateMainNumbers(mainNumbers)
     updateNotes(notes)
@@ -116,13 +116,11 @@ const startGame = ({ mainNumbers, notes, selectedCell, moves, difficultyLevel, m
 }
 
 const startNewGame = ({ mainNumbers, difficultyLevel }) => {
-    const initRefereeData = () => {
-        return {
-            difficultyLevel,
-            mistakes: 0,
-            time: { hours: 0, minutes: 0, seconds: 0 },
-        }
-    }
+    const initRefereeData = () => ({
+        difficultyLevel,
+        mistakes: 0,
+        time: { hours: 0, minutes: 0, seconds: 0 },
+    })
 
     startGame({
         mainNumbers,
@@ -319,7 +317,7 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => {}, // most likely i won't use this action
+    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
     [ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS]: handleMenuItemPress,

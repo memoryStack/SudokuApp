@@ -1,6 +1,6 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react'
+import React from 'react'
 
-import { View, StyleSheet, Linking, Image, Text } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 
 import _noop from 'lodash/src/utils/noop'
 
@@ -22,12 +22,10 @@ export const getLinkTagSubstr = (startIndex, str) => {
     return str.substring(startIndex, endIndex)
 }
 
-export const getLinkTagData = tag => {
-    return {
-        routeKey: tag.match(/(?<=#).*?(?=#)/i)[0],
-        text: tag.match(/(?<=>).*?(?=<)/i)[0],
-    }
-}
+export const getLinkTagData = tag => ({
+    routeKey: tag.match(/(?<=#).*?(?=#)/i)[0],
+    text: tag.match(/(?<=>).*?(?=<)/i)[0],
+})
 
 export const getTextConfig = text => {
     const result = []
@@ -72,16 +70,14 @@ export const ExperimentalText = ({ navigation }) => {
 
         return (
             <Text>
-                {textConfig.map(({ text, isLink, routeKey }) => {
-                    return (
-                        <Text
-                            style={[isLink ? styles.link : null]}
-                            onPress={isLink ? () => onLinkPress(routeKey) : _noop}
-                        >
-                            {text}
-                        </Text>
-                    )
-                })}
+                {textConfig.map(({ text, isLink, routeKey }) => (
+                    <Text
+                        style={[isLink ? styles.link : null]}
+                        onPress={isLink ? () => onLinkPress(routeKey) : _noop}
+                    >
+                        {text}
+                    </Text>
+                ))}
             </Text>
         )
     }
@@ -91,5 +87,5 @@ export const ExperimentalText = ({ navigation }) => {
 
 /*
     subtasks
-        1. decide a format for rendering the link 
+        1. decide a format for rendering the link
 */

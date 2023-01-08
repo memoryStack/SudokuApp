@@ -1,11 +1,13 @@
-import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import React, {
+    useState, useCallback, useEffect, useRef,
+} from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { Touchable, TouchableTypes } from '../components/Touchable'
+import { Touchable, TouchableTypes } from '../components/Touchable' // TODO: make linter catch issues like this
 import { GAME_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
@@ -13,8 +15,6 @@ import { GameOverCard } from './gameOverCard'
 import { CustomPuzzle } from './customPuzzle'
 import SmartHintHC from './smartHintHC'
 import { fonts } from '../../resources/fonts/font'
-import { ShareIcon } from '../../resources/svgIcons/share'
-import { LeftArrow } from '../../resources/svgIcons/leftArrow'
 import { HintsMenu } from './hintsMenu'
 import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
@@ -34,12 +34,9 @@ import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
-import { ROUTES, HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_ITEMS } from '../../navigation/route.constants'
+import { HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_ITEMS } from '../../navigation/route.constants'
 
 const MAX_AVAILABLE_HINTS = 3
-const HEADER_ICONS_TOUCHABLE_HIT_SLOP = { top: 16, right: 16, bottom: 16, left: 16 }
-const HEADER_ICON_FILL = 'rgba(0, 0, 0, .8)'
-const HEADER_ICON_DIMENSION = 32
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -93,7 +90,9 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu }) => {
+const Arena_ = ({
+    navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
+}) => {
     const [pageHeight, setPageHeight] = useState(0)
 
     const gameState = useSelector(getGameState)
@@ -102,7 +101,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 
     const previousGameState = usePrevious(gameState)
 
-    const fadeAnim = useRef(new Animated.Value(0)).current
+    const fadeAnim = useRef(new Animated.Value(0))
 
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
 
@@ -125,7 +124,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
-            onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim })
+            onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim.current })
         }
     }, [gameState, onAction])
 
@@ -162,14 +161,15 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [onAction])
 
     const hideCongratsModal = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD, payload: fadeAnim })
-    }, [])
+        onAction({ type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD, payload: fadeAnim.current })
+    }, [onAction])
 
+    // eslint-disable-next-line no-shadow
     const isPuzzlePresent = (currentGameState, previousGameState) => {
         const currentGameStateObj = new GameState(currentGameState)
         return (
-            currentGameStateObj.isGameActive() ||
-            (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
+            currentGameStateObj.isGameActive()
+            || (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
         )
     }
 
@@ -180,8 +180,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [gameState, previousGameState])
 
     useEffect(() => {
-        navigation.isFocused() &&
-            navigation.setParams({
+        navigation.isFocused()
+            && navigation.setParams({
                 [HEADER_ITEMS_PRESS_HANDLERS_KEYS[HEADER_ITEMS.SHARE]]: handleSharePuzzleClick,
             })
     }, [navigation, handleSharePuzzleClick])
@@ -199,7 +199,7 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
-        return <Button text={'Fill'} onClick={fillPuzzle} />
+        return <Button text="Fill" onClick={fillPuzzle} />
     }
 
     const renderHintsMenu = () => {
@@ -229,13 +229,11 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
         )
     }
 
-    const renderInputPanel = () => {
-        return (
-            <View style={styles.inputPanelContainer}>
-                <GameInputPanel />
-            </View>
-        )
-    }
+    const renderInputPanel = () => (
+        <View style={styles.inputPanelContainer}>
+            <GameInputPanel />
+        </View>
+    )
 
     const renderSmartHintHC = () => {
         if (!(pageHeight && showSmartHint)) return null
@@ -259,9 +257,11 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
                         style={styles.gameOverCardAbsoluteBG}
                         onPress={hideCongratsModal}
                     >
-                        <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim }]}>
+                        <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
                             <GameOverCard
-                                stats={{ mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - 2 }}
+                                stats={{
+                                    mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - 2,
+                                }}
                                 openNextGameMenu={hideCongratsModal}
                             />
                         </Animated.View>
