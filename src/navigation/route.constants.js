@@ -16,6 +16,10 @@ export const HEADER_ITEMS = {
     SHARE: 'SHARE',
 }
 
+export const ROUTE_HEADER_TITLES = {
+    [ROUTES.PLAY_GUIDE]: 'How To Play?',
+}
+
 // todo: we should change it's name as these keys will be defined in
 //      navigation params only
 export const HEADER_ITEMS_PRESS_HANDLERS_KEYS = {

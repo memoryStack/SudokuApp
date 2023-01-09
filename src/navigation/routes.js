@@ -3,7 +3,9 @@ import { Home } from '../apps/home'
 import { PlayGuide } from '../apps/playGuide'
 import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
-import { HEADER_ITEMS, HEADER_SECTION, ROUTES } from './route.constants'
+import {
+    HEADER_ITEMS, HEADER_SECTION, ROUTES, ROUTE_HEADER_TITLES,
+} from './route.constants'
 
 export const routes = [
     {
@@ -25,6 +27,7 @@ export const routes = [
         name: ROUTES.PLAY_GUIDE,
         component: PlayGuide,
         headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.PLAY_GUIDE],
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },

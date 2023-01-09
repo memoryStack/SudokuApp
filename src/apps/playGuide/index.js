@@ -7,40 +7,29 @@ import { Board } from '../arena/gameBoard'
 
 import { mainNumbers, cellsHighlightData } from './boardData'
 
-import { RULES_TEXT_CONFIG, PAGE_HEADING } from './playGuide.constants'
+import { RULES_TEXT_CONFIG } from './playGuide.constants'
 
 import { styles } from './style'
 
 const PlayGuide_ = () => {
-    const renderPageHeading = () => {
-        return <Text style={styles.heading}>{PAGE_HEADING}</Text>
-    }
+    const renderBoard = () => (
+        <Board
+            mainNumbers={mainNumbers}
+            showSmartHint // this is problamatic, why are we even sending this ??
+            cellsHighlightData={cellsHighlightData}
+            gameState={GAME_STATE.ACTIVE}
+            axisTextStyles={styles.axisText}
+        />
+    )
 
-    const renderBoard = () => {
-        return (
-            <Board
-                mainNumbers={mainNumbers}
-                showSmartHint={true} // this is problamatic, why are we even sending this ??
-                cellsHighlightData={cellsHighlightData}
-                gameState={GAME_STATE.ACTIVE}
-                axisTextStyles={styles.axisText}
-            />
-        )
-    }
-
-    const renderRules = () => {
-        return (
-            <Text style={styles.ruleText}>
-                {RULES_TEXT_CONFIG.map(({ label, styles = {} }) => {
-                    return <Text style={styles}>{label}</Text>
-                })}
-            </Text>
-        )
-    }
+    const renderRules = () => (
+        <Text style={styles.ruleText}>
+            {RULES_TEXT_CONFIG.map(({ label, styles = {} }) => <Text style={styles}>{label}</Text>)}
+        </Text>
+    )
 
     return (
         <View style={styles.container}>
-            {renderPageHeading()}
             {renderBoard()}
             {renderRules()}
         </View>
