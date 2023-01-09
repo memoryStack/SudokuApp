@@ -24,6 +24,7 @@ module.exports = {
     globals: {
         __DEV__: 'readonly',
     },
+    reportUnusedDisableDirectives: true,
     rules: {
         indent: ['error', 4, { SwitchCase: 1 }],
         quotes: ['error', 'single'],
