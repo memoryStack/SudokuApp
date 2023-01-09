@@ -6,8 +6,10 @@ export const styles = StyleSheet.create({
     overlayContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
-        width: '100%',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
         position: 'absolute',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },

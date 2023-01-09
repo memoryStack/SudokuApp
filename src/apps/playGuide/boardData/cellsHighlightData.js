@@ -7,9 +7,9 @@ import { setCellDataInHintResult } from '../../arena/utils/smartHints/util'
 import { forBoardEachCell } from '../../arena/utils/util'
 
 export const HOUSE_VS_CELLS_BACKGROUND_COLOR = {
-    [HOUSE_TYPE.ROW]: 'rgba(255, 0, 0, 0.5)',
-    [HOUSE_TYPE.COL]: 'rgba(0, 255, 0, 0.5)',
-    [HOUSE_TYPE.BLOCK]: 'rgba(0, 0, 255, 0.5)',
+    [HOUSE_TYPE.ROW]: 'rgba(255, 0, 0, 0.6)',
+    [HOUSE_TYPE.COL]: 'rgba(0, 255, 0, 0.6)',
+    [HOUSE_TYPE.BLOCK]: 'rgba(0, 0, 255, 0.6)',
 }
 
 const addHouseCellsHighlightData = (house, cellsHighlightData) => {
@@ -37,7 +37,5 @@ addHouseCellsHighlightData({ type: HOUSE_TYPE.ROW, num: 3 }, cellsHighlightData)
 addHouseCellsHighlightData({ type: HOUSE_TYPE.COL, num: 6 }, cellsHighlightData)
 addHouseCellsHighlightData({ type: HOUSE_TYPE.BLOCK, num: 6 }, cellsHighlightData)
 addRemainingCellsHighlightData(cellsHighlightData) // TODO: this step shouldn't be here
-
-console.log(JSON.stringify(cellsHighlightData))
 
 export { cellsHighlightData }

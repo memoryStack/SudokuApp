@@ -243,6 +243,7 @@ const Arena_ = ({
     return (
         <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} navigation={navigation}>
             <View style={styles.container} onLayout={onParentLayout}>
+                {renderFillPuzzleBtn()}
                 <Refree />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
@@ -269,7 +270,7 @@ const Arena_ = ({
                 ) : null}
                 {renderSmartHintHC()}
                 {renderHintsMenu()}
-                {renderFillPuzzleBtn()}
+
             </View>
         </Page>
     )

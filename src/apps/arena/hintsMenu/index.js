@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react'
+import React, { useEffect, useCallback } from 'react'
 
 import { View, Text } from 'react-native'
 
@@ -57,37 +57,27 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         )
     }
 
-    const renderVerticalSeparator = key => {
-        return <View style={styles.verticalSeperator} key={key} />
-    }
+    const renderVerticalSeparator = key => <View style={styles.verticalSeperator} key={key} />
 
-    const renderHorizontalSeparator = key => {
-        return <View style={styles.horizontalSeperator} key={key} />
-    }
+    const renderHorizontalSeparator = key => <View style={styles.horizontalSeperator} key={key} />
 
     const menuRows = []
     let menuRow = []
 
-    const isLastMenuItem = index => {
-        return index === HINTS_MENU_ITEMS.length - 1
-    }
+    const isLastMenuItem = index => index === HINTS_MENU_ITEMS.length - 1
 
-    const isRowLastItem = index => {
-        return index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastMenuItem(index)
-    }
+    const isRowLastItem = index => index % COLUMNS_COUNT === COLUMNS_COUNT - 1 || isLastMenuItem(index)
 
     const addMenuItemInRow = (item, index) => {
         menuRow.push(renderMenuItem(item))
         if (!isRowLastItem(index)) menuRow.push(renderVerticalSeparator(`verticalSep_${index}`))
     }
 
-    const renderMenuRow = () => {
-        return (
-            <View style={styles.menuRowContainer} key={`row_${menuRows.length}`}>
-                {menuRow}
-            </View>
-        )
-    }
+    const renderMenuRow = () => (
+        <View style={styles.menuRowContainer} key={`row_${menuRows.length}`}>
+            {menuRow}
+        </View>
+    )
 
     const addMenuRow = () => {
         if (menuRows.length) menuRows.push(renderHorizontalSeparator(`horizoSep_${menuRows.length}`))

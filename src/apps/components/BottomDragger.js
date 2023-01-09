@@ -1,5 +1,9 @@
-import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
-import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler } from 'react-native'
+import React, {
+    useState, useEffect, useImperativeHandle, useCallback,
+} from 'react'
+import {
+    View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler,
+} from 'react-native'
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
@@ -8,7 +12,7 @@ import { rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { EVENTS } from '../../constants/events'
 
-import { Touchable, TouchableTypes } from '../components/Touchable'
+import { Touchable, TouchableTypes } from './Touchable'
 
 const ANIMATION_DURATION = 150
 let HEADER_HEIGHT = 50
@@ -139,8 +143,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 onPanResponderRelease: (evt, gestureState) => {
                     let nextPosition = isFullView ? topMostPosition : bottomMostPosition
                     if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = bottomMostPosition
-                    else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL)
-                        nextPosition = topMostPosition
+                    else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) { nextPosition = topMostPosition }
                     moveDragger(nextPosition)
                 },
             }),
@@ -189,7 +192,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
             duration: ANIMATION_DURATION,
             useNativeDriver: true,
         }).start(() => {
-            const sholdBeFullView = toValue === topMostPosition ? true : false
+            const sholdBeFullView = toValue === topMostPosition
             if (sholdBeFullView !== isFullView) {
                 // there is a change in dragger's state so call callback and set new state
                 setFullView(sholdBeFullView)
@@ -215,14 +218,12 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         }
     }, [])
 
-    const renderHeader = () => {
-        return (
-            <View style={styles.header} {...panResponder.panHandlers}>
-                <View style={styles.clipStyle} />
-                <Text style={styles.headerText}>{headerText}</Text>
-            </View>
-        )
-    }
+    const renderHeader = () => (
+        <View style={styles.header} {...panResponder.panHandlers}>
+            <View style={styles.clipStyle} />
+            <Text style={styles.headerText}>{headerText}</Text>
+        </View>
+    )
 
     const renderBackgroundOverlay = () => {
         if (!isDraggerActive) return null
