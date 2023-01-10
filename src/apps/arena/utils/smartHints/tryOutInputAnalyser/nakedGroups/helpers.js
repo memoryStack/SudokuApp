@@ -3,9 +3,7 @@ import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import {
-    getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellNoteVisible,
-} from '../../../util'
+import { getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellNoteVisible } from '../../../util'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
@@ -38,12 +36,13 @@ export const getNotesFromCellsWithNotes = cellsWithNotes => cellsWithNotes.map((
 // TODO: think over the below type of DS special case
 /* below some funcs will work on CellWithNotes DS specially for try-out ananlysers */
 // TODO: should i handle it using the class based implementation ??
-export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => cells
-    .map(cell => ({
-        note: getCellVisibleNotes(boardNotes[cell.row][cell.col])[0],
-        cell,
-    }))
-    .sort(({ note: noteA }, { note: noteB }) => noteA - noteB)
+export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) =>
+    cells
+        .map(cell => ({
+            note: getCellVisibleNotes(boardNotes[cell.row][cell.col])[0],
+            cell,
+        }))
+        .sort(({ note: noteA }, { note: noteB }) => noteA - noteB)
 
 export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCells) => {
     const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
@@ -62,9 +61,10 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCell
 const getCellsWithNoCandidates = focusedCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    return focusedCells.filter(cell => (
-        isCellEmpty(cell, tryOutMainNumbers) && getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0
-    ))
+    return focusedCells.filter(
+        cell =>
+            isCellEmpty(cell, tryOutMainNumbers) && getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 0,
+    )
 }
 
 const getEmptyCellsErrorResult = cellsWithNoCandidates => {
@@ -77,10 +77,11 @@ const getEmptyCellsErrorResult = cellsWithNoCandidates => {
     }
 }
 
-const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells) => groupCandidates.filter(candidate => {
-    const candidateNakedSingleHostCells = getCandidateNakedSingleHostCells(candidate, focusedCells)
-    return candidateNakedSingleHostCells.length > 1
-})
+const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells) =>
+    groupCandidates.filter(candidate => {
+        const candidateNakedSingleHostCells = getCandidateNakedSingleHostCells(candidate, focusedCells)
+        return candidateNakedSingleHostCells.length > 1
+    })
 
 const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells) => {
     const firstCandidate = multipleCellsNakedSingleCandidates[0]
@@ -103,10 +104,11 @@ const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandida
 const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
 
-    return focusedCells.filter(cell => (
-        isCellNoteVisible(candidate, tryOutNotesInfo[cell.row][cell.col])
-        && getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1
-    ))
+    return focusedCells.filter(
+        cell =>
+            isCellNoteVisible(candidate, tryOutNotesInfo[cell.row][cell.col]) &&
+            getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1,
+    )
 }
 
 export const getAllInputsFilledResult = groupCandidates => {

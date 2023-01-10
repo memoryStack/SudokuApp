@@ -1,9 +1,5 @@
-import React, {
-    useState, useEffect, useImperativeHandle, useCallback,
-} from 'react'
-import {
-    View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler,
-} from 'react-native'
+import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
+import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler } from 'react-native'
 import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
@@ -143,7 +139,9 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 onPanResponderRelease: (evt, gestureState) => {
                     let nextPosition = isFullView ? topMostPosition : bottomMostPosition
                     if (isFullView && gestureState.dy > RELEASE_LIMIT_FOR_AUTO_SCROLL) nextPosition = bottomMostPosition
-                    else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) { nextPosition = topMostPosition }
+                    else if (!isFullView && gestureState.dy < -RELEASE_LIMIT_FOR_AUTO_SCROLL) {
+                        nextPosition = topMostPosition
+                    }
                     moveDragger(nextPosition)
                 },
             }),

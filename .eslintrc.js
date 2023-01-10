@@ -4,12 +4,8 @@ module.exports = {
         es2021: true,
         node: true,
     },
-    extends: [
-        'plugin:react/recommended',
-        'airbnb',
-    ],
-    overrides: [
-    ],
+    extends: ['plugin:react/recommended', 'airbnb'],
+    overrides: [],
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
@@ -17,10 +13,7 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    plugins: [
-        'react',
-        'react-hooks',
-    ],
+    plugins: ['react', 'react-hooks'],
     globals: {
         __DEV__: 'readonly',
     },
@@ -39,7 +32,8 @@ module.exports = {
         'react/forbid-prop-types': 'off', // TODO: enable it in future for ease of development, take it as late-night refactoring
         'no-unused-expressions': ['error', { allowShortCircuit: true }],
         'react/function-component-definition': [
-            'error', {
+            'error',
+            {
                 namedComponents: 'arrow-function',
                 unnamedComponents: 'arrow-function',
             },

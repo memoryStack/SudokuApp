@@ -3,9 +3,7 @@ import { Home } from '../apps/home'
 import { PlayGuide } from '../apps/playGuide'
 import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
-import {
-    HEADER_ITEMS, HEADER_SECTION, ROUTES, ROUTE_HEADER_TITLES,
-} from './route.constants'
+import { HEADER_ITEMS, HEADER_SECTION, ROUTES, ROUTE_HEADER_TITLES } from './route.constants'
 
 export const routes = [
     {

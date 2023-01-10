@@ -71,10 +71,7 @@ export const ExperimentalText = ({ navigation }) => {
         return (
             <Text>
                 {textConfig.map(({ text, isLink, routeKey }) => (
-                    <Text
-                        style={[isLink ? styles.link : null]}
-                        onPress={isLink ? () => onLinkPress(routeKey) : _noop}
-                    >
+                    <Text style={[isLink ? styles.link : null]} onPress={isLink ? () => onLinkPress(routeKey) : _noop}>
                         {text}
                     </Text>
                 ))}

@@ -1,6 +1,4 @@
-import React, {
-    useState, useCallback, useEffect, useRef,
-} from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -90,9 +88,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = ({
-    navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
-}) => {
+const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu }) => {
     const [pageHeight, setPageHeight] = useState(0)
 
     const gameState = useSelector(getGameState)
@@ -168,8 +164,8 @@ const Arena_ = ({
     const isPuzzlePresent = (currentGameState, previousGameState) => {
         const currentGameStateObj = new GameState(currentGameState)
         return (
-            currentGameStateObj.isGameActive()
-            || (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
+            currentGameStateObj.isGameActive() ||
+            (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
         )
     }
 
@@ -180,8 +176,8 @@ const Arena_ = ({
     }, [gameState, previousGameState])
 
     useEffect(() => {
-        navigation.isFocused()
-            && navigation.setParams({
+        navigation.isFocused() &&
+            navigation.setParams({
                 [HEADER_ITEMS_PRESS_HANDLERS_KEYS[HEADER_ITEMS.SHARE]]: handleSharePuzzleClick,
             })
     }, [navigation, handleSharePuzzleClick])
@@ -261,7 +257,10 @@ const Arena_ = ({
                         <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
                             <GameOverCard
                                 stats={{
-                                    mistakes, difficultyLevel, time, hintsUsed: MAX_AVAILABLE_HINTS - 2,
+                                    mistakes,
+                                    difficultyLevel,
+                                    time,
+                                    hintsUsed: MAX_AVAILABLE_HINTS - 2,
                                 }}
                                 openNextGameMenu={hideCongratsModal}
                             />
@@ -270,7 +269,6 @@ const Arena_ = ({
                 ) : null}
                 {renderSmartHintHC()}
                 {renderHintsMenu()}
-
             </View>
         </Page>
     )
