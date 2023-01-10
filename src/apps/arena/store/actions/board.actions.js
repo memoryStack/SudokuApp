@@ -18,11 +18,14 @@ import {
     forCellEachNote,
 } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
-import { getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell } from '../selectors/board.selectors'
+import {
+    getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell,
+} from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
 import { getHouseCells } from '../../utils/houseCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
+import { consoleLog } from '../../../../utils/util'
 
 const {
     setMainNumbers,
@@ -83,6 +86,14 @@ export const fastPencilAction = () => {
         },
     }
     invokeDispatch(addMove(constructMove(move)))
+
+    if (__DEV__) {
+        // so that i can add things in testData.js files
+        setTimeout(() => {
+            consoleLog(getMainNumbers(getStoreState()))
+            consoleLog(getNotesInfo(getStoreState()))
+        })
+    }
 }
 
 const getNewNotesBunchToShow = () => {
@@ -93,9 +104,7 @@ const getNewNotesBunchToShow = () => {
 
     forBoardEachCell(({ row, col }) => {
         if (isCellEmpty({ row, col }, mainNumbers)) {
-            _filter(notes[row][col], ({ noteValue, show }) => {
-                return !show && !duplicacyPresent(noteValue, mainNumbers, { row, col })
-            }).forEach(({ noteValue }) => {
+            _filter(notes[row][col], ({ noteValue, show }) => !show && !duplicacyPresent(noteValue, mainNumbers, { row, col })).forEach(({ noteValue }) => {
                 result.push({ cell: { row, col }, note: noteValue })
             })
         }
@@ -104,16 +113,10 @@ const getNewNotesBunchToShow = () => {
     return result
 }
 
-const getVisibileNotesBunchInCell = (cell, notes) => {
-    return _filter(notes[cell.row][cell.col], ({ show }) => {
-        return show
-    }).map(({ noteValue }) => {
-        return {
-            cell,
-            note: noteValue,
-        }
-    })
-}
+const getVisibileNotesBunchInCell = (cell, notes) => _filter(notes[cell.row][cell.col], ({ show }) => show).map(({ noteValue }) => ({
+    cell,
+    note: noteValue,
+}))
 
 const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
     const result = []
@@ -354,8 +357,7 @@ export const fillPuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
     forBoardEachCell(cell => {
-        if (isCellEmpty(cell, mainNumbers))
-            invokeDispatch(setCellMainNumber({ cell, number: mainNumbers[cell.row][cell.col].solutionValue }))
+        if (isCellEmpty(cell, mainNumbers)) invokeDispatch(setCellMainNumber({ cell, number: mainNumbers[cell.row][cell.col].solutionValue }))
     })
 }
 
