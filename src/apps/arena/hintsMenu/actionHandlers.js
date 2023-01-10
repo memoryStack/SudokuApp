@@ -19,18 +19,16 @@ const onInit = async ({ setState, params: { mainNumbers, notes } }) => {
 
 // TODO: analyze the asynchronous behaviour of this handler
 // i really need to brush up asynchronous in js
-const rawHintsPromise = (hintId, mainNumbers, notes) => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            getRawHints(hintId, mainNumbers, notes)
-                .then(resolve)
-                .catch(error => {
-                    consoleLog(hintId, error)
-                    resolve(null)
-                })
-        })
+const rawHintsPromise = (hintId, mainNumbers, notes) => new Promise(resolve => {
+    setTimeout(() => {
+        getRawHints(hintId, mainNumbers, notes)
+            .then(resolve)
+            .catch(error => {
+                consoleLog(hintId, error)
+                resolve(null)
+            })
     })
-}
+})
 
 const handleCloseHintsMenu = () => {
     hintsMenuVisibilityAction(false)

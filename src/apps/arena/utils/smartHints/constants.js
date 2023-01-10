@@ -49,6 +49,7 @@ const HINTS_IDS = {
     SASHIMI_FINNED_X_WING: 'SASHIMI_FINNED_X_WING',
     Y_WING: 'Y_WING',
     OMISSION: 'OMISSION',
+    REMOTE_PAIRS: 'REMOTE_PAIRS',
     ALL: 'ALL',
 }
 
@@ -89,20 +90,11 @@ const HINTS_MENU_ITEMS = [
         label: 'Y-Wing',
         id: HINTS_IDS.Y_WING,
     },
+    {
+        label: 'Remote Pairs',
+        id: HINTS_IDS.REMOTE_PAIRS,
+    },
 ]
-
-const NO_HINTS_FOUND_POPUP_TEXT = {
-    [HINTS_IDS.NAKED_SINGLE]: 'naked singles',
-    [HINTS_IDS.HIDDEN_SINGLE]: 'hidden singles',
-    [HINTS_IDS.NAKED_DOUBLE]: 'naked doubles',
-    [HINTS_IDS.HIDDEN_DOUBLE]: 'hidden doubles',
-    [HINTS_IDS.NAKED_TRIPPLE]: 'naked tripples',
-    [HINTS_IDS.HIDDEN_TRIPPLE]: 'hidden tripples',
-    [HINTS_IDS.X_WING]: 'x-wings',
-    [HINTS_IDS.Y_WING]: 'y-wings',
-    [HINTS_IDS.OMISSION]: 'Omissions',
-    [HINTS_IDS.ALL]: 'hints',
-}
 
 const HINT_TEXT_ELEMENTS_JOIN_CONJUGATION = {
     AND: 'and',
@@ -133,7 +125,6 @@ export {
     HOUSE_TYPE,
     HINTS_MENU_ITEMS,
     HINTS_IDS,
-    NO_HINTS_FOUND_POPUP_TEXT,
     UI_HINTS_COUNT_THRESHOLD,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
     HOUSE_TYPE_VS_FULL_NAMES,
