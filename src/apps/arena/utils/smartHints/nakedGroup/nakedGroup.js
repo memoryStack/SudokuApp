@@ -35,25 +35,24 @@ import {
     MAX_VALID_CELLS_COUNT,
 } from './nakedGroup.constants'
 
-export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => {
-    return _filter(getHouseCells(house), cell => {
-        if (!isCellEmpty(cell, mainNumbers)) return false
+export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => _filter(getHouseCells(house), cell => {
+    if (!isCellEmpty(cell, mainNumbers)) return false
 
-        return inRange(getCellVisibleNotesCount(notesData[cell.row][cell.col]), {
-            start: VALID_CELL_MINIMUM_NOTES_COUNT,
-            end: groupCandidatesCount,
-        })
+    return inRange(getCellVisibleNotesCount(notesData[cell.row][cell.col]), {
+        start: VALID_CELL_MINIMUM_NOTES_COUNT,
+        end: groupCandidatesCount,
     })
-}
+})
 
-const getDefaultGroupsFoundInHouses = () => {
-    return {
-        [HOUSE_TYPE.ROW]: {},
-        [HOUSE_TYPE.COL]: {},
-        [HOUSE_TYPE.BLOCK]: {},
-    }
-}
+const getDefaultGroupsFoundInHouses = () => ({
+    [HOUSE_TYPE.ROW]: {},
+    [HOUSE_TYPE.COL]: {},
+    [HOUSE_TYPE.BLOCK]: {},
+})
 
+// FIX_ME: should be renamed, when i read it months later it felt like it will return a map
+// with cellID and how many notes are visible in them, but after reading the implementation
+// found something else
 export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     const result = {}
     _forEach(cells, ({ row, col }) => {
@@ -69,13 +68,11 @@ export const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) =
     const notesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const candidates = Object.keys(notesInstancesCount)
     return (
-        candidates.length === groupCandidatesCount &&
-        _every(candidates, candidate => {
-            return inRange(notesInstancesCount[candidate], {
-                start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
-                end: groupCandidatesCount,
-            })
-        })
+        candidates.length === groupCandidatesCount
+        && _every(candidates, candidate => inRange(notesInstancesCount[candidate], {
+            start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
+            end: groupCandidatesCount,
+        }))
     )
 }
 
@@ -105,14 +102,10 @@ export const getAnotherSharedHouse = (mainHouse, selectedCells) => {
 
 export const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
     const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
-    return getHousesCellsSharedByCells(selectedCells).some(cell => {
-        return (
-            !isCellExists(cell, selectedCells) &&
-            groupCandidates.some(groupCandidate => {
-                return notesData[cell.row][cell.col][groupCandidate - 1].show
-            })
-        )
-    })
+    return getHousesCellsSharedByCells(selectedCells).some(cell => (
+        !isCellExists(cell, selectedCells)
+        && groupCandidates.some(groupCandidate => notesData[cell.row][cell.col][groupCandidate - 1].show)
+    ))
 }
 
 const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHouses) => {
