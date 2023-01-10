@@ -1,6 +1,5 @@
 import _isEmpty from 'lodash/src/utils/isEmpty'
 import _map from 'lodash/src/utils/map'
-import _noop from 'lodash/src/utils/noop'
 
 import { getNakedSingleRawHints } from './nakedSingle/nakedSingle'
 import { getHiddenSingleRawHints } from './hiddenSingle/hiddenSingle'
@@ -9,6 +8,7 @@ import { getHiddenGroupRawHints } from './hiddenGroup/hiddenGroup'
 import { getXWingRawHints } from './xWing'
 import { getYWingRawHints } from './yWing/yWing'
 import { getOmissionRawHints } from './omission/omission'
+import { getRemotePairsRawHints } from './remotePairs/remotePairs'
 
 import {
     transformNakedSingleRawHint,
@@ -46,7 +46,7 @@ const HINT_ID_VS_HANDLERS = {
     [HINTS_IDS.X_WING]: (mainNumbers, notesData) => getXWingRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.Y_WING]: (mainNumbers, notesData) => getYWingRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.OMISSION]: (mainNumbers, notesData) => getOmissionRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData) => _noop,
+    [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData) => getRemotePairsRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
 }
 
 const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {

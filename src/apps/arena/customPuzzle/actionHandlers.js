@@ -10,8 +10,8 @@ import {
     initMainNumbers,
     isCellEmpty,
     convertBoardCellNumToCell,
+    getPuzzleSolutionType,
 } from '../utils/util'
-import { getPuzzleSolutionType } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
 import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
@@ -61,7 +61,10 @@ const initBoardData = () => {
     // const str = '000800069000006312060010070100240005007500108005038040020000950001600703056000080'
 
     // unicorn case for hidden tripple. TODO: analyze it properly
-    const str = '085000291736000485291405736007503000000100840012000000004008009070290004020004600'
+    // const str = '085000291736000485291405736007503000000100840012000000004008009070290004020004600'
+
+    // remote pairs
+    const str = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
 
     if (__DEV__) {
         for (let i = 0; i < str.length; i++) {
@@ -132,30 +135,33 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
     const { row, col } = cell
 
     for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-        if (isCellEligibleForStatusUpdate(row, col))
+        if (isCellEligibleForStatusUpdate(row, col)) {
             mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
                 mainNumbers,
                 { row, col },
                 mainNumbers[row][col].value,
             )
+        }
     }
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {
-        if (isCellEligibleForStatusUpdate(row, col))
+        if (isCellEligibleForStatusUpdate(row, col)) {
             mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
                 mainNumbers,
                 { row, col },
                 mainNumbers[row][col].value,
             )
+        }
     }
     const { blockNum } = getBlockAndBoxNum(cell)
     for (let box = 0; box < CELLS_IN_HOUSE; box++) {
         const { row, col } = getRowAndCol(blockNum, box)
-        if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue)
+        if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue) {
             mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
                 mainNumbers,
                 { row, col },
                 mainNumbers[row][col].value,
             )
+        }
     }
 
     function isCellEligibleForStatusUpdate(row, col) {
