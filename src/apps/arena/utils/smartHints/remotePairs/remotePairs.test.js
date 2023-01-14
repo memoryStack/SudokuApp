@@ -1,9 +1,20 @@
-import { mainNumbers, notes } from './testData'
+import { mainNumbers, notes, possibleNotes } from './testData'
 
-import { getAllCellsWithPairs } from './remotePairs'
+import { getAllValidCellsWithPairs } from './remotePairs'
 
-// TODO: fix these linting errors
-describe('getAllCellsWithPairs()', () => {
+jest.mock('../../../../../redux/dispatch.helpers')
+jest.mock('../../../store/selectors/board.selectors')
+
+const mockBoardSelectors = () => {
+    const { getPossibleNotes } = require('../../../store/selectors/board.selectors')
+    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
+    getPossibleNotes.mockReturnValue(possibleNotes)
+    getStoreState.mockReturnValue({})
+}
+
+// TODO: fix these linting errors for test files
+describe('getAllValidCellsWithPairs()', () => {
+    mockBoardSelectors()
     test('returns all the cells which have only 2 notes in them', () => {
         const expectedResult = [
             { row: 0, col: 0 },
@@ -19,6 +30,6 @@ describe('getAllCellsWithPairs()', () => {
             { row: 5, col: 2 },
             { row: 5, col: 3 },
         ]
-        expect(getAllCellsWithPairs(mainNumbers, notes)).toStrictEqual(expectedResult)
+        expect(getAllValidCellsWithPairs(mainNumbers, notes)).toStrictEqual(expectedResult)
     })
 })

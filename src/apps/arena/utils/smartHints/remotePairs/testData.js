@@ -1,3 +1,5 @@
+import _cloneDeep from 'lodash/src/utils/cloneDeep'
+
 export const mainNumbers = [
     [
         {
@@ -3522,3 +3524,5 @@ export const notes = [
         ],
     ],
 ]
+
+export const possibleNotes = _cloneDeep(notes)

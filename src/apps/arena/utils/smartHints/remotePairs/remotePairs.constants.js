@@ -1,0 +1,1 @@
+export const NOTES_COUNT_IN_ELIGIBLE_CELLS = 2
