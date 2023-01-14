@@ -9,10 +9,7 @@ import { HOUSE_TYPE } from '../constants'
 import { filterNakedGroupEligibleCellsInHouse } from '../nakedGroup/nakedGroup'
 import { cellHasAllPossibleNotes } from '../validityTest/validity.helpers'
 
-import {
-    NOTES_COUNT_IN_ELIGIBLE_CELLS,
-    VALID_NOTES_PAIRS_HOST_CELLS_COUNT_THRESHOLD,
-} from './remotePairs.constants'
+import { NOTES_COUNT_IN_ELIGIBLE_CELLS, VALID_NOTES_PAIRS_HOST_CELLS_COUNT_THRESHOLD } from './remotePairs.constants'
 
 export const getRemotePairsRawHints = (mainNumbers, notes, maxHintsThreshold) => {
     const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes)
@@ -51,7 +48,8 @@ const getMapKeyFromNotesPair = notes => `${notes[0]}${notes[1]}`
 export const deleteInvalidNotesPairsKeys = notesPairsHostCells => {
     const keys = Object.keys(notesPairsHostCells)
     _forEach(keys, key => {
-        if (notesPairsHostCells[key].length < VALID_NOTES_PAIRS_HOST_CELLS_COUNT_THRESHOLD) delete notesPairsHostCells[key]
+        if (notesPairsHostCells[key].length < VALID_NOTES_PAIRS_HOST_CELLS_COUNT_THRESHOLD)
+            delete notesPairsHostCells[key]
     })
 }
 
