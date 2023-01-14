@@ -9,12 +9,15 @@ import { HOUSE_TYPE } from '../constants'
 import { filterNakedGroupEligibleCellsInHouse } from '../nakedGroup/nakedGroup'
 import { cellHasAllPossibleNotes } from '../validityTest/validity.helpers'
 
-import { NOTES_COUNT_IN_ELIGIBLE_CELLS } from './remotePairs.constants'
+import {
+    NOTES_COUNT_IN_ELIGIBLE_CELLS,
+    VALID_NOTES_PAIRS_HOST_CELLS_COUNT_THRESHOLD,
+} from './remotePairs.constants'
 
 export const getRemotePairsRawHints = (mainNumbers, notes, maxHintsThreshold) => {
     const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes)
-
     const notesPairsHostCells = getHostCellsForEachNotesPair(cellsWithValidNotes, notes)
+    deleteInvalidNotesPairsKeys(notesPairsHostCells)
 }
 
 export const getAllValidCellsWithPairs = (mainNumbers, notes) => {
@@ -32,15 +35,24 @@ export const getAllValidCellsWithPairs = (mainNumbers, notes) => {
 }
 
 export const getHostCellsForEachNotesPair = (cells, notes) => {
-    const result = new Map()
+    const result = {}
     _forEach(cells, cell => {
         const key = getMapKeyFromNotesPair(getCellVisibleNotes(notes[cell.row][cell.col]))
-        if (result.has(key)) result.get(key).push(cell)
-        else result.set(key, [cell])
+        if (result[key]) result[key].push(cell)
+        else result[key] = [cell]
     })
     return result
 }
 
 const getMapKeyFromNotesPair = notes => `${notes[0]}${notes[1]}`
+
+// TODO: check the eslinting error here
+// check if it's allowable for functions which has side effects
+export const deleteInvalidNotesPairsKeys = notesPairsHostCells => {
+    const keys = Object.keys(notesPairsHostCells)
+    _forEach(keys, key => {
+        if (notesPairsHostCells[key].length < VALID_NOTES_PAIRS_HOST_CELLS_COUNT_THRESHOLD) delete notesPairsHostCells[key]
+    })
+}
 
 const getNotesPairFromMapKey = key => [Number(key[0]), Number(key[1])]
