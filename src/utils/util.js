@@ -1,6 +1,7 @@
 import { PixelRatio } from 'react-native'
 
 import _inRange from 'lodash/src/utils/inRange'
+import _map from 'lodash/src/utils/map'
 
 export const rgba = function (hex, opacity) {
     hex = hex.replace('#', '')
@@ -38,9 +39,14 @@ if (Array.prototype.sameArrays === undefined) {
 
 if (Array.prototype.sortNumbers === undefined) {
     Array.prototype.sortNumbers = function () {
-        return this.sort(function (a, b) {
-            return a - b
-        })
+        return this.sort((a, b) => a - b)
+    }
+}
+
+// TODO: how to write test-cases for these utils ??
+if (Array.prototype.atIndexes === undefined) {
+    Array.prototype.atIndexes = function (indexes) {
+        return _map(indexes, index => this[index])
     }
 }
 
@@ -50,18 +56,14 @@ export const consoleLog = (...args) => {
 
 // TODO: fix it as per my requirements
 function noWhiteSpace(strings, ...placeholders) {
-    let withSpace = strings.reduce((result, string, i) => result + placeholders[i - 1] + string)
-    let withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ')
+    const withSpace = strings.reduce((result, string, i) => result + placeholders[i - 1] + string)
+    const withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ')
     return withoutSpace
 }
 
 // TODO: make it explicit here that this is a callback to Array.filter
-export const onlyUnique = (value, index, self) => {
-    return self.indexOf(value) === index
-}
+export const onlyUnique = (value, index, self) => self.indexOf(value) === index
 
-export const roundToNearestPixel = sizeInDp => {
-    return PixelRatio.roundToNearestPixel(sizeInDp)
-}
+export const roundToNearestPixel = sizeInDp => PixelRatio.roundToNearestPixel(sizeInDp)
 
 export const inRange = (value, { start, end }) => _inRange(value, start, end + 1)

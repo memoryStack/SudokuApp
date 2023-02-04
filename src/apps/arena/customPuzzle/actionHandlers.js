@@ -66,6 +66,14 @@ const initBoardData = () => {
     // remote pairs
     const str = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
 
+    // it has remote pairs which doesn't make any cycle at all, links cross each other
+    // const str = '360859004519472386408613950146738295900541000005926401054387009093164500001295043'
+
+    // example that a lot of notes can be removed, not only in cell which is common to end points.
+    // it also shows that we can apply this technique even when we have odd number of cells in our chain
+    // https://hodoku.sourceforge.net/en/show_example.php?file=rp02&tech=Remote+Pair
+    // const str = '178609050934150607256703010793560041641037590825914736567301000410075060380406175'
+
     if (__DEV__) {
         for (let i = 0; i < str.length; i++) {
             const { row, col } = convertBoardCellNumToCell(i)
