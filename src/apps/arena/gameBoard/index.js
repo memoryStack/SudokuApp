@@ -4,13 +4,16 @@ import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
 import _get from 'lodash/src/utils/get'
+import _set from 'lodash/src/utils/set'
+import _noop from 'lodash/src/utils/noop'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
-import { areSameCells, areCommonHouseCells } from '../utils/util'
+import {
+    areSameCells, areCommonHouseCells, forBoardEachCell, forCellEachNote,
+} from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
 import {
@@ -22,6 +25,7 @@ import {
 
 import { getStyles } from './style'
 import { Cell } from './cell'
+import { consoleLog } from '../../../utils/util'
 
 const looper = []
 const bordersLooper = []
@@ -56,6 +60,16 @@ const Board_ = ({
         // consider any other number as clue
         return styles.clueNumColor
     }
+
+    const notesRefs = useMemo(() => {
+        const result = []
+        forBoardEachCell(({ row, col }) => {
+            forCellEachNote((_, noteIdx) => {
+                _set(result, [row, col, noteIdx], React.createRef())
+            })
+        })
+        return result
+    }, [])
 
     const isCustomPuzleScreen = () => screenName === SCREEN_NAME.CUSTOM_PUZZLE
 
@@ -147,6 +161,7 @@ const Board_ = ({
                                 selectedMainNumber={selectedCellMainValue}
                                 showSmartHint={showSmartHint}
                                 showCellContent={shouldShowCellContent()}
+                                notesRefs={notesRefs[row][col]}
                             />
                         </View>
                     )
