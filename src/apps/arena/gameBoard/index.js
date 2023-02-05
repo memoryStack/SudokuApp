@@ -132,24 +132,22 @@ const Board_ = ({
                     }
 
                     return (
-                        <View style={{ flexDirection: 'row' }}>
-                            {/* eslint-disable-next-line react/no-array-index-key */}
-                            <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${index}`}>
-                                <Cell
-                                    row={row}
-                                    col={col}
-                                    cellBGColor={getCellBackgroundColor(cell)}
-                                    mainValueFontColor={getMainNumFontColor(cell)}
-                                    cellMainValue={mainNumbers[row][col].value}
-                                    cellNotes={_get(notes, [row, col])}
-                                    onCellClick={onCellClick}
-                                    displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
-                                    smartHintData={_get(cellsHighlightData, [row, col])}
-                                    selectedMainNumber={selectedCellMainValue}
-                                    showSmartHint={showSmartHint}
-                                    showCellContent={shouldShowCellContent()}
-                                />
-                            </View>
+                        // eslint-disable-next-line react/no-array-index-key
+                        <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${index}`}>
+                            <Cell
+                                row={row}
+                                col={col}
+                                cellBGColor={getCellBackgroundColor(cell)}
+                                mainValueFontColor={getMainNumFontColor(cell)}
+                                cellMainValue={mainNumbers[row][col].value}
+                                cellNotes={_get(notes, [row, col])}
+                                onCellClick={onCellClick}
+                                displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
+                                smartHintData={_get(cellsHighlightData, [row, col])}
+                                selectedMainNumber={selectedCellMainValue}
+                                showSmartHint={showSmartHint}
+                                showCellContent={shouldShowCellContent()}
+                            />
                         </View>
                     )
                 })}
