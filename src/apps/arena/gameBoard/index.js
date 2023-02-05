@@ -44,14 +44,11 @@ const Board_ = ({
 }) => {
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
-    const styles = useMemo(() => {
-        return getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH })
-    }, [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
+    const styles = useMemo(() => getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH }), [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
 
     const selectedCellMainValue = _get(mainNumbers, [selectedCell.row, selectedCell.col, 'value'], 0)
 
-    const sameValueAsSelectedBox = cell =>
-        selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
+    const sameValueAsSelectedBox = cell => selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
 
     const getCustomPuzzleMainNumFontColor = cell => {
         const isWronglyPlaced = mainNumbers[cell.row][cell.col].wronglyPlaced
@@ -60,9 +57,7 @@ const Board_ = ({
         return styles.clueNumColor
     }
 
-    const isCustomPuzleScreen = () => {
-        return screenName === SCREEN_NAME.CUSTOM_PUZZLE
-    }
+    const isCustomPuzleScreen = () => screenName === SCREEN_NAME.CUSTOM_PUZZLE
 
     const getMainNumFontColor = cell => {
         const { row, col } = cell
@@ -79,20 +74,15 @@ const Board_ = ({
     }
 
     const getSmartHintActiveBgColor = cell => {
-        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell))
-            return styles.selectedCellBGColor
+        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) { return styles.selectedCellBGColor }
         return _get(cellsHighlightData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
     }
 
-    const shouldShowCellContent = () => {
-        return [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(
-            gameState,
-        )
-    }
+    const shouldShowCellContent = () => [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(
+        gameState,
+    )
 
-    const hasSameValueInSameHouseAsSelectedCell = cell => {
-        return areCommonHouseCells(cell, selectedCell) && sameValueAsSelectedBox(cell)
-    }
+    const hasSameValueInSameHouseAsSelectedCell = cell => areCommonHouseCells(cell, selectedCell) && sameValueAsSelectedBox(cell)
 
     const getCustomPuzzleBoardCellBgColor = cell => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
@@ -118,9 +108,7 @@ const Board_ = ({
         return getActiveGameBoardCellBgCell(cell)
     }
 
-    const shouldMarkCellAsInhabitable = cell => {
-        return _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false)
-    }
+    const shouldMarkCellAsInhabitable = cell => _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false)
 
     const renderRow = (row, key) => {
         const rowAdditionalStyles = {
@@ -145,6 +133,7 @@ const Board_ = ({
 
                     return (
                         <View style={{ flexDirection: 'row' }}>
+                            {/* eslint-disable-next-line react/no-array-index-key */}
                             <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${index}`}>
                                 <Cell
                                     row={row}
@@ -179,7 +168,7 @@ const Board_ = ({
         }
 
         return (
-            <View style={[styles.gridBorderContainer, orientationBasedStyles]} pointerEvents={'none'}>
+            <View style={[styles.gridBorderContainer, orientationBasedStyles]} pointerEvents="none">
                 {bordersLooper.map(borderNum => {
                     const boldBorder = borderNum === 3 || borderNum === 6
                     const borderViewStyle = boldBorder ? thickBorderStyle : normalBorderStyle
@@ -189,27 +178,19 @@ const Board_ = ({
         )
     }
 
-    const renderAxisText = label => {
-        return <Text style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}>{label}</Text>
-    }
+    const renderAxisText = label => <Text style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}>{label}</Text>
 
-    const yAxis = useMemo(() => {
-        return <View style={styles.yAxis}>{BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}</View>
-    }, [showSmartHint])
+    const yAxis = useMemo(() => <View style={styles.yAxis}>{BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}</View>, [showSmartHint])
 
-    const xAxis = useMemo(() => {
-        return <View style={styles.xAxis}>{BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}</View>
-    }, [showSmartHint])
+    const xAxis = useMemo(() => <View style={styles.xAxis}>{BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}</View>, [showSmartHint])
 
-    const renderBoard = () => {
-        return (
-            <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
-                {looper.map((row, index) => renderRow(row, `${index}`))}
-                {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
-                {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
-            </View>
-        )
-    }
+    const renderBoard = () => (
+        <View style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}>
+            {looper.map((row, index) => renderRow(row, `${index}`))}
+            {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
+            {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
+        </View>
+    )
 
     return (
         <>
