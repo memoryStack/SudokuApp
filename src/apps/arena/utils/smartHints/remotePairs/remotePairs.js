@@ -1,6 +1,3 @@
-// NOTE: take some handlers from naked double or tripple as well
-// they might come in handy in this hint
-
 import _forEach from 'lodash/src/utils/forEach'
 import _find from 'lodash/src/utils/find'
 import _map from 'lodash/src/utils/map'
@@ -8,8 +5,9 @@ import _filter from 'lodash/src/utils/filter'
 import _every from 'lodash/src/utils/every'
 import _isNil from 'lodash/src/utils/isNil'
 import _isEmpty from 'lodash/src/utils/isEmpty'
-// import _some from 'lodash/src/utils/some' // TODO: add this into utils
-// import _reduce from 'lodash/src/utils/reduce' // TODO: add this into utils
+import _some from 'lodash/src/utils/some'
+import _reduce from 'lodash/src/utils/reduce'
+
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 
 import {
@@ -22,9 +20,10 @@ import {
     isCellExists,
     isCellNoteVisible,
 } from '../../util'
-import { HOUSE_TYPE } from '../constants'
+
 import { filterNakedGroupEligibleCellsInHouse } from '../nakedGroup/nakedGroup'
 import { cellHasAllPossibleNotes } from '../validityTest/validity.helpers'
+import { HOUSE_TYPE } from '../constants'
 
 import {
     NOTES_COUNT_IN_ELIGIBLE_CELLS,
@@ -132,8 +131,10 @@ export const isValidChainOfCells = cells => {
     try to optimize the ordering of cells, and cells from which notes will be removed
     because this will be calculated multiple times
 */
-export const validChainRemovesNotes = (chainCells, remotePairNotes, notes) => getRemovableNotesEligibleCells(chainCells, remotePairNotes, notes)
-    .some(removableNotesHostCell => isChainRemovesNotesInCell(removableNotesHostCell, getOrderedChainCells(chainCells)))
+export const validChainRemovesNotes = (chainCells, remotePairNotes, notes) => {
+    const eligibleCells = getRemovableNotesEligibleCells(chainCells, remotePairNotes, notes)
+    return _some(eligibleCells, removableNotesHostCell => isChainRemovesNotesInCell(removableNotesHostCell, getOrderedChainCells(chainCells)))
+}
 
 // TODO: can we merge this and above functions ??
 export const getCellsWithNotesToBeRemoved = (validChainCells, remoteNotesPair, notes) => getRemovableNotesEligibleCells(validChainCells, remoteNotesPair, notes)
@@ -147,7 +148,7 @@ const getRemovableNotesEligibleCells = (chainCells, visibleNotes, notes) => {
     // have atleast one of the note from the list
     const result = []
     forBoardEachCell(cell => {
-        const anyCellNoteVisible = visibleNotes.some(note => isCellNoteVisible(note, notes[cell.row][cell.col]))
+        const anyCellNoteVisible = _some(visibleNotes, note => isCellNoteVisible(note, notes[cell.row][cell.col]))
         if (anyCellNoteVisible) result.push(cell)
     })
     return _filter(result, cell => !isCellExists(cell, chainCells))
@@ -177,7 +178,7 @@ export const getOrderedChainCells = cells => {
 
     const cellsNum = Object.keys(eachCellCommonHousesCells)
 
-    const cellsVisited = cellsNum.reduce((acc, cellNum) => {
+    const cellsVisited = _reduce(cellsNum, (acc, cellNum) => {
         acc[cellNum] = false
         return acc
     }, {})
@@ -211,7 +212,7 @@ export const isChainPossibleWithAllCells = eachCellCommonHousesCells => {
 const getCellsVisitedStatus = eachCellCommonHousesCells => {
     const cellsNum = Object.keys(eachCellCommonHousesCells)
 
-    const cellsVisited = cellsNum.reduce((acc, cellNum) => {
+    const cellsVisited = _reduce(cellsNum, (acc, cellNum) => {
         acc[cellNum] = false
         return acc
     }, {})
