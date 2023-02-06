@@ -71,6 +71,7 @@ const Cell_ = ({
                         key={`${noteNum}`}
                         ref={notesRefs[noteNum]}
                         style={styles.noteContainer}
+                        collapsable={false}
                     >
                         <Text
                             style={[

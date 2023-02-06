@@ -44,6 +44,7 @@ module.exports = {
         'no-use-before-define': 'off', // couldn't make it work only for functions. so disabling it for now
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
+        'react/jsx-props-no-spreading': 'off',
         // 'no-use-before-define': ['error', { functions: false }], // TODO: check how to use this rule optimally because it conflicts with "clean code" book suggestion
     },
 }
