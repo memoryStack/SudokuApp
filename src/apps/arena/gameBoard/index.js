@@ -6,7 +6,9 @@ import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import { Svg, Path, Circle } from 'react-native-svg'
+import {
+    Svg, Path, Circle, Defs, Marker,
+} from 'react-native-svg'
 
 import _get from 'lodash/src/utils/get'
 import _set from 'lodash/src/utils/set'
@@ -18,8 +20,8 @@ import _forEach from 'lodash/src/utils/forEach'
 import _reduce from 'lodash/src/utils/reduce'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
-import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
+import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import {
     areSameCells, areCommonHouseCells, forBoardEachCell, forCellEachNote,
 } from '../utils/util'
@@ -129,7 +131,7 @@ const getChainPath = async (notesRefs, boardRef) => {
                             },
                         }
                     })
-                    svgElementsArgs.push(...notesHighlightArgs)
+                    // svgElementsArgs.push(...notesHighlightArgs)
 
                     if (i + 1 < chainTrack.length) {
                         const currentCellOutNoteViewMeasurements = notesWithMeasurements[currentSpotCell.row][currentSpotCell.col][currentOut]
@@ -231,6 +233,20 @@ const Board_ = ({
                     height={SVG_CONTAINER_HEIGHT}
                     overflow="visible"
                 >
+                    <Defs>
+                        <Marker
+                            id="Triangle"
+                            viewBox="0 0 10 10"
+                            refX="0"
+                            refY="5"
+                            markerUnits="strokeWidth"
+                            markerWidth="4"
+                            markerHeight="3"
+                            orient="auto"
+                        >
+                            <Path d="M 0 0 L 10 5 L 0 10 z" stroke="red" fill="red" />
+                        </Marker>
+                    </Defs>
                     {
                         _map(outlineState.svgElements, ({ element: Element, props }) => (
                             <Element
@@ -241,6 +257,7 @@ const Board_ = ({
                                 strokeWidth={SVG_STROKE_WIDTH}
                                 strokeLinejoin="round"
                                 strokeDasharray="6, 4"
+                                markerEnd="url(#Triangle)"
                             />
                         ))
                     }
