@@ -37,7 +37,7 @@ import {
 import { getStyles } from './style'
 import { Cell } from './cell'
 import { consoleLog, roundToNearestPixel } from '../../../utils/util'
-import { getCurveCenters } from './curvePath.utils'
+import { getCurveCenters, getPointsOnLineFromEndpoints } from './curvePath.utils'
 
 const looper = []
 const bordersLooper = []
@@ -153,12 +153,16 @@ const getChainPath = async (notesRefs, boardRef) => {
                             x: nextCellBoardX + cellWidth / 2,
                             y: nextCellBoardY + cellHeight / 2,
                         }
+                        const line = { start: startPoint, end: endPoint }
+                        const { centerA, centerB } = getCurveCenters(line)
 
-                        const { centerA, centerB } = getCurveCenters({ start: startPoint, end: endPoint })
+                        const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, 6) // 7 units offset
 
                         const path = [
-                            'M', startPoint.x, startPoint.y,
-                            'C', centerA.x, centerA.y, centerB.x, centerB.y, endPoint.x, endPoint.y,
+                            'M', closeToStart.x, closeToStart.y,
+                            'L', closeToEnd.x, closeToEnd.y,
+                            // 'M', startPoint.x, startPoint.y,
+                            // // 'C', centerA.x, centerA.y, centerB.x, centerB.y, endPoint.x, endPoint.y,
                             // 'L', endPoint.x, endPoint.y,
                         ].join(' ')
 
@@ -251,15 +255,20 @@ const Board_ = ({
                     <Defs>
                         <Marker
                             id="Triangle"
-                            viewBox="0 0 10 10"
-                            refX="0"
-                            refY="5"
+                            viewBox="0 -5 10 10"
+                            refX="8"// TODO: understand these refs properly, these will help in positioning the arrows along the x-axis of line
+                            refY="0"
                             markerUnits="strokeWidth"
                             markerWidth="4"
                             markerHeight="3"
                             orient="auto"
                         >
-                            <Path d="M 0 0 L 10 5 L 0 10 z" stroke="red" fill="red" />
+                            <Path
+                                // d="M 0 0 L 10 5 L 0 10 z"
+                                d="M0,-5L10,0L0,5"
+                                stroke="red"
+                                fill="red"
+                            />
                         </Marker>
                     </Defs>
                     {
