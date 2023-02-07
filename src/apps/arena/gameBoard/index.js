@@ -37,6 +37,7 @@ import {
 import { getStyles } from './style'
 import { Cell } from './cell'
 import { consoleLog, roundToNearestPixel } from '../../../utils/util'
+import { getCurveCenters } from './curvePath.utils'
 
 const looper = []
 const bordersLooper = []
@@ -143,9 +144,22 @@ const getChainPath = async (notesRefs, boardRef) => {
                         const [, , , , nextCellPageX, nextCellPageY] = nextCellInNoteViewMeasurements
                         const { x: nextCellBoardX, y: nextCellBoardY } = getCellCordinatesRelativeToBoard(nextCellPageX, nextCellPageY)
                         // TODO: make these lines curved
+
+                        const startPoint = {
+                            x: currentCellBoardX + cellWidth / 2,
+                            y: currentCellBoardY + cellHeight / 2,
+                        }
+                        const endPoint = {
+                            x: nextCellBoardX + cellWidth / 2,
+                            y: nextCellBoardY + cellHeight / 2,
+                        }
+
+                        const { centerA, centerB } = getCurveCenters({ start: startPoint, end: endPoint })
+
                         const path = [
-                            'M', currentCellBoardX + cellWidth / 2, currentCellBoardY + cellHeight / 2,
-                            'L', nextCellBoardX + cellWidth / 2, nextCellBoardY + cellHeight / 2,
+                            'M', startPoint.x, startPoint.y,
+                            'C', centerA.x, centerA.y, centerB.x, centerB.y, endPoint.x, endPoint.y,
+                            // 'L', endPoint.x, endPoint.y,
                         ].join(' ')
 
                         svgElementsArgs.push({
@@ -254,7 +268,7 @@ const Board_ = ({
                                 {...props}
                                 // stroke="rgb(152, 3, 252)"
                                 stroke="red"
-                                fill="rgba(0, 0, 0, 0.2)"
+                                // fill="rgba(0, 0, 0, 0.2)"
                                 strokeWidth={SVG_STROKE_WIDTH}
                                 strokeLinejoin="round"
                                 strokeDasharray="6, 4"

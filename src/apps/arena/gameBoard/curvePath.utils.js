@@ -41,3 +41,16 @@ export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
         closeToEnd,
     }
 }
+
+// write util which will give two points on one side only
+
+export const getCurveCenters = line => {
+    const angleInDegree = 45
+    const distanceOnLine = 30
+    // get points on line and then rotate them
+    const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, distanceOnLine)
+    return {
+        centerA: getRoatatedPoint(closeToStart, line.start, angleInDegree),
+        centerB: getRoatatedPoint(closeToEnd, line.end, 360 - angleInDegree),
+    }
+}
