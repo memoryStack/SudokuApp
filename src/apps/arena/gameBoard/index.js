@@ -45,7 +45,7 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const SVG_STROKE_WIDTH = roundToNearestPixel(3)
+const SVG_STROKE_WIDTH = roundToNearestPixel(2) // width 2 is good for chains
 
 const getChainPath = async (notesRefs, boardRef) => {
     const chainTrack = [
@@ -142,6 +142,7 @@ const getChainPath = async (notesRefs, boardRef) => {
                         const nextCellInNoteViewMeasurements = notesWithMeasurements[nextSpotCell.row][nextSpotCell.col][nextSpotIn]
                         const [, , , , nextCellPageX, nextCellPageY] = nextCellInNoteViewMeasurements
                         const { x: nextCellBoardX, y: nextCellBoardY } = getCellCordinatesRelativeToBoard(nextCellPageX, nextCellPageY)
+                        // TODO: make these lines curved
                         const path = [
                             'M', currentCellBoardX + cellWidth / 2, currentCellBoardY + cellHeight / 2,
                             'L', nextCellBoardX + cellWidth / 2, nextCellBoardY + cellHeight / 2,
