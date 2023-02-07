@@ -20,3 +20,24 @@ export const getRoatatedPoint = (point, pivot, angleInDegree) => {
         y: rotatedShiftedPoint.y + pivot.y,
     }
 }
+
+export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
+    const { start, end } = line
+
+    const segmentLength = Math.sqrt((start.x - end.x) ** 2 + (start.y - end.y) ** 2)
+
+    const closeToStart = {
+        x: start.x + ((end.x - start.x) * distanceOnLine) / segmentLength,
+        y: start.y + ((end.y - start.y) * distanceOnLine) / segmentLength,
+    }
+
+    const closeToEnd = {
+        x: end.x - ((end.x - start.x) * distanceOnLine) / segmentLength,
+        y: end.y - ((end.y - start.y) * distanceOnLine) / segmentLength,
+    }
+
+    return {
+        closeToStart,
+        closeToEnd,
+    }
+}
