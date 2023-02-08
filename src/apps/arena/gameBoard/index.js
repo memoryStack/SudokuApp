@@ -72,6 +72,16 @@ const getChainPath = async (notesRefs, boardRef) => {
         {
             cell: { row: 3, col: 6 },
             in: 7,
+            out: 3,
+        },
+        {
+            cell: { row: 4, col: 6 },
+            in: 7,
+            out: 3,
+        },
+        {
+            cell: { row: 4, col: 7 },
+            in: 1,
         },
     ]
 
@@ -171,9 +181,12 @@ const getChainPath = async (notesRefs, boardRef) => {
                             props: {
                                 d: path,
                             },
+                            markerID: i === (chainTrack.length - 2) ? 'ShortLinkTriangle' : 'LongLinkTriangle',
                         })
                     }
                 }
+
+                console.log('@@@@@ xx', JSON.stringify(svgElementsArgs))
 
                 resolve({
                     svgElements: svgElementsArgs,
@@ -184,6 +197,25 @@ const getChainPath = async (notesRefs, boardRef) => {
         })
     })
 }
+
+const getMarker = ({ id, ...rest }) => (
+    <Marker
+        id={id}
+        viewBox="0 -5 10 10"
+        refY="0"
+        markerUnits="strokeWidth"
+        markerWidth="4"
+        markerHeight="3"
+        orient="auto"
+        {...rest}
+    >
+        <Path
+            d="M0,-5L10,0L0,5"
+            stroke="red"
+            fill="red"
+        />
+    </Marker>
+)
 
 const Board_ = ({
     screenName,
@@ -253,35 +285,19 @@ const Board_ = ({
                     overflow="visible"
                 >
                     <Defs>
-                        <Marker
-                            id="Triangle"
-                            viewBox="0 -5 10 10"
-                            refX="8"// TODO: understand these refs properly, these will help in positioning the arrows along the x-axis of line
-                            refY="0"
-                            markerUnits="strokeWidth"
-                            markerWidth="4"
-                            markerHeight="3"
-                            orient="auto"
-                        >
-                            <Path
-                                // d="M 0 0 L 10 5 L 0 10 z"
-                                d="M0,-5L10,0L0,5"
-                                stroke="red"
-                                fill="red"
-                            />
-                        </Marker>
+                        {getMarker({ id: 'LongLinkTriangle', refX: '8' })}
+                        {getMarker({ id: 'ShortLinkTriangle', refX: '5' })}
+                        {/* make one hollow arrow as marker */}
                     </Defs>
                     {
-                        _map(outlineState.svgElements, ({ element: Element, props }) => (
+                        _map(outlineState.svgElements, ({ element: Element, markerID = 'LongLinkTriangle', props }) => (
                             <Element
                                 {...props}
-                                // stroke="rgb(152, 3, 252)"
                                 stroke="red"
-                                // fill="rgba(0, 0, 0, 0.2)"
                                 strokeWidth={SVG_STROKE_WIDTH}
                                 strokeLinejoin="round"
                                 strokeDasharray="6, 4"
-                                markerEnd="url(#Triangle)"
+                                markerEnd={`url(#${markerID})`}
                             />
                         ))
                     }
