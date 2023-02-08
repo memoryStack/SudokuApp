@@ -50,38 +50,69 @@ const SVG_STROKE_WIDTH = roundToNearestPixel(2) // width 2 is good for chains
 
 const getChainPath = async (notesRefs, boardRef) => {
     const chainTrack = [
+        // {
+        //     cell: { row: 0, col: 0 },
+        //     out: 5,
+        // },
+        // {
+        //     cell: { row: 2, col: 2 },
+        //     in: 3,
+        //     out: 9,
+        // },
+        // {
+        //     cell: { row: 5, col: 2 },
+        //     in: 1,
+        //     out: 7,
+        // },
+        // {
+        //     cell: { row: 3, col: 4 },
+        //     in: 1,
+        //     out: 7,
+        // },
+        // {
+        //     cell: { row: 3, col: 6 },
+        //     in: 7,
+        //     out: 3,
+        // },
+        // {
+        //     cell: { row: 4, col: 6 },
+        //     in: 7,
+        //     out: 3,
+        // },
+        // {
+        //     cell: { row: 4, col: 7 },
+        //     in: 1,
+        //     out: 3,
+        // },
+
+        // small bond from right to left
+        // {
+        //     cell: { row: 0, col: 8 },
+        //     out: 1,
+        // },
+        // {
+        //     cell: { row: 0, col: 7 },
+        //     in: 1,
+        // },
+
+        // small bond from top to bottom
+        // {
+        //     cell: { row: 2, col: 6 },
+        //     out: 3,
+        // },
+        // {
+        //     cell: { row: 3, col: 6 },
+        //     in: 3,
+        // },
+
+        // long bond
         {
-            cell: { row: 0, col: 0 },
-            out: 5,
-        },
-        {
-            cell: { row: 2, col: 2 },
-            in: 3,
-            out: 9,
-        },
-        {
-            cell: { row: 5, col: 2 },
-            in: 1,
-            out: 7,
-        },
-        {
-            cell: { row: 3, col: 4 },
-            in: 1,
-            out: 7,
-        },
-        {
-            cell: { row: 3, col: 6 },
-            in: 7,
+            cell: { row: 2, col: 6 },
             out: 3,
         },
         {
             cell: { row: 4, col: 6 },
-            in: 7,
-            out: 3,
-        },
-        {
-            cell: { row: 4, col: 7 },
-            in: 1,
+            in: 9,
         },
     ]
 
@@ -169,10 +200,21 @@ const getChainPath = async (notesRefs, boardRef) => {
                         const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, 6) // 7 units offset
 
                         const path = [
-                            'M', closeToStart.x, closeToStart.y,
-                            'L', closeToEnd.x, closeToEnd.y,
+                            // straight line without offsets
                             // 'M', startPoint.x, startPoint.y,
-                            // // 'C', centerA.x, centerA.y, centerB.x, centerB.y, endPoint.x, endPoint.y,
+                            // 'L', endPoint.x, endPoint.y,
+
+                            // straight line with offsets
+                            // 'M', closeToStart.x, closeToStart.y,
+                            // 'L', closeToEnd.x, closeToEnd.y,
+
+                            // curve with offsets
+                            'M', closeToStart.x, closeToStart.y,
+                            'C', centerA.x, centerA.y, centerB.x, centerB.y, closeToEnd.x, closeToEnd.y,
+
+                            // curve without offsets
+                            // 'M', startPoint.x, startPoint.y,
+                            // 'C', centerA.x, centerA.y, centerB.x, centerB.y, endPoint.x, endPoint.y,
                             // 'L', endPoint.x, endPoint.y,
                         ].join(' ')
 
@@ -181,12 +223,10 @@ const getChainPath = async (notesRefs, boardRef) => {
                             props: {
                                 d: path,
                             },
-                            markerID: i === (chainTrack.length - 2) ? 'ShortLinkTriangle' : 'LongLinkTriangle',
+                            // markerID: i === (chainTrack.length - 2) ? 'ShortLinkTriangle' : 'LongLinkTriangle',
                         })
                     }
                 }
-
-                console.log('@@@@@ xx', JSON.stringify(svgElementsArgs))
 
                 resolve({
                     svgElements: svgElementsArgs,

@@ -21,10 +21,14 @@ export const getRoatatedPoint = (point, pivot, angleInDegree) => {
     }
 }
 
-export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
+const getLineSegmentLength = line => {
     const { start, end } = line
+    return Math.sqrt((start.x - end.x) ** 2 + (start.y - end.y) ** 2)
+}
 
-    const segmentLength = Math.sqrt((start.x - end.x) ** 2 + (start.y - end.y) ** 2)
+export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
+    const segmentLength = getLineSegmentLength(line)
+    const { start, end } = line
 
     const closeToStart = {
         x: start.x + ((end.x - start.x) * distanceOnLine) / segmentLength,
@@ -45,9 +49,27 @@ export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
 // write util which will give two points on one side only
 
 export const getCurveCenters = line => {
-    const angleInDegree = 45
-    const distanceOnLine = 30
-    // get points on line and then rotate them
+    // const linkType = 'smallLink'
+    const linkType = 'longLink'
+
+    // +ve angle rotation will make anticlockwise curve
+    // -ve will make clockwise curve
+
+    const segmentLength = getLineSegmentLength(line)
+
+    const curverCentersConfig = {
+        smallLink: {
+            distanceOnLine: segmentLength * 0.45,
+            angleInDegree: 30, // how to know what type of curve it will give
+        },
+        longLink: {
+            distanceOnLine: segmentLength * 0.45,
+            angleInDegree: 15,
+        },
+    }
+
+    const { angleInDegree, distanceOnLine } = curverCentersConfig[linkType]
+
     const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, distanceOnLine)
     return {
         centerA: getRoatatedPoint(closeToStart, line.start, angleInDegree),
