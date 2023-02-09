@@ -1,3 +1,5 @@
+import { areSameColCells, areSameRowCells } from '../utils/util'
+
 function degToRad(deg) {
     return deg * (Math.PI / 180.0)
 }
@@ -50,6 +52,7 @@ export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
     }
 }
 
+// TODO: remote it, most likely won't be used
 export const getAngleBetweenLines = (aLine, bLine) => {
     const aVector = {
         x: aLine.end.x - aLine.start.x,
@@ -61,6 +64,18 @@ export const getAngleBetweenLines = (aLine, bLine) => {
     }
     const vectorsDotProduct = aVector.x * bVector.x + aVector.y * bVector.y
     return radToDeg(Math.acos(vectorsDotProduct / getLineSegmentLength(aLine) / getLineSegmentLength(bLine)))
+}
+
+export const shouldCurveLink = (linkStart, linkEnd) => {
+    const cellsPair = [linkStart.cell, linkEnd.cell]
+    const cellsInSameRow = areSameRowCells(cellsPair)
+    const cellsInSameCol = areSameColCells(cellsPair)
+    if (!cellsInSameRow && !cellsInSameCol) return false
+
+    const startNoteIndex = linkStart.note - 1
+    const endNoteIndex = linkEnd.note - 1
+    if (cellsInSameRow) return Math.floor(startNoteIndex / 3) === Math.floor(endNoteIndex / 3)
+    return (startNoteIndex % 3) === (endNoteIndex % 3)
 }
 
 // write util which will give two points on one side only

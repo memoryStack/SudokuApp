@@ -2,6 +2,7 @@ import {
     getRoatatedPoint,
     getPointsOnLineFromEndpoints,
     getAngleBetweenLines,
+    shouldCurveLink,
 } from './curvePath.utils'
 
 describe('getRoatatedPoint()', () => {
@@ -119,5 +120,67 @@ describe('getAngleBetweenLines()', () => {
             end: { x: 1, y: 6 },
         }
         expect(getAngleBetweenLines(aLine, bLine)).toBeCloseTo(112.619)
+    })
+})
+
+describe('shouldCurveLink()', () => {
+    test('returns false if start and end cells do not make horizontal or vertical straight lines', () => {
+        const linkStart = {
+            cell: { row: 0, col: 0 },
+            note: 1,
+        }
+        const linkEnd = {
+            cell: { row: 2, col: 2 },
+            note: 1,
+        }
+        expect(shouldCurveLink(linkStart, linkEnd)).toBe(false)
+    })
+
+    test('returns true if cells are in same row and startNote and endNote are in same horizontal line', () => {
+        const linkStart = {
+            cell: { row: 0, col: 0 },
+            note: 1,
+        }
+        const linkEnd = {
+            cell: { row: 0, col: 4 },
+            note: 3,
+        }
+        expect(shouldCurveLink(linkStart, linkEnd)).toBe(true)
+    })
+
+    test('returns false if cells are in same row but startNote and endNote are not in same horizontal line', () => {
+        const linkStart = {
+            cell: { row: 0, col: 0 },
+            note: 4,
+        }
+        const linkEnd = {
+            cell: { row: 0, col: 4 },
+            note: 9,
+        }
+        expect(shouldCurveLink(linkStart, linkEnd)).toBe(false)
+    })
+
+    test('returns true if cells are in same column and startNote and endNote are in same vertical line', () => {
+        const linkStart = {
+            cell: { row: 2, col: 2 },
+            note: 2,
+        }
+        const linkEnd = {
+            cell: { row: 4, col: 2 },
+            note: 8,
+        }
+        expect(shouldCurveLink(linkStart, linkEnd)).toBe(true)
+    })
+
+    test('returns false if cells are in same column but startNote and endNote are not in same vertical line', () => {
+        const linkStart = {
+            cell: { row: 2, col: 2 },
+            note: 2,
+        }
+        const linkEnd = {
+            cell: { row: 4, col: 2 },
+            note: 9,
+        }
+        expect(shouldCurveLink(linkStart, linkEnd)).toBe(false)
     })
 })
