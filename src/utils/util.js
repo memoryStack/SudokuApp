@@ -3,7 +3,7 @@ import { PixelRatio } from 'react-native'
 import _inRange from 'lodash/src/utils/inRange'
 import _map from 'lodash/src/utils/map'
 
-export const rgba = function (hex, opacity) {
+export const rgba = function (hex, opacity = 100) {
     hex = hex.replace('#', '')
     const r = parseInt(hex.substring(0, 2), 16)
     const g = parseInt(hex.substring(2, 4), 16)

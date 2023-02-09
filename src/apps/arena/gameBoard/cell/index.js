@@ -48,7 +48,7 @@ const Cell_ = ({
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
     const getNotesFontColor = noteValue => {
-        if (showSmartHint) {
+        if (showSmartHint || true) {
             return _get(smartHintData, ['notesToHighlightData', noteValue, 'fontColor'], null)
         }
         // remove it later or make it better for practice sessions

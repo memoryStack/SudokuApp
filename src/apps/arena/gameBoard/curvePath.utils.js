@@ -2,6 +2,10 @@ function degToRad(deg) {
     return deg * (Math.PI / 180.0)
 }
 
+function radToDeg(rad) {
+    return rad * (180.0 / Math.PI)
+}
+
 export const getRoatatedPoint = (point, pivot, angleInDegree) => {
     const angleInRadian = degToRad(angleInDegree)
 
@@ -46,6 +50,19 @@ export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
     }
 }
 
+export const getAngleBetweenLines = (aLine, bLine) => {
+    const aVector = {
+        x: aLine.end.x - aLine.start.x,
+        y: aLine.end.y - aLine.start.y,
+    }
+    const bVector = {
+        x: bLine.end.x - bLine.start.x,
+        y: bLine.end.y - bLine.start.y,
+    }
+    const vectorsDotProduct = aVector.x * bVector.x + aVector.y * bVector.y
+    return radToDeg(Math.acos(vectorsDotProduct / getLineSegmentLength(aLine) / getLineSegmentLength(bLine)))
+}
+
 // write util which will give two points on one side only
 
 export const getCurveCenters = line => {
@@ -64,7 +81,7 @@ export const getCurveCenters = line => {
         },
         longLink: {
             distanceOnLine: segmentLength * 0.45,
-            angleInDegree: 15,
+            angleInDegree: 20,
         },
     }
 

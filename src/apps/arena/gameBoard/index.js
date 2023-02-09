@@ -36,8 +36,8 @@ import {
 
 import { getStyles } from './style'
 import { Cell } from './cell'
-import { consoleLog, roundToNearestPixel } from '../../../utils/util'
-import { getCurveCenters, getPointsOnLineFromEndpoints } from './curvePath.utils'
+import { consoleLog, rgba, roundToNearestPixel } from '../../../utils/util'
+import { getAngleBetweenLines, getCurveCenters, getPointsOnLineFromEndpoints } from './curvePath.utils'
 
 const looper = []
 const bordersLooper = []
@@ -106,14 +106,25 @@ const getChainPath = async (notesRefs, boardRef) => {
         // },
 
         // long bond
+        // {
+        //     cell: { row: 3, col: 4 },
+        //     out: 2,
+        // },
+        // {
+        //     cell: { row: 5, col: 3 },
+        //     in: 7,
+        // },
+
         {
-            cell: { row: 2, col: 6 },
-            out: 3,
+            cell: { row: 2, col: 2 },
+            out: 1,
         },
         {
-            cell: { row: 4, col: 6 },
-            in: 9,
+            cell: { row: 2, col: 3 },
+            in: 2,
+            out: 1,
         },
+
     ]
 
     return new Promise(resolve => {
@@ -170,6 +181,7 @@ const getChainPath = async (notesRefs, boardRef) => {
                                 cx: x + cellWidth / 2,
                                 cy: y + cellHeight / 2,
                                 r: cellHeight / 2,
+                                fill: 'rgba(217, 19, 235, 0.4)',
                             },
                         }
                     })
@@ -180,7 +192,7 @@ const getChainPath = async (notesRefs, boardRef) => {
                         const [, , cellWidth, cellHeight, currentCellPageX, currentCellPageY] = currentCellOutNoteViewMeasurements
                         const { x: currentCellBoardX, y: currentCellBoardY } = getCellCordinatesRelativeToBoard(currentCellPageX, currentCellPageY)
 
-                        const { cell: nextSpotCell, in: nextSpotIn } = chainTrack[i + 1]
+                        const { cell: nextSpotCell, in: nextSpotIn, out: nextSpotOut } = chainTrack[i + 1]
                         const nextCellInNoteViewMeasurements = notesWithMeasurements[nextSpotCell.row][nextSpotCell.col][nextSpotIn]
                         const [, , , , nextCellPageX, nextCellPageY] = nextCellInNoteViewMeasurements
                         const { x: nextCellBoardX, y: nextCellBoardY } = getCellCordinatesRelativeToBoard(nextCellPageX, nextCellPageY)
@@ -197,6 +209,17 @@ const getChainPath = async (notesRefs, boardRef) => {
                         const line = { start: startPoint, end: endPoint }
                         const { centerA, centerB } = getCurveCenters(line)
 
+                        /** finding the angle between lines starts here */
+                        const aLine = { start: startPoint, end: endPoint }
+                        const nextCellOutNoteViewMeasurements = notesWithMeasurements[nextSpotCell.row][nextSpotCell.col][nextSpotOut]
+                        const [, , , , nextCellPageXOut, nextCellPageYOut] = nextCellOutNoteViewMeasurements
+                        const { x: nextCellBoardXOut, y: nextCellBoardYOut } = getCellCordinatesRelativeToBoard(nextCellPageXOut, nextCellPageYOut)
+                        const bLine = { start: startPoint, end: { x: nextCellBoardXOut + cellWidth / 2, y: nextCellBoardYOut + cellHeight / 2 } } // next cell another note
+
+                        consoleLog('angle between lines', getAngleBetweenLines(aLine, bLine))
+
+                        /** finding the angle between lines ends here */
+
                         const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, 6) // 7 units offset
 
                         const path = [
@@ -205,12 +228,12 @@ const getChainPath = async (notesRefs, boardRef) => {
                             // 'L', endPoint.x, endPoint.y,
 
                             // straight line with offsets
-                            // 'M', closeToStart.x, closeToStart.y,
-                            // 'L', closeToEnd.x, closeToEnd.y,
+                            'M', closeToStart.x, closeToStart.y,
+                            'L', closeToEnd.x, closeToEnd.y,
 
                             // curve with offsets
-                            'M', closeToStart.x, closeToStart.y,
-                            'C', centerA.x, centerA.y, centerB.x, centerB.y, closeToEnd.x, closeToEnd.y,
+                            // 'M', closeToStart.x, closeToStart.y,
+                            // 'C', centerA.x, centerA.y, centerB.x, centerB.y, closeToEnd.x, closeToEnd.y,
 
                             // curve without offsets
                             // 'M', startPoint.x, startPoint.y,
@@ -238,6 +261,14 @@ const getChainPath = async (notesRefs, boardRef) => {
     })
 }
 
+// const fontColor = 'rgb(0, 255, 0)'
+const fontColor = 'green'
+const linkColor = 'rgb(217, 19, 235)'
+// const linkColor = 'rgb(0, 255, 0)'
+//
+// const fontColor = 'rgb(97, 64, 81)'
+// const linkColor = 'rgba(97, 64, 81, 0.6)'
+
 const getMarker = ({ id, ...rest }) => (
     <Marker
         id={id}
@@ -251,8 +282,12 @@ const getMarker = ({ id, ...rest }) => (
     >
         <Path
             d="M0,-5L10,0L0,5"
-            stroke="red"
-            fill="red"
+            // stroke="red"
+            // fill='red'
+            // stroke="rgba(255, 0, 0, 0.6)"
+            // fill="rgba(255, 0, 0, 0.6)"
+            stroke={linkColor}
+            fill={linkColor}
         />
     </Marker>
 )
@@ -266,10 +301,27 @@ const Board_ = ({
     onCellClick,
     isHintTryOut,
     showSmartHint,
-    cellsHighlightData,
+    // cellsHighlightData,
     axisTextStyles,
 }) => {
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
+
+    const cellsHighlightData = {
+        2: {
+            2: {
+                notesToHighlightData: {
+                    1: { fontColor: 'rgb(217, 19, 235)' },
+                    2: { fontColor },
+                },
+            },
+            3: {
+                notesToHighlightData: {
+                    2: { fontColor },
+                    1: { fontColor: 'rgb(217, 19, 235)' },
+                },
+            },
+        },
+    }
 
     const SVG_CONTAINER_WIDTH = (BOARD_GRID_WIDTH)
     const SVG_CONTAINER_HEIGHT = (BOARD_GRID_WIDTH)
@@ -333,11 +385,13 @@ const Board_ = ({
                         _map(outlineState.svgElements, ({ element: Element, markerID = 'LongLinkTriangle', props }) => (
                             <Element
                                 {...props}
-                                stroke="red"
+                                // stroke="red"
+                                // stroke="rgba(255, 0, 0, 0.6)"
+                                stroke={linkColor}
                                 strokeWidth={SVG_STROKE_WIDTH}
                                 strokeLinejoin="round"
                                 strokeDasharray="6, 4"
-                                markerEnd={`url(#${markerID})`}
+                                {... (Element === Path) && { markerEnd: `url(#${markerID})` }}
                             />
                         ))
                     }

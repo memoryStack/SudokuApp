@@ -1,4 +1,8 @@
-import { getRoatatedPoint, getPointsOnLineFromEndpoints } from './curvePath.utils'
+import {
+    getRoatatedPoint,
+    getPointsOnLineFromEndpoints,
+    getAngleBetweenLines,
+} from './curvePath.utils'
 
 describe('getRoatatedPoint()', () => {
     test('rotates point anticlockwise w.r.t origin', () => {
@@ -89,5 +93,31 @@ describe('getPointsOnLineFromEndpoints()', () => {
         expect(returnedResult.closeToStart.y).toBeCloseTo(expectedResult.closeToStart.y, 5)
         expect(returnedResult.closeToEnd.y).toBeCloseTo(expectedResult.closeToEnd.y, 5)
         expect(returnedResult.closeToEnd.x).toBeCloseTo(expectedResult.closeToEnd.x, 5)
+    })
+})
+
+describe('getAngleBetweenLines()', () => {
+    test('returns angle in degree between two lines', () => {
+        const aLine = {
+            start: { x: 0, y: 0 },
+            end: { x: 0, y: 1 },
+        }
+        const bLine = {
+            start: { x: 0, y: 0 },
+            end: { x: 1, y: 0 },
+        }
+        expect(getAngleBetweenLines(aLine, bLine)).toBeCloseTo(90, 2)
+    })
+
+    test('returns angle in degree between two lines', () => {
+        const aLine = {
+            start: { x: 1, y: 2 },
+            end: { x: 4, y: 4 },
+        }
+        const bLine = {
+            start: { x: 4, y: 4 },
+            end: { x: 1, y: 6 },
+        }
+        expect(getAngleBetweenLines(aLine, bLine)).toBeCloseTo(112.619)
     })
 })
