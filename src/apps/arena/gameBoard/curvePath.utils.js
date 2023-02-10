@@ -1,5 +1,10 @@
 import { areSameColCells, areSameRowCells } from '../utils/util'
 
+export const CURVER_DIRECTIONS = {
+    CLOCKWISE: 'CLOCKWISE',
+    ANTI_CLOCKWISE: 'ANTI_CLOCKWISE',
+}
+
 function degToRad(deg) {
     return deg * (Math.PI / 180.0)
 }
@@ -76,6 +81,32 @@ export const shouldCurveLink = (linkStart, linkEnd) => {
     const endNoteIndex = linkEnd.note - 1
     if (cellsInSameRow) return Math.floor(startNoteIndex / 3) === Math.floor(endNoteIndex / 3)
     return (startNoteIndex % 3) === (endNoteIndex % 3)
+}
+
+export const getCurveDirection = (startCell, endCell) => {
+    const cellsPair = [startCell, endCell]
+
+    const areFirstRowCell = areSameRowCells(cellsPair) && startCell.row === 0
+    if (areFirstRowCell) {
+        return startCell.col < endCell.col ? CURVER_DIRECTIONS.ANTI_CLOCKWISE : CURVER_DIRECTIONS.CLOCKWISE
+    }
+
+    const areLastRowCell = areSameRowCells(cellsPair) && startCell.row === 8
+    if (areLastRowCell) {
+        return startCell.col < endCell.col ? CURVER_DIRECTIONS.CLOCKWISE : CURVER_DIRECTIONS.ANTI_CLOCKWISE
+    }
+
+    const areFirstColCell = areSameColCells(cellsPair) && startCell.col === 0
+    if (areFirstColCell) {
+        return startCell.row < endCell.row ? CURVER_DIRECTIONS.CLOCKWISE : CURVER_DIRECTIONS.ANTI_CLOCKWISE
+    }
+
+    const areLastColCell = areSameColCells(cellsPair) && startCell.col === 8
+    if (areLastColCell) {
+        return startCell.row < endCell.row ? CURVER_DIRECTIONS.ANTI_CLOCKWISE : CURVER_DIRECTIONS.CLOCKWISE
+    }
+
+    return CURVER_DIRECTIONS.CLOCKWISE
 }
 
 // write util which will give two points on one side only
