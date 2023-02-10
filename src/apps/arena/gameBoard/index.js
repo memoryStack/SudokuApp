@@ -39,6 +39,10 @@ import { Cell } from './cell'
 import { consoleLog, rgba, roundToNearestPixel } from '../../../utils/util'
 import { getAngleBetweenLines, getCurveCenters, getPointsOnLineFromEndpoints } from './curvePath.utils'
 
+import HintsSvgDrawing from '../hintsSvgDrawing'
+import { HINTS_IDS } from '../utils/smartHints/constants'
+import { MARKER_TYPES } from '../hintsSvgDrawing/svgDefs/remotePairs/remotePairs.constants'
+
 const looper = []
 const bordersLooper = []
 for (let i = 0; i < 10; i++) {
@@ -269,29 +273,6 @@ const linkColor = 'rgb(217, 19, 235)'
 // const fontColor = 'rgb(97, 64, 81)'
 // const linkColor = 'rgba(97, 64, 81, 0.6)'
 
-const getMarker = ({ id, ...rest }) => (
-    <Marker
-        id={id}
-        viewBox="0 -5 10 10"
-        refY="0"
-        markerUnits="strokeWidth"
-        markerWidth="4"
-        markerHeight="3"
-        orient="auto"
-        {...rest}
-    >
-        <Path
-            d="M0,-5L10,0L0,5"
-            // stroke="red"
-            // fill='red'
-            // stroke="rgba(255, 0, 0, 0.6)"
-            // fill="rgba(255, 0, 0, 0.6)"
-            stroke={linkColor}
-            fill={linkColor}
-        />
-    </Marker>
-)
-
 const Board_ = ({
     screenName,
     gameState,
@@ -322,9 +303,6 @@ const Board_ = ({
             },
         },
     }
-
-    const SVG_CONTAINER_WIDTH = (BOARD_GRID_WIDTH)
-    const SVG_CONTAINER_HEIGHT = (BOARD_GRID_WIDTH)
 
     const styles = useMemo(() => getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH }), [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
 
@@ -357,46 +335,25 @@ const Board_ = ({
         if (_isEmpty(outlineState.svgElements)) return null
 
         return (
-            <View
-                style={{
-                    width: SVG_CONTAINER_WIDTH,
-                    height: SVG_CONTAINER_HEIGHT,
-                    position: 'absolute',
-                    zIndex: 1,
-                    overflow: 'visible',
-                    top: outlineState.boardYPos,
-                    left: outlineState.boardXPos,
-                    // backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                }}
-                pointerEvents="none"
+            <HintsSvgDrawing
+                hint={{ id: HINTS_IDS.REMOTE_PAIRS }}
+                outlineState={outlineState}
             >
-                <Svg
-                    viewBox={`0 0 ${SVG_CONTAINER_WIDTH} ${SVG_CONTAINER_HEIGHT}`}
-                    width={SVG_CONTAINER_WIDTH}
-                    height={SVG_CONTAINER_HEIGHT}
-                    overflow="visible"
-                >
-                    <Defs>
-                        {getMarker({ id: 'LongLinkTriangle', refX: '8' })}
-                        {getMarker({ id: 'ShortLinkTriangle', refX: '5' })}
-                        {/* make one hollow arrow as marker */}
-                    </Defs>
-                    {
-                        _map(outlineState.svgElements, ({ element: Element, markerID = 'LongLinkTriangle', props }) => (
-                            <Element
-                                {...props}
-                                // stroke="red"
-                                // stroke="rgba(255, 0, 0, 0.6)"
-                                stroke={linkColor}
-                                strokeWidth={SVG_STROKE_WIDTH}
-                                strokeLinejoin="round"
-                                strokeDasharray="6, 4"
-                                {... (Element === Path) && { markerEnd: `url(#${markerID})` }}
-                            />
-                        ))
-                    }
-                </Svg>
-            </View>
+                {
+                    _map(outlineState.svgElements, ({ element: Element, markerID = MARKER_TYPES.LONG_LINK, props }) => (
+                        <Element
+                            {...props}
+                            // stroke="red"
+                            // stroke="rgba(255, 0, 0, 0.6)"
+                            stroke={linkColor}
+                            strokeWidth={SVG_STROKE_WIDTH}
+                            strokeLinejoin="round"
+                            strokeDasharray="6, 4"
+                            {... (Element === Path) && { markerEnd: `url(#${markerID})` }}
+                        />
+                    ))
+                }
+            </HintsSvgDrawing>
         )
     }
 

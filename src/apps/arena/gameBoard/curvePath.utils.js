@@ -84,6 +84,7 @@ export const shouldCurveLink = (linkStart, linkEnd) => {
 }
 
 export const getCurveDirection = (startCell, endCell) => {
+    // TODO: remove magic numbers from here
     const cellsPair = [startCell, endCell]
 
     const areFirstRowCell = areSameRowCells(cellsPair) && startCell.row === 0
