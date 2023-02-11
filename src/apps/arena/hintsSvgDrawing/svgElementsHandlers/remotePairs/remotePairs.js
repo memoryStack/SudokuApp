@@ -209,11 +209,7 @@ const getChainPath = async ({ notesRefs, boardPageCordinates }) => {
                 }
             }
 
-            resolve({
-                svgElements: svgElementsArgs,
-                boardXPos: boardPageX,
-                boardYPos: boardPageY,
-            })
+            resolve(svgElementsArgs)
         })
     })
 }

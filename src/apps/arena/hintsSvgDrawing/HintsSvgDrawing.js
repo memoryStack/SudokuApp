@@ -37,7 +37,11 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
                 const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
                 if (!_isFunction(svgElementsHandler)) return
                 const boardPageCordinates = { x: boardPageX, y: boardPageY }
-                setPath(await svgElementsHandler({ notesRefs, boardPageCordinates }))
+                setPath({
+                    svgElements: await svgElementsHandler({ notesRefs, boardPageCordinates }),
+                    boardXPos: boardPageX,
+                    boardYPos: boardPageY,
+                })
             })
         }
         setTimeout(handler, 4000)
@@ -88,8 +92,7 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
     )
 }
 
-// TODO: add prop types
-
+// TODO: fix these proptypes
 HintsSvgDrawing.propTypes = {
     hint: PropTypes.object,
     // boardRef: PropTypes.oneOfType([
