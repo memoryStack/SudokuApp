@@ -10,7 +10,7 @@ import {
     getPointsOnLineFromEndpoints,
 } from '../../../gameBoard/curvePath.utils'
 
-const getChainPath = async (notesRefs, boardPageCordinates) => {
+const getChainPath = async ({ notesRefs, boardPageCordinates }) => {
     const { x: boardPageX, y: boardPageY } = boardPageCordinates
     const chainTrack = [
         // {

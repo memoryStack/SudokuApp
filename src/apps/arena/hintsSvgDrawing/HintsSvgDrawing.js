@@ -2,11 +2,14 @@ import React, { memo, useState, useEffect } from 'react'
 
 import { View } from 'react-native'
 
+import PropTypes from 'prop-types'
+
 import { Svg, Path } from 'react-native-svg'
 
 import _map from 'lodash/src/utils/map'
 import _isNil from 'lodash/src/utils/isNil'
 import _isEmpty from 'lodash/src/utils/isEmpty'
+import _isFunction from 'lodash/src/utils/isFunction'
 
 import { roundToNearestPixel } from '../../../utils/util'
 
@@ -32,8 +35,9 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
         const handler = () => {
             boardRef.current && boardRef.current.measure(async (_x, _y, _boardWidth, _boardHeight, boardPageX, boardPageY) => {
                 const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
-
-                setPath(await svgElementsHandler(notesRefs, { x: boardPageX, y: boardPageY }))
+                if (!_isFunction(svgElementsHandler)) return
+                const boardPageCordinates = { x: boardPageX, y: boardPageY }
+                setPath(await svgElementsHandler({ notesRefs, boardPageCordinates }))
             })
         }
         setTimeout(handler, 4000)
@@ -41,8 +45,7 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
 
     const getDefs = () => {
         const DefsComponent = HINT_ID_VS_SVG_DEFS[hint.id]
-        if (_isNil(DefsComponent)) return null
-        return <DefsComponent />
+        return !_isNil(DefsComponent) ? <DefsComponent /> : null
     }
 
     if (_isEmpty(outlineState.svgElements)) return null
@@ -71,8 +74,7 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
                     _map(outlineState.svgElements, ({ element: Element, markerID = MARKER_TYPES.LONG_LINK, props }) => (
                         <Element
                             {...props}
-                            // stroke="red"
-                            // stroke="rgba(255, 0, 0, 0.6)"
+                            // TODO: get these below props from components only
                             stroke={linkColor}
                             strokeWidth={SVG_STROKE_WIDTH}
                             strokeLinejoin="round"
@@ -87,5 +89,23 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
 }
 
 // TODO: add prop types
+
+HintsSvgDrawing.propTypes = {
+    hint: PropTypes.object,
+    // boardRef: PropTypes.oneOfType([
+    //     PropTypes.func,
+    //     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    // ]),
+    // PropTypes.shape({
+    //     color: PropTypes.string,
+    //     fontSize: PropTypes.number
+    // })
+    // notesRefs: PropTypes.shape(), // how to write it's shape ??
+}
+
+HintsSvgDrawing.defaultProps = {
+    hint: {},
+    // boardRef: {},
+}
 
 export default memo(HintsSvgDrawing)
