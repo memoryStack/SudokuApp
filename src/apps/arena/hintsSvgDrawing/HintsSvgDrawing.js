@@ -1,4 +1,6 @@
-import React, { memo, useState, useEffect } from 'react'
+import React, {
+    memo, useState, useEffect, useMemo,
+} from 'react'
 
 import { View } from 'react-native'
 
@@ -47,26 +49,25 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
         setTimeout(handler, 4000)
     }, [boardRef, notesRefs])
 
+    if (_isEmpty(outlineState.svgElements)) return null
+
+    const getContianerStyles = () => ({
+        position: 'absolute',
+        width: SVG_CONTAINER_WIDTH,
+        height: SVG_CONTAINER_HEIGHT,
+        top: outlineState.boardYPos,
+        left: outlineState.boardXPos,
+        overflow: 'visible',
+        zIndex: 1,
+    })
+
     const getDefs = () => {
         const DefsComponent = HINT_ID_VS_SVG_DEFS[hint.id]
         return !_isNil(DefsComponent) ? <DefsComponent /> : null
     }
 
-    if (_isEmpty(outlineState.svgElements)) return null
-
     return (
-        <View
-            style={{
-                width: SVG_CONTAINER_WIDTH,
-                height: SVG_CONTAINER_HEIGHT,
-                position: 'absolute',
-                zIndex: 1,
-                overflow: 'visible',
-                top: outlineState.boardYPos,
-                left: outlineState.boardXPos,
-            }}
-            pointerEvents="none"
-        >
+        <View style={getContianerStyles()} pointerEvents="none">
             <Svg
                 viewBox={`0 0 ${SVG_CONTAINER_WIDTH} ${SVG_CONTAINER_HEIGHT}`}
                 width={SVG_CONTAINER_WIDTH}
