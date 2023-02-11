@@ -36,9 +36,10 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
 
     useEffect(() => {
         const handler = () => {
+            const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
+            if (!_isFunction(svgElementsHandler)) return
+
             boardRef.current && boardRef.current.measure(async (_x, _y, _boardWidth, _boardHeight, boardPageX, boardPageY) => {
-                const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
-                if (!_isFunction(svgElementsHandler)) return
                 // eslint-disable-next-line no-shadow
                 const boardPageCordinates = { x: boardPageX, y: boardPageY }
                 setBoardPageCordinates(boardPageCordinates)
@@ -46,7 +47,8 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
             })
         }
         setTimeout(handler, 4000)
-    }, [boardRef, notesRefs])
+        // TODO: fix it's dependency issues
+    }, [])
 
     if (_isEmpty(svgElementsConfigs)) return null
 

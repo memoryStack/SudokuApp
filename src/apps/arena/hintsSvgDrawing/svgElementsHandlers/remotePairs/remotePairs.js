@@ -10,208 +10,179 @@ import {
     getPointsOnLineFromEndpoints,
 } from './helpers/curvePath.helpers'
 
-const getChainPath = async ({ notesRefs, boardPageCordinates }) => {
-    const { x: boardPageX, y: boardPageY } = boardPageCordinates
-    const chainTrack = [
-        // {
-        //     cell: { row: 0, col: 0 },
-        //     out: 5,
-        // },
-        // {
-        //     cell: { row: 2, col: 2 },
-        //     in: 3,
-        //     out: 9,
-        // },
-        // {
-        //     cell: { row: 5, col: 2 },
-        //     in: 1,
-        //     out: 7,
-        // },
-        // {
-        //     cell: { row: 3, col: 4 },
-        //     in: 1,
-        //     out: 7,
-        // },
-        // {
-        //     cell: { row: 3, col: 6 },
-        //     in: 7,
-        //     out: 3,
-        // },
-        // {
-        //     cell: { row: 4, col: 6 },
-        //     in: 7,
-        //     out: 3,
-        // },
-        // {
-        //     cell: { row: 4, col: 7 },
-        //     in: 1,
-        //     out: 3,
-        // },
+const chainTrack = [
+    // {
+    //     cell: { row: 0, col: 0 },
+    //     out: 5,
+    // },
+    // {
+    //     cell: { row: 2, col: 2 },
+    //     in: 3,
+    //     out: 9,
+    // },
+    // {
+    //     cell: { row: 5, col: 2 },
+    //     in: 1,
+    //     out: 7,
+    // },
+    // {
+    //     cell: { row: 3, col: 4 },
+    //     in: 1,
+    //     out: 7,
+    // },
+    // {
+    //     cell: { row: 3, col: 6 },
+    //     in: 7,
+    //     out: 3,
+    // },
+    // {
+    //     cell: { row: 4, col: 6 },
+    //     in: 7,
+    //     out: 3,
+    // },
+    // {
+    //     cell: { row: 4, col: 7 },
+    //     in: 1,
+    //     out: 3,
+    // },
 
-        // small bond from right to left
-        // {
-        //     cell: { row: 0, col: 8 },
-        //     out: 1,
-        // },
-        // {
-        //     cell: { row: 0, col: 7 },
-        //     in: 1,
-        // },
+    // small bond from right to left
+    // {
+    //     cell: { row: 0, col: 8 },
+    //     out: 1,
+    // },
+    // {
+    //     cell: { row: 0, col: 7 },
+    //     in: 1,
+    // },
 
-        // small bond from top to bottom
-        // {
-        //     cell: { row: 2, col: 6 },
-        //     out: 3,
-        // },
-        // {
-        //     cell: { row: 3, col: 6 },
-        //     in: 3,
-        // },
+    // small bond from top to bottom
+    // {
+    //     cell: { row: 2, col: 6 },
+    //     out: 3,
+    // },
+    // {
+    //     cell: { row: 3, col: 6 },
+    //     in: 3,
+    // },
 
-        // long bond
-        // {
-        //     cell: { row: 3, col: 4 },
-        //     out: 2,
-        // },
-        // {
-        //     cell: { row: 5, col: 3 },
-        //     in: 7,
-        // },
+    // long bond
+    // {
+    //     cell: { row: 3, col: 4 },
+    //     out: 2,
+    // },
+    // {
+    //     cell: { row: 5, col: 3 },
+    //     in: 7,
+    // },
 
-        {
-            cell: { row: 2, col: 2 },
-            out: 1,
-        },
-        {
-            cell: { row: 2, col: 3 },
-            in: 2,
-            out: 1,
-        },
+    {
+        cell: { row: 2, col: 2 },
+        out: 1,
+    },
+    {
+        cell: { row: 2, col: 3 },
+        in: 2,
+        out: 1,
+    },
 
-    ]
+]
 
-    return new Promise(resolve => {
-        // TODO: use null check here
+const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates }) => new Promise(resolve => {
+    Promise.all(getAllNotesMeasurePromises(notesRefs, chainTrack)).then(notesMeasurements => {
+        const notesWithMeasurements = transformNotesMeasurementPromisesResult(notesMeasurements)
 
-        const promises = []
-
-        // promises for each note in each cell
+        const svgElementsArgs = []
         for (let i = 0; i < chainTrack.length; i++) {
-            const currentSpot = chainTrack[i]
+            const { cell: currentSpotCell, out: currentOut } = chainTrack[i] // arrow exit cell
 
-            const { cell, in: currentSpotIn, out: currentSpotOut } = currentSpot
-            const notesToMeasure = _compact([currentSpotIn, currentSpotOut])
+            if (i + 1 < chainTrack.length) {
+                const currentCellOutNoteViewMeasurements = notesWithMeasurements[currentSpotCell.row][currentSpotCell.col][currentOut]
+                const [, , cellWidth, cellHeight, currentCellPageX, currentCellPageY] = currentCellOutNoteViewMeasurements
+                const { x: currentCellBoardX, y: currentCellBoardY } = getCordinatesRelativeToReference({ x: currentCellPageX, y: currentCellPageY }, boardPageCordinates)
 
-            // measure each note of the cell
-            _forEach(notesToMeasure, note => {
-                const pro = new Promise(resolve => {
-                    notesRefs[cell.row][cell.col][note - 1].current.measure((...measurements) => {
-                        resolve({ cell, note, measurements })
-                    })
+                const { cell: nextSpotCell, in: nextSpotIn } = chainTrack[i + 1] // arrow entry cell
+                const nextCellInNoteViewMeasurements = notesWithMeasurements[nextSpotCell.row][nextSpotCell.col][nextSpotIn]
+                const [, , , , nextCellPageX, nextCellPageY] = nextCellInNoteViewMeasurements
+                const { x: nextCellBoardX, y: nextCellBoardY } = getCordinatesRelativeToReference({ x: nextCellPageX, y: nextCellPageY }, boardPageCordinates)
+                // TODO: make these lines curved
+
+                const startPoint = {
+                    x: currentCellBoardX + cellWidth / 2,
+                    y: currentCellBoardY + cellHeight / 2,
+                }
+                const endPoint = {
+                    x: nextCellBoardX + cellWidth / 2,
+                    y: nextCellBoardY + cellHeight / 2,
+                }
+                const line = { start: startPoint, end: endPoint }
+                const { centerA, centerB } = getCurveCenters(line)
+
+                const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, 6) // 7 units offset
+
+                const path = [
+                    // straight line without offsets
+                    // 'M', startPoint.x, startPoint.y,
+                    // 'L', endPoint.x, endPoint.y,
+
+                    // straight line with offsets
+                    'M', closeToStart.x, closeToStart.y,
+                    'L', closeToEnd.x, closeToEnd.y,
+
+                    // curve with offsets
+                    // 'M', closeToStart.x, closeToStart.y,
+                    // 'C', centerA.x, centerA.y, centerB.x, centerB.y, closeToEnd.x, closeToEnd.y,
+
+                    // curve without offsets
+                    // 'M', startPoint.x, startPoint.y,
+                    // 'C', centerA.x, centerA.y, centerB.x, centerB.y, endPoint.x, endPoint.y,
+                    // 'L', endPoint.x, endPoint.y,
+                ].join(' ')
+
+                svgElementsArgs.push({
+                    element: Path,
+                    props: {
+                        d: path,
+                    },
+                    // markerID: i === (chainTrack.length - 2) ? 'ShortLinkTriangle' : 'LongLinkTriangle',
                 })
-                promises.push(pro)
-            })
+            }
         }
 
-        const getCellCordinatesRelativeToBoard = (cellPageX, cellPageY) => ({
-            x: cellPageX - boardPageX,
-            y: cellPageY - boardPageY,
-        })
+        resolve(svgElementsArgs)
+    })
+})
 
-        Promise.all(promises).then(notesMeasurements => {
-            // format all notes measurements for ease of access
+const getAllNotesMeasurePromises = (notesRefs, chainTrack) => {
+    const result = []
 
-            const notesWithMeasurements = _reduce(notesMeasurements, (acc, current) => {
-                const { cell: { row, col }, note, measurements } = current
-                return _set(acc, [row, col, note], measurements)
-            }, [])
-
-            const svgElementsArgs = []
-            // start from first cell to next and store the svg arguments
-            for (let i = 0; i < chainTrack.length; i++) {
-                const { cell: currentSpotCell, in: currentIn, out: currentOut } = chainTrack[i]
-                // highlight all the circles in this spot
-
-                // const notesHighlightArgs = _map(_compact([currentIn, currentOut]), note => {
-                //     const noteViewMeasurements = notesWithMeasurements[currentSpotCell.row][currentSpotCell.col][note]
-                //     const [, , cellWidth, cellHeight, cellPageX, cellPageY] = noteViewMeasurements
-                //     const { x, y } = getCellCordinatesRelativeToBoard(cellPageX, cellPageY)
-                //     return {
-                //         element: Circle,
-                //         props: {
-                //             cx: x + cellWidth / 2,
-                //             cy: y + cellHeight / 2,
-                //             r: cellHeight / 2,
-                //             fill: 'rgba(217, 19, 235, 0.4)',
-                //         },
-                //     }
-                // })
-                // svgElementsArgs.push(...notesHighlightArgs)
-
-                if (i + 1 < chainTrack.length) {
-                    const currentCellOutNoteViewMeasurements = notesWithMeasurements[currentSpotCell.row][currentSpotCell.col][currentOut]
-                    const [, , cellWidth, cellHeight, currentCellPageX, currentCellPageY] = currentCellOutNoteViewMeasurements
-                    const { x: currentCellBoardX, y: currentCellBoardY } = getCellCordinatesRelativeToBoard(currentCellPageX, currentCellPageY)
-
-                    const { cell: nextSpotCell, in: nextSpotIn, out: nextSpotOut } = chainTrack[i + 1]
-                    const nextCellInNoteViewMeasurements = notesWithMeasurements[nextSpotCell.row][nextSpotCell.col][nextSpotIn]
-                    const [, , , , nextCellPageX, nextCellPageY] = nextCellInNoteViewMeasurements
-                    const { x: nextCellBoardX, y: nextCellBoardY } = getCellCordinatesRelativeToBoard(nextCellPageX, nextCellPageY)
-                    // TODO: make these lines curved
-
-                    const startPoint = {
-                        x: currentCellBoardX + cellWidth / 2,
-                        y: currentCellBoardY + cellHeight / 2,
-                    }
-                    const endPoint = {
-                        x: nextCellBoardX + cellWidth / 2,
-                        y: nextCellBoardY + cellHeight / 2,
-                    }
-                    const line = { start: startPoint, end: endPoint }
-                    const { centerA, centerB } = getCurveCenters(line)
-
-                    /** finding the angle between lines starts here */
-                    const aLine = { start: startPoint, end: endPoint }
-                    const nextCellOutNoteViewMeasurements = notesWithMeasurements[nextSpotCell.row][nextSpotCell.col][nextSpotOut]
-                    const [, , , , nextCellPageXOut, nextCellPageYOut] = nextCellOutNoteViewMeasurements
-                    const { x: nextCellBoardXOut, y: nextCellBoardYOut } = getCellCordinatesRelativeToBoard(nextCellPageXOut, nextCellPageYOut)
-                    const bLine = { start: startPoint, end: { x: nextCellBoardXOut + cellWidth / 2, y: nextCellBoardYOut + cellHeight / 2 } } // next cell another note
-                    /** finding the angle between lines ends here */
-
-                    const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, 6) // 7 units offset
-
-                    const path = [
-                        // straight line without offsets
-                        // 'M', startPoint.x, startPoint.y,
-                        // 'L', endPoint.x, endPoint.y,
-
-                        // straight line with offsets
-                        'M', closeToStart.x, closeToStart.y,
-                        'L', closeToEnd.x, closeToEnd.y,
-
-                        // curve with offsets
-                        // 'M', closeToStart.x, closeToStart.y,
-                        // 'C', centerA.x, centerA.y, centerB.x, centerB.y, closeToEnd.x, closeToEnd.y,
-
-                        // curve without offsets
-                        // 'M', startPoint.x, startPoint.y,
-                        // 'C', centerA.x, centerA.y, centerB.x, centerB.y, endPoint.x, endPoint.y,
-                        // 'L', endPoint.x, endPoint.y,
-                    ].join(' ')
-
-                    svgElementsArgs.push({
-                        element: Path,
-                        props: {
-                            d: path,
-                        },
-                        // markerID: i === (chainTrack.length - 2) ? 'ShortLinkTriangle' : 'LongLinkTriangle',
+    _forEach(chainTrack, ({ cell, in: entryNote, out: exitNote }) => {
+        const notesToMeasure = _compact([entryNote, exitNote])
+        _forEach(notesToMeasure, note => {
+            const noteRef = notesRefs[cell.row][cell.col][note - 1]
+            if (noteRef) {
+                result.push(new Promise(resolve => {
+                    noteRef.current.measure((...measurements) => {
+                        resolve({ cell, note, measurements })
                     })
-                }
+                }))
             }
-
-            resolve(svgElementsArgs)
         })
     })
+
+    return result
 }
 
-export default getChainPath
+// TODO: this will be used at multiple places
+// plan to write a geometry class for my svg requirements
+const getCordinatesRelativeToReference = (elementCordinates, referencePoint) => ({
+    x: elementCordinates.x - referencePoint.x,
+    y: elementCordinates.y - referencePoint.y,
+})
+
+const transformNotesMeasurementPromisesResult = notesMeasurements => _reduce(notesMeasurements, (acc, current) => {
+    const { cell: { row, col }, note, measurements } = current
+    return _set(acc, [row, col, note], measurements)
+}, [])
+
+export default getRemotePairsSvgElementsConfigs
