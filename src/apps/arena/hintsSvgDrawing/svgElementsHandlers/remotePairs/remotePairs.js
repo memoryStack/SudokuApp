@@ -9,6 +9,10 @@ import {
     getCurveCenters,
     getPointsOnLineFromEndpoints,
 } from './helpers/curvePath.helpers'
+import { MARKER_TYPES } from '../../svgDefs/remotePairs/remotePairs.constants'
+import { roundToNearestPixel } from '../../../../../utils/util'
+
+const linkColor = 'rgb(217, 19, 235)'
 
 const chainTrack = [
     // {
@@ -88,6 +92,13 @@ const chainTrack = [
 
 ]
 
+const strokeProps = {
+    stroke: linkColor,
+    strokeWidth: roundToNearestPixel(2),
+    strokeLinejoin: 'round',
+    strokeDasharray: '6, 4',
+}
+
 const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates }) => new Promise(resolve => {
     Promise.all(getAllNotesMeasurePromises(notesRefs, chainTrack)).then(notesMeasurements => {
         const notesWithMeasurements = transformNotesMeasurementPromisesResult(notesMeasurements)
@@ -143,8 +154,9 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
                     element: Path,
                     props: {
                         d: path,
+                        ...strokeProps,
+                        markerEnd: `url(#${MARKER_TYPES.LONG_LINK})`,
                     },
-                    // markerID: i === (chainTrack.length - 2) ? 'ShortLinkTriangle' : 'LongLinkTriangle',
                 })
             }
         }

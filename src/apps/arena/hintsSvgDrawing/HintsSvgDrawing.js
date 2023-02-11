@@ -1,29 +1,20 @@
-import React, {
-    memo, useState, useEffect, useMemo,
-} from 'react'
+import React, { memo, useState, useEffect } from 'react'
 
 import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import { Svg, Path } from 'react-native-svg'
+import { Svg } from 'react-native-svg'
 
 import _map from 'lodash/src/utils/map'
 import _isNil from 'lodash/src/utils/isNil'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 import _isFunction from 'lodash/src/utils/isFunction'
 
-import { roundToNearestPixel } from '../../../utils/util'
-
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
-import { MARKER_TYPES } from './svgDefs/remotePairs/remotePairs.constants'
 import { HINT_ID_VS_SVG_DEFS } from './svgDefs'
 import { HINT_ID_VS_SVG_ELEMENTS_HANDLER } from './svgElementsHandlers'
-
-const SVG_STROKE_WIDTH = roundToNearestPixel(2) // width 2 is good for chains
-
-const linkColor = 'rgb(217, 19, 235)'
 
 const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
     const {
@@ -76,19 +67,7 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
                 overflow="visible"
             >
                 {getDefs()}
-                {
-                    _map(svgElementsConfigs, ({ element: Element, markerID = MARKER_TYPES.LONG_LINK, props }) => (
-                        <Element
-                            {...props}
-                            // TODO: get these below props from components only
-                            stroke={linkColor}
-                            strokeWidth={SVG_STROKE_WIDTH}
-                            strokeLinejoin="round"
-                            strokeDasharray="6, 4"
-                            {... (Element === Path) && { markerEnd: `url(#${markerID})` }}
-                        />
-                    ))
-                }
+                {_map(svgElementsConfigs, ({ element: Element, props }) => (<Element {...props} />))}
             </Svg>
         </View>
     )
