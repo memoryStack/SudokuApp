@@ -31,32 +31,31 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
         BOARD_GRID_HEIGHT: SVG_CONTAINER_HEIGHT,
     } = useBoardElementsDimensions()
 
-    const [outlineState, setPath] = useState({ svgElements: [], boardYPos: -1, boardXPos: -1 })
+    const [svgElementsConfigs, setSvgElementsConfigs] = useState([])
+    const [boardPageCordinates, setBoardPageCordinates] = useState({ x: -1, y: -1 })
 
     useEffect(() => {
         const handler = () => {
             boardRef.current && boardRef.current.measure(async (_x, _y, _boardWidth, _boardHeight, boardPageX, boardPageY) => {
                 const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
                 if (!_isFunction(svgElementsHandler)) return
+                // eslint-disable-next-line no-shadow
                 const boardPageCordinates = { x: boardPageX, y: boardPageY }
-                setPath({
-                    svgElements: await svgElementsHandler({ notesRefs, boardPageCordinates }),
-                    boardXPos: boardPageX,
-                    boardYPos: boardPageY,
-                })
+                setBoardPageCordinates(boardPageCordinates)
+                setSvgElementsConfigs(await svgElementsHandler({ notesRefs, boardPageCordinates }))
             })
         }
         setTimeout(handler, 4000)
     }, [boardRef, notesRefs])
 
-    if (_isEmpty(outlineState.svgElements)) return null
+    if (_isEmpty(svgElementsConfigs)) return null
 
     const getContianerStyles = () => ({
         position: 'absolute',
         width: SVG_CONTAINER_WIDTH,
         height: SVG_CONTAINER_HEIGHT,
-        top: outlineState.boardYPos,
-        left: outlineState.boardXPos,
+        top: boardPageCordinates.y,
+        left: boardPageCordinates.x,
         overflow: 'visible',
         zIndex: 1,
     })
@@ -76,7 +75,7 @@ const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
             >
                 {getDefs()}
                 {
-                    _map(outlineState.svgElements, ({ element: Element, markerID = MARKER_TYPES.LONG_LINK, props }) => (
+                    _map(svgElementsConfigs, ({ element: Element, markerID = MARKER_TYPES.LONG_LINK, props }) => (
                         <Element
                             {...props}
                             // TODO: get these below props from components only
