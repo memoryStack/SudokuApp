@@ -8,7 +8,7 @@ import _reduce from 'lodash/src/utils/reduce'
 import {
     getCurveCenters,
     getPointsOnLineFromEndpoints,
-} from '../../../gameBoard/curvePath.utils'
+} from './helpers/curvePath.helpers'
 
 const getChainPath = async ({ notesRefs, boardPageCordinates }) => {
     const { x: boardPageX, y: boardPageY } = boardPageCordinates

@@ -1,4 +1,4 @@
-import { areSameColCells, areSameRowCells } from '../utils/util'
+import { areSameColCells, areSameRowCells } from '../../../../utils/util'
 
 export const CURVER_DIRECTIONS = {
     CLOCKWISE: 'CLOCKWISE',

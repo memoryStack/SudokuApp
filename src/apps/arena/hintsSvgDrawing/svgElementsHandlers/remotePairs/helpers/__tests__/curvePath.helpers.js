@@ -5,7 +5,7 @@ import {
     shouldCurveLink,
     getCurveDirection,
     CURVER_DIRECTIONS,
-} from './curvePath.utils'
+} from '../curvePath.helpers'
 
 describe('getRoatatedPoint()', () => {
     test('rotates point anticlockwise w.r.t origin', () => {
