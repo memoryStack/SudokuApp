@@ -1,4 +1,6 @@
+import { consoleLog } from '../../../../../../utils/util'
 import { areSameColCells, areSameRowCells } from '../../../../utils/util'
+import { ONE_STEP_LINK_DIRECTIONS } from '../remotePairs.constants'
 
 export const CURVER_DIRECTIONS = {
     CLOCKWISE: 'CLOCKWISE',
@@ -139,4 +141,84 @@ export const getCurveCenters = line => {
         centerA: getRoatatedPoint(closeToStart, line.start, angleInDegree),
         centerB: getRoatatedPoint(closeToEnd, line.end, 360 - angleInDegree),
     }
+}
+
+// TODO: think about making a reader class for this link object structure
+export const isOneStepLink = link => {
+    const {
+        start: { cell: startCell, note: startNote },
+        end: { cell: endCell, note: endNote },
+    } = link
+    if (!areNeighbourCells(startCell, endCell)) return false
+
+    const linkDirection = getOneStepLinkDirection(startCell, endCell)
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.LEFT_RIGHT) {
+        const startNoteInThirdColumn = startNote % 3 === 0
+        const endNoteInFirstColumn = endNote % 3 === 1
+        const bothNotesAreInSameHorizontalLine = Math.abs(startNote - endNote) === 2
+        return startNoteInThirdColumn && endNoteInFirstColumn && bothNotesAreInSameHorizontalLine
+    }
+
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.RIGHT_LEFT) {
+        const startNoteInFirstColumn = startNote % 3 === 1
+        const endNoteInLastColumn = endNote % 3 === 0
+        const bothNotesAreInSameHorizontalLine = Math.abs(startNote - endNote) === 2
+        return startNoteInFirstColumn && endNoteInLastColumn && bothNotesAreInSameHorizontalLine
+    }
+
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.TOP_BOTTOM) {
+        const startNoteInLastRow = startNote >= 7
+        const endNoteInFirstRow = endNote <= 3
+        const bothNotesAreInSameVerticalLine = Math.abs(startNote - endNote) === 6
+        return startNoteInLastRow && endNoteInFirstRow && bothNotesAreInSameVerticalLine
+    }
+
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.BOTTOM_TOP) {
+        const startNoteInFirstRow = startNote <= 3
+        const endNoteInLastRow = endNote >= 7
+        const bothNotesAreInSameVerticalLine = Math.abs(startNote - endNote) === 6
+        return startNoteInFirstRow && endNoteInLastRow && bothNotesAreInSameVerticalLine
+    }
+
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.BOTTOM_RIGHT) {
+        return startNote === 9 && endNote === 1
+    }
+
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.TOP_LEFT) {
+        return startNote === 1 && endNote === 9
+    }
+
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.TOP_RIGHT) {
+        return startNote === 3 && endNote === 7
+    }
+
+    if (linkDirection === ONE_STEP_LINK_DIRECTIONS.BOTTOM_LEFT) {
+        return startNote === 7 && endNote === 3
+    }
+
+    return false
+}
+
+export const areNeighbourCells = (aCell, bCell) => {
+    const horizontalSteps = Math.abs(aCell.row - bCell.row)
+    const verticalSteps = Math.abs(aCell.col - bCell.col)
+    return horizontalSteps < 2 && verticalSteps < 2
+}
+
+export const getOneStepLinkDirection = (startCell, endCell) => {
+    const verticalSteps = startCell.row - endCell.row
+    const horizontalSteps = startCell.col - endCell.col
+    const isMovingRight = horizontalSteps < 0
+    const isMovingLeft = horizontalSteps > 0
+    const isMovingUp = verticalSteps > 0
+    const isMovingDown = verticalSteps < 0
+
+    if (isMovingUp && isMovingRight) return ONE_STEP_LINK_DIRECTIONS.TOP_RIGHT
+    if (isMovingUp && isMovingLeft) return ONE_STEP_LINK_DIRECTIONS.TOP_LEFT
+    if (isMovingDown && isMovingRight) return ONE_STEP_LINK_DIRECTIONS.BOTTOM_RIGHT
+    if (isMovingDown && isMovingLeft) return ONE_STEP_LINK_DIRECTIONS.BOTTOM_LEFT
+    if (isMovingLeft) return ONE_STEP_LINK_DIRECTIONS.RIGHT_LEFT
+    if (isMovingRight) return ONE_STEP_LINK_DIRECTIONS.LEFT_RIGHT
+    if (isMovingUp) return ONE_STEP_LINK_DIRECTIONS.BOTTOM_TOP
+    return ONE_STEP_LINK_DIRECTIONS.TOP_BOTTOM
 }

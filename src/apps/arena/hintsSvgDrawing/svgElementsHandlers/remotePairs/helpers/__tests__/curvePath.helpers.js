@@ -5,7 +5,13 @@ import {
     shouldCurveLink,
     getCurveDirection,
     CURVER_DIRECTIONS,
+    isOneStepLink,
+    areNeighbourCells,
+    getOneStepLinkDirection,
 } from '../curvePath.helpers'
+
+import { ONE_STEP_LINK_DIRECTIONS } from '../../remotePairs.constants'
+import { consoleLog } from '../../../../../../../utils/util'
 
 describe('getRoatatedPoint()', () => {
     test('rotates point anticlockwise w.r.t origin', () => {
@@ -187,7 +193,7 @@ describe('shouldCurveLink()', () => {
     })
 })
 
-describe.only('getCurveDirection()', () => {
+describe('getCurveDirection()', () => {
     describe('first row links', () => {
         test('should turn anti-clockwise while moving from left to right in first row', () => {
             const startCell = { row: 0, col: 2 }
@@ -250,5 +256,227 @@ describe.only('getCurveDirection()', () => {
             const endCell = { row: 3, col: 1 }
             expect(getCurveDirection(startCell, endCell)).toBe(CURVER_DIRECTIONS.CLOCKWISE)
         })
+    })
+})
+
+describe('isOneStepLink()', () => {
+    test('returns false if cells are not neighbours', () => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 3,
+            },
+            end: {
+                cell: { row: 0, col: 4 },
+                note: 1,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(false)
+    })
+
+    test('returns true when short link is in left-right direction and start note is in third column and end note is in first column', () => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 3,
+            },
+            end: {
+                cell: { row: 0, col: 1 },
+                note: 1,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+
+    test('returns true when short link is in right-left direction and start note is in first column and end note is in third column and line joining them is horizontally straight', () => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 1 },
+                note: 7,
+            },
+            end: {
+                cell: { row: 0, col: 0 },
+                note: 9,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+
+    test('returns false when short link is in left-right direction and start note is in first column and end note is in third column and line joining them is not horizontally straight', () => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 9,
+            },
+            end: {
+                cell: { row: 0, col: 1 },
+                note: 1,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(false)
+    })
+
+    test.each([[9, 3], [8, 2], [7, 1]])('returns true when short link is in top-bottom direction and start note is in last row and end note is in first row and line joining them is vertically straight', (startNote, endNote) => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: startNote,
+            },
+            end: {
+                cell: { row: 1, col: 0 },
+                note: endNote,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+
+    test.each([[9, 1], [5, 2], [7, 2]])('returns false when cells are arranged as top-bottom but link violates one of conditions to be a short link', (startNote, endNote) => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: startNote,
+            },
+            end: {
+                cell: { row: 1, col: 0 },
+                note: endNote,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(false)
+    })
+
+    test.each([[1, 7], [2, 8], [3, 9]])('returns true when short link is in bottom-top direction and start note is in first row and end note is in last row and line joining them is vertically straight', (startNote, endNote) => {
+        const link = {
+            start: {
+                cell: { row: 1, col: 0 },
+                note: startNote,
+            },
+            end: {
+                cell: { row: 0, col: 0 },
+                note: endNote,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+
+    test('returns true when short link is in bottom-right direction and link notes are closest to touching corner', () => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 9,
+            },
+            end: {
+                cell: { row: 1, col: 1 },
+                note: 1,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+
+    test('returns true when short link is in bottom-right direction and one or both of the link notes are not closest to touching corner', () => {
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 8,
+            },
+            end: {
+                cell: { row: 1, col: 1 },
+                note: 1,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(false)
+    })
+
+    test('returns true when short link is in top-left direction and link notes are closest to touching corner', () => {
+        const link = {
+            start: {
+                cell: { row: 1, col: 1 },
+                note: 1,
+            },
+            end: {
+                cell: { row: 0, col: 0 },
+                note: 9,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+
+    test('returns true when short link is in top-right direction and link notes are closest to touching corner', () => {
+        const link = {
+            start: {
+                cell: { row: 1, col: 1 },
+                note: 3,
+            },
+            end: {
+                cell: { row: 0, col: 2 },
+                note: 7,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+
+    test('returns true when short link is in bottom-left direction and link notes are closest to touching corner', () => {
+        const link = {
+            start: {
+                cell: { row: 1, col: 1 },
+                note: 7,
+            },
+            end: {
+                cell: { row: 2, col: 0 },
+                note: 3,
+            },
+        }
+        expect(isOneStepLink(link)).toBe(true)
+    })
+})
+
+describe('areNeighbourCells()', () => {
+    test('returns true when cells are one step away horizontally', () => {
+        const aCell = { row: 2, col: 2 }
+        const bCell = { row: 2, col: 1 }
+        expect(areNeighbourCells(aCell, bCell)).toBe(true)
+    })
+
+    test('returns true when cells are one step away vertically', () => {
+        const aCell = { row: 2, col: 2 }
+        const bCell = { row: 1, col: 2 }
+        expect(areNeighbourCells(aCell, bCell)).toBe(true)
+    })
+
+    test('returns true when cells are one step away diagonally', () => {
+        const aCell = { row: 2, col: 2 }
+        const bCell = { row: 1, col: 3 }
+        expect(areNeighbourCells(aCell, bCell)).toBe(true)
+    })
+
+    test('returns false when cells are multiple steps away from each other in any direction', () => {
+        const aCell = { row: 2, col: 2 }
+        const bCell = { row: 1, col: 4 }
+        expect(areNeighbourCells(aCell, bCell)).toBe(false)
+    })
+})
+
+describe('getOneStepLinkDirection()', () => {
+    test('right-left when end cell is one step left to the start cell in same row', () => {
+        const startCell = { row: 2, col: 3 }
+        const endCell = { row: 2, col: 2 }
+        expect(getOneStepLinkDirection(startCell, endCell)).toBe(ONE_STEP_LINK_DIRECTIONS.RIGHT_LEFT)
+    })
+
+    test('left-right when end cell is one step right to the start cell in same row', () => {
+        const startCell = { row: 2, col: 2 }
+        const endCell = { row: 2, col: 3 }
+        expect(getOneStepLinkDirection(startCell, endCell)).toBe(ONE_STEP_LINK_DIRECTIONS.LEFT_RIGHT)
+    })
+
+    test('top-right when end cell is one step up and right to the start cell', () => {
+        const startCell = { row: 2, col: 2 }
+        const endCell = { row: 1, col: 3 }
+        expect(getOneStepLinkDirection(startCell, endCell)).toBe(ONE_STEP_LINK_DIRECTIONS.TOP_RIGHT)
+    })
+
+    test('bottom-right when end cell is one step down and right to the start cell', () => {
+        const startCell = { row: 2, col: 2 }
+        const endCell = { row: 3, col: 3 }
+        expect(getOneStepLinkDirection(startCell, endCell)).toBe(ONE_STEP_LINK_DIRECTIONS.BOTTOM_RIGHT)
     })
 })
