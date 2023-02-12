@@ -59,7 +59,7 @@ export const getPointsOnLineFromEndpoints = (line, distanceOnLine) => {
     }
 }
 
-// TODO: remote it, most likely won't be used
+// TODO: remove it, most likely won't be used
 export const getAngleBetweenLines = (aLine, bLine) => {
     const aVector = {
         x: aLine.end.x - aLine.start.x,
