@@ -131,63 +131,73 @@ describe('getAngleBetweenLines()', () => {
 
 describe('shouldCurveLink()', () => {
     test('returns false if start and end cells do not make horizontal or vertical straight lines', () => {
-        const linkStart = {
-            cell: { row: 0, col: 0 },
-            note: 1,
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 1,
+            },
+            end: {
+                cell: { row: 2, col: 2 },
+                note: 1,
+            },
         }
-        const linkEnd = {
-            cell: { row: 2, col: 2 },
-            note: 1,
-        }
-        expect(shouldCurveLink(linkStart, linkEnd)).toBe(false)
+        expect(shouldCurveLink(link)).toBe(false)
     })
 
     test('returns true if cells are in same row and startNote and endNote are in same horizontal line', () => {
-        const linkStart = {
-            cell: { row: 0, col: 0 },
-            note: 1,
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 1,
+            },
+            end: {
+                cell: { row: 0, col: 4 },
+                note: 3,
+            },
         }
-        const linkEnd = {
-            cell: { row: 0, col: 4 },
-            note: 3,
-        }
-        expect(shouldCurveLink(linkStart, linkEnd)).toBe(true)
+        expect(shouldCurveLink(link)).toBe(true)
     })
 
     test('returns false if cells are in same row but startNote and endNote are not in same horizontal line', () => {
-        const linkStart = {
-            cell: { row: 0, col: 0 },
-            note: 4,
+        const link = {
+            start: {
+                cell: { row: 0, col: 0 },
+                note: 4,
+            },
+            end: {
+                cell: { row: 0, col: 4 },
+                note: 9,
+            },
         }
-        const linkEnd = {
-            cell: { row: 0, col: 4 },
-            note: 9,
-        }
-        expect(shouldCurveLink(linkStart, linkEnd)).toBe(false)
+        expect(shouldCurveLink(link)).toBe(false)
     })
 
     test('returns true if cells are in same column and startNote and endNote are in same vertical line', () => {
-        const linkStart = {
-            cell: { row: 2, col: 2 },
-            note: 2,
+        const link = {
+            start: {
+                cell: { row: 2, col: 2 },
+                note: 2,
+            },
+            end: {
+                cell: { row: 4, col: 2 },
+                note: 8,
+            },
         }
-        const linkEnd = {
-            cell: { row: 4, col: 2 },
-            note: 8,
-        }
-        expect(shouldCurveLink(linkStart, linkEnd)).toBe(true)
+        expect(shouldCurveLink(link)).toBe(true)
     })
 
     test('returns false if cells are in same column but startNote and endNote are not in same vertical line', () => {
-        const linkStart = {
-            cell: { row: 2, col: 2 },
-            note: 2,
+        const link = {
+            start: {
+                cell: { row: 2, col: 2 },
+                note: 2,
+            },
+            end: {
+                cell: { row: 4, col: 2 },
+                note: 9,
+            },
         }
-        const linkEnd = {
-            cell: { row: 4, col: 2 },
-            note: 9,
-        }
-        expect(shouldCurveLink(linkStart, linkEnd)).toBe(false)
+        expect(shouldCurveLink(link)).toBe(false)
     })
 })
 

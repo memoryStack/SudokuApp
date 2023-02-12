@@ -5,6 +5,10 @@ import _forEach from 'lodash/src/utils/forEach'
 import _set from 'lodash/src/utils/set'
 import _reduce from 'lodash/src/utils/reduce'
 
+import { roundToNearestPixel } from '../../../../../utils/util'
+
+import { MARKER_TYPES } from '../../svgDefs/remotePairs/remotePairs.constants'
+
 import {
     getCurveCenters,
     getPointsOnLineFromEndpoints,
@@ -12,10 +16,9 @@ import {
     shouldCurveLink,
     getCurveDirection,
 } from './helpers/remotePairs.helpers'
-import { MARKER_TYPES } from '../../svgDefs/remotePairs/remotePairs.constants'
-import { roundToNearestPixel } from '../../../../../utils/util'
 import { LINK_ENDPOINTS_OFFSET } from './remotePairs.constants'
 
+// TODO: hint generator will send this color
 const linkColor = 'rgb(217, 19, 235)'
 
 const chainTrack = [
@@ -62,6 +65,7 @@ const strokeProps = {
     strokeDasharray: '6, 4',
 }
 
+// TODO: get link color and chain details as well in args
 const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates }) => new Promise(resolve => {
     Promise.all(getAllNotesMeasurePromises(notesRefs, chainTrack)).then(notesRawMeasurements => {
         const notesMeasurements = transformNotesMeasurementPromisesResult(notesRawMeasurements)
@@ -140,7 +144,7 @@ const getLinkCoordinates = (link, notesMeasurements, boardPageCordinates) => {
 const getLinkPathGeometry = (link, linkCoordinates) => {
     const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(linkCoordinates, LINK_ENDPOINTS_OFFSET)
 
-    if (shouldCurveLink(link.start, link.end) && !isOneStepLink(link)) {
+    if (shouldCurveLink(link) && !isOneStepLink(link)) {
         const curveDirection = getCurveDirection(link.start.cell, link.end.cell)
         const { centerA, centerB } = getCurveCenters(linkCoordinates, curveDirection)
         return [

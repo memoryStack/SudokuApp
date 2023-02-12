@@ -1,4 +1,5 @@
 import { areSameColCells, areSameRowCells } from '../../../../utils/util'
+import LinkReader from '../readers/link.reader'
 
 import { ONE_STEP_LINK_DIRECTIONS, CURVE_DIRECTIONS } from '../remotePairs.constants'
 
@@ -68,14 +69,14 @@ export const getAngleBetweenLines = (aLine, bLine) => {
     return radToDeg(Math.acos(vectorsDotProduct / getLineSegmentLength(aLine) / getLineSegmentLength(bLine)))
 }
 
-export const shouldCurveLink = (linkStart, linkEnd) => {
-    const cellsPair = [linkStart.cell, linkEnd.cell]
+export const shouldCurveLink = link => {
+    const cellsPair = [LinkReader.startCell(link), LinkReader.endCell(link)]
     const cellsInSameRow = areSameRowCells(cellsPair)
     const cellsInSameCol = areSameColCells(cellsPair)
     if (!cellsInSameRow && !cellsInSameCol) return false
 
-    const startNoteIndex = linkStart.note - 1
-    const endNoteIndex = linkEnd.note - 1
+    const startNoteIndex = LinkReader.startNote(link) - 1
+    const endNoteIndex = LinkReader.endNote(link) - 1
     if (cellsInSameRow) return Math.floor(startNoteIndex / 3) === Math.floor(endNoteIndex / 3)
     return (startNoteIndex % 3) === (endNoteIndex % 3)
 }
@@ -136,12 +137,13 @@ export const getCurveCenters = (line, curveDirection) => {
     }
 }
 
-// TODO: think about making a reader class for this link object structure
+// TODO: break down this function
 export const isOneStepLink = link => {
-    const {
-        start: { cell: startCell, note: startNote },
-        end: { cell: endCell, note: endNote },
-    } = link
+    const startCell = LinkReader.startCell(link)
+    const endCell = LinkReader.endCell(link)
+    const startNote = LinkReader.startNote(link)
+    const endNote = LinkReader.endNote(link)
+
     if (!areNeighbourCells(startCell, endCell)) return false
 
     const linkDirection = getOneStepLinkDirection(startCell, endCell)
