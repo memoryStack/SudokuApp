@@ -1,4 +1,5 @@
 import { areSameColCells, areSameRowCells } from '../../../../utils/util'
+
 import { ONE_STEP_LINK_DIRECTIONS, CURVE_DIRECTIONS } from '../remotePairs.constants'
 
 function degToRad(deg) {
@@ -106,29 +107,27 @@ export const getCurveDirection = (startCell, endCell) => {
     return CURVE_DIRECTIONS.CLOCKWISE
 }
 
-// write util which will give two points on one side only
-
-export const getCurveCenters = line => {
+export const getCurveCenters = (line, curveDirection) => {
     // const linkType = 'smallLink'
     const linkType = 'longLink'
 
-    // +ve angle rotation will make anticlockwise curve
-    // -ve will make clockwise curve
+    const rotationDirection = curveDirection === CURVE_DIRECTIONS.ANTI_CLOCKWISE ? 1 : -1
 
     const segmentLength = getLineSegmentLength(line)
 
-    const curverCentersConfig = {
+    // TODO: extract it out, it needs some finalisation and testing as well
+    const curveCentersConfig = {
         smallLink: {
             distanceOnLine: segmentLength * 0.45,
-            angleInDegree: 30, // how to know what type of curve it will give
+            angleInDegree: 30 * rotationDirection,
         },
         longLink: {
             distanceOnLine: segmentLength * 0.45,
-            angleInDegree: 20,
+            angleInDegree: 20 * rotationDirection,
         },
     }
 
-    const { angleInDegree, distanceOnLine } = curverCentersConfig[linkType]
+    const { angleInDegree, distanceOnLine } = curveCentersConfig[linkType]
 
     const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(line, distanceOnLine)
     return {

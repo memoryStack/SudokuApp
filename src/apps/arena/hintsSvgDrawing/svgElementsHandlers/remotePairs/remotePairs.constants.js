@@ -13,3 +13,5 @@ export const CURVE_DIRECTIONS = {
     CLOCKWISE: 'CLOCKWISE',
     ANTI_CLOCKWISE: 'ANTI_CLOCKWISE',
 }
+
+export const LINK_ENDPOINTS_OFFSET = 6 // in px

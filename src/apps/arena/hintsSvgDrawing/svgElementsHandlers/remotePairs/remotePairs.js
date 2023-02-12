@@ -10,9 +10,11 @@ import {
     getPointsOnLineFromEndpoints,
     isOneStepLink,
     shouldCurveLink,
-} from './helpers/curvePath.helpers'
+    getCurveDirection,
+} from './helpers/remotePairs.helpers'
 import { MARKER_TYPES } from '../../svgDefs/remotePairs/remotePairs.constants'
 import { roundToNearestPixel } from '../../../../../utils/util'
+import { LINK_ENDPOINTS_OFFSET } from './remotePairs.constants'
 
 const linkColor = 'rgb(217, 19, 235)'
 
@@ -51,39 +53,6 @@ const chainTrack = [
         in: 1,
         out: 3,
     },
-
-    // small bond from right to left
-    // {
-    //     cell: { row: 0, col: 8 },
-    //     out: 1,
-    // },
-    // {
-    //     cell: { row: 0, col: 7 },
-    //     in: 1,
-    // },
-
-    // write for one step bond as well
-
-    // small bond from top to bottom
-    // {
-    //     cell: { row: 2, col: 6 },
-    //     out: 3,
-    // },
-    // {
-    //     cell: { row: 3, col: 6 },
-    //     in: 3,
-    // },
-
-    // long bond
-    // {
-    //     cell: { row: 3, col: 4 },
-    //     out: 2,
-    // },
-    // {
-    //     cell: { row: 5, col: 3 },
-    //     in: 7,
-    // },
-
 ]
 
 const strokeProps = {
@@ -99,14 +68,13 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
 
         const svgElementsArgs = []
         for (let i = 1; i < chainTrack.length; i++) {
-            const { cell: currentSpotCell, out: currentOut } = chainTrack[i - 1] // TODO: rename these variables
-            const { cell: nextSpotCell, in: nextSpotIn } = chainTrack[i]
+            const { cell: startCell, out: startNote } = chainTrack[i - 1]
+            const { cell: endCell, in: endNote } = chainTrack[i]
 
             const link = {
-                start: { cell: currentSpotCell, note: currentOut },
-                end: { cell: nextSpotCell, note: nextSpotIn },
+                start: { cell: startCell, note: startNote },
+                end: { cell: endCell, note: endNote },
             }
-
             const linkCoordinates = getLinkCoordinates(link, notesMeasurements, boardPageCordinates)
             const linkMarker = isOneStepLink(link) ? MARKER_TYPES.SHORT_LINK : MARKER_TYPES.LONG_LINK
             svgElementsArgs.push({
@@ -170,11 +138,11 @@ const getLinkCoordinates = (link, notesMeasurements, boardPageCordinates) => {
 }
 
 const getLinkPathGeometry = (link, linkCoordinates) => {
-    // TODO: remove magic number
-    const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(linkCoordinates, 6) // 7 units offset
+    const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(linkCoordinates, LINK_ENDPOINTS_OFFSET)
 
     if (shouldCurveLink(link.start, link.end) && !isOneStepLink(link)) {
-        const { centerA, centerB } = getCurveCenters(linkCoordinates)
+        const curveDirection = getCurveDirection(link.start.cell, link.end.cell)
+        const { centerA, centerB } = getCurveCenters(linkCoordinates, curveDirection)
         return [
             'M', closeToStart.x, closeToStart.y,
             'C', centerA.x, centerA.y, centerB.x, centerB.y, closeToEnd.x, closeToEnd.y,

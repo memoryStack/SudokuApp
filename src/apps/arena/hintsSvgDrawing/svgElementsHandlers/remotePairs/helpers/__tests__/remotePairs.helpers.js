@@ -10,7 +10,6 @@ import {
 } from '../remotePairs.helpers'
 
 import { ONE_STEP_LINK_DIRECTIONS, CURVE_DIRECTIONS } from '../../remotePairs.constants'
-import { consoleLog } from '../../../../../../../utils/util'
 
 describe('getRoatatedPoint()', () => {
     test('rotates point anticlockwise w.r.t origin', () => {
