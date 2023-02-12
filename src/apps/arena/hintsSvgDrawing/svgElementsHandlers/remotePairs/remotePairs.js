@@ -145,7 +145,7 @@ const getLinkPathGeometry = (link, linkCoordinates) => {
     const { closeToStart, closeToEnd } = getPointsOnLineFromEndpoints(linkCoordinates, LINK_ENDPOINTS_OFFSET)
 
     if (shouldCurveLink(link) && !isOneStepLink(link)) {
-        const curveDirection = getCurveDirection(link.start.cell, link.end.cell)
+        const curveDirection = getCurveDirection(link)
         const { centerA, centerB } = getCurveCenters(linkCoordinates, curveDirection)
         return [
             'M', closeToStart.x, closeToStart.y,

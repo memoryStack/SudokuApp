@@ -204,65 +204,83 @@ describe('shouldCurveLink()', () => {
 describe('getCurveDirection()', () => {
     describe('first row links', () => {
         test('should turn anti-clockwise while moving from left to right in first row', () => {
-            const startCell = { row: 0, col: 2 }
-            const endCell = { row: 0, col: 6 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
+            const link = {
+                start: { cell: { row: 0, col: 2 } },
+                end: { cell: { row: 0, col: 6 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
         })
 
         test('should turn clockwise while moving from right to left in first row', () => {
-            const startCell = { row: 0, col: 6 }
-            const endCell = { row: 0, col: 2 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
+            const link = {
+                start: { cell: { row: 0, col: 6 } },
+                end: { cell: { row: 0, col: 2 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
         })
     })
 
     describe('last row links', () => {
         test('should turn clockwise while moving from left to right in last row', () => {
-            const startCell = { row: 8, col: 2 }
-            const endCell = { row: 8, col: 6 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
+            const link = {
+                start: { cell: { row: 8, col: 2 } },
+                end: { cell: { row: 8, col: 6 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
         })
 
         test('should turn anti-clockwise while moving from right to left in last row', () => {
-            const startCell = { row: 8, col: 6 }
-            const endCell = { row: 8, col: 2 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
+            const link = {
+                start: { cell: { row: 8, col: 6 } },
+                end: { cell: { row: 8, col: 2 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
         })
     })
 
     describe('first column links', () => {
         test('should turn anti-clockwise while moving from bottom to top in first column', () => {
-            const startCell = { row: 4, col: 0 }
-            const endCell = { row: 2, col: 0 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
+            const link = {
+                start: { cell: { row: 4, col: 0 } },
+                end: { cell: { row: 2, col: 0 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
         })
 
         test('should turn clockwise while moving from top to bottom in first column', () => {
-            const startCell = { row: 2, col: 0 }
-            const endCell = { row: 4, col: 0 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
+            const link = {
+                start: { cell: { row: 2, col: 0 } },
+                end: { cell: { row: 4, col: 0 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
         })
     })
 
     describe('last column links', () => {
         test('should turn anti-clockwise while moving from top to bottom in last column', () => {
-            const startCell = { row: 2, col: 8 }
-            const endCell = { row: 4, col: 8 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
+            const link = {
+                start: { cell: { row: 2, col: 8 } },
+                end: { cell: { row: 4, col: 8 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.ANTI_CLOCKWISE)
         })
 
         test('should turn clockwise while moving from bottom to top in last column', () => {
-            const startCell = { row: 4, col: 8 }
-            const endCell = { row: 2, col: 8 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
+            const link = {
+                start: { cell: { row: 4, col: 8 } },
+                end: { cell: { row: 2, col: 8 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
         })
     })
 
     describe('any other link', () => {
         test('should turn clockwise always if link doesnt fall in above categories', () => {
-            const startCell = { row: 0, col: 1 }
-            const endCell = { row: 3, col: 1 }
-            expect(getCurveDirection(startCell, endCell)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
+            const link = {
+                start: { cell: { row: 0, col: 1 } },
+                end: { cell: { row: 3, col: 1 } },
+            }
+            expect(getCurveDirection(link)).toBe(CURVE_DIRECTIONS.CLOCKWISE)
         })
     })
 })

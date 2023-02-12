@@ -81,7 +81,10 @@ export const shouldCurveLink = link => {
     return (startNoteIndex % 3) === (endNoteIndex % 3)
 }
 
-export const getCurveDirection = (startCell, endCell) => {
+export const getCurveDirection = link => {
+    const startCell = LinkReader.startCell(link)
+    const endCell = LinkReader.endCell(link)
+
     // TODO: remove magic numbers from here
     const cellsPair = [startCell, endCell]
 
