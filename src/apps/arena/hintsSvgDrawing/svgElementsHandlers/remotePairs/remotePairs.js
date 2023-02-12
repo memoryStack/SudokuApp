@@ -16,6 +16,7 @@ import {
     shouldCurveLink,
     getCurveDirection,
 } from './helpers/remotePairs.helpers'
+import LinkReader from './readers/link.reader'
 import { LINK_ENDPOINTS_OFFSET } from './remotePairs.constants'
 
 // TODO: hint generator will send this color
@@ -121,10 +122,10 @@ const transformNotesMeasurementPromisesResult = notesMeasurements => _reduce(not
 }, [])
 
 const getLinkCoordinates = (link, notesMeasurements, boardPageCordinates) => {
-    const {
-        start: { cell: startCell, note: startNote },
-        end: { cell: endCell, note: endNote },
-    } = link
+    const startCell = LinkReader.startCell(link)
+    const endCell = LinkReader.endCell(link)
+    const startNote = LinkReader.startNote(link)
+    const endNote = LinkReader.endNote(link)
 
     const startCellMeasurements = notesMeasurements[startCell.row][startCell.col][startNote]
     const endCellMeasurements = notesMeasurements[endCell.row][endCell.col][endNote]
