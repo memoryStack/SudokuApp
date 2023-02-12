@@ -1,4 +1,3 @@
-import { consoleLog } from '../../../../../../utils/util'
 import { areSameColCells, areSameRowCells } from '../../../../utils/util'
 import { ONE_STEP_LINK_DIRECTIONS } from '../remotePairs.constants'
 

@@ -8,7 +8,7 @@ import {
     isOneStepLink,
     areNeighbourCells,
     getOneStepLinkDirection,
-} from '../curvePath.helpers'
+} from '../remotePairs.helpers'
 
 import { ONE_STEP_LINK_DIRECTIONS } from '../../remotePairs.constants'
 import { consoleLog } from '../../../../../../../utils/util'
