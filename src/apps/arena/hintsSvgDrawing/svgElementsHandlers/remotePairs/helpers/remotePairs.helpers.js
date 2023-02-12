@@ -1,10 +1,5 @@
 import { areSameColCells, areSameRowCells } from '../../../../utils/util'
-import { ONE_STEP_LINK_DIRECTIONS } from '../remotePairs.constants'
-
-export const CURVER_DIRECTIONS = {
-    CLOCKWISE: 'CLOCKWISE',
-    ANTI_CLOCKWISE: 'ANTI_CLOCKWISE',
-}
+import { ONE_STEP_LINK_DIRECTIONS, CURVE_DIRECTIONS } from '../remotePairs.constants'
 
 function degToRad(deg) {
     return deg * (Math.PI / 180.0)
@@ -90,25 +85,25 @@ export const getCurveDirection = (startCell, endCell) => {
 
     const areFirstRowCell = areSameRowCells(cellsPair) && startCell.row === 0
     if (areFirstRowCell) {
-        return startCell.col < endCell.col ? CURVER_DIRECTIONS.ANTI_CLOCKWISE : CURVER_DIRECTIONS.CLOCKWISE
+        return startCell.col < endCell.col ? CURVE_DIRECTIONS.ANTI_CLOCKWISE : CURVE_DIRECTIONS.CLOCKWISE
     }
 
     const areLastRowCell = areSameRowCells(cellsPair) && startCell.row === 8
     if (areLastRowCell) {
-        return startCell.col < endCell.col ? CURVER_DIRECTIONS.CLOCKWISE : CURVER_DIRECTIONS.ANTI_CLOCKWISE
+        return startCell.col < endCell.col ? CURVE_DIRECTIONS.CLOCKWISE : CURVE_DIRECTIONS.ANTI_CLOCKWISE
     }
 
     const areFirstColCell = areSameColCells(cellsPair) && startCell.col === 0
     if (areFirstColCell) {
-        return startCell.row < endCell.row ? CURVER_DIRECTIONS.CLOCKWISE : CURVER_DIRECTIONS.ANTI_CLOCKWISE
+        return startCell.row < endCell.row ? CURVE_DIRECTIONS.CLOCKWISE : CURVE_DIRECTIONS.ANTI_CLOCKWISE
     }
 
     const areLastColCell = areSameColCells(cellsPair) && startCell.col === 8
     if (areLastColCell) {
-        return startCell.row < endCell.row ? CURVER_DIRECTIONS.ANTI_CLOCKWISE : CURVER_DIRECTIONS.CLOCKWISE
+        return startCell.row < endCell.row ? CURVE_DIRECTIONS.ANTI_CLOCKWISE : CURVE_DIRECTIONS.CLOCKWISE
     }
 
-    return CURVER_DIRECTIONS.CLOCKWISE
+    return CURVE_DIRECTIONS.CLOCKWISE
 }
 
 // write util which will give two points on one side only
