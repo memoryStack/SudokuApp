@@ -8,6 +8,7 @@ import _isEmpty from 'lodash/src/utils/isEmpty'
 import _some from 'lodash/src/utils/some'
 import _reduce from 'lodash/src/utils/reduce'
 
+import isNil from 'lodash/src/utils/isNil'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
 
 import {
@@ -34,11 +35,14 @@ import {
     CHAIN_VS_REMOVABLE_NOTES_CELL_PARAMETERS,
 } from './remotePairs.constants'
 
+// TODO: it will return only one  hint by default
 export const getRemotePairsRawHints = (mainNumbers, notes, maxHintsThreshold) => {
     const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes)
     const notesPairsHostCells = getHostCellsForEachNotesPair(cellsWithValidNotes, notes)
     deleteInvalidNotesPairsKeys(notesPairsHostCells)
-    return getHintRawData(notesPairsHostCells, notes)
+
+    const rawHintData = getHintRawData(notesPairsHostCells, notes)
+    return isNil(rawHintData) ? null : [rawHintData]
 }
 
 export const getAllValidCellsWithPairs = (mainNumbers, notes) => {

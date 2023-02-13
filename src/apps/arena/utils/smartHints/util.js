@@ -7,9 +7,12 @@ const setCellDataInHintResult = (cell, highlightData, cellsToFocusData) => {
     cellsToFocusData[cell.row][cell.col] = highlightData
 }
 
-const maxHintsLimitReached = (hints, maxHintsThreshold) => {
-    return hints.length >= maxHintsThreshold
+const setCellNotesHighlightDataInHintResult = (cell, highlightData, cellsToFocusData) => {
+    if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
+    cellsToFocusData[cell.row][cell.col].notesToHighlightData = highlightData
 }
+
+const maxHintsLimitReached = (hints, maxHintsThreshold) => hints.length >= maxHintsThreshold
 
 const getCandidatesListText = (candidates, lastCandidateConjugation) => {
     if (candidates.length === 1) return `${candidates[0]}`
@@ -19,15 +22,13 @@ const getCandidatesListText = (candidates, lastCandidateConjugation) => {
     }
 
     const allCandidatesExceptLast = candidates.slice(0, candidates.length - 1)
-    return allCandidatesExceptLast.join(', ') + ` ${lastCandidateConjugation} ${candidates[candidates.length - 1]}`
+    return `${allCandidatesExceptLast.join(', ')} ${lastCandidateConjugation} ${candidates[candidates.length - 1]}`
 }
 
 const getHintExplanationStepsFromHintChunks = (hintChunks, addTryOutStep = true) => {
-    const result = hintChunks.map(hintChunk => {
-        return { text: hintChunk }
-    })
-    addTryOutStep &&
-        result.push({
+    const result = hintChunks.map(hintChunk => ({ text: hintChunk }))
+    addTryOutStep
+        && result.push({
             isTryOut: true,
             text: 'try out',
         })
@@ -53,9 +54,7 @@ const getCellsFromCellsToFocusedData = cellsToFocusData => {
     const rows = Object.keys(cellsToFocusData).map(row => parseInt(row, 10))
     rows.forEach(row => {
         const columns = Object.keys(cellsToFocusData[row]).map(row => parseInt(row, 10))
-        const rowCells = columns.map(column => {
-            return { row, col: column }
-        })
+        const rowCells = columns.map(column => ({ row, col: column }))
         result.push(...rowCells)
     })
     return result
@@ -68,6 +67,7 @@ const isCellFocusedInSmartHint = cell => {
 
 export {
     setCellDataInHintResult,
+    setCellNotesHighlightDataInHintResult,
     maxHintsLimitReached,
     getCandidatesListText,
     getHintExplanationStepsFromHintChunks,

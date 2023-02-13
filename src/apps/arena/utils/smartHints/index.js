@@ -18,6 +18,7 @@ import {
     transformXWingRawHint,
     transformYWingRawHint,
     transformOmissionRawHint,
+    transformRemotePairsRawHint,
 } from './rawHintTransformers'
 
 import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
@@ -35,28 +36,18 @@ export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData)
 // TODO: fix the contract of this module. it returns null and receiving all
 // sorts of things from it's dependent modules
 const HINT_ID_VS_HANDLERS = {
-    [HINTS_IDS.NAKED_SINGLE]: (mainNumbers, notesData) =>
-        getNakedSingleRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.HIDDEN_SINGLE]: (mainNumbers, notesData) =>
-        getHiddenSingleRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.NAKED_DOUBLE]: (mainNumbers, notesData) =>
-        HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](2, mainNumbers, notesData),
-    [HINTS_IDS.HIDDEN_DOUBLE]: (mainNumbers, notesData) =>
-        HINT_ID_VS_HANDLERS[GROUPS.HIDDEN_GROUP](2, mainNumbers, notesData),
-    [HINTS_IDS.NAKED_TRIPPLE]: (mainNumbers, notesData) =>
-        HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](3, mainNumbers, notesData),
-    [HINTS_IDS.HIDDEN_TRIPPLE]: (mainNumbers, notesData) =>
-        HINT_ID_VS_HANDLERS[GROUPS.HIDDEN_GROUP](3, mainNumbers, notesData),
-    [GROUPS.NAKED_GROUP]: (candidatesCount, mainNumbers, notesData) =>
-        getNakedGroupRawHints(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD),
-    [GROUPS.HIDDEN_GROUP]: (candidatesCount, mainNumbers, notesData) =>
-        getHiddenGroupRawHints(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.NAKED_SINGLE]: (mainNumbers, notesData) => getNakedSingleRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.HIDDEN_SINGLE]: (mainNumbers, notesData) => getHiddenSingleRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.NAKED_DOUBLE]: (mainNumbers, notesData) => HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](2, mainNumbers, notesData),
+    [HINTS_IDS.HIDDEN_DOUBLE]: (mainNumbers, notesData) => HINT_ID_VS_HANDLERS[GROUPS.HIDDEN_GROUP](2, mainNumbers, notesData),
+    [HINTS_IDS.NAKED_TRIPPLE]: (mainNumbers, notesData) => HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](3, mainNumbers, notesData),
+    [HINTS_IDS.HIDDEN_TRIPPLE]: (mainNumbers, notesData) => HINT_ID_VS_HANDLERS[GROUPS.HIDDEN_GROUP](3, mainNumbers, notesData),
+    [GROUPS.NAKED_GROUP]: (candidatesCount, mainNumbers, notesData) => getNakedGroupRawHints(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD),
+    [GROUPS.HIDDEN_GROUP]: (candidatesCount, mainNumbers, notesData) => getHiddenGroupRawHints(candidatesCount, notesData, mainNumbers, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.X_WING]: (mainNumbers, notesData) => getXWingRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.Y_WING]: (mainNumbers, notesData) => getYWingRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.OMISSION]: (mainNumbers, notesData) =>
-        getOmissionRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData) =>
-        getRemotePairsRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.OMISSION]: (mainNumbers, notesData) => getOmissionRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData) => getRemotePairsRawHints(mainNumbers, notesData, UI_HINTS_COUNT_THRESHOLD),
 }
 
 const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
@@ -69,4 +60,5 @@ const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
     [HINTS_IDS.X_WING]: transformXWingRawHint,
     [HINTS_IDS.Y_WING]: transformYWingRawHint,
     [HINTS_IDS.OMISSION]: transformOmissionRawHint,
+    [HINTS_IDS.REMOTE_PAIRS]: transformRemotePairsRawHint,
 }

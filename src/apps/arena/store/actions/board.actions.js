@@ -2,7 +2,6 @@ import _filter from 'lodash/src/utils/filter'
 import _isEmpty from 'lodash/src/utils/isEmpty'
 import _forEach from 'lodash/src/utils/forEach'
 import _get from 'lodash/src/utils/get'
-import _flatten from 'lodash/src/utils/flatten'
 import _map from 'lodash/src/utils/map'
 
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
@@ -106,8 +105,7 @@ const getNewNotesBunchToShow = () => {
         if (isCellEmpty({ row, col }, mainNumbers)) {
             _filter(
                 notes[row][col],
-                // ({ noteValue, show }) => !show && !duplicacyPresent(noteValue, mainNumbers, { row, col }),
-                ({ noteValue, show }) => !show,
+                ({ noteValue, show }) => !show && !duplicacyPresent(noteValue, mainNumbers, { row, col }),
             ).forEach(({ noteValue }) => {
                 result.push({ cell: { row, col }, note: noteValue })
             })
