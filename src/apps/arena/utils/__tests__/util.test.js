@@ -31,7 +31,7 @@ import {
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
 
-jest.mock('../../../../utils/storage')
+jest.mock('@utils/storage')
 
 describe('time component value formatter', () => {
     test('addLeadingZeroIfEligible test 1', () => {
@@ -487,7 +487,7 @@ describe('initMainNumbers()', () => {
 })
 
 describe('previousInactiveGameExists()', () => {
-    const { getKey } = require('../../../../utils/storage')
+    const { getKey } = require('@utils/storage')
     getKey
         .mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.INACTIVE }))
         .mockReturnValueOnce(getStoragePromise({ [GAME_DATA_KEYS.STATE]: GAME_STATE.DISPLAY_HINT }))

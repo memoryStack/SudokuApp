@@ -47,4 +47,14 @@ module.exports = {
         'react/jsx-props-no-spreading': 'off',
         // 'no-use-before-define': ['error', { functions: false }], // TODO: check how to use this rule optimally because it conflicts with "clean code" book suggestion
     },
+    settings: {
+        'import/resolver': {
+            alias: {
+                map: [
+                    ['@utils', './src/utils'],
+                ],
+                extensions: ['.ts', '.js', '.jsx', '.json'],
+            },
+        },
+    },
 }

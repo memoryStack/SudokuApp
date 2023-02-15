@@ -3,11 +3,13 @@ import _forEach from 'lodash/src/utils/forEach'
 import _every from 'lodash/src/utils/every'
 import _filter from 'lodash/src/utils/filter'
 
+import { getKey } from '@utils/storage'
 import { GAME_STATE } from '../../../resources/constants'
-import { getKey } from '../../../utils/storage'
 import { onlyUnique } from '../../../utils/util'
 
-import { BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
+import {
+    BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES,
+} from '../constants'
 
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSE_TYPE } from './smartHints/constants'
@@ -16,24 +18,14 @@ import { GameState } from './classes/gameState'
 
 export const addLeadingZeroIfEligible = value => {
     if (value > 9) return `${value}`
-    else return `0${value}`
+    return `0${value}`
 }
 
-export const shouldSaveDataOnGameStateChange = (currentState, previousState) => {
-    return new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
-}
+export const shouldSaveDataOnGameStateChange = (currentState, previousState) => new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
 
-export const duplicacyPresent = (num, mainNumbers, cell) => {
-    return isNumberPresentInAnyHouseOfCell(num, cell, mainNumbers)
-}
+export const duplicacyPresent = (num, mainNumbers, cell) => isNumberPresentInAnyHouseOfCell(num, cell, mainNumbers)
 
-const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => {
-    return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
-        return getHouseCells(getCellHouseInfo(houseType, cell)).some(({ row, col }) => {
-            return mainNumbers[row][col].value === number
-        })
-    })
-}
+const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => getHouseCells(getCellHouseInfo(houseType, cell)).some(({ row, col }) => mainNumbers[row][col].value === number))
 
 const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) => {
     const isPuzzleSolved = row === CELLS_IN_HOUSE
@@ -48,8 +40,7 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
     const isRowComplete = col === CELLS_IN_HOUSE
     if (isRowComplete) return getSolutionsCountForPuzzleType(mainNumbers, { row: row + 1, col: 0 })
 
-    if (!isCellEmpty({ row, col }, mainNumbers))
-        return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
+    if (!isCellEmpty({ row, col }, mainNumbers)) return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
 
     let result = 0
     for (let num = 1; num <= NUMBERS_IN_HOUSE; num++) {
@@ -83,9 +74,7 @@ export const areSameCells = (cellA, cellB) => {
 }
 
 export const areSameBlockCells = cells => {
-    const cellsBlockNum = cells.map(cell => {
-        return getBlockAndBoxNum(cell).blockNum
-    })
+    const cellsBlockNum = cells.map(cell => getBlockAndBoxNum(cell).blockNum)
     return cellsBlockNum.allValuesSame()
 }
 
@@ -122,26 +111,20 @@ export const initNotes = () => {
     return notes
 }
 
-export const getCellRowHouseInfo = cell => {
-    return {
-        type: HOUSE_TYPE.ROW,
-        num: cell.row,
-    }
-}
+export const getCellRowHouseInfo = cell => ({
+    type: HOUSE_TYPE.ROW,
+    num: cell.row,
+})
 
-export const getCellColHouseInfo = cell => {
-    return {
-        type: HOUSE_TYPE.COL,
-        num: cell.col,
-    }
-}
+export const getCellColHouseInfo = cell => ({
+    type: HOUSE_TYPE.COL,
+    num: cell.col,
+})
 
-export const getCellBlockHouseInfo = cell => {
-    return {
-        type: HOUSE_TYPE.BLOCK,
-        num: getBlockAndBoxNum(cell).blockNum,
-    }
-}
+export const getCellBlockHouseInfo = cell => ({
+    type: HOUSE_TYPE.BLOCK,
+    num: getBlockAndBoxNum(cell).blockNum,
+})
 
 export const getCellHouseInfo = (type, cell) => {
     if (type === HOUSE_TYPE.ROW) return getCellRowHouseInfo(cell)
@@ -156,18 +139,12 @@ export const getCellHousesInfo = cell => {
 }
 
 // TODO: merge duplicacyPresent and isDuplicateEntry functions into one
-export const isDuplicateEntry = (mainNumbers, cell, number) => {
-    return multipleNumberInstancesExistInAnyHouseOfCell(number, cell, mainNumbers)
-}
+export const isDuplicateEntry = (mainNumbers, cell, number) => multipleNumberInstancesExistInAnyHouseOfCell(number, cell, mainNumbers)
 
-const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => {
-    return [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
-        const numberHostCellsInHouse = getHouseCells(getCellHouseInfo(houseType, cell)).filter(({ row, col }) => {
-            return mainNumbers[row][col].value === number
-        })
-        return numberHostCellsInHouse.length > 1
-    })
-}
+const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
+    const numberHostCellsInHouse = getHouseCells(getCellHouseInfo(houseType, cell)).filter(({ row, col }) => mainNumbers[row][col].value === number)
+    return numberHostCellsInHouse.length > 1
+})
 
 export const duplicatesInPuzzle = mainNumbers => {
     for (let row = 0; row < HOUSES_COUNT; row++) {
@@ -223,24 +200,16 @@ export const getCellVisibleNotes = notes => {
     return result
 }
 
-export const getCellVisibleNotesCount = notes => {
-    return getCellVisibleNotes(notes).length
-}
+export const getCellVisibleNotesCount = notes => getCellVisibleNotes(notes).length
 
-export const isCellNoteVisible = (note, cellNotes) => {
-    return cellNotes[note - 1].show
-}
+export const isCellNoteVisible = (note, cellNotes) => cellNotes[note - 1].show
 
-export const convertBoardCellToNum = ({ row, col }) => {
-    return row * HOUSES_COUNT + col
-}
+export const convertBoardCellToNum = ({ row, col }) => row * HOUSES_COUNT + col
 
-export const convertBoardCellNumToCell = cellNum => {
-    return {
-        row: Math.floor(cellNum / HOUSES_COUNT),
-        col: cellNum % HOUSES_COUNT,
-    }
-}
+export const convertBoardCellNumToCell = cellNum => ({
+    row: Math.floor(cellNum / HOUSES_COUNT),
+    col: cellNum % HOUSES_COUNT,
+})
 
 export const getCellsCommonHouses = cells => {
     const result = {
@@ -250,7 +219,7 @@ export const getCellsCommonHouses = cells => {
     }
     for (let i = 1; i < cells.length; i++) {
         const pairCommonHouses = getPairCellsCommonHouses(cells[i - 1], cells[i])
-        for (let key in result) {
+        for (const key in result) {
             result[key] = result[key] && pairCommonHouses[key]
         }
     }
@@ -260,9 +229,7 @@ export const getCellsCommonHouses = cells => {
 
 export const areSameCellsSets = (setA, setB) => {
     if (setA.length !== setB.length) return false
-    return setA.every(cell => {
-        return isCellExists(cell, setB)
-    })
+    return setA.every(cell => isCellExists(cell, setB))
 }
 
 export const getHousePossibleNotes = (house, mainNumbers) => {
@@ -304,11 +271,7 @@ export const forHouseEachCell = (house, callback) => {
     })
 }
 
-export const filterHouseCells = (house, filterCallback) => {
-    return getHouseCells(house).filter(cell => {
-        return filterCallback(cell)
-    })
-}
+export const filterHouseCells = (house, filterCallback) => getHouseCells(house).filter(cell => filterCallback(cell))
 
 export const getCellAxesValues = cell => {
     const yAxisTexts = BOARD_AXES_VALUES.Y_AXIS
@@ -377,9 +340,7 @@ export const getHousesCellsSharedByCells = cells => {
 }
 
 export const areSameNotesInCells = (cells, notes) => {
-    const cellsNotes = cells.map(cell => {
-        return getCellVisibleNotes(notes[cell.row][cell.col])
-    })
+    const cellsNotes = cells.map(cell => getCellVisibleNotes(notes[cell.row][cell.col]))
     return _every(cellsNotes, aCellNotes => aCellNotes.sameArrays(cellsNotes[0]))
 }
 
