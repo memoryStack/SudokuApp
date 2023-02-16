@@ -50,27 +50,10 @@ const Board_ = ({
     onCellClick,
     isHintTryOut,
     showSmartHint,
-    // cellsHighlightData,
+    cellsHighlightData,
     axisTextStyles,
 }) => {
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
-
-    const cellsHighlightData = {
-        2: {
-            2: {
-                notesToHighlightData: {
-                    1: { fontColor: 'rgb(217, 19, 235)' },
-                    2: { fontColor },
-                },
-            },
-            3: {
-                notesToHighlightData: {
-                    2: { fontColor },
-                    1: { fontColor: 'rgb(217, 19, 235)' },
-                },
-            },
-        },
-    }
 
     const styles = useMemo(() => getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH }), [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
 

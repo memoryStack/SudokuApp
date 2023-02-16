@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 
-import { View, Text, ScrollView, useWindowDimensions } from 'react-native'
+import {
+    View, Text, ScrollView, useWindowDimensions,
+} from 'react-native'
 
 import { useSelector } from 'react-redux'
 
@@ -28,7 +30,9 @@ import { FOOTER_BUTTONS_TEXT, HITSLOP } from './constants'
 
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
-        hint: { focusedCells, title = '', logic = '', selectCellOnClose, inputPanelNumbersVisibility } = {},
+        hint: {
+            focusedCells, title = '', logic = '', selectCellOnClose, inputPanelNumbersVisibility,
+        } = {},
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
@@ -81,7 +85,8 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const onClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
-        closeByApplyHintClick.current && onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
+        const shouldApplyHint = closeByApplyHintClick.current && !_isEmpty(applyHintChanges)
+        if (shouldApplyHint) onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
     }, [onAction, selectCellOnClose, applyHintChanges])
 
     const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } } = {} } = {}) => {
@@ -96,29 +101,25 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const containerStyles = getContainerStyles(windowHeight)
 
-    const renderHeader = () => {
-        return (
-            <View style={styles.headerContainer}>
-                <View style={styles.hintTitleContainer}>
-                    <Text style={styles.hintTitle}>{title}</Text>
-                    {totalHintsCount > 1 ? (
-                        <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
-                    ) : null}
-                </View>
-                <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
-                    <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
-                </Touchable>
+    const renderHeader = () => (
+        <View style={styles.headerContainer}>
+            <View style={styles.hintTitleContainer}>
+                <Text style={styles.hintTitle}>{title}</Text>
+                {totalHintsCount > 1 ? (
+                    <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
+                ) : null}
             </View>
-        )
-    }
+            <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
+                <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
+            </Touchable>
+        </View>
+    )
 
-    const renderHintText = () => {
-        return (
-            <ScrollView ref={scrollViewRef} onScroll={handleOnScroll}>
-                <Text style={styles.hintLogicText}>{logic}</Text>
-            </ScrollView>
-        )
-    }
+    const renderHintText = () => (
+        <ScrollView ref={scrollViewRef} onScroll={handleOnScroll}>
+            <Text style={styles.hintLogicText}>{logic}</Text>
+        </ScrollView>
+    )
 
     const getTryOutResultTextStyle = () => {
         if (tryOutResult.state === TRY_OUT_RESULT_STATES.VALID_PROGRESS) return styles.tryOutProgressResult
@@ -126,36 +127,32 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         return styles.tryOutDefaultResult
     }
 
-    const renderTryOutContent = () => {
-        return (
-            <>
-                <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} singleRow />
-                <Text style={[styles.tryOutResult, getTryOutResultTextStyle()]}>{tryOutResult.msg}</Text>
-            </>
-        )
-    }
+    const renderTryOutContent = () => (
+        <>
+            <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} singleRow />
+            <Text style={[styles.tryOutResult, getTryOutResultTextStyle()]}>{tryOutResult.msg}</Text>
+        </>
+    )
 
-    const renderFooter = () => {
-        return (
-            <View style={styles.footerContainer}>
-                <Button
-                    text={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
-                    onClick={displayPrevButton ? onPrevClick : _noop}
-                    avoidDefaultContainerStyles={true}
-                    textStyles={styles.footerButtonText}
-                    hitSlop={HITSLOP}
-                />
-                {/* TODO: find better way to hide the button.it's wtf right now */}
-                <Button
-                    text={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
-                    onClick={displayNextButton ? onNextClick : onApplyHintClick}
-                    avoidDefaultContainerStyles={true}
-                    textStyles={styles.footerButtonText}
-                    hitSlop={HITSLOP}
-                />
-            </View>
-        )
-    }
+    const renderFooter = () => (
+        <View style={styles.footerContainer}>
+            <Button
+                text={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
+                onClick={displayPrevButton ? onPrevClick : _noop}
+                avoidDefaultContainerStyles
+                textStyles={styles.footerButtonText}
+                hitSlop={HITSLOP}
+            />
+            {/* TODO: find better way to hide the button.it's wtf right now */}
+            <Button
+                text={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
+                onClick={displayNextButton ? onNextClick : onApplyHintClick}
+                avoidDefaultContainerStyles
+                textStyles={styles.footerButtonText}
+                hitSlop={HITSLOP}
+            />
+        </View>
+    )
 
     return (
         <BottomDragger

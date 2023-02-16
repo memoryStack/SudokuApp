@@ -13,7 +13,7 @@ export const transformRemotePairsRawHint = ({ rawHint: remotePairs, notesData })
     return {
         cellsToFocusData: getUICellsToFocusData(remotePairs, notesData),
         title: HINT_ID_VS_TITLES[HINTS_IDS.REMOTE_PAIRS],
-        // steps: [{ text: getHintExplaination(remotePairs, notesData) }],
+        steps: [{ text: 'bla bla bla' }], // pass on something from here
         // applyHint: getApplyHintData(remotePairs, notesData),
     }
 }
@@ -24,7 +24,7 @@ export const getNotesColors = remotePairNotes => _reduce(remotePairNotes, (acc, 
 }), {})
 
 // TODO: how to test schema of this function ??
-// or what and how to test functions like this.
+// or what and how to test functions like this in general
 const getUICellsToFocusData = remotePairs => {
     const result = {}
 
@@ -40,25 +40,25 @@ const getUICellsToFocusData = remotePairs => {
     })
 
     const remotePairsNotesColors = getNotesColors(remotePairNotes)
-    _forEach(orderedChainCells, cell => {
-        const notesHighlightData = {}
-        _forEach(remotePairNotes, note => {
-            notesHighlightData[note] = remotePairsNotesColors[note]
-        })
-        setCellNotesHighlightDataInHintResult(cell, notesHighlightData, result)
-    })
+    highlightCellsAllNotes(orderedChainCells, remotePairNotes, remotePairsNotesColors, result)
 
     const removableNotesColors = {
         [remotePairNotes[0]]: 'red',
         [remotePairNotes[1]]: 'red',
     }
-    _forEach(removableNotesHostCells, cell => {
-        const notesHighlightData = {}
-        _forEach(remotePairNotes, note => {
-            notesHighlightData[note] = removableNotesColors[note]
-        })
-        setCellNotesHighlightDataInHintResult(cell, notesHighlightData, result)
-    })
+    highlightCellsAllNotes(removableNotesHostCells, remotePairNotes, removableNotesColors, result)
 
     return result
+}
+
+const highlightCellsAllNotes = (cells, notes, notesColors, cellsToFocusData) => {
+    _forEach(cells, cell => {
+        const notesHighlightData = {}
+        _forEach(notes, note => {
+            notesHighlightData[note] = {
+                fontColor: notesColors[note], // TODO: this fontColor key is necessary here, same with background color for cell
+            }
+        })
+        setCellNotesHighlightDataInHintResult(cell, notesHighlightData, cellsToFocusData)
+    })
 }
