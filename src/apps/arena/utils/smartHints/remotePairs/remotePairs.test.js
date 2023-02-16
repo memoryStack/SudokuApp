@@ -120,11 +120,11 @@ describe('deleteInvalidNotesPairsKeys()', () => {
 
 describe('getRemotePairsRawHints()', () => {
     test('returns raw details of a remote pair chain', () => {
-        const expectedResult = {
+        const expectedResult = [{
             remotePairNotes: [1, 7],
             orderedChainCells: [{ row: 1, col: 4 }, { row: 3, col: 4 }, { row: 5, col: 3 }, { row: 5, col: 2 }],
             removableNotesHostCells: [{ row: 1, col: 2 }],
-        }
+        }]
         expect(getRemotePairsRawHints(mainNumbers, notes)).toStrictEqual(expectedResult)
     })
 })
