@@ -1,4 +1,6 @@
-import React, { useMemo, useRef } from 'react'
+import React, {
+    useMemo, useRef,
+} from 'react'
 
 import { View, Text } from 'react-native'
 
@@ -7,6 +9,7 @@ import PropTypes from 'prop-types'
 import _get from 'lodash/src/utils/get'
 import _set from 'lodash/src/utils/set'
 import _noop from 'lodash/src/utils/noop'
+import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 
@@ -39,8 +42,6 @@ for (let i = 0; i < 10; i++) {
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const fontColor = 'green'
-
 const Board_ = ({
     screenName,
     gameState,
@@ -52,6 +53,7 @@ const Board_ = ({
     showSmartHint,
     cellsHighlightData,
     axisTextStyles,
+    svgProps,
 }) => {
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
@@ -73,11 +75,14 @@ const Board_ = ({
         return result
     }, [])
 
-    const renderChain = () => (
+    // TODO: control it's visibility via hints props
+    // hints will mark if svg is needed or not for a particulat hint
+    const renderHintSvgView = () => (
         <HintsSvgDrawing
             hint={{ id: HINTS_IDS.REMOTE_PAIRS }}
             boardRef={boardRef}
             notesRefs={notesRefs}
+            svgProps={svgProps}
         />
     )
 
@@ -218,6 +223,7 @@ const Board_ = ({
         <View
             ref={boardRef}
             style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}
+            collapsable={false}
         >
             {looper.map((row, index) => renderRow(row, `${index}`))}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
@@ -232,7 +238,7 @@ const Board_ = ({
                 {yAxis}
                 {renderBoard()}
             </View>
-            {renderChain()}
+            {!_isEmpty(cellsHighlightData) && renderHintSvgView()}
         </>
     )
 }
@@ -250,6 +256,7 @@ Board_.propTypes = {
     showSmartHint: PropTypes.bool,
     cellsHighlightData: PropTypes.object,
     axisTextStyles: PropTypes.object,
+    svgProps: PropTypes.array, // experimental
 }
 
 Board_.defaultProps = {
@@ -261,4 +268,5 @@ Board_.defaultProps = {
     showSmartHint: false,
     cellsHighlightData: {},
     axisTextStyles: {},
+    svgProps: [],
 }

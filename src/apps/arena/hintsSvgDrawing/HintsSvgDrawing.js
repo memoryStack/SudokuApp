@@ -16,27 +16,38 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import { HINT_ID_VS_SVG_DEFS } from './svgDefs'
 import { HINT_ID_VS_SVG_ELEMENTS_HANDLER } from './svgElementsHandlers'
 
-const HintsSvgDrawing = ({ boardRef, notesRefs, hint }) => {
+const HintsSvgDrawing = ({
+    boardRef, notesRefs, hint, svgProps,
+}) => {
     const {
         BOARD_GRID_WIDTH: SVG_CONTAINER_WIDTH,
         BOARD_GRID_HEIGHT: SVG_CONTAINER_HEIGHT,
     } = useBoardElementsDimensions()
 
     const [svgElementsConfigs, setSvgElementsConfigs] = useState([])
-    const [boardPageCordinates, setBoardPageCordinates] = useState({ x: -1, y: -1 })
+
+    const [boardPageCordinates, setBoardPageCordinates] = useState(null)
 
     useEffect(() => {
-        return
-        const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
-        if (!_isFunction(svgElementsHandler)) return
+        const measureBoard = () => {
+            boardRef.current && boardRef.current.measure((_x, _y, _width, _height, _pageX, _pageY) => {
+                setBoardPageCordinates({ x: _pageX, y: _pageY })
+            })
+        }
+        // have to put this delay, else notes and board
+        // measurements are all empty
+        // TODO: it needs some serious searching
+        setTimeout(measureBoard, 100)
+    }, [])
 
-        boardRef.current && boardRef.current.measure(async (_x, _y, _boardWidth, _boardHeight, boardPageX, boardPageY) => {
-            // eslint-disable-next-line no-shadow
-            const boardPageCordinates = { x: boardPageX, y: boardPageY }
-            setBoardPageCordinates(boardPageCordinates)
-            setSvgElementsConfigs(await svgElementsHandler({ notesRefs, boardPageCordinates }))
-        })
-    }, [boardRef, notesRefs, hint])
+    useEffect(() => {
+        const handler = async () => {
+            const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
+            if (_isEmpty(boardPageCordinates) || !_isFunction(svgElementsHandler) || _isEmpty(svgProps)) return
+            setSvgElementsConfigs(await svgElementsHandler({ notesRefs, boardPageCordinates, svgProps }))
+        }
+        handler()
+    }, [boardPageCordinates, boardRef, notesRefs, hint, svgProps])
 
     if (_isEmpty(svgElementsConfigs)) return null
 

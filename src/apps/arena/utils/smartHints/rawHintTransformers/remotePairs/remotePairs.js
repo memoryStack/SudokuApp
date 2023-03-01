@@ -1,7 +1,9 @@
 import _reduce from 'lodash/src/utils/reduce'
 import _forEach from 'lodash/src/utils/forEach'
+import _map from 'lodash/src/utils/map'
 
 import { forBoardEachCell } from '../../../util'
+
 import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { setCellDataInHintResult, setCellNotesHighlightDataInHintResult } from '../../util'
@@ -13,7 +15,10 @@ export const transformRemotePairsRawHint = ({ rawHint: remotePairs, notesData })
     return {
         cellsToFocusData: getUICellsToFocusData(remotePairs, notesData),
         title: HINT_ID_VS_TITLES[HINTS_IDS.REMOTE_PAIRS],
-        steps: [{ text: 'bla bla bla' }], // pass on something from here
+        steps: [{ text: 'bla bla bla' }],
+        svgProps: {
+            data: getSvgData(remotePairs),
+        },
         // applyHint: getApplyHintData(remotePairs, notesData),
     }
 }
@@ -62,3 +67,75 @@ const highlightCellsAllNotes = (cells, notes, notesColors, cellsToFocusData) => 
         setCellNotesHighlightDataInHintResult(cell, notesHighlightData, cellsToFocusData)
     })
 }
+
+const getSvgData = ({
+    remotePairNotes,
+    orderedChainCells,
+}) => {
+    let currentNote = remotePairNotes[0]
+
+    const getAlternateNote = note => (note === remotePairNotes[0] ? remotePairNotes[1] : remotePairNotes[0])
+
+    return _map(orderedChainCells, (cell, cellIdx) => {
+        if (cellIdx === 0) {
+            const data = {
+                cell,
+                out: currentNote,
+            }
+
+            return data
+        }
+
+        if (cellIdx === orderedChainCells.length - 1) {
+            return {
+                cell,
+                in: currentNote,
+            }
+        }
+
+        const data = {
+            cell,
+            in: currentNote,
+            out: getAlternateNote(currentNote),
+        }
+        currentNote = getAlternateNote(currentNote)
+        return data
+    })
+}
+
+const chainTrack = [
+    {
+        cell: { row: 0, col: 0 },
+        out: 5,
+    },
+    {
+        cell: { row: 2, col: 2 },
+        in: 3,
+        out: 9,
+    },
+    {
+        cell: { row: 5, col: 2 },
+        in: 1,
+        out: 7,
+    },
+    {
+        cell: { row: 3, col: 4 },
+        in: 1,
+        out: 7,
+    },
+    {
+        cell: { row: 3, col: 6 },
+        in: 7,
+        out: 3,
+    },
+    {
+        cell: { row: 4, col: 6 },
+        in: 7,
+        out: 3,
+    },
+    {
+        cell: { row: 4, col: 7 },
+        in: 1,
+        out: 3,
+    },
+]

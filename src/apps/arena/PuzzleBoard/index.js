@@ -28,12 +28,10 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     const gameState = useSelector(getGameState)
     const moves = useSelector(getMoves)
 
-    const { show: showSmartHint, hint: { cellsToFocusData = {} } = {} } = useSelector(getHintHCInfo)
+    const { show: showSmartHint, hint: { cellsToFocusData = {}, svgProps } = {} } = useSelector(getHintHCInfo)
 
-    useEffect(() => {
-        return () => {
-            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-        }
+    useEffect(() => () => {
+        onAction({ type: ACTION_TYPES.ON_UNMOUNT })
     }, [])
 
     useEffect(() => {
@@ -43,9 +41,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         })
     }, [mainNumbers])
 
-    const isCellClickable = cell => {
-        return !isHintTryOut || (isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell))
-    }
+    const isCellClickable = cell => !isHintTryOut || (isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell))
 
     const onCellClick = useCallback(
         cell => {
@@ -79,6 +75,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             isHintTryOut={isHintTryOut}
             showSmartHint={showSmartHint}
             cellsHighlightData={cellsToFocusData}
+            svgProps={svgProps}
         />
     )
 }

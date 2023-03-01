@@ -2,7 +2,6 @@ import { Path } from 'react-native-svg'
 
 import _compact from 'lodash/src/utils/compact'
 import _forEach from 'lodash/src/utils/forEach'
-import _set from 'lodash/src/utils/set'
 import _reduce from 'lodash/src/utils/reduce'
 
 import { roundToNearestPixel } from '../../../../../utils/util'
@@ -22,43 +21,6 @@ import { LINK_ENDPOINTS_OFFSET } from './remotePairs.constants'
 // TODO: hint generator will send this color
 const linkColor = 'rgb(217, 19, 235)'
 
-const chainTrack = [
-    {
-        cell: { row: 0, col: 0 },
-        out: 5,
-    },
-    {
-        cell: { row: 2, col: 2 },
-        in: 3,
-        out: 9,
-    },
-    {
-        cell: { row: 5, col: 2 },
-        in: 1,
-        out: 7,
-    },
-    {
-        cell: { row: 3, col: 4 },
-        in: 1,
-        out: 7,
-    },
-    {
-        cell: { row: 3, col: 6 },
-        in: 7,
-        out: 3,
-    },
-    {
-        cell: { row: 4, col: 6 },
-        in: 7,
-        out: 3,
-    },
-    {
-        cell: { row: 4, col: 7 },
-        in: 1,
-        out: 3,
-    },
-]
-
 const strokeProps = {
     stroke: linkColor,
     strokeWidth: roundToNearestPixel(2),
@@ -67,9 +29,15 @@ const strokeProps = {
 }
 
 // TODO: get link color and chain details as well in args
-const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates }) => new Promise(resolve => {
+const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates, svgProps: chainTrack }) => new Promise(resolve => {
+    // consoleLog('@@@@@@ chaintrack', chainTrack)
+
     Promise.all(getAllNotesMeasurePromises(notesRefs, chainTrack)).then(notesRawMeasurements => {
+        // console.log('@@@@@@ notesmeasue', notesRawMeasurements)
+
         const notesMeasurements = transformNotesMeasurementPromisesResult(notesRawMeasurements)
+
+        // console.log('@@@@@@ notesmeasue', notesMeasurements)
 
         const svgElementsArgs = []
         for (let i = 1; i < chainTrack.length; i++) {
@@ -81,7 +49,11 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
                 end: { cell: endCell, note: endNote },
             }
             const linkCoordinates = getLinkCoordinates(link, notesMeasurements, boardPageCordinates)
+
+            // console.log('@@@@@ lc', linkCoordinates)
+
             const linkMarker = isOneStepLink(link) ? MARKER_TYPES.SHORT_LINK : MARKER_TYPES.LONG_LINK
+
             svgElementsArgs.push({
                 element: Path,
                 props: {
@@ -105,7 +77,7 @@ const getAllNotesMeasurePromises = (notesRefs, chainTrack) => {
             const noteRef = notesRefs[cell.row][cell.col][note - 1]
             if (noteRef) {
                 result.push(new Promise(resolve => {
-                    noteRef.current.measure((...measurements) => {
+                    noteRef.current && noteRef.current.measure((...measurements) => {
                         resolve({ cell, note, measurements })
                     })
                 }))
@@ -118,8 +90,11 @@ const getAllNotesMeasurePromises = (notesRefs, chainTrack) => {
 
 const transformNotesMeasurementPromisesResult = notesMeasurements => _reduce(notesMeasurements, (acc, current) => {
     const { cell: { row, col }, note, measurements } = current
-    return _set(acc, [row, col, note], measurements)
-}, [])
+    if (!acc[row]) acc[row] = {}
+    if (!acc[row][col]) acc[row][col] = {}
+    acc[row][col][note] = measurements
+    return acc
+}, {})
 
 const getLinkCoordinates = (link, notesMeasurements, boardPageCordinates) => {
     const startCell = LinkReader.startCell(link)
@@ -132,6 +107,10 @@ const getLinkCoordinates = (link, notesMeasurements, boardPageCordinates) => {
 
     const startCellBoardCoordinates = getNotePositionRelativeToBoard(startCellMeasurements, boardPageCordinates)
     const endCellBoardCoordinates = getNotePositionRelativeToBoard(endCellMeasurements, boardPageCordinates)
+
+    // console.log('@@@@@@ cells measurements', startCellBoardCoordinates, boardPageCordinates)
+    // console.log('@@@@@@ cells measurements', endCellBoardCoordinates)
+
     const cellDimensions = {
         width: startCellMeasurements[2],
         height: startCellMeasurements[3],
