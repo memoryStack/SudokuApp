@@ -90,10 +90,10 @@ const HINTS_MENU_ITEMS = [
         label: 'Y-Wing',
         id: HINTS_IDS.Y_WING,
     },
-    {
-        label: 'Remote Pairs',
-        id: HINTS_IDS.REMOTE_PAIRS,
-    },
+    // {
+    //     label: 'Remote Pairs',
+    //     id: HINTS_IDS.REMOTE_PAIRS,
+    // },
 ]
 
 const HINT_TEXT_ELEMENTS_JOIN_CONJUGATION = {
