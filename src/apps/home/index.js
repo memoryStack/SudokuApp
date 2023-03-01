@@ -1,6 +1,10 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react'
+import React, {
+    useCallback, useState, useEffect, useMemo,
+} from 'react'
 
-import { View, Linking, Image, Text } from 'react-native'
+import {
+    View, Linking, Image, Text,
+} from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -11,7 +15,6 @@ import { ROUTES } from '../../navigation/route.constants'
 
 import { NextGameMenu } from '../arena/nextGameMenu'
 import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimensions'
-import { Settings } from '../header/components/settings/settings'
 
 import { getStyles } from './styles'
 
@@ -23,9 +26,7 @@ const Home_ = ({ navigation }) => {
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
-    const styles = useMemo(() => {
-        return getStyles(CELL_WIDTH)
-    }, [CELL_WIDTH])
+    const styles = useMemo(() => getStyles(CELL_WIDTH), [CELL_WIDTH])
 
     const handlePlayOfflineClick = useCallback(() => {
         setShowNextGameMenu(true)
@@ -71,32 +72,26 @@ const Home_ = ({ navigation }) => {
     }, [])
 
     // TODO: get these assets from a central place
-    const renderAppIcon = () => {
-        return <Image source={require('../../resources/assets/appIcon.png')} style={styles.appIcon} />
-    }
+    const renderAppIcon = () => <Image source={require('../../resources/assets/appIcon.png')} style={styles.appIcon} />
 
     const renderSudokuText = () => {
-        const renderLetter = (letter, index) => {
-            return (
-                <Text style={styles.sudokuLetterText} key={`${index}`}>
-                    {letter}
-                </Text>
-            )
-        }
+        const renderLetter = (letter, index) => (
+            <Text style={styles.sudokuLetterText} key={`${index}`}>
+                {letter}
+            </Text>
+        )
 
         return <View style={styles.sudokuTextContainer}>{SUDOKU_LETTERS.map(renderLetter)}</View>
     }
 
-    const renderPlayButton = () => {
-        return (
-            <Button
-                onClick={handlePlayOfflineClick}
-                text={'Play'}
-                containerStyle={styles.playButtonContainer}
-                textStyles={styles.playButtonText}
-            />
-        )
-    }
+    const renderPlayButton = () => (
+        <Button
+            onClick={handlePlayOfflineClick}
+            text="Play"
+            containerStyle={styles.playButtonContainer}
+            textStyles={styles.playButtonText}
+        />
+    )
 
     const renderNewGameMenu = () => {
         if (!pageHeight || !showNextGameMenu) return null
