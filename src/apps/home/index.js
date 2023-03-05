@@ -18,7 +18,8 @@ import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimen
 
 import { getStyles } from './styles'
 
-const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
+// const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
+const SUDOKU_LETTERS = ['सु', 'डो', 'कु']
 
 const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)
