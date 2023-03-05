@@ -1,4 +1,6 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react'
+import React, {
+    useRef, useCallback, useEffect, useState,
+} from 'react'
 
 import { View, StyleSheet } from 'react-native'
 
@@ -9,6 +11,8 @@ import CodePush from 'react-native-code-push'
 import { NavigationContainer } from '@react-navigation/native'
 
 import _isEmpty from 'lodash/src/utils/isEmpty'
+
+import ModalProvider from 'src/containers/ModalProvider'
 
 import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
@@ -39,21 +43,29 @@ const App = () => {
         })
     }, [])
 
-    const [snackBar, setSnackBar] = useState({ show: false, view: null, msg: '', customStyles: null })
+    const [snackBar, setSnackBar] = useState({
+        show: false, view: null, msg: '', customStyles: null,
+    })
     const snackBarTimerID = useRef(null)
     // added pretty raw implementation for snackbars right now
     // later on after finalizing a robust implementation i can make
     // an HOC so that tis snackbar can be re-used for each view
 
     const hideSnackBar = () => {
-        setSnackBar({ show: false, view: null, msg: '', customStyles: null })
+        setSnackBar({
+            show: false, view: null, msg: '', customStyles: null,
+        })
     }
 
     useEffect(() => {
-        const handler = ({ snackbarView = null, msg = '', visibleTime = 3000, customStyles = null }) => {
+        const handler = ({
+            snackbarView = null, msg = '', visibleTime = 3000, customStyles = null,
+        }) => {
             if (_isEmpty(snackbarView) && _isEmpty(msg)) return
 
-            setSnackBar({ show: true, view: snackbarView, msg, customStyles })
+            setSnackBar({
+                show: true, view: snackbarView, msg, customStyles,
+            })
             snackBarTimerID.current = setTimeout(hideSnackBar, visibleTime)
         }
         addListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
@@ -73,10 +85,12 @@ const App = () => {
 
     return (
         <Provider store={store}>
-            <View style={styles.container}>
-                <NavigationContainer>{getNavigator()}</NavigationContainer>
-                {renderSnackBar()}
-            </View>
+            <ModalProvider>
+                <View style={styles.container}>
+                    <NavigationContainer>{getNavigator()}</NavigationContainer>
+                    {renderSnackBar()}
+                </View>
+            </ModalProvider>
         </Provider>
     )
 }

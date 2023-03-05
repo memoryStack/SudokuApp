@@ -37,6 +37,7 @@ const TouchablesMap = {
     // newNativeFeedBack: NewTouchableNativeFeedback,
 }
 
+// TODO: make it opacity only, most of the places i am using opacity
 const defaultTouchable = Platform.isIOS() ? 'highLight' : 'nativeFeedBack'
 
 const defaultProps = {
@@ -45,6 +46,7 @@ const defaultProps = {
         color: 'white',
         opacity: 0,
     },
+    avoidDefaultStyles: false,
 }
 
 const getTouchable = touchable => {
@@ -54,10 +56,12 @@ const getTouchable = touchable => {
 }
 
 export const Touchable = props => {
-    const { style, touchable, underlayColor = 'white', children, ...rest } = props
+    const {
+        style, touchable, underlayColor = 'white', children, avoidDefaultStyles, ...rest
+    } = props
     const Touchable = getTouchable(touchable)
     return (
-        <Touchable style={[styles.container, style]} underlayColor={underlayColor} {...rest}>
+        <Touchable style={[avoidDefaultStyles ? null : styles.container, style]} underlayColor={underlayColor} {...rest}>
             {children}
         </Touchable>
     )
