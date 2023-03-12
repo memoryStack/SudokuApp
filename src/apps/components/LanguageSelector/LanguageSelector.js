@@ -1,6 +1,4 @@
-import React, {
-    memo, useCallback, useState,
-} from 'react'
+import React, { memo, useState } from 'react'
 
 import { View, Text } from 'react-native'
 
@@ -8,27 +6,25 @@ import PropTypes from 'prop-types'
 
 import _noop from 'lodash/src/utils/noop'
 
-import { DEFAULT_SELECTED_LANGUAGE, LANGAUGE_OPTIONS } from 'src/i18n/languages'
+import { LANGAUGE_OPTIONS } from 'src/i18n/languages'
 import Radio from 'src/apps/components/Radio'
 import { Button } from 'src/components/button'
-
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
-import { styles } from './style'
+
 import { Touchable, TouchableTypes } from '../Touchable'
+import { styles } from './style'
 
-const LanguageSelector_ = ({
-    onSavePress,
-}) => {
-    const { i18n } = useTranslation()
+const LanguageSelector_ = ({ onSavePress }) => {
+    const { i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
 
-    const [selectedLanguage, setSelectedLanguage] = useState(DEFAULT_SELECTED_LANGUAGE)
+    const [selectedLanguage, setSelectedLanguage] = useState(defaultSelectedLanguage)
 
     const isLanguageSelected = langKey => langKey === selectedLanguage
 
-    const handleSavePress = useCallback(() => {
+    const handleSavePress = () => {
         i18n.changeLanguage(selectedLanguage)
         onSavePress()
-    }, [onSavePress, i18n])
+    }
 
     // TODO: this radio buttons list can be a separate
     // independent component, plan to move it

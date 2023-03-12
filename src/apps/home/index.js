@@ -17,16 +17,16 @@ import { ROUTES } from '../../navigation/route.constants'
 import { NextGameMenu } from '../arena/nextGameMenu'
 import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimensions'
 
+import { LANGUAGE_VS_TITLE_CHARS } from './home.constants'
 import { getStyles } from './styles'
-
-// const SUDOKU_LETTERS = ['S', 'U', 'D', 'O', 'K', 'U']
-const SUDOKU_LETTERS = ['सु', 'डो', 'कु']
 
 const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
-    const { t } = useTranslation()
+    const { t, selectedLanguage } = useTranslation()
+
+    const SUDOKU_LETTERS = LANGUAGE_VS_TITLE_CHARS[selectedLanguage]
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
