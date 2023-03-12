@@ -47,6 +47,7 @@ export const Settings_ = ({ navigation, onPress, onAction }) => {
             type: ACTION_TYPES.ON_ITEM_PRESS,
             payload: { itemKey: key, modalContextValues },
         })
+        toggleMenuVisibility()
     }
 
     const renderMenu = () => {

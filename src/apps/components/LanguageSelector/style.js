@@ -24,9 +24,12 @@ export const styles = StyleSheet.create({
     languageLable: {
         marginLeft: 16,
     },
-    saveBtnContainer: {
-        marginTop: 8,
-        alignSelf: 'flex-end',
+    footerContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 16,
     },
     saveBtnText: {
         color: 'black',

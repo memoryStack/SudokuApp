@@ -53,19 +53,12 @@ const LanguageSelector_ = ({ onSavePress }) => {
         ))
     )
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.headerText}>
-                Select a Language
-            </Text>
-            <View style={styles.languagesListContainer}>
-                {getLanguagesList()}
-            </View>
+    const renderFooter = () => (
+        <View style={styles.footerContainer}>
             <Button
-                text="Save"
-                onClick={handleSavePress}
+                text="Cancel"
+                onClick={onSavePress}
                 avoidDefaultContainerStyles
-                style={styles.saveBtnContainer}
                 textStyles={styles.saveBtnText}
                 hitSlop={{
                     top: 16,
@@ -74,6 +67,30 @@ const LanguageSelector_ = ({ onSavePress }) => {
                     right: 16,
                 }}
             />
+            <Button
+                text="Save"
+                onClick={handleSavePress}
+                avoidDefaultContainerStyles
+                textStyles={styles.saveBtnText}
+                hitSlop={{
+                    top: 16,
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
+                }}
+            />
+        </View>
+    )
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.headerText}>
+                Select a Language
+            </Text>
+            <View style={styles.languagesListContainer}>
+                {getLanguagesList()}
+            </View>
+            {renderFooter()}
         </View>
     )
 }
