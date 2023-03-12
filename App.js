@@ -21,6 +21,8 @@ import { getNavigator } from './src/navigation/navigator'
 
 import store from './src/redux/store'
 
+import './src/i18n/i18n.config'
+
 const CODE_PUSH_OPTIONS = {
     checkFrequency: CodePush.CheckFrequency.ON_APP_START,
 }
