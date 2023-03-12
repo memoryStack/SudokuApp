@@ -8,6 +8,7 @@ import {
 
 import PropTypes from 'prop-types'
 
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { Button } from '../../components/button'
 
 import { EVENTS } from '../../constants/events'
@@ -24,6 +25,8 @@ const SUDOKU_LETTERS = ['सु', 'डो', 'कु']
 const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
+
+    const { t } = useTranslation()
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
@@ -88,7 +91,7 @@ const Home_ = ({ navigation }) => {
     const renderPlayButton = () => (
         <Button
             onClick={handlePlayOfflineClick}
-            text="Play"
+            text={t('PLAY')}
             containerStyle={styles.playButtonContainer}
             textStyles={styles.playButtonText}
         />
