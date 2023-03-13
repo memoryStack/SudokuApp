@@ -22,7 +22,7 @@ export const getHintHCInfo = state => {
         isTryOut: state.smartHintHC.hints[0].steps[currentHintNum - 1].isTryOut || false,
         tryOutAnalyserData: state.smartHintHC.hints[0].tryOutAnalyserData,
 
-        svgProps: state.smartHintHC.hints[0].svgProps.data, // experimental
+        svgProps: state.smartHintHC.hints[0].svgProps?.data, // experimental
     })
 
     return {
@@ -47,4 +47,4 @@ export const getTryOutCellsRestrictedNumberInputsMsg = state => state.smartHintH
 
 export const getApplyHintChanges = state => state.smartHintHC.hints[0].applyHint
 
-export const getSvgPropsData = state => state.smartHintHC.hints[0].svgProps.data
+export const getSvgPropsData = state => state.smartHintHC.hints[0].svgProps?.data
