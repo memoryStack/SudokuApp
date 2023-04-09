@@ -35,15 +35,14 @@ import {
     MAX_VALID_CELLS_COUNT,
 } from './nakedGroup.constants'
 
-export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) =>
-    _filter(getHouseCells(house), cell => {
-        if (!isCellEmpty(cell, mainNumbers)) return false
+export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => _filter(getHouseCells(house), cell => {
+    if (!isCellEmpty(cell, mainNumbers)) return false
 
-        return inRange(getCellVisibleNotesCount(notesData[cell.row][cell.col]), {
-            start: VALID_CELL_MINIMUM_NOTES_COUNT,
-            end: groupCandidatesCount,
-        })
+    return inRange(getCellVisibleNotesCount(notesData[cell.row][cell.col]), {
+        start: VALID_CELL_MINIMUM_NOTES_COUNT,
+        end: groupCandidatesCount,
     })
+})
 
 const getDefaultGroupsFoundInHouses = () => ({
     [HOUSE_TYPE.ROW]: {},
@@ -69,13 +68,11 @@ export const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) =
     const notesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const candidates = Object.keys(notesInstancesCount)
     return (
-        candidates.length === groupCandidatesCount &&
-        _every(candidates, candidate =>
-            inRange(notesInstancesCount[candidate], {
-                start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
-                end: groupCandidatesCount,
-            }),
-        )
+        candidates.length === groupCandidatesCount
+        && _every(candidates, candidate => inRange(notesInstancesCount[candidate], {
+            start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
+            end: groupCandidatesCount,
+        }))
     )
 }
 
@@ -106,9 +103,8 @@ export const getAnotherSharedHouse = (mainHouse, selectedCells) => {
 export const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
     const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
     return getHousesCellsSharedByCells(selectedCells).some(
-        cell =>
-            !isCellExists(cell, selectedCells) &&
-            groupCandidates.some(groupCandidate => notesData[cell.row][cell.col][groupCandidate - 1].show),
+        cell => !isCellExists(cell, selectedCells)
+            && groupCandidates.some(groupCandidate => notesData[cell.row][cell.col][groupCandidate - 1].show),
     )
 }
 
