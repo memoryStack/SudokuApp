@@ -8,16 +8,15 @@ import { Provider } from 'react-redux'
 
 import CodePush from 'react-native-code-push'
 
-import { NavigationContainer } from '@react-navigation/native'
-
 import _isEmpty from 'lodash/src/utils/isEmpty'
 
 import ModalProvider from 'src/containers/ModalProvider'
 
+import ThemeProvider from 'src/containers/ThemeProvider'
 import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
 import { EVENTS } from './src/constants/events'
-import { getNavigator } from './src/navigation/navigator'
+import { getNavigator, NavigationProvider } from './src/navigation/navigator'
 
 import store from './src/redux/store'
 
@@ -87,12 +86,14 @@ const App = () => {
 
     return (
         <Provider store={store}>
-            <ModalProvider>
-                <View style={styles.container}>
-                    <NavigationContainer>{getNavigator()}</NavigationContainer>
-                    {renderSnackBar()}
-                </View>
-            </ModalProvider>
+            <ThemeProvider>
+                <ModalProvider>
+                    <View style={styles.container}>
+                        <NavigationProvider />
+                        {renderSnackBar()}
+                    </View>
+                </ModalProvider>
+            </ThemeProvider>
         </Provider>
     )
 }
