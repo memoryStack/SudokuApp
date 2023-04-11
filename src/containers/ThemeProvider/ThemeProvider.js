@@ -4,8 +4,7 @@ import { useColorScheme } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-// TODO: add import aliases for contexts
-import ThemeContext from 'src/contexts/ThemeContext'
+import ThemeContext from '@contexts/ThemeContext'
 
 const ThemeProvider = ({ children }) => {
     const [userPreferredTheme, setUserPreferredTheme] = useState(null)

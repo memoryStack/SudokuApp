@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import ThemeContext from 'src/contexts/ThemeContext'
+import ThemeContext from '@contexts/ThemeContext'
 
 import { useTheme as useNavigationTheme } from '@react-navigation/native'
 

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 
 import { View } from 'react-native'
 
-import ModalContext from 'src/contexts/ModalContext'
+import ModalContext from '@contexts/ModalContext'
 
 import { styles } from './modalProvider.style'
 

@@ -52,6 +52,7 @@ module.exports = {
             alias: {
                 map: [
                     ['@utils', './src/utils'],
+                    ['@contexts', './src/contexts'],
                 ],
                 extensions: ['.ts', '.js', '.jsx', '.json'],
             },
