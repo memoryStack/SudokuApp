@@ -1,5 +1,5 @@
 import React, {
-    useCallback, useState, useEffect, useMemo,
+    useCallback, useState, useEffect,
 } from 'react'
 
 import {
@@ -9,13 +9,14 @@ import {
 import PropTypes from 'prop-types'
 
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { useStyles } from '@utils/customHooks/useStyles'
+
 import { Button } from '../../components/button'
 
 import { EVENTS } from '../../constants/events'
 import { ROUTES } from '../../navigation/route.constants'
 
 import { NextGameMenu } from '../arena/nextGameMenu'
-import { useBoardElementsDimensions } from '../arena/hooks/useBoardElementsDimensions'
 
 import { LANGUAGE_VS_TITLE_CHARS } from './home.constants'
 import { getStyles } from './styles'
@@ -28,9 +29,7 @@ const Home_ = ({ navigation }) => {
 
     const SUDOKU_LETTERS = LANGUAGE_VS_TITLE_CHARS[selectedLanguage]
 
-    const { CELL_WIDTH } = useBoardElementsDimensions()
-
-    const styles = useMemo(() => getStyles(CELL_WIDTH), [CELL_WIDTH])
+    const styles = useStyles(getStyles)
 
     const handlePlayOfflineClick = useCallback(() => {
         setShowNextGameMenu(true)
