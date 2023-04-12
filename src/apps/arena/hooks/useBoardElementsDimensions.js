@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useWindowDimensions } from 'react-native'
 
 import { roundToNearestPixel } from '../../../utils/util'
@@ -12,14 +13,18 @@ import {
 
 export const useBoardElementsDimensions = () => {
     const { width: windowWidth } = useWindowDimensions()
+
     const cellWidth = getCellWidth(windowWidth)
     const boardGridWidth = cellWidth * CELLS_IN_HOUSE + getAllBordersTotalSpace()
-    return {
+
+    const boardElementsDimensions = useMemo(() => ({
         BOARD_GRID_WIDTH: boardGridWidth,
         BOARD_GRID_HEIGHT: boardGridWidth,
         CELL_WIDTH: cellWidth,
         CELL_HEIGHT: cellWidth,
-    }
+    }), [boardGridWidth, cellWidth])
+
+    return boardElementsDimensions
 }
 
 const getCellWidth = windowWidth => {
