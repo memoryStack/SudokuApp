@@ -4,7 +4,7 @@ import React, {
 
 import { View, Text } from 'react-native'
 
-import _map from 'lodash/src/utils/map'
+import _map from '@lodash/map'
 
 import { TouchableOpacity } from 'react-native-gesture-handler'
 

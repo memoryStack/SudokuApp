@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 
 import CodePush from 'react-native-code-push'
 
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _isEmpty from '@lodash/isEmpty'
 
 import ModalProvider from 'src/containers/ModalProvider'
 

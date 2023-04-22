@@ -1,5 +1,5 @@
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import _map from 'lodash/src/utils/map'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _map from '@lodash/map'
 
 import { getHouseCells } from '../../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../../util'
@@ -37,11 +37,10 @@ const addHostHouseHighlightData = (omission, cellsToFocusData) => {
 
 const addRemovableNotesHouseHighlightData = (omission, notesData, cellsToFocusData) => {
     const { removableNotesHostHouse, note, hostCells } = omission
-    const cellsToHighlight = getHouseCells(removableNotesHostHouse).filter(cell => {
+    const cellsToHighlight = getHouseCells(removableNotesHostHouse).filter(cell =>
         // not filtering out the cells which are highlighted by hostHouse already
         // becoz won't make a difference
-        return !isCellExists(cell, hostCells)
-    })
+        !isCellExists(cell, hostCells))
 
     cellsToHighlight.forEach(cell => {
         const cellHighlightData = { bgColor: COLORS.CELL }
@@ -61,12 +60,10 @@ const getUICellsToFocusData = (omission, notesData) => {
     return cellsToFocusData
 }
 
-export const getHouseNoteHostCells = (note, house, notes) => {
-    return getHouseCells(house).filter(cell => {
-        const cellNotes = notes[cell.row][cell.col]
-        return isCellNoteVisible(note, cellNotes)
-    })
-}
+export const getHouseNoteHostCells = (note, house, notes) => getHouseCells(house).filter(cell => {
+    const cellNotes = notes[cell.row][cell.col]
+    return isCellNoteVisible(note, cellNotes)
+})
 
 const getRemovableNotesHostCells = (omission, notes) => {
     const { note, hostHouse, removableNotesHostHouse } = omission
@@ -100,19 +97,15 @@ const getHintExplaination = (omission, notes) => {
 
 const getApplyHintData = (omission, notes) => {
     const removableNotesHostCells = getRemovableNotesHostCells(omission, notes)
-    return _map(removableNotesHostCells, cell => {
-        return {
-            cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [omission.note] },
-        }
-    })
+    return _map(removableNotesHostCells, cell => ({
+        cell,
+        action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [omission.note] },
+    }))
 }
 
-export const transformOmissionRawHint = ({ rawHint: omission, notesData }) => {
-    return {
-        cellsToFocusData: getUICellsToFocusData(omission, notesData),
-        title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],
-        steps: [{ text: getHintExplaination(omission, notesData) }],
-        applyHint: getApplyHintData(omission, notesData),
-    }
-}
+export const transformOmissionRawHint = ({ rawHint: omission, notesData }) => ({
+    cellsToFocusData: getUICellsToFocusData(omission, notesData),
+    title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],
+    steps: [{ text: getHintExplaination(omission, notesData) }],
+    applyHint: getApplyHintData(omission, notesData),
+})

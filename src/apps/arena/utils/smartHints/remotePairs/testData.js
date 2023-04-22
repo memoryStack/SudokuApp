@@ -1,4 +1,4 @@
-import _cloneDeep from 'lodash/src/utils/cloneDeep'
+import _cloneDeep from '@lodash/cloneDeep'
 
 export const mainNumbers = [
     [

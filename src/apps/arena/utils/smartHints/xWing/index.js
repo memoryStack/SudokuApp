@@ -1,7 +1,7 @@
-import _cloneDeep from 'lodash/src/utils/cloneDeep'
-import _get from 'lodash/src/utils/get'
-import _every from 'lodash/src/utils/every'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _cloneDeep from '@lodash/cloneDeep'
+import _get from '@lodash/get'
+import _every from '@lodash/every'
+import _isEmpty from '@lodash/isEmpty'
 
 import { inRange } from '../../../../../utils/util'
 
@@ -62,11 +62,7 @@ const isPerfectXWingRemovesNotes = (xWing, notesData) => {
     })
 }
 
-export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => {
-    return getFinnedXWingRemovableNotesHostCells({ houseType, legs }, notesData).some(cell => {
-        return isCellNoteVisible(legs[0].candidate, notesData[cell.row][cell.col])
-    })
-}
+export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => getFinnedXWingRemovableNotesHostCells({ houseType, legs }, notesData).some(cell => isCellNoteVisible(legs[0].candidate, notesData[cell.row][cell.col]))
 
 const removableNotesPresentInCrossHouse = ({ houseType, legs }, notesData) => {
     const { otherLeg } = categorizeLegs(...legs)
@@ -76,42 +72,32 @@ const removableNotesPresentInCrossHouse = ({ houseType, legs }, notesData) => {
 }
 
 // change it's name to perfectXWingLegs
-export const isPerfectXWing = (perfectLegHostCells, otherLegHostCells) => {
-    return perfectLegHostCells.every(perfectLegCell => {
-        return otherLegHostCells.some(otherLegCell => {
-            const cellsPair = [perfectLegCell, otherLegCell]
-            return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
-        })
-    })
-}
+export const isPerfectXWing = (perfectLegHostCells, otherLegHostCells) => perfectLegHostCells.every(perfectLegCell => otherLegHostCells.some(otherLegCell => {
+    const cellsPair = [perfectLegCell, otherLegCell]
+    return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
+}))
 
 export const isFinnedXWing = (perfectLegHostCells, finnedLegHostCells) => {
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLegHostCells, finnedLegHostCells)
     if (perfectCells.length !== 2) return false
-    return finns.every(finnCell => {
-        return perfectCells.some(perfectCell => areSameBlockCells([perfectCell, finnCell]))
-    })
+    return finns.every(finnCell => perfectCells.some(perfectCell => areSameBlockCells([perfectCell, finnCell])))
 }
 
-export const getAlignedCellInPerfectLeg = (perfectLegCells, otherLegCells) => {
-    return perfectLegCells.find(perfectLegCell => {
-        return otherLegCells.some(otherLegCell => {
-            const cellsPair = [perfectLegCell, otherLegCell]
-            return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
-        })
-    })
-}
+export const getAlignedCellInPerfectLeg = (perfectLegCells, otherLegCells) => perfectLegCells.find(perfectLegCell => otherLegCells.some(otherLegCell => {
+    const cellsPair = [perfectLegCell, otherLegCell]
+    return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
+}))
 
 const arePerfectNonAlignedLegsSashimiFinnedXWing = xWing => {
     const { perfectLeg, otherLeg } = categorizeLegs(...xWing.legs)
     return (
         isSashimiFinnedXWing({
             houseType: xWing.houseType,
-            legs: [perfectLeg, { ...Object.assign({}, otherLeg), type: LEG_TYPES.FINNED }],
-        }) ||
-        isSashimiFinnedXWing({
+            legs: [perfectLeg, { ...({ ...otherLeg }), type: LEG_TYPES.FINNED }],
+        })
+        || isSashimiFinnedXWing({
             houseType: xWing.houseType,
-            legs: [otherLeg, { ...Object.assign({}, perfectLeg), type: LEG_TYPES.FINNED }],
+            legs: [otherLeg, { ...({ ...perfectLeg }), type: LEG_TYPES.FINNED }],
         })
     )
 }
@@ -119,9 +105,7 @@ const arePerfectNonAlignedLegsSashimiFinnedXWing = xWing => {
 const allFinnsShareBlockWithSashimiCell = (sashimiCell, legsCells) => {
     const { perfectLegCells, sashimiFinnedLegCells } = legsCells
     const { finns } = categorizeFinnedLegCells(perfectLegCells, sashimiFinnedLegCells)
-    return finns.every(finn => {
-        return areSameBlockCells([sashimiCell, finn])
-    })
+    return finns.every(finn => areSameBlockCells([sashimiCell, finn]))
 }
 
 const perfectLegAlignsWithFinnedLegForSashimiXWing = (perfectLegCells, finnedLegCells) => {
@@ -168,11 +152,7 @@ export const getXWingType = xWing => {
     return XWING_TYPES.INVALID
 }
 
-const getEmptyCellsInHouse = (house, mainNumbers) => {
-    return getHouseCells(house).filter(cell => {
-        return isCellEmpty(cell, mainNumbers)
-    })
-}
+const getEmptyCellsInHouse = (house, mainNumbers) => getHouseCells(house).filter(cell => isCellEmpty(cell, mainNumbers))
 
 // we can use this func for our purpose below
 const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {
@@ -248,7 +228,7 @@ const getSashimiLegFromNonAllignedPerfectLegs = xWing => {
 
     const isLegAValidSashimiLeg = isSashimiFinnedXWing({
         ...xWing,
-        legs: [{ ...Object.assign({}, legA), type: LEG_TYPES.FINNED }, legB],
+        legs: [{ ...({ ...legA }), type: LEG_TYPES.FINNED }, legB],
     })
     return isLegAValidSashimiLeg ? legA : legB
 }
@@ -295,9 +275,7 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
     return result
 }
 
-const transformValidXWingLegs = xWing => {
-    return xWing.type === XWING_TYPES.SASHIMI_FINNED ? transformSashimiXWingLeg(xWing) : xWing.legs
-}
+const transformValidXWingLegs = xWing => (xWing.type === XWING_TYPES.SASHIMI_FINNED ? transformSashimiXWingLeg(xWing) : xWing.legs)
 
 const getCandidateValidXWings = (houseType, candidateXWingLegsInHouses, notes, maxHintsThreshold) => {
     const result = []

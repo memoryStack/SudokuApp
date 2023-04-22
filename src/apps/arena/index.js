@@ -1,9 +1,11 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, {
+    useState, useCallback, useEffect, useRef,
+} from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { Touchable, TouchableTypes } from '../components/Touchable' // TODO: make linter catch issues like this
 import { GAME_STATE } from '../../resources/constants'
@@ -88,7 +90,9 @@ const styles = StyleSheet.create({
     },
 })
 
-const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu }) => {
+const Arena_ = ({
+    navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
+}) => {
     const [pageHeight, setPageHeight] = useState(0)
 
     const gameState = useSelector(getGameState)
@@ -164,8 +168,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     const isPuzzlePresent = (currentGameState, previousGameState) => {
         const currentGameStateObj = new GameState(currentGameState)
         return (
-            currentGameStateObj.isGameActive() ||
-            (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
+            currentGameStateObj.isGameActive()
+            || (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
         )
     }
 
@@ -176,8 +180,8 @@ const Arena_ = ({ navigation, route, onAction, showCustomPuzzleHC, showGameSolve
     }, [gameState, previousGameState])
 
     useEffect(() => {
-        navigation.isFocused() &&
-            navigation.setParams({
+        navigation.isFocused()
+            && navigation.setParams({
                 [HEADER_ITEMS_PRESS_HANDLERS_KEYS[HEADER_ITEMS.SHARE]]: handleSharePuzzleClick,
             })
     }, [navigation, handleSharePuzzleClick])

@@ -4,8 +4,8 @@ import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
-import _get from 'lodash/src/utils/get'
+import _noop from '@lodash/noop'
+import _get from '@lodash/get'
 
 import { CloseIcon } from '../../../../resources/svgIcons/close'
 import { fonts } from '../../../../resources/fonts/font'

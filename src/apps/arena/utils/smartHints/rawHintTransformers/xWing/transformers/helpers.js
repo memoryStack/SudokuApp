@@ -1,5 +1,5 @@
-import { toOrdinal } from 'lodash/src/utils/toOrdinal'
-import _map from 'lodash/src/utils/map'
+import { toOrdinal } from '@lodash/toOrdinal'
+import _map from '@lodash/map'
 
 import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
@@ -9,21 +9,13 @@ import { HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
 import { getCrossHouseType } from '../../../xWing/utils'
 import { getCellsAxesValuesListText } from '../../helpers'
 
-export const getXWingHouseFullName = xWing => {
-    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME
-}
+export const getXWingHouseFullName = xWing => HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME
 
-export const getXWingHouseFullNamePlural = xWing => {
-    return HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
-}
+export const getXWingHouseFullNamePlural = xWing => HOUSE_TYPE_VS_FULL_NAMES[xWing.houseType].FULL_NAME_PLURAL
 
-export const getXWingCrossHouseFullName = xWing => {
-    return HOUSE_TYPE_VS_FULL_NAMES[getCrossHouseType(xWing.houseType)].FULL_NAME
-}
+export const getXWingCrossHouseFullName = xWing => HOUSE_TYPE_VS_FULL_NAMES[getCrossHouseType(xWing.houseType)].FULL_NAME
 
-export const getXWingCrossHouseFullNamePlural = xWing => {
-    return HOUSE_TYPE_VS_FULL_NAMES[getCrossHouseType(xWing.houseType)].FULL_NAME_PLURAL
-}
+export const getXWingCrossHouseFullNamePlural = xWing => HOUSE_TYPE_VS_FULL_NAMES[getCrossHouseType(xWing.houseType)].FULL_NAME_PLURAL
 
 // TODO: check if this stays even relevant
 export const getXWingRectangleCornersAxesText = xWingLegs => {
@@ -40,12 +32,10 @@ export const getXWingHousesTexts = (houseType, xWingLegs) => {
     }
 }
 
-const getXWingHousesNums = (houseType, xWingLegs) => {
-    return {
-        houseANum: getCellHouseInfo(houseType, xWingLegs[0].cells[0]).num,
-        houseBNum: getCellHouseInfo(houseType, xWingLegs[1].cells[0]).num,
-    }
-}
+const getXWingHousesNums = (houseType, xWingLegs) => ({
+    houseANum: getCellHouseInfo(houseType, xWingLegs[0].cells[0]).num,
+    houseBNum: getCellHouseInfo(houseType, xWingLegs[1].cells[0]).num,
+})
 
 export const getHouseAxesText = house => {
     const houseAxesValue = getHouseAxesValue(house)
@@ -71,7 +61,9 @@ const getCrossHousesNums = xWing => {
 }
 
 export const getDiagonalsCornersAxesTexts = xWing => {
-    const { topLeft, topRight, bottomLeft, bottomRight } = getXWingCornerCells(xWing)
+    const {
+        topLeft, topRight, bottomLeft, bottomRight,
+    } = getXWingCornerCells(xWing)
     return {
         topDown: getCellsAxesValuesListText([topLeft, bottomRight]),
         bottomUp: getCellsAxesValuesListText([bottomLeft, topRight]),
@@ -79,7 +71,7 @@ export const getDiagonalsCornersAxesTexts = xWing => {
 }
 
 export const getXWingCornerCells = xWing => {
-    const houseType = xWing.houseType
+    const { houseType } = xWing
     const xWingLegs = xWing.legs
     return {
         topLeft: xWingLegs[0].cells[0],
@@ -89,11 +81,7 @@ export const getXWingCornerCells = xWing => {
     }
 }
 
-export const getApplyHintData = (candidate, removableNotesHostCells) => {
-    return _map(removableNotesHostCells, cell => {
-        return {
-            cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [candidate] },
-        }
-    })
-}
+export const getApplyHintData = (candidate, removableNotesHostCells) => _map(removableNotesHostCells, cell => ({
+    cell,
+    action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [candidate] },
+}))

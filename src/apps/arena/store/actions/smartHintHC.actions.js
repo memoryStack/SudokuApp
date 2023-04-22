@@ -1,5 +1,5 @@
-import _cloneDeep from 'lodash/src/utils/cloneDeep'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _cloneDeep from '@lodash/cloneDeep'
+import _isEmpty from '@lodash/isEmpty'
 
 import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
@@ -79,7 +79,7 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
     const selectedCell = getTryOutSelectedCell(getStoreState())
     if (_isEmpty(selectedCell)) {
         showSnackBar({
-            msg: `please select some cell before filling number`,
+            msg: 'please select some cell before filling number',
             customStyles: snackBarCustomStyles,
         })
         return
@@ -184,13 +184,11 @@ const getNotesToEnterHostCells = focusedCells => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col]).filter(note => {
-                    return shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)
-                }),
+                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col]).filter(note => shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)),
             })
         } else if (
-            isCellEmpty(cell, tryOutMainNumbers) &&
-            shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)
+            isCellEmpty(cell, tryOutMainNumbers)
+            && shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)
         ) {
             result.push({
                 cell,
@@ -206,8 +204,8 @@ const shouldSpawnNoteInCell = (note, cell, mainNumbersStateAfterErase) => {
     const actualNotesInfo = getNotesInfo(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
     return (
-        isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col]) &&
-        !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col]) &&
-        !duplicacyPresent(note, mainNumbersStateAfterErase, cell)
+        isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col])
+        && !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col])
+        && !duplicacyPresent(note, mainNumbersStateAfterErase, cell)
     )
 }

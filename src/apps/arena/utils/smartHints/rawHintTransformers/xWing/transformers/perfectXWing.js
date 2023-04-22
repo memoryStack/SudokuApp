@@ -1,4 +1,4 @@
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { getHouseCells } from '../../../../houseCells'
 import { getCellAxesValues, isCellExists, isCellNoteVisible } from '../../../../util'
@@ -61,13 +61,11 @@ const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     xWingHousesNum.forEach(houseNum => {
         getHouseCells({ type: houseType, num: houseNum })
             .filter(cell => !isCellExists(cell, xWingCells))
-            .forEach(cell =>
-                setCellDataInHintResult(
-                    cell,
-                    { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT },
-                    cellsToFocusData,
-                ),
-            )
+            .forEach(cell => setCellDataInHintResult(
+                cell,
+                { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT },
+                cellsToFocusData,
+            ))
     })
 }
 
@@ -98,7 +96,9 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
 }
 
 const getXWingCornersText = xWing => {
-    const { topLeft, topRight, bottomLeft, bottomRight } = getXWingCornerCells(xWing)
+    const {
+        topLeft, topRight, bottomLeft, bottomRight,
+    } = getXWingCornerCells(xWing)
     return [topLeft, topRight, bottomRight, bottomLeft, topLeft]
         .map(cell => getCellAxesValues(cell))
         .join(` ${String.fromCodePoint(0x279d)} `)
@@ -118,20 +118,14 @@ const getHintChunks = xWing => {
     }
 
     const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.PERFECT_X_WING]
-    return msgTemplates.map(template => {
-        return dynamicInterpolation(template, msgPlaceholdersValues)
-    })
+    return msgTemplates.map(template => dynamicInterpolation(template, msgPlaceholdersValues))
 }
 
-const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => {
-    return focusedCells.filter(cell => {
-        return !isCellExists(cell, xWingCells) && isCellNoteVisible(candidate, notes[cell.row][cell.col])
-    })
-}
+const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => focusedCells.filter(cell => !isCellExists(cell, xWingCells) && isCellNoteVisible(candidate, notes[cell.row][cell.col]))
 
 export const getPerfectXWingUIData = (xWing, notesData) => {
     const { legs, houseType } = xWing
-    const candidate = legs[0].candidate
+    const { candidate } = legs[0]
     const cells = legs.map(leg => leg.cells)
     const xWingCells = getXWingCells(xWing.legs)
 

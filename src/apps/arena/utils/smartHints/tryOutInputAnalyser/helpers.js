@@ -1,5 +1,5 @@
-import _filter from 'lodash/src/utils/filter'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _filter from '@lodash/filter'
+import _isEmpty from '@lodash/isEmpty'
 
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
@@ -10,9 +10,7 @@ export const filterFilledCellsInTryOut = cells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
 
-    return _filter(cells, cell => {
-        return isCellEmpty(cell, mainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
-    })
+    return _filter(cells, cell => isCellEmpty(cell, mainNumbers) && !isCellEmpty(cell, tryOutMainNumbers))
 }
 
 export const noInputInTryOut = focusedCells => _isEmpty(filterFilledCellsInTryOut(focusedCells))
@@ -29,12 +27,6 @@ export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) 
     return result
 }
 
-export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => {
-    return groupCandidates
-        .map(candidate => {
-            return parseInt(candidate, 10)
-        })
-        .filter(groupCandidate => {
-            return !correctlyFilledGroupCandidates.includes(groupCandidate)
-        })
-}
+export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => groupCandidates
+    .map(candidate => parseInt(candidate, 10))
+    .filter(groupCandidate => !correctlyFilledGroupCandidates.includes(groupCandidate))

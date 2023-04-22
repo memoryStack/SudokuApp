@@ -1,8 +1,8 @@
-import _filter from 'lodash/src/utils/filter'
-import _isEmpty from 'lodash/src/utils/isEmpty'
-import _forEach from 'lodash/src/utils/forEach'
-import _get from 'lodash/src/utils/get'
-import _map from 'lodash/src/utils/map'
+import _filter from '@lodash/filter'
+import _isEmpty from '@lodash/isEmpty'
+import _forEach from '@lodash/forEach'
+import _get from '@lodash/get'
+import _map from '@lodash/map'
 
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { PENCIL_STATE } from '../../../../resources/constants'

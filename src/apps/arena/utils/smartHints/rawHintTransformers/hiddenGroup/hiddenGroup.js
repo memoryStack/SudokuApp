@@ -1,10 +1,12 @@
+import _cloneDeep from '@lodash/cloneDeep'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _forEach from '@lodash/forEach'
+import _filter from '@lodash/filter'
 import { onlyUnique } from '../../../../../../utils/util'
-import _cloneDeep from 'lodash/src/utils/cloneDeep'
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import _forEach from 'lodash/src/utils/forEach'
-import _filter from 'lodash/src/utils/filter'
 
-import { HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+import {
+    HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR,
+} from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     areSameBlockCells,
@@ -27,7 +29,6 @@ import {
     removeDuplicteCells,
     getCandidatesListText,
 } from '../../util'
-import { SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
@@ -35,12 +36,8 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
     hostCells.forEach(cell => {
         const cellNotes = notesData[cell.row][cell.col]
         const cellRemovableNotes = cellNotes
-            .filter(({ show, noteValue }) => {
-                return show && !groupCandidates.includes(noteValue)
-            })
-            .map(({ noteValue }) => {
-                return noteValue
-            })
+            .filter(({ show, noteValue }) => show && !groupCandidates.includes(noteValue))
+            .map(({ noteValue }) => noteValue)
         result.push(...cellRemovableNotes)
     })
     return result.filter(onlyUnique).sortNumbers()
@@ -84,9 +81,7 @@ const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, note
 }
 
 // TODO: put it in utils and see where else it can be used
-const isRowOrColHouse = houseType => {
-    return houseType === HOUSE_TYPE.ROW || houseType === HOUSE_TYPE.COL
-}
+const isRowOrColHouse = houseType => houseType === HOUSE_TYPE.ROW || houseType === HOUSE_TYPE.COL
 
 const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
     // TODO: nested ifs. can it be made linear or refactor into better readability ??
@@ -114,15 +109,11 @@ const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
     return result
 }
 
-const shouldHighlightSecondaryHouseCells = (houseCells, groupHostCells, groupCandidates, mainNumbers, notesData) => {
-    return houseCells.some(cell => {
-        if (!isCellEmpty(cell, mainNumbers)) return false
-        if (isCellExists(cell, groupHostCells)) return false
-        return groupCandidates.some(groupCandidate => {
-            return notesData[cell.row][cell.col][groupCandidate - 1].show
-        })
-    })
-}
+const shouldHighlightSecondaryHouseCells = (houseCells, groupHostCells, groupCandidates, mainNumbers, notesData) => houseCells.some(cell => {
+    if (!isCellEmpty(cell, mainNumbers)) return false
+    if (isCellExists(cell, groupHostCells)) return false
+    return groupCandidates.some(groupCandidate => notesData[cell.row][cell.col][groupCandidate - 1].show)
+})
 
 const highlightSecondaryHouseCells = (
     houseCells,
@@ -150,18 +141,14 @@ const highlightSecondaryHouseCells = (
 }
 
 // DEAD CODE ??
-const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHostCells, notesData) => {
-    return removableGroupCandidatesHostCells
-        .reduce((prevValue, cell) => {
-            const cellNotes = notesData[cell.row][cell.col]
-            const groupCandidatesPresentInCell = groupCandidates.filter(groupCandidate => {
-                return isCellNoteVisible(groupCandidate, cellNotes)
-            })
-            return [...prevValue, ...groupCandidatesPresentInCell]
-        }, [])
-        .filter(onlyUnique)
-        .sortNumbers()
-}
+const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHostCells, notesData) => removableGroupCandidatesHostCells
+    .reduce((prevValue, cell) => {
+        const cellNotes = notesData[cell.row][cell.col]
+        const groupCandidatesPresentInCell = groupCandidates.filter(groupCandidate => isCellNoteVisible(groupCandidate, cellNotes))
+        return [...prevValue, ...groupCandidatesPresentInCell]
+    }, [])
+    .filter(onlyUnique)
+    .sortNumbers()
 
 const getHintChunks = (houseType, groupCandidates, groupCells) => {
     const hintId = groupCandidates.length === 2 ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
@@ -183,19 +170,15 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
     removableGroupCandidatesHostCells,
     groupCandidates,
     notes,
-) => {
-    return removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
-        const restrictedInputsForCell = notes[cell.row][cell.col]
-            .filter(({ show, noteValue }) => {
-                return show && !groupCandidates.includes(noteValue)
-            })
-            .map(({ noteValue }) => noteValue)
-        if (restrictedInputsForCell.length) {
-            prevValue[getCellAxesValues(cell)] = restrictedInputsForCell
-        }
-        return prevValue
-    }, {})
-}
+) => removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
+    const restrictedInputsForCell = notes[cell.row][cell.col]
+        .filter(({ show, noteValue }) => show && !groupCandidates.includes(noteValue))
+        .map(({ noteValue }) => noteValue)
+    if (restrictedInputsForCell.length) {
+        prevValue[getCellAxesValues(cell)] = restrictedInputsForCell
+    }
+    return prevValue
+}, {})
 
 const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandidatesHostCells, notesData) => {
     const result = []
@@ -211,9 +194,7 @@ const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandida
     })
 
     _forEach(removableGroupCandidatesHostCells, cell => {
-        const visibleGroupCandidatesInCell = _filter(groupCandidates, groupCandidate => {
-            return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
-        })
+        const visibleGroupCandidatesInCell = _filter(groupCandidates, groupCandidate => isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col]))
         result.push({
             cell,
             action: { type: BOARD_MOVES_TYPES.REMOVE, notes: visibleGroupCandidatesInCell },
@@ -224,7 +205,7 @@ const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandida
 }
 
 export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notesData }) => {
-    const { house, groupCandidates: groupCandidates, groupCells: hostCells } = group
+    const { house, groupCandidates, groupCells: hostCells } = group
 
     const cellsToFocusData = {}
 
@@ -246,7 +227,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
             mainNumbers,
             notesData,
         )
-        if (secondaryHouseEligibleForHighlight)
+        if (secondaryHouseEligibleForHighlight) {
             highlightSecondaryHouseCells(
                 secondaryHouseCells,
                 hostCells,
@@ -255,14 +236,13 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
                 notesData,
                 cellsToFocusData,
             )
+        }
         focusedCells.push(...secondaryHouseCells)
         focusedCells = removeDuplicteCells(focusedCells)
 
         removableGroupCandidatesHostCells = secondaryHouseCells.filter(cell => {
             if (isCellExists(cell, hostCells)) return false
-            return groupCandidates.some(groupCandidate => {
-                return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
-            })
+            return groupCandidates.some(groupCandidate => isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col]))
         })
     }
 
@@ -302,6 +282,6 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
             notesData,
         ),
         restrictedNumberInputMsg:
-            "input the numbers which are highlighted in red color in this cell. other numbers don't help in learning this hint.",
+            'input the numbers which are highlighted in red color in this cell. other numbers don\'t help in learning this hint.',
     }
 }

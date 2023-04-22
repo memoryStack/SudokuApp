@@ -1,9 +1,11 @@
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import _filter from 'lodash/src/utils/filter'
-import _forEach from 'lodash/src/utils/forEach'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _filter from '@lodash/filter'
+import _forEach from '@lodash/forEach'
+import _isEmpty from '@lodash/isEmpty'
 
-import { getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists, isCellNoteVisible } from '../../../util'
+import {
+    getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists, isCellNoteVisible,
+} from '../../../util'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
@@ -50,9 +52,7 @@ const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) =>
         let notesWillBeHighlighted = false
         groupCandidates.forEach(groupCandidate => {
             if (notesData[row][col][groupCandidate - 1].show) {
-                if (isCellExists({ row, col }, groupCells))
-                    notesToHighlightData[groupCandidate] = { fontColor: 'green' }
-                else notesToHighlightData[groupCandidate] = { fontColor: 'red' }
+                if (isCellExists({ row, col }, groupCells)) { notesToHighlightData[groupCandidate] = { fontColor: 'green' } } else notesToHighlightData[groupCandidate] = { fontColor: 'red' }
                 notesWillBeHighlighted = true
             }
         })
@@ -76,25 +76,18 @@ const getHintChunks = (groupCandidates, groupCells) => {
         ),
         groupCellsText: getCellsAxesValuesListText(groupCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
-    return HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)].map(hintChunkTemplate => {
-        return dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues)
-    })
+    return HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)].map(hintChunkTemplate => dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues))
 }
 
-const getHintId = groupCandidates =>
-    groupCandidates.length === NAKED_DOUBLE_CANDIDATES_COUNT ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE
+const getHintId = groupCandidates => (groupCandidates.length === NAKED_DOUBLE_CANDIDATES_COUNT ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE)
 
 const getApplyHintData = (focusedCells, groupCells, groupCandidates, notesData) => {
     const result = []
 
-    const cellsWithoutGroupCells = _filter(focusedCells, cell => {
-        return !isCellExists(cell, groupCells)
-    })
+    const cellsWithoutGroupCells = _filter(focusedCells, cell => !isCellExists(cell, groupCells))
 
     _forEach(cellsWithoutGroupCells, cell => {
-        const groupCandidatesVisible = _filter(groupCandidates, groupCandidate => {
-            return isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col])
-        })
+        const groupCandidatesVisible = _filter(groupCandidates, groupCandidate => isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col]))
         if (!_isEmpty(groupCandidatesVisible)) {
             result.push({
                 cell,

@@ -1,4 +1,4 @@
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
@@ -37,18 +37,14 @@ export const hiddenGroupTryOutAnalyser = ({
     return correctlyFilledGroupCellsResult(groupCells, groupCandidates, removableCandidates)
 }
 
-const getNoInputResult = () => {
-    return {
-        msg: HIDDEN_GROUP.NO_INPUT,
-        state: TRY_OUT_RESULT_STATES.START,
-    }
-}
+const getNoInputResult = () => ({
+    msg: HIDDEN_GROUP.NO_INPUT,
+    state: TRY_OUT_RESULT_STATES.START,
+})
 
 const removableGroupCandidatesFilledHostCells = removableGroupCandidatesHostCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return removableGroupCandidatesHostCells.filter(cell => {
-        return !isCellEmpty(cell, tryOutMainNumbers)
-    })
+    return removableGroupCandidatesHostCells.filter(cell => !isCellEmpty(cell, tryOutMainNumbers))
 }
 
 const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse) => {
@@ -68,24 +64,16 @@ const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells,
 const getRemovableGroupCandidatesFilledCellsWithNumbers = removableGroupCandidatesHostCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     return removableGroupCandidatesFilledHostCells(removableGroupCandidatesHostCells)
-        .map(cell => {
-            return {
-                cell,
-                number: tryOutMainNumbers[cell.row][cell.col].value,
-            }
-        })
-        .sort(({ number: cellANumber }, { number: cellBNumber }) => {
-            return cellANumber - cellBNumber
-        })
+        .map(cell => ({
+            cell,
+            number: tryOutMainNumbers[cell.row][cell.col].value,
+        }))
+        .sort(({ number: cellANumber }, { number: cellBNumber }) => cellANumber - cellBNumber)
 }
 
-const getCellsFromCellsWithNumbers = cellsWithNumbers => {
-    return cellsWithNumbers.map(({ cell }) => cell)
-}
+const getCellsFromCellsWithNumbers = cellsWithNumbers => cellsWithNumbers.map(({ cell }) => cell)
 
-const getNumbersFromCellsWithNumbers = cellsWithNumbers => {
-    return cellsWithNumbers.map(({ number }) => number)
-}
+const getNumbersFromCellsWithNumbers = cellsWithNumbers => cellsWithNumbers.map(({ number }) => number)
 
 const someGroupCellWronglyFilled = (groupCells, groupCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
@@ -142,11 +130,7 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
 
 const getGroupCandidatesToBeFilledWithoutHostCells = (groupCandidatesToBeFilled, groupCells) => {
     const tryOutNotes = getTryOutNotes(getStoreState())
-    return groupCandidatesToBeFilled.filter(groupCandidate => {
-        return !groupCells.some(cell => {
-            return isCellNoteVisible(groupCandidate, tryOutNotes[cell.row][cell.col])
-        })
-    })
+    return groupCandidatesToBeFilled.filter(groupCandidate => !groupCells.some(cell => isCellNoteVisible(groupCandidate, tryOutNotes[cell.row][cell.col])))
 }
 
 // TODO: break down this function
@@ -184,8 +168,6 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableC
 
 const getGroupCandidatesToBeFilled = (groupCells, groupCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const filledCellsNumbers = groupCells.map(cell => {
-        return tryOutMainNumbers[cell.row][cell.col].value
-    })
+    const filledCellsNumbers = groupCells.map(cell => tryOutMainNumbers[cell.row][cell.col].value)
     return getCandidatesToBeFilled(filledCellsNumbers, groupCandidates)
 }

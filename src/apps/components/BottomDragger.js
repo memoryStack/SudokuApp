@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react'
-import { View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler } from 'react-native'
+import React, {
+    useState, useEffect, useImperativeHandle, useCallback,
+} from 'react'
+import {
+    View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler,
+} from 'react-native'
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { rgba } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'

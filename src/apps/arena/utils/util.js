@@ -1,7 +1,7 @@
-import _isEmpty from 'lodash/src/utils/isEmpty'
-import _forEach from 'lodash/src/utils/forEach'
-import _every from 'lodash/src/utils/every'
-import _filter from 'lodash/src/utils/filter'
+import _isEmpty from '@lodash/isEmpty'
+import _forEach from '@lodash/forEach'
+import _every from '@lodash/every'
+import _filter from '@lodash/filter'
 
 import { getKey } from '@utils/storage'
 import { GAME_STATE } from '../../../resources/constants'

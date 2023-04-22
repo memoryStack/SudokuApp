@@ -1,6 +1,6 @@
-import _reduce from 'lodash/src/utils/reduce'
-import _forEach from 'lodash/src/utils/forEach'
-import _map from 'lodash/src/utils/map'
+import _reduce from '@lodash/reduce'
+import _forEach from '@lodash/forEach'
+import _map from '@lodash/map'
 
 import { forBoardEachCell } from '../../../util'
 

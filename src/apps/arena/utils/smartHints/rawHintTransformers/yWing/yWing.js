@@ -1,5 +1,5 @@
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import _map from 'lodash/src/utils/map'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _map from '@lodash/map'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { getCellAxesValues } from '../../../util'
 
@@ -46,7 +46,9 @@ const addEliminableNoteCellUIHighlightData = (eliminableNote, eliminableNotesCel
     })
 }
 
-const getUICellsToFocusData = ({ commonNoteInWings, pivotCell, wingCells, eliminableNotesCells }) => {
+const getUICellsToFocusData = ({
+    commonNoteInWings, pivotCell, wingCells, eliminableNotesCells,
+}) => {
     const cellsToFocusData = {}
 
     addPivotUIHighlightData(pivotCell, cellsToFocusData)
@@ -56,7 +58,9 @@ const getUICellsToFocusData = ({ commonNoteInWings, pivotCell, wingCells, elimin
     return cellsToFocusData
 }
 
-const getHintExplainationChunks = ({ pivotNotes, commonNoteInWings, pivotCell, wingCells }) => {
+const getHintExplainationChunks = ({
+    pivotNotes, commonNoteInWings, pivotCell, wingCells,
+}) => {
     const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.Y_WING]
 
     const msgPlaceholdersValues = {
@@ -72,12 +76,10 @@ const getHintExplainationChunks = ({ pivotNotes, commonNoteInWings, pivotCell, w
 
 const getApplyHintData = (yWing, notesData) => {
     const eliminableNotesCells = getEliminatableNotesCells(yWing, notesData)
-    return _map(eliminableNotesCells, cell => {
-        return {
-            cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [yWing.wingsCommonNote] },
-        }
-    })
+    return _map(eliminableNotesCells, cell => ({
+        cell,
+        action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [yWing.wingsCommonNote] },
+    }))
 }
 
 export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {

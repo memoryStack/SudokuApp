@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { HintIcon } from '../../../resources/svgIcons/hint'
 
@@ -41,7 +41,7 @@ const Hint_ = ({ iconBoxSize, hints, onClick }) => {
                 <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
                 {renderTickerIcon()}
             </>
-            <Text style={Styles.actionText}>{`Hint`}</Text>
+            <Text style={Styles.actionText}>Hint</Text>
         </Touchable>
     )
 }

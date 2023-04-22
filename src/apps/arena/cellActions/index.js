@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import withActions from '../../../utils/hocs/withActions'
 
@@ -37,10 +37,8 @@ const BoardController_ = ({ onAction }) => {
 
     useCacheGameState(GAME_DATA_KEYS.CELL_ACTIONS, { pencilState, hints })
 
-    useEffect(() => {
-        return () => {
-            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-        }
+    useEffect(() => () => {
+        onAction({ type: ACTION_TYPES.ON_UNMOUNT })
     }, [])
 
     const { width: windowWidth } = useWindowDimensions()

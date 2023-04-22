@@ -3,7 +3,7 @@ import { Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { PencilIcon } from '../../../resources/svgIcons/pencil'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
@@ -11,14 +11,12 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 import { Styles, INACTIVE_ICON_FILL } from './style'
 
 // TODO: use pencilState to animate the UI
-const FastPencil_ = ({ iconBoxSize, onClick }) => {
-    return (
-        <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
-            <PencilIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-            <Text style={Styles.actionText}>{`Fast Pencil`}</Text>
-        </Touchable>
-    )
-}
+const FastPencil_ = ({ iconBoxSize, onClick }) => (
+    <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
+        <PencilIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
+        <Text style={Styles.actionText}>Fast Pencil</Text>
+    </Touchable>
+)
 
 export const FastPencil = React.memo(FastPencil_)
 

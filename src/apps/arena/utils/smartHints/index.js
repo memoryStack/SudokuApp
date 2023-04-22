@@ -1,5 +1,5 @@
-import _isEmpty from 'lodash/src/utils/isEmpty'
-import _map from 'lodash/src/utils/map'
+import _isEmpty from '@lodash/isEmpty'
+import _map from '@lodash/map'
 
 import { getNakedSingleRawHints } from './nakedSingle/nakedSingle'
 import { getHiddenSingleRawHints } from './hiddenSingle/hiddenSingle'

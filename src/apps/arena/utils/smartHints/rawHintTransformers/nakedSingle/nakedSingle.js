@@ -1,5 +1,5 @@
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
-import _forEach from 'lodash/src/utils/forEach'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _forEach from '@lodash/forEach'
 
 import {
     SMART_HINTS_CELLS_BG_COLOR,
@@ -43,8 +43,7 @@ const SMART_HINTS_TECHNIQUES = {
     NAKED_SINGLE: {
         TITLE: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_SINGLE],
         DESCRIPTION: {
-            getSingleHouseMsg: (houseType, solutionValue, cell) =>
-                getSingleHouseNakedSingleDescription(houseType, solutionValue, cell),
+            getSingleHouseMsg: (houseType, solutionValue, cell) => getSingleHouseNakedSingleDescription(houseType, solutionValue, cell),
             getMultipleHouseMsg: (solutionValue, cell) => getMultipleHousesNakeSingleDescription(solutionValue, cell),
         },
     },

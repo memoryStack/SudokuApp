@@ -1,7 +1,7 @@
 import { PixelRatio } from 'react-native'
 
-import _inRange from 'lodash/src/utils/inRange'
-import _map from 'lodash/src/utils/map'
+import _inRange from '@lodash/inRange'
+import _map from '@lodash/map'
 
 export const isHexColor = (color = '') => color.charAt(0) === '#'
 

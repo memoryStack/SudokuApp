@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { LANGAUGE_OPTIONS } from 'src/i18n/languages'
 import Radio from 'src/apps/components/Radio'

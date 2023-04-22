@@ -1,4 +1,4 @@
-import _map from 'lodash/src/utils/map'
+import _map from '@lodash/map'
 
 export const LANGUAGE_KEYS = {
     ENGLISH: 'ENGLISH',

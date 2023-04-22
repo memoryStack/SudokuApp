@@ -1,8 +1,8 @@
 import { Path } from 'react-native-svg'
 
-import _compact from 'lodash/src/utils/compact'
-import _forEach from 'lodash/src/utils/forEach'
-import _reduce from 'lodash/src/utils/reduce'
+import _compact from '@lodash/compact'
+import _forEach from '@lodash/forEach'
+import _reduce from '@lodash/reduce'
 
 import { roundToNearestPixel } from '../../../../../utils/util'
 

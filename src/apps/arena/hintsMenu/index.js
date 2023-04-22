@@ -4,9 +4,9 @@ import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
-import _get from 'lodash/src/utils/get'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _noop from '@lodash/noop'
+import _get from '@lodash/get'
+import _isEmpty from '@lodash/isEmpty'
 
 import withActions from '../../../utils/hocs/withActions'
 

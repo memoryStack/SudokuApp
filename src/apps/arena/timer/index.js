@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { GAME_STATE } from '../../../resources/constants'
 import { noop } from '../../../utils/util'
@@ -18,7 +18,9 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { addLeadingZeroIfEligible } from '../utils/util'
 import { GameState } from '../utils/classes/gameState'
 
-const hitSlop = { left: 8, right: 8, bottom: 8, top: 8 }
+const hitSlop = {
+    left: 8, right: 8, bottom: 8, top: 8,
+}
 const styles = StyleSheet.create({
     triangleShape: {
         width: 0,
@@ -63,18 +65,14 @@ const Timer_ = ({ onClick = noop, time }) => {
 
     const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
-    const getPauseTimerIcon = () => {
-        return (
-            <View style={styles.pauseTimerIconContainer}>
-                <View style={[styles.pauseButtonMiddleGap, styles.rectangleShape]} />
-                <View style={styles.rectangleShape} />
-            </View>
-        )
-    }
+    const getPauseTimerIcon = () => (
+        <View style={styles.pauseTimerIconContainer}>
+            <View style={[styles.pauseButtonMiddleGap, styles.rectangleShape]} />
+            <View style={styles.rectangleShape} />
+        </View>
+    )
 
-    const renderTimerStateIcon = () => {
-        return new GameState(gameState).isGameActive() ? getPauseTimerIcon() : getStartTimerIcon()
-    }
+    const renderTimerStateIcon = () => (new GameState(gameState).isGameActive() ? getPauseTimerIcon() : getStartTimerIcon())
 
     return (
         <Touchable style={styles.timeCounter} onPress={onClick} touchable={TouchableTypes.opacity} hitSlop={hitSlop}>

@@ -1,4 +1,4 @@
-import _flatten from 'lodash/src/utils/flatten'
+import _flatten from '@lodash/flatten'
 
 import { getHouseCells } from '../../houseCells'
 import {
@@ -26,12 +26,10 @@ export const categorizeLegs = (legA, legB) => {
 }
 
 export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells) => {
-    const perfectCells = finnedLegHostCells.filter(finnedLegCell => {
-        return perfectLegHostCells.some(perfectLegCell => {
-            const cellsPair = [finnedLegCell, perfectLegCell]
-            return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
-        })
-    })
+    const perfectCells = finnedLegHostCells.filter(finnedLegCell => perfectLegHostCells.some(perfectLegCell => {
+        const cellsPair = [finnedLegCell, perfectLegCell]
+        return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
+    }))
 
     return {
         perfect: perfectCells,
@@ -47,10 +45,9 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
 
     return getHouseCells(getCellBlockHouseInfo(finns[0])).filter(cell => {
         if (
-            isCellExists(cell, getXWingCells(legs)) ||
-            !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col])
-        )
-            return false
+            isCellExists(cell, getXWingCells(legs))
+            || !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col])
+        ) return false
         return finnedLegPerfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]
             if (getCrossHouseType(houseType) === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
@@ -62,26 +59,18 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
 export const getPerfectCellsInFinnedBlock = legs => {
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
-    return perfectCells.filter(perfectCell => {
-        return finns.some(finnCell => areSameBlockCells([finnCell, perfectCell]))
-    })
+    return perfectCells.filter(perfectCell => finns.some(finnCell => areSameBlockCells([finnCell, perfectCell])))
 }
 
 export const addCellInXWingLeg = (cell, legCells, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)
     legCells.push(cell)
-    legCells.sort((cellA, cellB) => {
-        return cellA[crossHouseType] - cellB[crossHouseType]
-    })
+    legCells.sort((cellA, cellB) => cellA[crossHouseType] - cellB[crossHouseType])
 }
 
 export const getXWingCandidate = xWing => xWing.legs[0].candidate
 
-export const getXWingHosuesInOrder = xWing => {
-    return xWing.legs.map(({ cells }) => {
-        return getCellHouseInfo(xWing.houseType, cells[0])
-    })
-}
+export const getXWingHosuesInOrder = xWing => xWing.legs.map(({ cells }) => getCellHouseInfo(xWing.houseType, cells[0]))
 
 export const getXWingCells = xWingLegs => _flatten(xWingLegs.map(leg => leg.cells))
 

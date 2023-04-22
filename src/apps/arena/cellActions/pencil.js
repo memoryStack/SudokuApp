@@ -4,7 +4,7 @@ import { Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { PENCIL_STATE } from '../../../resources/constants'
 import { PencilIcon } from '../../../resources/svgIcons/pencil'
@@ -24,7 +24,9 @@ const Pencil_ = ({ iconBoxSize, pencilState, onClick }) => {
             <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL} />
             <Text
                 style={[Styles.actionText, { color: isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL }]}
-            >{`Pencil`}</Text>
+            >
+                Pencil
+            </Text>
         </Touchable>
     )
 }

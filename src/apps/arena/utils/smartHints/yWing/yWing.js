@@ -1,4 +1,4 @@
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _isEmpty from '@lodash/isEmpty'
 
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { N_CHOOSE_K } from '../../../../../resources/constants'
@@ -91,9 +91,7 @@ export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
 
 const extractYWingCellsFromYWing = yWing => {
     const pivotCell = yWing.pivot.cell
-    const wingCells = yWing.wings.map(wing => {
-        return wing.cell
-    })
+    const wingCells = yWing.wings.map(wing => wing.cell)
     return [pivotCell, ...wingCells]
 }
 
@@ -103,11 +101,7 @@ const areSameYWings = (yWingA, yWingB) => {
     return areSameCellsSets(yWingACells, yWingBCells)
 }
 
-const isDuplicateYWing = (newYWing, existingYWings) => {
-    return existingYWings.some(existingYWing => {
-        return areSameYWings(newYWing, existingYWing)
-    })
-}
+const isDuplicateYWing = (newYWing, existingYWings) => existingYWings.some(existingYWing => areSameYWings(newYWing, existingYWing))
 
 const categorizeYWingCellsInHouses = yWingCells => {
     const result = {}
@@ -120,16 +114,10 @@ const categorizeYWingCellsInHouses = yWingCells => {
 const getPivotHousesToSearchForSecondWing = (yWingCellA, yWingCellB) => {
     const commonHouses = getPairCellsCommonHouses(yWingCellA, yWingCellB)
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
-    return allHouses.filter(houseType => {
-        return !commonHouses[houseType]
-    })
+    return allHouses.filter(houseType => !commonHouses[houseType])
 }
 
-const getEligibleSecondWings = (expectedNotes, eligibleYWingCells) => {
-    return eligibleYWingCells.filter(eligibleYWingCell => {
-        return eligibleYWingCell.notes.sameArrays(expectedNotes)
-    })
-}
+const getEligibleSecondWings = (expectedNotes, eligibleYWingCells) => eligibleYWingCells.filter(eligibleYWingCell => eligibleYWingCell.notes.sameArrays(expectedNotes))
 
 const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
     const result = []
@@ -142,9 +130,7 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
 
     const eligibleCellsCombinations = N_CHOOSE_K[yWingEligibleCells.length]?.[2] || []
     eligibleCellsCombinations
-        .filter(combination => {
-            return isValidYWingCellsPair(yWingEligibleCells[combination[0]], yWingEligibleCells[combination[1]])
-        })
+        .filter(combination => isValidYWingCellsPair(yWingEligibleCells[combination[0]], yWingEligibleCells[combination[1]]))
         .forEach(combination => {
             const firstEligibleCell = yWingEligibleCells[combination[0]]
             const secondEligibleCell = yWingEligibleCells[combination[1]]
@@ -165,12 +151,10 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
                         secondWingExpectedNotes,
                         housesYWingEligibleCells[secondWingHouseType][secondWingHouseNum],
                     )
-                        .filter(eligibleSecondWing => {
-                            return !areCommonHouseCells(firstWing.cell, eligibleSecondWing.cell)
-                        })
+                        .filter(eligibleSecondWing => !areCommonHouseCells(firstWing.cell, eligibleSecondWing.cell))
                         .forEach(secondWing => {
                             result.push({
-                                pivot: pivot,
+                                pivot,
                                 wings: [firstWing, secondWing],
                                 wingsCommonNote: getCommonNoteInWingCells(firstWing.notes, secondWing.notes),
                             })

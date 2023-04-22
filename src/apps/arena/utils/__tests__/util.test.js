@@ -1,5 +1,5 @@
-import _isArray from 'lodash/src/utils/isArray'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _isArray from '@lodash/isArray'
+import _isEmpty from '@lodash/isEmpty'
 
 import { GAME_STATE } from '../../../../resources/constants'
 import { getStoragePromise } from '../../../../utils/testingBoilerplate/storage'

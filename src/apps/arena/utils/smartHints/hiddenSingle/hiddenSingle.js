@@ -1,4 +1,4 @@
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _isEmpty from '@lodash/isEmpty'
 
 import { CELLS_IN_HOUSE } from '../../../constants'
 
@@ -55,8 +55,7 @@ export const getHiddenSingleRawHints = (mainNumbers, notesData, maxHintsThreshol
             if (maxHintsLimitReached(result, maxHintsThreshold)) break hintsSearchLoop
 
             const cell = { row, col }
-            const skipCheckingHiddenSingle =
-                !isCellEmpty(cell, mainNumbers) || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
+            const skipCheckingHiddenSingle = !isCellEmpty(cell, mainNumbers) || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
             if (skipCheckingHiddenSingle) continue
 
             const { present, type, mainNumber } = getCellHiddenSingle(cell, notesData)

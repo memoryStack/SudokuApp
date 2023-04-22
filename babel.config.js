@@ -19,6 +19,7 @@ module.exports = {
                 alias: {
                     '@utils': './src/utils',
                     '@contexts': './src/contexts',
+                    '@lodash': 'lodash/src/utils',
                 },
             },
         ],

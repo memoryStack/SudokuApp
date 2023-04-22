@@ -1,5 +1,5 @@
-import _isEmpty from 'lodash/src/utils/isEmpty'
-import _get from 'lodash/src/utils/get'
+import _isEmpty from '@lodash/isEmpty'
+import _get from '@lodash/get'
 
 import { getHouseCells } from '../../arena/utils/houseCells'
 import { HOUSE_TYPE } from '../../arena/utils/smartHints/constants'

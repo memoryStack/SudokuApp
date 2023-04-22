@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { SCREEN_NAME } from '../../../resources/constants'
 import withActions from '../../../utils/hocs/withActions'

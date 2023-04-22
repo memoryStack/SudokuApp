@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { Platform } from '../../utils/classes/platform'
 import { AppState } from '../../utils/classes/appState'
@@ -19,7 +19,9 @@ const styles = StyleSheet.create({
 
 const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
-const Page_ = ({ children, onLayout, onFocus, onBlur, navigation }) => {
+const Page_ = ({
+    children, onLayout, onFocus, onBlur, navigation,
+}) => {
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState() === 'active')
 
     const handleFocus = useCallback(() => {

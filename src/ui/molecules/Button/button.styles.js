@@ -2,8 +2,8 @@ import { PixelRatio, StyleSheet } from 'react-native'
 
 import { fonts } from 'src/resources/fonts/font'
 
-import _get from 'lodash/src/utils/get'
-import _isNil from 'lodash/src/utils/isNil'
+import _get from '@lodash/get'
+import _isNil from '@lodash/isNil'
 
 import { isHexColor, rgba } from '@utils/util'
 

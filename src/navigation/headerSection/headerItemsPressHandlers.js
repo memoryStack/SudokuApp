@@ -1,23 +1,15 @@
-import _get from 'lodash/src/utils/get'
-import _noop from 'lodash/src/utils/noop'
+import _get from '@lodash/get'
+import _noop from '@lodash/noop'
 
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../route.constants'
 
-const handleBackPress = ({ navigation }) => {
-    return () => navigation && navigation.goBack()
-}
+const handleBackPress = ({ navigation }) => () => navigation && navigation.goBack()
 
-const handlePress = (route, pressHandlerKey) => {
-    return _get(route, ['params', pressHandlerKey], _noop)()
-}
+const handlePress = (route, pressHandlerKey) => _get(route, ['params', pressHandlerKey], _noop)()
 
-const handlerSettingsPress = ({ route }) => {
-    return () => handlePress(route, HEADER_ITEMS_PRESS_HANDLERS_KEYS.SETTINGS)
-}
+const handlerSettingsPress = ({ route }) => () => handlePress(route, HEADER_ITEMS_PRESS_HANDLERS_KEYS.SETTINGS)
 
-const handlerSharePress = ({ route }) => {
-    return () => handlePress(route, HEADER_ITEMS_PRESS_HANDLERS_KEYS.SHARE)
-}
+const handlerSharePress = ({ route }) => () => handlePress(route, HEADER_ITEMS_PRESS_HANDLERS_KEYS.SHARE)
 
 const HEADER_ITEM_VS_PRESS_HANDLER = {
     [HEADER_ITEMS.BACK]: handleBackPress,
@@ -25,6 +17,4 @@ const HEADER_ITEM_VS_PRESS_HANDLER = {
     [HEADER_ITEMS.SHARE]: handlerSharePress,
 }
 
-export const getHeaderItemPress = ({ item, route, navigation }) => {
-    return _get(HEADER_ITEM_VS_PRESS_HANDLER, item, _noop)({ route, navigation }) || _noop
-}
+export const getHeaderItemPress = ({ item, route, navigation }) => _get(HEADER_ITEM_VS_PRESS_HANDLER, item, _noop)({ route, navigation }) || _noop

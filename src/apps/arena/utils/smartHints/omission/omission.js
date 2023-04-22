@@ -1,4 +1,4 @@
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _isEmpty from '@lodash/isEmpty'
 
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
@@ -21,9 +21,7 @@ const HOST_CELLS_COMMON_HOUSES_COUNT = 2
 export const areValidOmissionHostCells = hostCells => {
     if (hostCells.length < 2) return false
 
-    const cellsCommonHouses = Object.values(getCellsCommonHouses(hostCells)).filter(value => {
-        return value
-    })
+    const cellsCommonHouses = Object.values(getCellsCommonHouses(hostCells)).filter(value => value)
     return cellsCommonHouses.length === HOST_CELLS_COMMON_HOUSES_COUNT
 }
 
@@ -35,16 +33,11 @@ export const isNoteHaveOmissionInHouse = (note, house, mainNumbers, notesData) =
     const houseCells = getHouseCells(house)
 
     const hostCells = houseCells
-        .filter(cell => {
-            return isCellEmpty(cell, mainNumbers)
-        })
-        .filter(cell => {
-            return isCellNoteVisible(note, notesData[cell.row][cell.col])
-        })
+        .filter(cell => isCellEmpty(cell, mainNumbers))
+        .filter(cell => isCellNoteVisible(note, notesData[cell.row][cell.col]))
 
-    const isValidOmission =
-        isHintValid({ type: HINTS_IDS.OMISSION, data: { houseCells, note, userNotesHostCells: hostCells } }) &&
-        areValidOmissionHostCells(hostCells)
+    const isValidOmission = isHintValid({ type: HINTS_IDS.OMISSION, data: { houseCells, note, userNotesHostCells: hostCells } })
+        && areValidOmissionHostCells(hostCells)
     return {
         present: isValidOmission,
         hostCells,
@@ -53,9 +46,7 @@ export const isNoteHaveOmissionInHouse = (note, house, mainNumbers, notesData) =
 
 const getRemovableNotesHostHouse = (hostCells, hostHouse) => {
     const commonHouses = getCellsCommonHouses(hostCells)
-    return getCellHousesInfo(hostCells[0]).filter(house => {
-        return commonHouses[house.type] && house.type !== hostHouse.type
-    })[0]
+    return getCellHousesInfo(hostCells[0]).filter(house => commonHouses[house.type] && house.type !== hostHouse.type)[0]
 }
 
 export const getHouseOmissions = (house, mainNumbers, notesData) => {
@@ -75,24 +66,18 @@ export const getHouseOmissions = (house, mainNumbers, notesData) => {
     return result
 }
 
-const isDuplicateOmission = (newOmission, allOmissions) => {
-    return allOmissions.some(existingOmission => {
-        const isSameNote = newOmission.note === existingOmission.note
-        return isSameNote && areSameCellsSets(newOmission.hostCells, existingOmission.hostCells)
-    })
-}
+const isDuplicateOmission = (newOmission, allOmissions) => allOmissions.some(existingOmission => {
+    const isSameNote = newOmission.note === existingOmission.note
+    return isSameNote && areSameCellsSets(newOmission.hostCells, existingOmission.hostCells)
+})
 
 export const removesNotes = (omission, mainNumbers, notesData) => {
     const { removableNotesHostHouse } = omission
     const houseCells = getHouseCells(removableNotesHostHouse)
 
     return houseCells
-        .filter(cell => {
-            return isCellEmpty(cell, mainNumbers) && !isCellExists(cell, omission.hostCells)
-        })
-        .some(cell => {
-            return isCellNoteVisible(omission.note, notesData[cell.row][cell.col])
-        })
+        .filter(cell => isCellEmpty(cell, mainNumbers) && !isCellExists(cell, omission.hostCells))
+        .some(cell => isCellNoteVisible(omission.note, notesData[cell.row][cell.col]))
 }
 
 export const getOmissionRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
@@ -104,9 +89,7 @@ export const getOmissionRawHints = (mainNumbers, notesData, maxHintsThreshold) =
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const house = { type: houseType, num: houseNum }
-            const newOmissions = getHouseOmissions(house, mainNumbers, notesData).filter(newOmission => {
-                return !isDuplicateOmission(newOmission, result) && removesNotes(newOmission, mainNumbers, notesData)
-            })
+            const newOmissions = getHouseOmissions(house, mainNumbers, notesData).filter(newOmission => !isDuplicateOmission(newOmission, result) && removesNotes(newOmission, mainNumbers, notesData))
             result.push(...newOmissions)
         }
     })

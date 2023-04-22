@@ -1,5 +1,5 @@
-import _isEmpty from 'lodash/src/utils/isEmpty'
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import _isEmpty from '@lodash/isEmpty'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
@@ -64,9 +64,7 @@ export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
 
 const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
     const notes = getTryOutNotes(getStoreState())
-    return cells.filter(cell => {
-        return isCellNoteVisible(candidate, notes[cell.row][cell.col])
-    })
+    return cells.filter(cell => isCellNoteVisible(candidate, notes[cell.row][cell.col]))
 }
 
 export const getOneLegWithNoCandidateResult = xWing => {
@@ -92,15 +90,12 @@ const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
     const notes = getTryOutNotes(getStoreState())
-    return xWingLegs.find(({ cells: legXWingCells }) => {
-        return legXWingCells.every(xWingCell => {
-            // handles sashimi finned x-wing as well
-            return (
-                (isCellEmpty(xWingCell, tryOutMainNumbers) || !isCellEmpty(xWingCell, mainNumbers)) &&
-                !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
-            )
-        })
-    })
+    return xWingLegs.find(({ cells: legXWingCells }) => legXWingCells.every(xWingCell =>
+    // handles sashimi finned x-wing as well
+    (
+        (isCellEmpty(xWingCell, tryOutMainNumbers) || !isCellEmpty(xWingCell, mainNumbers))
+        && !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
+    )))
 }
 
 export const getLegsFilledWithoutErrorResult = xWing => {

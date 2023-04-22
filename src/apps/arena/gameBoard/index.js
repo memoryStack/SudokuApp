@@ -6,10 +6,10 @@ import { View, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _get from 'lodash/src/utils/get'
-import _set from 'lodash/src/utils/set'
-import _noop from 'lodash/src/utils/noop'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _get from '@lodash/get'
+import _set from '@lodash/set'
+import _noop from '@lodash/noop'
+import _isEmpty from '@lodash/isEmpty'
 
 import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
 

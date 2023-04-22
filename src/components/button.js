@@ -4,7 +4,7 @@ import { Text, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { Touchable, TouchableTypes } from '../apps/components/Touchable'
 import { fonts } from '../resources/fonts/font'

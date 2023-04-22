@@ -1,4 +1,4 @@
-import _get from 'lodash/src/utils/get'
+import _get from '@lodash/get'
 
 import { HEADER_SECTION, ROUTES } from './route.constants'
 import { routesHeaderItems } from './routes'

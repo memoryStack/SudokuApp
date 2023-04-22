@@ -1,4 +1,4 @@
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { getHouseCells } from '../../../../houseCells'
 
@@ -73,9 +73,7 @@ const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
 const getFinnedXWingHintChunks = (xWing, removableNotesHostCells) => {
     const msgPlaceholdersValues = getPlaceholdersValues(xWing, removableNotesHostCells)
 
-    return HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING].map(template => {
-        return dynamicInterpolation(template, msgPlaceholdersValues)
-    })
+    return HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING].map(template => dynamicInterpolation(template, msgPlaceholdersValues))
 }
 
 // this implementation is different from utils implementation
@@ -84,9 +82,7 @@ const getSashimiCell = (xWing, notes) => {
     const { otherLeg: finnedLeg } = categorizeLegs(...legs)
 
     const candidate = getXWingCandidate(xWing)
-    return finnedLeg.cells.find(cell => {
-        return !isCellNoteVisible(candidate, notes[cell.row][cell.col])
-    })
+    return finnedLeg.cells.find(cell => !isCellNoteVisible(candidate, notes[cell.row][cell.col]))
 }
 
 const getSashimiFinnedHintChunks = (xWing, removableNotesHostCells, notes) => {
@@ -95,9 +91,7 @@ const getSashimiFinnedHintChunks = (xWing, removableNotesHostCells, notes) => {
         sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes)),
     }
 
-    return HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING].map(template => {
-        return dynamicInterpolation(template, placeholdersValues)
-    })
+    return HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING].map(template => dynamicInterpolation(template, placeholdersValues))
 }
 
 // doing 2 things
@@ -107,9 +101,7 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
 
     const xWingHousesNum = [firstHouseNum, secondHouseNum]
     xWingHousesNum.forEach(houseNum => {
-        getHouseCells({ type: houseType, num: houseNum }).forEach(cell =>
-            setCellDataInHintResult(cell, { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }, cellsToFocusData),
-        )
+        getHouseCells({ type: houseType, num: houseNum }).forEach(cell => setCellDataInHintResult(cell, { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }, cellsToFocusData))
     })
 }
 
@@ -182,7 +174,7 @@ const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cells
 
 export const getFinnedXWingUIData = (xWing, notesData) => {
     const { type: finnedXWingType, legs, houseType } = xWing
-    const candidate = legs[0].candidate
+    const { candidate } = legs[0]
 
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
 
@@ -214,10 +206,9 @@ export const getFinnedXWingUIData = (xWing, notesData) => {
         },
     }
 
-    const hintChunks =
-        finnedXWingType === XWING_TYPES.FINNED
-            ? getFinnedXWingHintChunks(xWing, removableNotesHostCells)
-            : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData)
+    const hintChunks = finnedXWingType === XWING_TYPES.FINNED
+        ? getFinnedXWingHintChunks(xWing, removableNotesHostCells)
+        : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData)
 
     return {
         cellsToFocusData,

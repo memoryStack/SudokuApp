@@ -6,10 +6,10 @@ import PropTypes from 'prop-types'
 
 import { Svg } from 'react-native-svg'
 
-import _map from 'lodash/src/utils/map'
-import _isNil from 'lodash/src/utils/isNil'
-import _isEmpty from 'lodash/src/utils/isEmpty'
-import _isFunction from 'lodash/src/utils/isFunction'
+import _map from '@lodash/map'
+import _isNil from '@lodash/isNil'
+import _isEmpty from '@lodash/isEmpty'
+import _isFunction from '@lodash/isFunction'
 
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 

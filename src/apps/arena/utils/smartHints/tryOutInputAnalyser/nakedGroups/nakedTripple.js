@@ -1,3 +1,4 @@
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
@@ -25,7 +26,6 @@ import {
     getAllInputsFilledResult,
     getPartialCorrectlyFilledResult,
 } from './helpers'
-import { dynamicInterpolation } from 'lodash/src/utils/dynamicInterpolation'
 import { NAKED_TRIPPLE } from '../stringLiterals'
 
 export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
@@ -51,9 +51,7 @@ export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, grou
 
 const allGroupCellsEmpty = groupCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return !groupCells.some(cell => {
-        return !isCellEmpty(cell, tryOutMainNumbers)
-    })
+    return !groupCells.some(cell => !isCellEmpty(cell, tryOutMainNumbers))
 }
 
 // two cells have naked single in them because of that third one
@@ -77,15 +75,11 @@ const getNakedSinglesInvalidCombination = groupCells => {
 
         // bug in this func.
         // i again wish i had implemented this using TDD
-        const allChosenCellsHaveNakedSingle = !chosenCells.some(cell => {
-            return !isNakedSinglePresent(tryOutNotesInfo[cell.row][cell.col]).present
-        })
+        const allChosenCellsHaveNakedSingle = !chosenCells.some(cell => !isNakedSinglePresent(tryOutNotesInfo[cell.row][cell.col]).present)
 
         if (allChosenCellsHaveNakedSingle) {
             const chosenCellNotes = chosenCells
-                .map(cell => {
-                    return getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0]
-                })
+                .map(cell => getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0])
                 .sortNumbers()
             const notChosenCell = getNotChosenCell(chosenCells, groupCells)
             const notChosenCellWillNotHaveCandidate = chosenCellNotes.sameArrays(
@@ -98,17 +92,9 @@ const getNakedSinglesInvalidCombination = groupCells => {
     })
 }
 
-const getChosenCells = (combination, groupCells) => {
-    return combination.map(idx => {
-        return groupCells[idx]
-    })
-}
+const getChosenCells = (combination, groupCells) => combination.map(idx => groupCells[idx])
 
-const getNotChosenCell = (chosenCells, allCells) => {
-    return allCells.find(cell => {
-        return !isCellExists(cell, chosenCells)
-    })
-}
+const getNotChosenCell = (chosenCells, allCells) => allCells.find(cell => !isCellExists(cell, chosenCells))
 
 const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
     const chosenCellWithNote = getNakedSingleCellsWithNoteInAscOrder(chosenCells, tryOutNotesInfo)
@@ -148,35 +134,29 @@ const getNakedDoublePairCellsErrorResultIfPresent = groupCells => {
     }
 }
 
-const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => {
-    return N_CHOOSE_K[3][2].find(combination => {
-        const chosenCells = getChosenCells(combination, groupCells)
+const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHOOSE_K[3][2].find(combination => {
+    const chosenCells = getChosenCells(combination, groupCells)
 
-        if (areSameNotesInCells(chosenCells, tryOutNotesInfo)) {
-            const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+    if (areSameNotesInCells(chosenCells, tryOutNotesInfo)) {
+        const notChosenCell = getNotChosenCell(chosenCells, groupCells)
 
-            const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
-            const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
-            const notChosenCellWillHaveCandidate = notChosenCellNotes.some(notChosenCellNote => {
-                return !aChosenCellNotes.includes(notChosenCellNote)
-            })
-            return !notChosenCellWillHaveCandidate
-        }
-        return false
-    })
-}
+        const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
+        const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
+        const notChosenCellWillHaveCandidate = notChosenCellNotes.some(notChosenCellNote => !aChosenCellNotes.includes(notChosenCellNote))
+        return !notChosenCellWillHaveCandidate
+    }
+    return false
+})
 
 const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
     const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
     const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
 
-    const isThirdCellHasNakedSingle =
-        getCellVisibleNotesCount(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]) === 1
+    const isThirdCellHasNakedSingle = getCellVisibleNotesCount(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]) === 1
 
     let chosenCellsPotentialMultipleNakedSingleCandidate
     if (isThirdCellHasNakedSingle) {
-        chosenCellsPotentialMultipleNakedSingleCandidate =
-            notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
+        chosenCellsPotentialMultipleNakedSingleCandidate = notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
     }
 
     const chosenCellsAxesText = getCellsAxesValuesListText(chosenCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
@@ -186,7 +166,8 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
         HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
     )
 
-    let msgPlaceholderValues, resultMsg
+    let msgPlaceholderValues; let
+        resultMsg
     if (isThirdCellHasNakedSingle) {
         msgPlaceholderValues = {
             nakedSingleCandidate: notChosenCellNotes[0],
@@ -216,8 +197,7 @@ const getValidProgressResult = (groupCandidates, groupCells) => {
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         return getAllInputsFilledResult(groupCandidates)
-    } else {
-        const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
-        return getPartialCorrectlyFilledResult(candidatesToBeFilled)
     }
+    const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
+    return getPartialCorrectlyFilledResult(candidatesToBeFilled)
 }

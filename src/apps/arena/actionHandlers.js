@@ -1,10 +1,10 @@
 import { Animated } from 'react-native'
 import Share from 'react-native-share'
 
-import _isEmpty from 'lodash/src/utils/isEmpty'
-import _findIndex from 'lodash/src/utils/findIndex'
-import _isInteger from 'lodash/src/utils/isInteger'
-import _noop from 'lodash/src/utils/noop'
+import _isEmpty from '@lodash/isEmpty'
+import _findIndex from '@lodash/findIndex'
+import _isInteger from '@lodash/isInteger'
+import _noop from '@lodash/noop'
 
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '@utils/storage'

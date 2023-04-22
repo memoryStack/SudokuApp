@@ -2,7 +2,7 @@ import React from 'react'
 
 import { StyleSheet, Text } from 'react-native'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 const styles = StyleSheet.create({
     link: {

@@ -53,6 +53,7 @@ module.exports = {
                 map: [
                     ['@utils', './src/utils'],
                     ['@contexts', './src/contexts'],
+                    ['@lodash', 'lodash/src/utils'],
                 ],
                 extensions: ['.ts', '.js', '.jsx', '.json'],
             },

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { fonts } from '../../../resources/fonts/font'
 import withActions from '../../../utils/hocs/withActions'
@@ -14,7 +14,9 @@ import withActions from '../../../utils/hocs/withActions'
 import { useCacheGameState } from '../hooks/useCacheGameState'
 import { startTimer, stopTimer } from '../store/actions/refree.actions'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit } from '../store/selectors/refree.selectors'
+import {
+    getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit,
+} from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { GameState } from '../utils/classes/gameState'
@@ -44,10 +46,8 @@ const Refree_ = ({ onAction }) => {
 
     const gameState = useSelector(getGameState)
 
-    useEffect(() => {
-        return () => {
-            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-        }
+    useEffect(() => () => {
+        onAction({ type: ACTION_TYPES.ON_UNMOUNT })
     }, [])
 
     useEffect(() => {

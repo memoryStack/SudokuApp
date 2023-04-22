@@ -1,5 +1,5 @@
-import _flatten from 'lodash/src/utils/flatten'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _flatten from '@lodash/flatten'
+import _isEmpty from '@lodash/isEmpty'
 
 import { getXWingCells } from '../../xWing/utils'
 
@@ -22,15 +22,15 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
     }
 
     if (
-        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) &&
-        _isEmpty(filterFilledCellsInTryOut(xWingCells))
+        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))
+        && _isEmpty(filterFilledCellsInTryOut(xWingCells))
     ) {
         return getSameCrossHouseCandidatePossibilitiesResult(xWing)
     }
 
     if (
-        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells)) &&
-        !_isEmpty(filterFilledCellsInTryOut(xWingCells))
+        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))
+        && !_isEmpty(filterFilledCellsInTryOut(xWingCells))
     ) {
         return getOneLegWithNoCandidateResult(xWing)
     }

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
 import { Button } from '../../components/button'
@@ -72,7 +72,9 @@ const getTimeView = (timeTaken = {}) => {
 
 // TODO: change this file name to something generic
 const GameOverCard_ = ({ stats, openNextGameMenu }) => {
-    const { mistakes, difficultyLevel, time, hintsUsed } = stats
+    const {
+        mistakes, difficultyLevel, time, hintsUsed,
+    } = stats
 
     const gameState = useSelector(getGameState)
 
@@ -81,27 +83,27 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
 
         return (
             <>
-                {/* 
+                {/*
                     this trophy icon works well only for debug builds. for release build app crashes. my guess is that it's because of wrong formats.
                     like "m"(web) and "M"(App) for drawings
                 */}
                 {/* <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} /> */}
-                <Text style={styles.congratsText}>{'Congratulations!'}</Text>
+                <Text style={styles.congratsText}>Congratulations!</Text>
                 <View style={styles.statsContainer}>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>{'Difficulty'}</Text>
+                        <Text style={styles.statText}>Difficulty</Text>
                         <Text style={styles.statText}>{difficultyLevel}</Text>
                     </View>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>{'Time'}</Text>
+                        <Text style={styles.statText}>Time</Text>
                         {getTimeView(time)}
                     </View>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>{'Mistakes'}</Text>
+                        <Text style={styles.statText}>Mistakes</Text>
                         <Text style={styles.statText}>{mistakes}</Text>
                     </View>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>{'Hints Used'}</Text>
+                        <Text style={styles.statText}>Hints Used</Text>
                         <Text style={styles.statText}>{hintsUsed}</Text>
                     </View>
                 </View>
@@ -118,9 +120,7 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
         )
     }
 
-    const renderNewGameButton = () => {
-        return <Button text={NEW_GAME} onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
-    }
+    const renderNewGameButton = () => <Button text={NEW_GAME} onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
 
     return (
         <Touchable touchable={TouchableTypes.opacity} activeOpacity={1} onPress={_noop} style={styles.container}>

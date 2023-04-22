@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import withActions from '../../../utils/hocs/withActions'
 
@@ -20,7 +20,7 @@ const GameInputPanel_ = ({ onAction }) => {
     const getInstancesCounts = mainNumbers => {
         const instancesCount = new Array(10).fill(0)
         forBoardEachCell(({ row, col }) => {
-            const value = mainNumbers[row][col].value
+            const { value } = mainNumbers[row][col]
             if (value === mainNumbers[row][col].solutionValue) {
                 instancesCount[value]++
             }
@@ -30,8 +30,7 @@ const GameInputPanel_ = ({ onAction }) => {
 
     const getNumbersVisibilityStatus = instancesCount => {
         const numbersVisibility = [true]
-        for (let i = 1; i <= MAX_INSTANCES_OF_NUMBER; i++)
-            numbersVisibility.push(instancesCount[i] !== MAX_INSTANCES_OF_NUMBER)
+        for (let i = 1; i <= MAX_INSTANCES_OF_NUMBER; i++) numbersVisibility.push(instancesCount[i] !== MAX_INSTANCES_OF_NUMBER)
         return numbersVisibility
     }
 

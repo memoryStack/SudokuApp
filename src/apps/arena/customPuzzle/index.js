@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { CloseIcon } from '../../../resources/svgIcons/close'
 import { PLAY } from '../../../resources/stringLiterals'
@@ -21,7 +21,9 @@ import { Inputpanel } from '../inputPanel'
 
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
 
-const CLOSE_ICON_HITSLOP = { top: 24, left: 24, bottom: 24, right: 24 }
+const CLOSE_ICON_HITSLOP = {
+    top: 24, left: 24, bottom: 24, right: 24,
+}
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -62,7 +64,9 @@ const styles = StyleSheet.create({
     },
 })
 
-const CustomPuzzle_ = ({ mainNumbers, selectedCell, notes, parentHeight, onCustomPuzzleClosed, onAction }) => {
+const CustomPuzzle_ = ({
+    mainNumbers, selectedCell, notes, parentHeight, onCustomPuzzleClosed, onAction,
+}) => {
     const customPuzzleRef = useRef(null)
 
     useEffect(() => {
@@ -94,7 +98,7 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notes, parentHeight, onCusto
             onDraggerClosed={onHCClosed}
             ref={customPuzzleRef}
             bottomMostPositionRatio={1.1}
-            stopBackgroundClickClose={true}
+            stopBackgroundClickClose
         >
             <View style={styles.container}>
                 <Touchable
@@ -103,7 +107,7 @@ const CustomPuzzle_ = ({ mainNumbers, selectedCell, notes, parentHeight, onCusto
                     onPress={handleOnClose}
                     hitSlop={CLOSE_ICON_HITSLOP}
                 >
-                    <CloseIcon height={24} width={24} fill={'rgba(0, 0, 0, .8)'} />
+                    <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
                 </Touchable>
                 <Board
                     gameState={GAME_STATE.ACTIVE}

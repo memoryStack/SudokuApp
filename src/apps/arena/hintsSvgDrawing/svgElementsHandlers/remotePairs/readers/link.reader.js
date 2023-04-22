@@ -1,4 +1,4 @@
-import _property from 'lodash/src/utils/property'
+import _property from '@lodash/property'
 
 const LinkReader = {
     start: _property('start'),

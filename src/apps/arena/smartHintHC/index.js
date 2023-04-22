@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
-import _noop from 'lodash/src/utils/noop'
-import _get from 'lodash/src/utils/get'
-import _isEmpty from 'lodash/src/utils/isEmpty'
+import _noop from '@lodash/noop'
+import _get from '@lodash/get'
+import _isEmpty from '@lodash/isEmpty'
 
 import { BottomDragger } from '../../components/BottomDragger'
 import { CloseIcon } from '../../../resources/svgIcons/close'

@@ -1,11 +1,13 @@
-import React, { useCallback, useRef, useEffect, useState } from 'react'
+import React, {
+    useCallback, useRef, useEffect, useState,
+} from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
 
 import { Svg, Path } from 'react-native-svg'
 
-import _noop from 'lodash/src/utils/noop'
+import _noop from '@lodash/noop'
 
 import { useScreenName } from '../../../utils/customHooks'
 
@@ -70,43 +72,37 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
             })
     }, [screenName])
 
-    const getBarPath = barNum => {
-        return [
-            'M',
-            75 + 100 * barNum,
-            '450',
-            'L',
-            75 + 100 * barNum,
-            350 - 100 * barNum,
-            'A 25 25 0 0 1',
-            125 + 100 * barNum,
-            350 - 100 * barNum,
-            'L',
-            125 + 100 * barNum,
-            '450',
-            'A 25 25 0 0 1',
-            75 + 100 * barNum,
-            '450',
-        ].join(' ')
-    }
+    const getBarPath = barNum => [
+        'M',
+        75 + 100 * barNum,
+        '450',
+        'L',
+        75 + 100 * barNum,
+        350 - 100 * barNum,
+        'A 25 25 0 0 1',
+        125 + 100 * barNum,
+        350 - 100 * barNum,
+        'L',
+        125 + 100 * barNum,
+        '450',
+        'A 25 25 0 0 1',
+        75 + 100 * barNum,
+        '450',
+    ].join(' ')
 
-    const getBarStrokeAndFillProps = (barNum, difficultyLevelIndex) => {
-        return {
-            stroke: barNum <= difficultyLevelIndex ? 'rgba(0, 0, 0, .5)' : 'black',
-            fill: barNum <= difficultyLevelIndex ? 'black' : 'none',
-        }
-    }
+    const getBarStrokeAndFillProps = (barNum, difficultyLevelIndex) => ({
+        stroke: barNum <= difficultyLevelIndex ? 'rgba(0, 0, 0, .5)' : 'black',
+        fill: barNum <= difficultyLevelIndex ? 'black' : 'none',
+    })
 
-    const getBar = (barNum, level) => {
-        return (
-            <Path
-                key={`${barNum}`}
-                d={getBarPath(barNum)}
-                {...getBarStrokeAndFillProps(barNum, level)}
-                strokeWidth={5}
-            />
-        )
-    }
+    const getBar = (barNum, level) => (
+        <Path
+            key={`${barNum}`}
+            d={getBarPath(barNum)}
+            {...getBarStrokeAndFillProps(barNum, level)}
+            strokeWidth={5}
+        />
+    )
 
     const getLevelIcon = level => {
         const childArray = []
@@ -130,47 +126,43 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
         [nextGameMenuRef, menuItemClick],
     )
 
-    const getNextGameMenu = () => {
-        return (
-            <View style={styles.nextGameMenuContainer}>
-                {Object.keys(LEVEL_DIFFICULTIES).map((levelText, index) => {
-                    return (
-                        <View key={levelText}>
-                            <Touchable
-                                style={styles.levelContainer}
-                                touchable={TouchableTypes.opacity}
-                                onPress={() => nextGameMenuItemClicked(levelText)}
-                            >
-                                {getLevelIcon(index)}
-                                <Text style={styles.levelText}>{levelText}</Text>
-                            </Touchable>
-                        </View>
-                    )
-                })}
-                {/* TODO: make these options a little more configurable */}
-                <Touchable
-                    key={CUSTOMIZE_YOUR_PUZZLE_TITLE}
-                    style={styles.levelContainer}
-                    touchable={TouchableTypes.opacity}
-                    onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
-                >
-                    <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
-                    <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
-                </Touchable>
-                {isHomeScreen && pendingGame.available ? (
+    const getNextGameMenu = () => (
+        <View style={styles.nextGameMenuContainer}>
+            {Object.keys(LEVEL_DIFFICULTIES).map((levelText, index) => (
+                <View key={levelText}>
                     <Touchable
-                        key={RESUME}
                         style={styles.levelContainer}
                         touchable={TouchableTypes.opacity}
-                        onPress={() => nextGameMenuItemClicked(RESUME)}
+                        onPress={() => nextGameMenuItemClicked(levelText)}
                     >
-                        <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
-                        <Text style={styles.levelText}>{RESUME}</Text>
+                        {getLevelIcon(index)}
+                        <Text style={styles.levelText}>{levelText}</Text>
                     </Touchable>
-                ) : null}
-            </View>
-        )
-    }
+                </View>
+            ))}
+            {/* TODO: make these options a little more configurable */}
+            <Touchable
+                key={CUSTOMIZE_YOUR_PUZZLE_TITLE}
+                style={styles.levelContainer}
+                touchable={TouchableTypes.opacity}
+                onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
+            >
+                <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
+                <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
+            </Touchable>
+            {isHomeScreen && pendingGame.available ? (
+                <Touchable
+                    key={RESUME}
+                    style={styles.levelContainer}
+                    touchable={TouchableTypes.opacity}
+                    onPress={() => nextGameMenuItemClicked(RESUME)}
+                >
+                    <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
+                    <Text style={styles.levelText}>{RESUME}</Text>
+                </Touchable>
+            ) : null}
+        </View>
+    )
 
     if (!pendingGame.checkedStatus) return null
 
