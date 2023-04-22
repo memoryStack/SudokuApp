@@ -7,11 +7,14 @@ import PropTypes from 'prop-types'
 import ThemeContext from '@contexts/ThemeContext'
 
 const ThemeProvider = ({ children }) => {
+    // TODO: here colorScheme and theme are getting mixed
+    // search on the defination of these two words
     const [userPreferredTheme, setUserPreferredTheme] = useState(null)
 
     const deviceColorScheme = useColorScheme()
     const colorScheme = userPreferredTheme || deviceColorScheme
 
+    // TODO: we can remove isDarkTheme function if we pass that boolean from here only
     const contextValues = useMemo(() => ({
         colorScheme,
         setTheme: setUserPreferredTheme,

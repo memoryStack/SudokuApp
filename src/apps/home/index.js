@@ -11,8 +11,8 @@ import PropTypes from 'prop-types'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import ExperimentalButton from 'src/ui/molecules/Button'
 import { Button } from '../../components/button'
-
 import { EVENTS } from '../../constants/events'
 import { ROUTES } from '../../navigation/route.constants'
 
@@ -107,12 +107,30 @@ const Home_ = ({ navigation }) => {
         )
     }
 
+    const [st, setSt] = useState('enabled')
+    useEffect(() => {
+        setTimeout(() => {
+            setSt('disabled')
+        }, 5000)
+    }, [])
+
     return (
         <View style={styles.container} onLayout={onParentLayout}>
             {renderAppIcon()}
             {renderSudokuText()}
             {renderPlayButton()}
             {renderNewGameMenu()}
+
+            <View style={{
+                marginTop: 40,
+            }}
+            >
+                <ExperimentalButton
+                    text="Experiment"
+                // state={st}
+                />
+            </View>
+
         </View>
     )
 }

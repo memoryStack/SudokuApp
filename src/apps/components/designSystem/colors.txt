@@ -1,0 +1,378 @@
+use below link to generate colors palattes with tones
+    https://m3.material.io/theme-builder#/custom
+    Note: will have to copy paste colors one by one
+
+types of the colors in an app
+    1. Primary
+    2. Secondary
+    3. Tertiary
+    4. Error
+    5. Neutral
+    6. Neutral Variant
+
+core color tokens
+{
+    "color": {
+      "white": {
+        "value": "#ffffff",
+      },
+      "black": {
+        "value": "#000000",
+        "type": "color",
+        "description": "black"
+      },
+      "primary": {
+        "0": {
+            "value": {color.black},
+        },
+        "10": {
+            "value": "#21005D",
+        },
+        "20": {
+            "value": "#381E72",
+        },
+        "30": {
+            "value": "#4F378B",
+        },
+        "40": {
+            "value": "#6750A4",
+        },
+        "50": {
+            "value": "#7F67BE",
+        },
+        "60": {
+            "value": "#9A82DB",
+        },
+        "70": {
+            "value": "#B69DF8",
+        },
+        "80": {
+            "value": "#D0BCFF",
+        },
+        "90": {
+            "value": "#EADDFF",
+        },
+        "95": {
+            "value": "#F6EDFF",
+        },
+        "99": {
+            "value": "#FFFBFF",
+        },
+        "100": {
+            "value": {color.white}
+        },
+      },
+      "secondary": {
+           "0": {
+            "value": {color.black},
+        },
+        "10": {
+            "value": "#1D192B",
+        },
+        "20": {
+            "value": "#332D41",
+        },
+        "30": {
+            "value": "#4A4458",
+        },
+        "40": {
+            "value": "#625B71",
+        },
+        "50": {
+            "value": "#7A7289",
+        },
+        "60": {
+            "value": "#958DA5",
+        },
+        "70": {
+            "value": "#B0A7C0",
+        },
+        "80": {
+            "value": "#CCC2DC",
+        },
+        "90": {
+            "value": "#E8DEF8",
+        },
+        "95": {
+            "value": "#F6EDFF",
+        },
+        "99": {
+            "value": "#FFFBFF",
+        },
+        "100": {
+            "value": {color.white}
+        },
+      },
+      "tertiary": {
+           "0": {
+            "value": {color.black},
+        },
+        "10": {
+            "value": "#31111D",
+        },
+        "20": {
+            "value": "#492532",
+        },
+        "30": {
+            "value": "#633B48",
+        },
+        "40": {
+            "value": "#7D5260",
+        },
+        "50": {
+            "value": "#986977",
+        },
+        "60": {
+            "value": "#B58392",
+        },
+        "70": {
+            "value": "#D29DAC",
+        },
+        "80": {
+            "value": "#EFB8C8",
+        },
+        "90": {
+            "value": "#FFD8E4",
+        },
+        "95": {
+            "value": "#FFECF1",
+        },
+        "99": {
+            "value": "#FFFBFA",
+        },
+        "100": {
+            "value": {color.white}
+        },
+      },
+      "neutral": {
+           "0": {
+            "value": {color.black},
+        },
+        "10": {
+            "value": "#1C1B1F",
+        },
+        "20": {
+            "value": "#313033",
+        },
+        "30": {
+            "value": "#484649",
+        },
+        "40": {
+            "value": "#605D62",
+        },
+        "50": {
+            "value": "#787579",
+        },
+        "60": {
+            "value": "#939094",
+        },
+        "70": {
+            "value": "#AEAAAE",
+        },
+        "80": {
+            "value": "#C9C5CA",
+        },
+        "90": {
+            "value": "#E6E1E5",
+        },
+        "95": {
+            "value": "#F4EFF4",
+        },
+        "99": {
+            "value": "#FFFBFE",
+        },
+        "100": {
+            "value": {color.white}
+        },
+      },
+      "neutral-variant": {
+        "0": {
+            "value": {color.black},
+        },
+        "10": {
+            "value": "#1D1A22",
+        },
+        "20": {
+            "value": "#332F37",
+        },
+        "30": {
+            "value": "#49454F",
+        },
+        "40": {
+            "value": "#605D66",
+        },
+        "50": {
+            "value": "#79747E",
+        },
+        "60": {
+            "value": "#938F99",
+        },
+        "70": {
+            "value": "#AEA9B4",
+        },
+        "80": {
+            "value": "#CAC4D0",
+        },
+        "90": {
+            "value": "#E7E0EC",
+        },
+        "95": {
+            "value": "#F5EEFA",
+        },
+        "99": {
+            "value": "#FFFBFE",
+        },
+        "100": {
+            "value": {color.white}
+        },
+      },
+    },
+}
+
+
+color semantics, Light theme
+{
+    "primary": {
+        "value": {primary.40}
+    }.
+    "primary-container": {
+        "value": {primary.90}
+    },
+    "on-primary": {
+        "value": {primary.100}
+    },
+    "on-primary-container": {
+        "value": {primary.90}
+    },
+
+    "inverse-primary": {
+        "value": {primary.80}
+    }
+
+    "secondary": {
+        "value": {secondary.40}
+    },
+    "secondary-container": {
+        "value": {secondary.90}
+    },
+    "on-secondary": {
+        "value": {secondary.100}
+    },
+    "on-secondary-container": {
+        "value": {secondary.10}
+    },
+
+    "tertiary": {
+        "value": {tertiary.40}
+    },
+    "tertiary-container": {
+        "value": {tertiary.90}
+    },
+    "on-tertiary": {
+        "value": {tertiary.100}
+    },
+    "on-tertiary-container": {
+        "value": {tertiary.10}
+    },
+
+    "surface": {
+        "value": {neutral.98}
+    },
+    "surface-dim": {
+        "value": {neutral.87}
+    },
+    "surface-bright": {
+        "value": {neutral.98}
+    },
+
+    "surface-container-lowest": {
+        "value": {neutral.100}
+    },
+    "surface-container-low": {
+        "value": {neutral.96}
+    },
+    "surface-container": {
+        "value": {neutral.94}
+    },
+    "surface-container-high": {
+        "value": {neutral.92}
+    },
+    "surface-container-highest": {
+        "value": {neutral.90}
+    }
+
+    "surface-variant": {
+        "value": {neutral-variant.90}
+    },
+
+    "on-surface": {
+        "value": {neutral.10}
+    },
+
+    "on-surface-variant": {
+        "value": {neutral-variant.30}
+    },
+
+    "inverse-surface": {
+        "value": {neutral.20}
+    },
+    "inverse-on-surface": {
+        "value": {neutral.95}
+    },
+
+    "background": {
+        "value": {neutral.98}
+    },
+    "on-background": {
+        "value": {neutral.10}
+    },
+
+    "outline": {
+        "value": {neutral-variant.50}
+    },
+    "outline-variant": {
+        "value": {neutral-variant.80}
+    },
+
+    "shadow": {
+        "value": {neutral.0}
+    },
+
+    "surface-tint-color": {
+        "value": {primary}
+    },
+    "scrim": {
+        "value": {neutral.0}
+    },
+
+}
+
+
+
+// add values for below tokens
+
+"surface": {
+    "value": "{color.neutral.98}"
+  },
+
+  "surface-dim": {
+    "value": "{color.neutral.87}"
+  },
+   "surface-bright": {
+    "value": "{color.neutral.98}"
+  },
+  "surface-container-low": {
+    "value": "{color.neutral.96}"
+  },
+  "surface-container": {
+    "value": "{color.neutral.94}"
+  },
+  "surface-container-high": {
+    "value": "{color.neutral.92}"
+  },
+  "surface-container-lowest": {
+    "value": "{color.neutral.100}"
+  },
+  "background": {
+    "value": "{color.neutral.98}"
+  },

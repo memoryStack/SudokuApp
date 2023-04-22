@@ -1,0 +1,65 @@
+Questions
+    1. what is the difference between the "filled" and "filled tonal" buttons
+        and when we should use each of these ??
+    2. 
+
+
+types of buttons
+    1. filled button
+        let's call these as CTA buttons as well.
+    
+    2. outlined button/Ghost button
+        This kind of buttons helps to set the visual hierarchy in case there 
+        are several CTA elements: the core CTA is presented in a filled button 
+        while the secondary (still active) is given in a ghost button.
+        
+    3. Text button
+        Text buttons are usually used to create secondary interactive zones without
+        distracting from the main controls or CTA elements.
+    
+which button to use for which purpose ??
+    https://m3.material.io/components/all-buttons
+
+the above are taken from internet from some random article. below are what we have in Tekion
+    a. primary
+    b. subtle
+    c. secondary
+    d. neutral
+    e. plain
+    f. accent
+    
+    TODO: understand what is the use of all these buttons. what these words like "neutral", "plain"
+            "accent" even mean.
+    
+    each button will be in 2 states
+        a. default
+        b. disabled
+        Note: on web we have "hover" state as well
+    
+    parts of a button to style
+        a. background
+        b. border
+        c. shadow
+        d. text/copy
+        e. icon
+
+    example of tokens for a button's color would be like
+    TODO: know the most used rule on how to maintain the hierarchy. in Tekion we have a different
+            hierarchy. it starts with css property instead of the element.
+
+    "button": {
+        "primary": {
+            "default": {
+                "background": {
+                    "color": {
+                        value: "red",
+                        type: "color"
+                    }
+                    ...other properties of background to style
+                }
+                ...other parts of button to color
+            },
+            ...other states of a button
+        }
+        ...other types of buttons
+    }

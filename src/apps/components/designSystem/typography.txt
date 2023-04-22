@@ -1,0 +1,50 @@
+types of fonts roles in UI
+    Display 
+    Headline
+    Title
+    Body
+    Label
+
+Where to use Display font role ??
+    As the largest text on the screen, display styles are reserved for 
+    short, important text or numerals. They work best on large screens.
+    
+    so we should have different font-families for Displays types ??
+        For display type, consider choosing a more expressive font, 
+        such as a handwritten or script style. 
+
+    Essence -> these are weired texts on big screens put to basically catch
+                user attentions, and these texts might not give clarity to user
+                so they need some body texts as well to explain what this is all
+                about.
+
+    Note: Most likely i will use this for my brand name on home page like 
+            SUDOKU spelled in weired hand crafted typography.
+
+Where to use Headline font role ??
+    Headlines are best-suited for short, high-emphasis text on smaller screens.
+    Headlines can also make use of expressive (hand-crafted or weird) typefaces, provided that 
+    appropriate line height and letter spacing is also integrated to maintain readability.
+
+Where to use Title font role ??
+    Titles are smaller than headline styles, and should be used for medium-emphasis 
+    text that remains relatively short.
+    For titles, use caution when using expressive fonts, including display, 
+    handwritten, and script styles.
+
+Ques -> what is the difference between Headings and Titles ??
+    i have understood the role of Title but not sure about Headings.
+    Looks like in most of the places i will be using Titles instead of Headings.
+
+Where to use Body font role ??
+    Body styles are used for longer passages of text in your app. 
+    Use typefaces intended for body styles, which are readable at smaller
+    sizes and can be comfortably read in longer passages.
+    Avoid expressive or decorative fonts for body text because these can be
+    harder to read at small sizes.
+
+Where to use Label font role ??
+    Label styles are smaller, used for things like the text inside components
+    or for very small text in the content body, such as captions. 
+
+TODO: add typography all tokens and use them for button
