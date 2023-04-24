@@ -1,6 +1,9 @@
 // can't add fontFamily here because tokens generation is at build-time
 // and at this time we don't know if it's android, ios or web. so <Text />
 // will have to take care of this
+
+// TODO: make fontWeight numbers to strings
+
 module.exports = {
     typography: {
         display: {

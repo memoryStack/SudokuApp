@@ -32,7 +32,7 @@ const getStyles = ({
             // TODO: what should be the font-weight for each type of button
             //      current font-weight is small
             color: getTextColor(buttonConfigs, theme),
-            fontFamily: fonts.regular,
+            fontFamily: fonts.bold,
             // fontSize: _get(theme, ['button', type, 'layout', 'label-text', 'size']),
             // lineHeight: _get(theme, ['button', type, 'layout', 'label-text', 'line-height']),
 

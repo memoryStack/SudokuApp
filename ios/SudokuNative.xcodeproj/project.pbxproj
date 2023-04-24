@@ -14,9 +14,10 @@
 		264F22883A3DFF57926403B1 /* libPods-SudokuNative-SudokuNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2E2DEB7C6A936B59BBBEBB /* libPods-SudokuNative-SudokuNativeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F6ADF574F7116BAABC497C5F /* libPods-SudokuNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 934E88F367026971CDA15F7C /* libPods-SudokuNative.a */; };
-		EE82BD76EF4549678C749823 /* ProximaNovaBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9A6246222214DD3B8591C03 /* ProximaNovaBold.ttf */; };
-		95B3429536294E2F96191DED /* ProximaNovaItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD7D55245D2B4E54BD4298A4 /* ProximaNovaItalic.ttf */; };
-		41B2370B95B043F1B0258DF5 /* ProximaNovaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 275A6154D65B44118F9367E4 /* ProximaNovaRegular.ttf */; };
+		401CE4EFEE424D77A46305FA /* OpenSansBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FE3AF0DD6D6C46F0B7570E9A /* OpenSansBold.ttf */; };
+		6E67DF21A1D34831A0AB5AF0 /* OpenSansMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9659099AD935461A908B9608 /* OpenSansMedium.ttf */; };
+		E927E713481345A09ADCE9A9 /* OpenSansRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A395A082104302A4196CD8 /* OpenSansRegular.ttf */; };
+		0B6FF5A17C2343648C5CFE72 /* OpenSansSemibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13DCD012BE0D49ED9CFF8E42 /* OpenSansSemibold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,12 @@
 		C9A6246222214DD3B8591C03 /* ProximaNovaBold.ttf */ = {isa = PBXFileReference; name = "ProximaNovaBold.ttf"; path = "../src/resources/fonts/ProximaNovaBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		DD7D55245D2B4E54BD4298A4 /* ProximaNovaItalic.ttf */ = {isa = PBXFileReference; name = "ProximaNovaItalic.ttf"; path = "../src/resources/fonts/ProximaNovaItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		275A6154D65B44118F9367E4 /* ProximaNovaRegular.ttf */ = {isa = PBXFileReference; name = "ProximaNovaRegular.ttf"; path = "../src/resources/fonts/ProximaNovaRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A40B55AB519C4F718F7F43CD /* ProximaNovaMedium.ttf */ = {isa = PBXFileReference; name = "ProximaNovaMedium.ttf"; path = "../src/resources/fonts/ProximaNovaMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		156DC551706042729888BF3B /* ProximaNovaSemibold.ttf */ = {isa = PBXFileReference; name = "ProximaNovaSemibold.ttf"; path = "../src/resources/fonts/ProximaNovaSemibold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FE3AF0DD6D6C46F0B7570E9A /* OpenSansBold.ttf */ = {isa = PBXFileReference; name = "OpenSansBold.ttf"; path = "../src/resources/fonts/OpenSansBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9659099AD935461A908B9608 /* OpenSansMedium.ttf */ = {isa = PBXFileReference; name = "OpenSansMedium.ttf"; path = "../src/resources/fonts/OpenSansMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E7A395A082104302A4196CD8 /* OpenSansRegular.ttf */ = {isa = PBXFileReference; name = "OpenSansRegular.ttf"; path = "../src/resources/fonts/OpenSansRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		13DCD012BE0D49ED9CFF8E42 /* OpenSansSemibold.ttf */ = {isa = PBXFileReference; name = "OpenSansSemibold.ttf"; path = "../src/resources/fonts/OpenSansSemibold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +169,12 @@
 				C9A6246222214DD3B8591C03 /* ProximaNovaBold.ttf */,
 				DD7D55245D2B4E54BD4298A4 /* ProximaNovaItalic.ttf */,
 				275A6154D65B44118F9367E4 /* ProximaNovaRegular.ttf */,
+				A40B55AB519C4F718F7F43CD /* ProximaNovaMedium.ttf */,
+				156DC551706042729888BF3B /* ProximaNovaSemibold.ttf */,
+				FE3AF0DD6D6C46F0B7570E9A /* OpenSansBold.ttf */,
+				9659099AD935461A908B9608 /* OpenSansMedium.ttf */,
+				E7A395A082104302A4196CD8 /* OpenSansRegular.ttf */,
+				13DCD012BE0D49ED9CFF8E42 /* OpenSansSemibold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -264,6 +277,12 @@
 				EE82BD76EF4549678C749823 /* ProximaNovaBold.ttf in Resources */,
 				95B3429536294E2F96191DED /* ProximaNovaItalic.ttf in Resources */,
 				41B2370B95B043F1B0258DF5 /* ProximaNovaRegular.ttf in Resources */,
+				F92CF133761644189767D331 /* ProximaNovaMedium.ttf in Resources */,
+				AD669ADAA501435E8B43F9D0 /* ProximaNovaSemibold.ttf in Resources */,
+				401CE4EFEE424D77A46305FA /* OpenSansBold.ttf in Resources */,
+				6E67DF21A1D34831A0AB5AF0 /* OpenSansMedium.ttf in Resources */,
+				E927E713481345A09ADCE9A9 /* OpenSansRegular.ttf in Resources */,
+				0B6FF5A17C2343648C5CFE72 /* OpenSansSemibold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

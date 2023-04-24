@@ -53,9 +53,10 @@
 	<string>Light</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>ProximaNovaBold.ttf</string>
-		<string>ProximaNovaItalic.ttf</string>
-		<string>ProximaNovaRegular.ttf</string>
+		<string>OpenSansBold.ttf</string>
+		<string>OpenSansMedium.ttf</string>
+		<string>OpenSansRegular.ttf</string>
+		<string>OpenSansSemibold.ttf</string>
 	</array>
 </dict>
 </plist>

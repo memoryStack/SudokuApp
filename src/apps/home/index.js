@@ -12,6 +12,7 @@ import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import ExperimentalButton from 'src/ui/molecules/Button'
+import ExperimentalText from 'src/ui/atoms/Text'
 import { Button } from '../../components/button'
 import { EVENTS } from '../../constants/events'
 import { ROUTES } from '../../navigation/route.constants'
@@ -90,7 +91,7 @@ const Home_ = ({ navigation }) => {
     const renderPlayButton = () => (
         <Button
             onClick={handlePlayOfflineClick}
-            text={t('PLAY')}
+            text={t('PLAY  000')}
             containerStyle={styles.playButtonContainer}
             textStyles={styles.playButtonText}
         />
@@ -122,13 +123,31 @@ const Home_ = ({ navigation }) => {
             {renderNewGameMenu()}
 
             <View style={{
-                marginTop: 40,
+                marginTop: 24,
             }}
             >
-                <ExperimentalButton
+                {/* <ExperimentalButton
                     text="Experiment"
+                    textStyles={{
+                        // only fontWeight 700 works
+                        fontWeight: '800',
+                    }}
                 // state={st}
-                />
+                /> */}
+
+                <ExperimentalText style={{ fontWeight: '400' }}>
+                    Play 400
+                </ExperimentalText>
+                <ExperimentalText style={{ fontWeight: '500' }}>
+                    Play 500
+                </ExperimentalText>
+                <ExperimentalText style={{ fontWeight: '600' }}>
+                    Play 600
+                </ExperimentalText>
+                <ExperimentalText style={{ fontWeight: '700' }}>
+                    Play 700
+                </ExperimentalText>
+
             </View>
 
         </View>
