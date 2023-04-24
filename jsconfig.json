@@ -11,6 +11,9 @@
             "@lodash/*": [
                 "lodash/src/utils*"
             ],
+            "@ui/*": [
+                "./src/ui/*"
+            ],
         }
     },
     "exclude": [

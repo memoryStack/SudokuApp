@@ -54,6 +54,7 @@ module.exports = {
                     ['@utils', './src/utils'],
                     ['@contexts', './src/contexts'],
                     ['@lodash', 'lodash/src/utils'],
+                    ['@ui', './src/ui'],
                 ],
                 extensions: ['.ts', '.js', '.jsx', '.json'],
             },

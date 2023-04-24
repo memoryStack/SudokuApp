@@ -20,6 +20,7 @@ module.exports = {
                     '@utils': './src/utils',
                     '@contexts': './src/contexts',
                     '@lodash': 'lodash/src/utils',
+                    '@ui': './src/ui',
                 },
             },
         ],

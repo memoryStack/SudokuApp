@@ -11,8 +11,8 @@ import PropTypes from 'prop-types'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { useStyles } from '@utils/customHooks/useStyles'
 
-import ExperimentalButton from 'src/ui/molecules/Button'
-import ExperimentalText from 'src/ui/atoms/Text'
+import ExperimentalButton from '@ui/molecules/Button'
+
 import { Button } from '../../components/button'
 import { EVENTS } from '../../constants/events'
 import { ROUTES } from '../../navigation/route.constants'

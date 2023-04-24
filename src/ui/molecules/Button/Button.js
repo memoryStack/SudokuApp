@@ -8,7 +8,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Touchable, TouchableTypes } from 'src/apps/components/Touchable'
 
-import Text from 'src/ui/atoms/Text'
+import Text from '@ui/atoms/Text'
 
 import { getStyles } from './button.styles'
 import { BUTTON_STATES, BUTTON_TYPES, BUTTON_SIZES } from './button.constants'
