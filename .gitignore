@@ -29,3 +29,5 @@ android/build
 .idea
 main.jsbundle.meta
 .vscode/settings.json
+
+*.hprof
