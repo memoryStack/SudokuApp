@@ -37,9 +37,7 @@ export const getStyles = ({ CELL_WIDTH }) => StyleSheet.create({
         marginTop: '30%',
     },
     playButtonContainer: {
-        backgroundColor: rgba('#d5e5f6', 60),
-        borderRadius: 8,
-        paddingHorizontal: 20,
+        width: '30%',
         marginTop: '20%',
     },
     playButtonText: {

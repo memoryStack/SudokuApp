@@ -89,11 +89,10 @@ const Home_ = ({ navigation }) => {
     }
 
     const renderPlayButton = () => (
-        <Button
+        <ExperimentalButton
             onClick={handlePlayOfflineClick}
-            text={t('PLAY')}
+            label={t('PLAY')}
             containerStyle={styles.playButtonContainer}
-            textStyles={styles.playButtonText}
         />
     )
 
@@ -108,30 +107,12 @@ const Home_ = ({ navigation }) => {
         )
     }
 
-    const [st, setSt] = useState('enabled')
-    useEffect(() => {
-        setTimeout(() => {
-            setSt('disabled')
-        }, 5000)
-    }, [])
-
     return (
         <View style={styles.container} onLayout={onParentLayout}>
             {renderAppIcon()}
             {renderSudokuText()}
             {renderPlayButton()}
             {renderNewGameMenu()}
-
-            <View style={{
-                marginTop: 24,
-            }}
-            >
-                <ExperimentalButton
-                    label="Experiment"
-                // state={st}
-                />
-            </View>
-
         </View>
     )
 }
