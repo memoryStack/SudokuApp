@@ -6,6 +6,8 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
+import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
+
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
@@ -42,16 +44,25 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
     )
 
     const renderInputNumber = number => (
-        <Touchable
-            style={styles.numberButtonContainer}
-            onPress={numbersVisible[number] ? () => onNumberClicked(number) : _noop}
-            touchable={TouchableTypes.opacity}
+        <Button
             key={`${number}`}
-        >
-            <Text adjustsFontSizeToFit style={styles.textStyle}>
-                {numbersVisible[number] ? number : ''}
-            </Text>
-        </Touchable>
+            type={BUTTON_TYPES.TONAL}
+            containerStyle={styles.numberButtonContainer}
+            onPress={numbersVisible[number] ? () => onNumberClicked(number) : _noop}
+            label={numbersVisible[number] ? number : ''}
+            textStyles={styles.textStyle}
+        />
+
+        // <Touchable
+        //     style={styles.numberButtonContainer}
+        //     onPress={numbersVisible[number] ? () => onNumberClicked(number) : _noop}
+        //     touchable={TouchableTypes.opacity}
+        //     key={`${number}`}
+        // >
+        //     <Text adjustsFontSizeToFit style={styles.textStyle}>
+        //         {numbersVisible[number] ? number : ''}
+        //     </Text>
+        // </Touchable>
     )
 
     const isNumberEligibleToAddInPanel = number => !isHintTryOut || (isHintTryOut && numbersVisible[number])

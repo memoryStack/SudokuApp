@@ -13,26 +13,23 @@ export const getStyles = CELL_WIDTH => {
             justifyContent: 'center',
         },
         numberButtonContainer: {
-            display: 'flex',
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
             maxWidth: INPUT_NUMBER_DIMENSION,
             maxHeight: INPUT_NUMBER_DIMENSION,
             aspectRatio: 1,
             marginHorizontal: 2,
-            backgroundColor: rgba('#d5e5f6', 60),
             borderRadius: 12,
+            paddingLeft: 0,
+            paddingRight: 0,
         },
         horizontalSeperator: {
             width: '100%',
             height: 4,
         },
         textStyle: {
-            color: 'rgb(49, 90, 163)',
             fontSize: INPUT_NUMBER_DIMENSION * 0.66, // 66% of the container size
-            textAlign: 'center',
-            fontFamily: fonts.regular,
+            fontWeight: '500',
+            lineHeight: INPUT_NUMBER_DIMENSION,
         },
         eraser: {
             width: '50%',

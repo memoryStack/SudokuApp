@@ -41,7 +41,7 @@ const Button_ = ({
             disabled={state === BUTTON_STATES.DISABLED}
             {...rest}
         >
-            <Text style={{ ...styles.defaultText, textStyles }}>
+            <Text style={{ ...styles.defaultText, ...textStyles }}>
                 {label}
             </Text>
         </Touchable>
