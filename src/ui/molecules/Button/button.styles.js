@@ -12,10 +12,10 @@ import { isHexColor, rgba } from '@utils/util'
 //      so work-around is to use rgba() function for showing disabled states
 
 const getStyles = ({
-    type, state, isIconAvailable, isTextAvailable,
+    type, state, isIconAvailable, isLabelAvailable, size,
 }, theme) => {
     const buttonConfigs = {
-        type, state, isIconAvailable, isTextAvailable,
+        type, state, isIconAvailable, isLabelAvailable, size,
     }
 
     return StyleSheet.create({
@@ -23,26 +23,14 @@ const getStyles = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: getContainerBackgroundColor({ type, state }, theme),
+            backgroundColor: getContainerBackgroundColor(buttonConfigs, theme),
             height: _get(theme, ['button', type, 'layout', 'container', 'height']),
             borderRadius: _get(theme, ['button', type, 'layout', 'container', 'border-radius']),
             ...getContainerPaddings(buttonConfigs, theme),
         },
         defaultText: {
-            // TODO: what should be the font-weight for each type of button
-            //      current font-weight is small
             color: getTextColor(buttonConfigs, theme),
-            fontFamily: fonts.bold,
-            // fontSize: _get(theme, ['button', type, 'layout', 'label-text', 'size']),
-            // lineHeight: _get(theme, ['button', type, 'layout', 'label-text', 'line-height']),
-
-            // fontWeight: '600',
-
-            fontSize: 24,
-            lineHeight: 40,
-            fontWeight: '500', // 700 goes in bold category
-            // letterSpacing: 0.3,
-
+            ..._get(theme, ['typography', 'label', size]),
         },
         icon: { // TODO: how these properties will work with Svg icons. test that
             color: getIconColor(buttonConfigs, theme),
@@ -58,15 +46,15 @@ const getContainerBackgroundColor = ({ type, state }, theme) => {
 }
 
 const getContainerPaddings = ({
-    type, isIconAvailable, isTextAvailable,
+    type, isIconAvailable, isLabelAvailable,
 }, theme) => {
     // TODO: what will happen if only icon is available ??
     //      it will need some refactoring
     let paddingLeft; let paddingRight
-    if (isIconAvailable && isTextAvailable) {
+    if (isIconAvailable && isLabelAvailable) {
         paddingLeft = _get(theme, ['button', type, 'layout', 'container', 'padding', 'with-icon', 'icon-side-padding'])
         paddingRight = _get(theme, ['button', type, 'layout', 'container', 'padding', 'with-icon', 'icon-opposite-side-padding'])
-    } else if (isTextAvailable) {
+    } else if (isLabelAvailable) {
         paddingLeft = _get(theme, ['button', type, 'layout', 'container', 'padding', 'without-icon', 'padding-left'])
         paddingRight = _get(theme, ['button', type, 'layout', 'container', 'padding', 'without-icon', 'padding-right'])
     }

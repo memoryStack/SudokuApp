@@ -2,14 +2,12 @@
 // and at this time we don't know if it's android, ios or web. so <Text />
 // will have to take care of this
 
-// TODO: make fontWeight numbers to strings
-
 module.exports = {
     typography: {
         display: {
             large: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 64,
                     fontSize: 57,
@@ -18,7 +16,7 @@ module.exports = {
             },
             medium: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 52,
                     fontSize: 45,
@@ -27,7 +25,7 @@ module.exports = {
             },
             small: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 44,
                     fontSize: 36,
@@ -38,7 +36,7 @@ module.exports = {
         heading: {
             large: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 40,
                     fontSize: 32,
@@ -47,7 +45,7 @@ module.exports = {
             },
             medium: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 36,
                     fontSize: 28,
@@ -56,7 +54,7 @@ module.exports = {
             },
             small: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 32,
                     fontSize: 24,
@@ -67,7 +65,7 @@ module.exports = {
         title: {
             large: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 28,
                     fontSize: 22,
@@ -76,7 +74,7 @@ module.exports = {
             },
             medium: {
                 value: {
-                    fontWeight: 500,
+                    fontWeight: '500',
                     letterSpacing: 0.15, // test it's effectiveness
                     lineHeight: 24,
                     fontSize: 16,
@@ -85,7 +83,7 @@ module.exports = {
             },
             small: {
                 value: {
-                    fontWeight: 500,
+                    fontWeight: '500',
                     letterSpacing: 0.1,
                     lineHeight: 20,
                     fontSize: 14,
@@ -96,7 +94,7 @@ module.exports = {
         body: {
             large: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0.5,
                     lineHeight: 24,
                     fontSize: 16,
@@ -105,7 +103,7 @@ module.exports = {
             },
             medium: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0.25,
                     lineHeight: 20,
                     fontSize: 14,
@@ -114,7 +112,7 @@ module.exports = {
             },
             small: {
                 value: {
-                    fontWeight: 400,
+                    fontWeight: '400',
                     letterSpacing: 0.4,
                     lineHeight: 16,
                     fontSize: 12,
@@ -125,16 +123,16 @@ module.exports = {
         label: {
             large: {
                 value: {
-                    fontWeight: 500,
+                    fontWeight: '600',
                     letterSpacing: 0.1,
-                    lineHeight: 20,
-                    fontSize: 14,
+                    lineHeight: 24,
+                    fontSize: 16,
                 },
                 type: 'typography',
             },
             medium: {
                 value: {
-                    fontWeight: 500,
+                    fontWeight: '500',
                     letterSpacing: 0.5,
                     lineHeight: 16,
                     fontSize: 12,
@@ -143,7 +141,7 @@ module.exports = {
             },
             small: {
                 value: {
-                    fontWeight: 500,
+                    fontWeight: '500',
                     letterSpacing: 0.5,
                     lineHeight: 16,
                     fontSize: 11,

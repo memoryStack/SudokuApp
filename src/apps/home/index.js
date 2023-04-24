@@ -91,7 +91,7 @@ const Home_ = ({ navigation }) => {
     const renderPlayButton = () => (
         <Button
             onClick={handlePlayOfflineClick}
-            text={t('PLAY  000')}
+            text={t('PLAY')}
             containerStyle={styles.playButtonContainer}
             textStyles={styles.playButtonText}
         />
@@ -126,28 +126,10 @@ const Home_ = ({ navigation }) => {
                 marginTop: 24,
             }}
             >
-                {/* <ExperimentalButton
-                    text="Experiment"
-                    textStyles={{
-                        // only fontWeight 700 works
-                        fontWeight: '800',
-                    }}
+                <ExperimentalButton
+                    label="Experiment"
                 // state={st}
-                /> */}
-
-                <ExperimentalText style={{ fontWeight: '400' }}>
-                    Play 400
-                </ExperimentalText>
-                <ExperimentalText style={{ fontWeight: '500' }}>
-                    Play 500
-                </ExperimentalText>
-                <ExperimentalText style={{ fontWeight: '600' }}>
-                    Play 600
-                </ExperimentalText>
-                <ExperimentalText style={{ fontWeight: '700' }}>
-                    Play 700
-                </ExperimentalText>
-
+                />
             </View>
 
         </View>

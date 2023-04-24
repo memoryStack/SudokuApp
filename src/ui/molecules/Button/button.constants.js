@@ -13,7 +13,14 @@ const BUTTON_STATES = {
     DISABLED: 'disabled',
 }
 
+const BUTTON_SIZES = {
+    SMALL: 'small',
+    MEDIUM: 'medium',
+    LARGE: 'large',
+}
+
 export {
     BUTTON_STATES,
     BUTTON_TYPES,
+    BUTTON_SIZES,
 }
