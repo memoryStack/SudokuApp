@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
+import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
@@ -48,21 +48,11 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
             key={`${number}`}
             type={BUTTON_TYPES.TONAL}
             containerStyle={styles.numberButtonContainer}
-            onPress={numbersVisible[number] ? () => onNumberClicked(number) : _noop}
-            label={numbersVisible[number] ? number : ''}
+            onPress={() => onNumberClicked(number)}
+            label={number}
             textStyles={styles.textStyle}
+            state={numbersVisible[number] ? BUTTON_STATES.ENABLED : BUTTON_STATES.DISABLED}
         />
-
-        // <Touchable
-        //     style={styles.numberButtonContainer}
-        //     onPress={numbersVisible[number] ? () => onNumberClicked(number) : _noop}
-        //     touchable={TouchableTypes.opacity}
-        //     key={`${number}`}
-        // >
-        //     <Text adjustsFontSizeToFit style={styles.textStyle}>
-        //         {numbersVisible[number] ? number : ''}
-        //     </Text>
-        // </Touchable>
     )
 
     const isNumberEligibleToAddInPanel = number => !isHintTryOut || (isHintTryOut && numbersVisible[number])

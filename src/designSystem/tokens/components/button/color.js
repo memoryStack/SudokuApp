@@ -62,7 +62,6 @@ module.exports = {
                 },
             },
         },
-
         tonal: {
             color: {
                 container: {
@@ -86,14 +85,14 @@ module.exports = {
                         color: {
                             value: '{colors.on-secondary-container}',
                         },
-                        disabled: {
-                            color: {
-                                value: '{colors.on-surface}',
-                            },
-                            opacity: {
-                                value: '38%',
-                                type: 'colorOpacity',
-                            },
+                    },
+                    disabled: {
+                        color: {
+                            value: '{colors.on-surface}',
+                        },
+                        opacity: {
+                            value: '38%',
+                            type: 'colorOpacity',
                         },
                     },
                 },
