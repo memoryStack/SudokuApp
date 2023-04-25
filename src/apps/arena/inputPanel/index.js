@@ -47,11 +47,11 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
         <Button
             key={`${number}`}
             type={BUTTON_TYPES.TONAL}
+            state={numbersVisible[number] ? BUTTON_STATES.ENABLED : BUTTON_STATES.DISABLED}
             containerStyle={styles.numberButtonContainer}
             onPress={() => onNumberClicked(number)}
             label={number}
             textStyles={styles.textStyle}
-            state={numbersVisible[number] ? BUTTON_STATES.ENABLED : BUTTON_STATES.DISABLED}
         />
     )
 

@@ -8,8 +8,6 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { GAME_STATE } from '../../../resources/constants'
-import { noop } from '../../../utils/util'
 import { fonts } from '../../../resources/fonts/font'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
@@ -60,7 +58,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const Timer_ = ({ onClick = noop, time }) => {
+const Timer_ = ({ onClick, time }) => {
     const gameState = useSelector(getGameState)
 
     const getStartTimerIcon = () => <View style={styles.triangleShape} />
