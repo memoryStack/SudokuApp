@@ -1,7 +1,5 @@
 // const Color = require('color')
 
-// const lightnessList = [10, 20, 30, 40, 50, 60, 70, 80, 87, 90, 92, 94, 95, 96, 98, 99]
-
 // // we will make out palettes using this algorithm
 // // take hue and chroma from themebuilder (https://m3.material.io/theme-builder#/custom)
 // // and just change the lightness as per the variant is required
@@ -9,29 +7,25 @@
 // const color = Color({ r: 97, g: 93, b: 103 }).hex()
 // console.log(color)
 
+// const lightnessList = [10, 20, 30, 40, 50, 60, 70, 80, 87, 90, 92, 94, 95, 96, 98, 99]
 // const result = {}
-
 // lightnessList.forEach(lightnessVale => {
 //     const color = Color({
-//         h: 298, // originalcolors.color[0],
-//         s: 8.33, // originalcolors.color[1],
+//         h: 27.40, // originalcolors.color[0],
+//         s: 113.35, // originalcolors.color[1],
 //         l: lightnessVale,
 //     })
 //     result[lightnessVale] = {
-//         value: colors.hex(),
+//         value: color.hex(),
 //         isCore: true,
 //     }
 //     // console.log(`color: ${colors.hex()}; // lightness value is ${lightnessVale}`)
 // })
-
 // console.log(result)
 
 module.exports = {
     colors: {
-        white: {
-            value: '#FFFFFF',
-            isCore: true,
-        },
+        white: { value: '#FFFFFF', isCore: true },
         black: {
             value: '#000000',
             isCore: true,
@@ -271,6 +265,26 @@ module.exports = {
                 value: '{colors.white}',
                 isCore: true,
             },
+        },
+        error: {
+            0: { value: '{colors.black}', isCore: true },
+            10: { value: '#331700', isCore: true },
+            20: { value: '#662F00', isCore: true },
+            30: { value: '#994600', isCore: true },
+            40: { value: '#CC5D00', isCore: true },
+            50: { value: '#FF7400', isCore: true },
+            60: { value: '#FF9033', isCore: true },
+            70: { value: '#FFAC66', isCore: true },
+            80: { value: '#FFC899', isCore: true },
+            87: { value: '#FFDBBD', isCore: true },
+            90: { value: '#FFE3CC', isCore: true },
+            92: { value: '#FFE9D6', isCore: true },
+            94: { value: '#FFEEE0', isCore: true },
+            95: { value: '#FFF1E5', isCore: true },
+            96: { value: '#FFF4EB', isCore: true },
+            98: { value: '#FFF9F5', isCore: true },
+            99: { value: '#FFFCFA', isCore: true },
+            100: { value: '{colors.white}', isCore: true },
         },
     },
 }

@@ -99,5 +99,17 @@ module.exports = {
         scrim: {
             value: '{colors.neutral.0}',
         },
+        error: {
+            value: '{colors.error.40}',
+        },
+        'on-error': {
+            value: '{colors.error.100}',
+        },
+        'error-container': {
+            value: '{colors.error.90}',
+        },
+        'on-error-container': {
+            value: '{colors.error.10}',
+        },
     },
 }
