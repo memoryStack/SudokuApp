@@ -19,9 +19,15 @@ const handleLanguageSelectPress = ({ params }) => {
     })
 }
 
+const handleDesignSystemPress = ({ getState }) => {
+    const { navigation } = getState()
+    navigation.navigate(ROUTES.DESIGN_SYSTEM)
+}
+
 const ITEM_VS_PRESS_HANDLER = {
     [ITEMS_KEYS.HOW_TO_PLAY]: handleHowToPlayPress,
     [ITEMS_KEYS.SELECT_LANGUAGE]: handleLanguageSelectPress,
+    [ITEMS_KEYS.DESIGN_SYSTEM]: handleDesignSystemPress,
 }
 
 const handleItemPress = ({ getState, setState, params }) => {

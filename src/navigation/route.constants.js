@@ -3,6 +3,7 @@ export const ROUTES = {
     ARENA: 'arena',
     SOME_PAGE: 'somepage',
     PLAY_GUIDE: 'play_guide',
+    DESIGN_SYSTEM: 'design_system',
 }
 
 export const HEADER_SECTION = {
@@ -18,6 +19,7 @@ export const HEADER_ITEMS = {
 
 export const ROUTE_HEADER_TITLES = {
     [ROUTES.PLAY_GUIDE]: 'How To Play?',
+    [ROUTES.DESIGN_SYSTEM]: 'Design System',
 }
 
 // todo: we should change it's name as these keys will be defined in
