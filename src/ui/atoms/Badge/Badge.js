@@ -1,15 +1,15 @@
 import React from 'react'
 
-import { Text, ViewPropTypes } from 'react-native'
+import { ViewPropTypes } from 'react-native'
 
 import PropTypes from 'prop-types'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import Text from '../Text'
+
 import { BADGE_TYPE } from './badge.constants'
 import { getStyles } from './badge.styles'
-
-// import Text from '../Text' // TODO: how to use this ??
 
 /*
     How to use this properly
