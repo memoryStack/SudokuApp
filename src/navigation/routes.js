@@ -3,6 +3,7 @@ import { Home } from '../apps/home'
 import { PlayGuide } from '../apps/playGuide'
 import DesignSystem from '../apps/designSystemScreen'
 import Badge from '../apps/designSystemScreen/componentsScreens/Badge'
+import Typography from '../apps/designSystemScreen/componentsScreens/Typography'
 
 import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
@@ -27,6 +28,14 @@ const DESIGN_SYSTEM_SCREENS = [
         component: Badge,
         headerItems: {
             title: ROUTE_HEADER_TITLES[ROUTES.BADGE],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+    {
+        name: ROUTES.TYPOGRAPHY,
+        component: Typography,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.TYPOGRAPHY],
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },

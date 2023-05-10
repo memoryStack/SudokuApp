@@ -37,7 +37,10 @@ const Text = ({
 export default React.memo(Text)
 
 Text.propTypes = {
-    style: PropTypes.object,
+    style: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
+    ]),
 }
 
 Text.defaultProps = {

@@ -14,6 +14,10 @@ const BUTTONS_MAP = [
         label: 'Badge',
         routeKey: ROUTES.BADGE,
     },
+    {
+        label: 'Typography',
+        routeKey: ROUTES.TYPOGRAPHY,
+    },
 ]
 
 const DesignSystem = ({ navigation }) => {
