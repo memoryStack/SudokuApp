@@ -16,20 +16,6 @@ export const Styles = StyleSheet.create({
         color: INACTIVE_ICON_FILL, // to match the icon color and below text color
     },
     hintsTickerBox: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        top: -4,
         left: ACTION_CONTAINER_WIDTH / 2,
-        width: 16,
-        height: 16,
-        borderRadius: 8,
-        backgroundColor: 'rgb(49, 90, 163)',
-    },
-    hintsTickerText: {
-        fontSize: 12,
-        color: 'white',
-        fontFamily: fonts.regular,
     },
 })

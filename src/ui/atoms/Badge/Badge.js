@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Text } from 'react-native'
+import { Text, ViewPropTypes } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -35,11 +35,12 @@ import { getStyles } from './badge.styles'
 const Badge = ({
     type,
     label,
+    styles: stylesProp,
 }) => {
     const styles = useStyles(getStyles, { type })
 
     return (
-        <Text style={[styles.label, styles.container]}>
+        <Text style={[styles.label, styles.container, stylesProp]}>
             {type === BADGE_TYPE.SMALL ? '' : label}
         </Text>
     )
@@ -50,9 +51,11 @@ export default React.memo(Badge)
 Badge.propTypes = {
     type: PropTypes.string,
     label: PropTypes.string,
+    styles: ViewPropTypes.style,
 }
 
 Badge.defaultProps = {
     type: BADGE_TYPE.LARGE,
     label: '',
+    styles: {},
 }

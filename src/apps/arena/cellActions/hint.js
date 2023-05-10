@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { View, Text } from 'react-native'
+import { Text } from 'react-native'
 
 import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
+
+import Badge from '@ui/atoms/Badge'
 
 import { HintIcon } from '../../../resources/svgIcons/hint'
 
@@ -24,14 +26,11 @@ import { Styles, INACTIVE_ICON_FILL } from './style'
 const Hint_ = ({ iconBoxSize, hints, onClick }) => {
     const gameState = useSelector(getGameState)
 
-    const renderTickerIcon = () => {
-        return null
+    const renderHintsCount = () => {
         if (!new GameState(gameState).isGameActive()) return null
 
         return (
-            <View style={Styles.hintsTickerBox}>
-                <Text style={Styles.hintsTickerText}>{hints}</Text>
-            </View>
+            <Badge label={hints} styles={Styles.hintsTickerBox} />
         )
     }
 
@@ -39,7 +38,7 @@ const Hint_ = ({ iconBoxSize, hints, onClick }) => {
         <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
             <>
                 <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-                {renderTickerIcon()}
+                {renderHintsCount()}
             </>
             <Text style={Styles.actionText}>Hint</Text>
         </Touchable>
