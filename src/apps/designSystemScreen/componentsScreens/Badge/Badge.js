@@ -9,10 +9,8 @@ import { Page } from 'src/apps/components/Page'
 
 import { styles } from './badge.styles'
 
-// TODO: remove navigation prop drilling to Page component
-// use hooks instead
-const BadgeDemo = ({ navigation }) => (
-    <Page navigation={navigation} style={styles.container}>
+const BadgeDemo = () => (
+    <Page style={styles.container}>
         <View>
             <View style={{ height: 32, width: 32, backgroundColor: 'pink' }}>
                 <Text>Icon</Text>

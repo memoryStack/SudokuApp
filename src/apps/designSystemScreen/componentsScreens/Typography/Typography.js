@@ -29,7 +29,7 @@ const TypographyDemo = ({ navigation }) => {
     }
 
     return (
-        <Page navigation={navigation} style={styles.container}>
+        <Page style={styles.container}>
             <ScrollView>
                 {_map(TYPOGRAPHIES, renderTypographyVariant)}
             </ScrollView>

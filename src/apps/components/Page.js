@@ -4,6 +4,8 @@ import { SafeAreaView, StyleSheet, ViewPropTypes } from 'react-native'
 
 import PropTypes from 'prop-types'
 
+import { useNavigation } from '@react-navigation/native'
+
 import _noop from '@lodash/noop'
 
 import { Platform } from '../../utils/classes/platform'
@@ -21,8 +23,10 @@ const styles = StyleSheet.create({
 const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
 const Page_ = ({
-    children, onLayout, onFocus, onBlur, navigation, style: styleProp,
+    children, onLayout, onFocus, onBlur, style: styleProp,
 }) => {
+    const navigation = useNavigation()
+
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState() === 'active')
 
     const handleFocus = useCallback(() => {
@@ -86,7 +90,6 @@ Page_.propTypes = {
     onLayout: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
-    navigation: PropTypes.object,
     style: ViewPropTypes.style,
 }
 
@@ -95,6 +98,5 @@ Page_.defaultProps = {
     onLayout: _noop,
     onFocus: _noop,
     onBlur: _noop,
-    navigation: {},
     style: null,
 }

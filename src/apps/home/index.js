@@ -106,13 +106,13 @@ const Home_ = ({ navigation }) => {
         )
     }
 
+    // TODO: use <Page /> here
     return (
         <View style={styles.container} onLayout={onParentLayout}>
             {renderAppIcon()}
             {renderSudokuText()}
             {renderPlayButton()}
             {renderNewGameMenu()}
-
         </View>
     )
 }
