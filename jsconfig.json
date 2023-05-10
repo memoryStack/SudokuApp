@@ -9,7 +9,7 @@
                 "./src/contexts/*"
             ],
             "@lodash/*": [
-                "lodash/src/utils*"
+                "./node_modules/lodash/src/utils/*"
             ],
             "@ui/*": [
                 "./src/ui/*"
