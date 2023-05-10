@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import { View } from 'react-native'
+import { View, ScrollView } from 'react-native'
 
 import _map from '@lodash/map'
 import _get from '@lodash/get'
@@ -12,21 +12,7 @@ import { Page } from 'src/apps/components/Page'
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
 import { styles } from './typography.styles'
-
-const TYPOGRAPHIES = [
-    {
-        title: 'Display Large',
-        tokensPath: 'display.large',
-    },
-    {
-        title: 'Display Medium',
-        tokensPath: 'display.medium',
-    },
-    {
-        title: 'Display Small',
-        tokensPath: 'display.small',
-    },
-]
+import { TYPOGRAPHIES } from './typography.constants'
 
 const TypographyDemo = ({ navigation }) => {
     const theme = useThemeValues()
@@ -44,9 +30,9 @@ const TypographyDemo = ({ navigation }) => {
 
     return (
         <Page navigation={navigation} style={styles.container}>
-            <View>
+            <ScrollView>
                 {_map(TYPOGRAPHIES, renderTypographyVariant)}
-            </View>
+            </ScrollView>
         </Page>
     )
 }
