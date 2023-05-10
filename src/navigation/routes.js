@@ -2,6 +2,7 @@ import { Arena } from '../apps/arena'
 import { Home } from '../apps/home'
 import { PlayGuide } from '../apps/playGuide'
 import DesignSystem from '../apps/designSystemScreen'
+import Badge from '../apps/designSystemScreen/componentsScreens/Badge'
 
 import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
@@ -11,6 +12,25 @@ import {
     ROUTES,
     ROUTE_HEADER_TITLES,
 } from './route.constants'
+
+const DESIGN_SYSTEM_SCREENS = [
+    {
+        name: ROUTES.DESIGN_SYSTEM,
+        component: DesignSystem,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.DESIGN_SYSTEM],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+    {
+        name: ROUTES.BADGE,
+        component: Badge,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.BADGE],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+]
 
 export const routes = [
     {
@@ -37,20 +57,13 @@ export const routes = [
         },
     },
     {
-        name: ROUTES.DESIGN_SYSTEM,
-        component: DesignSystem,
-        headerItems: {
-            title: ROUTE_HEADER_TITLES[ROUTES.DESIGN_SYSTEM],
-            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
-        },
-    },
-    {
         name: ROUTES.SOME_PAGE,
         component: TempScreen,
         headerItems: {
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },
+    ...DESIGN_SYSTEM_SCREENS,
 ]
 
 // TODO: write testcases for it

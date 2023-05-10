@@ -2,18 +2,34 @@ import React, { memo } from 'react'
 
 import { View } from 'react-native'
 
+import _map from '@lodash/map'
+
+import Button from '@ui/molecules/Button'
+
+import { ROUTES } from 'src/navigation/route.constants'
 import { styles } from './designSystem.styles'
 
-const DesignSystem = () => {
-    const a = 10
+const BUTTONS_MAP = [
+    {
+        label: 'Badge',
+        routeKey: ROUTES.BADGE,
+    },
+]
+
+const DesignSystem = ({ navigation }) => {
+    // TODO: remove this extra view and add this support in Button only
+    const renderItem = ({ label, routeKey }) => (
+        <View style={{ marginTop: 40 }} key={routeKey}>
+            <Button
+                onClick={() => navigation && navigation.navigate(routeKey)}
+                label={label}
+            />
+        </View>
+    )
+
     return (
         <View style={styles.container}>
-            <View style={{
-                width: 20,
-                height: 20,
-                backgroundColor: 'red',
-            }}
-            />
+            {_map(BUTTONS_MAP, renderItem)}
         </View>
     )
 }

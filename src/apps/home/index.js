@@ -12,7 +12,6 @@ import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import Button from '@ui/molecules/Button'
-import Badge from '@ui/atoms/Badge'
 
 import { EVENTS } from '../../constants/events'
 import { ROUTES } from '../../navigation/route.constants'
@@ -113,18 +112,6 @@ const Home_ = ({ navigation }) => {
             {renderSudokuText()}
             {renderPlayButton()}
             {renderNewGameMenu()}
-
-            <View style={{
-                marginTop: 40,
-                borderWidth: 2,
-                borderColor: 'black',
-                height: 50,
-                width: 50,
-            }}
-            >
-                <View style={{ height: 32, width: 32 }} />
-                <Badge label="99999+" />
-            </View>
 
         </View>
     )
