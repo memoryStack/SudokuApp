@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { SafeAreaView, StyleSheet, ViewPropTypes } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -14,13 +14,14 @@ const styles = StyleSheet.create({
     safeAreaView: {
         flex: 1,
         width: '100%',
+        paddingTop: Platform.isIOS() ? 64 : 56,
     },
 })
 
 const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
 const Page_ = ({
-    children, onLayout, onFocus, onBlur, navigation,
+    children, onLayout, onFocus, onBlur, navigation, style: styleProp,
 }) => {
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState() === 'active')
 
@@ -72,7 +73,7 @@ const Page_ = ({
     }, [handleAppStateChange, handleFocus, handleBlur, navigation])
 
     return (
-        <SafeAreaView onLayout={onLayout} style={styles.safeAreaView}>
+        <SafeAreaView onLayout={onLayout} style={[styles.safeAreaView, styleProp]}>
             {children}
         </SafeAreaView>
     )
@@ -86,6 +87,7 @@ Page_.propTypes = {
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     navigation: PropTypes.object,
+    style: ViewPropTypes.style,
 }
 
 Page_.defaultProps = {
@@ -94,4 +96,5 @@ Page_.defaultProps = {
     onFocus: _noop,
     onBlur: _noop,
     navigation: {},
+    style: null,
 }
