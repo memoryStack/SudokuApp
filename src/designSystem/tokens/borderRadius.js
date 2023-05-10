@@ -25,7 +25,7 @@ module.exports = {
             isCore: true,
         },
         full: {
-            value: '100%',
+            value: 1000,
             isCore: true,
         },
     },

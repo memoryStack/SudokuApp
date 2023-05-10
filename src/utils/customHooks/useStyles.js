@@ -15,6 +15,8 @@ export const useStyles = (stylesHandler, customProps) => {
         }
 
         return stylesHandler(styleHandlerProps, theme)
+        // TODO: try to optimize it try spreading customProps inside this dependency array
+        // else will have to use lot of useMemo in all the components to avoid styles generation
     }, [theme, boardElementsDimensions, customProps])
     return styles
 }

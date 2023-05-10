@@ -21,7 +21,10 @@ const Text = ({
     }
 
     return (
-        <RNText style={textStyles} {...rest} />
+        <RNText
+            style={textStyles}
+            {...rest}
+        />
     )
 }
 
