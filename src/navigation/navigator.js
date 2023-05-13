@@ -2,11 +2,9 @@ import React from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { useTheme } from 'src/apps/arena/hooks/useTheme'
-import { isDarkTheme } from 'src/containers/ThemeProvider/themeProvider.utils'
 
-import theme from 'src/designSystem/tokens'
 import { getNavigationOptions } from './navigationOptions'
 import { routes } from './routes'
 import { ROUTES } from './route.constants'
@@ -25,13 +23,8 @@ export const getNavigator = () => {
     )
 }
 
-export const NavigationProvider = () => {
-    const { colorScheme } = useTheme()
-
-    return (
-        // <NavigationContainer theme={isDarkTheme(colorScheme) ? DarkTheme : DefaultTheme}>
-        <NavigationContainer theme={theme}>
-            {getNavigator()}
-        </NavigationContainer>
-    )
-}
+export const NavigationProvider = () => (
+    <NavigationContainer>
+        {getNavigator()}
+    </NavigationContainer>
+)

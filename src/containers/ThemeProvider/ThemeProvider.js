@@ -6,6 +6,8 @@ import PropTypes from 'prop-types'
 
 import ThemeContext from '@contexts/ThemeContext'
 
+import theme from 'src/designSystem/tokens'
+
 const ThemeProvider = ({ children }) => {
     // TODO: here colorScheme and theme are getting mixed
     // search on the defination of these two words
@@ -18,6 +20,7 @@ const ThemeProvider = ({ children }) => {
     const contextValues = useMemo(() => ({
         colorScheme,
         setTheme: setUserPreferredTheme,
+        theme,
     }), [colorScheme])
 
     return (
