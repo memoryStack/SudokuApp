@@ -123,7 +123,7 @@ module.exports = {
         label: {
             large: {
                 value: {
-                    fontWeight: '600',
+                    fontWeight: '500',
                     letterSpacing: 0.1,
                     lineHeight: 24,
                     fontSize: 16,

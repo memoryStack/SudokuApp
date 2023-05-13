@@ -14,7 +14,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import { styles } from './typography.styles'
 import { TYPOGRAPHIES } from './typography.constants'
 
-const TypographyDemo = ({ navigation }) => {
+const TypographyDemo = () => {
     const theme = useThemeValues()
 
     const renderTypographyVariant = ({ title, tokensPath }) => {

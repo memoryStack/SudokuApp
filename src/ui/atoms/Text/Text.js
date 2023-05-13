@@ -24,6 +24,8 @@ const Text = ({
         ...styles,
         fontFamily: fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],
         fontWeight,
+        includeFontPadding: false,
+        textAlignVertical: 'center',
     }
 
     return (

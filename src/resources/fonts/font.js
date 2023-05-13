@@ -23,25 +23,26 @@ const FONT_FAMILIES = {
 
 export const DEFAULT_FONT_WEIGHT = '400'
 
+// NOTE: semi-bold doesn't exist for Roboto font
 export const FONT_WEIGHT_VS_FONT_FAMILY = {
     400: FONT_FAMILIES.REGULAR,
     500: FONT_FAMILIES.MEDIUM,
-    600: FONT_FAMILIES.SEMI_BOLD,
+    // 600: FONT_FAMILIES.SEMI_BOLD,
     700: FONT_FAMILIES.BOLD,
 }
 
 export const fonts = Platform.select({
     android: {
-        [FONT_FAMILIES.REGULAR]: 'OpenSans',
-        [FONT_FAMILIES.MEDIUM]: 'OpenSans',
-        [FONT_FAMILIES.SEMI_BOLD]: 'OpenSans',
-        [FONT_FAMILIES.BOLD]: 'OpenSans',
+        [FONT_FAMILIES.REGULAR]: 'Roboto',
+        [FONT_FAMILIES.MEDIUM]: 'Roboto',
+        // [FONT_FAMILIES.SEMI_BOLD]: 'Roboto',
+        [FONT_FAMILIES.BOLD]: 'Roboto',
     },
     ios: {
         // TODO: test for iOS
         [FONT_FAMILIES.REGULAR]: 'OpenSans',
         [FONT_FAMILIES.MEDIUM]: 'OpenSans-Medium',
-        [FONT_FAMILIES.SEMI_BOLD]: 'OpenSans-Semibold',
+        // [FONT_FAMILIES.SEMI_BOLD]: 'OpenSans-Semibold',
         [FONT_FAMILIES.BOLD]: 'OpenSans-Bold',
     },
 })
