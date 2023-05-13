@@ -38,12 +38,15 @@ import { HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_ITEMS } from '../../navigation
 
 const MAX_AVAILABLE_HINTS = 3
 const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
+    page: {
+        display: 'flex',
         backgroundColor: 'white',
-        paddingTop: 75,
+    },
+    contentContainer: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        paddingTop: 24,
     },
     refereeContainer: {
         display: 'flex',
@@ -240,40 +243,46 @@ const Arena_ = ({
         return <SmartHintHC parentHeight={pageHeight} />
     }
 
+    const renderGameOverCard = () => {
+        if (!showGameSolvedCard) return null
+
+        return (
+            <Touchable
+                touchable={TouchableTypes.opacity}
+                activeOpacity={1}
+                style={styles.gameOverCardAbsoluteBG}
+                onPress={hideCongratsModal}
+            >
+                <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
+                    <GameOverCard
+                        stats={{
+                            mistakes,
+                            difficultyLevel,
+                            time,
+                            hintsUsed: MAX_AVAILABLE_HINTS - 2,
+                        }}
+                        openNextGameMenu={hideCongratsModal}
+                    />
+                </Animated.View>
+            </Touchable>
+        )
+    }
+
     return (
-        <Page onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus}>
-            <View style={styles.container} onLayout={onParentLayout}>
+        <Page style={styles.page} onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} onLayout={onParentLayout}>
+            <View style={styles.contentContainer}>
                 {renderFillPuzzleBtn()}
                 <Refree />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
                 <BoardController />
                 {renderInputPanel()}
-                {renderNextGameMenu()}
-                {renderCustomPuzzleHC()}
-                {showGameSolvedCard ? (
-                    <Touchable
-                        touchable={TouchableTypes.opacity}
-                        activeOpacity={1}
-                        style={styles.gameOverCardAbsoluteBG}
-                        onPress={hideCongratsModal}
-                    >
-                        <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
-                            <GameOverCard
-                                stats={{
-                                    mistakes,
-                                    difficultyLevel,
-                                    time,
-                                    hintsUsed: MAX_AVAILABLE_HINTS - 2,
-                                }}
-                                openNextGameMenu={hideCongratsModal}
-                            />
-                        </Animated.View>
-                    </Touchable>
-                ) : null}
-                {renderSmartHintHC()}
-                {renderHintsMenu()}
             </View>
+            {renderSmartHintHC()}
+            {renderHintsMenu()}
+            {renderNextGameMenu()}
+            {renderCustomPuzzleHC()}
+            {renderGameOverCard()}
         </Page>
     )
 }
