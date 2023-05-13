@@ -1,17 +1,7 @@
-import React, { memo } from 'react'
-import {
-    StyleSheet,
-    View,
-} from 'react-native'
-
-import PropTypes from 'prop-types'
+import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
-
-import { useStyles } from '@utils/customHooks/useStyles'
 import { isHexColor, rgba } from '@utils/util'
-
-// TODO: move it to ui library
 
 // TODO: this just got repeated
 // we need to make some kind of utils
@@ -20,7 +10,7 @@ const getTransformedHexColor = ({ color, opacity }) => {
     return rgba(color, opacity)
 }
 
-const getStyles = ({ isSelected, disabled }, theme) => {
+export const getStyles = ({ isSelected, disabled }, theme) => {
     let color = _get(theme, 'radioButton.default.color')
     if (isSelected) {
         color = _get(theme, 'radioButton.selected.color')
@@ -47,32 +37,3 @@ const getStyles = ({ isSelected, disabled }, theme) => {
         },
     })
 }
-
-const Radio = props => {
-    const { isSelected, disabled } = props
-
-    const styles = useStyles(getStyles, { isSelected, disabled })
-
-    const renderIconFill = () => {
-        if (!isSelected || disabled) return null
-        return <View style={styles.innerDot} />
-    }
-
-    return (
-        <View style={styles.container}>
-            {renderIconFill()}
-        </View>
-    )
-}
-
-Radio.propTypes = {
-    isSelected: PropTypes.bool,
-    disabled: PropTypes.bool,
-}
-
-Radio.defaultProps = {
-    isSelected: false,
-    disabled: false,
-}
-
-export default memo(Radio)

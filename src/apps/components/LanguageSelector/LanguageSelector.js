@@ -6,12 +6,14 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
+import Radio from '@ui/atoms/RadioButton'
+
 import { LANGAUGE_OPTIONS } from 'src/i18n/languages'
-import Radio from 'src/apps/components/Radio'
 import { Button } from 'src/components/button'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 import { Touchable, TouchableTypes } from '../Touchable'
+
 import { styles } from './style'
 
 const LanguageSelector_ = ({ onSavePress }) => {
