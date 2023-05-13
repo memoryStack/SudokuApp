@@ -4,3 +4,5 @@ cd './android'
 
 # copy the file
 cp ./app/build/outputs/apk/debug/app-armeabi-v7a-debug.apk ~/Desktop/SudokuDebug.apk
+
+say "Build Completed"
