@@ -26,7 +26,8 @@ module.exports = {
                         value: '{shape.corner.full}',
                     },
                     padding: {
-                        value: 4,
+                        value: 0,
+                        description: 'initially it was 4 but lineHeight of label covers the whole container, so made it 0.',
                     },
                     size: {
                         value: 16,

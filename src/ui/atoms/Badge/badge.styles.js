@@ -38,6 +38,7 @@ export const getStyles = ({ type }, theme) => {
                 color: _get(theme, ['badge', type, 'label', 'color']),
                 ..._get(theme, ['badge', type, 'label', 'font']),
             },
+            textAlign: 'center',
         },
     })
 }
