@@ -10,7 +10,6 @@ import _get from '@lodash/get'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 import { isHexColor, rgba } from '@utils/util'
-import { useThemeValues } from '../arena/hooks/useTheme'
 
 // TODO: move it to ui library
 
@@ -53,9 +52,6 @@ const Radio = props => {
     const { isSelected, disabled } = props
 
     const styles = useStyles(getStyles, { isSelected, disabled })
-
-    console.log('@@@@@', styles.container)
-    console.log('@@@@@', styles.innerDot)
 
     const renderIconFill = () => {
         if (!isSelected || disabled) return null

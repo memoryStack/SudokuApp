@@ -3,7 +3,6 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { NavigationContainer } from '@react-navigation/native'
-import { useTheme } from 'src/apps/arena/hooks/useTheme'
 
 import { getNavigationOptions } from './navigationOptions'
 import { routes } from './routes'
