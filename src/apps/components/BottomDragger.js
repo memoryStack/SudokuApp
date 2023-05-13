@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { rgba } from '../../utils/util'
+import { hexToRGBA } from '../../utils/util'
 import { fonts } from '../../resources/fonts/font'
 import { EVENTS } from '../../constants/events'
 
@@ -49,11 +49,11 @@ const styles = StyleSheet.create({
         height: XSMALL_SPACE,
         width: 24,
         borderRadius: XSMALL_SPACE,
-        backgroundColor: rgba('#282C3F', 20),
+        backgroundColor: hexToRGBA('#282C3F', 20),
     },
     headerText: {
         fontSize: 20,
-        color: rgba('#282C3F', 90),
+        color: hexToRGBA('#282C3F', 90),
         fontFamily: fonts.regular,
     },
 })

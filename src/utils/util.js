@@ -14,12 +14,6 @@ export const hexToRGBA = (hex, opacity = 100) => {
     return `rgba(${r}, ${g}, ${b}, ${opacity / 100})`
 }
 
-// TODO: remove it when all the instances of
-//  this are replaced by above
-export const rgba = function (hex, opacity = 100) {
-    return hexToRGBA(hex, opacity)
-}
-
 // prototypes to the array
 if (Array.prototype.allValuesSame === undefined) {
     Array.prototype.allValuesSame = function () {

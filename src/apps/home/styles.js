@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { rgba } from '../../utils/util'
+import { hexToRGBA } from '../../utils/util'
 
 export const getStyles = ({ CELL_WIDTH }) => StyleSheet.create({
     container: {
@@ -24,7 +24,7 @@ export const getStyles = ({ CELL_WIDTH }) => StyleSheet.create({
     sudokuLetterText: {
         width: CELL_WIDTH * 1.3,
         height: CELL_WIDTH * 1.3,
-        backgroundColor: rgba('#d5e5f6', 60),
+        backgroundColor: hexToRGBA('#d5e5f6', 60),
         borderRadius: 12,
         textAlign: 'center',
         textAlignVertical: 'center',
