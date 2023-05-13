@@ -5,13 +5,19 @@ import _map from '@lodash/map'
 
 export const isHexColor = (color = '') => color.charAt(0) === '#'
 
-export const rgba = function (hex, opacity = 100) {
+export const hexToRGBA = (hex, opacity = 100) => {
     if (!isHexColor(hex)) return hex
 
     const r = parseInt(hex.substring(1, 3), 16)
     const g = parseInt(hex.substring(3, 5), 16)
     const b = parseInt(hex.substring(5, 7), 16)
     return `rgba(${r}, ${g}, ${b}, ${opacity / 100})`
+}
+
+// TODO: remove it when all the instances of
+//  this are replaced by above
+export const rgba = function (hex, opacity = 100) {
+    return hexToRGBA(hex, opacity)
 }
 
 // prototypes to the array

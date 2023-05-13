@@ -8,6 +8,8 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './radioButton.styles'
 
+// NOTE: if option is "disabled" then option-disabled-feedback have to be implemented by
+// the parent element, since this is just dumb UI with any Touchability functionality
 const Radio = props => {
     const { isSelected, disabled } = props
 

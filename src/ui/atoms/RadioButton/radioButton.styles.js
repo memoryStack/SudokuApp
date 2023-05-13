@@ -1,14 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
-import { isHexColor, rgba } from '@utils/util'
-
-// TODO: this just got repeated
-// we need to make some kind of utils
-const getTransformedHexColor = ({ color, opacity }) => {
-    if (!isHexColor(color)) return color
-    return rgba(color, opacity)
-}
+import { hexToRGBA } from '@utils/util'
 
 export const getStyles = ({ isSelected, disabled }, theme) => {
     let color = _get(theme, 'radioButton.default.color')
@@ -16,7 +9,8 @@ export const getStyles = ({ isSelected, disabled }, theme) => {
         color = _get(theme, 'radioButton.selected.color')
     }
     if (disabled) {
-        color = getTransformedHexColor(_get(theme, 'radioButton.disabled'))
+        const { color: _color, opacity } = _get(theme, 'radioButton.disabled')
+        color = hexToRGBA(_color, opacity)
     }
 
     return StyleSheet.create({
