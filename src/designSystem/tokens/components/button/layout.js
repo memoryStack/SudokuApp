@@ -3,7 +3,7 @@
 //          then we can add those variations in this layout
 // TODO: button-label-text weight hasn't been configured yet
 // TODO: know what is the default value for all of these properties
-//          right now i am using empty-string like an idiot
+//          right now i am using empty-string
 const DEFAULT = {
     container: {
         height: {
@@ -37,11 +37,8 @@ const DEFAULT = {
         },
     },
     'label-text': {
-        size: {
-            value: 14,
-        },
-        'line-height': {
-            value: 20,
+        font: {
+            value: '{typography.label.large}',
         },
     },
     'items-spacing': {
@@ -87,11 +84,8 @@ const OUTLINED = {
         },
     },
     'label-text': {
-        size: {
-            value: 14,
-        },
-        'line-height': {
-            value: 20,
+        font: {
+            value: '{typography.label.large}',
         },
     },
     'items-spacing': {
@@ -135,11 +129,8 @@ const TEXT = {
         },
     },
     'label-text': {
-        size: {
-            value: 14,
-        },
-        'line-height': {
-            value: 20,
+        font: {
+            value: '{typography.label.large}',
         },
     },
     'items-spacing': {

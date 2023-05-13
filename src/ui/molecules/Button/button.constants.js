@@ -13,6 +13,8 @@ const BUTTON_STATES = {
     DISABLED: 'disabled',
 }
 
+// TODO: not getting used anywhere, look for use-cases and add tokens
+//          for sizes as well
 const BUTTON_SIZES = {
     SMALL: 'small',
     MEDIUM: 'medium',

@@ -11,7 +11,7 @@ import { Touchable, TouchableTypes } from 'src/apps/components/Touchable'
 import Text from '@ui/atoms/Text'
 
 import { getStyles } from './button.styles'
-import { BUTTON_STATES, BUTTON_TYPES, BUTTON_SIZES } from './button.constants'
+import { BUTTON_STATES, BUTTON_TYPES } from './button.constants'
 
 // TODO: add support for touchable hitslops as well
 const Button_ = ({
@@ -22,7 +22,6 @@ const Button_ = ({
     avoidDefaultContainerStyles = false,
     type,
     state,
-    size,
     ...rest
 }) => {
     const styles = useStyles(getStyles, {
@@ -30,7 +29,6 @@ const Button_ = ({
         state,
         isLabelAvailable: !!label,
         isIconAvailable: false,
-        size,
     })
 
     return (
@@ -58,7 +56,6 @@ Button_.propTypes = {
     avoidDefaultContainerStyles: PropTypes.bool,
     type: PropTypes.oneOf(Object.values(BUTTON_TYPES)),
     state: PropTypes.oneOf(Object.values(BUTTON_STATES)),
-    size: PropTypes.oneOf(Object.values(BUTTON_SIZES)),
 }
 
 Button_.defaultProps = {
@@ -69,5 +66,4 @@ Button_.defaultProps = {
     avoidDefaultContainerStyles: false,
     type: BUTTON_TYPES.FILLED,
     state: BUTTON_STATES.ENABLED,
-    size: BUTTON_SIZES.LARGE, // most likely we will never use other than large variant
 }

@@ -1,9 +1,6 @@
-import { PixelRatio, StyleSheet } from 'react-native'
-
-import { fonts } from 'src/resources/fonts/font'
+import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
-import _isNil from '@lodash/isNil'
 
 import { isHexColor, rgba } from '@utils/util'
 
@@ -12,10 +9,10 @@ import { isHexColor, rgba } from '@utils/util'
 //      so work-around is to use rgba() function for showing disabled states
 
 const getStyles = ({
-    type, state, isIconAvailable, isLabelAvailable, size,
+    type, state, isIconAvailable, isLabelAvailable,
 }, theme) => {
     const buttonConfigs = {
-        type, state, isIconAvailable, isLabelAvailable, size,
+        type, state, isIconAvailable, isLabelAvailable,
     }
 
     return StyleSheet.create({
@@ -30,7 +27,7 @@ const getStyles = ({
         },
         defaultText: {
             color: getTextColor(buttonConfigs, theme),
-            ..._get(theme, ['typography', 'label', size]),
+            ..._get(theme, ['button', type, 'layout', 'label-text', 'font']),
         },
         icon: { // TODO: how these properties will work with Svg icons. test that
             color: getIconColor(buttonConfigs, theme),

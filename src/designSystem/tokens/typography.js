@@ -10,7 +10,7 @@ module.exports = {
                     fontWeight: '400',
                     letterSpacing: 0,
                     lineHeight: 64,
-                    fontSize: 57,
+                    fontSize: 56,
                 },
                 type: 'typography',
             },
