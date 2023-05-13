@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 
-import { isHexColor, rgba } from '@utils/util'
+import { hexToRGBA } from '@utils/util'
 
 // Note: can't use opacity property here because it will dim down text as well
 //      looks like opacity dim downs whole container's contents along with container
@@ -39,7 +39,7 @@ const getStyles = ({
 
 const getContainerBackgroundColor = ({ type, state }, theme) => {
     const { background = 'transparent', opacity } = _get(theme, ['button', type, 'color', 'container', state])
-    return getTransformedHexColor({ color: background, opacity })
+    return hexToRGBA(background, opacity)
 }
 
 const getContainerPaddings = ({
@@ -60,17 +60,12 @@ const getContainerPaddings = ({
 
 const getTextColor = ({ type, state }, theme) => {
     const { color, opacity } = _get(theme, ['button', type, 'color', 'label-text', state])
-    return getTransformedHexColor({ color, opacity })
+    return hexToRGBA(color, opacity)
 }
 
 const getIconColor = ({ type, state }, theme) => {
     const { color, opacity } = _get(theme, ['button', type, 'color', 'icon', state])
-    return getTransformedHexColor({ color, opacity })
-}
-
-const getTransformedHexColor = ({ color, opacity }) => {
-    if (!isHexColor(color)) return color
-    return rgba(color, opacity)
+    return hexToRGBA(color, opacity)
 }
 
 export { getStyles }
