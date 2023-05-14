@@ -28,10 +28,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         width: '100%',
-        backgroundColor: 'white',
         paddingVertical: 16,
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
         paddingHorizontal: '3%', // 94% is te grid size
     },
     closeIconContainer: {
