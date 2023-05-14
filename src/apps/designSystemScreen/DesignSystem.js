@@ -18,6 +18,10 @@ const BUTTONS_MAP = [
         label: 'Typography',
         routeKey: ROUTES.TYPOGRAPHY,
     },
+    {
+        label: 'Button',
+        routeKey: ROUTES.BUTTON,
+    },
 ]
 
 const DesignSystem = ({ navigation }) => {
