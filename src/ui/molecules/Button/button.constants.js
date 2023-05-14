@@ -1,8 +1,8 @@
 const BUTTON_TYPES = {
-    FILLED: 'filled', // primary or most emphasis button
+    FILLED: 'filled',
     TONAL: 'tonal',
+    TEXT: 'text',
     /*
-        text
         elevated
         contained
     */
@@ -21,8 +21,16 @@ const BUTTON_SIZES = {
     LARGE: 'large',
 }
 
+const HIT_SLOP = {
+    top: 16,
+    right: 16,
+    bottom: 16,
+    left: 16,
+}
+
 export {
     BUTTON_STATES,
     BUTTON_TYPES,
     BUTTON_SIZES,
+    HIT_SLOP,
 }

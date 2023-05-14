@@ -11,9 +11,8 @@ import { Touchable, TouchableTypes } from 'src/apps/components/Touchable'
 import Text from '@ui/atoms/Text'
 
 import { getStyles } from './button.styles'
-import { BUTTON_STATES, BUTTON_TYPES } from './button.constants'
+import { BUTTON_STATES, BUTTON_TYPES, HIT_SLOP } from './button.constants'
 
-// TODO: add support for touchable hitslops as well
 const Button_ = ({
     onClick,
     containerStyle = null,
@@ -38,6 +37,7 @@ const Button_ = ({
             onPress={onClick}
             disabled={state === BUTTON_STATES.DISABLED}
             {...rest}
+            hitSlop={type === BUTTON_TYPES.TEXT ? HIT_SLOP : null}
         >
             <Text style={{ ...styles.defaultText, ...textStyles }}>
                 {label}

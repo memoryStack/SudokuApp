@@ -97,32 +97,7 @@ const OUTLINED = {
 
 // TODO: for all text-buttons use hitslop for ease of pressing
 const TEXT = {
-    container: {
-        height: {
-            value: '',
-        },
-        'border-radius': {
-            value: '',
-        },
-        padding: {
-            'without-icon': {
-                'padding-left': {
-                    value: '',
-                },
-                'padding-right': {
-                    value: '',
-                },
-            },
-            'with-icon': {
-                'icon-side-padding': {
-                    value: '',
-                },
-                'icon-opposite-side-padding': {
-                    value: '',
-                },
-            },
-        },
-    },
+    container: {},
     icon: {
         size: {
             value: 18,

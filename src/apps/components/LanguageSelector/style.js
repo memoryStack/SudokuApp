@@ -31,7 +31,4 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 16,
     },
-    saveBtnText: {
-        color: 'black',
-    },
 })

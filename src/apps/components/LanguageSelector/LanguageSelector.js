@@ -9,9 +9,9 @@ import _noop from '@lodash/noop'
 import Radio from '@ui/atoms/RadioButton'
 
 import { LANGAUGE_OPTIONS } from 'src/i18n/languages'
-import { Button } from 'src/components/button'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
+import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import { Touchable, TouchableTypes } from '../Touchable'
 
 import { styles } from './style'
@@ -57,30 +57,9 @@ const LanguageSelector_ = ({ onSavePress }) => {
 
     const renderFooter = () => (
         <View style={styles.footerContainer}>
-            <Button
-                text="Cancel"
-                onClick={onSavePress}
-                avoidDefaultContainerStyles
-                textStyles={styles.saveBtnText}
-                hitSlop={{
-                    top: 16,
-                    bottom: 16,
-                    left: 16,
-                    right: 16,
-                }}
-            />
-            <Button
-                text="Save"
-                onClick={handleSavePress}
-                avoidDefaultContainerStyles
-                textStyles={styles.saveBtnText}
-                hitSlop={{
-                    top: 16,
-                    bottom: 16,
-                    left: 16,
-                    right: 16,
-                }}
-            />
+            {/* TODO: Refactor the onClick for both functions */}
+            <Button type={BUTTON_TYPES.TEXT} label="Cancel" onClick={onSavePress} />
+            <Button type={BUTTON_TYPES.TEXT} label="Save" onClick={handleSavePress} />
         </View>
     )
 

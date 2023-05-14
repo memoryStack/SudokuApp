@@ -17,10 +17,10 @@ const BUTTONS = [
         label: 'Tonal Button',
         type: BUTTON_TYPES.TONAL,
     },
-    // {
-    //     label: 'Text Button',
-    //     type: BUTTON_TYPES.TEXT,
-    // },
+    {
+        label: 'Text Button',
+        type: BUTTON_TYPES.TEXT,
+    },
 ]
 
 const ButtonDemo = () => {

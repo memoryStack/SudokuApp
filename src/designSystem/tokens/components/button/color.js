@@ -114,5 +114,58 @@ module.exports = {
                 },
             },
         },
+        text: {
+            color: {
+                container: {
+                    enabled: {
+                        background: {
+                            value: 'transparent',
+                            // TODO: add it in colors tokens
+                        },
+                    },
+                    disabled: {
+                        background: {
+                            value: 'transparent',
+                        },
+                        opacity: {
+                            value: '12%',
+                            type: 'colorOpacity',
+                        },
+                    },
+                },
+                'label-text': {
+                    enabled: {
+                        color: {
+                            value: '{colors.primary}',
+                        },
+                    },
+                    disabled: {
+                        color: {
+                            value: '{colors.on-surface}',
+                        },
+                        opacity: {
+                            value: '38%',
+                            type: 'colorOpacity',
+                        },
+                    },
+                },
+                icon: {
+                    enabled: {
+                        color: {
+                            value: '{colors.primary}',
+                        },
+                    },
+                    disabled: {
+                        color: {
+                            value: '{colors.on-surface}',
+                        },
+                        opacity: {
+                            value: '38%',
+                            type: 'colorOpacity',
+                        },
+                    },
+                },
+            },
+        },
     },
 }
