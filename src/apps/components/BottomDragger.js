@@ -207,13 +207,12 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
             duration: ANIMATION_DURATION,
             useNativeDriver: true,
         }).start(() => {
-            const sholdBeFullView = toValue === topMostPosition
-            if (sholdBeFullView !== isFullView) {
+            const shouldBeFullView = toValue === topMostPosition
+            if (shouldBeFullView !== isFullView) {
                 // there is a change in dragger's state so call callback and set new state
-                setFullView(sholdBeFullView)
-                if (!sholdBeFullView) setIsDraggerActive(false)
-                // TODO: fix typo
-                sholdBeFullView ? onDraggerOpened(data) : onDraggerClosed(data)
+                setFullView(shouldBeFullView)
+                if (!shouldBeFullView) setIsDraggerActive(false)
+                shouldBeFullView ? onDraggerOpened(data) : onDraggerClosed(data)
             }
         })
     }
