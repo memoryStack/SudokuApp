@@ -14,7 +14,7 @@ const handleLanguageSelectPress = ({ params }) => {
     showModal({
         Component: LanguageSelector,
         props: {
-            onSavePress: hideModal,
+            hideModal,
         },
     })
 }

@@ -16,7 +16,7 @@ import { Touchable, TouchableTypes } from '../Touchable'
 
 import { styles } from './style'
 
-const LanguageSelector_ = ({ onSavePress }) => {
+const LanguageSelector_ = ({ hideModal }) => {
     const { i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
 
     const [selectedLanguage, setSelectedLanguage] = useState(defaultSelectedLanguage)
@@ -25,7 +25,7 @@ const LanguageSelector_ = ({ onSavePress }) => {
 
     const handleSavePress = () => {
         i18n.changeLanguage(selectedLanguage)
-        onSavePress()
+        hideModal()
     }
 
     // TODO: this radio buttons list can be a separate
@@ -57,8 +57,7 @@ const LanguageSelector_ = ({ onSavePress }) => {
 
     const renderFooter = () => (
         <View style={styles.footerContainer}>
-            {/* TODO: Refactor the onClick for both functions */}
-            <Button type={BUTTON_TYPES.TEXT} label="Cancel" onClick={onSavePress} />
+            <Button type={BUTTON_TYPES.TEXT} label="Cancel" onClick={hideModal} />
             <Button type={BUTTON_TYPES.TEXT} label="Save" onClick={handleSavePress} />
         </View>
     )
@@ -77,11 +76,11 @@ const LanguageSelector_ = ({ onSavePress }) => {
 }
 
 LanguageSelector_.propTypes = {
-    onSavePress: PropTypes.func,
+    hideModal: PropTypes.func,
 }
 
 LanguageSelector_.defaultProps = {
-    onSavePress: _noop,
+    hideModal: _noop,
 }
 
 export default memo(LanguageSelector_)
