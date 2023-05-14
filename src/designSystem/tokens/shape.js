@@ -20,11 +20,9 @@ module.exports = {
                 },
             },
             small: {
-
                 value: {
                     borderRadius: '{borderRadius.small}',
                 },
-
             },
             medium: {
                 value: {
@@ -71,6 +69,5 @@ module.exports = {
                 },
             },
         },
-
     },
 }

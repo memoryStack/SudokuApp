@@ -27,10 +27,7 @@ const NEXT_GAME_MENU_ROW_HEIGHT = 50
 
 const styles = StyleSheet.create({
     nextGameMenuContainer: {
-        backgroundColor: 'white',
         width: '100%',
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
     },
     levelContainer: {
         flexDirection: 'row',
