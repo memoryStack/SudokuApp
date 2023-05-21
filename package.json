@@ -13,7 +13,8 @@
         "create-design-tokens": "node ./sd.config.js",
         "pushStage": "./scripts/bundlePushSudoku s 1.5",
         "pushProd": "./scripts/bundlePushSudoku p 1.6",
-        "debugApk": "./scripts/debugApk"
+        "debugApk": "./scripts/debugApk",
+        "createComponent": "./scripts/createComponent"
     },
     "dependencies": {
         "@react-native-async-storage/async-storage": "^1.15.5",
