@@ -8,10 +8,10 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { TrophyIcon } from '../../resources/svgIcons/congratsTrophy'
+import { TrophyIcon } from '@resources/svgIcons/congratsTrophy'
+import { NEW_GAME } from '@resources/stringLiterals'
+import { fonts } from '@resources/fonts/font'
 import { Button } from '../../components/button'
-import { NEW_GAME } from '../../resources/stringLiterals'
-import { fonts } from '../../resources/fonts/font'
 import { Touchable, TouchableTypes } from '../components/Touchable'
 
 import { addLeadingZeroIfEligible } from './utils/util'

@@ -1,14 +1,15 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 
+import { GAME_STATE } from '@resources/constants'
 import { testStoreWrapper } from '../../../../utils/testingBoilerplate/reduxStoreWrapper'
 import { makeTestStore } from '../../../../utils/testingBoilerplate/makeReduxStore'
-import { GAME_STATE } from '../../../../resources/constants'
 
 import { GAME_DATA_KEYS } from '../../utils/cacheGameHandler/constants'
 import gameStateReducers, { gameStateActions } from '../../store/reducers/gameState.reducers'
-const gameCacheUtils = require('../../utils/cacheGameHandler/cacheGameHandler')
 
 import { useCacheGameState } from '../useCacheGameState'
+
+const gameCacheUtils = require('../../utils/cacheGameHandler/cacheGameHandler')
 
 const { setGameState } = gameStateActions
 
@@ -18,7 +19,7 @@ describe('useCacheGameState()', () => {
 
         store.dispatch(setGameState(GAME_STATE.ACTIVE))
 
-        const cacheHandlerSpy = jest.spyOn(gameCacheUtils, 'cacheGameData').mockImplementation(() => {})
+        const cacheHandlerSpy = jest.spyOn(gameCacheUtils, 'cacheGameData').mockImplementation(() => { })
 
         renderHook(({ key, data }) => useCacheGameState(key, data), {
             wrapper: testStoreWrapper,

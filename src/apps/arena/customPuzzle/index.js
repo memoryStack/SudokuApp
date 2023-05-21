@@ -6,10 +6,10 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { CloseIcon } from '../../../resources/svgIcons/close'
-import { PLAY } from '../../../resources/stringLiterals'
-import { fonts } from '../../../resources/fonts/font'
-import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
+import { CloseIcon } from '@resources/svgIcons/close'
+import { PLAY } from '@resources/stringLiterals'
+import { fonts } from '@resources/fonts/font'
+import { GAME_STATE, SCREEN_NAME } from '@resources/constants'
 import withActions from '../../../utils/hocs/withActions'
 import { Button } from '../../../components/button'
 

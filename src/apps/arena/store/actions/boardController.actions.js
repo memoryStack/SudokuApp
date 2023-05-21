@@ -1,5 +1,5 @@
+import { PENCIL_STATE } from '@resources/constants'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
-import { PENCIL_STATE } from '../../../../resources/constants'
 import { boardControllerActions } from '../reducers/boardController.reducers'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 

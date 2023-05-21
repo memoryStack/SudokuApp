@@ -1,12 +1,14 @@
+import { GAME_STATE } from '@resources/constants'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
-import { GAME_STATE } from '../../../../resources/constants'
 import { GameState } from '../../utils/classes/gameState'
 import { refreeActions } from '../reducers/refree.reducers'
 import { getGameState } from '../selectors/gameState.selectors'
 import { getTime } from '../selectors/refree.selectors'
 import { updateGameState } from './gameState.actions'
 
-const { resetMistakes, increaseMistakes, setMistakes, setDifficultylevel, setTime, resetState } = refreeActions
+const {
+    resetMistakes, increaseMistakes, setMistakes, setDifficultylevel, setTime, resetState,
+} = refreeActions
 
 export const clearMistakes = () => invokeDispatch(resetMistakes())
 

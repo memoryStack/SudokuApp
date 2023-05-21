@@ -1,7 +1,7 @@
 import _isEmpty from '@lodash/isEmpty'
 
+import { N_CHOOSE_K } from '@resources/constants'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { N_CHOOSE_K } from '../../../../../resources/constants'
 import { HOUSES_COUNT } from '../../../constants'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import {

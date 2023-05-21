@@ -4,7 +4,7 @@ import _every from '@lodash/every'
 import _filter from '@lodash/filter'
 
 import { getKey } from '@utils/storage'
-import { GAME_STATE } from '../../../resources/constants'
+import { GAME_STATE } from '@resources/constants'
 import { onlyUnique } from '../../../utils/util'
 
 import {

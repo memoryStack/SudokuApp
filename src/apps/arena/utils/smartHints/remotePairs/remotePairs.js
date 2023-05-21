@@ -9,7 +9,7 @@ import _some from '@lodash/some'
 import _reduce from '@lodash/reduce'
 
 import isNil from '@lodash/isNil'
-import { N_CHOOSE_K } from '../../../../../resources/constants'
+import { N_CHOOSE_K } from '@resources/constants'
 
 import {
     areCommonHouseCells,

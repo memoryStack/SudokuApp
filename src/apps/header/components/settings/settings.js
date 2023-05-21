@@ -10,7 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import withActions from '@utils/hocs/withActions'
 import { useModal } from 'src/apps/arena/hooks/useModal'
-import { SettingsIcon } from '../../../../resources/svgIcons/settings'
+import { SettingsIcon } from '@resources/svgIcons/settings'
 import { useToggle } from '../../../../utils/customHooks'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../../../navigation/route.constants'
 

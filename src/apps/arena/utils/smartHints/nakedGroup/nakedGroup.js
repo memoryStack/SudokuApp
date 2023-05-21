@@ -5,7 +5,7 @@ import _every from '@lodash/every'
 import _isEmpty from '@lodash/isEmpty'
 import _isNull from '@lodash/isNull'
 
-import { N_CHOOSE_K } from '../../../../../resources/constants'
+import { N_CHOOSE_K } from '@resources/constants'
 import { inRange } from '../../../../../utils/util'
 
 import { HOUSES_COUNT } from '../../../constants'

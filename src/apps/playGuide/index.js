@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { Text, View } from 'react-native'
-import { GAME_STATE } from '../../resources/constants'
+import { GAME_STATE } from '@resources/constants'
 
 import { Board } from '../arena/gameBoard'
 

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { UndoIcon } from '../../../resources/svgIcons/undo'
+import { UndoIcon } from '@resources/svgIcons/undo'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 

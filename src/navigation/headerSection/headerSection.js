@@ -6,10 +6,10 @@ import _get from '@lodash/get'
 import _map from '@lodash/map'
 import _isFunction from '@lodash/isFunction'
 
+import { LeftArrow } from '@resources/svgIcons/leftArrow'
+import { ShareIcon } from '@resources/svgIcons/share'
 import { Settings } from '../../apps/header/components/settings/settings'
 import { Touchable, TouchableTypes } from '../../apps/components/Touchable'
-import { LeftArrow } from '../../resources/svgIcons/leftArrow'
-import { ShareIcon } from '../../resources/svgIcons/share'
 
 import { getHeaderRightItems, getHeaderLeftItems } from '../navigation.utils'
 import { HEADER_ITEMS } from '../route.constants'

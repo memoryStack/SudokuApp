@@ -39,7 +39,7 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
             touchable={TouchableTypes.opacity}
             key="erase_cell"
         >
-            <Image style={styles.eraser} source={require('../../../resources/assets/eraser.png')} />
+            <Image style={styles.eraser} source={require('@resources/assets/eraser.png')} />
         </Touchable>
     )
 

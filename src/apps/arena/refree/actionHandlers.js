@@ -1,8 +1,8 @@
-import { GAME_STATE } from '../../../resources/constants'
+import { GAME_STATE } from '@resources/constants'
 import { updateGameState } from '../store/actions/gameState.actions'
 import { resetStoreState, timerClick } from '../store/actions/refree.actions'
 
-const handleInit = () => {}
+const handleInit = () => { }
 
 const handleTimerClick = () => {
     timerClick()

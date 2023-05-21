@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { PencilIcon } from '../../../resources/svgIcons/pencil'
+import { PencilIcon } from '@resources/svgIcons/pencil'
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { Styles, INACTIVE_ICON_FILL } from './style'

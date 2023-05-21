@@ -1,4 +1,4 @@
-import { fonts } from '../../resources/fonts/font'
+import { fonts } from '@resources/fonts/font'
 
 import { HOUSE_TYPE } from '../arena/utils/smartHints/constants'
 

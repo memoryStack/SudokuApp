@@ -6,8 +6,9 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
+import { fonts } from '@resources/fonts/font'
+
 import { Touchable, TouchableTypes } from '../apps/components/Touchable'
-import { fonts } from '../resources/fonts/font'
 
 const styles = StyleSheet.create({
     defaultContainer: {

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { fonts } from '../../../../resources/fonts/font'
+import { fonts } from '@resources/fonts/font'
 
 export const styles = StyleSheet.create({
     menuContainer: {

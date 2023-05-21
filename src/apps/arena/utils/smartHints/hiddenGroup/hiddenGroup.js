@@ -1,5 +1,5 @@
-import { N_CHOOSE_K } from '../../../../../resources/constants'
-import { GROUPS, HOUSE_TYPE } from '../../smartHints/constants'
+import { N_CHOOSE_K } from '@resources/constants'
+import { GROUPS, HOUSE_TYPE } from '../constants'
 import { areSameCells, isCellEmpty, isCellExists } from '../../util'
 import { getGroupUIHighlightData } from '../rawHintTransformers/hiddenGroup/hiddenGroup'
 import { getHouseCells } from '../../houseCells'
@@ -9,8 +9,7 @@ import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
 const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
     if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount
-    if (groupCandidatesCount === 3)
-        return candidateOccurencesCount >= 2 && candidateOccurencesCount <= groupCandidatesCount
+    if (groupCandidatesCount === 3) return candidateOccurencesCount >= 2 && candidateOccurencesCount <= groupCandidatesCount
 }
 
 export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCount, mainNumbers, notesData) => {
@@ -21,7 +20,7 @@ export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCo
             const cellNotes = notesData[cell.row][cell.col]
             cellNotes.forEach(note => {
                 if (note.show) {
-                    const noteValue = note.noteValue
+                    const { noteValue } = note
                     if (!candidatesHostCells[noteValue]) candidatesHostCells[noteValue] = []
                     candidatesHostCells[noteValue].push(cell)
                 }
@@ -58,13 +57,7 @@ const isNakedGroup = (groupCandidatesCount, groupCells, notesData) => {
     return groupCandidatesCount === candidatesList.length
 }
 
-const isGroupCellsExist = (newHiddenGroupCells, allHiddenGroups) => {
-    return allHiddenGroups.some(({ groupCells: existingHiddenGroupCells }) => {
-        return existingHiddenGroupCells.every((existingHiddenGroupCell, idx) => {
-            return areSameCells(existingHiddenGroupCell, newHiddenGroupCells[idx])
-        })
-    })
-}
+const isGroupCellsExist = (newHiddenGroupCells, allHiddenGroups) => allHiddenGroups.some(({ groupCells: existingHiddenGroupCells }) => existingHiddenGroupCells.every((existingHiddenGroupCell, idx) => areSameCells(existingHiddenGroupCell, newHiddenGroupCells[idx])))
 
 const findHiddenGroupsFromValidCandidates = (
     validCandidates,
@@ -75,8 +68,7 @@ const findHiddenGroupsFromValidCandidates = (
     maxHintsThreshold,
 ) => {
     // TODO: put some thought into this condition here
-    if (validCandidates.length > 6)
-        throw `to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`
+    if (validCandidates.length > 6) throw `to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`
 
     const result = []
     const N = validCandidates.length
@@ -99,8 +91,8 @@ const findHiddenGroupsFromValidCandidates = (
         })
 
         if (
-            groupCells.length === groupCandidatesCount &&
-            !isNakedGroup(groupCandidates.length, groupCells, notesData)
+            groupCells.length === groupCandidatesCount
+            && !isNakedGroup(groupCandidates.length, groupCells, notesData)
         ) {
             result.push({
                 house: { type: houseType, num: houseNum }, // TODO: remove the 'house' prefix from here
@@ -137,19 +129,17 @@ export const getHiddenGroupRawHints = (groupCandidatesCount, notesData, mainNumb
                     maxHintsThreshold,
                 )
 
-                const newHiddenGroups = hiddenGroupsInHouse.filter(group => {
-                    return (
-                        !isGroupCellsExist(group.groupCells, result) &&
-                        isHintValid({
-                            type: GROUPS.HIDDEN_GROUP,
-                            data: {
-                                houseType: group.house.type,
-                                groupCandidates: group.groupCandidates,
-                                hostCells: group.groupCells,
-                            },
-                        })
-                    )
-                })
+                const newHiddenGroups = hiddenGroupsInHouse.filter(group => (
+                    !isGroupCellsExist(group.groupCells, result)
+                    && isHintValid({
+                        type: GROUPS.HIDDEN_GROUP,
+                        data: {
+                            houseType: group.house.type,
+                            groupCandidates: group.groupCandidates,
+                            hostCells: group.groupCells,
+                        },
+                    })
+                ))
 
                 result.push(...newHiddenGroups)
             }

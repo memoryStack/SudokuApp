@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { fonts } from '../../../resources/fonts/font'
+import { fonts } from '@resources/fonts/font'
 
 const BORDER_THICKNESS = 2
 export const styles = StyleSheet.create({

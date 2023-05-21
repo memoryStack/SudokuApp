@@ -11,7 +11,7 @@ import _set from '@lodash/set'
 import _noop from '@lodash/noop'
 import _isEmpty from '@lodash/isEmpty'
 
-import { GAME_STATE, SCREEN_NAME } from '../../../resources/constants'
+import { GAME_STATE, SCREEN_NAME } from '@resources/constants'
 
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import {

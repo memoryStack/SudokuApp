@@ -1,4 +1,4 @@
-import { GAME_STATE } from '../../../resources/constants'
+import { GAME_STATE } from '@resources/constants'
 
 import { applyHintAction, updateSelectedCell } from '../store/actions/board.actions'
 import { updateGameState } from '../store/actions/gameState.actions'

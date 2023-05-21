@@ -7,14 +7,14 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
+import { GAME_STATE } from '@resources/constants'
+import { fonts } from '@resources/fonts/font'
 import { Touchable, TouchableTypes } from '../components/Touchable' // TODO: make linter catch issues like this
-import { GAME_STATE } from '../../resources/constants'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
 import { CustomPuzzle } from './customPuzzle'
 import SmartHintHC from './smartHintHC'
-import { fonts } from '../../resources/fonts/font'
 import { HintsMenu } from './hintsMenu'
 import Refree from './refree'
 import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'

@@ -12,8 +12,8 @@ import _noop from '@lodash/noop'
 import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 
+import { CloseIcon } from '@resources/svgIcons/close'
 import { BottomDragger } from '../../components/BottomDragger'
-import { CloseIcon } from '../../../resources/svgIcons/close'
 import { Button } from '../../../components/button'
 import withActions from '../../../utils/hocs/withActions'
 

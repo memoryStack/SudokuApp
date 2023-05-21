@@ -1,7 +1,8 @@
-import { GAME_STATE } from '../../../../resources/constants'
+import { GAME_STATE } from '@resources/constants'
 
 export class GameState {
     #state
+
     constructor(value) {
         this.#state = value
     }

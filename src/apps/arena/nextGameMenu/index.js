@@ -9,13 +9,12 @@ import { Svg, Path } from 'react-native-svg'
 
 import _noop from '@lodash/noop'
 
+import { RestartIcon } from '@resources/svgIcons/restart'
+import { PersonalizePuzzleIcon } from '@resources/svgIcons/personalizePuzzle'
+import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '@resources/constants'
+import { fonts } from '@resources/fonts/font'
+import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '@resources/stringLiterals'
 import { useScreenName } from '../../../utils/customHooks'
-
-import { RestartIcon } from '../../../resources/svgIcons/restart'
-import { PersonalizePuzzleIcon } from '../../../resources/svgIcons/personalizePuzzle'
-import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '../../../resources/constants'
-import { fonts } from '../../../resources/fonts/font'
-import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '../../../resources/stringLiterals'
 
 import { BottomDragger } from '../../components/BottomDragger'
 import { Touchable, TouchableTypes } from '../../components/Touchable'

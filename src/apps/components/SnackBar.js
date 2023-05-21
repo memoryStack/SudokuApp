@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { fonts } from '../../resources/fonts/font'
-import { CloseIcon } from '../../resources/svgIcons/close'
+import { fonts } from '@resources/fonts/font'
+import { CloseIcon } from '@resources/svgIcons/close'
 import { Touchable, TouchableTypes } from './Touchable'
 
 const CLOSE_ICON_TOUCHABLE_HIT_SLOP = {

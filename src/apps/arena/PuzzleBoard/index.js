@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { SCREEN_NAME } from '../../../resources/constants'
+import { SCREEN_NAME } from '@resources/constants'
 import withActions from '../../../utils/hocs/withActions'
 import { Board } from '../gameBoard'
 import { useCacheGameState } from '../hooks/useCacheGameState'

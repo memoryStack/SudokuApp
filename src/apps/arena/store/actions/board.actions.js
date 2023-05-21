@@ -4,8 +4,8 @@ import _forEach from '@lodash/forEach'
 import _get from '@lodash/get'
 import _map from '@lodash/map'
 
+import { PENCIL_STATE } from '@resources/constants'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
-import { PENCIL_STATE } from '../../../../resources/constants'
 import {
     duplicacyPresent,
     forBoardEachCell,

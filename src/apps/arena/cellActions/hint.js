@@ -10,7 +10,7 @@ import _noop from '@lodash/noop'
 
 import Badge from '@ui/atoms/Badge'
 
-import { HintIcon } from '../../../resources/svgIcons/hint'
+import { HintIcon } from '@resources/svgIcons/hint'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 

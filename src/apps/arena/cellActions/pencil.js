@@ -6,8 +6,8 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { PENCIL_STATE } from '../../../resources/constants'
-import { PencilIcon } from '../../../resources/svgIcons/pencil'
+import { PENCIL_STATE } from '@resources/constants'
+import { PencilIcon } from '@resources/svgIcons/pencil'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 

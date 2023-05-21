@@ -75,7 +75,7 @@ const Home_ = ({ navigation }) => {
     }, [])
 
     // TODO: get these assets from a central place
-    const renderAppIcon = () => <Image source={require('../../resources/assets/appIcon.png')} style={styles.appIcon} />
+    const renderAppIcon = () => <Image source={require('@resources/assets/appIcon.png')} style={styles.appIcon} />
 
     const renderSudokuText = () => {
         const renderLetter = (letter, index) => (

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { fonts } from '../../../resources/fonts/font'
+import { fonts } from '@resources/fonts/font'
 import withActions from '../../../utils/hocs/withActions'
 
 import { useCacheGameState } from '../hooks/useCacheGameState'

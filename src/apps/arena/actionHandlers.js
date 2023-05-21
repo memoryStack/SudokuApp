@@ -9,13 +9,20 @@ import _noop from '@lodash/noop'
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '@utils/storage'
 import {
+    LAUNCHING_DEFAULT_PUZZLE,
+    DEEPLINK_PUZZLE_NO_SOLUTIONS,
+    RESUME,
+    CUSTOMIZE_YOUR_PUZZLE_TITLE,
+    SOMETHING_WENT_WRONG,
+} from '@resources/stringLiterals'
+import {
     LEVEL_DIFFICULTIES,
     GAME_STATE,
     LEVELS_CLUES_INFO,
     CUSTOMIZED_PUZZLE_LEVEL_TITLE,
     DEEPLINK_HOST_NAME,
     PENCIL_STATE,
-} from '../../resources/constants'
+} from '@resources/constants'
 import { emit } from '../../utils/GlobalEventBus'
 import {
     convertBoardCellToNum,
@@ -26,13 +33,6 @@ import {
 } from './utils/util'
 
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
-import {
-    LAUNCHING_DEFAULT_PUZZLE,
-    DEEPLINK_PUZZLE_NO_SOLUTIONS,
-    RESUME,
-    CUSTOMIZE_YOUR_PUZZLE_TITLE,
-    SOMETHING_WENT_WRONG,
-} from '../../resources/stringLiterals'
 import { updateGameState } from './store/actions/gameState.actions'
 import { consoleLog } from '../../utils/util'
 import {
