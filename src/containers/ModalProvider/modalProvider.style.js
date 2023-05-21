@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
-    overlay: {
+export const getStyles = (_, theme) => StyleSheet.create({
+    backdrop: {
         height: '100%',
         width: '100%',
         backgroundColor: 'rgba(0, 0, 0, 0.4)',

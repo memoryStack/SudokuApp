@@ -2,41 +2,56 @@ import React, { useState, useMemo } from 'react'
 
 import { View } from 'react-native'
 
+import PropTypes from 'prop-types'
+
 import ModalContext from '@contexts/ModalContext'
 
-import { styles } from './modalProvider.style'
+import { useStyles } from '@utils/customHooks/useStyles'
+
+import { Touchable, TouchableTypes } from 'src/apps/components/Touchable'
+
+import { DEFAULT_STATE } from './modalProvider.constants'
+import { getStyles } from './modalProvider.style'
 
 const ModalProvider = ({ children }) => {
-    const [modal, setModal] = useState({
-        show: false,
-        Component: null,
-    })
+    const [modal, setModal] = useState(DEFAULT_STATE)
 
-    const contextValues = useMemo(() => ({
-        // TODO: add option for adding component props here
-        showModal: ({ Component, props }) => {
-            setModal({
-                show: true,
-                Component,
-                props,
-            })
-        },
-        hideModal: () => {
-            setModal({ show: false })
-        },
-    }), [])
+    const styles = useStyles(getStyles)
+
+    const handleBackdropPress = () => {
+        if (!modal.closeOnBackdropClick) return
+        setModal(DEFAULT_STATE)
+    }
 
     const renderModal = () => {
         if (!modal.show) return null
 
         const { Component, props } = modal
-
         return (
-            <View style={styles.overlay}>
-                <Component {...props} />
-            </View>
+            <Touchable
+                touchable={TouchableTypes.withoutFeedBack}
+                onPress={handleBackdropPress}
+            >
+                <View style={styles.backdrop}>
+                    <Component {...props} />
+                </View>
+            </Touchable>
         )
     }
+
+    const contextValues = useMemo(() => ({
+        showModal: ({ Component, props, closeOnBackdropClick = true }) => {
+            setModal({
+                show: true,
+                Component,
+                props,
+                closeOnBackdropClick,
+            })
+        },
+        hideModal: () => {
+            setModal(DEFAULT_STATE)
+        },
+    }), [])
 
     return (
         <ModalContext.Provider value={contextValues}>
@@ -46,4 +61,8 @@ const ModalProvider = ({ children }) => {
     )
 }
 
-export default ModalProvider
+export default React.memo(ModalProvider)
+
+ModalProvider.propTypes = {
+    children: PropTypes.element.isRequired,
+}
