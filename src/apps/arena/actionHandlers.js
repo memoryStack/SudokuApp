@@ -30,6 +30,7 @@ import {
     forBoardEachCell,
     getPuzzleSolutionType,
     initNotes,
+    isGenerateNewPuzzleItem,
 } from './utils/util'
 
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
@@ -197,43 +198,43 @@ const generateNewPuzzle = difficultyLevel => {
         })
 }
 
-// TODO: decide contract for the previous game
-// TODO: test it once the game state caching logic is implemented
-const resumePreviousGame = previousGameData => {
+const resumePreviousGame = () => {
+    // TODO: decide contract for the previous game
+    // TODO: test it once the game state caching logic is implemented
     // TODO: do all this only if the previous game is unsolved
     // if it's solved/failed then start a new game of same level and nudge the user as well
-    startGame({
-        ...previousGameData[GAME_DATA_KEYS.BOARD_DATA],
-        ...previousGameData[GAME_DATA_KEYS.REFEREE],
-        ...previousGameData[GAME_DATA_KEYS.CELL_ACTIONS],
-    })
+
+    getKey(PREVIOUS_GAME_DATA_KEY)
+        .then(previousGameData => {
+            startGame({
+                ...previousGameData[GAME_DATA_KEYS.BOARD_DATA],
+                ...previousGameData[GAME_DATA_KEYS.REFEREE],
+                ...previousGameData[GAME_DATA_KEYS.CELL_ACTIONS],
+            })
+        })
+        .catch(error => {
+            __DEV__ && console.log(error)
+        })
 }
 
-// TODO: SF wise men say not to use switch statements. how to handle this thing then ??
 const handleMenuItemPress = ({ setState, params: menuItem }) => {
-    switch (menuItem) {
-        case LEVEL_DIFFICULTIES.EASY:
-        case LEVEL_DIFFICULTIES.MEDIUM:
-        case LEVEL_DIFFICULTIES.HARD:
-        case LEVEL_DIFFICULTIES.EXPERT:
-            generateNewPuzzle(menuItem)
-            break
-        case RESUME:
-            getKey(PREVIOUS_GAME_DATA_KEY)
-                .then(previousGameData => {
-                    resumePreviousGame(previousGameData)
-                })
-                .catch(error => {
-                    __DEV__ && console.log(error)
-                })
-            break
-        case CUSTOMIZE_YOUR_PUZZLE_TITLE:
-            setState({ showCustomPuzzleHC: true })
-            break
-        default:
-            consoleLog('@@@@ unidentified game menu item, starting easy puzzle')
-            generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
+    if (isGenerateNewPuzzleItem(menuItem)) {
+        generateNewPuzzle(menuItem)
+        return
     }
+
+    if (menuItem === RESUME) {
+        resumePreviousGame()
+        return
+    }
+
+    if (menuItem === CUSTOMIZE_YOUR_PUZZLE_TITLE) {
+        setState({ showCustomPuzzleHC: true })
+        return
+    }
+
+    consoleLog('@@@@ unidentified game menu item, starting easy puzzle')
+    generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
 }
 
 const handleStartCustomPuzzle = ({ params: mainNumbers }) => {

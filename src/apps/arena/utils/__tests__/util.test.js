@@ -1,7 +1,7 @@
 import _isArray from '@lodash/isArray'
 import _isEmpty from '@lodash/isEmpty'
 
-import { GAME_STATE } from '@resources/constants'
+import { CUSTOMIZED_PUZZLE_LEVEL_TITLE, GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
 import { getStoragePromise } from '../../../../utils/testingBoilerplate/storage'
 
 import {
@@ -27,6 +27,7 @@ import {
     previousInactiveGameExists,
     getHousesCellsSharedByCells,
     areSameNotesInCells,
+    isGenerateNewPuzzleItem,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -599,5 +600,15 @@ describe('areSameNotesInCells()', () => {
             { row: 2, col: 8 },
         ]
         expect(areSameNotesInCells(cells, boardNotes)).toBe(false)
+    })
+})
+
+describe('isGenerateNewPuzzleItem()', () => {
+    test('returns true if chosen item will result in generating a new puzzle using algorithm', () => {
+        expect(isGenerateNewPuzzleItem(LEVEL_DIFFICULTIES.MEDIUM)).toBeTruthy()
+    })
+
+    test('returns false if above consition is not satisfied', () => {
+        expect(isGenerateNewPuzzleItem(CUSTOMIZED_PUZZLE_LEVEL_TITLE)).toBeFalsy()
     })
 })

@@ -2,9 +2,13 @@ import _isEmpty from '@lodash/isEmpty'
 import _forEach from '@lodash/forEach'
 import _every from '@lodash/every'
 import _filter from '@lodash/filter'
+import _includes from '@lodash/includes'
+import _values from '@lodash/values'
 
 import { getKey } from '@utils/storage'
-import { GAME_STATE } from '@resources/constants'
+
+import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
+
 import { onlyUnique } from '../../../utils/util'
 
 import {
@@ -345,3 +349,5 @@ export const areSameNotesInCells = (cells, notes) => {
 }
 
 export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => isCellEmpty(cell, mainNumbers))
+
+export const isGenerateNewPuzzleItem = item => _includes(_values(LEVEL_DIFFICULTIES), item)
