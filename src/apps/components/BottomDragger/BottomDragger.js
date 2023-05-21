@@ -2,72 +2,24 @@ import React, {
     useState, useEffect, useImperativeHandle, useCallback,
 } from 'react'
 import {
-    View, Text, Animated, StyleSheet, PanResponder, useWindowDimensions, BackHandler,
+    View, Text, Animated, PanResponder, useWindowDimensions, BackHandler,
 } from 'react-native'
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
-import _get from '@lodash/get'
 
 import { useStyles } from '@utils/customHooks/useStyles'
-import { hexToRGBA } from '../../utils/util'
-import { fonts } from '../../resources/fonts/font'
-import { EVENTS } from '../../constants/events'
+import { EVENTS } from '../../../constants/events'
 
-import { Touchable, TouchableTypes } from './Touchable'
+import { Touchable, TouchableTypes } from '../Touchable'
 
-const ANIMATION_DURATION = 150
-let HEADER_HEIGHT = 50
-const RELEASE_LIMIT_FOR_AUTO_SCROLL = 20
-const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = 0.9
-const XXSMALL_SIZE = 8
-const XSMALL_SPACE = 4
-export const HC_OVERLAY_BG_COLOR = 'rgba(0, 0, 0, 0.2)'
-
-const getStyles = (_, theme) => {
-    const { color: scrimColor, opacity: scrimOpacity } = _get(theme, ['bottomSheet', 'scrim'])
-
-    return StyleSheet.create({
-        slidingParentContainer: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: hexToRGBA(scrimColor, scrimOpacity),
-        },
-        header: {
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            width: '100%',
-            height: HEADER_HEIGHT,
-            backgroundColor: 'white',
-            borderWidth: 1,
-            borderColor: 'rgb(216, 217, 220)',
-            borderTopLeftRadius: XXSMALL_SIZE,
-            borderTopRightRadius: XXSMALL_SIZE,
-        },
-        subView: {
-            position: 'absolute',
-            width: '100%',
-            backgroundColor: 'white',
-            // TODO: use of below color needs some research
-            // backgroundColor: _get(theme, ['bottomSheet', 'container', 'color']),
-            ..._get(theme, ['bottomSheet', 'container', 'layout', 'shape']),
-        },
-        clipStyle: {
-            height: XSMALL_SPACE,
-            width: 24,
-            borderRadius: XSMALL_SPACE,
-            backgroundColor: hexToRGBA('#282C3F', 20),
-        },
-        headerText: {
-            fontSize: 20,
-            color: hexToRGBA('#282C3F', 90),
-            fontFamily: fonts.regular,
-        },
-    })
-}
+import {
+    ANIMATION_DURATION,
+    HEADER_HEIGHT,
+    RELEASE_LIMIT_FOR_AUTO_SCROLL,
+    DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
+} from './bottomDragger.constants'
+import { getStyles } from './bottomDragger.styles'
 
 const BottomDragger_ = React.forwardRef((props, ref) => {
     const {
@@ -89,13 +41,13 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     const { height: windowHeight } = useWindowDimensions()
     const [childrenHeight, setChildrenHeight] = useState(windowHeight)
 
-    if (!headerText) HEADER_HEIGHT = 0 // header won't be present in this case
+    const headerHeight = headerText ? HEADER_HEIGHT : 0
 
     // TODO: figure out how to remove this code duplication and how can we make it more efficient
     const [isFullView, setFullView] = useState(false)
     const [isDraggerActive, setIsDraggerActive] = useState(false)
     const [bottomMostPosition, setBottomMostPosition] = useState(parentHeight * bottomMostPositionRatio)
-    const [topMostPosition, setTopMostPosition] = useState(parentHeight - (childrenHeight + HEADER_HEIGHT))
+    const [topMostPosition, setTopMostPosition] = useState(parentHeight - (childrenHeight + headerHeight))
     const [transformValue, setTransformValue] = useState(new Animated.Value(bottomMostPosition))
     const [transparentViewOpacityConfig, setTransparentViewOpacityConfig] = useState(
         transformValue.interpolate({
@@ -126,7 +78,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
 
     useEffect(() => {
         const bottomMostPosition = parentHeight * bottomMostPositionRatio
-        const topMostPosition = parentHeight - (childrenHeight + HEADER_HEIGHT)
+        const topMostPosition = parentHeight - (childrenHeight + headerHeight)
         const transformValue = new Animated.Value(isFullView ? topMostPosition : bottomMostPosition)
         setBottomMostPosition(bottomMostPosition)
         setTopMostPosition(topMostPosition)
@@ -220,7 +172,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     const childrenOnLayout = useCallback(event => {
         const { nativeEvent: { layout: { height = 0 } = {} } = {} } = event
         setChildrenHeight(height)
-        const topMostPosition = parentHeight - (height + HEADER_HEIGHT)
+        const topMostPosition = parentHeight - (height + headerHeight)
         setTopMostPosition(topMostPosition)
         // TODO: on children height changed dynamically, this openDragger will be called 2 times
         // STOP THAT
@@ -261,7 +213,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                     styles.subView,
                     {
                         transform: [{ translateY: transformValue }],
-                        height: childrenHeight + HEADER_HEIGHT,
+                        height: childrenHeight + headerHeight,
                     },
                 ]}
             >
