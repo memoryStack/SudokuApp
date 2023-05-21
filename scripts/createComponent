@@ -25,7 +25,7 @@ touch ${componentSubFilesPrefix}.constants.js
 
 # add boilerplate to the index.js file
 echo "export { default } from './${component}'
-export * from './${componentSubFilesPrefix}.constants.js'" > index.js
+export * from './${componentSubFilesPrefix}.constants'" > index.js
 
 # add boilerplate to the .styles.js file
 echo "import { StyleSheet } from 'react-native'
@@ -53,7 +53,7 @@ import Text from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
-import { getStyles } from './${componentSubFilesPrefix}.styles.js'
+import { getStyles } from './${componentSubFilesPrefix}.styles'
 
 const ${component} = ({
     ...rest
