@@ -3,6 +3,7 @@ const DESIGN_SYSTEM_ROUTES = {
     BADGE: 'badge',
     TYPOGRAPHY: 'typography',
     BUTTON: 'button',
+    DIVIDER: 'divider',
 }
 
 export const ROUTES = {
@@ -30,6 +31,7 @@ export const ROUTE_HEADER_TITLES = {
     [ROUTES.BADGE]: 'Badge',
     [ROUTES.TYPOGRAPHY]: 'Typography',
     [ROUTES.BUTTON]: 'Button',
+    [ROUTES.DIVIDER]: 'Divder',
 }
 
 // todo: we should change it's name as these keys will be defined in

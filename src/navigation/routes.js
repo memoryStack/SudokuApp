@@ -5,6 +5,7 @@ import DesignSystem from '../apps/designSystemScreen'
 import Badge from '../apps/designSystemScreen/componentsScreens/Badge'
 import Typography from '../apps/designSystemScreen/componentsScreens/Typography'
 import Button from '../apps/designSystemScreen/componentsScreens/Button'
+import Divider from '../apps/designSystemScreen/componentsScreens/Divider'
 
 import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
@@ -45,6 +46,14 @@ const DESIGN_SYSTEM_SCREENS = [
         component: Button,
         headerItems: {
             title: ROUTE_HEADER_TITLES[ROUTES.BUTTON],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+    {
+        name: ROUTES.DIVIDER,
+        component: Divider,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.DIVIDER],
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },

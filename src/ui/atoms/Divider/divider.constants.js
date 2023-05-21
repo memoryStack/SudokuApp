@@ -1,0 +1,4 @@
+export const DIVIDER_TYPES = {
+    HORIZONTAL: 'HORIZONTAL',
+    VERTICAL: 'VERTICAL',
+}

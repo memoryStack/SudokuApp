@@ -22,6 +22,10 @@ const BUTTONS_MAP = [
         label: 'Button',
         routeKey: ROUTES.BUTTON,
     },
+    {
+        label: 'Divider',
+        routeKey: ROUTES.DIVIDER,
+    },
 ]
 
 const DesignSystem = ({ navigation }) => {
