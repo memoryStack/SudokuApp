@@ -164,10 +164,9 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
 
     return (
         <BottomDragger
+            ref={nextGameMenuRef}
             parentHeight={parentHeight}
             onDraggerClosed={onMenuClosed}
-            ref={nextGameMenuRef}
-            bottomMostPositionRatio={1.1}
         >
             {getNextGameMenu()}
         </BottomDragger>

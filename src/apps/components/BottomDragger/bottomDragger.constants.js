@@ -1,7 +1,9 @@
 const ANIMATION_DURATION = 150
 const HEADER_HEIGHT = 50
 const RELEASE_LIMIT_FOR_AUTO_SCROLL = 20
-const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = 0.9
+// TODO: if we make it 0.9 then animation doesn't work good
+//      some issue with the positioning
+const DEFAULT_BOOTTOM_MOST_POSITION_RATIO = 1.1
 const XXSMALL_SIZE = 8
 const XSMALL_SPACE = 4
 const HC_OVERLAY_BG_COLOR = 'rgba(0, 0, 0, 0.2)'

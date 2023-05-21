@@ -160,7 +160,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             stopBackgroundClickClose
             onDraggerClosed={onClosed}
             parentHeight={parentHeight}
-            bottomMostPositionRatio={1.1} // TODO: we can make it a default i guess
             animateBackgroundOverlayOnClose={false}
         >
             <View style={containerStyles}>

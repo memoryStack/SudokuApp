@@ -91,10 +91,9 @@ const CustomPuzzle_ = ({
 
     return (
         <BottomDragger
+            ref={customPuzzleRef}
             parentHeight={parentHeight}
             onDraggerClosed={onHCClosed}
-            ref={customPuzzleRef}
-            bottomMostPositionRatio={1.1}
             stopBackgroundClickClose
         >
             <View style={styles.container}>
