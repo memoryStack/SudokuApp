@@ -9,7 +9,7 @@ import {
     getAlignedCellInPerfectLeg,
     transformSashimiXWingLeg,
     getXWingType,
-} from '.'
+} from './index' // TODO: find why jest tests fail when this import is like '.' instead of './index'
 import { HOUSE_TYPE } from '../constants'
 import { LEG_TYPES, XWING_TYPES } from './constants'
 import {
@@ -362,7 +362,7 @@ describe('isFinnedXWing()', () => {
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
     })
 
-    test(`returns false when all perfectLeg cells are aligned but the finns doesn't share a common block with any otherLeg cell which are aligned with perfectLeg cells`, () => {
+    test('returns false when all perfectLeg cells are aligned but the finns doesn\'t share a common block with any otherLeg cell which are aligned with perfectLeg cells', () => {
         const perfectLegHostCells = [
             { row: 4, col: 3 },
             { row: 5, col: 3 },
@@ -376,7 +376,7 @@ describe('isFinnedXWing()', () => {
         expect(isFinnedXWing(perfectLegHostCells, otherLegHostCells)).toBe(false)
     })
 
-    test(`returns false when all perfectLeg cells are aligned but the finns doesn't share a common block with any otherLeg cell which are aligned with perfectLeg cells`, () => {
+    test('returns false when all perfectLeg cells are aligned but the finns doesn\'t share a common block with any otherLeg cell which are aligned with perfectLeg cells', () => {
         const perfectLegHostCells = [
             { row: 4, col: 3 },
             { row: 4, col: 6 },
