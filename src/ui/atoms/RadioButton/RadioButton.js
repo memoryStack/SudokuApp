@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './radioButton.styles'
+import { TEST_IDS } from './radioButton.constants'
 
 // NOTE: if option is "disabled" then option-disabled-feedback have to be implemented by
 // the parent element, since this is just dumb UI with any Touchability functionality
@@ -17,11 +18,11 @@ const Radio = props => {
 
     const renderIconFill = () => {
         if (!isSelected || disabled) return null
-        return <View style={styles.innerDot} />
+        return <View style={styles.innerDot} testID={TEST_IDS.INNER_DOT} />
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} testID={TEST_IDS.OUTER_RING}>
             {renderIconFill()}
         </View>
     )

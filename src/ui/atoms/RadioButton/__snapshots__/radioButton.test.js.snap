@@ -1,6 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders checked Checkbox with onPress 1`] = `
+exports[`snapshot for disabled radio button 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "borderColor": "rgba(27, 23, 28, 0.38)",
+      "borderRadius": 1000,
+      "borderWidth": 2,
+      "height": 20,
+      "justifyContent": "center",
+      "width": 20,
+    }
+  }
+  testID="radioOuterRing"
+/>
+`;
+
+exports[`snapshot for not selected radio button 1`] = `
 <View
   style={
     Object {
@@ -13,5 +30,35 @@ exports[`renders checked Checkbox with onPress 1`] = `
       "width": 20,
     }
   }
+  testID="radioOuterRing"
 />
+`;
+
+exports[`snapshot for selected radio button 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "borderColor": "#6750A4",
+      "borderRadius": 1000,
+      "borderWidth": 2,
+      "height": 20,
+      "justifyContent": "center",
+      "width": 20,
+    }
+  }
+  testID="radioOuterRing"
+>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#6750A4",
+        "borderRadius": 1000,
+        "height": 10,
+        "width": 10,
+      }
+    }
+    testID="radioInnerDot"
+  />
+</View>
 `;
