@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders checked Checkbox with onPress 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "borderColor": "#49454F",
+      "borderRadius": 1000,
+      "borderWidth": 2,
+      "height": 20,
+      "justifyContent": "center",
+      "width": 20,
+    }
+  }
+/>
+`;
