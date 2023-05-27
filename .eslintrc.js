@@ -3,6 +3,7 @@ module.exports = {
         browser: true,
         es2021: true,
         node: true,
+        'jest/globals': true,
     },
     extends: ['plugin:react/recommended', 'airbnb'],
     overrides: [],
@@ -13,7 +14,7 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    plugins: ['react', 'react-hooks'],
+    plugins: ['react', 'react-hooks', 'jest'],
     globals: {
         __DEV__: 'readonly',
     },
