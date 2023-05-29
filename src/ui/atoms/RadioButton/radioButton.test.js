@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { render, screen } from 'testing-utils' // TODO: fix the eslint error
+import { render, screen } from 'testing-utils'
 
 import Radio from './RadioButton'
 import { TEST_IDS } from './radioButton.constants'
