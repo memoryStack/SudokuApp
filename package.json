@@ -8,6 +8,7 @@
         "start": "react-native start",
         "start-remove-cache": "react-native start --reset-cache",
         "test": "jest",
+        "update-ui-snapshots": "jest --updateSnapshot",
         "lint": "eslint .",
         "prettier": "prettier --write '**/*.{ts,tsx,js}'",
         "create-design-tokens": "node ./sd.config.js",

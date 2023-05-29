@@ -1,0 +1,327 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot for filled button in disabled state 1`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": true,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  hitSlop={null}
+  nativeID="animatedComponent"
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "rgba(27, 23, 28, 0.12)",
+      "borderRadius": 20,
+      "display": "flex",
+      "height": 40,
+      "justifyContent": "center",
+      "opacity": 1,
+      "paddingLeft": 24,
+      "paddingRight": 24,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "rgba(27, 23, 28, 0.38)",
+        "fontFamily": "OpenSans-Medium",
+        "fontSize": 16,
+        "fontWeight": "500",
+        "includeFontPadding": false,
+        "letterSpacing": 0.1,
+        "lineHeight": 24,
+        "textAlignVertical": "center",
+      }
+    }
+  >
+    test button
+  </Text>
+</View>
+`;
+
+exports[`snapshot for filled button in enabled state 1`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  hitSlop={null}
+  nativeID="animatedComponent"
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "rgba(103, 80, 164, 1)",
+      "borderRadius": 20,
+      "display": "flex",
+      "height": 40,
+      "justifyContent": "center",
+      "opacity": 1,
+      "paddingLeft": 24,
+      "paddingRight": 24,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "rgba(255, 255, 255, 1)",
+        "fontFamily": "OpenSans-Medium",
+        "fontSize": 16,
+        "fontWeight": "500",
+        "includeFontPadding": false,
+        "letterSpacing": 0.1,
+        "lineHeight": 24,
+        "textAlignVertical": "center",
+      }
+    }
+  >
+    test button
+  </Text>
+</View>
+`;
+
+exports[`snapshot for text button in disabled state 1`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": true,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 16,
+      "left": 16,
+      "right": 16,
+      "top": 16,
+    }
+  }
+  nativeID="animatedComponent"
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "transparent",
+      "borderRadius": undefined,
+      "display": "flex",
+      "height": undefined,
+      "justifyContent": "center",
+      "opacity": 1,
+      "paddingLeft": undefined,
+      "paddingRight": undefined,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "rgba(27, 23, 28, 0.38)",
+        "fontFamily": "OpenSans-Medium",
+        "fontSize": 16,
+        "fontWeight": "500",
+        "includeFontPadding": false,
+        "letterSpacing": 0.1,
+        "lineHeight": 24,
+        "textAlignVertical": "center",
+      }
+    }
+  >
+    test button
+  </Text>
+</View>
+`;
+
+exports[`snapshot for text button in enabled state 1`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 16,
+      "left": 16,
+      "right": 16,
+      "top": 16,
+    }
+  }
+  nativeID="animatedComponent"
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "transparent",
+      "borderRadius": undefined,
+      "display": "flex",
+      "height": undefined,
+      "justifyContent": "center",
+      "opacity": 1,
+      "paddingLeft": undefined,
+      "paddingRight": undefined,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "rgba(103, 80, 164, 1)",
+        "fontFamily": "OpenSans-Medium",
+        "fontSize": 16,
+        "fontWeight": "500",
+        "includeFontPadding": false,
+        "letterSpacing": 0.1,
+        "lineHeight": 24,
+        "textAlignVertical": "center",
+      }
+    }
+  >
+    test button
+  </Text>
+</View>
+`;
+
+exports[`snapshot for tonal button in disabled state 1`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": true,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  hitSlop={null}
+  nativeID="animatedComponent"
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "rgba(27, 23, 28, 0.12)",
+      "borderRadius": 20,
+      "display": "flex",
+      "height": 40,
+      "justifyContent": "center",
+      "opacity": 1,
+      "paddingLeft": 24,
+      "paddingRight": 24,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "rgba(27, 23, 28, 0.38)",
+        "fontFamily": "OpenSans-Medium",
+        "fontSize": 16,
+        "fontWeight": "500",
+        "includeFontPadding": false,
+        "letterSpacing": 0.1,
+        "lineHeight": 24,
+        "textAlignVertical": "center",
+      }
+    }
+  >
+    test button
+  </Text>
+</View>
+`;
+
+exports[`snapshot for tonal button in enabled state 1`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  hitSlop={null}
+  nativeID="animatedComponent"
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "rgba(232, 222, 248, 1)",
+      "borderRadius": 20,
+      "display": "flex",
+      "height": 40,
+      "justifyContent": "center",
+      "opacity": 1,
+      "paddingLeft": 24,
+      "paddingRight": 24,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "rgba(29, 25, 43, 1)",
+        "fontFamily": "OpenSans-Medium",
+        "fontSize": 16,
+        "fontWeight": "500",
+        "includeFontPadding": false,
+        "letterSpacing": 0.1,
+        "lineHeight": 24,
+        "textAlignVertical": "center",
+      }
+    }
+  >
+    test button
+  </Text>
+</View>
+`;
