@@ -1,8 +1,8 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 
 import { GAME_STATE } from '@resources/constants'
-import { testStoreWrapper } from '../../../../utils/testingBoilerplate/reduxStoreWrapper'
-import { makeTestStore } from '../../../../utils/testingBoilerplate/makeReduxStore'
+import { testStoreWrapper } from '../../../../utils/testing/testingBoilerplate/reduxStoreWrapper'
+import { makeTestStore } from '../../../../utils/testing/testingBoilerplate/makeReduxStore'
 
 import { GAME_DATA_KEYS } from '../../utils/cacheGameHandler/constants'
 import gameStateReducers, { gameStateActions } from '../../store/reducers/gameState.reducers'

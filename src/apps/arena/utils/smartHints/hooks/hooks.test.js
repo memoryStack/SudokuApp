@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 
-import { testStoreWrapper } from '../../../../../utils/testingBoilerplate/reduxStoreWrapper'
-import { makeTestStore } from '../../../../../utils/testingBoilerplate/makeReduxStore'
+import { testStoreWrapper } from '../../../../../utils/testing/testingBoilerplate/reduxStoreWrapper'
+import { makeTestStore } from '../../../../../utils/testing/testingBoilerplate/makeReduxStore'
 import smartHintHCReducers, { smartHintHCActions } from '../../../store/reducers/smartHintHC.reducers'
 
 import { useIsHintTryOutStep } from '.'

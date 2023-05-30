@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { render, screen, fireEvent } from 'testing-utils'
+import { render, screen, fireEvent } from '@utils/testing/testingLibrary'
 import { PersistentRender } from '@utils/testing/persistentRender'
 
 import Button from './Button'

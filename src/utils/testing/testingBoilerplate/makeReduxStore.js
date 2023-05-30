@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { initDispatch, initGetState } from '../../redux/dispatch.helpers'
+import { initDispatch, initGetState } from '../../../redux/dispatch.helpers'
 
 export const makeTestStore = reducer => {
     const store = configureStore({ reducer })

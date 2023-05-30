@@ -2,7 +2,7 @@ import _isArray from '@lodash/isArray'
 import _isEmpty from '@lodash/isEmpty'
 
 import { CUSTOMIZED_PUZZLE_LEVEL_TITLE, GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
-import { getStoragePromise } from '../../../../utils/testingBoilerplate/storage'
+import { getStoragePromise } from '../../../../utils/testing/testingBoilerplate/storage'
 
 import {
     addLeadingZeroIfEligible,

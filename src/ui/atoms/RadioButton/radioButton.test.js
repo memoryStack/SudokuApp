@@ -1,7 +1,6 @@
 import * as React from 'react'
 
-// TODO: manage these imports properly
-import { render, screen } from 'testing-utils'
+import { render, screen } from '@utils/testing/testingLibrary'
 import { PersistentRender } from '@utils/testing/persistentRender'
 
 import Radio from './RadioButton'

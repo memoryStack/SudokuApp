@@ -1,7 +1,7 @@
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
-import { render, screen } from 'testing-utils'
+import { render, screen } from '@utils/testing/testingLibrary'
 
 // TODO: write the test-cases for this class ??
 export class PersistentRender {

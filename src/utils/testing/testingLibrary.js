@@ -1,5 +1,6 @@
 import React from 'react'
 
+// TODO: fix this eslint warning
 import { render } from '@testing-library/react-native'
 
 import ThemeProvider from 'src/containers/ThemeProvider'
@@ -12,8 +13,6 @@ const AllTheProviders = ({ children }) => (
 
 const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...options })
 
-// re-export everything
 export * from '@testing-library/react-native'
 
-// override render method
 export { customRender as render }

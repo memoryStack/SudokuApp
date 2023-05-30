@@ -1,4 +1,4 @@
-import { makeTestStore } from '../../../../../utils/testingBoilerplate/makeReduxStore'
+import { makeTestStore } from '../../../../../utils/testing/testingBoilerplate/makeReduxStore'
 import boardReducers, { boardActions } from '../../../store/reducers/board.reducers'
 import { HOUSE_TYPE } from '../constants'
 import {
@@ -66,7 +66,9 @@ describe('getCellsVisibleNotesInstancesCount()', () => {
             { row: 5, col: 3 },
             { row: 3, col: 4 },
         ]
-        const expectedResult = { 2: 1, 4: 2, 5: 1, 6: 1, 8: 2, 9: 1 }
+        const expectedResult = {
+            2: 1, 4: 2, 5: 1, 6: 1, 8: 2, 9: 1,
+        }
         expect(getCellsVisibleNotesInstancesCount(cells, notesData)).toStrictEqual(expectedResult)
     })
 
