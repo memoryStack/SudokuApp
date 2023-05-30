@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { render, screen, fireEvent } from 'testing-utils'
+import { PersistentRender } from '@utils/testing/persistentRender'
 
 import Button from './Button'
 import { BUTTON_STATES, BUTTON_TYPES } from './button.constants'
@@ -71,8 +72,7 @@ test('snapshot for text button in disabled state', () => {
     expect(tree).toMatchSnapshot()
 })
 
-// TODO: add color changes functionality cases as well
-//         should i add test-cases if prop-override colors are working fine or not ?
+// should i add test-cases if prop-override colors are working fine or not ?
 describe('Button functionality', () => {
     test('renders only the outer circle if not selected', () => {
         const buttonLabel = 'test button'
@@ -97,5 +97,20 @@ describe('Button functionality', () => {
 
         fireEvent.press(screen.getByText(buttonLabel))
         expect(onClick).toHaveBeenCalledTimes(0)
+    })
+
+    test.only('changes appearence when button state is toggled', () => {
+        const buttonLabel = 'test button'
+
+        const aPersistentRender = new PersistentRender({
+            getRenderingResultToCompare: () => {
+                const element = screen.getByText(buttonLabel)
+                return [element.props.style.color]
+            },
+        })
+        aPersistentRender.render(<Button state={BUTTON_STATES.ENABLED} label={buttonLabel} />)
+        aPersistentRender.update(<Button state={BUTTON_STATES.DISABLED} label={buttonLabel} />)
+
+        expect(aPersistentRender.getChangedRenderingResultStatus()).toEqual([true])
     })
 })
