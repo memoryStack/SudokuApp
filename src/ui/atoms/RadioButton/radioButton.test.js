@@ -1,6 +1,8 @@
 import * as React from 'react'
 
+// TODO: manage these imports properly
 import { render, screen } from 'testing-utils'
+import { PersistentRender } from '@utils/testing/persistentRender'
 
 import Radio from './RadioButton'
 import { TEST_IDS } from './radioButton.constants'
@@ -52,25 +54,21 @@ describe('radio button functionality', () => {
     })
 
     test('changes color when selected/disabled state is toggled', () => {
-        // TODO: think for a util which will check if a property changed or not
-        //          between the renderings
-        const getOuterRingColor = () => screen.getByTestId(TEST_IDS.OUTER_RING).props.style.borderColor
+        const aPersistentRender = new PersistentRender(
+            {
+                getRenderingResultToCompare: () => {
+                    const element = screen.getByTestId(TEST_IDS.OUTER_RING)
+                    return [element.props.style.borderColor]
+                },
+            },
+        )
 
-        render(<Radio isSelected={false} />)
+        aPersistentRender.render(<Radio isSelected={false} />)
+        aPersistentRender.update(<Radio isSelected />)
 
-        let previousRenderColor
-        let currentRenderColor = getOuterRingColor()
+        expect(aPersistentRender.getChangedRenderingResultStatus()).toEqual([true])
 
-        screen.update(<Radio isSelected />)
-
-        previousRenderColor = currentRenderColor
-        currentRenderColor = getOuterRingColor()
-        expect(currentRenderColor !== previousRenderColor).toBeTruthy()
-
-        screen.update(<Radio isSelected={false} disabled />)
-
-        previousRenderColor = currentRenderColor
-        currentRenderColor = getOuterRingColor()
-        expect(currentRenderColor !== previousRenderColor).toBeTruthy()
+        aPersistentRender.update(<Radio isSelected={false} disabled />)
+        expect(aPersistentRender.getChangedRenderingResultStatus()).toEqual([true])
     })
 })
