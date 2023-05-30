@@ -1,4 +1,5 @@
 import _isEmpty from '@lodash/isEmpty'
+import _isEqual from '@lodash/isEqual'
 import _forEach from '@lodash/forEach'
 import _every from '@lodash/every'
 import _filter from '@lodash/filter'
@@ -74,7 +75,7 @@ export const previousInactiveGameExists = async () => {
 
 export const areSameCells = (cellA, cellB) => {
     if (_isEmpty(cellA) || _isEmpty(cellB)) return false
-    return cellA.row === cellB.row && cellA.col === cellB.col
+    return _isEqual(cellA, cellB)
 }
 
 export const areSameBlockCells = cells => {

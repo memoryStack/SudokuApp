@@ -13,10 +13,6 @@ export class PersistentRender {
     }
 
     getChangedRenderingResultStatus() {
-        // technical debt
-        // TODO: add a util for allEqual based on the _isEqual lodash util
-        //          TODO: and replace a util which i created for such use-case
-
         if (this.renderingResults.length < 2) {
             throw new Error('not sufficient renders to compare')
         }

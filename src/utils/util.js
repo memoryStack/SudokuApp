@@ -2,6 +2,7 @@ import { PixelRatio } from 'react-native'
 
 import _inRange from '@lodash/inRange'
 import _map from '@lodash/map'
+import _isEqual from '@lodash/isEqual'
 
 export const isHexColor = (color = '') => color.charAt(0) === '#'
 
@@ -18,7 +19,7 @@ export const hexToRGBA = (hex, opacity = 100) => {
 if (Array.prototype.allValuesSame === undefined) {
     Array.prototype.allValuesSame = function () {
         for (let i = 1; i < this.length; i++) {
-            if (this[i] !== this[0]) {
+            if (!_isEqual(this[i], this[0])) {
                 return false
             }
         }
