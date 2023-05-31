@@ -72,7 +72,6 @@ test('snapshot for text button in disabled state', () => {
     expect(tree).toMatchSnapshot()
 })
 
-// should i add test-cases if prop-override colors are working fine or not ?
 describe('Button functionality', () => {
     test('renders only the outer circle if not selected', () => {
         const buttonLabel = 'test button'
@@ -99,7 +98,7 @@ describe('Button functionality', () => {
         expect(onClick).toHaveBeenCalledTimes(0)
     })
 
-    test.only('changes appearence when button state is toggled', () => {
+    test('changes appearence when button state is toggled', () => {
         const buttonLabel = 'test button'
 
         const aPersistentRender = new PersistentRender({
@@ -112,5 +111,27 @@ describe('Button functionality', () => {
         aPersistentRender.update(<Button state={BUTTON_STATES.DISABLED} label={buttonLabel} />)
 
         expect(aPersistentRender.getChangedRenderingResultStatus()).toEqual([true])
+    })
+})
+
+describe('Styles Overrides', () => {
+    test('applies override styles from prop to both button and text', () => {
+        const buttonLabel = 'test button'
+        const textStyles = { color: 'green' }
+        const containerStyle = { color: 'red' }
+
+        render(<Button label={buttonLabel} textStyles={textStyles} containerStyle={containerStyle} />)
+
+        expect(screen.getByText(buttonLabel).props.style.color).toBe(textStyles.color)
+        expect(screen.getByRole('button').props.style.color).toBe(containerStyle.color)
+    })
+
+    test('applies override styles from prop to both button and text', () => {
+        const containerStyle = { color: 'red', height: 40 }
+        render(<Button avoidDefaultContainerStyles containerStyle={containerStyle} />)
+
+        // to match is used here because default button is TouchableOpacity and this adds
+        // opacity: 1 by default internally
+        expect(screen.getByRole('button').props.style).toMatchObject(containerStyle)
     })
 })

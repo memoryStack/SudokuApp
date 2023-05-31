@@ -34,10 +34,12 @@ const Button_ = ({
         <Touchable
             touchable={TouchableTypes.opacity}
             style={[avoidDefaultContainerStyles ? null : styles.defaultContainer, containerStyle]}
+            avoidDefaultStyles={avoidDefaultContainerStyles}
             onPress={onClick}
             disabled={state === BUTTON_STATES.DISABLED}
-            {...rest}
             hitSlop={type === BUTTON_TYPES.TEXT ? HIT_SLOP : null}
+            accessibilityRole="button"
+            {...rest}
         >
             <Text style={{ ...styles.defaultText, ...textStyles }}>
                 {label}
