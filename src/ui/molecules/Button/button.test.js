@@ -122,8 +122,8 @@ describe('Styles Overrides', () => {
 
         render(<Button label={buttonLabel} textStyles={textStyles} containerStyle={containerStyle} />)
 
-        expect(screen.getByText(buttonLabel).props.style.color).toBe(textStyles.color)
-        expect(screen.getByRole('button').props.style.color).toBe(containerStyle.color)
+        expect(screen.getByText(buttonLabel)).toHaveStyle(textStyles)
+        expect(screen.getByRole('button')).toHaveStyle(containerStyle)
     })
 
     test('applies override styles from prop to both button and text', () => {
@@ -132,6 +132,7 @@ describe('Styles Overrides', () => {
 
         // to match is used here because default button is TouchableOpacity and this adds
         // opacity: 1 by default internally
-        expect(screen.getByRole('button').props.style).toMatchObject(containerStyle)
+        // NOTE: this and above test-cases are are kind of similar
+        expect(screen.getByRole('button')).toHaveStyle(containerStyle)
     })
 })
