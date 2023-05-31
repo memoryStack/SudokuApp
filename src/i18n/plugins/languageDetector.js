@@ -15,7 +15,6 @@ export const languageDetectorPlugin = {
     },
     async cacheUserLanguage(language) {
         try {
-            consoleLog('@@@@@ language to save', language)
             await setKey(SELECTED_LANGUAGE_STORAGE_KEY, language)
         } catch (error) {
             consoleLog('@@@@@@@ error saving changed language', error)

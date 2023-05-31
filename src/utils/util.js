@@ -59,7 +59,7 @@ export const consoleLog = (...args) => {
 
 // TODO: fix it as per my requirements
 function noWhiteSpace(strings, ...placeholders) {
-    const withSpace = strings.reduce((result, string, i) => result + placeholders[i - 1] + string)
+    const withSpace = strings.reduce((result, string, i) => result + placeholders[i - 1] + string, '')
     const withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ')
     return withoutSpace
 }
