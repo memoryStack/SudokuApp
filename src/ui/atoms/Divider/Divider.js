@@ -4,15 +4,10 @@ import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import _get from '@lodash/get'
-import _noop from '@lodash/noop'
-
-import Text from '@ui/atoms/Text'
-
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './divider.styles'
-import { DIVIDER_TYPES } from './divider.constants'
+import { DIVIDER_TEST_ID, DIVIDER_TYPES } from './divider.constants'
 
 const Divider = ({
     style,
@@ -22,7 +17,11 @@ const Divider = ({
     const styles = useStyles(getStyles, { type })
 
     return (
-        <View style={[styles.container, style]} {...rest} />
+        <View
+            testID={DIVIDER_TEST_ID}
+            style={[styles.container, style]}
+            {...rest}
+        />
     )
 }
 

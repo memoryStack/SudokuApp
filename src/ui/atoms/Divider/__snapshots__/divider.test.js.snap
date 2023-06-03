@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot for horizontal divider 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#CAC4D0",
+        "height": 1,
+        "width": "100%",
+      },
+      null,
+    ]
+  }
+  testID="divider_test_id"
+/>
+`;
+
+exports[`snapshot for vertical divider 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#CAC4D0",
+        "height": "100%",
+        "width": 1,
+      },
+      null,
+    ]
+  }
+  testID="divider_test_id"
+/>
+`;
