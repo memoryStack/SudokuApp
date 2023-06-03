@@ -8,7 +8,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import Text from '../Text'
 
-import { BADGE_TYPE } from './badge.constants'
+import { BADGE_TEST_ID, BADGE_TYPE } from './badge.constants'
 import { getStyles } from './badge.styles'
 
 /*
@@ -39,9 +39,14 @@ const Badge = ({
 }) => {
     const styles = useStyles(getStyles, { type })
 
+    const renderLabel = () => (type === BADGE_TYPE.SMALL ? '' : label)
+
     return (
-        <Text style={[styles.label, styles.container, stylesProp]}>
-            {type === BADGE_TYPE.SMALL ? '' : label}
+        <Text
+            testID={BADGE_TEST_ID}
+            style={[styles.label, styles.container, stylesProp]}
+        >
+            {renderLabel()}
         </Text>
     )
 }
@@ -50,7 +55,10 @@ export default React.memo(Badge)
 
 Badge.propTypes = {
     type: PropTypes.string,
-    label: PropTypes.string,
+    label: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]),
     styles: ViewPropTypes.style,
 }
 
