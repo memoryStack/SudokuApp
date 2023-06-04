@@ -43,7 +43,7 @@ const renderHeaderItem = ({
     const IconRenderer = HEADER_ITEM_VS_ICON[item]
 
     return (
-        <View style={{ marginLeft: index !== 0 ? 16 : 0 }}>
+        <View key={item} style={{ marginLeft: index !== 0 ? 16 : 0 }}>
             {_isFunction(IconRenderer)
                 ? IconRenderer({ ...commonProps, navigation })
                 : renderIconBtn({

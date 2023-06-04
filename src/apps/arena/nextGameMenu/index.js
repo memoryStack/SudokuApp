@@ -21,8 +21,11 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { previousInactiveGameExists } from '../utils/util'
 
-const LEVEL_ICON_DIMENSION = 24
-const NEXT_GAME_MENU_ROW_HEIGHT = 50
+import {
+    LEVEL_ICON_DIMENSION,
+    NEXT_GAME_MENU_ROW_HEIGHT,
+    NEXT_GAME_MENU_TEST_ID,
+} from './nextGameMenu.constants'
 
 const styles = StyleSheet.create({
     nextGameMenuContainer: {
@@ -164,6 +167,7 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
 
     return (
         <BottomDragger
+            testID={NEXT_GAME_MENU_TEST_ID}
             ref={nextGameMenuRef}
             parentHeight={parentHeight}
             onDraggerClosed={onMenuClosed}

@@ -16,7 +16,7 @@ import ThemeProvider from 'src/containers/ThemeProvider'
 import { addListener, removeListener } from './src/utils/GlobalEventBus'
 import { SnackBar } from './src/apps/components/SnackBar'
 import { EVENTS } from './src/constants/events'
-import { getNavigator, NavigationProvider } from './src/navigation/navigator'
+import { NavigationProvider } from './src/navigation/navigator'
 
 import store from './src/redux/store'
 

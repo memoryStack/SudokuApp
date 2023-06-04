@@ -18,7 +18,7 @@ import { ROUTES } from '../../navigation/route.constants'
 
 import { NextGameMenu } from '../arena/nextGameMenu'
 
-import { LANGUAGE_VS_TITLE_CHARS } from './home.constants'
+import { HOME_PAGE_TEST_ID, LANGUAGE_VS_TITLE_CHARS } from './home.constants'
 import { getStyles } from './styles'
 
 const Home_ = ({ navigation }) => {
@@ -43,7 +43,6 @@ const Home_ = ({ navigation }) => {
         setShowNextGameMenu(false)
     }, [])
 
-    // TODO: put these screenNames to constants
     const handleMenuItemClicked = useCallback(
         item => {
             setShowNextGameMenu(false)
@@ -108,7 +107,11 @@ const Home_ = ({ navigation }) => {
 
     // TODO: use <Page /> here
     return (
-        <View style={styles.container} onLayout={onParentLayout}>
+        <View
+            testID={HOME_PAGE_TEST_ID}
+            style={styles.container}
+            onLayout={onParentLayout}
+        >
             {renderAppIcon()}
             {renderSudokuText()}
             {renderPlayButton()}

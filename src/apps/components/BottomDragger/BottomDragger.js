@@ -32,6 +32,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         stopBackgroundClickClose,
         showBackgroundOverlay,
         animateBackgroundOverlayOnClose,
+        testID,
     } = props
 
     const styles = useStyles(getStyles)
@@ -216,6 +217,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                         height: childrenHeight + headerHeight,
                     },
                 ]}
+                testID={testID}
             >
                 <View onLayout={childrenOnLayout}>
                     {headerText ? renderHeader() : null}
@@ -238,6 +240,7 @@ BottomDragger_.propTypes = {
     stopBackgroundClickClose: PropTypes.bool,
     showBackgroundOverlay: PropTypes.bool,
     animateBackgroundOverlayOnClose: PropTypes.bool,
+    testID: PropTypes.string,
 }
 
 BottomDragger_.defaultProps = {
@@ -250,4 +253,5 @@ BottomDragger_.defaultProps = {
     stopBackgroundClickClose: false,
     showBackgroundOverlay: true,
     animateBackgroundOverlayOnClose: true,
+    testID: '',
 }
