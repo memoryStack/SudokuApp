@@ -11,7 +11,6 @@ import { fireEvent } from './testingLibrary'
 */
 
 export const fireLayoutEvent = (view, layoutData) => {
-    // TODO: how to check the node_id of this view
     fireEvent(view, 'layout', {
         nativeEvent: {
             layout: layoutData,
