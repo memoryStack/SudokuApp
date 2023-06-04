@@ -73,11 +73,11 @@ test('snapshot for text button in disabled state', () => {
 })
 
 describe('Button functionality', () => {
-    test('renders only the outer circle if not selected', () => {
+    test('renders button with passed text label', () => {
         const buttonLabel = 'test button'
         render(<Button label={buttonLabel} />)
 
-        expect(screen.getByText(buttonLabel)).toBeTruthy()
+        screen.getByText(buttonLabel)
     })
 
     test('performs onClick when pressed', () => {

@@ -6,9 +6,6 @@ import { PersistentRender } from '@utils/testing/persistentRender'
 import Radio from './RadioButton'
 import { TEST_IDS } from './radioButton.constants'
 
-// TODO: i don't see options available to me for "screen" object
-// this is important to fix
-
 test('snapshot for not selected radio button', () => {
     const tree = render(<Radio isSelected={false} />).toJSON()
     expect(tree).toMatchSnapshot()
@@ -28,7 +25,7 @@ describe('radio button functionality', () => {
     test('renders only the outer circle if not selected', () => {
         render(<Radio isSelected={false} />)
 
-        expect(screen.getByTestId(TEST_IDS.OUTER_RING)).toBeTruthy()
+        screen.getByTestId(TEST_IDS.OUTER_RING)
         expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).toBeFalsy()
     })
 
@@ -39,7 +36,7 @@ describe('radio button functionality', () => {
 
         screen.update(<Radio isSelected />)
 
-        expect(screen.getByTestId(TEST_IDS.INNER_DOT)).toBeTruthy()
+        screen.getByTestId(TEST_IDS.INNER_DOT)
     })
 
     test('inner dot is not rendered if disabled is true but parent component mistakenly marks Radio as selected', () => {
