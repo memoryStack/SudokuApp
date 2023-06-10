@@ -6,8 +6,6 @@ import { NEXT_GAME_MENU_TEST_ID } from '../arena/nextGameMenu/nextGameMenu.const
 
 import { HOME_PAGE_TEST_ID } from './home.constants'
 
-// TODO: how to render any screen, here navigator will render the first/home screen
-// TODO: getting i18n warning errors now due to encounter with t('PLAY') function
 describe('Home Page', () => {
     test('shows Next Game Menu card on Play button click', async () => {
         renderScreen({
