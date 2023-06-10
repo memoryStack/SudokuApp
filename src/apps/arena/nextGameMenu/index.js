@@ -69,7 +69,7 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                 setPendingGame(pendingGame => ({ ...pendingGame, checkedStatus: true }))
                 __DEV__ && console.log(error)
             })
-    }, [screenName])
+    }, [isHomeScreen])
 
     const getBarPath = barNum => [
         'M',

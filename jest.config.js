@@ -5,5 +5,6 @@ module.exports = {
     setupFilesAfterEnv: [
         '@testing-library/jest-native/extend-expect',
         '<rootDir>/jestSetupFiles/mockRNSwitchComponent.js',
+        '<rootDir>/jestSetupFiles/i18n.js',
     ],
 }
