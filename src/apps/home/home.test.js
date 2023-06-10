@@ -1,8 +1,5 @@
-import * as React from 'react'
-
-import {
-    screen, fireEvent, waitFor,
-} from '@utils/testing/testingLibrary'
+// TODO: merge renderScreen util with the testingLibrary exports
+import { screen, fireEvent } from '@utils/testing/testingLibrary'
 import { renderScreen } from '@utils/testing/renderScreen'
 
 import { NEXT_GAME_MENU_TEST_ID } from '../arena/nextGameMenu/nextGameMenu.constants'
@@ -22,11 +19,9 @@ describe('Home Page', () => {
 
         fireEvent.press(screen.getByText('PLAY'))
 
-        // TODO: should fakeTimer be used here ?? since the component will be opened
-        //          in sometime
-
-        await waitFor(() => {
-            expect(screen.getByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
-        })
+        // TODO: learn async act() more deeply to understand
+        //          react renders due to component internally like network call, setTimeouts etc
+        //          https://callstack.github.io/react-native-testing-library/docs/understanding-act#asynchronous-act
+        expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
     })
 })

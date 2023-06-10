@@ -22,8 +22,10 @@ const getNavigator = () => {
     )
 }
 
-export const NavigationProvider = () => (
+// TODO: children prop is for testing purpose to hack navigation prop
+export const NavigationProvider = ({ children }) => (
     <NavigationContainer>
         {getNavigator()}
+        {children}
     </NavigationContainer>
 )
