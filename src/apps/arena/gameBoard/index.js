@@ -213,7 +213,14 @@ const Board_ = ({
         )
     }
 
-    const renderAxisText = label => <Text style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}>{label}</Text>
+    const renderAxisText = label => (
+        <Text
+            key={label}
+            style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}
+        >
+            {label}
+        </Text>
+    )
 
     const yAxis = useMemo(() => <View style={styles.yAxis}>{BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}</View>, [showSmartHint])
 

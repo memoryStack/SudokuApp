@@ -53,7 +53,7 @@ export default React.memo(Button_)
 Button_.propTypes = {
     onClick: PropTypes.func,
     containerStyle: PropTypes.object,
-    label: PropTypes.string,
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     textStyles: PropTypes.object,
     avoidDefaultContainerStyles: PropTypes.bool,
     type: PropTypes.oneOf(Object.values(BUTTON_TYPES)),

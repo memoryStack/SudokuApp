@@ -85,7 +85,7 @@ const Timer_ = ({ onClick, time }) => {
 export const Timer = React.memo(Timer_)
 
 Timer_.propTypes = {
-    time: PropTypes.number,
+    time: PropTypes.object,
     onClick: PropTypes.func,
 }
 

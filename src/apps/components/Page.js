@@ -96,7 +96,7 @@ const Page_ = ({
 export const Page = React.memo(Page_)
 
 Page_.propTypes = {
-    children: PropTypes.element,
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
     onLayout: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
