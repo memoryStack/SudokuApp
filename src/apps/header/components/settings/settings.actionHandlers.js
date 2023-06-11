@@ -1,7 +1,7 @@
 import LanguageSelector from 'src/apps/components/LanguageSelector'
 import { ROUTES } from '../../../../navigation/route.constants'
 
-import { ITEMS_KEYS } from './settings.config'
+import { ITEMS_KEYS } from './settings.constants'
 
 const handleHowToPlayPress = ({ getState }) => {
     const { navigation } = getState()

@@ -17,6 +17,8 @@ const HOME_SCREEN_LAYOUT = {
     y: 0,
 }
 
+const SCREEN_NAME_TEXT_TEST_ID = 'current_screen_name'
+
 const NavigateToRoute = ({
     route = '',
     routeOptions = {},
@@ -37,7 +39,7 @@ const NavigateToRoute = ({
     }, [navigation, route, routeOptions])
 
     return (
-        <Text testID="current_screen_name">{routeName}</Text>
+        <Text testID={SCREEN_NAME_TEXT_TEST_ID}>{routeName}</Text>
     )
 }
 
@@ -68,4 +70,4 @@ export const renderScreen = ({
     }
 }
 
-export const getScreenName = () => screen.getByTestId('current_screen_name').children[0]
+export const getScreenName = () => screen.getByTestId(SCREEN_NAME_TEXT_TEST_ID).children[0]

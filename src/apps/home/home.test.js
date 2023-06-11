@@ -1,11 +1,12 @@
 // TODO: merge renderScreen util with the testingLibrary exports
 import {
-    screen, fireEvent, waitFor,
+    screen, fireEvent, waitFor, act,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
-import { act } from 'react-test-renderer'
+// import { act } from 'react-test-renderer'
 import { NEXT_GAME_MENU_TEST_ID } from '../arena/nextGameMenu/nextGameMenu.constants'
+import { SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from '../header/components/settings/settings.constants'
 
 import { HOME_PAGE_TEST_ID } from './home.constants'
 
@@ -45,5 +46,21 @@ describe('Home Page', () => {
 
         expect(getScreenName()).toBeTruthy()
         expect(beforeNavigationScreenName !== getScreenName()).toBeTruthy()
+    })
+})
+
+describe('Home Page Settings Functionality', () => {
+    test('opens and closes the settings menu on header settings button click', async () => {
+        renderScreen({
+            getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
+        })
+
+        fireEvent.press(screen.getByTestId(SETTINGS_BUTTON_TEST_ID))
+
+        expect(await screen.findByTestId(SETTINGS_MENU_TEST_ID)).toBeOnTheScreen()
+
+        fireEvent.press(screen.getByTestId(SETTINGS_BUTTON_TEST_ID))
+
+        expect(screen.queryByTestId(SETTINGS_MENU_TEST_ID)).not.toBeOnTheScreen()
     })
 })

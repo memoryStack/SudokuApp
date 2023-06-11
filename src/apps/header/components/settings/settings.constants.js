@@ -21,3 +21,6 @@ export const MENU_ITEMS = _compact([
         label: 'Design System',
     },
 ])
+
+export const SETTINGS_BUTTON_TEST_ID = 'settings_button_test_id'
+export const SETTINGS_MENU_TEST_ID = 'settings_menu'
