@@ -1,11 +1,14 @@
 import * as React from 'react'
+import { Text } from 'react-native'
 
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useNavigationState } from '@react-navigation/native'
+
+import _get from '@lodash/get'
 
 import { NavigationProvider } from 'src/navigation/navigator'
 
 import { fireLayoutEvent } from './fireEvent.utils'
-import { render } from './testingLibrary'
+import { render, screen } from './testingLibrary'
 
 const HOME_SCREEN_LAYOUT = {
     height: 768,
@@ -21,6 +24,8 @@ const NavigateToRoute = ({
 }) => {
     const navigation = useNavigation()
 
+    const routeName = useNavigationState(state => _get(state, ['routeNames', _get(state, 'index')], 'NO SCREEN'))
+
     React.useEffect(() => {
         onNavigationReceived(navigation)
     }, [navigation])
@@ -32,7 +37,7 @@ const NavigateToRoute = ({
     }, [navigation, route, routeOptions])
 
     return (
-        null
+        <Text testID="current_screen_name">{routeName}</Text>
     )
 }
 
@@ -62,3 +67,5 @@ export const renderScreen = ({
         navigation,
     }
 }
+
+export const getScreenName = () => screen.getByTestId('current_screen_name').children[0]

@@ -4,11 +4,15 @@ import React from 'react'
 import { render } from '@testing-library/react-native'
 
 import ThemeProvider from 'src/containers/ThemeProvider'
+import { Provider } from 'react-redux'
+import store from 'src/redux/store'
 
 const AllTheProviders = ({ children }) => (
-    <ThemeProvider>
-        {children}
-    </ThemeProvider>
+    <Provider store={store}>
+        <ThemeProvider>
+            {children}
+        </ThemeProvider>
+    </Provider>
 )
 
 const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...options })

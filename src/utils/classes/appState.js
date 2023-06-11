@@ -11,11 +11,15 @@ const IOS_EVENTS = [...COMMON_EVENTS]
 const ANDROID_EVENTS = [...COMMON_EVENTS, EVENTS.APP_STATE.BLUR, EVENTS.APP_STATE.FOCUS]
 
 export class AppState {
-    static addListener(eventName, handler) {
+    constructor() {
+        this.eventsSub = {}
+    }
+
+    addListener(eventName, handler) {
         if (!AppState.isValidEventName(eventName)) {
             throw new Error(`<${eventName}> is not a valid event for ${Platform.OS()} platform`)
         }
-        NativeAppState.addEventListener(eventName, handler)
+        this.eventsSub[eventName] = NativeAppState.addEventListener(eventName, handler)
     }
 
     static isValidEventName(eventName) {
@@ -23,8 +27,9 @@ export class AppState {
         return IOS_EVENTS.includes(eventName)
     }
 
-    static removeListener(eventName, handler) {
-        NativeAppState.removeEventListener(eventName, handler)
+    removeListener(eventName) {
+        const eventSub = this.eventsSub[eventName]
+        eventSub?.remove()
     }
 
     static currentState() {

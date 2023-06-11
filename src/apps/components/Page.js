@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import _noop from '@lodash/noop'
 
+import { consoleLog } from '@utils/util'
 import { Platform } from '../../utils/classes/platform'
 import { AppState } from '../../utils/classes/appState'
 import { EVENTS } from '../../constants/events'
@@ -61,17 +62,26 @@ const Page_ = ({
     }, [navigation, handleFocus, handleBlur])
 
     useEffect(() => {
-        AppState.addListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
+        const appState = new AppState()
+        try {
+            appState.addListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
+        } catch (err) {
+            consoleLog(err)
+        }
         if (Platform.isAndroid()) {
-            AppState.addListener(EVENTS.APP_STATE.FOCUS, handleFocus)
-            AppState.addListener(EVENTS.APP_STATE.BLUR, handleBlur)
+            try {
+                appState.addListener(EVENTS.APP_STATE.FOCUS, handleFocus)
+                appState.addListener(EVENTS.APP_STATE.BLUR, handleBlur)
+            } catch (err) {
+                consoleLog(err)
+            }
         }
 
         return () => {
-            AppState.removeListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
+            appState.removeListener(EVENTS.APP_STATE.CHANGE, handleAppStateChange)
             if (Platform.isAndroid()) {
-                AppState.removeListener(EVENTS.APP_STATE.FOCUS, handleFocus)
-                AppState.removeListener(EVENTS.APP_STATE.BLUR, handleBlur)
+                appState.removeListener(EVENTS.APP_STATE.FOCUS, handleFocus)
+                appState.removeListener(EVENTS.APP_STATE.BLUR, handleBlur)
             }
         }
     }, [handleAppStateChange, handleFocus, handleBlur, navigation])
