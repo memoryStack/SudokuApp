@@ -53,7 +53,7 @@ describe('Home Page', () => {
         expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
     })
 
-    test.only('goes to puzzle screen upon clicking', async () => {
+    test('goes to puzzle screen upon clicking', async () => {
         renderScreen({
             // TODO: it can be made better
             // we can map routeVStest_id and the screenRenderer will only return the screen root element

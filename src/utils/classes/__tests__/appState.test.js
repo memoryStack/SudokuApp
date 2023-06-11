@@ -11,16 +11,16 @@ const mockPlatformForIOS = () => {
 
 describe('AppState native module', () => {
     test('throws exception if addListener is called with invalid eventName', () => {
-        expect(() => AppState.addListener('random event name', () => {})).toThrow(Error)
+        expect(() => new AppState().addListener('random event name', () => { })).toThrow(Error)
     })
 
     test('throws exception if addListener is called with valid eventNames for other platform', () => {
         mockPlatformForIOS()
-        expect(() => AppState.addListener(EVENTS.APP_STATE.BLUR, () => {})).toThrow(Error)
+        expect(() => new AppState().addListener(EVENTS.APP_STATE.BLUR, () => { })).toThrow(Error)
     })
 
     test('subscribe valid platform specific events without any error', () => {
         mockPlatformForIOS()
-        AppState.addListener(EVENTS.APP_STATE.CHANGE, () => {})
+        new AppState().addListener(EVENTS.APP_STATE.CHANGE, () => { })
     })
 })
