@@ -3,3 +3,5 @@ export const DEFAULT_STATE = {
     Component: null,
     closeOnBackdropClick: true,
 }
+
+export const MODAL_TEST_ID = 'modal_test_id'

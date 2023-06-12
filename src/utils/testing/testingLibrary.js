@@ -1,16 +1,22 @@
 import React from 'react'
+import { Provider } from 'react-redux'
 
 // TODO: fix this eslint warning
 import { render } from '@testing-library/react-native'
 
+import ModalProvider from 'src/containers/ModalProvider'
 import ThemeProvider from 'src/containers/ThemeProvider'
-import { Provider } from 'react-redux'
+
+import 'src/i18n/i18n.config'
+
 import store from 'src/redux/store'
 
 const AllTheProviders = ({ children }) => (
     <Provider store={store}>
         <ThemeProvider>
-            {children}
+            <ModalProvider>
+                {children}
+            </ModalProvider>
         </ThemeProvider>
     </Provider>
 )

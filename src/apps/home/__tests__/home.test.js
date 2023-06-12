@@ -4,11 +4,11 @@ import {
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
-// import { act } from 'react-test-renderer'
-import { NEXT_GAME_MENU_TEST_ID } from '../arena/nextGameMenu/nextGameMenu.constants'
-import { SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from '../header/components/settings/settings.constants'
+import { MODAL_TEST_ID } from 'src/containers/ModalProvider/modalProvider.constants'
+import { NEXT_GAME_MENU_TEST_ID } from '../../arena/nextGameMenu/nextGameMenu.constants'
+import { SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settings.constants'
 
-import { HOME_PAGE_TEST_ID } from './home.constants'
+import { HOME_PAGE_TEST_ID } from '../home.constants'
 
 describe('Home Page', () => {
     test('shows Next Game Menu card on Play button click', async () => {
@@ -49,8 +49,8 @@ describe('Home Page', () => {
     })
 })
 
-describe('Home Page Settings Functionality', () => {
-    test('opens and closes the settings menu on header settings button click', async () => {
+describe('Home Page Header Settings Button', () => {
+    test('opens and closes the settings menu click', async () => {
         renderScreen({
             getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
         })

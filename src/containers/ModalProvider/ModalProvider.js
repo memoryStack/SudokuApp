@@ -10,7 +10,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Touchable, TouchableTypes } from 'src/apps/components/Touchable'
 
-import { DEFAULT_STATE } from './modalProvider.constants'
+import { DEFAULT_STATE, MODAL_TEST_ID } from './modalProvider.constants'
 import { getStyles } from './modalProvider.style'
 
 const ModalProvider = ({ children }) => {
@@ -29,6 +29,7 @@ const ModalProvider = ({ children }) => {
         const { Component, props } = modal
         return (
             <Touchable
+                testID={MODAL_TEST_ID}
                 touchable={TouchableTypes.withoutFeedBack}
                 onPress={handleBackdropPress}
             >
