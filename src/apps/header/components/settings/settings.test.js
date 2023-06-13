@@ -8,7 +8,7 @@ import { Settings } from './settings'
 import { SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from './settings.constants'
 
 describe('Settings Header Icon', () => {
-    test.skip('should toggle settings menu visibility on click', () => {
+    test('should toggle settings menu visibility on click', () => {
         render(<Settings />)
 
         fireEvent.press(screen.getByTestId(SETTINGS_BUTTON_TEST_ID))
