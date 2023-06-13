@@ -26,13 +26,13 @@ describe('radio button functionality', () => {
         render(<Radio isSelected={false} />)
 
         screen.getByTestId(TEST_IDS.OUTER_RING)
-        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).toBeFalsy()
+        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).not.toBeOnTheScreen()
     })
 
     test('renders only inner circle once state changes from not selected to selected', () => {
         render(<Radio isSelected={false} />)
 
-        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).toBeFalsy()
+        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).not.toBeOnTheScreen()
 
         screen.update(<Radio isSelected />)
 
@@ -42,11 +42,11 @@ describe('radio button functionality', () => {
     test('inner dot is not rendered if disabled is true but parent component mistakenly marks Radio as selected', () => {
         render(<Radio isSelected={false} disabled />)
 
-        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).toBeFalsy()
+        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).not.toBeOnTheScreen()
 
         screen.update(<Radio isSelected disabled />)
 
-        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).toBeFalsy()
+        expect(screen.queryByTestId(TEST_IDS.INNER_DOT)).not.toBeOnTheScreen()
     })
 
     test('changes color when selected/disabled state is toggled', () => {
