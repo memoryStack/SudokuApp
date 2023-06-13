@@ -21,9 +21,6 @@ import { Inputpanel } from '../inputPanel'
 
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
 
-const CLOSE_ICON_HITSLOP = {
-    top: 24, left: 24, bottom: 24, right: 24,
-}
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -101,7 +98,7 @@ const CustomPuzzle_ = ({
                     touchable={TouchableTypes.opacity}
                     style={styles.closeIconContainer}
                     onPress={handleOnClose}
-                    hitSlop={CLOSE_ICON_HITSLOP}
+                    addHitSlop
                 >
                     <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
                 </Touchable>

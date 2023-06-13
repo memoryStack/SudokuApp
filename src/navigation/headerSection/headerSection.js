@@ -2,7 +2,6 @@ import React from 'react'
 
 import { View } from 'react-native'
 
-import _get from '@lodash/get'
 import _map from '@lodash/map'
 import _isFunction from '@lodash/isFunction'
 
@@ -15,7 +14,7 @@ import { getHeaderRightItems, getHeaderLeftItems } from '../navigation.utils'
 import { HEADER_ITEMS } from '../route.constants'
 
 import { getHeaderItemPress } from './headerItemsPressHandlers'
-import { HEADER_ICONS_TOUCHABLE_HIT_SLOP, ICON_DIMENSION, ICON_FILL } from './headerSection.constants'
+import { ICON_DIMENSION, ICON_FILL } from './headerSection.constants'
 import { styles } from './headerSection.styles'
 
 const HEADER_ITEM_VS_ICON = {
@@ -25,7 +24,11 @@ const HEADER_ITEM_VS_ICON = {
 }
 
 const renderIconBtn = ({ Icon, onPress, ...rest }) => (
-    <Touchable touchable={TouchableTypes.opacity} onPress={onPress} hitSlop={HEADER_ICONS_TOUCHABLE_HIT_SLOP}>
+    <Touchable
+        touchable={TouchableTypes.opacity}
+        onPress={onPress}
+        addHitSlop
+    >
         <Icon {...rest} />
     </Touchable>
 )

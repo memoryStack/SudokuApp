@@ -8,10 +8,6 @@ import { fonts } from '@resources/fonts/font'
 import { CloseIcon } from '@resources/svgIcons/close'
 import { Touchable, TouchableTypes } from './Touchable'
 
-const CLOSE_ICON_TOUCHABLE_HIT_SLOP = {
-    top: 20, right: 20, bottom: 20, left: 20,
-}
-
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
@@ -49,7 +45,7 @@ const SnackBar_ = ({ msg, customStyles, onClose }) => (
             touchable={TouchableTypes.opacity}
             activeOpacity={1}
             onPress={onClose}
-            hitSlop={CLOSE_ICON_TOUCHABLE_HIT_SLOP} // TODO: there is an issue with the hitslop. looks like it only works inside the parent element area
+            addHitSlop
         >
             <CloseIcon height={10} width={10} fill="white" />
         </Touchable>

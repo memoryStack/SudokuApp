@@ -11,7 +11,7 @@ import { Touchable, TouchableTypes } from 'src/apps/components/Touchable'
 import Text from '@ui/atoms/Text'
 
 import { getStyles } from './button.styles'
-import { BUTTON_STATES, BUTTON_TYPES, HIT_SLOP } from './button.constants'
+import { BUTTON_STATES, BUTTON_TYPES } from './button.constants'
 
 const Button_ = ({
     onClick,
@@ -37,7 +37,7 @@ const Button_ = ({
             avoidDefaultStyles={avoidDefaultContainerStyles}
             onPress={onClick}
             disabled={state === BUTTON_STATES.DISABLED}
-            hitSlop={type === BUTTON_TYPES.TEXT ? HIT_SLOP : null}
+            addHitSlop={type === BUTTON_TYPES.TEXT}
             accessibilityRole="button"
             {...rest}
         >

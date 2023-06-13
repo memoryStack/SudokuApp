@@ -7,6 +7,8 @@ import {
     TouchableOpacity,
 } from 'react-native'
 
+import PropTypes from 'prop-types'
+
 // import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { Platform } from '../../utils/classes/platform'
@@ -48,17 +50,34 @@ const getTouchable = touchable => {
 
 export const Touchable = props => {
     const {
-        style, touchable, underlayColor = 'white', children, avoidDefaultStyles, ...rest
+        style, touchable, underlayColor = 'white', children, avoidDefaultStyles, addHitSlop, ...rest
     } = props
+
+    const hitSlop = addHitSlop ? {
+        top: 16, bottom: 16, left: 16, right: 16,
+    } : null
+
     const Touchable = getTouchable(touchable)
+
     return (
-        <Touchable style={[avoidDefaultStyles ? null : styles.container, style]} underlayColor={underlayColor} {...rest}>
+        <Touchable
+            style={[avoidDefaultStyles ? null : styles.container, style]}
+            underlayColor={underlayColor}
+            hitSlop={hitSlop}
+            {...rest}
+        >
             {children}
         </Touchable>
     )
 }
 
-// TODO: add proptypes as well for the ease of development
+Touchable.propTypes = {
+    touchable: PropTypes.string,
+    underlayColorType: PropTypes.object,
+    avoidDefaultStyles: PropTypes.bool,
+    addHitSlop: PropTypes.bool,
+}
+
 Touchable.defaultProps = {
     touchable: defaultTouchable,
     underlayColorType: {
@@ -66,4 +85,5 @@ Touchable.defaultProps = {
         opacity: 0,
     },
     avoidDefaultStyles: false,
+    addHitSlop: false,
 }

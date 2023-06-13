@@ -16,9 +16,6 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { addLeadingZeroIfEligible } from '../utils/util'
 import { GameState } from '../utils/classes/gameState'
 
-const hitSlop = {
-    left: 8, right: 8, bottom: 8, top: 8,
-}
 const styles = StyleSheet.create({
     triangleShape: {
         width: 0,
@@ -73,7 +70,12 @@ const Timer_ = ({ onClick, time }) => {
     const renderTimerStateIcon = () => (new GameState(gameState).isGameActive() ? getPauseTimerIcon() : getStartTimerIcon())
 
     return (
-        <Touchable style={styles.timeCounter} onPress={onClick} touchable={TouchableTypes.opacity} hitSlop={hitSlop}>
+        <Touchable
+            style={styles.timeCounter}
+            onPress={onClick}
+            touchable={TouchableTypes.opacity}
+            addHitSlop
+        >
             <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.hours)}:`}</Text>
             <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.minutes)}:`}</Text>
             <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.seconds)}`}</Text>

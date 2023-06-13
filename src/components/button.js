@@ -54,6 +54,7 @@ Button_.propTypes = {
     text: PropTypes.string,
     textStyles: PropTypes.object,
     avoidDefaultContainerStyles: PropTypes.bool,
+    addHitSlop: PropTypes.bool,
 }
 
 Button_.defaultProps = {
@@ -62,4 +63,5 @@ Button_.defaultProps = {
     text: '',
     textStyles: null,
     avoidDefaultContainerStyles: false,
+    addHitSlop: false,
 }

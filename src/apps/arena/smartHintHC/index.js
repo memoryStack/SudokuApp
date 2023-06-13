@@ -26,7 +26,7 @@ import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/c
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { getContainerStyles, styles } from './styles'
-import { FOOTER_BUTTONS_TEXT, HITSLOP } from './constants'
+import { FOOTER_BUTTONS_TEXT } from './constants'
 
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
@@ -109,7 +109,11 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                     <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
                 ) : null}
             </View>
-            <Touchable touchable={TouchableTypes.opacity} onPress={closeView} hitSlop={HITSLOP}>
+            <Touchable
+                touchable={TouchableTypes.opacity}
+                onPress={closeView}
+                addHitSlop
+            >
                 <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
             </Touchable>
         </View>
@@ -141,7 +145,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                 onClick={displayPrevButton ? onPrevClick : _noop}
                 avoidDefaultContainerStyles
                 textStyles={styles.footerButtonText}
-                hitSlop={HITSLOP}
+                addHitSlop
             />
             {/* TODO: find better way to hide the button.it's wtf right now */}
             <Button
@@ -149,7 +153,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                 onClick={displayNextButton ? onNextClick : onApplyHintClick}
                 avoidDefaultContainerStyles
                 textStyles={styles.footerButtonText}
-                hitSlop={HITSLOP}
+                addHitSlop
             />
         </View>
     )

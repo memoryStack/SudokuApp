@@ -40,13 +40,7 @@ const LanguageSelector_ = ({ hideModal }) => {
                     { marginTop: index ? 16 : 0 },
                 ]}
                 onPress={() => setSelectedLanguage(key)}
-                // TODO: standardize the hitslops
-                hitSlop={{
-                    top: 16,
-                    bottom: 16,
-                    left: 16,
-                    right: 16,
-                }}
+                addHitSlop
                 avoidDefaultStyles
             >
                 <Radio isSelected={isLanguageSelected(key)} />
