@@ -46,18 +46,16 @@ const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT
                 return result
             }
 
-            getOnActionProp = () => {
-                return actionHandlersConfig.reduce(
-                    (prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
-                        prev[onActionPropAlias] = action => this.handleAction(action, actionHandlers)
-                        return prev
-                    },
-                    {},
-                )
-            }
+            getOnActionProp = () => actionHandlersConfig.reduce(
+                (prev, { onActionPropAlias = DEFAULT_ON_ACTION_PROP_NAME, actionHandlers }) => {
+                    prev[onActionPropAlias] = action => this.handleAction(action, actionHandlers)
+                    return prev
+                },
+                {},
+            )
 
             render() {
-                return <WrappedComponent {...this.props} {...this.state} {...this.onActions} />
+                return <WrappedComponent {...this.state} {...this.onActions} {...this.props} />
             }
         }
 

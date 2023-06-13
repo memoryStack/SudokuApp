@@ -4,7 +4,6 @@ import {
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
-import { MODAL_TEST_ID } from 'src/containers/ModalProvider/modalProvider.constants'
 import { NEXT_GAME_MENU_TEST_ID } from '../../arena/nextGameMenu/nextGameMenu.constants'
 import { SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settings.constants'
 
