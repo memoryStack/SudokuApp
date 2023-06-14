@@ -38,7 +38,7 @@ const getStyles = ({
 }
 
 const getContainerBackgroundColor = ({ type, state }, theme) => {
-    const { background = 'transparent', opacity } = _get(theme, ['button', type, 'color', 'container', state])
+    const { background = 'transparent', opacity } = _get(theme, ['button', type, 'color', 'container', state], {})
     return hexToRGBA(background, opacity)
 }
 
@@ -59,12 +59,12 @@ const getContainerPaddings = ({
 }
 
 const getTextColor = ({ type, state }, theme) => {
-    const { color, opacity } = _get(theme, ['button', type, 'color', 'label-text', state])
+    const { color, opacity } = _get(theme, ['button', type, 'color', 'label-text', state], {})
     return hexToRGBA(color, opacity)
 }
 
 const getIconColor = ({ type, state }, theme) => {
-    const { color, opacity } = _get(theme, ['button', type, 'color', 'icon', state])
+    const { color, opacity } = _get(theme, ['button', type, 'color', 'icon', state], {})
     return hexToRGBA(color, opacity)
 }
 
