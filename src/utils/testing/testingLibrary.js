@@ -25,4 +25,4 @@ const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...
 
 export * from '@testing-library/react-native'
 
-export { customRender as render }
+export { customRender as render, render as isolatedRender }

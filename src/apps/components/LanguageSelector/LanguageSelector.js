@@ -7,17 +7,18 @@ import PropTypes from 'prop-types'
 import _noop from '@lodash/noop'
 
 import Radio from '@ui/atoms/RadioButton'
+import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 
 import { LANGAUGE_OPTIONS } from 'src/i18n/languages'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
-import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import { Touchable, TouchableTypes } from '../Touchable'
 
+import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'
 import { styles } from './style'
 
 const LanguageSelector_ = ({ hideModal }) => {
-    const { i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
+    const { t, i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
 
     const [selectedLanguage, setSelectedLanguage] = useState(defaultSelectedLanguage)
 
@@ -33,8 +34,8 @@ const LanguageSelector_ = ({ hideModal }) => {
     const getLanguagesList = () => (
         LANGAUGE_OPTIONS.map(({ key, label }, index) => (
             <Touchable
-                touchable={TouchableTypes.opacity}
                 key={key}
+                touchable={TouchableTypes.opacity}
                 style={[
                     styles.languageItemContainer,
                     { marginTop: index ? 16 : 0 },
@@ -42,8 +43,12 @@ const LanguageSelector_ = ({ hideModal }) => {
                 onPress={() => setSelectedLanguage(key)}
                 addHitSlop
                 avoidDefaultStyles
+                testID={LANGUAGE_OPTION_TEST_ID[key]}
             >
-                <Radio isSelected={isLanguageSelected(key)} />
+                <Radio
+                    testID={SELECTED_OPTION_HIGHLIGHTER_TEST_ID}
+                    isSelected={isLanguageSelected(key)}
+                />
                 <Text style={styles.languageLable}>{label}</Text>
             </Touchable>
         ))
@@ -51,19 +56,15 @@ const LanguageSelector_ = ({ hideModal }) => {
 
     const renderFooter = () => (
         <View style={styles.footerContainer}>
-            <Button type={BUTTON_TYPES.TEXT} label="Cancel" onClick={hideModal} />
-            <Button type={BUTTON_TYPES.TEXT} label="Save" onClick={handleSavePress} />
+            <Button type={BUTTON_TYPES.TEXT} label={t('Cancel')} onClick={hideModal} />
+            <Button type={BUTTON_TYPES.TEXT} label={t('Save')} onClick={handleSavePress} />
         </View>
     )
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}>
-                Select a Language
-            </Text>
-            <View style={styles.languagesListContainer}>
-                {getLanguagesList()}
-            </View>
+            <Text style={styles.headerText}>{t('Select a Language')}</Text>
+            <View style={styles.languagesListContainer}>{getLanguagesList()}</View>
             {renderFooter()}
         </View>
     )
