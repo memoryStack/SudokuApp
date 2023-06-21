@@ -1,10 +1,10 @@
 import LanguageSelector from 'src/apps/components/LanguageSelector'
-import { ROUTES } from '../../../../navigation/route.constants'
+import { ROUTES } from '../../../../../navigation/route.constants'
 
-import { ITEMS_KEYS } from './settings.constants'
+import { ITEMS_KEYS } from './settingsMenu.constants'
 
-const handleHowToPlayPress = ({ getState }) => {
-    const { navigation } = getState()
+const handleHowToPlayPress = ({ params }) => {
+    const { navigation } = params
     navigation.navigate(ROUTES.PLAY_GUIDE)
 }
 
@@ -19,8 +19,8 @@ const handleLanguageSelectPress = ({ params }) => {
     })
 }
 
-const handleDesignSystemPress = ({ getState }) => {
-    const { navigation } = getState()
+const handleDesignSystemPress = ({ params }) => {
+    const { navigation } = params
     navigation.navigate(ROUTES.DESIGN_SYSTEM)
 }
 

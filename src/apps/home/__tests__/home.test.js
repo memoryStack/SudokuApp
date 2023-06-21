@@ -5,7 +5,8 @@ import {
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
 import { NEXT_GAME_MENU_TEST_ID } from '../../arena/nextGameMenu/nextGameMenu.constants'
-import { SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settings.constants'
+import { SETTINGS_BUTTON_TEST_ID } from '../../header/components/settings/settings.constants'
+import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settingsMenu/settingsMenu.constants'
 
 import { HOME_PAGE_TEST_ID } from '../home.constants'
 

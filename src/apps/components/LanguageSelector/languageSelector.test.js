@@ -12,6 +12,7 @@ import LanguageSelector from './LanguageSelector'
 import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'
 
 // have to prefix these with mock*, else jest throws error
+// TODO: is there any other way to test language change instead of this mockist style ??
 const mockChangeLanguage = jest.fn(() => new Promise(() => { }))
 const mockSelectedLanguageKey = LANGUAGE_KEYS.ENGLISH
 jest.mock('react-i18next', () => ({

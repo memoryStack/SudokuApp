@@ -1,28 +1,18 @@
-import React, {
-    memo, useRef,
-} from 'react'
+import React, { memo, useRef } from 'react'
 
-import { View, Text } from 'react-native'
-
-import _map from '@lodash/map'
+import { View } from 'react-native'
 
 import { SettingsIcon } from '@resources/svgIcons/settings'
-
-import withActions from '@utils/hocs/withActions'
-
-import { useModal } from 'src/apps/arena/hooks/useModal'
 
 import { useToggle } from '../../../../utils/customHooks'
 
 import { Touchable } from '../../../components/Touchable'
 
-import { ACTION_HANDLERS, ACTION_TYPES } from './settings.actionHandlers'
-import { MENU_ITEMS, SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from './settings.constants'
-import { styles } from './settings.style'
+import { SETTINGS_BUTTON_TEST_ID } from './settings.constants'
 
-export const Settings_ = ({ onAction }) => {
-    const modalContextValues = useModal()
+import SettingsMenu from './settingsMenu'
 
+export const Settings_ = () => {
     const [openMenu, toggleMenuVisibility] = useToggle(false)
 
     const iconRef = useRef(null)
@@ -38,40 +28,15 @@ export const Settings_ = ({ onAction }) => {
         </Touchable>
     )
 
-    const onItemPress = ({ key }) => {
-        onAction({
-            type: ACTION_TYPES.ON_ITEM_PRESS,
-            payload: { itemKey: key, modalContextValues },
-        })
-        toggleMenuVisibility()
-    }
-
-    const renderMenu = () => {
-        if (!openMenu) return null
-
-        return (
-            <View style={styles.menuContainer} testID={SETTINGS_MENU_TEST_ID}>
-                {_map(MENU_ITEMS, (item, index) => (
-                    <Touchable
-                        key={item.label}
-                        onPress={() => onItemPress(item)}
-                        avoidDefaultStyles
-                    >
-                        <Text style={[styles.menuText, index ? styles.spaceBetweenMenuItems : null]}>
-                            {item.label}
-                        </Text>
-                    </Touchable>
-                ))}
-            </View>
-        )
-    }
-
     return (
         <>
             {renderIcon()}
-            {renderMenu()}
+            <SettingsMenu
+                open={openMenu}
+                onClose={toggleMenuVisibility}
+            />
         </>
     )
 }
 
-export const Settings = memo(withActions({ actionHandlers: ACTION_HANDLERS })(Settings_))
+export const Settings = memo(Settings_)
