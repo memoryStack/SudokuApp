@@ -39,8 +39,7 @@ const TouchablesMap = {
     // newNativeFeedBack: NewTouchableNativeFeedback,
 }
 
-// TODO: make it opacity only, most of the places i am using opacity
-const defaultTouchable = Platform.isIOS() ? 'highLight' : 'nativeFeedBack'
+const defaultTouchable = TouchableTypes.opacity
 
 const getTouchable = touchable => {
     if (!touchable) touchable = defaultTouchable

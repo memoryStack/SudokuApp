@@ -6,7 +6,7 @@ import _noop from '@lodash/noop'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
-import { Touchable, TouchableTypes } from 'src/apps/components/Touchable'
+import { Touchable } from 'src/apps/components/Touchable'
 
 import Text from '@ui/atoms/Text'
 
@@ -32,7 +32,6 @@ const Button_ = ({
 
     return (
         <Touchable
-            touchable={TouchableTypes.opacity}
             style={[avoidDefaultContainerStyles ? null : styles.defaultContainer, containerStyle]}
             avoidDefaultStyles={avoidDefaultContainerStyles}
             onPress={onClick}

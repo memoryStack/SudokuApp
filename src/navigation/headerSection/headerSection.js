@@ -8,7 +8,7 @@ import _isFunction from '@lodash/isFunction'
 import { LeftArrow } from '@resources/svgIcons/leftArrow'
 import { ShareIcon } from '@resources/svgIcons/share'
 import { Settings } from '../../apps/header/components/settings/settings'
-import { Touchable, TouchableTypes } from '../../apps/components/Touchable'
+import { Touchable } from '../../apps/components/Touchable'
 
 import { getHeaderRightItems, getHeaderLeftItems } from '../navigation.utils'
 import { HEADER_ITEMS } from '../route.constants'
@@ -25,7 +25,6 @@ const HEADER_ITEM_VS_ICON = {
 
 const renderIconBtn = ({ Icon, onPress, ...rest }) => (
     <Touchable
-        touchable={TouchableTypes.opacity}
         onPress={onPress}
         addHitSlop
     >

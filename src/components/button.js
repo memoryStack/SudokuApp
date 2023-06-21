@@ -8,7 +8,7 @@ import _noop from '@lodash/noop'
 
 import { fonts } from '@resources/fonts/font'
 
-import { Touchable, TouchableTypes } from '../apps/components/Touchable'
+import { Touchable } from '../apps/components/Touchable'
 
 const styles = StyleSheet.create({
     defaultContainer: {
@@ -37,7 +37,6 @@ const Button_ = ({
     ...rest
 }) => (
     <Touchable
-        touchable={TouchableTypes.opacity}
         onPress={onClick}
         style={[avoidDefaultContainerStyles ? null : styles.defaultContainer, containerStyle]}
         {...rest}

@@ -12,7 +12,7 @@ import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import { LANGAUGE_OPTIONS } from 'src/i18n/languages'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
-import { Touchable, TouchableTypes } from '../Touchable'
+import { Touchable } from '../Touchable'
 
 import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'
 import { styles } from './style'
@@ -35,7 +35,6 @@ const LanguageSelector_ = ({ hideModal }) => {
         LANGAUGE_OPTIONS.map(({ key, label }, index) => (
             <Touchable
                 key={key}
-                touchable={TouchableTypes.opacity}
                 style={[
                     styles.languageItemContainer,
                     { marginTop: index ? 16 : 0 },

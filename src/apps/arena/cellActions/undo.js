@@ -8,12 +8,12 @@ import _noop from '@lodash/noop'
 
 import { UndoIcon } from '@resources/svgIcons/undo'
 
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { Styles, INACTIVE_ICON_FILL } from './style'
 
 const Undo_ = ({ iconBoxSize, onClick }) => (
-    <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
+    <Touchable style={Styles.actionContainer} onPress={onClick}>
         <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
         <Text style={Styles.actionText}>Undo</Text>
     </Touchable>

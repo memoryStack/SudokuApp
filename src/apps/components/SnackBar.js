@@ -6,7 +6,8 @@ import _noop from '@lodash/noop'
 
 import { fonts } from '@resources/fonts/font'
 import { CloseIcon } from '@resources/svgIcons/close'
-import { Touchable, TouchableTypes } from './Touchable'
+
+import { Touchable } from './Touchable'
 
 const styles = StyleSheet.create({
     container: {
@@ -42,7 +43,6 @@ const SnackBar_ = ({ msg, customStyles, onClose }) => (
         <Text style={styles.msgTextStyle}>{msg}</Text>
         <Touchable
             style={styles.closeButton}
-            touchable={TouchableTypes.opacity}
             activeOpacity={1}
             onPress={onClose}
             addHitSlop

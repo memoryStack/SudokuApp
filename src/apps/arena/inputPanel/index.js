@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 
-import { View, Text, Image } from 'react-native'
+import { View, Image } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -8,7 +8,7 @@ import _noop from '@lodash/noop'
 
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
@@ -36,7 +36,6 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
         <Touchable
             style={styles.numberButtonContainer}
             onPress={onEraserClick}
-            touchable={TouchableTypes.opacity}
             key="erase_cell"
         >
             <Image style={styles.eraser} source={require('@resources/assets/eraser.png')} />

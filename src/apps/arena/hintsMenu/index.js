@@ -8,9 +8,11 @@ import _noop from '@lodash/noop'
 import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 
+import { Platform } from '@utils/classes/platform'
+
 import withActions from '../../../utils/hocs/withActions'
 
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
@@ -50,7 +52,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
                 key={label}
                 style={[styles.menuItem, !isAvailable ? styles.disabledMenuItem : null]}
                 onPress={isAvailable ? () => onMenuItemClick(id) : _noop}
-                touchable={TouchableTypes.opacity}
+
             >
                 <Text style={[styles.menuItemText, !isAvailable ? styles.disabledMenuItemText : null]}>{label}</Text>
             </Touchable>
@@ -91,7 +93,10 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     })
 
     return (
-        <Touchable onPress={onOverlayContainerClick}>
+        <Touchable
+            onPress={onOverlayContainerClick}
+            touchable={Platform.isIOS() ? Touchable.highLight : Touchable.nativeFeedBack}
+        >
             <View style={styles.overlayContainer}>
                 <View style={styles.container}>{menuRows}</View>
             </View>

@@ -9,7 +9,7 @@ import _noop from '@lodash/noop'
 import { PENCIL_STATE } from '@resources/constants'
 import { PencilIcon } from '@resources/svgIcons/pencil'
 
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { Styles, INACTIVE_ICON_FILL } from './style'
 
@@ -20,7 +20,7 @@ const Pencil_ = ({ iconBoxSize, pencilState, onClick }) => {
     const isActive = pencilState === PENCIL_STATE.ACTIVE
 
     return (
-        <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
+        <Touchable style={Styles.actionContainer} onPress={onClick}>
             <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL} />
             <Text
                 style={[Styles.actionText, { color: isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL }]}

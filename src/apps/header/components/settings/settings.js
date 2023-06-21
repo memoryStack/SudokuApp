@@ -14,7 +14,7 @@ import { useModal } from 'src/apps/arena/hooks/useModal'
 
 import { useToggle } from '../../../../utils/customHooks'
 
-import { Touchable, TouchableTypes } from '../../../components/Touchable'
+import { Touchable } from '../../../components/Touchable'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './settings.actionHandlers'
 import { MENU_ITEMS, SETTINGS_BUTTON_TEST_ID, SETTINGS_MENU_TEST_ID } from './settings.constants'
@@ -29,7 +29,6 @@ export const Settings_ = ({ onAction }) => {
 
     const renderIcon = () => (
         <Touchable
-            touchable={TouchableTypes.opacity}
             onPress={toggleMenuVisibility}
             testID={SETTINGS_BUTTON_TEST_ID}
         >
@@ -55,7 +54,6 @@ export const Settings_ = ({ onAction }) => {
                 {_map(MENU_ITEMS, (item, index) => (
                     <Touchable
                         key={item.label}
-                        touchable={TouchableTypes.opacity}
                         onPress={() => onItemPress(item)}
                         avoidDefaultStyles
                     >

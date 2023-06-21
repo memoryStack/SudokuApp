@@ -10,7 +10,7 @@ import _noop from '@lodash/noop'
 
 import { fonts } from '@resources/fonts/font'
 
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { addLeadingZeroIfEligible } from '../utils/util'
@@ -73,7 +73,6 @@ const Timer_ = ({ onClick, time }) => {
         <Touchable
             style={styles.timeCounter}
             onPress={onClick}
-            touchable={TouchableTypes.opacity}
             addHitSlop
         >
             <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.hours)}:`}</Text>

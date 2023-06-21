@@ -17,7 +17,7 @@ import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '@resources/stringLiterals'
 import { useScreenName } from '../../../utils/customHooks'
 
 import { BottomDragger } from '../../components/BottomDragger'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { previousInactiveGameExists } from '../utils/util'
 
@@ -131,7 +131,6 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                 <View key={levelText}>
                     <Touchable
                         style={styles.levelContainer}
-                        touchable={TouchableTypes.opacity}
                         onPress={() => nextGameMenuItemClicked(levelText)}
                     >
                         {getLevelIcon(index)}
@@ -143,7 +142,6 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
             <Touchable
                 key={CUSTOMIZE_YOUR_PUZZLE_TITLE}
                 style={styles.levelContainer}
-                touchable={TouchableTypes.opacity}
                 onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
             >
                 <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
@@ -153,7 +151,6 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                 <Touchable
                     key={RESUME}
                     style={styles.levelContainer}
-                    touchable={TouchableTypes.opacity}
                     onPress={() => nextGameMenuItemClicked(RESUME)}
                 >
                     <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />

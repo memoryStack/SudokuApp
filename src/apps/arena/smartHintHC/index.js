@@ -17,7 +17,7 @@ import { BottomDragger } from '../../components/BottomDragger'
 import { Button } from '../../../components/button'
 import withActions from '../../../utils/hocs/withActions'
 
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { getApplyHintChanges, getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
@@ -110,7 +110,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                 ) : null}
             </View>
             <Touchable
-                touchable={TouchableTypes.opacity}
                 onPress={closeView}
                 addHitSlop
             >

@@ -12,7 +12,7 @@ import Badge from '@ui/atoms/Badge'
 
 import { HintIcon } from '@resources/svgIcons/hint'
 
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { GameState } from '../utils/classes/gameState'
@@ -35,7 +35,7 @@ const Hint_ = ({ iconBoxSize, hints, onClick }) => {
     }
 
     return (
-        <Touchable style={Styles.actionContainer} onPress={onClick} touchable={TouchableTypes.opacity}>
+        <Touchable style={Styles.actionContainer} onPress={onClick}>
             <>
                 <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
                 {renderHintsCount()}

@@ -10,7 +10,7 @@ import _get from '@lodash/get'
 import { CloseIcon } from '@resources/svgIcons/close'
 import { fonts } from '@resources/fonts/font'
 
-import { Touchable, TouchableTypes } from '../../../components/Touchable'
+import { Touchable } from '../../../components/Touchable'
 
 import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensions'
 
@@ -119,8 +119,8 @@ const Cell_ = ({
     }
 
     return (
+        // TODO: can use a different touchable
         <Touchable
-            touchable={TouchableTypes.opacity}
             activeOpacity={1}
             style={[styles.cell, cellBGColor]}
             onPress={() => onCellClick({ row, col })}

@@ -14,7 +14,7 @@ import withActions from '../../../utils/hocs/withActions'
 import { Button } from '../../../components/button'
 
 import { BottomDragger } from '../../components/BottomDragger'
-import { Touchable, TouchableTypes } from '../../components/Touchable'
+import { Touchable } from '../../components/Touchable'
 
 import { Board } from '../gameBoard'
 import { Inputpanel } from '../inputPanel'
@@ -95,7 +95,6 @@ const CustomPuzzle_ = ({
         >
             <View style={styles.container}>
                 <Touchable
-                    touchable={TouchableTypes.opacity}
                     style={styles.closeIconContainer}
                     onPress={handleOnClose}
                     addHitSlop

@@ -9,7 +9,7 @@ import _noop from '@lodash/noop'
 
 import { GAME_STATE } from '@resources/constants'
 import { fonts } from '@resources/fonts/font'
-import { Touchable, TouchableTypes } from '../components/Touchable' // TODO: make linter catch issues like this
+import { Touchable } from '../components/Touchable' // TODO: make linter catch issues like this
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { GameOverCard } from './gameOverCard'
@@ -248,7 +248,6 @@ const Arena_ = ({
 
         return (
             <Touchable
-                touchable={TouchableTypes.opacity}
                 activeOpacity={1}
                 style={styles.gameOverCardAbsoluteBG}
                 onPress={hideCongratsModal}

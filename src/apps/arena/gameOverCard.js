@@ -12,7 +12,7 @@ import { TrophyIcon } from '@resources/svgIcons/congratsTrophy'
 import { NEW_GAME } from '@resources/stringLiterals'
 import { fonts } from '@resources/fonts/font'
 import { Button } from '../../components/button'
-import { Touchable, TouchableTypes } from '../components/Touchable'
+import { Touchable } from '../components/Touchable'
 
 import { addLeadingZeroIfEligible } from './utils/util'
 import { GameState } from './utils/classes/gameState'
@@ -123,7 +123,7 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
     const renderNewGameButton = () => <Button text={NEW_GAME} onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
 
     return (
-        <Touchable touchable={TouchableTypes.opacity} activeOpacity={1} onPress={_noop} style={styles.container}>
+        <Touchable activeOpacity={1} onPress={_noop} style={styles.container}>
             {getGameSolvedView()}
             {getGameUnsolvedView()}
             {renderNewGameButton()}
