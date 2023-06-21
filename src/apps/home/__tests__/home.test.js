@@ -4,6 +4,7 @@ import {
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
+import { ROUTES } from 'src/navigation/route.constants'
 import { NEXT_GAME_MENU_TEST_ID } from '../../arena/nextGameMenu/nextGameMenu.constants'
 import { SETTINGS_BUTTON_TEST_ID } from '../../header/components/settings/settings.constants'
 import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settingsMenu/settingsMenu.constants'
@@ -32,8 +33,6 @@ describe('Home Page', () => {
             getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
         })
 
-        const beforeNavigationScreenName = getScreenName()
-
         fireEvent.press(screen.getByText('PLAY'))
 
         await waitFor(() => {
@@ -45,7 +44,7 @@ describe('Home Page', () => {
         })
 
         expect(getScreenName()).toBeTruthy()
-        expect(beforeNavigationScreenName !== getScreenName()).toBeTruthy()
+        expect(getScreenName()).toBe(ROUTES.ARENA)
     })
 })
 
