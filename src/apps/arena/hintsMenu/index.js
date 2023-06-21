@@ -12,7 +12,7 @@ import { Platform } from '@utils/classes/platform'
 
 import withActions from '../../../utils/hocs/withActions'
 
-import { Touchable } from '../../components/Touchable'
+import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
@@ -95,7 +95,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     return (
         <Touchable
             onPress={onOverlayContainerClick}
-            touchable={Platform.isIOS() ? Touchable.highLight : Touchable.nativeFeedBack}
+            touchable={Platform.isIOS() ? TouchableTypes.highLight : TouchableTypes.nativeFeedBack}
         >
             <View style={styles.overlayContainer}>
                 <View style={styles.container}>{menuRows}</View>
