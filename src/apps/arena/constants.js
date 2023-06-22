@@ -48,3 +48,5 @@ export const BOARD_GRID_BORDERS_DIRECTION = {
     VERTICAL: 'vertical',
     HORIZONTAL: 'horizontal',
 }
+
+export const ARENA_PAGE_TEST_ID = 'arena_test_id'

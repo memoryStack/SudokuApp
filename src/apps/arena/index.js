@@ -35,6 +35,7 @@ import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
 import { HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_ITEMS } from '../../navigation/route.constants'
+import { ARENA_PAGE_TEST_ID } from './constants'
 
 const MAX_AVAILABLE_HINTS = 3
 const styles = StyleSheet.create({
@@ -269,7 +270,7 @@ const Arena_ = ({
 
     return (
         <Page
-            testID="arena_test_id"
+            testID={ARENA_PAGE_TEST_ID}
             style={styles.page}
             onFocus={handleGameInFocus}
             onBlur={handleGameOutOfFocus}
