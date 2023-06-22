@@ -14,7 +14,7 @@ import { getHeaderRightItems, getHeaderLeftItems } from '../navigation.utils'
 import { HEADER_ITEMS } from '../route.constants'
 
 import { getHeaderItemPress } from './headerItemsPressHandlers'
-import { ICON_DIMENSION, ICON_FILL } from './headerSection.constants'
+import { ICON_DIMENSION, ICON_FILL, HEADER_ITEM_VS_TEST_ID } from './headerSection.constants'
 import { styles } from './headerSection.styles'
 
 const HEADER_ITEM_VS_ICON = {
@@ -23,8 +23,11 @@ const HEADER_ITEM_VS_ICON = {
     [HEADER_ITEMS.SHARE]: ShareIcon,
 }
 
-const renderIconBtn = ({ Icon, onPress, ...rest }) => (
+const renderIconBtn = ({
+    Icon, onPress, testID, ...rest
+}) => (
     <Touchable
+        testID={testID}
         onPress={onPress}
         addHitSlop
     >
@@ -50,6 +53,7 @@ const renderHeaderItem = ({
                 ? IconRenderer({ ...commonProps, navigation })
                 : renderIconBtn({
                     Icon: IconRenderer,
+                    testID: HEADER_ITEM_VS_TEST_ID[item],
                     ...commonProps,
                 })}
         </View>

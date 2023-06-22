@@ -14,6 +14,7 @@ export const ROUTES = {
     ...DESIGN_SYSTEM_ROUTES,
 }
 
+// TODO: separate out the header and route constants here in this file
 export const HEADER_SECTION = {
     LEFT: 'LEFT',
     RIGHT: 'RIGHT',

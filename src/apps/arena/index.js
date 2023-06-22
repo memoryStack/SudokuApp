@@ -268,7 +268,13 @@ const Arena_ = ({
     }
 
     return (
-        <Page style={styles.page} onFocus={handleGameInFocus} onBlur={handleGameOutOfFocus} onLayout={onParentLayout}>
+        <Page
+            testID="arena_test_id"
+            style={styles.page}
+            onFocus={handleGameInFocus}
+            onBlur={handleGameOutOfFocus}
+            onLayout={onParentLayout}
+        >
             <View style={styles.contentContainer}>
                 {renderFillPuzzleBtn()}
                 <Refree />

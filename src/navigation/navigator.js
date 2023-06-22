@@ -2,11 +2,13 @@ import React from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native'
 
 import { getNavigationOptions } from './navigationOptions'
 import { routes } from './routes'
 import { ROUTES } from './route.constants'
+
+export const navigationRef = createNavigationContainerRef()
 
 // TODO: how to dynamically load the screens ??
 const getScreens = Stack => routes.map(({ name, component }) => (
@@ -24,7 +26,7 @@ const getNavigator = () => {
 
 // TODO: children prop is for testing purpose to hack navigation prop
 export const NavigationProvider = ({ children }) => (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
         {getNavigator()}
         {children}
     </NavigationContainer>

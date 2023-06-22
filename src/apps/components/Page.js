@@ -24,7 +24,12 @@ const styles = StyleSheet.create({
 const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
 const Page_ = ({
-    children, onLayout, onFocus, onBlur, style: styleProp,
+    children,
+    onLayout,
+    onFocus,
+    onBlur,
+    style: styleProp,
+    ...restProps
 }) => {
     const navigation = useNavigation()
 
@@ -87,7 +92,11 @@ const Page_ = ({
     }, [handleAppStateChange, handleFocus, handleBlur, navigation])
 
     return (
-        <SafeAreaView onLayout={onLayout} style={[styles.safeAreaView, styleProp]}>
+        <SafeAreaView
+            onLayout={onLayout}
+            style={[styles.safeAreaView, styleProp]}
+            {...restProps}
+        >
             {children}
         </SafeAreaView>
     )
