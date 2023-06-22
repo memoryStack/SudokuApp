@@ -51,12 +51,12 @@ const NavigateToRoute_ = ({
         navigation.navigate(route, routeOptions)
     }, [navigation, route, routeOptions])
 
-    const isScreenRendered = (!route && routeName === ROUTES.HOME) || (routeName === route)
+    const isScreenRendered = routeName === route
 
     React.useEffect(() => {
         if (!isScreenRendered || !renderCalled) return
 
-        getScreenRootElement !== _noop && fireLayoutEvent(getScreenRootElement(), HOME_SCREEN_LAYOUT)
+        fireLayoutEvent(getScreenRootElement(), HOME_SCREEN_LAYOUT)
     }, [isScreenRendered, renderCalled, getScreenRootElement])
 
     React.useEffect(() => {
@@ -104,7 +104,7 @@ export const getScreenName = () => {
 
 export const renderScreen = ({
     getScreenRootElement = _noop,
-    route,
+    route = ROUTES.HOME,
     routeOptions,
     children,
 } = {}) => {

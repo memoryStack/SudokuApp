@@ -1,3 +1,5 @@
+import _isNil from '@lodash/isNil'
+
 import { fireEvent } from './testingLibrary'
 
 /*
@@ -11,6 +13,8 @@ import { fireEvent } from './testingLibrary'
 */
 
 export const fireLayoutEvent = (view, layoutData) => {
+    if (_isNil(view)) return
+
     fireEvent(view, 'layout', {
         nativeEvent: {
             layout: layoutData,
