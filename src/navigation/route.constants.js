@@ -17,10 +17,6 @@ export const ROUTES = {
 }
 
 // TODO: separate out the header and route constants here in this file
-export const HEADER_SECTION = {
-    LEFT: 'LEFT',
-    RIGHT: 'RIGHT',
-}
 
 export const ROUTE_HEADER_TITLES = {
     [ROUTES.PLAY_GUIDE]: 'How To Play?',
