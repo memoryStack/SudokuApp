@@ -9,7 +9,7 @@ import _noop from '@lodash/noop'
 
 import { GAME_STATE } from '@resources/constants'
 import { fonts } from '@resources/fonts/font'
-import { HEADER_ITEMS } from 'src/navigation/headerSection/headerSection.constants'
+import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from 'src/navigation/headerSection/headerSection.constants'
 import { Touchable } from '../components/Touchable' // TODO: make linter catch issues like this
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
@@ -35,7 +35,7 @@ import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
-import { HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/route.constants'
+
 import { ARENA_PAGE_TEST_ID } from './constants'
 
 const MAX_AVAILABLE_HINTS = 3
