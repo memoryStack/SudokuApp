@@ -1,3 +1,5 @@
+import { HEADER_ITEMS } from './headerSection/headerSection.constants'
+
 const DESIGN_SYSTEM_ROUTES = {
     DESIGN_SYSTEM: 'design_system',
     BADGE: 'badge',
@@ -18,12 +20,6 @@ export const ROUTES = {
 export const HEADER_SECTION = {
     LEFT: 'LEFT',
     RIGHT: 'RIGHT',
-}
-
-export const HEADER_ITEMS = {
-    BACK: 'BACK',
-    SETTINGS: 'SETTINGS',
-    SHARE: 'SHARE',
 }
 
 export const ROUTE_HEADER_TITLES = {

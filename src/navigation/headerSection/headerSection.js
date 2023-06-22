@@ -11,10 +11,14 @@ import { Settings } from '../../apps/header/components/settings/settings'
 import { Touchable } from '../../apps/components/Touchable'
 
 import { getHeaderRightItems, getHeaderLeftItems } from '../navigation.utils'
-import { HEADER_ITEMS } from '../route.constants'
 
 import { getHeaderItemPress } from './headerItemsPressHandlers'
-import { ICON_DIMENSION, ICON_FILL, HEADER_ITEM_VS_TEST_ID } from './headerSection.constants'
+import {
+    ICON_DIMENSION,
+    ICON_FILL,
+    HEADER_ITEM_VS_TEST_ID,
+    HEADER_ITEMS,
+} from './headerSection.constants'
 import { styles } from './headerSection.styles'
 
 const HEADER_ITEM_VS_ICON = {

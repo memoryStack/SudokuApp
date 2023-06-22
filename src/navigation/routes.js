@@ -9,8 +9,9 @@ import Divider from '../apps/designSystemScreen/componentsScreens/Divider'
 
 import { TempScreen } from '../apps/vocabularyExplaination/temp'
 
+import { HEADER_ITEMS } from './headerSection/headerSection.constants'
+
 import {
-    HEADER_ITEMS,
     HEADER_SECTION,
     ROUTES,
     ROUTE_HEADER_TITLES,
