@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, cleanup,
+    screen, fireEvent,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -40,7 +40,9 @@ describe('Arena Screen', () => {
         jest.useFakeTimers()
         jest.clearAllMocks()
     })
-    afterEach(cleanup)
+    afterEach(() => {
+        jest.useRealTimers()
+    })
 
     test('should go back to home page on back button press', async () => {
         await renderScreenAndWaitForPuzzleStart()
@@ -56,7 +58,9 @@ describe('Timer Click Once', () => {
         jest.useFakeTimers()
         jest.clearAllMocks()
     })
-    afterEach(cleanup)
+    afterEach(() => {
+        jest.useRealTimers()
+    })
 
     const clickTimerOnce = () => fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
 
@@ -113,7 +117,9 @@ describe('Timer Click Twice', () => {
         jest.useFakeTimers()
         jest.clearAllMocks()
     })
-    afterEach(cleanup)
+    afterEach(() => {
+        jest.useRealTimers()
+    })
 
     const clickTimerTwice = async () => {
         fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
