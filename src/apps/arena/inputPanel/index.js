@@ -2,6 +2,8 @@ import React, { useCallback, useMemo } from 'react'
 
 import { View, Image } from 'react-native'
 
+import { useSelector } from 'react-redux'
+
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
@@ -10,15 +12,21 @@ import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 
 import { Touchable } from '../../components/Touchable'
 
+import { getGameState } from '../store/selectors/gameState.selectors'
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
+import { GameState } from '../utils/classes/gameState'
 
 import { getStyles } from './style'
-import { ACTION_TYPES } from './constants'
+import { ACTION_TYPES, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 
 const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
     const isHintTryOut = useIsHintTryOutStep()
+
+    const gameState = useSelector(getGameState)
+
+    const disableNumbersInput = !(new GameState(gameState).isGameActive())
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
@@ -34,23 +42,31 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
 
     const renderEraser = () => (
         <Touchable
+            key="erase_cell"
             style={styles.numberButtonContainer}
             onPress={onEraserClick}
-            key="erase_cell"
+            disabled={disableNumbersInput}
+            testID={INPUT_PANEL_ITEM_TEST_ID}
         >
             <Image style={styles.eraser} source={require('@resources/assets/eraser.png')} />
         </Touchable>
     )
 
+    const getButtonState = number => {
+        if (disableNumbersInput) return BUTTON_STATES.DISABLED
+        return numbersVisible[number] ? BUTTON_STATES.ENABLED : BUTTON_STATES.DISABLED
+    }
+
     const renderInputNumber = number => (
         <Button
             key={`${number}`}
             type={BUTTON_TYPES.TONAL}
-            state={numbersVisible[number] ? BUTTON_STATES.ENABLED : BUTTON_STATES.DISABLED}
+            state={getButtonState(number)}
             containerStyle={styles.numberButtonContainer}
             onPress={() => onNumberClicked(number)}
             label={number}
             textStyles={styles.textStyle}
+            testID={INPUT_PANEL_ITEM_TEST_ID}
         />
     )
 

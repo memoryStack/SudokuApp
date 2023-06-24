@@ -6,7 +6,12 @@ import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 import { ROUTES } from 'src/navigation/route.constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from 'src/navigation/headerSection/headerSection.constants'
 
-import { allBoardControllersDisabled, checkAllCellsEmpty, hasPuzzleStarted } from '@utils/testing/arena'
+import {
+    allBoardControllersDisabled,
+    checkAllCellsEmpty,
+    hasPuzzleStarted,
+    allInputPanelItemsAreDisabled,
+} from '@utils/testing/arena'
 import { ARENA_PAGE_TEST_ID } from '../constants'
 import { TIMER_TEST_ID } from '../timer/timer.constants'
 
@@ -58,5 +63,19 @@ describe('Arena Screen', () => {
         fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
 
         allBoardControllersDisabled()
+    })
+
+    // game pause attribute 2
+    test('all input panel items will be disabled on timer click', async () => {
+        renderScreen({
+            route: ROUTES.ARENA,
+            getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
+        })
+
+        await hasPuzzleStarted()
+
+        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+
+        allInputPanelItemsAreDisabled()
     })
 })
