@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, cleanup,
+    screen, fireEvent, cleanup, waitFor,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -7,21 +7,27 @@ import { ROUTES } from 'src/navigation/route.constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from 'src/navigation/headerSection/headerSection.constants'
 
 import {
-    allBoardControllersDisabled,
-    checkAllCellsEmpty,
     hasPuzzleStarted,
-    allInputPanelItemsAreDisabled,
+    expectOnAllBoardCells,
+    expectOnAllBoardControllers,
+    expectOnAllInputPanelItems,
 } from '@utils/testing/arena'
-import { ARENA_PAGE_TEST_ID } from '../constants'
-import { TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 
-const renderScreenAndWaitForPuzzleStart = async () => {
+import { isEmptyElement } from '@utils/testing/touchable'
+import storageUtils from '@utils/storage'
+
+import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
+import { ARENA_PAGE_TEST_ID } from '../constants'
+
+const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
     renderScreen({
         route: ROUTES.ARENA,
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
     })
 
     await hasPuzzleStarted()
+
+    await executeMoreSetupSteps()
 }
 
 describe('Arena Screen', () => {
@@ -42,40 +48,40 @@ describe('Arena Screen', () => {
     })
 })
 
-describe('Game Pause', () => {
+describe('Timer Click Once', () => {
     beforeEach(() => {
         jest.useFakeTimers()
     })
     afterEach(cleanup)
 
+    const clickTimerOnce = () => fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+
     test('all board numbers will be disappeared', async () => {
-        await renderScreenAndWaitForPuzzleStart()
+        await renderScreenAndWaitForPuzzleStart(clickTimerOnce)
 
-        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
-
-        checkAllCellsEmpty()
+        expectOnAllBoardCells(element => {
+            expect(isEmptyElement(element)).toBe(true)
+        })
     })
 
     test('all board controllers will be disabled', async () => {
-        await renderScreenAndWaitForPuzzleStart()
+        await renderScreenAndWaitForPuzzleStart(clickTimerOnce)
 
-        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
-
-        allBoardControllersDisabled()
+        expectOnAllBoardControllers(element => {
+            expect(element).toBeDisabled()
+        })
     })
 
     test('all input panel items will be disabled', async () => {
-        await renderScreenAndWaitForPuzzleStart()
+        await renderScreenAndWaitForPuzzleStart(clickTimerOnce)
 
-        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
-
-        allInputPanelItemsAreDisabled()
+        expectOnAllInputPanelItems(element => {
+            expect(element).toBeDisabled()
+        })
     })
 
     test('start the timer icon will be visible', async () => {
-        await renderScreenAndWaitForPuzzleStart()
-
-        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+        await renderScreenAndWaitForPuzzleStart(clickTimerOnce)
 
         expect(screen.getByTestId(TIMER_START_ICON_TEST_ID)).toBeVisible()
     })
@@ -83,10 +89,73 @@ describe('Game Pause', () => {
     test('timer will be cleared', async () => {
         jest.spyOn(global, 'clearInterval')
 
-        await renderScreenAndWaitForPuzzleStart()
-
-        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+        await renderScreenAndWaitForPuzzleStart(clickTimerOnce)
 
         expect(clearInterval).toHaveBeenCalledTimes(1)
+    })
+})
+
+describe('Timer Click Twice', () => {
+    beforeEach(() => {
+        jest.useFakeTimers()
+    })
+    afterEach(cleanup)
+
+    const clickTimerTwice = async () => {
+        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+
+        await screen.findByTestId(TIMER_START_ICON_TEST_ID)
+
+        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+    }
+
+    test.skip('game is cached', async () => {
+        await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
+        const cacheHandlerSpy = jest.spyOn(storageUtils, 'setKey')
+
+        console.log(cacheHandlerSpy.mock.calls)
+    })
+
+    test('numbers will be visible in board cells', async () => {
+        await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
+
+        let filledCellsCount = 0
+        const someCellsHaveNumbers = element => {
+            if (!isEmptyElement(element)) filledCellsCount++
+        }
+
+        expectOnAllBoardCells(someCellsHaveNumbers)
+
+        expect(filledCellsCount).not.toBe(0)
+    })
+
+    test('all board controllers will be enabled', async () => {
+        await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
+
+        expectOnAllBoardControllers(element => {
+            expect(element).not.toBeDisabled()
+        })
+    })
+
+    test('all input panel items will be enabled', async () => {
+        await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
+
+        expectOnAllInputPanelItems(element => {
+            expect(element).not.toBeDisabled()
+        })
+    })
+
+    test('pause the timer icon will be visible', async () => {
+        await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
+
+        expect(screen.getByTestId(TIMER_PAUSE_ICON_TEST_ID)).toBeVisible()
+    })
+
+    test('timer will be setup', async () => {
+        jest.spyOn(global, 'setInterval')
+
+        await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
+
+        expect(setInterval).toHaveBeenCalledTimes(2)
     })
 })
