@@ -21,6 +21,7 @@ import { Pencil } from './pencil'
 import { FastPencil } from './fastPencil'
 import { Hint } from './hint'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { BOARD_CONTROLLER_TEST_ID } from './cellActions.constants'
 
 const styles = StyleSheet.create({
     cellActionsContainer: {
@@ -73,23 +74,27 @@ const BoardController_ = ({ onAction }) => {
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                 onClick={onUndoClick}
+                testID={BOARD_CONTROLLER_TEST_ID}
             />
             <Pencil
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                 pencilState={pencilState}
                 onClick={onPencilClick}
+                testID={BOARD_CONTROLLER_TEST_ID}
             />
             <FastPencil
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                 onClick={onFastPencilClick}
+                testID={BOARD_CONTROLLER_TEST_ID}
             />
             <Hint
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                 hints={hints}
                 onClick={onHintClick}
+                testID={BOARD_CONTROLLER_TEST_ID}
             />
         </View>
     )

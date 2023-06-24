@@ -1,5 +1,6 @@
 import { BOARD_CELL_TEST_ID } from 'src/apps/arena/gameBoard/cell/cell.constants'
 import { TIMER_PAUSE_ICON_TEST_ID } from 'src/apps/arena/timer/timer.constants'
+import { BOARD_CONTROLLER_TEST_ID } from 'src/apps/arena/cellActions/cellActions.constants'
 
 import { isEmptyElement } from './touchable'
 import { screen } from './testingLibrary'
@@ -13,4 +14,12 @@ export const checkAllCellsEmpty = () => {
 
 export const hasPuzzleStarted = async () => {
     await screen.findByTestId(TIMER_PAUSE_ICON_TEST_ID)
+}
+
+export const allBoardControllersDisabled = () => {
+    const allBoardControllers = screen.getAllByTestId(BOARD_CONTROLLER_TEST_ID)
+
+    allBoardControllers.forEach(element => {
+        expect(element).toBeDisabled()
+    })
 }
