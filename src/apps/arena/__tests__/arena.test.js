@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, cleanup, waitFor,
+    screen, fireEvent, cleanup,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -14,10 +14,12 @@ import {
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
-import storageUtils from '@utils/storage'
 
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 import { ARENA_PAGE_TEST_ID } from '../constants'
+import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
+
+const storageUtils = require('@utils/storage')
 
 const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
     renderScreen({
@@ -36,6 +38,7 @@ describe('Arena Screen', () => {
     // TODO: read more about the jest.useFakeTimers() and this cleanup func
     beforeEach(() => {
         jest.useFakeTimers()
+        jest.clearAllMocks()
     })
     afterEach(cleanup)
 
@@ -51,10 +54,20 @@ describe('Arena Screen', () => {
 describe('Timer Click Once', () => {
     beforeEach(() => {
         jest.useFakeTimers()
+        jest.clearAllMocks()
     })
     afterEach(cleanup)
 
     const clickTimerOnce = () => fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+
+    test('game is cached', async () => {
+        const setKeySpy = jest.spyOn(storageUtils, 'setKey')
+        await renderScreenAndWaitForPuzzleStart(clickTimerOnce)
+
+        expect(setKeySpy.mock.calls).toEqual(
+            expect.arrayContaining([[PREVIOUS_GAME_DATA_KEY, expect.anything()]]),
+        )
+    })
 
     test('all board numbers will be disappeared', async () => {
         await renderScreenAndWaitForPuzzleStart(clickTimerOnce)
@@ -98,6 +111,7 @@ describe('Timer Click Once', () => {
 describe('Timer Click Twice', () => {
     beforeEach(() => {
         jest.useFakeTimers()
+        jest.clearAllMocks()
     })
     afterEach(cleanup)
 
@@ -108,13 +122,6 @@ describe('Timer Click Twice', () => {
 
         fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
     }
-
-    test.skip('game is cached', async () => {
-        await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
-        const cacheHandlerSpy = jest.spyOn(storageUtils, 'setKey')
-
-        console.log(cacheHandlerSpy.mock.calls)
-    })
 
     test('numbers will be visible in board cells', async () => {
         await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
