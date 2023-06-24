@@ -23,7 +23,9 @@ import { Styles, INACTIVE_ICON_FILL } from './style'
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their
 // comfort and confidence level
 
-const Hint_ = ({ iconBoxSize, hints, onClick }) => {
+const Hint_ = ({
+    iconBoxSize, hints, onClick, ...rest
+}) => {
     const gameState = useSelector(getGameState)
 
     const renderHintsCount = () => {
@@ -35,7 +37,7 @@ const Hint_ = ({ iconBoxSize, hints, onClick }) => {
     }
 
     return (
-        <Touchable style={Styles.actionContainer} onPress={onClick}>
+        <Touchable style={Styles.actionContainer} onPress={onClick} {...rest}>
             <>
                 <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
                 {renderHintsCount()}

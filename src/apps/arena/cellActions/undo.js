@@ -12,8 +12,8 @@ import { Touchable } from '../../components/Touchable'
 
 import { Styles, INACTIVE_ICON_FILL } from './style'
 
-const Undo_ = ({ iconBoxSize, onClick }) => (
-    <Touchable style={Styles.actionContainer} onPress={onClick}>
+const Undo_ = ({ iconBoxSize, onClick, ...rest }) => (
+    <Touchable style={Styles.actionContainer} onPress={onClick} {...rest}>
         <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
         <Text style={Styles.actionText}>Undo</Text>
     </Touchable>

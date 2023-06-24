@@ -16,11 +16,13 @@ import { Styles, INACTIVE_ICON_FILL } from './style'
 const ACTIVE_PENCIL_FILL = 'rgb(57, 91, 158)'
 
 // TODO: use pencilState to animate the UI
-const Pencil_ = ({ iconBoxSize, pencilState, onClick }) => {
+const Pencil_ = ({
+    iconBoxSize, pencilState, onClick, ...rest
+}) => {
     const isActive = pencilState === PENCIL_STATE.ACTIVE
 
     return (
-        <Touchable style={Styles.actionContainer} onPress={onClick}>
+        <Touchable style={Styles.actionContainer} onPress={onClick} {...rest}>
             <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL} />
             <Text
                 style={[Styles.actionText, { color: isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL }]}

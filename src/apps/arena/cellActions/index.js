@@ -13,6 +13,8 @@ import withActions from '../../../utils/hocs/withActions'
 import { getPencilStatus } from '../store/selectors/boardController.selectors'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { useCacheGameState } from '../hooks/useCacheGameState'
+import { getGameState } from '../store/selectors/gameState.selectors'
+import { GameState } from '../utils/classes/gameState'
 
 import { Undo } from './undo'
 import { Pencil } from './pencil'
@@ -34,6 +36,10 @@ const styles = StyleSheet.create({
 const BoardController_ = ({ onAction }) => {
     const pencilState = useSelector(getPencilStatus)
     const hints = 3 // TODO: add proper logic for it
+
+    const gameState = useSelector(getGameState)
+
+    const disableControllers = !(new GameState(gameState).isGameActive())
 
     useCacheGameState(GAME_DATA_KEYS.CELL_ACTIONS, { pencilState, hints })
 
@@ -60,12 +66,31 @@ const BoardController_ = ({ onAction }) => {
         onAction({ type: ACTION_TYPES.ON_HINT_CLICK })
     }, [onAction])
 
+    // TODO: use a single component for these 4 components, and use them via a config
     return (
         <View style={styles.cellActionsContainer}>
-            <Undo iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onUndoClick} />
-            <Pencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} pencilState={pencilState} onClick={onPencilClick} />
-            <FastPencil iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} onClick={onFastPencilClick} />
-            <Hint iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION} hints={hints} onClick={onHintClick} />
+            <Undo
+                disabled={disableControllers}
+                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                onClick={onUndoClick}
+            />
+            <Pencil
+                disabled={disableControllers}
+                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                pencilState={pencilState}
+                onClick={onPencilClick}
+            />
+            <FastPencil
+                disabled={disableControllers}
+                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                onClick={onFastPencilClick}
+            />
+            <Hint
+                disabled={disableControllers}
+                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                hints={hints}
+                onClick={onHintClick}
+            />
         </View>
     )
 }

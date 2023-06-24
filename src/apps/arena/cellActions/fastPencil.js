@@ -11,8 +11,8 @@ import { Touchable } from '../../components/Touchable'
 import { Styles, INACTIVE_ICON_FILL } from './style'
 
 // TODO: use pencilState to animate the UI
-const FastPencil_ = ({ iconBoxSize, onClick }) => (
-    <Touchable style={Styles.actionContainer} onPress={onClick}>
+const FastPencil_ = ({ iconBoxSize, onClick, ...rest }) => (
+    <Touchable style={Styles.actionContainer} onPress={onClick} {...rest}>
         <PencilIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
         <Text style={Styles.actionText}>Fast Pencil</Text>
     </Touchable>
