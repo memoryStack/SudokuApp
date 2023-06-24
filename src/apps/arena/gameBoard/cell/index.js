@@ -16,6 +16,7 @@ import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensio
 
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../style'
 
+import { BOARD_CELL_TEST_ID } from './cell.constants'
 import { getStyles } from './style'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
@@ -119,11 +120,12 @@ const Cell_ = ({
     }
 
     return (
-        // TODO: can use a different touchable
+        // let's use opacity only, this supports passing null as child as well
         <Touchable
             activeOpacity={1}
             style={[styles.cell, cellBGColor]}
             onPress={() => onCellClick({ row, col })}
+            testID={BOARD_CELL_TEST_ID}
         >
             {showCellContent ? getCellContent() : null}
         </Touchable>

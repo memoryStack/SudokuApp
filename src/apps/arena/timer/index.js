@@ -16,6 +16,8 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { addLeadingZeroIfEligible } from '../utils/util'
 import { GameState } from '../utils/classes/gameState'
 
+import { TIMER_TEST_ID, TIMER_PAUSE_ICON_TEST_ID } from './timer.constants'
+
 const styles = StyleSheet.create({
     triangleShape: {
         width: 0,
@@ -61,7 +63,10 @@ const Timer_ = ({ onClick, time }) => {
     const getStartTimerIcon = () => <View style={styles.triangleShape} />
 
     const getPauseTimerIcon = () => (
-        <View style={styles.pauseTimerIconContainer}>
+        <View
+            style={styles.pauseTimerIconContainer}
+            testID={TIMER_PAUSE_ICON_TEST_ID}
+        >
             <View style={[styles.pauseButtonMiddleGap, styles.rectangleShape]} />
             <View style={styles.rectangleShape} />
         </View>
@@ -74,6 +79,7 @@ const Timer_ = ({ onClick, time }) => {
             style={styles.timeCounter}
             onPress={onClick}
             addHitSlop
+            testID={TIMER_TEST_ID}
         >
             <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.hours)}:`}</Text>
             <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.minutes)}:`}</Text>
