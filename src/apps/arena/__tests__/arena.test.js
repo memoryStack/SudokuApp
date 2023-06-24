@@ -92,4 +92,20 @@ describe('Arena Screen', () => {
 
         expect(screen.getByTestId(TIMER_START_ICON_TEST_ID)).toBeVisible()
     })
+
+    // game pause attribute 5
+    test('timer will be cleared on timer click', async () => {
+        jest.spyOn(global, 'clearInterval')
+
+        renderScreen({
+            route: ROUTES.ARENA,
+            getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
+        })
+
+        await hasPuzzleStarted()
+
+        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+
+        expect(clearInterval).toHaveBeenCalledTimes(1)
+    })
 })
