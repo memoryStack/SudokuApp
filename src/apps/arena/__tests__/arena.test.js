@@ -13,7 +13,7 @@ import {
     allInputPanelItemsAreDisabled,
 } from '@utils/testing/arena'
 import { ARENA_PAGE_TEST_ID } from '../constants'
-import { TIMER_TEST_ID } from '../timer/timer.constants'
+import { TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 
 describe('Arena Screen', () => {
     // added this to avoid "ReferenceError: You are trying to `import` a file after the Jest environment has been torn down."
@@ -65,7 +65,7 @@ describe('Arena Screen', () => {
         allBoardControllersDisabled()
     })
 
-    // game pause attribute 2
+    // game pause attribute 3
     test('all input panel items will be disabled on timer click', async () => {
         renderScreen({
             route: ROUTES.ARENA,
@@ -77,5 +77,19 @@ describe('Arena Screen', () => {
         fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
 
         allInputPanelItemsAreDisabled()
+    })
+
+    // game pause attribute 4
+    test('start the timer icon will be visible on timer click', async () => {
+        renderScreen({
+            route: ROUTES.ARENA,
+            getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
+        })
+
+        await hasPuzzleStarted()
+
+        fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
+
+        expect(screen.getByTestId(TIMER_START_ICON_TEST_ID)).toBeVisible()
     })
 })

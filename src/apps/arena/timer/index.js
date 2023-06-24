@@ -16,7 +16,7 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { addLeadingZeroIfEligible } from '../utils/util'
 import { GameState } from '../utils/classes/gameState'
 
-import { TIMER_TEST_ID, TIMER_PAUSE_ICON_TEST_ID } from './timer.constants'
+import { TIMER_TEST_ID, TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID } from './timer.constants'
 
 const styles = StyleSheet.create({
     triangleShape: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 const Timer_ = ({ onClick, time }) => {
     const gameState = useSelector(getGameState)
 
-    const getStartTimerIcon = () => <View style={styles.triangleShape} />
+    const getStartTimerIcon = () => <View style={styles.triangleShape} testID={TIMER_START_ICON_TEST_ID} />
 
     const getPauseTimerIcon = () => (
         <View
