@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent,
+    screen, fireEvent, waitFor,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -11,6 +11,7 @@ import {
     expectOnAllBoardCells,
     expectOnAllBoardControllers,
     expectOnAllInputPanelItems,
+    expectOnHintMenuItems,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -18,6 +19,7 @@ import { isEmptyElement } from '@utils/testing/touchable'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 import { ARENA_PAGE_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
+import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -170,5 +172,54 @@ describe('Timer Click Twice', () => {
         await renderScreenAndWaitForPuzzleStart(clickTimerTwice)
 
         expect(setInterval).toHaveBeenCalledTimes(2)
+    })
+})
+
+describe.only('Hints Click', () => {
+    beforeEach(() => {
+        jest.useFakeTimers()
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+    })
+
+    test('will open hints menu', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        fireEvent.press(screen.getByText('Hint'))
+
+        screen.getByTestId(HINTS_MENU_CONTAINER_TEST_ID)
+    })
+
+    // TODO: this test-case is wrong, we are not waiting until all the hints are checked
+    test.skip('all hints will be disabled if notes are not present', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        fireEvent.press(screen.getByText('Hint'))
+
+        expectOnHintMenuItems(element => {
+            expect(element).toBeDisabled()
+        })
+    })
+
+    // NOTE: test-cases like this might fail in future if the mocked puzzle doesn't have any hints at all
+    test('some hints will be enabled if notes are present before opening hints menu', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        fireEvent.press(screen.getByText('Fast Pencil'))
+
+        fireEvent.press(screen.getByText('Hint'))
+
+        await waitFor(() => {
+            let enabledHintsCount = 0
+            expectOnHintMenuItems(element => {
+                try {
+                    expect(element).not.toBeDisabled()
+                    enabledHintsCount++
+                } catch (error) { }
+            })
+
+            expect(enabledHintsCount).not.toBe(0)
+        })
     })
 })

@@ -8,13 +8,15 @@ import { getRawHints } from '../utils/smartHints'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 
-const onInit = async ({ setState, params: { mainNumbers, notes } }) => {
+const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
     const availableRawHints = {}
     for (let i = 0; i < HINTS_MENU_ITEMS.length; i++) {
         const { id: hintId } = HINTS_MENU_ITEMS[i]
         availableRawHints[hintId] = await rawHintsPromise(hintId, mainNumbers, notes)
     }
-    setState({ availableRawHints })
+
+    const { unmounting } = getState()
+    !unmounting && setState({ availableRawHints })
 }
 
 // TODO: analyze the asynchronous behaviour of this handler

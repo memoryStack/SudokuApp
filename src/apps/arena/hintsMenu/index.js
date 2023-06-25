@@ -18,6 +18,11 @@ import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import {
+    HINTS_MENU_CONTAINER_TEST_ID,
+    HINTS_MENU_OVERLAY_TEST_ID,
+    HINT_MENU_ITEM_TEST_ID,
+} from './hintsMenu.constants'
 import { styles } from './style'
 
 const COLUMNS_COUNT = 3
@@ -44,18 +49,24 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     }
 
     const renderMenuItem = ({ label, id }) => {
-        const isAvailable = !_isEmpty(_get(availableRawHints, id))
-        // can't use disabled prop as it propogates the click event to parent
-        // component. is there way to solve it without this onPress hack ??
-        return (
-            <Touchable
-                key={label}
-                style={[styles.menuItem, !isAvailable ? styles.disabledMenuItem : null]}
-                onPress={isAvailable ? () => onMenuItemClick(id) : _noop}
+        const isNotAvailable = _isEmpty(_get(availableRawHints, id))
 
+        return (
+            <View
+                style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}
+                onStartShouldSetResponder={e => true}
+                onTouchEnd={e => e.stopPropagation()}
+                key={label}
             >
-                <Text style={[styles.menuItemText, !isAvailable ? styles.disabledMenuItemText : null]}>{label}</Text>
-            </Touchable>
+                <Touchable
+                    style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}
+                    onPress={() => onMenuItemClick(id)}
+                    disabled={isNotAvailable}
+                    testID={HINT_MENU_ITEM_TEST_ID}
+                >
+                    <Text style={[styles.menuItemText, isNotAvailable ? styles.disabledMenuItemText : null]}>{label}</Text>
+                </Touchable>
+            </View>
         )
     }
 
@@ -75,30 +86,33 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         if (!isRowLastItem(index)) menuRow.push(renderVerticalSeparator(`verticalSep_${index}`))
     }
 
-    const renderMenuRow = () => (
-        <View style={styles.menuRowContainer} key={`row_${menuRows.length}`}>
+    const renderMenuRow = rowKey => (
+        <View style={styles.menuRowContainer} key={rowKey}>
             {menuRow}
         </View>
     )
 
-    const addMenuRow = () => {
+    const addMenuRow = rowKey => {
         if (menuRows.length) menuRows.push(renderHorizontalSeparator(`horizoSep_${menuRows.length}`))
-        menuRows.push(renderMenuRow())
+        menuRows.push(renderMenuRow(rowKey))
         menuRow = []
     }
 
     HINTS_MENU_ITEMS.forEach((item, index) => {
         addMenuItemInRow(item, index)
-        if (isRowLastItem(index)) addMenuRow()
+        if (isRowLastItem(index)) addMenuRow(`row_${index}`)
     })
 
     return (
         <Touchable
             onPress={onOverlayContainerClick}
             touchable={Platform.isIOS() ? TouchableTypes.highLight : TouchableTypes.nativeFeedBack}
+            testID={HINTS_MENU_OVERLAY_TEST_ID}
         >
             <View style={styles.overlayContainer}>
-                <View style={styles.container}>{menuRows}</View>
+                <View style={styles.container} testID={HINTS_MENU_CONTAINER_TEST_ID}>
+                    {menuRows}
+                </View>
             </View>
         </Touchable>
     )

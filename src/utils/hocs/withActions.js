@@ -21,9 +21,14 @@ const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT
                 super(props)
 
                 this.onActions = this.getOnActionProp()
+                this.unmounting = false
             }
 
-            getState = () => ({ ...this.props, ...this.state })
+            componentWillUnmount() {
+                this.unmounting = true
+            }
+
+            getState = () => ({ ...this.props, ...this.state, unmounting: this.unmounting })
 
             handleAction = (action = {}, actionHandlers) => {
                 const handler = actionHandlers[action.type]

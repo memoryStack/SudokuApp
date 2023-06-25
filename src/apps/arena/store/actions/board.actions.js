@@ -86,7 +86,7 @@ export const fastPencilAction = () => {
     }
     invokeDispatch(addMove(constructMove(move)))
 
-    if (__DEV__) {
+    if (__DEV__ && false) {
         // so that i can add things in testData.js files
         setTimeout(() => {
             consoleLog(getMainNumbers(getStoreState()))
