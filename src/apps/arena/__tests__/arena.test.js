@@ -15,6 +15,7 @@ import {
     getFirstEmptyCell,
     getFirstEnabledInputPanelNumber,
     getInputPanelNumberIfEnabled,
+    getInputPanelEraser,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -290,5 +291,51 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
         expect(emptyCell).not.toHaveTextContent(9)
+    })
+})
+
+describe('Erase Board Cell Value', () => {
+    test('can erase wrongly filled value', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = getFirstEmptyCell()
+        fireEvent.press(cell)
+        // 5 is not the solution of the empty cell above
+        fireEvent.press(getInputPanelNumberIfEnabled(5))
+        fireEvent.press(getInputPanelEraser())
+
+        expect(isEmptyElement(cell)).toBe(true)
+    })
+
+    test('can not erase correctly filled value', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = getFirstEmptyCell()
+        fireEvent.press(cell)
+        // 2 is the correct solution of the empty cell above
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelEraser())
+
+        expect(isEmptyElement(cell)).toBe(false)
+    })
+
+    test('can not erase clue value', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const clueCell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[0]
+        fireEvent.press(clueCell)
+        fireEvent.press(getInputPanelEraser())
+
+        expect(isEmptyElement(clueCell)).toBe(false)
+    })
+
+    test('erase on empty cell has no effect', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = getFirstEmptyCell()
+        fireEvent.press(cell)
+        fireEvent.press(getInputPanelEraser())
+
+        expect(isEmptyElement(cell)).toBe(true)
     })
 })

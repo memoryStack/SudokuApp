@@ -71,3 +71,5 @@ export const getInputPanelNumberIfEnabled = inputNumber => {
     expect(element).toBeEnabled()
     return element
 }
+
+export const getInputPanelEraser = () => screen.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)[9]
