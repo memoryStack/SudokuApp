@@ -22,6 +22,7 @@ import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { GameState } from '../utils/classes/gameState'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { MISTAKES_TEXT_TEST_ID } from './refree.constants'
 
 const styles = StyleSheet.create({
     refereeContainer: {
@@ -73,7 +74,9 @@ const Refree_ = ({ onAction }) => {
 
     return (
         <View style={styles.refereeContainer}>
-            <Text style={styles.refereeTextStyles}>{`Mistakes: ${mistakes} / ${maxMistakesLimit}`}</Text>
+            <Text style={styles.refereeTextStyles} testID={MISTAKES_TEXT_TEST_ID}>
+                {`Mistakes: ${mistakes} / ${maxMistakesLimit}`}
+            </Text>
             <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
             <Timer time={time} onClick={onTimerClick} />
         </View>

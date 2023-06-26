@@ -1,10 +1,10 @@
 import { BOARD_CELL_TEST_ID } from 'src/apps/arena/gameBoard/cell/cell.constants'
 import { TIMER_PAUSE_ICON_TEST_ID } from 'src/apps/arena/timer/timer.constants'
 import { BOARD_CONTROLLER_TEST_ID } from 'src/apps/arena/cellActions/cellActions.constants'
-import { INPUT_PANEL_ITEM_TEST_ID } from 'src/apps/arena/inputPanel/constants'
+import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from 'src/apps/arena/inputPanel/constants'
 import { HINT_MENU_ITEM_TEST_ID } from 'src/apps/arena/hintsMenu/hintsMenu.constants'
 
-import { screen } from './testingLibrary'
+import { screen, within } from './testingLibrary'
 import { isEmptyElement } from './touchable'
 
 export const hasPuzzleStarted = async () => {
@@ -61,4 +61,13 @@ export const getFirstEnabledInputPanelNumber = () => {
         inputNumber: enabledInputNumberIndex + 1,
         element: allInputPanelNumbers[enabledInputNumberIndex],
     }
+}
+
+export const getInputPanelNumberIfEnabled = inputNumber => {
+    const inputPanel = within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+    const element = inputPanel.getByText(String(inputNumber))
+    // will fail the test-case if someday mocked puzzle is changed and this
+    // requested input number is not enabled for new puzzle
+    expect(element).toBeEnabled()
+    return element
 }

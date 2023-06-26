@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, waitFor, within,
+    screen, fireEvent, waitFor,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -14,6 +14,7 @@ import {
     expectOnHintMenuItems,
     getFirstEmptyCell,
     getFirstEnabledInputPanelNumber,
+    getInputPanelNumberIfEnabled,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -22,6 +23,7 @@ import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } fro
 import { ARENA_PAGE_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
+import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -240,5 +242,17 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(inputPanelItemToPress.element)
 
         expect(emptyCell).toHaveTextContent(inputPanelItemToPress.inputNumber)
+    })
+
+    test('mistakes count will increase on clicking wrong number', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        const numberToInputInEmptyCell = 5 // 5 is not the solution of the empty cell above
+        fireEvent.press(getInputPanelNumberIfEnabled(numberToInputInEmptyCell))
+
+        expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 1/)
     })
 })

@@ -18,8 +18,8 @@ import { forCellEachNote as forEachInputNumber } from '../utils/util'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import { GameState } from '../utils/classes/gameState'
 
+import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 import { getStyles } from './style'
-import { ACTION_TYPES, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 
 const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
     const isHintTryOut = useIsHintTryOutStep()
@@ -102,7 +102,7 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} testID={INPUT_PANEL_CONTAINER_TEST_ID}>
             {renderPanelView()}
         </View>
     )
