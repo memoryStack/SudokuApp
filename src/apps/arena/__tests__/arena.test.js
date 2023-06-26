@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, waitFor,
+    screen, fireEvent, waitFor, within,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -16,6 +16,7 @@ import {
     getFirstEnabledInputPanelNumber,
     getInputPanelNumberIfEnabled,
     getInputPanelEraser,
+    isNotePresentInCell,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -291,6 +292,30 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
         expect(emptyCell).not.toHaveTextContent(9)
+    })
+})
+
+describe('Board Cell Fill Notes', () => {
+    test('should fill note in an empty cell if that number is not present in row, col and block', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2)) // 2 can be entered as not in the cell
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+    })
+
+    test('will not fill note in an empty cell if that number is present in row, col and block', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(9)) // 9 is present in block and column of this cell
+
+        expect(isNotePresentInCell(cell, 9)).toBe(false)
     })
 })
 

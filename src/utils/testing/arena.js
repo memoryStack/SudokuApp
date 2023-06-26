@@ -1,4 +1,4 @@
-import { BOARD_CELL_TEST_ID } from 'src/apps/arena/gameBoard/cell/cell.constants'
+import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from 'src/apps/arena/gameBoard/cell/cell.constants'
 import { TIMER_PAUSE_ICON_TEST_ID } from 'src/apps/arena/timer/timer.constants'
 import { BOARD_CONTROLLER_TEST_ID } from 'src/apps/arena/cellActions/cellActions.constants'
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from 'src/apps/arena/inputPanel/constants'
@@ -44,6 +44,25 @@ export const expectOnHintMenuItems = expectCallback => {
 
 export const getFirstEmptyCell = () => screen.getAllByTestId(BOARD_CELL_TEST_ID)
     .find(element => isEmptyElement(element))
+
+export const isNotePresentInCell = (cellElement, note) => {
+    const allNotes = within(cellElement).queryAllByTestId(CELL_NOTE_TEST_ID)
+
+    return allNotes.some(noteElement => {
+        let found
+        try {
+            expect(noteElement).toHaveTextContent(note)
+            found = true
+        } catch (error) {
+            found = false
+        }
+        return found
+    })
+}
+
+export const isMainNumberPresentInCell = (cellElement, mainNumber) => {
+    expect(within(cellElement).getByTestId(CELL_MAIN_VALUE_TEST_ID)).toHaveTextContent(mainNumber)
+}
 
 export const getFirstEnabledInputPanelNumber = () => {
     const allInputPanelNumbers = screen.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)

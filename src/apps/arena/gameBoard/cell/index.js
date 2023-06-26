@@ -16,7 +16,7 @@ import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensio
 
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../style'
 
-import { BOARD_CELL_TEST_ID } from './cell.constants'
+import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from './cell.constants'
 import { getStyles } from './style'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
@@ -78,6 +78,7 @@ const Cell_ = ({
                                 styles.noteText,
                                 noteFontColor ? { color: noteFontColor, fontFamily: fonts.bold } : null,
                             ]}
+                            testID={CELL_NOTE_TEST_ID}
                         >
                             {show ? `${noteValue}` : ''}
                         </Text>
@@ -102,7 +103,7 @@ const Cell_ = ({
     )
 
     const renderCellMainValue = () => (
-        <Text style={[styles.mainNumberText, mainValueFontColor]}>
+        <Text style={[styles.mainNumberText, mainValueFontColor]} testID={CELL_MAIN_VALUE_TEST_ID}>
             {' '}
             {`${cellMainValue}`}
             {' '}
