@@ -64,6 +64,10 @@ export const isMainNumberPresentInCell = (cellElement, mainNumber) => {
     expect(within(cellElement).getByTestId(CELL_MAIN_VALUE_TEST_ID)).toHaveTextContent(mainNumber)
 }
 
+export const isMainNumberNotPresentInCell = (cellElement, mainNumber) => {
+    expect(within(cellElement).getByTestId(CELL_MAIN_VALUE_TEST_ID)).not.toHaveTextContent(mainNumber)
+}
+
 export const getFirstEnabledInputPanelNumber = () => {
     const allInputPanelNumbers = screen.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)
 

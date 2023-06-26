@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, waitFor, within,
+    screen, fireEvent, waitFor,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -17,6 +17,7 @@ import {
     getInputPanelNumberIfEnabled,
     getInputPanelEraser,
     isNotePresentInCell,
+    isMainNumberPresentInCell,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -244,7 +245,7 @@ describe('Board Cell Fill Values', () => {
         const inputPanelItemToPress = getFirstEnabledInputPanelNumber()
         fireEvent.press(inputPanelItemToPress.element)
 
-        expect(emptyCell).toHaveTextContent(inputPanelItemToPress.inputNumber)
+        isMainNumberPresentInCell(emptyCell, inputPanelItemToPress.inputNumber)
     })
 
     test('mistakes count will increase on clicking wrong number', async () => {
@@ -267,31 +268,31 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(clueCell)
         fireEvent.press(getInputPanelNumberIfEnabled(5))
 
-        expect(clueCell).toHaveTextContent(9)
+        isMainNumberPresentInCell(clueCell, 9)
     })
 
     test('clicked number wont change value in correctly filled cell as well', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         // in mocked puzzle, second cell is empty and it's solution is 2
-        const emptyCell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
-        fireEvent.press(emptyCell)
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
         fireEvent.press(getInputPanelNumberIfEnabled(2)) // fill correct value
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
-        expect(emptyCell).not.toHaveTextContent(9)
+        isMainNumberPresentInCell(cell, 2)
     })
 
     test('clicked number wont change value in wrongly filled cell as well', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         // in mocked puzzle, second cell is empty and it's solution is 2
-        const emptyCell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
-        fireEvent.press(emptyCell)
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
         fireEvent.press(getInputPanelNumberIfEnabled(5)) // fill wrong value
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
-        expect(emptyCell).not.toHaveTextContent(9)
+        isMainNumberPresentInCell(cell, 5)
     })
 })
 
