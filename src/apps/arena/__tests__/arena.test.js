@@ -22,6 +22,7 @@ import {
 
 import { isEmptyElement } from '@utils/testing/touchable'
 
+import { ErrorWithStack } from '@testing-library/react-native/build/helpers/errors'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 import { ARENA_PAGE_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
@@ -335,6 +336,24 @@ describe('Board Cell Fill Notes', () => {
     })
 })
 
+describe('Board Cell fill MainValue in Notes filled cell', () => {
+    test('will remove notes and show main value', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(false)
+        expect(isNotePresentInCell(cell, 3)).toBe(false)
+        isMainNumberPresentInCell(cell, 2)
+    })
+})
+
 describe('Erase Board Cell Main Number', () => {
     test('can erase wrongly filled value', async () => {
         await renderScreenAndWaitForPuzzleStart()
@@ -391,13 +410,107 @@ describe('Erase Board Cell Notes', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(2))
         fireEvent.press(getInputPanelNumberIfEnabled(3))
         fireEvent.press(getInputPanelNumberIfEnabled(4))
+        fireEvent.press(getInputPanelEraser())
+
+        expect(isNotePresentInCell(cell, 2)).toBe(false)
+        expect(isNotePresentInCell(cell, 3)).toBe(false)
+        expect(isNotePresentInCell(cell, 4)).toBe(false)
+    })
+})
+
+describe('Undo', () => {
+    // TODO: will undo fast pencil click move
+    // add test cases for fast pencil first before adding test case for it here
+
+    test('will remove correctly filled main number', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isEmptyElement(cell)).toBe(true)
+    })
+
+    test('will remove wrongly filled main number as well', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isEmptyElement(cell)).toBe(true)
+    })
+
+    test('will remove filled notes one by one on each click', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
 
         expect(isNotePresentInCell(cell, 2)).toBe(true)
         expect(isNotePresentInCell(cell, 3)).toBe(true)
-        expect(isNotePresentInCell(cell, 4)).toBe(true)
 
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        expect(isNotePresentInCell(cell, 3)).toBe(false)
+
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(false)
+        expect(isNotePresentInCell(cell, 3)).toBe(false)
+    })
+
+    test('will bring back removed main number from cell', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(getInputPanelNumberIfEnabled(3)) // only wrongly filled main numbers can be removed
         fireEvent.press(getInputPanelEraser())
+        fireEvent.press(screen.getByText('Undo'))
 
-        expect(isEmptyElement(cell)).toBe(true)
+        expect(cell).toHaveTextContent(3)
+    })
+
+    test('will bring back removed notes from cell', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(getInputPanelEraser())
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        expect(isNotePresentInCell(cell, 3)).toBe(true)
+    })
+
+    test('will bring back the notes which were present before filling main number', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(false)
+        expect(isNotePresentInCell(cell, 3)).toBe(false)
+
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        expect(isNotePresentInCell(cell, 3)).toBe(true)
     })
 })
