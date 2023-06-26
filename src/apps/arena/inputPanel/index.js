@@ -101,7 +101,11 @@ const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
         return rows
     }
 
-    return <View style={styles.container}>{renderPanelView()}</View>
+    return (
+        <View style={styles.container}>
+            {renderPanelView()}
+        </View>
+    )
 }
 
 export const Inputpanel = React.memo(Inputpanel_)

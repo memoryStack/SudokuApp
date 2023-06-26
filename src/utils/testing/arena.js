@@ -5,6 +5,7 @@ import { INPUT_PANEL_ITEM_TEST_ID } from 'src/apps/arena/inputPanel/constants'
 import { HINT_MENU_ITEM_TEST_ID } from 'src/apps/arena/hintsMenu/hintsMenu.constants'
 
 import { screen } from './testingLibrary'
+import { isEmptyElement } from './touchable'
 
 export const hasPuzzleStarted = async () => {
     await screen.findByTestId(TIMER_PAUSE_ICON_TEST_ID)
@@ -39,4 +40,25 @@ export const expectOnHintMenuItems = expectCallback => {
     allHintMenuItems.forEach(element => {
         expectCallback(element)
     })
+}
+
+export const getFirstEmptyCell = () => screen.getAllByTestId(BOARD_CELL_TEST_ID)
+    .find(element => isEmptyElement(element))
+
+export const getFirstEnabledInputPanelNumber = () => {
+    const allInputPanelNumbers = screen.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)
+
+    const enabledInputNumberIndex = allInputPanelNumbers.findIndex(element => {
+        let isEnabled = false
+        try {
+            expect(element).toBeEnabled()
+            isEnabled = true
+        } catch (error) { }
+        return isEnabled
+    })
+
+    return {
+        inputNumber: enabledInputNumberIndex + 1,
+        element: allInputPanelNumbers[enabledInputNumberIndex],
+    }
 }

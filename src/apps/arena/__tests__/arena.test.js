@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, waitFor,
+    screen, fireEvent, waitFor, within,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -12,6 +12,8 @@ import {
     expectOnAllBoardControllers,
     expectOnAllInputPanelItems,
     expectOnHintMenuItems,
+    getFirstEmptyCell,
+    getFirstEnabledInputPanelNumber,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -225,5 +227,18 @@ describe('Hints Click', () => {
 
             expect(enabledHintsCount).not.toBe(0)
         })
+    })
+})
+
+describe('Board Cell Fill Values', () => {
+    test('should fill main number in an empty cell', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        const inputPanelItemToPress = getFirstEnabledInputPanelNumber()
+        fireEvent.press(inputPanelItemToPress.element)
+
+        expect(emptyCell).toHaveTextContent(inputPanelItemToPress.inputNumber)
     })
 })
