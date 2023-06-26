@@ -267,4 +267,17 @@ describe('Board Cell Fill Values', () => {
 
         expect(clueCell).toHaveTextContent(9)
     })
+
+    test('clicked number wont change value in correctly filled cell as well', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        // in mocked puzzle, second cell is empty and it's solution is 2
+        const emptyCell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(emptyCell)
+        fireEvent.press(getInputPanelNumberIfEnabled(2)) // fill correct value
+        fireEvent.press(getInputPanelNumberIfEnabled(9))
+
+        expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 0/)
+        expect(emptyCell).not.toHaveTextContent(9)
+    })
 })
