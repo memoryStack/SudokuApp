@@ -318,9 +318,24 @@ describe('Board Cell Fill Notes', () => {
 
         expect(isNotePresentInCell(cell, 9)).toBe(false)
     })
+
+    test('try filling a note two times will actually erase that note after filling on first click', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(false)
+    })
 })
 
-describe('Erase Board Cell Value', () => {
+describe('Erase Board Cell Main Number', () => {
     test('can erase wrongly filled value', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -360,6 +375,27 @@ describe('Erase Board Cell Value', () => {
 
         const cell = getFirstEmptyCell()
         fireEvent.press(cell)
+        fireEvent.press(getInputPanelEraser())
+
+        expect(isEmptyElement(cell)).toBe(true)
+    })
+})
+
+describe('Erase Board Cell Notes', () => {
+    test('eraser will erase all the notes in cell', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(getInputPanelNumberIfEnabled(4))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        expect(isNotePresentInCell(cell, 3)).toBe(true)
+        expect(isNotePresentInCell(cell, 4)).toBe(true)
+
         fireEvent.press(getInputPanelEraser())
 
         expect(isEmptyElement(cell)).toBe(true)
