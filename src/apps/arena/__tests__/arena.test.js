@@ -24,6 +24,7 @@ import { ARENA_PAGE_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
+import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -254,5 +255,16 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(numberToInputInEmptyCell))
 
         expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 1/)
+    })
+
+    test('clicked number wont change clue cell value', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        // in mocked puzzle, first cell is filled and it's value is 9
+        const clueCell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[0]
+        fireEvent.press(clueCell)
+        fireEvent.press(getInputPanelNumberIfEnabled(5))
+
+        expect(clueCell).toHaveTextContent(9)
     })
 })
