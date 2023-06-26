@@ -418,6 +418,46 @@ describe('Erase Board Cell Notes', () => {
     })
 })
 
+describe('Fast Pencil', () => {
+    test('will add all possible notes to all the empty cells', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        fireEvent.press(screen.getByText('Fast Pencil'))
+
+        // assuming if it works for two random cells then will work for other cells as well
+        const cellA = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        expect(isNotePresentInCell(cellA, 2)).toBe(true)
+        expect(isNotePresentInCell(cellA, 3)).toBe(true)
+        expect(isNotePresentInCell(cellA, 4)).toBe(true)
+        expect(isNotePresentInCell(cellA, 7)).toBe(true)
+
+        const cellB = screen.getAllByTestId(BOARD_CELL_TEST_ID)[53]
+        expect(isNotePresentInCell(cellB, 1)).toBe(true)
+        expect(isNotePresentInCell(cellB, 3)).toBe(true)
+        expect(isNotePresentInCell(cellB, 5)).toBe(true)
+
+        expectOnAllBoardCells(element => {
+            expect(isEmptyElement(element)).toBe(false)
+        })
+    })
+
+    test('will add all remaining notes to partially filled notes in cell', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(screen.getByText('Fast Pencil'))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        expect(isNotePresentInCell(cell, 3)).toBe(true)
+        expect(isNotePresentInCell(cell, 4)).toBe(true)
+        expect(isNotePresentInCell(cell, 7)).toBe(true)
+    })
+})
+
 describe('Undo', () => {
     // TODO: will undo fast pencil click move
     // add test cases for fast pencil first before adding test case for it here
