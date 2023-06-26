@@ -513,4 +513,19 @@ describe('Undo', () => {
         expect(isNotePresentInCell(cell, 2)).toBe(true)
         expect(isNotePresentInCell(cell, 3)).toBe(true)
     })
+
+    test('will bring back the note which was removed by toggling the note', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        expect(isNotePresentInCell(cell, 3)).toBe(true)
+    })
 })
