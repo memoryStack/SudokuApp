@@ -459,9 +459,6 @@ describe('Fast Pencil', () => {
 })
 
 describe('Undo', () => {
-    // TODO: will undo fast pencil click move
-    // add test cases for fast pencil first before adding test case for it here
-
     test('will remove correctly filled main number', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -567,5 +564,21 @@ describe('Undo', () => {
 
         expect(isNotePresentInCell(cell, 2)).toBe(true)
         expect(isNotePresentInCell(cell, 3)).toBe(true)
+    })
+
+    test('will remove notes added by Fast Pencil click, rest will survive', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+        fireEvent.press(cell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(2)) // add notes by normal pencil
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+        fireEvent.press(screen.getByText('Fast Pencil'))
+        fireEvent.press(screen.getByText('Undo'))
+
+        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        expect(isNotePresentInCell(cell, 3)).toBe(true)
+        expect(isEmptyElement(screen.getAllByTestId(BOARD_CELL_TEST_ID)[53])).toBe(true)
     })
 })
