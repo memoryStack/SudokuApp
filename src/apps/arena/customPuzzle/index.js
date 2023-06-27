@@ -20,7 +20,7 @@ import { Board } from '../gameBoard'
 import { Inputpanel } from '../inputPanel'
 
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
-import { CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
+import { CLOSE_ICON_TEST_ID, CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
 
 const styles = StyleSheet.create({
     container: {
@@ -105,6 +105,7 @@ const CustomPuzzle_ = ({
                     style={styles.closeIconContainer}
                     onPress={handleOnClose}
                     addHitSlop
+                    testID={CLOSE_ICON_TEST_ID}
                 >
                     <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
                 </Touchable>

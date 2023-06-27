@@ -9,6 +9,8 @@ import { render } from '@testing-library/react-native'
 import ModalProvider from 'src/containers/ModalProvider'
 import ThemeProvider from 'src/containers/ThemeProvider'
 
+import { SnackBar } from 'src/apps/components/SnackBar'
+
 import 'src/i18n/i18n.config'
 
 import store from 'src/redux/store'
@@ -17,7 +19,10 @@ const AllTheProviders = ({ children }) => (
     <Provider store={store}>
         <ThemeProvider>
             <ModalProvider>
-                {children}
+                <>
+                    {children}
+                    <SnackBar />
+                </>
             </ModalProvider>
         </ThemeProvider>
     </Provider>

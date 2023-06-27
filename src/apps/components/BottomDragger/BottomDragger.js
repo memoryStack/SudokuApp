@@ -18,6 +18,8 @@ import {
     HEADER_HEIGHT,
     RELEASE_LIMIT_FOR_AUTO_SCROLL,
     DEFAULT_BOOTTOM_MOST_POSITION_RATIO,
+    CONTENT_CONTAINER_TEST_ID,
+    BOTTOM_DRAGGER_OVERLAY_TEST_ID,
 } from './bottomDragger.constants'
 import { getStyles } from './bottomDragger.styles'
 
@@ -199,6 +201,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
             <Touchable
                 touchable={TouchableTypes.withoutFeedBack}
                 onPress={() => !stopBackgroundClickClose && moveDragger(bottomMostPosition)}
+                testID={BOTTOM_DRAGGER_OVERLAY_TEST_ID}
             >
                 <Animated.View style={[styles.slidingParentContainer, { opacity: transparentViewOpacityConfig }]} />
             </Touchable>
@@ -219,7 +222,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 ]}
                 testID={testID}
             >
-                <View onLayout={childrenOnLayout}>
+                <View onLayout={childrenOnLayout} testID={CONTENT_CONTAINER_TEST_ID}>
                     {headerText ? renderHeader() : null}
                     {children}
                 </View>

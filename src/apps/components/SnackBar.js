@@ -1,11 +1,16 @@
-import React from 'react'
+import React, {
+    useRef, useCallback, useEffect, useState,
+} from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import PropTypes from 'prop-types'
 
-import _noop from '@lodash/noop'
+import _isEmpty from '@lodash/isEmpty'
 
 import { fonts } from '@resources/fonts/font'
 import { CloseIcon } from '@resources/svgIcons/close'
+
+import { addListener, removeListener } from '@utils/GlobalEventBus'
+
+import { EVENTS } from 'src/constants/events'
 
 import { Touchable } from './Touchable'
 
@@ -38,30 +43,74 @@ const styles = StyleSheet.create({
     },
 })
 
-const SnackBar_ = ({ msg, customStyles, onClose }) => (
-    <View style={[styles.container, customStyles]}>
-        <Text style={styles.msgTextStyle}>{msg}</Text>
-        <Touchable
-            style={styles.closeButton}
-            activeOpacity={1}
-            onPress={onClose}
-            addHitSlop
-        >
-            <CloseIcon height={10} width={10} fill="white" />
-        </Touchable>
-    </View>
-)
+const SnackBar_ = () => {
+    const [snackBar, setSnackBar] = useState({
+        show: false, view: null, msg: '', customStyles: null,
+    })
+    const snackBarTimerID = useRef(null)
+    // added pretty raw implementation for snackbars right now
+    // later on after finalizing a robust implementation i can make
+    // an HOC so that tis snackbar can be re-used for each view
+
+    const hideSnackBar = () => {
+        setSnackBar({
+            show: false, view: null, msg: '', customStyles: null,
+        })
+    }
+
+    const clearTimer = () => {
+        snackBarTimerID.current && clearTimeout(snackBarTimerID.current)
+    }
+
+    useEffect(() => {
+        const handler = ({
+            snackbarView = null, msg = '', visibleTime = 3000, customStyles = null,
+        }) => {
+            if (_isEmpty(snackbarView) && _isEmpty(msg)) return
+
+            setSnackBar({
+                show: true, view: snackbarView, msg, customStyles,
+            })
+            snackBarTimerID.current = setTimeout(hideSnackBar, visibleTime)
+        }
+        addListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
+
+        return () => {
+            removeListener(EVENTS.LOCAL.SHOW_SNACK_BAR, handler)
+            clearTimer()
+        }
+    }, [])
+
+    const onCloseSnackBar = useCallback(() => {
+        clearTimer()
+        hideSnackBar()
+    }, [])
+
+    if (!snackBar.show) return null
+    if (snackBar.view) return snackBar.view
+
+    return (
+        <View style={[styles.container, snackBar.customStyles]}>
+            <Text style={styles.msgTextStyle}>{snackBar.msg}</Text>
+            <Touchable
+                style={styles.closeButton}
+                activeOpacity={1}
+                onPress={onCloseSnackBar}
+                addHitSlop
+            >
+                <CloseIcon height={10} width={10} fill="white" />
+            </Touchable>
+        </View>
+
+    )
+}
 
 export const SnackBar = React.memo(SnackBar_)
 
 SnackBar_.propTypes = {
-    msg: PropTypes.string,
-    customStyles: PropTypes.object,
-    onClose: PropTypes.func,
+
 }
 
 SnackBar_.defaultProps = {
-    msg: '',
-    customStyles: null,
-    onClose: _noop,
+
 }
