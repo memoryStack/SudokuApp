@@ -2,15 +2,16 @@ component=$1
 type=$2
 
 if [ "$type" = "molecules" ]
-then componentType="molecules"
+then folderPath="./src/ui/molecules/${component}"
 elif [ "$type" = "atoms" ]
-then componentType="atoms"
+then folderPath="./src/ui/atoms/${component}"
 else 
-    echo "Error: component type can be atoms or molecules" >&2
-    exit 1
+    # echo "Error: component type can be atoms or molecules" >&2
+    # exit 1
+    # second argument should be full path
+    folderPath="${2}/${component}"
 fi
 
-folderPath="./src/ui/${componentType}/${component}"
 mkdir $folderPath
 cd $folderPath
 
