@@ -12,21 +12,17 @@ import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 
 import { Touchable } from '../../components/Touchable'
 
-import { getGameState } from '../store/selectors/gameState.selectors'
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
-import { GameState } from '../utils/classes/gameState'
 
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 import { getStyles } from './style'
 
-const Inputpanel_ = ({ numbersVisible, onAction, singleRow }) => {
+const Inputpanel_ = ({
+    numbersVisible, onAction, singleRow, disableNumbersInput,
+}) => {
     const isHintTryOut = useIsHintTryOutStep()
-
-    const gameState = useSelector(getGameState)
-
-    const disableNumbersInput = !(new GameState(gameState).isGameActive())
 
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
@@ -114,10 +110,12 @@ Inputpanel_.propTypes = {
     numbersVisible: PropTypes.array,
     onAction: PropTypes.func,
     singleRow: PropTypes.bool,
+    disableNumbersInput: PropTypes.bool,
 }
 
 Inputpanel_.defaultProps = {
     numbersVisible: new Array(10).fill(true),
     onAction: _noop,
     singleRow: false,
+    disableNumbersInput: false,
 }

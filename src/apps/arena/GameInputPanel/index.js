@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import PropTypes from 'prop-types'
 
+import { useSelector } from 'react-redux'
+
 import _noop from '@lodash/noop'
 
 import withActions from '../../../utils/hocs/withActions'
@@ -10,11 +12,16 @@ import { Inputpanel } from '../inputPanel'
 import { forBoardEachCell } from '../utils/util'
 import { MAX_INSTANCES_OF_NUMBER } from '../constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
+import { GameState } from '../utils/classes/gameState'
+import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { ACTION_HANDLERS } from './actionHandlers'
 
 const GameInputPanel_ = ({ onAction }) => {
     const { mainNumbers } = useGameBoardInputs()
+
+    const gameState = useSelector(getGameState)
+
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
 
     const getInstancesCounts = mainNumbers => {
@@ -39,7 +46,13 @@ const GameInputPanel_ = ({ onAction }) => {
         if (!numbersVisible.sameArrays(numbersNewVisibility)) setNumbersVisibility(numbersNewVisibility)
     }, [mainNumbers, numbersVisible])
 
-    return <Inputpanel numbersVisible={numbersVisible} onAction={onAction} />
+    return (
+        <Inputpanel
+            numbersVisible={numbersVisible}
+            onAction={onAction}
+            disableNumbersInput={!(new GameState(gameState).isGameActive())}
+        />
+    )
 }
 
 export const GameInputPanel = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(GameInputPanel_))
