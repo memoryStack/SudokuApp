@@ -19,6 +19,7 @@ import { GameState } from './utils/classes/gameState'
 import { getGameState } from './store/selectors/gameState.selectors'
 
 const TROPHY_ICON_DIMENSION = 60
+export const GAME_OVER_CARD_TEST_ID = 'GAME_OVER_CARD_TEST_ID'
 const styles = StyleSheet.create({
     container: {
         padding: 20,
@@ -122,8 +123,17 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
 
     const renderNewGameButton = () => <Button text={NEW_GAME} onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
 
+    /**
+     * remove touchable
+     * add new folder for this component
+     */
     return (
-        <Touchable activeOpacity={1} onPress={_noop} style={styles.container}>
+        <Touchable
+            activeOpacity={1}
+            onPress={_noop}
+            style={styles.container}
+            testID={GAME_OVER_CARD_TEST_ID}
+        >
             {getGameSolvedView()}
             {getGameUnsolvedView()}
             {renderNewGameButton()}

@@ -18,17 +18,20 @@ import {
     getInputPanelEraser,
     isNotePresentInCell,
     isMainNumberPresentInCell,
+    solvePuzzle,
+    gameOverByMistakes,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
 
-import { ErrorWithStack } from '@testing-library/react-native/build/helpers/errors'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 import { ARENA_PAGE_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
+import { GAME_OVER_CARD_TEST_ID } from '../gameOverCard'
+import { NEXT_GAME_MENU_TEST_ID } from '../nextGameMenu/nextGameMenu.constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -580,5 +583,29 @@ describe('Undo', () => {
         expect(isNotePresentInCell(cell, 2)).toBe(true)
         expect(isNotePresentInCell(cell, 3)).toBe(true)
         expect(isEmptyElement(screen.getAllByTestId(BOARD_CELL_TEST_ID)[53])).toBe(true)
+    })
+})
+
+describe('Game Over Card', () => {
+    test('clicking on NewGame Button after puzzle was solved will open Next Game Menu to start new puzzle', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        solvePuzzle()
+        fireEvent.press(screen.getByText('New Game'))
+
+        await waitFor(() => {
+            expect(screen.getByTestId(NEXT_GAME_MENU_TEST_ID)).toBeVisible()
+        })
+    })
+
+    test('clicking on NewGame Button after puzzle was not solved will open Next Game Menu to start new puzzle', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        gameOverByMistakes()
+        fireEvent.press(screen.getByText('New Game'))
+
+        await waitFor(() => {
+            expect(screen.getByTestId(NEXT_GAME_MENU_TEST_ID)).toBeVisible()
+        })
     })
 })

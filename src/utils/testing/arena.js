@@ -4,7 +4,7 @@ import { BOARD_CONTROLLER_TEST_ID } from 'src/apps/arena/cellActions/cellActions
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from 'src/apps/arena/inputPanel/constants'
 import { HINT_MENU_ITEM_TEST_ID } from 'src/apps/arena/hintsMenu/hintsMenu.constants'
 
-import { screen, within } from './testingLibrary'
+import { screen, within, fireEvent } from './testingLibrary'
 import { isEmptyElement } from './touchable'
 
 export const hasPuzzleStarted = async () => {
@@ -96,3 +96,17 @@ export const getInputPanelNumberIfEnabled = inputNumber => {
 }
 
 export const getInputPanelEraser = () => screen.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)[9]
+
+export const solvePuzzle = () => {
+    // this will break if in future Fill button is removed in dev mode
+    fireEvent.press(screen.getByText('Fill'))
+}
+
+export const gameOverByMistakes = () => {
+    fireEvent.press(screen.getAllByTestId(BOARD_CELL_TEST_ID)[1])
+    fireEvent.press(getInputPanelNumberIfEnabled(3))
+    fireEvent.press(getInputPanelEraser())
+    fireEvent.press(getInputPanelNumberIfEnabled(3))
+    fireEvent.press(getInputPanelEraser())
+    fireEvent.press(getInputPanelNumberIfEnabled(3))
+}
