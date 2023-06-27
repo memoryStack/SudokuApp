@@ -254,7 +254,6 @@ const Arena_ = ({
                 onPress={hideCongratsModal}
             >
                 <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
-
                     <GameOverCard
                         stats={{
                             mistakes,

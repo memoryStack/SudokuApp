@@ -79,7 +79,7 @@ const initBoardData = () => {
     // const str = '090000070800000000576390800900014005004070900700930014003089657000060403050020180'
     // const str = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
     const str = '900008000000004027061027000095000004080010090600000780000850140850600000000300002'
-    if (__DEV__) {
+    if (__DEV__ && false) {
         for (let i = 0; i < str.length; i++) {
             const { row, col } = convertBoardCellNumToCell(i)
             mainNumbers[row][col].value = parseInt(str[i], 10)

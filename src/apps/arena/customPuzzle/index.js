@@ -20,6 +20,7 @@ import { Board } from '../gameBoard'
 import { Inputpanel } from '../inputPanel'
 
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
+import { CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
 
 const styles = StyleSheet.create({
     container: {
@@ -59,7 +60,12 @@ const styles = StyleSheet.create({
 })
 
 const CustomPuzzle_ = ({
-    mainNumbers, selectedCell, notes, parentHeight, onCustomPuzzleClosed, onAction,
+    mainNumbers,
+    selectedCell,
+    notes,
+    parentHeight,
+    onCustomPuzzleClosed,
+    onAction,
 }) => {
     const customPuzzleRef = useRef(null)
 
@@ -92,6 +98,7 @@ const CustomPuzzle_ = ({
             parentHeight={parentHeight}
             onDraggerClosed={onHCClosed}
             stopBackgroundClickClose
+            testID={CUSTOM_PUZZLE_TEST_ID}
         >
             <View style={styles.container}>
                 <Touchable
