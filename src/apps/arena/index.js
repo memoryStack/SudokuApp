@@ -13,7 +13,6 @@ import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from 'src/navigation/h
 import { Touchable } from '../components/Touchable' // TODO: make linter catch issues like this
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
-import { GameOverCard } from './gameOverCard'
 import { CustomPuzzle } from './customPuzzle'
 import SmartHintHC from './smartHintHC'
 import { HintsMenu } from './hintsMenu'
@@ -35,8 +34,8 @@ import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
-
 import { ARENA_PAGE_TEST_ID } from './constants'
+import GameOverCard from './GameOverCard'
 
 const MAX_AVAILABLE_HINTS = 3
 const styles = StyleSheet.create({
@@ -255,6 +254,7 @@ const Arena_ = ({
                 onPress={hideCongratsModal}
             >
                 <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
+
                     <GameOverCard
                         stats={{
                             mistakes,

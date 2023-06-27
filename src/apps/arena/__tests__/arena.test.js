@@ -30,7 +30,6 @@ import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
-import { GAME_OVER_CARD_TEST_ID } from '../gameOverCard'
 import { NEXT_GAME_MENU_TEST_ID } from '../nextGameMenu/nextGameMenu.constants'
 
 const storageUtils = require('@utils/storage')

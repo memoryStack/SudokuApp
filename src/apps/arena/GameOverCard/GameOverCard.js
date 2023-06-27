@@ -8,18 +8,16 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { TrophyIcon } from '@resources/svgIcons/congratsTrophy'
 import { NEW_GAME } from '@resources/stringLiterals'
 import { fonts } from '@resources/fonts/font'
-import { Button } from '../../components/button'
-import { Touchable } from '../components/Touchable'
+import { Button } from '../../../components/button'
 
-import { addLeadingZeroIfEligible } from './utils/util'
-import { GameState } from './utils/classes/gameState'
-import { getGameState } from './store/selectors/gameState.selectors'
+import { addLeadingZeroIfEligible } from '../utils/util'
+import { GameState } from '../utils/classes/gameState'
+import { getGameState } from '../store/selectors/gameState.selectors'
 
-const TROPHY_ICON_DIMENSION = 60
-export const GAME_OVER_CARD_TEST_ID = 'GAME_OVER_CARD_TEST_ID'
+import { GAME_OVER_CARD_TEST_ID } from './gameOverCard.constants'
+
 const styles = StyleSheet.create({
     container: {
         padding: 20,
@@ -72,7 +70,7 @@ const getTimeView = (timeTaken = {}) => {
 }
 
 // TODO: change this file name to something generic
-const GameOverCard_ = ({ stats, openNextGameMenu }) => {
+const GameOverCard = ({ stats, openNextGameMenu }) => {
     const {
         mistakes, difficultyLevel, time, hintsUsed,
     } = stats
@@ -121,34 +119,35 @@ const GameOverCard_ = ({ stats, openNextGameMenu }) => {
         )
     }
 
-    const renderNewGameButton = () => <Button text={NEW_GAME} onClick={openNextGameMenu} containerStyle={styles.newGameButtonContainer} />
+    const renderNewGameButton = () => (
+        <Button
+            text={NEW_GAME}
+            onClick={openNextGameMenu}
+            containerStyle={styles.newGameButtonContainer}
+        />
+    )
 
-    /**
-     * remove touchable
-     * add new folder for this component
-     */
     return (
-        <Touchable
-            activeOpacity={1}
-            onPress={_noop}
+        <View
+            onStartShouldSetResponder={() => true}
             style={styles.container}
             testID={GAME_OVER_CARD_TEST_ID}
         >
             {getGameSolvedView()}
             {getGameUnsolvedView()}
             {renderNewGameButton()}
-        </Touchable>
+        </View>
     )
 }
 
-export const GameOverCard = React.memo(GameOverCard_)
+export default React.memo(GameOverCard)
 
-GameOverCard_.propTypes = {
+GameOverCard.propTypes = {
     stats: PropTypes.object,
     openNextGameMenu: PropTypes.func,
 }
 
-GameOverCard_.defaultProps = {
+GameOverCard.defaultProps = {
     stats: {},
     openNextGameMenu: _noop,
 }
