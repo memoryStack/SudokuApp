@@ -3,7 +3,9 @@ import * as React from 'react'
 import {
     fireEvent, render, act, screen, waitFor,
 } from '@utils/testing/testingLibrary'
-import { getFirstEmptyCell, getInputPanelEraser, getInputPanelNumberIfEnabled } from '@utils/testing/arena'
+import {
+    getCellByPosition, getFirstEmptyCell, getInputPanelEraser, getInputPanelNumberIfEnabled,
+} from '@utils/testing/arena'
 import { isEmptyElement } from '@utils/testing/touchable'
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 
@@ -30,7 +32,10 @@ const fillCustomPuzzle = cellVsMainNumbers => {
         const cellNo = cellsNo[i]
         const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[parseInt(cellNo, 10) - 1]
         fireEvent.press(cell)
-        fireEvent.press(getInputPanelNumberIfEnabled(cellVsMainNumbers[cellNo]))
+        act(() => {
+            fireEvent.press(getInputPanelNumberIfEnabled(cellVsMainNumbers[cellNo]))
+            jest.runAllTimers()
+        })
     }
 }
 
@@ -58,31 +63,25 @@ describe('Custom Puzzle', () => {
     test('should fill a number on Input Number click', () => {
         renderCustomPuzzle()
 
-        const cell = getFirstEmptyCell()
-        fireEvent.press(cell)
-        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fillCustomPuzzle({ 1: 2 })
 
-        expect(cell).toHaveTextContent(2)
+        expect(getCellByPosition(1)).toHaveTextContent(2)
     })
 
     test('filled number can be overriden by another number', () => {
         renderCustomPuzzle()
 
-        const cell = getFirstEmptyCell()
-        fireEvent.press(cell)
-        fireEvent.press(getInputPanelNumberIfEnabled(2))
-        fireEvent.press(cell) // after filling cell once, next cell in row gets selected automatically
-        fireEvent.press(getInputPanelNumberIfEnabled(4))
+        fillCustomPuzzle({ 1: 2 })
+        fillCustomPuzzle({ 1: 4 })
 
-        expect(cell).toHaveTextContent(4)
+        expect(getCellByPosition(1)).toHaveTextContent(4)
     })
 
     test('eraser will remove number from the cell', () => {
         renderCustomPuzzle()
 
         const cell = getFirstEmptyCell()
-        fireEvent.press(cell)
-        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        fillCustomPuzzle({ 1: 2 })
         fireEvent.press(cell)
         fireEvent.press(getInputPanelEraser())
 
@@ -101,7 +100,7 @@ describe('Custom Puzzle', () => {
         expect(onClosed).toBeCalledTimes(1)
     })
 
-    test('clicking on background overlay will not close the view', async () => {
+    test('clicking on background overlay will not close the view', () => {
         const onClosed = jest.fn()
         renderCustomPuzzle({ onCustomPuzzleClosed: onClosed })
 
@@ -119,8 +118,8 @@ describe('Analyze Custom Puzzle', () => {
     test('invalid puzzle if clues are less than minimum required', async () => {
         renderCustomPuzzle()
 
-        fireEvent.press(getFirstEmptyCell())
-        fireEvent.press(getInputPanelNumberIfEnabled(2))
+        const PUZZLE_CELL_VS_MAIN_NUMBER = { 1: 2 }
+        fillCustomPuzzle(PUZZLE_CELL_VS_MAIN_NUMBER)
         fireEvent.press(screen.getByText('Play'))
 
         await waitFor(() => {
@@ -212,7 +211,7 @@ describe('Analyze Custom Puzzle', () => {
 
     // TODO: this test might break because puzzle validity subroutine might take a lot of time
     //          and waitFor() will throw error
-    test('for valid puzzle will start puzzle and close the view', async () => {
+    test('for valid puzzle will start puzzle and close the view', () => {
         const onClosed = jest.fn()
         const onStartPuzzle = jest.fn()
         renderCustomPuzzle({
