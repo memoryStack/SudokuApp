@@ -8,25 +8,25 @@ import _noop from '@lodash/noop'
 
 import { UndoIcon } from '@resources/svgIcons/undo'
 
-import { Touchable } from '../../components/Touchable'
+import { Touchable } from '../../../components/Touchable'
 
-import { Styles, INACTIVE_ICON_FILL } from './style'
+import { Styles, INACTIVE_ICON_FILL } from '../style'
 
-const Undo_ = ({ iconBoxSize, onClick, ...rest }) => (
+const Undo = ({ iconBoxSize, onClick, ...rest }) => (
     <Touchable style={Styles.actionContainer} onPress={onClick} {...rest}>
         <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
         <Text style={Styles.actionText}>Undo</Text>
     </Touchable>
 )
 
-export const Undo = React.memo(Undo_)
+export default React.memo(Undo)
 
-Undo_.propTypes = {
+Undo.propTypes = {
     iconBoxSize: PropTypes.number,
     onClick: PropTypes.func,
 }
 
-Undo_.defaultProps = {
+Undo.defaultProps = {
     iconBoxSize: 40,
     onClick: _noop,
 }

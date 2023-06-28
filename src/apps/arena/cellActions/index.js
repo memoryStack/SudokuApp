@@ -18,10 +18,10 @@ import { useCacheGameState } from '../hooks/useCacheGameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { GameState } from '../utils/classes/gameState'
 
-import { Undo } from './undo'
-import { Hint } from './hint'
+import Undo from './Undo'
 import Pencil from './Pencil'
 import FastPencil from './FastPencil'
+import { Hint } from './hint'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID } from './cellActions.constants'
 
