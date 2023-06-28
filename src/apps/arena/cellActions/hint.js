@@ -28,12 +28,21 @@ const Hint_ = ({
         )
     }
 
+    const renderIcon = () => (
+        <>
+            <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
+            {renderHintsCount()}
+        </>
+    )
+
     return (
-        <Touchable style={Styles.actionContainer} onPress={onClick} {...rest}>
-            <>
-                <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-                {renderHintsCount()}
-            </>
+        <Touchable
+            style={Styles.actionContainer}
+            onPress={onClick}
+            disabled={disabled}
+            {...rest}
+        >
+            {renderIcon()}
             <Text style={Styles.actionText}>Hint</Text>
         </Touchable>
     )
