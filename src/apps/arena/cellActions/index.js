@@ -21,7 +21,7 @@ import { GameState } from '../utils/classes/gameState'
 import Undo from './Undo'
 import Pencil from './Pencil'
 import FastPencil from './FastPencil'
-import { Hint } from './hint'
+import Hint from './Hint'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID } from './cellActions.constants'
 

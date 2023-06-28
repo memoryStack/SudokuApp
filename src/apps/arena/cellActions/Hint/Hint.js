@@ -10,15 +10,15 @@ import Badge from '@ui/atoms/Badge'
 
 import { HintIcon } from '@resources/svgIcons/hint'
 
-import { Touchable } from '../../components/Touchable'
+import { Touchable } from '../../../components/Touchable'
 
-import { Styles, INACTIVE_ICON_FILL } from './style'
+import { Styles, INACTIVE_ICON_FILL } from '../style'
 
 // TODO: i should make it as a part of settings so that users can change it according to their confidence level
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their
 // comfort and confidence level
 
-const Hint_ = ({
+const Hint = ({
     iconBoxSize, hints, onClick, disabled, ...rest
 }) => {
     const renderHintsCount = () => {
@@ -48,16 +48,16 @@ const Hint_ = ({
     )
 }
 
-export const Hint = React.memo(Hint_)
+export default React.memo(Hint)
 
-Hint_.propTypes = {
+Hint.propTypes = {
     iconBoxSize: PropTypes.number,
     onClick: PropTypes.func,
     hints: PropTypes.number,
     disabled: PropTypes.bool,
 }
 
-Hint_.defaultProps = {
+Hint.defaultProps = {
     iconBoxSize: 40,
     onClick: _noop,
     hints: 0,
