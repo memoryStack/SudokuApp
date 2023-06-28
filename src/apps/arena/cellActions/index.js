@@ -8,6 +8,8 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
+import { PENCIL_STATE } from '@resources/constants'
+
 import withActions from '../../../utils/hocs/withActions'
 
 import { getPencilStatus } from '../store/selectors/boardController.selectors'
@@ -79,7 +81,7 @@ const BoardController_ = ({ onAction }) => {
             <Pencil
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                pencilState={pencilState}
+                isActive={pencilState === PENCIL_STATE.ACTIVE}
                 onClick={onPencilClick}
                 testID={BOARD_CONTROLLER_TEST_ID}
             />
