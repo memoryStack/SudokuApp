@@ -19,9 +19,9 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { GameState } from '../utils/classes/gameState'
 
 import { Undo } from './undo'
-import { FastPencil } from './fastPencil'
 import { Hint } from './hint'
 import Pencil from './Pencil'
+import FastPencil from './FastPencil'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID } from './cellActions.constants'
 
