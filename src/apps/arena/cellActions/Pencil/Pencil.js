@@ -9,14 +9,13 @@ import _noop from '@lodash/noop'
 import { PENCIL_STATE } from '@resources/constants'
 import { PencilIcon } from '@resources/svgIcons/pencil'
 
-import { Touchable } from '../../components/Touchable'
+import { Touchable } from '../../../components/Touchable'
 
-import { Styles, INACTIVE_ICON_FILL } from './style'
+import { Styles, INACTIVE_ICON_FILL } from '../style'
 
 const ACTIVE_PENCIL_FILL = 'rgb(57, 91, 158)'
 
-// TODO: use pencilState to animate the UI
-const Pencil_ = ({
+const Pencil = ({
     iconBoxSize, pencilState, onClick, ...rest
 }) => {
     const isActive = pencilState === PENCIL_STATE.ACTIVE
@@ -33,15 +32,15 @@ const Pencil_ = ({
     )
 }
 
-export const Pencil = React.memo(Pencil_)
+export default React.memo(Pencil)
 
-Pencil_.propTypes = {
+Pencil.propTypes = {
     iconBoxSize: PropTypes.number,
     onClick: PropTypes.func,
     pencilState: PropTypes.string,
 }
 
-Pencil_.defaultProps = {
+Pencil.defaultProps = {
     iconBoxSize: 40,
     onClick: _noop,
     pencilState: PENCIL_STATE.INACTIVE,
