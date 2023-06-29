@@ -186,6 +186,7 @@ describe('Timer Click Twice', () => {
     })
 })
 
+// TODO: refine these hints test cases
 describe('Hints Click', () => {
     beforeEach(() => {
         jest.useFakeTimers()
@@ -194,6 +195,7 @@ describe('Hints Click', () => {
         jest.useRealTimers()
     })
 
+    // TODO: this is supposed to be unit test
     test('will open hints menu', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
