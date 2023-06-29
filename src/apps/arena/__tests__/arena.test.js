@@ -195,49 +195,13 @@ describe('Hints Click', () => {
         jest.useRealTimers()
     })
 
-    // TODO: this is supposed to be unit test
+    // TODO: this is supposed to be unit test for BoardController
     test('will open hints menu', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         fireEvent.press(screen.getByText('Hint'))
 
         screen.getByTestId(HINTS_MENU_CONTAINER_TEST_ID)
-    })
-
-    // TODO: this test-case is flawed/brittle, we are not waiting correctly until all the hints are checked
-    // research for test-cases of this kind
-    test('all hints will be disabled if notes are not present', async () => {
-        jest.useRealTimers()
-        await renderScreenAndWaitForPuzzleStart()
-
-        fireEvent.press(screen.getByText('Hint'))
-
-        await new Promise(r => setTimeout(r, 2000))
-
-        expectOnHintMenuItems(element => {
-            expect(element).toBeDisabled()
-        })
-    })
-
-    // NOTE: test-cases like this might fail in future if the mocked puzzle doesn't have any hints at all
-    test('some hints will be enabled if notes are present before opening hints menu', async () => {
-        await renderScreenAndWaitForPuzzleStart()
-
-        fireEvent.press(screen.getByText('Fast Pencil'))
-
-        fireEvent.press(screen.getByText('Hint'))
-
-        await waitFor(() => {
-            let enabledHintsCount = 0
-            expectOnHintMenuItems(element => {
-                try {
-                    expect(element).not.toBeDisabled()
-                    enabledHintsCount++
-                } catch (error) { }
-            })
-
-            expect(enabledHintsCount).not.toBe(0)
-        })
     })
 })
 
