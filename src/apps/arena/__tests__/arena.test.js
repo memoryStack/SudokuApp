@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, waitFor, act,
+    screen, fireEvent, waitFor, act, within,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -19,6 +19,7 @@ import {
     isMainNumberPresentInCell,
     solvePuzzle,
     gameOverByMistakes,
+    getCellByPosition,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -36,6 +37,7 @@ import {
     SMART_HINT_HC_TEST_ID,
     CLOSE_ICON_TEST_ID as SMART_HINT_HC_CLOSE_ICON_TEST_ID,
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
+    SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from '../smartHintHC/constants'
 import { waitForAvailableHintsToBeChecked } from '../hintsMenu/hintsMenu.test'
 
@@ -202,16 +204,14 @@ describe.only('Hint/Smart Hints', () => {
     })
 
     /**
-     *
      * 1. will open hints explaination HC on clicking on the hint menu item (DONE)
      * 2. will be closed on clicking on X btn (DONE)
      * 3. won't be closed on clicking on backdrop (DONE)
-     * 4. next and prev will change the page
+     * 4. next and prev will change the page (DONE)
      * 5. in tryout, clicking on number will fill that number in cell and remove
      *      other notes of same number in other houses
      * 6. in tryout, clicking on eraser will remove the input number from cell and notes will popup back
-     * 7. apply hint will apply the number and will close the HC
-     *
+     * 7. apply hint will apply the number and will close the HC (DONE)
      *
      */
 
@@ -235,6 +235,17 @@ describe.only('Hint/Smart Hints', () => {
             // TODO: search why jest.runAllTimers() blocks the test cases and runs 1L timers
             // jest.runAllTimers()
             jest.advanceTimersByTime(200)
+        })
+    }
+
+    const pressNextUntilApplyHintStep = async smartHintHC => {
+        await waitFor(() => {
+            try {
+                smartHintHC.getByText('Apply Hint')
+            } catch (error) {
+                fireEvent.press(smartHintHC.getByText('Next'))
+                throw new Error(error)
+            }
         })
     }
 
@@ -276,6 +287,67 @@ describe.only('Hint/Smart Hints', () => {
         })
 
         screen.getByTestId(SMART_HINT_HC_TEST_ID)
+    })
+
+    test('clicking on Next Button in smart hint HC will show next page in hint explaination and page count will update', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Tripple')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+
+        expect(smartHintHC.getByTestId(SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID)).toHaveTextContent(/1\//)
+
+        fireEvent.press(smartHintHC.getByText('Next'))
+
+        expect(smartHintHC.getByTestId(SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID)).toHaveTextContent(/2\//)
+    })
+
+    test('clicking on Prev Button in smart hint HC will show Previous page in hint explaination and page count will update', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Tripple')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        fireEvent.press(smartHintHC.getByText('Next'))
+
+        expect(smartHintHC.getByTestId(SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID)).toHaveTextContent(/2\//)
+
+        fireEvent.press(smartHintHC.getByText('Prev'))
+
+        expect(smartHintHC.getByTestId(SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID)).toHaveTextContent(/1\//)
+    })
+
+    // NOTE: this test is coupled with the algorithm for finding hints. if the order of checking
+    //      hints changes then this test case might fail and must be updated
+    test('clicking on Apply Hint will apply the recommended change in puzzle', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Single')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+
+        await pressNextUntilApplyHintStep(smartHintHC)
+
+        expect(isNotePresentInCell(getCellByPosition(11), 3)).toBe(true)
+
+        act(() => {
+            fireEvent.press(smartHintHC.getByText('Apply Hint'))
+            jest.advanceTimersByTime(200)
+        })
+
+        isMainNumberPresentInCell(getCellByPosition(11), 3)
+    })
+
+    test('clicking on Apply Hint will close the smart hint HC', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Single')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await pressNextUntilApplyHintStep(smartHintHC)
+        act(() => {
+            fireEvent.press(smartHintHC.getByText('Apply Hint'))
+            jest.advanceTimersByTime(200)
+        })
+
+        expect(screen.queryByTestId(SMART_HINT_HC_TEST_ID)).not.toBeOnTheScreen()
     })
 })
 

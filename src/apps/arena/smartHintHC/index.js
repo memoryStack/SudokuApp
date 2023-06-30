@@ -31,6 +31,7 @@ import {
     SMART_HINT_HC_TEST_ID,
     CLOSE_ICON_TEST_ID,
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
+    SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from './constants'
 
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
@@ -111,7 +112,12 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             <View style={styles.hintTitleContainer}>
                 <Text style={styles.hintTitle}>{title}</Text>
                 {totalHintsCount > 1 ? (
-                    <Text style={styles.hintsCountText}>{`${currentHintNum}/${totalHintsCount}`}</Text>
+                    <Text
+                        style={styles.hintsCountText}
+                        testID={SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID}
+                    >
+                        {`${currentHintNum}/${totalHintsCount}`}
+                    </Text>
                 ) : null}
             </View>
             <Touchable

@@ -62,6 +62,7 @@ export const isNotePresentInCell = (cellElement, note) => {
     })
 }
 
+// TODO: refactor this func, by name looks like it will return boolean
 export const isMainNumberPresentInCell = (cellElement, mainNumber) => {
     expect(within(cellElement).getByTestId(CELL_MAIN_VALUE_TEST_ID)).toHaveTextContent(mainNumber)
 }
