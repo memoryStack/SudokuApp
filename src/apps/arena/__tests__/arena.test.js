@@ -196,6 +196,7 @@ describe('Timer Click Twice', () => {
     })
 })
 
+// extremly slow test-suite
 describe('Hint/Smart Hints', () => {
     beforeEach(() => {
         jest.useFakeTimers()
