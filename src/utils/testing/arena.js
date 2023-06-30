@@ -89,16 +89,22 @@ export const getFirstEnabledInputPanelNumber = () => {
     }
 }
 
-export const getInputPanelNumberIfEnabled = inputNumber => {
-    const inputPanel = within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+export const getInputPanelNumberIfEnabled = (inputNumber, _inputPanel) => {
+    const inputPanel = _inputPanel || within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+
     const element = inputPanel.getByText(String(inputNumber))
     // will fail the test-case if someday mocked puzzle is changed and this
     // requested input number is not enabled for new puzzle
+
     expect(element).toBeEnabled()
     return element
 }
 
-export const getInputPanelEraser = () => screen.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)[9]
+export const getInputPanelEraser = _inputPanel => {
+    const inputPanel = _inputPanel || within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+    const allItems = inputPanel.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)
+    return allItems[allItems.length - 1]
+}
 
 export const solvePuzzle = () => {
     // this will break if in future Fill button is removed in dev mode

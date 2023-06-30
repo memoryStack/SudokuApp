@@ -40,6 +40,7 @@ import {
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from '../smartHintHC/constants'
 import { waitForAvailableHintsToBeChecked } from '../hintsMenu/hintsMenu.test'
+import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../inputPanel/constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -195,25 +196,13 @@ describe('Timer Click Twice', () => {
     })
 })
 
-describe.only('Hint/Smart Hints', () => {
+describe('Hint/Smart Hints', () => {
     beforeEach(() => {
         jest.useFakeTimers()
     })
     afterEach(() => {
         jest.useRealTimers()
     })
-
-    /**
-     * 1. will open hints explaination HC on clicking on the hint menu item (DONE)
-     * 2. will be closed on clicking on X btn (DONE)
-     * 3. won't be closed on clicking on backdrop (DONE)
-     * 4. next and prev will change the page (DONE)
-     * 5. in tryout, clicking on number will fill that number in cell and remove
-     *      other notes of same number in other houses
-     * 6. in tryout, clicking on eraser will remove the input number from cell and notes will popup back
-     * 7. apply hint will apply the number and will close the HC (DONE)
-     *
-     */
 
     const openSmartHintHC = async hintItemToClick => {
         fireEvent.press(screen.getByText('Fast Pencil'))
@@ -238,7 +227,7 @@ describe.only('Hint/Smart Hints', () => {
         })
     }
 
-    const pressNextUntilApplyHintStep = async smartHintHC => {
+    const gotoApplyHintStep = async smartHintHC => {
         await waitFor(() => {
             try {
                 smartHintHC.getByText('Apply Hint')
@@ -246,6 +235,26 @@ describe.only('Hint/Smart Hints', () => {
                 fireEvent.press(smartHintHC.getByText('Next'))
                 throw new Error(error)
             }
+        })
+    }
+
+    const gotoTryOutStep = async smartHintHC => {
+        await waitFor(() => {
+            try {
+                smartHintHC.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)
+            } catch (error) {
+                fireEvent.press(smartHintHC.getByText('Next'))
+                throw new Error(error)
+            }
+        })
+    }
+
+    const getInputPanel = smartHintHC => within(smartHintHC.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+
+    const closeSmartHintHC = () => {
+        act(() => {
+            fireEvent.press(screen.getByTestId(SMART_HINT_HC_CLOSE_ICON_TEST_ID))
+            jest.advanceTimersByTime(200)
         })
     }
 
@@ -318,13 +327,12 @@ describe.only('Hint/Smart Hints', () => {
 
     // NOTE: this test is coupled with the algorithm for finding hints. if the order of checking
     //      hints changes then this test case might fail and must be updated
-    test('clicking on Apply Hint will apply the recommended change in puzzle', async () => {
+    test('clicking on Apply Hint will apply the recommended change in puzzle (fill a main number)', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await openSmartHintHC('Naked Single')
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-
-        await pressNextUntilApplyHintStep(smartHintHC)
+        await gotoApplyHintStep(smartHintHC)
 
         expect(isNotePresentInCell(getCellByPosition(11), 3)).toBe(true)
 
@@ -336,18 +344,89 @@ describe.only('Hint/Smart Hints', () => {
         isMainNumberPresentInCell(getCellByPosition(11), 3)
     })
 
+    test('clicking on Apply Hint will apply the recommended change in puzzle (remove notes)', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Omission')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoApplyHintStep(smartHintHC)
+
+        // notes are present before applying hint
+        expect(isNotePresentInCell(getCellByPosition(32), 3)).toBe(true)
+        expect(isNotePresentInCell(getCellByPosition(50), 3)).toBe(true)
+
+        act(() => {
+            fireEvent.press(smartHintHC.getByText('Apply Hint'))
+            jest.advanceTimersByTime(200)
+        })
+
+        expect(isNotePresentInCell(getCellByPosition(32), 3)).toBe(false)
+        expect(isNotePresentInCell(getCellByPosition(50), 3)).toBe(false)
+    })
+
     test('clicking on Apply Hint will close the smart hint HC', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await openSmartHintHC('Naked Single')
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await pressNextUntilApplyHintStep(smartHintHC)
+        await gotoApplyHintStep(smartHintHC)
         act(() => {
             fireEvent.press(smartHintHC.getByText('Apply Hint'))
             jest.advanceTimersByTime(200)
         })
 
         expect(screen.queryByTestId(SMART_HINT_HC_TEST_ID)).not.toBeOnTheScreen()
+    })
+
+    test('in try out step, user can fill numbers in cells and see impact', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Hidden Double')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoTryOutStep(smartHintHC)
+        fireEvent.press(getCellByPosition(2))
+
+        // before filling the number
+        expect(isNotePresentInCell(getCellByPosition(3), 2)).toBe(true)
+
+        fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
+
+        isMainNumberPresentInCell(getCellByPosition(2), 2)
+        expect(isNotePresentInCell(getCellByPosition(3), 2)).toBe(false)
+    })
+
+    test('in try out step, user can remove the filled numbers as well from cells', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Hidden Double')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoTryOutStep(smartHintHC)
+        fireEvent.press(getCellByPosition(3))
+        fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
+        fireEvent.press(getInputPanelEraser(getInputPanel(smartHintHC)))
+
+        // main number will be removed and note will return in
+        // TODO: right now there is no query to run which tells that a Main number is not
+        //          present in the cell, so using note's availability in 3rd cell here as a proxy for that
+        expect(isNotePresentInCell(getCellByPosition(3), 3)).toBe(true)
+        expect(isNotePresentInCell(getCellByPosition(2), 3)).toBe(true)
+    })
+
+    test('in try out step, changes made in board by user will not be reflected in main puzzle', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Hidden Double')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoTryOutStep(smartHintHC)
+        fireEvent.press(getCellByPosition(3))
+        fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
+
+        isMainNumberPresentInCell(getCellByPosition(3), 3)
+
+        closeSmartHintHC()
+        // TODO: right now there is no query to run which tells that a Main number is not
+        //          present in the cell, so using note's availability in 3rd cell here as a proxy for that
+        expect(isNotePresentInCell(getCellByPosition(3), 3)).toBe(true)
     })
 })
 
