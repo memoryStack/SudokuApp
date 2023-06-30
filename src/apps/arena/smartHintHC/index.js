@@ -26,7 +26,12 @@ import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/c
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { getContainerStyles, styles } from './styles'
-import { FOOTER_BUTTONS_TEXT } from './constants'
+import {
+    FOOTER_BUTTONS_TEXT,
+    SMART_HINT_HC_TEST_ID,
+    CLOSE_ICON_TEST_ID,
+    SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
+} from './constants'
 
 const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const {
@@ -112,6 +117,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             <Touchable
                 onPress={closeView}
                 addHitSlop
+                testID={CLOSE_ICON_TEST_ID}
             >
                 <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
             </Touchable>
@@ -164,8 +170,9 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             onDraggerClosed={onClosed}
             parentHeight={parentHeight}
             animateBackgroundOverlayOnClose={false}
+            testID={SMART_HINT_HC_TEST_ID}
         >
-            <View style={containerStyles}>
+            <View style={containerStyles} testID={SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID}>
                 {renderHeader()}
                 <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText()}</View>
                 {renderFooter()}

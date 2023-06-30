@@ -20,13 +20,7 @@ import { HintsMenu } from './index'
 
 const { ACTION_HANDLERS } = require('./actionHandlers')
 
-const renderHintsMenu = async props => {
-    invokeDispatch(boardActions.setMainNumbers(MainNumbers))
-    invokeDispatch(boardActions.setNotes(Notes))
-    invokeDispatch(boardActions.setPossibleNotes(PossibleNotes))
-
-    render(<HintsMenu {...props} />)
-
+export const waitForAvailableHintsToBeChecked = async () => {
     // can we wait for it in a better way ??
     await waitFor(() => {
         let enabledHintsCount = 0
@@ -39,6 +33,15 @@ const renderHintsMenu = async props => {
 
         expect(enabledHintsCount).not.toBe(0)
     })
+}
+
+const renderHintsMenu = async props => {
+    invokeDispatch(boardActions.setMainNumbers(MainNumbers))
+    invokeDispatch(boardActions.setNotes(Notes))
+    invokeDispatch(boardActions.setPossibleNotes(PossibleNotes))
+
+    render(<HintsMenu {...props} />)
+    await waitForAvailableHintsToBeChecked()
 }
 
 describe('Available Hints Menu', () => {

@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, waitFor,
+    screen, fireEvent, waitFor, act,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -11,7 +11,6 @@ import {
     expectOnAllBoardCells,
     expectOnAllBoardControllers,
     expectOnAllInputPanelItems,
-    expectOnHintMenuItems,
     getFirstEmptyCell,
     getFirstEnabledInputPanelNumber,
     getInputPanelNumberIfEnabled,
@@ -24,6 +23,8 @@ import {
 
 import { isEmptyElement } from '@utils/testing/touchable'
 
+import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
+import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from 'src/apps/components/BottomDragger/bottomDragger.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 import { ARENA_PAGE_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
@@ -31,6 +32,12 @@ import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
 import { NEXT_GAME_MENU_TEST_ID } from '../nextGameMenu/nextGameMenu.constants'
+import {
+    SMART_HINT_HC_TEST_ID,
+    CLOSE_ICON_TEST_ID as SMART_HINT_HC_CLOSE_ICON_TEST_ID,
+    SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
+} from '../smartHintHC/constants'
+import { waitForAvailableHintsToBeChecked } from '../hintsMenu/hintsMenu.test'
 
 const storageUtils = require('@utils/storage')
 
@@ -186,8 +193,7 @@ describe('Timer Click Twice', () => {
     })
 })
 
-// TODO: refine these hints test cases
-describe('Hints Click', () => {
+describe.only('Hint/Smart Hints', () => {
     beforeEach(() => {
         jest.useFakeTimers()
     })
@@ -195,13 +201,81 @@ describe('Hints Click', () => {
         jest.useRealTimers()
     })
 
-    // TODO: this is supposed to be unit test for BoardController
-    test('will open hints menu', async () => {
+    /**
+     *
+     * 1. will open hints explaination HC on clicking on the hint menu item (DONE)
+     * 2. will be closed on clicking on X btn (DONE)
+     * 3. won't be closed on clicking on backdrop (DONE)
+     * 4. next and prev will change the page
+     * 5. in tryout, clicking on number will fill that number in cell and remove
+     *      other notes of same number in other houses
+     * 6. in tryout, clicking on eraser will remove the input number from cell and notes will popup back
+     * 7. apply hint will apply the number and will close the HC
+     *
+     *
+     */
+
+    const openSmartHintHC = async hintItemToClick => {
+        fireEvent.press(screen.getByText('Fast Pencil'))
+        fireEvent.press(screen.getByText('Hint'))
+        await waitForAvailableHintsToBeChecked()
+        fireEvent.press(screen.getByText(hintItemToClick))
+        // TODO: wait for dragger to be opened
+        act(() => {
+            // event used by BottomDragger component to
+            // measure child view dimensions
+            fireLayoutEvent(screen.getByTestId(SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID), {
+                width: 400,
+                height: 200,
+                x: 0,
+                y: 0,
+            })
+            // TODO: jest.runAllTimers(), jest.advanceTimersByTime() also works here
+            //      need to understand the proper relation of these timers with Animated components
+            // TODO: search why jest.runAllTimers() blocks the test cases and runs 1L timers
+            // jest.runAllTimers()
+            jest.advanceTimersByTime(200)
+        })
+    }
+
+    test('will open hints menu on clicking Hint Button', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         fireEvent.press(screen.getByText('Hint'))
 
         screen.getByTestId(HINTS_MENU_CONTAINER_TEST_ID)
+    })
+
+    test('clicking on enabled hint item will open hint detailed explaination half card', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Single')
+
+        screen.getByTestId(SMART_HINT_HC_TEST_ID)
+    })
+
+    test('clicking on X icon in hint detailed explaination half card will close it', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Single')
+        act(() => {
+            fireEvent.press(screen.getByTestId(SMART_HINT_HC_CLOSE_ICON_TEST_ID))
+            jest.advanceTimersByTime(200)
+        })
+
+        expect(screen.queryByTestId(SMART_HINT_HC_TEST_ID)).not.toBeOnTheScreen()
+    })
+
+    test('clicking on background overlay of hint detailed explaination half card will not close it', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Single')
+        act(() => {
+            fireEvent.press(screen.getByTestId(BOTTOM_DRAGGER_OVERLAY_TEST_ID))
+            jest.advanceTimersByTime(200)
+        })
+
+        screen.getByTestId(SMART_HINT_HC_TEST_ID)
     })
 })
 
