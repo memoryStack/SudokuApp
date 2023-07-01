@@ -3,7 +3,9 @@ import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helper
 import { boardControllerActions } from '../reducers/boardController.reducers'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 
-const { setPencil, setHintsMenu, resetState } = boardControllerActions
+const {
+    setPencil, setHintsMenu, resetState, decreaseHint,
+} = boardControllerActions
 
 const getNewPencilState = currentState => {
     if (!currentState) return PENCIL_STATE.INACTIVE
@@ -30,4 +32,8 @@ export const resetStoreState = () => {
             showHintsMenu: false,
         }),
     )
+}
+
+export const decreaseAvailableHintsCount = () => {
+    invokeDispatch(decreaseHint())
 }

@@ -207,15 +207,7 @@ const removeCellNotes = () => {
     const notesBunch = getVisibileNotesBunchInCell(selectedCell, notes)
     if (!notesBunch.length) return
 
-    invokeDispatch(eraseNotesBunch(notesBunch))
-
-    const move = {
-        notes: {
-            action: BOARD_MOVES_TYPES.REMOVE,
-            bunch: notesBunch,
-        },
-    }
-    invokeDispatch(addMove(constructMove(move)))
+    removeNotesBunchAndAddMove(notesBunch)
 }
 
 const eraseMainNumber = () => {
@@ -363,6 +355,19 @@ export const fillPuzzle = () => {
     })
 }
 
+// TODO: re-use it
+const removeNotesBunchAndAddMove = notesBunch => {
+    invokeDispatch(eraseNotesBunch(notesBunch))
+
+    const move = {
+        notes: {
+            action: BOARD_MOVES_TYPES.REMOVE,
+            bunch: notesBunch,
+        },
+    }
+    invokeDispatch(addMove(constructMove(move)))
+}
+
 export const applyHintAction = applyHintChanges => {
     /*
         right now if ADD action is present then it will be the only entry.
@@ -373,18 +378,11 @@ export const applyHintAction = applyHintChanges => {
         return
     }
 
+    // TODO: why can't below be made as a re-usable handler just like inputMainNumber()
     const notesBunch = []
     _forEach(applyHintChanges, ({ cell, action }) => {
         notesBunch.push(..._map(_get(action, 'notes'), note => ({ cell, note })))
     })
 
-    invokeDispatch(eraseNotesBunch(notesBunch))
-
-    const move = {
-        notes: {
-            action: BOARD_MOVES_TYPES.REMOVE,
-            bunch: notesBunch,
-        },
-    }
-    invokeDispatch(addMove(constructMove(move)))
+    removeNotesBunchAndAddMove(notesBunch)
 }

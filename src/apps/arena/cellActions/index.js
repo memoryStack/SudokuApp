@@ -12,7 +12,7 @@ import { PENCIL_STATE } from '@resources/constants'
 
 import withActions from '../../../utils/hocs/withActions'
 
-import { getPencilStatus } from '../store/selectors/boardController.selectors'
+import { getAvailableHintsCount, getPencilStatus } from '../store/selectors/boardController.selectors'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { useCacheGameState } from '../hooks/useCacheGameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
@@ -23,7 +23,7 @@ import Pencil from './Pencil'
 import FastPencil from './FastPencil'
 import Hint from './Hint'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { BOARD_CONTROLLER_TEST_ID } from './cellActions.constants'
+import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './cellActions.constants'
 
 const styles = StyleSheet.create({
     cellActionsContainer: {
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 
 const BoardController_ = ({ onAction }) => {
     const pencilState = useSelector(getPencilStatus)
-    const hints = 3 // TODO: add proper logic for it
+    const hints = useSelector(getAvailableHintsCount)
 
     const gameState = useSelector(getGameState)
 
@@ -71,7 +71,7 @@ const BoardController_ = ({ onAction }) => {
 
     // TODO: use a single component for these 4 components, and use them via a config
     return (
-        <View style={styles.cellActionsContainer}>
+        <View style={styles.cellActionsContainer} testID={BOARD_CONTROLLER_CONTAINER_TEST_ID}>
             <Undo
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}

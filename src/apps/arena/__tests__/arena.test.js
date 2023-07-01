@@ -26,6 +26,7 @@ import { isEmptyElement } from '@utils/testing/touchable'
 
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from 'src/apps/components/BottomDragger/bottomDragger.constants'
+import { BADGE_TEST_ID } from '@ui/atoms/Badge'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
@@ -41,6 +42,7 @@ import {
 } from '../smartHintHC/constants'
 import { waitForAvailableHintsToBeChecked } from '../hintsMenu/hintsMenu.test'
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../inputPanel/constants'
+import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -259,6 +261,14 @@ describe('Hint/Smart Hints', () => {
         })
     }
 
+    test('by default 3 hints will be available', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
+
+        expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(3)
+    })
+
     test('will open hints menu on clicking Hint Button', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -343,6 +353,43 @@ describe('Hint/Smart Hints', () => {
         })
 
         isMainNumberPresentInCell(getCellByPosition(11), 3)
+    })
+
+    test('clicking on Apply Hint will decrease the number of available hints', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Single')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoApplyHintStep(smartHintHC)
+
+        const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
+        expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(3)
+
+        act(() => {
+            fireEvent.press(smartHintHC.getByText('Apply Hint'))
+            jest.advanceTimersByTime(200)
+        })
+
+        expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(2)
+    })
+
+    // add additional support for this test case to implement
+    test.skip('hints menu will not be opened once available hints are 0', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Naked Single')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoApplyHintStep(smartHintHC)
+
+        const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
+        expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(3)
+
+        act(() => {
+            fireEvent.press(smartHintHC.getByText('Apply Hint'))
+            jest.advanceTimersByTime(200)
+        })
+
+        expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(2)
     })
 
     test('clicking on Apply Hint will apply the recommended change in puzzle (remove notes)', async () => {
