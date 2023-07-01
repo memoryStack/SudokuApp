@@ -35,11 +35,13 @@ const Hint = ({
         </>
     )
 
+    const noAvailableHints = hints === 0
+
     return (
         <Touchable
             style={Styles.actionContainer}
             onPress={onClick}
-            disabled={disabled}
+            disabled={disabled || noAvailableHints}
             {...rest}
         >
             {renderIcon()}

@@ -26,16 +26,25 @@ describe('Hint', () => {
 
     test('will call handler on click', () => {
         const onClick = jest.fn()
-        render(<Hint iconBoxSize={50} onClick={onClick} />)
+        render(<Hint iconBoxSize={50} onClick={onClick} hints={3} />)
 
         fireEvent.press(screen.getByText('Hint'))
 
         expect(onClick).toHaveBeenCalledTimes(1)
     })
 
+    test('if available hints are 0, will not call handler on click', () => {
+        const onClick = jest.fn()
+        render(<Hint iconBoxSize={50} onClick={onClick} hints={0} />)
+
+        fireEvent.press(screen.getByText('Hint'))
+
+        expect(onClick).toHaveBeenCalledTimes(0)
+    })
+
     test('if disabled, will not call handler on click', () => {
         const onClick = jest.fn()
-        render(<Hint iconBoxSize={50} onClick={onClick} disabled />)
+        render(<Hint iconBoxSize={50} onClick={onClick} disabled hints={3} />)
 
         fireEvent.press(screen.getByText('Hint'))
 
