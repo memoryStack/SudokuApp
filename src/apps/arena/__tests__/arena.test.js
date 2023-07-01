@@ -27,7 +27,7 @@ import { isEmptyElement } from '@utils/testing/touchable'
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from 'src/apps/components/BottomDragger/bottomDragger.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
-import { ARENA_PAGE_TEST_ID } from '../constants'
+import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
@@ -798,5 +798,42 @@ describe('Game Over Card', () => {
         await waitFor(() => {
             expect(screen.getByTestId(NEXT_GAME_MENU_TEST_ID)).toBeVisible()
         })
+    })
+})
+
+describe('Start New Game', () => {
+    beforeEach(() => {
+        jest.useFakeTimers()
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+    })
+
+    test('select new game from New Game button on game over card ', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        solvePuzzle()
+        act(() => {
+            fireEvent.press(screen.getByText('New Game'))
+            jest.advanceTimersByTime(200)
+        })
+        const newGameMenu = within(screen.getByTestId(NEXT_GAME_MENU_TEST_ID))
+        fireEvent.press(newGameMenu.getByText('EASY'))
+
+        await hasPuzzleStarted()
+    })
+
+    test('if new game is not selected and game over card is dismissed then Next Game menu will be opened by itself', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        solvePuzzle()
+        act(() => {
+            fireEvent.press(screen.getByTestId(GAME_OVER_CARD_OVERLAY_TEST_ID))
+            jest.advanceTimersByTime(200)
+        })
+        const newGameMenu = within(screen.getByTestId(NEXT_GAME_MENU_TEST_ID))
+        fireEvent.press(newGameMenu.getByText('EASY'))
+
+        await hasPuzzleStarted()
     })
 })

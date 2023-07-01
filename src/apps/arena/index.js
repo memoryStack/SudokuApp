@@ -34,7 +34,7 @@ import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
-import { ARENA_PAGE_TEST_ID } from './constants'
+import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID } from './constants'
 import GameOverCard from './GameOverCard'
 
 const MAX_AVAILABLE_HINTS = 3
@@ -252,6 +252,7 @@ const Arena_ = ({
                 activeOpacity={1}
                 style={styles.gameOverCardAbsoluteBG}
                 onPress={hideCongratsModal}
+                testID={GAME_OVER_CARD_OVERLAY_TEST_ID}
             >
                 <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
                     <GameOverCard
