@@ -43,6 +43,7 @@ import {
 import { waitForAvailableHintsToBeChecked } from '../hintsMenu/hintsMenu.test'
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../inputPanel/constants'
 import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.constants'
+import { decreaseAvailableHintsCount } from '../store/actions/boardController.actions'
 
 const storageUtils = require('@utils/storage')
 
@@ -373,23 +374,20 @@ describe('Hint/Smart Hints', () => {
         expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(2)
     })
 
-    // add additional support for this test case to implement
-    test.skip('hints menu will not be opened once available hints are 0', async () => {
+    test('hints menu will not be opened once available hints are 0', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Single')
-        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoApplyHintStep(smartHintHC)
-
+        // exhaust all hints, using this approach of setting store directly
+        //  to make this test-case faster
         const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
-        expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(3)
-
-        act(() => {
-            fireEvent.press(smartHintHC.getByText('Apply Hint'))
-            jest.advanceTimersByTime(200)
+        await waitFor(() => {
+            // coupled with implementation detail
+            decreaseAvailableHintsCount()
+            expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(0)
         })
+        fireEvent.press(screen.getByText('Hint'))
 
-        expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(2)
+        expect(screen.queryByTestId(HINTS_MENU_CONTAINER_TEST_ID)).not.toBeOnTheScreen()
     })
 
     test('clicking on Apply Hint will apply the recommended change in puzzle (remove notes)', async () => {
