@@ -197,13 +197,8 @@ export const getUniqueNotesFromCells = (cells, notesData) => {
     return result.filter(onlyUnique).sortNumbers()
 }
 
-export const getCellVisibleNotes = notes => {
-    const result = []
-    notes.forEach(({ noteValue, show }) => {
-        if (show) result.push(noteValue)
-    })
-    return result
-}
+export const getCellVisibleNotes = notes => notes.filter(({ show }) => show)
+    .map(({ noteValue }) => noteValue)
 
 export const getCellVisibleNotesCount = notes => getCellVisibleNotes(notes).length
 
