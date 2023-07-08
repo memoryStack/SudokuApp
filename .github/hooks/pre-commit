@@ -50,6 +50,7 @@
 
 
 ## below script is a step towards CI
+
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
 
 git add \.
@@ -71,7 +72,8 @@ if [ "$localChangesPresent" = true ];  then
     }
 fi
 
-
 git add \. # add local changes to stage
+
+npm run lint # run linter locally
 
 npm run test # run test cases for local changes in case developer didn't run them locally
