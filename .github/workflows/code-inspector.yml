@@ -3,7 +3,7 @@ name: Code Inspector
 
 on:
   schedule: 
-    - cron: "5 * * * *"
+    - cron: '*/5 * * * *'
   
   workflow_dispatch:
 
@@ -11,13 +11,13 @@ jobs:
   code-inspector:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "14.18.2"
+      # - uses: actions/checkout@v2
+      #   with:
+      #     ref: ${{ github.head_ref }}
+      #     token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: "14.18.2"
       - run: echo @@@@@@@@@@@
       # - run: git config --global credential.helper store
       # - run: npm install
