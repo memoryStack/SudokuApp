@@ -3,7 +3,7 @@ name: Code Inspector
 
 on:
   schedule: 
-    - cron: '0 14 * * *'
+    - cron: '17 16 * * *'
   
   workflow_dispatch:
 
