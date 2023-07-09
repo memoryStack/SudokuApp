@@ -3,7 +3,7 @@ name: Code Inspector
 
 on:
   schedule: 
-    - cron: '55 13 * * *'
+    - cron: '49 21 * * *' # will run arount 3:19AM IST, 21:49PM is in UTC here
   
   workflow_dispatch:
 
