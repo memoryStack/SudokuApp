@@ -1,4 +1,4 @@
-import { HOUSE_TYPE } from '../../smartHints/constants'
+import { HOUSE_TYPE } from '../constants'
 import { getHiddenGroupRawHints, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -77,7 +77,7 @@ test('hidden doubles', () => {
 })
 
 test('hidden tripples', () => {
-    const { mainNumbers, notesData } = require('./hiddenTrippleTestData')
+    const { mainNumbers, notesData } = require('./hiddenTripple.testData')
     mockBoardSelectors(notesData)
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
@@ -101,7 +101,7 @@ test('hidden tripples', () => {
 
 test('hidden tripples duplicate houses with same group cells', () => {
     // TODO: break down this test data file
-    const { mainNumbers, multipleHousesHiddenGroupNotesData } = require('./hiddenTrippleTestData')
+    const { mainNumbers, multipleHousesHiddenGroupNotesData } = require('./hiddenTripple.testData')
     mockBoardSelectors(multipleHousesHiddenGroupNotesData)
     // TODO: order of records is coupled with the algorithm implementation
     // DANGER: violating the rule of TDD

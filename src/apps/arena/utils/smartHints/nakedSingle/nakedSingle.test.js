@@ -14,7 +14,7 @@ const mockBoardSelectors = mockedNotes => {
 }
 
 test('naked singles', () => {
-    const { mainNumbersTestOne, notesDataTestOne } = require('./nakedSingleTestData')
+    const { mainNumbersTestOne, notesDataTestOne } = require('./nakedSingle.testData')
 
     mockBoardSelectors(notesDataTestOne)
 

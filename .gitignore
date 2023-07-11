@@ -31,3 +31,5 @@ main.jsbundle.meta
 .vscode/settings.json
 
 *.hprof
+
+.scannerwork/*
