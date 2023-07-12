@@ -21,6 +21,7 @@ const handleFastPencilClick = () => {
 
 const handleHintClick = () => {
     if (!isGameActive()) return
+    // TODO: Fix "Remove Flag Argument"
     hintsMenuVisibilityAction(true)
     updateGameState(GAME_STATE.DISPLAY_HINT)
 }
