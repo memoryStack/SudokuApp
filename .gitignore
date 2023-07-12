@@ -33,3 +33,5 @@ main.jsbundle.meta
 *.hprof
 
 .scannerwork/*
+
+coverage/*

@@ -8,4 +8,6 @@ module.exports = {
         '<rootDir>/jestSetupFiles/i18n.js',
         '<rootDir>/jestSetupFiles/fastSudokuPuzzles.js',
     ],
+    testResultsProcessor: 'jest-sonar-reporter',
+    collectCoverage: true,
 }
