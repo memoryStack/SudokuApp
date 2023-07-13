@@ -4,7 +4,7 @@ import { getHouseCells } from '../../houseCells'
 import {
     areSameColCells,
     areSameRowCells,
-    getCellHouseInfo,
+    getCellHouseForHouseType,
     isCellExists,
     isCellNoteVisible,
     getCellBlockHouseInfo,
@@ -70,7 +70,7 @@ export const addCellInXWingLeg = (cell, legCells, houseType) => {
 
 export const getXWingCandidate = xWing => xWing.legs[0].candidate
 
-export const getXWingHosuesInOrder = xWing => xWing.legs.map(({ cells }) => getCellHouseInfo(xWing.houseType, cells[0]))
+export const getXWingHosuesInOrder = xWing => xWing.legs.map(({ cells }) => getCellHouseForHouseType(xWing.houseType, cells[0]))
 
 export const getXWingCells = xWingLegs => _flatten(xWingLegs.map(leg => leg.cells))
 

@@ -6,7 +6,7 @@ import { HOUSES_COUNT } from '../../../constants'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import {
     getCellHousesInfo,
-    getCellHouseInfo,
+    getCellHouseForHouseType,
     isCellEmpty,
     getPairCellsCommonHouses,
     getCellVisibleNotes,
@@ -146,7 +146,7 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
                 const secondWingExpectedNotes = getSecondWingExpectedNotes(pivot.notes, firstWing.notes)
 
                 pivotHousesToSearch.forEach(secondWingHouseType => {
-                    const { num: secondWingHouseNum } = getCellHouseInfo(secondWingHouseType, pivot.cell)
+                    const { num: secondWingHouseNum } = getCellHouseForHouseType(secondWingHouseType, pivot.cell)
                     getEligibleSecondWings(
                         secondWingExpectedNotes,
                         housesYWingEligibleCells[secondWingHouseType][secondWingHouseNum],

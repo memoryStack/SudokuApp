@@ -6,7 +6,7 @@ import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { getCellHouseInfo, isCellEmpty, isCellNoteVisible } from '../../../util'
+import { getCellHouseForHouseType, isCellEmpty, isCellNoteVisible } from '../../../util'
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
@@ -51,7 +51,7 @@ export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
         ),
         crossHouse: getHouseAxesText(
-            getCellHouseInfo(getCrossHouseType(xWing.houseType), xWingCellsWithCandidateAsNote[0]),
+            getCellHouseForHouseType(getCrossHouseType(xWing.houseType), xWingCellsWithCandidateAsNote[0]),
         ),
         crossHouseFullName: getXWingCrossHouseFullName(xWing),
     }
@@ -76,7 +76,7 @@ export const getOneLegWithNoCandidateResult = xWing => {
         candidate,
         houseFullName: getXWingHouseFullName(xWing),
         inhabitableHouseAxesText: getHouseAxesText(
-            getCellHouseInfo(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
+            getCellHouseForHouseType(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
         ),
     }
 
@@ -112,7 +112,7 @@ export const getLegsFilledWithoutErrorResult = xWing => {
 // it looks like this function returns some error
 const getOneLegFilledWithoutErrorResult = xWing => {
     const filledXWingCells = filterFilledCellsInTryOut(getXWingCells(xWing.legs))
-    const filledLegHouse = getCellHouseInfo(xWing.houseType, filledXWingCells[0])
+    const filledLegHouse = getCellHouseForHouseType(xWing.houseType, filledXWingCells[0])
     const houseAxesText = getHouseAxesText(filledLegHouse)
 
     const msgPlaceholdersValues = {

@@ -10,7 +10,7 @@ import {
     SMART_HINTS_CELLS_BG_COLOR,
 } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
-import { getCellAxesValues, getCellHouseInfo, isCellNoteVisible } from '../../../../util'
+import { getCellAxesValues, getCellHouseForHouseType, isCellNoteVisible } from '../../../../util'
 
 import {
     getCellsFromCellsToFocusedData,
@@ -52,7 +52,7 @@ const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
 
     return {
         candidate: getXWingCandidate(xWing),
-        finnedLegAxesText: getHouseAxesText(getCellHouseInfo(houseType, finnedLeg.cells[0])),
+        finnedLegAxesText: getHouseAxesText(getCellHouseForHouseType(houseType, finnedLeg.cells[0])),
         finnedLegHouseText: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         finnCellsAxesListText: getCellsAxesValuesListText(finnCells),
         finnCellEnglishText: finnCells.length === 1 ? 'cell' : 'cells',

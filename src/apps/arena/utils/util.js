@@ -30,7 +30,7 @@ export const shouldSaveDataOnGameStateChange = (currentState, previousState) => 
 
 export const duplicacyPresent = (num, mainNumbers, cell) => isNumberPresentInAnyHouseOfCell(num, cell, mainNumbers)
 
-const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => getHouseCells(getCellHouseInfo(houseType, cell)).some(({ row, col }) => mainNumbers[row][col].value === number))
+const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => getHouseCells(getCellHouseForHouseType(houseType, cell)).some(({ row, col }) => mainNumbers[row][col].value === number))
 
 const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) => {
     const isPuzzleSolved = row === CELLS_IN_HOUSE
@@ -131,10 +131,10 @@ export const getCellBlockHouseInfo = cell => ({
     num: getBlockAndBoxNum(cell).blockNum,
 })
 
-export const getCellHouseInfo = (type, cell) => {
-    if (type === HOUSE_TYPE.ROW) return getCellRowHouseInfo(cell)
-    if (type === HOUSE_TYPE.COL) return getCellColHouseInfo(cell)
-    if (type === HOUSE_TYPE.BLOCK) return getCellBlockHouseInfo(cell)
+export const getCellHouseForHouseType = (houseType, cell) => {
+    if (houseType === HOUSE_TYPE.ROW) return getCellRowHouseInfo(cell)
+    if (houseType === HOUSE_TYPE.COL) return getCellColHouseInfo(cell)
+    if (houseType === HOUSE_TYPE.BLOCK) return getCellBlockHouseInfo(cell)
     throw 'un-identified house'
 }
 
@@ -147,7 +147,7 @@ export const getCellHousesInfo = cell => {
 export const isDuplicateEntry = (mainNumbers, cell, number) => multipleNumberInstancesExistInAnyHouseOfCell(number, cell, mainNumbers)
 
 const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
-    const numberHostCellsInHouse = getHouseCells(getCellHouseInfo(houseType, cell)).filter(({ row, col }) => mainNumbers[row][col].value === number)
+    const numberHostCellsInHouse = getHouseCells(getCellHouseForHouseType(houseType, cell)).filter(({ row, col }) => mainNumbers[row][col].value === number)
     return numberHostCellsInHouse.length > 1
 })
 
@@ -330,7 +330,7 @@ export const getHousesCellsSharedByCells = cells => {
     const commonHouses = getCellsCommonHouses(cells)
     for (const houseType in commonHouses) {
         if (!commonHouses[houseType]) continue
-        const commonHouseCells = getHouseCells(getCellHouseInfo(houseType, cells[0]))
+        const commonHouseCells = getHouseCells(getCellHouseForHouseType(houseType, cells[0]))
         _forEach(commonHouseCells, cell => {
             if (!isCellExists(cell, result)) result.push(cell)
         })

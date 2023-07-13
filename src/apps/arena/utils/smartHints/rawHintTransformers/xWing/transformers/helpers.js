@@ -3,7 +3,7 @@ import _map from '@lodash/map'
 
 import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
-import { getCellHouseInfo, getHouseAxesValue } from '../../../../util'
+import { getCellHouseForHouseType, getHouseAxesValue } from '../../../../util'
 
 import { HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
 import { getCrossHouseType } from '../../../xWing/utils'
@@ -33,8 +33,8 @@ export const getXWingHousesTexts = (houseType, xWingLegs) => {
 }
 
 const getXWingHousesNums = (houseType, xWingLegs) => ({
-    houseANum: getCellHouseInfo(houseType, xWingLegs[0].cells[0]).num,
-    houseBNum: getCellHouseInfo(houseType, xWingLegs[1].cells[0]).num,
+    houseANum: getCellHouseForHouseType(houseType, xWingLegs[0].cells[0]).num,
+    houseBNum: getCellHouseForHouseType(houseType, xWingLegs[1].cells[0]).num,
 })
 
 export const getHouseAxesText = house => {
@@ -55,8 +55,8 @@ export const getCrossHouseAxesText = xWing => {
 const getCrossHousesNums = xWing => {
     const crossHouseType = getCrossHouseType(xWing.houseType)
     return {
-        crossHouseANum: getCellHouseInfo(crossHouseType, xWing.legs[0].cells[0]).num,
-        crossHouseBNum: getCellHouseInfo(crossHouseType, xWing.legs[0].cells[1]).num,
+        crossHouseANum: getCellHouseForHouseType(crossHouseType, xWing.legs[0].cells[0]).num,
+        crossHouseBNum: getCellHouseForHouseType(crossHouseType, xWing.legs[0].cells[1]).num,
     }
 }
 
