@@ -11,7 +11,7 @@ import _set from '@lodash/set'
 import _noop from '@lodash/noop'
 import _isEmpty from '@lodash/isEmpty'
 
-import { GAME_STATE, SCREEN_NAME } from '@resources/constants'
+import { GAME_STATE } from '@resources/constants'
 
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import {
@@ -43,7 +43,7 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({
-    screenName,
+
     gameState,
     mainNumbers,
     notes,
@@ -54,6 +54,7 @@ const Board_ = ({
     cellsHighlightData,
     axisTextStyles,
     svgProps,
+    isCustomPuzleScreen,
 }) => {
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
@@ -93,12 +94,10 @@ const Board_ = ({
         return styles.clueNumColor
     }
 
-    const isCustomPuzleScreen = () => screenName === SCREEN_NAME.CUSTOM_PUZZLE
-
     const getMainNumFontColor = cell => {
         const { row, col } = cell
         if (!mainNumbers[row][col].value) return null
-        if (isCustomPuzleScreen()) return getCustomPuzzleMainNumFontColor(cell)
+        if (isCustomPuzleScreen) return getCustomPuzzleMainNumFontColor(cell)
 
         if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
 
@@ -140,7 +139,7 @@ const Board_ = ({
     const getCellBackgroundColor = cell => {
         if (!shouldShowCellContent()) return null
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
-        if (isCustomPuzleScreen()) return getCustomPuzzleBoardCellBgColor(cell)
+        if (isCustomPuzleScreen) return getCustomPuzzleBoardCellBgColor(cell)
         return getActiveGameBoardCellBgCell(cell)
     }
 
@@ -255,7 +254,6 @@ export const Board = React.memo(Board_)
 Board_.propTypes = {
     mainNumbers: PropTypes.array,
     notes: PropTypes.array,
-    screenName: PropTypes.string,
     gameState: PropTypes.string,
     selectedCell: PropTypes.object,
     onCellClick: PropTypes.func,
@@ -264,10 +262,10 @@ Board_.propTypes = {
     cellsHighlightData: PropTypes.object,
     axisTextStyles: PropTypes.object,
     svgProps: PropTypes.array, // experimental
+    isCustomPuzleScreen: PropTypes.bool,
 }
 
 Board_.defaultProps = {
-    screenName: '',
     gameState: GAME_STATE.INACTIVE,
     selectedCell: {},
     onCellClick: _noop,
@@ -276,4 +274,5 @@ Board_.defaultProps = {
     cellsHighlightData: {},
     axisTextStyles: {},
     svgProps: [],
+    isCustomPuzleScreen: false,
 }

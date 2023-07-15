@@ -53,7 +53,7 @@
 
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
 
-git add \.
+git add .
 
 localChangesPresent=true
 localChangesStashResult=$(git stash) # stash local changes because of warning due to "git pull" command
@@ -72,8 +72,8 @@ if [ "$localChangesPresent" = true ];  then
     }
 fi
 
-git add \. # add local changes to stage
-
 npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
 
 npm run test # run test cases for local changes in case developer didn't run them locally
+
+git add . # add local changes to stage

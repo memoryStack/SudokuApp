@@ -51,7 +51,6 @@ const PENCIL_STATE = {
 const SCREEN_NAME = {
     HOME: 'home',
     ARENA: 'arena',
-    CUSTOM_PUZZLE: 'custom-puzzle',
 }
 
 const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'

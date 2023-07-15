@@ -9,7 +9,7 @@ import _noop from '@lodash/noop'
 import { CloseIcon } from '@resources/svgIcons/close'
 import { PLAY } from '@resources/stringLiterals'
 import { fonts } from '@resources/fonts/font'
-import { GAME_STATE, SCREEN_NAME } from '@resources/constants'
+import { GAME_STATE } from '@resources/constants'
 import withActions from '../../../utils/hocs/withActions'
 import { Button } from '../../../components/button'
 
@@ -111,11 +111,11 @@ const CustomPuzzle_ = ({
                 </Touchable>
                 <Board
                     gameState={GAME_STATE.ACTIVE}
-                    screenName={SCREEN_NAME.CUSTOM_PUZZLE}
                     mainNumbers={mainNumbers}
                     notes={notes}
                     selectedCell={selectedCell}
                     onCellClick={onCellClick}
+                    isCustomPuzleScreen
                 />
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel onAction={onAction} />
