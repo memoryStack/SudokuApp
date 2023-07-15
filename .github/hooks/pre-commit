@@ -51,28 +51,32 @@
 
 ## below script is a step towards CI
 
-currentBranch=$(git rev-parse --abbrev-ref HEAD)
+developerStagedFilesCount=$(git diff --cached --numstat | wc -l)
 
-localChangesPresent=true
-localChangesStashResult=$(git stash) # stash local changes because of warning due to "git pull" command
-if [ "$localChangesStashResult" = "No local changes to save" ] ; then # TODO: how to decouple it with git command message
-    localChangesPresent=false
+if [ $developerStagedFilesCount = 0 ] ; then
+    HINT_COLOR='\033[0;33m';
+        echo "${HINT_COLOR}No local changes are staged for commit";
+    exit 1;
 fi
 
+developerStagedFiles=$(git diff --name-only --cached)
+
+git add .
+
+git stash
+
+currentBranch=$(git rev-parse --abbrev-ref HEAD)
 # TODO: what if the branch is not present on the remote, what will happen ??
 git pull --rebase origin $currentBranch # remote changes are already tested via CI
 
+git stash pop || { 
+    HINT_COLOR='\033[0;33m';
+        echo "${HINT_COLOR}Guess: Local changes are in conflict with remote, resolve the conflicts and run \"git commit\" again";
+    exit 1;
+}
 
-if [ "$localChangesPresent" = true ];  then
-    git stash pop || { 
-        HINT_COLOR='\033[0;33m';
-         echo "${HINT_COLOR}Guess: Local changes are in conflict with remote, resolve the conflicts and run \"git commit\" again";
-        exit 1;
-    }
+git add $developerStagedFiles
 
-    git add .
-fi
+npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
 
-# npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
-
-# npm run test # run test cases for local changes in case developer didn't run them locally
+npm run test # run test cases for local changes in case developer didn't run them locally
