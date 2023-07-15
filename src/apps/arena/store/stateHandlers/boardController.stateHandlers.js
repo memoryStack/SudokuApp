@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const stateHandlers = {
     resetState: (state, { payload }) => {
         state.pencilState = payload.pencilState
@@ -7,7 +8,7 @@ const stateHandlers = {
     setPencil: (state, { payload }) => {
         state.pencilState = payload
     },
-    decreaseHint: (state, action) => {
+    decreaseHint: state => {
         state.hintsLeft -= 1
     },
     setHints: (state, { payload }) => {

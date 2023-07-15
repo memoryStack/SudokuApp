@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const stateHandlers = {
     resetState: (state, action) => {
         const {
@@ -10,7 +11,7 @@ const stateHandlers = {
     setHints: (state, action) => {
         const {
             payload: {
-                hints, mainNumbers, notes, applyHint,
+                hints, mainNumbers, notes,
             },
         } = action
         state.show = true
@@ -22,16 +23,16 @@ const stateHandlers = {
             notesErasedOnInput: {},
         }
     },
-    removeHints: (state, action) => {
+    removeHints: state => {
         state.show = false
         state.currentHintNum = -1
         state.hints = []
         state.tryOut = {}
     },
-    setNextHint: (state, action) => {
+    setNextHint: state => {
         state.currentHintNum += 1
     },
-    setPrevHint: (state, action) => {
+    setPrevHint: state => {
         state.currentHintNum -= 1
     },
     setTryOutSelectedCell: (state, { payload: cell }) => {

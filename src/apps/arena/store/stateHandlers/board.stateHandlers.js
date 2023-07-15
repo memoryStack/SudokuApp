@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const stateHandlers = {
     resetState: (state, { payload }) => {
         state.mainNumbers = payload.mainNumbers
@@ -56,7 +57,7 @@ const stateHandlers = {
     addMove: (state, { payload }) => {
         state.moves.push(payload)
     },
-    popMove: (state, { payload }) => {
+    popMove: state => {
         state.moves.pop()
     },
 }
