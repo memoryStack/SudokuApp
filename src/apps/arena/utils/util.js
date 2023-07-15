@@ -5,12 +5,15 @@ import _every from '@lodash/every'
 import _filter from '@lodash/filter'
 import _includes from '@lodash/includes'
 import _values from '@lodash/values'
+import _unique from '@lodash/unique'
 
 import { getKey } from '@utils/storage'
 
 import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
 
-import { onlyUnique } from '../../../utils/util'
+import {
+    areAllLiteralValuesUnique, areUniqueValuesByProperty, sortNumbersArray,
+} from '../../../utils/util'
 
 import {
     BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES,
@@ -78,20 +81,11 @@ export const areSameCells = (cellA, cellB) => {
     return _isEqual(cellA, cellB)
 }
 
-export const areSameBlockCells = cells => {
-    const cellsBlockNum = cells.map(cell => getBlockAndBoxNum(cell).blockNum)
-    return cellsBlockNum.allValuesSame()
-}
+export const areSameBlockCells = cells => areAllLiteralValuesUnique(cells.map(cell => getBlockAndBoxNum(cell).blockNum))
 
-export const areSameRowCells = cells => {
-    const cellsRow = cells.map(({ row }) => row)
-    return cellsRow.allValuesSame()
-}
+export const areSameRowCells = cells => areUniqueValuesByProperty(cells, 'row')
 
-export const areSameColCells = cells => {
-    const cellsCol = cells.map(({ col }) => col)
-    return cellsCol.allValuesSame()
-}
+export const areSameColCells = cells => areUniqueValuesByProperty(cells, 'col')
 
 export const isCellEmpty = ({ row, col }, mainNumbers) => mainNumbers[row][col].value === 0
 
@@ -194,7 +188,7 @@ export const getUniqueNotesFromCells = (cells, notesData) => {
         result.push(...getCellVisibleNotes(notesData[cell.row][cell.col]))
     })
 
-    return result.filter(onlyUnique).sortNumbers()
+    return sortNumbersArray(_unique(result))
 }
 
 export const getCellVisibleNotes = notes => notes.filter(({ show }) => show)
@@ -341,7 +335,7 @@ export const getHousesCellsSharedByCells = cells => {
 
 export const areSameNotesInCells = (cells, notes) => {
     const cellsNotes = cells.map(cell => getCellVisibleNotes(notes[cell.row][cell.col]))
-    return _every(cellsNotes, aCellNotes => aCellNotes.sameArrays(cellsNotes[0]))
+    return _every(cellsNotes, aCellNotes => _isEqual(aCellNotes, cellsNotes[0]))
 }
 
 export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => isCellEmpty(cell, mainNumbers))

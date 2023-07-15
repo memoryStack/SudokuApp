@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 import _noop from '@lodash/noop'
+import _isEqual from '@lodash/isEqual'
 
 import withActions from '../../../utils/hocs/withActions'
 
@@ -43,7 +44,7 @@ const GameInputPanel_ = ({ onAction }) => {
 
     useEffect(() => {
         const numbersNewVisibility = getNumbersVisibilityStatus(getInstancesCounts(mainNumbers))
-        if (!numbersVisible.sameArrays(numbersNewVisibility)) setNumbersVisibility(numbersNewVisibility)
+        if (!_isEqual(numbersVisible, numbersNewVisibility)) setNumbersVisibility(numbersNewVisibility)
     }, [mainNumbers, numbersVisible])
 
     return (

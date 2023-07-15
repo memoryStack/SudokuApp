@@ -3,8 +3,6 @@ import { getRemovableCandidates } from './hiddenGroup'
 
 describe('getRemovableCandidates()', () => {
     test('returns the notes which will be removed because of hidden tripple in the host cells', () => {
-        // TODO: fix this file import issue
-        // import it from proper place
         const { notesData } = require('../../hiddenGroup/hiddenTripple.testData')
         const hostCells = [
             { row: 0, col: 2 },

@@ -1,6 +1,8 @@
 import _isEmpty from '@lodash/isEmpty'
+import _isEqual from '@lodash/isEqual'
 
 import { N_CHOOSE_K } from '@resources/constants'
+import { sortNumbersArray } from '@utils/util'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { HOUSES_COUNT } from '../../../constants'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
@@ -84,8 +86,7 @@ export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
     const expectedNotes = pivotNotes
         .concat(firstWingNotes)
         .filter(note => note !== commonNote)
-        .sortNumbers()
-    return expectedNotes
+    return sortNumbersArray(expectedNotes)
 }
 
 const extractYWingCellsFromYWing = yWing => {
@@ -116,7 +117,7 @@ const getPivotHousesToSearchForSecondWing = (yWingCellA, yWingCellB) => {
     return allHouses.filter(houseType => !commonHouses[houseType])
 }
 
-const getEligibleSecondWings = (expectedNotes, eligibleYWingCells) => eligibleYWingCells.filter(eligibleYWingCell => eligibleYWingCell.notes.sameArrays(expectedNotes))
+const getEligibleSecondWings = (expectedNotes, eligibleYWingCells) => eligibleYWingCells.filter(eligibleYWingCell => _isEqual(eligibleYWingCell.notes, expectedNotes))
 
 const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
     const result = []

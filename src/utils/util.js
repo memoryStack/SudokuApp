@@ -1,8 +1,8 @@
 import { PixelRatio } from 'react-native'
 
 import _inRange from '@lodash/inRange'
-import _map from '@lodash/map'
-import _isEqual from '@lodash/isEqual'
+import _unique from '@lodash/unique'
+import _uniqueBy from '@lodash/uniqueBy'
 
 export const isHexColor = (color = '') => color.charAt(0) === '#'
 
@@ -15,57 +15,17 @@ export const hexToRGBA = (hex, opacity = 100) => {
     return `rgba(${r}, ${g}, ${b}, ${opacity / 100})`
 }
 
-// prototypes to the array
-if (Array.prototype.allValuesSame === undefined) {
-    Array.prototype.allValuesSame = function () {
-        for (let i = 1; i < this.length; i++) {
-            if (!_isEqual(this[i], this[0])) {
-                return false
-            }
-        }
-        return true
-    }
-}
+const singleEntryInArray = (array = []) => array.length === 1
 
-// TODO: change naming
-if (Array.prototype.sameArrays === undefined) {
-    Array.prototype.sameArrays = function (arrayB) {
-        if (this.length !== arrayB.length) return false
-        for (let i = 0; i < this.length; i++) {
-            if (this[i] !== arrayB[i]) {
-                return false
-            }
-        }
-        return true
-    }
-}
+export const areAllLiteralValuesUnique = array => singleEntryInArray(_unique(array))
 
-if (Array.prototype.sortNumbers === undefined) {
-    Array.prototype.sortNumbers = function () {
-        return this.sort((a, b) => a - b)
-    }
-}
+export const areUniqueValuesByProperty = (array, property) => singleEntryInArray(_uniqueBy(array, property))
 
-// TODO: how to write test-cases for these utils ??
-if (Array.prototype.atIndexes === undefined) {
-    Array.prototype.atIndexes = function (indexes) {
-        return _map(indexes, index => this[index])
-    }
-}
+export const sortNumbersArray = array => array.sort((valueA, valueB) => valueA - valueB)
 
 export const consoleLog = (...args) => {
     __DEV__ && console.log(...args)
 }
-
-// TODO: fix it as per my requirements
-function noWhiteSpace(strings, ...placeholders) {
-    const withSpace = strings.reduce((result, string, i) => result + placeholders[i - 1] + string, '')
-    const withoutSpace = withSpace.replace(/$\n^\s*/gm, ' ')
-    return withoutSpace
-}
-
-// TODO: make it explicit here that this is a callback to Array.filter
-export const onlyUnique = (value, index, self) => self.indexOf(value) === index
 
 export const roundToNearestPixel = sizeInDp => PixelRatio.roundToNearestPixel(sizeInDp)
 

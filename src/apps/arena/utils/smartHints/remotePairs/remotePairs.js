@@ -7,8 +7,8 @@ import _isNil from '@lodash/isNil'
 import _isEmpty from '@lodash/isEmpty'
 import _some from '@lodash/some'
 import _reduce from '@lodash/reduce'
+import _at from '@lodash/at'
 
-import isNil from '@lodash/isNil'
 import { N_CHOOSE_K } from '@resources/constants'
 
 import {
@@ -42,7 +42,7 @@ export const getRemotePairsRawHints = (mainNumbers, notes, maxHintsThreshold) =>
     deleteInvalidNotesPairsKeys(notesPairsHostCells)
 
     const rawHintData = getHintRawData(notesPairsHostCells, notes)
-    return isNil(rawHintData) ? null : [rawHintData]
+    return _isNil(rawHintData) ? null : [rawHintData]
 }
 
 export const getAllValidCellsWithPairs = (mainNumbers, notes) => {
@@ -107,7 +107,7 @@ export const getRemotePairsValidChainCells = (remotePairNotes, hostCells, notes)
         const hostCellsCombinations = N_CHOOSE_K[hostCells.length][hostCellsToChoose]
         const validHintCellsCombination = getValidHintHostCellsCombination(hostCellsCombinations, hostCells, remotePairNotes, notes)
         if (!_isNil(validHintCellsCombination)) {
-            return hostCells.atIndexes(validHintCellsCombination)
+            return _at(hostCells, validHintCellsCombination)
         }
         hostCellsToChoose++
     }
@@ -115,8 +115,7 @@ export const getRemotePairsValidChainCells = (remotePairNotes, hostCells, notes)
 }
 
 export const getValidHintHostCellsCombination = (combinations, hostCells, remotePairNotes, notes) => _find(combinations, combination => {
-    const chainCells = hostCells.atIndexes(combination)
-
+    const chainCells = _at(hostCells, combination)
     if (isValidChainOfCells(chainCells)) {
         return validChainRemovesNotes(chainCells, remotePairNotes, notes)
     }

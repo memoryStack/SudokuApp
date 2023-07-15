@@ -1,5 +1,8 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _isEqual from '@lodash/isEqual'
+
 import { N_CHOOSE_K } from '@resources/constants'
+import { sortNumbersArray } from '@utils/util'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
@@ -80,11 +83,13 @@ const getNakedSinglesInvalidCombination = groupCells => {
         if (allChosenCellsHaveNakedSingle) {
             const chosenCellNotes = chosenCells
                 .map(cell => getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0])
-                .sortNumbers()
+
             const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-            const notChosenCellWillNotHaveCandidate = chosenCellNotes.sameArrays(
+            const notChosenCellWillNotHaveCandidate = _isEqual(
+                sortNumbersArray(chosenCellNotes),
                 getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]),
             )
+
             return notChosenCellWillNotHaveCandidate
         }
 

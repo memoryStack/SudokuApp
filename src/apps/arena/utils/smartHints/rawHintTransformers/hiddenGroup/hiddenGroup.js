@@ -2,7 +2,9 @@ import _cloneDeep from '@lodash/cloneDeep'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
 import _filter from '@lodash/filter'
-import { onlyUnique } from '../../../../../../utils/util'
+import _unique from '@lodash/unique'
+
+import { sortNumbersArray } from '../../../../../../utils/util'
 
 import {
     HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR,
@@ -40,7 +42,8 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
             .map(({ noteValue }) => noteValue)
         result.push(...cellRemovableNotes)
     })
-    return result.filter(onlyUnique).sortNumbers()
+
+    return sortNumbersArray(_unique(result))
 }
 
 const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) => {
@@ -140,16 +143,6 @@ const highlightSecondaryHouseCells = (
     })
 }
 
-// DEAD CODE ??
-const getRemovableGroupCandidates = (groupCandidates, removableGroupCandidatesHostCells, notesData) => removableGroupCandidatesHostCells
-    .reduce((prevValue, cell) => {
-        const cellNotes = notesData[cell.row][cell.col]
-        const groupCandidatesPresentInCell = groupCandidates.filter(groupCandidate => isCellNoteVisible(groupCandidate, cellNotes))
-        return [...prevValue, ...groupCandidatesPresentInCell]
-    }, [])
-    .filter(onlyUnique)
-    .sortNumbers()
-
 const getHintChunks = (houseType, groupCandidates, groupCells) => {
     const hintId = groupCandidates.length === 2 ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
     const msgTemplates = HINT_EXPLANATION_TEXTS[hintId]
@@ -163,7 +156,7 @@ const getHintChunks = (houseType, groupCandidates, groupCells) => {
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
     const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notes)
-    return [...groupCandidates, ...removableCandidates].sortNumbers()
+    return sortNumbersArray([...groupCandidates, ...removableCandidates])
 }
 
 const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
