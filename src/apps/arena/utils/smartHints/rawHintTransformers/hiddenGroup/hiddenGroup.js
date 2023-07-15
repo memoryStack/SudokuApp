@@ -239,8 +239,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
         })
     }
 
-    const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notesData)
-    const hintChunks = getHintChunks(house.type, groupCandidates, hostCells, removableCandidates)
+    const hintChunks = getHintChunks(house.type, groupCandidates, hostCells)
 
     const isHiddenDoubles = groupCandidates.length === 2
     const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(
@@ -263,7 +262,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
             groupCandidates,
             focusedCells,
             groupCells: hostCells,
-            removableCandidates,
+            removableCandidates: getRemovableCandidates(hostCells, groupCandidates, notesData),
             removableGroupCandidatesHostCells,
             primaryHouse: group.house,
         },

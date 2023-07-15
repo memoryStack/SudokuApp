@@ -10,18 +10,14 @@ import { setCellDataInHintResult, setCellNotesHighlightDataInHintResult } from '
 
 const REMOTE_PAIRS_COLORS = ['green', 'rgb(217, 19, 235)']
 
-export const transformRemotePairsRawHint = ({ rawHint: remotePairs, notesData }) => {
-    const a = '10'
-    return {
-        cellsToFocusData: getUICellsToFocusData(remotePairs, notesData),
-        title: HINT_ID_VS_TITLES[HINTS_IDS.REMOTE_PAIRS],
-        steps: [{ text: 'bla bla bla' }],
-        svgProps: {
-            data: getSvgData(remotePairs),
-        },
-        // applyHint: getApplyHintData(remotePairs, notesData),
-    }
-}
+export const transformRemotePairsRawHint = ({ rawHint: remotePairs }) => ({
+    cellsToFocusData: getUICellsToFocusData(remotePairs),
+    title: HINT_ID_VS_TITLES[HINTS_IDS.REMOTE_PAIRS],
+    steps: [{ text: 'bla bla bla' }],
+    svgProps: {
+        data: getSvgData(remotePairs),
+    },
+})
 
 export const getNotesColors = remotePairNotes => _reduce(remotePairNotes, (acc, note, index) => ({
     ...acc,

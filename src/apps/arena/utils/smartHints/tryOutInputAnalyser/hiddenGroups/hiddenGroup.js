@@ -117,7 +117,6 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
             emptyGroupCellsHelpingVerb: emptyGroupCells.length > 1 ? 'are' : 'is',
             primaryHouseFullName,
             candidatesCountWithoutCells,
-            candidatesListText,
         }
         errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.INSUFFICIENT_HOST_CELLS
     }
