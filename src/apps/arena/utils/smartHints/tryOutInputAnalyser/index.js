@@ -18,5 +18,5 @@ export const analyseTryOutInput = ({ hintType, data }) => {
     if (handler) {
         return handler(data)
     }
-    throw 'invalid type of hint try-out requested for analysing'
+    throw new Error('invalid type of hint try-out requested for analysing')
 }

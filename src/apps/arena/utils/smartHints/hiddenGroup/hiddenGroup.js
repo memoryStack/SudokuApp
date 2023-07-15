@@ -67,7 +67,7 @@ const findHiddenGroupsFromValidCandidates = (
     maxHintsThreshold,
 ) => {
     // TODO: put some thought into this condition here
-    if (validCandidates.length > 6) throw `to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`
+    if (validCandidates.length > 6) throw new Error(`to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`)
 
     const result = []
     const N = validCandidates.length
