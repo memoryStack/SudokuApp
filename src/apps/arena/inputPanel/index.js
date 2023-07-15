@@ -2,8 +2,6 @@ import React, { useCallback, useMemo } from 'react'
 
 import { View, Image } from 'react-native'
 
-import { useSelector } from 'react-redux'
-
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'

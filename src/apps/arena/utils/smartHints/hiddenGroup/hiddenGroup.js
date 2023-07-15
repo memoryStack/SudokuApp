@@ -1,7 +1,6 @@
 import { N_CHOOSE_K } from '@resources/constants'
 import { GROUPS, HOUSE_TYPE } from '../constants'
 import { areSameCells, isCellEmpty, isCellExists } from '../../util'
-import { getGroupUIHighlightData } from '../rawHintTransformers/hiddenGroup/hiddenGroup'
 import { getHouseCells } from '../../houseCells'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'

@@ -5,7 +5,6 @@ import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionT
 import { updateGameState } from '../store/actions/gameState.actions'
 import { forBoardEachCell, isCellCorrectlyFilled } from '../utils/util'
 import { BOARD_CELLS_COUNT } from '../constants'
-import { consoleLog } from '../../../utils/util'
 
 const handleCellPress = ({ params: cell }) => {
     // TODO: some improvements can be done here like

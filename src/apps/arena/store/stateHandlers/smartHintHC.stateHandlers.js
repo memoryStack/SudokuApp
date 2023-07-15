@@ -9,7 +9,9 @@ const stateHandlers = {
     },
     setHints: (state, action) => {
         const {
-            payload: { hints, mainNumbers, notes, applyHint },
+            payload: {
+                hints, mainNumbers, notes, applyHint,
+            },
         } = action
         state.show = true
         state.currentHintNum = 1
@@ -38,7 +40,7 @@ const stateHandlers = {
     updateBoardDataOnTryOutNumberInput: (state, { payload }) => {
         const { removalbeNotesHostCellsData, number } = payload
 
-        const selectedCell = state.tryOut.selectedCell
+        const { selectedCell } = state.tryOut
         state.tryOut.mainNumbers[selectedCell.row][selectedCell.col].value = number
 
         removalbeNotesHostCellsData.forEach(({ cell, notes }) => {
@@ -50,7 +52,7 @@ const stateHandlers = {
     updateBoardDataOnTryOutErase: (state, { payload }) => {
         const notesToEnterHostCellsData = payload
 
-        const selectedCell = state.tryOut.selectedCell
+        const { selectedCell } = state.tryOut
         state.tryOut.mainNumbers[selectedCell.row][selectedCell.col].value = 0
 
         notesToEnterHostCellsData.forEach(({ cell, notes }) => {

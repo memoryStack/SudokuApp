@@ -1,5 +1,4 @@
 import _filter from '@lodash/filter'
-import _isEmpty from '@lodash/isEmpty'
 
 import { CELLS_IN_HOUSE } from '../../../constants'
 

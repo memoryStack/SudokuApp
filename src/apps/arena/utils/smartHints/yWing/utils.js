@@ -1,5 +1,7 @@
 import { getHouseCells } from '../../houseCells'
-import { getCellHousesInfo, convertBoardCellNumToCell, convertBoardCellToNum, isCellNoteVisible } from '../../util'
+import {
+    getCellHousesInfo, convertBoardCellNumToCell, convertBoardCellToNum, isCellNoteVisible,
+} from '../../util'
 
 const getHousesCellsNum = cell => {
     const result = {}
@@ -22,9 +24,7 @@ const getWingsCommonCells = (wingCellA, wingCellB) => {
         if (wingBCells[cellNum]) commonCellsInAllHouses.push(cellNum)
     }
 
-    return commonCellsInAllHouses.map(cellNum => {
-        return convertBoardCellNumToCell(parseInt(cellNum, 10))
-    })
+    return commonCellsInAllHouses.map(cellNum => convertBoardCellNumToCell(parseInt(cellNum, 10)))
 }
 
 export const getEliminatableNotesCells = (yWing, notesData) => {
@@ -34,7 +34,5 @@ export const getEliminatableNotesCells = (yWing, notesData) => {
     const commonNoteInWings = yWing.wingsCommonNote
     const wingsCommonSeenCells = getWingsCommonCells(...wingCells)
 
-    return wingsCommonSeenCells.filter(cell => {
-        return isCellNoteVisible(commonNoteInWings, notesData[cell.row][cell.col])
-    })
+    return wingsCommonSeenCells.filter(cell => isCellNoteVisible(commonNoteInWings, notesData[cell.row][cell.col]))
 }

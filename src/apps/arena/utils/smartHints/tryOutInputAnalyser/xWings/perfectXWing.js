@@ -1,5 +1,4 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
-import _flatten from '@lodash/flatten'
 import _isEmpty from '@lodash/isEmpty'
 
 import { getXWingHouseFullName, getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'

@@ -1,4 +1,3 @@
-import _flatten from '@lodash/flatten'
 import _isEmpty from '@lodash/isEmpty'
 
 import { getXWingCells } from '../../xWing/utils'

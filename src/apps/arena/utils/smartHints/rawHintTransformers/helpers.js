@@ -9,11 +9,7 @@ export const getCellsAxesValuesListText = (cells, lastCellConjugation) => {
 
     const allCellsExceptLast = cells.slice(0, cells.length - 1)
     const cellsAxesList = getCellsAxesList(allCellsExceptLast)
-    return cellsAxesList.join(', ') + ` ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1])}`
+    return `${cellsAxesList.join(', ')} ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1])}`
 }
 
-export const getCellsAxesList = cells => {
-    return cells.map(cell => {
-        return getCellAxesValues(cell)
-    })
-}
+export const getCellsAxesList = cells => cells.map(cell => getCellAxesValues(cell))

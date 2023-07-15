@@ -1,7 +1,6 @@
 import _cloneDeep from '@lodash/cloneDeep'
 import _get from '@lodash/get'
 import _every from '@lodash/every'
-import _isEmpty from '@lodash/isEmpty'
 
 import { inRange } from '../../../../../utils/util'
 

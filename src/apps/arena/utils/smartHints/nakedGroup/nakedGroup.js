@@ -2,7 +2,6 @@ import _filter from '@lodash/filter'
 import _map from '@lodash/map'
 import _forEach from '@lodash/forEach'
 import _every from '@lodash/every'
-import _isEmpty from '@lodash/isEmpty'
 import _isNull from '@lodash/isNull'
 
 import { N_CHOOSE_K } from '@resources/constants'

@@ -10,8 +10,7 @@ export const cellHasAllPossibleNotes = (cell, userInputNotes) => {
     const cellPossibleNotes = possibleNotes[cell.row][cell.col]
 
     for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
-        const sameVisibilityStatus =
-            isCellNoteVisible(note, userInputNotes) === isCellNoteVisible(note, cellPossibleNotes)
+        const sameVisibilityStatus = isCellNoteVisible(note, userInputNotes) === isCellNoteVisible(note, cellPossibleNotes)
         if (!sameVisibilityStatus) return false
     }
 

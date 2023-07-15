@@ -1,5 +1,3 @@
-import _isEmpty from '@lodash/isEmpty'
-
 import { CELLS_IN_HOUSE } from '../../../constants'
 
 import { isCellEmpty } from '../../util'

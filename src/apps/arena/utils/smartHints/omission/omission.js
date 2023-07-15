@@ -1,5 +1,3 @@
-import _isEmpty from '@lodash/isEmpty'
-
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
 import { getHouseCells } from '../../houseCells'

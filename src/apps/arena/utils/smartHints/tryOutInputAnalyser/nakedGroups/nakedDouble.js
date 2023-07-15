@@ -24,8 +24,7 @@ export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, group
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         return getAllInputsFilledResult(groupCandidates)
-    } else {
-        const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
-        return getPartialCorrectlyFilledResult(candidatesToBeFilled)
     }
+    const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
+    return getPartialCorrectlyFilledResult(candidatesToBeFilled)
 }

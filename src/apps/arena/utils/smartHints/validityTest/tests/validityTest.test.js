@@ -196,7 +196,7 @@ describe('isValidXWing()', () => {
         expect(isValidXWing(xWing, notes)).toBe(true)
     })
 
-    test(`returns false for perfect x-wing detected where candidate is possible in the cells other than x-wing host cells but user didn't enter them`, () => {
+    test('returns false for perfect x-wing detected where candidate is possible in the cells other than x-wing host cells but user didn\'t enter them', () => {
         const { notes } = require('./testData')
 
         const xWing = {
