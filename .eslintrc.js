@@ -14,7 +14,7 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    plugins: ['react', 'react-hooks', 'jest'],
+    plugins: ['react', 'react-hooks', 'jest', 'unused-imports'],
     globals: {
         __DEV__: 'readonly',
     },
@@ -24,6 +24,7 @@ module.exports = {
         quotes: ['error', 'single'],
         semi: ['error', 'never'],
         'no-underscore-dangle': 'off',
+        'unused-imports/no-unused-imports': 'error',
         'max-len': 'off',
         'no-shadow': ['error', { builtinGlobals: false, allow: [''] }],
         'react/jsx-indent': ['error', 4],
