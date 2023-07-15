@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-export const getStyles = (_, theme) => StyleSheet.create({
+export const getStyles = () => StyleSheet.create({
     backdrop: {
         height: '100%',
         width: '100%',

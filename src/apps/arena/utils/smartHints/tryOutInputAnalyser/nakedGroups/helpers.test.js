@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { getCellsFromCellsWithNote, getNotesFromCellsWithNotes, getNakedSingleCellsWithNoteInAscOrder } from './helpers'
 
 describe('getNakedSingleCellsWithNoteInAscOrder()', () => {

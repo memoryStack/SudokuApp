@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import _isArray from '@lodash/isArray'
 import _isEmpty from '@lodash/isEmpty'
 

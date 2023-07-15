@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { HOUSE_TYPE } from '../../constants'
 
 import { getHouseNoteHostCells } from './omission'

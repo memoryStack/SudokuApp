@@ -115,6 +115,9 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
                 mainNumbers[row][col].solutionValue,
                 cell,
             )
+            break
+        default:
+            break
     }
 
     return {

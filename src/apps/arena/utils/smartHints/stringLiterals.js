@@ -16,11 +16,6 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.ALL]: 'hints',
 }
 
-const HIDDEN_GROUP_HINT_EXPLANATION_TEXT = {
-    PRIMARY_HOUSE: 'In the highlighted {{houseName}}, {{candidatesCountText}} numbers {{candidatesListText}} in green color can come in exactly {{cellsCountText}} cells {{cellsListText}}. so in this {{houseName}} in {{cellsListText}} only {{candidatesListText}} stays and {{removableCandidatesListText}} can be removed.',
-    SECONDARY_HOUSE: 'once we remove {{removableCandidatesListText}} from {{groupCellsAxesListText}} then in the highlighted {{houseName}} {{candidatesListText}} will make a {{complementaryHintTitle}} and because of that {{removableGroupCandidatesListText}} can\'t come in {{removableGroupCandidatesHostCellsListText}}. so we can remove these as well.',
-}
-
 export const HINT_EXPLANATION_TEXTS = {
     [HINTS_IDS.NAKED_SINGLE]: {
         SINGLE_HOUSE: 'in this {{houseType}} only {{cellAxesText}} is empty so {{solutionValue}} will come here',

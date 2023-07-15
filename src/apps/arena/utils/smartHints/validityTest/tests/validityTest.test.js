@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { isValidNakedSingle } from '../nakedSingle'
 import { isValidHiddenSingle } from '../hiddenSingle'
 import { isValidNakedGroup } from '../nakedGroup'
@@ -12,6 +13,7 @@ import { LEG_TYPES } from '../../xWing/constants'
 jest.mock('../../../../../../redux/dispatch.helpers')
 jest.mock('../../../../store/selectors/board.selectors')
 
+// eslint-disable-next-line no-unused-vars
 const mockBoardSelectors = mockedNotes => {
     const { getPossibleNotes, getNotesInfo } = require('../../../../store/selectors/board.selectors')
     const { getStoreState } = require('../../../../../../redux/dispatch.helpers')

@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { HIDDEN_SINGLE_TYPES } from '../constants'
 import { getHiddenSingleRawHints } from './hiddenSingle'
 

@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { getNakedSingleRawHints } from './nakedSingle'
 import { NAKED_SINGLE_TYPES } from '../constants'
 

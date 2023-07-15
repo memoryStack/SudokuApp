@@ -1,10 +1,11 @@
 import { EVENTS } from '../../../constants/events'
 import { AppState } from '../appState'
 
+const { Platform } = require('../platform')
+
 jest.mock('../platform')
 
 const mockPlatformForIOS = () => {
-    const { Platform } = require('../platform')
     Platform.isIOS.mockReturnValue(true)
     Platform.OS.mockReturnValue('ios')
 }
