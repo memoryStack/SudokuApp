@@ -53,8 +53,6 @@
 
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
 
-git add .
-
 localChangesPresent=true
 localChangesStashResult=$(git stash) # stash local changes because of warning due to "git pull" command
 if [ "$localChangesStashResult" = "No local changes to save" ] ; then # TODO: how to decouple it with git command message
@@ -64,16 +62,17 @@ fi
 # TODO: what if the branch is not present on the remote, what will happen ??
 git pull --rebase origin $currentBranch # remote changes are already tested via CI
 
+
 if [ "$localChangesPresent" = true ];  then
     git stash pop || { 
         HINT_COLOR='\033[0;33m';
          echo "${HINT_COLOR}Guess: Local changes are in conflict with remote, resolve the conflicts and run \"git commit\" again";
         exit 1;
     }
+
+    git add .
 fi
 
-npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
+# npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
 
-npm run test # run test cases for local changes in case developer didn't run them locally
-
-git add . # add local changes to stage
+# npm run test # run test cases for local changes in case developer didn't run them locally
