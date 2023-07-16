@@ -26,6 +26,6 @@ const codePush = {
     InstallMode: { ON_NEXT_RESTART: 'ON_APP_RESTART' },
     CheckFrequency: { ON_APP_START: 'ON_APP_START' },
 }
-const cb = _ => app => app
+const cb = () => app => app
 Object.assign(cb, codePush)
 export default cb

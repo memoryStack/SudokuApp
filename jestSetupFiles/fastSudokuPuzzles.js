@@ -1,6 +1,6 @@
 jest.mock('fast-sudoku-puzzles', () => ({
     RNSudokuPuzzle: {
-        getSudokuPuzzle: clues => Promise.resolve(
+        getSudokuPuzzle: () => Promise.resolve(
             {
                 clues: [
                     9, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0,

@@ -9,6 +9,7 @@ import {
 import { isEmptyElement } from '@utils/testing/touchable'
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 
+// eslint-disable-next-line import/no-unresolved
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID, CONTENT_CONTAINER_TEST_ID } from 'src/apps/components/BottomDragger/bottomDragger.constants'
 
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'

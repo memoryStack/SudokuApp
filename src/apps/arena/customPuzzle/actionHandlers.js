@@ -146,23 +146,21 @@ const handleInputNumberClick = ({ setState, getState, params: newInputValue }) =
 }
 
 const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbers) => {
-    const { row, col } = cell
-
     for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-        if (isCellEligibleForStatusUpdate(row, col)) {
-            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
+        if (isCellEligibleForStatusUpdate(cell.row, col)) {
+            mainNumbers[cell.row][col].wronglyPlaced = isDuplicateEntry(
                 mainNumbers,
-                { row, col },
-                mainNumbers[row][col].value,
+                { row: cell.row, col },
+                mainNumbers[cell.row][col].value,
             )
         }
     }
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {
-        if (isCellEligibleForStatusUpdate(row, col)) {
-            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
+        if (isCellEligibleForStatusUpdate(row, cell.col)) {
+            mainNumbers[row][cell.col].wronglyPlaced = isDuplicateEntry(
                 mainNumbers,
-                { row, col },
-                mainNumbers[row][col].value,
+                { row, col: cell.col },
+                mainNumbers[row][cell.col].value,
             )
         }
     }

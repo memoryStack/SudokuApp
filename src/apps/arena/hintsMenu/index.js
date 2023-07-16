@@ -54,7 +54,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         return (
             <View
                 style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}
-                onStartShouldSetResponder={e => true}
+                onStartShouldSetResponder={() => true}
                 onTouchEnd={e => e.stopPropagation()}
                 key={label}
             >

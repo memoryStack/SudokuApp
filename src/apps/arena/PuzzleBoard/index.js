@@ -32,29 +32,25 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
 
     useEffect(() => () => {
         onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-    }, [])
+    }, [onAction])
 
     useEffect(() => {
         onAction({
             type: ACTION_TYPES.ON_MAIN_NUMBERS_UPDATE,
             payload: mainNumbers,
         })
-    }, [mainNumbers])
+    }, [onAction, mainNumbers])
 
-    const isCellClickable = cell => !isHintTryOut || (isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell))
+    const onCellClick = useCallback(cell => {
+        const isCellClickable = !isHintTryOut || (isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell))
+        if (!isCellClickable) {
+            // TODO: snow a snackBar to communicate the user about what is happening
+            return
+        }
 
-    const onCellClick = useCallback(
-        cell => {
-            if (!isCellClickable(cell)) {
-                // TODO: snow a snackBar to communicate the user about what is happening
-                return
-            }
-
-            const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
-            handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-        },
-        [onAction, isHintTryOut],
-    )
+        const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
+        handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    }, [onAction, smartHintTryOutOnAction, isHintTryOut])
 
     const dataToCache = {
         mainNumbers,

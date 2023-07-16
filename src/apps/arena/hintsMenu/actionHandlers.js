@@ -1,3 +1,6 @@
+import _map from '@lodash/map'
+import _forEach from '@lodash/forEach'
+
 import { GAME_STATE } from '@resources/constants'
 import { consoleLog } from '../../../utils/util'
 
@@ -10,10 +13,14 @@ import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 
 const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
     const availableRawHints = {}
-    for (let i = 0; i < HINTS_MENU_ITEMS.length; i++) {
-        const { id: hintId } = HINTS_MENU_ITEMS[i]
-        availableRawHints[hintId] = await rawHintsPromise(hintId, mainNumbers, notes)
-    }
+    const allHintsPromises = _map(HINTS_MENU_ITEMS, ({ id: hintId }) => rawHintsPromise(hintId, mainNumbers, notes))
+
+    await Promise.all(allHintsPromises)
+        .then(rawHints => {
+            _forEach(rawHints, ({ id, data } = {}) => {
+                availableRawHints[id] = data
+            })
+        })
 
     const { unmounting } = getState()
     !unmounting && setState({ availableRawHints })
@@ -24,7 +31,7 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
 const rawHintsPromise = (hintId, mainNumbers, notes) => new Promise(resolve => {
     setTimeout(() => {
         getRawHints(hintId, mainNumbers, notes)
-            .then(resolve)
+            .then(rawHint => resolve({ id: hintId, data: rawHint }))
             .catch(error => {
                 consoleLog(hintId, error)
                 resolve(null)

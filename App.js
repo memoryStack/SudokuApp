@@ -6,8 +6,9 @@ import { Provider } from 'react-redux'
 
 import CodePush from 'react-native-code-push'
 
-import ModalProvider from 'src/containers/ModalProvider'
-import ThemeProvider from 'src/containers/ThemeProvider'
+import { consoleLog } from '@utils/util'
+import ModalProvider from './src/containers/ModalProvider'
+import ThemeProvider from './src/containers/ThemeProvider'
 
 import { SnackBar } from './src/apps/components/SnackBar'
 
@@ -35,7 +36,7 @@ const App = () => {
     // {"status":400,"name":"Error","message":"Missing required query parameter \"deployment_key\""}
     useEffect(() => {
         CodePush.sync({ installMode: CodePush.InstallMode.IMMEDIATE }, status => {
-            console.log('@@@@@@@ JS update installed status', status)
+            consoleLog('@@@@@@@ JS update installed status', status)
         })
     }, [])
 

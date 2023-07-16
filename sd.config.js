@@ -1,5 +1,6 @@
 const fs = require('fs')
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 const StyleDictionary = require('style-dictionary')
 
 StyleDictionary.registerTransform({

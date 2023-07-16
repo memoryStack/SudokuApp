@@ -4,8 +4,8 @@ import {
     fireEvent, render, screen, waitFor,
 } from '@utils/testing/testingLibrary'
 
-import { getStoreState, invokeDispatch } from 'src/redux/dispatch.helpers'
 import { expectOnHintMenuItems } from '@utils/testing/arena'
+import { getStoreState, invokeDispatch } from '../../../redux/dispatch.helpers'
 
 import { boardActions } from '../store/reducers/board.reducers'
 

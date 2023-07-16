@@ -221,9 +221,17 @@ const Board_ = ({
         </Text>
     )
 
-    const yAxis = useMemo(() => <View style={styles.yAxis}>{BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}</View>, [showSmartHint])
+    const yAxis = (
+        <View style={styles.yAxis}>
+            {BOARD_AXES_VALUES.Y_AXIS.map(label => renderAxisText(label))}
+        </View>
+    )
 
-    const xAxis = useMemo(() => <View style={styles.xAxis}>{BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}</View>, [showSmartHint])
+    const xAxis = (
+        <View style={styles.xAxis}>
+            {BOARD_AXES_VALUES.X_AXIS.map(label => renderAxisText(label))}
+        </View>
+    )
 
     const renderBoard = () => (
         <View
@@ -266,6 +274,8 @@ Board_.propTypes = {
 }
 
 Board_.defaultProps = {
+    mainNumbers: [],
+    notes: [],
     gameState: GAME_STATE.INACTIVE,
     selectedCell: {},
     onCellClick: _noop,

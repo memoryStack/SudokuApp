@@ -48,7 +48,7 @@ const BoardController_ = ({ onAction }) => {
 
     useEffect(() => () => {
         onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-    }, [])
+    }, [onAction])
 
     const { width: windowWidth } = useWindowDimensions()
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5

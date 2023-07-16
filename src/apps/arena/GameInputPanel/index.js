@@ -18,23 +18,23 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { ACTION_HANDLERS } from './actionHandlers'
 
+const getInstancesCounts = mainNumbers => {
+    const instancesCount = new Array(10).fill(0)
+    forBoardEachCell(({ row, col }) => {
+        const { value } = mainNumbers[row][col]
+        if (value === mainNumbers[row][col].solutionValue) {
+            instancesCount[value]++
+        }
+    })
+    return instancesCount
+}
+
 const GameInputPanel_ = ({ onAction }) => {
     const { mainNumbers } = useGameBoardInputs()
 
     const gameState = useSelector(getGameState)
 
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
-
-    const getInstancesCounts = mainNumbers => {
-        const instancesCount = new Array(10).fill(0)
-        forBoardEachCell(({ row, col }) => {
-            const { value } = mainNumbers[row][col]
-            if (value === mainNumbers[row][col].solutionValue) {
-                instancesCount[value]++
-            }
-        })
-        return instancesCount
-    }
 
     const getNumbersVisibilityStatus = instancesCount => {
         const numbersVisibility = [true]

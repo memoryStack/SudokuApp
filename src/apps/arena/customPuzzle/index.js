@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
 
 const CustomPuzzle_ = ({
     mainNumbers,
-    selectedCell,
     notes,
+    selectedCell,
     parentHeight,
     onCustomPuzzleClosed,
     onAction,
@@ -71,7 +71,7 @@ const CustomPuzzle_ = ({
 
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT })
-    }, [])
+    }, [onAction])
 
     const handleOnClose = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: customPuzzleRef })
@@ -79,8 +79,9 @@ const CustomPuzzle_ = ({
 
     const handlePlayClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef } })
-    }, [mainNumbers])
+    }, [onAction])
 
+    // TODO: fix this hack of memozation in parent component only
     const onHCClosed = useCallback(() => {
         onCustomPuzzleClosed()
     }, [])
@@ -131,6 +132,8 @@ export const CustomPuzzle = React.memo(
 )
 
 CustomPuzzle_.propTypes = {
+    mainNumbers: PropTypes.array,
+    notes: PropTypes.array,
     onAction: PropTypes.func,
     onCustomPuzzleClosed: PropTypes.func,
     selectedCell: PropTypes.object,
@@ -138,6 +141,8 @@ CustomPuzzle_.propTypes = {
 }
 
 CustomPuzzle_.defaultProps = {
+    mainNumbers: [],
+    notes: [],
     onAction: _noop,
     onCustomPuzzleClosed: _noop,
     parentHeight: 0,

@@ -194,7 +194,7 @@ const generateNewPuzzle = difficultyLevel => {
             startNewGame({ difficultyLevel, mainNumbers })
         })
         .catch(error => {
-            __DEV__ && console.log(error)
+            consoleLog(error)
         })
 }
 
@@ -213,7 +213,7 @@ const resumePreviousGame = () => {
             })
         })
         .catch(error => {
-            __DEV__ && console.log(error)
+            consoleLog(error)
         })
 }
 
