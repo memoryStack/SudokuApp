@@ -1,5 +1,8 @@
 import React, { useContext } from 'react'
+
 import { View } from 'react-native'
+
+import PropTypes from 'prop-types'
 
 import Button from '@ui/molecules/Button'
 
@@ -35,6 +38,16 @@ const TestingComponent = ({
             <Button label="Close" onClick={handleClosePress} />
         </>
     )
+}
+
+TestingComponent.propTypes = {
+    uiCustomProps: PropTypes.object,
+    closeOnBackdropClick: PropTypes.bool,
+}
+
+TestingComponent.defaultProps = {
+    uiCustomProps: {},
+    closeOnBackdropClick: true,
 }
 
 describe('ModalProvider', () => {

@@ -5,8 +5,8 @@ import {
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
-import { MODAL_TEST_ID } from 'src/containers/ModalProvider/modalProvider.constants'
-import { ROUTES } from 'src/navigation/route.constants'
+import { MODAL_TEST_ID } from '../../../../../containers/ModalProvider/modalProvider.constants'
+import { ROUTES } from '../../../../../navigation/route.constants'
 
 import SettingsMenu from './SettingsMenu'
 import { SETTINGS_MENU_TEST_ID } from './settingsMenu.constants'

@@ -1,4 +1,4 @@
-import LanguageSelector from 'src/apps/components/LanguageSelector'
+import LanguageSelector from '../../../../components/LanguageSelector'
 import { ROUTES } from '../../../../../navigation/route.constants'
 
 import { ITEMS_KEYS } from './settingsMenu.constants'

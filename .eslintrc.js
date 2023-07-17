@@ -51,6 +51,7 @@ module.exports = {
         'no-restricted-exports': ['error', {
             restrictedNamedExports: ['then'], // then is added becasue it was added in airbnb's eslint configs
         }],
+        'no-param-reassign': 'off', // TODO: come back to this, use it judiciously
     },
     settings: {
         'import/resolver': {
