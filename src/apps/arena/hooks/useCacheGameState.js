@@ -16,5 +16,5 @@ export const useCacheGameState = (key, data) => {
         if (shouldSaveDataOnGameStateChange(gameState, previousGameState)) {
             cacheGameData(key, data)
         }
-    }, [key, data, gameState])
+    }, [key, data, gameState, previousGameState])
 }

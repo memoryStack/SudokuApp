@@ -14,6 +14,7 @@ import { PersonalizePuzzleIcon } from '@resources/svgIcons/personalizePuzzle'
 import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '@resources/constants'
 import { fonts } from '@resources/fonts/font'
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '@resources/stringLiterals'
+import { consoleLog } from '@utils/util'
 import { useScreenName } from '../../../utils/customHooks'
 
 import { BottomDragger } from '../../components/BottomDragger'
@@ -66,8 +67,8 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                 setPendingGame({ available: pendingGameAvailable, checkedStatus: true })
             })
             .catch(error => {
-                setPendingGame(pendingGame => ({ ...pendingGame, checkedStatus: true }))
-                __DEV__ && console.log(error)
+                setPendingGame(_pendingGame => ({ ..._pendingGame, checkedStatus: true }))
+                consoleLog(error)
             })
     }, [isHomeScreen])
 
@@ -115,15 +116,12 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
 
     const closeView = () => nextGameMenuRef.current && nextGameMenuRef.current.closeDragger()
 
-    const nextGameMenuItemClicked = useCallback(
-        item => {
-            if (menuItemClick) {
-                menuItemClick(item)
-                closeView()
-            }
-        },
-        [nextGameMenuRef, menuItemClick],
-    )
+    const nextGameMenuItemClicked = useCallback(item => {
+        if (menuItemClick) {
+            menuItemClick(item)
+            closeView()
+        }
+    }, [menuItemClick])
 
     const getNextGameMenu = () => (
         <View style={styles.nextGameMenuContainer}>

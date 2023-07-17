@@ -1,8 +1,8 @@
-import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from 'src/apps/arena/gameBoard/cell/cell.constants'
-import { TIMER_PAUSE_ICON_TEST_ID } from 'src/apps/arena/timer/timer.constants'
-import { BOARD_CONTROLLER_TEST_ID } from 'src/apps/arena/cellActions/cellActions.constants'
-import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from 'src/apps/arena/inputPanel/constants'
-import { HINT_MENU_ITEM_TEST_ID } from 'src/apps/arena/hintsMenu/hintsMenu.constants'
+import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from '../../apps/arena/gameBoard/cell/cell.constants'
+import { TIMER_PAUSE_ICON_TEST_ID } from '../../apps/arena/timer/timer.constants'
+import { BOARD_CONTROLLER_TEST_ID } from '../../apps/arena/cellActions/cellActions.constants'
+import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../../apps/arena/inputPanel/constants'
+import { HINT_MENU_ITEM_TEST_ID } from '../../apps/arena/hintsMenu/hintsMenu.constants'
 
 import { screen, within, fireEvent } from './testingLibrary'
 import { isEmptyElement } from './touchable'
@@ -79,6 +79,7 @@ export const getFirstEnabledInputPanelNumber = () => {
         try {
             expect(element).toBeEnabled()
             isEnabled = true
+            // eslint-disable-next-line no-empty
         } catch (error) { }
         return isEnabled
     })

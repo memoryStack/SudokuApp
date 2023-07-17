@@ -10,7 +10,7 @@ import { CloseIcon } from '@resources/svgIcons/close'
 
 import { addListener, removeListener } from '@utils/GlobalEventBus'
 
-import { EVENTS } from 'src/constants/events'
+import { EVENTS } from '../../constants/events'
 
 import { Touchable } from './Touchable'
 

@@ -5,6 +5,7 @@ import {
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
     TouchableOpacity,
+    ViewPropTypes,
 } from 'react-native'
 
 import PropTypes from 'prop-types'
@@ -49,7 +50,7 @@ export const Touchable = props => {
     const {
         style,
         touchable,
-        underlayColor = 'white',
+        underlayColor,
         children,
         avoidDefaultStyles,
         addHitSlop,
@@ -75,10 +76,13 @@ export const Touchable = props => {
 }
 
 Touchable.propTypes = {
+    children: PropTypes.node.isRequired,
     touchable: PropTypes.string,
     underlayColorType: PropTypes.object,
     avoidDefaultStyles: PropTypes.bool,
     addHitSlop: PropTypes.bool,
+    style: ViewPropTypes.style,
+    underlayColor: PropTypes.string,
 }
 
 Touchable.defaultProps = {
@@ -89,4 +93,6 @@ Touchable.defaultProps = {
     },
     avoidDefaultStyles: false,
     addHitSlop: false,
+    style: null,
+    underlayColor: 'white',
 }

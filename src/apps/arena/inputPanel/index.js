@@ -17,6 +17,8 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 import { getStyles } from './style'
 
+const ERASER_SOURCE = require('@resources/assets/eraser.png')
+
 const Inputpanel_ = ({
     numbersVisible, onAction, singleRow, disableNumbersInput,
 }) => {
@@ -42,7 +44,7 @@ const Inputpanel_ = ({
             disabled={disableNumbersInput}
             testID={INPUT_PANEL_ITEM_TEST_ID}
         >
-            <Image style={styles.eraser} source={require('@resources/assets/eraser.png')} />
+            <Image style={styles.eraser} source={ERASER_SOURCE} />
         </Touchable>
     )
 

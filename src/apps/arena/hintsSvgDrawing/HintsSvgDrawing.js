@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { memo, useState, useEffect } from 'react'
 
 import { View } from 'react-native'
@@ -38,7 +39,7 @@ const HintsSvgDrawing = ({
         // measurements are all empty
         // TODO: it needs some serious searching
         setTimeout(measureBoard, 100)
-    }, [])
+    }, [boardRef])
 
     useEffect(() => {
         const handler = async () => {

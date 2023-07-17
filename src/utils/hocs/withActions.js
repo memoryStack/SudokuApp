@@ -15,13 +15,12 @@ const withActions = ({ actionHandlers = {}, initialState = {}, options = DEFAULT
 
     return function wrapComponent(WrappedComponent) {
         class WithActions extends PureComponent {
-            state = initialState
-
             constructor(props) {
                 super(props)
 
                 this.onActions = this.getOnActionProp()
                 this.unmounting = false
+                this.state = initialState
             }
 
             componentWillUnmount() {

@@ -1,19 +1,23 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react'
+
 import { Provider } from 'react-redux'
+
+import PropTypes from 'prop-types'
 
 import { NavigationContainer } from '@react-navigation/native'
 
 // TODO: fix this eslint warning
 import { render } from '@testing-library/react-native'
 
-import ModalProvider from 'src/containers/ModalProvider'
-import ThemeProvider from 'src/containers/ThemeProvider'
+import ModalProvider from '../../containers/ModalProvider'
+import ThemeProvider from '../../containers/ThemeProvider'
 
-import { SnackBar } from 'src/apps/components/SnackBar'
+import { SnackBar } from '../../apps/components/SnackBar'
 
-import 'src/i18n/i18n.config'
+import '../../i18n/i18n.config'
 
-import store from 'src/redux/store'
+import store from '../../redux/store'
 
 const AllTheProviders = ({ children }) => (
     <Provider store={store}>
@@ -27,6 +31,14 @@ const AllTheProviders = ({ children }) => (
         </ThemeProvider>
     </Provider>
 )
+
+AllTheProviders.propTypes = {
+    children: PropTypes.node,
+}
+
+AllTheProviders.defaultProps = {
+    children: null,
+}
 
 const customRender = (ui, options) => render(ui, {
     wrapper: ({ children }) => (

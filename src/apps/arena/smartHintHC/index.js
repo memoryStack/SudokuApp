@@ -87,7 +87,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const onApplyHintClick = useCallback(() => {
         closeView()
         closeByApplyHintClick.current = true
-    }, [onAction])
+    }, [])
 
     const onClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })

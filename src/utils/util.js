@@ -24,6 +24,7 @@ export const areUniqueValuesByProperty = (array, property) => singleEntryInArray
 export const sortNumbersArray = array => array.sort((valueA, valueB) => valueA - valueB)
 
 export const consoleLog = (...args) => {
+    // eslint-disable-next-line no-console
     __DEV__ && console.log(...args)
 }
 

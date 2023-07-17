@@ -1,3 +1,5 @@
+import _isNil from '@lodash/isNil'
+
 import { PENCIL_STATE } from '@resources/constants'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { boardControllerActions } from '../reducers/boardController.reducers'
@@ -12,12 +14,14 @@ const getNewPencilState = currentState => {
     return currentState === PENCIL_STATE.ACTIVE ? PENCIL_STATE.INACTIVE : PENCIL_STATE.ACTIVE
 }
 
-export const updatePencil = (newState = '') => {
-    if (!newState) {
-        const currentState = getPencilStatus(getStoreState())
-        newState = getNewPencilState(currentState)
-    }
-    invokeDispatch(setPencil(newState))
+const getToggledPencilNewState = () => {
+    const currentState = getPencilStatus(getStoreState())
+    return getNewPencilState(currentState)
+}
+
+export const updatePencil = newState => {
+    const finalNewState = _isNil(newState) ? getToggledPencilNewState() : newState
+    invokeDispatch(setPencil(finalNewState))
 }
 
 export const hintsMenuVisibilityAction = visibilityStatus => {

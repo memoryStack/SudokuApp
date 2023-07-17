@@ -7,9 +7,9 @@ import _get from '@lodash/get'
 
 import Text from '@ui/atoms/Text'
 
-import { Page } from 'src/apps/components/Page'
+import { useThemeValues } from '../../../arena/hooks/useTheme'
 
-import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
+import { Page } from '../../../components/Page'
 
 import { styles } from './typography.styles'
 import { TYPOGRAPHIES } from './typography.constants'

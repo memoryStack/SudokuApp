@@ -1,3 +1,9 @@
+import _forEach from '@lodash/forEach'
+import _every from '@lodash/every'
+import _isNil from '@lodash/isNil'
+
+import { consoleLog } from '@utils/util'
+
 import { setKey } from '../../../../utils/storage'
 
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './constants'
@@ -11,13 +17,14 @@ const dataToBeCached = {
 
 const dataReadyForCache = () => {
     const keys = Object.keys(dataToBeCached)
-    for (const key of keys) if (!dataToBeCached[key]) return false
-    return true
+    return _every(keys, key => !_isNil(dataToBeCached[key]))
 }
 
 const resetDataToBeCached = () => {
     const keys = Object.keys(dataToBeCached)
-    for (const key of keys) dataToBeCached[key] = null
+    _forEach(keys, key => {
+        dataToBeCached[key] = null
+    })
 }
 
 const cacheGameData = (key, data) => {
@@ -30,8 +37,8 @@ const cacheGameData = (key, data) => {
                 resetDataToBeCached()
             })
             .catch(error => {
-                __DEV__ && console.log(error)
                 resetDataToBeCached()
+                consoleLog(error)
             })
     }
 }

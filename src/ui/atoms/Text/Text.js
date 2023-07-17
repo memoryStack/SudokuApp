@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import _get from '@lodash/get'
 import _isArray from '@lodash/isArray'
 
-import { FONT_WEIGHT_VS_FONT_FAMILY, DEFAULT_FONT_WEIGHT, fonts } from 'src/resources/fonts/font'
+import { FONT_WEIGHT_VS_FONT_FAMILY, DEFAULT_FONT_WEIGHT, fonts } from '@resources/fonts/font'
 
 const getStylesObjectFromProps = styleProp => {
     if (_isArray(styleProp)) return Object.assign({}, ...styleProp)

@@ -45,10 +45,10 @@ const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
 export const getNakedSingleRawHints = (mainNumbers, notes, maxHintsThreshold) => {
     const result = []
 
-    // BOARD_LOOPER: 9
-    hintsSearchLoop: for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-            if (maxHintsLimitReached(result, maxHintsThreshold)) break hintsSearchLoop
+            if (maxHintsLimitReached(result, maxHintsThreshold)) break
+
             if (!isCellEmpty({ row, col }, mainNumbers)) continue
 
             const cell = { row, col }

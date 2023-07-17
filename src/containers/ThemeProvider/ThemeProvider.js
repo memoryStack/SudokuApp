@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import ThemeContext from '@contexts/ThemeContext'
 
-import theme from 'src/designSystem/tokens'
+import theme from '../../designSystem/tokens.json'
 
 const ThemeProvider = ({ children }) => {
     // TODO: here colorScheme and theme are getting mixed

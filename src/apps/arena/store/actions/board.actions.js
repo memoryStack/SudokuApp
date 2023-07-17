@@ -24,7 +24,6 @@ import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
 import { getHouseCells } from '../../utils/houseCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
-import { consoleLog } from '../../../../utils/util'
 
 const {
     setMainNumbers,
@@ -86,13 +85,13 @@ export const fastPencilAction = () => {
     }
     invokeDispatch(addMove(constructMove(move)))
 
-    if (__DEV__ && false) {
-        // so that i can add things in testData.js files
-        setTimeout(() => {
-            consoleLog(getMainNumbers(getStoreState()))
-            consoleLog(getNotesInfo(getStoreState()))
-        })
-    }
+    // so that i can add things in testData.js files
+    // if (__DEV__) {
+    //     setTimeout(() => {
+    //         consoleLog(getMainNumbers(getStoreState()))
+    //         consoleLog(getNotesInfo(getStoreState()))
+    //     })
+    // }
 }
 
 const getNewNotesBunchToShow = () => {

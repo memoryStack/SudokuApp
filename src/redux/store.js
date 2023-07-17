@@ -16,11 +16,10 @@ const store = configureStore({
         boardController: boardControllerReducers,
         board: boardReducers,
     },
-});
-(function () {
-    initDispatch(store.dispatch)
-    initGetState(store.getState)
-}())
+})
+
+initDispatch(store.dispatch)
+initGetState(store.getState)
 
 export default store
 

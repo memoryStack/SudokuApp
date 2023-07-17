@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
-import { useBoardElementsDimensions } from 'src/apps/arena/hooks/useBoardElementsDimensions'
+import { useBoardElementsDimensions } from '../../apps/arena/hooks/useBoardElementsDimensions'
+import { useThemeValues } from '../../apps/arena/hooks/useTheme'
 
 export const useStyles = (stylesHandler, customProps) => {
     const theme = useThemeValues()

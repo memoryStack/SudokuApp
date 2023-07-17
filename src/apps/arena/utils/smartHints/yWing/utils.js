@@ -1,3 +1,5 @@
+import _filter from '@lodash/filter'
+
 import { getHouseCells } from '../../houseCells'
 import {
     getCellHousesInfo, convertBoardCellNumToCell, convertBoardCellToNum, isCellNoteVisible,
@@ -6,8 +8,8 @@ import {
 const getHousesCellsNum = cell => {
     const result = {}
     getCellHousesInfo(cell).forEach(house => {
-        getHouseCells(house).forEach(cell => {
-            const cellNum = convertBoardCellToNum(cell)
+        getHouseCells(house).forEach(houseCell => {
+            const cellNum = convertBoardCellToNum(houseCell)
             result[cellNum] = true
         })
     })
@@ -17,13 +19,7 @@ const getHousesCellsNum = cell => {
 const getWingsCommonCells = (wingCellA, wingCellB) => {
     const wingACells = getHousesCellsNum(wingCellA)
     const wingBCells = getHousesCellsNum(wingCellB)
-
-    const commonCellsInAllHouses = []
-
-    for (const cellNum in wingACells) {
-        if (wingBCells[cellNum]) commonCellsInAllHouses.push(cellNum)
-    }
-
+    const commonCellsInAllHouses = _filter(Object.keys(wingACells), windACellNum => !!wingBCells[windACellNum])
     return commonCellsInAllHouses.map(cellNum => convertBoardCellNumToCell(parseInt(cellNum, 10)))
 }
 

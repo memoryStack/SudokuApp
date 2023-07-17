@@ -8,10 +8,11 @@ import {
 
 import PropTypes from 'prop-types'
 
-import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import Button from '@ui/molecules/Button'
+import { consoleLog } from '@utils/util'
+import { useTranslation } from '../../i18n/hooks/useTranslation'
 
 import { EVENTS } from '../../constants/events'
 import { ROUTES } from '../../navigation/route.constants'
@@ -20,6 +21,8 @@ import { NextGameMenu } from '../arena/nextGameMenu'
 
 import { HOME_PAGE_TEST_ID, LANGUAGE_VS_TITLE_CHARS } from './home.constants'
 import { getStyles } from './styles'
+
+const APP_ICON_SOURCE = require('@resources/assets/appIcon.png')
 
 const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)
@@ -61,7 +64,7 @@ const Home_ = ({ navigation }) => {
                 url && launchDeeplinkPuzzle(url)
             })
             .catch(error => {
-                __DEV__ && console.log(error)
+                consoleLog(error)
             })
     }, [])
 
@@ -74,7 +77,7 @@ const Home_ = ({ navigation }) => {
     }, [])
 
     // TODO: get these assets from a central place
-    const renderAppIcon = () => <Image source={require('@resources/assets/appIcon.png')} style={styles.appIcon} />
+    const renderAppIcon = () => <Image source={APP_ICON_SOURCE} style={styles.appIcon} />
 
     const renderSudokuText = () => {
         const renderLetter = (letter, index) => (

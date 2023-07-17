@@ -4,9 +4,8 @@ import {
     isolatedRender as render, fireEvent, screen, within,
 } from '@utils/testing/testingLibrary'
 
-import { LANGUAGE_KEYS } from 'src/i18n/languages'
-
 import { isRadioSelected as isSelectedLanguageOptionHighlighted } from '@ui/atoms/RadioButton/radioButton.testUtils'
+import { LANGUAGE_KEYS } from '../../../i18n/languages'
 
 import LanguageSelector from './LanguageSelector'
 import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'

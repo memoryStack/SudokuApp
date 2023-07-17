@@ -37,7 +37,7 @@ const getHintExplanationStepsFromHintChunks = (hintChunks, addTryOutStep = true)
 
 const getTryOutInputPanelNumbersVisibility = allowedCandidates => {
     const numbersVisibility = new Array(10).fill(false)
-    allowedCandidates.forEach(candidate => (numbersVisibility[candidate] = true))
+    allowedCandidates.forEach(candidate => { numbersVisibility[candidate] = true })
     return numbersVisibility
 }
 
@@ -49,11 +49,12 @@ const removeDuplicteCells = cells => {
     return result
 }
 
+// TODO: this logic is duplicated with "getAllCellsToBeHighlighted"
 const getCellsFromCellsToFocusedData = cellsToFocusData => {
     const result = []
     const rows = Object.keys(cellsToFocusData).map(row => parseInt(row, 10))
     rows.forEach(row => {
-        const columns = Object.keys(cellsToFocusData[row]).map(row => parseInt(row, 10))
+        const columns = Object.keys(cellsToFocusData[row]).map(col => parseInt(col, 10))
         const rowCells = columns.map(column => ({ row, col: column }))
         result.push(...rowCells)
     })

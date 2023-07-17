@@ -8,12 +8,11 @@ import { useNavigation, useNavigationState } from '@react-navigation/native'
 import _get from '@lodash/get'
 import _noop from '@lodash/noop'
 
-import { NavigationProvider, navigationRef } from 'src/navigation/navigator'
-
 import { consoleLog } from '@utils/util'
 import { addListener, emit, removeListener } from '@utils/GlobalEventBus'
+import { NavigationProvider, navigationRef } from '../../navigation/navigator'
 
-import { ROUTES } from 'src/navigation/route.constants'
+import { ROUTES } from '../../navigation/route.constants'
 
 import { fireLayoutEvent } from './fireEvent.utils'
 import { render, screen, act } from './testingLibrary'
@@ -43,7 +42,7 @@ const NavigateToRoute_ = ({
 
     React.useEffect(() => {
         if (navigation) onNavigationReceived(navigation)
-    }, [navigation])
+    }, [navigation, onNavigationReceived])
 
     React.useEffect(() => {
         if (!route || !navigationRef.isReady()) return
@@ -95,7 +94,7 @@ const NavigateToRoute = React.memo(NavigateToRoute_)
 export const getScreenName = () => {
     let result
     try {
-        result = screen.getByTestId(SCREEN_NAME_TEXT_TEST_ID).children[0]
+        result = _get(screen.getByTestId(SCREEN_NAME_TEXT_TEST_ID), 'children.[0]')
     } catch (error) {
         consoleLog(error)
     }

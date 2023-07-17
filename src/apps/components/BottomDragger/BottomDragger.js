@@ -32,7 +32,6 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         onDraggerOpened,
         onDraggerClosed,
         stopBackgroundClickClose,
-        showBackgroundOverlay,
         animateBackgroundOverlayOnClose,
         testID,
     } = props
@@ -80,17 +79,17 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     )
 
     useEffect(() => {
-        const bottomMostPosition = parentHeight * bottomMostPositionRatio
-        const topMostPosition = parentHeight - (childrenHeight + headerHeight)
-        const transformValue = new Animated.Value(isFullView ? topMostPosition : bottomMostPosition)
-        setBottomMostPosition(bottomMostPosition)
-        setTopMostPosition(topMostPosition)
-        setTransformValue(transformValue)
+        const _bottomMostPosition = parentHeight * bottomMostPositionRatio
+        const _topMostPosition = parentHeight - (childrenHeight + headerHeight)
+        const _transformValue = new Animated.Value(isFullView ? _topMostPosition : _bottomMostPosition)
+        setBottomMostPosition(_bottomMostPosition)
+        setTopMostPosition(_topMostPosition)
+        setTransformValue(_transformValue)
 
         setTransparentViewOpacityConfig(
-            transformValue.interpolate({
+            _transformValue.interpolate({
                 // this object is duplicated above as well
-                inputRange: [topMostPosition, bottomMostPosition],
+                inputRange: [_topMostPosition, _bottomMostPosition],
                 outputRange: [1, animateBackgroundOverlayOnClose ? 0 : 1],
             }),
         )
@@ -166,8 +165,12 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
             if (shouldBeFullView !== isFullView) {
                 // there is a change in dragger's state so call callback and set new state
                 setFullView(shouldBeFullView)
-                if (!shouldBeFullView) setIsDraggerActive(false)
-                shouldBeFullView ? onDraggerOpened(data) : onDraggerClosed(data)
+                if (shouldBeFullView) {
+                    onDraggerOpened(data)
+                } else {
+                    setIsDraggerActive(false)
+                    onDraggerClosed(data)
+                }
             }
         })
     }
@@ -175,8 +178,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
     const childrenOnLayout = useCallback(event => {
         const { nativeEvent: { layout: { height = 0 } = {} } = {} } = event
         setChildrenHeight(height)
-        const topMostPosition = parentHeight - (height + headerHeight)
-        setTopMostPosition(topMostPosition)
+        setTopMostPosition(parentHeight - (height + headerHeight))
         // TODO: on children height changed dynamically, this openDragger will be called 2 times
         // STOP THAT
         if (!headerText) {
@@ -186,7 +188,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
                 ref.current && ref.current.openDragger()
             }, 0)
         }
-    }, [])
+    }, [parentHeight, headerHeight, headerText, ref])
 
     const renderHeader = () => (
         <View style={styles.header} {...panResponder.panHandlers}>
@@ -241,7 +243,6 @@ BottomDragger_.propTypes = {
     onDraggerOpened: PropTypes.func,
     onDraggerClosed: PropTypes.func,
     stopBackgroundClickClose: PropTypes.bool,
-    showBackgroundOverlay: PropTypes.bool,
     animateBackgroundOverlayOnClose: PropTypes.bool,
     testID: PropTypes.string,
 }
@@ -254,7 +255,6 @@ BottomDragger_.defaultProps = {
     onDraggerOpened: _noop,
     onDraggerClosed: _noop,
     stopBackgroundClickClose: false,
-    showBackgroundOverlay: true,
     animateBackgroundOverlayOnClose: true,
     testID: '',
 }

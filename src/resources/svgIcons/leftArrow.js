@@ -1,11 +1,14 @@
 import React from 'react'
+
 import { Svg, Path, G } from 'react-native-svg'
 
-const SvgComponent = props => (
-    <Svg width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" {...props}>
+import PropTypes from 'prop-types'
+
+const SvgComponent = ({ fill, ...restProps }) => (
+    <Svg width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" {...restProps}>
         <G
             transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-            fill={props.fill || 'black'}
+            fill={fill}
             stroke="none"
         >
             <Path
@@ -21,3 +24,11 @@ const SvgComponent = props => (
 )
 
 export const LeftArrow = React.memo(SvgComponent)
+
+SvgComponent.propTypes = {
+    fill: PropTypes.string,
+}
+
+SvgComponent.defaultProps = {
+    fill: 'black',
+}

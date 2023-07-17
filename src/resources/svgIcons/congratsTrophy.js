@@ -1,5 +1,8 @@
 import React, { memo } from 'react'
+
 import { Svg, Path, G } from 'react-native-svg'
+
+import PropTypes from 'prop-types'
 
 const SvgComponent = ({ height, width }) => (
     <Svg height={height} viewBox="-5 0 493 493.59368" width={width}>
@@ -101,3 +104,13 @@ const SvgComponent = ({ height, width }) => (
 )
 
 export const TrophyIcon = memo(SvgComponent)
+
+SvgComponent.propTypes = {
+    width: PropTypes.number,
+    height: PropTypes.number,
+}
+
+SvgComponent.defaultProps = {
+    width: 100,
+    height: 100,
+}

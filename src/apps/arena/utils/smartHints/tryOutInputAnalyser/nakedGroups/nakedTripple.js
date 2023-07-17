@@ -129,14 +129,12 @@ const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
 // will have no candidate in it
 const getNakedDoublePairCellsErrorResultIfPresent = groupCells => {
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
-
     const invalidNakedDoubleCellsCombination = getNakedDoublesInvalidCombination(groupCells, tryOutNotesInfo)
+    if (!invalidNakedDoubleCellsCombination) return null
 
-    if (invalidNakedDoubleCellsCombination) {
-        const chosenCells = getChosenCells(invalidNakedDoubleCellsCombination, groupCells)
-        const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-        return getNakedDoublePairErrorResult(chosenCells, notChosenCell, tryOutNotesInfo)
-    }
+    const chosenCells = getChosenCells(invalidNakedDoubleCellsCombination, groupCells)
+    const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+    return getNakedDoublePairErrorResult(chosenCells, notChosenCell, tryOutNotesInfo)
 }
 
 const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHOOSE_K[3][2].find(combination => {

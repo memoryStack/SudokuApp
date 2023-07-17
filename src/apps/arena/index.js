@@ -9,7 +9,7 @@ import _noop from '@lodash/noop'
 
 import { GAME_STATE } from '@resources/constants'
 import { fonts } from '@resources/fonts/font'
-import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from 'src/navigation/headerSection/headerSection.constants'
+import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
 import { Touchable } from '../components/Touchable' // TODO: make linter catch issues like this
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
@@ -117,6 +117,7 @@ const Arena_ = ({
 
     useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
+    // TODO: putting "route" in dependency array here fails test-cases
     useEffect(() => {
         const { params: { puzzleUrl = '', selectedGameMenuItem = '' } = {} } = route || {}
         if (puzzleUrl) {
@@ -181,7 +182,7 @@ const Arena_ = ({
         if (isPuzzlePresent(gameState, previousGameState)) {
             onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
         }
-    }, [gameState, previousGameState])
+    }, [onAction, gameState, previousGameState])
 
     useEffect(() => {
         navigation.isFocused()

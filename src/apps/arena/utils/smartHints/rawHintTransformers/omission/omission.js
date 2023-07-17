@@ -37,10 +37,9 @@ const addHostHouseHighlightData = (omission, cellsToFocusData) => {
 
 const addRemovableNotesHouseHighlightData = (omission, notesData, cellsToFocusData) => {
     const { removableNotesHostHouse, note, hostCells } = omission
-    const cellsToHighlight = getHouseCells(removableNotesHostHouse).filter(cell =>
-        // not filtering out the cells which are highlighted by hostHouse already
-        // becoz won't make a difference
-        !isCellExists(cell, hostCells))
+    // not filtering out the cells which are highlighted by hostHouse already
+    // becoz won't make a difference
+    const cellsToHighlight = getHouseCells(removableNotesHostHouse).filter(cell => !isCellExists(cell, hostCells))
 
     cellsToHighlight.forEach(cell => {
         const cellHighlightData = { bgColor: COLORS.CELL }

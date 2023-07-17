@@ -6,9 +6,8 @@ import _noop from '@lodash/noop'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
-import { Touchable } from 'src/apps/components/Touchable'
-
 import Text from '@ui/atoms/Text'
+import { Touchable } from '../../../apps/components/Touchable'
 
 import { getStyles } from './button.styles'
 import { BUTTON_STATES, BUTTON_TYPES } from './button.constants'

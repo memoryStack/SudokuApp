@@ -144,7 +144,8 @@ export const getNakedGroupRawHints = (groupCandidatesCount, notesData, mainNumbe
 
     const result = []
 
-    for (const houseType of houseTypes) {
+    for (let i = 0; i < houseTypes.length; i++) {
+        const houseType = houseTypes[i]
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
             const house = { type: houseType, num: houseNum }
             const validCells = filterNakedGroupEligibleCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)

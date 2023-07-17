@@ -7,7 +7,8 @@ import smartHintHCReducers, { smartHintHCActions } from '../../../store/reducers
 import { useIsHintTryOutStep } from '.'
 import { mainNumbers, notesData } from '../hiddenGroup/testData'
 import { HINTS_IDS } from '../constants'
-import { getSmartHint } from '..'
+import { getRawHints } from '..'
+
 import boardReducers, { boardActions } from '../../../store/reducers/board.reducers'
 
 const { setHints, setNextHint } = smartHintHCActions
@@ -16,8 +17,8 @@ const { setPossibleNotes } = boardActions
 
 // TODO: this test-case will be changed now due to implementation
 // i guess this is what we call testing the implementation. lol ??
-describe('useIsHintTryOutStep()', () => {
-    test.skip('returns false until tryout step is not reached by pressing next button', async () => {
+describe.skip('useIsHintTryOutStep()', () => {
+    test('returns false until tryout step is not reached by pressing next button', async () => {
         const store = makeTestStore({
             smartHintHC: smartHintHCReducers,
             board: boardReducers,
@@ -31,7 +32,7 @@ describe('useIsHintTryOutStep()', () => {
         expect(result.current).toBeFalsy()
 
         await act(async () => {
-            const hints = await getSmartHint(mainNumbers, notesData, HINTS_IDS.HIDDEN_DOUBLE)
+            const hints = await getRawHints(HINTS_IDS.HIDDEN_DOUBLE, mainNumbers, notesData)
             store.dispatch(setHints({ hints }))
         })
 

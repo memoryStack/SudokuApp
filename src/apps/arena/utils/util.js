@@ -38,9 +38,8 @@ const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TY
 const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) => {
     const isPuzzleSolved = row === CELLS_IN_HOUSE
     if (isPuzzleSolved) {
-        forBoardEachCell(({ row, col }) => {
-            const cellValue = mainNumbers[row][col].value
-            mainNumbers[row][col].solutionValue = cellValue
+        forBoardEachCell(({ row: _row, col: _col }) => {
+            mainNumbers[_row][_col].solutionValue = mainNumbers[_row][_col].value
         })
         return 1
     }
@@ -211,11 +210,12 @@ export const getCellsCommonHouses = cells => {
         [HOUSE_TYPE.ROW]: true,
         [HOUSE_TYPE.COL]: true,
     }
+
     for (let i = 1; i < cells.length; i++) {
         const pairCommonHouses = getPairCellsCommonHouses(cells[i - 1], cells[i])
-        for (const key in result) {
-            result[key] = result[key] && pairCommonHouses[key]
-        }
+        _forEach(Object.keys(result), houseType => {
+            result[houseType] = result[houseType] && pairCommonHouses[houseType]
+        })
     }
 
     return result
@@ -322,13 +322,13 @@ export const getHousesCellsSharedByCells = cells => {
     const result = []
 
     const commonHouses = getCellsCommonHouses(cells)
-    for (const houseType in commonHouses) {
-        if (!commonHouses[houseType]) continue
-        const commonHouseCells = getHouseCells(getCellHouseForHouseType(houseType, cells[0]))
-        _forEach(commonHouseCells, cell => {
-            if (!isCellExists(cell, result)) result.push(cell)
+    Object.keys(commonHouses).filter(houseType => commonHouses[houseType])
+        .forEach(houseType => {
+            const commonHouseCells = getHouseCells(getCellHouseForHouseType(houseType, cells[0]))
+            _forEach(commonHouseCells, cell => {
+                if (!isCellExists(cell, result)) result.push(cell)
+            })
         })
-    }
 
     return result
 }

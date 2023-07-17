@@ -49,7 +49,7 @@ const Refree_ = ({ onAction }) => {
 
     useEffect(() => () => {
         onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-    }, [])
+    }, [onAction])
 
     useEffect(() => {
         if (mistakes >= maxMistakesLimit) {
@@ -57,7 +57,7 @@ const Refree_ = ({ onAction }) => {
                 type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED,
             })
         }
-    }, [mistakes, maxMistakesLimit])
+    }, [onAction, mistakes, maxMistakesLimit])
 
     // TODO: check what happens when back button is pressed
     useEffect(() => {

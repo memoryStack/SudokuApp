@@ -83,7 +83,7 @@ export const XWING = {
         + ' {{houseFullNamePlural}} we have two cells {{xWingHostCellsTexts}} but both of'
         + ' these cells are in {{crossHouse}} {{crossHouseFullName}}',
     ONE_LEG_NO_CANDIDATE:
-        'there is no cell in {{inhabitableHouseAxesText}} {{houseFullName}}' + ' where {{candidate}} can come',
+        'there is no cell in {{inhabitableHouseAxesText}} {{houseFullName}} where {{candidate}} can come',
     ONE_LEG_VALID_FILL:
         '{{candidate}} is filled in {{houseAxesText}} {{houseFullName}} without any error, try filling it'
         + ' in other places as well where it is highlighted in red or green color',

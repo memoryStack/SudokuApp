@@ -1,8 +1,9 @@
 import _isEmpty from '@lodash/isEmpty'
 import _isEqual from '@lodash/isEqual'
+import _find from '@lodash/find'
 
 import { N_CHOOSE_K } from '@resources/constants'
-import { sortNumbersArray } from '@utils/util'
+import { consoleLog, sortNumbersArray } from '@utils/util'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { HOUSES_COUNT } from '../../../constants'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
@@ -75,11 +76,7 @@ export const isValidYWingCellsPair = (yWingCellA, yWingCellB) => {
 
 // TODO: change it's name to something general
 // it's used for wings cells and also for pivot and wingCells as well
-const getCommonNoteInWingCells = (cellANotes, cellBNotes) => {
-    for (let i = 0; i < cellANotes.length; i++) {
-        if (cellBNotes.includes(cellANotes[i])) return cellANotes[i]
-    }
-}
+const getCommonNoteInWingCells = (cellANotes, cellBNotes) => _find(cellANotes, cellANote => cellBNotes.includes(cellANote))
 
 export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
     const commonNote = getCommonNoteInWingCells(pivotNotes, firstWingNotes)
@@ -125,7 +122,7 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
     const yWingEligibleCells = housesYWingEligibleCells[type]?.[num] || []
 
     if (yWingEligibleCells.length > N_CHOOSE_K_LIMIT) {
-        console.warn('found more than 6 cells with only 2 notes in them')
+        consoleLog('found more than 6 cells with only 2 notes in them')
     }
 
     const eligibleCellsCombinations = N_CHOOSE_K[yWingEligibleCells.length]?.[2] || []

@@ -9,8 +9,8 @@ import _noop from '@lodash/noop'
 import Radio from '@ui/atoms/RadioButton'
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 
-import { LANGAUGE_OPTIONS } from 'src/i18n/languages'
-import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
+import { LANGAUGE_OPTIONS } from '../../../i18n/languages'
 
 import { Touchable } from '../Touchable'
 

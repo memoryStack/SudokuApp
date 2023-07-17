@@ -3,6 +3,7 @@ import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
 import _noop from '@lodash/noop'
+import { consoleLog } from '@utils/util'
 
 const styles = StyleSheet.create({
     link: {
@@ -59,20 +60,19 @@ export const getTextConfig = text => {
 
 export const ExperimentalText = ({ navigation }) => {
     const onLinkPress = routeKey => {
-        console.log('text pressed', routeKey)
+        consoleLog('text pressed', routeKey)
         navigation.navigate(routeKey)
     }
 
     const renderExperimentalText = () => {
         const text = 'Please visit <a pageRouteKey=#somepage#>here</a>.'
-
         const textConfig = getTextConfig(text)
 
         return (
             <Text>
-                {textConfig.map(({ text, isLink, routeKey }) => (
+                {textConfig.map(({ text: _text, isLink, routeKey }) => (
                     <Text style={[isLink ? styles.link : null]} onPress={isLink ? () => onLinkPress(routeKey) : _noop}>
-                        {text}
+                        {_text}
                     </Text>
                 ))}
             </Text>

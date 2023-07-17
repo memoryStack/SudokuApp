@@ -1,6 +1,7 @@
 import _cloneDeep from '@lodash/cloneDeep'
 import _get from '@lodash/get'
 import _every from '@lodash/every'
+import _some from '@lodash/some'
 
 import { inRange } from '../../../../../utils/util'
 
@@ -192,11 +193,7 @@ export const isFinnedLeg = hostCells => {
 
     if (uniqueHostBlocksCount === 1 || hostCells.length === 3) return true
 
-    for (const blockNum in hostCellsGroupsByBlock) {
-        if (hostCellsGroupsByBlock[blockNum].length === 1) return true
-    }
-
-    return false
+    return _some(Object.keys(hostCellsGroupsByBlock), blockNum => hostCellsGroupsByBlock[blockNum].length === 1)
 }
 
 const getXWingLegType = candidateHostCells => {
@@ -308,10 +305,15 @@ export const getXWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
     const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData)
-    for (const candidate in candidateXWingLegs) {
-        for (const houseType in candidateXWingLegs[candidate]) {
-            if (maxHintsLimitReached(maxHintsThreshold, result)) return result
 
+    const candidatesWithXWingLegs = Object.keys(candidateXWingLegs)
+    for (let i = 0; i < candidatesWithXWingLegs.length; i++) {
+        const candidate = candidatesWithXWingLegs[i]
+        const xWingLegHouseTypes = Object.keys(candidateXWingLegs[candidate])
+        for (let j = 0; j < xWingLegHouseTypes.length; j++) {
+            if (maxHintsLimitReached(maxHintsThreshold, result)) break
+
+            const houseType = xWingLegHouseTypes[j]
             const xWingLegsInHouses = _get(candidateXWingLegs, [candidate, houseType], [])
             result.push(...getCandidateValidXWings(houseType, xWingLegsInHouses, notesData, maxHintsThreshold))
         }

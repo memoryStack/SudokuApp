@@ -5,7 +5,7 @@ import { View } from 'react-native'
 import Text from '@ui/atoms/Text'
 import Badge from '@ui/atoms/Badge'
 
-import { Page } from 'src/apps/components/Page'
+import { Page } from '../../../components/Page'
 
 import { styles } from './badge.styles'
 

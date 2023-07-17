@@ -1,5 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _find from '@lodash/find'
+import _map from '@lodash/map'
+import _forEach from '@lodash/forEach'
 
 import {
     HIDDEN_SINGLE_TYPES,
@@ -412,12 +414,9 @@ const getHiddenSingleLogic = (rawHint, solutionValue, filledCellsWithSolutionVal
 
 const getAllCellsToBeHighlighted = cellsToFocusData => {
     const result = []
-    for (const row in cellsToFocusData) {
-        for (const col in cellsToFocusData[row]) {
-            result.push({ row, col })
-        }
-    }
-
+    _forEach(Object.keys(cellsToFocusData), row => {
+        result.push(..._map(Object.keys(cellsToFocusData[row]), col => ({ row, col })))
+    })
     return result
 }
 
@@ -441,7 +440,7 @@ export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
     const hiddenSingleCellSolutionValue = mainNumbers[cell.row][cell.col].solutionValue
 
     const filledCellsWithSolutionValue = getAllCellsToBeHighlighted(cellsToFocusData).filter(
-        cell => mainNumbers[cell.row][cell.col].value === hiddenSingleCellSolutionValue,
+        aCell => mainNumbers[aCell.row][aCell.col].value === hiddenSingleCellSolutionValue,
     )
 
     return {

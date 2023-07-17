@@ -24,8 +24,9 @@ const PlayGuide_ = () => {
 
     const renderRules = () => (
         <Text style={styles.ruleText}>
-            {RULES_TEXT_CONFIG.map(({ label, styles = {} }, index) => (
-                <Text key={index} style={styles}>{label}</Text>
+            {RULES_TEXT_CONFIG.map(({ label, styles: subTextStyles = {} }, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Text key={index} style={subTextStyles}>{label}</Text>
             ))}
         </Text>
     )

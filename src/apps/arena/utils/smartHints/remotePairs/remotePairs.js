@@ -35,8 +35,7 @@ import {
     CHAIN_VS_REMOVABLE_NOTES_CELL_PARAMETERS,
 } from './remotePairs.constants'
 
-// TODO: it will return only one  hint by default
-export const getRemotePairsRawHints = (mainNumbers, notes, maxHintsThreshold) => {
+export const getRemotePairsRawHints = (mainNumbers, notes) => {
     const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes)
     const notesPairsHostCells = getHostCellsForEachNotesPair(cellsWithValidNotes, notes)
     deleteInvalidNotesPairsKeys(notesPairsHostCells)
@@ -221,6 +220,7 @@ const getCellsVisitedStatus = eachCellCommonHousesCells => {
     }, {})
 
     let currentCellNum = _find(cellsNum, cellNum => eachCellCommonHousesCells[cellNum].length === COMMON_HOUSE_CELLS_COUNT_FOR_ENDPOINT)
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         cellsVisited[currentCellNum] = true
         const nextCellToVisit = _find(eachCellCommonHousesCells[currentCellNum], cellInCommonHouse => !cellsVisited[convertBoardCellToNum(cellInCommonHouse)])

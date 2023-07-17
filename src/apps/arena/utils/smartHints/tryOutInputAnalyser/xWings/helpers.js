@@ -90,12 +90,11 @@ const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
     const notes = getTryOutNotes(getStoreState())
-    return xWingLegs.find(({ cells: legXWingCells }) => legXWingCells.every(xWingCell =>
     // handles sashimi finned x-wing as well
-        (
-            (isCellEmpty(xWingCell, tryOutMainNumbers) || !isCellEmpty(xWingCell, mainNumbers))
+    return xWingLegs.find(({ cells: legXWingCells }) => legXWingCells.every(xWingCell => (
+        (isCellEmpty(xWingCell, tryOutMainNumbers) || !isCellEmpty(xWingCell, mainNumbers))
         && !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
-        )))
+    )))
 }
 
 export const getLegsFilledWithoutErrorResult = xWing => {

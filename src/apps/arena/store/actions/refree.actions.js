@@ -33,16 +33,18 @@ export const timerClick = () => {
 let timerId = null
 
 const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
-    seconds++
-    if (seconds === 60) {
-        minutes++
-        seconds = 0
+    let nextSecond = seconds + 1
+    let nextMinute = minutes
+    let nextHour = hours
+    if (nextSecond === 60) {
+        nextMinute++
+        nextSecond = 0
     }
-    if (minutes === 60) {
-        hours++
-        minutes = 0
+    if (nextMinute === 60) {
+        nextHour++
+        nextMinute = 0
     }
-    return { hours, minutes, seconds }
+    return { hours: nextHour, minutes: nextMinute, seconds: nextSecond }
 }
 
 export const updateTime = time => invokeDispatch(setTime(time))

@@ -164,13 +164,14 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
     groupCandidates,
     notes,
 ) => removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
+    const result = { ...prevValue }
     const restrictedInputsForCell = notes[cell.row][cell.col]
         .filter(({ show, noteValue }) => show && !groupCandidates.includes(noteValue))
         .map(({ noteValue }) => noteValue)
     if (restrictedInputsForCell.length) {
-        prevValue[getCellAxesValues(cell)] = restrictedInputsForCell
+        result[getCellAxesValues(cell)] = restrictedInputsForCell
     }
-    return prevValue
+    return result
 }, {})
 
 const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandidatesHostCells, notesData) => {

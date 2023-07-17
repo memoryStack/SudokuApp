@@ -6,7 +6,7 @@ import _map from '@lodash/map'
 
 import Button from '@ui/molecules/Button'
 
-import { ROUTES } from 'src/navigation/route.constants'
+import { ROUTES } from '../../navigation/route.constants'
 import { styles } from './designSystem.styles'
 
 const BUTTONS_MAP = [

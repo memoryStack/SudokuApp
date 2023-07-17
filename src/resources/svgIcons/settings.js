@@ -1,5 +1,8 @@
 import React, { memo } from 'react'
+
 import { Svg, Path } from 'react-native-svg'
+
+import PropTypes from 'prop-types'
 
 const SvgComponent = ({ iconBoxSize, fill = '#000000' }) => (
     <Svg fill={fill} viewBox="0 0 32 32" width={iconBoxSize} height={iconBoxSize}>
@@ -36,3 +39,13 @@ const SvgComponent = ({ iconBoxSize, fill = '#000000' }) => (
 )
 
 export const SettingsIcon = memo(SvgComponent)
+
+SvgComponent.propTypes = {
+    iconBoxSize: PropTypes.number,
+    fill: PropTypes.string,
+}
+
+SvgComponent.defaultProps = {
+    iconBoxSize: 24,
+    fill: '',
+}

@@ -8,7 +8,7 @@ import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
 const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
     if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount
-    if (groupCandidatesCount === 3) return candidateOccurencesCount >= 2 && candidateOccurencesCount <= groupCandidatesCount
+    return candidateOccurencesCount >= 2 && candidateOccurencesCount <= groupCandidatesCount
 }
 
 export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCount, mainNumbers, notesData) => {

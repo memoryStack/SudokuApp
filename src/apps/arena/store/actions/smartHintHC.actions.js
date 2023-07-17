@@ -140,14 +140,11 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
                 cell,
                 notes: getCellVisibleNotes(notes[cell.row][cell.col]),
             })
-        } else {
-            // TODO: can make it better
-            if (isCellNoteVisible(inputNumber, notes[cell.row][cell.col]) && areCommonHouseCells(cell, selectedCell)) {
-                result.push({
-                    cell,
-                    notes: [inputNumber],
-                })
-            }
+        } else if (isCellNoteVisible(inputNumber, notes[cell.row][cell.col]) && areCommonHouseCells(cell, selectedCell)) {
+            result.push({
+                cell,
+                notes: [inputNumber],
+            })
         }
     })
 

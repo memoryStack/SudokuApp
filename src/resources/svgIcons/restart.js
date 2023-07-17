@@ -1,5 +1,8 @@
 import React, { memo } from 'react'
+
 import { Svg, Path, G } from 'react-native-svg'
+
+import PropTypes from 'prop-types'
 
 const SvgComponent = ({ width, height }) => (
     <Svg viewBox="0 0 80 80" width={width} height={height}>
@@ -25,3 +28,13 @@ const SvgComponent = ({ width, height }) => (
 )
 
 export const RestartIcon = memo(SvgComponent)
+
+SvgComponent.propTypes = {
+    width: PropTypes.number,
+    height: PropTypes.number,
+}
+
+SvgComponent.defaultProps = {
+    width: 24,
+    height: 24,
+}
