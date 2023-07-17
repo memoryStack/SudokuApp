@@ -2,6 +2,8 @@ import React, { memo } from 'react'
 
 import { View } from 'react-native'
 
+import PropTypes from 'prop-types'
+
 import _map from '@lodash/map'
 
 import Button from '@ui/molecules/Button'
@@ -47,3 +49,11 @@ const DesignSystem = ({ navigation }) => {
 }
 
 export default memo(DesignSystem)
+
+DesignSystem.propTypes = {
+    navigation: PropTypes.object,
+}
+
+DesignSystem.defaultProps = {
+    navigation: {},
+}

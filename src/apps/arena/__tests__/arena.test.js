@@ -3,9 +3,6 @@ import {
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
-import { ROUTES } from 'src/navigation/route.constants'
-import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from 'src/navigation/headerSection/headerSection.constants'
-
 import {
     hasPuzzleStarted,
     expectOnAllBoardCells,
@@ -25,8 +22,10 @@ import {
 import { isEmptyElement } from '@utils/testing/touchable'
 
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
-import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from 'src/apps/components/BottomDragger/bottomDragger.constants'
 import { BADGE_TEST_ID } from '@ui/atoms/Badge'
+import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
+import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
+import { ROUTES } from '../../../navigation/route.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'

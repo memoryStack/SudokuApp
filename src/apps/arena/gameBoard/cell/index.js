@@ -58,9 +58,9 @@ const Cell_ = ({
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
 
-        const cellNotesRows = looper.map(row => {
-            const cellNotesRow = looper.map(col => {
-                const noteNum = row * 3 + col
+        const cellNotesRows = looper.map(cellNoteRow => {
+            const cellNotesRow = looper.map(cellNoteCol => {
+                const noteNum = cellNoteRow * 3 + cellNoteCol
                 const { show, noteValue } = cellNotes[noteNum] || {}
                 const noteFontColor = show ? getNotesFontColor(noteValue) : null
 
@@ -84,7 +84,7 @@ const Cell_ = ({
                 )
             })
             return (
-                <View style={styles.notesRow} key={`${row}`}>
+                <View style={styles.notesRow} key={`${cellNoteRow}`}>
                     {cellNotesRow}
                 </View>
             )

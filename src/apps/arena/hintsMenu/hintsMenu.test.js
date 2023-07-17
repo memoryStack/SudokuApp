@@ -28,6 +28,7 @@ export const waitForAvailableHintsToBeChecked = async () => {
             try {
                 expect(element).not.toBeDisabled()
                 enabledHintsCount++
+                // eslint-disable-next-line no-empty
             } catch (error) { }
         })
 
@@ -71,7 +72,7 @@ describe('Available Hints Menu', () => {
 
         render(<HintsMenu />)
 
-        await new Promise(r => setTimeout(r, 2000))
+        await new Promise(resolve => { setTimeout(resolve, 2000) })
 
         expectOnHintMenuItems(element => {
             expect(element).toBeDisabled()

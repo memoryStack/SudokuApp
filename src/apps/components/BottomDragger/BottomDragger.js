@@ -121,7 +121,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
 
     useEffect(() => {
         const handler = () => {
-            moveDragger()
+            moveDragger(bottomMostPosition)
             return true
         }
         const backHandler = BackHandler.addEventListener(EVENTS.HARDWARE_BACK_PRESS, handler)
@@ -153,7 +153,7 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         ],
     )
 
-    const moveDragger = (toValue = bottomMostPosition, data) => {
+    const moveDragger = (toValue, data) => {
         // parent component might open the dragger. so mark dragger as active
         if (!isDraggerActive) setIsDraggerActive(true)
         Animated.timing(transformValue, {

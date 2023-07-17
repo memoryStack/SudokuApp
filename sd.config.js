@@ -37,6 +37,12 @@ const sd = StyleDictionary.extend(STYLE_DICTIONARY_CONFIG)
 
 sd.buildAllPlatforms()
 
+const saveFormattedTokens = tokens => {
+    fs.writeFile('src/designSystem/tokens.json', JSON.stringify(tokens), err => {
+        if (err) throw err
+    })
+}
+
 const formatTokensForNavigationContainer = () => {
     // NavigationContainer needs a property like "color.background"
     // to work proporly in theme, so all this deleting, renaming properties
@@ -51,9 +57,7 @@ const formatTokensForNavigationContainer = () => {
         dataObj.colors.background = 'rgb(242, 242, 242)'
         delete dataObj.colors['on-background']
 
-        fs.writeFile('src/designSystem/tokens.json', JSON.stringify(dataObj), err => {
-            if (err) throw err
-        })
+        saveFormattedTokens(dataObj)
     })
 }
 
