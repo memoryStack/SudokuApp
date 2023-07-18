@@ -1,7 +1,5 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _find from '@lodash/find'
-import _map from '@lodash/map'
-import _forEach from '@lodash/forEach'
 
 import {
     HIDDEN_SINGLE_TYPES,
@@ -14,7 +12,7 @@ import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues,
 } from '../../../util'
-import { setCellDataInHintResult } from '../../util'
+import { getCellsFromCellsToFocusedData, setCellDataInHintResult } from '../../util'
 
 import {
     BLOCKS_COUNT_IN_ROW,
@@ -412,14 +410,6 @@ const getHiddenSingleLogic = (rawHint, solutionValue, filledCellsWithSolutionVal
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
-const getAllCellsToBeHighlighted = cellsToFocusData => {
-    const result = []
-    _forEach(Object.keys(cellsToFocusData), row => {
-        result.push(..._map(Object.keys(cellsToFocusData[row]), col => ({ row, col })))
-    })
-    return result
-}
-
 const getApplyHintData = rawHint => {
     const { cell, mainNumber } = rawHint
     return [
@@ -439,9 +429,8 @@ export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
 
     const hiddenSingleCellSolutionValue = mainNumbers[cell.row][cell.col].solutionValue
 
-    const filledCellsWithSolutionValue = getAllCellsToBeHighlighted(cellsToFocusData).filter(
-        aCell => mainNumbers[aCell.row][aCell.col].value === hiddenSingleCellSolutionValue,
-    )
+    const filledCellsWithSolutionValue = getCellsFromCellsToFocusedData(cellsToFocusData)
+        .filter(aCell => mainNumbers[aCell.row][aCell.col].value === hiddenSingleCellSolutionValue)
 
     return {
         cellsToFocusData,

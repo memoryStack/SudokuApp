@@ -49,14 +49,14 @@ const removeDuplicteCells = cells => {
     return result
 }
 
-// TODO: this logic is duplicated with "getAllCellsToBeHighlighted"
 const getCellsFromCellsToFocusedData = cellsToFocusData => {
     const result = []
-    const rows = Object.keys(cellsToFocusData).map(row => parseInt(row, 10))
-    rows.forEach(row => {
-        const columns = Object.keys(cellsToFocusData[row]).map(col => parseInt(col, 10))
-        const rowCells = columns.map(column => ({ row, col: column }))
-        result.push(...rowCells)
+    const rowsWithFocusedCells = Object.keys(cellsToFocusData).map(row => parseInt(row, 10))
+    rowsWithFocusedCells.forEach(row => {
+        const rowFocusedCells = Object.keys(cellsToFocusData[row])
+            .map(col => parseInt(col, 10))
+            .map(col => ({ row, col }))
+        result.push(...rowFocusedCells)
     })
     return result
 }

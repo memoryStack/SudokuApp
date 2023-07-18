@@ -24,7 +24,7 @@ export const updatePencil = newState => {
     invokeDispatch(setPencil(finalNewState))
 }
 
-export const hintsMenuVisibilityAction = visibilityStatus => {
+export const setHintsMenuVisibilityAction = visibilityStatus => {
     invokeDispatch(setHintsMenu(visibilityStatus))
 }
 

@@ -51,7 +51,6 @@ const Cell_ = ({
         if (showSmartHint) {
             return _get(smartHintData, ['notesToHighlightData', noteValue, 'fontColor'], null)
         }
-        // TODO: remove it later or make it better for practice sessions
         return __DEV__ && noteValue === selectedMainNumber ? 'red' : ''
     }
 

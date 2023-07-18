@@ -4,7 +4,7 @@ import _forEach from '@lodash/forEach'
 import { GAME_STATE } from '@resources/constants'
 import { consoleLog } from '../../../utils/util'
 
-import { hintsMenuVisibilityAction } from '../store/actions/boardController.actions'
+import { setHintsMenuVisibilityAction } from '../store/actions/boardController.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
 import { showHintAction } from '../store/actions/smartHintHC.actions'
 import { getRawHints } from '../utils/smartHints'
@@ -40,7 +40,7 @@ const rawHintsPromise = (hintId, mainNumbers, notes) => new Promise(resolve => {
 })
 
 const handleCloseHintsMenu = () => {
-    hintsMenuVisibilityAction(false)
+    setHintsMenuVisibilityAction(false)
 }
 
 const handleMenuItemPress = ({ getState, params: { id, mainNumbers, notes } }) => {

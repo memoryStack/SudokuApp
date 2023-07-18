@@ -81,23 +81,15 @@ const CustomPuzzle_ = ({
         onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef } })
     }, [onAction])
 
-    // TODO: fix this hack of memozation in parent component only
-    const onHCClosed = useCallback(() => {
-        onCustomPuzzleClosed()
-    }, [])
-
-    const onCellClick = useCallback(
-        cell => {
-            onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-        },
-        [onAction],
-    )
+    const onCellClick = useCallback(cell => {
+        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+    }, [onAction])
 
     return (
         <BottomDragger
             ref={customPuzzleRef}
             parentHeight={parentHeight}
-            onDraggerClosed={onHCClosed}
+            onDraggerClosed={onCustomPuzzleClosed}
             stopBackgroundClickClose
             testID={CUSTOM_PUZZLE_TEST_ID}
         >

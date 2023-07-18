@@ -151,19 +151,14 @@ const Arena_ = ({
         onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
     }, [onAction, gameState])
 
-    const onStartCustomPuzzle = useCallback(
-        mainNumbers => {
-            onAction({
-                type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
-                payload: mainNumbers,
-            })
-        },
-        [onAction],
-    )
-
-    const onCustomPuzzleHCClosed = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
+    const onStartCustomPuzzle = useCallback(mainNumbers => {
+        onAction({
+            type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
+            payload: mainNumbers,
+        })
     }, [onAction])
+
+    const onCustomPuzzleHCClosed = () => onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
 
     const hideCongratsModal = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD, payload: fadeAnim.current })
