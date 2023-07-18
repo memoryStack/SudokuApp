@@ -1,5 +1,6 @@
 import _cloneDeep from '@lodash/cloneDeep'
 import _isEmpty from '@lodash/isEmpty'
+import _isNil from '@lodash/isNil'
 
 import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
@@ -152,7 +153,10 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
 }
 
 export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles) => {
-    if (!cellHasTryOutInput()) {
+    const selectedCell = getTryOutSelectedCell(getStoreState())
+    if (_isNil(selectedCell)) return
+
+    if (!cellHasTryOutInput(selectedCell)) {
         showSnackBar({
             msg: 'you can only erase from cells which were filled after this hint is displayed',
             customStyles: snackBarCustomStyles,
