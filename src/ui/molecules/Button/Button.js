@@ -20,6 +20,7 @@ const Button_ = ({
     avoidDefaultContainerStyles = false,
     type,
     state,
+    children,
     ...rest
 }) => {
     const styles = useStyles(getStyles, {
@@ -28,6 +29,12 @@ const Button_ = ({
         isLabelAvailable: !!label,
         isIconAvailable: false,
     })
+
+    const renderLabel = () => (
+        <Text style={{ ...styles.defaultText, ...textStyles }}>
+            {label}
+        </Text>
+    )
 
     return (
         <Touchable
@@ -39,9 +46,7 @@ const Button_ = ({
             accessibilityRole="button"
             {...rest}
         >
-            <Text style={{ ...styles.defaultText, ...textStyles }}>
-                {label}
-            </Text>
+            {children || renderLabel()}
         </Touchable>
     )
 }
@@ -49,6 +54,7 @@ const Button_ = ({
 export default React.memo(Button_)
 
 Button_.propTypes = {
+    children: PropTypes.node,
     onClick: PropTypes.func,
     containerStyle: PropTypes.object,
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -59,6 +65,7 @@ Button_.propTypes = {
 }
 
 Button_.defaultProps = {
+    children: null,
     onClick: _noop,
     containerStyle: null,
     label: '',

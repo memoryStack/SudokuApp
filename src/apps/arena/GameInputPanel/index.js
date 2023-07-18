@@ -33,7 +33,7 @@ const GameInputPanel_ = ({ onAction }) => {
     const { mainNumbers } = useGameBoardInputs()
 
     const gameState = useSelector(getGameState)
-
+    const isGameActive = (new GameState(gameState).isGameActive())
     const [numbersVisible, setNumbersVisibility] = useState(new Array(10).fill(true))
 
     const getNumbersVisibilityStatus = instancesCount => {
@@ -51,7 +51,8 @@ const GameInputPanel_ = ({ onAction }) => {
         <Inputpanel
             numbersVisible={numbersVisible}
             onAction={onAction}
-            disableNumbersInput={!(new GameState(gameState).isGameActive())}
+            disableNumbersInput={!isGameActive}
+            disableEraser={!isGameActive}
         />
     )
 }

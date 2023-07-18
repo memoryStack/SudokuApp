@@ -8,8 +8,6 @@ import _noop from '@lodash/noop'
 
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 
-import { Touchable } from '../../components/Touchable'
-
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { forCellEachNote as forEachInputNumber } from '../utils/util'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
@@ -20,7 +18,7 @@ import { getStyles } from './style'
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
 
 const Inputpanel_ = ({
-    numbersVisible, onAction, singleRow, disableNumbersInput,
+    numbersVisible, onAction, singleRow, disableNumbersInput, disableEraser,
 }) => {
     const isHintTryOut = useIsHintTryOutStep()
 
@@ -37,15 +35,16 @@ const Inputpanel_ = ({
     }, [onAction])
 
     const renderEraser = () => (
-        <Touchable
+        <Button
             key="erase_cell"
-            style={styles.numberButtonContainer}
+            type={BUTTON_TYPES.TONAL}
+            state={disableEraser ? BUTTON_STATES.DISABLED : BUTTON_STATES.ENABLED}
+            containerStyle={styles.numberButtonContainer}
             onPress={onEraserClick}
-            disabled={disableNumbersInput}
             testID={INPUT_PANEL_ITEM_TEST_ID}
         >
-            <Image style={styles.eraser} source={ERASER_SOURCE} />
-        </Touchable>
+            <Image style={[styles.eraser, disableEraser ? { opacity: 0.5 } : null]} source={ERASER_SOURCE} />
+        </Button>
     )
 
     const getButtonState = number => {
@@ -111,6 +110,7 @@ Inputpanel_.propTypes = {
     onAction: PropTypes.func,
     singleRow: PropTypes.bool,
     disableNumbersInput: PropTypes.bool,
+    disableEraser: PropTypes.bool,
 }
 
 Inputpanel_.defaultProps = {
@@ -118,4 +118,5 @@ Inputpanel_.defaultProps = {
     onAction: _noop,
     singleRow: false,
     disableNumbersInput: false,
+    disableEraser: false,
 }
