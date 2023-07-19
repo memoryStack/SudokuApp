@@ -118,7 +118,7 @@ describe('Styles Overrides', () => {
     test('applies override styles from prop to both button and text', () => {
         const buttonLabel = 'test button'
         const textStyles = { color: 'green' }
-        const containerStyle = { color: 'red' }
+        const containerStyle = { width: 80 }
 
         render(<Button label={buttonLabel} textStyles={textStyles} containerStyle={containerStyle} />)
 
@@ -127,7 +127,7 @@ describe('Styles Overrides', () => {
     })
 
     test('applies override styles from prop to both button and text', () => {
-        const containerStyle = { color: 'red', height: 40 }
+        const containerStyle = { width: 80, height: 40 }
         render(<Button avoidDefaultContainerStyles containerStyle={containerStyle} />)
 
         // to match is used here because default button is TouchableOpacity and this adds

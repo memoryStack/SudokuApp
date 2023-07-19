@@ -76,7 +76,7 @@ export const Touchable = props => {
 }
 
 Touchable.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     touchable: PropTypes.string,
     underlayColorType: PropTypes.object,
     avoidDefaultStyles: PropTypes.bool,
@@ -86,6 +86,7 @@ Touchable.propTypes = {
 }
 
 Touchable.defaultProps = {
+    children: null,
     touchable: defaultTouchable,
     underlayColorType: {
         color: 'white',
