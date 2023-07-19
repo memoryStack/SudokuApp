@@ -1,6 +1,7 @@
 import _cloneDeep from '@lodash/cloneDeep'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
+import _isEmpty from '@lodash/isEmpty'
 import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 
@@ -83,7 +84,6 @@ const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, note
     })
 }
 
-// TODO: put it in utils and see where else it can be used
 const isRowOrColHouse = houseType => houseType === HOUSE_TYPE.ROW || houseType === HOUSE_TYPE.COL
 
 const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
@@ -208,9 +208,8 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
     let focusedCells = getHouseCells(house)
     let removableGroupCandidatesHostCells = []
     const secondaryHostHouse = getSecondaryHostHouse(house.type, hostCells)
-    // TODO: add a utility to check if the returned object is empty or not for cases like this
     let secondaryHouseEligibleForHighlight
-    if (secondaryHostHouse.type) {
+    if (!_isEmpty(secondaryHostHouse)) {
         const secondaryHouseCells = getHouseCells(secondaryHostHouse)
         // TODO: this logic is of eligibility check for highlighting secondary house cells is wrong
         // will come up with the usecase for it later

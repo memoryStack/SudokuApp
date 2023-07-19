@@ -168,7 +168,7 @@ const Board_ = ({
 
                     return (
                         // eslint-disable-next-line react/no-array-index-key
-                        <View style={[styles.cellContainer, cellAdditionalStyles]} key={`${index}`}>
+                        <View style={[styles.cellContainer, cellAdditionalStyles]} key={index}>
                             <Cell
                                 row={row}
                                 col={col}

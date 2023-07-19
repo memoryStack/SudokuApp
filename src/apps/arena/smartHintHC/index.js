@@ -13,7 +13,7 @@ import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 
 import { CloseIcon } from '@resources/svgIcons/close'
-import { BottomDragger } from '../../components/BottomDragger'
+import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 import { Button } from '../../../components/button'
 import withActions from '../../../utils/hocs/withActions'
 
@@ -66,7 +66,8 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const hintsScrollPositions = useRef({})
 
     const scrollHintView = newVerticalPosition => {
-        scrollViewRef.current && scrollViewRef.current.scrollTo({ x: 0, y: newVerticalPosition, animated: true })
+        const scrollHandler = _get(scrollViewRef, 'current.scrollTo', _noop)
+        scrollHandler({ x: 0, y: newVerticalPosition, animated: true })
     }
 
     useEffect(() => {
@@ -82,7 +83,10 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
         onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
     }, [onAction])
 
-    const closeView = () => smartHintHCRef.current && smartHintHCRef.current.closeDragger()
+    const closeView = () => {
+        const closeDragger = getCloseDraggerHandler(smartHintHCRef)
+        closeDragger()
+    }
 
     const onApplyHintClick = useCallback(() => {
         closeView()
@@ -158,7 +162,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
                 textStyles={styles.footerButtonText}
                 addHitSlop
             />
-            {/* TODO: find better way to hide the button.it's wtf right now */}
             <Button
                 text={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
                 onClick={displayNextButton ? onNextClick : onApplyHintClick}

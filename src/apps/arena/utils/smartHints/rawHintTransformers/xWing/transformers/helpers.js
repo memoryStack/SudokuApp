@@ -17,13 +17,6 @@ export const getXWingCrossHouseFullName = xWing => HOUSE_TYPE_VS_FULL_NAMES[getC
 
 export const getXWingCrossHouseFullNamePlural = xWing => HOUSE_TYPE_VS_FULL_NAMES[getCrossHouseType(xWing.houseType)].FULL_NAME_PLURAL
 
-// TODO: check if this stays even relevant
-export const getXWingRectangleCornersAxesText = xWingLegs => {
-    const cornersList = [...xWingLegs[0].cells, xWingLegs[1].cells[1], xWingLegs[1].cells[0]]
-    cornersList.push(cornersList[0])
-    return getCellsAxesValuesListText(cornersList)
-}
-
 export const getXWingHousesTexts = (houseType, xWingLegs) => {
     const { houseANum, houseBNum } = getXWingHousesNums(houseType, xWingLegs)
     return {

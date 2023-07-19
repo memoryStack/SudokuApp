@@ -49,7 +49,7 @@ const getDefaultGroupsFoundInHouses = () => ({
     [HOUSE_TYPE.BLOCK]: {},
 })
 
-// FIX_ME: should be renamed, when i read it months later it felt like it will return a map
+// TODO: should be renamed, when i read it months later it felt like it will return a map
 // with cellID and how many notes are visible in them, but after reading the implementation
 // found something else
 export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {

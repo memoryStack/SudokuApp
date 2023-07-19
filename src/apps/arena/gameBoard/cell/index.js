@@ -107,14 +107,10 @@ const Cell_ = ({
         </Text>
     )
 
-    const getCellNumberView = () => {
-        if (cellMainValue) return renderCellMainValue()
-        return getCellNotes()
-    }
-
     const getCellContent = () => {
         if (displayCrossIcon) return getCellCrossIcon()
-        return getCellNumberView()
+        if (cellMainValue) return renderCellMainValue()
+        return getCellNotes()
     }
 
     return (

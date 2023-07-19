@@ -49,6 +49,7 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
     })
 }
 
+// TODO: synchronize the structre in which cells is passed around for all xWings
 const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     // TODO: this logic is repeated
     const firstHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].row : cells[0][0].col

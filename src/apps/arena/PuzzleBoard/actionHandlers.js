@@ -7,8 +7,6 @@ import { forBoardEachCell, isCellCorrectlyFilled } from '../utils/util'
 import { BOARD_CELLS_COUNT } from '../constants'
 
 const handleCellPress = ({ params: cell }) => {
-    // TODO: some improvements can be done here like
-    // check if user is clicking on same cell again and again
     if (!isGameActive()) return
     updateSelectedCell(cell)
 }

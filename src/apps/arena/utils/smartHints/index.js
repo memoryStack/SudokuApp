@@ -1,5 +1,6 @@
 import _isEmpty from '@lodash/isEmpty'
 import _map from '@lodash/map'
+import _noop from '@lodash/noop'
 
 import { getNakedSingleRawHints } from './nakedSingle/nakedSingle'
 import { getHiddenSingleRawHints } from './hiddenSingle/hiddenSingle'
@@ -24,8 +25,8 @@ import {
 import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
 
 export const getRawHints = async (hintId, mainNumbers, notesData) => {
-    const handler = HINT_ID_VS_HANDLERS[hintId]
-    return handler && handler(mainNumbers, notesData)
+    const handler = HINT_ID_VS_HANDLERS[hintId] || _noop
+    return handler(mainNumbers, notesData)
 }
 
 export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData) => {

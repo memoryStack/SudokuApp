@@ -2,7 +2,7 @@
 import {
     getOmissionRawHints,
     getHouseOmissions,
-    isNoteHaveOmissionInHouse,
+    analyzeOmissionInHouse,
     areValidOmissionHostCells,
     removesNotes as omissionRemovesNotes,
 } from './omission'
@@ -177,7 +177,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(isNoteHaveOmissionInHouse(2, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(2, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notesData)).toStrictEqual(
         expectedResultOne,
     )
 
@@ -189,7 +189,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(isNoteHaveOmissionInHouse(9, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(9, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notesData)).toStrictEqual(
         expectedResultTwo,
     )
 
@@ -201,7 +201,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(isNoteHaveOmissionInHouse(5, { type: HOUSE_TYPE.BLOCK, num: 2 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(5, { type: HOUSE_TYPE.BLOCK, num: 2 }, mainNumbers, notesData)).toStrictEqual(
         expectedResultThree,
     )
 
@@ -213,7 +213,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(isNoteHaveOmissionInHouse(8, { type: HOUSE_TYPE.COL, num: 7 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.COL, num: 7 }, mainNumbers, notesData)).toStrictEqual(
         expectedResultFour,
     )
 
@@ -226,7 +226,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(isNoteHaveOmissionInHouse(8, { type: HOUSE_TYPE.BLOCK, num: 5 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.BLOCK, num: 5 }, mainNumbers, notesData)).toStrictEqual(
         expectedResultFive,
     )
 })

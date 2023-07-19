@@ -22,7 +22,6 @@ import {
 import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../xWing/utils'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
-// TODO: do something about this handler. looks like it's not in right place
 import { filterFilledCellsInTryOut } from '../helpers'
 import { XWING } from '../stringLiterals'
 

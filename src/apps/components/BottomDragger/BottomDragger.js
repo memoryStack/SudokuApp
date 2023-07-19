@@ -179,11 +179,11 @@ const BottomDragger_ = React.forwardRef((props, ref) => {
         const { nativeEvent: { layout: { height = 0 } = {} } = {} } = event
         setChildrenHeight(height)
         setTopMostPosition(parentHeight - (height + headerHeight))
-        // TODO: on children height changed dynamically, this openDragger will be called 2 times
-        // STOP THAT
         if (!headerText) {
             // mostly we want the dragger to be opened itself when header
             // clip is not present
+            // TODO: why ref is used in this component, it's mainly for parent components
+            // to open and close the dragger
             setTimeout(() => {
                 ref.current && ref.current.openDragger()
             }, 0)

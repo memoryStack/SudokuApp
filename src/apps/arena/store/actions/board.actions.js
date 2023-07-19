@@ -166,7 +166,6 @@ const inputMainNumber = number => {
     invokeDispatch(addMove(constructMove(move)))
 }
 
-// TODO: break it down
 const inputNoteNumber = number => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
@@ -354,7 +353,6 @@ export const fillPuzzle = () => {
     })
 }
 
-// TODO: re-use it
 const removeNotesBunchAndAddMove = notesBunch => {
     invokeDispatch(eraseNotesBunch(notesBunch))
 
@@ -377,7 +375,6 @@ export const applyHintAction = applyHintChanges => {
         return
     }
 
-    // TODO: why can't below be made as a re-usable handler just like inputMainNumber()
     const notesBunch = []
     _forEach(applyHintChanges, ({ cell, action }) => {
         notesBunch.push(..._map(_get(action, 'notes'), note => ({ cell, note })))

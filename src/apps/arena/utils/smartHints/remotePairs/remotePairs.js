@@ -70,8 +70,6 @@ export const getHostCellsForEachNotesPair = (cells, notes) => {
 
 const getMapKeyFromNotesPair = notes => `${notes[0]}${notes[1]}`
 
-// TODO: check the eslinting error here
-// check if it's allowable for functions which has side effects
 export const deleteInvalidNotesPairsKeys = notesPairsHostCells => {
     const keys = Object.keys(notesPairsHostCells)
     _forEach(keys, key => {

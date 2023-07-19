@@ -6,6 +6,7 @@ import {
 } from '../store/selectors/smartHintHC.selectors'
 import { isCellEmpty, isCellExists } from '../utils/util'
 
+// TODO: merge this with "filterFilledCellsInTryOut" or "noInputInTryOut"
 export const cellHasTryOutInput = cell => {
     const actualMainNumbers = getMainNumbers(getStoreState())
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())

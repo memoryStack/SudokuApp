@@ -29,8 +29,6 @@ const LanguageSelector_ = ({ hideModal }) => {
         hideModal()
     }
 
-    // TODO: this radio buttons list can be a separate
-    // independent component, plan to move it
     const getLanguagesList = () => (
         LANGAUGE_OPTIONS.map(({ key, label }, index) => (
             <Touchable

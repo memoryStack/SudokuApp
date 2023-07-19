@@ -10,7 +10,7 @@ import _noop from '@lodash/noop'
 import { GAME_STATE } from '@resources/constants'
 import { fonts } from '@resources/fonts/font'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
-import { Touchable } from '../components/Touchable' // TODO: make linter catch issues like this
+import { Touchable } from '../components/Touchable'
 import { Page } from '../components/Page'
 import { NextGameMenu } from './nextGameMenu'
 import { CustomPuzzle } from './customPuzzle'
@@ -35,7 +35,7 @@ import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID } from './constants'
-import GameOverCard from './GameOverCard'
+import GameResultCard from './GameResultCard'
 
 const MAX_AVAILABLE_HINTS = 3
 const styles = StyleSheet.create({
@@ -251,7 +251,7 @@ const Arena_ = ({
                 testID={GAME_OVER_CARD_OVERLAY_TEST_ID}
             >
                 <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
-                    <GameOverCard
+                    <GameResultCard
                         stats={{
                             mistakes,
                             difficultyLevel,

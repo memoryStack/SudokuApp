@@ -21,8 +21,6 @@ export const hiddenGroupTryOutAnalyser = ({
     primaryHouse,
 }) => {
     if (noInputInTryOut([...groupCells, ...removableGroupCandidatesHostCells])) {
-        // TODO: check if direct details of numbers and cells
-        //         should be injected in this example
         return getNoInputResult()
     }
 

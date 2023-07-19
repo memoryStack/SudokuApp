@@ -17,7 +17,7 @@ import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '@resources/stringLiterals'
 import { consoleLog } from '@utils/util'
 import { useScreenName } from '../../../utils/customHooks'
 
-import { BottomDragger } from '../../components/BottomDragger'
+import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 import { Touchable } from '../../components/Touchable'
 
 import { previousInactiveGameExists } from '../utils/util'
@@ -48,8 +48,14 @@ const styles = StyleSheet.create({
     },
 })
 
-// TODO: research about using "useMemo" for the functions which are rendering a view in the
-//          functional component
+const getBarPath = barNum => [
+    'M', 75 + 100 * barNum, '450',
+    'L', 75 + 100 * barNum, 350 - 100 * barNum,
+    'A 25 25 0 0 1', 125 + 100 * barNum, 350 - 100 * barNum,
+    'L', 125 + 100 * barNum, '450',
+    'A 25 25 0 0 1', 75 + 100 * barNum, '450',
+].join(' ')
+
 // TODO: find a good icon for this resume option
 const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
     const screenName = useScreenName()
@@ -71,24 +77,6 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                 consoleLog(error)
             })
     }, [isHomeScreen])
-
-    const getBarPath = barNum => [
-        'M',
-        75 + 100 * barNum,
-        '450',
-        'L',
-        75 + 100 * barNum,
-        350 - 100 * barNum,
-        'A 25 25 0 0 1',
-        125 + 100 * barNum,
-        350 - 100 * barNum,
-        'L',
-        125 + 100 * barNum,
-        '450',
-        'A 25 25 0 0 1',
-        75 + 100 * barNum,
-        '450',
-    ].join(' ')
 
     const getBarStrokeAndFillProps = (barNum, difficultyLevelIndex) => ({
         stroke: barNum <= difficultyLevelIndex ? 'rgba(0, 0, 0, .5)' : 'black',
@@ -114,7 +102,10 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
         )
     }
 
-    const closeView = () => nextGameMenuRef.current && nextGameMenuRef.current.closeDragger()
+    const closeView = () => {
+        const closeDragger = getCloseDraggerHandler(nextGameMenuRef)
+        closeDragger()
+    }
 
     const nextGameMenuItemClicked = useCallback(item => {
         if (menuItemClick) {

@@ -59,7 +59,6 @@ const Refree_ = ({ onAction }) => {
         }
     }, [onAction, mistakes, maxMistakesLimit])
 
-    // TODO: check what happens when back button is pressed
     useEffect(() => {
         if (new GameState(gameState).isGameActive()) startTimer()
         else stopTimer()

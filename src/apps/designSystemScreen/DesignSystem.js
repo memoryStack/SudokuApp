@@ -31,14 +31,13 @@ const BUTTONS_MAP = [
 ]
 
 const DesignSystem = ({ navigation }) => {
-    // TODO: remove this extra view and add this support in Button only
     const renderItem = ({ label, routeKey }) => (
-        <View style={{ marginTop: 40 }} key={routeKey}>
-            <Button
-                onClick={() => navigation && navigation.navigate(routeKey)}
-                label={label}
-            />
-        </View>
+        <Button
+            key={routeKey}
+            containerStyle={{ marginTop: 40 }}
+            onClick={() => navigation && navigation.navigate(routeKey)}
+            label={label}
+        />
     )
 
     return (

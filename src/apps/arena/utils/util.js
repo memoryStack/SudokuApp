@@ -31,6 +31,7 @@ export const addLeadingZeroIfEligible = value => {
 
 export const shouldSaveDataOnGameStateChange = (currentState, previousState) => new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
 
+// it's checking if number is present or not already
 export const duplicacyPresent = (num, mainNumbers, cell) => isNumberPresentInAnyHouseOfCell(num, cell, mainNumbers)
 
 const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => getHouseCells(getCellHouseForHouseType(houseType, cell)).some(({ row, col }) => mainNumbers[row][col].value === number))
@@ -137,12 +138,14 @@ export const getCellHousesInfo = cell => {
 }
 
 // TODO: merge duplicacyPresent and isDuplicateEntry functions into one
+// it's checking after number has been already put more than 1 any house this cell shares
 export const isDuplicateEntry = (mainNumbers, cell, number) => multipleNumberInstancesExistInAnyHouseOfCell(number, cell, mainNumbers)
 
-const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => {
-    const numberHostCellsInHouse = getHouseCells(getCellHouseForHouseType(houseType, cell)).filter(({ row, col }) => mainNumbers[row][col].value === number)
-    return numberHostCellsInHouse.length > 1
-})
+const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK]
+    .some(houseType => {
+        const numberHostCellsInHouse = getHouseCells(getCellHouseForHouseType(houseType, cell)).filter(({ row, col }) => mainNumbers[row][col].value === number)
+        return numberHostCellsInHouse.length > 1
+    })
 
 export const duplicatesInPuzzle = mainNumbers => {
     for (let row = 0; row < HOUSES_COUNT; row++) {

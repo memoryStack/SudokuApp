@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
 
@@ -53,21 +53,13 @@ const BoardController_ = ({ onAction }) => {
     const { width: windowWidth } = useWindowDimensions()
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 
-    const onUndoClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_UNDO_CLICK })
-    }, [onAction])
+    const onUndoClick = () => onAction({ type: ACTION_TYPES.ON_UNDO_CLICK })
 
-    const onPencilClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_PENCIL_CLICK })
-    }, [onAction])
+    const onPencilClick = () => onAction({ type: ACTION_TYPES.ON_PENCIL_CLICK })
 
-    const onFastPencilClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK })
-    }, [onAction])
+    const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK })
 
-    const onHintClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_HINT_CLICK })
-    }, [onAction])
+    const onHintClick = () => onAction({ type: ACTION_TYPES.ON_HINT_CLICK })
 
     // TODO: use a single component for these 4 components, and use them via a config
     return (

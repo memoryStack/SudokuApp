@@ -144,7 +144,6 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
     const mainNumbers = getMainNumbersFromString(getSharedPuzzleNumbersFromUrl(puzzleUrl))
 
     if (duplicatesInPuzzle(mainNumbers).present) {
-        // TODO: give option to correct the puzzle if user can
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `puzzle is invalid. ${LAUNCHING_DEFAULT_PUZZLE}` })
         generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
         return
@@ -184,9 +183,8 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
 }
 
 const generateNewPuzzle = difficultyLevel => {
-    consoleLog('@@@@@@ difficulty level', difficultyLevel)
     if (!difficultyLevel) return
-    // "minClues" becoz sometimes for the expert type of levels we get more than desired clues
+    // "minClues" becoz sometimes for the expert levels we get more than desired clues
     const minClues = LEVELS_CLUES_INFO[difficultyLevel]
     RNSudokuPuzzle.getSudokuPuzzle(minClues)
         .then(({ clues, solution }) => {
@@ -199,11 +197,6 @@ const generateNewPuzzle = difficultyLevel => {
 }
 
 const resumePreviousGame = () => {
-    // TODO: decide contract for the previous game
-    // TODO: test it once the game state caching logic is implemented
-    // TODO: do all this only if the previous game is unsolved
-    // if it's solved/failed then start a new game of same level and nudge the user as well
-
     getKey(PREVIOUS_GAME_DATA_KEY)
         .then(previousGameData => {
             startGame({
@@ -305,7 +298,6 @@ const handleGameOver = ({ setState, params: fadeAnim }) => {
 }
 
 const ACTION_TYPES = {
-    ON_INIT: 'ON_INIT',
     ON_SHARE_CLICK: 'ON_SHARE_CLICK',
     ON_INIT_SHARED_PUZZLE: 'ON_INIT_SHARED_PUZZLE',
     ON_NEW_GAME_MENU_ITEM_PRESS: 'ON_NEW_GAME_MENU_ITEM_PRESS',
@@ -319,7 +311,6 @@ const ACTION_TYPES = {
 }
 
 const ACTION_HANDLERS = {
-    [ACTION_TYPES.ON_INIT]: () => { }, // most likely i won't use this action
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
     [ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS]: handleMenuItemPress,

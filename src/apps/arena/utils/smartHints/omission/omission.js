@@ -23,11 +23,7 @@ export const areValidOmissionHostCells = hostCells => {
     return cellsCommonHouses.length === HOST_CELLS_COMMON_HOUSES_COUNT
 }
 
-// TODO: change it's name to something more expressive intent
-// TODO: this func is doing 2 things. transform it
-// let's come back to this some time later and see if
-// it should be made simple or not
-export const isNoteHaveOmissionInHouse = (note, house, mainNumbers, notesData) => {
+export const analyzeOmissionInHouse = (note, house, mainNumbers, notesData) => {
     const houseCells = getHouseCells(house)
 
     const hostCells = houseCells
@@ -50,7 +46,7 @@ const getRemovableNotesHostHouse = (hostCells, hostHouse) => {
 export const getHouseOmissions = (house, mainNumbers, notesData) => {
     const result = []
     for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
-        const { present, hostCells } = isNoteHaveOmissionInHouse(note, house, mainNumbers, notesData)
+        const { present, hostCells } = analyzeOmissionInHouse(note, house, mainNumbers, notesData)
         if (present) {
             result.push({
                 hostHouse: house,

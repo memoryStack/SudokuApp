@@ -74,12 +74,10 @@ export const isValidYWingCellsPair = (yWingCellA, yWingCellB) => {
     return Object.keys(allNotes).length === VALID_NOTES_COUNT_IN_CELLS_PAIR
 }
 
-// TODO: change it's name to something general
-// it's used for wings cells and also for pivot and wingCells as well
-const getCommonNoteInWingCells = (cellANotes, cellBNotes) => _find(cellANotes, cellANote => cellBNotes.includes(cellANote))
+const getCommonNoteInCells = (cellANotes, cellBNotes) => _find(cellANotes, cellANote => cellBNotes.includes(cellANote))
 
 export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
-    const commonNote = getCommonNoteInWingCells(pivotNotes, firstWingNotes)
+    const commonNote = getCommonNoteInCells(pivotNotes, firstWingNotes)
     const expectedNotes = pivotNotes
         .concat(firstWingNotes)
         .filter(note => note !== commonNote)
@@ -153,7 +151,7 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
                             result.push({
                                 pivot,
                                 wings: [firstWing, secondWing],
-                                wingsCommonNote: getCommonNoteInWingCells(firstWing.notes, secondWing.notes),
+                                wingsCommonNote: getCommonNoteInCells(firstWing.notes, secondWing.notes),
                             })
                         })
                 })

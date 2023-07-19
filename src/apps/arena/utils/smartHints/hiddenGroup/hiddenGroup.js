@@ -61,10 +61,9 @@ const isGroupCellsExist = (newHiddenGroupCells, allHiddenGroups) => allHiddenGro
 const findHiddenGroupsFromValidCandidates = (
     validCandidates,
     groupCandidatesCount,
-    houseType,
-    houseNum,
     notesData,
     maxHintsThreshold,
+    house,
 ) => {
     // TODO: put some thought into this condition here
     if (validCandidates.length > 6) throw new Error(`to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`)
@@ -94,7 +93,7 @@ const findHiddenGroupsFromValidCandidates = (
             && !isNakedGroup(groupCandidates.length, groupCells, notesData)
         ) {
             result.push({
-                house: { type: houseType, num: houseNum }, // TODO: remove the 'house' prefix from here
+                house,
                 groupCandidates, // TODO: let's remove the 'group' prefix form here for both fields
                 groupCells,
             })
@@ -122,10 +121,9 @@ export const getHiddenGroupRawHints = (groupCandidatesCount, notesData, mainNumb
                 const hiddenGroupsInHouse = findHiddenGroupsFromValidCandidates(
                     validCandidatesWithLocations,
                     groupCandidatesCount,
-                    houseType,
-                    houseNum,
                     notesData,
                     maxHintsThreshold,
+                    { type: houseType, num: houseNum },
                 )
 
                 const newHiddenGroups = hiddenGroupsInHouse.filter(group => (

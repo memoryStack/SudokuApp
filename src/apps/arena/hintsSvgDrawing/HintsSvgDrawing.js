@@ -11,6 +11,8 @@ import _map from '@lodash/map'
 import _isNil from '@lodash/isNil'
 import _isEmpty from '@lodash/isEmpty'
 import _isFunction from '@lodash/isFunction'
+import _get from '@lodash/get'
+import _noop from '@lodash/noop'
 
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
@@ -31,7 +33,8 @@ const HintsSvgDrawing = ({
 
     useEffect(() => {
         const measureBoard = () => {
-            boardRef.current && boardRef.current.measure((_x, _y, _width, _height, _pageX, _pageY) => {
+            const boardMeasureHandler = _get(boardRef, ['current.measure'], _noop)
+            boardMeasureHandler((_x, _y, _width, _height, _pageX, _pageY) => {
                 setBoardPageCordinates({ x: _pageX, y: _pageY })
             })
         }
