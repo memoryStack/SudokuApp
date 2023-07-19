@@ -10,7 +10,7 @@ import {
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
-    isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues,
+    isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues, getBlockStartCell,
 } from '../../../util'
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult } from '../../util'
 
@@ -150,11 +150,6 @@ const highlightNeighbourHouseNewWinnerInstance = (
         setCellDataInHintResult({ row: instanceRow, col }, cellHighlightData, cellsToFocusData)
     }
 }
-
-const getBlockStartCell = blockNum => ({
-    row: blockNum - (blockNum % 3),
-    col: (blockNum % 3) * 3,
-})
 
 // TODO: test how cross-hatching fits into this highlighting properly
 // TODO: we can break it down further but let's leave it for now.

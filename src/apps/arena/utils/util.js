@@ -341,3 +341,8 @@ export const areSameNotesInCells = (cells, notes) => {
 export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => isCellEmpty(cell, mainNumbers))
 
 export const isGenerateNewPuzzleItem = item => _includes(_values(LEVEL_DIFFICULTIES), item)
+
+export const getBlockStartCell = blockNum => ({
+    row: blockNum - (blockNum % 3),
+    col: (blockNum % 3) * 3,
+})
