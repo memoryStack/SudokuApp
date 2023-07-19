@@ -4,7 +4,7 @@ import { Svg, Path } from 'react-native-svg'
 
 import PropTypes from 'prop-types'
 
-const SvgComponent = ({ iconBoxSize, fill = '#000000' }) => (
+const SvgComponent = ({ iconBoxSize, fill }) => (
     <Svg fill={fill} viewBox="0 0 32 32" width={iconBoxSize} height={iconBoxSize}>
         <Path
             d="M 13.1875 3 L 13.03125 3.8125 L 12.4375 6.78125 C 11.484375 7.15625 10.625 7.683594
@@ -47,5 +47,5 @@ SvgComponent.propTypes = {
 
 SvgComponent.defaultProps = {
     iconBoxSize: 24,
-    fill: '',
+    fill: '#000000',
 }
