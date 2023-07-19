@@ -423,6 +423,16 @@ describe('Hint/Smart Hints', () => {
         expect(screen.queryByTestId(SMART_HINT_HC_TEST_ID)).not.toBeOnTheScreen()
     })
 
+    test('BugFix: erasing without selecting any cell will crash app', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC('Hidden Double')
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoTryOutStep(smartHintHC)
+
+        expect(() => fireEvent.press(getInputPanelEraser(getInputPanel(smartHintHC)))).not.toThrow(Error)
+    })
+
     test('in try out step, user can fill numbers in cells and see impact', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
