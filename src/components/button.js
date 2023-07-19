@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
 
 // TODO: make the tuchable configurable as well when in need
 // TODO: add support for touchable hitslops as well
+// TODO: remove this button
 const Button_ = ({
     onClick,
     containerStyle = null,

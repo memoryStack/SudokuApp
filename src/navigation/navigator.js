@@ -24,7 +24,7 @@ const getNavigator = () => {
     )
 }
 
-// TODO: children prop is for testing purpose to hack navigation prop
+// children prop is for testing purpose to hack navigation prop
 // eslint-disable-next-line react/prop-types
 export const NavigationProvider = ({ children }) => (
     <NavigationContainer ref={navigationRef}>

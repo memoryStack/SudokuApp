@@ -39,11 +39,14 @@ const BUTTONS = [
 ]
 
 const ButtonDemo = () => {
-    // TODO: remove this extra view and add this support in Button only
     const renderItem = ({ label, type, ...rest }) => (
-        <View style={{ marginTop: 40 }} key={type}>
-            <Button type={type} label={label} {...rest} />
-        </View>
+        <Button
+            key={type}
+            containerStyle={{ marginTop: 40 }}
+            type={type}
+            label={label}
+            {...rest}
+        />
     )
 
     return (

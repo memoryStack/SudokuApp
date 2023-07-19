@@ -13,7 +13,7 @@ import {
     getInputPanelNumberIfEnabled,
     getInputPanelEraser,
     isNotePresentInCell,
-    isMainNumberPresentInCell,
+    expectMainNumberPresentInCell,
     solvePuzzle,
     gameOverByMistakes,
     getCellByPosition,
@@ -352,7 +352,7 @@ describe('Hint/Smart Hints', () => {
             jest.advanceTimersByTime(200)
         })
 
-        isMainNumberPresentInCell(getCellByPosition(11), 3)
+        expectMainNumberPresentInCell(getCellByPosition(11), 3)
     })
 
     test('clicking on Apply Hint will decrease the number of available hints', async () => {
@@ -446,7 +446,7 @@ describe('Hint/Smart Hints', () => {
 
         fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
 
-        isMainNumberPresentInCell(getCellByPosition(2), 2)
+        expectMainNumberPresentInCell(getCellByPosition(2), 2)
         expect(isNotePresentInCell(getCellByPosition(3), 2)).toBe(false)
     })
 
@@ -476,7 +476,7 @@ describe('Hint/Smart Hints', () => {
         fireEvent.press(getCellByPosition(3))
         fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
 
-        isMainNumberPresentInCell(getCellByPosition(3), 3)
+        expectMainNumberPresentInCell(getCellByPosition(3), 3)
 
         closeSmartHintHC()
         // TODO: right now there is no query to run which tells that a Main number is not
@@ -494,7 +494,7 @@ describe('Board Cell Fill Values', () => {
         const inputPanelItemToPress = getFirstEnabledInputPanelNumber()
         fireEvent.press(inputPanelItemToPress.element)
 
-        isMainNumberPresentInCell(emptyCell, inputPanelItemToPress.inputNumber)
+        expectMainNumberPresentInCell(emptyCell, inputPanelItemToPress.inputNumber)
     })
 
     test('mistakes count will increase on clicking wrong number', async () => {
@@ -517,7 +517,7 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(clueCell)
         fireEvent.press(getInputPanelNumberIfEnabled(5))
 
-        isMainNumberPresentInCell(clueCell, 9)
+        expectMainNumberPresentInCell(clueCell, 9)
     })
 
     test('clicked number wont change value in correctly filled cell as well', async () => {
@@ -529,7 +529,7 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(2)) // fill correct value
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
-        isMainNumberPresentInCell(cell, 2)
+        expectMainNumberPresentInCell(cell, 2)
     })
 
     test('clicked number wont change value in wrongly filled cell as well', async () => {
@@ -541,7 +541,7 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(5)) // fill wrong value
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
-        isMainNumberPresentInCell(cell, 5)
+        expectMainNumberPresentInCell(cell, 5)
     })
 })
 
@@ -598,7 +598,7 @@ describe('Board Cell fill MainValue in Notes filled cell', () => {
 
         expect(isNotePresentInCell(cell, 2)).toBe(false)
         expect(isNotePresentInCell(cell, 3)).toBe(false)
-        isMainNumberPresentInCell(cell, 2)
+        expectMainNumberPresentInCell(cell, 2)
     })
 })
 

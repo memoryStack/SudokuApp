@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
 
 import { NavigationContainer } from '@react-navigation/native'
 
-// TODO: fix this eslint warning
 import { render } from '@testing-library/react-native'
 
 import ModalProvider from '../../containers/ModalProvider'

@@ -17,7 +17,6 @@ const addHouseCellsHighlightData = (house, cellsHighlightData) => {
         const cellHighlightData = {
             bgColor: { backgroundColor: HOUSE_VS_CELLS_BACKGROUND_COLOR[house.type] },
         }
-        // TODO: below function name could be a little generic
         setCellDataInHintResult(cell, cellHighlightData, cellsHighlightData)
     })
 }
@@ -36,6 +35,6 @@ const cellsHighlightData = {}
 addHouseCellsHighlightData({ type: HOUSE_TYPE.ROW, num: 3 }, cellsHighlightData)
 addHouseCellsHighlightData({ type: HOUSE_TYPE.COL, num: 6 }, cellsHighlightData)
 addHouseCellsHighlightData({ type: HOUSE_TYPE.BLOCK, num: 6 }, cellsHighlightData)
-addRemainingCellsHighlightData(cellsHighlightData) // TODO: this step shouldn't be here
+addRemainingCellsHighlightData(cellsHighlightData)
 
 export { cellsHighlightData }

@@ -1,3 +1,3 @@
-import { THEME_TYPES } from './themeProvider.constants'
+import { COLOR_SCHEMES } from './themeProvider.constants'
 
-export const isDarkTheme = theme => THEME_TYPES.DARK === theme
+export const isDarkColorScheme = theme => COLOR_SCHEMES.DARK === theme

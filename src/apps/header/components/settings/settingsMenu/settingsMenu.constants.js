@@ -15,7 +15,6 @@ export const MENU_ITEMS = _compact([
         key: ITEMS_KEYS.SELECT_LANGUAGE,
         label: 'Language',
     },
-    // TODO: it's just experimental, remove it later
     __DEV__ && {
         key: ITEMS_KEYS.DESIGN_SYSTEM,
         label: 'Design System',

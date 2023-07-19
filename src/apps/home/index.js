@@ -76,7 +76,6 @@ const Home_ = ({ navigation }) => {
         return () => Linking.removeEventListener(EVENTS.LINKING_URL, handler)
     }, [])
 
-    // TODO: get these assets from a central place
     const renderAppIcon = () => <Image source={APP_ICON_SOURCE} style={styles.appIcon} />
 
     const renderSudokuText = () => {

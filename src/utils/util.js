@@ -4,7 +4,7 @@ import _inRange from '@lodash/inRange'
 import _unique from '@lodash/unique'
 import _uniqueBy from '@lodash/uniqueBy'
 
-export const isHexColor = (color = '') => color.charAt(0) === '#'
+export const isHexColor = (color = '') => color.startsWith('#')
 
 export const hexToRGBA = (hex, opacity = 100) => {
     if (!isHexColor(hex)) return hex
