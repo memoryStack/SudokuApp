@@ -7,7 +7,7 @@ import _map from '@lodash/map'
 import { PENCIL_STATE } from '@resources/constants'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import {
-    duplicacyPresent,
+    isMainNumberPresentInAnyHouseOfCell,
     forBoardEachCell,
     getCellHousesInfo,
     initNotes,
@@ -104,7 +104,7 @@ const getNewNotesBunchToShow = () => {
         if (isCellEmpty({ row, col }, mainNumbers)) {
             _filter(
                 notes[row][col],
-                ({ noteValue, show }) => !show && !duplicacyPresent(noteValue, mainNumbers, { row, col }),
+                ({ noteValue, show }) => !show && !isMainNumberPresentInAnyHouseOfCell(noteValue, { row, col }, mainNumbers),
             ).forEach(({ noteValue }) => {
                 result.push({ cell: { row, col }, note: noteValue })
             })
@@ -169,7 +169,7 @@ const inputMainNumber = number => {
 const inputNoteNumber = number => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
-    if (duplicacyPresent(number, mainNumbers, selectedCell)) return
+    if (isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
 
     const notes = getNotesInfo(getStoreState())
     const notesBunch = [{ cell: selectedCell, note: number }]
@@ -264,7 +264,7 @@ const getCellAllPossibleNotes = (cell, mainNumbers) => {
     if (!isCellEmpty(cell, mainNumbers)) return result
 
     forCellEachNote(note => {
-        if (!duplicacyPresent(note, mainNumbers, cell)) result.push({ cell, note })
+        if (!isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbers)) result.push({ cell, note })
     })
 
     return result
@@ -283,7 +283,7 @@ const addPossibleNotesOnMainNumberErased = (selectedCell, mainNumbers) => {
     const cellHouses = getCellHousesInfo(selectedCell)
     cellHouses.forEach(house => {
         getHouseCells(house).forEach(cell => {
-            if (!mainNumbers[cell.row][cell.col].value && !duplicacyPresent(numberRemoved, mainNumbers, cell)) {
+            if (!mainNumbers[cell.row][cell.col].value && !isMainNumberPresentInAnyHouseOfCell(numberRemoved, cell, mainNumbers)) {
                 possibleNotesBunch.push({ cell, note: numberRemoved })
             }
         })

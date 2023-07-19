@@ -31,10 +31,7 @@ export const addLeadingZeroIfEligible = value => {
 
 export const shouldSaveDataOnGameStateChange = (currentState, previousState) => new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
 
-// it's checking if number is present or not already
-export const duplicacyPresent = (num, mainNumbers, cell) => isNumberPresentInAnyHouseOfCell(num, cell, mainNumbers)
-
-const isNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK].some(houseType => getHouseCells(getCellHouseForHouseType(houseType, cell)).some(({ row, col }) => mainNumbers[row][col].value === number))
+export const isMainNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) => mainNumberCountExccedsThresholdInAnyHouseOfCell(number, cell, mainNumbers, 0)
 
 const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) => {
     const isPuzzleSolved = row === CELLS_IN_HOUSE
@@ -53,7 +50,7 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
     let result = 0
     for (let num = 1; num <= NUMBERS_IN_HOUSE; num++) {
         if (result > 1) break
-        if (!duplicacyPresent(num, mainNumbers, { row, col })) {
+        if (!isMainNumberPresentInAnyHouseOfCell(num, { row, col }, mainNumbers)) {
             mainNumbers[row][col].value = num
             result += getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
             mainNumbers[row][col].value = 0
@@ -137,22 +134,22 @@ export const getCellHousesInfo = cell => {
     return result
 }
 
-// TODO: merge duplicacyPresent and isDuplicateEntry functions into one
-// it's checking after number has been already put more than 1 any house this cell shares
-export const isDuplicateEntry = (mainNumbers, cell, number) => multipleNumberInstancesExistInAnyHouseOfCell(number, cell, mainNumbers)
+export const areMultipleMainNumbersInAnyHouseOfCell = (mainNumbers, cell, number) => mainNumberCountExccedsThresholdInAnyHouseOfCell(number, cell, mainNumbers, 1)
 
-const multipleNumberInstancesExistInAnyHouseOfCell = (number, cell, mainNumbers) => [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK]
-    .some(houseType => {
+const mainNumberCountExccedsThresholdInAnyHouseOfCell = (number, cell, mainNumbers, threshold) => {
+    const allHouses = [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK]
+    return allHouses.some(houseType => {
         const numberHostCellsInHouse = getHouseCells(getCellHouseForHouseType(houseType, cell)).filter(({ row, col }) => mainNumbers[row][col].value === number)
-        return numberHostCellsInHouse.length > 1
+        return numberHostCellsInHouse.length > threshold
     })
+}
 
 export const duplicatesInPuzzle = mainNumbers => {
     for (let row = 0; row < HOUSES_COUNT; row++) {
         for (let col = 0; col < HOUSES_COUNT; col++) {
             if (isCellEmpty({ row, col }, mainNumbers)) continue
 
-            if (isDuplicateEntry(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
+            if (areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
                 return {
                     present: true,
                     cell: { row, col },

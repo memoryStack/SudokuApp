@@ -5,7 +5,7 @@ import {
     areSameCells,
     duplicatesInPuzzle,
     forBoardEachCell,
-    isDuplicateEntry,
+    areMultipleMainNumbersInAnyHouseOfCell,
     getRowAndCol,
     getBlockAndBoxNum,
     initMainNumbers,
@@ -125,7 +125,7 @@ const handleInputNumberClick = ({ setState, getState, params: newInputValue }) =
 
     const oldInputValue = mainNumbers[row][col].value
     mainNumbers[row][col].value = newInputValue
-    mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(mainNumbers, selectedCell, newInputValue)
+    mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, selectedCell, newInputValue)
 
     if (oldInputValue && oldInputValue !== newInputValue) {
         updateWronglyPlacedNumbersStatusInHouses(oldInputValue, selectedCell, mainNumbers)
@@ -149,7 +149,7 @@ const handleInputNumberClick = ({ setState, getState, params: newInputValue }) =
 const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbers) => {
     for (let col = 0; col < CELLS_IN_HOUSE; col++) {
         if (isCellEligibleForStatusUpdate(cell.row, col)) {
-            mainNumbers[cell.row][col].wronglyPlaced = isDuplicateEntry(
+            mainNumbers[cell.row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
                 { row: cell.row, col },
                 mainNumbers[cell.row][col].value,
@@ -158,7 +158,7 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
     }
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         if (isCellEligibleForStatusUpdate(row, cell.col)) {
-            mainNumbers[row][cell.col].wronglyPlaced = isDuplicateEntry(
+            mainNumbers[row][cell.col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
                 { row, col: cell.col },
                 mainNumbers[row][cell.col].value,
@@ -169,7 +169,7 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
     for (let box = 0; box < CELLS_IN_HOUSE; box++) {
         const { row, col } = getRowAndCol(blockNum, box)
         if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue) {
-            mainNumbers[row][col].wronglyPlaced = isDuplicateEntry(
+            mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
                 { row, col },
                 mainNumbers[row][col].value,

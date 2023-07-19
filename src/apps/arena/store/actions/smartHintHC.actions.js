@@ -11,7 +11,7 @@ import { getTransformedRawHints } from '../../utils/smartHints'
 import {
     areCommonHouseCells,
     areSameCells,
-    duplicacyPresent,
+    isMainNumberPresentInAnyHouseOfCell,
     getCellAxesValues,
     getCellVisibleNotes,
     isCellEmpty,
@@ -207,6 +207,6 @@ const shouldSpawnNoteInCell = (note, cell, mainNumbersStateAfterErase) => {
     return (
         isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col])
         && !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col])
-        && !duplicacyPresent(note, mainNumbersStateAfterErase, cell)
+        && !isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbersStateAfterErase)
     )
 }
