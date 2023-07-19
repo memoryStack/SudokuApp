@@ -9,6 +9,7 @@ import _noop from '@lodash/noop'
 
 import { GAME_STATE } from '@resources/constants'
 import { fonts } from '@resources/fonts/font'
+import Button from '@ui/molecules/Button'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
 import { Touchable } from '../components/Touchable'
 import { Page } from '../components/Page'
@@ -30,7 +31,6 @@ import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 import { updateGameState } from './store/actions/gameState.actions'
 import { usePrevious } from '../../utils/customHooks'
 import { consoleLog } from '../../utils/util'
-import { Button } from '../../components/button'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
@@ -199,7 +199,7 @@ const Arena_ = ({
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
-        return <Button text="Fill" onClick={fillPuzzle} />
+        return <Button label="Fill" onClick={fillPuzzle} />
     }
 
     const renderHintsMenu = () => {

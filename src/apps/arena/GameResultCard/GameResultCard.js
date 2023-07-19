@@ -10,7 +10,8 @@ import _noop from '@lodash/noop'
 
 import { NEW_GAME } from '@resources/stringLiterals'
 import { fonts } from '@resources/fonts/font'
-import { Button } from '../../../components/button'
+
+import Button from '@ui/molecules/Button'
 
 import { addLeadingZeroIfEligible } from '../utils/util'
 import { GameState } from '../utils/classes/gameState'
@@ -120,7 +121,7 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
 
     const renderNewGameButton = () => (
         <Button
-            text={NEW_GAME}
+            label={NEW_GAME}
             onClick={openNextGameMenu}
             containerStyle={styles.newGameButtonContainer}
         />

@@ -10,15 +10,12 @@ import { CloseIcon } from '@resources/svgIcons/close'
 import { PLAY } from '@resources/stringLiterals'
 import { fonts } from '@resources/fonts/font'
 import { GAME_STATE } from '@resources/constants'
+import Button from '@ui/molecules/Button'
 import withActions from '../../../utils/hocs/withActions'
-import { Button } from '../../../components/button'
-
 import { BottomDragger } from '../../components/BottomDragger'
 import { Touchable } from '../../components/Touchable'
-
 import { Board } from '../gameBoard'
 import { Inputpanel } from '../inputPanel'
-
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
 import { CLOSE_ICON_TEST_ID, CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
 
@@ -113,7 +110,7 @@ const CustomPuzzle_ = ({
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel onAction={onAction} />
                 </View>
-                <Button containerStyle={styles.playButtonContainer} onClick={handlePlayClick} text={PLAY} />
+                <Button containerStyle={styles.playButtonContainer} onClick={handlePlayClick} label={PLAY} />
             </View>
         </BottomDragger>
     )

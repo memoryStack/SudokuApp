@@ -13,8 +13,9 @@ import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 
 import { CloseIcon } from '@resources/svgIcons/close'
+import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
-import { Button } from '../../../components/button'
+
 import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable } from '../../components/Touchable'
@@ -156,18 +157,18 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const renderFooter = () => (
         <View style={styles.footerContainer}>
             <Button
-                text={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
+                label={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
                 onClick={displayPrevButton ? onPrevClick : _noop}
                 avoidDefaultContainerStyles
                 textStyles={styles.footerButtonText}
-                addHitSlop
+                type={BUTTON_TYPES.TEXT}
             />
             <Button
-                text={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
+                label={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
                 onClick={displayNextButton ? onNextClick : onApplyHintClick}
                 avoidDefaultContainerStyles
                 textStyles={styles.footerButtonText}
-                addHitSlop
+                type={BUTTON_TYPES.TEXT}
             />
         </View>
     )
