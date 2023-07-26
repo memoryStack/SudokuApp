@@ -21,7 +21,6 @@ import {
     forCellEachNote,
     forBoardEachCell,
     areCommonHouseCells,
-    isCellCorrectlyFilled,
     getRowAndCol,
     getBlockAndBoxNum,
     initMainNumbers,
@@ -408,24 +407,6 @@ describe('forBoardEachCell()', () => {
         const mockCallback = jest.fn()
         forBoardEachCell(mockCallback)
         expect(mockCallback.mock.calls.length).toBe(81)
-    })
-})
-
-describe('isCellCorrectlyFilled()', () => {
-    test('returns false when input value is different than solution value of cell', () => {
-        const cellData = { value: 0, solutionValue: 5, isClue: false }
-        expect(isCellCorrectlyFilled(cellData)).toBeFalsy()
-    })
-
-    test('returns true when input value is same as solution value', () => {
-        const cellData = { value: 5, solutionValue: 5, isClue: false }
-        expect(isCellCorrectlyFilled(cellData)).toBeTruthy()
-    })
-
-    test('returns false for bad data', () => {
-        expect(isCellCorrectlyFilled({ solutionValue: 5, isClue: false })).toBeFalsy()
-        expect(isCellCorrectlyFilled({ value: 0, solutionValue: 0, isClue: false })).toBeFalsy()
-        expect(isCellCorrectlyFilled()).toBeFalsy()
     })
 })
 

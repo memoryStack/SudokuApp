@@ -293,11 +293,6 @@ export const forEachHouse = callback => {
     for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) callback(houseNum)
 }
 
-export const isCellCorrectlyFilled = ({ solutionValue = 0, value = 0 } = {}) => {
-    if (solutionValue === 0 || value === 0) return false
-    return value === solutionValue
-}
-
 export const getRowAndCol = (blockNum, boxNum) => {
     const addToRow = (boxNum - (boxNum % 3)) / 3
     const row = blockNum - (blockNum % 3) + addToRow
