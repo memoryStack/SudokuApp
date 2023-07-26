@@ -29,7 +29,6 @@ import {
     duplicatesInPuzzle,
     forBoardEachCell,
     getPuzzleSolutionType,
-    initNotes,
     isGenerateNewPuzzleItem,
 } from './utils/util'
 
@@ -53,6 +52,7 @@ import {
     BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
 } from './constants'
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
+import { NotesRecord } from './RecordUtilities/boardNotes'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -127,7 +127,7 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
 
     startGame({
         mainNumbers,
-        notes: initNotes(),
+        notes: NotesRecord.initNotes(),
         selectedCell: { row: 0, col: 0 },
         moves: [],
         ...initRefereeData(),

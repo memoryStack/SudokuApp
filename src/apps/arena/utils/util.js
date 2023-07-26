@@ -89,25 +89,6 @@ export const isCellEmpty = (cell, mainNumbers) => !MainNumbersRecord.isCellFille
 
 export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
-export const initNotes = () => {
-    const notes = []
-    // BOARD_LOOPER: 12
-    for (let row = 0; row < HOUSES_COUNT; row++) {
-        const rowNotes = []
-        for (let col = 0; col < HOUSES_COUNT; col++) {
-            const boxNotes = []
-            for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
-                // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0]
-                //  represenstion. but let's ignore it for now
-                boxNotes.push({ noteValue: note, show: 0 })
-            }
-            rowNotes.push(boxNotes)
-        }
-        notes.push(rowNotes)
-    }
-    return notes
-}
-
 export const getCellRowHouseInfo = cell => ({
     type: HOUSE_TYPE.ROW,
     num: cell.row,

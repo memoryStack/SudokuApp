@@ -13,8 +13,9 @@ import {
 } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
-import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
+import { CELLS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../RecordUtilities/boardNotes'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -88,23 +89,8 @@ const initBoardData = () => {
         }
     }
 
-    // TODO: move it to notes record
-    const notes = []
-    for (let i = 0; i < CELLS_IN_HOUSE; i++) {
-        const rowNotes = []
-        for (let j = 0; j < CELLS_IN_HOUSE; j++) {
-            const boxNotes = []
-            for (let k = 1; k <= NUMBERS_IN_HOUSE; k++) {
-                // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
-                boxNotes.push({ noteValue: k, show: 0 })
-            }
-            rowNotes.push(boxNotes)
-        }
-        notes.push(rowNotes)
-    }
-
     return {
-        notes,
+        notes: NotesRecord.initNotes(),
         mainNumbers,
         selectedCell: { row: 0, col: 0 },
     }

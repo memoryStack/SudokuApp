@@ -10,7 +10,6 @@ import {
     isMainNumberPresentInAnyHouseOfCell,
     forBoardEachCell,
     getCellHousesInfo,
-    initNotes,
     isCellEmpty,
     forCellEachNote,
 } from '../../utils/util'
@@ -23,6 +22,7 @@ import { addMistake } from './refree.actions'
 import { getHouseCells } from '../../utils/houseCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../RecordUtilities/boardNotes'
 
 const {
     setMainNumbers,
@@ -245,7 +245,7 @@ const removeCellNotesIfEmptyCell = () => {
 
 export const initPossibleNotes = mainNumbers => {
     setTimeout(() => {
-        const notes = initNotes()
+        const notes = NotesRecord.initNotes()
 
         forBoardEachCell(({ row, col }) => {
             const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)
@@ -338,9 +338,9 @@ export const resetStoreState = () => {
         resetState({
             mainNumbers: MainNumbersRecord.initMainNumbers(),
             selectedCell: { row: 0, col: 0 },
-            notes: initNotes(),
+            notes: NotesRecord.initNotes(),
             moves: [],
-            possibleNotes: initNotes(),
+            possibleNotes: NotesRecord.initNotes(),
         }),
     )
 }

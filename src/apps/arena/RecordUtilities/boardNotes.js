@@ -3,6 +3,7 @@ import _filter from '@lodash/filter'
 import _every from '@lodash/every'
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
+import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE } from '../constants'
 
 /*
     // what do we do with notes ??
@@ -23,11 +24,28 @@ const getCellVisibleNotesList = (notes, cell = {}) => {
     return _filter(cellNotes, ({ show }) => show).map(({ noteValue }) => noteValue)
 }
 
-export const getCellVisibleNotesCount = (notes, cell = {}) => getCellVisibleNotesList(notes, cell).length
+const getCellVisibleNotesCount = (notes, cell = {}) => getCellVisibleNotesList(notes, cell).length
 
-export const areSameNotesInCells = (notes, cells) => {
+const areSameNotesInCells = (notes, cells) => {
     const cellsNotes = _map(cells, cell => getCellVisibleNotesList(notes[cell.row][cell.col]))
     return _every(cellsNotes, aCellNotes => _isEqual(aCellNotes, cellsNotes[0]))
+}
+
+const initNotes = () => {
+    const result = []
+    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+        const rowNotes = []
+        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
+            const boxNotes = []
+            for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
+                // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
+                boxNotes.push({ noteValue: note, show: 0 })
+            }
+            rowNotes.push(boxNotes)
+        }
+        result.push(rowNotes)
+    }
+    return result
 }
 
 export const NotesRecord = {
@@ -35,4 +53,6 @@ export const NotesRecord = {
     isNotePresentInCell,
     getCellVisibleNotesList,
     getCellVisibleNotesCount,
+    areSameNotesInCells,
+    initNotes,
 }

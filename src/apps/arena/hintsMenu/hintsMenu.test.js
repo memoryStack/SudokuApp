@@ -15,9 +15,9 @@ import PossibleNotes from './testData/possibleNotes.testData.json'
 import { HINTS_MENU_OVERLAY_TEST_ID } from './hintsMenu.constants'
 import { getHintsMenuVisibilityStatus } from '../store/selectors/boardController.selectors'
 import { ACTION_TYPES } from './actionHandlers'
-import { initNotes } from '../utils/util'
 import { HintsMenu } from './index'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../RecordUtilities/boardNotes'
 
 const { ACTION_HANDLERS } = require('./actionHandlers')
 
@@ -51,8 +51,8 @@ describe('Available Hints Menu', () => {
         jest.clearAllMocks()
         // clear store
         invokeDispatch(boardActions.setMainNumbers(MainNumbersRecord.initMainNumbers()))
-        invokeDispatch(boardActions.setNotes(initNotes()))
-        invokeDispatch(boardActions.setPossibleNotes(initNotes()))
+        invokeDispatch(boardActions.setNotes(NotesRecord.initNotes()))
+        invokeDispatch(boardActions.setPossibleNotes(NotesRecord.initNotes()))
     })
 
     test('menu will be closed on overlay click', async () => {
