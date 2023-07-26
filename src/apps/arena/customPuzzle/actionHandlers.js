@@ -8,7 +8,6 @@ import {
     areMultipleMainNumbersInAnyHouseOfCell,
     getRowAndCol,
     getBlockAndBoxNum,
-    initMainNumbers,
     convertBoardCellNumToCell,
     getPuzzleSolutionType,
 } from '../utils/util'
@@ -18,7 +17,7 @@ import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../cons
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 const initBoardData = () => {
-    const mainNumbers = initMainNumbers()
+    const mainNumbers = MainNumbersRecord.initMainNumbers()
 
     // this string have naked groups present
     // const str = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
@@ -89,6 +88,7 @@ const initBoardData = () => {
         }
     }
 
+    // TODO: move it to notes record
     const notes = []
     for (let i = 0; i < CELLS_IN_HOUSE; i++) {
         const rowNotes = []

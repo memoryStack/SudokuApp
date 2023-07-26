@@ -12,7 +12,6 @@ import {
     getCellHousesInfo,
     initNotes,
     isCellEmpty,
-    initMainNumbers,
     forCellEachNote,
 } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
@@ -337,7 +336,7 @@ const undoNotes = previousMove => {
 export const resetStoreState = () => {
     invokeDispatch(
         resetState({
-            mainNumbers: initMainNumbers(),
+            mainNumbers: MainNumbersRecord.initMainNumbers(),
             selectedCell: { row: 0, col: 0 },
             notes: initNotes(),
             moves: [],

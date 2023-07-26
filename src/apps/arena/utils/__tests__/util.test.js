@@ -23,7 +23,6 @@ import {
     areCommonHouseCells,
     getRowAndCol,
     getBlockAndBoxNum,
-    initMainNumbers,
     previousInactiveGameExists,
     getHousesCellsSharedByCells,
     areSameNotesInCells,
@@ -31,6 +30,7 @@ import {
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
+import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 
 jest.mock('@utils/storage')
 
@@ -428,12 +428,12 @@ describe('getBlockAndBoxNum()', () => {
 
 describe('initMainNumbers()', () => {
     test('returns an array which contains 9 other arrays in init', () => {
-        const mainNumbers = initMainNumbers()
+        const mainNumbers = MainNumbersRecord.initMainNumbers()
         expect(_isArray(mainNumbers)).toBeTruthy()
     })
 
     test('returned value is a grid of 9*9', () => {
-        const mainNumbers = initMainNumbers()
+        const mainNumbers = MainNumbersRecord.initMainNumbers()
         expect(mainNumbers.length).toBe(9)
         mainNumbers.forEach(rowMainNumbers => {
             expect(_isArray(rowMainNumbers)).toBeTruthy()
@@ -442,7 +442,7 @@ describe('initMainNumbers()', () => {
     })
 
     test('initializes default main number values for each 9*9 cells in board', () => {
-        const mainNumbers = initMainNumbers()
+        const mainNumbers = MainNumbersRecord.initMainNumbers()
         forBoardEachCell(({ row, col }) => {
             expect(_isEmpty(mainNumbers[row][col])).toBeFalsy()
         })

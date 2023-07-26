@@ -307,20 +307,6 @@ export const getBlockAndBoxNum = cell => {
     return { blockNum, boxNum }
 }
 
-export const initMainNumbers = () => {
-    const result = []
-    for (let i = 0; i < HOUSES_COUNT; i++) {
-        const rowData = []
-        for (let j = 0; j < CELLS_IN_HOUSE; j++) {
-            rowData.push(getCellMainNumberDefaultValue())
-        }
-        result.push(rowData)
-    }
-    return result
-}
-
-const getCellMainNumberDefaultValue = () => ({ value: 0, solutionValue: 0, isClue: false })
-
 export const getHousesCellsSharedByCells = cells => {
     const result = []
 

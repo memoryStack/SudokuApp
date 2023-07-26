@@ -63,7 +63,7 @@ const Board_ = ({
 
     const selectedCellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell) || 0
 
-    const sameValueAsSelectedBox = cell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, selectedCellMainValue, cell)
+    const sameValueAsSelectedBox = cell => selectedCellMainValue && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, selectedCellMainValue, cell)
 
     const boardRef = useRef(null)
 
@@ -126,10 +126,8 @@ const Board_ = ({
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
         if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
 
-        const isSameHouseAsSelected = areCommonHouseCells(cell, selectedCell)
-        const isSameValueAsSelected = sameValueAsSelectedBox(cell)
-        if (isSameHouseAsSelected) return styles.sameHouseCellBGColor
-        if (!isSameHouseAsSelected && isSameValueAsSelected) return styles.diffHouseSameValueBGColor
+        if (areCommonHouseCells(cell, selectedCell)) return styles.sameHouseCellBGColor
+        if (sameValueAsSelectedBox(cell)) return styles.diffHouseSameValueBGColor
         return styles.defaultCellBGColor
     }
 

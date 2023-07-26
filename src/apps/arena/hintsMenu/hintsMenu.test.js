@@ -15,8 +15,9 @@ import PossibleNotes from './testData/possibleNotes.testData.json'
 import { HINTS_MENU_OVERLAY_TEST_ID } from './hintsMenu.constants'
 import { getHintsMenuVisibilityStatus } from '../store/selectors/boardController.selectors'
 import { ACTION_TYPES } from './actionHandlers'
-import { initMainNumbers, initNotes } from '../utils/util'
+import { initNotes } from '../utils/util'
 import { HintsMenu } from './index'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 const { ACTION_HANDLERS } = require('./actionHandlers')
 
@@ -49,7 +50,7 @@ describe('Available Hints Menu', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         // clear store
-        invokeDispatch(boardActions.setMainNumbers(initMainNumbers()))
+        invokeDispatch(boardActions.setMainNumbers(MainNumbersRecord.initMainNumbers()))
         invokeDispatch(boardActions.setNotes(initNotes()))
         invokeDispatch(boardActions.setPossibleNotes(initNotes()))
     })
