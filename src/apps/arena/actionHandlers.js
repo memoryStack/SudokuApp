@@ -52,6 +52,7 @@ import { GameState } from './utils/classes/gameState'
 import {
     BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
 } from './constants'
+import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -243,7 +244,8 @@ const handleSharePuzzle = () => {
 
     let puzzleString = ''
     forBoardEachCell(({ row, col }) => {
-        const num = mainNumbers[row][col].isClue ? mainNumbers[row][col].value : 0
+        const num = MainNumbersRecord.isClueCell(mainNumbers, { row, col })
+            ? MainNumbersRecord.getCellMainValue(mainNumbers, { row, col }) : 0
         puzzleString = `${puzzleString}${num}`
     })
 

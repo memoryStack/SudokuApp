@@ -17,12 +17,13 @@ import { GameState } from '../utils/classes/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { ACTION_HANDLERS } from './actionHandlers'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 const getInstancesCounts = mainNumbers => {
     const instancesCount = new Array(10).fill(0)
-    forBoardEachCell(({ row, col }) => {
-        const { value } = mainNumbers[row][col]
-        if (value === mainNumbers[row][col].solutionValue) {
+    forBoardEachCell(cell => {
+        if (MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
+            const value = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
             instancesCount[value]++
         }
     })

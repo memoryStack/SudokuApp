@@ -3,8 +3,9 @@ import { updateSelectedCell, resetStoreState } from '../store/actions/board.acti
 import { isGameActive } from '../store/utils'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { updateGameState } from '../store/actions/gameState.actions'
-import { forBoardEachCell, isCellCorrectlyFilled } from '../utils/util'
+import { forBoardEachCell } from '../utils/util'
 import { BOARD_CELLS_COUNT } from '../constants'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 const handleCellPress = ({ params: cell }) => {
     if (!isGameActive()) return
@@ -17,8 +18,8 @@ const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
 
 const getCorrectlyFilledCells = mainNumbers => {
     let result = 0
-    forBoardEachCell(({ row, col }) => {
-        if (isCellCorrectlyFilled(mainNumbers[row][col])) result++
+    forBoardEachCell(cell => {
+        if (MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) result++
     })
     return result
 }

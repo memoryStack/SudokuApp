@@ -497,6 +497,20 @@ describe('Board Cell Fill Values', () => {
         expectMainNumberPresentInCell(emptyCell, inputPanelItemToPress.inputNumber)
     })
 
+    test('mistakes count will remain same on filling correct number', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 0/)
+
+        const numberToInputInEmptyCell = 2 // 2 is correct solution of the empty cell above
+        fireEvent.press(getInputPanelNumberIfEnabled(numberToInputInEmptyCell))
+
+        expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 0/)
+    })
+
     test('mistakes count will increase on clicking wrong number', async () => {
         await renderScreenAndWaitForPuzzleStart()
 

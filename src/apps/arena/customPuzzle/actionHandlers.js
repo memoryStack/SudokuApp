@@ -9,13 +9,13 @@ import {
     getRowAndCol,
     getBlockAndBoxNum,
     initMainNumbers,
-    isCellEmpty,
     convertBoardCellNumToCell,
     getPuzzleSolutionType,
 } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
 import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 const initBoardData = () => {
     const mainNumbers = initMainNumbers()
@@ -118,12 +118,10 @@ const handleInit = ({ setState }) => {
 
 const handleInputNumberClick = ({ setState, getState, params: newInputValue }) => {
     const { selectedCell, mainNumbers } = getState()
-
     const { row, col } = selectedCell
+    if (MainNumbersRecord.isCellFilledWithNumber(mainNumbers, newInputValue, selectedCell)) return
 
-    if (newInputValue === mainNumbers[row][col].value) return
-
-    const oldInputValue = mainNumbers[row][col].value
+    const oldInputValue = MainNumbersRecord.getCellMainValue(mainNumbers, { row, col })
     mainNumbers[row][col].value = newInputValue
     mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, selectedCell, newInputValue)
 
@@ -152,7 +150,7 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
             mainNumbers[cell.row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
                 { row: cell.row, col },
-                mainNumbers[cell.row][col].value,
+                MainNumbersRecord.getCellMainValue(mainNumbers, { row: cell.row, col }), // TODO: this argument is redundant
             )
         }
     }
@@ -161,24 +159,24 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
             mainNumbers[row][cell.col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
                 { row, col: cell.col },
-                mainNumbers[row][cell.col].value,
+                MainNumbersRecord.getCellMainValue(mainNumbers, { row, col: cell.col }), // TODO: this argument is redundant
             )
         }
     }
     const { blockNum } = getBlockAndBoxNum(cell)
     for (let box = 0; box < CELLS_IN_HOUSE; box++) {
         const { row, col } = getRowAndCol(blockNum, box)
-        if (mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue) {
+        if (mainNumbers[row][col].wronglyPlaced && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, oldInputValue, { row, col })) {
             mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
                 { row, col },
-                mainNumbers[row][col].value,
+                MainNumbersRecord.getCellMainValue(mainNumbers, { row, col }), // TODO: this argument is redundant
             )
         }
     }
 
     function isCellEligibleForStatusUpdate(row, col) {
-        return mainNumbers[row][col].wronglyPlaced && mainNumbers[row][col].value === oldInputValue
+        return mainNumbers[row][col].wronglyPlaced && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, oldInputValue, { row, col })
     }
 }
 
@@ -196,8 +194,8 @@ const handleCellClick = ({ setState, getState, params: cell }) => {
 
 const getCluesCount = mainNumbers => {
     let cluesCount = 0
-    forBoardEachCell(({ row, col }) => {
-        if (mainNumbers[row][col].value) cluesCount++
+    forBoardEachCell(cell => {
+        if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) cluesCount++
     })
     return cluesCount
 }
@@ -243,7 +241,7 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
 
 const transformMainNumbersForValidPuzzle = mainNumbers => {
     forBoardEachCell(({ row, col }) => {
-        mainNumbers[row][col].isClue = !isCellEmpty({ row, col }, mainNumbers)
+        mainNumbers[row][col].isClue = MainNumbersRecord.isCellFilled(mainNumbers, { row, col })
         delete mainNumbers[row][col].wronglyPlaced
     })
 }

@@ -11,7 +11,6 @@ import {
     forBoardEachCell,
     getCellHousesInfo,
     initNotes,
-    isCellCorrectlyFilled,
     isCellEmpty,
     initMainNumbers,
     forCellEachNote,
@@ -24,6 +23,7 @@ import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
 import { getHouseCells } from '../../utils/houseCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
+import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 
 const {
     setMainNumbers,
@@ -146,9 +146,7 @@ const inputMainNumber = number => {
         },
     }
 
-    invokeDispatch(setCellMainNumber({ cell: selectedCell, number }))
-
-    if (number !== mainNumbers[selectedCell.row][selectedCell.col].solutionValue) addMistake()
+    if (number !== MainNumbersRecord.getCellSolutionValue(mainNumbers, selectedCell)) addMistake()
     else {
         const notes = getNotesInfo(getStoreState())
         const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, notes)
@@ -163,6 +161,7 @@ const inputMainNumber = number => {
         }
     }
 
+    invokeDispatch(setCellMainNumber({ cell: selectedCell, number }))
     invokeDispatch(addMove(constructMove(move)))
 }
 
@@ -190,7 +189,7 @@ const inputNoteNumber = number => {
 export const inputNumberAction = number => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
-    if (mainNumbers[selectedCell.row][selectedCell.col].value) return
+    if (MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) return
 
     // TODO: check at how many places this pencil state is required
     // if it's more than 1 then move it to store/utils
@@ -211,7 +210,8 @@ const removeCellNotes = () => {
 const eraseMainNumber = () => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
-    const cellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value
+    const cellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell)
+
     invokeDispatch(eraseCellMainValue(selectedCell))
 
     const move = {
@@ -234,8 +234,8 @@ export const eraseAction = () => {
 const isMainNumberEligibleToErase = () => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
-    const cellMainValue = mainNumbers[selectedCell.row][selectedCell.col].value
-    return cellMainValue && cellMainValue !== mainNumbers[selectedCell.row][selectedCell.col].solutionValue
+    return MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)
+        && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, selectedCell)
 }
 
 const removeCellNotesIfEmptyCell = () => {
@@ -276,16 +276,17 @@ function erasePossibleNotesOnNumberInput(number, selectedCell) {
     invokeDispatch(erasePossibleNotesBunch(possibleNotesBunch))
 }
 
-const addPossibleNotesOnMainNumberErased = (selectedCell, mainNumbers) => {
-    const numberRemoved = mainNumbers[selectedCell.row][selectedCell.col].solutionValue
-    const possibleNotesBunch = [...getCellAllPossibleNotes(selectedCell, mainNumbers)]
+const addPossibleNotesOnCorrectlyFilledMainNumberErased = (selectedCell, mainNumbersAfterErase) => {
+    const numberRemoved = MainNumbersRecord.getCellSolutionValue(mainNumbersAfterErase, selectedCell)
+
+    const possibleNotesBunch = [...getCellAllPossibleNotes(selectedCell, mainNumbersAfterErase)]
 
     const cellHouses = getCellHousesInfo(selectedCell)
     cellHouses.forEach(house => {
         getHouseCells(house).forEach(cell => {
-            if (!mainNumbers[cell.row][cell.col].value && !isMainNumberPresentInAnyHouseOfCell(numberRemoved, cell, mainNumbers)) {
-                possibleNotesBunch.push({ cell, note: numberRemoved })
-            }
+            const shouldSpawnNoteInCell = !MainNumbersRecord.isCellFilled(mainNumbersAfterErase, selectedCell)
+                && !isMainNumberPresentInAnyHouseOfCell(numberRemoved, cell, mainNumbersAfterErase)
+            if (shouldSpawnNoteInCell) possibleNotesBunch.push({ cell, note: numberRemoved })
         })
     })
 
@@ -311,9 +312,9 @@ const undoMainNumber = previousMove => {
         const cell = previousMove.selectedCell
         const mainNumbersBeforeErase = getMainNumbers(getStoreState())
         invokeDispatch(eraseCellMainValue(cell))
-        if (isCellCorrectlyFilled(mainNumbersBeforeErase[cell.row][cell.col])) {
+        if (MainNumbersRecord.isCellFilledCorrectly(mainNumbersBeforeErase, cell)) {
             const mainNumbersAfterErase = getMainNumbers(getStoreState())
-            addPossibleNotesOnMainNumberErased(cell, mainNumbersAfterErase)
+            addPossibleNotesOnCorrectlyFilledMainNumberErased(cell, mainNumbersAfterErase)
         }
     } else {
         // this will be executed only for the mistake made.
@@ -349,7 +350,7 @@ export const fillPuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
     forBoardEachCell(cell => {
-        if (isCellEmpty(cell, mainNumbers)) invokeDispatch(setCellMainNumber({ cell, number: mainNumbers[cell.row][cell.col].solutionValue }))
+        if (isCellEmpty(cell, mainNumbers)) invokeDispatch(setCellMainNumber({ cell, number: MainNumbersRecord.getCellSolutionValue(mainNumbers, cell) }))
     })
 }
 

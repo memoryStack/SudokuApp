@@ -34,6 +34,7 @@ import { Cell } from './cell'
 
 import HintsSvgDrawing from '../hintsSvgDrawing'
 import { HINTS_IDS } from '../utils/smartHints/constants'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 const looper = []
 const bordersLooper = []
@@ -60,9 +61,9 @@ const Board_ = ({
 
     const styles = useMemo(() => getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH }), [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
 
-    const selectedCellMainValue = _get(mainNumbers, [selectedCell.row, selectedCell.col, 'value'], 0)
+    const selectedCellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell) || 0
 
-    const sameValueAsSelectedBox = cell => selectedCellMainValue && selectedCellMainValue === mainNumbers[cell.row][cell.col].value
+    const sameValueAsSelectedBox = cell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, selectedCellMainValue, cell)
 
     const boardRef = useRef(null)
 
@@ -95,16 +96,12 @@ const Board_ = ({
     }
 
     const getMainNumFontColor = cell => {
-        const { row, col } = cell
-        if (!mainNumbers[row][col].value) return null
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) return null
         if (isCustomPuzleScreen) return getCustomPuzzleMainNumFontColor(cell)
-
         if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
-
         if (showSmartHint) return styles.clueNumColor
-
-        if (mainNumbers[row][col].value !== mainNumbers[row][col].solutionValue) return styles.wronglyFilledNumColor
-        if (!mainNumbers[row][col].isClue) return styles.userFilledNumColor
+        if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
+        if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
         return styles.clueNumColor
     }
 
@@ -174,7 +171,7 @@ const Board_ = ({
                                 col={col}
                                 cellBGColor={getCellBackgroundColor(cell)}
                                 mainValueFontColor={getMainNumFontColor(cell)}
-                                cellMainValue={mainNumbers[row][col].value}
+                                cellMainValue={MainNumbersRecord.getCellMainValue(mainNumbers, cell)}
                                 cellNotes={_get(notes, [row, col])}
                                 onCellClick={onCellClick}
                                 displayCrossIcon={shouldMarkCellAsInhabitable(cell)}

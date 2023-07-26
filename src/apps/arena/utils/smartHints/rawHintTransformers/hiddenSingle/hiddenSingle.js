@@ -1,6 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _find from '@lodash/find'
 
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import {
     HIDDEN_SINGLE_TYPES,
     HINTS_IDS,
@@ -44,7 +45,7 @@ const getNewHighlightableInstanceHouseType = ({ row, col }, neighbourRows, neigh
 const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, neighbourRows) => {
     const getWinnerInstancePosInRow = () => {
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-            if (mainNumbers[firstCell.row][col].value === winnerCandidate) return col
+            if (MainNumbersRecord.isCellFilledWithNumber(mainNumbers, winnerCandidate, { row: firstCell.row, col })) return col
         }
         return -1
     }
@@ -72,7 +73,7 @@ const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, nei
 const getWinnerInstanceInfoInCol = (firstCell, winnerCandidate, mainNumbers, neighbourCols) => {
     const getWinnerInstancePosInCol = () => {
         for (let row = 0; row < CELLS_IN_HOUSE; row++) {
-            if (mainNumbers[row][firstCell.col].value === winnerCandidate) return row
+            if (MainNumbersRecord.isCellFilledWithNumber(mainNumbers, winnerCandidate, { row, col: firstCell.col })) return row
         }
         return -1
     }
@@ -165,7 +166,8 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     const neighbourCols = {}
     const { blockNum: hostBlockNum } = getBlockAndBoxNum(hostCell)
     const { row: startRow, col: startCol } = getBlockStartCell(hostBlockNum)
-    const winnerCandidate = mainNumbers[hostRow][hostCol].solutionValue
+    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, { row: hostRow, col: hostCol })
+
     for (let i = 0; i < 3; i++) {
         const row = startRow + i
         if (row !== hostRow) { getWinnerInstanceInfoInRow({ row, col: startCol }, winnerCandidate, mainNumbers, neighbourRows) }
@@ -225,7 +227,7 @@ const getNextBlockInRow = currentBlockNumIdx => {
 
 const getNextBlockInCol = currentBlockNumIdx => (currentBlockNumIdx + BLOCKS_COUNT_IN_ROW) % HOUSES_COUNT
 
-const getCandidateInstanceCordinatesInHouse = (candidate, house, mainNumbers) => _find(getHouseCells(house), ({ row, col }) => mainNumbers[row][col].value === candidate)
+const getCandidateInstanceCordinatesInHouse = (candidate, house, mainNumbers) => _find(getHouseCells(house), cell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, candidate, cell))
 
 const shouldHighlightWinnerCandidateInstanceInBlock = (hostCell, blockNum, singleType, mainNumbers) => {
     const blockFirstCell = getRowAndCol(blockNum, 0)
@@ -251,13 +253,12 @@ const hiddenSingleInRowHighlightBlockCells = ({
     cellsToFocusData,
     candidateCordinatesInBlock,
 }) => {
-    const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
-
+    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, { row: selectedRow, col: selectedCol })
     const currentBlockStartColumn = getBlockStartCell(blockNum).col
     for (let i = 0; i < 3; i++) {
         const col = currentBlockStartColumn + i
         if (col === selectedCol) continue
-        if (!mainNumbers[selectedRow][col].value) {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, { row: selectedRow, col })) {
             if (!candidateCordinatesInBlock) {
                 const { row: instanceRow, col: instanceCol } = getCandidateInstanceCordinatesInHouse(
                     winnerCandidate,
@@ -284,12 +285,12 @@ const hiddenSingleInColHighlightBlockCells = ({
     cellsToFocusData,
     candidateCordinatesInBlock,
 }) => {
-    const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
+    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, { row: selectedRow, col: selectedCol })
     const currentBlockStartRow = getBlockStartCell(blockNum).row
     for (let i = 0; i < 3; i++) {
         const row = currentBlockStartRow + i
         if (row === selectedRow) continue
-        if (!mainNumbers[row][selectedCol].value) {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, { row, col: selectedCol })) {
             if (!candidateCordinatesInBlock) {
                 const { row: instanceRow, col: instanceCol } = getCandidateInstanceCordinatesInHouse(
                     winnerCandidate,
@@ -311,7 +312,7 @@ const hiddenSingleInColHighlightBlockCells = ({
 const highlightBlockCells = ({
     selectedRow, selectedCol, blockNum, mainNumbers, cellsToFocusData, singleType,
 }) => {
-    const winnerCandidate = mainNumbers[selectedRow][selectedCol].solutionValue
+    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, { row: selectedRow, col: selectedCol })
 
     const candidateCordinatesInBlock = getCandidateInstanceCordinatesInHouse(
         winnerCandidate,
@@ -422,10 +423,10 @@ export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
         ? getHiddenSingleInBlockData(cell, mainNumbers)
         : getHiddenSingleInRowOrColData(cell, type, mainNumbers)
 
-    const hiddenSingleCellSolutionValue = mainNumbers[cell.row][cell.col].solutionValue
+    const hiddenSingleCellSolutionValue = MainNumbersRecord.getCellSolutionValue(mainNumbers, cell)
 
     const filledCellsWithSolutionValue = getCellsFromCellsToFocusedData(cellsToFocusData)
-        .filter(aCell => mainNumbers[aCell.row][aCell.col].value === hiddenSingleCellSolutionValue)
+        .filter(aCell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, hiddenSingleCellSolutionValue, aCell))
 
     return {
         cellsToFocusData,

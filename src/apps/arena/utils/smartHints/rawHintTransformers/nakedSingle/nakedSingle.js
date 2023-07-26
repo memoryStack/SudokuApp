@@ -1,6 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
 
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import {
     SMART_HINTS_CELLS_BG_COLOR,
     NAKED_SINGLE_TYPES,
@@ -89,7 +90,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
             cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 HOUSE_TYPE.ROW,
-                mainNumbers[row][col].solutionValue,
+                MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
             )
             break
@@ -97,7 +98,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
             cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 HOUSE_TYPE.COL,
-                mainNumbers[row][col].solutionValue,
+                MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
             )
             break
@@ -105,14 +106,14 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
             cellsToFocusData = dataToHighlightHouseCells(getCellBlockHouseInfo(cell), cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 HOUSE_TYPE.BLOCK,
-                mainNumbers[row][col].solutionValue,
+                MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
             )
             break
         case NAKED_SINGLE_TYPES.MIX:
             cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg(
-                mainNumbers[row][col].solutionValue,
+                MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
             )
             break

@@ -23,6 +23,7 @@ import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
 import { GameState } from './classes/gameState'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 export const addLeadingZeroIfEligible = value => {
     if (value > 9) return `${value}`
@@ -37,7 +38,7 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
     const isPuzzleSolved = row === CELLS_IN_HOUSE
     if (isPuzzleSolved) {
         forBoardEachCell(({ row: _row, col: _col }) => {
-            mainNumbers[_row][_col].solutionValue = mainNumbers[_row][_col].value
+            mainNumbers[_row][_col].solutionValue = MainNumbersRecord.getCellMainValue(mainNumbers, { row: _row, col: _col })
         })
         return 1
     }
@@ -84,7 +85,7 @@ export const areSameRowCells = cells => areUniqueValuesByProperty(cells, 'row')
 
 export const areSameColCells = cells => areUniqueValuesByProperty(cells, 'col')
 
-export const isCellEmpty = ({ row, col }, mainNumbers) => mainNumbers[row][col].value === 0
+export const isCellEmpty = (cell, mainNumbers) => !MainNumbersRecord.isCellFilled(mainNumbers, cell)
 
 export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
@@ -139,7 +140,8 @@ export const areMultipleMainNumbersInAnyHouseOfCell = (mainNumbers, cell, number
 const mainNumberCountExccedsThresholdInAnyHouseOfCell = (number, cell, mainNumbers, threshold) => {
     const allHouses = [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK]
     return allHouses.some(houseType => {
-        const numberHostCellsInHouse = getHouseCells(getCellHouseForHouseType(houseType, cell)).filter(({ row, col }) => mainNumbers[row][col].value === number)
+        const numberHostCellsInHouse = getHouseCells(getCellHouseForHouseType(houseType, cell))
+            .filter(cell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, number, cell))
         return numberHostCellsInHouse.length > threshold
     })
 }
@@ -147,9 +149,13 @@ const mainNumberCountExccedsThresholdInAnyHouseOfCell = (number, cell, mainNumbe
 export const duplicatesInPuzzle = mainNumbers => {
     for (let row = 0; row < HOUSES_COUNT; row++) {
         for (let col = 0; col < HOUSES_COUNT; col++) {
-            if (isCellEmpty({ row, col }, mainNumbers)) continue
+            if (!MainNumbersRecord.isCellFilled(mainNumbers, { row, col })) continue
 
-            if (areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, { row, col }, mainNumbers[row][col].value)) {
+            if (areMultipleMainNumbersInAnyHouseOfCell(
+                mainNumbers,
+                { row, col },
+                MainNumbersRecord.getCellMainValue(mainNumbers, { row, col }),
+            )) {
                 return {
                     present: true,
                     cell: { row, col },
@@ -230,8 +236,10 @@ export const getHousePossibleNotes = (house, mainNumbers) => {
     const possibleNotes = new Array(10).fill(true)
     possibleNotes[0] = false
     getHouseCells(house).forEach(cell => {
-        const cellValue = mainNumbers[cell.row][cell.col].value
-        if (cellValue) possibleNotes[cellValue] = false
+        if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
+            const cellValue = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
+            possibleNotes[cellValue] = false
+        }
     })
 
     const result = []
