@@ -207,23 +207,6 @@ export const areSameCellsSets = (setA, setB) => {
     return setA.every(cell => isCellExists(cell, setB))
 }
 
-export const getHousePossibleNotes = (house, mainNumbers) => {
-    const possibleNotes = new Array(10).fill(true)
-    possibleNotes[0] = false
-    getHouseCells(house).forEach(cell => {
-        if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
-            const cellValue = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
-            possibleNotes[cellValue] = false
-        }
-    })
-
-    const result = []
-    for (let num = 1; num <= NUMBERS_IN_HOUSE; num++) {
-        if (possibleNotes[num]) result.push(num)
-    }
-    return result
-}
-
 /* Board Iterators */
 
 export const forBoardEachCell = callback => {
@@ -248,6 +231,10 @@ export const forHouseEachCell = (house, callback) => {
     })
 }
 
+export const forEachHouse = callback => {
+    for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) callback(houseNum)
+}
+
 export const filterHouseCells = (house, filterCallback) => getHouseCells(house).filter(cell => filterCallback(cell))
 
 export const getCellAxesValues = cell => {
@@ -262,10 +249,6 @@ export const getHouseAxesValue = ({ type, num }) => {
         [HOUSE_TYPE.COL]: BOARD_AXES_VALUES.X_AXIS,
     }
     return HOUSE_TYPE_VS_AXES_VALUES[type][num]
-}
-
-export const forEachHouse = callback => {
-    for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) callback(houseNum)
 }
 
 export const getRowAndCol = (blockNum, boxNum) => {
