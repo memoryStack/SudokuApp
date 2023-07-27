@@ -1,3 +1,4 @@
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { CELLS_IN_HOUSE } from '../../../constants'
 
 import { isCellEmpty } from '../../util'
@@ -7,13 +8,9 @@ import { maxHintsLimitReached } from '../util'
 import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 
 const getCellHiddenSingle = (cell, notesData) => {
-    const { row, col } = cell
     let singleType = ''
 
-    const possibleCandiates = []
-    notesData[row][col].forEach(({ noteValue, show }) => {
-        if (show) possibleCandiates.push(noteValue)
-    })
+    const possibleCandiates = NotesRecord.getCellVisibleNotesList(notesData, cell)
 
     let singleCandidate = -1
     possibleCandiates.some(candidate => {

@@ -1,4 +1,5 @@
 import { N_CHOOSE_K } from '@resources/constants'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { GROUPS, HOUSE_TYPE } from '../constants'
 import { areSameCells, isCellEmpty, isCellExists } from '../../util'
 import { getHouseCells } from '../../houseCells'
@@ -16,14 +17,11 @@ export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCo
     const candidatesHostCells = {}
     houseCells.forEach(cell => {
         if (isCellEmpty(cell, mainNumbers)) {
-            const cellNotes = notesData[cell.row][cell.col]
-            cellNotes.forEach(note => {
-                if (note.show) {
-                    const { noteValue } = note
-                    if (!candidatesHostCells[noteValue]) candidatesHostCells[noteValue] = []
-                    candidatesHostCells[noteValue].push(cell)
-                }
-            })
+            NotesRecord.getCellVisibleNotesList(notesData, cell)
+                .forEach(note => {
+                    if (!candidatesHostCells[note]) candidatesHostCells[note] = []
+                    candidatesHostCells[note].push(cell)
+                })
         }
     })
 
@@ -42,11 +40,11 @@ export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCo
 
 const getDistinctCandidatesListInCells = (groupCells, notesData) => {
     const candidates = {}
-    groupCells.forEach(({ row, col }) => {
-        const cellNotes = notesData[row][col]
-        cellNotes.forEach(({ show, noteValue }) => {
-            if (show) candidates[noteValue] = true
-        })
+    groupCells.forEach(cell => {
+        NotesRecord.getCellVisibleNotesList(notesData, cell)
+            .forEach(note => {
+                candidates[note] = true
+            })
     })
     return Object.keys(candidates)
 }

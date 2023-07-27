@@ -159,12 +159,10 @@ const getEmptyCellsInHouse = (house, mainNumbers) => getHouseCells(house).filter
 const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {
     const result = {}
     getEmptyCellsInHouse(house, mainNumbers).forEach(cell => {
-        const cellNotes = notesData[cell.row][cell.col]
-        cellNotes
-            .filter(({ show }) => show)
-            .forEach(({ noteValue }) => {
-                if (!result[noteValue]) result[noteValue] = []
-                result[noteValue].push(cell)
+        NotesRecord.getCellVisibleNotesList(notesData, cell)
+            .forEach(note => {
+                if (!result[note]) result[note] = []
+                result[note].push(cell)
             })
     })
     return result

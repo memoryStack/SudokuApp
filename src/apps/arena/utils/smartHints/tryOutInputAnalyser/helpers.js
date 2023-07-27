@@ -1,5 +1,6 @@
 import _filter from '@lodash/filter'
 import _isEmpty from '@lodash/isEmpty'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
@@ -21,7 +22,7 @@ export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) 
     const result = []
     groupCells.forEach(cell => {
         if (!isCellEmpty(cell, tryOutMainNumbers)) {
-            result.push(tryOutMainNumbers[cell.row][cell.col].value)
+            result.push(MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell))
         }
     })
     return result

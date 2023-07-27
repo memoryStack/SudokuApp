@@ -100,10 +100,8 @@ export const getAnotherSharedHouse = (mainHouse, selectedCells) => {
 
 export const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
     const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
-    return getHousesCellsSharedByCells(selectedCells).some(
-        cell => !isCellExists(cell, selectedCells)
-            && groupCandidates.some(groupCandidate => notesData[cell.row][cell.col][groupCandidate - 1].show),
-    )
+    return getHousesCellsSharedByCells(selectedCells).some(cell => !isCellExists(cell, selectedCells)
+        && groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell)))
 }
 
 const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHouses) => {

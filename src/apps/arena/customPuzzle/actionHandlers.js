@@ -210,7 +210,7 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
     if (duplicateNumber.present) {
         const { cell } = duplicateNumber
         setState({ selectedCell: cell })
-        showSnackBar({ msg: `puzzle has multiple instances of ${mainNumbers[cell.row][cell.col].value} in same house` })
+        showSnackBar({ msg: `puzzle has multiple instances of ${MainNumbersRecord.getCellMainValue(mainNumbers, cell)} in same house` })
         return
     }
 

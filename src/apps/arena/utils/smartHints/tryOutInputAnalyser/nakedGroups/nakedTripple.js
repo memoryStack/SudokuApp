@@ -76,7 +76,7 @@ const getNakedSinglesInvalidCombination = groupCells => {
 
         // bug in this func.
         // i again wish i had implemented this using TDD
-        const allChosenCellsHaveNakedSingle = !chosenCells.some(cell => !isNakedSinglePresent(tryOutNotesInfo[cell.row][cell.col]).present)
+        const allChosenCellsHaveNakedSingle = !chosenCells.some(cell => !isNakedSinglePresent(NotesRecord.getCellNotes(tryOutNotesInfo, cell)).present)
 
         if (allChosenCellsHaveNakedSingle) {
             const chosenCellNotes = chosenCells

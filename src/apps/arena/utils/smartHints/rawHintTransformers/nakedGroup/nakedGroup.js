@@ -46,20 +46,24 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
 const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) => {
     const result = {}
 
-    cells.forEach(({ row, col }) => {
+    cells.forEach(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
 
         const notesToHighlightData = {}
         let notesWillBeHighlighted = false
         groupCandidates.forEach(groupCandidate => {
-            if (notesData[row][col][groupCandidate - 1].show) {
-                if (isCellExists({ row, col }, groupCells)) { notesToHighlightData[groupCandidate] = { fontColor: 'green' } } else notesToHighlightData[groupCandidate] = { fontColor: 'red' }
+            if (NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell)) {
+                if (isCellExists(cell, groupCells)) {
+                    notesToHighlightData[groupCandidate] = { fontColor: 'green' }
+                } else {
+                    notesToHighlightData[groupCandidate] = { fontColor: 'red' }
+                }
                 notesWillBeHighlighted = true
             }
         })
 
         if (notesWillBeHighlighted) cellHighlightData.notesToHighlightData = notesToHighlightData
-        setCellDataInHintResult({ row, col }, cellHighlightData, result)
+        setCellDataInHintResult(cell, cellHighlightData, result)
     })
 
     return result

@@ -36,8 +36,7 @@ import { BOARD_MOVES_TYPES } from '../../../../constants'
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
     hostCells.forEach(cell => {
-        const cellNotes = notesData[cell.row][cell.col]
-        const cellRemovableNotes = cellNotes
+        const cellRemovableNotes = NotesRecord.getCellNotes(notesData, cell)
             .filter(({ show, noteValue }) => show && !groupCandidates.includes(noteValue))
             .map(({ noteValue }) => noteValue)
         result.push(...cellRemovableNotes)
@@ -74,7 +73,7 @@ const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, note
             const isPrimaryHouse = true
             cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
                 isPrimaryHouse,
-                notesData[cell.row][cell.col],
+                NotesRecord.getCellNotes(notesData, cell),
                 groupCandidates,
             )
         }
@@ -114,7 +113,7 @@ const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
 const shouldHighlightSecondaryHouseCells = (houseCells, groupHostCells, groupCandidates, mainNumbers, notesData) => houseCells.some(cell => {
     if (!isCellEmpty(cell, mainNumbers)) return false
     if (isCellExists(cell, groupHostCells)) return false
-    return groupCandidates.some(groupCandidate => notesData[cell.row][cell.col][groupCandidate - 1].show)
+    return groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
 })
 
 const highlightSecondaryHouseCells = (
@@ -133,7 +132,7 @@ const highlightSecondaryHouseCells = (
                 const isPrimaryHouse = false
                 cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
                     isPrimaryHouse,
-                    notesData[cell.row][cell.col],
+                    NotesRecord.getCellNotes(notesData, cell),
                     groupCandidates,
                 )
             }
