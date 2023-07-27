@@ -9,11 +9,11 @@ import _noop from '@lodash/noop'
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
-import { forCellEachNote as forEachInputNumber } from '../utils/util'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 import { getStyles } from './style'
+import { BoardIterators } from '../utils/classes/boardIterators'
 
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
 
@@ -82,7 +82,7 @@ const Inputpanel_ = ({
     const renderPanelView = () => {
         const rows = []
         let rowItems = []
-        forEachInputNumber(number => {
+        BoardIterators.forCellEachNote(number => {
             addNumberInPanelRowIfEligible(number, rowItems)
             if (rowItems.length >= 5 && !singleRow) {
                 rows.push(renderPanelRow(rowItems, 'rowOne'))

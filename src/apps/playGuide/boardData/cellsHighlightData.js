@@ -1,10 +1,10 @@
 import _isEmpty from '@lodash/isEmpty'
 import _get from '@lodash/get'
 
+import { BoardIterators } from 'src/apps/arena/utils/classes/boardIterators'
 import { getHouseCells } from '../../arena/utils/houseCells'
 import { HOUSE_TYPE } from '../../arena/utils/smartHints/constants'
 import { setCellDataInHintResult } from '../../arena/utils/smartHints/util'
-import { forBoardEachCell } from '../../arena/utils/util'
 
 export const HOUSE_VS_CELLS_BACKGROUND_COLOR = {
     [HOUSE_TYPE.ROW]: 'rgba(255, 0, 0, 0.6)',
@@ -22,7 +22,7 @@ const addHouseCellsHighlightData = (house, cellsHighlightData) => {
 }
 
 const addRemainingCellsHighlightData = cellsHighlightData => {
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         if (_isEmpty(_get(cellsHighlightData, [cell.row, cell.col]))) {
             const cellHighlightData = { bgColor: { backgroundColor: 'white' } }
             setCellDataInHintResult(cell, cellHighlightData, cellsHighlightData)

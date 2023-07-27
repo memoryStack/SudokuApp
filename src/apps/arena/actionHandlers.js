@@ -27,7 +27,6 @@ import { emit } from '../../utils/GlobalEventBus'
 import {
     convertBoardCellToNum,
     duplicatesInPuzzle,
-    forBoardEachCell,
     getPuzzleSolutionType,
     isGenerateNewPuzzleItem,
 } from './utils/util'
@@ -53,6 +52,7 @@ import {
 } from './constants'
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 import { NotesRecord } from './RecordUtilities/boardNotes'
+import { BoardIterators } from './utils/classes/boardIterators'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -243,7 +243,7 @@ const handleSharePuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
     let puzzleString = ''
-    forBoardEachCell(({ row, col }) => {
+    BoardIterators.forBoardEachCell(({ row, col }) => {
         const num = MainNumbersRecord.isClueCell(mainNumbers, { row, col })
             ? MainNumbersRecord.getCellMainValue(mainNumbers, { row, col }) : 0
         puzzleString = `${puzzleString}${num}`

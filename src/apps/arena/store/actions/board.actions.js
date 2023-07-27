@@ -8,10 +8,8 @@ import { PENCIL_STATE } from '@resources/constants'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import {
     isMainNumberPresentInAnyHouseOfCell,
-    forBoardEachCell,
     getCellHousesInfo,
     isCellEmpty,
-    forCellEachNote,
 } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import {
@@ -23,6 +21,7 @@ import { getHouseCells } from '../../utils/houseCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../RecordUtilities/boardNotes'
+import { BoardIterators } from '../../utils/classes/boardIterators'
 
 const {
     setMainNumbers,
@@ -99,7 +98,7 @@ const getNewNotesBunchToShow = () => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notes = getNotesInfo(getStoreState())
 
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         if (isCellEmpty(cell, mainNumbers)) {
             _filter(
                 NotesRecord.getCellNotes(notes, cell),
@@ -247,7 +246,7 @@ export const initPossibleNotes = mainNumbers => {
     setTimeout(() => {
         const notes = NotesRecord.initNotes()
 
-        forBoardEachCell(({ row, col }) => {
+        BoardIterators.forBoardEachCell(({ row, col }) => {
             const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)
             cellNotes.forEach(({ note }) => {
                 notes[row][col][note - 1].show = 1
@@ -262,7 +261,7 @@ const getCellAllPossibleNotes = (cell, mainNumbers) => {
     const result = []
     if (!isCellEmpty(cell, mainNumbers)) return result
 
-    forCellEachNote(note => {
+    BoardIterators.forCellEachNote(note => {
         if (!isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbers)) result.push({ cell, note })
     })
 
@@ -348,7 +347,7 @@ export const resetStoreState = () => {
 export const fillPuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         if (isCellEmpty(cell, mainNumbers)) invokeDispatch(setCellMainNumber({ cell, number: MainNumbersRecord.getCellSolutionValue(mainNumbers, cell) }))
     })
 }

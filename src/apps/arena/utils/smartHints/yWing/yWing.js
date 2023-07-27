@@ -14,12 +14,12 @@ import {
     isCellEmpty,
     getPairCellsCommonHouses,
     areSameCellsSets,
-    forBoardEachCell,
     areCommonHouseCells,
 } from '../../util'
 import { HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { getEliminatableNotesCells } from './utils'
+import { BoardIterators } from '../../classes/boardIterators'
 
 const VALID_NOTES_COUNT_IN_CELL = 2
 const VALID_NOTES_COUNT_IN_CELLS_PAIR = 3
@@ -41,7 +41,7 @@ export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
     const possibleNotes = getPossibleNotes(getStoreState())
 
     const result = []
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         if (!isCellEmpty(cell, mainNumbers)) return
         if (isValidYWingCell(cell, userInputNotes, possibleNotes)) {
             result.push({ cell, notes: NotesRecord.getCellVisibleNotesList(userInputNotes, cell) })

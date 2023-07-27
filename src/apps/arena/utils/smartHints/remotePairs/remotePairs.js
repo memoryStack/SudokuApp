@@ -16,8 +16,6 @@ import {
     areCommonHouseCells,
     convertBoardCellNumToCell,
     convertBoardCellToNum,
-    forBoardEachCell,
-    forEachHouse,
     isCellExists,
 } from '../../util'
 
@@ -33,6 +31,7 @@ import {
     MIDDLE_CELLS_VALID_COMMON_HOUSES_CELLS_COUNT,
     CHAIN_VS_REMOVABLE_NOTES_CELL_PARAMETERS,
 } from './remotePairs.constants'
+import { BoardIterators } from '../../classes/boardIterators'
 
 export const getRemotePairsRawHints = (mainNumbers, notes) => {
     const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes)
@@ -45,7 +44,7 @@ export const getRemotePairsRawHints = (mainNumbers, notes) => {
 
 export const getAllValidCellsWithPairs = (mainNumbers, notes) => {
     const result = []
-    forEachHouse(num => {
+    BoardIterators.forEachHouse(num => {
         const validCells = filterNakedGroupEligibleCellsInHouse(
             { type: HOUSE_TYPE.ROW, num },
             NOTES_COUNT_IN_ELIGIBLE_CELLS,
@@ -146,7 +145,7 @@ const getRemovableNotesEligibleCells = (chainCells, visibleNotes, notes) => {
     // TODO: part of this function can be a util which will extract all the cells which
     // have atleast one of the note from the list
     const result = []
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         const anyCellNoteVisible = _some(visibleNotes, note => NotesRecord.isNotePresentInCell(notes, note, cell))
         if (anyCellNoteVisible) result.push(cell)
     })

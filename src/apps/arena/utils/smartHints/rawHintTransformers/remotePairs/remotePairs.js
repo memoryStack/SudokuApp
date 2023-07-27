@@ -2,11 +2,10 @@ import _reduce from '@lodash/reduce'
 import _forEach from '@lodash/forEach'
 import _map from '@lodash/map'
 
-import { forBoardEachCell } from '../../../util'
-
 import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { setCellDataInHintResult, setCellNotesHighlightDataInHintResult } from '../../util'
+import { BoardIterators } from '../../../classes/boardIterators'
 
 const REMOTE_PAIRS_COLORS = ['green', 'rgb(217, 19, 235)']
 
@@ -35,7 +34,7 @@ const getUICellsToFocusData = remotePairs => {
         removableNotesHostCells,
     } = remotePairs
 
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         setCellDataInHintResult(cell, cellHighlightData, result)
     })

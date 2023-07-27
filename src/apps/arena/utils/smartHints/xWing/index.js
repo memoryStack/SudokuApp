@@ -13,7 +13,6 @@ import {
     areSameBlockCells,
     areSameColCells,
     areSameRowCells,
-    forEachHouse,
     isCellEmpty,
     getBlockAndBoxNum,
 } from '../../util'
@@ -41,6 +40,7 @@ import {
 } from './utils'
 import { maxHintsLimitReached } from '../util'
 import { Houses } from '../../classes/houses'
+import { BoardIterators } from '../../classes/boardIterators'
 
 const getCrossHouseCells = (cell, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)
@@ -261,7 +261,7 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
 
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
     searchableHouses.forEach(houseType => {
-        forEachHouse(houseNum => {
+        BoardIterators.forEachHouse(houseNum => {
             const house = { type: houseType, num: houseNum }
             getHouseXWingLegs(house, mainNumbers, notesData).forEach(xWingLeg => {
                 addCandidateXWingLeg(xWingLeg, houseType, result)

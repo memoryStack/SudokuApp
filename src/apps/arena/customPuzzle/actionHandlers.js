@@ -4,7 +4,6 @@ import { ACTION_TYPES as BOARD_ACTION_TYPES } from '../gameBoard/actionTypes'
 import {
     areSameCells,
     duplicatesInPuzzle,
-    forBoardEachCell,
     areMultipleMainNumbersInAnyHouseOfCell,
     getRowAndCol,
     getBlockAndBoxNum,
@@ -16,6 +15,7 @@ import { EVENTS } from '../../../constants/events'
 import { CELLS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
+import { BoardIterators } from '../utils/classes/boardIterators'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -180,7 +180,7 @@ const handleCellClick = ({ setState, getState, params: cell }) => {
 
 const getCluesCount = mainNumbers => {
     let cluesCount = 0
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) cluesCount++
     })
     return cluesCount
@@ -226,7 +226,7 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
 }
 
 const transformMainNumbersForValidPuzzle = mainNumbers => {
-    forBoardEachCell(({ row, col }) => {
+    BoardIterators.forBoardEachCell(({ row, col }) => {
         mainNumbers[row][col].isClue = MainNumbersRecord.isCellFilled(mainNumbers, { row, col })
         delete mainNumbers[row][col].wronglyPlaced
     })

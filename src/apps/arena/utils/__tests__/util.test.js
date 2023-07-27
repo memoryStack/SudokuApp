@@ -15,8 +15,6 @@ import {
     getPairCellsCommonHouses,
     getCellsCommonHouses,
     areSameCellsSets,
-    forCellEachNote,
-    forBoardEachCell,
     areCommonHouseCells,
     getRowAndCol,
     getBlockAndBoxNum,
@@ -27,6 +25,7 @@ import {
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
+import { BoardIterators } from '../classes/boardIterators'
 
 jest.mock('@utils/storage')
 
@@ -307,22 +306,6 @@ test('are same cells sets', () => {
     expect(areSameCellsSets(testFour.setA, testFour.setB)).toBe(false)
 })
 
-describe('forCellEachNote()', () => {
-    test('calls the callback 9 times, once for each note', () => {
-        const mockCallback = jest.fn()
-        forCellEachNote(mockCallback)
-        expect(mockCallback.mock.calls.length).toBe(9)
-    })
-})
-
-describe('forBoardEachCell()', () => {
-    test('calls the callback 81 times, oncefor each cell', () => {
-        const mockCallback = jest.fn()
-        forBoardEachCell(mockCallback)
-        expect(mockCallback.mock.calls.length).toBe(81)
-    })
-})
-
 describe('getRowAndCol()', () => {
     test('returns cell row and col upon passing block number and box number in the block', () => {
         expect(getRowAndCol(0, 7)).toStrictEqual({ row: 2, col: 1 })
@@ -356,7 +339,7 @@ describe('initMainNumbers()', () => {
 
     test('initializes default main number values for each 9*9 cells in board', () => {
         const mainNumbers = MainNumbersRecord.initMainNumbers()
-        forBoardEachCell(({ row, col }) => {
+        BoardIterators.forBoardEachCell(({ row, col }) => {
             expect(_isEmpty(mainNumbers[row][col])).toBeFalsy()
         })
     })

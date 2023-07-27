@@ -25,6 +25,7 @@ import { GameState } from './classes/gameState'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { Houses } from './classes/houses'
+import { BoardIterators } from './classes/boardIterators'
 
 export const addLeadingZeroIfEligible = value => {
     if (value > 9) return `${value}`
@@ -38,7 +39,7 @@ export const isMainNumberPresentInAnyHouseOfCell = (number, cell, mainNumbers) =
 const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) => {
     const isPuzzleSolved = row === CELLS_IN_HOUSE
     if (isPuzzleSolved) {
-        forBoardEachCell(({ row: _row, col: _col }) => {
+        BoardIterators.forBoardEachCell(({ row: _row, col: _col }) => {
             mainNumbers[_row][_col].solutionValue = MainNumbersRecord.getCellMainValue(mainNumbers, { row: _row, col: _col })
         })
         return 1
@@ -205,34 +206,6 @@ export const getCellsCommonHouses = cells => {
 export const areSameCellsSets = (setA, setB) => {
     if (setA.length !== setB.length) return false
     return setA.every(cell => isCellExists(cell, setB))
-}
-
-/* Board Iterators */
-
-export const forBoardEachCell = callback => {
-    for (let row = 0; row < HOUSES_COUNT; row++) {
-        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
-            callback({ row, col })
-        }
-    }
-}
-
-export const forCellEachNote = callback => {
-    for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
-        const noteValue = note
-        const noteIndx = note - 1
-        callback(noteValue, noteIndx)
-    }
-}
-
-export const forHouseEachCell = (house, callback) => {
-    getHouseCells(house).forEach(cell => {
-        callback(cell)
-    })
-}
-
-export const forEachHouse = callback => {
-    for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) callback(houseNum)
 }
 
 export const filterHouseCells = (house, filterCallback) => getHouseCells(house).filter(cell => filterCallback(cell))

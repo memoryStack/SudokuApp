@@ -10,7 +10,6 @@ import _isEqual from '@lodash/isEqual'
 import withActions from '../../../utils/hocs/withActions'
 
 import { Inputpanel } from '../inputPanel'
-import { forBoardEachCell } from '../utils/util'
 import { MAX_INSTANCES_OF_NUMBER } from '../constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { GameState } from '../utils/classes/gameState'
@@ -18,10 +17,11 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { ACTION_HANDLERS } from './actionHandlers'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { BoardIterators } from '../utils/classes/boardIterators'
 
 const getInstancesCounts = mainNumbers => {
     const instancesCount = new Array(10).fill(0)
-    forBoardEachCell(cell => {
+    BoardIterators.forBoardEachCell(cell => {
         if (MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
             const value = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
             instancesCount[value]++

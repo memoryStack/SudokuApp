@@ -17,8 +17,6 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import {
     areSameCells,
     areCommonHouseCells,
-    forBoardEachCell,
-    forCellEachNote,
 } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { cellHasTryOutInput } from '../smartHintHC/helpers'
@@ -35,6 +33,7 @@ import { Cell } from './cell'
 import HintsSvgDrawing from '../hintsSvgDrawing'
 import { HINTS_IDS } from '../utils/smartHints/constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { BoardIterators } from '../utils/classes/boardIterators'
 
 const looper = []
 const bordersLooper = []
@@ -69,8 +68,8 @@ const Board_ = ({
 
     const notesRefs = useMemo(() => {
         const result = []
-        forBoardEachCell(({ row, col }) => {
-            forCellEachNote((_, noteIdx) => {
+        BoardIterators.forBoardEachCell(({ row, col }) => {
+            BoardIterators.forCellEachNote((_, noteIdx) => {
                 _set(result, [row, col, noteIdx], React.createRef())
             })
         })
