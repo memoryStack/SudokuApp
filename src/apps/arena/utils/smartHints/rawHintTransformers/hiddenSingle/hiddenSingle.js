@@ -24,6 +24,7 @@ import {
 } from '../../../../constants'
 import { getHouseCells } from '../../../houseCells'
 import { getCellsAxesValuesListText } from '../helpers'
+import { Houses } from '../../../classes/houses'
 
 const getInhabitableCellData = () => ({
     bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
@@ -139,12 +140,12 @@ const highlightNeighbourHouseNewWinnerInstance = (
     highlightableNeighbourHousesWinnerCandidates,
     cellsToFocusData,
 ) => {
-    if (instanceHouseType === HOUSE_TYPE.ROW) {
+    if (Houses.isRowHouse(instanceHouseType)) {
         highlightableNeighbourHousesWinnerCandidates.rows[row] = true
         const { col: instanceColumn } = neighbourRows[row]
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
         setCellDataInHintResult({ row, col: instanceColumn }, cellHighlightData, cellsToFocusData)
-    } else if (instanceHouseType === HOUSE_TYPE.COL) {
+    } else if (Houses.isColHouse(instanceHouseType)) {
         highlightableNeighbourHousesWinnerCandidates.cols[col] = true
         const { row: instanceRow } = neighbourCols[col]
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }

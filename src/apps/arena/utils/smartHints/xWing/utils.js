@@ -1,5 +1,6 @@
 import _flatten from '@lodash/flatten'
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { Houses } from '../../classes/houses'
 
 import { getHouseCells } from '../../houseCells'
 import {
@@ -37,7 +38,7 @@ export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells
     }
 }
 
-export const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+export const getCrossHouseType = houseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
 export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notesData) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
@@ -50,7 +51,7 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
         ) return false
         return finnedLegPerfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]
-            if (getCrossHouseType(houseType) === HOUSE_TYPE.ROW) return areSameRowCells(cellsPair)
+            if (Houses.isRowHouse(getCrossHouseType(houseType))) return areSameRowCells(cellsPair)
             return areSameColCells(cellsPair)
         })
     })
@@ -78,7 +79,7 @@ export const getSashimiCell = ({ houseType, legs }) => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
 
-    if (houseType === HOUSE_TYPE.ROW) {
+    if (Houses.isRowHouse(houseType)) {
         return {
             row: otherLeg.cells[0].row,
             col: sashimiAligned.col,

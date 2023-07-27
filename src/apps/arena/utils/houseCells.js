@@ -1,5 +1,5 @@
 import { CELLS_IN_HOUSE } from '../constants'
-import { HOUSE_TYPE } from './smartHints/constants'
+import { Houses } from './classes/houses'
 
 // TODO: this exact copy of "getRowAndCol" defined in arena/utils.js file
 // added it here to remove circular dependency in these two files
@@ -35,9 +35,9 @@ const getBlockHouseCells = houseNum => {
 }
 
 const getHouseCells = ({ type, num }) => {
-    if (type === HOUSE_TYPE.ROW) return getRowHouseCells(num)
-    if (type === HOUSE_TYPE.COL) return getColHouseCells(num)
-    if (type === HOUSE_TYPE.BLOCK) return getBlockHouseCells(num)
+    if (Houses.isRowHouse(type)) return getRowHouseCells(num)
+    if (Houses.isColHouse(type)) return getColHouseCells(num)
+    if (Houses.isBlockHouse(type)) return getBlockHouseCells(num)
     throw new Error('invalid house type')
 }
 

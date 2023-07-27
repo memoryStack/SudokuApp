@@ -1,10 +1,11 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { Houses } from 'src/apps/arena/utils/classes/houses'
 
 import { getHouseCells } from '../../../../houseCells'
 import { getCellAxesValues, isCellExists } from '../../../../util'
 
-import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
+import { SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
 import {
     setCellDataInHintResult,
@@ -53,8 +54,8 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
 // TODO: synchronize the structre in which cells is passed around for all xWings
 const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
     // TODO: this logic is repeated
-    const firstHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].row : cells[0][0].col
-    const secondHouseNum = houseType === HOUSE_TYPE.ROW ? cells[1][0].row : cells[1][0].col
+    const firstHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].row : cells[0][0].col
+    const secondHouseNum = Houses.isRowHouse(houseType) ? cells[1][0].row : cells[1][0].col
 
     const xWingCells = [...cells[0], ...cells[1]]
 
@@ -73,8 +74,8 @@ const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
 
 const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, cellsToFocusData) => {
     const xWingCells = [...cells[0], ...cells[1]]
-    const firstCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].col : cells[0][0].row
-    const secondCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][1].col : cells[0][1].row
+    const firstCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].col : cells[0][0].row
+    const secondCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][1].col : cells[0][1].row
     const crossHousesNum = [firstCrossHouseNum, secondCrossHouseNum]
     crossHousesNum.forEach(houseNum => {
         const crossHouseType = getCrossHouseType(houseType)

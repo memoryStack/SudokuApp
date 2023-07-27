@@ -1,11 +1,12 @@
 import { toOrdinal } from '@lodash/toOrdinal'
 import _map from '@lodash/map'
 
+import { Houses } from 'src/apps/arena/utils/classes/houses'
 import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
 import { getCellHouseForHouseType, getHouseAxesValue } from '../../../../util'
 
-import { HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
+import { HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
 import { getCrossHouseType } from '../../../xWing/utils'
 import { getCellsAxesValuesListText } from '../../helpers'
 
@@ -32,7 +33,7 @@ const getXWingHousesNums = (houseType, xWingLegs) => ({
 
 export const getHouseAxesText = house => {
     const houseAxesValue = getHouseAxesValue(house)
-    if (house.type === HOUSE_TYPE.ROW) return houseAxesValue
+    if (Houses.isRowHouse(house.type)) return houseAxesValue
     return toOrdinal(parseInt(houseAxesValue, 10))
 }
 
@@ -68,8 +69,8 @@ export const getXWingCornerCells = xWing => {
     const xWingLegs = xWing.legs
     return {
         topLeft: xWingLegs[0].cells[0],
-        topRight: houseType === HOUSE_TYPE.COL ? xWingLegs[1].cells[0] : xWingLegs[0].cells[1],
-        bottomLeft: houseType === HOUSE_TYPE.COL ? xWingLegs[0].cells[1] : xWingLegs[1].cells[0],
+        topRight: Houses.isColHouse(houseType) ? xWingLegs[1].cells[0] : xWingLegs[0].cells[1],
+        bottomLeft: Houses.isColHouse(houseType) ? xWingLegs[0].cells[1] : xWingLegs[1].cells[0],
         bottomRight: xWingLegs[1].cells[1],
     }
 }

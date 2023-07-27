@@ -32,6 +32,7 @@ import {
     getCandidatesListText,
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
+import { Houses } from '../../../classes/houses'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
@@ -82,7 +83,7 @@ const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, note
     })
 }
 
-const isRowOrColHouse = houseType => houseType === HOUSE_TYPE.ROW || houseType === HOUSE_TYPE.COL
+const isRowOrColHouse = houseType => Houses.isRowHouse(houseType) || Houses.isColHouse(houseType)
 
 const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
     // TODO: nested ifs. can it be made linear or refactor into better readability ??
@@ -93,7 +94,7 @@ const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
             type: HOUSE_TYPE.BLOCK,
             num: getBlockAndBoxNum(groupHostCells[0]).blockNum,
         }
-    } else if (primaryHouseType === HOUSE_TYPE.BLOCK) {
+    } else if (Houses.isBlockHouse(primaryHouseType)) {
         if (areSameRowCells(groupHostCells)) {
             result = {
                 type: HOUSE_TYPE.ROW,

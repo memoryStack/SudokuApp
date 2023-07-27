@@ -24,6 +24,7 @@ import { getHouseCells } from './houseCells'
 import { GameState } from './classes/gameState'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
+import { Houses } from './classes/houses'
 
 export const addLeadingZeroIfEligible = value => {
     if (value > 9) return `${value}`
@@ -105,9 +106,9 @@ export const getCellBlockHouseInfo = cell => ({
 })
 
 export const getCellHouseForHouseType = (houseType, cell) => {
-    if (houseType === HOUSE_TYPE.ROW) return getCellRowHouseInfo(cell)
-    if (houseType === HOUSE_TYPE.COL) return getCellColHouseInfo(cell)
-    if (houseType === HOUSE_TYPE.BLOCK) return getCellBlockHouseInfo(cell)
+    if (Houses.isRowHouse(houseType)) return getCellRowHouseInfo(cell)
+    if (Houses.isColHouse(houseType)) return getCellColHouseInfo(cell)
+    if (Houses.isBlockHouse(houseType)) return getCellBlockHouseInfo(cell)
     throw new Error('un-identified house')
 }
 

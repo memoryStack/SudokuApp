@@ -1,6 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { Houses } from 'src/apps/arena/utils/classes/houses'
 import { getHouseCells } from '../../../../houseCells'
 
 import {
@@ -42,7 +43,7 @@ const DIAGONAL_CELLS_COLORS = {
     FINN: 'rgb(255, 245, 187)',
 }
 
-const getCrossHouseType = houseType => (houseType === HOUSE_TYPE.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+const getCrossHouseType = houseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
 const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
     const { houseType, legs } = xWing
@@ -97,8 +98,8 @@ const getSashimiFinnedHintChunks = (xWing, removableNotesHostCells, notes) => {
 
 // doing 2 things
 const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
-    const firstHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].row : cells[0][0].col
-    const secondHouseNum = houseType === HOUSE_TYPE.ROW ? cells[1][0].row : cells[1][0].col
+    const firstHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].row : cells[0][0].col
+    const secondHouseNum = Houses.isRowHouse(houseType) ? cells[1][0].row : cells[1][0].col
 
     const xWingHousesNum = [firstHouseNum, secondHouseNum]
     xWingHousesNum.forEach(houseNum => {
@@ -107,8 +108,8 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
 }
 
 const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData) => {
-    const firstCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][0].col : cells[0][0].row
-    const secondCrossHouseNum = houseType === HOUSE_TYPE.ROW ? cells[0][1].col : cells[0][1].row
+    const firstCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].col : cells[0][0].row
+    const secondCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][1].col : cells[0][1].row
     const crossHousesNum = [firstCrossHouseNum, secondCrossHouseNum]
     crossHousesNum.forEach(houseNum => {
         const crossHouseType = getCrossHouseType(houseType)

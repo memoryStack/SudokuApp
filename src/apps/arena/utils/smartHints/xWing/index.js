@@ -40,10 +40,11 @@ import {
     isPerfectLegType,
 } from './utils'
 import { maxHintsLimitReached } from '../util'
+import { Houses } from '../../classes/houses'
 
 const getCrossHouseCells = (cell, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)
-    const crossHouseNum = crossHouseType === HOUSE_TYPE.ROW ? cell.row : cell.col
+    const crossHouseNum = Houses.isRowHouse(crossHouseType) ? cell.row : cell.col
     return getHouseCells({
         type: crossHouseType,
         num: crossHouseNum,
