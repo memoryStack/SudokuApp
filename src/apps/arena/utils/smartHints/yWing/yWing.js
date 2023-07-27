@@ -13,7 +13,6 @@ import {
     getCellHouseForHouseType,
     isCellEmpty,
     getPairCellsCommonHouses,
-    getCellVisibleNotesCount,
     areSameCellsSets,
     forBoardEachCell,
     areCommonHouseCells,
@@ -30,11 +29,11 @@ const VALID_NOTES_COUNT_IN_CELLS_PAIR = 3
 // and this is called coupling my friend
 const N_CHOOSE_K_LIMIT = 6
 
-export const isValidYWingCell = (userInputNotes, allPossibleNotes) => {
-    const possibleNotesCount = getCellVisibleNotesCount(allPossibleNotes)
+export const isValidYWingCell = (cell, userInputNotes, possibleNotes) => {
+    const possibleNotesCount = NotesRecord.getCellVisibleNotesCount(possibleNotes, cell)
     if (possibleNotesCount !== VALID_NOTES_COUNT_IN_CELL) return false
 
-    const userInputNotesCount = getCellVisibleNotesCount(userInputNotes)
+    const userInputNotesCount = NotesRecord.getCellVisibleNotesCount(userInputNotes, cell)
     return userInputNotesCount === VALID_NOTES_COUNT_IN_CELL
 }
 
@@ -44,9 +43,7 @@ export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
     const result = []
     forBoardEachCell(cell => {
         if (!isCellEmpty(cell, mainNumbers)) return
-        const cellUserInputNotes = NotesRecord.getCellNotes(userInputNotes, cell)
-        const cellAllPossibleNotes = NotesRecord.getCellNotes(possibleNotes, cell)
-        if (isValidYWingCell(cellUserInputNotes, cellAllPossibleNotes)) {
+        if (isValidYWingCell(cell, userInputNotes, possibleNotes)) {
             result.push({ cell, notes: NotesRecord.getCellVisibleNotesList(userInputNotes, cell) })
         }
     })
