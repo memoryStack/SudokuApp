@@ -3,7 +3,7 @@ import _map from '@lodash/map'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getHouseCells } from '../../../houseCells'
-import { isCellExists, isCellNoteVisible } from '../../../util'
+import { isCellExists } from '../../../util'
 
 import {
     HINTS_IDS,
@@ -44,7 +44,7 @@ const addRemovableNotesHouseHighlightData = (omission, notesData, cellsToFocusDa
 
     cellsToHighlight.forEach(cell => {
         const cellHighlightData = { bgColor: COLORS.CELL }
-        if (isCellNoteVisible(note, notesData[cell.row][cell.col])) {
+        if (NotesRecord.isNotePresentInCell(notesData, note, cell)) {
             cellHighlightData.notesToHighlightData = {
                 [note]: { fontColor: COLORS.REMOVABLE_NOTE },
             }

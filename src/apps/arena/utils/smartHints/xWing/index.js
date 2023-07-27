@@ -3,6 +3,7 @@ import _get from '@lodash/get'
 import _every from '@lodash/every'
 import _some from '@lodash/some'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { inRange } from '../../../../../utils/util'
 
 import { NUMBERS_IN_HOUSE } from '../../../constants'
@@ -14,7 +15,6 @@ import {
     areSameRowCells,
     forEachHouse,
     isCellEmpty,
-    isCellNoteVisible,
     getBlockAndBoxNum,
 } from '../../util'
 
@@ -54,15 +54,16 @@ const isPerfectXWingRemovesNotes = (xWing, notesData) => {
     const MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVER_XWING = 3
 
     return xWing.legs[0].cells.some(mainHouseCell => {
+        const candidate = getXWingCandidate(xWing)
         let candidateInstancesCount = 0
-        getCrossHouseCells(mainHouseCell, xWing.houseType).forEach(({ row, col }) => {
-            if (notesData[row][col][getXWingCandidate(xWing) - 1].show) candidateInstancesCount++
+        getCrossHouseCells(mainHouseCell, xWing.houseType).forEach(cell => {
+            if (NotesRecord.isNotePresentInCell(notesData, candidate, cell)) candidateInstancesCount++
         })
         return candidateInstancesCount >= MIN_CROSS_HOUSE_OCCURENCES_IN_NOTES_REMOVER_XWING
     })
 }
 
-export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => getFinnedXWingRemovableNotesHostCells({ houseType, legs }, notesData).some(cell => isCellNoteVisible(legs[0].candidate, notesData[cell.row][cell.col]))
+export const isFinnedXWingRemovesNotes = ({ houseType, legs }, notesData) => getFinnedXWingRemovableNotesHostCells({ houseType, legs }, notesData).some(cell => NotesRecord.isNotePresentInCell(notesData, legs[0].candidate, cell))
 
 const removableNotesPresentInCrossHouse = ({ houseType, legs }, notesData) => {
     const { otherLeg } = categorizeLegs(...legs)

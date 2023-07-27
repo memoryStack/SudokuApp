@@ -21,7 +21,6 @@ import {
     getCellVisibleNotes,
     isCellEmpty,
     isCellExists,
-    isCellNoteVisible,
 } from '../../../util'
 
 import { getHouseCells } from '../../../houseCells'
@@ -189,7 +188,8 @@ const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandida
     })
 
     _forEach(removableGroupCandidatesHostCells, cell => {
-        const visibleGroupCandidatesInCell = _filter(groupCandidates, groupCandidate => isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col]))
+        const visibleGroupCandidatesInCell = _filter(groupCandidates, groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
+
         result.push({
             cell,
             action: { type: BOARD_MOVES_TYPES.REMOVE, notes: visibleGroupCandidatesInCell },
@@ -236,7 +236,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
 
         removableGroupCandidatesHostCells = secondaryHouseCells.filter(cell => {
             if (isCellExists(cell, hostCells)) return false
-            return groupCandidates.some(groupCandidate => isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col]))
+            return groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
         })
     }
 

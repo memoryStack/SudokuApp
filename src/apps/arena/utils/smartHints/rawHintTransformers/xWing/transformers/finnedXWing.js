@@ -11,7 +11,7 @@ import {
     SMART_HINTS_CELLS_BG_COLOR,
 } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
-import { getCellAxesValues, getCellHouseForHouseType, isCellNoteVisible } from '../../../../util'
+import { getCellAxesValues, getCellHouseForHouseType } from '../../../../util'
 
 import {
     getCellsFromCellsToFocusedData,
@@ -158,10 +158,7 @@ const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
 
 const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cellsToFocusData) => {
     hostCells
-        .filter(cell => {
-            const cellNotes = notesData[cell.row][cell.col]
-            return isCellNoteVisible(candidate, cellNotes)
-        })
+        .filter(cell => NotesRecord.isNotePresentInCell(notesData, candidate, cell))
         .forEach(cell => {
             const cellHighlightData = {
                 bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,

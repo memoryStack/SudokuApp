@@ -1,8 +1,9 @@
 import _filter from '@lodash/filter'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 
 import { getHouseCells } from '../../houseCells'
 import {
-    getCellHousesInfo, convertBoardCellNumToCell, convertBoardCellToNum, isCellNoteVisible,
+    getCellHousesInfo, convertBoardCellNumToCell, convertBoardCellToNum,
 } from '../../util'
 
 const getHousesCellsNum = cell => {
@@ -30,5 +31,5 @@ export const getEliminatableNotesCells = (yWing, notesData) => {
     const commonNoteInWings = yWing.wingsCommonNote
     const wingsCommonSeenCells = getWingsCommonCells(...wingCells)
 
-    return wingsCommonSeenCells.filter(cell => isCellNoteVisible(commonNoteInWings, notesData[cell.row][cell.col]))
+    return wingsCommonSeenCells.filter(cell => NotesRecord.isNotePresentInCell(notesData, commonNoteInWings, cell))
 }

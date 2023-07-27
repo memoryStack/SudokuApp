@@ -1,4 +1,5 @@
 import _flatten from '@lodash/flatten'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 
 import { getHouseCells } from '../../houseCells'
 import {
@@ -6,7 +7,6 @@ import {
     areSameRowCells,
     getCellHouseForHouseType,
     isCellExists,
-    isCellNoteVisible,
     getCellBlockHouseInfo,
     areSameBlockCells,
 } from '../../util'
@@ -46,7 +46,7 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     return getHouseCells(getCellBlockHouseInfo(finns[0])).filter(cell => {
         if (
             isCellExists(cell, getXWingCells(legs))
-            || !isCellNoteVisible(perfectLeg.candidate, notesData[cell.row][cell.col])
+            || !NotesRecord.isNotePresentInCell(notesData, perfectLeg.candidate, cell)
         ) return false
         return finnedLegPerfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]

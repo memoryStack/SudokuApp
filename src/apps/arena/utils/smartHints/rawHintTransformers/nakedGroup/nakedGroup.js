@@ -3,8 +3,9 @@ import _filter from '@lodash/filter'
 import _forEach from '@lodash/forEach'
 import _isEmpty from '@lodash/isEmpty'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import {
-    getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists, isCellNoteVisible,
+    getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists,
 } from '../../../util'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
@@ -87,7 +88,7 @@ const getApplyHintData = (focusedCells, groupCells, groupCandidates, notesData) 
     const cellsWithoutGroupCells = _filter(focusedCells, cell => !isCellExists(cell, groupCells))
 
     _forEach(cellsWithoutGroupCells, cell => {
-        const groupCandidatesVisible = _filter(groupCandidates, groupCandidate => isCellNoteVisible(groupCandidate, notesData[cell.row][cell.col]))
+        const groupCandidatesVisible = _filter(groupCandidates, groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
         if (!_isEmpty(groupCandidatesVisible)) {
             result.push({
                 cell,

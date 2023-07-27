@@ -1,10 +1,10 @@
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
 import { getHouseCells } from '../../houseCells'
 import {
     getCellsCommonHouses,
     isCellEmpty,
-    isCellNoteVisible,
     areSameCellsSets,
     getCellHousesInfo,
     isCellExists,
@@ -28,7 +28,7 @@ export const analyzeOmissionInHouse = (note, house, mainNumbers, notesData) => {
 
     const hostCells = houseCells
         .filter(cell => isCellEmpty(cell, mainNumbers))
-        .filter(cell => isCellNoteVisible(note, notesData[cell.row][cell.col]))
+        .filter(cell => NotesRecord.isNotePresentInCell(notesData, note, cell))
 
     const isValidOmission = isHintValid({ type: HINTS_IDS.OMISSION, data: { houseCells, note, userNotesHostCells: hostCells } })
         && areValidOmissionHostCells(hostCells)
@@ -71,7 +71,7 @@ export const removesNotes = (omission, mainNumbers, notesData) => {
 
     return houseCells
         .filter(cell => isCellEmpty(cell, mainNumbers) && !isCellExists(cell, omission.hostCells))
-        .some(cell => isCellNoteVisible(omission.note, notesData[cell.row][cell.col]))
+        .some(cell => NotesRecord.isNotePresentInCell(notesData, omission.note, cell))
 }
 
 export const getOmissionRawHints = (mainNumbers, notesData, maxHintsThreshold) => {

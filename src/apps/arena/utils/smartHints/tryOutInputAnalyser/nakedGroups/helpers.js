@@ -4,7 +4,7 @@ import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { getCellVisibleNotesCount, isCellEmpty, isCellNoteVisible } from '../../../util'
+import { getCellVisibleNotesCount, isCellEmpty } from '../../../util'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
@@ -103,8 +103,8 @@ const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
 
     return focusedCells.filter(
-        cell => isCellNoteVisible(candidate, tryOutNotesInfo[cell.row][cell.col])
-            && getCellVisibleNotesCount(tryOutNotesInfo[cell.row][cell.col]) === 1,
+        cell => NotesRecord.isNotePresentInCell(tryOutNotesInfo, candidate, cell)
+            && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, candidate, cell) === 1,
     )
 }
 

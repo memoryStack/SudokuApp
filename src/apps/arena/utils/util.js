@@ -181,9 +181,6 @@ export const getCellVisibleNotes = notes => notes.filter(({ show }) => show)
 
 export const getCellVisibleNotesCount = notes => getCellVisibleNotes(notes).length
 
-// TODO: check if usecases like this can be handled by NotesRecord or not
-export const isCellNoteVisible = (note, cellNotes) => cellNotes[note - 1].show
-
 export const convertBoardCellToNum = ({ row, col }) => row * HOUSES_COUNT + col
 
 export const convertBoardCellNumToCell = cellNum => ({
