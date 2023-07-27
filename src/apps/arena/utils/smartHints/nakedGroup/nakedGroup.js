@@ -16,7 +16,6 @@ import {
     areSameRowCells,
     areSameColCells,
     areSameBlockCells,
-    getCellVisibleNotesCount,
     getBlockAndBoxNum,
     isCellEmpty,
     isCellExists,
@@ -37,7 +36,7 @@ import {
 export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => _filter(getHouseCells(house), cell => {
     if (!isCellEmpty(cell, mainNumbers)) return false
 
-    return inRange(getCellVisibleNotesCount(notesData[cell.row][cell.col]), {
+    return inRange(NotesRecord.getCellVisibleNotesCount(notesData, cell), {
         start: VALID_CELL_MINIMUM_NOTES_COUNT,
         end: groupCandidatesCount,
     })

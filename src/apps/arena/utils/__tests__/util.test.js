@@ -13,7 +13,6 @@ import {
     areSameRowCells,
     areSameColCells,
     getPairCellsCommonHouses,
-    getCellVisibleNotesCount,
     getCellsCommonHouses,
     areSameCellsSets,
     getHousePossibleNotes,
@@ -235,36 +234,6 @@ describe('areCommonHouseCells()', () => {
         const cellB = { row: 3, col: 2 }
         expect(areCommonHouseCells(cellA, cellB)).toBe(false)
     })
-})
-
-test('cell visible notes count ', () => {
-    const cellNotesTestOne = [
-        { noteValue: 1, show: 0 },
-        { noteValue: 2, show: 0 },
-        { noteValue: 3, show: 1 },
-        { noteValue: 4, show: 0 },
-        { noteValue: 5, show: 0 },
-        { noteValue: 6, show: 1 },
-        { noteValue: 7, show: 0 },
-        { noteValue: 8, show: 0 },
-        { noteValue: 9, show: 0 },
-    ]
-
-    expect(getCellVisibleNotesCount(cellNotesTestOne)).toBe(2)
-
-    const cellNotesTestTwo = [
-        { noteValue: 1, show: 0 },
-        { noteValue: 2, show: 0 },
-        { noteValue: 3, show: 0 },
-        { noteValue: 4, show: 0 },
-        { noteValue: 5, show: 0 },
-        { noteValue: 6, show: 0 },
-        { noteValue: 7, show: 0 },
-        { noteValue: 8, show: 0 },
-        { noteValue: 9, show: 0 },
-    ]
-
-    expect(getCellVisibleNotesCount(cellNotesTestTwo)).toBe(0)
 })
 
 test('common houses in cells ', () => {

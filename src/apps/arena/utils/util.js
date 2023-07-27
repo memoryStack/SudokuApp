@@ -181,6 +181,7 @@ export const getUniqueNotesFromCells = (cells, notesData) => {
 export const getCellVisibleNotes = notes => notes.filter(({ show }) => show)
     .map(({ noteValue }) => noteValue)
 
+// TODO: can't remove for now due to it's use in yWing
 export const getCellVisibleNotesCount = notes => getCellVisibleNotes(notes).length
 
 export const convertBoardCellToNum = ({ row, col }) => row * HOUSES_COUNT + col
