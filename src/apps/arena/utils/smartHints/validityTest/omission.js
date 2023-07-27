@@ -1,6 +1,7 @@
-import { areSameCellsSets, isCellNoteVisible } from '../../util'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { areSameCellsSets } from '../../util'
 
 export const isValidOmission = ({ note, houseCells, userNotesHostCells }, possibleNotes) => {
-    const notePossibleHostCells = houseCells.filter(cell => isCellNoteVisible(note, possibleNotes[cell.row][cell.col]))
+    const notePossibleHostCells = houseCells.filter(cell => NotesRecord.isNotePresentInCell(possibleNotes, note, cell))
     return areSameCellsSets(userNotesHostCells, notePossibleHostCells)
 }

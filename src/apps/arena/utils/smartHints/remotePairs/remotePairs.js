@@ -11,15 +11,14 @@ import _at from '@lodash/at'
 
 import { N_CHOOSE_K } from '@resources/constants'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import {
     areCommonHouseCells,
     convertBoardCellNumToCell,
     convertBoardCellToNum,
     forBoardEachCell,
     forEachHouse,
-    getCellVisibleNotes,
     isCellExists,
-    isCellNoteVisible,
 } from '../../util'
 
 import { filterNakedGroupEligibleCellsInHouse } from '../nakedGroup/nakedGroup'
@@ -52,7 +51,7 @@ export const getAllValidCellsWithPairs = (mainNumbers, notes) => {
             NOTES_COUNT_IN_ELIGIBLE_CELLS,
             mainNumbers,
             notes,
-        ).filter(cell => cellHasAllPossibleNotes(cell, notes[cell.row][cell.col]))
+        ).filter(cell => cellHasAllPossibleNotes(cell, notes))
         result.push(...validCells)
     })
     return result
@@ -61,7 +60,7 @@ export const getAllValidCellsWithPairs = (mainNumbers, notes) => {
 export const getHostCellsForEachNotesPair = (cells, notes) => {
     const result = {}
     _forEach(cells, cell => {
-        const key = getMapKeyFromNotesPair(getCellVisibleNotes(notes[cell.row][cell.col]))
+        const key = getMapKeyFromNotesPair(NotesRecord.getCellVisibleNotesList(notes, cell))
         if (result[key]) result[key].push(cell)
         else result[key] = [cell]
     })
@@ -148,7 +147,7 @@ const getRemovableNotesEligibleCells = (chainCells, visibleNotes, notes) => {
     // have atleast one of the note from the list
     const result = []
     forBoardEachCell(cell => {
-        const anyCellNoteVisible = _some(visibleNotes, note => isCellNoteVisible(note, notes[cell.row][cell.col]))
+        const anyCellNoteVisible = _some(visibleNotes, note => NotesRecord.isNotePresentInCell(notes, note, cell))
         if (anyCellNoteVisible) result.push(cell)
     })
     return _filter(result, cell => !isCellExists(cell, chainCells))

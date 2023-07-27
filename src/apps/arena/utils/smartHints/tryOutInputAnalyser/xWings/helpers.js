@@ -1,12 +1,13 @@
 import _isEmpty from '@lodash/isEmpty'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getMainNumbers } from '../../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { getCellHouseForHouseType, isCellEmpty, isCellNoteVisible } from '../../../util'
+import { getCellHouseForHouseType, isCellEmpty } from '../../../util'
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
@@ -63,7 +64,7 @@ export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
 
 const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
     const notes = getTryOutNotes(getStoreState())
-    return cells.filter(cell => isCellNoteVisible(candidate, notes[cell.row][cell.col]))
+    return cells.filter(cell => NotesRecord.isNotePresentInCell(notes, candidate, cell))
 }
 
 export const getOneLegWithNoCandidateResult = xWing => {
@@ -92,7 +93,7 @@ const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
     // handles sashimi finned x-wing as well
     return xWingLegs.find(({ cells: legXWingCells }) => legXWingCells.every(xWingCell => (
         (isCellEmpty(xWingCell, tryOutMainNumbers) || !isCellEmpty(xWingCell, mainNumbers))
-        && !isCellNoteVisible(candidate, notes[xWingCell.row][xWingCell.col])
+        && !NotesRecord.isNotePresentInCell(notes, candidate, xWingCell)
     )))
 }
 

@@ -3,14 +3,8 @@ import _filter from '@lodash/filter'
 import _every from '@lodash/every'
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
-import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE } from '../constants'
 
-/*
-    // what do we do with notes ??
-    1. get notes data of a cell
-    2. check if some note is present or not in a cell
-    3 get list of all the notes present in a cell
-*/
+import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE } from '../constants'
 
 const getCellNotes = (notes, cell = {}) => _get(notes, [cell.row, cell.col])
 
@@ -27,7 +21,7 @@ const getCellVisibleNotesList = (notes, cell = {}) => {
 const getCellVisibleNotesCount = (notes, cell = {}) => getCellVisibleNotesList(notes, cell).length
 
 const areSameNotesInCells = (notes, cells) => {
-    const cellsNotes = _map(cells, cell => getCellVisibleNotesList(notes[cell.row][cell.col]))
+    const cellsNotes = _map(cells, cell => getCellVisibleNotesList(notes, cell))
     return _every(cellsNotes, aCellNotes => _isEqual(aCellNotes, cellsNotes[0]))
 }
 

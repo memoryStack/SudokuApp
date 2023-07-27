@@ -1,9 +1,11 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { filterEmptyCells, isCellEmpty, isCellNoteVisible } from '../../../util'
+import { filterEmptyCells, isCellEmpty } from '../../../util'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
@@ -64,7 +66,7 @@ const getRemovableGroupCandidatesFilledCellsWithNumbers = removableGroupCandidat
     return removableGroupCandidatesFilledHostCells(removableGroupCandidatesHostCells)
         .map(cell => ({
             cell,
-            number: tryOutMainNumbers[cell.row][cell.col].value,
+            number: MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell),
         }))
         .sort(({ number: cellANumber }, { number: cellBNumber }) => cellANumber - cellBNumber)
 }
@@ -77,7 +79,7 @@ const someGroupCellWronglyFilled = (groupCells, groupCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     return groupCells.some(cell => {
         if (isCellEmpty(cell, tryOutMainNumbers)) return false
-        const cellValue = tryOutMainNumbers[cell.row][cell.col].value
+        const cellValue = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell)
         return !groupCandidates.includes(cellValue)
     })
 }
@@ -127,7 +129,7 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
 
 const getGroupCandidatesToBeFilledWithoutHostCells = (groupCandidatesToBeFilled, groupCells) => {
     const tryOutNotes = getTryOutNotes(getStoreState())
-    return groupCandidatesToBeFilled.filter(groupCandidate => !groupCells.some(cell => isCellNoteVisible(groupCandidate, tryOutNotes[cell.row][cell.col])))
+    return groupCandidatesToBeFilled.filter(groupCandidate => !groupCells.some(cell => NotesRecord.isNotePresentInCell(tryOutNotes, groupCandidate, cell)))
 }
 
 // TODO: break down this function
@@ -165,6 +167,6 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableC
 
 const getGroupCandidatesToBeFilled = (groupCells, groupCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const filledCellsNumbers = groupCells.map(cell => tryOutMainNumbers[cell.row][cell.col].value)
+    const filledCellsNumbers = groupCells.map(cell => MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell))
     return getCandidatesToBeFilled(filledCellsNumbers, groupCandidates)
 }

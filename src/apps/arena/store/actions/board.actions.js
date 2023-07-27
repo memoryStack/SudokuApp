@@ -99,13 +99,13 @@ const getNewNotesBunchToShow = () => {
     const mainNumbers = getMainNumbers(getStoreState())
     const notes = getNotesInfo(getStoreState())
 
-    forBoardEachCell(({ row, col }) => {
-        if (isCellEmpty({ row, col }, mainNumbers)) {
+    forBoardEachCell(cell => {
+        if (isCellEmpty(cell, mainNumbers)) {
             _filter(
-                notes[row][col],
-                ({ noteValue, show }) => !show && !isMainNumberPresentInAnyHouseOfCell(noteValue, { row, col }, mainNumbers),
+                NotesRecord.getCellNotes(notes, cell),
+                ({ noteValue, show }) => !show && !isMainNumberPresentInAnyHouseOfCell(noteValue, cell, mainNumbers),
             ).forEach(({ noteValue }) => {
-                result.push({ cell: { row, col }, note: noteValue })
+                result.push({ cell, note: noteValue })
             })
         }
     })
@@ -113,10 +113,8 @@ const getNewNotesBunchToShow = () => {
     return result
 }
 
-const getVisibileNotesBunchInCell = (cell, notes) => _filter(notes[cell.row][cell.col], ({ show }) => show).map(({ noteValue }) => ({
-    cell,
-    note: noteValue,
-}))
+const getVisibileNotesBunchInCell = (cell, notes) => _filter(NotesRecord.getCellNotes(notes, cell), ({ show }) => show)
+    .map(({ noteValue }) => ({ cell, note: noteValue }))
 
 const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
     const result = []
@@ -124,9 +122,10 @@ const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
 
     const cellHouses = getCellHousesInfo(cell)
     cellHouses.forEach(house => {
-        getHouseCells(house).forEach(({ row, col }) => {
-            const { show } = notes[row][col][number - 1]
-            if (show) result.push({ cell: { row, col }, note: number })
+        getHouseCells(house).forEach(cell => {
+            if (NotesRecord.isNotePresentInCell(notes, number, cell)) {
+                result.push({ cell, note: number })
+            }
         })
     })
 
@@ -172,13 +171,14 @@ const inputNoteNumber = number => {
     const notes = getNotesInfo(getStoreState())
     const notesBunch = [{ cell: selectedCell, note: number }]
 
-    const { show } = notes[selectedCell.row][selectedCell.col][number - 1]
-    if (show) invokeDispatch(eraseNotesBunch(notesBunch))
+    const noteAlreadyPresent = NotesRecord.isNotePresentInCell(notes, number, selectedCell)
+
+    if (noteAlreadyPresent) invokeDispatch(eraseNotesBunch(notesBunch))
     else invokeDispatch(setNotesBunch(notesBunch))
 
     const move = {
         notes: {
-            action: show ? BOARD_MOVES_TYPES.REMOVE : BOARD_MOVES_TYPES.ADD,
+            action: noteAlreadyPresent ? BOARD_MOVES_TYPES.REMOVE : BOARD_MOVES_TYPES.ADD,
             bunch: notesBunch,
         },
     }

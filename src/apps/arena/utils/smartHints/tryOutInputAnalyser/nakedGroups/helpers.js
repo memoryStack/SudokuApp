@@ -1,11 +1,10 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import {
-    getCellVisibleNotes, getCellVisibleNotesCount, isCellEmpty, isCellNoteVisible,
-} from '../../../util'
+import { getCellVisibleNotesCount, isCellEmpty, isCellNoteVisible } from '../../../util'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
@@ -40,7 +39,7 @@ export const getNotesFromCellsWithNotes = cellsWithNotes => cellsWithNotes.map((
 // TODO: should i handle it using the class based implementation ??
 export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => cells
     .map(cell => ({
-        note: getCellVisibleNotes(boardNotes[cell.row][cell.col])[0],
+        note: NotesRecord.getCellVisibleNotesList(boardNotes, cell)[0],
         cell,
     }))
     .sort(({ note: noteA }, { note: noteB }) => noteA - noteB)

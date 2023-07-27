@@ -1,5 +1,6 @@
 import _filter from '@lodash/filter'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { CELLS_IN_HOUSE } from '../../../constants'
 
 import { getHouseCells } from '../../houseCells'
@@ -12,21 +13,11 @@ import { isHintValid } from '../validityTest'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 
 // TODO: put it in utils and refactore it with unit test cases
-export const isNakedSinglePresent = cellNotes => {
-    let possibleCandidatesCount = 0
-    let mainNumber = -1
-
-    cellNotes.some(({ show, noteValue }) => {
-        if (show) {
-            possibleCandidatesCount++
-            mainNumber = noteValue
-        }
-        return possibleCandidatesCount > 1
-    })
-
+export const isNakedSinglePresent = (notes, cell) => {
+    const cellVisibleNotesList = NotesRecord.getCellVisibleNotesList(notes, cell)
     return {
-        present: possibleCandidatesCount === 1,
-        mainNumber: possibleCandidatesCount === 1 ? mainNumber : -1,
+        present: cellVisibleNotesList.length === 1,
+        mainNumber: cellVisibleNotesList.length === 1 ? cellVisibleNotesList[0] : -1,
     }
 }
 
@@ -53,7 +44,7 @@ export const getNakedSingleRawHints = (mainNumbers, notes, maxHintsThreshold) =>
 
             const cell = { row, col }
             // TODO: change "mainNumber" field name. it doesn't feel right.
-            const { present, mainNumber } = isNakedSinglePresent(notes[row][col])
+            const { present, mainNumber } = isNakedSinglePresent(notes, cell)
             const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
             if (isValid) {
                 result.push({ cell, mainNumber, type: getNakedSingleType(cell, mainNumbers) })

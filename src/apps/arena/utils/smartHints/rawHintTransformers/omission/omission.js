@@ -1,6 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _map from '@lodash/map'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getHouseCells } from '../../../houseCells'
 import { isCellExists, isCellNoteVisible } from '../../../util'
 
@@ -59,10 +60,8 @@ const getUICellsToFocusData = (omission, notesData) => {
     return cellsToFocusData
 }
 
-export const getHouseNoteHostCells = (note, house, notes) => getHouseCells(house).filter(cell => {
-    const cellNotes = notes[cell.row][cell.col]
-    return isCellNoteVisible(note, cellNotes)
-})
+export const getHouseNoteHostCells = (note, house, notes) => getHouseCells(house)
+    .filter(cell => NotesRecord.isNotePresentInCell(notes, note, cell))
 
 const getRemovableNotesHostCells = (omission, notes) => {
     const { note, hostHouse, removableNotesHostHouse } = omission

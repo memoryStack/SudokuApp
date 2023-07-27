@@ -1,5 +1,6 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getHouseCells } from '../../../../houseCells'
 
 import {
@@ -82,7 +83,7 @@ const getSashimiCell = (xWing, notes) => {
     const { otherLeg: finnedLeg } = categorizeLegs(...legs)
 
     const candidate = getXWingCandidate(xWing)
-    return finnedLeg.cells.find(cell => !isCellNoteVisible(candidate, notes[cell.row][cell.col]))
+    return finnedLeg.cells.find(cell => !NotesRecord.isNotePresentInCell(notes, candidate, cell))
 }
 
 const getSashimiFinnedHintChunks = (xWing, removableNotesHostCells, notes) => {

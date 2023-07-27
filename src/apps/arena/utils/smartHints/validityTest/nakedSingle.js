@@ -1,12 +1,3 @@
-import { forCellEachNote } from '../../util'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 
-export const isValidNakedSingle = ({ cell }, possibleNotes) => {
-    const cellPossibleNotes = possibleNotes[cell.row][cell.col]
-
-    let possibleNotesCount = 0
-    forCellEachNote((_, noteIndx) => {
-        if (cellPossibleNotes[noteIndx].show) possibleNotesCount++
-    })
-
-    return possibleNotesCount === 1
-}
+export const isValidNakedSingle = ({ cell }, possibleNotes) => NotesRecord.getCellVisibleNotesCount(possibleNotes, cell) === 1

@@ -1,7 +1,8 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 
 import { getHouseCells } from '../../../../houseCells'
-import { getCellAxesValues, isCellExists, isCellNoteVisible } from '../../../../util'
+import { getCellAxesValues, isCellExists } from '../../../../util'
 
 import { HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
@@ -84,8 +85,7 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
                     bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
                 }
 
-                const cellNotes = notesData[cell.row][cell.col]
-                if (cellNotes[candidate - 1].show) {
+                if (NotesRecord.isNotePresentInCell(notesData, candidate, cell)) {
                     cellHighlightData.notesToHighlightData = {
                         [candidate]: { fontColor: 'red' },
                     }
@@ -122,7 +122,8 @@ const getHintChunks = xWing => {
     return msgTemplates.map(template => dynamicInterpolation(template, msgPlaceholdersValues))
 }
 
-const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => focusedCells.filter(cell => !isCellExists(cell, xWingCells) && isCellNoteVisible(candidate, notes[cell.row][cell.col]))
+const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => focusedCells.filter(cell => !isCellExists(cell, xWingCells)
+    && NotesRecord.isNotePresentInCell(notes, candidate, cell))
 
 export const getPerfectXWingUIData = (xWing, notesData) => {
     const { legs, houseType } = xWing

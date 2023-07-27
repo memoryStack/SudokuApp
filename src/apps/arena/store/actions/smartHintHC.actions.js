@@ -5,6 +5,8 @@ import _isNil from '@lodash/isNil'
 import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { emit } from '../../../../utils/GlobalEventBus'
+import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../RecordUtilities/boardNotes'
 
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
 import { getTransformedRawHints } from '../../utils/smartHints'
@@ -13,9 +15,7 @@ import {
     areSameCells,
     isMainNumberPresentInAnyHouseOfCell,
     getCellAxesValues,
-    getCellVisibleNotes,
     isCellEmpty,
-    isCellNoteVisible,
 } from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getNotesInfo } from '../selectors/board.selectors'
@@ -110,9 +110,8 @@ const isValidInputNumberClick = number => {
     const selectedCell = getTryOutSelectedCell(getStoreState())
     const mainNumbers = getTryOutMainNumbers(getStoreState())
     const notes = getTryOutNotes(getStoreState())
-    return (
-        isCellEmpty(selectedCell, mainNumbers) && isCellNoteVisible(number, notes[selectedCell.row][selectedCell.col])
-    )
+    return isCellEmpty(selectedCell, mainNumbers)
+        && NotesRecord.isNotePresentInCell(notes, number, selectedCell)
 }
 
 const isRestrictedInputClick = inputNumber => {
@@ -139,9 +138,9 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: getCellVisibleNotes(notes[cell.row][cell.col]),
+                notes: NotesRecord.getCellVisibleNotesList(notes, cell),
             })
-        } else if (isCellNoteVisible(inputNumber, notes[cell.row][cell.col]) && areCommonHouseCells(cell, selectedCell)) {
+        } else if (NotesRecord.isNotePresentInCell(notes, inputNumber, cell) && areCommonHouseCells(cell, selectedCell)) {
             result.push({
                 cell,
                 notes: [inputNumber],
@@ -173,7 +172,7 @@ const getNotesToEnterHostCells = focusedCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const actualNotesInfo = getNotesInfo(getStoreState())
 
-    const numberToBeErased = tryOutMainNumbers[selectedCell.row][selectedCell.col].value
+    const numberToBeErased = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, selectedCell)
 
     // TODO: make it efficient
 
@@ -185,7 +184,7 @@ const getNotesToEnterHostCells = focusedCells => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: getCellVisibleNotes(actualNotesInfo[cell.row][cell.col]).filter(note => shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)),
+                notes: NotesRecord.getCellVisibleNotesList(actualNotesInfo, cell).filter(note => shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)),
             })
         } else if (
             isCellEmpty(cell, tryOutMainNumbers)
@@ -205,8 +204,8 @@ const shouldSpawnNoteInCell = (note, cell, mainNumbersStateAfterErase) => {
     const actualNotesInfo = getNotesInfo(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
     return (
-        isCellNoteVisible(note, actualNotesInfo[cell.row][cell.col])
-        && !isCellNoteVisible(note, tryOutNotesInfo[cell.row][cell.col])
+        NotesRecord.isNotePresentInCell(actualNotesInfo, note, cell)
+        && !NotesRecord.isNotePresentInCell(tryOutNotesInfo, note, cell)
         && !isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbersStateAfterErase)
     )
 }

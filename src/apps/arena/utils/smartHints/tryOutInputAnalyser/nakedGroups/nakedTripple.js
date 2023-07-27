@@ -3,6 +3,7 @@ import _isEqual from '@lodash/isEqual'
 
 import { N_CHOOSE_K } from '@resources/constants'
 import { sortNumbersArray } from '@utils/util'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
@@ -11,7 +12,6 @@ import {
     getCellVisibleNotesCount,
     isCellEmpty,
     isCellExists,
-    areSameNotesInCells,
 } from '../../../util'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { noInputInTryOut, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from '../helpers'
@@ -140,7 +140,7 @@ const getNakedDoublePairCellsErrorResultIfPresent = groupCells => {
 const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHOOSE_K[3][2].find(combination => {
     const chosenCells = getChosenCells(combination, groupCells)
 
-    if (areSameNotesInCells(chosenCells, tryOutNotesInfo)) {
+    if (NotesRecord.areSameNotesInCells(tryOutNotesInfo, chosenCells)) {
         const notChosenCell = getNotChosenCell(chosenCells, groupCells)
 
         const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])

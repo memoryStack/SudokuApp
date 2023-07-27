@@ -5,6 +5,7 @@ import _isEmpty from '@lodash/isEmpty'
 import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { sortNumbersArray } from '../../../../../../utils/util'
 
 import {
@@ -165,7 +166,7 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
     notes,
 ) => removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
     const result = { ...prevValue }
-    const restrictedInputsForCell = notes[cell.row][cell.col]
+    const restrictedInputsForCell = NotesRecord.getCellNotes(notes, cell)
         .filter(({ show, noteValue }) => show && !groupCandidates.includes(noteValue))
         .map(({ noteValue }) => noteValue)
     if (restrictedInputsForCell.length) {

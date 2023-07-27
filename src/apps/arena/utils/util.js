@@ -1,7 +1,6 @@
 import _isEmpty from '@lodash/isEmpty'
 import _isEqual from '@lodash/isEqual'
 import _forEach from '@lodash/forEach'
-import _every from '@lodash/every'
 import _filter from '@lodash/filter'
 import _includes from '@lodash/includes'
 import _values from '@lodash/values'
@@ -182,6 +181,7 @@ export const getCellVisibleNotes = notes => notes.filter(({ show }) => show)
 
 export const getCellVisibleNotesCount = notes => getCellVisibleNotes(notes).length
 
+// TODO: check if usecases like this can be handled by NotesRecord or not
 export const isCellNoteVisible = (note, cellNotes) => cellNotes[note - 1].show
 
 export const convertBoardCellToNum = ({ row, col }) => row * HOUSES_COUNT + col
@@ -301,11 +301,6 @@ export const getHousesCellsSharedByCells = cells => {
         })
 
     return result
-}
-
-export const areSameNotesInCells = (cells, notes) => {
-    const cellsNotes = cells.map(cell => getCellVisibleNotes(notes[cell.row][cell.col]))
-    return _every(cellsNotes, aCellNotes => _isEqual(aCellNotes, cellsNotes[0]))
 }
 
 export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => isCellEmpty(cell, mainNumbers))
