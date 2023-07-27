@@ -13,7 +13,6 @@ import {
     getCellHouseForHouseType,
     isCellEmpty,
     getPairCellsCommonHouses,
-    getCellVisibleNotes,
     getCellVisibleNotesCount,
     areSameCellsSets,
     forBoardEachCell,
@@ -48,7 +47,7 @@ export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
         const cellUserInputNotes = NotesRecord.getCellNotes(userInputNotes, cell)
         const cellAllPossibleNotes = NotesRecord.getCellNotes(possibleNotes, cell)
         if (isValidYWingCell(cellUserInputNotes, cellAllPossibleNotes)) {
-            result.push({ cell, notes: getCellVisibleNotes(cellUserInputNotes) })
+            result.push({ cell, notes: NotesRecord.getCellVisibleNotesList(userInputNotes, cell) })
         }
     })
 

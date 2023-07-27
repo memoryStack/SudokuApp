@@ -23,6 +23,7 @@ import { HOUSE_TYPE } from './smartHints/constants'
 import { getHouseCells } from './houseCells'
 import { GameState } from './classes/gameState'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../RecordUtilities/boardNotes'
 
 export const addLeadingZeroIfEligible = value => {
     if (value > 9) return `${value}`
@@ -170,12 +171,13 @@ export const areCommonHouseCells = (cellA, cellB) => {
 export const getUniqueNotesFromCells = (cells, notesData) => {
     const result = []
     _forEach(cells, cell => {
-        result.push(...getCellVisibleNotes(notesData[cell.row][cell.col]))
+        result.push(...NotesRecord.getCellVisibleNotesList(notesData, cell))
     })
 
     return sortNumbersArray(_unique(result))
 }
 
+// remove it once "getCellVisibleNotesCount" is removed
 export const getCellVisibleNotes = notes => notes.filter(({ show }) => show)
     .map(({ noteValue }) => noteValue)
 

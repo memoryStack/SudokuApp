@@ -8,8 +8,6 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selector
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
     getCellAxesValues,
-    getCellVisibleNotes,
-    getCellVisibleNotesCount,
     isCellEmpty,
     isCellExists,
 } from '../../../util'
@@ -82,12 +80,12 @@ const getNakedSinglesInvalidCombination = groupCells => {
 
         if (allChosenCellsHaveNakedSingle) {
             const chosenCellNotes = chosenCells
-                .map(cell => getCellVisibleNotes(tryOutNotesInfo[cell.row][cell.col])[0])
+                .map(cell => NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, cell)[0])
 
             const notChosenCell = getNotChosenCell(chosenCells, groupCells)
             const notChosenCellWillNotHaveCandidate = _isEqual(
                 sortNumbersArray(chosenCellNotes),
-                getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]),
+                NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, notChosenCell),
             )
 
             return notChosenCellWillNotHaveCandidate
@@ -143,8 +141,8 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHO
     if (NotesRecord.areSameNotesInCells(tryOutNotesInfo, chosenCells)) {
         const notChosenCell = getNotChosenCell(chosenCells, groupCells)
 
-        const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
-        const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
+        const notChosenCellNotes = NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, notChosenCell)
+        const aChosenCellNotes = NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, chosenCells[0])
         const notChosenCellWillHaveCandidate = notChosenCellNotes.some(notChosenCellNote => !aChosenCellNotes.includes(notChosenCellNote))
         return !notChosenCellWillHaveCandidate
     }
@@ -152,10 +150,10 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHO
 })
 
 const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
-    const aChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[chosenCells[0].row][chosenCells[0].col])
-    const notChosenCellNotes = getCellVisibleNotes(tryOutNotesInfo[notChosenCell.row][notChosenCell.col])
+    const aChosenCellNotes = NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, chosenCells[0])
+    const notChosenCellNotes = NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, notChosenCell)
 
-    const isThirdCellHasNakedSingle = getCellVisibleNotesCount(tryOutNotesInfo[notChosenCell.row][notChosenCell.col]) === 1
+    const isThirdCellHasNakedSingle = notChosenCellNotes.length === 1
 
     let chosenCellsPotentialMultipleNakedSingleCandidate
     if (isThirdCellHasNakedSingle) {

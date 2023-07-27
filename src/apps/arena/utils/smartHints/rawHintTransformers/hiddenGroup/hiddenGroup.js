@@ -18,7 +18,6 @@ import {
     areSameRowCells,
     getBlockAndBoxNum,
     getCellAxesValues,
-    getCellVisibleNotes,
     isCellEmpty,
     isCellExists,
 } from '../../../util'
@@ -178,9 +177,8 @@ const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandida
     const result = []
 
     _forEach(groupHostCells, cell => {
-        const notesToRemove = getCellVisibleNotes(notesData[cell.row][cell.col]).filter(
-            note => !groupCandidates.includes(note),
-        )
+        const notesToRemove = NotesRecord.getCellVisibleNotesList(notesData, cell)
+            .filter(note => !groupCandidates.includes(note))
         result.push({
             cell,
             action: { type: BOARD_MOVES_TYPES.REMOVE, notes: notesToRemove },

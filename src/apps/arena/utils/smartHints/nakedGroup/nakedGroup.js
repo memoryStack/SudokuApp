@@ -5,6 +5,7 @@ import _every from '@lodash/every'
 import _isNull from '@lodash/isNull'
 
 import { N_CHOOSE_K } from '@resources/constants'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { inRange } from '../../../../../utils/util'
 
 import { HOUSES_COUNT } from '../../../constants'
@@ -18,7 +19,6 @@ import {
     getCellVisibleNotesCount,
     getBlockAndBoxNum,
     isCellEmpty,
-    getCellVisibleNotes,
     isCellExists,
     areSameCellsSets,
     getUniqueNotesFromCells,
@@ -54,8 +54,8 @@ const getDefaultGroupsFoundInHouses = () => ({
 // found something else
 export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     const result = {}
-    _forEach(cells, ({ row, col }) => {
-        _forEach(getCellVisibleNotes(notesData[row][col]), note => {
+    _forEach(cells, cell => {
+        _forEach(NotesRecord.getCellVisibleNotesList(notesData, cell), note => {
             if (!result[note]) result[note] = 1
             else result[note]++
         })
