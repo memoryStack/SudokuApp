@@ -1,18 +1,17 @@
 import React from 'react'
 
-import { Text } from 'react-native'
-
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import Badge from '@ui/atoms/Badge'
-
 import { HintIcon } from '@resources/svgIcons/hint'
+
+import Badge from '@ui/atoms/Badge'
+import Text from '@ui/atoms/Text'
 
 import { Touchable } from '../../../components/Touchable'
 
-import { Styles, INACTIVE_ICON_FILL } from '../style'
+import { styles, INACTIVE_ICON_FILL } from '../style'
 
 // TODO: i should make it as a part of settings so that users can change it according to their confidence level
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their
@@ -24,7 +23,7 @@ const Hint = ({
     const renderHintsCount = () => {
         if (disabled) return null
         return (
-            <Badge label={hints} styles={Styles.hintsTickerBox} />
+            <Badge label={hints} />
         )
     }
 
@@ -39,13 +38,13 @@ const Hint = ({
 
     return (
         <Touchable
-            style={Styles.actionContainer}
+            style={styles.actionContainer}
             onPress={onClick}
             disabled={disabled || noAvailableHints}
             {...rest}
         >
             {renderIcon()}
-            <Text style={Styles.actionText}>Hint</Text>
+            <Text style={styles.actionText}>Hint</Text>
         </Touchable>
     )
 }

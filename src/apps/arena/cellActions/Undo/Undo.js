@@ -1,21 +1,21 @@
 import React from 'react'
 
-import { Text } from 'react-native'
-
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
 import { UndoIcon } from '@resources/svgIcons/undo'
 
+import Text from '@ui/atoms/Text'
+
 import { Touchable } from '../../../components/Touchable'
 
-import { Styles, INACTIVE_ICON_FILL } from '../style'
+import { styles, INACTIVE_ICON_FILL } from '../style'
 
 const Undo = ({ iconBoxSize, onClick, ...rest }) => (
-    <Touchable style={Styles.actionContainer} onPress={onClick} {...rest}>
+    <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
         <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-        <Text style={Styles.actionText}>Undo</Text>
+        <Text style={styles.actionText}>Undo</Text>
     </Touchable>
 )
 

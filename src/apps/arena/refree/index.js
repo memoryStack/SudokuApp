@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import { useSelector } from 'react-redux'
 
@@ -8,7 +8,8 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { fonts } from '@resources/fonts/font'
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+
 import withActions from '../../../utils/hocs/withActions'
 
 import { useCacheGameState } from '../hooks/useCacheGameState'
@@ -32,10 +33,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '94%',
         marginBottom: 4,
-    },
-    refereeTextStyles: {
-        fontSize: 14,
-        fontFamily: fonts.regular,
     },
 })
 
@@ -73,10 +70,10 @@ const Refree_ = ({ onAction }) => {
 
     return (
         <View style={styles.refereeContainer}>
-            <Text style={styles.refereeTextStyles} testID={MISTAKES_TEXT_TEST_ID}>
+            <Text testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
                 {`Mistakes: ${mistakes} / ${maxMistakesLimit}`}
             </Text>
-            <Text style={styles.refereeTextStyles}>{difficultyLevel}</Text>
+            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{difficultyLevel}</Text>
             <Timer time={time} onClick={onTimerClick} />
         </View>
     )

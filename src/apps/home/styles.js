@@ -27,9 +27,7 @@ export const getStyles = ({ CELL_WIDTH }) => StyleSheet.create({
         backgroundColor: hexToRGBA('#d5e5f6', 60),
         borderRadius: 12,
         textAlign: 'center',
-        textAlignVertical: 'center',
         color: 'rgb(49, 90, 163)',
-        fontSize: CELL_WIDTH * 0.75,
     },
     appIcon: {
         width: 100,

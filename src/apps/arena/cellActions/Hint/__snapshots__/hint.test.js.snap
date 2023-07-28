@@ -25,7 +25,6 @@ exports[`snapshot for disabled Hint 1`] = `
       "display": "flex",
       "justifyContent": "center",
       "opacity": 1,
-      "width": 60,
     }
   }
 >
@@ -81,7 +80,7 @@ exports[`snapshot for disabled Hint 1`] = `
         "height": 16,
         "includeFontPadding": false,
         "justifyContent": "center",
-        "left": 30,
+        "left": 16,
         "letterSpacing": 0.5,
         "lineHeight": 16,
         "minWidth": 16,
@@ -102,7 +101,12 @@ exports[`snapshot for disabled Hint 1`] = `
         "color": "rgb(127, 127, 127)",
         "fontFamily": "OpenSans",
         "fontSize": 16,
+        "fontWeight": "400",
+        "includeFontPadding": false,
+        "letterSpacing": 0.5,
+        "lineHeight": 24,
         "marginTop": 8,
+        "textAlignVertical": "center",
       }
     }
   >
@@ -136,7 +140,6 @@ exports[`snapshot for enabled Hint 1`] = `
       "display": "flex",
       "justifyContent": "center",
       "opacity": 1,
-      "width": 60,
     }
   }
 >
@@ -192,7 +195,7 @@ exports[`snapshot for enabled Hint 1`] = `
         "height": 16,
         "includeFontPadding": false,
         "justifyContent": "center",
-        "left": 30,
+        "left": 16,
         "letterSpacing": 0.5,
         "lineHeight": 16,
         "minWidth": 16,
@@ -213,7 +216,12 @@ exports[`snapshot for enabled Hint 1`] = `
         "color": "rgb(127, 127, 127)",
         "fontFamily": "OpenSans",
         "fontSize": 16,
+        "fontWeight": "400",
+        "includeFontPadding": false,
+        "letterSpacing": 0.5,
+        "lineHeight": 24,
         "marginTop": 8,
+        "textAlignVertical": "center",
       }
     }
   >

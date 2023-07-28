@@ -20,7 +20,6 @@ exports[`snapshot for active Pencil 1`] = `
       "display": "flex",
       "justifyContent": "center",
       "opacity": 1,
-      "width": 60,
     }
   }
 >
@@ -64,17 +63,17 @@ exports[`snapshot for active Pencil 1`] = `
   </RNSVGSvgView>
   <Text
     style={
-      Array [
-        Object {
-          "color": "rgb(127, 127, 127)",
-          "fontFamily": "OpenSans",
-          "fontSize": 16,
-          "marginTop": 8,
-        },
-        Object {
-          "color": "rgb(57, 91, 158)",
-        },
-      ]
+      Object {
+        "color": "rgb(57, 91, 158)",
+        "fontFamily": "OpenSans",
+        "fontSize": 16,
+        "fontWeight": "400",
+        "includeFontPadding": false,
+        "letterSpacing": 0.5,
+        "lineHeight": 24,
+        "marginTop": 8,
+        "textAlignVertical": "center",
+      }
     }
   >
     Pencil
@@ -102,7 +101,6 @@ exports[`snapshot for inactive Pencil 1`] = `
       "display": "flex",
       "justifyContent": "center",
       "opacity": 1,
-      "width": 60,
     }
   }
 >
@@ -146,17 +144,17 @@ exports[`snapshot for inactive Pencil 1`] = `
   </RNSVGSvgView>
   <Text
     style={
-      Array [
-        Object {
-          "color": "rgb(127, 127, 127)",
-          "fontFamily": "OpenSans",
-          "fontSize": 16,
-          "marginTop": 8,
-        },
-        Object {
-          "color": "rgb(127, 127, 127)",
-        },
-      ]
+      Object {
+        "color": "rgb(127, 127, 127)",
+        "fontFamily": "OpenSans",
+        "fontSize": 16,
+        "fontWeight": "400",
+        "includeFontPadding": false,
+        "letterSpacing": 0.5,
+        "lineHeight": 24,
+        "marginTop": 8,
+        "textAlignVertical": "center",
+      }
     }
   >
     Pencil

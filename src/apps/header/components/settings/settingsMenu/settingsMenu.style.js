@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native'
 
-import { fonts } from '@resources/fonts/font'
-
 export const styles = StyleSheet.create({
     menuContainer: {
         display: 'flex',
@@ -13,11 +11,7 @@ export const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 16,
     },
-    menuText: {
-        fontFamily: fonts.regular,
-        fontSize: 16,
-    },
     spaceBetweenMenuItems: {
-        marginTop: 16,
+        marginTop: 8,
     },
 })

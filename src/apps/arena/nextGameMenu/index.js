@@ -1,7 +1,7 @@
 import React, {
     useCallback, useRef, useEffect, useState,
 } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -12,9 +12,12 @@ import _noop from '@lodash/noop'
 import { RestartIcon } from '@resources/svgIcons/restart'
 import { PersonalizePuzzleIcon } from '@resources/svgIcons/personalizePuzzle'
 import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '@resources/constants'
-import { fonts } from '@resources/fonts/font'
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '@resources/stringLiterals'
+
+import Text from '@ui/atoms/Text'
+
 import { consoleLog } from '@utils/util'
+
 import { useScreenName } from '../../../utils/customHooks'
 
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
@@ -41,10 +44,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     levelText: {
-        fontSize: 16,
-        color: 'black',
         marginLeft: 16,
-        fontFamily: fonts.regular,
     },
 })
 

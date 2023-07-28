@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import { useSelector } from 'react-redux'
 
@@ -8,8 +8,7 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { fonts } from '@resources/fonts/font'
-
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { Touchable } from '../../components/Touchable'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
@@ -38,10 +37,6 @@ const styles = StyleSheet.create({
         width: 3,
         height: 10,
         backgroundColor: 'rgba(0, 0, 0, .5)',
-    },
-    textStyles: {
-        fontSize: 14,
-        fontFamily: fonts.regular,
     },
     timeCounter: {
         display: 'flex',
@@ -81,9 +76,9 @@ const Timer_ = ({ onClick, time }) => {
             addHitSlop
             testID={TIMER_TEST_ID}
         >
-            <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.hours)}:`}</Text>
-            <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.minutes)}:`}</Text>
-            <Text style={styles.textStyles}>{`${addLeadingZeroIfEligible(time.seconds)}`}</Text>
+            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${addLeadingZeroIfEligible(time.hours)}:`}</Text>
+            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${addLeadingZeroIfEligible(time.minutes)}:`}</Text>
+            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${addLeadingZeroIfEligible(time.seconds)}`}</Text>
             {renderTimerStateIcon()}
         </Touchable>
     )

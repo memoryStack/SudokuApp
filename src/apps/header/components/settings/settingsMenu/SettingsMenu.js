@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -10,8 +10,10 @@ import _noop from '@lodash/noop'
 import withActions from '@utils/hocs/withActions'
 
 import { useNavigation } from '@react-navigation/native'
-import { useModal } from '../../../../arena/hooks/useModal'
 
+import Text from '@ui/atoms/Text'
+
+import { useModal } from '../../../../arena/hooks/useModal'
 import { Touchable } from '../../../../components/Touchable'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './settingsMenu.actionHandlers'
@@ -40,7 +42,7 @@ export const SettingsMenu_ = ({ onAction, open, onClose }) => {
                     onPress={() => onItemPress(item)}
                     avoidDefaultStyles
                 >
-                    <Text style={[styles.menuText, index ? styles.spaceBetweenMenuItems : null]}>
+                    <Text style={index ? styles.spaceBetweenMenuItems : null}>
                         {item.label}
                     </Text>
                 </Touchable>

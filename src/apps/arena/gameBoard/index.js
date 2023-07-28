@@ -2,7 +2,7 @@ import React, {
     useMemo, useRef,
 } from 'react'
 
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -12,6 +12,8 @@ import _noop from '@lodash/noop'
 import _isEmpty from '@lodash/isEmpty'
 
 import { GAME_STATE } from '@resources/constants'
+
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import {
@@ -43,7 +45,6 @@ for (let i = 0; i < 10; i++) {
 }
 
 const Board_ = ({
-
     gameState,
     mainNumbers,
     notes,
@@ -209,7 +210,8 @@ const Board_ = ({
     const renderAxisText = label => (
         <Text
             key={label}
-            style={[showSmartHint ? styles.smartHintAxisText : styles.axisText, axisTextStyles]}
+            style={[showSmartHint ? styles.smartHintAxisText : null, axisTextStyles]}
+            type={TEXT_VARIATIONS.BODY_MEDIUM}
         >
             {label}
         </Text>

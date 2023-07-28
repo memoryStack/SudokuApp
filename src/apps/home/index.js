@@ -3,14 +3,15 @@ import React, {
 } from 'react'
 
 import {
-    View, Linking, Image, Text,
+    View, Linking, Image,
 } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import { useStyles } from '@utils/customHooks/useStyles'
-
 import Button from '@ui/molecules/Button'
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+
+import { useStyles } from '@utils/customHooks/useStyles'
 import { consoleLog } from '@utils/util'
 import { useTranslation } from '../../i18n/hooks/useTranslation'
 
@@ -80,7 +81,11 @@ const Home_ = ({ navigation }) => {
 
     const renderSudokuText = () => {
         const renderLetter = (letter, index) => (
-            <Text style={styles.sudokuLetterText} key={`${index}`}>
+            <Text
+                key={`${index}`}
+                style={styles.sudokuLetterText}
+                type={TEXT_VARIATIONS.HEADING_MEDIUM}
+            >
                 {letter}
             </Text>
         )
