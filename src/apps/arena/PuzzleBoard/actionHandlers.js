@@ -1,6 +1,5 @@
 import { GAME_STATE } from '@resources/constants'
 import { updateSelectedCell, resetStoreState } from '../store/actions/board.actions'
-import { isGameActive } from '../store/utils'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { updateGameState } from '../store/actions/gameState.actions'
 import { BOARD_CELLS_COUNT } from '../constants'
@@ -8,7 +7,6 @@ import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../utils/classes/boardIterators'
 
 const handleCellPress = ({ params: cell }) => {
-    if (!isGameActive()) return
     updateSelectedCell(cell)
 }
 

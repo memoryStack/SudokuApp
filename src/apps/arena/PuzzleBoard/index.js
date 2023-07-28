@@ -20,6 +20,7 @@ import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { GameState } from '../utils/classes/gameState'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const isHintTryOut = useIsHintTryOutStep()
@@ -42,15 +43,15 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     }, [onAction, mainNumbers])
 
     const onCellClick = useCallback(cell => {
-        const isCellClickable = !isHintTryOut || (isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell))
-        if (!isCellClickable) {
-            // TODO: snow a snackBar to communicate the user about what is happening
-            return
+        const isCellClickable = () => {
+            if (showSmartHint) return isHintTryOut ? isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell) : false
+            return new GameState(gameState).isGameActive()
         }
+        if (!isCellClickable()) return
 
         const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
         handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction, smartHintTryOutOnAction, isHintTryOut])
+    }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut])
 
     const dataToCache = {
         mainNumbers,
