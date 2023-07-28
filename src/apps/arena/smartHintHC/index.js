@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 
 import {
-    View, Text, ScrollView, useWindowDimensions,
+    View, ScrollView, useWindowDimensions,
 } from 'react-native'
 
 import { useSelector } from 'react-redux'
@@ -13,7 +13,10 @@ import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 
 import { CloseIcon } from '@resources/svgIcons/close'
+
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 
 import withActions from '../../../utils/hocs/withActions'
@@ -115,7 +118,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const renderHeader = () => (
         <View style={styles.headerContainer}>
             <View style={styles.hintTitleContainer}>
-                <Text style={styles.hintTitle}>{title}</Text>
+                <Text style={styles.hintTitle} type={TEXT_VARIATIONS.TITLE_LARGE}>{title}</Text>
                 {totalHintsCount > 1 ? (
                     <Text
                         style={styles.hintsCountText}

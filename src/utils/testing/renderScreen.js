@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Text } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -10,6 +9,7 @@ import _noop from '@lodash/noop'
 
 import { consoleLog } from '@utils/util'
 import { addListener, emit, removeListener } from '@utils/GlobalEventBus'
+import Text from '@ui/atoms/Text'
 import { NavigationProvider, navigationRef } from '../../navigation/navigator'
 
 import { ROUTES } from '../../navigation/route.constants'

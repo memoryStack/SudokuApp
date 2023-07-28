@@ -1,15 +1,15 @@
 import React, {
     useRef, useCallback, useEffect, useState,
 } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import _isEmpty from '@lodash/isEmpty'
 
-import { fonts } from '@resources/fonts/font'
 import { CloseIcon } from '@resources/svgIcons/close'
 
 import { addListener, removeListener } from '@utils/GlobalEventBus'
 
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { EVENTS } from '../../constants/events'
 
 import { Touchable } from './Touchable'
@@ -27,10 +27,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     msgTextStyle: {
-        fontSize: 20,
-        textAlign: 'center',
-        color: 'white', // need designer's input
-        fontFamily: fonts.regular,
+        color: 'white',
     },
     closeButton: {
         position: 'absolute',
@@ -91,7 +88,7 @@ const SnackBar_ = () => {
 
     return (
         <View style={[styles.container, snackBar.customStyles]}>
-            <Text style={styles.msgTextStyle}>{snackBar.msg}</Text>
+            <Text style={styles.msgTextStyle} type={TEXT_VARIATIONS.BODY_LARGE}>{snackBar.msg}</Text>
             <Touchable
                 style={styles.closeButton}
                 activeOpacity={1}

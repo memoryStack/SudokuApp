@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native'
-import { fonts } from '@resources/fonts/font'
 
 const BORDER_THICKNESS = 2
 export const styles = StyleSheet.create({
@@ -32,8 +31,6 @@ export const styles = StyleSheet.create({
     },
     menuItemText: {
         color: 'rgb(49, 90, 163)',
-        fontSize: 20,
-        fontFamily: fonts.regular,
     },
     disabledMenuItemText: {
         color: 'rgb(246, 246, 246)',

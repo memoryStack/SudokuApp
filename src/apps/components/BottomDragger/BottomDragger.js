@@ -2,13 +2,16 @@ import React, {
     useState, useEffect, useImperativeHandle, useCallback,
 } from 'react'
 import {
-    View, Text, Animated, PanResponder, useWindowDimensions, BackHandler,
+    View, Animated, PanResponder, useWindowDimensions, BackHandler,
 } from 'react-native'
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
+import Text from '@ui/atoms/Text'
+
 import { useStyles } from '@utils/customHooks/useStyles'
+
 import { EVENTS } from '../../../constants/events'
 
 import { Touchable, TouchableTypes } from '../Touchable'

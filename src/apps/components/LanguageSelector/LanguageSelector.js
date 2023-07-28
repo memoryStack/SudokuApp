@@ -1,12 +1,14 @@
 import React, { memo, useState } from 'react'
 
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
 import Radio from '@ui/atoms/RadioButton'
+import Text from '@ui/atoms/Text'
+
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 
 import { useTranslation } from '../../../i18n/hooks/useTranslation'

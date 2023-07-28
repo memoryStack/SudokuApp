@@ -1,29 +1,25 @@
 import { StyleSheet } from 'react-native'
-import { fonts } from '@resources/fonts/font'
 
 const FOOTER_HEIGHT = 24
 export const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 12,
+        marginBottom: 8,
     },
     hintTitleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     hintTitle: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        fontFamily: fonts.regular,
+        fontWeight: '500',
     },
     bodyContainer: {
         flex: 1,
         width: '100%',
     },
     hintLogicText: {
-        fontSize: 16,
-        fontFamily: fonts.regular,
+        lineHeight: 20,
     },
     hintsCountText: { marginLeft: 8, fontSize: 20 },
     footerContainer: {
@@ -36,8 +32,9 @@ export const styles = StyleSheet.create({
     },
     footerButtonText: { color: '#4088da' },
     tryOutResult: {
-        marginTop: 12,
+        marginTop: 8,
         marginBottom: 4,
+        lineHeight: 18,
     },
     tryOutDefaultResult: {
         color: 'black',
@@ -56,5 +53,6 @@ export const styles = StyleSheet.create({
 export const getContainerStyles = windowHeight => ({
     width: '100%',
     padding: 16,
+    paddingBottom: 8,
     height: windowHeight / 4 + FOOTER_HEIGHT,
 })

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import { useSelector } from 'react-redux'
 
@@ -9,10 +9,10 @@ import PropTypes from 'prop-types'
 import _noop from '@lodash/noop'
 
 import { NEW_GAME } from '@resources/stringLiterals'
-import { fonts } from '@resources/fonts/font'
 
 import Button from '@ui/molecules/Button'
 
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { addLeadingZeroIfEligible } from '../utils/util'
 import { GameState } from '../utils/classes/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
@@ -28,10 +28,8 @@ const styles = StyleSheet.create({
         width: '70%',
     },
     congratsText: {
-        fontSize: 30,
-        fontWeight: 'bold',
         marginVertical: 8,
-        fontFamily: fonts.regular,
+        fontWeight: '500',
     },
     statsContainer: {
         marginTop: 20,
@@ -42,10 +40,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginVertical: 2,
-    },
-    statText: {
-        fontSize: 16,
-        fontFamily: fonts.regular,
     },
     gameUnsolvedMsg: {
         textAlign: 'center',
@@ -63,9 +57,9 @@ const getTimeView = (timeTaken = {}) => {
     const { hours = 0, minutes = 0, seconds = 0 } = timeTaken
     return (
         <View style={styles.timeStatContainer}>
-            {hours ? <Text style={styles.statText}>{hours}</Text> : null}
-            <Text style={styles.statText}>{`${addLeadingZeroIfEligible(minutes)}:`}</Text>
-            <Text style={styles.statText}>{addLeadingZeroIfEligible(seconds)}</Text>
+            {hours ? <Text>{hours}</Text> : null}
+            <Text>{`${addLeadingZeroIfEligible(minutes)}:`}</Text>
+            <Text>{addLeadingZeroIfEligible(seconds)}</Text>
         </View>
     )
 }
@@ -87,23 +81,23 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
                     like "m"(web) and "M"(App) for drawings
                 */}
                 {/* <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} /> */}
-                <Text style={styles.congratsText}>Congratulations!</Text>
+                <Text style={styles.congratsText} type={TEXT_VARIATIONS.HEADING_SMALL}>Congratulations!</Text>
                 <View style={styles.statsContainer}>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>Difficulty</Text>
-                        <Text style={styles.statText}>{difficultyLevel}</Text>
+                        <Text>Difficulty</Text>
+                        <Text>{difficultyLevel}</Text>
                     </View>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>Time</Text>
+                        <Text>Time</Text>
                         {getTimeView(time)}
                     </View>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>Mistakes</Text>
-                        <Text style={styles.statText}>{mistakes}</Text>
+                        <Text>Mistakes</Text>
+                        <Text>{mistakes}</Text>
                     </View>
                     <View style={styles.statContainer}>
-                        <Text style={styles.statText}>Hints Used</Text>
-                        <Text style={styles.statText}>{hintsUsed}</Text>
+                        <Text>Hints Used</Text>
+                        <Text>{hintsUsed}</Text>
                     </View>
                 </View>
             </>

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -8,7 +8,8 @@ import _noop from '@lodash/noop'
 import _get from '@lodash/get'
 
 import { CloseIcon } from '@resources/svgIcons/close'
-import { fonts } from '@resources/fonts/font'
+
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { Touchable } from '../../../components/Touchable'
 
@@ -43,7 +44,7 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
-    const styles = useMemo(() => getStyles(CELL_HEIGHT), [CELL_HEIGHT])
+    const styles = useMemo(() => getStyles(), [])
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
@@ -73,9 +74,10 @@ const Cell_ = ({
                         <Text
                             style={[
                                 styles.noteText,
-                                noteFontColor ? { color: noteFontColor, fontFamily: fonts.bold } : null,
+                                noteFontColor ? { color: noteFontColor, fontWeight: '500' } : null,
                             ]}
                             testID={CELL_NOTE_TEST_ID}
+                            type={TEXT_VARIATIONS.BODY_SMALL}
                         >
                             {show ? `${noteValue}` : ''}
                         </Text>
@@ -100,10 +102,12 @@ const Cell_ = ({
     )
 
     const renderCellMainValue = () => (
-        <Text style={[styles.mainNumberText, mainValueFontColor]} testID={CELL_MAIN_VALUE_TEST_ID}>
-            {' '}
-            {`${cellMainValue}`}
-            {' '}
+        <Text
+            style={mainValueFontColor}
+            testID={CELL_MAIN_VALUE_TEST_ID}
+            type={TEXT_VARIATIONS.HEADING_LARGE}
+        >
+            {cellMainValue}
         </Text>
     )
 

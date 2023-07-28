@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react'
 
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -9,6 +9,8 @@ import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 
 import { Platform } from '@utils/classes/platform'
+
+import Text from '@ui/atoms/Text'
 
 import withActions from '../../../utils/hocs/withActions'
 
@@ -64,7 +66,9 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
                     disabled={isNotAvailable}
                     testID={HINT_MENU_ITEM_TEST_ID}
                 >
-                    <Text style={[styles.menuItemText, isNotAvailable ? styles.disabledMenuItemText : null]}>{label}</Text>
+                    <Text style={[styles.menuItemText, isNotAvailable ? styles.disabledMenuItemText : null]}>
+                        {label}
+                    </Text>
                 </Touchable>
             </View>
         )
