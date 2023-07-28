@@ -1,10 +1,9 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
-
-import { isCellEmpty } from '../../../util'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
@@ -62,7 +61,7 @@ const getCellsWithNoCandidates = focusedCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
     return focusedCells.filter(
-        cell => isCellEmpty(cell, tryOutMainNumbers)
+        cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
             && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, cell) === 0,
 
     )

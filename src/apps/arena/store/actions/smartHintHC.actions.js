@@ -15,7 +15,6 @@ import {
     areSameCells,
     isMainNumberPresentInAnyHouseOfCell,
     getCellAxesValues,
-    isCellEmpty,
 } from '../../utils/util'
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getNotesInfo } from '../selectors/board.selectors'
@@ -110,7 +109,7 @@ const isValidInputNumberClick = number => {
     const selectedCell = getTryOutSelectedCell(getStoreState())
     const mainNumbers = getTryOutMainNumbers(getStoreState())
     const notes = getTryOutNotes(getStoreState())
-    return isCellEmpty(selectedCell, mainNumbers)
+    return !MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)
         && NotesRecord.isNotePresentInCell(notes, number, selectedCell)
 }
 
@@ -187,7 +186,7 @@ const getNotesToEnterHostCells = focusedCells => {
                 notes: NotesRecord.getCellVisibleNotesList(actualNotesInfo, cell).filter(note => shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)),
             })
         } else if (
-            isCellEmpty(cell, tryOutMainNumbers)
+            !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
             && shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)
         ) {
             result.push({

@@ -1,16 +1,18 @@
 import { getStoreState } from '../../../redux/dispatch.helpers'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { getMainNumbers } from '../store/selectors/board.selectors'
 import {
     getTryOutMainNumbers,
     getTryOutClickableCells,
 } from '../store/selectors/smartHintHC.selectors'
-import { isCellEmpty, isCellExists } from '../utils/util'
+import { isCellExists } from '../utils/util'
 
 // TODO: merge this with "filterFilledCellsInTryOut" or "noInputInTryOut"
 export const cellHasTryOutInput = cell => {
     const actualMainNumbers = getMainNumbers(getStoreState())
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return isCellEmpty(cell, actualMainNumbers) && !isCellEmpty(cell, tryOutMainNumbers)
+    return !MainNumbersRecord.isCellFilled(actualMainNumbers, cell)
+        && MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
 }
 
 export const isCellTryOutClickable = cell => {

@@ -6,6 +6,7 @@ import _isNull from '@lodash/isNull'
 
 import { N_CHOOSE_K } from '@resources/constants'
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { inRange } from '../../../../../utils/util'
 
 import { HOUSES_COUNT } from '../../../constants'
@@ -17,7 +18,6 @@ import {
     areSameColCells,
     areSameBlockCells,
     getBlockAndBoxNum,
-    isCellEmpty,
     isCellExists,
     areSameCellsSets,
     getUniqueNotesFromCells,
@@ -34,7 +34,7 @@ import {
 } from './nakedGroup.constants'
 
 export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => _filter(getHouseCells(house), cell => {
-    if (!isCellEmpty(cell, mainNumbers)) return false
+    if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return false
 
     return inRange(NotesRecord.getCellVisibleNotesCount(notesData, cell), {
         start: VALID_CELL_MINIMUM_NOTES_COUNT,

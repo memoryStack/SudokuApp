@@ -5,13 +5,13 @@ import _find from '@lodash/find'
 import { N_CHOOSE_K } from '@resources/constants'
 import { consoleLog, sortNumbersArray } from '@utils/util'
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { HOUSES_COUNT } from '../../../constants'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import {
     getCellHousesInfo,
     getCellHouseForHouseType,
-    isCellEmpty,
     getPairCellsCommonHouses,
     areSameCellsSets,
     areCommonHouseCells,
@@ -42,7 +42,7 @@ export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
 
     const result = []
     BoardIterators.forBoardEachCell(cell => {
-        if (!isCellEmpty(cell, mainNumbers)) return
+        if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return
         if (isValidYWingCell(cell, userInputNotes, possibleNotes)) {
             result.push({ cell, notes: NotesRecord.getCellVisibleNotesList(userInputNotes, cell) })
         }

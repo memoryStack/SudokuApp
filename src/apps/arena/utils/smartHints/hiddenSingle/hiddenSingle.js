@@ -1,7 +1,6 @@
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { CELLS_IN_HOUSE } from '../../../constants'
-
-import { isCellEmpty } from '../../util'
 
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
@@ -50,7 +49,8 @@ export const getHiddenSingleRawHints = (mainNumbers, notesData, maxHintsThreshol
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const cell = { row, col }
-            const skipCheckingHiddenSingle = !isCellEmpty(cell, mainNumbers) || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
+            const skipCheckingHiddenSingle = MainNumbersRecord.isCellFilled(mainNumbers, cell)
+                || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
             if (skipCheckingHiddenSingle) continue
 
             const { present, type, mainNumber } = getCellHiddenSingle(cell, notesData)

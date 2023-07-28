@@ -4,6 +4,7 @@ import _every from '@lodash/every'
 import _some from '@lodash/some'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { inRange } from '../../../../../utils/util'
 
 import { NUMBERS_IN_HOUSE } from '../../../constants'
@@ -13,7 +14,6 @@ import {
     areSameBlockCells,
     areSameColCells,
     areSameRowCells,
-    isCellEmpty,
     getBlockAndBoxNum,
 } from '../../util'
 
@@ -154,7 +154,7 @@ export const getXWingType = xWing => {
     return XWING_TYPES.INVALID
 }
 
-const getEmptyCellsInHouse = (house, mainNumbers) => getHouseCells(house).filter(cell => isCellEmpty(cell, mainNumbers))
+const getEmptyCellsInHouse = (house, mainNumbers) => getHouseCells(house).filter(cell => !MainNumbersRecord.isCellFilled(mainNumbers, cell))
 
 // we can use this func for our purpose below
 const getAllCandidatesOccurencesInHouse = (house, notesData, mainNumbers) => {

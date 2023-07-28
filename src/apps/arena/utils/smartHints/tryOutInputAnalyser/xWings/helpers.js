@@ -2,12 +2,13 @@ import _isEmpty from '@lodash/isEmpty'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getMainNumbers } from '../../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { getCellHouseForHouseType, isCellEmpty } from '../../../util'
+import { getCellHouseForHouseType } from '../../../util'
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
@@ -92,7 +93,7 @@ const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
     const notes = getTryOutNotes(getStoreState())
     // handles sashimi finned x-wing as well
     return xWingLegs.find(({ cells: legXWingCells }) => legXWingCells.every(xWingCell => (
-        (isCellEmpty(xWingCell, tryOutMainNumbers) || !isCellEmpty(xWingCell, mainNumbers))
+        (!MainNumbersRecord.isCellFilled(tryOutMainNumbers, xWingCell) || MainNumbersRecord.isCellFilled(mainNumbers, xWingCell))
         && !NotesRecord.isNotePresentInCell(notes, candidate, xWingCell)
     )))
 }

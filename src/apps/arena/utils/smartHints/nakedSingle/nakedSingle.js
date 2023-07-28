@@ -1,12 +1,11 @@
 import _filter from '@lodash/filter'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { CELLS_IN_HOUSE } from '../../../constants'
 
 import { getHouseCells } from '../../houseCells'
-import {
-    isCellEmpty, getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo,
-} from '../../util'
+import { getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from '../../util'
 
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
@@ -29,7 +28,7 @@ const getNakedSingleType = (cell, mainNumbers) => {
 }
 
 const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
-    const emptyCellsInHouse = _filter(getHouseCells(house), cell => isCellEmpty(cell, mainNumbers))
+    const emptyCellsInHouse = _filter(getHouseCells(house), cell => !MainNumbersRecord.isCellFilled(mainNumbers, cell))
     return emptyCellsInHouse.length === 1
 }
 
@@ -40,7 +39,7 @@ export const getNakedSingleRawHints = (mainNumbers, notes, maxHintsThreshold) =>
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
-            if (!isCellEmpty({ row, col }, mainNumbers)) continue
+            if (MainNumbersRecord.isCellFilled(mainNumbers, { row, col })) continue
 
             const cell = { row, col }
             // TODO: change "mainNumber" field name. it doesn't feel right.

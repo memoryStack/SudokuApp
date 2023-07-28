@@ -11,7 +11,7 @@ import {
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
-    isCellEmpty, areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues, getBlockStartCell,
+    areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues, getBlockStartCell,
 } from '../../../util'
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult } from '../../util'
 
@@ -54,7 +54,7 @@ const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, nei
     const getBlockEmptyCellsCountInRow = () => {
         let result = 0
         for (let i = 0; i < 3; i++) {
-            if (isCellEmpty({ row: firstCell.row, col: firstCell.col + i }, mainNumbers)) result++
+            if (!MainNumbersRecord.isCellFilled(mainNumbers, { row: firstCell.row, col: firstCell.col + i })) result++
         }
         return result
     }
@@ -82,7 +82,7 @@ const getWinnerInstanceInfoInCol = (firstCell, winnerCandidate, mainNumbers, nei
     const getBlockEmptyCellsCountInCol = () => {
         let result = 0
         for (let i = 0; i < 3; i++) {
-            if (isCellEmpty({ row: firstCell.row + i, col: firstCell.col }, mainNumbers)) result++
+            if (!MainNumbersRecord.isCellFilled(mainNumbers, { row: firstCell.row + i, col: firstCell.col })) result++
         }
         return result
     }
@@ -103,7 +103,7 @@ const getMustHighlightableNeighbourRows = (neighbourRows, hostCell, mainNumbers,
     const result = {}
     Object.keys(neighbourRows).forEach(rowKey => {
         const rowNum = parseInt(rowKey, 10)
-        if (isCellEmpty({ row: rowNum, col: hostCell.col }, mainNumbers)) {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, { row: rowNum, col: hostCell.col })) {
             const { col: instanceColumn } = neighbourRows[rowKey]
             const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             setCellDataInHintResult({ row: rowNum, col: instanceColumn }, cellHighlightData, cellsToFocusData)
@@ -117,7 +117,7 @@ const getMustHighlightableNeighbourCols = (neighbourCols, hostCell, mainNumbers,
     const result = {}
     Object.keys(neighbourCols).forEach(colKey => {
         const colNum = parseInt(colKey, 10)
-        if (isCellEmpty({ row: hostCell.row, col: colNum }, mainNumbers)) {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, { row: hostCell.row, col: colNum })) {
             const { row: instanceRow } = neighbourCols[colKey]
             const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             setCellDataInHintResult({ row: instanceRow, col: colNum }, cellHighlightData, cellsToFocusData)
@@ -186,7 +186,7 @@ const getHiddenSingleInBlockData = (hostCell, mainNumbers) => {
     for (let cellNo = 0; cellNo < CELLS_IN_HOUSE; cellNo++) {
         const { row, col } = getRowAndCol(hostBlockNum, cellNo)
 
-        if (!isCellEmpty({ row, col }, mainNumbers)) {
+        if (MainNumbersRecord.isCellFilled(mainNumbers, { row, col })) {
             const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
             setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
             continue
@@ -239,7 +239,7 @@ const shouldHighlightWinnerCandidateInstanceInBlock = (hostCell, blockNum, singl
 
     const hostCellsCountInBlock = 3
     for (let i = 0; i < hostCellsCountInBlock; i++) {
-        if (isCellEmpty(hostHouseCellInBlock, mainNumbers)) return true
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, hostHouseCellInBlock)) return true
         hostHouseCellInBlock.row += cellIncrementer.row
         hostHouseCellInBlock.col += cellIncrementer.col
     }

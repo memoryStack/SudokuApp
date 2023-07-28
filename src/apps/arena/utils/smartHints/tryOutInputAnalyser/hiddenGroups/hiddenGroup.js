@@ -5,7 +5,7 @@ import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { filterEmptyCells, isCellEmpty } from '../../../util'
+import { filterEmptyCells } from '../../../util'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
@@ -44,7 +44,7 @@ const getNoInputResult = () => ({
 
 const removableGroupCandidatesFilledHostCells = removableGroupCandidatesHostCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return removableGroupCandidatesHostCells.filter(cell => !isCellEmpty(cell, tryOutMainNumbers))
+    return removableGroupCandidatesHostCells.filter(cell => MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 }
 
 const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse) => {
@@ -78,7 +78,7 @@ const getNumbersFromCellsWithNumbers = cellsWithNumbers => cellsWithNumbers.map(
 const someGroupCellWronglyFilled = (groupCells, groupCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     return groupCells.some(cell => {
-        if (isCellEmpty(cell, tryOutMainNumbers)) return false
+        if (!MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)) return false
         const cellValue = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell)
         return !groupCandidates.includes(cellValue)
     })

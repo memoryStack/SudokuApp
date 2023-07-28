@@ -1,7 +1,8 @@
 import { N_CHOOSE_K } from '@resources/constants'
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { GROUPS, HOUSE_TYPE } from '../constants'
-import { areSameCells, isCellEmpty, isCellExists } from '../../util'
+import { areSameCells, isCellExists } from '../../util'
 import { getHouseCells } from '../../houseCells'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
@@ -16,7 +17,7 @@ export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCo
     const houseCells = getHouseCells(house)
     const candidatesHostCells = {}
     houseCells.forEach(cell => {
-        if (isCellEmpty(cell, mainNumbers)) {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
             NotesRecord.getCellVisibleNotesList(notesData, cell)
                 .forEach(note => {
                     if (!candidatesHostCells[note]) candidatesHostCells[note] = []

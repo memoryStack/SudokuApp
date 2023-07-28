@@ -4,11 +4,11 @@ import _isEqual from '@lodash/isEqual'
 import { N_CHOOSE_K } from '@resources/constants'
 import { sortNumbersArray } from '@utils/util'
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
     getCellAxesValues,
-    isCellEmpty,
     isCellExists,
 } from '../../../util'
 import { TRY_OUT_RESULT_STATES } from '../constants'
@@ -52,7 +52,7 @@ export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, grou
 
 const allGroupCellsEmpty = groupCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return groupCells.every(cell => isCellEmpty(cell, tryOutMainNumbers))
+    return groupCells.every(cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 }
 
 // two cells have naked single in them because of that third one

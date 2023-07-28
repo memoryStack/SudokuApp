@@ -5,13 +5,13 @@ import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbe
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selectors'
-import { isCellEmpty } from '../../util'
 
 export const filterFilledCellsInTryOut = cells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
 
-    return _filter(cells, cell => isCellEmpty(cell, mainNumbers) && !isCellEmpty(cell, tryOutMainNumbers))
+    return _filter(cells, cell => !MainNumbersRecord.isCellFilled(mainNumbers, cell)
+        && MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 }
 
 export const noInputInTryOut = focusedCells => _isEmpty(filterFilledCellsInTryOut(focusedCells))
@@ -21,7 +21,7 @@ export const noInputInTryOut = focusedCells => _isEmpty(filterFilledCellsInTryOu
 export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) => {
     const result = []
     groupCells.forEach(cell => {
-        if (!isCellEmpty(cell, tryOutMainNumbers)) {
+        if (MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)) {
             result.push(MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell))
         }
     })

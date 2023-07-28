@@ -6,6 +6,7 @@ import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { sortNumbersArray } from '../../../../../../utils/util'
 
 import {
@@ -18,7 +19,6 @@ import {
     areSameRowCells,
     getBlockAndBoxNum,
     getCellAxesValues,
-    isCellEmpty,
     isCellExists,
 } from '../../../util'
 
@@ -112,7 +112,7 @@ const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
 }
 
 const shouldHighlightSecondaryHouseCells = (houseCells, groupHostCells, groupCandidates, mainNumbers, notesData) => houseCells.some(cell => {
-    if (!isCellEmpty(cell, mainNumbers)) return false
+    if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return false
     if (isCellExists(cell, groupHostCells)) return false
     return groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
 })
@@ -129,7 +129,7 @@ const highlightSecondaryHouseCells = (
         const isHostCell = isCellExists(cell, groupHostCells)
         if (!isHostCell) {
             const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-            if (isCellEmpty(cell, mainNumbers)) {
+            if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
                 const isPrimaryHouse = false
                 cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
                     isPrimaryHouse,

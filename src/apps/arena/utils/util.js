@@ -48,7 +48,7 @@ const getSolutionsCountForPuzzleType = (mainNumbers, { row = 0, col = 0 } = {}) 
     const isRowComplete = col === CELLS_IN_HOUSE
     if (isRowComplete) return getSolutionsCountForPuzzleType(mainNumbers, { row: row + 1, col: 0 })
 
-    if (!isCellEmpty({ row, col }, mainNumbers)) return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
+    if (MainNumbersRecord.isCellFilled(mainNumbers, { row, col })) return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
 
     let result = 0
     for (let num = 1; num <= NUMBERS_IN_HOUSE; num++) {
@@ -86,8 +86,6 @@ export const areSameBlockCells = cells => areAllLiteralValuesUnique(cells.map(ce
 export const areSameRowCells = cells => areUniqueValuesByProperty(cells, 'row')
 
 export const areSameColCells = cells => areUniqueValuesByProperty(cells, 'col')
-
-export const isCellEmpty = (cell, mainNumbers) => !MainNumbersRecord.isCellFilled(mainNumbers, cell)
 
 export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
@@ -253,7 +251,7 @@ export const getHousesCellsSharedByCells = cells => {
     return result
 }
 
-export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => isCellEmpty(cell, mainNumbers))
+export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => !MainNumbersRecord.isCellFilled(mainNumbers, cell))
 
 export const isGenerateNewPuzzleItem = item => _includes(_values(LEVEL_DIFFICULTIES), item)
 

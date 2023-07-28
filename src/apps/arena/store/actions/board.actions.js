@@ -9,7 +9,6 @@ import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helper
 import {
     isMainNumberPresentInAnyHouseOfCell,
     getCellHousesInfo,
-    isCellEmpty,
 } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import {
@@ -99,7 +98,7 @@ const getNewNotesBunchToShow = () => {
     const notes = getNotesInfo(getStoreState())
 
     BoardIterators.forBoardEachCell(cell => {
-        if (isCellEmpty(cell, mainNumbers)) {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
             _filter(
                 NotesRecord.getCellNotes(notes, cell),
                 ({ noteValue, show }) => !show && !isMainNumberPresentInAnyHouseOfCell(noteValue, cell, mainNumbers),
@@ -239,7 +238,7 @@ const isMainNumberEligibleToErase = () => {
 const removeCellNotesIfEmptyCell = () => {
     const mainNumbers = getMainNumbers(getStoreState())
     const selectedCell = getSelectedCell(getStoreState())
-    if (isCellEmpty(selectedCell, mainNumbers)) removeCellNotes()
+    if (!MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) removeCellNotes()
 }
 
 export const initPossibleNotes = mainNumbers => {
@@ -259,7 +258,7 @@ export const initPossibleNotes = mainNumbers => {
 
 const getCellAllPossibleNotes = (cell, mainNumbers) => {
     const result = []
-    if (!isCellEmpty(cell, mainNumbers)) return result
+    if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return result
 
     BoardIterators.forCellEachNote(note => {
         if (!isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbers)) result.push({ cell, note })
@@ -348,7 +347,7 @@ export const fillPuzzle = () => {
     const mainNumbers = getMainNumbers(getStoreState())
 
     BoardIterators.forBoardEachCell(cell => {
-        if (isCellEmpty(cell, mainNumbers)) invokeDispatch(setCellMainNumber({ cell, number: MainNumbersRecord.getCellSolutionValue(mainNumbers, cell) }))
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) invokeDispatch(setCellMainNumber({ cell, number: MainNumbersRecord.getCellSolutionValue(mainNumbers, cell) }))
     })
 }
 
