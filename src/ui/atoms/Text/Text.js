@@ -8,17 +8,26 @@ import _get from '@lodash/get'
 import _isArray from '@lodash/isArray'
 
 import { FONT_WEIGHT_VS_FONT_FAMILY, DEFAULT_FONT_WEIGHT, fonts } from '@resources/fonts/font'
+import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
+import { TEXT_VARIATIONS, TEXT_VARIATION_VS_TOKENS_PATH } from './text.constants'
 
-const getStylesObjectFromProps = styleProp => {
-    if (_isArray(styleProp)) return Object.assign({}, ...styleProp)
-    return styleProp
+const getFinalStyles = (styleProp, type, theme) => {
+    const styleFromProps = _isArray(styleProp) ? Object.assign({}, ...styleProp) : styleProp
+
+    return {
+        ..._get(theme, TEXT_VARIATION_VS_TOKENS_PATH[type], {}),
+        ...styleFromProps,
+    }
 }
 
 const Text = ({
     style,
+    type,
     ...rest
 }) => {
-    const styles = getStylesObjectFromProps(style)
+    const theme = useThemeValues()
+
+    const styles = getFinalStyles(style, type, theme)
     const fontWeight = _get(styles, 'fontWeight', DEFAULT_FONT_WEIGHT)
     const stylesWithFont = {
         ...styles,
@@ -43,8 +52,10 @@ Text.propTypes = {
         PropTypes.object,
         PropTypes.array,
     ]),
+    type: PropTypes.oneOf(Object.keys(TEXT_VARIATIONS)),
 }
 
 Text.defaultProps = {
     style: {},
+    type: TEXT_VARIATIONS.BODY_LARGE,
 }
