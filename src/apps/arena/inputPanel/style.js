@@ -25,9 +25,7 @@ export const getStyles = CELL_WIDTH => {
             height: 4,
         },
         textStyle: {
-            fontSize: INPUT_NUMBER_DIMENSION * 0.66, // 66% of the container size
             fontWeight: '500',
-            lineHeight: INPUT_NUMBER_DIMENSION,
         },
         eraser: {
             width: '50%',

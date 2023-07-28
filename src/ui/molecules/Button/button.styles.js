@@ -25,8 +25,10 @@ const getStyles = ({
             borderRadius: _get(theme, ['button', type, 'layout', 'container', 'border-radius']),
             ...getContainerPaddings(buttonConfigs, theme),
         },
-        defaultText: {
+        labelDefaultColor: {
             color: getTextColor(buttonConfigs, theme),
+        },
+        labelDefaultFont: {
             ..._get(theme, ['button', type, 'layout', 'label-text', 'font']),
         },
         icon: { // TODO: how these properties will work with Svg icons. test that

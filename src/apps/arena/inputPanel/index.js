@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import _noop from '@lodash/noop'
 
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
+import { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
@@ -61,6 +62,7 @@ const Inputpanel_ = ({
             onPress={() => onNumberClicked(number)}
             label={number}
             textStyles={styles.textStyle}
+            textType={TEXT_VARIATIONS.DISPLAY_SMALL}
             testID={INPUT_PANEL_ITEM_TEST_ID}
         />
     )
