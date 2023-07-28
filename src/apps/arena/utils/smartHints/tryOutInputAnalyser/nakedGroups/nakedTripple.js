@@ -52,7 +52,7 @@ export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, grou
 
 const allGroupCellsEmpty = groupCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return !groupCells.some(cell => !isCellEmpty(cell, tryOutMainNumbers))
+    return groupCells.every(cell => isCellEmpty(cell, tryOutMainNumbers))
 }
 
 // two cells have naked single in them because of that third one
@@ -76,7 +76,7 @@ const getNakedSinglesInvalidCombination = groupCells => {
 
         // bug in this func.
         // i again wish i had implemented this using TDD
-        const allChosenCellsHaveNakedSingle = !chosenCells.some(cell => !isNakedSinglePresent(NotesRecord.getCellNotes(tryOutNotesInfo, cell)).present)
+        const allChosenCellsHaveNakedSingle = chosenCells.every(cell => isNakedSinglePresent(tryOutNotesInfo, cell).present)
 
         if (allChosenCellsHaveNakedSingle) {
             const chosenCellNotes = chosenCells
