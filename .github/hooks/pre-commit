@@ -60,6 +60,7 @@ if [ $developerStagedFilesCount = 0 ] ; then
 fi
 
 developerStagedFiles=$(git diff --name-only --cached)
+untrackedFiles=$(git ls-files --others --exclude-standard)
 
 git add .
 
@@ -76,6 +77,8 @@ git stash pop || {
 }
 
 git add $developerStagedFiles
+
+git restore --staged $untrackedFiles
 
 npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
 
