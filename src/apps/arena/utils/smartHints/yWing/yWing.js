@@ -1,9 +1,10 @@
 import _isEmpty from '@lodash/isEmpty'
 import _isEqual from '@lodash/isEqual'
 import _find from '@lodash/find'
+import _sortNumbers from '@lodash/sortNumbers'
 
 import { N_CHOOSE_K } from '@resources/constants'
-import { consoleLog, sortNumbersArray } from '@utils/util'
+import { consoleLog } from '@utils/util'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
@@ -78,7 +79,7 @@ export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
     const expectedNotes = pivotNotes
         .concat(firstWingNotes)
         .filter(note => note !== commonNote)
-    return sortNumbersArray(expectedNotes)
+    return _sortNumbers(expectedNotes)
 }
 
 const extractYWingCellsFromYWing = yWing => {

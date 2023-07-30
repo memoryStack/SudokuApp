@@ -5,14 +5,12 @@ import _filter from '@lodash/filter'
 import _includes from '@lodash/includes'
 import _values from '@lodash/values'
 import _unique from '@lodash/unique'
+import _sortNumbers from '@lodash/sortNumbers'
+import _areSameValues from '@lodash/areSameValues'
 
 import { getKey } from '@utils/storage'
 
 import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
-
-import {
-    areAllLiteralValuesUnique, areUniqueValuesByProperty, sortNumbersArray,
-} from '../../../utils/util'
 
 import {
     BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES,
@@ -81,11 +79,11 @@ export const areSameCells = (cellA, cellB) => {
     return _isEqual(cellA, cellB)
 }
 
-export const areSameBlockCells = cells => areAllLiteralValuesUnique(cells.map(cell => getBlockAndBoxNum(cell).blockNum))
+export const areSameBlockCells = cells => _areSameValues(cells.map(cell => getBlockAndBoxNum(cell).blockNum))
 
-export const areSameRowCells = cells => areUniqueValuesByProperty(cells, 'row')
+export const areSameRowCells = cells => _areSameValues(cells, 'row')
 
-export const areSameColCells = cells => areUniqueValuesByProperty(cells, 'col')
+export const areSameColCells = cells => _areSameValues(cells, 'col')
 
 export const isCellExists = (cell, store) => store.some(storedCell => areSameCells(storedCell, cell))
 
@@ -174,7 +172,7 @@ export const getUniqueNotesFromCells = (cells, notesData) => {
         result.push(...NotesRecord.getCellVisibleNotesList(notesData, cell))
     })
 
-    return sortNumbersArray(_unique(result))
+    return _sortNumbers(_unique(result))
 }
 
 export const convertBoardCellToNum = ({ row, col }) => row * HOUSES_COUNT + col

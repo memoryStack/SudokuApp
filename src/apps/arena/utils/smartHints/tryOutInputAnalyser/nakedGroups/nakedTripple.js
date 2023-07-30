@@ -1,8 +1,9 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _isEqual from '@lodash/isEqual'
+import _sortNumbers from '@lodash/sortNumbers'
 
 import { N_CHOOSE_K } from '@resources/constants'
-import { sortNumbersArray } from '@utils/util'
+
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
@@ -84,7 +85,7 @@ const getNakedSinglesInvalidCombination = groupCells => {
 
             const notChosenCell = getNotChosenCell(chosenCells, groupCells)
             const notChosenCellWillNotHaveCandidate = _isEqual(
-                sortNumbersArray(chosenCellNotes),
+                _sortNumbers(chosenCellNotes),
                 NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, notChosenCell),
             )
 

@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
+import _prependZero from '@lodash/prependZero'
 
 import { NEW_GAME } from '@resources/stringLiterals'
 
 import Button from '@ui/molecules/Button'
-
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
-import { addLeadingZeroIfEligible } from '../utils/util'
+
 import { GameState } from '../utils/classes/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
@@ -58,8 +58,8 @@ const getTimeView = (timeTaken = {}) => {
     return (
         <View style={styles.timeStatContainer}>
             {hours ? <Text>{hours}</Text> : null}
-            <Text>{`${addLeadingZeroIfEligible(minutes)}:`}</Text>
-            <Text>{addLeadingZeroIfEligible(seconds)}</Text>
+            <Text>{`${_prependZero(minutes)}:`}</Text>
+            <Text>{_prependZero(seconds)}</Text>
         </View>
     )
 }

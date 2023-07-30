@@ -6,7 +6,6 @@ import { CUSTOMIZED_PUZZLE_LEVEL_TITLE, GAME_STATE, LEVEL_DIFFICULTIES } from '@
 import { getStoragePromise } from '../../../../utils/testing/testingBoilerplate/storage'
 
 import {
-    addLeadingZeroIfEligible,
     shouldSaveDataOnGameStateChange,
     areSameCells,
     areSameBlockCells,
@@ -28,20 +27,6 @@ import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../classes/boardIterators'
 
 jest.mock('@utils/storage')
-
-describe('time component value formatter', () => {
-    test('addLeadingZeroIfEligible test 1', () => {
-        expect(addLeadingZeroIfEligible(0)).toBe('00')
-    })
-
-    test('addLeadingZeroIfEligible test 2', () => {
-        expect(addLeadingZeroIfEligible(11)).toBe('11')
-    })
-
-    test('addLeadingZeroIfEligible test 3', () => {
-        expect(addLeadingZeroIfEligible(1)).toBe('01')
-    })
-})
 
 describe('should cache game data', () => {
     test('shouldSaveDataOnGameStateChange test 1', () => {

@@ -4,11 +4,10 @@ import _forEach from '@lodash/forEach'
 import _isEmpty from '@lodash/isEmpty'
 import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
+import _sortNumbers from '@lodash/sortNumbers'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-
-import { sortNumbersArray } from '../../../../../../utils/util'
 
 import {
     HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR,
@@ -44,7 +43,7 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
         result.push(...cellRemovableNotes)
     })
 
-    return sortNumbersArray(_unique(result))
+    return _sortNumbers(_unique(result))
 }
 
 const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) => {
@@ -156,7 +155,7 @@ const getHintChunks = (houseType, groupCandidates, groupCells) => {
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
     const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notes)
-    return sortNumbersArray([...groupCandidates, ...removableCandidates])
+    return _sortNumbers([...groupCandidates, ...removableCandidates])
 }
 
 const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (

@@ -3,10 +3,9 @@ import _map from '@lodash/map'
 import _forEach from '@lodash/forEach'
 import _every from '@lodash/every'
 import _isNull from '@lodash/isNull'
+import _inRange from '@lodash/inRange'
 
 import { N_CHOOSE_K } from '@resources/constants'
-
-import { inRange } from '../../../../../utils/util'
 
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
@@ -38,7 +37,7 @@ import {
 export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => _filter(getHouseCells(house), cell => {
     if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return false
 
-    return inRange(NotesRecord.getCellVisibleNotesCount(notesData, cell), {
+    return _inRange(NotesRecord.getCellVisibleNotesCount(notesData, cell), {
         start: VALID_CELL_MINIMUM_NOTES_COUNT,
         end: groupCandidatesCount,
     })
@@ -69,7 +68,7 @@ export const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) =
     const candidates = Object.keys(notesInstancesCount)
     return (
         candidates.length === groupCandidatesCount
-        && _every(candidates, candidate => inRange(notesInstancesCount[candidate], {
+        && _every(candidates, candidate => _inRange(notesInstancesCount[candidate], {
             start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
             end: groupCandidatesCount,
         }))
@@ -150,7 +149,7 @@ export const getNakedGroupRawHints = (groupCandidatesCount, notesData, mainNumbe
             const validCells = filterNakedGroupEligibleCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)
 
             // to avoid computing 7C2 and 7C3, because that might be heavy but it's open for research
-            if (!inRange(validCells.length, { start: groupCandidatesCount, end: MAX_VALID_CELLS_COUNT })) continue
+            if (!_inRange(validCells.length, { start: groupCandidatesCount, end: MAX_VALID_CELLS_COUNT })) continue
 
             const possibleSelections = N_CHOOSE_K[validCells.length][groupCandidatesCount]
 

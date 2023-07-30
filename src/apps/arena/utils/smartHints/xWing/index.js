@@ -2,10 +2,10 @@ import _cloneDeep from '@lodash/cloneDeep'
 import _get from '@lodash/get'
 import _every from '@lodash/every'
 import _some from '@lodash/some'
+import _inRange from '@lodash/inRange'
 
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
-import { inRange } from '../../../../../utils/util'
 
 import { NUMBERS_IN_HOUSE } from '../../../constants'
 
@@ -180,7 +180,7 @@ const getHostCellsGroupByBlock = hostCells => {
 }
 
 export const isFinnedLeg = hostCells => {
-    const candidateOccurencesInValidRange = inRange(hostCells.length, {
+    const candidateOccurencesInValidRange = _inRange(hostCells.length, {
         start: CANDIDATE_MIN_OCCURENCES_IN_FINNED_LEG,
         end: CANDIDATE_MAX_OCCURENCES_IN_FINNED_LEG,
     })
