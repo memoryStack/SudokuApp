@@ -3,17 +3,6 @@ import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
 
 export const getStyles = ({ isIconPresent, windowWidth }, theme) => StyleSheet.create({
-    overlay: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: _get(theme, 'dialog.scrim.color'),
-    },
     container: {
         backgroundColor: _get(theme, 'dialog.container.color'),
         borderRadius: _get(theme, 'dialog.container.layout.shape.borderRadius'),

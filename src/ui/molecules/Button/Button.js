@@ -6,8 +6,9 @@ import _noop from '@lodash/noop'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
-import Text from '@ui/atoms/Text'
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { Touchable } from '../../../apps/components/Touchable'
 
 import { getStyles } from './button.styles'
@@ -25,6 +26,8 @@ const Button_ = ({
     textType,
     ...rest
 }) => {
+    const { t } = useTranslation()
+
     const styles = useStyles(getStyles, {
         type,
         state,
@@ -43,7 +46,7 @@ const Button_ = ({
 
     const renderLabel = () => (
         <Text style={getTextFinalStyles()} type={textType}>
-            {label}
+            {t(label)}
         </Text>
     )
 
@@ -73,6 +76,7 @@ Button_.propTypes = {
     avoidDefaultContainerStyles: PropTypes.bool,
     type: PropTypes.oneOf(Object.values(BUTTON_TYPES)),
     state: PropTypes.oneOf(Object.values(BUTTON_STATES)),
+    textType: PropTypes.oneOf(Object.keys(TEXT_VARIATIONS)),
 }
 
 Button_.defaultProps = {
@@ -84,4 +88,5 @@ Button_.defaultProps = {
     avoidDefaultContainerStyles: false,
     type: BUTTON_TYPES.FILLED,
     state: BUTTON_STATES.ENABLED,
+    textType: null,
 }

@@ -34,7 +34,13 @@ const ModalProvider = ({ children }) => {
                 onPress={handleBackdropPress}
             >
                 <View style={styles.backdrop}>
-                    <Component {...props} />
+                    <View
+                        onStartShouldSetResponder={() => true}
+                        onTouchEnd={e => e.stopPropagation()}
+                        style={styles.untouchanbleContainer}
+                    >
+                        <Component {...props} />
+                    </View>
                 </View>
             </Touchable>
         )

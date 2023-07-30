@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, useWindowDimensions } from 'react-native'
+import { View, useWindowDimensions, ViewPropTypes } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -8,12 +8,15 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import _map from '@lodash/map'
 import _isNil from '@lodash/isNil'
+import _isEmpty from '@lodash/isEmpty'
 
 import Text from '@ui/atoms/Text'
-import { getStyles } from './dialog.styles'
 import Button, { BUTTON_TYPES } from '../Button'
 
+import { getStyles } from './dialog.styles'
+
 const Dialog = ({
+    styles: stylesProp,
     title,
     description,
     body,
@@ -29,7 +32,10 @@ const Dialog = ({
 
     const renderTitle = () => <Text style={styles.headline}>{title}</Text>
 
-    const renderDescription = () => <Text style={styles.description}>{description}</Text>
+    const renderDescription = () => {
+        if (_isEmpty(description)) return null
+        return (<Text style={styles.description}>{description}</Text>)
+    }
 
     // const renderDivider = () => (showDivider ? <Divider style={styles.divider} /> : null)
 
@@ -58,16 +64,14 @@ const Dialog = ({
 
     // TODO: think over the divider's uses
     return (
-        <View style={styles.overlay}>
-            <View style={styles.container}>
-                {renderIcon()}
-                {renderTitle()}
-                {renderDescription()}
-                {/* {renderDivider()} */}
-                {renderBody()}
-                {/* {renderDivider()} */}
-                {renderActionButtons()}
-            </View>
+        <View style={[styles.container, stylesProp]}>
+            {renderIcon()}
+            {renderTitle()}
+            {renderDescription()}
+            {/* {renderDivider()} */}
+            {renderBody()}
+            {/* {renderDivider()} */}
+            {renderActionButtons()}
         </View>
     )
 }
@@ -83,6 +87,7 @@ Dialog.propTypes = {
         label: PropTypes.string.isRequired,
         onClick: PropTypes.func.isRequired,
     })),
+    styles: ViewPropTypes.style,
 }
 
 Dialog.defaultProps = {
@@ -91,4 +96,5 @@ Dialog.defaultProps = {
     // showDivider: false,
     body: null,
     footerButtonsConfig: [],
+    styles: null,
 }

@@ -9,8 +9,7 @@ import _noop from '@lodash/noop'
 import Radio from '@ui/atoms/RadioButton'
 import Text from '@ui/atoms/Text'
 
-import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
-
+import Dialog from '@ui/molecules/Dialog'
 import { useTranslation } from '../../../i18n/hooks/useTranslation'
 import { LANGAUGE_OPTIONS } from '../../../i18n/languages'
 
@@ -37,7 +36,7 @@ const LanguageSelector_ = ({ hideModal }) => {
                 key={key}
                 style={[
                     styles.languageItemContainer,
-                    { marginTop: index ? 16 : 0 },
+                    index ? styles.languageItemsGap : null,
                 ]}
                 onPress={() => setSelectedLanguage(key)}
                 addHitSlop
@@ -53,19 +52,24 @@ const LanguageSelector_ = ({ hideModal }) => {
         ))
     )
 
-    const renderFooter = () => (
-        <View style={styles.footerContainer}>
-            <Button type={BUTTON_TYPES.TEXT} label={t('Cancel')} onClick={hideModal} />
-            <Button type={BUTTON_TYPES.TEXT} label={t('Save')} onClick={handleSavePress} />
-        </View>
-    )
+    const languagesOptionsView = <View style={styles.languagesListContainer}>{getLanguagesList()}</View>
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.headerText}>{t('Select a Language')}</Text>
-            <View style={styles.languagesListContainer}>{getLanguagesList()}</View>
-            {renderFooter()}
-        </View>
+        <Dialog
+            styles={styles.container}
+            title={t('Select a Language')}
+            body={languagesOptionsView}
+            footerButtonsConfig={[
+                {
+                    label: t('Cancel'),
+                    onClick: hideModal,
+                },
+                {
+                    label: t('Save'),
+                    onClick: handleSavePress,
+                },
+            ]}
+        />
     )
 }
 
