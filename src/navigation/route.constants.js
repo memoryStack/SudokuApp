@@ -4,6 +4,7 @@ const DESIGN_SYSTEM_ROUTES = {
     TYPOGRAPHY: 'typography',
     BUTTON: 'button',
     DIVIDER: 'divider',
+    DIALOG: 'dialog',
 }
 
 export const ROUTES = {
@@ -21,4 +22,5 @@ export const ROUTE_HEADER_TITLES = {
     [ROUTES.TYPOGRAPHY]: 'Typography',
     [ROUTES.BUTTON]: 'Button',
     [ROUTES.DIVIDER]: 'Divder',
+    [ROUTES.DIALOG]: 'Dialog',
 }

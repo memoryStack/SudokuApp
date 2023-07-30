@@ -28,6 +28,10 @@ const BUTTONS_MAP = [
         label: 'Divider',
         routeKey: ROUTES.DIVIDER,
     },
+    {
+        label: 'Dialog',
+        routeKey: ROUTES.DIALOG,
+    },
 ]
 
 const DesignSystem = ({ navigation }) => {

@@ -22,6 +22,7 @@ module.exports = {
                 },
                 spacing: {
                     iconAndTitle: { value: 16 },
+                    titleAndSupportingText: { value: 16 },
                     titleAndBody: { value: 16 },
                     bodyAndActions: { value: 24 },
                 },

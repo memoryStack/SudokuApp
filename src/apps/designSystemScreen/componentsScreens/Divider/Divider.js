@@ -25,7 +25,7 @@ const DividerDemo = () => {
         <>
             <Text>{label}</Text>
             <View style={{ height: 100, width: 100, marginTop: 40 }} key={type}>
-                <Divider type={type} label={label} {...rest} />
+                <Divider type={type} {...rest} />
             </View>
         </>
     )
