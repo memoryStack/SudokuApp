@@ -55,7 +55,10 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         const isNotAvailable = _isEmpty(_get(availableRawHints, id))
 
         return (
-            <StopTouchPropagation style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}>
+            <StopTouchPropagation
+                style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}
+                key={label}
+            >
                 <Touchable
                     style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}
                     onPress={() => onMenuItemClick(id)}
