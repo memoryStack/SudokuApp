@@ -8,6 +8,8 @@ import ModalContext from '@contexts/ModalContext'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import StopTouchPropagation from '@ui/molecules/StopTouchPropagation'
+
 import { Touchable, TouchableTypes } from '../../apps/components/Touchable'
 
 import { DEFAULT_STATE, MODAL_TEST_ID } from './modalProvider.constants'
@@ -34,13 +36,9 @@ const ModalProvider = ({ children }) => {
                 onPress={handleBackdropPress}
             >
                 <View style={styles.backdrop}>
-                    <View
-                        onStartShouldSetResponder={() => true}
-                        onTouchEnd={e => e.stopPropagation()}
-                        style={styles.untouchanbleContainer}
-                    >
+                    <StopTouchPropagation>
                         <Component {...props} />
-                    </View>
+                    </StopTouchPropagation>
                 </View>
             </Touchable>
         )

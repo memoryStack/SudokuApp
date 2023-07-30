@@ -11,6 +11,7 @@ import _isEmpty from '@lodash/isEmpty'
 import { Platform } from '@utils/classes/platform'
 
 import Text from '@ui/atoms/Text'
+import StopTouchPropagation from '@ui/molecules/StopTouchPropagation'
 
 import withActions from '../../../utils/hocs/withActions'
 
@@ -54,12 +55,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         const isNotAvailable = _isEmpty(_get(availableRawHints, id))
 
         return (
-            <View
-                style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}
-                onStartShouldSetResponder={() => true}
-                onTouchEnd={e => e.stopPropagation()}
-                key={label}
-            >
+            <StopTouchPropagation style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}>
                 <Touchable
                     style={[styles.menuItem, isNotAvailable ? styles.disabledMenuItem : null]}
                     onPress={() => onMenuItemClick(id)}
@@ -70,7 +66,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
                         {label}
                     </Text>
                 </Touchable>
-            </View>
+            </StopTouchPropagation>
         )
     }
 
