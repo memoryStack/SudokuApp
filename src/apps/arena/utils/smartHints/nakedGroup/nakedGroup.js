@@ -5,9 +5,11 @@ import _every from '@lodash/every'
 import _isNull from '@lodash/isNull'
 
 import { N_CHOOSE_K } from '@resources/constants'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+
 import { inRange } from '../../../../../utils/util'
+
+import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 
 import { HOUSES_COUNT } from '../../../constants'
 

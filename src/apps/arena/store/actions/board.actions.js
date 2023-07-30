@@ -120,9 +120,9 @@ const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
 
     const cellHouses = getCellHousesInfo(cell)
     cellHouses.forEach(house => {
-        getHouseCells(house).forEach(cell => {
-            if (NotesRecord.isNotePresentInCell(notes, number, cell)) {
-                result.push({ cell, note: number })
+        getHouseCells(house).forEach(houseCell => {
+            if (NotesRecord.isNotePresentInCell(notes, number, houseCell)) {
+                result.push({ cell: houseCell, note: number })
             }
         })
     })

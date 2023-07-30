@@ -5,8 +5,9 @@ import _isEmpty from '@lodash/isEmpty'
 import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+
 import { sortNumbersArray } from '../../../../../../utils/util'
 
 import {

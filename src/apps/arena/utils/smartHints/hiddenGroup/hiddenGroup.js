@@ -1,12 +1,15 @@
 import { N_CHOOSE_K } from '@resources/constants'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
-import { GROUPS, HOUSE_TYPE } from '../constants'
+
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
+import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
+
 import { areSameCells, isCellExists } from '../../util'
 import { getHouseCells } from '../../houseCells'
+
+import { GROUPS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
-import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
 const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
     if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount

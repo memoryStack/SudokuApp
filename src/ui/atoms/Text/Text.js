@@ -8,7 +8,9 @@ import _get from '@lodash/get'
 import _isArray from '@lodash/isArray'
 
 import { FONT_WEIGHT_VS_FONT_FAMILY, DEFAULT_FONT_WEIGHT, fonts } from '@resources/fonts/font'
-import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
+
+import { useThemeValues } from '../../../apps/arena/hooks/useTheme'
+
 import { TEXT_VARIATIONS, TEXT_VARIATION_VS_TOKENS_PATH } from './text.constants'
 
 const getFinalStyles = (styleProp, type, theme) => {

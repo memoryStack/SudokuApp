@@ -1,7 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _find from '@lodash/find'
 
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
     HIDDEN_SINGLE_TYPES,
     HINTS_IDS,

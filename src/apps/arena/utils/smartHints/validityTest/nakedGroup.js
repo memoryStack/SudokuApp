@@ -1,4 +1,4 @@
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 
 export const isValidNakedGroup = ({ groupCandidates, hostCells }, possibleNotes) => {
     const extraCandidatePossible = hostCells.some(cell => NotesRecord.getCellNotes(possibleNotes, cell)

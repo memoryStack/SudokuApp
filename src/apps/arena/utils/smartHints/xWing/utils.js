@@ -1,5 +1,5 @@
 import _flatten from '@lodash/flatten'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { Houses } from '../../classes/houses'
 
 import { getHouseCells } from '../../houseCells'

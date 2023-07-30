@@ -122,7 +122,7 @@ const mainNumberCountExccedsThresholdInAnyHouseOfCell = (number, cell, mainNumbe
     const allHouses = [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK]
     return allHouses.some(houseType => {
         const numberHostCellsInHouse = getHouseCells(getCellHouseForHouseType(houseType, cell))
-            .filter(cell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, number, cell))
+            .filter(houseCell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, number, houseCell))
         return numberHostCellsInHouse.length > threshold
     })
 }

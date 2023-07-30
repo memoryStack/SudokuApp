@@ -1,10 +1,10 @@
 import _isEmpty from '@lodash/isEmpty'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { getMainNumbers } from '../../../../store/selectors/board.selectors'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 

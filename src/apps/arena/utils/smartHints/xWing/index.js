@@ -3,8 +3,8 @@ import _get from '@lodash/get'
 import _every from '@lodash/every'
 import _some from '@lodash/some'
 
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { inRange } from '../../../../../utils/util'
 
 import { NUMBERS_IN_HOUSE } from '../../../constants'

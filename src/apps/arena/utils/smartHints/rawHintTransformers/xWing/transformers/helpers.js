@@ -1,7 +1,7 @@
 import { toOrdinal } from '@lodash/toOrdinal'
 import _map from '@lodash/map'
 
-import { Houses } from 'src/apps/arena/utils/classes/houses'
+import { Houses } from '../../../../classes/houses'
 import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
 import { getCellHouseForHouseType, getHouseAxesValue } from '../../../../util'

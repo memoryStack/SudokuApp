@@ -1,7 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
 
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
     SMART_HINTS_CELLS_BG_COLOR,
     NAKED_SINGLE_TYPES,

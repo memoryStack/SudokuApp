@@ -1,7 +1,7 @@
 import _filter from '@lodash/filter'
 
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { CELLS_IN_HOUSE } from '../../../constants'
 
 import { getHouseCells } from '../../houseCells'

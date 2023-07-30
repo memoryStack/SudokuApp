@@ -1,4 +1,4 @@
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { filterHouseCells, getCellHouseForHouseType, isCellExists } from '../../util'
 
 export const isValidXWing = ({ legs, houseType }, possibleNotes) => {

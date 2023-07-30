@@ -1,4 +1,4 @@
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { areSameCellsSets } from '../../util'
 
 export const isValidOmission = ({ note, houseCells, userNotesHostCells }, possibleNotes) => {

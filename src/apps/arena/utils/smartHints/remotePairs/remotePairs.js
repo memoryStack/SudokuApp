@@ -11,7 +11,8 @@ import _at from '@lodash/at'
 
 import { N_CHOOSE_K } from '@resources/constants'
 
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+
 import {
     areCommonHouseCells,
     convertBoardCellNumToCell,

@@ -1,6 +1,6 @@
 import _filter from '@lodash/filter'
 import _isEmpty from '@lodash/isEmpty'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'

@@ -8,7 +8,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
-import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
 import { Touchable } from '../../../apps/components/Touchable'
 
 import { getStyles } from './button.styles'

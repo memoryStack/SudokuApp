@@ -1,4 +1,4 @@
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { NUMBERS_IN_HOUSE } from '../../../constants'
 import { getPossibleNotes } from '../../../store/selectors/board.selectors'

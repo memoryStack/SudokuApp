@@ -1,6 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { Houses } from 'src/apps/arena/utils/classes/houses'
+
+import { Houses } from '../../../../classes/houses'
+import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
 
 import { getHouseCells } from '../../../../houseCells'
 import { getCellAxesValues, isCellExists } from '../../../../util'

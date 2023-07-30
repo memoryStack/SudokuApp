@@ -1,8 +1,9 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
+import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
 import { filterEmptyCells } from '../../../util'

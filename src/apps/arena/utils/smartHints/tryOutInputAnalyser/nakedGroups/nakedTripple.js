@@ -3,8 +3,8 @@ import _isEqual from '@lodash/isEqual'
 
 import { N_CHOOSE_K } from '@resources/constants'
 import { sortNumbersArray } from '@utils/util'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
