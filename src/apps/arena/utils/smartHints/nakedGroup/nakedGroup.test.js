@@ -25,7 +25,7 @@ describe('getNakedGroupRawHints()', () => {
                 ],
             },
         ]
-        expect(getNakedGroupRawHints(2, notesData, mainNumbers, 1)).toStrictEqual(expectedResult)
+        expect(getNakedGroupRawHints(2, notesData, mainNumbers)).toStrictEqual(expectedResult)
     })
 })
 

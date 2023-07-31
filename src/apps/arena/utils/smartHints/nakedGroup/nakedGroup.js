@@ -1,9 +1,9 @@
 import _filter from '@lodash/filter'
-import _map from '@lodash/map'
 import _forEach from '@lodash/forEach'
+import _isEmpty from '@lodash/isEmpty'
 import _every from '@lodash/every'
-import _isNull from '@lodash/isNull'
 import _inRange from '@lodash/inRange'
+import _at from '@lodash/at'
 
 import { N_CHOOSE_K } from '@resources/constants'
 
@@ -20,7 +20,6 @@ import {
     areSameBlockCells,
     getBlockAndBoxNum,
     isCellExists,
-    areSameCellsSets,
     getUniqueNotesFromCells,
     getHousesCellsSharedByCells,
 } from '../../util'
@@ -41,12 +40,6 @@ export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount
         start: VALID_CELL_MINIMUM_NOTES_COUNT,
         end: groupCandidatesCount,
     })
-})
-
-const getDefaultGroupsFoundInHouses = () => ({
-    [HOUSE_TYPE.ROW]: {},
-    [HOUSE_TYPE.COL]: {},
-    [HOUSE_TYPE.BLOCK]: {},
 })
 
 // TODO: should be renamed, when i read it months later it felt like it will return a map
@@ -105,16 +98,7 @@ export const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
         && groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell)))
 }
 
-const isCellsSelectionAlreadyProcessed = (selectedCells, house, groupsFoundInHouses) => {
-    if (Houses.isBlockHouse(house.type)) return false
-    // QUES -> why are we assuming that only one group is possible in a house ??
-    const houseCellsProcessed = groupsFoundInHouses[house.type][house.num] || []
-    return areSameCellsSets(selectedCells, houseCellsProcessed)
-}
-
-const isNewAndValidNakedGroup = (house, selectedCells, groupsFoundInHouses, notesData) => {
-    if (isCellsSelectionAlreadyProcessed(selectedCells, house, groupsFoundInHouses)) return false
-
+const isValidNakedGroupPresentInCells = (selectedCells, notesData) => {
     const allPossibleNotesPresent = isHintValid({
         type: GROUPS.NAKED_GROUP,
         data: {
@@ -122,55 +106,41 @@ const isNewAndValidNakedGroup = (house, selectedCells, groupsFoundInHouses, note
             hostCells: selectedCells,
         },
     })
-    if (!allPossibleNotesPresent) return false
 
-    return isHintRemovesNotesFromCells(selectedCells, notesData)
+    return allPossibleNotesPresent && isHintRemovesNotesFromCells(selectedCells, notesData)
 }
 
-const cacheProcessedGroup = (house, selectedCells, groupsFoundInHouses) => {
-    // Note/Issue: the correctness of this DS depends on iterating order of "houseType" loop
-    groupsFoundInHouses[house.type][house.num] = selectedCells
+const selectValidGroupCells = (cells, groupCandidatesCount, notes) => {
+    const result = []
 
-    const sharedHouse = getAnotherSharedHouse(house, selectedCells)
-    !_isNull(sharedHouse) && (groupsFoundInHouses[sharedHouse.type][sharedHouse.num] = selectedCells)
+    const cellsSelections = N_CHOOSE_K[cells.length][groupCandidatesCount]
+    for (let k = 0; k < cellsSelections.length; k++) {
+        const selectedCells = _at(cells, cellsSelections[k])
+        if (!selectedCellsMakeGroup(selectedCells, notes, groupCandidatesCount)) continue
+        if (isValidNakedGroupPresentInCells(selectedCells, notes)) {
+            result.push(...selectedCells)
+            break
+        }
+    }
+    return result
 }
 
-export const getNakedGroupRawHints = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
+export const getNakedGroupRawHints = (groupCandidatesCount, notesData, mainNumbers) => {
     const houseTypes = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
-
-    const groupsFoundInHouses = getDefaultGroupsFoundInHouses()
 
     const result = []
 
-    for (let i = 0; i < houseTypes.length; i++) {
+    for (let i = 0; i < houseTypes.length && _isEmpty(result); i++) {
         const houseType = houseTypes[i]
-        for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {
+        for (let houseNum = 0; houseNum < HOUSES_COUNT && _isEmpty(result); houseNum++) {
             const house = { type: houseType, num: houseNum }
             const validCells = filterNakedGroupEligibleCellsInHouse(house, groupCandidatesCount, mainNumbers, notesData)
-
             // to avoid computing 7C2 and 7C3, because that might be heavy but it's open for research
             if (!_inRange(validCells.length, { start: groupCandidatesCount, end: MAX_VALID_CELLS_COUNT })) continue
 
-            const possibleSelections = N_CHOOSE_K[validCells.length][groupCandidatesCount]
+            const validGroupCells = selectValidGroupCells(validCells, groupCandidatesCount, notesData)
 
-            for (let k = 0; k < possibleSelections.length; k++) {
-                const selectedCells = _map(possibleSelections[k], selectionIndex => validCells[selectionIndex])
-
-                if (!selectedCellsMakeGroup(selectedCells, notesData, groupCandidatesCount)) continue
-
-                const newAndValidNakedGroup = isNewAndValidNakedGroup(
-                    house,
-                    selectedCells,
-                    groupsFoundInHouses,
-                    notesData,
-                )
-                if (!newAndValidNakedGroup) continue
-
-                const nakedGroupsCount = result.push({ groupCells: selectedCells })
-                if (nakedGroupsCount >= maxHintsThreshold) return result
-
-                cacheProcessedGroup(house, selectedCells, groupsFoundInHouses)
-            }
+            if (!_isEmpty(validGroupCells)) result.push({ groupCells: validGroupCells })
         }
     }
 

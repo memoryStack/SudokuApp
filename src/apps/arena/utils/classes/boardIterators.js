@@ -23,6 +23,7 @@ const forHouseEachCell = (house, callback) => {
     })
 }
 
+// TODO: rename it to forEachHouseNum
 const forEachHouse = callback => {
     for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) callback(houseNum)
 }
