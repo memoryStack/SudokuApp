@@ -21,7 +21,7 @@ import { ROUTES } from '../../navigation/route.constants'
 import { NextGameMenu } from '../arena/nextGameMenu'
 
 import { HOME_PAGE_TEST_ID, LANGUAGE_VS_TITLE_CHARS } from './home.constants'
-import { getStyles } from './styles'
+import { getStyles } from './home.styles'
 
 const APP_ICON_SOURCE = require('@resources/assets/appIcon.png')
 

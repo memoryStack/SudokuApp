@@ -29,7 +29,7 @@ import { Inputpanel } from '../inputPanel'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { getContainerStyles, styles } from './styles'
+import { getContainerStyles, styles } from './smartHintHC.styles'
 import {
     FOOTER_BUTTONS_TEXT,
     SMART_HINT_HC_TEST_ID,

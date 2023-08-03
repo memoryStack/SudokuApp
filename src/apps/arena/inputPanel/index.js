@@ -13,7 +13,7 @@ import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
-import { getStyles } from './style'
+import { getStyles } from './inputPanel.styles'
 import { BoardIterators } from '../utils/classes/boardIterators'
 
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
