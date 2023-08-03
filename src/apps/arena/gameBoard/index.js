@@ -29,7 +29,7 @@ import {
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
 } from '../constants'
 
-import { getStyles } from './style'
+import { getStyles } from './gameBoard.styles'
 import { Cell } from './cell'
 
 import HintsSvgDrawing from '../hintsSvgDrawing'

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { View, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, useWindowDimensions } from 'react-native'
 
 import { useSelector } from 'react-redux'
 
@@ -24,17 +24,7 @@ import FastPencil from './FastPencil'
 import Hint from './Hint'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './cellActions.constants'
-
-const styles = StyleSheet.create({
-    cellActionsContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        width: '100%',
-        marginTop: 20,
-    },
-})
+import { styles } from './cellActions.styles'
 
 const BoardController_ = ({ onAction }) => {
     const pencilState = useSelector(getPencilStatus)

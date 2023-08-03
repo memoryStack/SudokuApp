@@ -1,4 +1,4 @@
-import { COLOR_SCHEME_STYLES as boardColorStyles } from '../../gameBoard/style'
+import { COLOR_SCHEME_STYLES as boardColorStyles } from '../../gameBoard/gameBoard.styles'
 
 const UI_HINTS_COUNT_THRESHOLD = 1
 

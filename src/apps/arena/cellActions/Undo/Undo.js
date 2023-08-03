@@ -10,7 +10,7 @@ import Text from '@ui/atoms/Text'
 
 import { Touchable } from '../../../components/Touchable'
 
-import { styles, INACTIVE_ICON_FILL } from '../style'
+import { styles, INACTIVE_ICON_FILL } from '../cellActions.styles'
 
 const Undo = ({ iconBoxSize, onClick, ...rest }) => (
     <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>

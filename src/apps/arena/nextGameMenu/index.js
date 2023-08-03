@@ -1,7 +1,7 @@
 import React, {
     useCallback, useRef, useEffect, useState,
 } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -27,26 +27,10 @@ import { previousInactiveGameExists } from '../utils/util'
 
 import {
     LEVEL_ICON_DIMENSION,
-    NEXT_GAME_MENU_ROW_HEIGHT,
     NEXT_GAME_MENU_TEST_ID,
 } from './nextGameMenu.constants'
 
-const styles = StyleSheet.create({
-    nextGameMenuContainer: {
-        width: '100%',
-    },
-    levelContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        width: '100%',
-        height: NEXT_GAME_MENU_ROW_HEIGHT,
-        paddingHorizontal: 16,
-    },
-    levelText: {
-        marginLeft: 16,
-    },
-})
+import { styles } from './nextGameMenu.styles'
 
 const getBarPath = barNum => [
     'M', 75 + 100 * barNum, '450',

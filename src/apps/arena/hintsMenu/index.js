@@ -26,7 +26,7 @@ import {
     HINTS_MENU_OVERLAY_TEST_ID,
     HINT_MENU_ITEM_TEST_ID,
 } from './hintsMenu.constants'
-import { styles } from './style'
+import { styles } from './hintsMenu.styles'
 
 const COLUMNS_COUNT = 3
 

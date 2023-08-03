@@ -10,7 +10,7 @@ import { consoleLog } from '@utils/util'
 import ModalProvider from './src/containers/ModalProvider'
 import ThemeProvider from './src/containers/ThemeProvider'
 
-import { SnackBar } from './src/apps/components/SnackBar'
+import { SnackBar } from './src/apps/components/SnackBar/SnackBar'
 
 import { NavigationProvider } from './src/navigation/navigator'
 

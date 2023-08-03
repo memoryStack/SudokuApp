@@ -1,14 +1,13 @@
 import React, {
     useState, useCallback, useEffect, useRef,
 } from 'react'
-import { View, Animated, StyleSheet } from 'react-native'
+import { View, Animated } from 'react-native'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
 import { GAME_STATE } from '@resources/constants'
-import { fonts } from '@resources/fonts/font'
 import Button from '@ui/molecules/Button'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
 import { Touchable } from '../components/Touchable'
@@ -36,63 +35,9 @@ import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID } from './constants'
 import GameResultCard from './GameResultCard'
+import { styles } from './arena.styles'
 
 const MAX_AVAILABLE_HINTS = 3
-const styles = StyleSheet.create({
-    page: {
-        display: 'flex',
-        backgroundColor: 'white',
-    },
-    contentContainer: {
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-        paddingTop: 24,
-    },
-    refereeContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '94%',
-        marginBottom: 4,
-    },
-    refereeTextStyles: {
-        fontSize: 14,
-        fontFamily: fonts.regular,
-    },
-    gameOverCardAbsoluteBG: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1,
-    },
-    gameOverAnimatedBG: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'rgba(0, 0, 0, .8)',
-    },
-    inputPanelContainer: {
-        width: '100%',
-        marginVertical: 20,
-    },
-    sudokuBoardContainer: {
-        zIndex: 1,
-    },
-    headerButtonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-        paddingHorizontal: 16,
-        marginTop: 16,
-        marginBottom: 40,
-    },
-})
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,

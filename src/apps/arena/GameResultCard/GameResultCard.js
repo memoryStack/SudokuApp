@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 
 import { useSelector } from 'react-redux'
 
@@ -18,40 +18,7 @@ import { GameState } from '../utils/classes/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { GAME_OVER_CARD_TEST_ID } from './gameResultCard.constants'
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 20,
-        alignItems: 'center',
-        backgroundColor: 'white',
-        borderRadius: 8,
-        width: '70%',
-    },
-    congratsText: {
-        marginVertical: 8,
-        fontWeight: '500',
-    },
-    statsContainer: {
-        marginTop: 20,
-        width: '100%',
-    },
-    statContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        marginVertical: 2,
-    },
-    gameUnsolvedMsg: {
-        textAlign: 'center',
-    },
-    newGameButtonContainer: {
-        marginTop: 16,
-        width: '80%',
-    },
-    timeStatContainer: {
-        flexDirection: 'row',
-    },
-})
+import { styles } from './gameResultCard.styles'
 
 const getTimeView = (timeTaken = {}) => {
     const { hours = 0, minutes = 0, seconds = 0 } = timeTaken

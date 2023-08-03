@@ -15,7 +15,7 @@ import { Touchable } from '../../../components/Touchable'
 
 import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensions'
 
-import { COLOR_SCHEME_STYLES as boardColorStyles } from '../style'
+import { COLOR_SCHEME_STYLES as boardColorStyles } from '../gameBoard.styles'
 
 import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from './cell.constants'
 import { getStyles } from './style'

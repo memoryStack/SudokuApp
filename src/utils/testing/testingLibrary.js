@@ -12,7 +12,7 @@ import { render } from '@testing-library/react-native'
 import ModalProvider from '../../containers/ModalProvider'
 import ThemeProvider from '../../containers/ThemeProvider'
 
-import { SnackBar } from '../../apps/components/SnackBar'
+import { SnackBar } from '../../apps/components/SnackBar/SnackBar'
 
 import '../../i18n/i18n.config'
 
