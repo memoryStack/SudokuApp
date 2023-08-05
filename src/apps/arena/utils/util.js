@@ -257,3 +257,9 @@ export const getBlockStartCell = blockNum => ({
     row: blockNum - (blockNum % 3),
     col: (blockNum % 3) * 3,
 })
+
+export const getHousesCommonCells = (houseA, houseB) => {
+    const firstHouseCells = getHouseCells(houseA)
+    return getHouseCells(houseB)
+        .filter(secondHouseCell => isCellExists(secondHouseCell, firstHouseCells))
+}

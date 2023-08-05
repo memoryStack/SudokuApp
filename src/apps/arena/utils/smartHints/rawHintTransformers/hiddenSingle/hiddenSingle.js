@@ -1,5 +1,6 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _find from '@lodash/find'
+import _isNil from '@lodash/isNil'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
@@ -11,7 +12,7 @@ import {
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
-    areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues, getBlockStartCell,
+    areSameCells, getRowAndCol, getBlockAndBoxNum, getCellAxesValues, getBlockStartCell, getCellHouseForHouseType, getHousesCommonCells,
 } from '../../../util'
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult } from '../../util'
 
@@ -43,6 +44,7 @@ const getNewHighlightableInstanceHouseType = ({ row, col }, neighbourRows, neigh
     return result
 }
 
+// TODO: these functions don't make sense
 const getWinnerInstanceInfoInRow = (firstCell, winnerCandidate, mainNumbers, neighbourRows) => {
     const getWinnerInstancePosInRow = () => {
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {
@@ -228,130 +230,74 @@ const getNextBlockInRow = currentBlockNumIdx => {
 
 const getNextBlockInCol = currentBlockNumIdx => (currentBlockNumIdx + BLOCKS_COUNT_IN_ROW) % HOUSES_COUNT
 
-const getCandidateInstanceCordinatesInHouse = (candidate, house, mainNumbers) => _find(getHouseCells(house), cell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, candidate, cell))
+// TODO: write test cases for it
+export const getCellFilledWithNumberInHouse = (number, house, mainNumbers) => _find(getHouseCells(house), cell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, number, cell))
 
-const shouldHighlightWinnerCandidateInstanceInBlock = (hostCell, blockNum, singleType, mainNumbers) => {
-    const blockFirstCell = getRowAndCol(blockNum, 0)
-    const cellIncrementer = singleType === HIDDEN_SINGLE_TYPES.ROW ? { row: 0, col: 1 } : { row: 1, col: 0 }
-    const hostHouseCellInBlock = singleType === HIDDEN_SINGLE_TYPES.ROW
-        ? { row: hostCell.row, col: blockFirstCell.col }
-        : { row: blockFirstCell.row, col: hostCell.col }
+export const shouldHighlightWinnerCandidateInstanceInBlock = (hostHouse, blockHouse, mainNumbers) => getHousesCommonCells(blockHouse, hostHouse)
+    .some(cell => !MainNumbersRecord.isCellFilled(mainNumbers, cell))
 
-    const hostCellsCountInBlock = 3
-    for (let i = 0; i < hostCellsCountInBlock; i++) {
-        if (!MainNumbersRecord.isCellFilled(mainNumbers, hostHouseCellInBlock)) return true
-        hostHouseCellInBlock.row += cellIncrementer.row
-        hostHouseCellInBlock.col += cellIncrementer.col
-    }
-    return false
+const getHostHouse = (hostCell, singleType) => {
+    if (singleType === HIDDEN_SINGLE_TYPES.ROW) return getCellHouseForHouseType(HOUSE_TYPE.ROW, hostCell)
+    if (singleType === HIDDEN_SINGLE_TYPES.COL) return getCellHouseForHouseType(HOUSE_TYPE.COL, hostCell)
+    return getCellHouseForHouseType(HOUSE_TYPE.BLOCK, hostCell)
 }
 
-const hiddenSingleInRowHighlightBlockCells = ({
-    selectedRow,
-    selectedCol,
-    blockNum,
+const highlightCrossHouseCellFilledWithHSCandidate = (singleType, hostHouseCell, winnerCandidate, mainNumbers, cellsToFocusData) => {
+    const crossHouseType = singleType === HIDDEN_SINGLE_TYPES.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW
+    const crossHouse = getCellHouseForHouseType(crossHouseType, hostHouseCell)
+    const candidateInstanceCell = getCellFilledWithNumberInHouse(winnerCandidate, crossHouse, mainNumbers)
+    const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+    setCellDataInHintResult(candidateInstanceCell, cellHighlightData, cellsToFocusData)
+}
+
+const highlightCommonCellsInBlockAndRowOrColHostHouse = ({
+    blockHouse,
     mainNumbers,
     cellsToFocusData,
-    candidateCordinatesInBlock,
+    isCandidatePresentInBlock,
+    hostCell,
+    singleType,
 }) => {
-    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, { row: selectedRow, col: selectedCol })
-    const currentBlockStartColumn = getBlockStartCell(blockNum).col
-    for (let i = 0; i < 3; i++) {
-        const col = currentBlockStartColumn + i
-        if (col === selectedCol) continue
-        if (!MainNumbersRecord.isCellFilled(mainNumbers, { row: selectedRow, col })) {
-            if (!candidateCordinatesInBlock) {
-                const { row: instanceRow, col: instanceCol } = getCandidateInstanceCordinatesInHouse(
-                    winnerCandidate,
-                    { type: HOUSE_TYPE.COL, num: col },
-                    mainNumbers,
-                )
-
+    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, hostCell)
+    getHousesCommonCells(blockHouse, getHostHouse(hostCell, singleType))
+        .filter(blockCell => !areSameCells(blockCell, hostCell))
+        .forEach(blockCell => {
+            if (MainNumbersRecord.isCellFilled(mainNumbers, blockCell)) {
                 const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-                setCellDataInHintResult({ row: instanceRow, col: instanceCol }, cellHighlightData, cellsToFocusData)
+                setCellDataInHintResult(blockCell, cellHighlightData, cellsToFocusData)
+            } else {
+                setCellDataInHintResult(blockCell, getInhabitableCellData(), cellsToFocusData)
+                if (!isCandidatePresentInBlock) {
+                    highlightCrossHouseCellFilledWithHSCandidate(singleType, blockCell, winnerCandidate, mainNumbers, cellsToFocusData)
+                }
             }
-            setCellDataInHintResult({ row: selectedRow, col }, getInhabitableCellData(), cellsToFocusData)
-        } else {
-            const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-            setCellDataInHintResult({ row: selectedRow, col }, cellHighlightData, cellsToFocusData)
-        }
-    }
+        })
 }
 
-const hiddenSingleInColHighlightBlockCells = ({
-    selectedRow,
-    selectedCol,
-    blockNum,
-    mainNumbers,
-    cellsToFocusData,
-    candidateCordinatesInBlock,
+const highlightBlockCellsForRowOrColHiddenSingle = ({
+    blockNum, mainNumbers, cellsToFocusData, singleType, hostCell: hiddenSingleHostCell,
 }) => {
-    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, { row: selectedRow, col: selectedCol })
-    const currentBlockStartRow = getBlockStartCell(blockNum).row
-    for (let i = 0; i < 3; i++) {
-        const row = currentBlockStartRow + i
-        if (row === selectedRow) continue
-        if (!MainNumbersRecord.isCellFilled(mainNumbers, { row, col: selectedCol })) {
-            if (!candidateCordinatesInBlock) {
-                const { row: instanceRow, col: instanceCol } = getCandidateInstanceCordinatesInHouse(
-                    winnerCandidate,
-                    { type: HOUSE_TYPE.ROW, num: row },
-                    mainNumbers,
-                )
+    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, hiddenSingleHostCell)
 
-                const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-                setCellDataInHintResult({ row: instanceRow, col: instanceCol }, cellHighlightData, cellsToFocusData)
-            }
-            setCellDataInHintResult({ row, col: selectedCol }, getInhabitableCellData(), cellsToFocusData)
-        } else {
-            const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-            setCellDataInHintResult({ row, col: selectedCol }, cellHighlightData, cellsToFocusData)
-        }
-    }
-}
+    const blockHouse = { type: HOUSE_TYPE.BLOCK, num: blockNum }
 
-const highlightBlockCells = ({
-    selectedRow, selectedCol, blockNum, mainNumbers, cellsToFocusData, singleType,
-}) => {
-    const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, { row: selectedRow, col: selectedCol })
+    const winnerCandidateHostCellInBlock = getCellFilledWithNumberInHouse(winnerCandidate, blockHouse, mainNumbers)
 
-    const candidateCordinatesInBlock = getCandidateInstanceCordinatesInHouse(
-        winnerCandidate,
-        { type: HOUSE_TYPE.BLOCK, num: blockNum },
-        mainNumbers,
-    )
-    if (
-        shouldHighlightWinnerCandidateInstanceInBlock(
-            { row: selectedRow, col: selectedCol },
-            blockNum,
-            singleType,
-            mainNumbers,
-        )
-        && candidateCordinatesInBlock
-    ) {
+    const highlightWinnerCandidateNumberInBlock = !!winnerCandidateHostCellInBlock
+        && shouldHighlightWinnerCandidateInstanceInBlock(getHostHouse(hiddenSingleHostCell, singleType), blockHouse, mainNumbers)
+    if (highlightWinnerCandidateNumberInBlock) {
         const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
-        setCellDataInHintResult(candidateCordinatesInBlock, cellHighlightData, cellsToFocusData)
+        setCellDataInHintResult(winnerCandidateHostCellInBlock, cellHighlightData, cellsToFocusData)
     }
 
-    if (singleType === HIDDEN_SINGLE_TYPES.ROW) {
-        hiddenSingleInRowHighlightBlockCells({
-            selectedRow,
-            selectedCol,
-            blockNum,
-            mainNumbers,
-            cellsToFocusData,
-            candidateCordinatesInBlock,
-        })
-    } else {
-        hiddenSingleInColHighlightBlockCells({
-            selectedRow,
-            selectedCol,
-            blockNum,
-            mainNumbers,
-            cellsToFocusData,
-            candidateCordinatesInBlock,
-        })
-    }
+    highlightCommonCellsInBlockAndRowOrColHostHouse({
+        mainNumbers,
+        cellsToFocusData,
+        isCandidatePresentInBlock: !_isNil(winnerCandidateHostCellInBlock),
+        hostCell: hiddenSingleHostCell,
+        blockHouse,
+        singleType,
+    })
 }
 
 // row and column are going to have same logic, let's write them down in the same function only
@@ -361,29 +307,34 @@ const getHiddenSingleInRowOrColData = (hostCell, type, mainNumbers) => {
     const cellsToFocusData = {}
 
     const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
-    setCellDataInHintResult({ row: hostRow, col: hostCol }, cellHighlightData, cellsToFocusData)
+    setCellDataInHintResult(hostCell, cellHighlightData, cellsToFocusData)
 
     const { blockNum: currentBlockNum } = getBlockAndBoxNum(hostCell)
-    highlightBlockCells({
-        selectedRow: hostRow,
-        selectedCol: hostCol,
+    // why are we highlighting the block cells just like that ??
+    highlightBlockCellsForRowOrColHiddenSingle({
         blockNum: currentBlockNum,
         mainNumbers,
         cellsToFocusData,
         singleType: type,
+        hostCell: {
+            row: hostRow,
+            col: hostCol,
+        },
     })
 
     // check in 2 neighbour blocks
     let neighboursBlocks = 2
     let neighbourBlockNum = getNextNeighbourBlock(currentBlockNum, getNextBlockSearchDirection(type))
     while (neighboursBlocks--) {
-        highlightBlockCells({
-            selectedRow: hostRow,
-            selectedCol: hostCol,
+        highlightBlockCellsForRowOrColHiddenSingle({
             blockNum: neighbourBlockNum,
             mainNumbers,
             cellsToFocusData,
             singleType: type,
+            hostCell: {
+                row: hostRow,
+                col: hostCol,
+            },
         })
         neighbourBlockNum = getNextNeighbourBlock(neighbourBlockNum, getNextBlockSearchDirection(type))
     }

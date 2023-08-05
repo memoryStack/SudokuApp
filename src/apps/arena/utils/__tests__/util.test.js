@@ -20,6 +20,7 @@ import {
     previousInactiveGameExists,
     getHousesCellsSharedByCells,
     isGenerateNewPuzzleItem,
+    getHousesCommonCells,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -413,5 +414,32 @@ describe('isGenerateNewPuzzleItem()', () => {
 
     test('returns false if above consition is not satisfied', () => {
         expect(isGenerateNewPuzzleItem(CUSTOMIZED_PUZZLE_LEVEL_TITLE)).toBeFalsy()
+    })
+})
+
+describe('getHousesCommonCells()', () => {
+    test('returns cells common in 1st block and 3rd column', () => {
+        const houseA = { type: HOUSE_TYPE.BLOCK, num: 0 }
+        const houseB = { type: HOUSE_TYPE.COL, num: 2 }
+        const expectedCommonCells = [
+            { row: 0, col: 2 },
+            { row: 1, col: 2 },
+            { row: 2, col: 2 },
+        ]
+        expect(getHousesCommonCells(houseA, houseB)).toEqual(expectedCommonCells)
+    })
+
+    test('returns cells common in 1st row and 3rd column', () => {
+        const houseA = { type: HOUSE_TYPE.ROW, num: 0 }
+        const houseB = { type: HOUSE_TYPE.COL, num: 2 }
+        const expectedCommonCells = [{ row: 0, col: 2 }]
+        expect(getHousesCommonCells(houseA, houseB)).toEqual(expectedCommonCells)
+    })
+
+    test('returns empty array when no common cells are present in houses', () => {
+        const houseA = { type: HOUSE_TYPE.ROW, num: 0 }
+        const houseB = { type: HOUSE_TYPE.ROW, num: 2 }
+        const expectedCommonCells = []
+        expect(getHousesCommonCells(houseA, houseB)).toEqual(expectedCommonCells)
     })
 })
