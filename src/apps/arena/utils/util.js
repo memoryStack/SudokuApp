@@ -263,3 +263,5 @@ export const getHousesCommonCells = (houseA, houseB) => {
     return getHouseCells(houseB)
         .filter(secondHouseCell => isCellExists(secondHouseCell, firstHouseCells))
 }
+
+export const areSameHouses = (houseA, houseB) => houseA.type === houseB.type && houseA.num === houseB.num
