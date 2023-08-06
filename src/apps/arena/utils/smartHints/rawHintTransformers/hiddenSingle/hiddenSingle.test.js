@@ -4,6 +4,7 @@ import { HOUSE_TYPE } from '../../constants'
 import {
     getEmptyCellsCountAndCandidatePosition,
     getBlockCellRowOrColNeighbourHousesInBlock,
+    getMustHighlightableNeighbourHouses,
 } from './hiddenSingle'
 
 import {
@@ -124,5 +125,21 @@ describe('getBlockCellRowOrColNeighbourHousesInBlock()', () => {
             { type: HOUSE_TYPE.COL, num: 4 },
         ]
         expect(getBlockCellRowOrColNeighbourHousesInBlock(blockCell, neighbourHouseType)).toEqual(expectedResult)
+    })
+})
+
+describe('getMustHighlightableNeighbourHouses()', () => {
+    test('returns a map of neighbour rows which must highlight their candidate host cell', () => {
+        const { mainNumbers } = require('./hiddenSingle.testData')
+        const hostCell = { row: 3, col: 1 }
+        const expectedResult = { 5: true }
+        expect(getMustHighlightableNeighbourHouses(HOUSE_TYPE.ROW, hostCell, mainNumbers)).toEqual(expectedResult)
+    })
+
+    test('returns a map of neighbour columns which must highlight their candidate host cell', () => {
+        const { mainNumbers } = require('./hiddenSingle.testData')
+        const hostCell = { row: 3, col: 1 }
+        const expectedResult = { 2: true }
+        expect(getMustHighlightableNeighbourHouses(HOUSE_TYPE.COL, hostCell, mainNumbers)).toEqual(expectedResult)
     })
 })
