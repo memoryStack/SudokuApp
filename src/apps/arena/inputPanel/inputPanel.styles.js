@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native'
 
+import { FONT_WEIGHTS } from '@resources/fonts/font'
+
 export const getStyles = CELL_WIDTH => {
     const INPUT_NUMBER_DIMENSION = CELL_WIDTH * 1.5 // 1.5 times the size of the board cells
     return StyleSheet.create({
@@ -25,7 +27,7 @@ export const getStyles = CELL_WIDTH => {
             height: 4,
         },
         textStyle: {
-            fontWeight: '500',
+            fontWeight: FONT_WEIGHTS.MEDIUM,
         },
         eraser: {
             width: '50%',

@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native'
 
+import { FONT_WEIGHTS } from '@resources/fonts/font'
+
 export const styles = StyleSheet.create({
     container: {
         padding: 20,
@@ -10,7 +12,7 @@ export const styles = StyleSheet.create({
     },
     congratsText: {
         marginVertical: 8,
-        fontWeight: '500',
+        fontWeight: FONT_WEIGHTS.MEDIUM,
     },
     statsContainer: {
         marginTop: 20,

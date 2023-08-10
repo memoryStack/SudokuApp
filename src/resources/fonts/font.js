@@ -21,7 +21,12 @@ const FONT_FAMILIES = {
     BOLD: 'bold',
 }
 
-export const DEFAULT_FONT_WEIGHT = '400'
+export const FONT_WEIGHTS = {
+    REGULAR: '400',
+    MEDIUM: '500',
+    SEMI_BOLD: '600',
+    BOLD: '700',
+}
 
 // NOTE: semi-bold doesn't exist for Roboto font
 export const FONT_WEIGHT_VS_FONT_FAMILY = {

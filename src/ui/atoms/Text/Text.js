@@ -7,7 +7,9 @@ import PropTypes from 'prop-types'
 import _get from '@lodash/get'
 import _isArray from '@lodash/isArray'
 
-import { FONT_WEIGHT_VS_FONT_FAMILY, DEFAULT_FONT_WEIGHT, fonts } from '@resources/fonts/font'
+import {
+    FONT_WEIGHT_VS_FONT_FAMILY, fonts, FONT_WEIGHTS,
+} from '@resources/fonts/font'
 
 import { useThemeValues } from '../../../apps/arena/hooks/useTheme'
 
@@ -30,7 +32,7 @@ const Text = ({
     const theme = useThemeValues()
 
     const styles = getFinalStyles(style, type, theme)
-    const fontWeight = _get(styles, 'fontWeight', DEFAULT_FONT_WEIGHT)
+    const fontWeight = _get(styles, 'fontWeight', FONT_WEIGHTS.REGULAR)
     const stylesWithFont = {
         ...styles,
         fontFamily: fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],

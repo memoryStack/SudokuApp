@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native'
 
+import { FONT_WEIGHTS } from '@resources/fonts/font'
+
 const FOOTER_HEIGHT = 24
 export const styles = StyleSheet.create({
     headerContainer: {
@@ -12,7 +14,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     hintTitle: {
-        fontWeight: '500',
+        fontWeight: FONT_WEIGHTS.MEDIUM,
     },
     bodyContainer: {
         flex: 1,

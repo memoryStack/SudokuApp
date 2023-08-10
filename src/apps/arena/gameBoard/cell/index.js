@@ -8,6 +8,7 @@ import _noop from '@lodash/noop'
 import _get from '@lodash/get'
 
 import { CloseIcon } from '@resources/svgIcons/close'
+import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
@@ -74,7 +75,7 @@ const Cell_ = ({
                         <Text
                             style={[
                                 styles.noteText,
-                                noteFontColor ? { color: noteFontColor, fontWeight: '500' } : null,
+                                noteFontColor ? { color: noteFontColor, fontWeight: FONT_WEIGHTS.MEDIUM } : null,
                             ]}
                             testID={CELL_NOTE_TEST_ID}
                             type={TEXT_VARIATIONS.BODY_SMALL}
