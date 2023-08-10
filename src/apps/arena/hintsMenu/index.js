@@ -19,6 +19,7 @@ import { Touchable, TouchableTypes } from '../../components/Touchable'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
+import { useThemeValues } from '../hooks/useTheme'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import {
@@ -32,6 +33,8 @@ const COLUMNS_COUNT = 3
 
 const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const { mainNumbers, notes } = useGameBoardInputs()
+
+    const theme = useThemeValues()
 
     useEffect(() => {
         onAction({
@@ -47,7 +50,12 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const onMenuItemClick = id => {
         onAction({
             type: ACTION_TYPES.ON_MENU_ITEM_PRESS,
-            payload: { id, mainNumbers, notes },
+            payload: {
+                id,
+                mainNumbers,
+                notes,
+                smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+            },
         })
     }
 

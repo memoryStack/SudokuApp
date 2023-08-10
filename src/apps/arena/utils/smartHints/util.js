@@ -66,6 +66,8 @@ const isCellFocusedInSmartHint = cell => {
     return !!smartHintCellsHighlightInfo[cell.row]?.[cell.col]
 }
 
+const transformCellBGColor = color => ({ backgroundColor: color })
+
 export {
     setCellDataInHintResult,
     setCellNotesHighlightDataInHintResult,
@@ -76,4 +78,5 @@ export {
     removeDuplicteCells,
     getCellsFromCellsToFocusedData,
     isCellFocusedInSmartHint,
+    transformCellBGColor,
 }

@@ -17,7 +17,7 @@ import {
 import { getHouseCells } from '../../../houseCells'
 import { Houses } from '../../../classes/houses'
 
-import { getCellsFromCellsToFocusedData, setCellDataInHintResult } from '../../util'
+import { getCellsFromCellsToFocusedData, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     HIDDEN_SINGLE_TYPES,
     HINTS_IDS,
@@ -26,6 +26,7 @@ import {
     HOUSE_TYPE,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import smartHintColorSystemReader from '../../colorSystemReader'
 
 import { getCellsAxesValuesListText } from '../helpers'
 
@@ -119,14 +120,14 @@ const getHostCellNeighbourHouseInfo = (hostCell, neighbourHouseType, mainNumbers
     return result
 }
 
-const highlightBlockCells = (hostCell, mainNumbers, cellsToFocusData) => {
+const highlightBlockCells = (hostCell, mainNumbers, cellsToFocusData, smartHintsColorSystem) => {
     getHouseCells(getCellBlockHouseInfo(hostCell))
         .forEach(cell => {
             if (areSameCells(cell, hostCell)) {
                 const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
                 setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
             } else if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
-                const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+                const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
                 setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
             } else {
                 setCellDataInHintResult(cell, getInhabitableCellData(), cellsToFocusData)
@@ -158,7 +159,7 @@ const getAllNeighbourHousesWithCandidateToHighlight = (hostCellNeighbourRowsInBl
     return result
 }
 
-const highlightCauseCells = (hostCell, mainNumbers, cellsToFocusData) => {
+const highlightCauseCells = (hostCell, mainNumbers, cellsToFocusData, smartHintsColorSystem) => {
     const hostCellNeighbourRowsInBlock = getHostCellNeighbourHouseInfo(hostCell, HOUSE_TYPE.ROW, mainNumbers)
     const hostCellNeighbourColsInBlock = getHostCellNeighbourHouseInfo(hostCell, HOUSE_TYPE.COL, mainNumbers)
 
@@ -173,16 +174,16 @@ const highlightCauseCells = (hostCell, mainNumbers, cellsToFocusData) => {
         Object.keys(neighbourHousesWithCandidateToHighlight[neighbourHousesKey]).forEach(houseNum => {
             const { candidateHostCell } = neighbourHousesKey === 'rows' ? hostCellNeighbourRowsInBlock[houseNum]
                 : hostCellNeighbourColsInBlock[houseNum]
-            const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+            const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
             setCellDataInHintResult(candidateHostCell, cellHighlightData, cellsToFocusData)
         })
     })
 }
 
-const getHiddenSingleInBlockHighlightData = (hostCell, mainNumbers) => {
+const getHiddenSingleInBlockHighlightData = (hostCell, mainNumbers, smartHintsColorSystem) => {
     const cellsToFocusData = {}
-    highlightBlockCells(hostCell, mainNumbers, cellsToFocusData)
-    highlightCauseCells(hostCell, mainNumbers, cellsToFocusData)
+    highlightBlockCells(hostCell, mainNumbers, cellsToFocusData, smartHintsColorSystem)
+    highlightCauseCells(hostCell, mainNumbers, cellsToFocusData, smartHintsColorSystem)
     return cellsToFocusData
 }
 
@@ -211,12 +212,12 @@ const getApplyHintData = rawHint => {
     ]
 }
 
-export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers }) => {
+export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem }) => {
     const { cell, type } = rawHint
 
     const cellsToFocusData = type === HIDDEN_SINGLE_TYPES.BLOCK
-        ? getHiddenSingleInBlockHighlightData(cell, mainNumbers)
-        : getHiddenSingleInRowOrColHighlightData(rawHint, mainNumbers)
+        ? getHiddenSingleInBlockHighlightData(cell, mainNumbers, smartHintsColorSystem)
+        : getHiddenSingleInRowOrColHighlightData(rawHint, mainNumbers, smartHintsColorSystem)
 
     const hiddenSingleCellSolutionValue = MainNumbersRecord.getCellSolutionValue(mainNumbers, cell)
 

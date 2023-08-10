@@ -8,27 +8,29 @@ import {
     getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists,
 } from '../../../util'
 
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     setCellDataInHintResult,
     getCandidatesListText,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
+    transformCellBGColor,
 } from '../../util'
 import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.constants'
 
 import { getCellsAxesValuesListText } from '../helpers'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
+import smartHintColorSystemReader from '../../colorSystemReader'
 
-export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
+export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }) => {
     const { groupCells } = rawHint
     const focusedCells = getHousesCellsSharedByCells(groupCells)
     const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)
 
     return {
         hasTryOut: true,
-        cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData),
+        cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData, smartHintsColorSystem),
         focusedCells,
         type: getHintId(groupCandidates),
         title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
@@ -43,11 +45,11 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData }) => {
     }
 }
 
-const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData) => {
+const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData, smartHintsColorSystem) => {
     const result = {}
 
     cells.forEach(cell => {
-        const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
 
         const notesToHighlightData = {}
         let notesWillBeHighlighted = false

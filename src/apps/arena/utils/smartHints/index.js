@@ -29,9 +29,11 @@ export const getRawHints = async (hintId, mainNumbers, notesData) => {
     return handler(mainNumbers, notesData)
 }
 
-export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData) => {
+export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData, smartHintsColorSystem) => {
     if (_isEmpty(rawHints)) return null
-    return _map(rawHints, rawHint => HINT_ID_VS_RAW_HINT_TRANSFORMERS[hintId]({ rawHint, mainNumbers, notesData }))
+    return _map(rawHints, rawHint => HINT_ID_VS_RAW_HINT_TRANSFORMERS[hintId]({
+        rawHint, mainNumbers, notesData, smartHintsColorSystem,
+    }))
 }
 
 // TODO: fix the contract of this module. it returns null and receiving all

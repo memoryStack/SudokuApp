@@ -6,13 +6,14 @@ import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
 import { getHouseCells } from '../../../../houseCells'
 import { getCellAxesValues, isCellExists } from '../../../../util'
 
-import { SMART_HINTS_CELLS_BG_COLOR, HINTS_IDS } from '../../../constants'
+import { HINTS_IDS } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
 import {
     setCellDataInHintResult,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     getCellsFromCellsToFocusedData,
+    transformCellBGColor,
 } from '../../../util'
 import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../../xWing/utils'
 
@@ -25,6 +26,7 @@ import {
     getXWingCornerCells,
     getApplyHintData,
 } from './helpers'
+import smartHintColorSystemReader from '../../../colorSystemReader'
 
 // TODO: come up with a better color scheme
 const DIAGONAL_CELLS_COLORS = {
@@ -53,7 +55,7 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
 }
 
 // TODO: synchronize the structre in which cells is passed around for all xWings
-const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
+const highlightHouseCells = ({ houseType, cells }, cellsToFocusData, smartHintsColorSystem) => {
     // TODO: this logic is repeated
     const firstHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].row : cells[0][0].col
     const secondHouseNum = Houses.isRowHouse(houseType) ? cells[1][0].row : cells[1][0].col
@@ -67,13 +69,13 @@ const highlightHouseCells = ({ houseType, cells }, cellsToFocusData) => {
             .filter(cell => !isCellExists(cell, xWingCells))
             .forEach(cell => setCellDataInHintResult(
                 cell,
-                { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT },
+                { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) },
                 cellsToFocusData,
             ))
     })
 }
 
-const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, cellsToFocusData) => {
+const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, cellsToFocusData, smartHintsColorSystem) => {
     const xWingCells = [...cells[0], ...cells[1]]
     const firstCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].col : cells[0][0].row
     const secondCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][1].col : cells[0][1].row
@@ -84,7 +86,7 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
             .filter(cell => !isCellExists(cell, xWingCells))
             .forEach(cell => {
                 const cellHighlightData = {
-                    bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+                    bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
                 }
 
                 if (NotesRecord.isNotePresentInCell(notesData, candidate, cell)) {
@@ -127,7 +129,7 @@ const getHintChunks = xWing => {
 const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => focusedCells.filter(cell => !isCellExists(cell, xWingCells)
     && NotesRecord.isNotePresentInCell(notes, candidate, cell))
 
-export const getPerfectXWingUIData = (xWing, notesData) => {
+export const getPerfectXWingUIData = (xWing, notesData, smartHintsColorSystem) => {
     const { legs, houseType } = xWing
     const { candidate } = legs[0]
     const cells = legs.map(leg => leg.cells)
@@ -135,8 +137,8 @@ export const getPerfectXWingUIData = (xWing, notesData) => {
 
     const cellsToFocusData = {}
     highlightXWingCells(xWingCells, candidate, cellsToFocusData)
-    highlightHouseCells({ houseType, cells }, cellsToFocusData)
-    highlightCrossHouseCells({ houseType, cells, candidate }, notesData, cellsToFocusData)
+    highlightHouseCells({ houseType, cells }, cellsToFocusData, smartHintsColorSystem)
+    highlightCrossHouseCells({ houseType, cells, candidate }, notesData, cellsToFocusData, smartHintsColorSystem)
 
     const tryOutInputPanelAllowedCandidates = [candidate]
 

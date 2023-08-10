@@ -43,12 +43,14 @@ const handleCloseHintsMenu = () => {
     setHintsMenuVisibilityAction(false)
 }
 
-const handleMenuItemPress = ({ getState, params: { id, mainNumbers, notes } }) => {
+const handleMenuItemPress = ({
+    getState, params: {
+        id, mainNumbers, notes, smartHintsColorSystem,
+    },
+}) => {
     handleCloseHintsMenu()
     const { availableRawHints } = getState()
-
-    showHintAction(id, availableRawHints[id], mainNumbers, notes)
-
+    showHintAction(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)
     updateGameState(GAME_STATE.ACTIVE)
 }
 

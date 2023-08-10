@@ -10,7 +10,7 @@ import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
 import {
-    HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES, SMART_HINTS_CELLS_BG_COLOR,
+    HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
@@ -30,9 +30,11 @@ import {
     getTryOutInputPanelNumbersVisibility,
     removeDuplicteCells,
     getCandidatesListText,
+    transformCellBGColor,
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { Houses } from '../../../classes/houses'
+import smartHintColorSystemReader from '../../colorSystemReader'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
@@ -65,10 +67,10 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) =
     return result
 }
 
-const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, notesData, cellsToFocusData) => {
+const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, notesData, cellsToFocusData, smartHintsColorSystem) => {
     const primaryHouseCells = getHouseCells(house)
     primaryHouseCells.forEach(cell => {
-        const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         const isHostCell = isCellExists(cell, groupHostCells)
         if (isHostCell) {
             const isPrimaryHouse = true
@@ -124,11 +126,12 @@ const highlightSecondaryHouseCells = (
     mainNumbers,
     notesData,
     cellsToFocusData,
+    smartHintsColorSystem,
 ) => {
     houseCells.forEach(cell => {
         const isHostCell = isCellExists(cell, groupHostCells)
         if (!isHostCell) {
-            const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+            const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
             if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
                 const isPrimaryHouse = false
                 cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
@@ -197,12 +200,14 @@ const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandida
     return result
 }
 
-export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notesData }) => {
+export const transformHiddenGroupRawHint = ({
+    rawHint: group, mainNumbers, notesData, smartHintsColorSystem,
+}) => {
     const { house, groupCandidates, groupCells: hostCells } = group
 
     const cellsToFocusData = {}
 
-    highlightPrimaryHouseCells(house, groupCandidates, hostCells, notesData, cellsToFocusData)
+    highlightPrimaryHouseCells(house, groupCandidates, hostCells, notesData, cellsToFocusData, smartHintsColorSystem)
 
     let focusedCells = getHouseCells(house)
     let removableGroupCandidatesHostCells = []
@@ -227,6 +232,7 @@ export const transformHiddenGroupRawHint = ({ rawHint: group, mainNumbers, notes
                 mainNumbers,
                 notesData,
                 cellsToFocusData,
+                smartHintsColorSystem,
             )
         }
         focusedCells.push(...secondaryHouseCells)

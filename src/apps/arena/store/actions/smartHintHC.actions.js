@@ -37,8 +37,8 @@ const {
     updateBoardDataOnTryOutErase,
 } = smartHintHCActions
 
-export const showHintAction = (hintId, rawHints, mainNumbers, notes) => {
-    const hints = getTransformedRawHints(hintId, rawHints, mainNumbers, notes)
+export const showHintAction = (hintId, rawHints, mainNumbers, notes, smartHintsColorSystem) => {
+    const hints = getTransformedRawHints(hintId, rawHints, mainNumbers, notes, smartHintsColorSystem)
     invokeDispatch(
         setHints({
             mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,

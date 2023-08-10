@@ -2,10 +2,11 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _map from '@lodash/map'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { getCellAxesValues } from '../../../util'
+import smartHintColorSystemReader from '../../colorSystemReader'
 
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks } from '../../util'
+import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, transformCellBGColor } from '../../util'
 import { getEliminatableNotesCells } from '../../yWing/utils'
 
 import { getCellsAxesValuesListText } from '../helpers'
@@ -13,13 +14,11 @@ import { getCellsAxesValuesListText } from '../helpers'
 const YWING_CELLS_TYPES = {
     PIVOT: 'PIVOT',
     WING: 'WING',
-    ELIMINABLE_NOTE: 'ELIMINABLE_NOTE',
 }
 
 const COLORS = {
     [YWING_CELLS_TYPES.PIVOT]: { backgroundColor: 'green' },
     [YWING_CELLS_TYPES.WING]: { backgroundColor: 'orange' },
-    [YWING_CELLS_TYPES.ELIMINABLE_NOTE]: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
 }
 
 const addPivotUIHighlightData = (pivotCell, cellsToFocusData) => {
@@ -34,9 +33,9 @@ const addWingsUIHighlightData = (wingCells, cellsToFocusData) => {
     })
 }
 
-const addEliminableNoteCellUIHighlightData = (eliminableNote, eliminableNotesCells, cellsToFocusData) => {
+const addEliminableNoteCellUIHighlightData = (eliminableNote, eliminableNotesCells, cellsToFocusData, smartHintsColorSystem) => {
     eliminableNotesCells.forEach(cell => {
-        const cellHighlightData = { bgColor: COLORS[YWING_CELLS_TYPES.ELIMINABLE_NOTE] }
+        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         cellHighlightData.notesToHighlightData = {
             [eliminableNote]: {
                 fontColor: 'red',
@@ -47,13 +46,13 @@ const addEliminableNoteCellUIHighlightData = (eliminableNote, eliminableNotesCel
 }
 
 const getUICellsToFocusData = ({
-    commonNoteInWings, pivotCell, wingCells, eliminableNotesCells,
+    commonNoteInWings, pivotCell, wingCells, eliminableNotesCells, smartHintsColorSystem,
 }) => {
     const cellsToFocusData = {}
 
     addPivotUIHighlightData(pivotCell, cellsToFocusData)
     addWingsUIHighlightData(wingCells, cellsToFocusData)
-    addEliminableNoteCellUIHighlightData(commonNoteInWings, eliminableNotesCells, cellsToFocusData)
+    addEliminableNoteCellUIHighlightData(commonNoteInWings, eliminableNotesCells, cellsToFocusData, smartHintsColorSystem)
 
     return cellsToFocusData
 }
@@ -82,7 +81,7 @@ const getApplyHintData = (yWing, notesData) => {
     }))
 }
 
-export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {
+export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsColorSystem }) => {
     const { pivot, wings } = yWing
 
     const wingCells = wings.map(wing => wing.cell)
@@ -92,6 +91,7 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData }) => {
         pivotCell: pivot.cell,
         wingCells,
         eliminableNotesCells: getEliminatableNotesCells(yWing, notesData),
+        smartHintsColorSystem,
     })
 
     const hintChunks = getHintExplainationChunks({

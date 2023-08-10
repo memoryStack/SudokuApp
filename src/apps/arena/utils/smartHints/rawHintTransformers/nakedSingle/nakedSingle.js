@@ -10,7 +10,7 @@ import {
     HOUSE_TYPE,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { setCellDataInHintResult } from '../../util'
+import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     areSameCells,
     getCellRowHouseInfo,
@@ -20,6 +20,7 @@ import {
 } from '../../../util'
 import { getHouseCells } from '../../../houseCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
+import smartHintColorSystemReader from '../../colorSystemReader'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue, cell) => {
     const msgPlaceholdersValues = {
@@ -50,22 +51,23 @@ const SMART_HINTS_TECHNIQUES = {
     },
 }
 
-const dataToHighlightHouseCells = (house, nakedSingleHostCell, cellsToFocusData = {}) => {
+const dataToHighlightHouseCells = (house, nakedSingleHostCell, cellsToFocusData, smartHintsColorSystem) => {
     _forEach(getHouseCells(house), cell => {
         const cellHighlightData = {
             bgColor: areSameCells(cell, nakedSingleHostCell)
                 ? SMART_HINTS_CELLS_BG_COLOR.SELECTED
-                : SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+                : transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
     })
     return cellsToFocusData
 }
 
-const nakedSingleMixHousesDataToHighlight = cell => {
-    let cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell)
-    cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell, cellsToFocusData)
-    cellsToFocusData = dataToHighlightHouseCells(getCellBlockHouseInfo(cell), cell, cellsToFocusData)
+const nakedSingleMixHousesDataToHighlight = (cell, smartHintsColorSystem) => {
+    let cellsToFocusData = {}
+    cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
+    cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
+    cellsToFocusData = dataToHighlightHouseCells(getCellBlockHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
     return cellsToFocusData
 }
 
@@ -79,15 +81,15 @@ const getApplyHintData = rawHint => {
     ]
 }
 
-export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
+export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem }) => {
     const { type, cell } = rawHint
 
     const { row, col } = cell
-    let cellsToFocusData = null
+    let cellsToFocusData = {}
     let logic = ''
     switch (type) {
         case NAKED_SINGLE_TYPES.ROW:
-            cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell)
+            cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 HOUSE_TYPE.ROW,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
@@ -95,7 +97,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
             )
             break
         case NAKED_SINGLE_TYPES.COL:
-            cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell)
+            cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 HOUSE_TYPE.COL,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
@@ -103,7 +105,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
             )
             break
         case NAKED_SINGLE_TYPES.BLOCK:
-            cellsToFocusData = dataToHighlightHouseCells(getCellBlockHouseInfo(cell), cell)
+            cellsToFocusData = dataToHighlightHouseCells(getCellBlockHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getSingleHouseMsg(
                 HOUSE_TYPE.BLOCK,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
@@ -111,7 +113,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers }) => {
             )
             break
         case NAKED_SINGLE_TYPES.MIX:
-            cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell)
+            cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell, smartHintsColorSystem)
             logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg(
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
