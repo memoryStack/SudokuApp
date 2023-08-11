@@ -28,7 +28,6 @@ const GROUPS = {
 */
 const SMART_HINTS_CELLS_BG_COLOR = {
     SELECTED: boardColorStyles.selectedCellBGColor,
-    IN_FOCUS_DEFAULT: boardColorStyles.defaultCellBGColor,
 }
 
 const NUMBER_TO_TEXT = {

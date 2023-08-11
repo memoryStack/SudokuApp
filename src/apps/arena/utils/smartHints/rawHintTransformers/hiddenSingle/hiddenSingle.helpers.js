@@ -4,7 +4,9 @@ import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { BLOCKS_COUNT_IN_ROW, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../../constants'
 import { getHouseCells } from '../../../houseCells'
 import { getCellHouseForHouseType, getHousesCommonCells } from '../../../util'
-import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE } from '../../constants'
+import { transformCellBGColor } from '../../util'
+import smartHintColorSystemReader from '../../colorSystemReader'
 
 export const getHostHouse = (hostCell, singleType) => {
     if (singleType === HIDDEN_SINGLE_TYPES.ROW) return getCellHouseForHouseType(HOUSE_TYPE.ROW, hostCell)
@@ -12,8 +14,8 @@ export const getHostHouse = (hostCell, singleType) => {
     return getCellHouseForHouseType(HOUSE_TYPE.BLOCK, hostCell)
 }
 
-export const getInhabitableCellData = () => ({
-    bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT,
+export const getInhabitableCellData = smartHintsColorSystem => ({
+    bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
     inhabitable: true,
 })
 

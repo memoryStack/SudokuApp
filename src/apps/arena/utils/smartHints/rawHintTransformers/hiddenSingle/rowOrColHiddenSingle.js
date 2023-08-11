@@ -29,7 +29,7 @@ const highlightRowOrColHostHouseCells = (hostCell, hiddenSingleType, mainNumbers
                 const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
                 setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
             } else {
-                setCellDataInHintResult(cell, getInhabitableCellData(), cellsToFocusData)
+                setCellDataInHintResult(cell, getInhabitableCellData(smartHintsColorSystem), cellsToFocusData)
             }
         })
 }

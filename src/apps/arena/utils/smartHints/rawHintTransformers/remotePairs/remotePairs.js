@@ -2,15 +2,16 @@ import _reduce from '@lodash/reduce'
 import _forEach from '@lodash/forEach'
 import _map from '@lodash/map'
 
-import { HINTS_IDS, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HINTS_IDS } from '../../constants'
 import { HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { setCellDataInHintResult, setCellNotesHighlightDataInHintResult } from '../../util'
+import { setCellDataInHintResult, setCellNotesHighlightDataInHintResult, transformCellBGColor } from '../../util'
 import { BoardIterators } from '../../../classes/boardIterators'
+import smartHintColorSystemReader from '../../colorSystemReader'
 
 const REMOTE_PAIRS_COLORS = ['green', 'rgb(217, 19, 235)']
 
-export const transformRemotePairsRawHint = ({ rawHint: remotePairs }) => ({
-    cellsToFocusData: getUICellsToFocusData(remotePairs),
+export const transformRemotePairsRawHint = ({ rawHint: remotePairs, smartHintsColorSystem }) => ({
+    cellsToFocusData: getUICellsToFocusData(remotePairs, smartHintsColorSystem),
     title: HINT_ID_VS_TITLES[HINTS_IDS.REMOTE_PAIRS],
     steps: [{ text: 'bla bla bla' }],
     svgProps: {
@@ -25,7 +26,7 @@ export const getNotesColors = remotePairNotes => _reduce(remotePairNotes, (acc, 
 
 // TODO: how to test schema of this function ??
 // or what and how to test functions like this in general
-const getUICellsToFocusData = remotePairs => {
+const getUICellsToFocusData = (remotePairs, smartHintsColorSystem) => {
     const result = {}
 
     const {
@@ -35,7 +36,7 @@ const getUICellsToFocusData = remotePairs => {
     } = remotePairs
 
     BoardIterators.forBoardEachCell(cell => {
-        const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.IN_FOCUS_DEFAULT }
+        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         setCellDataInHintResult(cell, cellHighlightData, result)
     })
 
