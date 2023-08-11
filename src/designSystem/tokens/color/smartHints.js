@@ -13,6 +13,11 @@ module.exports = {
                 pivotCellBGColor: { value: 'green' },
                 wingCellBGColor: { value: 'orange' },
             },
+            xWing: {
+                topLeftBottomRightCellsBGColor: { value: 'orange' },
+                topRightBottomLeftCellsBGColor: { value: 'pink' },
+                finnCellBGColor: { value: 'rgb(255, 245, 187)' },
+            },
         },
     },
 }

@@ -28,24 +28,16 @@ import {
 } from './helpers'
 import smartHintColorSystemReader from '../../../colorSystem.reader'
 
-// TODO: come up with a better color scheme
-const DIAGONAL_CELLS_COLORS = {
-    TOP_LEFT_BOTTOM_RIGHT: 'orange',
-    BOTTOM_LEFT_TOP_RIGHT: 'pink',
-}
-
 const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColorSystem) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
         const isBottomRightCell = index === 3
 
         const cellHighlightData = {
-            bgColor: {
-                backgroundColor:
-                    isTopLeftCell || isBottomRightCell
-                        ? DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT
-                        : DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT,
-            },
+            bgColor: transformCellBGColor(
+                isTopLeftCell || isBottomRightCell ? smartHintColorSystemReader.xWingTopLeftBottomRightCellBGColor(smartHintsColorSystem)
+                    : smartHintColorSystemReader.xWingTopRightBottomLeftCellBGColor(smartHintsColorSystem),
+            ),
             notesToHighlightData: {
                 [candidate]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
             },

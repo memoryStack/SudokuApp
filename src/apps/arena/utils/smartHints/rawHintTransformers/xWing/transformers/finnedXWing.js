@@ -36,14 +36,6 @@ import { XWING_TYPES } from '../../../xWing/constants'
 import { getApplyHintData, getHouseAxesText, getXWingCrossHouseFullNamePlural } from './helpers'
 import smartHintColorSystemReader from '../../../colorSystem.reader'
 
-// TODO: come up with a better color scheme
-// TODO: RENAME IT
-const DIAGONAL_CELLS_COLORS = {
-    TOP_LEFT_BOTTOM_RIGHT: 'orange',
-    BOTTOM_LEFT_TOP_RIGHT: 'pink',
-    FINN: 'rgb(255, 245, 187)',
-}
-
 const getCrossHouseType = houseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
 const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
@@ -132,12 +124,10 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColor
         const isBottomRightCell = index === 3
 
         const cellHighlightData = {
-            bgColor: {
-                backgroundColor:
-                    isTopLeftCell || isBottomRightCell
-                        ? DIAGONAL_CELLS_COLORS.TOP_LEFT_BOTTOM_RIGHT
-                        : DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT,
-            },
+            bgColor: transformCellBGColor(
+                isTopLeftCell || isBottomRightCell ? smartHintColorSystemReader.xWingTopLeftBottomRightCellBGColor(smartHintsColorSystem)
+                    : smartHintColorSystemReader.xWingTopRightBottomLeftCellBGColor(smartHintsColorSystem),
+            ),
             notesToHighlightData: {
                 [candidate]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
             },
@@ -149,9 +139,7 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColor
 const highlightFinnCells = (finnCells, candidate, cellsToFocusData, smartHintsColorSystem) => {
     finnCells.forEach(({ row, col }) => {
         const cellHighlightData = {
-            bgColor: {
-                backgroundColor: DIAGONAL_CELLS_COLORS.FINN,
-            },
+            bgColor: transformCellBGColor(smartHintColorSystemReader.xWingFinnCellBGColor(smartHintsColorSystem)),
             notesToHighlightData: {
                 [candidate]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
             },
