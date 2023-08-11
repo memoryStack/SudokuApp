@@ -4,6 +4,8 @@ module.exports = {
             cellDefaultBGColor: { value: '{colors.white}' },
             selectedCellBGColor: { value: 'rgb(255, 245, 187)' },
             inhabitableCellCrossColor: { value: 'rgb(167, 51, 37)' },
+            safeNoteColor: { value: 'green' },
+            toBeRemovedNoteColor: { value: 'red' },
         },
     },
 }

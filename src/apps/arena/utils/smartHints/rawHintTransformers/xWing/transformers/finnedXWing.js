@@ -126,7 +126,7 @@ const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData,
     })
 }
 
-const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
+const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColorSystem) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
         const isBottomRightCell = index === 3
@@ -139,21 +139,21 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
                         : DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT,
             },
             notesToHighlightData: {
-                [candidate]: { fontColor: 'green' },
+                [candidate]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
             },
         }
         setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
     })
 }
 
-const highlightFinnCells = (finnCells, candidate, cellsToFocusData) => {
+const highlightFinnCells = (finnCells, candidate, cellsToFocusData, smartHintsColorSystem) => {
     finnCells.forEach(({ row, col }) => {
         const cellHighlightData = {
             bgColor: {
                 backgroundColor: DIAGONAL_CELLS_COLORS.FINN,
             },
             notesToHighlightData: {
-                [candidate]: { fontColor: 'green' },
+                [candidate]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
             },
         }
         setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
@@ -167,7 +167,7 @@ const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cells
             const cellHighlightData = {
                 bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
                 notesToHighlightData: {
-                    [candidate]: { fontColor: 'red' },
+                    [candidate]: { fontColor: smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) },
                 },
             }
             setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
@@ -191,8 +191,8 @@ export const getFinnedXWingUIData = (xWing, notesData, smartHintsColorSystem) =>
 
     defaultHighlightHouseCells({ houseType, cells: [perfectLeg.cells, finnedLegPerfectCells] }, cellsToFocusData, smartHintsColorSystem)
     defaultHighlightCrossHouseCells({ houseType, cells: [perfectLeg.cells, finnedLegPerfectCells] }, cellsToFocusData, smartHintsColorSystem)
-    highlightXWingCells([...perfectLeg.cells, ...finnedLegPerfectCells], candidate, cellsToFocusData)
-    highlightFinnCells(finnCells, candidate, cellsToFocusData)
+    highlightXWingCells([...perfectLeg.cells, ...finnedLegPerfectCells], candidate, cellsToFocusData, smartHintsColorSystem)
+    highlightFinnCells(finnCells, candidate, cellsToFocusData, smartHintsColorSystem)
     highlightRemovableNotesHostCells(removableNotesHostCells, candidate, notesData, cellsToFocusData, smartHintsColorSystem)
 
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)

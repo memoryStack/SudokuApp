@@ -56,9 +56,9 @@ const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData, sm
         groupCandidates.forEach(groupCandidate => {
             if (NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell)) {
                 if (isCellExists(cell, groupCells)) {
-                    notesToHighlightData[groupCandidate] = { fontColor: 'green' }
+                    notesToHighlightData[groupCandidate] = { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) }
                 } else {
-                    notesToHighlightData[groupCandidate] = { fontColor: 'red' }
+                    notesToHighlightData[groupCandidate] = { fontColor: smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) }
                 }
                 notesWillBeHighlighted = true
             }

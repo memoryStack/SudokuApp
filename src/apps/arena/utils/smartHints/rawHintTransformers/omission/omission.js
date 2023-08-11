@@ -16,11 +16,6 @@ import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 
-const COLORS = {
-    HOST_HOUSE_NOTE: 'green',
-    REMOVABLE_NOTE: 'red',
-}
-
 const addHostHouseHighlightData = (omission, cellsToFocusData, smartHintsColorSystem) => {
     const { hostHouse, note, hostCells } = omission
 
@@ -28,7 +23,7 @@ const addHostHouseHighlightData = (omission, cellsToFocusData, smartHintsColorSy
         const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         if (isCellExists(cell, hostCells)) {
             cellHighlightData.notesToHighlightData = {
-                [note]: { fontColor: COLORS.HOST_HOUSE_NOTE },
+                [note]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
             }
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
@@ -45,7 +40,7 @@ const addRemovableNotesHouseHighlightData = (omission, notesData, cellsToFocusDa
         const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         if (NotesRecord.isNotePresentInCell(notesData, note, cell)) {
             cellHighlightData.notesToHighlightData = {
-                [note]: { fontColor: COLORS.REMOVABLE_NOTE },
+                [note]: { fontColor: smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) },
             }
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)

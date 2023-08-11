@@ -38,7 +38,7 @@ const addEliminableNoteCellUIHighlightData = (eliminableNote, eliminableNotesCel
         const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         cellHighlightData.notesToHighlightData = {
             [eliminableNote]: {
-                fontColor: 'red',
+                fontColor: smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem),
             },
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)

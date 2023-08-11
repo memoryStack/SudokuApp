@@ -34,7 +34,7 @@ const DIAGONAL_CELLS_COLORS = {
     BOTTOM_LEFT_TOP_RIGHT: 'pink',
 }
 
-const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
+const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColorSystem) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
         const isBottomRightCell = index === 3
@@ -47,7 +47,7 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData) => {
                         : DIAGONAL_CELLS_COLORS.BOTTOM_LEFT_TOP_RIGHT,
             },
             notesToHighlightData: {
-                [candidate]: { fontColor: 'green' },
+                [candidate]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
             },
         }
         setCellDataInHintResult({ row, col }, cellHighlightData, cellsToFocusData)
@@ -91,7 +91,7 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
 
                 if (NotesRecord.isNotePresentInCell(notesData, candidate, cell)) {
                     cellHighlightData.notesToHighlightData = {
-                        [candidate]: { fontColor: 'red' },
+                        [candidate]: { fontColor: smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) },
                     }
                 }
 
@@ -136,7 +136,7 @@ export const getPerfectXWingUIData = (xWing, notesData, smartHintsColorSystem) =
     const xWingCells = getXWingCells(xWing.legs)
 
     const cellsToFocusData = {}
-    highlightXWingCells(xWingCells, candidate, cellsToFocusData)
+    highlightXWingCells(xWingCells, candidate, cellsToFocusData, smartHintsColorSystem)
     highlightHouseCells({ houseType, cells }, cellsToFocusData, smartHintsColorSystem)
     highlightCrossHouseCells({ houseType, cells, candidate }, notesData, cellsToFocusData, smartHintsColorSystem)
 

@@ -6,6 +6,7 @@ import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
 
+import { consoleLog } from '@utils/util'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
@@ -48,13 +49,12 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
     return _sortNumbers(_unique(result))
 }
 
-const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates) => {
+const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates, smartHintsColorSystem) => {
+    consoleLog('@@@@', smartHintsColorSystem)
     const result = {}
-
-    // put these color in the color scheme and replace for naked group as well
     const NOTES_COLOR_SCHEME = {
-        candidate: isPrimaryHouse ? 'green' : 'red',
-        nonCandidate: isPrimaryHouse ? 'red' : '',
+        candidate: isPrimaryHouse ? smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) : smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem),
+        nonCandidate: isPrimaryHouse ? smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) : '',
     }
     cellNotes.forEach(({ show, noteValue }) => {
         if (show) {
@@ -78,6 +78,7 @@ const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, note
                 isPrimaryHouse,
                 NotesRecord.getCellNotes(notesData, cell),
                 groupCandidates,
+                smartHintsColorSystem,
             )
         }
         // TODO: improve the naming of this func

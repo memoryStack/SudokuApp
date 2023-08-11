@@ -4,6 +4,8 @@ const smartHintColorSystemReader = {
     cellDefaultBGColor: _property('cellDefaultBGColor'),
     selectedCellBGColor: _property('selectedCellBGColor'),
     inhabitableCellCrossColor: _property('inhabitableCellCrossColor'),
+    safeNoteColor: _property('safeNoteColor'),
+    toBeRemovedNoteColor: _property('toBeRemovedNoteColor'),
 }
 
 export default smartHintColorSystemReader
