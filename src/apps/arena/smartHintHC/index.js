@@ -16,6 +16,7 @@ import { CloseIcon } from '@resources/svgIcons/close'
 
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+import { useStyles } from '@utils/customHooks/useStyles'
 
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 
@@ -29,7 +30,7 @@ import { Inputpanel } from '../inputPanel'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { getContainerStyles, styles } from './smartHintHC.styles'
+import { getStyles } from './smartHintHC.styles'
 import {
     FOOTER_BUTTONS_TEXT,
     SMART_HINT_HC_TEST_ID,
@@ -65,6 +66,8 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const smartHintHCRef = useRef(null)
 
     const { height: windowHeight } = useWindowDimensions()
+
+    const styles = useStyles(getStyles, { windowHeight })
 
     const scrollViewRef = useRef(null)
     const hintsScrollPositions = useRef({})
@@ -112,8 +115,6 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
     const isFirstHint = currentHintNum === 1
     const displayNextButton = !(isOnlyHint || isLastHint)
     const displayPrevButton = !(isOnlyHint || isFirstHint)
-
-    const containerStyles = getContainerStyles(windowHeight)
 
     const renderHeader = () => (
         <View style={styles.headerContainer}>
@@ -185,7 +186,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             animateBackgroundOverlayOnClose={false}
             testID={SMART_HINT_HC_TEST_ID}
         >
-            <View style={containerStyles} testID={SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID}>
+            <View style={styles.containerStyles} testID={SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID}>
                 {renderHeader()}
                 <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText()}</View>
                 {renderFooter()}

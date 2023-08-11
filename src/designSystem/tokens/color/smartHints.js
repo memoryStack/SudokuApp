@@ -7,6 +7,8 @@ module.exports = {
             safeNoteColor: { value: 'green' },
             toBeRemovedNoteColor: { value: 'red' },
             tryOutFilledNumberColor: { value: '#FF9900' },
+            correctTryOutInputMsgColor: { value: 'green' },
+            incorrectTryOutInputMsgColor: { value: 'red' },
         },
     },
 }

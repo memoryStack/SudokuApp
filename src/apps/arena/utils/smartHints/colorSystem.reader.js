@@ -7,6 +7,8 @@ const smartHintColorSystemReader = {
     safeNoteColor: _property('safeNoteColor'),
     toBeRemovedNoteColor: _property('toBeRemovedNoteColor'),
     tryOutFilledNumberColor: _property('tryOutFilledNumberColor'),
+    correctTryOutInputMsgColor: _property('correctTryOutInputMsgColor'),
+    incorrectTryOutInputMsgColor: _property('incorrectTryOutInputMsgColor'),
 }
 
 export default smartHintColorSystemReader

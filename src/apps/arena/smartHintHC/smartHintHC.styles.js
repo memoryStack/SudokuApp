@@ -1,9 +1,20 @@
 import { StyleSheet } from 'react-native'
 
+import _get from '@lodash/get'
+
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 
+import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
+
 const FOOTER_HEIGHT = 24
-export const styles = StyleSheet.create({
+
+export const getStyles = ({ windowHeight }, theme) => StyleSheet.create({
+    containerStyles: {
+        width: '100%',
+        padding: 16,
+        paddingBottom: 8,
+        height: windowHeight / 4 + FOOTER_HEIGHT,
+    },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -42,19 +53,12 @@ export const styles = StyleSheet.create({
         color: 'black',
     },
     tryOutErrorResult: {
-        color: 'red',
+        color: smartHintColorSystemReader.incorrectTryOutInputMsgColor(_get(theme, 'colors.smartHints')),
     },
     tryOutProgressResult: {
-        color: 'green',
+        color: smartHintColorSystemReader.correctTryOutInputMsgColor(_get(theme, 'colors.smartHints')),
     },
     snackBar: {
         bottom: 200,
     },
-})
-
-export const getContainerStyles = windowHeight => ({
-    width: '100%',
-    padding: 16,
-    paddingBottom: 8,
-    height: windowHeight / 4 + FOOTER_HEIGHT,
 })
