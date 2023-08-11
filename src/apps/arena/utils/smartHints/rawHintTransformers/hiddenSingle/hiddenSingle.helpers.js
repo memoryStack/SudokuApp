@@ -15,8 +15,9 @@ export const getHostHouse = (hostCell, singleType) => {
 }
 
 export const getInhabitableCellData = smartHintsColorSystem => ({
-    bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
     inhabitable: true,
+    bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
+    crossIconColor: smartHintColorSystemReader.inhabitableCellCrossColor(smartHintsColorSystem),
 })
 
 export const getNextNeighbourBlock = (currentBlockNumIdx, direction) => {

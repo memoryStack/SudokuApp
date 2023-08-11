@@ -138,7 +138,10 @@ const Board_ = ({
         return getActiveGameBoardCellBgCell(cell)
     }
 
-    const shouldMarkCellAsInhabitable = cell => _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false)
+    const getInhabitableCellProps = cell => ({
+        displayCrossIcon: _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false),
+        crossIconColor: _get(cellsHighlightData, [cell.row, cell.col, 'crossIconColor'], ''),
+    })
 
     const renderRow = (row, key) => {
         const rowAdditionalStyles = {
@@ -172,7 +175,7 @@ const Board_ = ({
                                 cellMainValue={MainNumbersRecord.getCellMainValue(mainNumbers, cell)}
                                 cellNotes={_get(notes, [row, col])}
                                 onCellClick={onCellClick}
-                                displayCrossIcon={shouldMarkCellAsInhabitable(cell)}
+                                {...getInhabitableCellProps(cell)}
                                 smartHintData={_get(cellsHighlightData, [row, col])}
                                 selectedMainNumber={selectedCellMainValue}
                                 showSmartHint={showSmartHint}

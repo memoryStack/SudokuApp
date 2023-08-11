@@ -16,8 +16,6 @@ import { Touchable } from '../../../components/Touchable'
 
 import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensions'
 
-import { COLOR_SCHEME_STYLES as boardColorStyles } from '../gameBoard.styles'
-
 import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from './cell.constants'
 import { getStyles } from './cell.styles'
 
@@ -37,6 +35,7 @@ const Cell_ = ({
     onCellClick,
     showCellContent,
     displayCrossIcon,
+    crossIconColor,
     smartHintData,
     selectedMainNumber,
     showSmartHint,
@@ -98,7 +97,7 @@ const Cell_ = ({
         <CloseIcon
             height={CROSS_ICON_DIMENSION}
             width={CROSS_ICON_DIMENSION}
-            fill={boardColorStyles.wronglyFilledNumColor.color}
+            fill={crossIconColor}
         />
     )
 
@@ -143,6 +142,7 @@ Cell_.propTypes = {
     onCellClick: PropTypes.func,
     showCellContent: PropTypes.bool,
     displayCrossIcon: PropTypes.bool,
+    crossIconColor: PropTypes.string,
     smartHintData: PropTypes.object,
     selectedMainNumber: PropTypes.number,
     showSmartHint: PropTypes.bool,
@@ -159,6 +159,7 @@ Cell_.defaultProps = {
     onCellClick: _noop,
     showCellContent: true,
     displayCrossIcon: false,
+    crossIconColor: '',
     smartHintData: {},
     selectedMainNumber: 0,
     showSmartHint: false,
