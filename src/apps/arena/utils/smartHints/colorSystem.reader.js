@@ -6,6 +6,7 @@ const smartHintColorSystemReader = {
     inhabitableCellCrossColor: _property('inhabitableCellCrossColor'),
     safeNoteColor: _property('safeNoteColor'),
     toBeRemovedNoteColor: _property('toBeRemovedNoteColor'),
+    tryOutFilledNumberColor: _property('tryOutFilledNumberColor'),
 }
 
 export default smartHintColorSystemReader

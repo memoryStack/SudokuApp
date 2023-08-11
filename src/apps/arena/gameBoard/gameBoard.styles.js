@@ -1,9 +1,14 @@
 import { StyleSheet } from 'react-native'
+
+import _get from '@lodash/get'
+
 import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
+
 import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
+import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
 
 // TODO: think of a better color scheme mechanism
-export const COLOR_SCHEME_STYLES = {
+const COLOR_SCHEME_STYLES = {
     thickBorder: {
         backgroundColor: 'black',
     },
@@ -35,12 +40,9 @@ export const COLOR_SCHEME_STYLES = {
     clueNumColor: {
         color: 'rgb(12, 25, 22)',
     },
-    tryOutInputColor: {
-        color: '#FF9900',
-    },
 }
 
-export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }) => StyleSheet.create({
+export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, theme) => StyleSheet.create({
     board: {
         display: 'flex',
         height: BOARD_GRID_HEIGHT,
@@ -79,6 +81,9 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }) =
         height: CELL_WIDTH,
     },
     ...COLOR_SCHEME_STYLES,
+    tryOutInputColor: {
+        color: smartHintColorSystemReader.tryOutFilledNumberColor(_get(theme, 'colors.smartHints')),
+    },
     yAxis: {
         justifyContent: 'space-around',
         alignItems: 'center',

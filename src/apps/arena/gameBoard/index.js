@@ -15,6 +15,8 @@ import { GAME_STATE } from '@resources/constants'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
+
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import {
     areSameCells,
@@ -59,7 +61,7 @@ const Board_ = ({
 }) => {
     const { BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH } = useBoardElementsDimensions()
 
-    const styles = useMemo(() => getStyles({ BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH }), [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
+    const styles = useStyles(getStyles, { BOARD_GRID_HEIGHT, BOARD_GRID_WIDTH, CELL_WIDTH }, [BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH])
 
     const selectedCellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell) || 0
 

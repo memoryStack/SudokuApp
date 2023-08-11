@@ -6,6 +6,7 @@ module.exports = {
             inhabitableCellCrossColor: { value: 'rgb(167, 51, 37)' },
             safeNoteColor: { value: 'green' },
             toBeRemovedNoteColor: { value: 'red' },
+            tryOutFilledNumberColor: { value: '#FF9900' },
         },
     },
 }
