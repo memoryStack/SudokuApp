@@ -11,24 +11,14 @@ import { getEliminatableNotesCells } from '../../yWing/utils'
 
 import { getCellsAxesValuesListText } from '../helpers'
 
-const YWING_CELLS_TYPES = {
-    PIVOT: 'PIVOT',
-    WING: 'WING',
-}
-
-const COLORS = {
-    [YWING_CELLS_TYPES.PIVOT]: { backgroundColor: 'green' },
-    [YWING_CELLS_TYPES.WING]: { backgroundColor: 'orange' },
-}
-
-const addPivotUIHighlightData = (pivotCell, cellsToFocusData) => {
-    const pivotCellHighlightData = { bgColor: COLORS[YWING_CELLS_TYPES.PIVOT] }
+const addPivotUIHighlightData = (pivotCell, cellsToFocusData, smartHintsColorSystem) => {
+    const pivotCellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.yWingPivotCellBGColor(smartHintsColorSystem)) }
     setCellDataInHintResult(pivotCell, pivotCellHighlightData, cellsToFocusData)
 }
 
-const addWingsUIHighlightData = (wingCells, cellsToFocusData) => {
+const addWingsUIHighlightData = (wingCells, cellsToFocusData, smartHintsColorSystem) => {
     wingCells.forEach(wingCell => {
-        const wingCellHighlightData = { bgColor: COLORS[YWING_CELLS_TYPES.WING] }
+        const wingCellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.yWingWingCellBGColor(smartHintsColorSystem)) }
         setCellDataInHintResult(wingCell, wingCellHighlightData, cellsToFocusData)
     })
 }
@@ -49,11 +39,9 @@ const getUICellsToFocusData = ({
     commonNoteInWings, pivotCell, wingCells, eliminableNotesCells, smartHintsColorSystem,
 }) => {
     const cellsToFocusData = {}
-
-    addPivotUIHighlightData(pivotCell, cellsToFocusData)
-    addWingsUIHighlightData(wingCells, cellsToFocusData)
+    addPivotUIHighlightData(pivotCell, cellsToFocusData, smartHintsColorSystem)
+    addWingsUIHighlightData(wingCells, cellsToFocusData, smartHintsColorSystem)
     addEliminableNoteCellUIHighlightData(commonNoteInWings, eliminableNotesCells, cellsToFocusData, smartHintsColorSystem)
-
     return cellsToFocusData
 }
 

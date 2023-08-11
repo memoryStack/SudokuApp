@@ -16,6 +16,7 @@ import { CloseIcon } from '@resources/svgIcons/close'
 
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'

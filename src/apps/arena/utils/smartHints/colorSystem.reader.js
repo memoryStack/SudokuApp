@@ -9,6 +9,8 @@ const smartHintColorSystemReader = {
     tryOutFilledNumberColor: _property('tryOutFilledNumberColor'),
     correctTryOutInputMsgColor: _property('correctTryOutInputMsgColor'),
     incorrectTryOutInputMsgColor: _property('incorrectTryOutInputMsgColor'),
+    yWingPivotCellBGColor: _property('yWing.pivotCellBGColor'),
+    yWingWingCellBGColor: _property('yWing.wingCellBGColor'),
 }
 
 export default smartHintColorSystemReader

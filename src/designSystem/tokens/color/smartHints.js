@@ -9,6 +9,10 @@ module.exports = {
             tryOutFilledNumberColor: { value: '#FF9900' },
             correctTryOutInputMsgColor: { value: 'green' },
             incorrectTryOutInputMsgColor: { value: 'red' },
+            yWing: {
+                pivotCellBGColor: { value: 'green' },
+                wingCellBGColor: { value: 'orange' },
+            },
         },
     },
 }
