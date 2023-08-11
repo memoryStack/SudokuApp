@@ -21,7 +21,7 @@ import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.const
 
 import { getCellsAxesValuesListText } from '../helpers'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 
 export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }) => {
     const { groupCells } = rawHint

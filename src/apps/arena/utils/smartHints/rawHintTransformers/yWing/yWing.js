@@ -2,7 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _map from '@lodash/map'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { getCellAxesValues } from '../../../util'
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'

@@ -34,7 +34,7 @@ import {
 import { XWING_TYPES } from '../../../xWing/constants'
 
 import { getApplyHintData, getHouseAxesText, getXWingCrossHouseFullNamePlural } from './helpers'
-import smartHintColorSystemReader from '../../../colorSystemReader'
+import smartHintColorSystemReader from '../../../colorSystem.reader'
 
 // TODO: come up with a better color scheme
 // TODO: RENAME IT

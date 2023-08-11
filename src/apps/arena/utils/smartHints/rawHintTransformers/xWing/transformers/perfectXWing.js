@@ -26,7 +26,7 @@ import {
     getXWingCornerCells,
     getApplyHintData,
 } from './helpers'
-import smartHintColorSystemReader from '../../../colorSystemReader'
+import smartHintColorSystemReader from '../../../colorSystem.reader'
 
 // TODO: come up with a better color scheme
 const DIAGONAL_CELLS_COLORS = {

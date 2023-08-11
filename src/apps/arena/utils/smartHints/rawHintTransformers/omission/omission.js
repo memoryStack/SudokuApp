@@ -14,7 +14,7 @@ import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellsAxesValuesListText } from '../helpers'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 
 const COLORS = {
     HOST_HOUSE_NOTE: 'green',

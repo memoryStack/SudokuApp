@@ -6,7 +6,7 @@ import { getHouseCells } from '../../../houseCells'
 import { getCellHouseForHouseType, getHousesCommonCells } from '../../../util'
 import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE } from '../../constants'
 import { transformCellBGColor } from '../../util'
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 
 export const getHostHouse = (hostCell, singleType) => {
     if (singleType === HIDDEN_SINGLE_TYPES.ROW) return getCellHouseForHouseType(HOUSE_TYPE.ROW, hostCell)

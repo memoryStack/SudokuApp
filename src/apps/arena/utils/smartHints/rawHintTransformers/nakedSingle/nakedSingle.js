@@ -20,7 +20,7 @@ import {
 } from '../../../util'
 import { getHouseCells } from '../../../houseCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 
 const getSingleHouseNakedSingleDescription = (houseType, solutionValue, cell) => {
     const msgPlaceholdersValues = {

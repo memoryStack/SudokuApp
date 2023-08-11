@@ -6,7 +6,7 @@ import {
     areSameCells, getBlockAndBoxNum, getCellHouseForHouseType, getHousesCommonCells,
 } from '../../../util'
 
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 

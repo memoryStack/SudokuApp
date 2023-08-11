@@ -6,7 +6,7 @@ import { HINTS_IDS } from '../../constants'
 import { HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { setCellDataInHintResult, setCellNotesHighlightDataInHintResult, transformCellBGColor } from '../../util'
 import { BoardIterators } from '../../../classes/boardIterators'
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 
 const REMOTE_PAIRS_COLORS = ['green', 'rgb(217, 19, 235)']
 

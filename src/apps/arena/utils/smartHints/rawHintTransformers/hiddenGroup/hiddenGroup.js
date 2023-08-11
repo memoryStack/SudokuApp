@@ -34,7 +34,7 @@ import {
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { Houses } from '../../../classes/houses'
-import smartHintColorSystemReader from '../../colorSystemReader'
+import smartHintColorSystemReader from '../../colorSystem.reader'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
