@@ -22,7 +22,6 @@ import {
     HIDDEN_SINGLE_TYPES,
     HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
-    SMART_HINTS_CELLS_BG_COLOR,
     HOUSE_TYPE,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
@@ -124,7 +123,7 @@ const highlightBlockCells = (hostCell, mainNumbers, cellsToFocusData, smartHints
     getHouseCells(getCellBlockHouseInfo(hostCell))
         .forEach(cell => {
             if (areSameCells(cell, hostCell)) {
-                const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
+                const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.selectedCellBGColor(smartHintsColorSystem)) }
                 setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
             } else if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
                 const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }

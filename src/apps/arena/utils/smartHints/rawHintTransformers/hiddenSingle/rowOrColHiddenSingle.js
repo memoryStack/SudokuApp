@@ -7,7 +7,7 @@ import {
 } from '../../../util'
 
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE, SMART_HINTS_CELLS_BG_COLOR } from '../../constants'
+import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE } from '../../constants'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 
 import {
@@ -23,7 +23,7 @@ const highlightRowOrColHostHouseCells = (hostCell, hiddenSingleType, mainNumbers
     getHouseCells(getHostHouse(hostCell, hiddenSingleType))
         .forEach(cell => {
             if (areSameCells(hostCell, cell)) {
-                const cellHighlightData = { bgColor: SMART_HINTS_CELLS_BG_COLOR.SELECTED }
+                const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.selectedCellBGColor(smartHintsColorSystem)) }
                 setCellDataInHintResult(hostCell, cellHighlightData, cellsToFocusData)
             } else if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
                 const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }

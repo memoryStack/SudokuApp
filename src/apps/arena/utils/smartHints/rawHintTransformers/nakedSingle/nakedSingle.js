@@ -3,7 +3,6 @@ import _forEach from '@lodash/forEach'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
-    SMART_HINTS_CELLS_BG_COLOR,
     NAKED_SINGLE_TYPES,
     HINTS_IDS,
     HOUSE_TYPE_VS_FULL_NAMES,
@@ -55,7 +54,7 @@ const dataToHighlightHouseCells = (house, nakedSingleHostCell, cellsToFocusData,
     _forEach(getHouseCells(house), cell => {
         const cellHighlightData = {
             bgColor: areSameCells(cell, nakedSingleHostCell)
-                ? SMART_HINTS_CELLS_BG_COLOR.SELECTED
+                ? transformCellBGColor(smartHintColorSystemReader.selectedCellBGColor(smartHintsColorSystem))
                 : transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)

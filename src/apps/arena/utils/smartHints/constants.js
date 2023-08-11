@@ -1,5 +1,3 @@
-import { COLOR_SCHEME_STYLES as boardColorStyles } from '../../gameBoard/gameBoard.styles'
-
 const UI_HINTS_COUNT_THRESHOLD = 1
 
 const HOUSE_TYPE = {
@@ -20,14 +18,6 @@ const HIDDEN_SINGLE_TYPES = {
 const GROUPS = {
     NAKED_GROUP: 'NAKED_GROUP',
     HIDDEN_GROUP: 'HIDDEN_GROUP',
-}
-
-/*
-    TODO: come upp with better colors later on
-    let's focus on the functionality for now
-*/
-const SMART_HINTS_CELLS_BG_COLOR = {
-    SELECTED: boardColorStyles.selectedCellBGColor,
 }
 
 const NUMBER_TO_TEXT = {
@@ -119,7 +109,6 @@ export {
     NAKED_SINGLE_TYPES,
     HIDDEN_SINGLE_TYPES,
     GROUPS,
-    SMART_HINTS_CELLS_BG_COLOR,
     NUMBER_TO_TEXT,
     HOUSE_TYPE,
     HINTS_MENU_ITEMS,
