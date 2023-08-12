@@ -16,7 +16,7 @@ import { LANGAUGE_OPTIONS } from '../../../i18n/languages'
 import { Touchable } from '../Touchable'
 
 import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'
-import { styles } from './languageSelector.styles'
+import { styles } from './languageSelector.stylesss'
 
 const LanguageSelector_ = ({ hideModal }) => {
     const { t, i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
