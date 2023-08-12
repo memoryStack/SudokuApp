@@ -9,7 +9,7 @@ import { mainNumbers, cellsHighlightData } from './boardData'
 
 import { RULES_TEXT_CONFIG } from './playGuide.constants'
 
-import { styles } from './style'
+import { styles } from './playGuide.styles'
 
 const PlayGuide_ = () => {
     const renderBoard = () => (

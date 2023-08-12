@@ -18,7 +18,7 @@ import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensio
 import { COLOR_SCHEME_STYLES as boardColorStyles } from '../gameBoard.styles'
 
 import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from './cell.constants'
-import { getStyles } from './style'
+import { getStyles } from './cell.styles'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
 // becoz only 3 notes are there in a row

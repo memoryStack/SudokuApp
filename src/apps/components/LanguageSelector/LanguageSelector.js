@@ -8,15 +8,15 @@ import _noop from '@lodash/noop'
 
 import Radio from '@ui/atoms/RadioButton'
 import Text from '@ui/atoms/Text'
-
 import Dialog from '@ui/molecules/Dialog'
+
 import { useTranslation } from '../../../i18n/hooks/useTranslation'
 import { LANGAUGE_OPTIONS } from '../../../i18n/languages'
 
 import { Touchable } from '../Touchable'
 
 import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'
-import { styles } from './style'
+import { styles } from './languageSelector.styles'
 
 const LanguageSelector_ = ({ hideModal }) => {
     const { t, i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
