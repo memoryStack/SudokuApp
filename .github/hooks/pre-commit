@@ -62,6 +62,12 @@ fi
 developerStagedFiles=$(git diff --name-only --cached)
 untrackedFiles=$(git ls-files --others --exclude-standard)
 
+renamedFilesOldNames=$(git diff --cached --name-status --diff-filter=R | awk '{ 
+    for (i=1; i<=NF; i++) { 
+        if ($i ~ /^R[0-9]+$/) renamedFilesOldNames = renamedFilesOldNames " " $(i+1)
+    } 
+} END { print renamedFilesOldNames }')
+
 git add .
 
 git stash
@@ -79,6 +85,8 @@ git stash pop || {
 git add $developerStagedFiles
 
 git restore --staged $untrackedFiles
+
+git add $renamedFilesOldNames
 
 npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
 
