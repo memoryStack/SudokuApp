@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import _values from '@lodash/values'
+
 import { useBoardElementsDimensions } from '../../apps/arena/hooks/useBoardElementsDimensions'
 import { useThemeValues } from '../../apps/arena/hooks/useTheme'
 
@@ -13,10 +15,7 @@ export const useStyles = (stylesHandler, customProps) => {
             ...boardElementsDimensions,
             ...customProps,
         }
-
         return stylesHandler(styleHandlerProps, theme)
-        // TODO: try to optimize it try spreading customProps inside this dependency array
-        // else will have to use lot of useMemo in all the components to avoid styles generation
-    }, [theme, boardElementsDimensions, customProps])
+    }, [stylesHandler, ..._values(customProps), theme, boardElementsDimensions])
     return styles
 }
