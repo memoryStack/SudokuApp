@@ -15,23 +15,28 @@ import { useThemeValues } from '../../../apps/arena/hooks/useTheme'
 
 import { TEXT_VARIATIONS, TEXT_VARIATION_VS_TOKENS_PATH } from './text.constants'
 
-const getFinalStyles = (styleProp, type, theme) => {
+const getFinalStyles = (styleProp, type, withoutLineHeight, theme) => {
     const styleFromProps = _isArray(styleProp) ? Object.assign({}, ...styleProp) : styleProp
 
-    return {
+    const result = {
         ..._get(theme, TEXT_VARIATION_VS_TOKENS_PATH[type], {}),
         ...styleFromProps,
     }
+
+    if (withoutLineHeight) delete result.lineHeight
+
+    return result
 }
 
 const Text = ({
     style,
     type,
+    withoutLineHeight,
     ...rest
 }) => {
     const theme = useThemeValues()
 
-    const styles = getFinalStyles(style, type, theme)
+    const styles = getFinalStyles(style, type, withoutLineHeight, theme)
     const fontWeight = _get(styles, 'fontWeight', FONT_WEIGHTS.REGULAR)
     const stylesWithFont = {
         ...styles,
@@ -57,9 +62,11 @@ Text.propTypes = {
         PropTypes.array,
     ]),
     type: PropTypes.oneOf(Object.keys(TEXT_VARIATIONS)),
+    withoutLineHeight: PropTypes.bool,
 }
 
 Text.defaultProps = {
     style: {},
     type: TEXT_VARIATIONS.BODY_LARGE,
+    withoutLineHeight: false,
 }

@@ -44,7 +44,7 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
-    const styles = useMemo(() => getStyles(), [])
+    const styles = useMemo(() => getStyles(CELL_HEIGHT), [CELL_HEIGHT])
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
@@ -78,6 +78,7 @@ const Cell_ = ({
                             ]}
                             testID={CELL_NOTE_TEST_ID}
                             type={TEXT_VARIATIONS.BODY_SMALL}
+                            withoutLineHeight
                         >
                             {show ? `${noteValue}` : ''}
                         </Text>
@@ -103,9 +104,10 @@ const Cell_ = ({
 
     const renderCellMainValue = () => (
         <Text
-            style={mainValueFontColor}
+            style={[styles.mainNumberText, mainValueFontColor]}
             testID={CELL_MAIN_VALUE_TEST_ID}
             type={TEXT_VARIATIONS.HEADING_LARGE}
+            withoutLineHeight
         >
             {cellMainValue}
         </Text>
