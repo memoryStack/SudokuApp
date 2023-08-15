@@ -19,6 +19,13 @@ export const styles = StyleSheet.create({
         right: 0,
         zIndex: 1,
     },
+    gameOverAnimatedBG: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(0, 0, 0, .8)',
+    },
     inputPanelContainer: {
         width: '100%',
         marginVertical: 20,
