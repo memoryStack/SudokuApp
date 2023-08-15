@@ -5,6 +5,5 @@ import { getRouteHeaderTitle } from './navigation.utils'
 export const getNavigationOptions = ({ navigation, route }) => ({
     headerLeft: () => renderLeftHeader({ navigation, route }),
     headerRight: () => renderRightHeader({ navigation, route }),
-    headerTransparent: true,
     title: getRouteHeaderTitle(route),
 })

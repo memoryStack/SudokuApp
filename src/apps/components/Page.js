@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 import _noop from '@lodash/noop'
 
 import { consoleLog } from '@utils/util'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Platform } from '../../utils/classes/platform'
 import { AppState } from '../../utils/classes/appState'
 import { EVENTS } from '../../constants/events'
@@ -17,7 +18,6 @@ const styles = StyleSheet.create({
     safeAreaView: {
         flex: 1,
         width: '100%',
-        paddingTop: Platform.isIOS() ? 64 : 56,
     },
 })
 
@@ -32,6 +32,8 @@ const Page_ = ({
     ...restProps
 }) => {
     const navigation = useNavigation()
+
+    const insets = useSafeAreaInsets()
 
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState() === 'active')
 
@@ -94,7 +96,7 @@ const Page_ = ({
     return (
         <SafeAreaView
             onLayout={onLayout}
-            style={[styles.safeAreaView, styleProp]}
+            style={[styles.safeAreaView, styleProp, { paddingTop: insets.top + (Platform.isIOS() ? 64 : 56) }]}
             {...restProps}
         >
             {children}

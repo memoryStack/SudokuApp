@@ -18,7 +18,13 @@ const getScreens = Stack => routes.map(({ name, component }) => (
 const getNavigator = () => {
     const Stack = createStackNavigator()
     return (
-        <Stack.Navigator initialRouteName={ROUTES.HOME} screenOptions={{ headerShown: true }}>
+        <Stack.Navigator
+            initialRouteName={ROUTES.HOME}
+            screenOptions={{
+                headerShown: true,
+                headerTransparent: true,
+            }}
+        >
             {getScreens(Stack)}
         </Stack.Navigator>
     )
