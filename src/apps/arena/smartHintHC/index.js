@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 
 import {
-    View, ScrollView, useWindowDimensions,
+    View, ScrollView,
 } from 'react-native'
 
 import { useSelector } from 'react-redux'
@@ -40,7 +40,7 @@ import {
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from './constants'
 
-const SmartHintHC_ = ({ parentHeight, onAction }) => {
+const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
     const {
         hint: {
             focusedCells, title = '', logic = '', selectCellOnClose, inputPanelNumbersVisibility,
@@ -66,9 +66,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
 
     const smartHintHCRef = useRef(null)
 
-    const { height: windowHeight } = useWindowDimensions()
-
-    const styles = useStyles(getStyles, { windowHeight })
+    const styles = useStyles(getStyles)
 
     const scrollViewRef = useRef(null)
     const hintsScrollPositions = useRef({})
@@ -187,7 +185,7 @@ const SmartHintHC_ = ({ parentHeight, onAction }) => {
             animateBackgroundOverlayOnClose={false}
             testID={SMART_HINT_HC_TEST_ID}
         >
-            <View style={styles.containerStyles} testID={SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID}>
+            <View style={[styles.containerStyles, { height }]} testID={SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID}>
                 {renderHeader()}
                 <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText()}</View>
                 {renderFooter()}
@@ -200,10 +198,12 @@ export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(Smart
 
 SmartHintHC_.propTypes = {
     parentHeight: PropTypes.number,
+    height: PropTypes.number,
     onAction: PropTypes.func,
 }
 
 SmartHintHC_.defaultProps = {
     parentHeight: 0,
+    height: 0,
     onAction: _noop,
 }

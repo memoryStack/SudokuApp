@@ -1,10 +1,11 @@
 import * as React from 'react'
 
 import {
-    fireEvent, render, screen, waitFor,
+    fireEvent, render, screen, act,
 } from '@utils/testing/testingLibrary'
 
 import { expectOnHintMenuItems } from '@utils/testing/arena'
+
 import { getStoreState, invokeDispatch } from '../../../redux/dispatch.helpers'
 
 import { boardActions } from '../store/reducers/board.reducers'
@@ -18,38 +19,25 @@ import { ACTION_TYPES } from './actionHandlers'
 import { HintsMenu } from './index'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
+import { waitForAvailableHintsToBeChecked } from './hintsMenu.testingUtil'
 
 const { ACTION_HANDLERS } = require('./actionHandlers')
 
-export const waitForAvailableHintsToBeChecked = async () => {
-    // can we wait for it in a better way ??
-    await waitFor(() => {
-        let enabledHintsCount = 0
-        expectOnHintMenuItems(element => {
-            try {
-                expect(element).not.toBeDisabled()
-                enabledHintsCount++
-                // eslint-disable-next-line no-empty
-            } catch (error) { }
-        })
-
-        expect(enabledHintsCount).not.toBe(0)
-    })
-}
-
 const renderHintsMenu = async props => {
-    invokeDispatch(boardActions.setMainNumbers(MainNumbers))
-    invokeDispatch(boardActions.setNotes(Notes))
-    invokeDispatch(boardActions.setPossibleNotes(PossibleNotes))
-
     render(<HintsMenu {...props} />)
+
+    act(() => {
+        invokeDispatch(boardActions.setMainNumbers(MainNumbers))
+        invokeDispatch(boardActions.setNotes(Notes))
+        invokeDispatch(boardActions.setPossibleNotes(PossibleNotes))
+    })
+
     await waitForAvailableHintsToBeChecked()
 }
 
 describe('Available Hints Menu', () => {
-    beforeEach(() => {
+    afterEach(() => {
         jest.clearAllMocks()
-        // clear store
         invokeDispatch(boardActions.setMainNumbers(MainNumbersRecord.initMainNumbers()))
         invokeDispatch(boardActions.setNotes(NotesRecord.initNotes()))
         invokeDispatch(boardActions.setPossibleNotes(NotesRecord.initNotes()))

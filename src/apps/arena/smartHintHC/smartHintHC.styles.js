@@ -8,12 +8,10 @@ import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
 
 const FOOTER_HEIGHT = 24
 
-export const getStyles = ({ windowHeight }, theme) => StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     containerStyles: {
         width: '100%',
         padding: 16,
-        paddingBottom: 8,
-        height: windowHeight / 4 + FOOTER_HEIGHT,
     },
     headerContainer: {
         flexDirection: 'row',

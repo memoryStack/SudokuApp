@@ -29,11 +29,10 @@ import { useCacheGameState } from './hooks/useCacheGameState'
 import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 import { updateGameState } from './store/actions/gameState.actions'
 import { usePrevious } from '../../utils/customHooks'
-import { consoleLog } from '../../utils/util'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
-import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID } from './constants'
+import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
 import GameResultCard from './GameResultCard'
 import { styles } from './arena.styles'
 
@@ -46,15 +45,19 @@ const Arena_ = ({
 
     const gameState = useSelector(getGameState)
 
-    consoleLog('@@@@@ gs', gameState)
+    // consoleLog('@@@@@ gs', gameState)
 
     const previousGameState = usePrevious(gameState)
 
     const fadeAnim = useRef(new Animated.Value(0))
 
+    const boardControllersRef = useRef(null)
+
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
 
     const { show: showSmartHint } = useSelector(getHintHCInfo)
+
+    const [smartHintHCHeight, setSmartHintHCHeight] = useState(0)
 
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
@@ -73,12 +76,21 @@ const Arena_ = ({
     }, [onAction])
 
     useEffect(() => {
+        if (!showSmartHint || !pageHeight || smartHintHCHeight) return
+
+        boardControllersRef.current && boardControllersRef.current.measure((_x, _y, _width, _height, _pageX, _pageY) => {
+            setSmartHintHCHeight(Math.min(pageHeight - _pageY, SMART_HEIGHT_HC_MAX_HEIGHT))
+        })
+    }, [showSmartHint, smartHintHCHeight, pageHeight])
+
+    useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
             onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim.current })
         }
     }, [gameState, onAction])
 
-    const onParentLayout = useCallback(({ nativeEvent: { layout: { height = 0 } = {} } = {} }) => {
+    const onParentLayout = useCallback(e => {
+        const { nativeEvent: { layout: { height = 0 } = {} } = {} } = e
         setPageHeight(height)
     }, [])
 
@@ -181,8 +193,9 @@ const Arena_ = ({
     )
 
     const renderSmartHintHC = () => {
-        if (!(pageHeight && showSmartHint)) return null
-        return <SmartHintHC parentHeight={pageHeight} />
+        if (!(pageHeight && showSmartHint && smartHintHCHeight)) return null
+
+        return <SmartHintHC parentHeight={pageHeight} height={smartHintHCHeight} />
     }
 
     const renderGameOverCard = () => {
@@ -223,7 +236,7 @@ const Arena_ = ({
                 <Refree />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
-                <BoardController />
+                <BoardController refFromParent={boardControllersRef} />
                 {renderInputPanel()}
             </View>
             {renderSmartHintHC()}

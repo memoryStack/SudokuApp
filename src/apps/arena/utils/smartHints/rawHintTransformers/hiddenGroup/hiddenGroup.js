@@ -6,7 +6,6 @@ import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
 
-import { consoleLog } from '@utils/util'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
@@ -50,7 +49,6 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
 }
 
 const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates, smartHintsColorSystem) => {
-    consoleLog('@@@@', smartHintsColorSystem)
     const result = {}
     const NOTES_COLOR_SCHEME = {
         candidate: isPrimaryHouse ? smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) : smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem),

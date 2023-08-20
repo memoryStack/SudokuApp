@@ -37,11 +37,12 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const theme = useThemeValues()
 
     useEffect(() => {
+        if (_isEmpty(mainNumbers) || _isEmpty(notes)) return
         onAction({
             type: ACTION_TYPES.ON_INIT,
             payload: { mainNumbers, notes },
         })
-    }, [])
+    }, [onAction, mainNumbers, notes])
 
     const onOverlayContainerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS })

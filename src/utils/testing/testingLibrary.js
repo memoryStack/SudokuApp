@@ -9,6 +9,8 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { render } from '@testing-library/react-native'
 
+import { configureStore } from '@reduxjs/toolkit'
+
 import ModalProvider from '../../containers/ModalProvider'
 import ThemeProvider from '../../containers/ThemeProvider'
 
@@ -16,10 +18,33 @@ import { SnackBar } from '../../apps/components/SnackBar/SnackBar'
 
 import '../../i18n/i18n.config'
 
-import store from '../../redux/store'
+import smartHintHCReducers from '../../apps/arena/store/reducers/smartHintHC.reducers'
+import refreeReducers from '../../apps/arena/store/reducers/refree.reducers'
+import gameStateReducers from '../../apps/arena/store/reducers/gameState.reducers'
+import boardControllerReducers from '../../apps/arena/store/reducers/boardController.reducers'
+import boardReducers from '../../apps/arena/store/reducers/board.reducers'
+
+import { initDispatch, initGetState } from '../../redux/dispatch.helpers'
+
+const getNewStore = () => {
+    const store = configureStore({
+        reducer: {
+            smartHintHC: smartHintHCReducers,
+            refree: refreeReducers,
+            gameState: gameStateReducers,
+            boardController: boardControllerReducers,
+            board: boardReducers,
+        },
+    })
+
+    initDispatch(store.dispatch)
+    initGetState(store.getState)
+
+    return store
+}
 
 const AllTheProviders = ({ children }) => (
-    <Provider store={store}>
+    <Provider store={getNewStore()}>
         <ThemeProvider>
             <ModalProvider>
                 <>
@@ -53,7 +78,7 @@ const customRender = (ui, options) => render(ui, {
 // as the component renderer
 const renderWithEmptyNavigator = (ui, options) => render(ui, {
     wrapper: ({ children }) => (
-        <Provider store={store}>
+        <Provider store={getNewStore()}>
             <ThemeProvider>
                 <ModalProvider>
                     <NavigationContainer>

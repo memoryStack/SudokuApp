@@ -23,6 +23,7 @@ import { isEmptyElement } from '@utils/testing/touchable'
 
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 import { BADGE_TEST_ID } from '@ui/atoms/Badge'
+
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
@@ -39,10 +40,12 @@ import {
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from '../smartHintHC/constants'
-import { waitForAvailableHintsToBeChecked } from '../hintsMenu/hintsMenu.test'
+
+import { waitForAvailableHintsToBeChecked } from '../hintsMenu/hintsMenu.testingUtil'
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../inputPanel/constants'
 import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.constants'
 import { decreaseAvailableHintsCount } from '../store/actions/boardController.actions'
+import { BoardController } from '../cellActions'
 
 const storageUtils = require('@utils/storage')
 
@@ -205,14 +208,32 @@ describe('Hint/Smart Hints', () => {
     })
     afterEach(() => {
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
+    const mockBoardControllersRef = () => {
+        // TODO: how to do it by mocking measure function mentioned
+        // in "react-native/jest/MockNativeMethods"
+        // this implementation contains implementatin details of the component and
+        // it's fragile if my imlementation changes or if ReactNativeTestingLibrary changes
+        // it's implementation
+        const boardControllerDimensionMeasurer = screen.UNSAFE_getByType(BoardController).props.refFromParent.current.measure
+        boardControllerDimensionMeasurer.mockImplementation(cb => {
+            cb(0, 0, 392.72, 50.90, 0, 551.27)
+        })
+    }
+
     const openSmartHintHC = async hintItemToClick => {
+        mockBoardControllersRef()
         fireEvent.press(screen.getByText('Fast Pencil'))
         fireEvent.press(screen.getByText('Hint'))
         await waitForAvailableHintsToBeChecked()
         fireEvent.press(screen.getByText(hintItemToClick))
-        // TODO: wait for dragger to be opened
+
+        await waitFor(() => {
+            screen.getByTestId(SMART_HINT_HC_TEST_ID)
+        })
+
         act(() => {
             // event used by BottomDragger component to
             // measure child view dimensions

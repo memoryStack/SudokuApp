@@ -26,7 +26,7 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './cellActions.constants'
 import { styles } from './cellActions.styles'
 
-const BoardController_ = ({ onAction }) => {
+const BoardController_ = ({ onAction, refFromParent }) => {
     const pencilState = useSelector(getPencilStatus)
     const hints = useSelector(getAvailableHintsCount)
 
@@ -53,7 +53,11 @@ const BoardController_ = ({ onAction }) => {
 
     // TODO: use a single component for these 4 components, and use them via a config
     return (
-        <View style={styles.cellActionsContainer} testID={BOARD_CONTROLLER_CONTAINER_TEST_ID}>
+        <View
+            ref={refFromParent}
+            style={styles.cellActionsContainer}
+            testID={BOARD_CONTROLLER_CONTAINER_TEST_ID}
+        >
             <Undo
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
@@ -84,12 +88,14 @@ const BoardController_ = ({ onAction }) => {
     )
 }
 
-export const BoardController = React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_))
+export const BoardController = withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_)
 
 BoardController_.propTypes = {
     onAction: PropTypes.func,
+    refFromParent: PropTypes.object,
 }
 
 BoardController_.defaultProps = {
     onAction: _noop,
+    refFromParent: null,
 }
