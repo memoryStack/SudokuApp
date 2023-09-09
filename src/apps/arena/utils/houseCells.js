@@ -38,7 +38,7 @@ const getHouseCells = ({ type, num }) => {
     if (Houses.isRowHouse(type)) return getRowHouseCells(num)
     if (Houses.isColHouse(type)) return getColHouseCells(num)
     if (Houses.isBlockHouse(type)) return getBlockHouseCells(num)
-    throw new Error('invalid house type')
+    return []
 }
 
 export { getHouseCells }

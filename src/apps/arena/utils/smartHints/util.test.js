@@ -1,4 +1,8 @@
-import { getCellsFromCellsToFocusedData } from './util'
+import {
+    getCellsFromCellsToFocusedData,
+    setCellDataInHintResult,
+    setCellNotesHighlightDataInHintResult,
+} from './util'
 
 describe('getCellsFromCellsToFocusedData()', () => {
     test('returns cells which are basically the keys mentioned in the cellsToFocusData, first level keys are row numbers and second levels keys are column numbers in each row', () => {
@@ -24,5 +28,130 @@ describe('getCellsFromCellsToFocusedData()', () => {
         ]
 
         expect(getCellsFromCellsToFocusedData(cellsToFocusData)).toStrictEqual(expectedResult)
+    })
+})
+
+describe('setCellDataInHintResult()', () => {
+    test('set cell highlight data to the object which contains all cells highlight data', () => {
+        const cell = { row: 2, col: 3 }
+        const cellHighlightData = { bgColor: 'new cell bg-color' }
+        const cellsToFocusData = {
+            2: {
+                4: {
+                    bgColor: 'some value',
+                    noteColor: 'some value',
+                },
+            },
+        }
+        const expectedResult = {
+            2: {
+                3: {
+                    bgColor: 'new cell bg-color',
+                },
+                4: {
+                    bgColor: 'some value',
+                    noteColor: 'some value',
+                },
+            },
+        }
+        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+
+        expect(cellsToFocusData).toStrictEqual(expectedResult)
+    })
+
+    test('will override cell highlight data if it already exist', () => {
+        const cell = { row: 2, col: 3 }
+        const cellHighlightData = { bgColor: 'new bg-color' }
+        const cellsToFocusData = {
+            2: {
+                3: {
+                    bgColor: 'old bg-color',
+                },
+                4: {
+                    bgColor: 'some value',
+                    noteColor: 'some value',
+                },
+            },
+        }
+        const expectedResult = {
+            2: {
+                3: {
+                    bgColor: 'new bg-color',
+                },
+                4: {
+                    bgColor: 'some value',
+                    noteColor: 'some value',
+                },
+            },
+        }
+        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+
+        expect(cellsToFocusData).toStrictEqual(expectedResult)
+    })
+
+    test('will create entry for cell if it does not exist already', () => {
+        const cell = { row: 2, col: 3 }
+        const cellHighlightData = { bgColor: 'some color' }
+        const cellsToFocusData = {}
+        const expectedResult = {
+            2: {
+                3: {
+                    bgColor: 'some color',
+                },
+            },
+        }
+        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+
+        expect(cellsToFocusData).toStrictEqual(expectedResult)
+    })
+})
+
+describe('setCellNotesHighlightDataInHintResult()', () => {
+    test('similar to setCellDataInHintResult function sets cell notes highlight data to the object which contains all cells highlight data', () => {
+        const cell = { row: 2, col: 3 }
+        const cellNotesHighlightData = { color: 'notes font color' }
+        const cellsToFocusData = {
+            2: {
+                3: {
+                    bgColor: 'some color',
+                },
+                4: {
+                    bgColor: 'some value',
+                    noteColor: 'some value',
+                },
+            },
+        }
+        const expectedResult = {
+            2: {
+                3: {
+                    bgColor: 'some color',
+                    notesToHighlightData: { color: 'notes font color' },
+                },
+                4: {
+                    bgColor: 'some value',
+                    noteColor: 'some value',
+                },
+            },
+        }
+        setCellNotesHighlightDataInHintResult(cell, cellNotesHighlightData, cellsToFocusData)
+
+        expect(cellsToFocusData).toStrictEqual(expectedResult)
+    })
+
+    test('will throw error if entry for cell is not already created in the object which contains all cells highlight data', () => {
+        // assumption is that if some notes are going to be highlighted in the cell then that particular cells
+        // must be highlighted so some data for that cells should be present already in the object
+        const cell = { row: 2, col: 3 }
+        const cellNotesHighlightData = { color: 'notes font color' }
+        const cellsToFocusData = {
+            2: {
+                4: {
+                    bgColor: 'some value',
+                    noteColor: 'some value',
+                },
+            },
+        }
+
+        expect(() => setCellNotesHighlightDataInHintResult(cell, cellNotesHighlightData, cellsToFocusData)).toThrow(Error)
     })
 })

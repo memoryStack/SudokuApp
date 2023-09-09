@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import { getNakedSingleRawHints } from './nakedSingle'
+import { getNakedSingleRawHints, isNakedSinglePresent } from './nakedSingle'
 import { NAKED_SINGLE_TYPES } from '../constants'
 
 jest.mock('../../../../../redux/dispatch.helpers')
@@ -13,6 +13,22 @@ const mockBoardSelectors = mockedNotes => {
     getNotesInfo.mockReturnValue(mockedNotes)
     getStoreState.mockReturnValue({})
 }
+
+describe('isNakedSinglePresent()', () => {
+    test('returns a boolean as true and number which is naked single in cell', () => {
+        const { notesDataTestOne } = require('./nakedSingle.testData')
+
+        const expectedResult = { present: true, mainNumber: 8 }
+        expect(isNakedSinglePresent(notesDataTestOne, { row: 1, col: 0 })).toEqual(expectedResult)
+    })
+
+    test('returns a boolean as false and number as -1 if cell does not have Naked Single', () => {
+        const { notesDataTestOne } = require('./nakedSingle.testData')
+
+        const expectedResult = { present: false, mainNumber: -1 }
+        expect(isNakedSinglePresent(notesDataTestOne, { row: 0, col: 0 })).toEqual(expectedResult)
+    })
+})
 
 test('naked singles', () => {
     const { mainNumbersTestOne, notesDataTestOne } = require('./nakedSingle.testData')

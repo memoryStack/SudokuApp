@@ -213,6 +213,8 @@ export const getCellAxesValues = cell => {
 }
 
 export const getHouseAxesValue = ({ type, num }) => {
+    if (Houses.isBlockHouse(type)) return ''
+
     const HOUSE_TYPE_VS_AXES_VALUES = {
         [HOUSE_TYPE.ROW]: BOARD_AXES_VALUES.Y_AXIS,
         [HOUSE_TYPE.COL]: BOARD_AXES_VALUES.X_AXIS,
@@ -253,9 +255,9 @@ export const filterEmptyCells = (cells, mainNumbers) => _filter(cells, cell => !
 
 export const isGenerateNewPuzzleItem = item => _includes(_values(LEVEL_DIFFICULTIES), item)
 
-export const getBlockStartCell = blockNum => ({
-    row: blockNum - (blockNum % 3),
-    col: (blockNum % 3) * 3,
+export const getBlockStartCell = blockIndex => ({
+    row: blockIndex - (blockIndex % 3),
+    col: (blockIndex % 3) * 3,
 })
 
 export const getHousesCommonCells = (houseA, houseB) => {

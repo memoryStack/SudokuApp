@@ -21,6 +21,8 @@ import {
     getHousesCellsSharedByCells,
     isGenerateNewPuzzleItem,
     getHousesCommonCells,
+    getBlockStartCell,
+    getHouseAxesValue,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -441,5 +443,32 @@ describe('getHousesCommonCells()', () => {
         const houseB = { type: HOUSE_TYPE.ROW, num: 2 }
         const expectedCommonCells = []
         expect(getHousesCommonCells(houseA, houseB)).toEqual(expectedCommonCells)
+    })
+})
+
+describe('getBlockStartCell()', () => {
+    test('returns most top-left cell of 1st block', () => {
+        expect(getBlockStartCell(0)).toEqual({ row: 0, col: 0 })
+    })
+
+    test('returns most top-left cell of 8th block', () => {
+        expect(getBlockStartCell(7)).toEqual({ row: 6, col: 3 })
+    })
+})
+
+describe('getHouseAxesValue()', () => {
+    test('returns column house Axis value', () => {
+        const house = { type: HOUSE_TYPE.COL, num: 0 }
+        expect(getHouseAxesValue(house)).toBe('1')
+    })
+
+    test('returns row house Axis value', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 6 }
+        expect(getHouseAxesValue(house)).toBe('G')
+    })
+
+    test('returns empty string for block house', () => {
+        const house = { type: HOUSE_TYPE.BLOCK, num: 6 }
+        expect(getHouseAxesValue(house)).toBe('')
     })
 })

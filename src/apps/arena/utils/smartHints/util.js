@@ -8,7 +8,6 @@ const setCellDataInHintResult = (cell, highlightData, cellsToFocusData) => {
 }
 
 const setCellNotesHighlightDataInHintResult = (cell, highlightData, cellsToFocusData) => {
-    if (!cellsToFocusData[cell.row]) cellsToFocusData[cell.row] = {}
     cellsToFocusData[cell.row][cell.col].notesToHighlightData = highlightData
 }
 
