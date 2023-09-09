@@ -129,7 +129,7 @@ const highlightBlockCells = (hostCell, mainNumbers, cellsToFocusData, smartHints
                 const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
                 setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
             } else {
-                setCellDataInHintResult(cell, getInhabitableCellData(getInhabitableCellData), cellsToFocusData)
+                setCellDataInHintResult(cell, getInhabitableCellData(smartHintsColorSystem), cellsToFocusData)
             }
         })
 }
