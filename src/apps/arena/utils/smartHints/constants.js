@@ -42,41 +42,53 @@ const HINTS_IDS = {
     ALL: 'ALL',
 }
 
+const HINT_LABELS = {
+    [HINTS_IDS.NAKED_SINGLE]: 'Naked\nSingle',
+    [HINTS_IDS.HIDDEN_SINGLE]: 'Hidden\nSingle',
+    [HINTS_IDS.NAKED_DOUBLE]: 'Naked\nDouble',
+    [HINTS_IDS.HIDDEN_DOUBLE]: 'Hidden\nDouble',
+    [HINTS_IDS.NAKED_TRIPPLE]: 'Naked\nTripple',
+    [HINTS_IDS.HIDDEN_TRIPPLE]: 'Hidden\nTripple',
+    [HINTS_IDS.X_WING]: 'X-Wing',
+    [HINTS_IDS.Y_WING]: 'Y-Wing',
+    [HINTS_IDS.OMISSION]: 'Omission',
+}
+
 const HINTS_MENU_ITEMS = [
     {
-        label: 'Naked\nSingle',
+        label: HINT_LABELS[HINTS_IDS.NAKED_SINGLE],
         id: HINTS_IDS.NAKED_SINGLE,
     },
     {
-        label: 'Hidden\nSingle',
+        label: HINT_LABELS[HINTS_IDS.HIDDEN_SINGLE],
         id: HINTS_IDS.HIDDEN_SINGLE,
     },
     {
-        label: 'Omission',
+        label: HINT_LABELS[HINTS_IDS.OMISSION],
         id: HINTS_IDS.OMISSION,
     },
     {
-        label: 'Naked\nDouble',
+        label: HINT_LABELS[HINTS_IDS.NAKED_DOUBLE],
         id: HINTS_IDS.NAKED_DOUBLE,
     },
     {
-        label: 'Hidden\nDouble',
+        label: HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE],
         id: HINTS_IDS.HIDDEN_DOUBLE,
     },
     {
-        label: 'Naked\nTripple',
+        label: HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE],
         id: HINTS_IDS.NAKED_TRIPPLE,
     },
     {
-        label: 'Hidden\nTripple',
+        label: HINT_LABELS[HINTS_IDS.HIDDEN_TRIPPLE],
         id: HINTS_IDS.HIDDEN_TRIPPLE,
     },
     {
-        label: 'X-Wing',
+        label: HINT_LABELS[HINTS_IDS.X_WING],
         id: HINTS_IDS.X_WING,
     },
     {
-        label: 'Y-Wing',
+        label: HINT_LABELS[HINTS_IDS.Y_WING],
         id: HINTS_IDS.Y_WING,
     },
     // {
@@ -113,6 +125,7 @@ export {
     HOUSE_TYPE,
     HINTS_MENU_ITEMS,
     HINTS_IDS,
+    HINT_LABELS,
     UI_HINTS_COUNT_THRESHOLD,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
     HOUSE_TYPE_VS_FULL_NAMES,

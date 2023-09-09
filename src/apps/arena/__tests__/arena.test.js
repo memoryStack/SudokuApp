@@ -49,6 +49,7 @@ import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.c
 import { decreaseAvailableHintsCount } from '../store/actions/boardController.actions'
 import { BoardController } from '../cellActions'
 import { CUSTOM_PUZZLE_TEST_ID } from '../customPuzzle/customPuzzle.constants'
+import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -343,7 +344,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on enabled hint item will open hint detailed explaination half card', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Single')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
 
         screen.getByTestId(SMART_HINT_HC_TEST_ID)
     })
@@ -351,7 +352,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on X icon in hint detailed explaination half card will close it', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Single')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         act(() => {
             fireEvent.press(screen.getByTestId(SMART_HINT_HC_CLOSE_ICON_TEST_ID))
             jest.advanceTimersByTime(200)
@@ -363,7 +364,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on background overlay of hint detailed explaination half card will not close it', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Single')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         act(() => {
             fireEvent.press(screen.getByTestId(BOTTOM_DRAGGER_OVERLAY_TEST_ID))
             jest.advanceTimersByTime(200)
@@ -375,7 +376,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on Next Button in smart hint HC will show next page in hint explaination and page count will update', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Tripple')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
 
         expect(smartHintHC.getByTestId(SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID)).toHaveTextContent(/1\//)
@@ -388,7 +389,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on Prev Button in smart hint HC will show Previous page in hint explaination and page count will update', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Tripple')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         fireEvent.press(smartHintHC.getByText('Next'))
 
@@ -404,7 +405,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on Apply Hint will apply the recommended change in puzzle (fill a main number)', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Single')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoApplyHintStep(smartHintHC)
 
@@ -421,7 +422,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on Apply Hint will decrease the number of available hints', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Single')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoApplyHintStep(smartHintHC)
 
@@ -455,7 +456,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on Apply Hint will apply the recommended change in puzzle (remove notes)', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Omission')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.OMISSION])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoApplyHintStep(smartHintHC)
 
@@ -475,7 +476,7 @@ describe('Hint/Smart Hints', () => {
     test('clicking on Apply Hint will close the smart hint HC', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Naked Single')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoApplyHintStep(smartHintHC)
         act(() => {
@@ -489,7 +490,7 @@ describe('Hint/Smart Hints', () => {
     test('BugFix: erasing without selecting any cell will crash app', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Hidden Double')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoTryOutStep(smartHintHC)
 
@@ -499,7 +500,7 @@ describe('Hint/Smart Hints', () => {
     test('in try out step, user can fill numbers in cells and see impact', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Hidden Double')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoTryOutStep(smartHintHC)
         fireEvent.press(getCellByPosition(2))
@@ -516,7 +517,7 @@ describe('Hint/Smart Hints', () => {
     test('in try out step, user can remove the filled numbers as well from cells', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Hidden Double')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoTryOutStep(smartHintHC)
         fireEvent.press(getCellByPosition(3))
@@ -533,7 +534,7 @@ describe('Hint/Smart Hints', () => {
     test('in try out step, changes made in board by user will not be reflected in main puzzle', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        await openSmartHintHC('Hidden Double')
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoTryOutStep(smartHintHC)
         fireEvent.press(getCellByPosition(3))
@@ -551,7 +552,7 @@ describe('Hint/Smart Hints', () => {
         describe('Naked Double', () => {
             test('by default nudge user to input something', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 smartHintHC.getByText('try filling 3 or 9 in the cells where it is highlighted in red or green color to see why this hint works')
@@ -559,7 +560,7 @@ describe('Hint/Smart Hints', () => {
 
             test('one naked double note filled where it will stay', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
 
@@ -571,7 +572,7 @@ describe('Hint/Smart Hints', () => {
 
             test('both naked double notes filled where these will stay', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
 
@@ -585,7 +586,7 @@ describe('Hint/Smart Hints', () => {
 
             test('one naked double note makes NAKED SINGLE for both naked double cells', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
 
@@ -599,7 +600,7 @@ describe('Hint/Smart Hints', () => {
 
             test('one naked double cell left without any candidate', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
 
@@ -613,7 +614,7 @@ describe('Hint/Smart Hints', () => {
 
             test('both naked double cells left without any candidate', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
 
@@ -636,7 +637,7 @@ describe('Hint/Smart Hints', () => {
 
             test('by default nudge user to input something', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 smartHintHC.getByText('try filling 1, 5 or 9 in the cells where it is highlighted in red or green color to see why this hint works')
@@ -644,7 +645,7 @@ describe('Hint/Smart Hints', () => {
 
             test('one naked tripple note filled where it will stay', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(4))
@@ -655,7 +656,7 @@ describe('Hint/Smart Hints', () => {
 
             test('two naked tripple notes filled where these will stay', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(4))
@@ -668,7 +669,7 @@ describe('Hint/Smart Hints', () => {
 
             test('all naked tripple notes filled where these will stay', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(4))
@@ -683,7 +684,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: Naked Single in a group host cell will create NS in other group host cells with same candidate', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(14))
@@ -694,7 +695,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: 2 group host cells have Naked Single in them and 3rd group host cells will become empty', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(40))
@@ -706,7 +707,7 @@ describe('Hint/Smart Hints', () => {
             test('Wrong Fill: 2 group host cells have Naked Double in them and 3rd group host cells will become empty', async () => {
                 const puzzle = '409300781320700409700000000600050000050871040000040002000000008506007094178004506'
                 await renderScreenAndWaitCustomPuzzleToStart(puzzle)
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(62))
@@ -717,7 +718,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: Naked Single in 2 group host cells with same candidate', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(40))
@@ -730,7 +731,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: Naked Single in 2 group host cells with same candidate', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(40))
@@ -743,7 +744,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: 1 group host cell has no candidate left', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(40))
@@ -758,7 +759,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: 2 group host cell have no candidate left', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(40))
@@ -773,7 +774,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: if a group host cell is empty and other 2 host cells have NS in them with same candidate then empty group host cell error result will take precedence', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Naked Tripple')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(40))
@@ -789,7 +790,7 @@ describe('Hint/Smart Hints', () => {
             // TODO: write a test case for REMOVABLE_GROUP_CANDIDATE_FILLED case
             test('by default nudge user to input something', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Hidden Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 smartHintHC.getByText('try filling these numbers in the cells where these are highlighted in red or green color to see why green numbers stays and red numbers will be removed')
@@ -797,7 +798,7 @@ describe('Hint/Smart Hints', () => {
 
             test('one group host cell is correctly filled', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Hidden Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(2))
@@ -808,7 +809,7 @@ describe('Hint/Smart Hints', () => {
 
             test('all group host cells are correctly filled', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Hidden Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(2))
@@ -821,7 +822,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: insufficient cells for group candidates', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Hidden Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(2))
@@ -832,7 +833,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: no cells for group candidates', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('Hidden Double')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(2))
@@ -848,7 +849,7 @@ describe('Hint/Smart Hints', () => {
             // TODO: write a test case for REMOVABLE_GROUP_CANDIDATE_FILLED case
             test('by default nudge user to input something', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('X-Wing')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 smartHintHC.getByText('try filling 2 in 4th and 7th columns to understand why all 2 highlighted in red color can\'t come there and is safe to remove')
@@ -856,7 +857,7 @@ describe('Hint/Smart Hints', () => {
 
             test('candidate is filled correctly in one leg', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('X-Wing')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(49))
@@ -867,7 +868,7 @@ describe('Hint/Smart Hints', () => {
 
             test('candidate is filled correctly in both legs', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('X-Wing')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(49))
@@ -880,7 +881,7 @@ describe('Hint/Smart Hints', () => {
 
             test('Wrong Fill: no candidate left in a leg', async () => {
                 await renderScreenAndWaitForPuzzleStart()
-                await openSmartHintHC('X-Wing')
+                await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
                 await gotoTryOutStep(smartHintHC)
                 fireEvent.press(getCellByPosition(42))

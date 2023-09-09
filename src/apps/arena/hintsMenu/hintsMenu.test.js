@@ -43,6 +43,20 @@ describe('Available Hints Menu', () => {
         invokeDispatch(boardActions.setPossibleNotes(NotesRecord.initNotes()))
     })
 
+    test('hints menu will contain these hints', async () => {
+        await renderHintsMenu()
+
+        screen.getByText('Naked\nSingle')
+        screen.getByText('Hidden\nSingle')
+        screen.getByText('Naked\nDouble')
+        screen.getByText('Hidden\nDouble')
+        screen.getByText('Naked\nTripple')
+        screen.getByText('Hidden\nTripple')
+        screen.getByText('X-Wing')
+        screen.getByText('Y-Wing')
+        screen.getByText('Omission')
+    })
+
     test('menu will be closed on overlay click', async () => {
         await renderHintsMenu()
 
