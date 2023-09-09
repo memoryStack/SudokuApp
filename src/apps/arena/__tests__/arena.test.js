@@ -24,6 +24,8 @@ import { isEmptyElement } from '@utils/testing/touchable'
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 import { BADGE_TEST_ID } from '@ui/atoms/Badge'
 
+import { CUSTOMIZE_YOUR_PUZZLE_TITLE } from '@resources/stringLiterals'
+
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
@@ -46,6 +48,7 @@ import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../inpu
 import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.constants'
 import { decreaseAvailableHintsCount } from '../store/actions/boardController.actions'
 import { BoardController } from '../cellActions'
+import { CUSTOM_PUZZLE_TEST_ID } from '../customPuzzle/customPuzzle.constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -59,6 +62,24 @@ const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async (
 
     await executeMoreSetupSteps()
 }
+
+const renderScreenAndWaitCustomPuzzleToStart = async (executeMoreSetupSteps = async () => { }) => {
+    renderScreen({
+        route: ROUTES.ARENA,
+        getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
+        routeOptions: { selectedGameMenuItem: CUSTOMIZE_YOUR_PUZZLE_TITLE },
+    })
+
+    screen.getByTestId(CUSTOM_PUZZLE_TEST_ID)
+
+    // await hasPuzzleStarted()
+
+    // await executeMoreSetupSteps()
+}
+
+describe('', () => {
+
+})
 
 describe('Arena Screen', () => {
     // added this to avoid "ReferenceError: You are trying to `import` a file after the Jest environment has been torn down."
@@ -505,7 +526,7 @@ describe('Hint/Smart Hints', () => {
         expect(isNotePresentInCell(getCellByPosition(3), 3)).toBe(true)
     })
 
-    describe.only('Smart Hints try-out msgs', () => {
+    describe('Smart Hints try-out msgs', () => {
         describe('Naked Double', () => {
             test('by default nudge user to input something', async () => {
                 await renderScreenAndWaitForPuzzleStart()
@@ -769,7 +790,7 @@ describe('Hint/Smart Hints', () => {
                 fireEvent.press(getCellByPosition(2))
                 fireEvent.press(getInputPanelNumberIfEnabled(4, getInputPanel(smartHintHC)))
 
-                smartHintHC.getByText('2 numbers 7, 2 need to be filled but only 1 empty cell A3 is available for these in the highlighted block. so {{candidatesCountWithoutCells}} out of 7, 2 can\'t be filled in this block.')
+                smartHintHC.getByText('2 numbers 7, 2 need to be filled but only 1 empty cell A3 is available for these in the highlighted block. so 1 out of 7, 2 can\'t be filled in this block.')
             })
 
             test('Wrong Fill: no cells for group candidates', async () => {
@@ -786,7 +807,7 @@ describe('Hint/Smart Hints', () => {
             })
         })
 
-        describe.only('Finned X-Wing', () => {
+        describe('Finned X-Wing', () => {
             // TODO: write a test case for REMOVABLE_GROUP_CANDIDATE_FILLED case
             test('by default nudge user to input something', async () => {
                 await renderScreenAndWaitForPuzzleStart()
