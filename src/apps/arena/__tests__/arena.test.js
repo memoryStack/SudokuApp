@@ -627,8 +627,6 @@ describe('Hint/Smart Hints', () => {
         })
 
         describe('Naked Tripple', () => {
-            // TODO: write a test case where all the host cells will be empty
-
             beforeEach(() => {
                 jest.useFakeTimers()
             })
