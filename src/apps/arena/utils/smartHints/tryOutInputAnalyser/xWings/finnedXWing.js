@@ -8,7 +8,6 @@ import { UNATTAINABLE_TRY_OUT_STATE } from '../stringLiterals'
 
 import {
     getNoInputResult,
-    getSameCrossHouseCandidatePossibilitiesResult,
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
 } from './helpers'
@@ -20,19 +19,8 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
         return getNoInputResult(xWing)
     }
 
-    if (
-        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))
-        && _isEmpty(filterFilledCellsInTryOut(xWingCells))
-    ) {
-        return getSameCrossHouseCandidatePossibilitiesResult(xWing)
-    }
-
-    if (
-        !_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))
-        && !_isEmpty(filterFilledCellsInTryOut(xWingCells))
-    ) {
-        return getOneLegWithNoCandidateResult(xWing)
-    }
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing)
+    if (noCandidateInALegError) return noCandidateInALegError
 
     if (!_isEmpty(filterFilledCellsInTryOut(xWingCells))) {
         return getLegsFilledWithoutErrorResult(xWing)
