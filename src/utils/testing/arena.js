@@ -45,7 +45,7 @@ export const expectOnHintMenuItems = expectCallback => {
 export const getFirstEmptyCell = () => screen.getAllByTestId(BOARD_CELL_TEST_ID)
     .find(element => isEmptyElement(element))
 
-export const getCellByPosition = (position = 0) => screen.getAllByTestId(BOARD_CELL_TEST_ID)[position - 1]
+export const getCellByPosition = (position = 1, container = screen) => container.getAllByTestId(BOARD_CELL_TEST_ID)[position - 1]
 
 export const isNotePresentInCell = (cellElement, note) => {
     const allNotes = within(cellElement).queryAllByTestId(CELL_NOTE_TEST_ID)

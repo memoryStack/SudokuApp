@@ -26,7 +26,7 @@ import { BADGE_TEST_ID } from '@ui/atoms/Badge'
 
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE } from '@resources/stringLiterals'
 
-import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
+import { BOTTOM_DRAGGER_OVERLAY_TEST_ID, CONTENT_CONTAINER_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
@@ -63,23 +63,44 @@ const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async (
     await executeMoreSetupSteps()
 }
 
-const renderScreenAndWaitCustomPuzzleToStart = async (executeMoreSetupSteps = async () => { }) => {
+const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
     renderScreen({
         route: ROUTES.ARENA,
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
         routeOptions: { selectedGameMenuItem: CUSTOMIZE_YOUR_PUZZLE_TITLE },
     })
 
-    screen.getByTestId(CUSTOM_PUZZLE_TEST_ID)
+    act(() => {
+        fireLayoutEvent(screen.getByTestId(CONTENT_CONTAINER_TEST_ID), {
+            width: 400,
+            height: 700,
+            x: 0,
+            y: 0,
+        })
+        jest.advanceTimersByTime(500)
+    })
 
-    // await hasPuzzleStarted()
+    const customPuzzleContainer = within(screen.getByTestId(CUSTOM_PUZZLE_TEST_ID))
+    const inputPanel = within(customPuzzleContainer.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+    for (let i = 0; i < puzzle.length; i++) {
+        if (puzzle[i] !== '0') {
+            const cell = getCellByPosition(i + 1, customPuzzleContainer)
+            fireEvent.press(cell)
+            fireEvent.press(getInputPanelNumberIfEnabled(parseInt(puzzle[i], 10), inputPanel))
+            act(() => {
+                jest.advanceTimersByTime(500)
+            })
+        }
+    }
 
-    // await executeMoreSetupSteps()
+    fireEvent.press(customPuzzleContainer.getByText('Play'))
+
+    await waitFor(() => {
+        expect(screen.queryByTestId(CUSTOM_PUZZLE_TEST_ID)).not.toBeOnTheScreen()
+    }, { timeout: 5000 })
+
+    await hasPuzzleStarted()
 }
-
-describe('', () => {
-
-})
 
 describe('Arena Screen', () => {
     // added this to avoid "ReferenceError: You are trying to `import` a file after the Jest environment has been torn down."
@@ -606,8 +627,14 @@ describe('Hint/Smart Hints', () => {
         })
 
         describe('Naked Tripple', () => {
-            // TODO: write a test case that will cover NAKED_DOUBLE_IN_THIRD_CELL option of
             // TODO: write a test case where all the host cells will be empty
+
+            beforeEach(() => {
+                jest.useFakeTimers()
+            })
+            afterEach(() => {
+                jest.useRealTimers()
+            })
 
             test('by default nudge user to input something', async () => {
                 await renderScreenAndWaitForPuzzleStart()
@@ -678,6 +705,18 @@ describe('Hint/Smart Hints', () => {
                 smartHintHC.getByText('1 and 9 are Naked Singles in A4 and C4 respectively. because of this B4 can\'t have 1 or 9 and it will be empty, which is invalid')
             })
 
+            test('Wrong Fill: 2 group host cells have Naked Double in them and 3rd group host cells will become empty', async () => {
+                const puzzle = '409300781320700409700000000600050000050871040000040002000000008506007094178004506'
+                await renderScreenAndWaitCustomPuzzleToStart(puzzle)
+                await openSmartHintHC('Naked Tripple')
+                const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+                await gotoTryOutStep(smartHintHC)
+                fireEvent.press(getCellByPosition(62))
+                fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel(smartHintHC)))
+
+                smartHintHC.getByText('2 and 3 make a Naked Double in H7 and I8 cells. because of this rule 2 and 3 can\'t come in G7 and it will be empty')
+            })
+
             test('Wrong Fill: Naked Single in 2 group host cells with same candidate', async () => {
                 await renderScreenAndWaitForPuzzleStart()
                 await openSmartHintHC('Naked Tripple')
@@ -734,7 +773,7 @@ describe('Hint/Smart Hints', () => {
                 smartHintHC.getByText('B4 and C4 have no candidate left. in the final solution no cell can be empty so, the current arrangement of numbers is invalid')
             })
 
-            test('Wrong Fill: if a group host cell is empty and other 2 host cells have NS in them with same candidate then empty group host cell error result will take precedence ', async () => {
+            test('Wrong Fill: if a group host cell is empty and other 2 host cells have NS in them with same candidate then empty group host cell error result will take precedence', async () => {
                 await renderScreenAndWaitForPuzzleStart()
                 await openSmartHintHC('Naked Tripple')
                 const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
