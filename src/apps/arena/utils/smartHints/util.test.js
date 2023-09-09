@@ -2,6 +2,8 @@ import {
     getCellsFromCellsToFocusedData,
     setCellDataInHintResult,
     setCellNotesHighlightDataInHintResult,
+    getCandidatesListText,
+    removeDuplicteCells,
 } from './util'
 
 describe('getCellsFromCellsToFocusedData()', () => {
@@ -153,5 +155,37 @@ describe('setCellNotesHighlightDataInHintResult()', () => {
         }
 
         expect(() => setCellNotesHighlightDataInHintResult(cell, cellNotesHighlightData, cellsToFocusData)).toThrow(Error)
+    })
+})
+
+describe('getCandidatesListText()', () => {
+    test('returns list of candidates joined with the given keyword', () => {
+        const candidates = [1, 2, 3]
+        expect(getCandidatesListText(candidates, 'and')).toBe('1, 2 and 3')
+    })
+
+    test('returns candidate as string if only 1 candidate present in list', () => {
+        const candidates = [1]
+        expect(getCandidatesListText(candidates, 'and')).toBe('1')
+    })
+
+    test('returns candidates joined with comma (,) if no conjugation is passed', () => {
+        const candidates = [1, 2, 3]
+        expect(getCandidatesListText(candidates)).toBe('1, 2, 3')
+    })
+})
+
+describe('removeDuplicteCells()', () => {
+    test('returns a list with unique cells', () => {
+        const cells = [
+            { row: 0, col: 0 },
+            { row: 0, col: 1 },
+            { row: 0, col: 0 },
+        ]
+        const expectedResult = [
+            { row: 0, col: 0 },
+            { row: 0, col: 1 },
+        ]
+        expect(removeDuplicteCells(cells)).toEqual(expectedResult)
     })
 })
