@@ -1,5 +1,7 @@
+import _get from '@lodash/get'
 // TODO: add support for the default values for all these
 // primitive types of values
+
 const EMPTY_OBJECT = {}
 export const getHintHCInfo = state => {
     const { currentHintNum } = state.smartHintHC
@@ -39,7 +41,7 @@ export const getTryOutMainNumbers = state => state.smartHintHC.tryOut.mainNumber
 
 export const getTryOutNotes = state => state.smartHintHC.tryOut.notes
 
-export const getTryOutClickableCells = state => state.smartHintHC.hints[0].clickableCells || []
+export const getTryOutClickableCells = state => _get(state, 'smartHintHC.hints.0.clickableCells', [])
 
 export const getTryOutCellsRestrictedNumberInputs = state => state.smartHintHC.hints[0].cellsRestrictedNumberInputs || []
 

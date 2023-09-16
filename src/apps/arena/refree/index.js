@@ -65,8 +65,8 @@ const Refree_ = ({ onAction }) => {
     useCacheGameState(GAME_DATA_KEYS.REFEREE, { difficultyLevel, mistakes, time })
 
     const onTimerClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_TIMER_CLICK })
-    }, [onAction])
+        onAction({ type: ACTION_TYPES.ON_TIMER_CLICK, payload: gameState })
+    }, [onAction, gameState])
 
     return (
         <View style={styles.refereeContainer}>

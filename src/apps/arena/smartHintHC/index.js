@@ -25,7 +25,8 @@ import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable } from '../../components/Touchable'
 
-import { getApplyHintChanges, getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { getMainNumbers } from '../store/selectors/board.selectors'
+import { getApplyHintChanges, getHintHCInfo, getTryOutMainNumbers } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
@@ -49,6 +50,10 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
         totalHintsCount,
     } = useSelector(getHintHCInfo)
 
+    const mainNumbers = useSelector(getMainNumbers)
+
+    const tryOutMainNumbers = useSelector(getTryOutMainNumbers)
+
     const closeByApplyHintClick = useRef(false)
 
     const applyHintChanges = useSelector(getApplyHintChanges)
@@ -63,6 +68,20 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
             onAction({ type: ACTION_TYPES.ON_UNMOUNT })
         }
     }, [])
+
+    const newOnAction = action => {
+        if (action.type === ACTION_TYPES.ON_ERASE_CLICK) {
+            onAction({
+                type: action.type,
+                payload: {
+                    mainNumbers,
+                    tryOutMainNumbers,
+                },
+            })
+        } else {
+            onAction(action)
+        }
+    }
 
     const smartHintHCRef = useRef(null)
 
@@ -152,7 +171,7 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
 
     const renderTryOutContent = () => (
         <>
-            <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} singleRow />
+            <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={newOnAction} singleRow />
             <Text style={[styles.tryOutResult, getTryOutResultTextStyle()]}>{tryOutResult.msg}</Text>
         </>
     )

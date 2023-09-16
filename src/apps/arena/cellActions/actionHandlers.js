@@ -1,4 +1,4 @@
-import { GAME_STATE } from '@resources/constants'
+import { GAME_STATE, PENCIL_STATE } from '@resources/constants'
 import { fastPencilAction, undoAction } from '../store/actions/board.actions'
 import { updatePencil, setHintsMenuVisibilityAction, resetStoreState } from '../store/actions/boardController.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
@@ -9,9 +9,14 @@ const handleUndoClick = () => {
     undoAction()
 }
 
-const handlePencilClick = () => {
+const getNewPencilState = currentState => {
+    if (!currentState) return PENCIL_STATE.INACTIVE
+    return currentState === PENCIL_STATE.ACTIVE ? PENCIL_STATE.INACTIVE : PENCIL_STATE.ACTIVE
+}
+
+const handlePencilClick = ({ params: currentState }) => {
     if (!isGameActive()) return
-    updatePencil()
+    updatePencil(getNewPencilState(currentState))
 }
 
 const handleFastPencilClick = () => {
