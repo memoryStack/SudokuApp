@@ -25,6 +25,8 @@ describe('getYWingRawHints()', () => {
 
         mockBoardSelectors(notesData)
 
+        const possibleNotes = notesData
+
         const expectedYWings = [
             {
                 pivot: { cell: { row: 1, col: 0 }, notes: [2, 7] },
@@ -52,7 +54,7 @@ describe('getYWingRawHints()', () => {
             },
         ]
         const maxHintsThreshold = Number.POSITIVE_INFINITY
-        expect(getYWingRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedYWings)
+        expect(getYWingRawHints(mainNumbers, notesData, possibleNotes, maxHintsThreshold)).toStrictEqual(expectedYWings)
     })
 })
 
@@ -61,6 +63,8 @@ describe('getAllValidYWingCells()', () => {
         const { mainNumbers, notesData } = require('./testData')
 
         mockBoardSelectors(notesData)
+
+        const possibleNotes = notesData
 
         const expectedValidYWingCells = [
             { cell: { row: 0, col: 2 }, notes: [5, 7] },
@@ -80,7 +84,7 @@ describe('getAllValidYWingCells()', () => {
             { cell: { row: 8, col: 2 }, notes: [5, 7] },
         ]
 
-        expect(getAllValidYWingCells(mainNumbers, notesData)).toStrictEqual(expectedValidYWingCells)
+        expect(getAllValidYWingCells(mainNumbers, notesData, possibleNotes)).toStrictEqual(expectedValidYWingCells)
     })
 })
 

@@ -32,7 +32,7 @@ import { styles } from './hintsMenu.styles'
 const COLUMNS_COUNT = 3
 
 const HintsMenu_ = ({ onAction, availableRawHints }) => {
-    const { mainNumbers, notes } = useGameBoardInputs()
+    const { mainNumbers, notes, possibleNotes } = useGameBoardInputs()
 
     const theme = useThemeValues()
 
@@ -40,9 +40,9 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         if (_isEmpty(mainNumbers) || _isEmpty(notes)) return
         onAction({
             type: ACTION_TYPES.ON_INIT,
-            payload: { mainNumbers, notes },
+            payload: { mainNumbers, notes, possibleNotes },
         })
-    }, [onAction, mainNumbers, notes])
+    }, [onAction, mainNumbers, notes, possibleNotes])
 
     const onOverlayContainerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS })
