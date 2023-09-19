@@ -6,7 +6,6 @@ import { BOARD_MOVES_TYPES } from '../../../../constants'
 
 import {
     areSameCells,
-    getBlockAndBoxNum,
     getCellAxesValues,
     getBlockStartCell,
     getCellBlockHouseInfo,
@@ -31,6 +30,7 @@ import { getCellsAxesValuesListText } from '../helpers'
 
 import { getHiddenSingleInRowOrColHighlightData } from './rowOrColHiddenSingle'
 import { getCellFilledWithNumberInHouse, getInhabitableCellData } from './hiddenSingle.helpers'
+import { getBlockAndBoxNum } from '../../../cellTransformers'
 
 const getNewHighlightableInstanceHouseType = ({ row, col }, neighbourRows, neighbourCols) => {
     let result = ''

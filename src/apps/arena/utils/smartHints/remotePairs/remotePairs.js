@@ -15,8 +15,6 @@ import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 
 import {
     areCommonHouseCells,
-    convertBoardCellNumToCell,
-    convertBoardCellToNum,
     isCellExists,
 } from '../../util'
 
@@ -33,6 +31,7 @@ import {
     CHAIN_VS_REMOVABLE_NOTES_CELL_PARAMETERS,
 } from './remotePairs.constants'
 import { BoardIterators } from '../../classes/boardIterators'
+import { convertBoardCellToNum, convertBoardCellNumToCell } from '../../cellTransformers'
 
 export const getRemotePairsRawHints = (mainNumbers, notes) => {
     const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes)

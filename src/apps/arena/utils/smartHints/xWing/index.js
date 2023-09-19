@@ -14,7 +14,6 @@ import {
     areSameBlockCells,
     areSameColCells,
     areSameRowCells,
-    getBlockAndBoxNum,
 } from '../../util'
 
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
@@ -41,6 +40,7 @@ import {
 import { maxHintsLimitReached } from '../util'
 import { Houses } from '../../classes/houses'
 import { BoardIterators } from '../../classes/boardIterators'
+import { getBlockAndBoxNum } from '../../cellTransformers'
 
 const getCrossHouseCells = (cell, houseType) => {
     const crossHouseType = getCrossHouseType(houseType)

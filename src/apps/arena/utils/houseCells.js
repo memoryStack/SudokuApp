@@ -1,14 +1,6 @@
 import { CELLS_IN_HOUSE } from '../constants'
+import { getRowAndCol } from './cellTransformers'
 import { Houses } from './classes/houses'
-
-// TODO: this exact copy of "getRowAndCol" defined in arena/utils.js file
-// added it here to remove circular dependency in these two files
-const getRowAndCol = (blockNum, boxNum) => {
-    const addToRow = (boxNum - (boxNum % 3)) / 3
-    const row = blockNum - (blockNum % 3) + addToRow
-    const col = (blockNum % 3) * 3 + (boxNum % 3)
-    return { row, col }
-}
 
 const getRowHouseCells = houseNum => {
     const result = []

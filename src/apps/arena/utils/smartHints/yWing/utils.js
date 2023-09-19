@@ -1,10 +1,9 @@
 import _filter from '@lodash/filter'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { convertBoardCellToNum, convertBoardCellNumToCell } from '../../cellTransformers'
 
 import { getHouseCells } from '../../houseCells'
-import {
-    getCellHousesInfo, convertBoardCellNumToCell, convertBoardCellToNum,
-} from '../../util'
+import { getCellHousesInfo } from '../../util'
 
 const getHousesCellsNum = cell => {
     const result = {}

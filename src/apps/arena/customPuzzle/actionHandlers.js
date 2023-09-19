@@ -5,9 +5,6 @@ import {
     areSameCells,
     duplicatesInPuzzle,
     areMultipleMainNumbersInAnyHouseOfCell,
-    getRowAndCol,
-    getBlockAndBoxNum,
-    convertBoardCellNumToCell,
     getPuzzleSolutionType,
 } from '../utils/util'
 import { emit } from '../../../utils/GlobalEventBus'
@@ -16,6 +13,7 @@ import { CELLS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { BoardIterators } from '../utils/classes/boardIterators'
+import { getRowAndCol, getBlockAndBoxNum, convertBoardCellNumToCell } from '../utils/cellTransformers'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()

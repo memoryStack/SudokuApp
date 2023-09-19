@@ -1,9 +1,10 @@
 import _isNil from '@lodash/isNil'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { getBlockAndBoxNum } from '../../../cellTransformers'
 import { getHouseCells } from '../../../houseCells'
 import {
-    areSameCells, getBlockAndBoxNum, getCellHouseForHouseType, getHousesCommonCells,
+    areSameCells, getCellHouseForHouseType, getHousesCommonCells,
 } from '../../../util'
 
 import smartHintColorSystemReader from '../../colorSystem.reader'

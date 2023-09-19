@@ -24,6 +24,7 @@ import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { Houses } from './classes/houses'
 import { BoardIterators } from './classes/boardIterators'
+import { getBlockAndBoxNum } from './cellTransformers'
 
 export const addLeadingZeroIfEligible = value => {
     if (value > 9) return `${value}`
@@ -175,13 +176,6 @@ export const getUniqueNotesFromCells = (cells, notesData) => {
     return _sortNumbers(_unique(result))
 }
 
-export const convertBoardCellToNum = ({ row, col }) => row * HOUSES_COUNT + col
-
-export const convertBoardCellNumToCell = cellNum => ({
-    row: Math.floor(cellNum / HOUSES_COUNT),
-    col: cellNum % HOUSES_COUNT,
-})
-
 export const getCellsCommonHouses = cells => {
     const result = {
         [HOUSE_TYPE.BLOCK]: true,
@@ -220,20 +214,6 @@ export const getHouseAxesValue = ({ type, num }) => {
         [HOUSE_TYPE.COL]: BOARD_AXES_VALUES.X_AXIS,
     }
     return HOUSE_TYPE_VS_AXES_VALUES[type][num]
-}
-
-export const getRowAndCol = (blockNum, boxNum) => {
-    const addToRow = (boxNum - (boxNum % 3)) / 3
-    const row = blockNum - (blockNum % 3) + addToRow
-    const col = (blockNum % 3) * 3 + (boxNum % 3)
-    return { row, col }
-}
-
-export const getBlockAndBoxNum = cell => {
-    const { row, col } = cell
-    const blockNum = row - (row % 3) + (col - (col % 3)) / 3
-    const boxNum = (row % 3) * 3 + (col % 3)
-    return { blockNum, boxNum }
 }
 
 export const getHousesCellsSharedByCells = cells => {

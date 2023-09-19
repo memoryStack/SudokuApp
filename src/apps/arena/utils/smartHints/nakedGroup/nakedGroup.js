@@ -18,7 +18,6 @@ import {
     areSameRowCells,
     areSameColCells,
     areSameBlockCells,
-    getBlockAndBoxNum,
     isCellExists,
     getUniqueNotesFromCells,
     getHousesCellsSharedByCells,
@@ -32,6 +31,7 @@ import {
     VALID_CELL_MINIMUM_NOTES_COUNT,
     MAX_VALID_CELLS_COUNT,
 } from './nakedGroup.constants'
+import { getBlockAndBoxNum } from '../../cellTransformers'
 
 export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => _filter(getHouseCells(house), cell => {
     if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return false

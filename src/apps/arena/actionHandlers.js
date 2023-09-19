@@ -25,7 +25,6 @@ import {
 } from '@resources/constants'
 import { emit } from '../../utils/GlobalEventBus'
 import {
-    convertBoardCellToNum,
     duplicatesInPuzzle,
     getPuzzleSolutionType,
     isGenerateNewPuzzleItem,
@@ -53,6 +52,7 @@ import {
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 import { NotesRecord } from './RecordUtilities/boardNotes'
 import { BoardIterators } from './utils/classes/boardIterators'
+import { convertBoardCellToNum } from './utils/cellTransformers'
 
 const getMainNumbersFromString = puzzle => {
     const result = []

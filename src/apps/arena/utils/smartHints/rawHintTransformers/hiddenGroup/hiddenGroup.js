@@ -17,7 +17,6 @@ import {
     areSameBlockCells,
     areSameColCells,
     areSameRowCells,
-    getBlockAndBoxNum,
     getCellAxesValues,
     isCellExists,
 } from '../../../util'
@@ -35,6 +34,7 @@ import {
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { Houses } from '../../../classes/houses'
 import smartHintColorSystemReader from '../../colorSystem.reader'
+import { getBlockAndBoxNum } from '../../../cellTransformers'
 
 export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
     const result = []
