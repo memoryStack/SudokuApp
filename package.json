@@ -15,6 +15,7 @@
         "pushStage": "./scripts/bundlePushSudoku s 1.5",
         "pushProd": "./scripts/bundlePushSudoku p 1.6",
         "debugApk": "./scripts/debugApk",
+        "stageApk": "./scripts/stageApk",
         "createComponent": "./scripts/createComponent"
     },
     "dependencies": {

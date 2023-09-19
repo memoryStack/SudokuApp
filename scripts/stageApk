@@ -1,0 +1,8 @@
+cd './android'
+
+./gradlew clean assembleReleaseStaging
+
+# copy the file
+cp ./app/build/outputs/apk/releaseStaging/app-armeabi-v7a-releaseStaging.apk ~/Desktop/SudokuStage.apk
+
+say "Build Completed"
