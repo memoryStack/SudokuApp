@@ -4,15 +4,15 @@
 // // take hue and chroma from themebuilder (https://m3.material.io/theme-builder#/custom)
 // // and just change the lightness as per the variant is required
 
-// const color = Color({ r: 97, g: 93, b: 103 }).hex()
+// const color = Color({ r: 248, g: 200, b: 220 }).hex()
 // console.log(color)
 
 // const lightnessList = [10, 20, 30, 40, 50, 60, 70, 80, 87, 90, 92, 94, 95, 96, 98, 99]
 // const result = {}
 // lightnessList.forEach(lightnessVale => {
 //     const color = Color({
-//         h: 27.40, // originalcolors.color[0],
-//         s: 113.35, // originalcolors.color[1],
+//         h: 176, // originalcolors.color[0],
+//         s: 45, // originalcolors.color[1],
 //         l: lightnessVale,
 //     })
 //     result[lightnessVale] = {

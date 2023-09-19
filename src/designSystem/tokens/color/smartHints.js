@@ -14,9 +14,9 @@ module.exports = {
                 wingCellBGColor: { value: 'orange' },
             },
             xWing: {
-                topLeftBottomRightCellsBGColor: { value: 'orange' },
-                topRightBottomLeftCellsBGColor: { value: 'pink' },
-                finnCellBGColor: { value: 'rgb(255, 245, 187)' },
+                topLeftBottomRightCellsBGColor: { value: '#E0E8FF' },
+                topRightBottomLeftCellsBGColor: { value: '#CFEDEB' },
+                finnCellBGColor: { value: '#e9ddff' },
             },
         },
     },

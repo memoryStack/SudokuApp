@@ -118,6 +118,7 @@ const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData,
     })
 }
 
+// TODO: fix the order of cells here. sometimes topLeft cell takes different color
 const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColorSystem) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
