@@ -41,14 +41,10 @@ const handleCellClick = ({ params: cell }) => {
     updateTryOutSelectedCell(cell)
 }
 
-const handleNumberClick = ({
-    getState, params: {
-        number, selectedCell, cellsRestrictedNumberInputs, tryOutCellsRestrictedNumberInputsMsg,
-    },
-}) => {
+const handleNumberClick = ({ getState, params: number }) => {
     const { focusedCells, styles } = getState()
 
-    inputTryOutNumber(number, selectedCell, cellsRestrictedNumberInputs, focusedCells, tryOutCellsRestrictedNumberInputsMsg, styles.snackBar)
+    inputTryOutNumber(number, focusedCells, styles.snackBar)
 }
 
 const handleEraserClick = ({ getState, params: { mainNumbers, tryOutMainNumbers } }) => {

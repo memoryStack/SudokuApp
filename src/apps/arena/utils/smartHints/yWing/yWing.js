@@ -7,7 +7,9 @@ import { N_CHOOSE_K } from '@resources/constants'
 import { consoleLog } from '@utils/util'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
+import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { HOUSES_COUNT } from '../../../constants'
+import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import {
     getCellHousesInfo,
     getCellHouseForHouseType,
@@ -36,7 +38,10 @@ export const isValidYWingCell = (cell, userInputNotes, possibleNotes) => {
     return userInputNotesCount === VALID_NOTES_COUNT_IN_CELL
 }
 
-export const getAllValidYWingCells = (mainNumbers, userInputNotes, possibleNotes) => {
+// why is ti like this ??
+export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
+    const possibleNotes = getPossibleNotes(getStoreState())
+
     const result = []
     BoardIterators.forBoardEachCell(cell => {
         if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return
@@ -157,10 +162,10 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
 
 const yWingRemovesNotes = (yWing, notesData) => !_isEmpty(getEliminatableNotesCells(yWing, notesData))
 
-export const getYWingRawHints = (mainNumbers, notesData, possibleNotes, maxHintsThreshold) => {
+export const getYWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
     const result = []
 
-    const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData, possibleNotes))
+    const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData))
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     allHouses.forEach(houseType => {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {

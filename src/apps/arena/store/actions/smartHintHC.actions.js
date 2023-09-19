@@ -19,6 +19,8 @@ import {
 import { smartHintHCActions } from '../reducers/smartHintHC.reducers'
 import { getNotesInfo } from '../selectors/board.selectors'
 import {
+    getTryOutCellsRestrictedNumberInputs,
+    getTryOutCellsRestrictedNumberInputsMsg,
     getTryOutMainNumbers,
     getTryOutNotes,
     getTryOutSelectedCell,
@@ -73,7 +75,8 @@ export const updateTryOutSelectedCell = cell => {
     invokeDispatch(setTryOutSelectedCell(cell))
 }
 
-export const inputTryOutNumber = (number, selectedCell, cellsRestrictedNumberInputs, focusedCells, tryOutCellsRestrictedNumberInputsMsg, snackBarCustomStyles) => {
+export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) => {
+    const selectedCell = getTryOutSelectedCell(getStoreState())
     if (_isEmpty(selectedCell)) {
         showSnackBar({
             msg: 'please select some cell before filling number',
@@ -90,9 +93,9 @@ export const inputTryOutNumber = (number, selectedCell, cellsRestrictedNumberInp
         return
     }
 
-    if (isRestrictedInputClick(number, selectedCell, cellsRestrictedNumberInputs)) {
+    if (isRestrictedInputClick(number)) {
         showSnackBar({
-            msg: tryOutCellsRestrictedNumberInputsMsg,
+            msg: getTryOutCellsRestrictedNumberInputsMsg(getStoreState()),
             customStyles: snackBarCustomStyles,
         })
         return
@@ -110,7 +113,9 @@ const isValidInputNumberClick = number => {
         && NotesRecord.isNotePresentInCell(notes, number, selectedCell)
 }
 
-const isRestrictedInputClick = (inputNumber, selectedCell, cellsRestrictedNumberInputs) => {
+const isRestrictedInputClick = inputNumber => {
+    const cellsRestrictedNumberInputs = getTryOutCellsRestrictedNumberInputs(getStoreState())
+    const selectedCell = getTryOutSelectedCell(getStoreState())
     const selectedCellAxesValue = getCellAxesValues(selectedCell)
     return (cellsRestrictedNumberInputs[selectedCellAxesValue] || []).includes(inputNumber)
 }

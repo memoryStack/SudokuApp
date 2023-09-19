@@ -11,9 +11,9 @@ import { getRawHints } from '../utils/smartHints'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 
-const onInit = async ({ setState, getState, params: { mainNumbers, notes, possibleNotes } }) => {
+const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
     const availableRawHints = {}
-    const allHintsPromises = _map(HINTS_MENU_ITEMS, ({ id: hintId }) => rawHintsPromise(hintId, mainNumbers, notes, possibleNotes))
+    const allHintsPromises = _map(HINTS_MENU_ITEMS, ({ id: hintId }) => rawHintsPromise(hintId, mainNumbers, notes))
 
     await Promise.all(allHintsPromises)
         .then(rawHints => {
@@ -28,9 +28,9 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes, possib
 
 // TODO: analyze the asynchronous behaviour of this handler
 // i really need to brush up asynchronous in js
-const rawHintsPromise = (hintId, mainNumbers, notes, possibleNotes) => new Promise(resolve => {
+const rawHintsPromise = (hintId, mainNumbers, notes) => new Promise(resolve => {
     setTimeout(() => {
-        getRawHints(hintId, mainNumbers, notes, possibleNotes)
+        getRawHints(hintId, mainNumbers, notes)
             .then(rawHint => resolve({ id: hintId, data: rawHint }))
             .catch(error => {
                 consoleLog(hintId, error)

@@ -26,9 +26,7 @@ import withActions from '../../../utils/hocs/withActions'
 import { Touchable } from '../../components/Touchable'
 
 import { getMainNumbers } from '../store/selectors/board.selectors'
-import {
-    getApplyHintChanges, getHintHCInfo, getTryOutCellsRestrictedNumberInputs, getTryOutCellsRestrictedNumberInputsMsg, getTryOutMainNumbers,
-} from '../store/selectors/smartHintHC.selectors'
+import { getApplyHintChanges, getHintHCInfo, getTryOutMainNumbers } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
 import { Inputpanel } from '../inputPanel'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
@@ -42,7 +40,6 @@ import {
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from './constants'
-import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 
 const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
     const {
@@ -52,8 +49,6 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
         currentHintNum,
         totalHintsCount,
     } = useSelector(getHintHCInfo)
-
-    const { selectedCell } = useGameBoardInputs()
 
     const mainNumbers = useSelector(getMainNumbers)
 
@@ -66,10 +61,6 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
     const tryOutResult = useHintTryOutAnalyserResult()
 
     const isHintTryOut = useIsHintTryOutStep()
-
-    const cellsRestrictedNumberInputs = useSelector(getTryOutCellsRestrictedNumberInputs)
-
-    const tryOutCellsRestrictedNumberInputsMsg = useSelector(getTryOutCellsRestrictedNumberInputsMsg)
 
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells, styles } })
@@ -85,16 +76,6 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
                 payload: {
                     mainNumbers,
                     tryOutMainNumbers,
-                },
-            })
-        } else if (action.type === ACTION_TYPES.ON_NUMBER_CLICK) {
-            onAction({
-                type: action.type,
-                payload: {
-                    number: action.payload,
-                    selectedCell,
-                    cellsRestrictedNumberInputs,
-                    tryOutCellsRestrictedNumberInputsMsg,
                 },
             })
         } else {
