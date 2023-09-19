@@ -31,7 +31,6 @@ import { updateGameState } from './store/actions/gameState.actions'
 import { usePrevious } from '../../utils/customHooks'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
-import { getMainNumbers } from './store/selectors/board.selectors'
 import { GameState } from './utils/classes/gameState'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
 import GameResultCard from './GameResultCard'
@@ -63,8 +62,6 @@ const Arena_ = ({
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
     const time = useSelector(getTime)
-
-    const mainNumbers = useSelector(getMainNumbers)
 
     useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
@@ -111,10 +108,10 @@ const Arena_ = ({
         onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
     }, [onAction, gameState])
 
-    const onStartCustomPuzzle = useCallback(_mainNumbers => {
+    const onStartCustomPuzzle = useCallback(mainNumbers => {
         onAction({
             type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
-            payload: _mainNumbers,
+            payload: mainNumbers,
         })
     }, [onAction])
 
@@ -135,9 +132,9 @@ const Arena_ = ({
 
     const handleSharePuzzleClick = useCallback(() => {
         if (isPuzzlePresent(gameState, previousGameState)) {
-            onAction({ type: ACTION_TYPES.ON_SHARE_CLICK, payload: mainNumbers })
+            onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
         }
-    }, [onAction, gameState, previousGameState, mainNumbers])
+    }, [onAction, gameState, previousGameState])
 
     useEffect(() => {
         navigation.isFocused()

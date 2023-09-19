@@ -19,7 +19,7 @@ import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
-import { getHintHCInfo, getTryOutClickableCells } from '../store/selectors/smartHintHC.selectors'
+import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { GameState } from '../utils/classes/gameState'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
@@ -28,8 +28,6 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
     const moves = useSelector(getMoves)
-
-    const tryOutClickableCells = useSelector(getTryOutClickableCells)
 
     const { show: showSmartHint, hint: { cellsToFocusData = {}, svgProps } = {} } = useSelector(getHintHCInfo)
 
@@ -46,14 +44,14 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
 
     const onCellClick = useCallback(cell => {
         const isCellClickable = () => {
-            if (showSmartHint) return isHintTryOut ? isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell, tryOutClickableCells) : false
+            if (showSmartHint) return isHintTryOut ? isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell) : false
             return new GameState(gameState).isGameActive()
         }
         if (!isCellClickable()) return
 
         const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
         handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut, tryOutClickableCells])
+    }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut])
 
     const dataToCache = {
         mainNumbers,

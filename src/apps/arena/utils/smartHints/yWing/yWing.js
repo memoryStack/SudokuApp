@@ -38,7 +38,6 @@ export const isValidYWingCell = (cell, userInputNotes, possibleNotes) => {
     return userInputNotesCount === VALID_NOTES_COUNT_IN_CELL
 }
 
-// why is ti like this ??
 export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
     const possibleNotes = getPossibleNotes(getStoreState())
 

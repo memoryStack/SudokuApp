@@ -43,6 +43,8 @@ import {
 } from './store/actions/board.actions'
 import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
+import { getMainNumbers } from './store/selectors/board.selectors'
+import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
 import {
@@ -237,7 +239,9 @@ const handleCustomPuzzleHCClose = ({ setState }) => {
     setState({ showCustomPuzzleHC: false })
 }
 
-const handleSharePuzzle = ({ params: mainNumbers }) => {
+const handleSharePuzzle = () => {
+    const mainNumbers = getMainNumbers(getStoreState())
+
     let puzzleString = ''
     BoardIterators.forBoardEachCell(({ row, col }) => {
         const num = MainNumbersRecord.isClueCell(mainNumbers, { row, col })

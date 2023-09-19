@@ -150,11 +150,11 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
     return result
 }
 
-export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles, mainNumbers, tryOutMainNumbers) => {
+export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles) => {
     const selectedCell = getTryOutSelectedCell(getStoreState())
     if (_isNil(selectedCell)) return
 
-    if (!cellHasTryOutInput(selectedCell, mainNumbers, tryOutMainNumbers)) {
+    if (!cellHasTryOutInput(selectedCell)) {
         showSnackBar({
             msg: 'you can only erase from cells which were filled after this hint is displayed',
             customStyles: snackBarCustomStyles,

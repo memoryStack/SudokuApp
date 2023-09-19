@@ -17,7 +17,6 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
-import { useSelector } from 'react-redux'
 import {
     areSameCells,
     areCommonHouseCells,
@@ -38,7 +37,6 @@ import HintsSvgDrawing from '../hintsSvgDrawing'
 import { HINTS_IDS } from '../utils/smartHints/constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../utils/classes/boardIterators'
-import { getTryOutMainNumbers } from '../store/selectors/smartHintHC.selectors'
 
 const looper = []
 const bordersLooper = []
@@ -61,8 +59,6 @@ const Board_ = ({
     isCustomPuzleScreen,
 }) => {
     const styles = useStyles(getStyles)
-
-    const tryOutMainNumbers = useSelector(getTryOutMainNumbers)
 
     const selectedCellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell) || 0
 
@@ -101,7 +97,7 @@ const Board_ = ({
     const getMainNumFontColor = cell => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) return null
         if (isCustomPuzleScreen) return getCustomPuzzleMainNumFontColor(cell)
-        if (isHintTryOut && cellHasTryOutInput(cell, mainNumbers, tryOutMainNumbers)) return styles.tryOutInputColor
+        if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
         if (showSmartHint) return styles.clueNumColor
         if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
         if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor

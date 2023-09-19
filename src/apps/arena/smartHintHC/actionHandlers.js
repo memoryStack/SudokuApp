@@ -43,13 +43,12 @@ const handleCellClick = ({ params: cell }) => {
 
 const handleNumberClick = ({ getState, params: number }) => {
     const { focusedCells, styles } = getState()
-
     inputTryOutNumber(number, focusedCells, styles.snackBar)
 }
 
-const handleEraserClick = ({ getState, params: { mainNumbers, tryOutMainNumbers } }) => {
+const handleEraserClick = ({ getState }) => {
     const { focusedCells, styles } = getState()
-    eraseTryOutNumber(focusedCells, styles.snackBar, mainNumbers, tryOutMainNumbers)
+    eraseTryOutNumber(focusedCells, styles.snackBar)
 }
 
 const handleApplyHintClick = ({ params: applyHintChanges }) => {

@@ -45,7 +45,7 @@ const BoardController_ = ({ onAction, refFromParent }) => {
 
     const onUndoClick = () => onAction({ type: ACTION_TYPES.ON_UNDO_CLICK })
 
-    const onPencilClick = () => onAction({ type: ACTION_TYPES.ON_PENCIL_CLICK, payload: pencilState })
+    const onPencilClick = () => onAction({ type: ACTION_TYPES.ON_PENCIL_CLICK })
 
     const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK })
 
