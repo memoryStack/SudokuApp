@@ -36,12 +36,12 @@ const fillCustomPuzzle = cellVsMainNumbers => {
         act(() => {
             fireEvent.press(getInputPanelNumberIfEnabled(cellVsMainNumbers[cellNo]))
             jest.runAllTimers()
+            // jest.advanceTimersByTime(500)
         })
     }
 }
 
 const renderCustomPuzzle = props => {
-    jest.useFakeTimers()
     render(<CustomPuzzle parentHeight={1000} {...props} />)
 
     // this just got coupled with the implementation
@@ -61,6 +61,13 @@ const renderCustomPuzzle = props => {
 }
 
 describe('Custom Puzzle', () => {
+    beforeEach(() => {
+        jest.useFakeTimers()
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+    })
+
     test('should fill a number on Input Number click', () => {
         renderCustomPuzzle()
 
@@ -116,6 +123,13 @@ describe('Custom Puzzle', () => {
 })
 
 describe('Analyze Custom Puzzle', () => {
+    beforeEach(() => {
+        jest.useFakeTimers()
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+    })
+
     test('invalid puzzle if clues are less than minimum required', async () => {
         renderCustomPuzzle()
 
@@ -125,6 +139,10 @@ describe('Analyze Custom Puzzle', () => {
 
         await waitFor(() => {
             expect(screen.getByText('clues are less than 18')).toBeOnTheScreen()
+        })
+
+        act(() => {
+            jest.runAllTimers()
         })
     })
 
@@ -167,6 +185,10 @@ describe('Analyze Custom Puzzle', () => {
         await waitFor(() => {
             expect(screen.getByText('puzzle has multiple instances of 1 in same house')).toBeOnTheScreen()
         })
+
+        act(() => {
+            jest.runAllTimers()
+        })
     })
 
     test('invalid puzzle if puzzle has multiple solutions', async () => {
@@ -207,6 +229,10 @@ describe('Analyze Custom Puzzle', () => {
 
         await waitFor(() => {
             expect(screen.getByText('puzzle has multiple valid solutions. please input valid puzzle')).toBeOnTheScreen()
+        })
+
+        act(() => {
+            jest.runAllTimers()
         })
     })
 

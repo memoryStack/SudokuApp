@@ -227,7 +227,6 @@ const handleMenuItemPress = ({ setState, params: menuItem }) => {
         return
     }
 
-    consoleLog('@@@@ unidentified game menu item, starting easy puzzle')
     generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
 }
 
