@@ -44,7 +44,7 @@ export const getRemotePairsRawHints = (mainNumbers, notes) => {
 
 export const getAllValidCellsWithPairs = (mainNumbers, notes) => {
     const result = []
-    BoardIterators.forEachHouse(num => {
+    BoardIterators.forEachHouseNum(num => {
         const validCells = filterNakedGroupEligibleCellsInHouse(
             { type: HOUSE_TYPE.ROW, num },
             NOTES_COUNT_IN_ELIGIBLE_CELLS,

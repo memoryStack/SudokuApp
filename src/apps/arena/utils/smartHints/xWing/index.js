@@ -261,7 +261,7 @@ const getAllXWingEligibleCandidates = (mainNumbers, notesData) => {
 
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
     searchableHouses.forEach(houseType => {
-        BoardIterators.forEachHouse(houseNum => {
+        BoardIterators.forEachHouseNum(houseNum => {
             const house = { type: houseType, num: houseNum }
             getHouseXWingLegs(house, mainNumbers, notesData).forEach(xWingLeg => {
                 addCandidateXWingLeg(xWingLeg, houseType, result)
