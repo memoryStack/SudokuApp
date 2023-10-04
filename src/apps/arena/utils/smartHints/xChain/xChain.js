@@ -18,9 +18,8 @@ import _head from '@lodash/head'
 import _last from '@lodash/last'
 import _slice from '@lodash/slice'
 
-// TODO: add aliases for these files
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { N_CHOOSE_K } from '@resources/constants'
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { BoardIterators } from '../../classes/boardIterators'
 import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTransformers'
 import { getCellsSharingHousesWithCells } from '../../util'

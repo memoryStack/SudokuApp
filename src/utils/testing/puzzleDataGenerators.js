@@ -2,11 +2,11 @@ import _filter from '@lodash/filter'
 import _keys from '@lodash/keys'
 import _forEach from '@lodash/forEach'
 
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { convertBoardCellNumToCell } from 'src/apps/arena/utils/cellTransformers'
-import { BoardIterators } from 'src/apps/arena/utils/classes/boardIterators'
-import { isMainNumberPresentInAnyHouseOfCell } from 'src/apps/arena/utils/util'
+import { NotesRecord } from '../../apps/arena/RecordUtilities/boardNotes'
+import { convertBoardCellNumToCell } from '../../apps/arena/utils/cellTransformers'
+import { BoardIterators } from '../../apps/arena/utils/classes/boardIterators'
+import { isMainNumberPresentInAnyHouseOfCell } from '../../apps/arena/utils/util'
+import { MainNumbersRecord } from '../../apps/arena/RecordUtilities/boardMainNumbers'
 
 // TODO: this is almost copied from fastPencilAction in board.actions file
 const getNewNotesBunchToShow = mainNumbers => {

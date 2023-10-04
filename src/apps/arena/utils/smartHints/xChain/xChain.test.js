@@ -411,7 +411,7 @@ describe('analyzeChain()', () => {
 
         test('chain does not remove any notes from cells', () => {
             const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
-            const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+            const { notes: _notes } = getPuzzleDataFromPuzzleString(puzzle)
 
             const chain = [
                 {
@@ -432,14 +432,14 @@ describe('analyzeChain()', () => {
             ]
             const expectedResult = { foundChain: false, chain }
 
-            expect(analyzeChain(4, chain, notes)).toEqual(expectedResult)
+            expect(analyzeChain(4, chain, _notes)).toEqual(expectedResult)
         })
     })
 
     describe('valid chains will return full chain or its subchain with a flag telling that valid chain has been found', () => {
         test('chain made of all Strong Links, full chain or any of its subchain will be returned after its links transformed into a normal chain (STRONG -> WEAK -> STRONG...)', () => {
             const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
-            const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+            const { notes: _notes } = getPuzzleDataFromPuzzleString(puzzle)
 
             const chain = [
                 {
@@ -473,7 +473,7 @@ describe('analyzeChain()', () => {
                 ],
             }
 
-            expect(analyzeChain(3, chain, notes)).toEqual(expectedResult)
+            expect(analyzeChain(3, chain, _notes)).toEqual(expectedResult)
         })
 
         test('chain made of mix of STRONG and WEAK links ', () => {
@@ -612,7 +612,7 @@ describe('getAllValidSubChains() ', () => {
     // returns a list of sub-chains including complete chain if they remove some notes
     test('chain containing all the STRONG links, some STRONG links will be changed to WEAK', () => {
         const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
-        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+        const { notes: _notes } = getPuzzleDataFromPuzzleString(puzzle)
 
         const chain = [
             {
@@ -669,12 +669,12 @@ describe('getAllValidSubChains() ', () => {
             },
         ]
 
-        expect(getAllValidSubChains(3, chain, notes)).toEqual(expectedResult)
+        expect(getAllValidSubChains(3, chain, _notes)).toEqual(expectedResult)
     })
 
     test('returns empty list if no sub-chain removes any note', () => {
         const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
-        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+        const { notes: _notes } = getPuzzleDataFromPuzzleString(puzzle)
 
         const chain = [
             {
@@ -694,7 +694,7 @@ describe('getAllValidSubChains() ', () => {
             },
         ]
 
-        expect(getAllValidSubChains(4, chain, notes)).toEqual([])
+        expect(getAllValidSubChains(4, chain, _notes)).toEqual([])
     })
 
     test('chain containing mix of STRONG and WEAK links', () => {
@@ -711,7 +711,7 @@ describe('getAllValidSubChains() ', () => {
             71: [4],
             80: [4],
         }
-        const notes = generateCustomNotes(CELLS_VS_NOTES)
+        const _notes = generateCustomNotes(CELLS_VS_NOTES)
 
         const chain = [
             {
@@ -767,7 +767,7 @@ describe('getAllValidSubChains() ', () => {
             removableNotesCount: 1,
         }]
 
-        expect(getAllValidSubChains(4, chain, notes)).toEqual(expectedResult)
+        expect(getAllValidSubChains(4, chain, _notes)).toEqual(expectedResult)
     })
 })
 
