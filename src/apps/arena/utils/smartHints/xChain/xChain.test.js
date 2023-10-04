@@ -1,11 +1,25 @@
-const { HOUSE_TYPE } = require('../constants')
-const { mainNumbers, notes, possibleNotes } = require('./testData')
-const {
+import { generateCustomNotes, getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+import { HOUSE_TYPE } from '../constants'
+
+import { mainNumbers, notes, possibleNotes } from './testData'
+
+import {
     getCandidateAllStrongLinks,
     getNoteHostCellsInHouse,
     getAllStrongLinks,
     getNoteWeakLinks,
-} = require('./xChain')
+    getXChainRawHints,
+    getTrimWeakLinksFromEdges,
+    analyzeChain,
+    switchAllStrongLinksChainLinks,
+    switchMixedLinksChainLinks,
+    analyzeChainOfAllStrongLinks,
+    removableNotesCountByChain,
+    getCellsFromChain,
+    getChosenChainFromValidSubChains,
+    removeRedundantLinks,
+    analyzeMixedLinksChain,
+} from './xChain'
 
 describe('getAllStrongLinks()', () => {
     test('returns all the strong links in board', () => {
@@ -167,5 +181,756 @@ describe('getNoteWeakLinks()', () => {
         }
 
         expect(getNoteWeakLinks(2, notes, possibleNotes)).toEqual(expectedResult)
+    })
+})
+
+test('getXChainRawHints()', () => {
+    getXChainRawHints(mainNumbers, notes, possibleNotes)
+})
+
+describe('removeRedundantLinks()', () => {
+    test('removes redundant links between cells', () => {
+        const links = {
+            1: [10, 28, 64, 9, 10],
+            8: [17, 62, 71, 16, 17],
+            9: [10, 16, 17, 27, 54, 63, 1, 10],
+        }
+        const expectedResult = {
+            1: [10, 28, 64, 9],
+            8: [17, 62, 71, 16],
+            9: [10, 16, 17, 27, 54, 63, 1],
+        }
+        removeRedundantLinks(links)
+        expect(links).toEqual(expectedResult)
+    })
+})
+
+/*
+
+    // strong and weak links mapping structure
+    {
+      '9': [
+        10, 15, 17, 18, 36,
+        54, 63, 10, 18, 20
+      ],
+      '10': [
+         9, 15, 17, 37,
+        64,  9, 18, 20
+      ],
+      '15': [
+         9, 10, 17, 60,
+        69, 17, 26
+      ],
+      '17': [
+         9, 10, 15, 26,
+        62, 71, 15, 26
+      ],
+      '18': [
+        20, 26,  9, 36, 54,
+        63,  9, 10, 20
+      ],
+      '20': [
+        18, 26, 38, 56,
+         9, 10, 18
+      ],
+      '26': [
+        18, 20, 17, 62,
+        71, 15, 17
+      ],
+      '36': [
+        37, 38,  9, 18,
+        54, 63, 37, 38
+      ],
+      '37': [ 36, 38, 10, 64, 36, 38 ],
+      '38': [ 36, 37, 20, 56, 36, 37 ],
+      '54': [
+        56, 60, 62,  9, 18,
+        36, 63, 56, 63, 64
+      ],
+      '56': [
+        54, 60, 62, 20,
+        38, 54, 63, 64
+      ],
+      '60': [
+        54, 56, 62, 15,
+        69, 62, 69, 71
+      ],
+      '62': [
+        54, 56, 60, 17, 26,
+        71, 60, 69, 71
+      ],
+      '63': [
+        64, 69, 71,  9, 18,
+        36, 54, 54, 56, 64
+      ],
+      '64': [
+        63, 69, 71, 10,
+        37, 54, 56, 63
+      ],
+      '69': [
+        63, 64, 71, 15,
+        60, 60, 62, 71
+      ],
+      '71': [
+        63, 64, 69, 17, 26,
+        62, 60, 62, 69
+      ]
+    }
+
+*/
+
+describe('getTrimWeakLinksFromEdges()', () => {
+    test('removes weak links from start and end and will mark links beside these removed weak links as Last', () => {
+        const chain = [
+            {
+                start: 10, end: 1, type: 'WEAK', isLast: true,
+            },
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 61, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 61, end: 62, type: 'WEAK', isLast: true,
+            },
+        ]
+
+        const expectedResult = [
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 61, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        expect(getTrimWeakLinksFromEdges(chain)).toEqual(expectedResult)
+    })
+
+    test('removes weak links from only side if weak link is present only in one side', () => {
+        const chain = [
+            {
+                start: 10, end: 1, type: 'WEAK', isLast: true,
+            },
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 61, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        const expectedResult = [
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 61, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        expect(getTrimWeakLinksFromEdges(chain)).toEqual(expectedResult)
+    })
+
+    test('returns chain as it is if there is not weak link in the edge', () => {
+        const chain = [
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        const expectedResult = [
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        expect(getTrimWeakLinksFromEdges(chain)).toEqual(expectedResult)
+    })
+})
+
+describe('analyzeChain()', () => {
+    describe('invalid chains returns passed chain as it is with a flag telling if valid chain found or not', () => {
+        test('chain has less than 3 links after trimming weak links from edges', () => {
+            const chain = [
+                {
+                    start: 10, end: 1, type: 'WEAK', isLast: true,
+                },
+                {
+                    start: 1, end: 8, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 8, end: 16, type: 'STRONG', isLast: true,
+                },
+            ]
+            const expectedResult = { foundChain: false, chain }
+
+            expect(analyzeChain(7, chain, notes)).toEqual(expectedResult)
+        })
+
+        test('chain does not remove any notes from cells', () => {
+            const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
+            const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
+            const chain = [
+                {
+                    start: 11, end: 47, type: 'STRONG', isLast: true,
+                },
+                {
+                    start: 47, end: 46, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 46, end: 73, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 73, end: 72, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 72, end: 9, type: 'STRONG', isLast: true,
+                },
+            ]
+            const expectedResult = { foundChain: false, chain }
+
+            expect(analyzeChain(4, chain, notes)).toEqual(expectedResult)
+        })
+    })
+
+    describe('valid chains will return full chain or it subchain with a flag telling that valid chain has been found', () => {
+        test('in chain made of all Strong Links full chain or any of its subchain will be returned after its links transformed into a normal chain (STRONG -> WEAK -> STRONG...)', () => {
+            const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
+            const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
+            const chain = [
+                {
+                    start: 30, end: 40, type: 'STRONG', isLast: true,
+                },
+                {
+                    start: 40, end: 44, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 44, end: 52, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 52, end: 79, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 79, end: 69, type: 'STRONG', isLast: true,
+                },
+            ]
+            const expectedResult = {
+                foundChain: true,
+                chain: [
+                    {
+                        start: 40, end: 44, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 44, end: 52, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 52, end: 79, type: 'STRONG', isLast: true,
+                    },
+                ],
+            }
+
+            expect(analyzeChain(3, chain, notes)).toEqual(expectedResult)
+        })
+
+        // TODO: write this msg again.
+        test('in chain made of Strong and Weak Links (chain has odd number of links and all the links are alternated), will behave same as  ', () => {
+            const chain = [
+                {
+                    start: 9, end: 1, type: 'WEAK', isLast: true,
+                },
+                {
+                    start: 1, end: 8, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 8, end: 16, type: 'WEAK', isLast: false,
+                },
+                {
+                    start: 16, end: 61, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 61, end: 56, type: 'WEAK', isLast: false,
+                },
+                {
+                    start: 56, end: 29, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 29, end: 28, type: 'WEAK', isLast: true,
+                },
+            ]
+            const expectedResult = {
+                foundChain: true,
+                chain: [
+                    {
+                        start: 1, end: 8, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 8, end: 16, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 16, end: 61, type: 'STRONG', isLast: false,
+                    },
+                    {
+                        start: 61, end: 56, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 56, end: 29, type: 'STRONG', isLast: true,
+                    },
+                ],
+            }
+
+            expect(analyzeChain(7, chain, notes)).toEqual(expectedResult)
+        })
+    })
+})
+
+describe('switchAllStrongLinksChainLinks()', () => {
+    // chain will be transformed such that links become like "STRONG -> WEAK -> STRONG -> ..."
+    test('will return chain after switching its in-between strong links', () => {
+        const chain = [
+            {
+                start: 10, end: 1, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 8, end: 16, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 16, end: 78, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 78, end: 65, type: 'STRONG', isLast: true,
+            },
+        ]
+        const expectedResult = [
+            {
+                start: 10, end: 1, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 1, end: 8, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 8, end: 16, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 16, end: 78, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 78, end: 65, type: 'STRONG', isLast: true,
+            },
+        ]
+        expect(switchAllStrongLinksChainLinks(chain)).toEqual(expectedResult)
+    })
+})
+
+describe('switchMixedLinksChainLinks()', () => {
+    // chain will be transformed such that links become like "... WEAK -> STRONG -> WEAK -> STRONG -> ..."
+    test('will return chain after switching its in-between strong links', () => {
+        const chain = [
+            {
+                start: 10, end: 1, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 78, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 78, end: 65, type: 'STRONG', isLast: true,
+            },
+        ]
+        const expectedResult = [
+            {
+                start: 10, end: 1, type: 'WEAK', isLast: true,
+            },
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 78, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 78, end: 65, type: 'WEAK', isLast: true,
+            },
+        ]
+        expect(switchMixedLinksChainLinks(chain)).toEqual(expectedResult)
+    })
+})
+
+describe('analyzeChainOfAllStrongLinks()', () => {
+    test('returns a list of sub-chains and complete chain if they remove some notes, each entry will contain the chain and number of notes it removes', () => {
+        const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const chain = [
+            {
+                start: 30, end: 40, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 40, end: 44, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 44, end: 52, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 52, end: 79, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 79, end: 69, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        const expectedResult = [
+            {
+                chain: [
+                    {
+                        start: 40, end: 44, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 44, end: 52, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 52, end: 79, type: 'STRONG', isLast: true,
+                    },
+                ],
+                removableNotesCount: 1,
+            },
+            {
+                chain: [
+                    {
+                        start: 30, end: 40, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 40, end: 44, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 44, end: 52, type: 'STRONG', isLast: false,
+                    },
+                    {
+                        start: 52, end: 79, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 79, end: 69, type: 'STRONG', isLast: true,
+                    },
+                ],
+                removableNotesCount: 1,
+            },
+        ]
+
+        expect(analyzeChainOfAllStrongLinks(3, chain, notes)).toEqual(expectedResult)
+    })
+
+    test('returns empty list if complete chain or its sub-chains dont remove any note', () => {
+        const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        // TODO: this chain is a cycle of strong links, think over these cases from where to start this chain
+        const chain = [
+            {
+                start: 11, end: 47, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 47, end: 46, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 46, end: 73, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 73, end: 72, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 72, end: 9, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        expect(analyzeChainOfAllStrongLinks(4, chain, notes)).toEqual([])
+    })
+})
+
+describe('analyzeMixedLinksChain()', () => {
+    test('will analyze all the subchains in it like Pure Strong Links Chain, Continous Strong Links with Weak ones and will return all the valid sub-chains which will remove notes', () => {
+        const CELLS_VS_NOTES = {
+            2: [4],
+            4: [4],
+            14: [4],
+            17: [4],
+            22: [4],
+            25: [4],
+            58: [4],
+            61: [4],
+            62: [4],
+            71: [4],
+            80: [4],
+        }
+        const notes = generateCustomNotes(CELLS_VS_NOTES)
+
+        const chain = [
+            {
+                start: 2, end: 4, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 4, end: 14, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 14, end: 17, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 17, end: 25, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 25, end: 61, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 61, end: 62, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        const expectedResult = [{
+            chain: [{
+                start: 4, end: 14, type: 'STRONG', isLast: true,
+            }, {
+                start: 14, end: 17, type: 'WEAK', isLast: false,
+            }, {
+                start: 17, end: 25, type: 'STRONG', isLast: true,
+            }],
+            removableNotesCount: 1,
+        }, {
+            chain: [{
+                start: 17, end: 25, type: 'STRONG', isLast: true,
+            }, {
+                start: 25, end: 61, type: 'WEAK', isLast: false,
+            }, {
+                start: 61, end: 62, type: 'STRONG', isLast: true,
+            }],
+            removableNotesCount: 2,
+        }, {
+            chain: [{
+                start: 4, end: 14, type: 'STRONG', isLast: true,
+            }, {
+                start: 14, end: 17, type: 'WEAK', isLast: false,
+            }, {
+                start: 17, end: 25, type: 'STRONG', isLast: false,
+            }, {
+                start: 25, end: 61, type: 'WEAK', isLast: false,
+            }, {
+                start: 61, end: 62, type: 'STRONG', isLast: true,
+            }],
+            removableNotesCount: 1,
+        }]
+
+        expect(analyzeMixedLinksChain(4, chain, notes)).toEqual(expectedResult)
+    })
+})
+
+describe('removableNotesCountByChain()', () => {
+    test('will return number of notes the given valid chain can remove', () => {
+        const chain = [
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 61, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 61, end: 56, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 56, end: 29, type: 'STRONG', isLast: true,
+            },
+        ]
+        expect(removableNotesCountByChain(7, chain, notes)).toBe(1)
+    })
+
+    test('return 0 if no notes can be removed', () => {
+        const chain = [
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 61, type: 'STRONG', isLast: true,
+            },
+        ]
+        expect(removableNotesCountByChain(7, chain, notes)).toBe(0)
+    })
+})
+
+describe('getCellsFromChain()', () => {
+    // this function expects a chain whose length is odd and which contains alternate STRONG and WEAK links
+    test('returns list of cells which make chain from start to end of chain', () => {
+        const chain = [
+            {
+                start: 1, end: 8, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 8, end: 16, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 16, end: 61, type: 'STRONG', isLast: false,
+            },
+            {
+                start: 61, end: 56, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 56, end: 29, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        expect(getCellsFromChain(chain)).toEqual([1, 8, 16, 61, 56, 29])
+    })
+})
+
+describe('getChosenChainFromValidSubChains()', () => {
+    test('returns empty chain if passed subchains list is empty', () => {
+        expect(getChosenChainFromValidSubChains([])).toEqual([])
+    })
+
+    test('will choose a valid subchain which is smallest in length first and removes most number of notes', () => {
+        const subChains = [
+            {
+                chain: [
+                    {
+                        start: 40, end: 44, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 44, end: 52, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 52, end: 79, type: 'STRONG', isLast: true,
+                    },
+                ],
+                removableNotesCount: 1,
+            },
+            {
+                chain: [
+                    {
+                        start: 30, end: 40, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 40, end: 44, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 44, end: 52, type: 'STRONG', isLast: false,
+                    },
+                    {
+                        start: 52, end: 79, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 79, end: 69, type: 'STRONG', isLast: true,
+                    },
+                ],
+                removableNotesCount: 1,
+            },
+            {
+                chain: [
+                    {
+                        start: 40, end: 44, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 44, end: 52, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 52, end: 67, type: 'STRONG', isLast: true,
+                    },
+                ],
+                removableNotesCount: 3,
+            },
+        ]
+
+        const expectedResult = [
+            {
+                start: 40, end: 44, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 44, end: 52, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 52, end: 67, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        expect(getChosenChainFromValidSubChains(subChains)).toEqual(expectedResult)
+    })
+
+    test('will choose a shorter subchain over a longer one even though it removes less notes than longer subchain', () => {
+        const subChains = [
+            {
+                chain: [
+                    {
+                        start: 28, end: 34, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 34, end: 70, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 70, end: 62, type: 'STRONG', isLast: true,
+                    },
+                ],
+                removableNotesCount: 1,
+            },
+            {
+                chain: [
+                    {
+                        start: 28, end: 34, type: 'STRONG', isLast: true,
+                    },
+                    {
+                        start: 34, end: 70, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 70, end: 62, type: 'STRONG', isLast: false,
+                    },
+                    {
+                        start: 62, end: 59, type: 'WEAK', isLast: false,
+                    },
+                    {
+                        start: 59, end: 49, type: 'STRONG', isLast: true,
+                    },
+                ],
+                removableNotesCount: 3,
+            },
+        ]
+
+        const expectedResult = [
+            {
+                start: 28, end: 34, type: 'STRONG', isLast: true,
+            },
+            {
+                start: 34, end: 70, type: 'WEAK', isLast: false,
+            },
+            {
+                start: 70, end: 62, type: 'STRONG', isLast: true,
+            },
+        ]
+
+        expect(getChosenChainFromValidSubChains(subChains)).toEqual(expectedResult)
     })
 })

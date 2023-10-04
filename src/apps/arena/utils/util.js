@@ -247,3 +247,11 @@ export const getHousesCommonCells = (houseA, houseB) => {
 }
 
 export const areSameHouses = (houseA, houseB) => houseA.type === houseB.type && houseA.num === houseB.num
+
+export const getCellAllHousesCells = cell => getHousesCellsSharedByCells([cell, cell])
+
+export const getCellsSharingHousesWithCells = (cellA, cellB) => {
+    const cellAAllHousesCells = getCellAllHousesCells(cellA)
+    const cellBAllHousesCells = getCellAllHousesCells(cellB)
+    return _filter(cellBAllHousesCells, cell => isCellExists(cell, cellAAllHousesCells))
+}

@@ -21,6 +21,8 @@ import {
     getHousesCommonCells,
     getBlockStartCell,
     getHouseAxesValue,
+    getCellsSharingHousesWithCells,
+    getCellAllHousesCells,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -452,5 +454,51 @@ describe('getHouseAxesValue()', () => {
     test('returns empty string for block house', () => {
         const house = { type: HOUSE_TYPE.BLOCK, num: 6 }
         expect(getHouseAxesValue(house)).toBe('')
+    })
+})
+
+describe('getCellsSharingHousesWithCells()', () => {
+    test('returns cells which share any house with both of given cells', () => {
+        const cellA = { row: 0, col: 1 }
+        const cellB = { row: 3, col: 2 }
+        const expectedResult = [
+            { row: 3, col: 1 },
+            { row: 4, col: 1 },
+            { row: 5, col: 1 },
+            { row: 0, col: 2 },
+            { row: 1, col: 2 },
+            { row: 2, col: 2 },
+        ]
+        expect(getCellsSharingHousesWithCells(cellA, cellB)).toEqual(expectedResult)
+    })
+})
+
+describe('getCellAllHousesCells()', () => {
+    test('returns all the cells which are in all 3 houses of given cell, order of houses is [block, row, col]', () => {
+        const cell = { row: 3, col: 2 }
+        const expectedResult = [
+            { row: 3, col: 0 },
+            { row: 3, col: 1 },
+            { row: 3, col: 2 },
+            { row: 4, col: 0 },
+            { row: 4, col: 1 },
+            { row: 4, col: 2 },
+            { row: 5, col: 0 },
+            { row: 5, col: 1 },
+            { row: 5, col: 2 },
+            { row: 3, col: 3 },
+            { row: 3, col: 4 },
+            { row: 3, col: 5 },
+            { row: 3, col: 6 },
+            { row: 3, col: 7 },
+            { row: 3, col: 8 },
+            { row: 0, col: 2 },
+            { row: 1, col: 2 },
+            { row: 2, col: 2 },
+            { row: 6, col: 2 },
+            { row: 7, col: 2 },
+            { row: 8, col: 2 },
+        ]
+        expect(getCellAllHousesCells(cell)).toEqual(expectedResult)
     })
 })
