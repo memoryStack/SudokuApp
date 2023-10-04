@@ -1,24 +1,22 @@
 import { generateCustomNotes, getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 import { HOUSE_TYPE } from '../constants'
 
-import { mainNumbers, notes, possibleNotes } from './testData'
+import { notes, possibleNotes } from './testData'
 
 import {
     getCandidateAllStrongLinks,
     getNoteHostCellsInHouse,
     getAllStrongLinks,
     getNoteWeakLinks,
-    getXChainRawHints,
+    getFirstNoteXChain,
     getTrimWeakLinksFromEdges,
     analyzeChain,
-    switchAllStrongLinksChainLinks,
-    switchMixedLinksChainLinks,
-    analyzeChainOfAllStrongLinks,
+    alternateChainLinks,
     removableNotesCountByChain,
     getCellsFromChain,
     getChosenChainFromValidSubChains,
     removeRedundantLinks,
-    analyzeMixedLinksChain,
+    getAllValidSubChains,
 } from './xChain'
 
 describe('getAllStrongLinks()', () => {
@@ -184,8 +182,30 @@ describe('getNoteWeakLinks()', () => {
     })
 })
 
-test('getXChainRawHints()', () => {
-    getXChainRawHints(mainNumbers, notes, possibleNotes)
+describe('getFirstNoteXChain()', () => {
+    test('will return first note which has a valid X-Chain cycle', () => {
+        const expectedResult = {
+            note: 7,
+            chain: [
+                {
+                    start: 1, end: 8, type: 'STRONG', isLast: true,
+                },
+                {
+                    start: 8, end: 16, type: 'WEAK', isLast: false,
+                },
+                {
+                    start: 16, end: 61, type: 'STRONG', isLast: false,
+                },
+                {
+                    start: 61, end: 56, type: 'WEAK', isLast: false,
+                },
+                {
+                    start: 56, end: 29, type: 'STRONG', isLast: true,
+                },
+            ],
+        }
+        expect(getFirstNoteXChain(notes, possibleNotes)).toEqual(expectedResult)
+    })
 })
 
 describe('removeRedundantLinks()', () => {
@@ -360,6 +380,14 @@ describe('getTrimWeakLinksFromEdges()', () => {
 
         expect(getTrimWeakLinksFromEdges(chain)).toEqual(expectedResult)
     })
+
+    test('returns empty list if only link is weak', () => {
+        const chain = [{
+            start: 1, end: 8, type: 'WEAK', isLast: true,
+        }]
+
+        expect(getTrimWeakLinksFromEdges(chain)).toEqual([])
+    })
 })
 
 describe('analyzeChain()', () => {
@@ -408,8 +436,8 @@ describe('analyzeChain()', () => {
         })
     })
 
-    describe('valid chains will return full chain or it subchain with a flag telling that valid chain has been found', () => {
-        test('in chain made of all Strong Links full chain or any of its subchain will be returned after its links transformed into a normal chain (STRONG -> WEAK -> STRONG...)', () => {
+    describe('valid chains will return full chain or its subchain with a flag telling that valid chain has been found', () => {
+        test('chain made of all Strong Links, full chain or any of its subchain will be returned after its links transformed into a normal chain (STRONG -> WEAK -> STRONG...)', () => {
             const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
             const { notes } = getPuzzleDataFromPuzzleString(puzzle)
 
@@ -448,8 +476,7 @@ describe('analyzeChain()', () => {
             expect(analyzeChain(3, chain, notes)).toEqual(expectedResult)
         })
 
-        // TODO: write this msg again.
-        test('in chain made of Strong and Weak Links (chain has odd number of links and all the links are alternated), will behave same as  ', () => {
+        test('chain made of mix of STRONG and WEAK links ', () => {
             const chain = [
                 {
                     start: 9, end: 1, type: 'WEAK', isLast: true,
@@ -499,9 +526,8 @@ describe('analyzeChain()', () => {
     })
 })
 
-describe('switchAllStrongLinksChainLinks()', () => {
-    // chain will be transformed such that links become like "STRONG -> WEAK -> STRONG -> ..."
-    test('will return chain after switching its in-between strong links', () => {
+describe('alternateChainLinks()', () => {
+    test('will return chain after switching its in-between strong links, for pure Strong Link chain Edge links will always be STRONG', () => {
         const chain = [
             {
                 start: 10, end: 1, type: 'STRONG', isLast: true,
@@ -536,13 +562,11 @@ describe('switchAllStrongLinksChainLinks()', () => {
                 start: 78, end: 65, type: 'STRONG', isLast: true,
             },
         ]
-        expect(switchAllStrongLinksChainLinks(chain)).toEqual(expectedResult)
+        expect(alternateChainLinks(chain)).toEqual(expectedResult)
     })
-})
 
-describe('switchMixedLinksChainLinks()', () => {
     // chain will be transformed such that links become like "... WEAK -> STRONG -> WEAK -> STRONG -> ..."
-    test('will return chain after switching its in-between strong links', () => {
+    test('for mixed chain, edge links might be WEAK after transformation', () => {
         const chain = [
             {
                 start: 10, end: 1, type: 'STRONG', isLast: true,
@@ -577,12 +601,16 @@ describe('switchMixedLinksChainLinks()', () => {
                 start: 78, end: 65, type: 'WEAK', isLast: true,
             },
         ]
-        expect(switchMixedLinksChainLinks(chain)).toEqual(expectedResult)
+        expect(alternateChainLinks(chain)).toEqual(expectedResult)
     })
 })
 
-describe('analyzeChainOfAllStrongLinks()', () => {
-    test('returns a list of sub-chains and complete chain if they remove some notes, each entry will contain the chain and number of notes it removes', () => {
+describe('getAllValidSubChains() ', () => {
+    // will analyze all the subchains of odd length, starting at 3
+    // subchains must start and end with STRONG link
+    // STRONG and WEAK links must be alternate
+    // returns a list of sub-chains including complete chain if they remove some notes
+    test('chain containing all the STRONG links, some STRONG links will be changed to WEAK', () => {
         const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
         const { notes } = getPuzzleDataFromPuzzleString(puzzle)
 
@@ -641,14 +669,13 @@ describe('analyzeChainOfAllStrongLinks()', () => {
             },
         ]
 
-        expect(analyzeChainOfAllStrongLinks(3, chain, notes)).toEqual(expectedResult)
+        expect(getAllValidSubChains(3, chain, notes)).toEqual(expectedResult)
     })
 
-    test('returns empty list if complete chain or its sub-chains dont remove any note', () => {
+    test('returns empty list if no sub-chain removes any note', () => {
         const puzzle = '270060540050127080300400270000046752027508410500712908136274895785001024002000107'
         const { notes } = getPuzzleDataFromPuzzleString(puzzle)
 
-        // TODO: this chain is a cycle of strong links, think over these cases from where to start this chain
         const chain = [
             {
                 start: 11, end: 47, type: 'STRONG', isLast: true,
@@ -667,12 +694,10 @@ describe('analyzeChainOfAllStrongLinks()', () => {
             },
         ]
 
-        expect(analyzeChainOfAllStrongLinks(4, chain, notes)).toEqual([])
+        expect(getAllValidSubChains(4, chain, notes)).toEqual([])
     })
-})
 
-describe('analyzeMixedLinksChain()', () => {
-    test('will analyze all the subchains in it like Pure Strong Links Chain, Continous Strong Links with Weak ones and will return all the valid sub-chains which will remove notes', () => {
+    test('chain containing mix of STRONG and WEAK links', () => {
         const CELLS_VS_NOTES = {
             2: [4],
             4: [4],
@@ -742,7 +767,7 @@ describe('analyzeMixedLinksChain()', () => {
             removableNotesCount: 1,
         }]
 
-        expect(analyzeMixedLinksChain(4, chain, notes)).toEqual(expectedResult)
+        expect(getAllValidSubChains(4, chain, notes)).toEqual(expectedResult)
     })
 })
 
