@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -31,10 +32,21 @@ const getNavigator = () => {
 }
 
 // children prop is for testing purpose to hack navigation prop
-// eslint-disable-next-line react/prop-types
+
 export const NavigationProvider = ({ children }) => (
     <NavigationContainer ref={navigationRef}>
         {getNavigator()}
         {children}
     </NavigationContainer>
 )
+
+NavigationProvider.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]),
+}
+
+NavigationProvider.defaultProps = {
+    children: null,
+}

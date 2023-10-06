@@ -1,4 +1,5 @@
 module.exports = {
+    parser: './eslintCustomParser.js',
     env: {
         browser: true,
         es2021: true,
@@ -29,7 +30,7 @@ module.exports = {
         'no-shadow': ['error', { builtinGlobals: false, allow: [''] }],
         'react/jsx-indent': ['error', 4],
         'react/jsx-indent-props': ['error', 4],
-        'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+        'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx', '.ts'] }],
         'import/prefer-default-export': 'off',
         'react/forbid-prop-types': 'off', // TODO: enable it in future for ease of development, take it as late-night refactoring
         'no-unused-expressions': ['error', { allowShortCircuit: true }],
@@ -52,6 +53,16 @@ module.exports = {
             restrictedNamedExports: ['then'], // then is added becasue it was added in airbnb's eslint configs
         }],
         'no-param-reassign': 'off', // TODO: come back to this, use it judiciously
+        'import/extensions': [
+            'error',
+            'ignorePackages',
+            {
+                js: 'never',
+                jsx: 'never',
+                ts: 'never',
+                tsx: 'never',
+            },
+        ],
     },
     settings: {
         'import/resolver': {
@@ -64,7 +75,7 @@ module.exports = {
                     ['@resources', './src/resources'],
                     ['testing-utils', './src/utils/testing/testing-utils'],
                 ],
-                extensions: ['.ts', '.js', '.jsx', '.json'],
+                extensions: ['.ts', '.js', '.jsx', '.json', '.tsx'],
             },
         },
     },

@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useEffect } from 'react'
 
 import { View, StyleSheet } from 'react-native'
