@@ -44,3 +44,28 @@ declare module '@lodash/areSameValues' {
     import areSameValues from 'lodash/isEqual';
     export default areSameValues;
 }
+
+declare module '@lodash/isNil' {
+    import isNil from 'lodash/isNil'
+    export default isNil;
+}
+
+declare module '@lodash/get' {
+    import get from 'lodash/get'
+    export default get;
+}
+
+declare module '@lodash/noop' {
+    import noop from 'lodash/noop'
+    export default noop;
+}
+
+declare module '@lodash/set' {
+    import set from 'lodash/set'
+    export default set;
+}
+
+declare module '@lodash/isArray' {
+    import isArray from 'lodash/isArray'
+    export default isArray;
+}

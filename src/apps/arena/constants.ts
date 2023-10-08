@@ -49,6 +49,8 @@ export const BOARD_GRID_BORDERS_DIRECTION = {
     HORIZONTAL: 'horizontal',
 }
 
+export type BoardGridBorderDirectionValue = typeof BOARD_GRID_BORDERS_DIRECTION[keyof typeof BOARD_GRID_BORDERS_DIRECTION];
+
 export const ARENA_PAGE_TEST_ID = 'arena_test_id'
 
 export const GAME_OVER_CARD_OVERLAY_TEST_ID = 'GAME_OVER_CARD_OVERLAY_TEST_ID'

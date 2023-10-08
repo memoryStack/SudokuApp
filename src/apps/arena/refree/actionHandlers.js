@@ -7,7 +7,7 @@ const handleTimerClick = () => {
 }
 
 const handleMaxMistakesLimitReached = () => {
-    updateGameState(GAME_STATE.OVER.UNSOLVED)
+    updateGameState(GAME_STATE.OVER_UNSOLVED)
 }
 
 const handleResetStoreState = () => {

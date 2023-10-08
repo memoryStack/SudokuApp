@@ -33,11 +33,11 @@ jest.mock('@utils/storage')
 
 describe('should cache game data', () => {
     test('shouldSaveDataOnGameStateChange test 1', () => {
-        expect(shouldSaveDataOnGameStateChange(GAME_STATE.OVER.SOLVED, GAME_STATE.ACTIVE)).toBe(true)
+        expect(shouldSaveDataOnGameStateChange(GAME_STATE.OVER_SOLVED, GAME_STATE.ACTIVE)).toBe(true)
     })
 
     test('shouldSaveDataOnGameStateChange test 2', () => {
-        expect(shouldSaveDataOnGameStateChange(GAME_STATE.OVER.UNSOLVED, GAME_STATE.ACTIVE)).toBe(true)
+        expect(shouldSaveDataOnGameStateChange(GAME_STATE.OVER_UNSOLVED, GAME_STATE.ACTIVE)).toBe(true)
     })
 
     test('shouldSaveDataOnGameStateChange test 3', () => {

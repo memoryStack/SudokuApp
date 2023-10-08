@@ -2,7 +2,7 @@ import { CELLS_IN_HOUSE } from '../constants'
 import { getRowAndCol } from './cellTransformers'
 import { Houses } from './classes/houses'
 
-const getRowHouseCells = (houseNum: number) => {
+const getRowHouseCells = (houseNum: HouseNum) => {
     const result = []
     for (let col = 0; col < CELLS_IN_HOUSE; col++) {
         result.push({ row: houseNum, col })
@@ -10,7 +10,7 @@ const getRowHouseCells = (houseNum: number) => {
     return result
 }
 
-const getColHouseCells = (houseNum: number) => {
+const getColHouseCells = (houseNum: HouseNum) => {
     const result = []
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         result.push({ row, col: houseNum })
@@ -18,7 +18,7 @@ const getColHouseCells = (houseNum: number) => {
     return result
 }
 
-const getBlockHouseCells = (houseNum: number) => {
+const getBlockHouseCells = (houseNum: HouseNum) => {
     const result = []
     for (let box = 0; box < CELLS_IN_HOUSE; box++) {
         result.push(getRowAndCol(houseNum, box))

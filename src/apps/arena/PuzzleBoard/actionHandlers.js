@@ -11,7 +11,7 @@ const handleCellPress = ({ params: cell }) => {
 }
 
 const handleMainNumbersUpdate = ({ params: mainNumbers }) => {
-    if (getCorrectlyFilledCells(mainNumbers) === BOARD_CELLS_COUNT) updateGameState(GAME_STATE.OVER.SOLVED)
+    if (getCorrectlyFilledCells(mainNumbers) === BOARD_CELLS_COUNT) updateGameState(GAME_STATE.OVER_SOLVED)
 }
 
 const getCorrectlyFilledCells = mainNumbers => {

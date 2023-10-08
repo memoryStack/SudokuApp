@@ -4,8 +4,6 @@ import React, {
 
 import { View } from 'react-native'
 
-import PropTypes from 'prop-types'
-
 import _get from '@lodash/get'
 import _set from '@lodash/set'
 import _noop from '@lodash/noop'
@@ -26,6 +24,7 @@ import { cellHasTryOutInput } from '../smartHintHC/helpers'
 import {
     BOARD_AXES_VALUES,
     BOARD_GRID_BORDERS_DIRECTION,
+    BoardGridBorderDirectionValue,
     CELLS_IN_HOUSE,
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
 } from '../constants'
@@ -38,36 +37,54 @@ import { HINTS_IDS } from '../utils/smartHints/constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../utils/classes/boardIterators'
 
-const looper = []
-const bordersLooper = []
+const looper: number[] = []
+const bordersLooper: number[] = []
 for (let i = 0; i < 10; i++) {
     if (i < CELLS_IN_HOUSE) looper.push(i)
     bordersLooper.push(i) // 10 borders will be drawn
 }
 
-const Board_ = ({
-    gameState,
-    mainNumbers,
-    notes,
-    selectedCell,
-    onCellClick,
-    isHintTryOut,
-    showSmartHint,
-    cellsHighlightData,
-    axisTextStyles,
-    svgProps,
-    isCustomPuzleScreen,
+type NotesRefs = Array<Array<Array<React.RefObject<unknown>>>>
+
+interface Props {
+    gameState: GameState
+    mainNumbers: MainNumbers
+    notes: Notes
+    selectedCell: Cell
+    onCellClick: () => void // TODO: how/where to manage types for these prop drilled functions
+    isHintTryOut: boolean
+    showSmartHint: boolean
+    // TODO: add proper types for these record these are generated in hints folder
+    cellsHighlightData: object
+    axisTextStyles: object
+    svgProps: Array<unknown>
+    isCustomPuzleScreen: boolean
+}
+
+const Board_: React.FC<Props> = ({
+    // gameState = 'skl', // why assigning this value doesn't give error as this is not one of values given to GameState ??
+    gameState = GAME_STATE.INACTIVE as GameState,
+    mainNumbers = [],
+    notes = [],
+    selectedCell = {} as Cell, // why is this type any if type assertion is not used ??
+    onCellClick = _noop, // why is this type any ??
+    isHintTryOut = false,
+    showSmartHint = false,
+    cellsHighlightData = {},
+    axisTextStyles = {},
+    svgProps = [],
+    isCustomPuzleScreen = false,
 }) => {
     const styles = useStyles(getStyles)
 
     const selectedCellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell) || 0
 
-    const sameValueAsSelectedBox = cell => selectedCellMainValue && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, selectedCellMainValue, cell)
+    const sameValueAsSelectedBox = (cell: Cell) => selectedCellMainValue && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, selectedCellMainValue, cell)
 
     const boardRef = useRef(null)
 
     const notesRefs = useMemo(() => {
-        const result = []
+        const result: NotesRefs = []
         BoardIterators.forBoardEachCell(({ row, col }) => {
             BoardIterators.forCellEachNote((_, noteIdx) => {
                 _set(result, [row, col, noteIdx], React.createRef())
@@ -87,14 +104,14 @@ const Board_ = ({
         />
     )
 
-    const getCustomPuzzleMainNumFontColor = cell => {
-        const isWronglyPlaced = mainNumbers[cell.row][cell.col].wronglyPlaced
+    const getCustomPuzzleMainNumFontColor = (cell: Cell) => {
+        const isWronglyPlaced = (mainNumbers as CustomPuzzleMainNumbers)[cell.row][cell.col].wronglyPlaced
         if (isWronglyPlaced) return styles.wronglyFilledNumColor
         // consider any other number as clue
         return styles.clueNumColor
     }
 
-    const getMainNumFontColor = cell => {
+    const getMainNumFontColor = (cell: Cell) => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) return null
         if (isCustomPuzleScreen) return getCustomPuzzleMainNumFontColor(cell)
         if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
@@ -104,24 +121,24 @@ const Board_ = ({
         return styles.clueNumColor
     }
 
-    const getSmartHintActiveBgColor = cell => {
+    const getSmartHintActiveBgColor = (cell: Cell) => {
         if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) { return styles.selectedCellBGColor }
         return _get(cellsHighlightData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
     }
 
-    const shouldShowCellContent = () => [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(
+    const shouldShowCellContent = () => [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER_SOLVED, GAME_STATE.OVER_UNSOLVED].includes(
         gameState,
     )
 
-    const hasSameValueInSameHouseAsSelectedCell = cell => areCommonHouseCells(cell, selectedCell) && sameValueAsSelectedBox(cell)
+    const hasSameValueInSameHouseAsSelectedCell = (cell: Cell) => areCommonHouseCells(cell, selectedCell) && sameValueAsSelectedBox(cell)
 
-    const getCustomPuzzleBoardCellBgColor = cell => {
+    const getCustomPuzzleBoardCellBgColor = (cell: Cell) => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
         if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
         return null
     }
 
-    const getActiveGameBoardCellBgCell = cell => {
+    const getActiveGameBoardCellBgCell = (cell: Cell) => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
         if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
 
@@ -130,19 +147,20 @@ const Board_ = ({
         return styles.defaultCellBGColor
     }
 
-    const getCellBackgroundColor = cell => {
+    const getCellBackgroundColor = (cell: Cell) => {
         if (!shouldShowCellContent()) return null
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
         if (isCustomPuzleScreen) return getCustomPuzzleBoardCellBgColor(cell)
         return getActiveGameBoardCellBgCell(cell)
     }
 
-    const getInhabitableCellProps = cell => ({
+    const getInhabitableCellProps = (cell: Cell) => ({
         displayCrossIcon: _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false),
         crossIconColor: _get(cellsHighlightData, [cell.row, cell.col, 'crossIconColor'], ''),
     })
 
-    const renderRow = (row, key) => {
+    // TODO: decide over these partial types for Cell.row and Cell.col
+    const renderRow = (row: number, key: string) => {
         const rowAdditionalStyles = {
             marginTop:
                 row === 3 || row === 6
@@ -188,7 +206,7 @@ const Board_ = ({
         )
     }
 
-    const renderBordersGrid = orientation => {
+    const renderBordersGrid = (orientation: BoardGridBorderDirectionValue) => {
         const isVertical = orientation === BOARD_GRID_BORDERS_DIRECTION.VERTICAL
         const orientationBasedStyles = { flexDirection: isVertical ? 'row' : 'column' }
         const normalBorderStyle = isVertical ? styles.verticalBars : styles.horizontalBars
@@ -209,7 +227,7 @@ const Board_ = ({
         )
     }
 
-    const renderAxisText = label => (
+    const renderAxisText = (label: string) => (
         <Text
             key={label}
             style={[showSmartHint ? styles.smartHintAxisText : null, axisTextStyles]}
@@ -256,31 +274,3 @@ const Board_ = ({
 }
 
 export const Board = React.memo(Board_)
-
-Board_.propTypes = {
-    mainNumbers: PropTypes.array,
-    notes: PropTypes.array,
-    gameState: PropTypes.string,
-    selectedCell: PropTypes.object,
-    onCellClick: PropTypes.func,
-    isHintTryOut: PropTypes.bool,
-    showSmartHint: PropTypes.bool,
-    cellsHighlightData: PropTypes.object,
-    axisTextStyles: PropTypes.object,
-    svgProps: PropTypes.array, // experimental
-    isCustomPuzleScreen: PropTypes.bool,
-}
-
-Board_.defaultProps = {
-    mainNumbers: [],
-    notes: [],
-    gameState: GAME_STATE.INACTIVE,
-    selectedCell: {},
-    onCellClick: _noop,
-    isHintTryOut: false,
-    showSmartHint: false,
-    cellsHighlightData: {},
-    axisTextStyles: {},
-    svgProps: [],
-    isCustomPuzleScreen: false,
-}

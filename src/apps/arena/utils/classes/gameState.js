@@ -13,8 +13,8 @@ export class GameState {
             GAME_STATE.INACTIVE,
             GAME_STATE.DISPLAY_HINT,
             GAME_STATE.GAME_SELECT,
-            GAME_STATE.OVER.SOLVED,
-            GAME_STATE.OVER.UNSOLVED,
+            GAME_STATE.OVER_SOLVED,
+            GAME_STATE.OVER_UNSOLVED,
         ]
         return validValues.includes(value)
     }
@@ -32,11 +32,11 @@ export class GameState {
     }
 
     isGameSolved() {
-        return this.#state === GAME_STATE.OVER.SOLVED
+        return this.#state === GAME_STATE.OVER_SOLVED
     }
 
     isGameUnsolved() {
-        return this.#state === GAME_STATE.OVER.UNSOLVED
+        return this.#state === GAME_STATE.OVER_UNSOLVED
     }
 
     isGameSelecting() {
@@ -44,6 +44,6 @@ export class GameState {
     }
 
     isGameOver() {
-        return [GAME_STATE.OVER.SOLVED, GAME_STATE.OVER.UNSOLVED].includes(this.#state)
+        return [GAME_STATE.OVER_SOLVED, GAME_STATE.OVER_UNSOLVED].includes(this.#state)
     }
 }

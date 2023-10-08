@@ -2,7 +2,7 @@ import { PixelRatio } from 'react-native'
 
 export const isHexColor = (color = '') => color.startsWith('#')
 
-export const hexToRGBA = (hex, opacity = 100) => {
+export const hexToRGBA = (hex: string, opacity = 100) => {
     if (!isHexColor(hex)) return hex
 
     const r = parseInt(hex.substring(1, 3), 16)
@@ -11,9 +11,9 @@ export const hexToRGBA = (hex, opacity = 100) => {
     return `rgba(${r}, ${g}, ${b}, ${opacity / 100})`
 }
 
-export const consoleLog = (...args) => {
+export const consoleLog = (...args: unknown[]) => {
     // eslint-disable-next-line no-console
     __DEV__ && console.log(...args)
 }
 
-export const roundToNearestPixel = sizeInDp => PixelRatio.roundToNearestPixel(sizeInDp)
+export const roundToNearestPixel = (sizeInDp: number) => PixelRatio.roundToNearestPixel(sizeInDp)

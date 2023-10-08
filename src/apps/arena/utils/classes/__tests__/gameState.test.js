@@ -36,13 +36,13 @@ describe('GameState class', () => {
     })
 
     test('isGameSolved method returns true when game is over and is solved', () => {
-        expect(new GameState(GAME_STATE.OVER.SOLVED).isGameSolved()).toBeTruthy()
+        expect(new GameState(GAME_STATE.OVER_SOLVED).isGameSolved()).toBeTruthy()
         expect(new GameState(GAME_STATE.ACTIVE).isGameSolved()).toBeFalsy()
     })
 
     test('isGameUnsolved method returns true when game is over and is unsolved', () => {
-        expect(new GameState(GAME_STATE.OVER.UNSOLVED).isGameUnsolved()).toBeTruthy()
-        expect(new GameState(GAME_STATE.OVER.SOLVED).isGameUnsolved()).toBeFalsy()
+        expect(new GameState(GAME_STATE.OVER_UNSOLVED).isGameUnsolved()).toBeTruthy()
+        expect(new GameState(GAME_STATE.OVER_SOLVED).isGameUnsolved()).toBeFalsy()
     })
 
     test('isGameSelecting method returns true when use is choosing game', () => {
@@ -51,8 +51,8 @@ describe('GameState class', () => {
     })
 
     test('isGameOver method returns true when game is over', () => {
-        expect(new GameState(GAME_STATE.OVER.UNSOLVED).isGameOver()).toBeTruthy()
-        expect(new GameState(GAME_STATE.OVER.SOLVED).isGameOver()).toBeTruthy()
+        expect(new GameState(GAME_STATE.OVER_UNSOLVED).isGameOver()).toBeTruthy()
+        expect(new GameState(GAME_STATE.OVER_SOLVED).isGameOver()).toBeTruthy()
         expect(new GameState(GAME_STATE.INACTIVE).isGameOver()).toBeFalsy()
     })
 })

@@ -12,6 +12,10 @@ type MainNumber = {
     isClue: boolean
 }
 
+type CustomPuzzleMainNumber = MainNumber & {
+    wronglyPlaced: boolean
+}
+
 type Note = {
     noteValue: number
     show: number
@@ -20,13 +24,14 @@ type Note = {
 // i find Array<T> more obvious than CellMainNumber[][] syntax
 type MainNumbers = Array<Array<MainNumber>>
 
+type CustomPuzzleMainNumbers = Array<Array<CustomPuzzleMainNumber>>
+
 type Notes = Array<Array<Array<Note>>>
 
 // TODO: add literal type here like "row | col | block"
-// figure out a better way to expose sub-types
-type HouseType = string
-type HouseNum = number
 type House = {
-    type: HouseType
-    num: HouseNum
+    type: string
+    num: number
 }
+type HouseType = House['type']
+type HouseNum = House['num']

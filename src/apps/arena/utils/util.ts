@@ -15,6 +15,7 @@ import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
 import {
     BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES,
 } from '../constants'
+import { DEFAULT_CELL } from '../default.constants'
 
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSE_TYPE } from './smartHints/constants'
@@ -31,11 +32,11 @@ export const addLeadingZeroIfEligible = (value: number) => {
     return `0${value}`
 }
 
-export const shouldSaveDataOnGameStateChange = (currentState: unknown, previousState: unknown) => new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
+export const shouldSaveDataOnGameStateChange = (currentState: GAME_STATE, previousState: GAME_STATE) => new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
 
 export const isMainNumberPresentInAnyHouseOfCell = (number: number, cell: Cell, mainNumbers: MainNumbers) => mainNumberCountExccedsThresholdInAnyHouseOfCell(number, cell, mainNumbers, 0)
 
-const getSolutionsCountForPuzzleType = (mainNumbers: MainNumbers, { row = 0, col = 0 } = {} as Cell): number => {
+const getSolutionsCountForPuzzleType = (mainNumbers: MainNumbers, { row, col } = DEFAULT_CELL): number => {
     const isPuzzleSolved = row === CELLS_IN_HOUSE
     if (isPuzzleSolved) {
         BoardIterators.forBoardEachCell(({ row: _row, col: _col }: Cell) => {
@@ -103,7 +104,7 @@ export const getCellBlockHouseInfo = (cell: Cell) => ({
     num: getBlockAndBoxNum(cell).blockNum,
 })
 
-export const getCellHouseForHouseType = (houseType: unknown, cell: Cell) => {
+export const getCellHouseForHouseType = (houseType: HouseType, cell: Cell) => {
     if (Houses.isRowHouse(houseType)) return getCellRowHouseInfo(cell)
     if (Houses.isColHouse(houseType)) return getCellColHouseInfo(cell)
     if (Houses.isBlockHouse(houseType)) return getCellBlockHouseInfo(cell)

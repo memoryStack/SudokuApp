@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { Text as RNText } from 'react-native'
-
-import PropTypes from 'prop-types'
+import { Text as RNText, StyleProp, ViewStyle } from 'react-native'
 
 import _get from '@lodash/get'
 import _isArray from '@lodash/isArray'
@@ -15,8 +13,19 @@ import { useThemeValues } from '../../../apps/arena/hooks/useTheme'
 
 import { TEXT_VARIATIONS, TEXT_VARIATION_VS_TOKENS_PATH } from './text.constants'
 
-const getFinalStyles = (styleProp, type, withoutLineHeight, theme) => {
-    const styleFromProps = _isArray(styleProp) ? Object.assign({}, ...styleProp) : styleProp
+type Style = StyleProp<ViewStyle>
+type StyleArray = StyleProp<ViewStyle>[]
+type Styles = Style | StyleArray
+
+interface Props {
+    type?: string
+    style?: Styles
+    withoutLineHeight?: boolean
+    children: string | React.ReactNode
+}
+
+const getFinalStyles = (styleProp: Styles, type: string, withoutLineHeight: boolean, theme: unknown) => {
+    const styleFromProps = _isArray(styleProp) ? Object.assign({}, ...styleProp as StyleArray) : styleProp
 
     const result = {
         ..._get(theme, TEXT_VARIATION_VS_TOKENS_PATH[type], {}),
@@ -28,19 +37,21 @@ const getFinalStyles = (styleProp, type, withoutLineHeight, theme) => {
     return result
 }
 
-const Text = ({
-    style,
-    type,
-    withoutLineHeight,
+const Text: React.FC<Props> = ({
+    style = {},
+    type = TEXT_VARIATIONS.BODY_LARGE,
+    withoutLineHeight = false,
     ...rest
 }) => {
     const theme = useThemeValues()
 
     const styles = getFinalStyles(style, type, withoutLineHeight, theme)
-    const fontWeight = _get(styles, 'fontWeight', FONT_WEIGHTS.REGULAR)
+    // extract this type calculation to font.js if needs at another place
+    const fontWeight: keyof typeof FONT_WEIGHT_VS_FONT_FAMILY = _get(styles, 'fontWeight', FONT_WEIGHTS.REGULAR)
+
     const stylesWithFont = {
         ...styles,
-        fontFamily: fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],
+        fontFamily: fonts && fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],
         fontWeight,
         includeFontPadding: false,
         textAlignVertical: 'center',
@@ -55,18 +66,3 @@ const Text = ({
 }
 
 export default React.memo(Text)
-
-Text.propTypes = {
-    style: PropTypes.oneOfType([
-        PropTypes.object,
-        PropTypes.array,
-    ]),
-    type: PropTypes.oneOf(Object.keys(TEXT_VARIATIONS)),
-    withoutLineHeight: PropTypes.bool,
-}
-
-Text.defaultProps = {
-    style: {},
-    type: TEXT_VARIATIONS.BODY_LARGE,
-    withoutLineHeight: false,
-}
