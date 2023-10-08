@@ -1,9 +1,12 @@
-/* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { getCellsFromCellsWithNote, getNotesFromCellsWithNotes, getNakedSingleCellsWithNoteInAscOrder } from './helpers'
 
 describe('getNakedSingleCellsWithNoteInAscOrder()', () => {
     test('returns an array of objects with cell and note as keys and in sorted order wrt note value', () => {
-        const { boardNotes } = require('./testData')
+        const puzzle = '400000107305800406080406320043050070000000940801003002004530708500070204018004030'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
         const cells = [
             { row: 1, col: 7 },
             { row: 3, col: 8 },
@@ -12,7 +15,7 @@ describe('getNakedSingleCellsWithNoteInAscOrder()', () => {
             { cell: { row: 3, col: 8 }, note: 1 },
             { cell: { row: 1, col: 7 }, note: 9 },
         ]
-        expect(getNakedSingleCellsWithNoteInAscOrder(cells, boardNotes)).toStrictEqual(expectedResult)
+        expect(getNakedSingleCellsWithNoteInAscOrder(cells, notes)).toStrictEqual(expectedResult)
     })
 })
 

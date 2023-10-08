@@ -1,3 +1,5 @@
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { act, renderHook } from '@testing-library/react-hooks'
 
 import { testStoreWrapper } from '../../../../../utils/testing/testingBoilerplate/reduxStoreWrapper'
@@ -5,7 +7,7 @@ import { makeTestStore } from '../../../../../utils/testing/testingBoilerplate/m
 import smartHintHCReducers, { smartHintHCActions } from '../../../store/reducers/smartHintHC.reducers'
 
 import { useIsHintTryOutStep } from '.'
-import { mainNumbers, notesData } from '../hiddenGroup/testData'
+// import { mainNumbers, notesData } from '../hiddenGroup/testData'
 import { HINTS_IDS } from '../constants'
 import { getRawHints } from '..'
 
@@ -23,7 +25,10 @@ describe.skip('useIsHintTryOutStep()', () => {
             smartHintHC: smartHintHCReducers,
             board: boardReducers,
         })
-        store.dispatch(setPossibleNotes(notesData))
+
+        const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
+        const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+        store.dispatch(setPossibleNotes(notes))
 
         const { result } = renderHook(() => useIsHintTryOutStep(), {
             wrapper: testStoreWrapper,
@@ -32,7 +37,7 @@ describe.skip('useIsHintTryOutStep()', () => {
         expect(result.current).toBeFalsy()
 
         await act(async () => {
-            const hints = await getRawHints(HINTS_IDS.HIDDEN_DOUBLE, mainNumbers, notesData)
+            const hints = await getRawHints(HINTS_IDS.HIDDEN_DOUBLE, mainNumbers, notes)
             store.dispatch(setHints({ hints }))
         })
 

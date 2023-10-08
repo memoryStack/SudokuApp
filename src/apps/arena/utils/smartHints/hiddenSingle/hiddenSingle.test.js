@@ -1,4 +1,6 @@
 /* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { HIDDEN_SINGLE_TYPES } from '../constants'
 import { getHiddenSingleRawHints } from './hiddenSingle'
 
@@ -15,9 +17,9 @@ const mockBoardSelectors = mockedNotes => {
 }
 
 test('hidden singles', () => {
-    const { mainNumbers, notesData } = require('./testData')
-
-    mockBoardSelectors(notesData)
+    const puzzle = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
 
     const hiddenSingles = [
         { cell: { row: 0, col: 3 }, mainNumber: 8, type: HIDDEN_SINGLE_TYPES.ROW },
@@ -37,5 +39,5 @@ test('hidden singles', () => {
         { cell: { row: 7, col: 6 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.BLOCK },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenSingleRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(hiddenSingles)
+    expect(getHiddenSingleRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(hiddenSingles)
 })

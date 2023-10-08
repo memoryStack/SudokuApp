@@ -1,4 +1,6 @@
 /* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import {
     getAllValidYWingCells,
     getYWingRawHints,
@@ -21,9 +23,9 @@ const mockBoardSelectors = mockedNotes => {
 
 describe('getYWingRawHints()', () => {
     test('returns row data for all yWings in puzzle', () => {
-        const { mainNumbers, notesData } = require('./testData')
-
-        mockBoardSelectors(notesData)
+        const puzzle = '800360900009010863063089005924673158386951724571824396432196587698537000000248639'
+        const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+        mockBoardSelectors(notes)
 
         const expectedYWings = [
             {
@@ -52,15 +54,16 @@ describe('getYWingRawHints()', () => {
             },
         ]
         const maxHintsThreshold = Number.POSITIVE_INFINITY
-        expect(getYWingRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedYWings)
+        expect(getYWingRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(expectedYWings)
     })
 })
 
 describe('getAllValidYWingCells()', () => {
     test('returns all valid yWing cells in board based on the notes present in them', () => {
-        const { mainNumbers, notesData } = require('./testData')
+        const puzzle = '800360900009010863063089005924673158386951724571824396432196587698537000000248639'
+        const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
 
-        mockBoardSelectors(notesData)
+        mockBoardSelectors(notes)
 
         const expectedValidYWingCells = [
             { cell: { row: 0, col: 2 }, notes: [5, 7] },
@@ -80,7 +83,7 @@ describe('getAllValidYWingCells()', () => {
             { cell: { row: 8, col: 2 }, notes: [5, 7] },
         ]
 
-        expect(getAllValidYWingCells(mainNumbers, notesData)).toStrictEqual(expectedValidYWingCells)
+        expect(getAllValidYWingCells(mainNumbers, notes)).toStrictEqual(expectedValidYWingCells)
     })
 })
 

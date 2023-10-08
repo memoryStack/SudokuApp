@@ -1,8 +1,6 @@
 import { generateCustomNotes, getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 import { HOUSE_TYPE } from '../constants'
 
-import { notes, possibleNotes } from './testData'
-
 import {
     getCandidateAllStrongLinks,
     getNoteHostCellsInHouse,
@@ -135,6 +133,9 @@ describe('getAllStrongLinks()', () => {
                 },
             },
         }
+
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getAllStrongLinks(notes, possibleNotes)).toEqual(expectedResult)
     })
 })
@@ -151,10 +152,14 @@ describe('getCandidateAllStrongLinks()', () => {
                 7: [{ row: 1, col: 7 }, { row: 6, col: 7 }],
             },
         }
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getCandidateAllStrongLinks(7, notes, possibleNotes)).toEqual(expectedResult)
     })
 
     test('returns empty object if no strong links are found for a note in any house', () => {
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getCandidateAllStrongLinks(2, notes, possibleNotes)).toEqual({})
     })
 })
@@ -163,11 +168,15 @@ describe('getNoteHostCellsInHouse()', () => {
     test('returns the list of cells from a house in which a note is visible', () => {
         const house = { type: HOUSE_TYPE.ROW, num: 0 }
         const expectedResult = [{ row: 0, col: 1 }, { row: 0, col: 8 }]
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getNoteHostCellsInHouse(7, house, notes)).toEqual(expectedResult)
     })
 
     test('returns empty array if note is not present anywhere in house', () => {
         const house = { type: HOUSE_TYPE.BLOCK, num: 0 }
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getNoteHostCellsInHouse(3, house, notes)).toEqual([])
     })
 })
@@ -197,7 +206,8 @@ describe('getNoteWeakLinks()', () => {
                 8: [[{ row: 6, col: 6 }, { row: 6, col: 8 }], [{ row: 6, col: 6 }, { row: 7, col: 6 }], [{ row: 6, col: 6 }, { row: 7, col: 8 }], [{ row: 6, col: 8 }, { row: 7, col: 6 }], [{ row: 6, col: 8 }, { row: 7, col: 8 }], [{ row: 7, col: 6 }, { row: 7, col: 8 }]],
             },
         }
-
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getNoteWeakLinks(2, notes, possibleNotes)).toEqual(expectedResult)
     })
 })
@@ -224,6 +234,8 @@ describe('getFirstNoteXChain()', () => {
                 },
             ],
         }
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getFirstNoteXChain(notes, possibleNotes)).toEqual(expectedResult)
     })
 })
@@ -425,7 +437,8 @@ describe('analyzeChain()', () => {
                 },
             ]
             const expectedResult = { foundChain: false, chain }
-
+            const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+            const { notes } = getPuzzleDataFromPuzzleString(puzzle)
             expect(analyzeChain(7, chain, notes)).toEqual(expectedResult)
         })
 
@@ -540,7 +553,8 @@ describe('analyzeChain()', () => {
                     },
                 ],
             }
-
+            const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+            const { notes } = getPuzzleDataFromPuzzleString(puzzle)
             expect(analyzeChain(7, chain, notes)).toEqual(expectedResult)
         })
     })
@@ -810,6 +824,8 @@ describe('removableNotesCountByChain()', () => {
                 start: 56, end: 29, type: 'STRONG', isLast: true,
             },
         ]
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(removableNotesCountByChain(7, chain, notes)).toBe(1)
     })
 
@@ -825,6 +841,8 @@ describe('removableNotesCountByChain()', () => {
                 start: 16, end: 61, type: 'STRONG', isLast: true,
             },
         ]
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(removableNotesCountByChain(7, chain, notes)).toBe(0)
     })
 })

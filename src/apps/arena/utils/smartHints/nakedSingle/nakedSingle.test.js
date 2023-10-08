@@ -1,4 +1,6 @@
 /* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { getNakedSingleRawHints, isNakedSinglePresent } from './nakedSingle'
 import { NAKED_SINGLE_TYPES } from '../constants'
 
@@ -14,26 +16,23 @@ const mockBoardSelectors = mockedNotes => {
     getStoreState.mockReturnValue({})
 }
 
+const puzzle = '615030700000790010040005030000523090520000008400068000306080970200479006900300281'
+const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+
 describe('isNakedSinglePresent()', () => {
     test('returns a boolean as true and number which is naked single in cell', () => {
-        const { notesDataTestOne } = require('./nakedSingle.testData')
-
         const expectedResult = { present: true, mainNumber: 8 }
-        expect(isNakedSinglePresent(notesDataTestOne, { row: 1, col: 0 })).toEqual(expectedResult)
+        expect(isNakedSinglePresent(notes, { row: 1, col: 0 })).toEqual(expectedResult)
     })
 
     test('returns a boolean as false and number as -1 if cell does not have Naked Single', () => {
-        const { notesDataTestOne } = require('./nakedSingle.testData')
-
         const expectedResult = { present: false, mainNumber: -1 }
-        expect(isNakedSinglePresent(notesDataTestOne, { row: 0, col: 0 })).toEqual(expectedResult)
+        expect(isNakedSinglePresent(notes, { row: 0, col: 0 })).toEqual(expectedResult)
     })
 })
 
 test('naked singles', () => {
-    const { mainNumbersTestOne, notesDataTestOne } = require('./nakedSingle.testData')
-
-    mockBoardSelectors(notesDataTestOne)
+    mockBoardSelectors(notes)
 
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
@@ -47,7 +46,7 @@ test('naked singles', () => {
         { cell: { row: 8, col: 5 }, mainNumber: 6, type: NAKED_SINGLE_TYPES.MIX },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getNakedSingleRawHints(mainNumbersTestOne, notesDataTestOne, maxHintsThreshold)).toStrictEqual(
+    expect(getNakedSingleRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(
         nakedSinglesData,
     )
 })

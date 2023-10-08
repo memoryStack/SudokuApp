@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import { mainNumbers, notes, possibleNotes } from './testData'
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import {
     getAllValidCellsWithPairs,
@@ -17,6 +17,9 @@ import {
 
 jest.mock('../../../../../redux/dispatch.helpers')
 jest.mock('../../../store/selectors/board.selectors')
+
+const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
+const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
 const mockBoardSelectors = () => {
     const { getPossibleNotes } = require('../../../store/selectors/board.selectors')

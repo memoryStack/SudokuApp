@@ -1,4 +1,6 @@
 /* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { HOUSE_TYPE } from '../constants'
 import { getHiddenGroupRawHints, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
 
@@ -15,8 +17,9 @@ const mockBoardSelectors = mockedNotes => {
 }
 
 test('hidden doubles valid candidates test 1', () => {
-    const { mainNumbers, notesData } = require('./testData')
-    mockBoardSelectors(notesData)
+    const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
 
     const expectedResult = [
         {
@@ -28,13 +31,15 @@ test('hidden doubles valid candidates test 1', () => {
         },
     ]
     expect(
-        validCandidatesInHouseAndTheirLocations({ type: HOUSE_TYPE.BLOCK, num: 4 }, 2, mainNumbers, notesData),
+        validCandidatesInHouseAndTheirLocations({ type: HOUSE_TYPE.BLOCK, num: 4 }, 2, mainNumbers, notes),
     ).toStrictEqual(expectedResult)
 })
 
 test('hidden doubles valid candidates test 2', () => {
-    const { mainNumbers, notesData } = require('./testData')
-    mockBoardSelectors(notesData)
+    const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
+
     const expectedResult = [
         {
             candidate: 4,
@@ -52,15 +57,16 @@ test('hidden doubles valid candidates test 2', () => {
         },
     ]
     expect(
-        validCandidatesInHouseAndTheirLocations({ type: HOUSE_TYPE.BLOCK, num: 3 }, 2, mainNumbers, notesData),
+        validCandidatesInHouseAndTheirLocations({ type: HOUSE_TYPE.BLOCK, num: 3 }, 2, mainNumbers, notes),
     ).toStrictEqual(expectedResult)
 })
 
 test('hidden doubles', () => {
     // TODO: doesn't look like the notesData is related to the mainNumbers in the file
     // the notesData here is actually from this hiddenTrippleTestData file
-    const { mainNumbers, notesData } = require('./testData')
-    mockBoardSelectors(notesData)
+    const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
     const expectedResult = [
@@ -74,12 +80,14 @@ test('hidden doubles', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenGroupRawHints(2, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
+    expect(getHiddenGroupRawHints(2, notes, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples', () => {
-    const { mainNumbers, notesData } = require('./hiddenTripple.testData')
-    mockBoardSelectors(notesData)
+    const puzzle = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+
+    mockBoardSelectors(notes)
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
 
@@ -97,7 +105,7 @@ test('hidden tripples', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenGroupRawHints(3, notesData, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
+    expect(getHiddenGroupRawHints(3, notes, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples duplicate houses with same group cells', () => {

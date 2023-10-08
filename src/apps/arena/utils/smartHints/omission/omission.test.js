@@ -1,4 +1,6 @@
 /* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import {
     getOmissionRawHints,
     getHouseOmissions,
@@ -21,9 +23,9 @@ const mockBoardSelectors = mockedNotes => {
 }
 
 test('all omissions', () => {
-    const { mainNumbers, notesData } = require('./testData')
-
-    mockBoardSelectors(notesData)
+    const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
 
     const expectedOmissions = [
         {
@@ -110,13 +112,13 @@ test('all omissions', () => {
     ]
 
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getOmissionRawHints(mainNumbers, notesData, maxHintsThreshold)).toStrictEqual(expectedOmissions)
+    expect(getOmissionRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(expectedOmissions)
 })
 
 test('all Row 1 omissions', () => {
-    const { mainNumbers, notesData } = require('./testData')
-
-    mockBoardSelectors(notesData)
+    const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
 
     const house = { type: HOUSE_TYPE.ROW, num: 0 }
     const expectedOmissions = [
@@ -140,13 +142,13 @@ test('all Row 1 omissions', () => {
         },
     ]
 
-    expect(getHouseOmissions({ type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notesData)).toStrictEqual(expectedOmissions)
+    expect(getHouseOmissions({ type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes)).toStrictEqual(expectedOmissions)
 })
 
 test('all Block 2 omissions', () => {
-    const { mainNumbers, notesData } = require('./testData')
-
-    mockBoardSelectors(notesData)
+    const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
 
     const house = { type: HOUSE_TYPE.BLOCK, num: 2 }
     const expectedOmissions = [
@@ -161,13 +163,13 @@ test('all Block 2 omissions', () => {
         },
     ]
 
-    expect(getHouseOmissions(house, mainNumbers, notesData)).toStrictEqual(expectedOmissions)
+    expect(getHouseOmissions(house, mainNumbers, notes)).toStrictEqual(expectedOmissions)
 })
 
 test('does a note form omission in house', () => {
-    const { mainNumbers, notesData } = require('./testData')
-
-    mockBoardSelectors(notesData)
+    const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
 
     const expectedResultOne = {
         present: true,
@@ -177,7 +179,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(2, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(2, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes)).toStrictEqual(
         expectedResultOne,
     )
 
@@ -189,7 +191,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(9, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(9, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes)).toStrictEqual(
         expectedResultTwo,
     )
 
@@ -201,7 +203,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(5, { type: HOUSE_TYPE.BLOCK, num: 2 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(5, { type: HOUSE_TYPE.BLOCK, num: 2 }, mainNumbers, notes)).toStrictEqual(
         expectedResultThree,
     )
 
@@ -213,7 +215,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.COL, num: 7 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.COL, num: 7 }, mainNumbers, notes)).toStrictEqual(
         expectedResultFour,
     )
 
@@ -226,7 +228,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.BLOCK, num: 5 }, mainNumbers, notesData)).toStrictEqual(
+    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.BLOCK, num: 5 }, mainNumbers, notes)).toStrictEqual(
         expectedResultFive,
     )
 })
@@ -266,8 +268,9 @@ test('note host cells form valid omission', () => {
 })
 
 test('omission removes notes', () => {
-    const { mainNumbers, notesData } = require('./testData')
-    mockBoardSelectors(notesData)
+    const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    mockBoardSelectors(notes)
 
     const testOneOmission = {
         hostHouse: { type: HOUSE_TYPE.BLOCK, num: 0 },
@@ -278,7 +281,7 @@ test('omission removes notes', () => {
             { row: 2, col: 1 },
         ],
     }
-    expect(omissionRemovesNotes(testOneOmission, mainNumbers, notesData)).toBe(false)
+    expect(omissionRemovesNotes(testOneOmission, mainNumbers, notes)).toBe(false)
 
     const testTwoOmission = {
         hostHouse: { type: HOUSE_TYPE.BLOCK, num: 3 },
@@ -289,7 +292,7 @@ test('omission removes notes', () => {
             { row: 4, col: 2 },
         ],
     }
-    expect(omissionRemovesNotes(testTwoOmission, mainNumbers, notesData)).toBe(false)
+    expect(omissionRemovesNotes(testTwoOmission, mainNumbers, notes)).toBe(false)
 
     const testThreeOmission = {
         hostHouse: { type: HOUSE_TYPE.ROW, num: 3 },
@@ -300,5 +303,5 @@ test('omission removes notes', () => {
             { row: 3, col: 7 },
         ],
     }
-    expect(omissionRemovesNotes(testThreeOmission, mainNumbers, notesData)).toBe(true)
+    expect(omissionRemovesNotes(testThreeOmission, mainNumbers, notes)).toBe(true)
 })

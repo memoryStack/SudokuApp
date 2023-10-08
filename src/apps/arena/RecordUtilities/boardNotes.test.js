@@ -1,4 +1,5 @@
-/* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { NotesRecord } from './boardNotes'
 
 describe('NotesRecord', () => {
@@ -235,39 +236,39 @@ describe('NotesRecord', () => {
 describe('NotesRecord.areSameNotesInCells()', () => {
     // TODO: take care of this file import
     // it's long way from home
+
+    const puzzle = '400000107305800406080406320043050070000000940801003002004530708500070204018004030'
+    const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
     test('returns true when two cells have two same possible candidates only in them, [5, 6] and [5, 6] in this case', () => {
-        const { boardNotes } = require('../utils/smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 5, col: 6 },
             { row: 5, col: 7 },
         ]
-        expect(NotesRecord.areSameNotesInCells(boardNotes, cells)).toBe(true)
+        expect(NotesRecord.areSameNotesInCells(notes, cells)).toBe(true)
     })
 
     test('returns true when two cells have two same possible candidates only in them, [5, 9] and [5, 9] in this case', () => {
-        const { boardNotes } = require('../utils/smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 2, col: 8 },
             { row: 8, col: 8 },
         ]
-        expect(NotesRecord.areSameNotesInCells(boardNotes, cells)).toBe(true)
+        expect(NotesRecord.areSameNotesInCells(notes, cells)).toBe(true)
     })
 
     test('returns false when two cells have two possible candidates only in them but are different set of candidates, [5, 6] and [5, 9] in this case', () => {
-        const { boardNotes } = require('../utils/smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 8, col: 6 },
             { row: 8, col: 8 },
         ]
-        expect(NotesRecord.areSameNotesInCells(boardNotes, cells)).toBe(false)
+        expect(NotesRecord.areSameNotesInCells(notes, cells)).toBe(false)
     })
 
     test('returns false always when atleast one of the two cells have more than two possible candidates in it, [5, 9] and [5, 8, 9] in this case', () => {
-        const { boardNotes } = require('../utils/smartHints/tryOutInputAnalyser/nakedGroups/testData')
         const cells = [
             { row: 0, col: 7 },
             { row: 2, col: 8 },
         ]
-        expect(NotesRecord.areSameNotesInCells(boardNotes, cells)).toBe(false)
+        expect(NotesRecord.areSameNotesInCells(notes, cells)).toBe(false)
     })
 })

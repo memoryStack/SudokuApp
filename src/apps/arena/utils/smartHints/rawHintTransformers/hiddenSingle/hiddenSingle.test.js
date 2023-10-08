@@ -1,4 +1,5 @@
-/* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { GRID_TRAVERSALS } from '../../../../constants'
 import { HOUSE_TYPE } from '../../constants'
 import {
@@ -37,7 +38,8 @@ describe('getNextNeighbourBlock()', () => {
 
 describe('shouldHighlightWinnerCandidateInstanceInBlock()', () => {
     test('returns true if host house and block house have some empty common cells', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const blockHouse = { type: HOUSE_TYPE.BLOCK, num: 6 }
         const hostHouse = { type: HOUSE_TYPE.COL, num: 0 }
 
@@ -45,7 +47,8 @@ describe('shouldHighlightWinnerCandidateInstanceInBlock()', () => {
     })
 
     test('returns false if host house and block house have no empty empty common cells', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const blockHouse = { type: HOUSE_TYPE.BLOCK, num: 1 }
         const hostHouse = { type: HOUSE_TYPE.ROW, num: 0 }
 
@@ -55,7 +58,8 @@ describe('shouldHighlightWinnerCandidateInstanceInBlock()', () => {
 
 describe('getCellFilledWithNumberInHouse()', () => {
     test('returns true if host house and block house have some empty common cells', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const number = 8
         const blockHouse = { type: HOUSE_TYPE.BLOCK, num: 6 }
         expect(getCellFilledWithNumberInHouse(number, blockHouse, mainNumbers)).toEqual({ row: 6, col: 2 })
@@ -64,7 +68,8 @@ describe('getCellFilledWithNumberInHouse()', () => {
 
 describe('getEmptyCellsCountAndCandidatePosition()', () => {
     test('returnw how many cells shared by row and block are empty and where hidden single candidate is present in row', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const blockHouse = { type: HOUSE_TYPE.BLOCK, num: 3 }
         const rowHouse = { type: HOUSE_TYPE.ROW, num: 4 }
         const winnerCandidate = 8
@@ -75,7 +80,8 @@ describe('getEmptyCellsCountAndCandidatePosition()', () => {
     })
 
     test('returns null if hidden single candidate is not present in row or no empty cells present shared by block and row', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const winnerCandidate = 6
         const blockHouse = { type: HOUSE_TYPE.BLOCK, num: 8 }
         const rowHouse = { type: HOUSE_TYPE.ROW, num: 7 }
@@ -84,7 +90,8 @@ describe('getEmptyCellsCountAndCandidatePosition()', () => {
     })
 
     test('returnw how many cells shared by column and block are empty and where hidden single candidate is present in column', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const winnerCandidate = 6
         const neighbourCols = {}
         const blockHouse = { type: HOUSE_TYPE.BLOCK, num: 8 }
@@ -94,7 +101,8 @@ describe('getEmptyCellsCountAndCandidatePosition()', () => {
     })
 
     test('returns null if hidden single candidate is not present in column or no empty cells present shared by block and column', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const winnerCandidate = 6
         const neighbourCols = {}
         const blockHouse = { type: HOUSE_TYPE.BLOCK, num: 8 }
@@ -130,14 +138,16 @@ describe('getBlockCellRowOrColNeighbourHousesInBlock()', () => {
 
 describe('getMustHighlightableNeighbourHouses()', () => {
     test('returns a map of neighbour rows which must highlight their candidate host cell', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const hostCell = { row: 3, col: 1 }
         const expectedResult = { 5: true }
         expect(getMustHighlightableNeighbourHouses(HOUSE_TYPE.ROW, hostCell, mainNumbers)).toEqual(expectedResult)
     })
 
     test('returns a map of neighbour columns which must highlight their candidate host cell', () => {
-        const { mainNumbers } = require('./hiddenSingle.testData')
+        const puzzle = '001543006543270090070800500900030000034020980000080004008009020050062418600418300'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
         const hostCell = { row: 3, col: 1 }
         const expectedResult = { 2: true }
         expect(getMustHighlightableNeighbourHouses(HOUSE_TYPE.COL, hostCell, mainNumbers)).toEqual(expectedResult)

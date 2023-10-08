@@ -1,9 +1,12 @@
-/* eslint-disable global-require */
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { getRemovableCandidates } from './hiddenGroup'
 
 describe('getRemovableCandidates()', () => {
     test('returns the notes which will be removed because of hidden tripple in the host cells', () => {
-        const { notesData } = require('../../hiddenGroup/hiddenTripple.testData')
+        const puzzle = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
         const hostCells = [
             { row: 0, col: 2 },
             { row: 2, col: 2 },
@@ -11,6 +14,6 @@ describe('getRemovableCandidates()', () => {
         ]
         const groupCandidates = [1, 3, 8]
         const expectedResult = [2, 6, 7]
-        expect(getRemovableCandidates(hostCells, groupCandidates, notesData)).toStrictEqual(expectedResult)
+        expect(getRemovableCandidates(hostCells, groupCandidates, notes)).toStrictEqual(expectedResult)
     })
 })
