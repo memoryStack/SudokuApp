@@ -5,14 +5,12 @@ import {
 } from '@utils/testing/testingLibrary'
 
 import { expectOnHintMenuItems } from '@utils/testing/arena'
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import { getStoreState, invokeDispatch } from '../../../redux/dispatch.helpers'
 
 import { boardActions } from '../store/reducers/board.reducers'
 
-import MainNumbers from './testData/mainNumbers.testData.json'
-import Notes from './testData/notes.testData.json'
-import PossibleNotes from './testData/possibleNotes.testData.json'
 import { HINTS_MENU_OVERLAY_TEST_ID } from './hintsMenu.constants'
 import { getHintsMenuVisibilityStatus } from '../store/selectors/boardController.selectors'
 import { ACTION_TYPES } from './actionHandlers'
@@ -27,9 +25,11 @@ const renderHintsMenu = async props => {
     render(<HintsMenu {...props} />)
 
     act(() => {
-        invokeDispatch(boardActions.setMainNumbers(MainNumbers))
-        invokeDispatch(boardActions.setNotes(Notes))
-        invokeDispatch(boardActions.setPossibleNotes(PossibleNotes))
+        const puzzle = '900008000000004027061027000095000004080010090600000780000850140850600000000300002'
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+        invokeDispatch(boardActions.setMainNumbers(mainNumbers))
+        invokeDispatch(boardActions.setNotes(notes))
+        invokeDispatch(boardActions.setPossibleNotes(possibleNotes))
     })
 
     await waitForAvailableHintsToBeChecked()
@@ -70,8 +70,9 @@ describe('Available Hints Menu', () => {
     // research for test-cases of this kind
     test('all hints will be disabled if notes are not present or not enough notes filled by user', async () => {
         jest.useRealTimers()
-
-        invokeDispatch(boardActions.setMainNumbers(MainNumbers))
+        const puzzle = '900008000000004027061027000095000004080010090600000780000850140850600000000300002'
+        const { mainNumbers } = getPuzzleDataFromPuzzleString(puzzle)
+        invokeDispatch(boardActions.setMainNumbers(mainNumbers))
 
         render(<HintsMenu />)
 

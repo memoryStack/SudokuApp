@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+import { editNotes, getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import { HOUSE_TYPE } from '../constants'
 import { getHiddenGroupRawHints, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
@@ -109,9 +109,16 @@ test('hidden tripples', () => {
 })
 
 test('hidden tripples duplicate houses with same group cells', () => {
-    // TODO: break down this test data file
-    const { mainNumbers, multipleHousesHiddenGroupNotesData } = require('./hiddenTripple.testData')
-    mockBoardSelectors(multipleHousesHiddenGroupNotesData)
+    const puzzle = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    editNotes(notes, {
+        add: { 40: [2] },
+        remove: {
+            38: [6],
+            43: [8],
+        },
+    })
+    mockBoardSelectors(notes)
     // TODO: order of records is coupled with the algorithm implementation
     // DANGER: violating the rule of TDD
     // how to decouple this in any way ??
@@ -148,7 +155,7 @@ test('hidden tripples duplicate houses with same group cells', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenGroupRawHints(3, multipleHousesHiddenGroupNotesData, mainNumbers, maxHintsThreshold)).toStrictEqual(
+    expect(getHiddenGroupRawHints(3, notes, mainNumbers, maxHintsThreshold)).toStrictEqual(
         expectedResult,
     )
 })

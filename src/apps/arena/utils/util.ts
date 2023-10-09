@@ -234,7 +234,7 @@ export const getHousesCellsSharedByCells = (cells: Cell[]) => {
 
 export const filterEmptyCells = (cells: Cell[], mainNumbers: MainNumbers) => _filter(cells, (cell: Cell) => !MainNumbersRecord.isCellFilled(mainNumbers, cell))
 
-export const isGenerateNewPuzzleItem = (item: unknown) => _includes(_values(LEVEL_DIFFICULTIES), item)
+export const isGenerateNewPuzzleItem = (item: LEVEL_DIFFICULTIES) => _includes(_values(LEVEL_DIFFICULTIES), item)
 
 export const getBlockStartCell = (blockIndex: number) => ({
     row: blockIndex - (blockIndex % 3),

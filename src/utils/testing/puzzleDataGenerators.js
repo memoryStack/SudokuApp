@@ -53,3 +53,19 @@ export const generateCustomNotes = customNotes => {
     })
     return notes
 }
+
+export const editNotes = (notes, { add, remove }) => {
+    _forEach(_keys(add), cell => {
+        const { row, col } = convertBoardCellNumToCell(parseInt(cell, 10))
+        _forEach(add[cell], note => {
+            notes[row][col][note - 1].show = 1
+        })
+    })
+
+    _forEach(_keys(remove), cell => {
+        const { row, col } = convertBoardCellNumToCell(parseInt(cell, 10))
+        _forEach(remove[cell], note => {
+            notes[row][col][note - 1].show = 0
+        })
+    })
+}

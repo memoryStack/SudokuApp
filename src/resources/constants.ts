@@ -1,8 +1,8 @@
-const LEVEL_DIFFICULTIES = {
-    EASY: 'EASY',
-    MEDIUM: 'MEDIUM',
-    HARD: 'HARD',
-    EXPERT: 'EXPERT',
+enum LEVEL_DIFFICULTIES {
+    EASY = 'EASY',
+    MEDIUM = 'MEDIUM',
+    HARD = 'HARD',
+    EXPERT = 'EXPERT',
 }
 
 const LEVELS_CLUES_INFO = {
