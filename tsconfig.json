@@ -123,6 +123,7 @@
     },
     "include": [
         "./src/**/*.ts",
+        "./src/**/*.js",
         "./src/**/*.tsx",
         "./src/typings/**/*.d.ts",
     ],

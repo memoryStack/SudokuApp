@@ -121,12 +121,11 @@ const Arena_ = ({
         onAction({ type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD, payload: fadeAnim.current })
     }, [onAction])
 
-    // eslint-disable-next-line no-shadow
-    const isPuzzlePresent = (currentGameState, previousGameState) => {
+    const isPuzzlePresent = (currentGameState, _previousGameState) => {
         const currentGameStateObj = new GameState(currentGameState)
         return (
             currentGameStateObj.isGameActive()
-            || (currentGameStateObj.isGameSelecting() && new GameState(previousGameState).isGameOver())
+            || (currentGameStateObj.isGameSelecting() && new GameState(_previousGameState).isGameOver())
         )
     }
 

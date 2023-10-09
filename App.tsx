@@ -1,4 +1,3 @@
-// @ts-ignore
 import React, { useEffect } from 'react'
 
 import { View, StyleSheet } from 'react-native'
@@ -8,6 +7,7 @@ import { Provider } from 'react-redux'
 import CodePush from 'react-native-code-push'
 
 import { consoleLog } from '@utils/util'
+
 import ModalProvider from './src/containers/ModalProvider'
 import ThemeProvider from './src/containers/ThemeProvider'
 

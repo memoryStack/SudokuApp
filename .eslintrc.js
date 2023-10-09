@@ -7,7 +7,20 @@ module.exports = {
         'jest/globals': true,
     },
     extends: ['plugin:react/recommended', 'airbnb'],
-    overrides: [],
+    overrides: [
+        {
+            files: ['*.ts', '*.tsx'],
+            rules: {
+                'react/prop-types': 'off',
+                'react/require-default-props': 'off',
+                '@typescript-eslint/no-shadow': ['error'],
+            },
+            extends: [
+                'eslint:recommended',
+                'plugin:@typescript-eslint/recommended',
+            ],
+        },
+    ],
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
@@ -15,10 +28,11 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    plugins: ['react', 'react-hooks', 'jest', 'unused-imports'],
+    plugins: ['react', 'react-hooks', 'jest', 'unused-imports', '@typescript-eslint'],
     globals: {
         __DEV__: 'readonly',
     },
+    root: true,
     reportUnusedDisableDirectives: true,
     rules: {
         indent: ['error', 4, { SwitchCase: 1 }],
@@ -27,7 +41,8 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'unused-imports/no-unused-imports': 'error',
         'max-len': 'off',
-        'no-shadow': ['error', { builtinGlobals: false, allow: [''] }],
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': ['error'],
         'react/jsx-indent': ['error', 4],
         'react/jsx-indent-props': ['error', 4],
         'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx', '.ts'] }],

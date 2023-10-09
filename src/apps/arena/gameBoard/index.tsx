@@ -47,7 +47,7 @@ for (let i = 0; i < 10; i++) {
 type NotesRefs = Array<Array<Array<React.RefObject<unknown>>>>
 
 interface Props {
-    gameState: GameState
+    gameState: GAME_STATE
     mainNumbers: MainNumbers
     notes: Notes
     selectedCell: Cell
@@ -63,7 +63,7 @@ interface Props {
 
 const Board_: React.FC<Props> = ({
     // gameState = 'skl', // why assigning this value doesn't give error as this is not one of values given to GameState ??
-    gameState = GAME_STATE.INACTIVE as GameState,
+    gameState = GAME_STATE.INACTIVE,
     mainNumbers = [],
     notes = [],
     selectedCell = {} as Cell, // why is this type any if type assertion is not used ??
@@ -182,7 +182,7 @@ const Board_: React.FC<Props> = ({
                     }
 
                     return (
-                        // eslint-disable-next-line react/no-array-index-key
+                    // eslint-disable-next-line react/no-array-index-key
                         <View style={[styles.cellContainer, cellAdditionalStyles]} key={index}>
                             <Cell
                                 row={row}

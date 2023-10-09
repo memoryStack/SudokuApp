@@ -22,9 +22,7 @@ const Hint = ({
 }) => {
     const renderHintsCount = () => {
         if (disabled) return null
-        return (
-            <Badge label={hints} />
-        )
+        return <Badge label={hints} />
     }
 
     const renderIcon = () => (
@@ -37,12 +35,7 @@ const Hint = ({
     const noAvailableHints = hints === 0
 
     return (
-        <Touchable
-            style={styles.actionContainer}
-            onPress={onClick}
-            disabled={disabled || noAvailableHints}
-            {...rest}
-        >
+        <Touchable style={styles.actionContainer} onPress={onClick} disabled={disabled || noAvailableHints} {...rest}>
             {renderIcon()}
             <Text style={styles.actionText}>Hint</Text>
         </Touchable>
