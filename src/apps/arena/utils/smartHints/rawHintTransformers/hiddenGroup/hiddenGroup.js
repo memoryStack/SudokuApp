@@ -137,6 +137,7 @@ const highlightSecondaryHouseCells = (
                     isPrimaryHouse,
                     NotesRecord.getCellNotes(notesData, cell),
                     groupCandidates,
+                    smartHintsColorSystem,
                 )
             }
             setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
