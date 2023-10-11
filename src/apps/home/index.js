@@ -95,7 +95,7 @@ const Home_ = ({ navigation }) => {
 
     const renderPlayButton = () => (
         <Button
-            onClick={handlePlayOfflineClick}
+            onPress={handlePlayOfflineClick}
             label={t('PLAY')}
             containerStyle={styles.playButtonContainer}
         />

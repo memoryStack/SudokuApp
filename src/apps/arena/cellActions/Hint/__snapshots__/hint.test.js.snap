@@ -2,6 +2,7 @@
 
 exports[`snapshot for disabled Hint 1`] = `
 <View
+  accessibilityRole={null}
   accessibilityState={
     Object {
       "disabled": false,
@@ -117,6 +118,7 @@ exports[`snapshot for disabled Hint 1`] = `
 
 exports[`snapshot for enabled Hint 1`] = `
 <View
+  accessibilityRole={null}
   accessibilityState={
     Object {
       "disabled": false,

@@ -10,6 +10,8 @@ import {
 
 import PropTypes from 'prop-types'
 
+import _noop from '@lodash/noop'
+
 import { Platform } from '../../utils/classes/platform'
 // import { TouchableNativeFeedback as NewTouchableNativeFeedback } from 'react-native-gesture-handler'
 // will fix error related to this later
@@ -83,6 +85,9 @@ Touchable.propTypes = {
     addHitSlop: PropTypes.bool,
     style: ViewPropTypes.style,
     underlayColor: PropTypes.string,
+    onPress: PropTypes.func,
+    disabled: PropTypes.bool,
+    accessibilityRole: PropTypes.string,
 }
 
 Touchable.defaultProps = {
@@ -96,4 +101,7 @@ Touchable.defaultProps = {
     addHitSlop: false,
     style: null,
     underlayColor: 'white',
+    onPress: _noop,
+    disabled: false,
+    accessibilityRole: null,
 }

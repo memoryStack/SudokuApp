@@ -83,7 +83,7 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
     const renderNewGameButton = () => (
         <Button
             label={NEW_GAME}
-            onClick={openNextGameMenu}
+            onPress={openNextGameMenu}
             containerStyle={styles.newGameButtonContainer}
         />
     )

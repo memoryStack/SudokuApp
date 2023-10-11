@@ -2,6 +2,12 @@
 
 exports[`snapshot for  Undo 1`] = `
 <View
+  accessibilityRole={null}
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}

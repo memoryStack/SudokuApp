@@ -2,6 +2,12 @@
 
 exports[`snapshot for active Pencil 1`] = `
 <View
+  accessibilityRole={null}
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
@@ -83,6 +89,12 @@ exports[`snapshot for active Pencil 1`] = `
 
 exports[`snapshot for inactive Pencil 1`] = `
 <View
+  accessibilityRole={null}
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}

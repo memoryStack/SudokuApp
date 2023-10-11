@@ -161,14 +161,14 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
         <View style={styles.footerContainer}>
             <Button
                 label={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
-                onClick={displayPrevButton ? onPrevClick : _noop}
+                onPress={displayPrevButton ? onPrevClick : _noop}
                 avoidDefaultContainerStyles
                 textStyles={styles.footerButtonText}
                 type={BUTTON_TYPES.TEXT}
             />
             <Button
                 label={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
-                onClick={displayNextButton ? onNextClick : onApplyHintClick}
+                onPress={displayNextButton ? onNextClick : onApplyHintClick}
                 avoidDefaultContainerStyles
                 textStyles={styles.footerButtonText}
                 type={BUTTON_TYPES.TEXT}

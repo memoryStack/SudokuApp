@@ -1,25 +1,41 @@
 import React, { useCallback, useMemo } from 'react'
 
-import { View, Image } from 'react-native'
-
-import PropTypes from 'prop-types'
+import { View, Image, ImageStyle } from 'react-native'
 
 import _noop from '@lodash/noop'
 
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 import { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
+import { OnAction } from '@utils/hocs/withActions/types'
+
 import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 import { getStyles } from './inputPanel.styles'
-import { BoardIterators } from '../utils/classes/boardIterators'
+import { BoardIterators, CellEachNoteCallback } from '../utils/classes/boardIterators'
+import { VisibleNumbers } from './types'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
 
-const Inputpanel_ = ({
-    numbersVisible, onAction, singleRow, disableNumbersInput, disableEraser,
+type InputNumber = Parameters<CellEachNoteCallback>[0]
+
+interface Props {
+    numbersVisible: VisibleNumbers
+    onAction: OnAction
+    singleRow: boolean
+    disableNumbersInput: boolean
+    disableEraser: boolean
+}
+
+const Inputpanel_: React.FC<Props> = ({
+    numbersVisible = new Array(10).fill(true),
+    onAction = _noop,
+    singleRow = false,
+    disableNumbersInput = false,
+    disableEraser = false,
 }) => {
     const isHintTryOut = useIsHintTryOutStep()
 
@@ -27,9 +43,7 @@ const Inputpanel_ = ({
 
     const styles = useMemo(() => getStyles(CELL_WIDTH), [CELL_WIDTH])
 
-    const onNumberClicked = number => {
-        onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
-    }
+    const onNumberClicked = (number: InputNumber) => onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
 
     const onEraserClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_ERASE_CLICK })
@@ -44,38 +58,34 @@ const Inputpanel_ = ({
             onPress={onEraserClick}
             testID={INPUT_PANEL_ITEM_TEST_ID}
         >
-            <Image style={[styles.eraser, disableEraser ? { opacity: 0.5 } : null]} source={ERASER_SOURCE} />
+            <Image style={[styles.eraser as ImageStyle, disableEraser ? { opacity: 0.5 } : null]} source={ERASER_SOURCE} />
         </Button>
     )
 
-    const getButtonState = number => {
+    const getButtonState = (number: InputNumber) => {
         if (disableNumbersInput) return BUTTON_STATES.DISABLED
         return numbersVisible[number] ? BUTTON_STATES.ENABLED : BUTTON_STATES.DISABLED
     }
 
-    const renderInputNumber = number => (
+    const renderInputNumber = (number: InputNumber) => (
         <Button
             key={`${number}`}
             type={BUTTON_TYPES.TONAL}
             state={getButtonState(number)}
             containerStyle={styles.numberButtonContainer}
             onPress={() => onNumberClicked(number)}
-            label={number}
+            label={`${number}`}
             textStyles={styles.textStyle}
             textType={TEXT_VARIATIONS.DISPLAY_SMALL}
             testID={INPUT_PANEL_ITEM_TEST_ID}
         />
     )
 
-    const isNumberEligibleToAddInPanel = number => !isHintTryOut || (isHintTryOut && numbersVisible[number])
-
-    const addNumberInPanelRowIfEligible = (number, rowItems) => {
-        if (isNumberEligibleToAddInPanel(number)) rowItems.push(renderInputNumber(number))
-    }
+    const isNumberEligibleToAddInPanel = (number: InputNumber) => !isHintTryOut || (isHintTryOut && numbersVisible[number])
 
     const renderHorizontalSeparator = () => <View key="hori_seperator" style={styles.horizontalSeperator} />
 
-    const renderPanelRow = (rowItems, key) => (
+    const renderPanelRow = (rowItems: React.ReactElement[], key: string) => (
         <View key={key} style={styles.rowContainer}>
             {rowItems}
         </View>
@@ -83,9 +93,9 @@ const Inputpanel_ = ({
 
     const renderPanelView = () => {
         const rows = []
-        let rowItems = []
+        let rowItems: React.ReactElement[] = []
         BoardIterators.forCellEachNote(number => {
-            addNumberInPanelRowIfEligible(number, rowItems)
+            if (isNumberEligibleToAddInPanel(number)) rowItems.push(renderInputNumber(number))
             if (rowItems.length >= 5 && !singleRow) {
                 rows.push(renderPanelRow(rowItems, 'rowOne'))
                 rowItems = []
@@ -106,19 +116,3 @@ const Inputpanel_ = ({
 }
 
 export const Inputpanel = React.memo(Inputpanel_)
-
-Inputpanel_.propTypes = {
-    numbersVisible: PropTypes.array,
-    onAction: PropTypes.func,
-    singleRow: PropTypes.bool,
-    disableNumbersInput: PropTypes.bool,
-    disableEraser: PropTypes.bool,
-}
-
-Inputpanel_.defaultProps = {
-    numbersVisible: new Array(10).fill(true),
-    onAction: _noop,
-    singleRow: false,
-    disableNumbersInput: false,
-    disableEraser: false,
-}

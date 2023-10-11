@@ -78,6 +78,7 @@ module.exports = {
                 tsx: 'never',
             },
         ],
+        'prefer-object-spread': 'off',
     },
     settings: {
         'import/resolver': {

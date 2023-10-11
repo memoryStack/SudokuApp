@@ -39,7 +39,7 @@ const DesignSystem = ({ navigation }) => {
         <Button
             key={routeKey}
             containerStyle={{ marginTop: 40 }}
-            onClick={() => navigation && navigation.navigate(routeKey)}
+            onPress={() => navigation && navigation.navigate(routeKey)}
             label={label}
         />
     )

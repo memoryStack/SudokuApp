@@ -34,8 +34,8 @@ const TestingComponent = ({
 
     return (
         <>
-            <Button label="Open" onClick={handleOpenPress} />
-            <Button label="Close" onClick={handleClosePress} />
+            <Button label="Open" onPress={handleOpenPress} />
+            <Button label="Close" onPress={handleClosePress} />
         </>
     )
 }

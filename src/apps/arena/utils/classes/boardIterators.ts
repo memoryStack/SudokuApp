@@ -7,7 +7,7 @@ import { HOUSE_TYPE } from '../smartHints/constants'
 
 type EachCellCallback = (cell: Cell) => void
 
-type CellEachNoteCallback = (noteValue: number, noteIndx: number) => void
+export type CellEachNoteCallback = (noteValue: number, noteIndx: number) => void
 
 type EachHouseCallback = (house: House) => void
 

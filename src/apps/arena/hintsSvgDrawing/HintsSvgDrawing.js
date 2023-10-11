@@ -11,10 +11,6 @@ import _map from '@lodash/map'
 import _isNil from '@lodash/isNil'
 import _isEmpty from '@lodash/isEmpty'
 import _isFunction from '@lodash/isFunction'
-import _get from '@lodash/get'
-import _noop from '@lodash/noop'
-
-import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { HINT_ID_VS_SVG_DEFS } from './svgDefs'
 import { HINT_ID_VS_SVG_ELEMENTS_HANDLER } from './svgElementsHandlers'
@@ -22,19 +18,13 @@ import { HINT_ID_VS_SVG_ELEMENTS_HANDLER } from './svgElementsHandlers'
 const HintsSvgDrawing = ({
     boardRef, notesRefs, hint, svgProps,
 }) => {
-    const {
-        BOARD_GRID_WIDTH: SVG_CONTAINER_WIDTH,
-        BOARD_GRID_HEIGHT: SVG_CONTAINER_HEIGHT,
-    } = useBoardElementsDimensions()
-
     const [svgElementsConfigs, setSvgElementsConfigs] = useState([])
 
     const [boardPageCordinates, setBoardPageCordinates] = useState(null)
 
     useEffect(() => {
         const measureBoard = () => {
-            const boardMeasureHandler = _get(boardRef, ['current.measure'], _noop)
-            boardMeasureHandler((_x, _y, _width, _height, _pageX, _pageY) => {
+            boardRef?.current?.measure?.((_x, _y, _width, _height, _pageX, _pageY) => {
                 setBoardPageCordinates({ x: _pageX, y: _pageY })
             })
         }
@@ -42,7 +32,7 @@ const HintsSvgDrawing = ({
         // measurements are all empty
         // TODO: it needs some serious searching
         setTimeout(measureBoard, 100)
-    }, [boardRef])
+    }, [])
 
     useEffect(() => {
         const handler = async () => {
@@ -57,12 +47,11 @@ const HintsSvgDrawing = ({
 
     const getContianerStyles = () => ({
         position: 'absolute',
-        width: SVG_CONTAINER_WIDTH,
-        height: SVG_CONTAINER_HEIGHT,
-        top: boardPageCordinates.y,
-        left: boardPageCordinates.x,
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
         overflow: 'visible',
-        zIndex: 1,
     })
 
     const getDefs = () => {
@@ -73,9 +62,8 @@ const HintsSvgDrawing = ({
     return (
         <View style={getContianerStyles()} pointerEvents="none">
             <Svg
-                viewBox={`0 0 ${SVG_CONTAINER_WIDTH} ${SVG_CONTAINER_HEIGHT}`}
-                width={SVG_CONTAINER_WIDTH}
-                height={SVG_CONTAINER_HEIGHT}
+                width="100%"
+                height="100%"
                 overflow="visible"
             >
                 {getDefs()}

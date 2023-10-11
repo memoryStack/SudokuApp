@@ -155,7 +155,7 @@ const Arena_ = ({
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
-        return <Button label="Fill" onClick={fillPuzzle} />
+        return <Button label="Fill" onPress={fillPuzzle} />
     }
 
     const renderHintsMenu = () => {

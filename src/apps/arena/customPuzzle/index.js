@@ -73,7 +73,7 @@ const CustomPuzzle_ = ({
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel onAction={onAction} />
                 </View>
-                <Button containerStyle={styles.playButtonContainer} onClick={handlePlayClick} label={PLAY} />
+                <Button containerStyle={styles.playButtonContainer} onPress={handlePlayClick} label={PLAY} />
             </View>
         </BottomDragger>
     )

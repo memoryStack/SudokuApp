@@ -15,6 +15,7 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import { CellsFocusData, Chain } from '../utils/smartHints/types'
 import {
     areSameCells,
     areCommonHouseCells,
@@ -54,10 +55,9 @@ interface Props {
     onCellClick: () => void // TODO: how/where to manage types for these prop drilled functions
     isHintTryOut: boolean
     showSmartHint: boolean
-    // TODO: add proper types for these record these are generated in hints folder
-    cellsHighlightData: object
+    cellsHighlightData: CellsFocusData
     axisTextStyles: object
-    svgProps: Array<unknown>
+    svgProps: Chain
     isCustomPuzleScreen: boolean
 }
 
@@ -258,6 +258,7 @@ const Board_: React.FC<Props> = ({
             {looper.map((row, index) => renderRow(row, `${index}`))}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
+            {!_isEmpty(cellsHighlightData) && renderHintSvgView()}
         </View>
     )
 
@@ -268,7 +269,6 @@ const Board_: React.FC<Props> = ({
                 {yAxis}
                 {renderBoard()}
             </View>
-            {!_isEmpty(cellsHighlightData) && renderHintSvgView()}
         </>
     )
 }

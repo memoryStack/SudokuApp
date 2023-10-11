@@ -55,7 +55,7 @@ const Dialog = ({
                         type={BUTTON_TYPES.TEXT}
                         style={[styles.footerButton, index ? styles.footerButtonsGap : null]}
                         label={label}
-                        onClick={onClick}
+                        onPress={onClick}
                     />
                 ))
             }

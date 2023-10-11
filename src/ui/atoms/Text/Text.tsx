@@ -18,13 +18,13 @@ type StyleArray = StyleProp<ViewStyle>[]
 type Styles = Style | StyleArray
 
 interface Props {
-    type?: string
+    type?: TEXT_VARIATIONS
     style?: Styles
     withoutLineHeight?: boolean
     children: string | React.ReactNode
 }
 
-const getFinalStyles = (styleProp: Styles, type: string, withoutLineHeight: boolean, theme: unknown) => {
+const getFinalStyles = (styleProp: Styles, type: TEXT_VARIATIONS, withoutLineHeight: boolean, theme: unknown) => {
     const styleFromProps = _isArray(styleProp) ? Object.assign({}, ...styleProp as StyleArray) : styleProp
 
     const result = {

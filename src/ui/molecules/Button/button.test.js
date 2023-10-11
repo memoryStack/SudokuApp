@@ -83,7 +83,7 @@ describe('Button functionality', () => {
     test('performs onClick when pressed', () => {
         const buttonLabel = 'test button'
         const onClick = jest.fn()
-        render(<Button label={buttonLabel} onClick={onClick} />)
+        render(<Button label={buttonLabel} onPress={onClick} />)
 
         fireEvent.press(screen.getByText(buttonLabel))
         expect(onClick).toHaveBeenCalledTimes(1)
@@ -92,7 +92,7 @@ describe('Button functionality', () => {
     test('for disabled state onClick is not called on user press', () => {
         const buttonLabel = 'test button'
         const onClick = jest.fn()
-        render(<Button state={BUTTON_STATES.DISABLED} label={buttonLabel} onClick={onClick} />)
+        render(<Button state={BUTTON_STATES.DISABLED} label={buttonLabel} onPress={onClick} />)
 
         fireEvent.press(screen.getByText(buttonLabel))
         expect(onClick).toHaveBeenCalledTimes(0)

@@ -11,6 +11,7 @@ type MainNumber = {
     solutionValue: number
     isClue: boolean
 }
+type MainNumberValue = MainNumber['value']
 
 type CustomPuzzleMainNumber = MainNumber & {
     wronglyPlaced: boolean
@@ -20,6 +21,7 @@ type Note = {
     noteValue: number
     show: number
 }
+type NoteValue = Note['noteValue']
 
 // i find Array<T> more obvious than CellMainNumber[][] syntax
 type MainNumbers = Array<Array<MainNumber>>
