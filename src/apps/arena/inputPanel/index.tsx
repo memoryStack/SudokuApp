@@ -19,7 +19,7 @@ import { BoardIterators, CellEachNoteCallback } from '../utils/classes/boardIter
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
 
-type InputNumber = Parameters<CellEachNoteCallback>[0]
+export type InputNumber = Parameters<CellEachNoteCallback>[0]
 
 interface Props {
     numbersVisible?: InputPanelVisibleNumbers

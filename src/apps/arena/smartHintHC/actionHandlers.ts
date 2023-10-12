@@ -16,12 +16,23 @@ import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constant
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 
 import { SMART_HINT_CHANGES_APPLY_DELAY } from './constants'
+import { ApplyHint, SelectCellOnClose } from '../utils/smartHints/types'
+import { InputNumber } from '../inputPanel'
+import { StatePropsHandlers } from '@utils/hocs/withActions/types'
+import { Hint } from '../store/selectors/smartHintHC.selectors'
 
-const handleOnInit = ({ setState, params: { focusedCells, styles } }) => {
+type StateMaintainedByWithActionHOC = {
+    focusedCells: Hint['focusedCells']
+    styles: {
+        snackBar: object
+    }
+}
+
+const handleOnInit = ({ setState, params: { focusedCells, styles } } : StatePropsHandlers & { params: StateMaintainedByWithActionHOC }) => {
     setState({ focusedCells, styles })
 }
 
-const handleOnClose = ({ params: newCellToSelect }) => {
+const handleOnClose = ({ params: newCellToSelect } : { params: SelectCellOnClose }) => {
     if (newCellToSelect) updateSelectedCell(newCellToSelect)
     clearHints()
     updateGameState(GAME_STATE.ACTIVE)
@@ -37,21 +48,21 @@ const handleResetStoreState = () => {
     resetStoreState()
 }
 
-const handleCellClick = ({ params: cell }) => {
+const handleCellClick = ({ params: cell }: {params: Cell}) => {
     updateTryOutSelectedCell(cell)
 }
 
-const handleNumberClick = ({ getState, params: number }) => {
-    const { focusedCells, styles } = getState()
+const handleNumberClick = ({ getState, params: number }: StatePropsHandlers & {params: InputNumber}) => {
+    const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
     inputTryOutNumber(number, focusedCells, styles.snackBar)
 }
 
-const handleEraserClick = ({ getState }) => {
-    const { focusedCells, styles } = getState()
+const handleEraserClick = ({ getState }: StatePropsHandlers) => {
+    const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
     eraseTryOutNumber(focusedCells, styles.snackBar)
 }
 
-const handleApplyHintClick = ({ params: applyHintChanges }) => {
+const handleApplyHintClick = ({ params: applyHintChanges }: { params: ApplyHint }) => {
     setTimeout(() => {
         applyHintAction(applyHintChanges)
         decreaseAvailableHintsCount()

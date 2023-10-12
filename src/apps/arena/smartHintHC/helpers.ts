@@ -8,14 +8,14 @@ import {
 import { isCellExists } from '../utils/util'
 
 // TODO: merge this with "filterFilledCellsInTryOut" or "noInputInTryOut"
-export const cellHasTryOutInput = cell => {
+export const cellHasTryOutInput = (cell: Cell) => {
     const actualMainNumbers = getMainNumbers(getStoreState())
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     return !MainNumbersRecord.isCellFilled(actualMainNumbers, cell)
         && MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
 }
 
-export const isCellTryOutClickable = cell => {
+export const isCellTryOutClickable = (cell: Cell) => {
     const clickableCells = getTryOutClickableCells(getStoreState())
     if (clickableCells.length === 0) return true
     return isCellExists(cell, clickableCells)

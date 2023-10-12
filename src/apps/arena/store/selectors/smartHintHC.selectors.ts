@@ -3,22 +3,24 @@ import { CellsFocusData, FocusedCells, HintStep, SelectCellOnClose } from '../..
 
 import { HintsInfo, HintSvgData } from '../state/smartHintHC.state'
 
+export type Hint = {
+    type: HintsInfo['type']
+    title: HintsInfo['title']
+    logic: HintStep['text']
+    focusedCells: HintsInfo['focusedCells']
+    cellsToFocusData: HintsInfo['cellsToFocusData']
+    selectCellOnClose: HintsInfo['selectCellOnClose']
+    inputPanelNumbersVisibility: HintsInfo['inputPanelNumbersVisibility']
+    isTryOut: HintStep['isTryOut'] | boolean
+    tryOutAnalyserData: HintsInfo['tryOutAnalyserData']
+    svgProps?: HintSvgData['data']
+}
+
 type HintHCInfo = {
     show: boolean
     currentHintNum: number
     totalHintsCount: number
-    hint: {
-        type: HintsInfo['type']
-        title: HintsInfo['title']
-        logic: HintStep['text']
-        focusedCells: HintsInfo['focusedCells']
-        cellsToFocusData: HintsInfo['cellsToFocusData']
-        selectCellOnClose: HintsInfo['selectCellOnClose']
-        inputPanelNumbersVisibility: HintsInfo['inputPanelNumbersVisibility']
-        isTryOut: HintStep['isTryOut'] | boolean
-        tryOutAnalyserData: HintsInfo['tryOutAnalyserData']
-        svgProps?: HintSvgData['data']
-    }
+    hint: Hint
 }
 
 export const getHintHCInfo = (state: RootState): HintHCInfo => {
