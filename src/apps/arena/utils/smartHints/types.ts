@@ -1,3 +1,5 @@
+import { TRY_OUT_RESULT_STATES } from './tryOutInputAnalyser/constants'
+
 interface NotesToHighlightData {
     [note: string]: {
       fontColor: string
@@ -60,6 +62,8 @@ export type ApplyHint = AddMainNumberHintAction[] | NotesRemovalHintAction[]
 
 // TODO: put here vaild values of state instead of string
 export type TryOutResult = {
-    state: string
+    state: TRY_OUT_RESULT_STATES
     msg: string
 }
+
+export type InputPanelNumbersVisibility = InputPanelVisibleNumbers

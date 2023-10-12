@@ -1,4 +1,3 @@
-import { VisibleNumbers } from '../../inputPanel/types'
 import {
     CellsFocusData,
     FocusedCells,
@@ -7,6 +6,7 @@ import {
     HintSteps,
     ClickableCells,
     Chain,
+    InputPanelNumbersVisibility,
 } from '../../utils/smartHints/types'
 
 export type HintSvgData = {
@@ -24,7 +24,7 @@ export type HintsInfo = {
     clickableCells?: ClickableCells
     selectCellOnClose?: SelectCellOnClose
     tryOutAnalyserData?: unknown // every hint has separate contract for it
-    inputPanelNumbersVisibility?: VisibleNumbers
+    inputPanelNumbersVisibility?: InputPanelNumbersVisibility
     cellsRestrictedNumberInputs?: unknown
     restrictedNumberInputMsg?: string
     svgProps?: HintSvgData

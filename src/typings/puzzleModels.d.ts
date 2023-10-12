@@ -37,3 +37,5 @@ type House = {
 }
 type HouseType = House['type']
 type HouseNum = House['num']
+
+type InputPanelVisibleNumbers = [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean]

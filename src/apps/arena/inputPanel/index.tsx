@@ -15,7 +15,6 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 import { getStyles } from './inputPanel.styles'
 import { BoardIterators, CellEachNoteCallback } from '../utils/classes/boardIterators'
-import { VisibleNumbers } from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
@@ -23,7 +22,7 @@ const ERASER_SOURCE = require('@resources/assets/eraser.png')
 type InputNumber = Parameters<CellEachNoteCallback>[0]
 
 interface Props {
-    numbersVisible?: VisibleNumbers
+    numbersVisible?: InputPanelVisibleNumbers
     onAction?: OnAction
     singleRow?: boolean
     disableNumbersInput?: boolean
