@@ -29,9 +29,16 @@ type ChainCell = {
 
 export type Chain = ChainCell[]
 
-type FocusedCells = Cell[]
-type SelectCellOnClose = Cell
-type clickableCells = Cell[]
+export type FocusedCells = Cell[]
+export type SelectCellOnClose = Cell
+export type ClickableCells = Cell[]
+
+export type HintStep = {
+    text: string
+    isTryOut?:boolean
+}
+
+export type HintSteps = HintStep[]
 
 type NotesRemovalHintAction = {
     cell: Cell
@@ -49,4 +56,10 @@ type AddMainNumberHintAction = {
     }
 }
 
-type ApplyHint = AddMainNumberHintAction[] | NotesRemovalHintAction[]
+export type ApplyHint = AddMainNumberHintAction[] | NotesRemovalHintAction[]
+
+// TODO: put here vaild values of state instead of string
+export type TryOutResult = {
+    state: string
+    msg: string
+}

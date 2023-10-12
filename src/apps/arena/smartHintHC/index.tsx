@@ -1,12 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 
-import {
-    View, ScrollView,
-} from 'react-native'
+import { View, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 
 import { useSelector } from 'react-redux'
-
-import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 import _get from '@lodash/get'
@@ -16,6 +12,8 @@ import { CloseIcon } from '@resources/svgIcons/close'
 
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+
+import { OnAction } from '@utils/hocs/withActions/types'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
@@ -40,7 +38,19 @@ import {
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from './constants'
 
-const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
+type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
+
+type Props = {
+    parentHeight: number
+    onAction: OnAction
+    height: number
+}
+
+const SmartHintHC_: React.FC<Props> = ({
+    parentHeight = 0,
+    onAction = _noop,
+    height = 0,
+}) => {
     const {
         hint: {
             focusedCells, title = '', logic = '', selectCellOnClose, inputPanelNumbersVisibility,
@@ -69,9 +79,9 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
     const styles = useStyles(getStyles)
 
     const scrollViewRef = useRef(null)
-    const hintsScrollPositions = useRef({})
+    const hintsScrollPositions = useRef({} as {[key: number]: number})
 
-    const scrollHintView = newVerticalPosition => {
+    const scrollHintView = (newVerticalPosition: number) => {
         const scrollHandler = _get(scrollViewRef, 'current.scrollTo', _noop)
         scrollHandler({ x: 0, y: newVerticalPosition, animated: true })
     }
@@ -105,7 +115,7 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
         if (shouldApplyHint) onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
     }, [onAction, selectCellOnClose, applyHintChanges])
 
-    const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } } = {} } = {}) => {
+    const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } = {} } = {} } = {} as ScrollEventType) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
     }
 
@@ -179,7 +189,7 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
     return (
         <BottomDragger
             ref={smartHintHCRef}
-            stopBackgroundClickClose
+            stopBackgroundClickClose={true}
             onDraggerClosed={onClosed}
             parentHeight={parentHeight}
             animateBackgroundOverlayOnClose={false}
@@ -190,20 +200,8 @@ const SmartHintHC_ = ({ parentHeight, onAction, height }) => {
                 <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText()}</View>
                 {renderFooter()}
             </View>
-        </BottomDragger>
+         </BottomDragger>
     )
 }
 
 export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(SmartHintHC_))
-
-SmartHintHC_.propTypes = {
-    parentHeight: PropTypes.number,
-    height: PropTypes.number,
-    onAction: PropTypes.func,
-}
-
-SmartHintHC_.defaultProps = {
-    parentHeight: 0,
-    height: 0,
-    onAction: _noop,
-}

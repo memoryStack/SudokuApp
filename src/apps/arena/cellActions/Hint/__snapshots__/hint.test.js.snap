@@ -28,6 +28,7 @@ exports[`snapshot for disabled Hint 1`] = `
       "opacity": 1,
     }
   }
+  testID=""
 >
   <RNSVGSvgView
     align="xMidYMid"
@@ -110,6 +111,7 @@ exports[`snapshot for disabled Hint 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     Hint
   </Text>
@@ -144,6 +146,7 @@ exports[`snapshot for enabled Hint 1`] = `
       "opacity": 1,
     }
   }
+  testID=""
 >
   <RNSVGSvgView
     align="xMidYMid"
@@ -226,6 +229,7 @@ exports[`snapshot for enabled Hint 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     Hint
   </Text>

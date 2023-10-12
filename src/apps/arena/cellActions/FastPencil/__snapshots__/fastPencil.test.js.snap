@@ -28,6 +28,7 @@ exports[`snapshot for  FastPencil 1`] = `
       "opacity": 1,
     }
   }
+  testID=""
 >
   <RNSVGSvgView
     align="xMidYMid"
@@ -81,6 +82,7 @@ exports[`snapshot for  FastPencil 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     Fast Pencil
   </Text>

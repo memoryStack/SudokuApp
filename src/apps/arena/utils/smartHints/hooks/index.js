@@ -12,7 +12,7 @@ const useIsHintTryOutStep = () => {
 const useHintTryOutAnalyserResult = () => {
     const { hint: { type: hintType, tryOutAnalyserData } = {} } = useSelector(getHintHCInfo)
 
-    const [tryOutResult, setTryOutResult] = useState({})
+    const [tryOutResult, setTryOutResult] = useState({ state: '', msg: '' })
     const mainNumbers = useSelector(getTryOutMainNumbers)
     const notes = useSelector(getTryOutNotes)
     const isHintTryOut = useIsHintTryOutStep()

@@ -22,6 +22,7 @@ interface Props {
     style?: Styles
     withoutLineHeight?: boolean
     children: string | React.ReactNode
+    testID?: string
 }
 
 const getFinalStyles = (styleProp: Styles, type: TEXT_VARIATIONS, withoutLineHeight: boolean, theme: unknown) => {
@@ -41,6 +42,7 @@ const Text: React.FC<Props> = ({
     style = {},
     type = TEXT_VARIATIONS.BODY_LARGE,
     withoutLineHeight = false,
+    testID = '',
     ...rest
 }) => {
     const theme = useThemeValues()
@@ -60,6 +62,7 @@ const Text: React.FC<Props> = ({
     return (
         <RNText
             style={stylesWithFont}
+            testID={testID}
             {...rest}
         />
     )

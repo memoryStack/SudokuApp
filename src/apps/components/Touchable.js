@@ -88,6 +88,7 @@ Touchable.propTypes = {
     onPress: PropTypes.func,
     disabled: PropTypes.bool,
     accessibilityRole: PropTypes.string,
+    testID: PropTypes.string,
 }
 
 Touchable.defaultProps = {
@@ -104,4 +105,5 @@ Touchable.defaultProps = {
     onPress: _noop,
     disabled: false,
     accessibilityRole: null,
+    testID: '',
 }

@@ -33,6 +33,7 @@ exports[`snapshot for filled button in disabled state 1`] = `
       "paddingRight": 24,
     }
   }
+  testID=""
 >
   <Text
     style={
@@ -47,6 +48,7 @@ exports[`snapshot for filled button in disabled state 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     test button
   </Text>
@@ -86,6 +88,7 @@ exports[`snapshot for filled button in enabled state 1`] = `
       "paddingRight": 24,
     }
   }
+  testID=""
 >
   <Text
     style={
@@ -100,6 +103,7 @@ exports[`snapshot for filled button in enabled state 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     test button
   </Text>
@@ -146,6 +150,7 @@ exports[`snapshot for text button in disabled state 1`] = `
       "paddingRight": undefined,
     }
   }
+  testID=""
 >
   <Text
     style={
@@ -160,6 +165,7 @@ exports[`snapshot for text button in disabled state 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     test button
   </Text>
@@ -206,6 +212,7 @@ exports[`snapshot for text button in enabled state 1`] = `
       "paddingRight": undefined,
     }
   }
+  testID=""
 >
   <Text
     style={
@@ -220,6 +227,7 @@ exports[`snapshot for text button in enabled state 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     test button
   </Text>
@@ -259,6 +267,7 @@ exports[`snapshot for tonal button in disabled state 1`] = `
       "paddingRight": 24,
     }
   }
+  testID=""
 >
   <Text
     style={
@@ -273,6 +282,7 @@ exports[`snapshot for tonal button in disabled state 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     test button
   </Text>
@@ -312,6 +322,7 @@ exports[`snapshot for tonal button in enabled state 1`] = `
       "paddingRight": 24,
     }
   }
+  testID=""
 >
   <Text
     style={
@@ -326,6 +337,7 @@ exports[`snapshot for tonal button in enabled state 1`] = `
         "textAlignVertical": "center",
       }
     }
+    testID=""
   >
     test button
   </Text>

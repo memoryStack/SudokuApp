@@ -23,11 +23,11 @@ const ERASER_SOURCE = require('@resources/assets/eraser.png')
 type InputNumber = Parameters<CellEachNoteCallback>[0]
 
 interface Props {
-    numbersVisible: VisibleNumbers
-    onAction: OnAction
-    singleRow: boolean
-    disableNumbersInput: boolean
-    disableEraser: boolean
+    numbersVisible?: VisibleNumbers
+    onAction?: OnAction
+    singleRow?: boolean
+    disableNumbersInput?: boolean
+    disableEraser?: boolean
 }
 
 const Inputpanel_: React.FC<Props> = ({

@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const stateHandlers = {
     resetState: (state, action) => {
         const {
@@ -20,7 +19,6 @@ const stateHandlers = {
         state.tryOut = {
             mainNumbers,
             notes,
-            notesErasedOnInput: {},
         }
     },
     removeHints: state => {
