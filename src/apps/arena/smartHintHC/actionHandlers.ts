@@ -1,5 +1,6 @@
 import { GAME_STATE } from '@resources/constants'
 
+import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 import { applyHintAction, updateSelectedCell } from '../store/actions/board.actions'
 import { updateGameState } from '../store/actions/gameState.actions'
 import {
@@ -18,7 +19,6 @@ import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionT
 import { SMART_HINT_CHANGES_APPLY_DELAY } from './constants'
 import { ApplyHint, SelectCellOnClose } from '../utils/smartHints/types'
 import { InputNumber } from '../inputPanel'
-import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 import { Hint } from '../store/selectors/smartHintHC.selectors'
 
 type StateMaintainedByWithActionHOC = {
@@ -48,21 +48,21 @@ const handleResetStoreState = () => {
     resetStoreState()
 }
 
-const handleCellClick = ({ params: cell }: {params: Cell}) => {
+const handleCellClick = ({ params: cell } : { params: Cell }) => {
     updateTryOutSelectedCell(cell)
 }
 
-const handleNumberClick = ({ getState, params: number }: StatePropsHandlers & {params: InputNumber}) => {
+const handleNumberClick = ({ getState, params: number } : StatePropsHandlers & { params: InputNumber }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
     inputTryOutNumber(number, focusedCells, styles.snackBar)
 }
 
-const handleEraserClick = ({ getState }: StatePropsHandlers) => {
+const handleEraserClick = ({ getState } : StatePropsHandlers) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
     eraseTryOutNumber(focusedCells, styles.snackBar)
 }
 
-const handleApplyHintClick = ({ params: applyHintChanges }: { params: ApplyHint }) => {
+const handleApplyHintClick = ({ params: applyHintChanges } : { params: ApplyHint }) => {
     setTimeout(() => {
         applyHintAction(applyHintChanges)
         decreaseAvailableHintsCount()

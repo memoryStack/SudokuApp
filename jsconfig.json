@@ -17,9 +17,6 @@
             "@resources/*": [
                 "./src/resources/*"
             ],
-            "testing-utils": [
-                "./src/utils/testing/testing-utils"
-            ],
         }
     },
     "exclude": [

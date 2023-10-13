@@ -22,7 +22,6 @@ module.exports = {
                     '@lodash': './node_modules/lodash/src/utils',
                     '@ui': './src/ui',
                     '@resources': './src/resources',
-                    'testing-utils': './src/utils/testing/testing-utils',
                 },
             },
         ],

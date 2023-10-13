@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 
-import { View, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import {
+    View, ScrollView, NativeSyntheticEvent, NativeScrollEvent,
+} from 'react-native'
 
 import { useSelector } from 'react-redux'
 
@@ -189,7 +191,7 @@ const SmartHintHC_: React.FC<Props> = ({
     return (
         <BottomDragger
             ref={smartHintHCRef}
-            stopBackgroundClickClose={true}
+            stopBackgroundClickClose
             onDraggerClosed={onClosed}
             parentHeight={parentHeight}
             animateBackgroundOverlayOnClose={false}
@@ -200,7 +202,7 @@ const SmartHintHC_: React.FC<Props> = ({
                 <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText()}</View>
                 {renderFooter()}
             </View>
-         </BottomDragger>
+        </BottomDragger>
     )
 }
 

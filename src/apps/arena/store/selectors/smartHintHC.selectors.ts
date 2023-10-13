@@ -1,5 +1,5 @@
 import { RootState } from '../../../../redux/types'
-import { CellsFocusData, FocusedCells, HintStep, SelectCellOnClose } from '../../utils/smartHints/types'
+import { HintStep } from '../../utils/smartHints/types'
 
 import { HintsInfo, HintSvgData } from '../state/smartHintHC.state'
 
