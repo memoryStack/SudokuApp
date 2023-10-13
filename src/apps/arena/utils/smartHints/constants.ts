@@ -13,8 +13,10 @@ enum NAKED_SINGLE_TYPES {
     MIX = 'mix',
 }
 
-const HIDDEN_SINGLE_TYPES = {
-    ...HOUSE_TYPE,
+enum HIDDEN_SINGLE_TYPES {
+    ROW = 'row',
+    COL = 'col',
+    BLOCK = 'block',
 }
 
 const GROUPS = {

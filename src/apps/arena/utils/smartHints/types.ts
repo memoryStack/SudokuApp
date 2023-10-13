@@ -50,7 +50,7 @@ type NotesRemovalHintAction = {
     }
 }
 
-type AddMainNumberHintAction = {
+export type AddMainNumberHintAction = {
     cell: Cell
     action: {
         type: string

@@ -6,14 +6,21 @@ import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
 import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 
-const getCellHiddenSingle = (cell, notesData) => {
+import { HiddenSingleRawHint } from './types'
+
+type CellHiddenSingle = {
+    present: boolean
+    type: HIDDEN_SINGLE_TYPES | string
+    mainNumber: MainNumberValue
+}
+const getCellHiddenSingle = (cell: Cell, notesData: Notes): CellHiddenSingle => {
     let singleType = ''
 
     const possibleCandiates = NotesRecord.getCellVisibleNotesList(notesData, cell)
 
     let singleCandidate = -1
-    possibleCandiates.some(candidate => {
-        singleCandidate = candidate
+    possibleCandiates.some((candidate: unknown) => {
+        singleCandidate = candidate as number
         if (
             isHintValid({ type: HINTS_IDS.HIDDEN_SINGLE, data: { cell, type: HIDDEN_SINGLE_TYPES.BLOCK, candidate } })
         ) {
@@ -41,7 +48,7 @@ const getCellHiddenSingle = (cell, notesData) => {
     }
 }
 
-export const getHiddenSingleRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
+export const getHiddenSingleRawHints = (mainNumbers: MainNumbers, notesData: Notes, maxHintsThreshold: number): HiddenSingleRawHint[] => {
     const result = []
 
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {
@@ -54,7 +61,7 @@ export const getHiddenSingleRawHints = (mainNumbers, notesData, maxHintsThreshol
             if (skipCheckingHiddenSingle) continue
 
             const { present, type, mainNumber } = getCellHiddenSingle(cell, notesData)
-            if (present) result.push({ cell, mainNumber, type })
+            if (present) result.push({ cell, mainNumber, type } as HiddenSingleRawHint)
         }
     }
 

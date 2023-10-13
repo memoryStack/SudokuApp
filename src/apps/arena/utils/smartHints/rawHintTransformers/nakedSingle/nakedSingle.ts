@@ -20,8 +20,10 @@ import {
 import { getHouseCells } from '../../../houseCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { NakedSingleRawHint, NakedSingleTransformerArgs } from '../../nakedSingle/types'
-import { CellsFocusData, TransformedRawHint } from '../../types'
+import { NakedSingleRawHint } from '../../nakedSingle/types'
+import { AddMainNumberHintAction, CellsFocusData, TransformedRawHint } from '../../types'
+
+import { NakedSingleTransformerArgs } from './types'
 
 // TODO: move it to string literals file
 type NakedSingleExplainationTexts = {
@@ -30,7 +32,7 @@ type NakedSingleExplainationTexts = {
 }
 const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE] as NakedSingleExplainationTexts
 
-const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell) => {
+const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell): string => {
     const msgPlaceholdersValues = {
         houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         solutionValue,
@@ -40,7 +42,7 @@ const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValu
     return dynamicInterpolation(explainations.SINGLE_HOUSE, msgPlaceholdersValues)
 }
 
-const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell) => {
+const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell): string => {
     const msgPlaceholdersValues = {
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
@@ -70,7 +72,7 @@ const dataToHighlightHouseCells = (house: House, nakedSingleHostCell: Cell, cell
     return cellsToFocusData
 }
 
-const nakedSingleMixHousesDataToHighlight = (cell: Cell, smartHintsColorSystem: unknown) => {
+const nakedSingleMixHousesDataToHighlight = (cell: Cell, smartHintsColorSystem: unknown): CellsFocusData => {
     let cellsToFocusData = {}
     cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
     cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
@@ -78,7 +80,7 @@ const nakedSingleMixHousesDataToHighlight = (cell: Cell, smartHintsColorSystem: 
     return cellsToFocusData
 }
 
-const getApplyHintData = (rawHint: NakedSingleRawHint) => {
+const getApplyHintData = (rawHint: NakedSingleRawHint): AddMainNumberHintAction[] => {
     const { cell, mainNumber } = rawHint
     return [
         {
