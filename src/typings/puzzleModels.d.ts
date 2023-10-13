@@ -17,6 +17,7 @@ type MainNumber = {
     isClue: boolean
 }
 type MainNumberValue = MainNumber['value']
+type SolutionValue = MainNumber['solutionValue']
 
 type CustomPuzzleMainNumber = MainNumber & {
     wronglyPlaced: boolean

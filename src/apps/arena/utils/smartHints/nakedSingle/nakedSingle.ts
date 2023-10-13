@@ -10,9 +10,10 @@ import { getCellRowHouseInfo, getCellColHouseInfo, getCellBlockHouseInfo } from 
 import { maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
+import { NakedSingleRawHint } from './types'
 
 // TODO: put it in utils and refactore it with unit test cases
-export const isNakedSinglePresent = (notes: Notes, cell: Cell) => {
+export const isNakedSinglePresent = (notes: Notes, cell: Cell): { present: boolean, mainNumber: MainNumberValue } => {
     const cellVisibleNotesList = NotesRecord.getCellVisibleNotesList(notes, cell)
     return {
         present: cellVisibleNotesList.length === 1,
@@ -32,7 +33,7 @@ const isOnlyOneCellEmptyInHouse = (house: House, mainNumbers: MainNumbers) => {
     return emptyCellsInHouse.length === 1
 }
 
-export const getNakedSingleRawHints = (mainNumbers: MainNumbers, notes: Notes, maxHintsThreshold: number) => {
+export const getNakedSingleRawHints = (mainNumbers: MainNumbers, notes: Notes, maxHintsThreshold: number): NakedSingleRawHint[] => {
     const result = []
 
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {

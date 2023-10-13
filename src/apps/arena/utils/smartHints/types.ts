@@ -67,3 +67,19 @@ export type TryOutResult = {
 }
 
 export type InputPanelNumbersVisibility = InputPanelVisibleNumbers
+
+export type RawHintTransformersArgs = {
+    rawHint: unknown
+    mainNumbers: MainNumbers
+    notesData: Notes
+    smartHintsColorSystem: unknown
+}
+
+// TODO: add more keys here to support for other hints as well
+export type TransformedRawHint = {
+    cellsToFocusData: CellsFocusData
+    title: string // TODO: better get it from enums
+    selectCellOnClose: SelectCellOnClose
+    steps: HintSteps
+    applyHint: ApplyHint
+}

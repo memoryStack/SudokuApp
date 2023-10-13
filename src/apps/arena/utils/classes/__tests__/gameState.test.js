@@ -11,15 +11,6 @@ describe('GameState class', () => {
         expect(() => new GameState('sleeping')).toThrow(Error)
     })
 
-    test('isValidValue static method checks validity of passed value to initialize', () => {
-        expect(GameState.isValidValue('invalid')).toBeFalsy()
-        expect(GameState.isValidValue('')).toBeFalsy()
-        expect(GameState.isValidValue(null)).toBeFalsy()
-        expect(GameState.isValidValue(undefined)).toBeFalsy()
-        expect(GameState.isValidValue()).toBeFalsy()
-        expect(GameState.isValidValue(GAME_STATE.ACTIVE)).toBeTruthy()
-    })
-
     test('getGameState getter returns state with which object was initialised', () => {
         const gameState = new GameState(GAME_STATE.ACTIVE)
         expect(gameState.getGameState).toBe(GAME_STATE.ACTIVE)

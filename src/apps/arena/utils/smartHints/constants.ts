@@ -6,9 +6,11 @@ const HOUSE_TYPE = {
     BLOCK: 'block',
 }
 
-const NAKED_SINGLE_TYPES = {
-    ...HOUSE_TYPE,
-    MIX: 'mix',
+enum NAKED_SINGLE_TYPES {
+    ROW = 'row',
+    COL = 'col',
+    BLOCK = 'block',
+    MIX = 'mix',
 }
 
 const HIDDEN_SINGLE_TYPES = {

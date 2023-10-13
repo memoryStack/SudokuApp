@@ -20,38 +20,46 @@ import {
 import { getHouseCells } from '../../../houseCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
+import { NakedSingleRawHint, NakedSingleTransformerArgs } from '../../nakedSingle/types'
+import { CellsFocusData, TransformedRawHint } from '../../types'
 
-const getSingleHouseNakedSingleDescription = (houseType, solutionValue, cell) => {
+// TODO: move it to string literals file
+type NakedSingleExplainationTexts = {
+    SINGLE_HOUSE: string
+    MULTIPLE_HOUSE: string
+}
+const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE] as NakedSingleExplainationTexts
+
+const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell) => {
     const msgPlaceholdersValues = {
         houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
     }
-    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE].SINGLE_HOUSE
-    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+
+    return dynamicInterpolation(explainations.SINGLE_HOUSE, msgPlaceholdersValues)
 }
 
-const getMultipleHousesNakeSingleDescription = (solutionValue, cell) => {
+const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell) => {
     const msgPlaceholdersValues = {
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
     }
-    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE].MULTIPLE_HOUSE
-    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+    return dynamicInterpolation(explainations.MULTIPLE_HOUSE, msgPlaceholdersValues)
 }
 
 const SMART_HINTS_TECHNIQUES = {
     NAKED_SINGLE: {
         TITLE: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_SINGLE],
         DESCRIPTION: {
-            getSingleHouseMsg: (houseType, solutionValue, cell) => getSingleHouseNakedSingleDescription(houseType, solutionValue, cell),
-            getMultipleHouseMsg: (solutionValue, cell) => getMultipleHousesNakeSingleDescription(solutionValue, cell),
+            getSingleHouseMsg: getSingleHouseNakedSingleDescription,
+            getMultipleHouseMsg: getMultipleHousesNakeSingleDescription,
         },
     },
 }
 
-const dataToHighlightHouseCells = (house, nakedSingleHostCell, cellsToFocusData, smartHintsColorSystem) => {
-    _forEach(getHouseCells(house), cell => {
+const dataToHighlightHouseCells = (house: House, nakedSingleHostCell: Cell, cellsToFocusData: CellsFocusData, smartHintsColorSystem: unknown) => {
+    _forEach(getHouseCells(house), (cell: Cell) => {
         const cellHighlightData = {
             bgColor: areSameCells(cell, nakedSingleHostCell)
                 ? transformCellBGColor(smartHintColorSystemReader.selectedCellBGColor(smartHintsColorSystem))
@@ -62,7 +70,7 @@ const dataToHighlightHouseCells = (house, nakedSingleHostCell, cellsToFocusData,
     return cellsToFocusData
 }
 
-const nakedSingleMixHousesDataToHighlight = (cell, smartHintsColorSystem) => {
+const nakedSingleMixHousesDataToHighlight = (cell: Cell, smartHintsColorSystem: unknown) => {
     let cellsToFocusData = {}
     cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
     cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
@@ -70,7 +78,7 @@ const nakedSingleMixHousesDataToHighlight = (cell, smartHintsColorSystem) => {
     return cellsToFocusData
 }
 
-const getApplyHintData = rawHint => {
+const getApplyHintData = (rawHint: NakedSingleRawHint) => {
     const { cell, mainNumber } = rawHint
     return [
         {
@@ -80,7 +88,7 @@ const getApplyHintData = rawHint => {
     ]
 }
 
-export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem }) => {
+export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem } : NakedSingleTransformerArgs): TransformedRawHint => {
     const { type, cell } = rawHint
 
     const { row, col } = cell

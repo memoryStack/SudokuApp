@@ -83,3 +83,9 @@ declare module '@lodash/isArray' {
 
     export default isArray
 }
+
+declare module '@lodash/dynamicInterpolation' {
+    import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+
+    export { dynamicInterpolation }
+}
