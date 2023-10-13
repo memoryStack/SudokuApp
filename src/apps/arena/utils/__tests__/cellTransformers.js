@@ -1,10 +1,10 @@
-import { getRowAndCol, getBlockAndBoxNum } from '../cellTransformers'
+import { blockCellToBoardCell, getBlockAndBoxNum } from '../cellTransformers'
 
-describe('getRowAndCol()', () => {
+describe('blockCellToBoardCell()', () => {
     test('returns cell row and col upon passing block number and box number in the block', () => {
-        expect(getRowAndCol(0, 7)).toStrictEqual({ row: 2, col: 1 })
-        expect(getRowAndCol(4, 1)).toStrictEqual({ row: 3, col: 4 })
-        expect(getRowAndCol(8, 8)).toStrictEqual({ row: 8, col: 8 })
+        expect(blockCellToBoardCell({ blockNum: 0, boxNum: 7 })).toStrictEqual({ row: 2, col: 1 })
+        expect(blockCellToBoardCell({ blockNum: 4, boxNum: 1 })).toStrictEqual({ row: 3, col: 4 })
+        expect(blockCellToBoardCell({ blockNum: 8, boxNum: 8 })).toStrictEqual({ row: 8, col: 8 })
     })
 })
 

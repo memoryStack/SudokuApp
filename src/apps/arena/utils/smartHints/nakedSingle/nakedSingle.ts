@@ -12,7 +12,7 @@ import { isHintValid } from '../validityTest'
 import { HINTS_IDS, NAKED_SINGLE_TYPES } from '../constants'
 
 // TODO: put it in utils and refactore it with unit test cases
-export const isNakedSinglePresent = (notes, cell) => {
+export const isNakedSinglePresent = (notes: Notes, cell: Cell) => {
     const cellVisibleNotesList = NotesRecord.getCellVisibleNotesList(notes, cell)
     return {
         present: cellVisibleNotesList.length === 1,
@@ -20,19 +20,19 @@ export const isNakedSinglePresent = (notes, cell) => {
     }
 }
 
-const getNakedSingleType = (cell, mainNumbers) => {
+const getNakedSingleType = (cell: Cell, mainNumbers: MainNumbers) => {
     if (isOnlyOneCellEmptyInHouse(getCellRowHouseInfo(cell), mainNumbers)) return NAKED_SINGLE_TYPES.ROW
     if (isOnlyOneCellEmptyInHouse(getCellColHouseInfo(cell), mainNumbers)) return NAKED_SINGLE_TYPES.COL
     if (isOnlyOneCellEmptyInHouse(getCellBlockHouseInfo(cell), mainNumbers)) return NAKED_SINGLE_TYPES.BLOCK
     return NAKED_SINGLE_TYPES.MIX
 }
 
-const isOnlyOneCellEmptyInHouse = (house, mainNumbers) => {
-    const emptyCellsInHouse = _filter(getHouseCells(house), cell => !MainNumbersRecord.isCellFilled(mainNumbers, cell))
+const isOnlyOneCellEmptyInHouse = (house: House, mainNumbers: MainNumbers) => {
+    const emptyCellsInHouse = _filter(getHouseCells(house), (cell: Cell) => !MainNumbersRecord.isCellFilled(mainNumbers, cell))
     return emptyCellsInHouse.length === 1
 }
 
-export const getNakedSingleRawHints = (mainNumbers, notes, maxHintsThreshold) => {
+export const getNakedSingleRawHints = (mainNumbers: MainNumbers, notes: Notes, maxHintsThreshold: number) => {
     const result = []
 
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {

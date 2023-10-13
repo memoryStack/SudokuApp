@@ -13,7 +13,7 @@ import { CELLS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { BoardIterators } from '../utils/classes/boardIterators'
-import { getRowAndCol, getBlockAndBoxNum, convertBoardCellNumToCell } from '../utils/cellTransformers'
+import { blockCellToBoardCell, getBlockAndBoxNum, convertBoardCellNumToCell } from '../utils/cellTransformers'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -149,7 +149,7 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
     }
     const { blockNum } = getBlockAndBoxNum(cell)
     for (let box = 0; box < CELLS_IN_HOUSE; box++) {
-        const { row, col } = getRowAndCol(blockNum, box)
+        const { row, col } = blockCellToBoardCell({ blockNum, boxNum: box })
         if (mainNumbers[row][col].wronglyPlaced && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, oldInputValue, { row, col })) {
             mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,

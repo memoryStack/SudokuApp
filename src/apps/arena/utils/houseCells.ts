@@ -1,5 +1,5 @@
 import { CELLS_IN_HOUSE } from '../constants'
-import { getRowAndCol } from './cellTransformers'
+import { blockCellToBoardCell } from './cellTransformers'
 import { Houses } from './classes/houses'
 
 const getRowHouseCells = (houseNum: HouseNum) => {
@@ -21,7 +21,7 @@ const getColHouseCells = (houseNum: HouseNum) => {
 const getBlockHouseCells = (houseNum: HouseNum) => {
     const result = []
     for (let box = 0; box < CELLS_IN_HOUSE; box++) {
-        result.push(getRowAndCol(houseNum, box))
+        result.push(blockCellToBoardCell({ blockNum: houseNum, boxNum: box }))
     }
     return result
 }

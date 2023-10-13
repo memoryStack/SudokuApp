@@ -3,6 +3,11 @@ type Cell = {
     col: number
 }
 
+type BlockCell = {
+    blockNum: number
+    boxNum: number
+}
+
 // TODO: how to use the types of sub properties for these objects ?
 // like somewhere you pass MainNumber.value and instead of putting "number"
 // in the argument, you pass the type which is defined in here
