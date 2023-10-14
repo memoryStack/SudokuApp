@@ -89,3 +89,9 @@ declare module '@lodash/dynamicInterpolation' {
 
     export { dynamicInterpolation }
 }
+
+declare module '@lodash/find' {
+    import _find from '@lodash/find'
+
+    export default _find
+}

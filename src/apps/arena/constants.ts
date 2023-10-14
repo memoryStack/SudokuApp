@@ -15,10 +15,10 @@ export const THICK_BORDER_COUNT = 2
 export const THIN_BORDER_COUNT = 8
 export const BLOCKS_COUNT_IN_ROW = 3
 
-export const GRID_TRAVERSALS = {
-    ROW: 'ROW',
-    COL: 'COL',
-    BLOCK: 'BLOCK',
+export enum GRID_TRAVERSALS {
+    ROW = 'ROW',
+    COL = 'COL',
+    BLOCK = 'BLOCK',
 }
 
 export const STATIC_BOARD_ELEMENTS_DIMENSIONS = {

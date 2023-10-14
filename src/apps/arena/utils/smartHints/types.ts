@@ -72,7 +72,7 @@ export type RawHintTransformersArgs = {
     rawHint: unknown
     mainNumbers: MainNumbers
     notesData: Notes
-    smartHintsColorSystem: unknown
+    smartHintsColorSystem: SmartHintsColorSystem
 }
 
 // TODO: add more keys here to support for other hints as well
@@ -82,4 +82,24 @@ export type TransformedRawHint = {
     selectCellOnClose: SelectCellOnClose
     steps: HintSteps
     applyHint: ApplyHint
+}
+
+export type SmartHintsColorSystem = {
+    cellDefaultBGColor: string
+    selectedCellBGColor: string
+    inhabitableCellCrossColor: string
+    safeNoteColor: string
+    toBeRemovedNoteColor: string
+    tryOutFilledNumberColor: string
+    correctTryOutInputMsgColor: string
+    incorrectTryOutInputMsgColor: string
+    yWing: {
+        pivotCellBGColor: string
+        wingCellBGColor: string
+    }
+    xWing: {
+        topLeftBottomRightCellsBGColor: string
+        topRightBottomLeftCellsBGColor: string
+        finnCellBGColor: string
+    }
 }

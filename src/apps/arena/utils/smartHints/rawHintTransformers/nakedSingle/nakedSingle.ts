@@ -21,7 +21,9 @@ import { getHouseCells } from '../../../houseCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { NakedSingleRawHint } from '../../nakedSingle/types'
-import { AddMainNumberHintAction, CellsFocusData, TransformedRawHint } from '../../types'
+import {
+    AddMainNumberHintAction, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,
+} from '../../types'
 
 import { NakedSingleTransformerArgs } from './types'
 
@@ -60,7 +62,7 @@ const SMART_HINTS_TECHNIQUES = {
     },
 }
 
-const dataToHighlightHouseCells = (house: House, nakedSingleHostCell: Cell, cellsToFocusData: CellsFocusData, smartHintsColorSystem: unknown) => {
+const dataToHighlightHouseCells = (house: House, nakedSingleHostCell: Cell, cellsToFocusData: CellsFocusData, smartHintsColorSystem: SmartHintsColorSystem) => {
     _forEach(getHouseCells(house), (cell: Cell) => {
         const cellHighlightData = {
             bgColor: areSameCells(cell, nakedSingleHostCell)
@@ -72,7 +74,7 @@ const dataToHighlightHouseCells = (house: House, nakedSingleHostCell: Cell, cell
     return cellsToFocusData
 }
 
-const nakedSingleMixHousesDataToHighlight = (cell: Cell, smartHintsColorSystem: unknown): CellsFocusData => {
+const nakedSingleMixHousesDataToHighlight = (cell: Cell, smartHintsColorSystem: SmartHintsColorSystem): CellsFocusData => {
     let cellsToFocusData = {}
     cellsToFocusData = dataToHighlightHouseCells(getCellRowHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
     cellsToFocusData = dataToHighlightHouseCells(getCellColHouseInfo(cell), cell, cellsToFocusData, smartHintsColorSystem)
