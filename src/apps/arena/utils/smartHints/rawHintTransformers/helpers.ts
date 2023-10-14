@@ -3,7 +3,7 @@ import _isEmpty from '@lodash/isEmpty'
 
 import { getCellAxesValues } from '../../util'
 
-export const getCellsAxesValuesListText = (cells, lastCellConjugation) => {
+export const getCellsAxesValuesListText = (cells: Cell[], lastCellConjugation: string) => {
     if (_isEmpty(cells)) return ''
 
     if (cells.length === 1) return getCellAxesValues(cells[0])
@@ -15,4 +15,4 @@ export const getCellsAxesValuesListText = (cells, lastCellConjugation) => {
     return `${cellsAxesList.join(', ')} ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1])}`
 }
 
-export const getCellsAxesList = cells => _map(cells, cell => getCellAxesValues(cell))
+export const getCellsAxesList = (cells: Cell[]) => _map(cells, (cell: Cell) => getCellAxesValues(cell))

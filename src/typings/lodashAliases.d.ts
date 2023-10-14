@@ -95,3 +95,9 @@ declare module '@lodash/find' {
 
     export default _find
 }
+
+declare module '@lodash/map' {
+    import _map from '@lodash/map'
+
+    export default _map
+}
