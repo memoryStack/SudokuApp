@@ -6,27 +6,28 @@ import _map from '@lodash/map'
 
 import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE } from '../constants'
 
-const getCellNotes = (notes, cell = {}) => _get(notes, [cell.row, cell.col])
+const getCellNotes = (notes: Notes, cell = {} as Cell): Note[] => _get(notes, [cell.row, cell.col])
 
-const isNotePresentInCell = (notes, note, cell = {}) => {
+const isNotePresentInCell = (notes: Notes, note: NoteValue, cell = {} as Cell) => {
     const cellNotes = getCellNotes(notes, cell)
     return !!_get(cellNotes, [note - 1, 'show'])
 }
 
-const getCellVisibleNotesList = (notes, cell = {}) => {
+const getCellVisibleNotesList = (notes: Notes, cell = {} as Cell): NoteValue[] => {
     const cellNotes = getCellNotes(notes, cell)
-    return _filter(cellNotes, ({ show }) => show).map(({ noteValue }) => noteValue)
+    return _filter(cellNotes, ({ show }: Note) => show)
+        .map(({ noteValue }: Note) => noteValue)
 }
 
-const getCellVisibleNotesCount = (notes, cell = {}) => getCellVisibleNotesList(notes, cell).length
+const getCellVisibleNotesCount = (notes: Notes, cell = {} as Cell) => getCellVisibleNotesList(notes, cell).length
 
-const areSameNotesInCells = (notes, cells) => {
-    const cellsNotes = _map(cells, cell => getCellVisibleNotesList(notes, cell))
-    return _every(cellsNotes, aCellNotes => _isEqual(aCellNotes, cellsNotes[0]))
+const areSameNotesInCells = (notes: Notes, cells: Cell[]) => {
+    const cellsNotes: Note[][] = _map(cells, (cell: Cell) => getCellVisibleNotesList(notes, cell))
+    return _every(cellsNotes, (aCellNotes: Note[]) => _isEqual(aCellNotes, cellsNotes[0]))
 }
 
 const initNotes = () => {
-    const result = []
+    const result: Notes = []
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {
         const rowNotes = []
         for (let col = 0; col < CELLS_IN_HOUSE; col++) {

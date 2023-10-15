@@ -35,9 +35,15 @@ import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { Houses } from '../../../classes/houses'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { getBlockAndBoxNum } from '../../../cellTransformers'
+import { HiddenGroupTransformerArgs } from './types'
+import {
+    CellHighlightData, CellsFocusData, NotesRemovalHintAction, NotesToHighlightData, SmartHintsColorSystem, TransformedRawHint,
+} from '../../types'
 
-export const getRemovableCandidates = (hostCells, groupCandidates, notesData) => {
-    const result = []
+import { GroupCandidate, GroupCandidates, GroupHostCells } from '../../hiddenGroup/types'
+
+export const getRemovableCandidates = (hostCells: GroupHostCells, groupCandidates: GroupCandidates, notesData: Notes) => {
+    const result: NoteValue[] = []
     hostCells.forEach(cell => {
         const cellRemovableNotes = NotesRecord.getCellNotes(notesData, cell)
             .filter(({ show, noteValue }) => show && !groupCandidates.includes(noteValue))
@@ -48,8 +54,13 @@ export const getRemovableCandidates = (hostCells, groupCandidates, notesData) =>
     return _sortNumbers(_unique(result))
 }
 
-const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates, smartHintsColorSystem) => {
-    const result = {}
+const getCellNotesHighlightData = (
+    isPrimaryHouse: boolean,
+    cellNotes: Note[],
+    groupCandidates: GroupCandidates,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
+    const result: NotesToHighlightData = {}
     const NOTES_COLOR_SCHEME = {
         candidate: isPrimaryHouse ? smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) : smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem),
         nonCandidate: isPrimaryHouse ? smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) : '',
@@ -65,10 +76,17 @@ const getCellNotesHighlightData = (isPrimaryHouse, cellNotes, groupCandidates, s
     return result
 }
 
-const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, notesData, cellsToFocusData, smartHintsColorSystem) => {
+const highlightPrimaryHouseCells = (
+    house: House,
+    groupCandidates: GroupCandidates,
+    groupHostCells: GroupHostCells,
+    notesData: Notes,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const primaryHouseCells = getHouseCells(house)
     primaryHouseCells.forEach(cell => {
-        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
+        const cellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         const isHostCell = isCellExists(cell, groupHostCells)
         if (isHostCell) {
             const isPrimaryHouse = true
@@ -84,11 +102,11 @@ const highlightPrimaryHouseCells = (house, groupCandidates, groupHostCells, note
     })
 }
 
-const isRowOrColHouse = houseType => Houses.isRowHouse(houseType) || Houses.isColHouse(houseType)
+const isRowOrColHouse = (houseType: HouseType) => Houses.isRowHouse(houseType) || Houses.isColHouse(houseType)
 
-const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
+const getSecondaryHostHouse = (primaryHouseType: HouseType, groupHostCells: Cell[]) => {
     // TODO: nested ifs. can it be made linear or refactor into better readability ??
-    let result = {}
+    let result = {} as House
 
     if (isRowOrColHouse(primaryHouseType) && areSameBlockCells(groupHostCells)) {
         result = {
@@ -112,25 +130,31 @@ const getSecondaryHostHouse = (primaryHouseType, groupHostCells) => {
     return result
 }
 
-const shouldHighlightSecondaryHouseCells = (houseCells, groupHostCells, groupCandidates, mainNumbers, notesData) => houseCells.some(cell => {
+const shouldHighlightSecondaryHouseCells = (
+    houseCells: Cell[],
+    groupHostCells: GroupHostCells,
+    groupCandidates: GroupCandidates,
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+) => houseCells.some(cell => {
     if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return false
     if (isCellExists(cell, groupHostCells)) return false
     return groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
 })
 
 const highlightSecondaryHouseCells = (
-    houseCells,
-    groupHostCells,
-    groupCandidates,
-    mainNumbers,
-    notesData,
-    cellsToFocusData,
-    smartHintsColorSystem,
+    houseCells: Cell[],
+    groupHostCells: GroupHostCells,
+    groupCandidates: GroupCandidates,
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
 ) => {
     houseCells.forEach(cell => {
         const isHostCell = isCellExists(cell, groupHostCells)
         if (!isHostCell) {
-            const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
+            const cellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
             if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
                 const isPrimaryHouse = false
                 cellHighlightData.notesToHighlightData = getCellNotesHighlightData(
@@ -145,9 +169,9 @@ const highlightSecondaryHouseCells = (
     })
 }
 
-const getHintChunks = (houseType, groupCandidates, groupCells) => {
+const getHintChunks = (houseType: HouseType, groupCandidates: GroupCandidates, groupCells: GroupHostCells): string[] => {
     const hintId = groupCandidates.length === 2 ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
-    const msgTemplates = HINT_EXPLANATION_TEXTS[hintId]
+    const msgTemplates = HINT_EXPLANATION_TEXTS[hintId] as string[]
     const msgPlaceholdersValues = {
         houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         candidatesListText: getCandidatesListText(groupCandidates),
@@ -156,15 +180,15 @@ const getHintChunks = (houseType, groupCandidates, groupCells) => {
     return msgTemplates.map(msgTemplate => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
 
-const getTryOutInputPanelAllowedCandidates = (groupCandidates, hostCells, notes) => {
+const getTryOutInputPanelAllowedCandidates = (groupCandidates: GroupCandidates, hostCells: GroupHostCells, notes: Notes): NoteValue[] => {
     const removableCandidates = getRemovableCandidates(hostCells, groupCandidates, notes)
     return _sortNumbers([...groupCandidates, ...removableCandidates])
 }
 
 const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
-    removableGroupCandidatesHostCells,
-    groupCandidates,
-    notes,
+    removableGroupCandidatesHostCells: Cell[],
+    groupCandidates: GroupCandidates,
+    notes: Notes,
 ) => removableGroupCandidatesHostCells.reduce((prevValue, cell) => {
     const result = { ...prevValue }
     const restrictedInputsForCell = NotesRecord.getCellNotes(notes, cell)
@@ -174,12 +198,17 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
         result[getCellAxesValues(cell)] = restrictedInputsForCell
     }
     return result
-}, {})
+}, {} as {[key: string]: NoteValue[]})
 
-const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandidatesHostCells, notesData) => {
-    const result = []
+const getApplyHintData = (
+    groupCandidates: GroupCandidates,
+    groupHostCells: GroupHostCells,
+    removableGroupCandidatesHostCells: Cell[],
+    notesData: Notes,
+) => {
+    const result: NotesRemovalHintAction[] = []
 
-    _forEach(groupHostCells, cell => {
+    _forEach(groupHostCells, (cell: Cell) => {
         const notesToRemove = NotesRecord.getCellVisibleNotesList(notesData, cell)
             .filter(note => !groupCandidates.includes(note))
         result.push({
@@ -188,8 +217,8 @@ const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandida
         })
     })
 
-    _forEach(removableGroupCandidatesHostCells, cell => {
-        const visibleGroupCandidatesInCell = _filter(groupCandidates, groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
+    _forEach(removableGroupCandidatesHostCells, (cell: Cell) => {
+        const visibleGroupCandidatesInCell = _filter(groupCandidates, (groupCandidate: GroupCandidate) => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
 
         result.push({
             cell,
@@ -201,8 +230,11 @@ const getApplyHintData = (groupCandidates, groupHostCells, removableGroupCandida
 }
 
 export const transformHiddenGroupRawHint = ({
-    rawHint: group, mainNumbers, notesData, smartHintsColorSystem,
-}) => {
+    rawHint: group,
+    mainNumbers,
+    notesData,
+    smartHintsColorSystem,
+}: HiddenGroupTransformerArgs): TransformedRawHint => {
     const { house, groupCandidates, groupCells: hostCells } = group
 
     const cellsToFocusData = {}
@@ -210,7 +242,7 @@ export const transformHiddenGroupRawHint = ({
     highlightPrimaryHouseCells(house, groupCandidates, hostCells, notesData, cellsToFocusData, smartHintsColorSystem)
 
     let focusedCells = getHouseCells(house)
-    let removableGroupCandidatesHostCells = []
+    let removableGroupCandidatesHostCells: Cell[] = []
     const secondaryHostHouse = getSecondaryHostHouse(house.type, hostCells)
     let secondaryHouseEligibleForHighlight
     if (!_isEmpty(secondaryHostHouse)) {
@@ -271,7 +303,7 @@ export const transformHiddenGroupRawHint = ({
             removableGroupCandidatesHostCells,
             primaryHouse: group.house,
         },
-        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates) as InputPanelVisibleNumbers,
         clickableCells: _cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
         cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(
             removableGroupCandidatesHostCells,

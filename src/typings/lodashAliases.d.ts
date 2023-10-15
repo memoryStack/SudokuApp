@@ -101,3 +101,15 @@ declare module '@lodash/map' {
 
     export default _map
 }
+
+declare module '@lodash/every' {
+    import _every from '@lodash/every'
+
+    export default _every
+}
+
+declare module '@lodash/cloneDeep' {
+    import _cloneDeep from '@lodash/cloneDeep'
+
+    export default _cloneDeep
+}

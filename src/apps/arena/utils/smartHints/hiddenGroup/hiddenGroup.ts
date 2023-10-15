@@ -4,25 +4,37 @@ import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
 
-import { areSameCells, isCellExists } from '../../util'
+import { areSameCellsSets, isCellExists } from '../../util'
 import { getHouseCells } from '../../houseCells'
 
 import { GROUPS, HOUSE_TYPE } from '../constants'
 import { isHintValid } from '../validityTest'
 import { maxHintsLimitReached } from '../util'
 
-const isValidCandidate = (candidateOccurencesCount, groupCandidatesCount) => {
+import { HiddenGroupRawHint } from './types'
+
+type HouseHiddenGroupCandidate = {
+    candidate: NoteValue;
+    hostCells: Cell[],
+}
+
+const isValidCandidate = (candidateOccurencesCount: number, groupCandidatesCount: number) => {
     if (groupCandidatesCount === 2) return candidateOccurencesCount === groupCandidatesCount
     return candidateOccurencesCount >= 2 && candidateOccurencesCount <= groupCandidatesCount
 }
 
-export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCount, mainNumbers, notesData) => {
+export const validCandidatesInHouseAndTheirLocations = (
+    house: House,
+    groupCandidatesCount: number,
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+): HouseHiddenGroupCandidate[] => {
     const houseCells = getHouseCells(house)
-    const candidatesHostCells = {}
+    const candidatesHostCells: { [key: NoteValue]: Cell[] } = {}
     houseCells.forEach(cell => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
             NotesRecord.getCellVisibleNotesList(notesData, cell)
-                .forEach(note => {
+                .forEach((note: NoteValue) => {
                     if (!candidatesHostCells[note]) candidatesHostCells[note] = []
                     candidatesHostCells[note].push(cell)
                 })
@@ -42,8 +54,8 @@ export const validCandidatesInHouseAndTheirLocations = (house, groupCandidatesCo
     return result
 }
 
-const getDistinctCandidatesListInCells = (groupCells, notesData) => {
-    const candidates = {}
+const getDistinctCandidatesListInCells = (groupCells: Cell[], notesData: Notes) => {
+    const candidates: { [key: NoteValue]: boolean } = {}
     groupCells.forEach(cell => {
         NotesRecord.getCellVisibleNotesList(notesData, cell)
             .forEach(note => {
@@ -53,19 +65,19 @@ const getDistinctCandidatesListInCells = (groupCells, notesData) => {
     return Object.keys(candidates)
 }
 
-const isNakedGroup = (groupCandidatesCount, groupCells, notesData) => {
+const isNakedGroup = (groupCandidatesCount: number, groupCells: Cell[], notesData: Notes) => {
     const candidatesList = getDistinctCandidatesListInCells(groupCells, notesData)
     return groupCandidatesCount === candidatesList.length
 }
 
-const isGroupCellsExist = (newHiddenGroupCells, allHiddenGroups) => allHiddenGroups.some(({ groupCells: existingHiddenGroupCells }) => existingHiddenGroupCells.every((existingHiddenGroupCell, idx) => areSameCells(existingHiddenGroupCell, newHiddenGroupCells[idx])))
+const isGroupCellsExist = (newHiddenGroupCells: Cell[], allHiddenGroups: HiddenGroupRawHint[]) => allHiddenGroups.some(({ groupCells: existingHiddenGroupCells }) => areSameCellsSets(newHiddenGroupCells, existingHiddenGroupCells))
 
 const findHiddenGroupsFromValidCandidates = (
-    validCandidates,
-    groupCandidatesCount,
-    notesData,
-    maxHintsThreshold,
-    house,
+    validCandidates: HouseHiddenGroupCandidate[],
+    groupCandidatesCount: number,
+    notesData: Notes,
+    maxHintsThreshold: number,
+    house: House,
 ) => {
     // TODO: put some thought into this condition here
     if (validCandidates.length > 6) throw new Error(`to many valid candidates in house for hidden ${groupCandidatesCount}. unicorn is here ??`)
@@ -80,8 +92,8 @@ const findHiddenGroupsFromValidCandidates = (
         if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
         const selection = allSelections[i]
-        const groupCandidates = []
-        const groupCells = []
+        const groupCandidates: NoteValue[] = []
+        const groupCells: Cell[] = []
         selection.forEach(idx => {
             const candidateHostCells = validCandidates[idx].hostCells
             groupCandidates.push(validCandidates[idx].candidate)
@@ -105,8 +117,13 @@ const findHiddenGroupsFromValidCandidates = (
     return result
 }
 
-export const getHiddenGroupRawHints = (groupCandidatesCount, notesData, mainNumbers, maxHintsThreshold) => {
-    const result = []
+export const getHiddenGroupRawHints = (
+    groupCandidatesCount: number,
+    notesData: Notes,
+    mainNumbers: MainNumbers,
+    maxHintsThreshold: number,
+) => {
+    const result: HiddenGroupRawHint[] = []
     const houseIterationOrder = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     houseIterationOrder.forEach(houseType => {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {

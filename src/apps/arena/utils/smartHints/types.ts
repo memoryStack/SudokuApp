@@ -1,6 +1,6 @@
 import { TRY_OUT_RESULT_STATES } from './tryOutInputAnalyser/constants'
 
-interface NotesToHighlightData {
+export interface NotesToHighlightData {
     [note: string]: {
       fontColor: string
     }
@@ -10,9 +10,9 @@ type CellBackgroundColor = {
     backgroundColor: string
 }
 
-interface CellHighlightData {
+export interface CellHighlightData {
     bgColor: CellBackgroundColor
-    notesToHighlightData: NotesToHighlightData
+    notesToHighlightData?: NotesToHighlightData
 }
 
 interface RowData {
@@ -42,7 +42,7 @@ export type HintStep = {
 
 export type HintSteps = HintStep[]
 
-type NotesRemovalHintAction = {
+export type NotesRemovalHintAction = {
     cell: Cell
     action: {
         type: string
@@ -60,7 +60,6 @@ export type AddMainNumberHintAction = {
 
 export type ApplyHint = AddMainNumberHintAction[] | NotesRemovalHintAction[]
 
-// TODO: put here vaild values of state instead of string
 export type TryOutResult = {
     state: TRY_OUT_RESULT_STATES
     msg: string
@@ -79,9 +78,17 @@ export type RawHintTransformersArgs = {
 export type TransformedRawHint = {
     cellsToFocusData: CellsFocusData
     title: string // TODO: better get it from enums
-    selectCellOnClose: SelectCellOnClose
+    type?: string // TODO: verify why it's optional
     steps: HintSteps
     applyHint: ApplyHint
+    selectCellOnClose?: SelectCellOnClose
+    hasTryOut?: boolean
+    focusedCells?: FocusedCells
+    tryOutAnalyserData?: unknown
+    inputPanelNumbersVisibility?: InputPanelVisibleNumbers
+    clickableCells?: Cell[]
+    cellsRestrictedNumberInputs?: unknown
+    restrictedNumberInputMsg?: string
 }
 
 export type SmartHintsColorSystem = {

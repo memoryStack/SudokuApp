@@ -15,12 +15,21 @@ import { getCellsAxesValuesListText } from '../helpers'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
+import { OmissionTransformerArgs } from './types'
+import { RawOmissionHint } from '../../omission/types'
+import {
+    CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+} from '../../types'
 
-const addHostHouseHighlightData = (omission, cellsToFocusData, smartHintsColorSystem) => {
+const addHostHouseHighlightData = (
+    omission: RawOmissionHint,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const { hostHouse, note, hostCells } = omission
 
     getHouseCells(hostHouse).forEach(cell => {
-        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
+        const cellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         if (isCellExists(cell, hostCells)) {
             cellHighlightData.notesToHighlightData = {
                 [note]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
@@ -30,14 +39,19 @@ const addHostHouseHighlightData = (omission, cellsToFocusData, smartHintsColorSy
     })
 }
 
-const addRemovableNotesHouseHighlightData = (omission, notesData, cellsToFocusData, smartHintsColorSystem) => {
+const addRemovableNotesHouseHighlightData = (
+    omission: RawOmissionHint,
+    notesData: Notes,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const { removableNotesHostHouse, note, hostCells } = omission
     // not filtering out the cells which are highlighted by hostHouse already
     // becoz won't make a difference
     const cellsToHighlight = getHouseCells(removableNotesHostHouse).filter(cell => !isCellExists(cell, hostCells))
 
     cellsToHighlight.forEach(cell => {
-        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
+        const cellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
         if (NotesRecord.isNotePresentInCell(notesData, note, cell)) {
             cellHighlightData.notesToHighlightData = {
                 [note]: { fontColor: smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) },
@@ -47,17 +61,17 @@ const addRemovableNotesHouseHighlightData = (omission, notesData, cellsToFocusDa
     })
 }
 
-const getUICellsToFocusData = (omission, notesData, smartHintsColorSystem) => {
-    const cellsToFocusData = {}
+const getUICellsToFocusData = (omission: RawOmissionHint, notesData: Notes, smartHintsColorSystem: SmartHintsColorSystem) => {
+    const cellsToFocusData: CellsFocusData = {}
     addHostHouseHighlightData(omission, cellsToFocusData, smartHintsColorSystem)
     addRemovableNotesHouseHighlightData(omission, notesData, cellsToFocusData, smartHintsColorSystem)
     return cellsToFocusData
 }
 
-export const getHouseNoteHostCells = (note, house, notes) => getHouseCells(house)
+export const getHouseNoteHostCells = (note: NoteValue, house: House, notes: Notes) => getHouseCells(house)
     .filter(cell => NotesRecord.isNotePresentInCell(notes, note, cell))
 
-const getRemovableNotesHostCells = (omission, notes) => {
+const getRemovableNotesHostCells = (omission: RawOmissionHint, notes: Notes) => {
     const { note, hostHouse, removableNotesHostHouse } = omission
     const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
     return getHouseNoteHostCells(note, removableNotesHostHouse, notes).filter(
@@ -67,7 +81,7 @@ const getRemovableNotesHostCells = (omission, notes) => {
 
 // extract it out if this func is needed
 // at other places as well
-const getHintExplaination = (omission, notes) => {
+const getHintExplaination = (omission: RawOmissionHint, notes: Notes) => {
     const { hostHouse, note } = omission
     const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
 
@@ -87,15 +101,15 @@ const getHintExplaination = (omission, notes) => {
     return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
 }
 
-const getApplyHintData = (omission, notes) => {
+const getApplyHintData = (omission: RawOmissionHint, notes: Notes): NotesRemovalHintAction[] => {
     const removableNotesHostCells = getRemovableNotesHostCells(omission, notes)
-    return _map(removableNotesHostCells, cell => ({
+    return _map(removableNotesHostCells, (cell: Cell) => ({
         cell,
         action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [omission.note] },
     }))
 }
 
-export const transformOmissionRawHint = ({ rawHint: omission, notesData, smartHintsColorSystem }) => ({
+export const transformOmissionRawHint = ({ rawHint: omission, notesData, smartHintsColorSystem }: OmissionTransformerArgs): TransformedRawHint => ({
     cellsToFocusData: getUICellsToFocusData(omission, notesData, smartHintsColorSystem),
     title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],
     steps: [{ text: getHintExplaination(omission, notesData) }],

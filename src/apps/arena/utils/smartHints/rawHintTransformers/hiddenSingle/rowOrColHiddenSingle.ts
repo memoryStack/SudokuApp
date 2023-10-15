@@ -9,6 +9,8 @@ import {
 
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE } from '../../constants'
+import { HiddenSingleRawHint } from '../../hiddenSingle/types'
+import { CellsFocusData, SmartHintsColorSystem } from '../../types'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 
 import {
@@ -20,7 +22,13 @@ import {
     shouldHighlightWinnerCandidateInstanceInBlock,
 } from './hiddenSingle.helpers'
 
-const highlightRowOrColHostHouseCells = (hostCell, hiddenSingleType, mainNumbers, cellsToFocusData, smartHintsColorSystem) => {
+const highlightRowOrColHostHouseCells = (
+    hostCell: Cell,
+    hiddenSingleType: HIDDEN_SINGLE_TYPES,
+    mainNumbers: MainNumbers,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     getHouseCells(getHostHouse(hostCell, hiddenSingleType))
         .forEach(cell => {
             if (areSameCells(hostCell, cell)) {
@@ -35,7 +43,14 @@ const highlightRowOrColHostHouseCells = (hostCell, hiddenSingleType, mainNumbers
         })
 }
 
-const highlightCrossHouseCellFilledWithHSCandidate = (singleType, hostHouseCell, winnerCandidate, mainNumbers, cellsToFocusData, smartHintsColorSystem) => {
+const highlightCrossHouseCellFilledWithHSCandidate = (
+    singleType: HIDDEN_SINGLE_TYPES,
+    hostHouseCell: Cell,
+    winnerCandidate: SolutionValue,
+    mainNumbers: MainNumbers,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const crossHouseType = singleType === HIDDEN_SINGLE_TYPES.ROW ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW
     const crossHouse = getCellHouseForHouseType(crossHouseType, hostHouseCell)
     const candidateInstanceCell = getCellFilledWithNumberInHouse(winnerCandidate, crossHouse, mainNumbers)
@@ -45,6 +60,13 @@ const highlightCrossHouseCellFilledWithHSCandidate = (singleType, hostHouseCell,
 
 const highlightHSCauseCellsInBlockForRowOrColHS = ({
     blockNum, mainNumbers, cellsToFocusData, singleType, hostCell: hiddenSingleHostCell, smartHintsColorSystem,
+}: {
+    blockNum: number,
+    mainNumbers: MainNumbers,
+    cellsToFocusData: CellsFocusData,
+    singleType: HIDDEN_SINGLE_TYPES,
+    hostCell: Cell,
+    smartHintsColorSystem: SmartHintsColorSystem,
 }) => {
     const winnerCandidate = MainNumbersRecord.getCellSolutionValue(mainNumbers, hiddenSingleHostCell)
     const blockHouse = { type: HOUSE_TYPE.BLOCK, num: blockNum }
@@ -65,7 +87,13 @@ const highlightHSCauseCellsInBlockForRowOrColHS = ({
     }
 }
 
-const highlightHSCauseCellsForRowOrColHS = (hostCell, mainNumbers, singleType, cellsToFocusData, smartHintsColorSystem) => {
+const highlightHSCauseCellsForRowOrColHS = (
+    hostCell: Cell,
+    mainNumbers: MainNumbers,
+    singleType: HIDDEN_SINGLE_TYPES,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     let blocksCount = 3
     let { blockNum: blockNumToHighlight } = getBlockAndBoxNum(hostCell)
     while (blocksCount--) {
@@ -81,7 +109,11 @@ const highlightHSCauseCellsForRowOrColHS = (hostCell, mainNumbers, singleType, c
     }
 }
 
-export const getHiddenSingleInRowOrColHighlightData = (rawHint, mainNumbers, smartHintsColorSystem) => {
+export const getHiddenSingleInRowOrColHighlightData = (
+    rawHint: HiddenSingleRawHint,
+    mainNumbers: MainNumbers,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const { cell, type } = rawHint
     const cellsToFocusData = {}
     highlightRowOrColHostHouseCells(cell, type, mainNumbers, cellsToFocusData, smartHintsColorSystem)
