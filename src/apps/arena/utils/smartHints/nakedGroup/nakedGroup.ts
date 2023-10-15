@@ -12,12 +12,8 @@ import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 
 import { HOUSES_COUNT } from '../../../constants'
 
-import { Houses } from '../../classes/houses'
 import { getHouseCells } from '../../houseCells'
 import {
-    areSameRowCells,
-    areSameColCells,
-    areSameBlockCells,
     isCellExists,
     getUniqueNotesFromCells,
     getHousesCellsSharedByCells,
@@ -31,9 +27,14 @@ import {
     VALID_CELL_MINIMUM_NOTES_COUNT,
     MAX_VALID_CELLS_COUNT,
 } from './nakedGroup.constants'
-import { getBlockAndBoxNum } from '../../cellTransformers'
+import { NakedGroupRawHint } from './types'
 
-export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount, mainNumbers, notesData) => _filter(getHouseCells(house), cell => {
+export const filterNakedGroupEligibleCellsInHouse = (
+    house: House,
+    groupCandidatesCount: number,
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+): Cell[] => _filter(getHouseCells(house), (cell: Cell) => {
     if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return false
 
     return _inRange(NotesRecord.getCellVisibleNotesCount(notesData, cell), {
@@ -45,10 +46,10 @@ export const filterNakedGroupEligibleCellsInHouse = (house, groupCandidatesCount
 // TODO: should be renamed, when i read it months later it felt like it will return a map
 // with cellID and how many notes are visible in them, but after reading the implementation
 // found something else
-export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
-    const result = {}
-    _forEach(cells, cell => {
-        _forEach(NotesRecord.getCellVisibleNotesList(notesData, cell), note => {
+export const getCellsVisibleNotesInstancesCount = (cells: Cell[], notesData: Notes) => {
+    const result: { [key: NoteValue]: number } = {}
+    _forEach(cells, (cell: Cell) => {
+        _forEach(NotesRecord.getCellVisibleNotesList(notesData, cell), (note: NoteValue) => {
             if (!result[note]) result[note] = 1
             else result[note]++
         })
@@ -56,49 +57,25 @@ export const getCellsVisibleNotesInstancesCount = (cells, notesData) => {
     return result
 }
 
-export const selectedCellsMakeGroup = (cells, notesData, groupCandidatesCount) => {
+export const selectedCellsMakeGroup = (cells: Cell[], notesData: Notes, groupCandidatesCount: number): boolean => {
     const notesInstancesCount = getCellsVisibleNotesInstancesCount(cells, notesData)
     const candidates = Object.keys(notesInstancesCount)
     return (
         candidates.length === groupCandidatesCount
-        && _every(candidates, candidate => _inRange(notesInstancesCount[candidate], {
+        && _every(candidates, (candidate: number) => _inRange(notesInstancesCount[candidate], {
             start: VALID_CANDIDATE_MINIMUM_INSTANCES_COUNT,
             end: groupCandidatesCount,
         }))
     )
 }
 
-export const getAnotherSharedHouse = (mainHouse, selectedCells) => {
-    if (!Houses.isBlockHouse(mainHouse.type)) {
-        return areSameBlockCells(selectedCells)
-            ? { type: HOUSE_TYPE.BLOCK, num: getBlockAndBoxNum(selectedCells[0]).blockNum }
-            : null
-    }
-
-    if (areSameRowCells(selectedCells)) {
-        return {
-            type: HOUSE_TYPE.ROW,
-            num: selectedCells[0].row,
-        }
-    }
-
-    if (areSameColCells(selectedCells)) {
-        return {
-            type: HOUSE_TYPE.COL,
-            num: selectedCells[0].col,
-        }
-    }
-
-    return null
-}
-
-export const isHintRemovesNotesFromCells = (selectedCells, notesData) => {
+export const isHintRemovesNotesFromCells = (selectedCells: Cell[], notesData: Notes) => {
     const groupCandidates = getUniqueNotesFromCells(selectedCells, notesData)
     return getHousesCellsSharedByCells(selectedCells).some(cell => !isCellExists(cell, selectedCells)
         && groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell)))
 }
 
-const isValidNakedGroupPresentInCells = (selectedCells, notesData) => {
+const isValidNakedGroupPresentInCells = (selectedCells: Cell[], notesData: Notes) => {
     const allPossibleNotesPresent = isHintValid({
         type: GROUPS.NAKED_GROUP,
         data: {
@@ -110,7 +87,7 @@ const isValidNakedGroupPresentInCells = (selectedCells, notesData) => {
     return allPossibleNotesPresent && isHintRemovesNotesFromCells(selectedCells, notesData)
 }
 
-const selectValidGroupCells = (cells, groupCandidatesCount, notes) => {
+const selectValidGroupCells = (cells: Cell[], groupCandidatesCount: number, notes: Notes): Cell[] => {
     const result = []
 
     const cellsSelections = N_CHOOSE_K[cells.length][groupCandidatesCount]
@@ -125,10 +102,10 @@ const selectValidGroupCells = (cells, groupCandidatesCount, notes) => {
     return result
 }
 
-export const getNakedGroupRawHints = (groupCandidatesCount, notesData, mainNumbers) => {
+export const getNakedGroupRawHints = (groupCandidatesCount: number, notesData: Notes, mainNumbers: MainNumbers) => {
     const houseTypes = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
-    const result = []
+    const result: NakedGroupRawHint[] = []
 
     for (let i = 0; i < houseTypes.length && _isEmpty(result); i++) {
         const houseType = houseTypes[i]

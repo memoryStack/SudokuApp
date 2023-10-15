@@ -89,6 +89,7 @@ export type TransformedRawHint = {
     clickableCells?: Cell[]
     cellsRestrictedNumberInputs?: unknown
     restrictedNumberInputMsg?: string
+    svgProps?: { data: Chain }
 }
 
 export type SmartHintsColorSystem = {

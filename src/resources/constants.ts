@@ -54,7 +54,9 @@ const SCREEN_NAME = {
 const CUSTOMIZED_PUZZLE_LEVEL_TITLE = 'Customized Puzzle'
 const DEEPLINK_HOST_NAME = 'https://www.amazing-sudoku.com/puzzle/'
 
-const N_CHOOSE_K: { [n: number]: { [k: number]: number[][] | [] } } = {
+export type Combination = number[]
+export type Combinations = number[][] | []
+const N_CHOOSE_K: { [n: number]: { [k: number]: Combinations } } = {
     2: {
         2: [[1, 0]],
         3: [],
@@ -183,7 +185,7 @@ const N_CHOOSE_K: { [n: number]: { [k: number]: number[][] | [] } } = {
             [5, 4, 3, 2, 0],
             [5, 4, 3, 2, 1],
         ],
-        6: [5, 4, 3, 2, 1, 0],
+        6: [[5, 4, 3, 2, 1, 0]],
     },
     7: {
         4: [

@@ -22,8 +22,12 @@ import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.const
 import { getCellsAxesValuesListText } from '../helpers'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
+import { NakedGroupTransformerArgs } from './types'
+import {
+    CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, SmartHintsColorSystem, TransformedRawHint,
+} from '../../types'
 
-export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }) => {
+export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }: NakedGroupTransformerArgs): TransformedRawHint => {
     const { groupCells } = rawHint
     const focusedCells = getHousesCellsSharedByCells(groupCells)
     const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)
@@ -41,17 +45,23 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
             focusedCells,
             groupCells,
         },
-        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates),
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates) as InputPanelVisibleNumbers,
     }
 }
 
-const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData, smartHintsColorSystem) => {
+const getCellsHighlightData = (
+    cells: Cell[],
+    groupCells: Cell[],
+    groupCandidates: NoteValue[],
+    notesData: Notes,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const result = {}
 
     cells.forEach(cell => {
-        const cellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
+        const cellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
 
-        const notesToHighlightData = {}
+        const notesToHighlightData: NotesToHighlightData = {}
         let notesWillBeHighlighted = false
         groupCandidates.forEach(groupCandidate => {
             if (NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell)) {
@@ -71,7 +81,7 @@ const getCellsHighlightData = (cells, groupCells, groupCandidates, notesData, sm
     return result
 }
 
-const getHintChunks = (groupCandidates, groupCells) => {
+const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[]) => {
     const msgPlaceholdersValues = {
         candidatesListTextAndConcatenated: getCandidatesListText(
             groupCandidates,
@@ -83,18 +93,24 @@ const getHintChunks = (groupCandidates, groupCells) => {
         ),
         groupCellsText: getCellsAxesValuesListText(groupCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
-    return HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)].map(hintChunkTemplate => dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues))
+    return (HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)] as string[])
+        .map(hintChunkTemplate => dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues))
 }
 
-const getHintId = groupCandidates => (groupCandidates.length === NAKED_DOUBLE_CANDIDATES_COUNT ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE)
+const getHintId = (groupCandidates: NoteValue[]) => (groupCandidates.length === NAKED_DOUBLE_CANDIDATES_COUNT ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE)
 
-const getApplyHintData = (focusedCells, groupCells, groupCandidates, notesData) => {
-    const result = []
+const getApplyHintData = (
+    focusedCells: Cell[],
+    groupCells: Cell[],
+    groupCandidates: NoteValue[],
+    notesData: Notes,
+) => {
+    const result: NotesRemovalHintAction[] = []
 
-    const cellsWithoutGroupCells = _filter(focusedCells, cell => !isCellExists(cell, groupCells))
+    const cellsWithoutGroupCells = _filter(focusedCells, (cell: Cell) => !isCellExists(cell, groupCells))
 
-    _forEach(cellsWithoutGroupCells, cell => {
-        const groupCandidatesVisible = _filter(groupCandidates, groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
+    _forEach(cellsWithoutGroupCells, (cell: Cell) => {
+        const groupCandidatesVisible = _filter(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
         if (!_isEmpty(groupCandidatesVisible)) {
             result.push({
                 cell,

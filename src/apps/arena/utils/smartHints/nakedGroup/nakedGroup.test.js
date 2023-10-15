@@ -8,7 +8,6 @@ import {
     getNakedGroupRawHints,
     getCellsVisibleNotesInstancesCount,
     selectedCellsMakeGroup,
-    getAnotherSharedHouse,
     isHintRemovesNotesFromCells,
 } from './nakedGroup'
 
@@ -123,37 +122,6 @@ describe('selectedCellsMakeGroup()', () => {
             { row: 8, col: 5 },
         ]
         expect(selectedCellsMakeGroup(cells, notes, 3)).toBeFalsy()
-    })
-})
-
-describe('getAnotherSharedHouse()', () => {
-    test('return block house when row cells also happen to be in same block', () => {
-        const cells = [
-            { row: 1, col: 1 },
-            { row: 1, col: 2 },
-        ]
-        const mainHouse = { type: HOUSE_TYPE.ROW, num: 1 }
-        const expectedResult = { type: HOUSE_TYPE.BLOCK, num: 0 }
-        expect(getAnotherSharedHouse(mainHouse, cells)).toStrictEqual(expectedResult)
-    })
-
-    test('return column house when block cells also happen to be in same column', () => {
-        const cells = [
-            { row: 4, col: 5 },
-            { row: 5, col: 5 },
-        ]
-        const mainHouse = { type: HOUSE_TYPE.BLOCK, num: 4 }
-        const expectedResult = { type: HOUSE_TYPE.COL, num: 5 }
-        expect(getAnotherSharedHouse(mainHouse, cells)).toStrictEqual(expectedResult)
-    })
-
-    test('return null when cells have only one common house', () => {
-        const cells = [
-            { row: 4, col: 5 },
-            { row: 4, col: 6 },
-        ]
-        const mainHouse = { type: HOUSE_TYPE.ROW, num: 4 }
-        expect(getAnotherSharedHouse(mainHouse, cells)).toBeNull()
     })
 })
 

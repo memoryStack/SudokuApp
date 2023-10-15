@@ -113,3 +113,26 @@ declare module '@lodash/cloneDeep' {
 
     export default _cloneDeep
 }
+
+declare module '@lodash/inRange' {
+    import _inRange from '@lodash/inRange'
+
+    export default _inRange
+}
+declare module '@lodash/at' {
+    import _at from '@lodash/at'
+
+    export default _at
+}
+
+declare module '@lodash/some' {
+    import _some from '@lodash/some'
+
+    export default _some
+}
+
+declare module '@lodash/reduce' {
+    import _reduce from '@lodash/reduce'
+
+    export default _reduce
+}

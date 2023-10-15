@@ -168,8 +168,8 @@ export const areCommonHouseCells = (cellA: Cell, cellB: Cell) => {
     return Object.values(cellsPairCommonHouses).some(isCommonHouse => isCommonHouse)
 }
 
-export const getUniqueNotesFromCells = (cells: Cell[], notesData: Notes) => {
-    const result: number[] = []
+export const getUniqueNotesFromCells = (cells: Cell[], notesData: Notes): NoteValue[] => {
+    const result: NoteValue[] = []
     _forEach(cells, (cell: Cell) => {
         result.push(...NotesRecord.getCellVisibleNotesList(notesData, cell))
     })
