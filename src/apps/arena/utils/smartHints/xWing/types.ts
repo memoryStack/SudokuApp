@@ -1,0 +1,24 @@
+import { XWING_TYPES, LEG_TYPES } from './constants'
+
+export type XWingLeg = {
+    candidate: NoteValue
+    cells: Cell[]
+    type: LEG_TYPES
+}
+
+export type XWingRawHint = {
+    houseType: HouseType
+    type: XWING_TYPES
+    legs: [XWingLeg, XWingLeg]
+}
+export type XWingLegs = XWingRawHint['legs']
+
+export type SashimiXWingPerfectLegCellsCategories = {
+    perfectAligned: Cell
+    sashimiAligned: Cell
+}
+
+export type FinnedLegCellsCategories = {
+    perfect: Cell[]
+    finns: Cell[]
+}

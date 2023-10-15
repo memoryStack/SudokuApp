@@ -136,3 +136,9 @@ declare module '@lodash/reduce' {
 
     export default _reduce
 }
+
+declare module '@lodash/flatten' {
+    import _flatten from '@lodash/flatten'
+
+    export default _flatten
+}

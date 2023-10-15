@@ -15,10 +15,14 @@ import {
 import { HOUSE_TYPE } from '../constants'
 
 import { LEG_TYPES } from './constants'
+import {
+    FinnedLegCellsCategories,
+    SashimiXWingPerfectLegCellsCategories, XWingLeg, XWingLegs, XWingRawHint,
+} from './types'
 
-export const isPerfectLegType = leg => leg.type === LEG_TYPES.PERFECT
+export const isPerfectLegType = (leg: XWingLeg) => leg.type === LEG_TYPES.PERFECT
 
-export const categorizeLegs = (legA, legB) => {
+export const categorizeLegs = (legA: XWingLeg, legB: XWingLeg) => {
     const perfectLeg = isPerfectLegType(legA) ? legA : legB
     return {
         perfectLeg,
@@ -26,7 +30,7 @@ export const categorizeLegs = (legA, legB) => {
     }
 }
 
-export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells) => {
+export const categorizeFinnedLegCells = (perfectLegHostCells: Cell[], finnedLegHostCells: Cell[]): FinnedLegCellsCategories => {
     const perfectCells = finnedLegHostCells.filter(finnedLegCell => perfectLegHostCells.some(perfectLegCell => {
         const cellsPair = [finnedLegCell, perfectLegCell]
         return areSameRowCells(cellsPair) || areSameColCells(cellsPair)
@@ -38,9 +42,9 @@ export const categorizeFinnedLegCells = (perfectLegHostCells, finnedLegHostCells
     }
 }
 
-export const getCrossHouseType = houseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+export const getCrossHouseType = (houseType: HouseType): HouseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
-export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notesData) => {
+export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }: XWingRawHint, notesData: Notes): Cell[] => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { perfect: finnedLegPerfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
 
@@ -57,25 +61,28 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }, notes
     })
 }
 
-export const getPerfectCellsInFinnedBlock = legs => {
+export const getPerfectCellsInFinnedBlock = (legs: XWingLegs) => {
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
     return perfectCells.filter(perfectCell => finns.some(finnCell => areSameBlockCells([finnCell, perfectCell])))
 }
 
-export const addCellInXWingLeg = (cell, legCells, houseType) => {
+export const addCellInXWingLeg = (cell: Cell, legCells: Cell[], houseType: HouseType) => {
     const crossHouseType = getCrossHouseType(houseType)
     legCells.push(cell)
-    legCells.sort((cellA, cellB) => cellA[crossHouseType] - cellB[crossHouseType])
+    legCells.sort((cellA, cellB) => {
+        if (Houses.isRowHouse(crossHouseType)) return cellA.row - cellB.row
+        return cellA.col - cellB.col
+    })
 }
 
-export const getXWingCandidate = xWing => xWing.legs[0].candidate
+export const getXWingCandidate = (xWing: XWingRawHint) => xWing.legs[0].candidate
 
-export const getXWingHosuesInOrder = xWing => xWing.legs.map(({ cells }) => getCellHouseForHouseType(xWing.houseType, cells[0]))
+export const getXWingHosuesInOrder = (xWing: XWingRawHint) => xWing.legs.map(({ cells }) => getCellHouseForHouseType(xWing.houseType, cells[0]))
 
-export const getXWingCells = xWingLegs => _flatten(xWingLegs.map(leg => leg.cells))
+export const getXWingCells = (xWingLegs: XWingLegs): Cell[] => _flatten(xWingLegs.map(leg => leg.cells))
 
-export const getSashimiCell = ({ houseType, legs }) => {
+export const getSashimiCell = ({ houseType, legs }: XWingRawHint): Cell => {
     const { perfectLeg, otherLeg } = categorizeLegs(...legs)
     const { sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
 
@@ -92,8 +99,8 @@ export const getSashimiCell = ({ houseType, legs }) => {
     }
 }
 
-export const categorizeSashimiXWingPerfectLegCells = (perfectLegCells, otherLegCells) => {
-    const result = {}
+export const categorizeSashimiXWingPerfectLegCells = (perfectLegCells: Cell[], otherLegCells: Cell[]): SashimiXWingPerfectLegCellsCategories => {
+    const result = {} as SashimiXWingPerfectLegCellsCategories
     perfectLegCells.forEach(perfectLegCell => {
         // TODO: this below loop is repeating again and again
         // extract it

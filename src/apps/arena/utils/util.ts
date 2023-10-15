@@ -81,30 +81,30 @@ export const areSameCells = (cellA: Cell, cellB: Cell) => {
     return _isEqual(cellA, cellB)
 }
 
-export const areSameBlockCells = (cells: Cell[]) => _areSameValues(cells.map(cell => getBlockAndBoxNum(cell).blockNum))
+export const areSameBlockCells = (cells: Cell[]): boolean => _areSameValues(cells.map(cell => getBlockAndBoxNum(cell).blockNum))
 
-export const areSameRowCells = (cells: Cell[]) => _areSameValues(cells, 'row')
+export const areSameRowCells = (cells: Cell[]): boolean => _areSameValues(cells, 'row')
 
-export const areSameColCells = (cells: Cell[]) => _areSameValues(cells, 'col')
+export const areSameColCells = (cells: Cell[]): boolean => _areSameValues(cells, 'col')
 
 export const isCellExists = (cell: Cell, store: Cell[]) => store.some(storedCell => areSameCells(storedCell, cell))
 
-export const getCellRowHouseInfo = (cell: Cell) => ({
+export const getCellRowHouseInfo = (cell: Cell): House => ({
     type: HOUSE_TYPE.ROW,
     num: cell.row,
 })
 
-export const getCellColHouseInfo = (cell: Cell) => ({
+export const getCellColHouseInfo = (cell: Cell): House => ({
     type: HOUSE_TYPE.COL,
     num: cell.col,
 })
 
-export const getCellBlockHouseInfo = (cell: Cell) => ({
+export const getCellBlockHouseInfo = (cell: Cell): House => ({
     type: HOUSE_TYPE.BLOCK,
     num: getBlockAndBoxNum(cell).blockNum,
 })
 
-export const getCellHouseForHouseType = (houseType: HouseType, cell: Cell) => {
+export const getCellHouseForHouseType = (houseType: HouseType, cell: Cell): House => {
     if (Houses.isRowHouse(houseType)) return getCellRowHouseInfo(cell)
     if (Houses.isColHouse(houseType)) return getCellColHouseInfo(cell)
     if (Houses.isBlockHouse(houseType)) return getCellBlockHouseInfo(cell)

@@ -4,9 +4,11 @@ import { convertBoardCellToNum, convertBoardCellNumToCell } from '../../cellTran
 
 import { getHouseCells } from '../../houseCells'
 import { getCellHousesInfo } from '../../util'
+import { YWingRawHint } from './types'
 
-const getHousesCellsNum = cell => {
-    const result = {}
+// TODO: improve naming for "getHousesCellsNum" and "getWingsCommonCells"
+const getHousesCellsNum = (cell: Cell) => {
+    const result: { [cellNum: number | string]: boolean } = {}
     getCellHousesInfo(cell).forEach(house => {
         getHouseCells(house).forEach(houseCell => {
             const cellNum = convertBoardCellToNum(houseCell)
@@ -16,16 +18,16 @@ const getHousesCellsNum = cell => {
     return result
 }
 
-const getWingsCommonCells = (wingCellA, wingCellB) => {
+const getWingsCommonCells = (wingCellA: Cell, wingCellB: Cell): Cell[] => {
     const wingACells = getHousesCellsNum(wingCellA)
     const wingBCells = getHousesCellsNum(wingCellB)
-    const commonCellsInAllHouses = _filter(Object.keys(wingACells), windACellNum => !!wingBCells[windACellNum])
-    return commonCellsInAllHouses.map(cellNum => convertBoardCellNumToCell(parseInt(cellNum, 10)))
+    const commonCellsInAllHouses = _filter(Object.keys(wingACells), (wingACellNum: string) => !!wingBCells[wingACellNum])
+    return commonCellsInAllHouses.map((cellNum: string) => convertBoardCellNumToCell(parseInt(cellNum, 10)))
 }
 
-export const getEliminatableNotesCells = (yWing, notesData) => {
+export const getEliminatableNotesCells = (yWing: YWingRawHint, notesData: Notes) => {
     const { wings } = yWing
-    const wingCells = wings.map(wing => wing.cell)
+    const wingCells = wings.map(wing => wing.cell) as [Cell, Cell]
 
     const commonNoteInWings = yWing.wingsCommonNote
     const wingsCommonSeenCells = getWingsCommonCells(...wingCells)

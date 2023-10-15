@@ -21,6 +21,13 @@ import { HOUSE_TYPE } from '../constants'
 import { maxHintsLimitReached } from '../util'
 import { getEliminatableNotesCells } from './utils'
 import { BoardIterators } from '../../classes/boardIterators'
+import { YWingCell, YWingRawHint } from './types'
+
+type HousesPotentialYWingCells = {
+    [houseType: HouseType]: {
+        [houseNum: HouseNum]: YWingCell[]
+    }
+}
 
 const VALID_NOTES_COUNT_IN_CELL = 2
 const VALID_NOTES_COUNT_IN_CELLS_PAIR = 3
@@ -30,7 +37,7 @@ const VALID_NOTES_COUNT_IN_CELLS_PAIR = 3
 // and this is called coupling my friend
 const N_CHOOSE_K_LIMIT = 6
 
-export const isValidYWingCell = (cell, userInputNotes, possibleNotes) => {
+export const isValidYWingCell = (cell: Cell, userInputNotes: Notes, possibleNotes: Notes) => {
     const possibleNotesCount = NotesRecord.getCellVisibleNotesCount(possibleNotes, cell)
     if (possibleNotesCount !== VALID_NOTES_COUNT_IN_CELL) return false
 
@@ -38,10 +45,10 @@ export const isValidYWingCell = (cell, userInputNotes, possibleNotes) => {
     return userInputNotesCount === VALID_NOTES_COUNT_IN_CELL
 }
 
-export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
+export const getAllValidYWingCells = (mainNumbers: MainNumbers, userInputNotes: Notes) => {
     const possibleNotes = getPossibleNotes(getStoreState())
 
-    const result = []
+    const result: YWingCell[] = []
     BoardIterators.forBoardEachCell(cell => {
         if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return
         if (isValidYWingCell(cell, userInputNotes, possibleNotes)) {
@@ -53,7 +60,7 @@ export const getAllValidYWingCells = (mainNumbers, userInputNotes) => {
 }
 
 // TODO: add test cases for this func
-const addYWingCellInHouses = (yWingCell, housesYWingEligibleCells) => {
+const addYWingCellInHouses = (yWingCell: YWingCell, housesYWingEligibleCells: HousesPotentialYWingCells) => {
     getCellHousesInfo(yWingCell.cell).forEach(({ type, num }) => {
         if (!housesYWingEligibleCells[type]) housesYWingEligibleCells[type] = {}
         if (!housesYWingEligibleCells[type][num]) housesYWingEligibleCells[type][num] = []
@@ -61,20 +68,20 @@ const addYWingCellInHouses = (yWingCell, housesYWingEligibleCells) => {
     })
 }
 
-export const isValidYWingCellsPair = (yWingCellA, yWingCellB) => {
+export const isValidYWingCellsPair = (yWingCellA: YWingCell, yWingCellB: YWingCell) => {
     const cellANotes = yWingCellA.notes
     const cellBNotes = yWingCellB.notes
 
-    const allNotes = {}
+    const allNotes: { [note: NoteValue]: boolean } = {}
     cellANotes.concat(cellBNotes).forEach(note => {
         allNotes[note] = true
     })
     return Object.keys(allNotes).length === VALID_NOTES_COUNT_IN_CELLS_PAIR
 }
 
-const getCommonNoteInCells = (cellANotes, cellBNotes) => _find(cellANotes, cellANote => cellBNotes.includes(cellANote))
+const getCommonNoteInCells = (cellANotes: NoteValue[], cellBNotes: NoteValue[]): NoteValue => _find(cellANotes, (cellANote: NoteValue) => cellBNotes.includes(cellANote))
 
-export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
+export const getSecondWingExpectedNotes = (pivotNotes: NoteValue[], firstWingNotes: NoteValue[]): NoteValue[] => {
     const commonNote = getCommonNoteInCells(pivotNotes, firstWingNotes)
     const expectedNotes = pivotNotes
         .concat(firstWingNotes)
@@ -82,38 +89,38 @@ export const getSecondWingExpectedNotes = (pivotNotes, firstWingNotes) => {
     return _sortNumbers(expectedNotes)
 }
 
-const extractYWingCellsFromYWing = yWing => {
+const extractYWingCellsFromYWing = (yWing: YWingRawHint) => {
     const pivotCell = yWing.pivot.cell
     const wingCells = yWing.wings.map(wing => wing.cell)
     return [pivotCell, ...wingCells]
 }
 
-const areSameYWings = (yWingA, yWingB) => {
+const areSameYWings = (yWingA: YWingRawHint, yWingB: YWingRawHint) => {
     const yWingACells = extractYWingCellsFromYWing(yWingA)
     const yWingBCells = extractYWingCellsFromYWing(yWingB)
     return areSameCellsSets(yWingACells, yWingBCells)
 }
 
-const isDuplicateYWing = (newYWing, existingYWings) => existingYWings.some(existingYWing => areSameYWings(newYWing, existingYWing))
+const isDuplicateYWing = (newYWing: YWingRawHint, existingYWings: YWingRawHint[]) => existingYWings.some(existingYWing => areSameYWings(newYWing, existingYWing))
 
-const categorizeYWingCellsInHouses = yWingCells => {
-    const result = {}
+const categorizeYWingCellsInHouses = (yWingCells: YWingCell[]) => {
+    const result: HousesPotentialYWingCells = {}
     yWingCells.forEach(yWingCell => {
         addYWingCellInHouses(yWingCell, result)
     })
     return result
 }
 
-const getPivotHousesToSearchForSecondWing = (yWingCellA, yWingCellB) => {
+const getPivotHousesToSearchForSecondWing = (yWingCellA: Cell, yWingCellB: Cell): HouseType[] => {
     const commonHouses = getPairCellsCommonHouses(yWingCellA, yWingCellB)
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     return allHouses.filter(houseType => !commonHouses[houseType])
 }
 
-const getEligibleSecondWings = (expectedNotes, eligibleYWingCells) => eligibleYWingCells.filter(eligibleYWingCell => _isEqual(eligibleYWingCell.notes, expectedNotes))
+const getEligibleSecondWings = (expectedNotes: NoteValue[], eligibleYWingCells: YWingCell[]) => eligibleYWingCells.filter(eligibleYWingCell => _isEqual(eligibleYWingCell.notes, expectedNotes))
 
-const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
-    const result = []
+const getHouseYWings = ({ type, num }: House, housesYWingEligibleCells: HousesPotentialYWingCells) => {
+    const result: YWingRawHint[] = []
 
     const yWingEligibleCells = housesYWingEligibleCells[type]?.[num] || []
 
@@ -128,10 +135,7 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
             const firstEligibleCell = yWingEligibleCells[combination[0]]
             const secondEligibleCell = yWingEligibleCells[combination[1]]
 
-            const pivotHousesToSearch = getPivotHousesToSearchForSecondWing(
-                firstEligibleCell.cell,
-                secondEligibleCell.cell,
-            )
+            const pivotHousesToSearch = getPivotHousesToSearchForSecondWing(firstEligibleCell.cell, secondEligibleCell.cell)
 
             const possiblePivots = [firstEligibleCell, secondEligibleCell]
             possiblePivots.forEach((pivot, index) => {
@@ -159,10 +163,10 @@ const getHouseYWings = ({ type, num }, housesYWingEligibleCells) => {
     return result
 }
 
-const yWingRemovesNotes = (yWing, notesData) => !_isEmpty(getEliminatableNotesCells(yWing, notesData))
+const yWingRemovesNotes = (yWing: YWingRawHint, notesData: Notes) => !_isEmpty(getEliminatableNotesCells(yWing, notesData))
 
-export const getYWingRawHints = (mainNumbers, notesData, maxHintsThreshold) => {
-    const result = []
+export const getYWingRawHints = (mainNumbers: MainNumbers, notesData: Notes, maxHintsThreshold: number) => {
+    const result: YWingRawHint[] = []
 
     const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData))
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
