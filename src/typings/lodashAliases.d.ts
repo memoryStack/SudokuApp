@@ -148,3 +148,39 @@ declare module '@lodash/toOrdinal' {
 
     export { toOrdinal }
 }
+
+declare module '@lodash/findIndex' {
+    import _findIndex from '@lodash/findIndex'
+
+    export default _findIndex
+}
+
+declare module '@lodash/head' {
+    import _head from '@lodash/head'
+
+    export default _head
+}
+
+declare module '@lodash/last' {
+    import _last from '@lodash/last'
+
+    export default _last
+}
+
+declare module '@lodash/slice' {
+    import _slice from '@lodash/slice'
+
+    export default _slice
+}
+
+declare module '@lodash/keys' {
+    import _keys from '@lodash/keys'
+
+    export default _keys
+}
+
+declare module '@lodash/reverse' {
+    import _reverse from '@lodash/reverse'
+
+    export default _reverse
+}
