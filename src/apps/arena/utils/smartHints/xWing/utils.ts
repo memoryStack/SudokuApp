@@ -45,7 +45,7 @@ export const categorizeFinnedLegCells = (perfectLegHostCells: Cell[], finnedLegH
 export const getCrossHouseType = (houseType: HouseType): HouseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
 export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }: XWingRawHint, notesData: Notes): Cell[] => {
-    const { perfectLeg, otherLeg } = categorizeLegs(...legs)
+    const { perfectLeg, otherLeg } = categorizeLegs(legs[0], legs[1])
     const { perfect: finnedLegPerfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, otherLeg.cells)
 
     return getHouseCells(getCellBlockHouseInfo(finns[0])).filter(cell => {
@@ -62,7 +62,7 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }: XWing
 }
 
 export const getPerfectCellsInFinnedBlock = (legs: XWingLegs) => {
-    const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
+    const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(legs[0], legs[1])
     const { perfect: perfectCells, finns } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
     return perfectCells.filter(perfectCell => finns.some(finnCell => areSameBlockCells([finnCell, perfectCell])))
 }
@@ -83,7 +83,7 @@ export const getXWingHosuesInOrder = (xWing: XWingRawHint) => xWing.legs.map(({ 
 export const getXWingCells = (xWingLegs: XWingLegs): Cell[] => _flatten(xWingLegs.map(leg => leg.cells))
 
 export const getSashimiCell = ({ houseType, legs }: XWingRawHint): Cell => {
-    const { perfectLeg, otherLeg } = categorizeLegs(...legs)
+    const { perfectLeg, otherLeg } = categorizeLegs(legs[0], legs[1])
     const { sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
 
     if (Houses.isRowHouse(houseType)) {

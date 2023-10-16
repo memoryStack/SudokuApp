@@ -27,8 +27,17 @@ import {
     getApplyHintData,
 } from './helpers'
 import smartHintColorSystemReader from '../../../colorSystem.reader'
+import { XWingRawHint } from '../../../xWing/types'
+import {
+    CellsFocusData, SmartHintsColorSystem, CellHighlightData, TransformedRawHint,
+} from '../../../types'
 
-const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColorSystem) => {
+const highlightXWingCells = (
+    cells: Cell[],
+    candidate: NoteValue,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
         const isBottomRightCell = index === 3
@@ -47,7 +56,11 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColor
 }
 
 // TODO: synchronize the structre in which cells is passed around for all xWings
-const highlightHouseCells = ({ houseType, cells }, cellsToFocusData, smartHintsColorSystem) => {
+const highlightHouseCells = (
+    { houseType, cells }: {houseType: HouseType, cells: Cell[][]},
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     // TODO: this logic is repeated
     const firstHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].row : cells[0][0].col
     const secondHouseNum = Houses.isRowHouse(houseType) ? cells[1][0].row : cells[1][0].col
@@ -67,7 +80,12 @@ const highlightHouseCells = ({ houseType, cells }, cellsToFocusData, smartHintsC
     })
 }
 
-const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, cellsToFocusData, smartHintsColorSystem) => {
+const highlightCrossHouseCells = (
+    { houseType, cells, candidate }: {houseType: HouseType, cells: Cell[][], candidate: NoteValue},
+    notesData: Notes,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const xWingCells = [...cells[0], ...cells[1]]
     const firstCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].col : cells[0][0].row
     const secondCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][1].col : cells[0][1].row
@@ -77,7 +95,7 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
         getHouseCells({ type: crossHouseType, num: houseNum })
             .filter(cell => !isCellExists(cell, xWingCells))
             .forEach(cell => {
-                const cellHighlightData = {
+                const cellHighlightData: CellHighlightData = {
                     bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
                 }
 
@@ -92,7 +110,7 @@ const highlightCrossHouseCells = ({ houseType, cells, candidate }, notesData, ce
     })
 }
 
-const getXWingCornersText = xWing => {
+const getXWingCornersText = (xWing: XWingRawHint) => {
     const {
         topLeft, topRight, bottomLeft, bottomRight,
     } = getXWingCornerCells(xWing)
@@ -101,7 +119,7 @@ const getXWingCornersText = xWing => {
         .join(` ${String.fromCodePoint(0x279d)} `)
 }
 
-const getHintChunks = xWing => {
+const getHintChunks = (xWing: XWingRawHint) => {
     const { topDown: topDownDiagonalText, bottomUp: bottomUpDiagonalText } = getDiagonalsCornersAxesTexts(xWing)
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
@@ -114,20 +132,29 @@ const getHintChunks = xWing => {
         crossHouseFullNamePlural: getXWingCrossHouseFullNamePlural(xWing),
     }
 
-    const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.PERFECT_X_WING]
+    const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.PERFECT_X_WING] as string[]
     return msgTemplates.map(template => dynamicInterpolation(template, msgPlaceholdersValues))
 }
 
-const getRemovableNotesHostCells = (xWingCells, candidate, focusedCells, notes) => focusedCells.filter(cell => !isCellExists(cell, xWingCells)
+const getRemovableNotesHostCells = (
+    xWingCells: Cell[],
+    candidate: NoteValue,
+    focusedCells: Cell[],
+    notes: Notes,
+) => focusedCells.filter(cell => !isCellExists(cell, xWingCells)
     && NotesRecord.isNotePresentInCell(notes, candidate, cell))
 
-export const getPerfectXWingUIData = (xWing, notesData, smartHintsColorSystem) => {
+export const getPerfectXWingUIData = (
+    xWing: XWingRawHint,
+    notesData: Notes,
+    smartHintsColorSystem: SmartHintsColorSystem,
+): TransformedRawHint => {
     const { legs, houseType } = xWing
     const { candidate } = legs[0]
     const cells = legs.map(leg => leg.cells)
     const xWingCells = getXWingCells(xWing.legs)
 
-    const cellsToFocusData = {}
+    const cellsToFocusData: CellsFocusData = {}
     highlightXWingCells(xWingCells, candidate, cellsToFocusData, smartHintsColorSystem)
     highlightHouseCells({ houseType, cells }, cellsToFocusData, smartHintsColorSystem)
     highlightCrossHouseCells({ houseType, cells, candidate }, notesData, cellsToFocusData, smartHintsColorSystem)
@@ -145,7 +172,7 @@ export const getPerfectXWingUIData = (xWing, notesData, smartHintsColorSystem) =
         focusedCells,
         steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing)),
         applyHint: getApplyHintData(candidate, removableNotesHostCells),
-        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates),
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates) as InputPanelVisibleNumbers,
         tryOutAnalyserData: {
             xWingCells,
             removableNotesHostCells,

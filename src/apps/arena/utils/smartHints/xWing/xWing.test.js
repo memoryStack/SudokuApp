@@ -9,7 +9,6 @@ import {
     isFinnedXWing,
     isFinnedXWingRemovesNotes,
     isSashimiFinnedXWing,
-    getAlignedCellInPerfectLeg,
     transformSashimiXWingLeg,
     getXWingType,
 } from './index' // TODO: find why jest tests fail when this import is like '.' instead of './index'
@@ -842,49 +841,6 @@ describe('isSashimiFinnedXWing()', () => {
         }
 
         expect(isSashimiFinnedXWing(xWing)).toBe(false)
-    })
-})
-
-// mainly will use it for sashimi only. will make it more
-// general if other use cases occurs
-describe('getAlignedCellInPerfectLeg()', () => {
-    test('returns aligned cell 1 aligned cell present', () => {
-        const perfectLegCells = [
-            { row: 7, col: 5 },
-            { row: 7, col: 8 },
-        ]
-        const otherLegCells = [
-            { row: 3, col: 3 },
-            { row: 3, col: 4 },
-            { row: 3, col: 8 },
-        ]
-        const expectedResult = { row: 7, col: 8 }
-        expect(getAlignedCellInPerfectLeg(perfectLegCells, otherLegCells)).toStrictEqual(expectedResult)
-    })
-
-    test('returns first cell for both aligned cell present (basically perfect x-wing cells)', () => {
-        const perfectLegCells = [
-            { row: 7, col: 5 },
-            { row: 7, col: 8 },
-        ]
-        const otherLegCells = [
-            { row: 3, col: 5 },
-            { row: 3, col: 8 },
-        ]
-        const expectedResult = { row: 7, col: 5 }
-        expect(getAlignedCellInPerfectLeg(perfectLegCells, otherLegCells)).toStrictEqual(expectedResult)
-    })
-
-    test('returns undefined for no aligned cells', () => {
-        const perfectLegCells = [
-            { row: 7, col: 1 },
-            { row: 7, col: 3 },
-        ]
-        const otherLegCells = [
-            { row: 3, col: 2 },
-            { row: 3, col: 6 },
-        ]
-        expect(getAlignedCellInPerfectLeg(perfectLegCells, otherLegCells)).toBeUndefined()
     })
 })
 

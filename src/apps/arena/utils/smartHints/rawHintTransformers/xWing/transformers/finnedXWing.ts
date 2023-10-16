@@ -35,12 +35,16 @@ import { XWING_TYPES } from '../../../xWing/constants'
 
 import { getApplyHintData, getHouseAxesText, getXWingCrossHouseFullNamePlural } from './helpers'
 import smartHintColorSystemReader from '../../../colorSystem.reader'
+import {
+    CellHighlightData, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,
+} from '../../../types'
+import { XWingRawHint } from '../../../xWing/types'
 
-const getCrossHouseType = houseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+const getCrossHouseType = (houseType: HouseType) => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
-const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
+const getPlaceholdersValues = (xWing: XWingRawHint, removableNotesHostCells: Cell[]) => {
     const { houseType, legs } = xWing
-    const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
+    const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(legs[0], legs[1])
     const { finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
     const finnedBlockPerfectCells = getPerfectCellsInFinnedBlock(legs)
     const xWingHouses = getXWingHosuesInOrder(xWing)
@@ -65,32 +69,38 @@ const getPlaceholdersValues = (xWing, removableNotesHostCells) => {
     }
 }
 
-const getFinnedXWingHintChunks = (xWing, removableNotesHostCells) => {
+const getFinnedXWingHintChunks = (xWing: XWingRawHint, removableNotesHostCells: Cell[]): string[] => {
     const msgPlaceholdersValues = getPlaceholdersValues(xWing, removableNotesHostCells)
 
-    return HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING].map(template => dynamicInterpolation(template, msgPlaceholdersValues))
+    return (HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING] as string[])
+        .map(template => dynamicInterpolation(template, msgPlaceholdersValues))
 }
 
 // this implementation is different from utils implementation
-const getSashimiCell = (xWing, notes) => {
+const getSashimiCell = (xWing: XWingRawHint, notes: Notes) => {
     const { legs } = xWing
-    const { otherLeg: finnedLeg } = categorizeLegs(...legs)
+    const { otherLeg: finnedLeg } = categorizeLegs(legs[0], legs[1])
 
     const candidate = getXWingCandidate(xWing)
     return finnedLeg.cells.find(cell => !NotesRecord.isNotePresentInCell(notes, candidate, cell))
 }
 
-const getSashimiFinnedHintChunks = (xWing, removableNotesHostCells, notes) => {
+const getSashimiFinnedHintChunks = (xWing: XWingRawHint, removableNotesHostCells: Cell[], notes: Notes): string[] => {
     const placeholdersValues = {
         ...getPlaceholdersValues(xWing, removableNotesHostCells),
-        sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes)),
+        sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes) as Cell),
     }
 
-    return HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING].map(template => dynamicInterpolation(template, placeholdersValues))
+    return (HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING] as string[])
+        .map(template => dynamicInterpolation(template, placeholdersValues))
 }
 
 // doing 2 things
-const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData, smartHintsColorSystem) => {
+const defaultHighlightHouseCells = (
+    { houseType, cells }: {houseType: HouseType, cells: Cell[][]},
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const firstHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].row : cells[0][0].col
     const secondHouseNum = Houses.isRowHouse(houseType) ? cells[1][0].row : cells[1][0].col
 
@@ -103,7 +113,11 @@ const defaultHighlightHouseCells = ({ houseType, cells }, cellsToFocusData, smar
     })
 }
 
-const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData, smartHintsColorSystem) => {
+const defaultHighlightCrossHouseCells = (
+    { houseType, cells }: {houseType: HouseType, cells: Cell[][]},
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     const firstCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].col : cells[0][0].row
     const secondCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][1].col : cells[0][1].row
     const crossHousesNum = [firstCrossHouseNum, secondCrossHouseNum]
@@ -119,12 +133,17 @@ const defaultHighlightCrossHouseCells = ({ houseType, cells }, cellsToFocusData,
 }
 
 // TODO: fix the order of cells here. sometimes topLeft cell takes different color
-const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColorSystem) => {
+const highlightXWingCells = (
+    cells: Cell[],
+    candidate: NoteValue,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     cells.forEach(({ row, col }, index) => {
         const isTopLeftCell = index === 0
         const isBottomRightCell = index === 3
 
-        const cellHighlightData = {
+        const cellHighlightData: CellHighlightData = {
             bgColor: transformCellBGColor(
                 isTopLeftCell || isBottomRightCell ? smartHintColorSystemReader.xWingTopLeftBottomRightCellBGColor(smartHintsColorSystem)
                     : smartHintColorSystemReader.xWingTopRightBottomLeftCellBGColor(smartHintsColorSystem),
@@ -137,9 +156,14 @@ const highlightXWingCells = (cells, candidate, cellsToFocusData, smartHintsColor
     })
 }
 
-const highlightFinnCells = (finnCells, candidate, cellsToFocusData, smartHintsColorSystem) => {
+const highlightFinnCells = (
+    finnCells: Cell[],
+    candidate: NoteValue,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     finnCells.forEach(({ row, col }) => {
-        const cellHighlightData = {
+        const cellHighlightData: CellHighlightData = {
             bgColor: transformCellBGColor(smartHintColorSystemReader.xWingFinnCellBGColor(smartHintsColorSystem)),
             notesToHighlightData: {
                 [candidate]: { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) },
@@ -149,11 +173,17 @@ const highlightFinnCells = (finnCells, candidate, cellsToFocusData, smartHintsCo
     })
 }
 
-const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cellsToFocusData, smartHintsColorSystem) => {
+const highlightRemovableNotesHostCells = (
+    hostCells: Cell[],
+    candidate: NoteValue,
+    notesData: Notes,
+    cellsToFocusData: CellsFocusData,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
     hostCells
         .filter(cell => NotesRecord.isNotePresentInCell(notesData, candidate, cell))
         .forEach(cell => {
-            const cellHighlightData = {
+            const cellHighlightData: CellHighlightData = {
                 bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)),
                 notesToHighlightData: {
                     [candidate]: { fontColor: smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem) },
@@ -163,20 +193,24 @@ const highlightRemovableNotesHostCells = (hostCells, candidate, notesData, cells
         })
 }
 
-export const getFinnedXWingUIData = (xWing, notesData, smartHintsColorSystem) => {
+export const getFinnedXWingUIData = (
+    xWing: XWingRawHint,
+    notesData: Notes,
+    smartHintsColorSystem: SmartHintsColorSystem,
+): TransformedRawHint => {
     const { type: finnedXWingType, legs, houseType } = xWing
     const { candidate } = legs[0]
 
-    const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(...legs)
+    const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(legs[0], legs[1])
 
     const { perfect: finnedLegPerfectCells, finns: finnCells } = categorizeFinnedLegCells(
         perfectLeg.cells,
         finnedLeg.cells,
     )
 
-    const cellsToFocusData = {}
+    const cellsToFocusData: CellsFocusData = {}
 
-    const removableNotesHostCells = getFinnedXWingRemovableNotesHostCells({ houseType, legs }, notesData)
+    const removableNotesHostCells = getFinnedXWingRemovableNotesHostCells(xWing, notesData)
 
     defaultHighlightHouseCells({ houseType, cells: [perfectLeg.cells, finnedLegPerfectCells] }, cellsToFocusData, smartHintsColorSystem)
     defaultHighlightCrossHouseCells({ houseType, cells: [perfectLeg.cells, finnedLegPerfectCells] }, cellsToFocusData, smartHintsColorSystem)
@@ -189,7 +223,7 @@ export const getFinnedXWingUIData = (xWing, notesData, smartHintsColorSystem) =>
         hasTryOut: true,
         type: HINTS_IDS.FINNED_X_WING,
         focusedCells,
-        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]),
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]) as InputPanelVisibleNumbers,
         clickableCells: [...removableNotesHostCells, ...getXWingCells(xWing.legs)],
         tryOutAnalyserData: {
             xWing,

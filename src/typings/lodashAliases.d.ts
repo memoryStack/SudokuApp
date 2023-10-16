@@ -142,3 +142,9 @@ declare module '@lodash/flatten' {
 
     export default _flatten
 }
+
+declare module '@lodash/toOrdinal' {
+    import { toOrdinal } from '@lodash/toOrdinal'
+
+    export { toOrdinal }
+}

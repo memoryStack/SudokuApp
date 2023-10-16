@@ -9,7 +9,7 @@ export type XWingLeg = {
 export type XWingRawHint = {
     houseType: HouseType
     type: XWING_TYPES
-    legs: [XWingLeg, XWingLeg]
+    legs: XWingLeg[]
 }
 export type XWingLegs = XWingRawHint['legs']
 
