@@ -9,13 +9,12 @@ import { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { OnAction } from '@utils/hocs/withActions/types'
 
-import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
-
-import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
-import { getStyles } from './inputPanel.styles'
 import { BoardIterators, CellEachNoteCallback } from '../utils/classes/boardIterators'
+import { useIsHintTryOutStep } from '../hooks/smartHints'
 
+import { getStyles } from './inputPanel.styles'
+import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
 

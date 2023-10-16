@@ -2,16 +2,16 @@ import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerato
 
 import { act, renderHook } from '@testing-library/react-hooks'
 
-import { testStoreWrapper } from '../../../../../utils/testing/testingBoilerplate/reduxStoreWrapper'
-import { makeTestStore } from '../../../../../utils/testing/testingBoilerplate/makeReduxStore'
-import smartHintHCReducers, { smartHintHCActions } from '../../../store/reducers/smartHintHC.reducers'
+import { makeTestStore } from '@utils/testing/testingBoilerplate/makeReduxStore'
 
-import { useIsHintTryOutStep } from '.'
-// import { mainNumbers, notesData } from '../hiddenGroup/testData'
-import { HINTS_IDS } from '../constants'
-import { getRawHints } from '..'
+import { testStoreWrapper } from '@utils/testing/testingBoilerplate/reduxStoreWrapper'
+import smartHintHCReducers, { smartHintHCActions } from '../../store/reducers/smartHintHC.reducers'
 
-import boardReducers, { boardActions } from '../../../store/reducers/board.reducers'
+import { useIsHintTryOutStep } from '../smartHints'
+
+import boardReducers, { boardActions } from '../../store/reducers/board.reducers'
+import { HINTS_IDS } from '../../utils/smartHints/constants'
+import { getRawHints } from '../../utils/smartHints'
 
 const { setHints, setNextHint } = smartHintHCActions
 

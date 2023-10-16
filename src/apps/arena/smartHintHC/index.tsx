@@ -26,7 +26,8 @@ import withActions from '../../../utils/hocs/withActions'
 import { Touchable } from '../../components/Touchable'
 
 import { getApplyHintChanges, getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
-import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../utils/smartHints/hooks'
+import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../hooks/smartHints'
+
 import { Inputpanel } from '../inputPanel'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
 

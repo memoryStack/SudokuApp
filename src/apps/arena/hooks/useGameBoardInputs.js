@@ -2,8 +2,7 @@ import { useSelector } from 'react-redux'
 
 import { getTryOutSelectedCell, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
 import { getMainNumbers, getNotesInfo, getSelectedCell } from '../store/selectors/board.selectors'
-
-import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
+import { useIsHintTryOutStep } from './smartHints'
 
 export const useGameBoardInputs = () => {
     const isHintTryOut = useIsHintTryOutStep()

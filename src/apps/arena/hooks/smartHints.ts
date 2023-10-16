@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
-import { analyseTryOutInput } from '../tryOutInputAnalyser'
-import { TRY_OUT_RESULT_STATES } from '../tryOutInputAnalyser/constants'
-import { TryOutResult } from '../types'
+import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
+
+import { analyseTryOutInput } from '../utils/smartHints/tryOutInputAnalyser'
+import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
+import { TryOutResult } from '../utils/smartHints/types'
 
 const useIsHintTryOutStep = () => {
     const { hint: { isTryOut = false } = {} } = useSelector(getHintHCInfo)

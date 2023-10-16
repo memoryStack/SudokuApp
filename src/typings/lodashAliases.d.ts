@@ -184,3 +184,9 @@ declare module '@lodash/reverse' {
 
     export default _reverse
 }
+
+declare module '@lodash/property' {
+    import _property from '@lodash/property'
+
+    export default _property
+}

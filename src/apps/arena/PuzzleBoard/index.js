@@ -13,7 +13,6 @@ import { getMoves } from '../store/selectors/board.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { ACTION_TYPES } from './actionHandlers'
-import { useIsHintTryOutStep } from '../utils/smartHints/hooks'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
@@ -21,6 +20,7 @@ import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { GameState } from '../utils/classes/gameState'
+import { useIsHintTryOutStep } from '../hooks/smartHints'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const isHintTryOut = useIsHintTryOutStep()
