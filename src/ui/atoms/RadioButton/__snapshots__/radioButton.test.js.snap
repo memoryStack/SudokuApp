@@ -5,7 +5,7 @@ exports[`snapshot for disabled radio button 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "borderColor": "rgba(27, 23, 28, 0.38)",
+      "borderColor": "rgba(28, 24, 28, 0.38)",
       "borderRadius": 1000,
       "borderWidth": 2,
       "height": 20,
@@ -22,7 +22,7 @@ exports[`snapshot for not selected radio button 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "borderColor": "#49454F",
+      "borderColor": "#4D4752",
       "borderRadius": 1000,
       "borderWidth": 2,
       "height": 20,
@@ -39,7 +39,7 @@ exports[`snapshot for selected radio button 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "borderColor": "#6750A4",
+      "borderColor": "#4F2AA2",
       "borderRadius": 1000,
       "borderWidth": 2,
       "height": 20,
@@ -52,7 +52,7 @@ exports[`snapshot for selected radio button 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "#6750A4",
+        "backgroundColor": "#4F2AA2",
         "borderRadius": 1000,
         "height": 10,
         "width": 10,

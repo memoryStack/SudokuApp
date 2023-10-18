@@ -23,7 +23,7 @@ exports[`snapshot for filled button in disabled state 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "rgba(27, 23, 28, 0.12)",
+      "backgroundColor": "rgba(28, 24, 28, 0.12)",
       "borderRadius": 20,
       "display": "flex",
       "height": 40,
@@ -38,7 +38,7 @@ exports[`snapshot for filled button in disabled state 1`] = `
   <Text
     style={
       Object {
-        "color": "rgba(27, 23, 28, 0.38)",
+        "color": "rgba(28, 24, 28, 0.38)",
         "fontFamily": "OpenSans-Medium",
         "fontSize": 16,
         "fontWeight": "500",
@@ -78,7 +78,7 @@ exports[`snapshot for filled button in enabled state 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "rgba(103, 80, 164, 1)",
+      "backgroundColor": "rgba(79, 42, 162, 1)",
       "borderRadius": 20,
       "display": "flex",
       "height": 40,
@@ -155,7 +155,7 @@ exports[`snapshot for text button in disabled state 1`] = `
   <Text
     style={
       Object {
-        "color": "rgba(27, 23, 28, 0.38)",
+        "color": "rgba(28, 24, 28, 0.38)",
         "fontFamily": "OpenSans-Medium",
         "fontSize": 16,
         "fontWeight": "500",
@@ -217,7 +217,7 @@ exports[`snapshot for text button in enabled state 1`] = `
   <Text
     style={
       Object {
-        "color": "rgba(103, 80, 164, 1)",
+        "color": "rgba(79, 42, 162, 1)",
         "fontFamily": "OpenSans-Medium",
         "fontSize": 16,
         "fontWeight": "500",
@@ -257,7 +257,7 @@ exports[`snapshot for tonal button in disabled state 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "rgba(27, 23, 28, 0.12)",
+      "backgroundColor": "rgba(28, 24, 28, 0.12)",
       "borderRadius": 20,
       "display": "flex",
       "height": 40,
@@ -272,7 +272,7 @@ exports[`snapshot for tonal button in disabled state 1`] = `
   <Text
     style={
       Object {
-        "color": "rgba(27, 23, 28, 0.38)",
+        "color": "rgba(28, 24, 28, 0.38)",
         "fontFamily": "OpenSans-Medium",
         "fontSize": 16,
         "fontWeight": "500",
@@ -312,7 +312,7 @@ exports[`snapshot for tonal button in enabled state 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "rgba(232, 222, 248, 1)",
+      "backgroundColor": "rgba(228, 225, 234, 1)",
       "borderRadius": 20,
       "display": "flex",
       "height": 40,
@@ -327,7 +327,7 @@ exports[`snapshot for tonal button in enabled state 1`] = `
   <Text
     style={
       Object {
-        "color": "rgba(29, 25, 43, 1)",
+        "color": "rgba(24, 21, 30, 1)",
         "fontFamily": "OpenSans-Medium",
         "fontSize": 16,
         "fontWeight": "500",
