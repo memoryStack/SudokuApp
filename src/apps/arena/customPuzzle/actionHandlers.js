@@ -7,6 +7,7 @@ import {
     areMultipleMainNumbersInAnyHouseOfCell,
     getPuzzleSolutionType,
 } from '../utils/util'
+
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
 import { CELLS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
@@ -166,7 +167,9 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
 
 const handleEraseClick = ({ setState, getState }) => {
     const { selectedCell, mainNumbers } = getState()
+    const cellInputValue = mainNumbers[selectedCell.row][selectedCell.col].value
     mainNumbers[selectedCell.row][selectedCell.col].value = 0
+    updateWronglyPlacedNumbersStatusInHouses(cellInputValue, selectedCell, mainNumbers)
     setState({ mainNumbers: [...mainNumbers] })
 }
 

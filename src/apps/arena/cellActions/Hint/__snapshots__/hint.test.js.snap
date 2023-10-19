@@ -72,7 +72,7 @@ exports[`snapshot for disabled Hint 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "#CC5D00",
+        "backgroundColor": "#AF251D",
         "borderRadius": 1000,
         "color": "#FFFFFF",
         "display": "flex",
@@ -190,7 +190,7 @@ exports[`snapshot for enabled Hint 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "#CC5D00",
+        "backgroundColor": "#AF251D",
         "borderRadius": 1000,
         "color": "#FFFFFF",
         "display": "flex",

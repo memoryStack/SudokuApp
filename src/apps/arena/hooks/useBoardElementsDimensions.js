@@ -35,10 +35,11 @@ const getCellWidth = windowWidth => {
 const getAllBordersTotalSpace = () => {
     const thickBordersSpace = THICK_BORDER_COUNT * STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH
     const thinBordersSpace = THIN_BORDER_COUNT * STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH
-    return roundToNearestPixel(thickBordersSpace + thinBordersSpace)
+    const boardBorderWidth = 2 * STATIC_BOARD_ELEMENTS_DIMENSIONS.BOARD_BORDER_WIDTH
+    return roundToNearestPixel(thickBordersSpace + thinBordersSpace + boardBorderWidth)
 }
 
 const getBoardGridWidth = windowWidth => {
-    const boardWidth = windowWidth * BOARD_TO_WINDOW_WIDTH_RATIO
+    const boardWidth = roundToNearestPixel(windowWidth * BOARD_TO_WINDOW_WIDTH_RATIO)
     return boardWidth - STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH
 }

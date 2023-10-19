@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { View } from 'react-native'
 
@@ -12,6 +12,7 @@ import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import { Touchable } from '../../../components/Touchable'
 
 import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensions'
@@ -44,7 +45,7 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
-    const styles = useMemo(() => getStyles(CELL_HEIGHT), [CELL_HEIGHT])
+    const styles = useStyles(getStyles)
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
@@ -52,7 +53,12 @@ const Cell_ = ({
         if (showSmartHint) {
             return _get(smartHintData, ['notesToHighlightData', noteValue, 'fontColor'], null)
         }
-        return __DEV__ && noteValue === selectedMainNumber ? 'red' : ''
+        return null
+    }
+
+    const getNoteBackgroundColor = ({ noteValue, show } = {}) => {
+        if (!showSmartHint && show && noteValue === selectedMainNumber) return styles.selectedMainNumberNoteContainer
+        return null
     }
 
     const getCellNotes = () => {
@@ -68,12 +74,13 @@ const Cell_ = ({
                     <View
                         key={`${noteNum}`}
                         ref={notesRefs[noteNum]}
-                        style={styles.noteContainer}
+                        style={[styles.noteContainer, getNoteBackgroundColor(cellNotes[noteNum])]}
                         collapsable={false}
                     >
                         <Text
                             style={[
                                 styles.noteText,
+                                { fontWeight: FONT_WEIGHTS.REGULAR },
                                 noteFontColor ? { color: noteFontColor, fontWeight: FONT_WEIGHTS.MEDIUM } : null,
                             ]}
                             testID={CELL_NOTE_TEST_ID}

@@ -12,7 +12,7 @@ export const NUMBERS_IN_HOUSE = 9
 export const HOUSES_COUNT = 9
 export const BOARD_TO_WINDOW_WIDTH_RATIO = 0.94
 export const THICK_BORDER_COUNT = 2
-export const THIN_BORDER_COUNT = 8
+export const THIN_BORDER_COUNT = 6
 export const BLOCKS_COUNT_IN_ROW = 3
 
 export enum GRID_TRAVERSALS {
@@ -25,6 +25,7 @@ export const STATIC_BOARD_ELEMENTS_DIMENSIONS = {
     THICK_BORDER_WIDTH: roundToNearestPixel(3),
     THIN_BORDER_WIDTH: roundToNearestPixel(1),
     AXIS_WIDTH: roundToNearestPixel(20),
+    BOARD_BORDER_WIDTH: roundToNearestPixel(1),
 }
 
 export const DEEPLINK_PUZZLE_URL_ERRORS = {

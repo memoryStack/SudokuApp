@@ -7,17 +7,20 @@ import PropTypes from 'prop-types'
 import { useNavigation } from '@react-navigation/native'
 
 import _noop from '@lodash/noop'
+import _get from '@lodash/get'
 
 import { consoleLog } from '@utils/util'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useStyles } from '@utils/customHooks/useStyles'
 import { Platform } from '../../utils/classes/platform'
 import { AppState } from '../../utils/classes/appState'
 import { EVENTS } from '../../constants/events'
 
-const styles = StyleSheet.create({
+const getStyles = (_, theme) => StyleSheet.create({
     safeAreaView: {
         flex: 1,
         width: '100%',
+        backgroundColor: _get(theme, ['colors', 'surface']),
     },
 })
 
@@ -36,6 +39,8 @@ const Page_ = ({
     const insets = useSafeAreaInsets()
 
     const [isPageInFocus, setIsPageInFocus] = useState(AppState.currentState() === 'active')
+
+    const styles = useStyles(getStyles)
 
     const handleFocus = useCallback(() => {
         if (isPageInFocus) return

@@ -26,7 +26,6 @@ import {
     BOARD_AXES_VALUES,
     BOARD_GRID_BORDERS_DIRECTION,
     BoardGridBorderDirectionValue,
-    CELLS_IN_HOUSE,
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
 } from '../constants'
 
@@ -40,10 +39,11 @@ import { BoardIterators } from '../utils/classes/boardIterators'
 
 const looper: number[] = []
 const bordersLooper: number[] = []
-for (let i = 0; i < 10; i++) {
-    if (i < CELLS_IN_HOUSE) looper.push(i)
-    bordersLooper.push(i) // 10 borders will be drawn
-}
+
+for (let i = 0; i < 9; i++) { looper.push(i) }
+
+// 8 borders will be drawn
+for (let i = 0; i < 8; i++) { bordersLooper.push(i) }
 
 type NotesRefs = Array<Array<Array<React.RefObject<unknown>>>>
 
@@ -106,8 +106,7 @@ const Board_: React.FC<Props> = ({
 
     const getCustomPuzzleMainNumFontColor = (cell: Cell) => {
         const isWronglyPlaced = (mainNumbers as CustomPuzzleMainNumbers)[cell.row][cell.col].wronglyPlaced
-        if (isWronglyPlaced) return styles.wronglyFilledNumColor
-        // consider any other number as clue
+        if (isWronglyPlaced) return styles.customPuzzleWronglyFilledNumColor
         return styles.clueNumColor
     }
 
@@ -134,14 +133,16 @@ const Board_: React.FC<Props> = ({
 
     const getCustomPuzzleBoardCellBgColor = (cell: Cell) => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
-        if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
+        if (hasSameValueInSameHouseAsSelectedCell(cell)) { return styles.sameHouseSameValueBGColor }
+
         return null
     }
 
     const getActiveGameBoardCellBgCell = (cell: Cell) => {
+        if (MainNumbersRecord.isCellFilled(mainNumbers, cell) && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
+            return styles.sameHouseSameValueBGColor
+        }
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
-        if (hasSameValueInSameHouseAsSelectedCell(cell)) return styles.sameHouseSameValueBGColor
-
         if (areCommonHouseCells(cell, selectedCell)) return styles.sameHouseCellBGColor
         if (sameValueAsSelectedBox(cell)) return styles.diffHouseSameValueBGColor
         return styles.defaultCellBGColor
@@ -161,25 +162,18 @@ const Board_: React.FC<Props> = ({
 
     // TODO: decide over these partial types for Cell.row and Cell.col
     const renderRow = (row: number, key: string) => {
-        const rowAdditionalStyles = {
-            marginTop:
-                row === 3 || row === 6
-                    ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH
-                    : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
-            marginBottom: row === 8 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH : 0,
+        const getSpacingDueToBorders = (rowOrColNum: number) => {
+            if (rowOrColNum === 0) return 0
+            if (rowOrColNum === 3 || rowOrColNum === 6) return STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH
+            return STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH
         }
 
+        const rowAdditionalStyles = { marginTop: getSpacingDueToBorders(row) }
         return (
             <View style={[styles.rowStyle, rowAdditionalStyles]} key={key}>
                 {looper.map((col, index) => {
                     const cell = { row, col }
-                    const cellAdditionalStyles = {
-                        marginLeft:
-                            col === 3 || col === 6
-                                ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH
-                                : STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
-                        marginRight: col === 8 ? STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH : 0,
-                    }
+                    const cellAdditionalStyles = { marginLeft: getSpacingDueToBorders(col) }
 
                     return (
                     // eslint-disable-next-line react/no-array-index-key
@@ -219,9 +213,11 @@ const Board_: React.FC<Props> = ({
         return (
             <View style={[styles.gridBorderContainer, orientationBasedStyles]} pointerEvents="none">
                 {bordersLooper.map(borderNum => {
-                    const boldBorder = borderNum === 3 || borderNum === 6
+                    const boldBorder = borderNum === 2 || borderNum === 5
                     const borderViewStyle = boldBorder ? thickBorderStyle : normalBorderStyle
-                    return <View key={`${orientation}_${borderNum}`} style={borderViewStyle} />
+                    const borderColor = styles.lightGridBorder
+
+                    return <View key={`${orientation}_${borderNum}`} style={[borderViewStyle, borderColor]} />
                 })}
             </View>
         )

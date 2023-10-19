@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
+import _get from '@lodash/get'
 
-export const getStyles = CELL_HEIGHT => StyleSheet.create({
+export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
     cell: {
         flex: 1,
     },
@@ -19,5 +20,8 @@ export const getStyles = CELL_HEIGHT => StyleSheet.create({
     noteText: {
         color: 'rgba(0, 0, 0, .8)',
         fontSize: CELL_HEIGHT * 0.3,
+    },
+    selectedMainNumberNoteContainer: {
+        backgroundColor: _get(theme, ['colors', 'primary-container']),
     },
 })

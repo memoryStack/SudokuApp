@@ -10,7 +10,7 @@ module.exports = {
             value: '{colors.primary.100}',
         },
         'on-primary-container': {
-            value: '{colors.primary.90}',
+            value: '{colors.primary.10}',
         },
         'inverse-primary': {
             value: '{colors.primary.80}',
@@ -106,7 +106,7 @@ module.exports = {
             value: '{colors.error.100}',
         },
         'error-container': {
-            value: '{colors.error.90}',
+            value: '{colors.error.80}',
         },
         'on-error-container': {
             value: '{colors.error.10}',

@@ -1,13 +1,15 @@
 import { StyleSheet } from 'react-native'
 
+import _get from '@lodash/get'
+
 import { hexToRGBA } from '../../utils/util'
 
-export const getStyles = ({ CELL_WIDTH }) => StyleSheet.create({
+export const getStyles = ({ CELL_WIDTH }, theme) => StyleSheet.create({
     container: {
         alignItems: 'center',
         height: '100%',
         width: '100%',
-        backgroundColor: 'white',
+        backgroundColor: _get(theme, ['colors', 'surface']),
     },
     startGameButtonContainer: {
         marginTop: '20%',

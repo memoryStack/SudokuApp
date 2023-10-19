@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
     page: {
         display: 'flex',
-        backgroundColor: 'white',
     },
     contentContainer: {
         flex: 1,

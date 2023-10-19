@@ -8,39 +8,42 @@ import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
 
 // TODO: think of a better color scheme mechanism
-const COLOR_SCHEME_STYLES = {
+const COLOR_SCHEME_STYLES = theme => ({
     thickBorder: {
         backgroundColor: 'black',
     },
     selectedCellBGColor: {
         backgroundColor: 'rgb(255, 245, 187)',
     },
+    // TODO: change it's naming and differentiate between custom puzzle and on going game
     sameHouseSameValueBGColor: {
-        backgroundColor: 'rgb(245, 198, 210)',
+        backgroundColor: _get(theme, ['colors', 'error-container']),
     },
     sameHouseCellBGColor: {
-        backgroundColor: '#d5e5f6',
+        backgroundColor: _get(theme, ['colors', 'surface-container-high']),
     },
     diffHouseSameValueBGColor: {
-        backgroundColor: 'rgb(172, 225, 248)',
+        backgroundColor: _get(theme, ['colors', 'primary-container']),
     },
     smartHintOutOfFocusBGColor: {
         backgroundColor: HC_OVERLAY_BG_COLOR,
-        // backgroundColor: 'rgba(0, 0, 0, .2)',
     },
     defaultCellBGColor: {
         backgroundColor: 'white',
     },
     wronglyFilledNumColor: {
-        color: 'rgb(167, 51, 37)',
+        color: _get(theme, ['colors', 'on-error-container']),
+    },
+    customPuzzleWronglyFilledNumColor: {
+        color: _get(theme, ['colors', 'error']),
     },
     userFilledNumColor: {
-        color: 'rgb(49, 90, 163)',
+        color: _get(theme, ['colors', 'primary']),
     },
     clueNumColor: {
         color: 'rgb(12, 25, 22)',
     },
-}
+})
 
 export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, theme) => StyleSheet.create({
     board: {
@@ -48,39 +51,45 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
         height: BOARD_GRID_HEIGHT,
         width: BOARD_GRID_WIDTH,
         backgroundColor: 'white',
+        borderWidth: STATIC_BOARD_ELEMENTS_DIMENSIONS.BOARD_BORDER_WIDTH,
+        borderColor: _get(theme, ['colors', 'outline']),
     },
     boardAndYAxisContainer: {
         flexDirection: 'row',
     },
     gridBorderContainer: {
+        display: 'flex',
         position: 'absolute',
-        height: BOARD_GRID_HEIGHT,
-        width: BOARD_GRID_WIDTH,
-        justifyContent: 'space-between',
+        height: '100%',
+        width: '100%',
+        justifyContent: 'space-evenly',
         zIndex: 1,
     },
     verticalBars: {
-        height: BOARD_GRID_HEIGHT,
+        height: '100%',
         width: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
     horizontalBars: {
-        width: BOARD_GRID_WIDTH,
+        width: '100%',
         height: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
         backgroundColor: 'rgba(0, 0, 0, .8)',
+    },
+    lightGridBorder: {
+        backgroundColor: _get(theme, ['colors', 'outline-variant']),
     },
     rowStyle: {
         display: 'flex',
         flexDirection: 'row',
         height: CELL_WIDTH,
-        width: BOARD_GRID_WIDTH,
+        width: '100%',
         backgroundColor: 'white',
     },
     cellContainer: {
         width: CELL_WIDTH,
         height: CELL_WIDTH,
     },
-    ...COLOR_SCHEME_STYLES,
+    ...COLOR_SCHEME_STYLES(theme),
     tryOutInputColor: {
         color: smartHintColorSystemReader.tryOutFilledNumberColor(_get(theme, 'colors.smartHints')),
     },

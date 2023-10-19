@@ -1,27 +1,27 @@
-// const Color = require('color')
+const Color = require('color')
 
-// // we will make out palettes using this algorithm
-// // take hue and chroma from themebuilder (https://m3.material.io/theme-builder#/custom)
-// // and just change the lightness as per the variant is required
+// we will make out palettes using this algorithm
+// take hue and chroma from themebuilder (https://m3.material.io/theme-builder#/custom)
+// and just change the lightness as per the variant is required
 
-// const lightnessList = [10, 20, 30, 40, 50, 60, 70, 80, 87, 90, 92, 94, 95, 96, 98, 99]
+const lightnessList = [10, 20, 30, 40, 50, 60, 70, 80, 87, 90, 92, 94, 95, 96, 98, 99]
 
-// const colorHSL = Color('#666666').hsl()
+const colorHSL = Color('#B3261E').hsl()
 
-// const result = {}
+const result = {}
 
-// lightnessList.forEach(lightnessVale => {
-//     const color = Color({
-//         h: colorHSL.color[0],
-//         s: colorHSL.color[1],
-//         l: lightnessVale,
-//     })
-//     result[lightnessVale] = {
-//         value: color.hex(),
-//         isCore: true,
-//     }
-// })
-// console.log(result)
+lightnessList.forEach(lightnessVale => {
+    const color = Color({
+        h: colorHSL.color[0],
+        s: colorHSL.color[1],
+        l: lightnessVale,
+    })
+    result[lightnessVale] = {
+        value: color.hex(),
+        isCore: true,
+    }
+})
+console.log(result)
 
 module.exports = {
     colors: {
@@ -129,22 +129,22 @@ module.exports = {
         },
         error: {
             0: { value: '{colors.black}', isCore: true },
-            10: { value: '#331700', isCore: true },
-            20: { value: '#662F00', isCore: true },
-            30: { value: '#994600', isCore: true },
-            40: { value: '#CC5D00', isCore: true },
-            50: { value: '#FF7400', isCore: true },
-            60: { value: '#FF9033', isCore: true },
-            70: { value: '#FFAC66', isCore: true },
-            80: { value: '#FFC899', isCore: true },
-            87: { value: '#FFDBBD', isCore: true },
-            90: { value: '#FFE3CC', isCore: true },
-            92: { value: '#FFE9D6', isCore: true },
-            94: { value: '#FFEEE0', isCore: true },
-            95: { value: '#FFF1E5', isCore: true },
-            96: { value: '#FFF4EB', isCore: true },
-            98: { value: '#FFF9F5', isCore: true },
-            99: { value: '#FFFCFA', isCore: true },
+            10: { value: '#2C0907', isCore: true },
+            20: { value: '#57130F', isCore: true },
+            30: { value: '#831C16', isCore: true },
+            40: { value: '#AF251D', isCore: true },
+            50: { value: '#DA2E25', isCore: true },
+            60: { value: '#E25850', isCore: true },
+            70: { value: '#E9827C', isCore: true },
+            80: { value: '#F0ACA8', isCore: true },
+            87: { value: '#F5C9C6', isCore: true },
+            90: { value: '#F8D5D3', isCore: true },
+            92: { value: '#F9DEDC', isCore: true },
+            94: { value: '#FBE6E5', isCore: true },
+            95: { value: '#FBEAE9', isCore: true },
+            96: { value: '#FCEEEE', isCore: true },
+            98: { value: '#FEF7F6', isCore: true },
+            99: { value: '#FEFBFB', isCore: true },
             100: { value: '{colors.white}', isCore: true },
         },
     },
