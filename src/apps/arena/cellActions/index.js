@@ -10,6 +10,7 @@ import _noop from '@lodash/noop'
 
 import { PENCIL_STATE } from '@resources/constants'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import withActions from '../../../utils/hocs/withActions'
 
 import { getAvailableHintsCount, getPencilStatus } from '../store/selectors/boardController.selectors'
@@ -24,9 +25,11 @@ import FastPencil from './FastPencil'
 import Hint from './Hint'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './cellActions.constants'
-import { styles } from './cellActions.styles'
+import { getStyles } from './cellActions.styles'
 
 const BoardController_ = ({ onAction, refFromParent }) => {
+    const styles = useStyles(getStyles)
+
     const pencilState = useSelector(getPencilStatus)
     const hints = useSelector(getAvailableHintsCount)
 

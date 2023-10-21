@@ -10,6 +10,7 @@ import _noop from '@lodash/noop'
 import _prependZero from '@lodash/prependZero'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+import { useStyles } from '@utils/customHooks/useStyles'
 import { Touchable } from '../../components/Touchable'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
@@ -18,10 +19,12 @@ import { GameState } from '../utils/classes/gameState'
 
 import { TIMER_TEST_ID, TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID } from './timer.constants'
 
-import { styles } from './timer.styles'
+import { getStyles } from './timer.styles'
 
 const Timer_ = ({ onClick, time }) => {
     const gameState = useSelector(getGameState)
+
+    const styles = useStyles(getStyles)
 
     const getStartTimerIcon = () => <View style={styles.triangleShape} testID={TIMER_START_ICON_TEST_ID} />
 
@@ -44,9 +47,9 @@ const Timer_ = ({ onClick, time }) => {
             addHitSlop
             testID={TIMER_TEST_ID}
         >
-            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.hours)}:`}</Text>
-            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.minutes)}:`}</Text>
-            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.seconds)}`}</Text>
+            <Text style={styles.timerText} type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.hours)}:`}</Text>
+            <Text style={styles.timerText} type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.minutes)}:`}</Text>
+            <Text style={styles.timerText} type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.seconds)}`}</Text>
             {renderTimerStateIcon()}
         </Touchable>
     )

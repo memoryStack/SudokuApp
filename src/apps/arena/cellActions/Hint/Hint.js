@@ -9,9 +9,10 @@ import { HintIcon } from '@resources/svgIcons/hint'
 import Badge from '@ui/atoms/Badge'
 import Text from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import { Touchable } from '../../../components/Touchable'
 
-import { styles, INACTIVE_ICON_FILL } from '../cellActions.styles'
+import { getStyles } from '../cellActions.styles'
 
 // TODO: i should make it as a part of settings so that users can change it according to their confidence level
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their
@@ -20,6 +21,8 @@ import { styles, INACTIVE_ICON_FILL } from '../cellActions.styles'
 const Hint = ({
     iconBoxSize, hints, onClick, disabled, ...rest
 }) => {
+    const styles = useStyles(getStyles)
+
     const renderHintsCount = () => {
         if (disabled) return null
         return <Badge label={hints} />
@@ -27,7 +30,7 @@ const Hint = ({
 
     const renderIcon = () => (
         <>
-            <HintIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
+            <HintIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
             {renderHintsCount()}
         </>
     )

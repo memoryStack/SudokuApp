@@ -226,7 +226,7 @@ const Board_: React.FC<Props> = ({
     const renderAxisText = (label: string) => (
         <Text
             key={label}
-            style={[showSmartHint ? styles.smartHintAxisText : null, axisTextStyles]}
+            style={[styles.axisText, showSmartHint ? styles.smartHintAxisText : null, axisTextStyles]}
             type={TEXT_VARIATIONS.BODY_MEDIUM}
         >
             {label}
@@ -260,11 +260,12 @@ const Board_: React.FC<Props> = ({
 
     return (
         <>
-            {xAxis}
+
             <View style={styles.boardAndYAxisContainer}>
                 {yAxis}
                 {renderBoard()}
             </View>
+            {xAxis}
         </>
     )
 }

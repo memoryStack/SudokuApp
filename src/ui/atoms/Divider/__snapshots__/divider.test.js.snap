@@ -5,7 +5,7 @@ exports[`snapshot for horizontal divider 1`] = `
   style={
     Array [
       Object {
-        "backgroundColor": "#CCC8D0",
+        "backgroundColor": "#c6c5d0",
         "height": 1,
         "width": "100%",
       },
@@ -21,7 +21,7 @@ exports[`snapshot for vertical divider 1`] = `
   style={
     Array [
       Object {
-        "backgroundColor": "#CCC8D0",
+        "backgroundColor": "#c6c5d0",
         "height": "100%",
         "width": 1,
       },

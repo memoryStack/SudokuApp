@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import get from '@lodash/get'
+
+export const getStyles = (_, theme) => StyleSheet.create({
     container: {
         maxHeight: 500,
     },
@@ -21,5 +23,6 @@ export const styles = StyleSheet.create({
     },
     languageLable: {
         marginLeft: 16,
+        color: get(theme, ['colors', 'on-surface']),
     },
 })

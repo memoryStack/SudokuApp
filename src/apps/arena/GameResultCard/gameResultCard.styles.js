@@ -1,14 +1,18 @@
 import { StyleSheet } from 'react-native'
 
 import { FONT_WEIGHTS } from '@resources/fonts/font'
+import get from '@lodash/get'
 
-export const styles = StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     container: {
         padding: 20,
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: get(theme, ['colors', 'surface-container-low']),
         borderRadius: 8,
         width: '70%',
+    },
+    textColor: {
+        color: get(theme, ['colors', 'on-surface']),
     },
     congratsText: {
         marginVertical: 8,

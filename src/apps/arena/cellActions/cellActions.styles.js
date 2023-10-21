@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native'
 
-export const INACTIVE_ICON_FILL = 'rgb(127, 127, 127)'
-export const styles = StyleSheet.create({
+import get from '@lodash/get'
+
+export const getStyles = (_, theme) => StyleSheet.create({
     cellActionsContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -16,6 +17,12 @@ export const styles = StyleSheet.create({
     },
     actionText: {
         marginTop: 8,
-        color: INACTIVE_ICON_FILL, // to match the icon color and below text color
+        color: get(theme, ['colors', 'on-surface-variant-low']),
+    },
+    activeState: {
+        color: get(theme, ['colors', 'primary']),
+    },
+    inactiveState: {
+        color: get(theme, ['colors', 'on-surface-variant-low']),
     },
 })

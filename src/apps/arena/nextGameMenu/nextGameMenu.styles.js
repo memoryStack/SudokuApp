@@ -1,8 +1,10 @@
 import { StyleSheet } from 'react-native'
 
+import get from '@lodash/get'
+
 import { NEXT_GAME_MENU_ROW_HEIGHT } from './nextGameMenu.constants'
 
-export const styles = StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     nextGameMenuContainer: {
         width: '100%',
     },
@@ -16,5 +18,9 @@ export const styles = StyleSheet.create({
     },
     levelText: {
         marginLeft: 16,
+        color: get(theme, ['colors', 'on-surface']),
+    },
+    levelIcon: {
+        color: get(theme, ['colors', 'on-surface']),
     },
 })

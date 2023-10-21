@@ -72,6 +72,9 @@ module.exports = {
         'on-surface-variant': {
             value: '{colors.neutral-variant.30}',
         },
+        'on-surface-variant-low': {
+            value: '{colors.neutral-variant.50}',
+        },
         'inverse-surface': {
             value: '{colors.neutral.20}',
         },

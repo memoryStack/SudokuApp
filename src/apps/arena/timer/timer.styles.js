@@ -1,6 +1,7 @@
+import get from '@lodash/get'
 import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     triangleShape: {
         width: 0,
         height: 0,
@@ -8,7 +9,7 @@ export const styles = StyleSheet.create({
         marginLeft: 2,
         borderRightWidth: 0,
         borderLeftWidth: 8,
-        borderLeftColor: 'rgba(0, 0, 0, .5)',
+        borderLeftColor: get(theme, ['colors', 'on-surface-variant-low']),
         borderTopColor: 'transparent',
         borderBottomColor: 'transparent',
     },
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({
         display: 'flex',
         width: 3,
         height: 10,
-        backgroundColor: 'rgba(0, 0, 0, .5)',
+        backgroundColor: get(theme, ['colors', 'on-surface-variant-low']),
     },
     timeCounter: {
         display: 'flex',
@@ -27,6 +28,9 @@ export const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         width: '20%',
+    },
+    timerText: {
+        color: get(theme, ['colors', 'on-surface-variant-low']),
     },
     pauseTimerIconContainer: {
         display: 'flex',

@@ -59,7 +59,6 @@
         "@typescript-eslint/parser": "^6.7.4",
         "babel-jest": "^26.6.3",
         "babel-plugin-module-resolver": "^5.0.0",
-        "color": "^4.2.3",
         "eslint": "^8.31.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-typescript": "^17.1.0",

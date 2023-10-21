@@ -37,9 +37,7 @@ export const getStyles = (_, theme) => {
         subView: {
             position: 'absolute',
             width: '100%',
-            backgroundColor: 'white',
-            // TODO: use of below color needs some research
-            // backgroundColor: _get(theme, ['bottomSheet', 'container', 'color']),
+            backgroundColor: _get(theme, ['bottomSheet', 'container', 'color']),
             ..._get(theme, ['bottomSheet', 'container', 'layout', 'shape']),
         },
         clipStyle: {

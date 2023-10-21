@@ -10,7 +10,7 @@ import _map from '@lodash/map'
 import _isNil from '@lodash/isNil'
 import _isEmpty from '@lodash/isEmpty'
 
-import Text from '@ui/atoms/Text'
+import Text from '../../atoms/Text'
 import Button, { BUTTON_TYPES } from '../Button'
 
 import { getStyles } from './dialog.styles'

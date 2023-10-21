@@ -18,7 +18,7 @@ export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
         alignItems: 'center',
     },
     noteText: {
-        color: 'rgba(0, 0, 0, .8)',
+        color: _get(theme, ['colors', 'on-surface-variant']),
         fontSize: CELL_HEIGHT * 0.3,
     },
     selectedMainNumberNoteContainer: {

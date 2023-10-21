@@ -2,11 +2,16 @@ import React from 'react'
 
 import { View } from 'react-native'
 
+import PropTypes from 'prop-types'
+
 import _map from '@lodash/map'
 import _isFunction from '@lodash/isFunction'
+import get from '@lodash/get'
 
 import { LeftArrow } from '@resources/svgIcons/leftArrow'
 import { ShareIcon } from '@resources/svgIcons/share'
+
+import { useThemeValues } from '../../apps/arena/hooks/useTheme'
 import { Settings } from '../../apps/header/components/settings/settings'
 import { Touchable } from '../../apps/components/Touchable'
 
@@ -15,7 +20,6 @@ import { getHeaderRightItems, getHeaderLeftItems } from '../navigation.utils'
 import { getHeaderItemPress } from './headerItemsPressHandlers'
 import {
     ICON_DIMENSION,
-    ICON_FILL,
     HEADER_ITEM_VS_TEST_ID,
     HEADER_ITEMS,
 } from './headerSection.constants'
@@ -39,13 +43,15 @@ const renderIconBtn = ({
     </Touchable>
 )
 
-const renderHeaderItem = ({
+const HeaderItem = ({
     item, index, route, navigation,
 }) => {
+    const theme = useThemeValues()
+
     const commonProps = {
         width: ICON_DIMENSION,
         height: ICON_DIMENSION,
-        fill: ICON_FILL,
+        fill: get(theme, ['colors', 'on-surface-variant']),
         onPress: getHeaderItemPress({ item, route, navigation }),
     }
 
@@ -64,13 +70,25 @@ const renderHeaderItem = ({
     )
 }
 
+HeaderItem.propTypes = {
+    item: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
+    route: PropTypes.object.isRequired,
+    navigation: PropTypes.object.isRequired,
+}
+
 const renderHeaderSectionItems = ({
     containerStyle, items, navigation, route,
 }) => (
     <View style={containerStyle}>
-        {_map(items, (item, index) => renderHeaderItem({
-            item, index, route, navigation,
-        }))}
+        {_map(items, (item, index) => (
+            <HeaderItem
+                item={item}
+                index={index}
+                route={route}
+                navigation={navigation}
+            />
+        ))}
     </View>
 )
 

@@ -8,23 +8,25 @@ import { PencilIcon } from '@resources/svgIcons/pencil'
 
 import Text from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
+
 import { Touchable } from '../../../components/Touchable'
 
-import { styles, INACTIVE_ICON_FILL } from '../cellActions.styles'
-
-const ACTIVE_PENCIL_FILL = 'rgb(57, 91, 158)'
+import { getStyles } from '../cellActions.styles'
 
 const Pencil = ({
     iconBoxSize, isActive, onClick, ...rest
-}) => (
-    <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
-        <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL} />
-        <Text style={[styles.actionText, { color: isActive ? ACTIVE_PENCIL_FILL : INACTIVE_ICON_FILL }]}>
-            Pencil
-        </Text>
-    </Touchable>
-)
-
+}) => {
+    const styles = useStyles(getStyles)
+    return (
+        <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
+            <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? styles.activeState.color : styles.inactiveState.color} />
+            <Text style={[styles.actionText, isActive ? styles.activeState : styles.inactiveState]}>
+                Pencil
+            </Text>
+        </Touchable>
+    )
+}
 export default React.memo(Pencil)
 
 Pencil.propTypes = {

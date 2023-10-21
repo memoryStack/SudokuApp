@@ -5,7 +5,7 @@ exports[`snapshot for large badge 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "#AF251D",
+      "backgroundColor": "#b81f1e",
       "borderRadius": 1000,
       "color": "#FFFFFF",
       "display": "flex",
@@ -37,7 +37,7 @@ exports[`snapshot for small badge 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "#AF251D",
+      "backgroundColor": "#b81f1e",
       "borderRadius": 1000,
       "display": "flex",
       "fontFamily": "OpenSans",

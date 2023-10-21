@@ -8,17 +8,20 @@ import { UndoIcon } from '@resources/svgIcons/undo'
 
 import Text from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import { Touchable } from '../../../components/Touchable'
 
-import { styles, INACTIVE_ICON_FILL } from '../cellActions.styles'
+import { getStyles } from '../cellActions.styles'
 
-const Undo = ({ iconBoxSize, onClick, ...rest }) => (
-    <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
-        <UndoIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-        <Text style={styles.actionText}>Undo</Text>
-    </Touchable>
-)
-
+const Undo = ({ iconBoxSize, onClick, ...rest }) => {
+    const styles = useStyles(getStyles)
+    return (
+        <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
+            <UndoIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
+            <Text style={styles.actionText}>Undo</Text>
+        </Touchable>
+    )
+}
 export default React.memo(Undo)
 
 Undo.propTypes = {

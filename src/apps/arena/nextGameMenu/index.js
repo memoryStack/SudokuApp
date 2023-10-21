@@ -18,6 +18,7 @@ import Text from '@ui/atoms/Text'
 
 import { consoleLog } from '@utils/util'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import { useScreenName } from '../../../utils/customHooks'
 
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
@@ -30,7 +31,7 @@ import {
     NEXT_GAME_MENU_TEST_ID,
 } from './nextGameMenu.constants'
 
-import { styles } from './nextGameMenu.styles'
+import { getStyles } from './nextGameMenu.styles'
 
 const getBarPath = barNum => [
     'M', 75 + 100 * barNum, '450',
@@ -42,6 +43,8 @@ const getBarPath = barNum => [
 
 // TODO: find a good icon for this resume option
 const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
+    const styles = useStyles(getStyles)
+
     const screenName = useScreenName()
 
     const isHomeScreen = screenName === SCREEN_NAME.HOME
@@ -63,8 +66,8 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
     }, [isHomeScreen])
 
     const getBarStrokeAndFillProps = (barNum, difficultyLevelIndex) => ({
-        stroke: barNum <= difficultyLevelIndex ? 'rgba(0, 0, 0, .5)' : 'black',
-        fill: barNum <= difficultyLevelIndex ? 'black' : 'none',
+        stroke: styles.levelIcon.color,
+        fill: barNum <= difficultyLevelIndex ? styles.levelIcon.color : 'none',
     })
 
     const getBar = (barNum, level) => (
@@ -117,7 +120,7 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                 style={styles.levelContainer}
                 onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
             >
-                <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
+                <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} fill={styles.levelIcon.color} />
                 <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
             </Touchable>
             {isHomeScreen && pendingGame.available ? (
@@ -126,7 +129,7 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
                     style={styles.levelContainer}
                     onPress={() => nextGameMenuItemClicked(RESUME)}
                 >
-                    <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} />
+                    <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} fill={styles.levelIcon.color} />
                     <Text style={styles.levelText}>{RESUME}</Text>
                 </Touchable>
             ) : null}

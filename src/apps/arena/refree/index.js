@@ -10,6 +10,8 @@ import _noop from '@lodash/noop'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
+import get from '@lodash/get'
 import withActions from '../../../utils/hocs/withActions'
 
 import { useCacheGameState } from '../hooks/useCacheGameState'
@@ -25,18 +27,23 @@ import { GameState } from '../utils/classes/gameState'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { MISTAKES_TEXT_TEST_ID } from './refree.constants'
 
-const styles = StyleSheet.create({
+const getStyles = (_, theme) => StyleSheet.create({
     refereeContainer: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '94%',
-        marginBottom: 4,
+        marginBottom: 8,
+    },
+    textColor: {
+        color: get(theme, ['colors', 'on-surface-variant-low']),
     },
 })
 
 const Refree_ = ({ onAction }) => {
+    const styles = useStyles(getStyles)
+
     const maxMistakesLimit = useSelector(getMaxMistakesLimit)
     const mistakes = useSelector(getMistakes)
     const difficultyLevel = useSelector(getDifficultyLevel)
@@ -70,10 +77,10 @@ const Refree_ = ({ onAction }) => {
 
     return (
         <View style={styles.refereeContainer}>
-            <Text testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
-                {`Mistakes: ${mistakes} / ${maxMistakesLimit}`}
+            <Text style={styles.textColor} testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
+                {`Mistakes: ${mistakes}/${maxMistakesLimit}`}
             </Text>
-            <Text type={TEXT_VARIATIONS.BODY_MEDIUM}>{difficultyLevel}</Text>
+            <Text style={styles.textColor} type={TEXT_VARIATIONS.BODY_MEDIUM}>{difficultyLevel}</Text>
             <Timer time={time} onClick={onTimerClick} />
         </View>
     )

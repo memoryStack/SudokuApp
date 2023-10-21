@@ -14,19 +14,20 @@ import { NEW_GAME } from '@resources/stringLiterals'
 import Button from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import { GameState } from '../utils/classes/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { GAME_OVER_CARD_TEST_ID } from './gameResultCard.constants'
-import { styles } from './gameResultCard.styles'
+import { getStyles } from './gameResultCard.styles'
 
-const getTimeView = (timeTaken = {}) => {
-    const { hours = 0, minutes = 0, seconds = 0 } = timeTaken
+const getTimeView = (time, styles) => {
+    const { hours = 0, minutes = 0, seconds = 0 } = time || {}
     return (
         <View style={styles.timeStatContainer}>
-            {hours ? <Text>{hours}</Text> : null}
-            <Text>{`${_prependZero(minutes)}:`}</Text>
-            <Text>{_prependZero(seconds)}</Text>
+            {hours ? <Text style={styles.textColor}>{hours}</Text> : null}
+            <Text style={styles.textColor}>{`${_prependZero(minutes)}:`}</Text>
+            <Text style={styles.textColor}>{_prependZero(seconds)}</Text>
         </View>
     )
 }
@@ -35,6 +36,8 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
     const {
         mistakes, difficultyLevel, time, hintsUsed,
     } = stats
+
+    const styles = useStyles(getStyles)
 
     const gameState = useSelector(getGameState)
 
@@ -48,23 +51,25 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
                     like "m"(web) and "M"(App) for drawings
                 */}
                 {/* <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} /> */}
-                <Text style={styles.congratsText} type={TEXT_VARIATIONS.HEADING_SMALL}>Congratulations!</Text>
+                <Text style={[styles.congratsText, styles.textColor]} type={TEXT_VARIATIONS.HEADING_SMALL}>
+                    Congratulations!
+                </Text>
                 <View style={styles.statsContainer}>
                     <View style={styles.statContainer}>
-                        <Text>Difficulty</Text>
-                        <Text>{difficultyLevel}</Text>
+                        <Text style={styles.textColor}>Difficulty</Text>
+                        <Text style={styles.textColor}>{difficultyLevel}</Text>
                     </View>
                     <View style={styles.statContainer}>
-                        <Text>Time</Text>
-                        {getTimeView(time)}
+                        <Text style={styles.textColor}>Time</Text>
+                        {getTimeView(time, styles)}
                     </View>
                     <View style={styles.statContainer}>
-                        <Text>Mistakes</Text>
-                        <Text>{mistakes}</Text>
+                        <Text style={styles.textColor}>Mistakes</Text>
+                        <Text style={styles.textColor}>{mistakes}</Text>
                     </View>
                     <View style={styles.statContainer}>
-                        <Text>Hints Used</Text>
-                        <Text>{hintsUsed}</Text>
+                        <Text style={styles.textColor}>Hints Used</Text>
+                        <Text style={styles.textColor}>{hintsUsed}</Text>
                     </View>
                 </View>
             </>
@@ -74,8 +79,8 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
     const getGameUnsolvedView = () => {
         if (!new GameState(gameState).isGameUnsolved()) return null
         return (
-            <Text style={styles.gameUnsolvedMsg}>
-                {'you have reached the maximum mistakes limit\nGood Luck Next Time'}
+            <Text style={[styles.gameUnsolvedMsg, styles.textColor]}>
+                You have reached the maximum mistakes limit. Better Luck Next Time
             </Text>
         )
     }

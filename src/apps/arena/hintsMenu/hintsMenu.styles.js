@@ -1,7 +1,10 @@
 import { StyleSheet } from 'react-native'
 
+import _get from '@lodash/get'
+import { hexToRGBA } from '@utils/util'
+
 const BORDER_THICKNESS = 2
-export const styles = StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     overlayContainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -10,7 +13,8 @@ export const styles = StyleSheet.create({
         right: 0,
         left: 0,
         position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        // TODO: think over it
+        backgroundColor: hexToRGBA(_get(theme, ['colors', 'inverse-surface']), 80),
     },
     container: {
         height: '50%',

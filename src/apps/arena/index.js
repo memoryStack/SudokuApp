@@ -9,6 +9,7 @@ import _noop from '@lodash/noop'
 
 import { GAME_STATE } from '@resources/constants'
 import Button from '@ui/molecules/Button'
+import { useStyles } from '@utils/customHooks/useStyles'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
 import { Touchable } from '../components/Touchable'
 import { Page } from '../components/Page'
@@ -34,18 +35,18 @@ import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
 import { GameState } from './utils/classes/gameState'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
 import GameResultCard from './GameResultCard'
-import { styles } from './arena.styles'
+import { getStyles } from './arena.styles'
 
 const MAX_AVAILABLE_HINTS = 3
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
 }) => {
+    const styles = useStyles(getStyles)
+
     const [pageHeight, setPageHeight] = useState(0)
 
     const gameState = useSelector(getGameState)
-
-    // consoleLog('@@@@@ gs', gameState)
 
     const previousGameState = usePrevious(gameState)
 

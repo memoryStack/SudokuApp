@@ -1,6 +1,7 @@
+import get from '@lodash/get'
 import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     menuContainer: {
         display: 'flex',
         borderRadius: 4,
@@ -8,10 +9,15 @@ export const styles = StyleSheet.create({
         right: 8,
         top: 40,
         elevation: 10,
-        backgroundColor: 'white',
-        padding: 16,
+        backgroundColor: get(theme, ['colors', 'surface-container-low']),
+        paddingHorizontal: 16,
     },
-    spaceBetweenMenuItems: {
-        marginTop: 8,
+    menuItemContainer: {
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    menuItemText: {
+        color: get(theme, ['colors', 'on-surface']),
     },
 })

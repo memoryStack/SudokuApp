@@ -106,6 +106,9 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
         height: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
         marginLeft: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
     },
+    axisText: {
+        color: _get(theme, ['colors', 'on-surface-variant-low']),
+    },
     smartHintAxisText: {
         color: 'white',
         zIndex: 100, // TODO: make a constant with name like max_possible z_index

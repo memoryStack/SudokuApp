@@ -10,15 +10,18 @@ import Radio from '@ui/atoms/RadioButton'
 import Text from '@ui/atoms/Text'
 import Dialog from '@ui/molecules/Dialog'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import { useTranslation } from '../../../i18n/hooks/useTranslation'
 import { LANGAUGE_OPTIONS } from '../../../i18n/languages'
 
 import { Touchable } from '../Touchable'
 
 import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'
-import { styles } from './languageSelector.styles'
+import { getStyles } from './languageSelector.styles'
 
 const LanguageSelector_ = ({ hideModal }) => {
+    const styles = useStyles(getStyles)
+
     const { t, i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
 
     const [selectedLanguage, setSelectedLanguage] = useState(defaultSelectedLanguage)

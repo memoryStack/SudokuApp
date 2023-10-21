@@ -8,17 +8,20 @@ import { PencilIcon } from '@resources/svgIcons/pencil'
 
 import Text from '@ui/atoms/Text'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import { Touchable } from '../../../components/Touchable'
 
-import { styles, INACTIVE_ICON_FILL } from '../cellActions.styles'
+import { getStyles } from '../cellActions.styles'
 
-const FastPencil = ({ iconBoxSize, onClick, ...rest }) => (
-    <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
-        <PencilIcon iconBoxSize={iconBoxSize} fill={INACTIVE_ICON_FILL} />
-        <Text style={styles.actionText}>Fast Pencil</Text>
-    </Touchable>
-)
-
+const FastPencil = ({ iconBoxSize, onClick, ...rest }) => {
+    const styles = useStyles(getStyles)
+    return (
+        <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
+            <PencilIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
+            <Text style={styles.actionText}>Fast Pencil</Text>
+        </Touchable>
+    )
+}
 export default React.memo(FastPencil)
 
 FastPencil.propTypes = {

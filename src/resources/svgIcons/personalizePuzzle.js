@@ -1,13 +1,16 @@
 import React, { memo } from 'react'
+
 import { Svg, Path, G } from 'react-native-svg'
 
-const SvgComponent = props => (
-    <Svg viewBox="0 0 512 512" {...props}>
+import PropTypes from 'prop-types'
+
+const SvgComponent = ({ fill, ...rest }) => (
+    <Svg viewBox="0 0 512 512" {...rest}>
         <G
             transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
             strokeWidth="150"
-            fill="#000000"
-            stroke="#000000"
+            fill={fill}
+            stroke={fill}
         >
             <Path
                 d="M482 5100 c-167 -44 -307 -159 -380 -310 -23 -47 -46 -114 -52 -150
@@ -68,4 +71,15 @@ const SvgComponent = props => (
     </Svg>
 )
 
+SvgComponent.propTypes = {
+    width: PropTypes.number,
+    height: PropTypes.number,
+    fill: PropTypes.string,
+}
+
+SvgComponent.defaultProps = {
+    width: 24,
+    height: 24,
+    fill: '#000000',
+}
 export const PersonalizePuzzleIcon = memo(SvgComponent)

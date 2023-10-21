@@ -13,6 +13,7 @@ import { Platform } from '@utils/classes/platform'
 import Text from '@ui/atoms/Text'
 import StopTouchPropagation from '@ui/molecules/StopTouchPropagation'
 
+import { useStyles } from '@utils/customHooks/useStyles'
 import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
@@ -27,12 +28,14 @@ import {
     HINTS_MENU_OVERLAY_TEST_ID,
     HINT_MENU_ITEM_TEST_ID,
 } from './hintsMenu.constants'
-import { styles } from './hintsMenu.styles'
+import { getStyles } from './hintsMenu.styles'
 
 const COLUMNS_COUNT = 3
 
 const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const { mainNumbers, notes } = useGameBoardInputs()
+
+    const styles = useStyles(getStyles)
 
     const theme = useThemeValues()
 
