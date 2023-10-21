@@ -1,17 +1,21 @@
 import React, { memo } from 'react'
 
-import { Text, View } from 'react-native'
+import Text from '@ui/atoms/Text'
+
 import { GAME_STATE } from '@resources/constants'
 
+import { useStyles } from '@utils/customHooks/useStyles'
+
 import { Board } from '../arena/gameBoard'
+import { Page } from '../components/Page'
 
 import { mainNumbers, cellsHighlightData } from './boardData'
-
 import { RULES_TEXT_CONFIG } from './playGuide.constants'
-
-import { styles } from './playGuide.styles'
+import { getStyles } from './playGuide.styles'
 
 const PlayGuide_ = () => {
+    const styles = useStyles(getStyles)
+
     const renderBoard = () => (
         <Board
             mainNumbers={mainNumbers}
@@ -31,10 +35,10 @@ const PlayGuide_ = () => {
     )
 
     return (
-        <View style={styles.container}>
+        <Page style={styles.container}>
             {renderBoard()}
             {renderRules()}
-        </View>
+        </Page>
     )
 }
 

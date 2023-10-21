@@ -1,8 +1,10 @@
 import { StyleSheet } from 'react-native'
 
+import get from '@lodash/get'
+
 import { fonts } from '@resources/fonts/font'
 
-export const styles = StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     container: {
         alignItems: 'center',
         width: '100%',
@@ -12,6 +14,9 @@ export const styles = StyleSheet.create({
     closeIconContainer: {
         alignSelf: 'flex-end',
         marginBottom: 16,
+    },
+    closeIcon: {
+        color: get(theme, ['colors', 'on-surface-variant']),
     },
     inputPanelContainer: {
         width: '100%',

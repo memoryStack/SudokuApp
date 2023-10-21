@@ -1,8 +1,9 @@
-import { fonts } from '@resources/fonts/font'
+import get from '@lodash/get'
+import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 import { HOUSE_TYPE } from '../arena/utils/smartHints/constants'
 
-import { HOUSE_VS_CELLS_BACKGROUND_COLOR } from './boardData/cellsHighlightData'
+import { HOUSES_COLORS } from './boardData/cellsHighlightData'
 
 export const RULES_TEXT_CONFIG = [
     {
@@ -12,8 +13,8 @@ export const RULES_TEXT_CONFIG = [
     {
         label: 'rows',
         styles: {
-            color: HOUSE_VS_CELLS_BACKGROUND_COLOR[HOUSE_TYPE.ROW],
-            fontFamily: fonts.bold,
+            color: HOUSES_COLORS.HOUSE_TEXT[HOUSE_TYPE.ROW],
+            fontWeight: FONT_WEIGHTS.BOLD,
         },
         key: 'part_2',
     },
@@ -24,8 +25,8 @@ export const RULES_TEXT_CONFIG = [
     {
         label: 'columns',
         styles: {
-            color: HOUSE_VS_CELLS_BACKGROUND_COLOR[HOUSE_TYPE.COL],
-            fontFamily: fonts.bold,
+            color: HOUSES_COLORS.HOUSE_TEXT[HOUSE_TYPE.COL],
+            fontWeight: FONT_WEIGHTS.BOLD,
         },
         key: 'part_4',
     },
@@ -36,13 +37,25 @@ export const RULES_TEXT_CONFIG = [
     {
         label: 'blocks',
         styles: {
-            color: HOUSE_VS_CELLS_BACKGROUND_COLOR[HOUSE_TYPE.BLOCK],
-            fontFamily: fonts.bold,
+            color: HOUSES_COLORS.HOUSE_TEXT[HOUSE_TYPE.BLOCK],
+            fontWeight: FONT_WEIGHTS.BOLD,
         },
         key: 'part_6',
     },
     {
-        label: '.\n\nStudy the grid to find the numbers that might fit into each cell.',
+        label: '. Like it\'s shown above.',
         key: 'part_7',
     },
+    {
+        label: '\n\nStudy the grid to find the numbers that might fit into each cell.',
+        key: 'part_8',
+    },
 ]
+
+export const getRulesTextConfig = theme => {
+    const colors = {
+        [HOUSE_TYPE.ROW]: get(theme, ['colors', 'primary-container']),
+        [HOUSE_TYPE.COL]: get(theme, ['colors', 'secondary-container']),
+        [HOUSE_TYPE.BLOCK]: get(theme, ['colors', 'tertiary-container']),
+    }
+}

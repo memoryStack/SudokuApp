@@ -29,13 +29,13 @@ import {
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
 } from '../constants'
 
-import { getStyles } from './gameBoard.styles'
-import { Cell } from './cell'
-
 import HintsSvgDrawing from '../hintsSvgDrawing'
 import { HINTS_IDS } from '../utils/smartHints/constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../utils/classes/boardIterators'
+
+import { getStyles } from './gameBoard.styles'
+import { Cell } from './cell'
 
 const looper: number[] = []
 const bordersLooper: number[] = []
@@ -215,7 +215,7 @@ const Board_: React.FC<Props> = ({
                 {bordersLooper.map(borderNum => {
                     const boldBorder = borderNum === 2 || borderNum === 5
                     const borderViewStyle = boldBorder ? thickBorderStyle : normalBorderStyle
-                    const borderColor = styles.lightGridBorder
+                    const borderColor = boldBorder ? styles.lightGridBorder : styles.thinGridBorder
 
                     return <View key={`${orientation}_${borderNum}`} style={[borderViewStyle, borderColor]} />
                 })}

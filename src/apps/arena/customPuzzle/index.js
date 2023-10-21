@@ -10,6 +10,7 @@ import { CloseIcon } from '@resources/svgIcons/close'
 import { PLAY } from '@resources/stringLiterals'
 import { GAME_STATE } from '@resources/constants'
 import Button from '@ui/molecules/Button'
+import { useStyles } from '@utils/customHooks/useStyles'
 import withActions from '../../../utils/hocs/withActions'
 import { BottomDragger } from '../../components/BottomDragger'
 import { Touchable } from '../../components/Touchable'
@@ -17,7 +18,7 @@ import { Board } from '../gameBoard'
 import { Inputpanel } from '../inputPanel'
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
 import { CLOSE_ICON_TEST_ID, CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
-import { styles } from './customPuzzle.styles'
+import { getStyles } from './customPuzzle.styles'
 
 const CustomPuzzle_ = ({
     mainNumbers,
@@ -27,6 +28,8 @@ const CustomPuzzle_ = ({
     onCustomPuzzleClosed,
     onAction,
 }) => {
+    const styles = useStyles(getStyles)
+
     const customPuzzleRef = useRef(null)
 
     useEffect(() => {
@@ -60,7 +63,7 @@ const CustomPuzzle_ = ({
                     addHitSlop
                     testID={CLOSE_ICON_TEST_ID}
                 >
-                    <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
+                    <CloseIcon height={24} width={24} fill={styles.closeIcon.color} />
                 </Touchable>
                 <Board
                     gameState={GAME_STATE.ACTIVE}

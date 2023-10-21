@@ -6,16 +6,23 @@ import { getHouseCells } from '../../arena/utils/houseCells'
 import { HOUSE_TYPE } from '../../arena/utils/smartHints/constants'
 import { setCellDataInHintResult } from '../../arena/utils/smartHints/util'
 
-export const HOUSE_VS_CELLS_BACKGROUND_COLOR = {
-    [HOUSE_TYPE.ROW]: 'rgba(255, 0, 0, 0.6)',
-    [HOUSE_TYPE.COL]: 'rgba(0, 255, 0, 0.6)',
-    [HOUSE_TYPE.BLOCK]: 'rgba(0, 0, 255, 0.6)',
+export const HOUSES_COLORS = {
+    CELL_BG: {
+        [HOUSE_TYPE.ROW]: '#d5baff',
+        [HOUSE_TYPE.COL]: '#aac7ff',
+        [HOUSE_TYPE.BLOCK]: '#6cd9c1',
+    },
+    HOUSE_TEXT: {
+        [HOUSE_TYPE.ROW]: '#845EC2',
+        [HOUSE_TYPE.COL]: '#2C73D2',
+        [HOUSE_TYPE.BLOCK]: '#008F7A',
+    },
 }
 
 const addHouseCellsHighlightData = (house, cellsHighlightData) => {
     getHouseCells(house).forEach(cell => {
         const cellHighlightData = {
-            bgColor: { backgroundColor: HOUSE_VS_CELLS_BACKGROUND_COLOR[house.type] },
+            bgColor: { backgroundColor: HOUSES_COLORS.CELL_BG[house.type] },
         }
         setCellDataInHintResult(cell, cellHighlightData, cellsHighlightData)
     })

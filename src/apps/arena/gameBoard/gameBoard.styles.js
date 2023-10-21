@@ -68,15 +68,17 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
     verticalBars: {
         height: '100%',
         width: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
-        backgroundColor: 'rgba(0, 0, 0, .8)',
     },
     horizontalBars: {
         width: '100%',
         height: STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
-        backgroundColor: 'rgba(0, 0, 0, .8)',
     },
     lightGridBorder: {
-        backgroundColor: _get(theme, ['colors', 'outline-variant']),
+        backgroundColor: _get(theme, ['colors', 'outline']),
+    },
+    thinGridBorder: {
+        // backgroundColor: _get(theme, ['colors', 'outline-variant']),
+        backgroundColor: _get(theme, ['colors', 'outline']),
     },
     rowStyle: {
         display: 'flex',

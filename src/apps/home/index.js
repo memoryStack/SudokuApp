@@ -8,7 +8,7 @@ import {
 
 import PropTypes from 'prop-types'
 
-import Button from '@ui/molecules/Button'
+import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
@@ -101,6 +101,19 @@ const Home_ = ({ navigation }) => {
         />
     )
 
+    const renderGameRulesCTA = () => {
+        const a = 10
+        return (
+            <Button
+                type={BUTTON_TYPES.TONAL}
+                label={t('How To Play ?')}
+                containerStyle={{
+                    marginTop: 16,
+                }}
+            />
+        )
+    }
+
     const renderNewGameMenu = () => {
         if (!pageHeight || !showNextGameMenu) return null
         return (
@@ -122,6 +135,7 @@ const Home_ = ({ navigation }) => {
             {renderAppIcon()}
             {renderSudokuText()}
             {renderPlayButton()}
+            {renderGameRulesCTA()}
             {renderNewGameMenu()}
         </View>
     )
