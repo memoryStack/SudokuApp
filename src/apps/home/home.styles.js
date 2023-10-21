@@ -37,11 +37,15 @@ export const getStyles = ({ CELL_WIDTH }, theme) => StyleSheet.create({
         marginTop: '30%',
     },
     playButtonContainer: {
-        width: '30%',
+        width: '80%',
         marginTop: '20%',
     },
     playButtonText: {
         color: 'rgb(49, 90, 163)',
         fontSize: 24,
+    },
+    gameRulesCTA: {
+        marginTop: 16,
+        width: '80%',
     },
 })

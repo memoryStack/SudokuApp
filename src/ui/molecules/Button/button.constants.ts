@@ -2,6 +2,7 @@ export enum BUTTON_TYPES {
     FILLED = 'filled',
     TONAL = 'tonal',
     TEXT = 'text',
+    OUTLINED = 'outlined'
     /*
         elevated
         contained

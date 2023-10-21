@@ -101,18 +101,14 @@ const Home_ = ({ navigation }) => {
         />
     )
 
-    const renderGameRulesCTA = () => {
-        const a = 10
-        return (
-            <Button
-                type={BUTTON_TYPES.TONAL}
-                label={t('How To Play ?')}
-                containerStyle={{
-                    marginTop: 16,
-                }}
-            />
-        )
-    }
+    const renderGameRulesCTA = () => (
+        <Button
+            type={BUTTON_TYPES.OUTLINED}
+            label={t('How To Play ?')}
+            containerStyle={styles.gameRulesCTA}
+            onPress={() => navigation.navigate(ROUTES.PLAY_GUIDE)}
+        />
+    )
 
     const renderNewGameMenu = () => {
         if (!pageHeight || !showNextGameMenu) return null

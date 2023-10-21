@@ -36,6 +36,10 @@ const BUTTONS = [
         type: BUTTON_TYPES.TEXT,
         state: BUTTON_STATES.DISABLED,
     },
+    {
+        label: 'Outlined Button',
+        type: BUTTON_TYPES.OUTLINED,
+    },
 ]
 
 const ButtonDemo = () => {

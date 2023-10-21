@@ -167,5 +167,28 @@ module.exports = {
                 },
             },
         },
+        outlined: {
+            color: {
+                outline: {
+                    enabled: {
+                        color: { value: '{colors.neutral-variant.50}' },
+                    },
+                },
+                'label-text': {
+                    enabled: {
+                        color: {
+                            value: '{colors.primary}',
+                        },
+                    },
+                },
+                icon: {
+                    enabled: {
+                        color: {
+                            value: '{colors.primary}',
+                        },
+                    },
+                },
+            },
+        },
     },
 }

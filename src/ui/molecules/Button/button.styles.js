@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
 
 import { hexToRGBA } from '@utils/util'
+import { BUTTON_TYPES } from './button.constants'
 
 // Note: can't use opacity property here because it will dim down text as well
 //      looks like opacity dim downs whole container's contents along with container
@@ -24,6 +25,7 @@ const getStyles = ({
             height: _get(theme, ['button', type, 'layout', 'container', 'height']),
             borderRadius: _get(theme, ['button', type, 'layout', 'container', 'border-radius']),
             ...getContainerPaddings(buttonConfigs, theme),
+            ...getContainerOutlineStyles(buttonConfigs, theme),
         },
         labelDefaultColor: {
             color: getTextColor(buttonConfigs, theme),
@@ -58,6 +60,15 @@ const getContainerPaddings = ({
         paddingRight = _get(theme, ['button', type, 'layout', 'container', 'padding', 'without-icon', 'padding-right'])
     }
     return { paddingLeft, paddingRight }
+}
+
+const getContainerOutlineStyles = ({ type, state }, theme) => {
+    if (type !== BUTTON_TYPES.OUTLINED) return {}
+
+    return {
+        borderWidth: _get(theme, ['button', type, 'layout', 'container', 'border-width']),
+        borderColor: _get(theme, ['button', type, 'color', 'outline', state, 'color']),
+    }
 }
 
 const getTextColor = ({ type, state }, theme) => {

@@ -73,7 +73,7 @@ export const routes = [
         name: ROUTES.HOME,
         component: Home,
         headerItems: {
-            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SETTINGS],
+            [HEADER_SECTION.RIGHT]: __DEV__ ? [HEADER_ITEMS.SETTINGS] : [],
         },
     },
     {
