@@ -25,6 +25,7 @@ const CODE_PUSH_OPTIONS = {
 
 const styles = StyleSheet.create({
     // TODO: why putting here alignItems to center make everything invisible ??
+    // for temp commit
     container: {
         height: '100%',
         width: '100%',
