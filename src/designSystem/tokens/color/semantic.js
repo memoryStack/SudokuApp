@@ -114,5 +114,17 @@ module.exports = {
         'on-error-container': {
             value: '{colors.error.10}',
         },
+        success: {
+            value: '{colors.success.40}',
+        },
+        'on-success': {
+            value: '{colors.success.100}',
+        },
+        'success-container': {
+            value: '{colors.success.80}',
+        },
+        'on-success-container': {
+            value: '{colors.success.10}',
+        },
     },
 }

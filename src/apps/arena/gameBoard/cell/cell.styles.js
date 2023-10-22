@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
+import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
     cell: {
@@ -21,7 +22,8 @@ export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
         color: _get(theme, ['colors', 'on-surface-variant']),
         fontSize: CELL_HEIGHT * 0.3,
     },
-    selectedMainNumberNoteContainer: {
-        backgroundColor: _get(theme, ['colors', 'primary-container']),
+    selectedMainNumberNote: {
+        color: _get(theme, ['colors', 'primary']),
+        fontWeight: FONT_WEIGHTS.HEAVY,
     },
 })

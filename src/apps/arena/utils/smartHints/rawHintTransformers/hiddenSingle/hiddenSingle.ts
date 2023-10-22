@@ -22,6 +22,7 @@ import {
     HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
     HOUSE_TYPE,
+    HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import smartHintColorSystemReader from '../../colorSystem.reader'
@@ -233,7 +234,7 @@ const getHiddenSingleInBlockHighlightData = (hostCell: Cell, mainNumbers: MainNu
 const getHiddenSingleLogic = (rawHint: HiddenSingleRawHint, solutionValue: SolutionValue, filledCellsWithSolutionValue: Cell[]) => {
     const { type: houseType, cell } = rawHint
     const msgPlaceholdersValues = {
-        houseType,
+        houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         solutionValue,
         hostCell: getCellAxesValues(cell),
         filledCellsWithSolutionValue: getCellsAxesValuesListText(

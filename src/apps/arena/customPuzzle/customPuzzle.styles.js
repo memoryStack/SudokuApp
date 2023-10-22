@@ -8,7 +8,8 @@ export const getStyles = (_, theme) => StyleSheet.create({
     container: {
         alignItems: 'center',
         width: '100%',
-        paddingVertical: 16,
+        paddingTop: 16,
+        paddingBottom: 32,
         paddingHorizontal: '3%', // 94% is te grid size
     },
     closeIconContainer: {
@@ -24,6 +25,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     },
     playButtonContainer: {
         paddingHorizontal: 24,
+        width: '80%',
     },
     snackBarContainer: {
         justifyContent: 'center',

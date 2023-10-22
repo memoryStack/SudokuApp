@@ -19,7 +19,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     container: {
         height: '50%',
         width: '75%',
-        backgroundColor: 'white',
+        backgroundColor: _get(theme, ['colors', 'surface']),
         borderRadius: 32,
         overflow: 'hidden',
     },
@@ -31,13 +31,14 @@ export const getStyles = (_, theme) => StyleSheet.create({
         alignItems: 'center',
     },
     disabledMenuItem: {
-        backgroundColor: 'rgb(178, 178, 178)',
+        // for disabled items, colors are taken from button disabled tokens
+        backgroundColor: hexToRGBA(_get(theme, ['colors', 'on-surface']), 12),
     },
     menuItemText: {
-        color: 'rgb(49, 90, 163)',
+        color: _get(theme, ['colors', 'primary']),
     },
     disabledMenuItemText: {
-        color: 'rgb(246, 246, 246)',
+        color: hexToRGBA(_get(theme, ['colors', 'on-surface']), 50),
     },
     menuRowContainer: {
         flex: 1,
@@ -47,11 +48,11 @@ export const getStyles = (_, theme) => StyleSheet.create({
     horizontalSeperator: {
         width: '101%',
         height: BORDER_THICKNESS,
-        backgroundColor: 'rgb(49, 90, 163)',
+        backgroundColor: _get(theme, ['divider', 'color']),
     },
     verticalSeperator: {
         width: BORDER_THICKNESS,
         height: '101%',
-        backgroundColor: 'rgb(49, 90, 163)',
+        backgroundColor: _get(theme, ['divider', 'color']),
     },
 })

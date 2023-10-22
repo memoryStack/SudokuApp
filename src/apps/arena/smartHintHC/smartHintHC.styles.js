@@ -18,12 +18,16 @@ export const getStyles = (_, theme) => StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 8,
     },
+    closeIcon: {
+        color: _get(theme, ['colors', 'on-surface-variant']),
+    },
     hintTitleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     hintTitle: {
         fontWeight: FONT_WEIGHTS.MEDIUM,
+        color: _get(theme, ['colors', 'on-surface']),
     },
     bodyContainer: {
         flex: 1,
@@ -31,8 +35,13 @@ export const getStyles = (_, theme) => StyleSheet.create({
     },
     hintLogicText: {
         lineHeight: 20,
+        color: _get(theme, ['colors', 'on-surface']),
     },
-    hintsCountText: { marginLeft: 8, fontSize: 20 },
+    hintsCountText: {
+        marginLeft: 8,
+        fontSize: 20,
+        color: _get(theme, ['colors', 'on-surface']),
+    },
     footerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

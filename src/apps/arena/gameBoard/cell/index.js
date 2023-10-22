@@ -56,11 +56,6 @@ const Cell_ = ({
         return null
     }
 
-    const getNoteBackgroundColor = ({ noteValue, show } = {}) => {
-        if (!showSmartHint && show && noteValue === selectedMainNumber) return styles.selectedMainNumberNoteContainer
-        return null
-    }
-
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
 
@@ -74,14 +69,15 @@ const Cell_ = ({
                     <View
                         key={`${noteNum}`}
                         ref={notesRefs[noteNum]}
-                        style={[styles.noteContainer, getNoteBackgroundColor(cellNotes[noteNum])]}
+                        style={styles.noteContainer}
                         collapsable={false}
                     >
                         <Text
                             style={[
                                 styles.noteText,
                                 { fontWeight: FONT_WEIGHTS.REGULAR },
-                                noteFontColor ? { color: noteFontColor, fontWeight: FONT_WEIGHTS.MEDIUM } : null,
+                                noteFontColor ? { color: noteFontColor, fontWeight: FONT_WEIGHTS.HEAVY } : null,
+                                (!showSmartHint && show && noteValue === selectedMainNumber) ? styles.selectedMainNumberNote : null,
                             ]}
                             testID={CELL_NOTE_TEST_ID}
                             type={TEXT_VARIATIONS.BODY_SMALL}

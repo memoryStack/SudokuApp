@@ -19,6 +19,8 @@ const FONT_FAMILIES = {
     MEDIUM: 'medium',
     SEMI_BOLD: 'semibold',
     BOLD: 'bold',
+    EXTRA_BOLD: 'extra_bold',
+    HEAVY: 'heavy',
 }
 
 export const FONT_WEIGHTS = {
@@ -26,6 +28,8 @@ export const FONT_WEIGHTS = {
     MEDIUM: '500',
     SEMI_BOLD: '600',
     BOLD: '700',
+    EXTRA_BOLD: '800',
+    HEAVY: '900',
 }
 
 // NOTE: semi-bold doesn't exist for Roboto font
@@ -34,6 +38,8 @@ export const FONT_WEIGHT_VS_FONT_FAMILY = {
     [FONT_WEIGHTS.MEDIUM]: FONT_FAMILIES.MEDIUM,
     // [FONT_WEIGHTS.SEMI_BOLD]: FONT_FAMILIES.SEMI_BOLD,
     [FONT_WEIGHTS.BOLD]: FONT_FAMILIES.BOLD,
+    [FONT_WEIGHTS.EXTRA_BOLD]: FONT_FAMILIES.EXTRA_BOLD,
+    [FONT_WEIGHTS.HEAVY]: FONT_FAMILIES.HEAVY,
 }
 
 export const fonts = Platform.select({
@@ -42,6 +48,8 @@ export const fonts = Platform.select({
         [FONT_FAMILIES.MEDIUM]: 'Roboto',
         // [FONT_FAMILIES.SEMI_BOLD]: 'Roboto',
         [FONT_FAMILIES.BOLD]: 'Roboto',
+        [FONT_FAMILIES.EXTRA_BOLD]: 'Roboto',
+        [FONT_FAMILIES.HEAVY]: 'Roboto',
     },
     ios: {
         // TODO: test for iOS

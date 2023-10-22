@@ -146,7 +146,7 @@ const SmartHintHC_: React.FC<Props> = ({
                 addHitSlop
                 testID={CLOSE_ICON_TEST_ID}
             >
-                <CloseIcon height={24} width={24} fill="rgba(0, 0, 0, .8)" />
+                <CloseIcon height={24} width={24} fill={styles.closeIcon.color} />
             </Touchable>
         </View>
     )
