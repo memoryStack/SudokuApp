@@ -1,4 +1,3 @@
-import get from '@lodash/get'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 import { HOUSE_TYPE } from '../arena/utils/smartHints/constants'
@@ -51,11 +50,3 @@ export const RULES_TEXT_CONFIG = [
         key: 'part_8',
     },
 ]
-
-export const getRulesTextConfig = theme => {
-    const colors = {
-        [HOUSE_TYPE.ROW]: get(theme, ['colors', 'primary-container']),
-        [HOUSE_TYPE.COL]: get(theme, ['colors', 'secondary-container']),
-        [HOUSE_TYPE.BLOCK]: get(theme, ['colors', 'tertiary-container']),
-    }
-}

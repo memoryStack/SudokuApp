@@ -2,14 +2,24 @@ import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 
+import { FONT_WEIGHTS } from '@resources/fonts/font'
+
 import { hexToRGBA } from '../../utils/util'
 
 export const getStyles = ({ CELL_WIDTH }, theme) => StyleSheet.create({
     container: {
+        backgroundColor: _get(theme, ['colors', 'surface']),
+    },
+    viewContainer: {
+        paddingTop: 200,
         alignItems: 'center',
         height: '100%',
         width: '100%',
-        backgroundColor: _get(theme, ['colors', 'surface']),
+    },
+    gameDisplayName: {
+        textAlign: 'center',
+        fontWeight: FONT_WEIGHTS.BOLD,
+        color: _get(theme, ['colors', 'on-primary-container']),
     },
     startGameButtonContainer: {
         marginTop: '20%',

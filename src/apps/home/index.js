@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 
 import {
-    View, Linking, Image,
+    View, Linking,
 } from 'react-native'
 
 import PropTypes from 'prop-types'
@@ -20,18 +20,14 @@ import { ROUTES } from '../../navigation/route.constants'
 
 import { NextGameMenu } from '../arena/nextGameMenu'
 
-import { HOME_PAGE_TEST_ID, LANGUAGE_VS_TITLE_CHARS } from './home.constants'
+import { HOME_PAGE_TEST_ID } from './home.constants'
 import { getStyles } from './home.styles'
-
-const APP_ICON_SOURCE = require('@resources/assets/appIcon.png')
 
 const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
-    const { t, selectedLanguage } = useTranslation()
-
-    const SUDOKU_LETTERS = LANGUAGE_VS_TITLE_CHARS[selectedLanguage]
+    const { t } = useTranslation()
 
     const styles = useStyles(getStyles)
 
@@ -77,21 +73,14 @@ const Home_ = ({ navigation }) => {
         return () => Linking.removeEventListener(EVENTS.LINKING_URL, handler)
     }, [])
 
-    const renderAppIcon = () => <Image source={APP_ICON_SOURCE} style={styles.appIcon} />
-
-    const renderSudokuText = () => {
-        const renderLetter = (letter, index) => (
-            <Text
-                key={`${index}`}
-                style={styles.sudokuLetterText}
-                type={TEXT_VARIATIONS.HEADING_MEDIUM}
-            >
-                {letter}
-            </Text>
-        )
-
-        return <View style={styles.sudokuTextContainer}>{SUDOKU_LETTERS.map(renderLetter)}</View>
-    }
+    const renderSudokuText = () => (
+        <Text
+            type={TEXT_VARIATIONS.DISPLAY_LARGE}
+            style={styles.gameDisplayName}
+        >
+            {'SUPER\nSUDOKU'}
+        </Text>
+    )
 
     const renderPlayButton = () => (
         <Button
@@ -128,10 +117,11 @@ const Home_ = ({ navigation }) => {
             style={styles.container}
             onLayout={onParentLayout}
         >
-            {renderAppIcon()}
-            {renderSudokuText()}
-            {renderPlayButton()}
-            {renderGameRulesCTA()}
+            <View style={styles.viewContainer}>
+                {renderSudokuText()}
+                {renderPlayButton()}
+                {renderGameRulesCTA()}
+            </View>
             {renderNewGameMenu()}
         </View>
     )
