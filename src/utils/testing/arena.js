@@ -1,4 +1,6 @@
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE } from '@resources/stringLiterals'
+import { HINTS_IDS, HINT_LABELS } from 'src/apps/arena/utils/smartHints/constants'
+import { SMART_HINT_HC_TEST_ID } from 'src/apps/arena/smartHintHC/constants'
 import { ROUTES } from '../../navigation/route.constants'
 import { ARENA_PAGE_TEST_ID } from '../../apps/arena/constants'
 import { CONTENT_CONTAINER_TEST_ID } from '../../apps/components/BottomDragger/bottomDragger.constants'
@@ -15,6 +17,9 @@ import {
 import { isEmptyElement } from './touchable'
 import { renderScreen } from './renderScreen'
 import { fireLayoutEvent } from './fireEvent.utils'
+import {
+    assertHintsLeft, gotoApplyHintStep, openSmartHintHC,
+} from './smartHints'
 
 export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
     renderScreen({
@@ -178,4 +183,20 @@ export const gameOverByMistakes = () => {
     fireEvent.press(getInputPanelNumberIfEnabled(3))
     fireEvent.press(getInputPanelEraser())
     fireEvent.press(getInputPanelNumberIfEnabled(3))
+}
+
+// timelimit might fail in case number of hints increase in future
+export const exhaustHints = async () => {
+    await waitFor(async () => {
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
+
+        const smartHintHC = screen.getByTestId(SMART_HINT_HC_TEST_ID)
+
+        await gotoApplyHintStep(within(smartHintHC))
+
+        fireEvent.press(screen.getByText('Apply Hint'))
+
+        jest.advanceTimersByTime(500)
+        assertHintsLeft(0)
+    }, { timeout: 5000 })
 }

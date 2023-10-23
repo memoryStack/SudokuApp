@@ -43,7 +43,7 @@ import {
 import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
 import { getMainNumbers } from './store/selectors/board.selectors'
-import { getStoreState } from '../../redux/dispatch.helpers'
+import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
 import {
@@ -53,6 +53,9 @@ import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 import { NotesRecord } from './RecordUtilities/boardNotes'
 import { BoardIterators } from './utils/classes/boardIterators'
 import { convertBoardCellToNum } from './utils/cellTransformers'
+import { boardControllerActions } from './store/reducers/boardController.reducers'
+
+const { resetHints } = boardControllerActions
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -214,6 +217,7 @@ const resumePreviousGame = () => {
 const handleMenuItemPress = ({ setState, params: menuItem }) => {
     if (isGenerateNewPuzzleItem(menuItem)) {
         generateNewPuzzle(menuItem)
+        invokeDispatch(resetHints())
         return
     }
 

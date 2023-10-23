@@ -1,6 +1,6 @@
-import { waitFor } from '@utils/testing/testingLibrary'
+import { waitFor, screen } from '@utils/testing/testingLibrary'
 
-import { expectOnHintMenuItems } from '@utils/testing/arena'
+import { HINT_MENU_ITEM_TEST_ID } from './hintsMenu.constants'
 
 export const waitForAvailableHintsToBeChecked = async () => {
     // can we wait for it in a better way ??
@@ -15,5 +15,13 @@ export const waitForAvailableHintsToBeChecked = async () => {
         })
 
         expect(enabledHintsCount).not.toBe(0)
+    })
+}
+
+export const expectOnHintMenuItems = expectCallback => {
+    const allHintMenuItems = screen.getAllByTestId(HINT_MENU_ITEM_TEST_ID)
+
+    allHintMenuItems.forEach(element => {
+        expectCallback(element)
     })
 }

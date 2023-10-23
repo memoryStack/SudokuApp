@@ -1,4 +1,5 @@
-/* eslint-disable no-param-reassign */
+import { MAX_AVAILABLE_HINTS } from '../state/boardController.state'
+
 const stateHandlers = {
     resetState: (state, { payload }) => {
         state.pencilState = payload.pencilState
@@ -12,7 +13,11 @@ const stateHandlers = {
         state.hintsLeft -= 1
     },
     setHints: (state, { payload }) => {
+        // TODO: is this really needed ??
         state.hintsLeft = payload
+    },
+    resetHints: state => {
+        state.hintsLeft = MAX_AVAILABLE_HINTS
     },
     setHintsMenu: (state, { payload }) => {
         state.showHintsMenu = payload

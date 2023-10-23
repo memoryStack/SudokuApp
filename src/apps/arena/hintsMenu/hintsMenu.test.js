@@ -4,7 +4,6 @@ import {
     fireEvent, render, screen, act,
 } from '@utils/testing/testingLibrary'
 
-import { expectOnHintMenuItems } from '@utils/testing/arena'
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import { getStoreState, invokeDispatch } from '../../../redux/dispatch.helpers'
@@ -17,7 +16,7 @@ import { ACTION_TYPES } from './actionHandlers'
 import { HintsMenu } from './index'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
-import { waitForAvailableHintsToBeChecked } from './hintsMenu.testingUtil'
+import { expectOnHintMenuItems, waitForAvailableHintsToBeChecked } from './hintsMenu.testingUtil'
 
 const { ACTION_HANDLERS } = require('./actionHandlers')
 

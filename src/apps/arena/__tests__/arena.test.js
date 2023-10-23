@@ -17,10 +17,13 @@ import {
     solvePuzzle,
     gameOverByMistakes,
     renderScreenAndWaitForPuzzleStart,
+    exhaustHints,
+    renderScreenAndWaitCustomPuzzleToStart,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
 
+import { assertHintsLeft } from '@utils/testing/smartHints'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
@@ -29,6 +32,7 @@ import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
 import { NEXT_GAME_MENU_TEST_ID } from '../nextGameMenu/nextGameMenu.constants'
+import { MAX_AVAILABLE_HINTS } from '../store/state/boardController.state'
 
 const storageUtils = require('@utils/storage')
 
@@ -590,5 +594,31 @@ describe('Start New Game', () => {
         fireEvent.press(newGameMenu.getByText('EASY'))
 
         await hasPuzzleStarted()
+    })
+})
+
+describe('Bugs', () => {
+    beforeEach(() => {
+        jest.useFakeTimers()
+        jest.setTimeout(10000)
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+    })
+
+    test('starting new game after completing current one, allowed hints must be filled back', async () => {
+        const puzzle = '409300781320700409700000000600050000050871040000040002000000008506007094178004506'
+        await renderScreenAndWaitCustomPuzzleToStart(puzzle)
+        await exhaustHints()
+        solvePuzzle()
+        act(() => {
+            fireEvent.press(screen.getByText('New Game'))
+            jest.advanceTimersByTime(500)
+        })
+        const newGameMenu = within(screen.getByTestId(NEXT_GAME_MENU_TEST_ID))
+        fireEvent.press(newGameMenu.getByText('EASY'))
+        await hasPuzzleStarted()
+
+        assertHintsLeft(MAX_AVAILABLE_HINTS)
     })
 })
