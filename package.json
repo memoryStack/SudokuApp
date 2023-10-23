@@ -12,7 +12,7 @@
         "lint": "eslint .",
         "prettier": "prettier --write '**/*.{ts,tsx,js}'",
         "create-design-tokens": "node ./sd.config.js",
-        "pushStage": "./scripts/bundlePushSudoku s 1.5",
+        "pushStage": "./scripts/bundlePushSudoku s 1.7",
         "pushProd": "./scripts/bundlePushSudoku p 1.6",
         "debugApk": "./scripts/debugApk",
         "stageApk": "./scripts/stageApk",

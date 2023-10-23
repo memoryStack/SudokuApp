@@ -151,6 +151,7 @@ android {
             targetSdkVersion rootProject.ext.targetSdkVersion
             versionName name
             versionCode code
+            resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
         }
     } else {
         throw new GradleException("Could not read version.properties!")
