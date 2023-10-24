@@ -94,3 +94,14 @@ export const XWING = {
         BOTH_LEGS_WITHOUT_CANDIDATE: 'there is no cell in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} where {{candidate}} can come',
     },
 }
+
+export const YWING = {
+    NO_INPUT: 'try filling {{candidatesListText}} in highlighted cells',
+    CELLS_WITHOUT_CANDIDATE: '{{emptyCellsAxesListText}} {{emptyCellsHelpingVerb}} empty. this is an invalid solution.',
+    PIVOT_WILL_BE_EMPTY: '{{wingCellsAxesList}} have only one candidate in them, once {{wingCellsAxesList}} will be filled, {{pivotCellAxes}} will have no candidate left to be filled.',
+    MULTIPLE_NS_IN_HOUSE: '{{nakedSingleCellsAxesList}} have only {{nakedSingleCandidate}} as candidate in them and these cells'
+        + ' are in same {{nakedSingleCellsCommonHouse}}. so one of these cells will be empty once {{nakedSingleCandidate}} is filled in one of them',
+    TRYOUT_PARTIAL_VALID_PROGRESS: 'till now your guesses are correct, fill {{candidatesListText}} in all of these highlighted cells in all combinations to fully understand how this hint works.',
+    TRYOUT_COMPLETE: '{{yWingCellsAxesListText}} are filled and you can see that {{eliminableNote}} is not present in {{eliminableCellsAxesListText}}.'
+    + ' this can be a solution for {{yWingCellsAxesListText}}.',
+}

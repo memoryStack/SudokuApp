@@ -104,16 +104,17 @@ export const HINT_EXPLANATION_TEXTS = {
         + ' {{hostHousePluralName}}, {{candidate}} can\'t come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.',
     ],
     [HINTS_IDS.Y_WING]: [
-        'to spot a Y Wing look for a cell which has only 2 candidates. we will call it as pivot cell.'
-        + ' now look for two more cells with only 2 candidates.'
-        + ' these two cells will be called as wing cells.\n'
-        + 'these wings should share a row, column or block with the pivot. but these wings themselves can\'t be in'
-        + ' same row, column or block. And one candidate in both wings should be same and the other candidate'
-        + ' in wings should also be present in pivot cell.',
+        'To spot a Y-Wing look for a cell which has only 2 candidates. we will call it pivot cell.'
+        + ' now look for two more cells with only 2 candidates which share a row, column or block with pivot cell'
+        + ' but these two cells themselves shouldn\'t be in same row, column or block.'
+        + ' these two cells will be called wings cells.\n'
+        + 'one candidate in wing cells should be same and the other candidates'
+        + ' from each wing cell should be present in pivot cell.',
 
-        'here {{pivotCell}} is the pivot cell and {{wingCellsText}} are wings.'
-        + ' now in {{pivotCell}} whatever comes out of {{firstPivotNote}} or {{secondPivotNote}}, one of'
+        'here {{pivotCell}} is the pivot cell and {{wingCellsText}} are wing cells.'
+        + ' now in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, one of'
         + ' {{wingCellsText}} will be {{commonNoteInWings}}. so now we can remove {{commonNoteInWings}} from'
-        + ' all the cells which share a row, column or block with both wing cells.',
+        + ' all the cells which share atleast a row, column or block with both wing cells.\n'
+        + 'so here {{eliminableNotesCells}} are such cells from which we can remove {{commonNoteInWings}}.',
     ],
 }

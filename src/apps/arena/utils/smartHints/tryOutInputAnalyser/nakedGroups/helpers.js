@@ -3,8 +3,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
+import { getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
@@ -14,6 +13,7 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 
 import { NAKED_GROUPS } from '../stringLiterals'
+import { getCellsWithNoCandidates } from '../helpers'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const msgPlaceholderValues = {
@@ -46,6 +46,7 @@ export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => cell
 
 export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCells) => {
     const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
+
     if (cellsWithNoCandidates.length) {
         return getEmptyCellsErrorResult(cellsWithNoCandidates)
     }
@@ -56,16 +57,6 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCell
     }
 
     return null
-}
-
-const getCellsWithNoCandidates = focusedCells => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    return focusedCells.filter(
-        cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
-            && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, cell) === 0,
-
-    )
 }
 
 const getEmptyCellsErrorResult = cellsWithNoCandidates => {

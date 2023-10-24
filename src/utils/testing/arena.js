@@ -1,6 +1,6 @@
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE } from '@resources/stringLiterals'
-import { HINTS_IDS, HINT_LABELS } from 'src/apps/arena/utils/smartHints/constants'
-import { SMART_HINT_HC_TEST_ID } from 'src/apps/arena/smartHintHC/constants'
+import { HINTS_IDS, HINT_LABELS } from '../../apps/arena/utils/smartHints/constants'
+import { SMART_HINT_HC_TEST_ID } from '../../apps/arena/smartHintHC/constants'
 import { ROUTES } from '../../navigation/route.constants'
 import { ARENA_PAGE_TEST_ID } from '../../apps/arena/constants'
 import { CONTENT_CONTAINER_TEST_ID } from '../../apps/components/BottomDragger/bottomDragger.constants'

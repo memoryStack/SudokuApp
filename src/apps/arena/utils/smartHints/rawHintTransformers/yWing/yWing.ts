@@ -10,7 +10,9 @@ import {
     CellHighlightData,
     CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
-import { setCellDataInHintResult, getHintExplanationStepsFromHintChunks, transformCellBGColor } from '../../util'
+import {
+    setCellDataInHintResult, getHintExplanationStepsFromHintChunks, transformCellBGColor, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData,
+} from '../../util'
 import { YWingRawHint } from '../../yWing/types'
 import { getEliminatableNotesCells } from '../../yWing/utils'
 
@@ -63,12 +65,13 @@ const getUICellsToFocusData = ({
 }
 
 const getHintExplainationChunks = ({
-    pivotNotes, commonNoteInWings, pivotCell, wingCells,
+    pivotNotes, commonNoteInWings, pivotCell, wingCells, eliminableNotesCells,
 }: {
     pivotNotes: NoteValue[]
     commonNoteInWings: NoteValue
     pivotCell: Cell
-    wingCells: Cell[]
+        wingCells: Cell[]
+        eliminableNotesCells: Cell[]
 }): string[] => {
     const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.Y_WING] as string[]
 
@@ -78,6 +81,7 @@ const getHintExplainationChunks = ({
         commonNoteInWings,
         pivotCell: getCellAxesValues(pivotCell),
         wingCellsText: getCellsAxesValuesListText(wingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        eliminableNotesCells: getCellsAxesValuesListText(eliminableNotesCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
 
     return msgTemplates.map(msgTemplate => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
@@ -96,25 +100,39 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsCol
 
     const wingCells = wings.map(wing => wing.cell)
 
+    const commonNoteInWings = yWing.wingsCommonNote
+
+    const eliminableNotesCells = getEliminatableNotesCells(yWing, notesData)
     const cellsToFocusData = getUICellsToFocusData({
-        commonNoteInWings: yWing.wingsCommonNote,
+        commonNoteInWings,
         pivotCell: pivot.cell,
         wingCells,
-        eliminableNotesCells: getEliminatableNotesCells(yWing, notesData),
+        eliminableNotesCells,
         smartHintsColorSystem,
     })
 
     const hintChunks = getHintExplainationChunks({
         pivotNotes: pivot.notes,
-        commonNoteInWings: yWing.wingsCommonNote,
+        commonNoteInWings,
         pivotCell: pivot.cell,
         wingCells,
+        eliminableNotesCells,
     })
 
     return {
-        cellsToFocusData,
+        type: HINTS_IDS.Y_WING,
         title: HINT_ID_VS_TITLES[HINTS_IDS.Y_WING],
-        steps: getHintExplanationStepsFromHintChunks(hintChunks, false),
+        cellsToFocusData,
+        focusedCells: getCellsFromCellsToFocusedData(cellsToFocusData),
+        steps: getHintExplanationStepsFromHintChunks(hintChunks),
         applyHint: getApplyHintData(yWing, notesData),
+        hasTryOut: true,
+        tryOutAnalyserData: {
+            yWing,
+            eliminableNotesCells,
+        },
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([commonNoteInWings, ...pivot.notes]) as InputPanelVisibleNumbers,
+        // TODO: all the highlightable cells are clickable
+        // TODO: pass focused cells as well from here
     }
 }

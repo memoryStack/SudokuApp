@@ -1,10 +1,11 @@
 import _filter from '@lodash/filter'
 import _isEmpty from '@lodash/isEmpty'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 
 import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { getMainNumbers } from '../../../store/selectors/board.selectors'
-import { getTryOutMainNumbers } from '../../../store/selectors/smartHintHC.selectors'
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
 
 export const filterFilledCellsInTryOut = cells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
@@ -31,3 +32,17 @@ export const getCorrectFilledTryOutCandidates = (groupCells, tryOutMainNumbers) 
 export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCandidates) => groupCandidates
     .map(candidate => parseInt(candidate, 10))
     .filter(groupCandidate => !correctlyFilledGroupCandidates.includes(groupCandidate))
+
+export const getCellsWithNoCandidates = focusedCells => {
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+    return focusedCells.filter(
+        cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
+                && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, cell) === 0,
+    )
+}
+
+export const anyCellFilledWithGivenCandidate = (cells, candidate) => {
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    return cells.some(cell => MainNumbersRecord.isCellFilledWithNumber(tryOutMainNumbers, candidate, cell))
+}
