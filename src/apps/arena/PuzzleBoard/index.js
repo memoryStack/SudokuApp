@@ -6,15 +6,13 @@ import PropTypes from 'prop-types'
 import _noop from '@lodash/noop'
 
 import { SCREEN_NAME } from '@resources/constants'
+
 import withActions from '../../../utils/hocs/withActions'
 import { Board } from '../gameBoard'
-import { useCacheGameState } from '../hooks/useCacheGameState'
-import { getMoves } from '../store/selectors/board.selectors'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { ACTION_TYPES } from './actionHandlers'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
-import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
+import { useGameBoardInputs, useSavePuzzleState } from '../hooks/useGameBoardInputs'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
@@ -27,7 +25,8 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
 
     const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
-    const moves = useSelector(getMoves)
+
+    useSavePuzzleState()
 
     const { show: showSmartHint, hint: { cellsToFocusData = {}, svgProps } = {} } = useSelector(getHintHCInfo)
 
@@ -52,14 +51,6 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
         handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
     }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut])
-
-    const dataToCache = {
-        mainNumbers,
-        notes,
-        moves,
-        selectedCell,
-    }
-    useCacheGameState(GAME_DATA_KEYS.BOARD_DATA, dataToCache)
 
     return (
         <Board

@@ -2,24 +2,30 @@ import _sortNumbers from '@lodash/sortNumbers'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _isEmpty from '@lodash/isEmpty'
 import _isNil from '@lodash/isNil'
-import { getTryOutMainNumbers, getTryOutNotes } from 'src/apps/arena/store/selectors/smartHintHC.selectors'
-import { getStoreState } from 'src/redux/dispatch.helpers'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import _keys from '@lodash/keys'
 import _find from '@lodash/find'
+
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
+import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { getStoreState } from '../../../../../../redux/dispatch.helpers'
+
+import { getCellAxesValues, getCellsCommonHouses } from '../../../util'
+import { getCandidatesListText } from '../../util'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
+import { YWingRawHint } from '../../yWing/types'
+
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import {
     anyCellFilledWithGivenCandidate, filterFilledCellsInTryOut, getCellsWithNoCandidates, noInputInTryOut,
 } from '../helpers'
-
 import { YWING } from '../stringLiterals'
-import { getCandidatesListText } from '../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
-import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
-import { getCellAxesValues, getCellsCommonHouses } from '../../../util'
 
-export const yWingTryOutAnalyser = ({ yWing, eliminableNotesCells }) => {
+export const yWingTryOutAnalyser = ({ yWing, eliminableNotesCells }: {
+    yWing: YWingRawHint,
+    eliminableNotesCells: Cell[]
+}) => {
     const { pivot, wings, wingsCommonNote } = yWing
 
     const wingCells = wings.map(wing => wing.cell)
