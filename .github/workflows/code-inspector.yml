@@ -21,3 +21,17 @@ jobs:
       - run: git config --global credential.helper store
       - run: npm install
       - run: npm run lint
+
+  check-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16.0.0"
+      - run: git config --global credential.helper store
+      - run: npm install
+      - run: npm run check-types
