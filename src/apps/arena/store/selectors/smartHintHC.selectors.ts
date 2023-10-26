@@ -12,6 +12,7 @@ export type Hint = {
     selectCellOnClose: HintsInfo['selectCellOnClose']
     inputPanelNumbersVisibility: HintsInfo['inputPanelNumbersVisibility']
     isTryOut: HintStep['isTryOut'] | boolean
+    hasTryOut: HintsInfo['hasTryOut'] | boolean
     tryOutAnalyserData: HintsInfo['tryOutAnalyserData']
     svgProps?: HintSvgData['data']
 }
@@ -39,6 +40,7 @@ export const getHintHCInfo = (state: RootState): HintHCInfo => {
 
         inputPanelNumbersVisibility: state.smartHintHC.hints[0].inputPanelNumbersVisibility,
         isTryOut: state.smartHintHC.hints[0].steps[currentHintNum - 1].isTryOut || false,
+        hasTryOut: state.smartHintHC.hints[0].hasTryOut || false,
         tryOutAnalyserData: state.smartHintHC.hints[0].tryOutAnalyserData,
 
         svgProps: getSvgPropsData(state),

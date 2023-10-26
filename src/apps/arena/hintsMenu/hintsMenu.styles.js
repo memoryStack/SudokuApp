@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
+
 import { hexToRGBA } from '@utils/util'
 
 const BORDER_THICKNESS = 2
@@ -48,11 +49,11 @@ export const getStyles = (_, theme) => StyleSheet.create({
     horizontalSeperator: {
         width: '101%',
         height: BORDER_THICKNESS,
-        backgroundColor: _get(theme, ['divider', 'color']),
+        backgroundColor: hexToRGBA(_get(theme, ['colors', 'on-surface']), 50),
     },
     verticalSeperator: {
         width: BORDER_THICKNESS,
         height: '101%',
-        backgroundColor: _get(theme, ['divider', 'color']),
+        backgroundColor: hexToRGBA(_get(theme, ['colors', 'on-surface']), 50),
     },
 })

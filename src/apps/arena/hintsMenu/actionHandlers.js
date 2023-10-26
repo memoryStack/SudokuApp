@@ -1,7 +1,9 @@
 import _map from '@lodash/map'
 import _forEach from '@lodash/forEach'
+import _isEmpty from '@lodash/isEmpty'
 
 import { GAME_STATE } from '@resources/constants'
+
 import { consoleLog } from '../../../utils/util'
 
 import { setHintsMenuVisibilityAction } from '../store/actions/boardController.actions'
@@ -15,15 +17,18 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
     const availableRawHints = {}
     const allHintsPromises = _map(HINTS_MENU_ITEMS, ({ id: hintId }) => rawHintsPromise(hintId, mainNumbers, notes))
 
+    let availableHintsCount = 0
+
     await Promise.all(allHintsPromises)
         .then(rawHints => {
             _forEach(rawHints, ({ id, data } = {}) => {
                 availableRawHints[id] = data
+                if (!_isEmpty(data)) availableHintsCount++
             })
         })
 
     const { unmounting } = getState()
-    !unmounting && setState({ availableRawHints })
+    !unmounting && setState({ availableRawHints, availableHintsCount, hintsAnalyzed: true })
 }
 
 // TODO: analyze the asynchronous behaviour of this handler

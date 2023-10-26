@@ -12,6 +12,11 @@ const useIsHintTryOutStep = () => {
     return isTryOut
 }
 
+const useHintHasTryOutStep = () => {
+    const { hint: { hasTryOut = false } = {} } = useSelector(getHintHCInfo)
+    return hasTryOut
+}
+
 const useHintTryOutAnalyserResult = (): TryOutResult => {
     const { hint: { type: hintType, tryOutAnalyserData } = {} } = useSelector(getHintHCInfo)
 
@@ -28,4 +33,4 @@ const useHintTryOutAnalyserResult = (): TryOutResult => {
     return tryOutResult
 }
 
-export { useIsHintTryOutStep, useHintTryOutAnalyserResult }
+export { useIsHintTryOutStep, useHintTryOutAnalyserResult, useHintHasTryOutStep }

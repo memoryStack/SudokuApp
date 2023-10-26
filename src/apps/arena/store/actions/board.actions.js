@@ -5,6 +5,8 @@ import _get from '@lodash/get'
 import _map from '@lodash/map'
 
 import { PENCIL_STATE } from '@resources/constants'
+import { emit } from '@utils/GlobalEventBus'
+import { EVENTS } from '../../../../constants/events'
 import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
 import {
     isMainNumberPresentInAnyHouseOfCell,
@@ -221,11 +223,26 @@ const eraseMainNumber = () => {
 }
 
 export const eraseAction = () => {
+    if (isMainNumberNotEligibleToErase()) {
+        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
+            msg: 'Clues or Correctly filled cells can not be removed',
+            visibleTime: 5000,
+        })
+        return
+    }
+
     if (isMainNumberEligibleToErase()) {
         eraseMainNumber()
     } else {
         removeCellNotesIfEmptyCell()
     }
+}
+
+const isMainNumberNotEligibleToErase = () => {
+    const selectedCell = getSelectedCell(getStoreState())
+    const mainNumbers = getMainNumbers(getStoreState())
+    return MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)
+        && MainNumbersRecord.isCellFilledCorrectly(mainNumbers, selectedCell)
 }
 
 const isMainNumberEligibleToErase = () => {

@@ -7,20 +7,26 @@ import _noop from '@lodash/noop'
 
 import { SCREEN_NAME } from '@resources/constants'
 
+import { emit } from '@utils/GlobalEventBus'
+
+import { EVENTS } from '../../../constants/events'
 import withActions from '../../../utils/hocs/withActions'
+
 import { Board } from '../gameBoard'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { ACTION_TYPES } from './actionHandlers'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { useGameBoardInputs, useSavePuzzleState } from '../hooks/useGameBoardInputs'
-import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
-import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
 import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
 import { GameState } from '../utils/classes/gameState'
-import { useIsHintTryOutStep } from '../hooks/smartHints'
+import { useHintHasTryOutStep, useIsHintTryOutStep } from '../hooks/smartHints'
+
+import { ACTION_TYPES } from './actionHandlers'
+import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
+import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
+    const hasTryOut = useHintHasTryOutStep()
     const isHintTryOut = useIsHintTryOutStep()
 
     const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
@@ -43,14 +49,26 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
 
     const onCellClick = useCallback(cell => {
         const isCellClickable = () => {
-            if (showSmartHint) return isHintTryOut ? isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell) : false
+            if (showSmartHint) {
+                if (isHintTryOut) {
+                    // TODO: show snack bar here
+                    return isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell)
+                }
+                if (hasTryOut) {
+                    emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
+                        msg: 'click on Next button and go to last step to select cell',
+                        visibleTime: 5000,
+                    })
+                }
+                return false
+            }
             return new GameState(gameState).isGameActive()
         }
         if (!isCellClickable()) return
 
         const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
         handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut])
+    }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut, hasTryOut])
 
     return (
         <Board

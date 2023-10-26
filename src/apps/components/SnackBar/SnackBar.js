@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     },
     msgTextStyle: {
         color: 'white',
+        textAlign: 'center',
     },
     closeButton: {
         position: 'absolute',
