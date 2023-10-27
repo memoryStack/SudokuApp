@@ -40,6 +40,7 @@ import {
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from './constants'
+import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -51,7 +52,7 @@ type Props = {
 
 const SmartHintHC_: React.FC<Props> = ({
     parentHeight = 0,
-    onAction = _noop,
+    onAction: onActionFromProps = _noop,
     height = 0,
 }) => {
     const {
@@ -64,11 +65,23 @@ const SmartHintHC_: React.FC<Props> = ({
 
     const closeByApplyHintClick = useRef(false)
 
+    const { selectedCell } = useGameBoardInputs()
+
     const applyHintChanges = useSelector(getApplyHintChanges)
 
     const tryOutResult = useHintTryOutAnalyserResult()
 
     const isHintTryOut = useIsHintTryOutStep()
+
+    const onAction = React.useMemo(() => action => {
+        if (action.type === ACTION_TYPES.ON_NUMBER_CLICK) {
+            action.payload = {
+                number: action.payload,
+                selectedCell,
+            }
+        }
+        onActionFromProps(action)
+    }, [selectedCell, onActionFromProps])
 
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells, styles } })

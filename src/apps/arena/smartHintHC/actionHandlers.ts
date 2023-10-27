@@ -20,6 +20,7 @@ import { SMART_HINT_CHANGES_APPLY_DELAY } from './constants'
 import { ApplyHint, SelectCellOnClose } from '../utils/smartHints/types'
 import { InputNumber } from '../inputPanel'
 import { Hint } from '../store/selectors/smartHintHC.selectors'
+import { cellHasTryOutInput } from './helpers'
 
 type StateMaintainedByWithActionHOC = {
     focusedCells: Hint['focusedCells']
@@ -52,8 +53,13 @@ const handleCellClick = ({ params: cell } : { params: Cell }) => {
     updateTryOutSelectedCell(cell)
 }
 
-const handleNumberClick = ({ getState, params: number } : StatePropsHandlers & { params: InputNumber }) => {
+const handleNumberClick = ({ getState, params: { number, selectedCell } }: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
+
+    const isCellFilledInTryOut = cellHasTryOutInput(selectedCell)
+    if (isCellFilledInTryOut) {
+        handleEraserClick({ getState } as StatePropsHandlers)
+    }
     inputTryOutNumber(number, focusedCells, styles.snackBar)
 }
 

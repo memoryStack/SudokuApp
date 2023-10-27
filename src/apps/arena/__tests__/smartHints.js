@@ -260,4 +260,17 @@ describe('Hint/Smart Hints', () => {
         //          present in the cell, so using note's availability in 3rd cell here as a proxy for that
         expect(isNotePresentInCell(getCellByPosition(3), 3)).toBe(true)
     })
+
+    test('in try out step, input in cell shoule be able to change by just clicking another number in cell like Custom Puzzle', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        await gotoTryOutStep(smartHintHC)
+        fireEvent.press(getCellByPosition(2))
+        fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
+        fireEvent.press(getInputPanelNumberIfEnabled(4, getInputPanel(smartHintHC)))
+
+        expectMainNumberPresentInCell(getCellByPosition(2), 4)
+    })
 })
