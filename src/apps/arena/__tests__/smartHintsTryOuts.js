@@ -368,6 +368,18 @@ describe('Smart Hints try-out msgs', () => {
 
             smartHintHC.getByText('there is no cell in 4th column where 2 can come')
         })
+
+        test('BUG: in finned X-Wing test possibility of having candidate in same cross house like in perfect X-Wing when some removable candidate was input', async () => {
+            const puzzle = '000590034002340000700600002060000007820030065300000020900001003000073900470086000'
+            await renderScreenAndWaitCustomPuzzleToStart(puzzle)
+            await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])
+            const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+            await gotoTryOutStep(smartHintHC)
+            fireEvent.press(getCellByPosition(67))
+            fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
+
+            smartHintHC.getByText('now to fill 2 in G and I rows we have two cells G7 and I7 but both of these cells are in 7th column')
+        })
     })
 
     // TODO: write test-cases for perfect X-Wing

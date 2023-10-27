@@ -10,6 +10,7 @@ import {
     getNoInputResult,
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
+    getSameCrossHouseCandidatePossibilitiesResult,
 } from './helpers'
 
 export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) => {
@@ -19,8 +20,9 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
         return getNoInputResult(xWing)
     }
 
-    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing)
-    if (noCandidateInALegError) return noCandidateInALegError
+    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))) {
+        return getRemovableNoteHostCellFilledResult(xWing)
+    }
 
     if (!_isEmpty(filterFilledCellsInTryOut(xWingCells))) {
         return getLegsFilledWithoutErrorResult(xWing)
@@ -32,4 +34,11 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
         msg: UNATTAINABLE_TRY_OUT_STATE,
         state: TRY_OUT_RESULT_STATES.START,
     }
+}
+
+const getRemovableNoteHostCellFilledResult = xWing => {
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing)
+    if (noCandidateInALegError) return noCandidateInALegError
+
+    return getSameCrossHouseCandidatePossibilitiesResult(xWing)
 }
