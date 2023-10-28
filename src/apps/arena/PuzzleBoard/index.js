@@ -14,10 +14,9 @@ import withActions from '../../../utils/hocs/withActions'
 
 import { Board } from '../gameBoard'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { useGameBoardInputs, useSavePuzzleState } from '../hooks/useGameBoardInputs'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
-import { getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import { getHintHCInfo, getUnclickableCellClickInTryOutMsg } from '../store/selectors/smartHintHC.selectors'
 import { GameState } from '../utils/classes/gameState'
 import { useHintHasTryOutStep, useIsHintTryOutStep } from '../hooks/smartHints'
 
@@ -51,8 +50,14 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         const isCellClickable = () => {
             if (showSmartHint) {
                 if (isHintTryOut) {
-                    // TODO: show snack bar here
-                    return isCellFocusedInSmartHint(cell) && isCellTryOutClickable(cell)
+                    const isCellClickableInTryOut = isCellTryOutClickable(cell)
+                    if (!isCellClickableInTryOut) {
+                        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
+                            msg: getUnclickableCellClickInTryOutMsg(),
+                            visibleTime: 7000,
+                        })
+                    }
+                    return isCellClickableInTryOut
                 }
                 if (hasTryOut) {
                     emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {

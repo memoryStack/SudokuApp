@@ -225,6 +225,7 @@ export const getFinnedXWingUIData = (
         focusedCells,
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]) as InputPanelVisibleNumbers,
         clickableCells: [...removableNotesHostCells, ...getXWingCells(xWing.legs)],
+        unclickableCellClickInTryOutMsg: 'you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.',
         tryOutAnalyserData: {
             xWing,
             removableNotesHostCells,

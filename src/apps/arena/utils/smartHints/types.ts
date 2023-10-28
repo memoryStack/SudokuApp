@@ -87,6 +87,7 @@ export type TransformedRawHint = {
     tryOutAnalyserData?: unknown
     inputPanelNumbersVisibility?: InputPanelVisibleNumbers
     clickableCells?: Cell[]
+    unclickableCellClickInTryOutMsg?: string
     cellsRestrictedNumberInputs?: unknown
     restrictedNumberInputMsg?: string
     svgProps?: { data: Chain }

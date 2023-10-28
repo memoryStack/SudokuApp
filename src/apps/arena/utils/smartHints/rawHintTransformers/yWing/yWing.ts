@@ -127,12 +127,12 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsCol
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         applyHint: getApplyHintData(yWing, notesData),
         hasTryOut: true,
+        clickableCells: [pivot.cell, ...wingCells, ...eliminableNotesCells],
+        unclickableCellClickInTryOutMsg: 'you can only select cells which are highlighted here',
         tryOutAnalyserData: {
             yWing,
             eliminableNotesCells,
         },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([commonNoteInWings, ...pivot.notes]) as InputPanelVisibleNumbers,
-        // TODO: all the highlightable cells are clickable
-        // TODO: pass focused cells as well from here
     }
 }

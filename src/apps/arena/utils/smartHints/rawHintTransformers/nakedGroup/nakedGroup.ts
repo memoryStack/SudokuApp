@@ -2,6 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _filter from '@lodash/filter'
 import _forEach from '@lodash/forEach'
 import _isEmpty from '@lodash/isEmpty'
+import _some from '@lodash/some'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import {
@@ -40,6 +41,8 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
         title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
         steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells)),
         applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
+        clickableCells: [...groupCells, ...getRemovableNotesCells(groupCells, groupCandidates, focusedCells, notesData)],
+        unclickableCellClickInTryOutMsg: `you can select cells which have ${getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)} candidate highlighted in green or red color`,
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
@@ -48,6 +51,11 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(groupCandidates) as InputPanelVisibleNumbers,
     }
 }
+
+const getRemovableNotesCells = (groupCells :Cell[], groupCandidates: NoteValue[], focusedCells: Cell[], notesData: Notes) => _filter(focusedCells, (cell: Cell) => {
+    if (isCellExists(cell, groupCells)) return false
+    return _some(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
+})
 
 const getCellsHighlightData = (
     cells: Cell[],

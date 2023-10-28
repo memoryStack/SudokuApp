@@ -171,6 +171,8 @@ export const getPerfectXWingUIData = (
         cellsToFocusData,
         focusedCells,
         steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing)),
+        clickableCells: [...xWingCells, ...removableNotesHostCells],
+        unclickableCellClickInTryOutMsg: 'you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.',
         applyHint: getApplyHintData(candidate, removableNotesHostCells),
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates) as InputPanelVisibleNumbers,
         tryOutAnalyserData: {

@@ -22,6 +22,7 @@ export type HintsInfo = {
     steps: HintSteps
     applyHint: ApplyHint
     clickableCells?: ClickableCells
+    unclickableCellClickInTryOutMsg?: string
     selectCellOnClose?: SelectCellOnClose
     tryOutAnalyserData?: unknown // every hint has separate contract for it
     inputPanelNumbersVisibility?: InputPanelNumbersVisibility
