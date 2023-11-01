@@ -19,7 +19,7 @@ export const HINT_ID_VS_TITLES = {
 export const HINT_EXPLANATION_TEXTS = {
     [HINTS_IDS.NAKED_SINGLE]: {
         SINGLE_HOUSE: 'in this {{houseType}} only {{cellAxesText}} is empty so {{solutionValue}} will come here',
-        MULTIPLE_HOUSE: 'except {{solutionValue}} all other numbers from 1-9 are present in the highlighted area, so only number that can come in {{cellAxesText}} is {{solutionValue}}',
+        MULTIPLE_HOUSE: 'except {{solutionValue}} all other numbers from 1-9 are present in {{cellHousesText}} combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}',
     },
     [HINTS_IDS.HIDDEN_SINGLE]:
         'in the highlighted {{houseType}}, {{solutionValue}} can\'t come in crossed'
@@ -27,8 +27,9 @@ export const HINT_EXPLANATION_TEXTS = {
         + ' {{solutionValue}} can come',
     [HINTS_IDS.OMISSION]:
         'in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of'
-        + ' {{hostHouseHostCellsListText}}. so wherever we try to fill {{note}} in this {{hostHouseFullName}}'
-        + ' {{note}} from {{removableNotesHostCellsListText}} will be removed always',
+        + ' {{hostHouseHostCellsListText}} and all of these cells are part of {{secondaryHouseNumText}} as well.'
+        + ' so wherever we try to fill {{note}} in this {{hostHouseFullName}},'
+        + ' {{note}} in {{removableNotesHostCellsListText}} can\'t come',
     [HINTS_IDS.NAKED_DOUBLE]: [
         'A Naked Double is formed when two cells in a row, column or block have only two candidates'
         + ' and both cells have same set of candidates.\nhere {{groupCellsText}} have {{candidatesListTextAndConcatenated}}'

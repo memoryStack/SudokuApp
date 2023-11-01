@@ -14,7 +14,7 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 import {
-    getHouseAxesText,
+    getHouseNumText,
     getXWingCrossHouseFullName,
     getXWingHouseFullName,
     getXWingHouseFullNamePlural,
@@ -51,7 +51,7 @@ export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
             xWingCellsWithCandidateAsNote,
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
         ),
-        crossHouse: getHouseAxesText(
+        crossHouse: getHouseNumText(
             getCellHouseForHouseType(getCrossHouseType(xWing.houseType), xWingCellsWithCandidateAsNote[0]),
         ),
         crossHouseFullName: getXWingCrossHouseFullName(xWing),
@@ -76,7 +76,7 @@ export const getOneLegWithNoCandidateResult = xWing => {
     const msgPlaceholdersValues = {
         candidate,
         houseFullName: getXWingHouseFullName(xWing),
-        inhabitableHouseAxesText: getHouseAxesText(
+        inhabitableHouseAxesText: getHouseNumText(
             getCellHouseForHouseType(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
         ),
     }
@@ -113,7 +113,7 @@ export const getLegsFilledWithoutErrorResult = xWing => {
 const getOneLegFilledWithoutErrorResult = xWing => {
     const filledXWingCells = filterFilledCellsInTryOut(getXWingCells(xWing.legs))
     const filledLegHouse = getCellHouseForHouseType(xWing.houseType, filledXWingCells[0])
-    const houseAxesText = getHouseAxesText(filledLegHouse)
+    const houseAxesText = getHouseNumText(filledLegHouse)
 
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),

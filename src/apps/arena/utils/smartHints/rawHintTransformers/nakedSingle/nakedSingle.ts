@@ -1,5 +1,6 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
+import { toOrdinal } from '@lodash/toOrdinal'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
@@ -16,6 +17,8 @@ import {
     getCellColHouseInfo,
     getCellBlockHouseInfo,
     getCellAxesValues,
+    getCellHousesInfo,
+    getHouseAxesValue,
 } from '../../../util'
 import { getHouseCells } from '../../../houseCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
@@ -44,10 +47,19 @@ const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValu
     return dynamicInterpolation(explainations.SINGLE_HOUSE, msgPlaceholdersValues)
 }
 
+const getCellHousesText = (cell: Cell) => {
+    // msg will break if order of houses is changed in returned response of this function
+    const cellHouses = getCellHousesInfo(cell)
+    const columnNum = toOrdinal(cellHouses[1].num + 1)
+    const blockNum = toOrdinal(cellHouses[2].num + 1)
+    return `${getHouseAxesValue(cellHouses[0])} row, ${columnNum} column and ${blockNum} block`
+}
+
 const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell): string => {
     const msgPlaceholdersValues = {
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
+        cellHousesText: getCellHousesText(cell),
     }
     return dynamicInterpolation(explainations.MULTIPLE_HOUSE, msgPlaceholdersValues)
 }

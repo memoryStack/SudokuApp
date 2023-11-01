@@ -23,8 +23,8 @@ export const getXWingCrossHouseFullNamePlural = (xWing: XWingRawHint) => HOUSE_T
 export const getXWingHousesTexts = (houseType: HouseType, xWingLegs: XWingLegs) => {
     const { houseANum, houseBNum } = getXWingHousesNums(houseType, xWingLegs)
     return {
-        houseAAxesValue: getHouseAxesText({ type: houseType, num: houseANum }),
-        houseBAxesValue: getHouseAxesText({ type: houseType, num: houseBNum }),
+        houseAAxesValue: getHouseNumText({ type: houseType, num: houseANum }),
+        houseBAxesValue: getHouseNumText({ type: houseType, num: houseBNum }),
     }
 }
 
@@ -33,18 +33,17 @@ const getXWingHousesNums = (houseType: HouseType, xWingLegs: XWingLegs) => ({
     houseBNum: getCellHouseForHouseType(houseType, xWingLegs[1].cells[0]).num,
 })
 
-export const getHouseAxesText = (house: House) => {
-    const houseAxesValue = getHouseAxesValue(house)
-    if (Houses.isRowHouse(house.type)) return houseAxesValue
-    return toOrdinal(parseInt(houseAxesValue, 10))
+export const getHouseNumText = (house: House) => {
+    if (!Houses.isRowHouse(house.type)) return toOrdinal(house.num + 1)
+    return getHouseAxesValue(house)
 }
 
 export const getCrossHouseAxesText = (xWing: XWingRawHint) => {
     const crossHouseType = getCrossHouseType(xWing.houseType)
     const { crossHouseANum, crossHouseBNum } = getCrossHousesNums(xWing)
     return {
-        crossHouseAAxesValue: getHouseAxesText({ type: crossHouseType, num: crossHouseANum }),
-        crossHouseBAxesValue: getHouseAxesText({ type: crossHouseType, num: crossHouseBNum }),
+        crossHouseAAxesValue: getHouseNumText({ type: crossHouseType, num: crossHouseANum }),
+        crossHouseBAxesValue: getHouseNumText({ type: crossHouseType, num: crossHouseBNum }),
     }
 }
 

@@ -33,7 +33,7 @@ import {
 } from '../../../xWing/utils'
 import { XWING_TYPES } from '../../../xWing/constants'
 
-import { getApplyHintData, getHouseAxesText, getXWingCrossHouseFullNamePlural } from './helpers'
+import { getApplyHintData, getHouseNumText, getXWingCrossHouseFullNamePlural } from './helpers'
 import smartHintColorSystemReader from '../../../colorSystem.reader'
 import {
     CellHighlightData, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,
@@ -51,7 +51,7 @@ const getPlaceholdersValues = (xWing: XWingRawHint, removableNotesHostCells: Cel
 
     return {
         candidate: getXWingCandidate(xWing),
-        finnedLegAxesText: getHouseAxesText(getCellHouseForHouseType(houseType, finnedLeg.cells[0])),
+        finnedLegAxesText: getHouseNumText(getCellHouseForHouseType(houseType, finnedLeg.cells[0])),
         finnedLegHouseText: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         finnCellsAxesListText: getCellsAxesValuesListText(finnCells),
         finnCellEnglishText: finnCells.length === 1 ? 'cell' : 'cells',
@@ -62,7 +62,7 @@ const getPlaceholdersValues = (xWing: XWingRawHint, removableNotesHostCells: Cel
         ),
         cornersText: finnedBlockPerfectCells.length === 1 ? 'corner' : 'corners',
         crossHouseFullNamePlural: getXWingCrossHouseFullNamePlural(xWing),
-        hostHousesAxesListText: `${getHouseAxesText(xWingHouses[0])}, ${getHouseAxesText(xWingHouses[1])}`,
+        hostHousesAxesListText: `${getHouseNumText(xWingHouses[0])}, ${getHouseNumText(xWingHouses[1])}`,
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
         removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells),
         removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',

@@ -20,6 +20,7 @@ import { RawOmissionHint } from '../../omission/types'
 import {
     CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
+import { getHouseNumText } from '../xWing/transformers/helpers'
 
 const addHostHouseHighlightData = (
     omission: RawOmissionHint,
@@ -82,7 +83,7 @@ const getRemovableNotesHostCells = (omission: RawOmissionHint, notes: Notes) => 
 // extract it out if this func is needed
 // at other places as well
 const getHintExplaination = (omission: RawOmissionHint, notes: Notes) => {
-    const { hostHouse, note } = omission
+    const { hostHouse, note, removableNotesHostHouse } = omission
     const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
 
     const hostHouseHostCellsListText = getCellsAxesValuesListText(
@@ -94,7 +95,8 @@ const getHintExplaination = (omission: RawOmissionHint, notes: Notes) => {
         note,
         hostHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME,
         hostHouseHostCellsListText,
-        removableNotesHostCellsListText: getCellsAxesValuesListText(getRemovableNotesHostCells(omission, notes)),
+        secondaryHouseNumText: `${getHouseNumText(removableNotesHostHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME}`,
+        removableNotesHostCellsListText: getCellsAxesValuesListText(getRemovableNotesHostCells(omission, notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
 
     const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.OMISSION]
