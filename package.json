@@ -17,6 +17,7 @@
         "pushProd": "./scripts/bundlePushSudoku p 1.6",
         "debugApk": "./scripts/debugApk",
         "stageApk": "./scripts/stageApk",
+        "appAAB": "./scripts/appAAB.sh",
         "createComponent": "./scripts/createComponent"
     },
     "dependencies": {
