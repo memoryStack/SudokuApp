@@ -39,7 +39,7 @@ const rawHintsPromise = (hintId, mainNumbers, notes) => new Promise(resolve => {
             .then(rawHint => resolve({ id: hintId, data: rawHint }))
             .catch(error => {
                 consoleLog(hintId, error)
-                resolve(null)
+                resolve({ id: hintId, data: [] })
             })
     })
 })
