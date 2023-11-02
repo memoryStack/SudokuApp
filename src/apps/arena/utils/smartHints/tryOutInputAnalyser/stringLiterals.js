@@ -38,7 +38,10 @@ export const NAKED_GROUPS = {
         + ' it is highlighted in red color to see why these should be removed',
     EMPTY_GROUP_CELL:
         '{{emptyCellsListText}} have no candidate left. in the final'
-        + ' solution of puzzle no cell can be empty',
+        + ' solution of puzzle no cell can be empty \nto get back to right track remove'
+        + ' {{removableFilledNotes}} from {{removableFilledNotesHostCells}}.'
+        + ' {{numbersPronoun}} {{numbersTextSingularPlural}} {{candidatesHV}} belong in {{cellsPronoun}} {{cellsSingularPlural}}',
+
     MULTIPLE_CELLS_NAKED_SINGLE:
         '{{candidate}} is Naked Single for {{emptyCellsListText}}. fill {{candidate}} in one of'
         + ' these cells to know the fault in previous steps',

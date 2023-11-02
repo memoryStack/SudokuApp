@@ -36,7 +36,7 @@ export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, grou
         return getNakedGroupNoTryOutInputResult(groupCandidates)
     }
 
-    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, focusedCells)
+    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells)
     if (tryOutErrorResult) {
         return tryOutErrorResult
     }

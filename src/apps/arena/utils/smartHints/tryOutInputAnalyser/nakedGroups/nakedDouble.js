@@ -15,7 +15,7 @@ export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, group
         return getNakedGroupNoTryOutInputResult(groupCandidates)
     }
 
-    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, focusedCells)
+    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells)
     if (tryOutErrorResult) {
         return tryOutErrorResult
     }

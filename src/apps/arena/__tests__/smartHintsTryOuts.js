@@ -88,7 +88,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(72))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('H7 have no candidate left. in the final solution of puzzle no cell can be empty')
+            smartHintHC.getByText('H7 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 3 from H8. this number doesn\'t belong in this cell')
         })
 
         test('both naked double cells left without any candidate', async () => {
@@ -102,7 +102,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(63))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('H7 and H9 have no candidate left. in the final solution of puzzle no cell can be empty')
+            smartHintHC.getByText('H7 and H9 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 9 and 3 from G9 and H8. these numbers don\'t belong in these cells')
         })
     })
 
@@ -220,7 +220,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(13))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty')
+            smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 5 from E4. this number doesn\'t belong in this cell')
         })
 
         test('Wrong Fill: 2 group host cell have no candidate left', async () => {
@@ -235,7 +235,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(14))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('B4 and C4 have no candidate left. in the final solution of puzzle no cell can be empty')
+            smartHintHC.getByText('B4 and C4 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 9 and 5 from B5 and E4. these numbers don\'t belong in these cells')
         })
 
         test('Wrong Fill: if a group host cell is empty and other 2 host cells have NS in them with same candidate then empty group host cell error result will take precedence', async () => {
@@ -248,7 +248,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(14))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty')
+            smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 9 and 5 from B5 and E4. these numbers don\'t belong in these cells')
         })
     })
 

@@ -1,10 +1,11 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
+import { cellHasTryOutInput } from 'src/apps/arena/smartHintHC/helpers'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
+import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
@@ -14,6 +15,7 @@ import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { NAKED_GROUPS } from '../stringLiterals'
 import { getCandidatesToBeFilled, getCellsWithNoCandidates, getCorrectFilledTryOutCandidates } from '../helpers'
+import { isCellExists } from '../../../util'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const msgPlaceholderValues = {
@@ -44,11 +46,18 @@ export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => cell
     }))
     .sort(({ note: noteA }, { note: noteB }) => noteA - noteB)
 
-export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCells) => {
+export const getNakedGroupTryOutInputErrorResult = (groupCandidates, groupCells, focusedCells) => {
     const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
 
     if (cellsWithNoCandidates.length) {
-        return getEmptyCellsErrorResult(cellsWithNoCandidates)
+        const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+        const cellsFilledByRemovableNotes = focusedCells.filter(cell => !isCellExists(cell, groupCells) && cellHasTryOutInput(cell))
+            .map(cell => ({
+                number: MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell),
+                cell,
+            }))
+
+        return getEmptyCellsErrorResult(cellsWithNoCandidates, cellsFilledByRemovableNotes)
     }
 
     const multipleCellsNakedSingleCandidates = getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells)
@@ -59,9 +68,18 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, focusedCell
     return null
 }
 
-const getEmptyCellsErrorResult = cellsWithNoCandidates => {
+const getEmptyCellsErrorResult = (cellsWithNoCandidates, cellsFilledByRemovableNotes) => {
+    const removableFilledNotesList = cellsFilledByRemovableNotes.map(({ number }) => number)
+    const removableFilledNotesHostCellsList = cellsFilledByRemovableNotes.map(({ cell }) => cell)
     const msgPlaceholderValues = {
         emptyCellsListText: getCellsAxesValuesListText(cellsWithNoCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        removableFilledNotes: getCandidatesListText(removableFilledNotesList, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        removableFilledNotesHostCells: getCellsAxesValuesListText(removableFilledNotesHostCellsList, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        numbersPronoun: removableFilledNotesList.length > 1 ? 'these' : 'this',
+        numbersTextSingularPlural: removableFilledNotesList.length > 1 ? 'numbers' : 'number',
+        candidatesHV: removableFilledNotesList.length > 1 ? 'don\'t' : 'doesn\'t',
+        cellsPronoun: removableFilledNotesList.length > 1 ? 'these' : 'this',
+        cellsSingularPlural: removableFilledNotesList.length > 1 ? 'cells' : 'cell',
     }
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.EMPTY_GROUP_CELL, msgPlaceholderValues),
