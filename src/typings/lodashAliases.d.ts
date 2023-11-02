@@ -190,3 +190,9 @@ declare module '@lodash/property' {
 
     export default _property
 }
+
+declare module '@lodash/sortBy' {
+    import _sortBy from '@lodash/sortBy'
+
+    export default _sortBy
+}

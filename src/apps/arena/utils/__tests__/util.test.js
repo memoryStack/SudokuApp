@@ -23,6 +23,7 @@ import {
     getHouseAxesValue,
     getCellsSharingHousesWithCells,
     getCellAllHousesCells,
+    sortCells,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -500,5 +501,24 @@ describe('getCellAllHousesCells()', () => {
             { row: 8, col: 2 },
         ]
         expect(getCellAllHousesCells(cell)).toEqual(expectedResult)
+    })
+})
+
+describe('sortCells()', () => {
+    test('does not mutate the original list of cells', () => {
+        const cells = [{ row: 3, col: 2 }, { row: 3, col: 1 }, { row: 1, col: 1 }]
+        const cellsDupRef = cells
+        sortCells(cells)
+        expect(cells === cellsDupRef).toBeTruthy()
+        expect(cells).toStrictEqual([{ row: 3, col: 2 }, { row: 3, col: 1 }, { row: 1, col: 1 }])
+    })
+
+    test('returns sorted cells assuming top left corner as origin', () => {
+        const cells = [{ row: 3, col: 2 }, { row: 3, col: 1 }, { row: 1, col: 1 }]
+        const expectedResult = [
+            { row: 1, col: 1 }, { row: 3, col: 1 }, { row: 3, col: 2 },
+        ]
+
+        expect(sortCells(cells)).toEqual(expectedResult)
     })
 })

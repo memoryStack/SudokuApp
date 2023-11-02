@@ -56,20 +56,11 @@ export const NAKED_GROUPS = {
 
 export const NAKED_TRIPPLE = {
     FUTURE_EMPTY_CELL: {
-        NAKED_SINGLE_PAIR:
-            '{{nakedSingleCandidatesWithAndJoin}} are Naked Singles in'
-            + ' {{nakedSingleHostCellsAxesText}} respectively. because of'
-            + ' this {{futureEmptyCellText}} can\'t have {{nakedSingleCandidatesWithOrJoin}}'
-            + ' and it will be empty, which is invalid',
+        NAKED_SINGLE_PAIR: 'now fill {{nakedSingleCandidatesWithAndJoin}} in {{nakedSingleHostCellsAxesText}} respectively'
+            + ' to know the fault in previous steps',
         NAKED_DOUBLE_PAIR: {
-            NAKED_SINGLE_IN_THIRD_CELL:
-                '{{nakedSingleCandidate}} is the Naked Single in {{nakedSingleHostCell}} because of this'
-                + ' {{nakedPairCellAxesText}} will have {{chosenCellsPotentialMultipleNakedSingleCandidate}} as Naked Single'
-                + ' in them, which will result in invalid solution',
-            NAKED_DOUBLE_IN_THIRD_CELL:
-                '{{nakedDoubleCandidatesList}} make a Naked Double in {{nakedDoubleHostCellAxesText}} cells.'
-                + ' because of this rule {{futureEmptyCellCandidatesListText}} can\'t come in {{futureEmptyCellText}}'
-                + ' and it will be empty',
+            NAKED_SINGLE_IN_THIRD_CELL: 'now fill {{nakedSingleCandidate}} in {{nakedSingleHostCell}} to know the fault in previous steps',
+            NAKED_DOUBLE_IN_THIRD_CELL: 'now fill {{nakedDoubleCandidatesList}} in any of {{nakedDoubleHostCellAxesText}} cells to know the fault in previous steps',
         },
     },
 }

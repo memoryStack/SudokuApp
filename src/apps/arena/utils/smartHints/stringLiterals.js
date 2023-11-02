@@ -36,16 +36,16 @@ export const HINT_EXPLANATION_TEXTS = {
         + '\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}}'
         + ' as their candidates so this forms a Naked Double in {{hostHouses}}.',
 
-        'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although where exactly {{candidatesListTextAndConcatenated}} will be filled in {{groupCellsText}} is still not clear.'
-        + ' but at this point we are sure that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',
+        'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear.'
+        + ' but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',
     ],
     [HINTS_IDS.NAKED_TRIPPLE]: [
-        'a Naked Tripple is formed when three cells in a row, column or block have candidates only from a set of 3 candidates.\n'
-        + 'here {{groupCellsText}} have their candidates only from {{candidatesListTextAndConcatenated}}.',
+        'a Naked Tripple is formed when three cells in any row, column or block have candidates only from a set of 3 candidates.'
+        + ' and each cell must have atleast 2 candidates out of these 3.\n'
+        + 'here {{groupCellsText}} have a Naked Tripple in {{hostHouses}}.',
 
-        'in this highlighted area, {{candidatesListTextAndConcatenated}} will be filled only in {{groupCellsText}}.'
-        + ' so we can remove {{candidatesListTextAndConcatenated}} highlighted in red.'
-        + ' although where exactly {{candidatesListTextOrConcatenated}} will be filled {{groupCellsText}} is still not clear.',
+        'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear.'
+        + ' but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',
     ],
     [HINTS_IDS.HIDDEN_DOUBLE]: [
         'a Hidden Double is formed when two candidates are present together only in two cells and nowhere else'

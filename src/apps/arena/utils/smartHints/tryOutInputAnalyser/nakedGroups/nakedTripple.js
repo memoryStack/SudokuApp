@@ -11,6 +11,7 @@ import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
     getCellAxesValues,
     isCellExists,
+    sortCells,
 } from '../../../util'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { noInputInTryOut, getCorrectFilledTryOutCandidates } from '../helpers'
@@ -120,7 +121,7 @@ const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
 
     return {
         msg: dynamicInterpolation(NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_SINGLE_PAIR, msgPlaceholderValues),
-        state: TRY_OUT_RESULT_STATES.ERROR,
+        state: TRY_OUT_RESULT_STATES.START,
     }
 }
 
@@ -162,7 +163,6 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
     }
 
     const chosenCellsAxesText = getCellsAxesValuesListText(chosenCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
-    const chosenCellsCandidatesList = getCandidatesListText(aChosenCellNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
     const notChosenCellCandidatesListText = getCandidatesListText(
         notChosenCellNotes,
         HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
@@ -180,8 +180,8 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
         resultMsg = NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_DOUBLE_PAIR.NAKED_SINGLE_IN_THIRD_CELL
     } else {
         msgPlaceholderValues = {
-            nakedDoubleCandidatesList: chosenCellsCandidatesList,
-            nakedDoubleHostCellAxesText: chosenCellsAxesText,
+            nakedDoubleCandidatesList: getCandidatesListText(aChosenCellNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
+            nakedDoubleHostCellAxesText: getCellsAxesValuesListText(sortCells([...chosenCells, notChosenCell]), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
             futureEmptyCellText: getCellAxesValues(notChosenCell),
             futureEmptyCellCandidatesListText: notChosenCellCandidatesListText,
         }
@@ -190,7 +190,8 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
 
     return {
         msg: dynamicInterpolation(resultMsg, msgPlaceholderValues),
-        state: TRY_OUT_RESULT_STATES.ERROR,
+
+        state: TRY_OUT_RESULT_STATES.START,
     }
 }
 

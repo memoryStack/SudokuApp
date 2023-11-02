@@ -12,6 +12,7 @@ import { getKey } from '@utils/storage'
 
 import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
 
+import _sortBy from '@lodash/sortBy'
 import {
     BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES,
 } from '../constants'
@@ -263,3 +264,5 @@ export const getCellsSharingHousesWithCells = (cellA: Cell, cellB: Cell): Cell[]
     const cellBAllHousesCells = getCellAllHousesCells(cellB)
     return _filter(cellBAllHousesCells, (cell: Cell) => isCellExists(cell, cellAAllHousesCells))
 }
+
+export const sortCells = (cells: Cell[]) => _sortBy(cells, ['row', 'col'])

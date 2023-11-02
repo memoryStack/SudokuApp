@@ -34,7 +34,7 @@ describe('Smart Hints try-out msgs', () => {
             await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
             const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
             await gotoTryOutStep(smartHintHC)
-            smartHintHC.getByText('try filling 3 or 9 in the cells where it is highlighted in red or green color to see why this hint works')
+            smartHintHC.getByText('try to fill 3 and 9 where it is highlighted in red color to see why these should be removed')
         })
 
         test('one naked double note filled where it will stay', async () => {
@@ -46,7 +46,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(70))
             fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('fill 9 as well to find where these numbers can\'t come in the highlighted region.')
+            smartHintHC.getByText('3 is filled in H7 without any error. experiment with filling 9 as well to understand where it should be filled')
         })
 
         test('both naked double notes filled where these will stay', async () => {
@@ -60,7 +60,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(72))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('3 and 9 are filled in these cells without any error. now we are sure that 3 and 9 can\'t come in cells where these were highlighted in red')
+            smartHintHC.getByText('3 and 9 are filled in H7 and H9 cells without any error. this is one of many ways to fill these cells with 3 and 9. till now we are not sure what will be the exact solution for these cells but we are sure that 3 and 9 can\'t come in cells other than H7 and H9 in this highlighted region.')
         })
 
         test('one naked double note makes NAKED SINGLE for both naked double cells', async () => {
@@ -73,7 +73,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
 
             smartHintHC.getByText(
-                '9 is Naked Single for H7 and H9. if we try to fill it in one of these cells then other cell will have to be empty. so the current arrangement of numbers is wrong',
+                '9 is Naked Single for H7 and H9. fill 9 in one of these cells to know the fault in previous steps',
             )
         })
 
@@ -88,7 +88,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(72))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('H7 have no candidate left. in the final solution no cell can be empty so, the current arrangement of numbers is invalid')
+            smartHintHC.getByText('H7 have no candidate left. in the final solution of puzzle no cell can be empty')
         })
 
         test('both naked double cells left without any candidate', async () => {
@@ -102,7 +102,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(63))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('H7 and H9 have no candidate left. in the final solution no cell can be empty so, the current arrangement of numbers is invalid')
+            smartHintHC.getByText('H7 and H9 have no candidate left. in the final solution of puzzle no cell can be empty')
         })
     })
 
@@ -119,7 +119,7 @@ describe('Smart Hints try-out msgs', () => {
             await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
             const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
             await gotoTryOutStep(smartHintHC)
-            smartHintHC.getByText('try filling 1, 5 or 9 in the cells where it is highlighted in red or green color to see why this hint works')
+            smartHintHC.getByText('try to fill 1, 5 and 9 where it is highlighted in red color to see why these should be removed')
         })
 
         test('one naked tripple note filled where it will stay', async () => {
@@ -130,7 +130,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(4))
             fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('fill 5 and 9 as well to find where these numbers can\'t come in the highlighted region.')
+            smartHintHC.getByText('1 is filled in A4 without any error. experiment with filling 5 and 9 as well to understand where these should be filled')
         })
 
         test('two naked tripple notes filled where these will stay', async () => {
@@ -143,7 +143,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(22))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('fill 5 as well to find where these numbers can\'t come in the highlighted region.')
+            smartHintHC.getByText('9 and 1 are filled in C4 and A4 without any error. experiment with filling 5 as well to understand where it should be filled')
         })
 
         test('all naked tripple notes filled where these will stay', async () => {
@@ -158,7 +158,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(13))
             fireEvent.press(getInputPanelNumberIfEnabled(5, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('1, 5 and 9 are filled in these cells without any error. now we are sure that 1, 5 and 9 can\'t come in cells where these were highlighted in red')
+            smartHintHC.getByText('1, 5 and 9 are filled in A4, B4 and C4 cells without any error. this is one of many ways to fill these cells with 1, 5 and 9. till now we are not sure what will be the exact solution for these cells but we are sure that 1, 5 and 9 can\'t come in cells other than A4, B4 and C4 in this highlighted region.')
         })
 
         test('Wrong Fill: Naked Single in a group host cell will create NS in other group host cells with same candidate', async () => {
@@ -169,7 +169,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(14))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('5 is the Naked Single in C4 because of this A4 and B4 will have 1 as Naked Single in them, which will result in invalid solution')
+            smartHintHC.getByText('now fill 5 in C4 to know the fault in previous steps')
         })
 
         test('Wrong Fill: 2 group host cells have Naked Single in them and 3rd group host cells will become empty', async () => {
@@ -180,7 +180,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(40))
             fireEvent.press(getInputPanelNumberIfEnabled(5, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('1 and 9 are Naked Singles in A4 and C4 respectively. because of this B4 can\'t have 1 or 9 and it will be empty, which is invalid')
+            smartHintHC.getByText('now fill 1 and 9 in A4 and C4 respectively to know the fault in previous steps')
         })
 
         test('Wrong Fill: 2 group host cells have Naked Double in them and 3rd group host cells will become empty', async () => {
@@ -192,7 +192,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(62))
             fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('2 and 3 make a Naked Double in H7 and I8 cells. because of this rule 2 and 3 can\'t come in G7 and it will be empty')
+            smartHintHC.getByText('now fill 2 or 3 in any of G7, H7 and I8 cells to know the fault in previous steps')
         })
 
         test('Wrong Fill: Naked Single in 2 group host cells with same candidate', async () => {
@@ -205,20 +205,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(4))
             fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('9 is Naked Single for B4 and C4. if we try to fill it in one of these cells then other cell will have to be empty. so the current arrangement of numbers is wrong')
-        })
-
-        test('Wrong Fill: Naked Single in 2 group host cells with same candidate', async () => {
-            await renderScreenAndWaitForPuzzleStart()
-            await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
-            const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-            await gotoTryOutStep(smartHintHC)
-            fireEvent.press(getCellByPosition(40))
-            fireEvent.press(getInputPanelNumberIfEnabled(5, getInputPanel(smartHintHC)))
-            fireEvent.press(getCellByPosition(4))
-            fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel(smartHintHC)))
-
-            smartHintHC.getByText('9 is Naked Single for B4 and C4. if we try to fill it in one of these cells then other cell will have to be empty. so the current arrangement of numbers is wrong')
+            smartHintHC.getByText('9 is Naked Single for B4 and C4. fill 9 in one of these cells to know the fault in previous steps')
         })
 
         test('Wrong Fill: 1 group host cell has no candidate left', async () => {
@@ -233,7 +220,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(13))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('C4 have no candidate left. in the final solution no cell can be empty so, the current arrangement of numbers is invalid')
+            smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty')
         })
 
         test('Wrong Fill: 2 group host cell have no candidate left', async () => {
@@ -248,7 +235,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(14))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('B4 and C4 have no candidate left. in the final solution no cell can be empty so, the current arrangement of numbers is invalid')
+            smartHintHC.getByText('B4 and C4 have no candidate left. in the final solution of puzzle no cell can be empty')
         })
 
         test('Wrong Fill: if a group host cell is empty and other 2 host cells have NS in them with same candidate then empty group host cell error result will take precedence', async () => {
@@ -261,7 +248,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(14))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('C4 have no candidate left. in the final solution no cell can be empty so, the current arrangement of numbers is invalid')
+            smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty')
         })
     })
 

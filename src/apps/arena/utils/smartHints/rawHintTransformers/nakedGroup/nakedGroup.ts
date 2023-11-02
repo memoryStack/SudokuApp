@@ -7,7 +7,7 @@ import _some from '@lodash/some'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import {
     getCellsCommonHousesInfo,
-    getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists,
+    getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists, sortCells,
 } from '../../../util'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
@@ -107,7 +107,7 @@ const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[]) => {
             groupCandidates,
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
         ),
-        groupCellsText: getCellsAxesValuesListText(groupCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        groupCellsText: getCellsAxesValuesListText(sortCells(groupCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
         hostHouses: getHostHousesText(groupCells),
     }
     return (HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)] as string[])
