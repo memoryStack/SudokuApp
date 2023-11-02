@@ -15,7 +15,7 @@ import { TEXT_VARIATIONS, TEXT_VARIATION_VS_TOKENS_PATH } from './text.constants
 
 type Style = StyleProp<ViewStyle>
 type StyleArray = StyleProp<ViewStyle>[]
-type Styles = Style | StyleArray
+export type Styles = Style | StyleArray
 
 interface Props {
     type?: TEXT_VARIATIONS

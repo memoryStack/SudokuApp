@@ -1,7 +1,7 @@
 import { getTryOutMainNumbers } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
-import { noInputInTryOut, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from '../helpers'
+import { noInputInTryOut, getCorrectFilledTryOutCandidates } from '../helpers'
 
 import {
     getNakedGroupNoTryOutInputResult,
@@ -23,8 +23,7 @@ export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, group
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-        return getAllInputsFilledResult(groupCandidates)
+        return getAllInputsFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
     }
-    const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
-    return getPartialCorrectlyFilledResult(candidatesToBeFilled)
+    return getPartialCorrectlyFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
 }

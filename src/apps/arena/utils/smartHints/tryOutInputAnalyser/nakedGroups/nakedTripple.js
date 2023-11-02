@@ -13,7 +13,7 @@ import {
     isCellExists,
 } from '../../../util'
 import { TRY_OUT_RESULT_STATES } from '../constants'
-import { noInputInTryOut, getCorrectFilledTryOutCandidates, getCandidatesToBeFilled } from '../helpers'
+import { noInputInTryOut, getCorrectFilledTryOutCandidates } from '../helpers'
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { isNakedSinglePresent } from '../../nakedSingle/nakedSingle'
@@ -198,8 +198,7 @@ const getValidProgressResult = (groupCandidates, groupCells) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-        return getAllInputsFilledResult(groupCandidates)
+        return getAllInputsFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
     }
-    const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, groupCandidates)
-    return getPartialCorrectlyFilledResult(candidatesToBeFilled)
+    return getPartialCorrectlyFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
 }

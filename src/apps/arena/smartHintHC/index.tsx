@@ -13,7 +13,7 @@ import _isEmpty from '@lodash/isEmpty'
 import { CloseIcon } from '@resources/svgIcons/close'
 
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
-import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+import Text, { TEXT_VARIATIONS, Styles } from '@ui/atoms/Text'
 
 import { OnAction } from '@utils/hocs/withActions/types'
 
@@ -164,9 +164,9 @@ const SmartHintHC_: React.FC<Props> = ({
         </View>
     )
 
-    const renderHintText = () => (
+    const renderHintText = (text: string, textStyles: Styles) => (
         <ScrollView ref={scrollViewRef} onScroll={handleOnScroll}>
-            <Text style={styles.hintLogicText}>{logic}</Text>
+            <Text style={textStyles}>{text}</Text>
         </ScrollView>
     )
 
@@ -179,7 +179,7 @@ const SmartHintHC_: React.FC<Props> = ({
     const renderTryOutContent = () => (
         <>
             <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} singleRow />
-            <Text style={[styles.tryOutResult, getTryOutResultTextStyle()]}>{tryOutResult.msg}</Text>
+            {renderHintText(tryOutResult.msg, [styles.tryOutResult, getTryOutResultTextStyle()])}
         </>
     )
 
@@ -213,7 +213,7 @@ const SmartHintHC_: React.FC<Props> = ({
         >
             <View style={[styles.containerStyles, { height }]} testID={SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID}>
                 {renderHeader()}
-                <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText()}</View>
+                <View style={styles.bodyContainer}>{isHintTryOut ? renderTryOutContent() : renderHintText(logic, [styles.hintLogicText])}</View>
                 {renderFooter()}
             </View>
         </BottomDragger>

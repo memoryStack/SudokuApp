@@ -1,5 +1,6 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
+import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
@@ -11,13 +12,12 @@ import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
-
 import { NAKED_GROUPS } from '../stringLiterals'
-import { getCellsWithNoCandidates } from '../helpers'
+import { getCandidatesToBeFilled, getCellsWithNoCandidates, getCorrectFilledTryOutCandidates } from '../helpers'
 
 export const getNakedGroupNoTryOutInputResult = groupCandidates => {
     const msgPlaceholderValues = {
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
+        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.NO_INPUT, msgPlaceholderValues),
@@ -88,7 +88,7 @@ const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandida
 
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.MULTIPLE_CELLS_NAKED_SINGLE, msgPlaceholderValues),
-        state: TRY_OUT_RESULT_STATES.ERROR,
+        state: TRY_OUT_RESULT_STATES.START,
     }
 }
 
@@ -101,22 +101,37 @@ const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
     )
 }
 
-export const getAllInputsFilledResult = groupCandidates => {
+export const getAllInputsFilledResult = (groupCandidates, groupCells, tryOutMainNumbers) => {
+    const filledCandidatesHostCells = getCorrectlyFilledCandidatesHostCells(groupCandidates, groupCells, tryOutMainNumbers)
+
     const msgPlaceholderValues = {
+        candidatesHostCells: getCellsAxesValuesListText(filledCandidatesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
         candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
+
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.FULL, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }
 
-export const getPartialCorrectlyFilledResult = candidatesToBeFilled => {
+export const getPartialCorrectlyFilledResult = (groupCandidates, groupCells, tryOutMainNumbers) => {
+    const filledCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
+    const candidatesToBeFilled = getCandidatesToBeFilled(filledCandidates, groupCandidates)
+    const filledCandidatesHostCells = getCorrectlyFilledCandidatesHostCells(filledCandidates, groupCells, tryOutMainNumbers)
+
     const msgPlaceholderValues = {
-        candidatesListText: getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        toBeFilledCandidates: getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        filledCandidates: getCandidatesListText(filledCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        filledCandidatesHostCells: getCellsAxesValuesListText(filledCandidatesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        filledCandidatesCountHV: filledCandidates.length === 1 ? 'is' : 'are',
+        toBeFilledCandidatesPronoun: candidatesToBeFilled.length > 1 ? 'these' : 'it',
     }
+
     return {
         msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.PARTIAL, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }
+
+const getCorrectlyFilledCandidatesHostCells = (filledCandidates, groupCells, tryOutMainNumbers) => filledCandidates.map(filledCandidate => groupCells.find(groupCell => MainNumbersRecord.isCellFilledWithNumber(tryOutMainNumbers, filledCandidate, groupCell)))

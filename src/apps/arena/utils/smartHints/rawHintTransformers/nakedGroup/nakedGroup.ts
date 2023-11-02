@@ -6,10 +6,11 @@ import _some from '@lodash/some'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import {
+    getCellsCommonHousesInfo,
     getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists,
 } from '../../../util'
 
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     setCellDataInHintResult,
@@ -27,6 +28,7 @@ import { NakedGroupTransformerArgs } from './types'
 import {
     CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
+import { getHouseNumText } from '../xWing/transformers/helpers'
 
 export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }: NakedGroupTransformerArgs): TransformedRawHint => {
     const { groupCells } = rawHint
@@ -89,6 +91,12 @@ const getCellsHighlightData = (
     return result
 }
 
+const getHostHousesText = (groupCells: Cell[]) => {
+    const commonHouses = getCellsCommonHousesInfo(groupCells)
+    return commonHouses.map(commonHouse => `${getHouseNumText(commonHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[commonHouse.type].FULL_NAME}`)
+        .join(` ${HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND} `)
+}
+
 const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[]) => {
     const msgPlaceholdersValues = {
         candidatesListTextAndConcatenated: getCandidatesListText(
@@ -100,6 +108,7 @@ const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[]) => {
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
         ),
         groupCellsText: getCellsAxesValuesListText(groupCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        hostHouses: getHostHousesText(groupCells),
     }
     return (HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)] as string[])
         .map(hintChunkTemplate => dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues))

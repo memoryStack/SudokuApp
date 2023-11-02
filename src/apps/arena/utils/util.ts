@@ -194,6 +194,13 @@ export const getCellsCommonHouses = (cells: Cell[]) => {
     return result
 }
 
+export const getCellsCommonHousesInfo = (cells: Cell[]) => {
+    const commonHouses = getCellsCommonHouses(cells)
+    const allHouses = [HOUSE_TYPE.ROW, HOUSE_TYPE.COL, HOUSE_TYPE.BLOCK]
+    return allHouses.filter(houseType => commonHouses[houseType])
+        .map(commonHouseType => getCellHouseForHouseType(commonHouseType, cells[0]))
+}
+
 export const areSameCellsSets = (setA: Cell[], setB: Cell[]) => {
     if (setA.length !== setB.length) return false
     return setA.every(cell => isCellExists(cell, setB))

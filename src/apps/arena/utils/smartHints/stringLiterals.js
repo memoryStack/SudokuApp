@@ -31,13 +31,13 @@ export const HINT_EXPLANATION_TEXTS = {
         + ' so wherever we try to fill {{note}} in this {{hostHouseFullName}},'
         + ' {{note}} in {{removableNotesHostCellsListText}} can\'t come',
     [HINTS_IDS.NAKED_DOUBLE]: [
-        'A Naked Double is formed when two cells in a row, column or block have only two candidates'
-        + ' and both cells have same set of candidates.\nhere {{groupCellsText}} have {{candidatesListTextAndConcatenated}}'
-        + ' as their candidates so this forms a Naked Double.',
+        'A Naked Double occurs when two cells in any row, column, or block'
+        + ' contain only two possible candidates, and these two cells share the same set of candidates.'
+        + '\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}}'
+        + ' as their candidates so this forms a Naked Double in {{hostHouses}}.',
 
-        'in this highlighted area, {{candidatesListTextAndConcatenated}} will be filled only in {{groupCellsText}}.'
-        + ' so we can remove {{candidatesListTextAndConcatenated}} highlighted in red. although where exactly'
-        + ' {{candidatesListTextOrConcatenated}} will be filled in {{groupCellsText}} is still not clear.',
+        'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although where exactly {{candidatesListTextAndConcatenated}} will be filled in {{groupCellsText}} is still not clear.'
+        + ' but at this point we are sure that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',
     ],
     [HINTS_IDS.NAKED_TRIPPLE]: [
         'a Naked Tripple is formed when three cells in a row, column or block have candidates only from a set of 3 candidates.\n'

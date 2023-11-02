@@ -34,23 +34,23 @@ export const HIDDEN_GROUP = {
 
 export const NAKED_GROUPS = {
     NO_INPUT:
-        'try filling {{candidatesListText}} in the cells where'
-        + ' it is highlighted in red or green color to see why this hint works',
+        'try to fill {{candidatesListText}} where'
+        + ' it is highlighted in red color to see why these should be removed',
     EMPTY_GROUP_CELL:
         '{{emptyCellsListText}} have no candidate left. in the final'
-        + ' solution no cell can be empty so, the current arrangement of numbers is invalid',
+        + ' solution of puzzle no cell can be empty',
     MULTIPLE_CELLS_NAKED_SINGLE:
-        '{{candidate}} is Naked Single for {{emptyCellsListText}}. if we try to fill it in one of these cells'
-        + ' then other {{nakedSingleHostCellNounText}} will have to be empty.'
-        + ' so the current arrangement of numbers is wrong',
+        '{{candidate}} is Naked Single for {{emptyCellsListText}}. fill {{candidate}} in one of'
+        + ' these cells to know the fault in previous steps',
     VALID_FILL: {
         FULL:
-            '{{candidatesListText}} are filled in'
-            + ' these cells without any error. now we are sure'
-            + ' that {{candidatesListText}} can\'t come in cells where these were highlighted in red',
+            '{{candidatesListText}} are filled in {{candidatesHostCells}} cells without any error.'
+            + ' this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what'
+            + ' will be the exact solution for these cells but we are sure that {{candidatesListText}} can\'t'
+            + ' come in cells other than {{candidatesHostCells}} in this highlighted region.',
         PARTIAL:
-            'fill {{candidatesListText}} as well'
-            + ' to find where these numbers can\'t come in the highlighted region.',
+            '{{filledCandidates}} {{filledCandidatesCountHV}} filled in {{filledCandidatesHostCells}} without'
+            + ' any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} should be filled',
     },
 }
 
