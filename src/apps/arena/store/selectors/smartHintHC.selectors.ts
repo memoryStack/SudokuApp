@@ -76,3 +76,5 @@ export const getUnclickableCellClickInTryOutMsg = () => {
     const state = getStoreState()
     return state.smartHintHC.hints[0].unclickableCellClickInTryOutMsg
 }
+
+export const getRemovableNotesInfo = (state: RootState) => state.smartHintHC.hints[0].removableNotes

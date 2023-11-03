@@ -7,6 +7,7 @@ const smartHintColorSystemReader = {
     safeNoteColor: _property('safeNoteColor'),
     toBeRemovedNoteColor: _property('toBeRemovedNoteColor'),
     tryOutFilledNumberColor: _property('tryOutFilledNumberColor'),
+    removableNoteTryOutNumberInputColor: _property('removableNoteTryOutNumberInputColor'),
     correctTryOutInputMsgColor: _property('correctTryOutInputMsgColor'),
     incorrectTryOutInputMsgColor: _property('incorrectTryOutInputMsgColor'),
     yWingPivotCellBGColor: _property('yWing.pivotCellBGColor'),

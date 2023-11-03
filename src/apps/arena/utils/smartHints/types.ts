@@ -74,6 +74,11 @@ export type RawHintTransformersArgs = {
     smartHintsColorSystem: SmartHintsColorSystem
 }
 
+export type RemovableNotesInfo = {
+    notes: NoteValue[]
+    hostCells: Cell[]
+}
+
 // TODO: add more keys here to support for other hints as well
 export type TransformedRawHint = {
     cellsToFocusData: CellsFocusData
@@ -85,6 +90,7 @@ export type TransformedRawHint = {
     hasTryOut?: boolean
     focusedCells?: FocusedCells
     tryOutAnalyserData?: unknown
+    removableNotes?: RemovableNotesInfo
     inputPanelNumbersVisibility?: InputPanelVisibleNumbers
     clickableCells?: Cell[]
     unclickableCellClickInTryOutMsg?: string

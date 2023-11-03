@@ -21,7 +21,7 @@ import {
     areCommonHouseCells,
 } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
-import { cellHasTryOutInput } from '../smartHintHC/helpers'
+import { cellHasTryOutInput, removableNoteFilledInCell } from '../smartHintHC/helpers'
 import {
     BOARD_AXES_VALUES,
     BOARD_GRID_BORDERS_DIRECTION,
@@ -113,7 +113,10 @@ const Board_: React.FC<Props> = ({
     const getMainNumFontColor = (cell: Cell) => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) return null
         if (isCustomPuzleScreen) return getCustomPuzzleMainNumFontColor(cell)
-        if (isHintTryOut && cellHasTryOutInput(cell)) return styles.tryOutInputColor
+        if (isHintTryOut && cellHasTryOutInput(cell)) {
+            return removableNoteFilledInCell(cell) ? styles.removableNoteTryOutInputColor
+                : styles.tryOutInputColor
+        }
         if (showSmartHint) return styles.clueNumColor
         if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
         if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor

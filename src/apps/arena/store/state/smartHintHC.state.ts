@@ -7,6 +7,7 @@ import {
     ClickableCells,
     Chain,
     InputPanelNumbersVisibility,
+    RemovableNotesInfo,
 } from '../../utils/smartHints/types'
 
 export type HintSvgData = {
@@ -25,6 +26,7 @@ export type HintsInfo = {
     unclickableCellClickInTryOutMsg?: string
     selectCellOnClose?: SelectCellOnClose
     tryOutAnalyserData?: unknown // every hint has separate contract for it
+    removableNotes?: RemovableNotesInfo
     inputPanelNumbersVisibility?: InputPanelNumbersVisibility
     cellsRestrictedNumberInputs?: unknown
     restrictedNumberInputMsg?: string

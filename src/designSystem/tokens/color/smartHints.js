@@ -9,6 +9,7 @@ module.exports = {
             safeNoteColor: { value: '{colors.success.60}' },
             toBeRemovedNoteColor: { value: '{colors.error.60}' },
             tryOutFilledNumberColor: { value: '{colors.primary}' },
+            removableNoteTryOutNumberInputColor: { value: '{colors.error}' },
             correctTryOutInputMsgColor: { value: '{colors.success}' },
             incorrectTryOutInputMsgColor: { value: '{colors.error}' },
             yWing: {

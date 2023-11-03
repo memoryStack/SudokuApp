@@ -7,81 +7,81 @@ declare module '@lodash/isEmpty' {
 }
 
 declare module '@lodash/isEqual' {
-    import isEqual from '@lodash/isEqual'
+    import _isEqual from '@lodash/isEqual'
 
-    export default isEqual
+    export default _isEqual
 }
 
 declare module '@lodash/forEach' {
-    import forEach from '@lodash/forEach'
+    import _forEach from '@lodash/forEach'
 
-    export default forEach
+    export default _forEach
 }
 
 declare module '@lodash/filter' {
-    import filter from '@lodash/filter'
+    import _filter from '@lodash/filter'
 
-    export default filter
+    export default _filter
 }
 
 declare module '@lodash/includes' {
-    import includes from '@lodash/includes'
+    import _includes from '@lodash/includes'
 
-    export default includes
+    export default _includes
 }
 
 declare module '@lodash/values' {
-    import values from '@lodash/values'
+    import _values from '@lodash/values'
 
-    export default values
+    export default _values
 }
 
 declare module '@lodash/unique' {
-    import unique from '@lodash/unique'
+    import _unique from '@lodash/unique'
 
-    export default unique
+    export default _unique
 }
 
 declare module '@lodash/sortNumbers' {
-    import sortNumbers from '@lodash/sortNumbers'
+    import _sortNumbers from '@lodash/sortNumbers'
 
-    export default sortNumbers
+    export default _sortNumbers
 }
 
 declare module '@lodash/areSameValues' {
-    import areSameValues from '@lodash/isEqual'
+    import _areSameValues from '@lodash/isEqual'
 
-    export default areSameValues
+    export default _areSameValues
 }
 
 declare module '@lodash/isNil' {
-    import isNil from '@lodash/isNil'
+    import _isNil from '@lodash/isNil'
 
-    export default isNil
+    export default _isNil
 }
 
 declare module '@lodash/get' {
-    import get from '@lodash/get'
+    import _get from '@lodash/get'
 
-    export default get
+    export default _get
 }
 
 declare module '@lodash/noop' {
-    import noop from '@lodash/noop'
+    import _noop from '@lodash/noop'
 
-    export default noop
+    export default _noop
 }
 
 declare module '@lodash/set' {
-    import set from '@lodash/set'
+    import _set from '@lodash/set'
 
-    export default set
+    export default _set
 }
 
 declare module '@lodash/isArray' {
-    import isArray from '@lodash/isArray'
+    import _isArray from '@lodash/isArray'
 
-    export default isArray
+    export default _isArray
 }
 
 declare module '@lodash/dynamicInterpolation' {

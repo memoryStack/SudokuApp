@@ -95,6 +95,9 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
     tryOutInputColor: {
         color: smartHintColorSystemReader.tryOutFilledNumberColor(_get(theme, 'colors.smartHints')),
     },
+    removableNoteTryOutInputColor: {
+        color: smartHintColorSystemReader.removableNoteTryOutNumberInputColor(_get(theme, 'colors.smartHints')),
+    },
     yAxis: {
         justifyContent: 'space-around',
         alignItems: 'center',

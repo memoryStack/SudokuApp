@@ -35,6 +35,7 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
     const focusedCells = getHousesCellsSharedByCells(groupCells)
     const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)
 
+    const removableNotesHostCells = getRemovableNotesCells(groupCells, groupCandidates, focusedCells, notesData)
     return {
         hasTryOut: true,
         cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData, smartHintsColorSystem),
@@ -43,8 +44,12 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
         title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
         steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells)),
         applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
-        clickableCells: [...groupCells, ...getRemovableNotesCells(groupCells, groupCandidates, focusedCells, notesData)],
+        clickableCells: [...groupCells, ...removableNotesHostCells],
         unclickableCellClickInTryOutMsg: `you can select cells which have ${getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)} candidate highlighted in green or red color`,
+        removableNotes: {
+            notes: [...groupCandidates],
+            hostCells: removableNotesHostCells,
+        },
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
