@@ -47,24 +47,50 @@ export const HINT_EXPLANATION_TEXTS = {
         'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear.'
         + ' but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',
     ],
-    [HINTS_IDS.HIDDEN_DOUBLE]: [
-        'a Hidden Double is formed when two candidates are present together only in two cells and nowhere else'
-        + ' in a row, column or block then these cells will be reserved for these candidates.\n'
-        + 'here in this {{houseType}} {{candidatesListText}} are present only'
-        + ' in {{groupCellsText}}',
+    [HINTS_IDS.HIDDEN_DOUBLE]: {
+        DEFAULT: [
+            'a Hidden Double is formed when two candidates are present together only in two cells and nowhere else'
+            + ' in any row, column or block.'
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
 
-        'since only {{candidatesListText}} can be filled in {{groupCellsText}}, we can remove all'
-        + ' the candidates highlighted in red.\nNote: we are still not clear exactly which candidate will fill which cell',
-    ],
-    [HINTS_IDS.HIDDEN_TRIPPLE]: [
-        'a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else'
-        + ' in a row, column or block then these cells will be reserved for these candidates.\n'
-        + 'here in this {{houseType}} {{candidatesListText}} are present only'
-        + ' in {{groupCellsText}}',
+            '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
+            + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
+            + ' removed from {{primaryHouseRemovableNotesHostCells}}',
+        ],
+        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
+            'a Hidden Double is formed when two candidates are present together only in two cells and nowhere else'
+            + ' in any row, column or block.'
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
 
-        'since only {{candidatesListText}} can be filled in {{groupCellsText}}, we can remove all'
-        + ' the candidates highlighted in red.\nNote: we are still not clear exactly which candidate will fill which cell',
-    ],
+            '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
+            + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
+            + ' removed from {{primaryHouseRemovableNotesHostCells}}'
+            + '\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed'
+            + ' from {{secondaryHouseRemovableNotesHostCells}} as well',
+        ],
+    },
+    [HINTS_IDS.HIDDEN_TRIPPLE]: {
+        DEFAULT: [
+            'a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else'
+            + ' in any row, column or block.\neach of these three cells must have atleast two out of these three candidates.'
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
+
+            '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
+            + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
+            + ' removed from {{primaryHouseRemovableNotesHostCells}}',
+        ],
+        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
+            'a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else'
+            + ' in any row, column or block.\neach of these three cells must have atleast two out of these three candidates.'
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
+
+            '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
+            + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
+            + ' removed from {{primaryHouseRemovableNotesHostCells}}'
+            + '\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed'
+            + ' from {{secondaryHouseRemovableNotesHostCells}} as well',
+        ],
+    },
     [HINTS_IDS.PERFECT_X_WING]: [
         'in X-Wing we search for a candidate which is present in exactly 2 cells of 2 rows or columns each.'
         + ' these cells must form corners of a rectangle.\n'

@@ -4,6 +4,8 @@ import _forEach from '@lodash/forEach'
 import _isEmpty from '@lodash/isEmpty'
 import _some from '@lodash/some'
 
+import _isNil from '@lodash/isNil'
+import _intersection from '@lodash/intersection'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import {
     getCellsCommonHousesInfo,
@@ -26,7 +28,7 @@ import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { NakedGroupTransformerArgs } from './types'
 import {
-    CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, SmartHintsColorSystem, TransformedRawHint,
+    CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
 import { getHouseNumText } from '../xWing/transformers/helpers'
 
@@ -46,10 +48,7 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
         applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
         clickableCells: [...groupCells, ...removableNotesHostCells],
         unclickableCellClickInTryOutMsg: `you can select cells which have ${getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)} candidate highlighted in green or red color`,
-        removableNotes: {
-            notes: [...groupCandidates],
-            hostCells: removableNotesHostCells,
-        },
+        removableNotes: getRemovableNotesHostCellsMap(groupCandidates, removableNotesHostCells, notesData),
         tryOutAnalyserData: {
             groupCandidates,
             focusedCells,
@@ -139,6 +138,21 @@ const getApplyHintData = (
                 action: { type: BOARD_MOVES_TYPES.REMOVE, notes: groupCandidatesVisible },
             })
         }
+    })
+
+    return result
+}
+
+const getRemovableNotesHostCellsMap = (groupCandidates: NoteValue[], removableNotesHostCells: Cell[], notes: Notes) => {
+    const result: RemovableNotesInfo = {}
+
+    removableNotesHostCells.forEach(cell => {
+        const visibleNotes = NotesRecord.getCellVisibleNotesList(notes, cell)
+        const removableGroupCandidatesInCell = _intersection(visibleNotes, groupCandidates)
+        removableGroupCandidatesInCell.forEach((removableNote: NoteValue) => {
+            if (_isNil(result[removableNote])) result[removableNote] = []
+            result[removableNote].push(cell)
+        })
     })
 
     return result

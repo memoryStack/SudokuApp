@@ -75,8 +75,7 @@ export type RawHintTransformersArgs = {
 }
 
 export type RemovableNotesInfo = {
-    notes: NoteValue[]
-    hostCells: Cell[]
+    [note: NoteValue]: Cell[]
 }
 
 // TODO: add more keys here to support for other hints as well

@@ -265,4 +265,4 @@ export const getCellsSharingHousesWithCells = (cellA: Cell, cellB: Cell): Cell[]
     return _filter(cellBAllHousesCells, (cell: Cell) => isCellExists(cell, cellAAllHousesCells))
 }
 
-export const sortCells = (cells: Cell[]) => _sortBy(cells, ['row', 'col'])
+export const sortCells = (cells: Cell[]): Cell[] => _sortBy(cells, ['row', 'col'])

@@ -1,4 +1,4 @@
-import _includes from '@lodash/includes'
+import _get from '@lodash/get'
 
 import { getStoreState } from '../../../redux/dispatch.helpers'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
@@ -27,8 +27,8 @@ export const isCellTryOutClickable = (cell: Cell) => {
 
 export const removableNoteFilledInCell = (cell: Cell) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState()) as MainNumbers
-    const { notes = [], hostCells = [] } = getRemovableNotesInfo(getStoreState()) || {} as RemovableNotesInfo
-    if (!isCellExists(cell, hostCells)) return false
+    const removableNotes = getRemovableNotesInfo(getStoreState()) || {} as RemovableNotesInfo
     const filledNumberInCell = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell)
-    return _includes(notes, filledNumberInCell)
+    const noteRemovableHostCells = _get(removableNotes, filledNumberInCell, [])
+    return isCellExists(cell, noteRemovableHostCells)
 }

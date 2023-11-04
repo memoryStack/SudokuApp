@@ -196,3 +196,15 @@ declare module '@lodash/sortBy' {
 
     export default _sortBy
 }
+
+declare module '@lodash/difference' {
+    import _difference from '@lodash/difference'
+
+    export default _difference
+}
+
+declare module '@lodash/intersection' {
+    import _intersection from '@lodash/intersection'
+
+    export default _intersection
+}

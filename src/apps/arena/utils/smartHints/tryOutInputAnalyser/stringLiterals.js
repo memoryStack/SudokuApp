@@ -3,32 +3,31 @@ import { XWING_TYPES } from '../xWing/constants'
 export const UNATTAINABLE_TRY_OUT_STATE = 'not sure how we reached here'
 
 export const HIDDEN_GROUP = {
-    NO_INPUT:
-        'try filling these numbers in the cells where these are'
-        + ' highlighted in red or green color to see why green numbers stays'
-        + ' and red numbers will be removed',
+    NO_INPUT: 'try to fill numbers highlighted in red color to understand why these should be removed from these cells',
     REMOVABLE_GROUP_CANDIDATE_FILLED:
         '{{filledCandidatesListText}} {{filledInstancesHelpingVerb}} filled in {{filledCellsAxesListText}}.'
         + ' because of this there {{filledInstancesHelpingVerb}} no'
-        + ' cell for {{filledCandidatesListText}} in highlighted {{primaryHouseFullName}}', // TODO: instead of highlighted row, we can actually add the row's name
+        + ' {{cellSingularPlural}} left for {{filledCandidatesListText}} in {{primaryHouseFullName}}'
+        + '\nto fix this error, remove {{filledCandidatesListText}} from {{filledCellsAxesListText}}',
     INVALID_CANDIDATE_IN_GROUP_CELL: {
-        NO_HOST_CELL_FOR_GROUP_CANDIDATES: 'in the highlighted {{primaryHouseFullName}}, there is no cell where {{candidatesListText}} can come.',
+        NO_HOST_CELL_FOR_GROUP_CANDIDATES: 'in {{primaryHouseFullName}} {{candidatesListText}} can\'t come in any cell'
+        + '\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}',
         INSUFFICIENT_HOST_CELLS:
-            '{{candidatesToBeFilledCount}} numbers {{candidatesListText}} need to be filled'
-            + ' but only {{emptyGroupCellsCount}} empty {{emptyGroupCellsNounText}}'
-            + ' {{emptyCellsAxesListText}} {{emptyGroupCellsHelpingVerb}} available for these'
-            + ' in the highlighted {{primaryHouseFullName}}. so {{candidatesCountWithoutCells}} out of {{candidatesListText}}'
-            + ' can\'t be filled in this {{primaryHouseFullName}}.',
+            '{{candidatesListText}} need to be filled but only {{emptyCellsAxesListText}} {{emptyGroupCellsHelpingVerb}}'
+            + ' available for these in {{primaryHouseFullName}}. so {{candidatesCountWithoutCells}} out of {{candidatesListText}}'
+            + ' can\'t be filled in this {{primaryHouseFullName}}.'
+            + '\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}',
     },
     VALID_FILL: {
         FULL:
-            '{{candidatesListText}} are filled in {{groupCellsAxesListText}} cells without any'
-            + ' error. so only {{candidatesListText}} highlighted in green color stays'
-            + ' and other red highlighted numbers can be removed.',
+            '{{candidatesListText}} are filled in {{groupCellsAxesListText}} cells without any error.'
+            + ' this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what'
+            + ' will be the exact solution for these cells but we are sure that {{candidatesListText}} can\'t'
+            + ' come in cells other than {{groupCellsAxesListText}} in this highlighted region.',
+
         PARTIAL:
-            'try filling {{candidatesListText}} as well where {{candidatesPronoun}} '
-            + ' {{candidatesHelpingVerb}} highlighted to find out in which cells {{candidatesListText}}'
-            + ' can and can\'t come.',
+            '{{filledCandidates}} {{filledCandidatesCountHV}} filled in {{filledCandidatesHostCells}} without'
+            + ' any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can\'t be filled',
     },
 }
 
@@ -53,7 +52,7 @@ export const NAKED_GROUPS = {
             + ' come in cells other than {{candidatesHostCells}} in this highlighted region.',
         PARTIAL:
             '{{filledCandidates}} {{filledCandidatesCountHV}} filled in {{filledCandidatesHostCells}} without'
-            + ' any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} should be filled',
+            + ' any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} should be filled and why',
     },
 }
 

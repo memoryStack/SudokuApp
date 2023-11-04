@@ -6,11 +6,16 @@ import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
 
+import _sortBy from '@lodash/sortBy'
+import _difference from '@lodash/difference'
+
+import _isNil from '@lodash/isNil'
+import _intersection from '@lodash/intersection'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
 import {
-    HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES,
+    HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
@@ -19,6 +24,7 @@ import {
     areSameRowCells,
     getCellAxesValues,
     isCellExists,
+    sortCells,
 } from '../../../util'
 
 import { getHouseCells } from '../../../houseCells'
@@ -37,10 +43,11 @@ import smartHintColorSystemReader from '../../colorSystem.reader'
 import { getBlockAndBoxNum } from '../../../cellTransformers'
 import { HiddenGroupTransformerArgs } from './types'
 import {
-    CellHighlightData, CellsFocusData, NotesRemovalHintAction, NotesToHighlightData, SmartHintsColorSystem, TransformedRawHint,
+    CellHighlightData, CellsFocusData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
 
 import { GroupCandidate, GroupCandidates, GroupHostCells } from '../../hiddenGroup/types'
+import { getHouseNumText } from '../xWing/transformers/helpers'
 
 export const getRemovableCandidates = (hostCells: GroupHostCells, groupCandidates: GroupCandidates, notesData: Notes) => {
     const result: NoteValue[] = []
@@ -169,13 +176,87 @@ const highlightSecondaryHouseCells = (
     })
 }
 
-const getHintChunks = (houseType: HouseType, groupCandidates: GroupCandidates, groupCells: GroupHostCells): string[] => {
+const getGroupCellsRemovableNotes = (
+    groupCandidates: GroupCandidates,
+    groupCells: GroupHostCells,
+    notes: Notes,
+) => {
+    const allNotesInGroupCells: NoteValue[] = []
+    _forEach(groupCells, (cell: Cell) => {
+        allNotesInGroupCells.push(...NotesRecord.getCellVisibleNotesList(notes, cell))
+    })
+    return _sortBy(_difference(_unique(allNotesInGroupCells), groupCandidates)) as NoteValue[]
+}
+
+const getPrimaryHouseRemovableNotesHostCells = (
+    groupCandidates: GroupCandidates,
+    groupCells: GroupHostCells,
+    notes: Notes,
+) => {
+    const result: Cell[] = []
+    _forEach(groupCells, (cell: Cell) => {
+        const cellNotes = NotesRecord.getCellVisibleNotesList(notes, cell)
+        if (!_isEmpty(_difference(cellNotes, groupCandidates))) result.push(cell)
+    })
+    return sortCells(result)
+}
+
+const getSecondaryHouseRemovableNotes = (
+    house: House,
+    groupCandidates: GroupCandidates,
+    groupCells: GroupHostCells,
+    notes: Notes,
+) => {
+    const removableGroupCandidates: NoteValue[] = []
+    getHouseCells(house).filter(cell => !isCellExists(cell, groupCells))
+        .forEach(cell => {
+            const groupCandidatesPresentInCell = _filter(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notes, groupCandidate, cell))
+            removableGroupCandidates.push(...groupCandidatesPresentInCell)
+        })
+    return _sortBy(_unique(removableGroupCandidates)) as NoteValue[]
+}
+
+const getSecondaryHouseRemovableNotesHostCells = (
+    house: House,
+    groupCandidates: GroupCandidates,
+    groupCells: GroupHostCells,
+    notes: Notes,
+) => {
+    const result: Cell[] = []
+    getHouseCells(house).filter(cell => !isCellExists(cell, groupCells))
+        .forEach(cell => {
+            const groupCandidatesPresentInCell = _filter(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notes, groupCandidate, cell))
+            if (!_isEmpty(groupCandidatesPresentInCell)) result.push(cell)
+        })
+
+    return sortCells(result)
+}
+
+const getHintChunks = (
+    house: House,
+    groupCandidates: GroupCandidates,
+    groupCells: GroupHostCells,
+    secondaryHostHouse: House,
+    secondaryHouseEligibleForHighlight: boolean,
+    notes: Notes,
+): string[] => {
     const hintId = groupCandidates.length === 2 ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
-    const msgTemplates = HINT_EXPLANATION_TEXTS[hintId] as string[]
+    const msgTemplates = secondaryHouseEligibleForHighlight ? HINT_EXPLANATION_TEXTS[hintId].REMOVABLE_NOTES_IN_SECONDARY_HOUSE
+        : HINT_EXPLANATION_TEXTS[hintId].DEFAULT as string[]
+    const groupCellsRemovableNotes = getGroupCellsRemovableNotes(groupCandidates, groupCells, notes)
+    const primaryHouseRemovableNotesHostCells = getPrimaryHouseRemovableNotesHostCells(groupCandidates, groupCells, notes)
     const msgPlaceholdersValues = {
-        houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
-        candidatesListText: getCandidatesListText(groupCandidates),
-        groupCellsText: getCellsAxesValuesListText(groupCells),
+        houseType: HOUSE_TYPE_VS_FULL_NAMES[house.type].FULL_NAME,
+        hostHouseNumText: getHouseNumText(house),
+        candidatesListText: getCandidatesListText(_sortBy(groupCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        groupCellsText: getCellsAxesValuesListText(sortCells(groupCells)),
+        primaryHouseRemovableNotes: getCandidatesListText(groupCellsRemovableNotes),
+        primaryHouseRemovableNotesHostCells: getCellsAxesValuesListText(primaryHouseRemovableNotesHostCells),
+        ...secondaryHouseEligibleForHighlight && {
+            secondaryHostHouse: `${getHouseNumText(secondaryHostHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[secondaryHostHouse.type].FULL_NAME}`,
+            secondaryHouseRemovableNotes: getCandidatesListText(getSecondaryHouseRemovableNotes(secondaryHostHouse, groupCandidates, groupCells, notes)),
+            secondaryHouseRemovableNotesHostCells: getCellsAxesValuesListText(getSecondaryHouseRemovableNotesHostCells(secondaryHostHouse, groupCandidates, groupCells, notes)),
+        },
     }
     return msgTemplates.map(msgTemplate => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
@@ -229,6 +310,30 @@ const getApplyHintData = (
     return result
 }
 
+const getRemovableNotesHostCellsMap = (groupCandidates: NoteValue[], groupCells: Cell[], removableGroupCandidatesHostCells: Cell[], notes: Notes) => {
+    const result: RemovableNotesInfo = {}
+
+    groupCells.forEach(groupCell => {
+        const visibleNotes = NotesRecord.getCellVisibleNotesList(notes, groupCell)
+        const removableNotes = _difference(visibleNotes, groupCandidates)
+        removableNotes.forEach((removableNote: NoteValue) => {
+            if (_isNil(result[removableNote])) result[removableNote] = []
+            result[removableNote].push(groupCell)
+        })
+    })
+
+    removableGroupCandidatesHostCells.forEach(cell => {
+        const visibleNotes = NotesRecord.getCellVisibleNotesList(notes, cell)
+        const removableGroupCandidatesInCell = _intersection(visibleNotes, groupCandidates)
+        removableGroupCandidatesInCell.forEach((removableNote: NoteValue) => {
+            if (_isNil(result[removableNote])) result[removableNote] = []
+            result[removableNote].push(cell)
+        })
+    })
+
+    return result
+}
+
 export const transformHiddenGroupRawHint = ({
     rawHint: group,
     mainNumbers,
@@ -276,7 +381,8 @@ export const transformHiddenGroupRawHint = ({
         })
     }
 
-    const hintChunks = getHintChunks(house.type, groupCandidates, hostCells)
+    // pass secondary house as well here
+    const hintChunks = getHintChunks(house, groupCandidates, hostCells, secondaryHostHouse, secondaryHouseEligibleForHighlight as boolean, notesData)
 
     const isHiddenDoubles = groupCandidates.length === 2
     const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(
@@ -303,6 +409,7 @@ export const transformHiddenGroupRawHint = ({
             removableGroupCandidatesHostCells,
             primaryHouse: group.house,
         },
+        removableNotes: getRemovableNotesHostCellsMap(groupCandidates, hostCells, removableGroupCandidatesHostCells, notesData),
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates) as InputPanelVisibleNumbers,
         clickableCells: _cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
         unclickableCellClickInTryOutMsg: 'you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.',

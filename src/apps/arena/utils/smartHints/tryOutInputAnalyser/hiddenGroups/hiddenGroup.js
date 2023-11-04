@@ -1,4 +1,6 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _sortBy from '@lodash/sortBy'
+import _unique from '@lodash/unique'
 
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
@@ -6,10 +8,11 @@ import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
-import { filterEmptyCells } from '../../../util'
+import { filterEmptyCells, sortCells } from '../../../util'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
+import { getHouseNumText } from '../../rawHintTransformers/xWing/transformers/helpers'
 import { getCandidatesListText } from '../../util'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
@@ -19,7 +22,6 @@ import { HIDDEN_GROUP } from '../stringLiterals'
 export const hiddenGroupTryOutAnalyser = ({
     groupCandidates,
     groupCells,
-    removableCandidates,
     removableGroupCandidatesHostCells,
     primaryHouse,
 }) => {
@@ -35,7 +37,7 @@ export const hiddenGroupTryOutAnalyser = ({
         return groupCellWronglyFilledResult(groupCells, groupCandidates, primaryHouse)
     }
 
-    return correctlyFilledGroupCellsResult(groupCells, groupCandidates, removableCandidates)
+    return correctlyFilledGroupCellsResult(groupCells, groupCandidates)
 }
 
 const getNoInputResult = () => ({
@@ -51,16 +53,20 @@ const removableGroupCandidatesFilledHostCells = removableGroupCandidatesHostCell
 const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse) => {
     const filledCellsWithNumbers = getRemovableGroupCandidatesFilledCellsWithNumbers(removableGroupCandidatesHostCells)
     const msgPlaceholderValues = {
-        primaryHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME,
+        primaryHouseFullName: getHouseFullNumAndName(primaryHouse),
         filledCandidatesListText: getCandidatesListText(getNumbersFromCellsWithNumbers(filledCellsWithNumbers)),
         filledCellsAxesListText: getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers)),
         filledInstancesHelpingVerb: filledCellsWithNumbers.length > 1 ? 'are' : 'is',
+        cellSingularPlural: filledCellsWithNumbers.length > 1 ? 'cells' : 'cell',
     }
     return {
         msg: dynamicInterpolation(HIDDEN_GROUP.REMOVABLE_GROUP_CANDIDATE_FILLED, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
+
+// TODO: make it a util
+const getHouseFullNumAndName = house => `${getHouseNumText(house)} ${HOUSE_TYPE_VS_FULL_NAMES[house.type].FULL_NAME}`
 
 const getRemovableGroupCandidatesFilledCellsWithNumbers = removableGroupCandidatesHostCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
@@ -85,10 +91,23 @@ const someGroupCellWronglyFilled = (groupCells, groupCandidates) => {
     })
 }
 
+// TODO: can merge getWronglyFilledGroupCellsInfo and someGroupCellWronglyFilled
+const getWronglyFilledGroupCellsInfo = (_groupCells, groupCandidates) => {
+    const groupCells = sortCells(_groupCells)
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const result = []
+    groupCells.filter(cell => MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
+        .forEach(cell => {
+            const cellValue = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell)
+            if (!groupCandidates.includes(cellValue)) { result.push({ cell, number: cellValue }) }
+        })
+    return result
+}
+
 // TODO: break down this function
 const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse) => {
     let errorMsg
-    const primaryHouseFullName = HOUSE_TYPE_VS_FULL_NAMES[primaryHouse.type].FULL_NAME
+    const primaryHouseFullName = getHouseFullNumAndName(primaryHouse)
     const groupCandidatesToBeFilled = getGroupCandidatesToBeFilled(groupCells, groupCandidates)
 
     const groupCandidatesToBeFilledWithoutHostCells = getGroupCandidatesToBeFilledWithoutHostCells(
@@ -96,16 +115,24 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
         groupCells,
     )
 
+    const wronglyFilledGroupCellsInfo = getWronglyFilledGroupCellsInfo(groupCells, groupCandidates)
+    const wronglyFilledGroupCells = getCellsFromCellsWithNumbers(wronglyFilledGroupCellsInfo)
+    const wronglyFilledNumbersInGroupCells = getNumbersFromCellsWithNumbers(wronglyFilledGroupCellsInfo)
+    const wronglyFilledNumbersInGroupCellsListText = getCandidatesListText(wronglyFilledNumbersInGroupCells)
+    const wronglyFilledGroupCellsAxesListText = getCellsAxesValuesListText(wronglyFilledGroupCells)
+
     let msgPlaceholderValues
     if (groupCandidatesToBeFilledWithoutHostCells.length !== 0) {
         msgPlaceholderValues = {
             primaryHouseFullName,
-            candidatesListText: getCandidatesListText(groupCandidatesToBeFilledWithoutHostCells),
+            candidatesListText: getCandidatesListText(_sortBy(groupCandidatesToBeFilledWithoutHostCells)),
+            wronglyFilledNumbersInGroupCellsListText,
+            wronglyFilledGroupCellsAxesListText,
         }
         errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.NO_HOST_CELL_FOR_GROUP_CANDIDATES
     } else {
-        const emptyGroupCells = filterEmptyCells(groupCells, getTryOutMainNumbers(getStoreState()))
-        const candidatesListText = getCandidatesListText(groupCandidatesToBeFilled)
+        const emptyGroupCells = sortCells(filterEmptyCells(groupCells, getTryOutMainNumbers(getStoreState())))
+        const candidatesListText = getCandidatesListText(_sortBy(groupCandidatesToBeFilled))
         const emptyCellsAxesListText = getCellsAxesValuesListText(emptyGroupCells)
         const candidatesCountWithoutCells = groupCandidatesToBeFilled.length - emptyGroupCells.length
 
@@ -118,6 +145,8 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse)
             emptyGroupCellsHelpingVerb: emptyGroupCells.length > 1 ? 'are' : 'is',
             primaryHouseFullName,
             candidatesCountWithoutCells,
+            wronglyFilledNumbersInGroupCellsListText,
+            wronglyFilledGroupCellsAxesListText,
         }
         errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.INSUFFICIENT_HOST_CELLS
     }
@@ -134,28 +163,40 @@ const getGroupCandidatesToBeFilledWithoutHostCells = (groupCandidatesToBeFilled,
 }
 
 // TODO: break down this function
-const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, removableCandidates) => {
+const correctlyFilledGroupCellsResult = (groupCells, groupCandidates) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    const notes = getTryOutNotes(getStoreState())
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     let progressMsg = ''
     let msgPlaceholderValues
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         msgPlaceholderValues = {
-            candidatesListText: getCandidatesListText(groupCandidates),
-            groupCellsAxesListText: getCellsAxesValuesListText(groupCells),
+            candidatesListText: getCandidatesListText(_sortBy(groupCandidates)),
+            groupCellsAxesListText: getCellsAxesValuesListText(sortCells(groupCells)),
         }
         progressMsg = HIDDEN_GROUP.VALID_FILL.FULL
     } else {
-        const candidatesToBeFilled = getCandidatesToBeFilled(correctlyFilledGroupCandidates, [
-            ...groupCandidates,
-            ...removableCandidates,
-        ])
-        const pluralCandidatesToBeFilled = candidatesToBeFilled.length > 1
+        const correctlyFilledGroupCellsInfo = []
+        sortCells(groupCells).filter(cell => MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
+            .forEach(cell => {
+                const cellValue = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell)
+                correctlyFilledGroupCellsInfo.push({ cell, number: cellValue })
+            })
+        const correctlyFilledGroupCandidates = getNumbersFromCellsWithNumbers(correctlyFilledGroupCellsInfo)
+        const filledGroupCells = getCellsFromCellsWithNumbers(correctlyFilledGroupCellsInfo)
+
+        let candidatesToBeFilled = []
+        groupCells.forEach(cell => {
+            candidatesToBeFilled.push(...NotesRecord.getCellVisibleNotesList(notes, cell))
+        })
+        candidatesToBeFilled = _sortBy(_unique(candidatesToBeFilled))
 
         msgPlaceholderValues = {
-            candidatesListText: getCandidatesListText(candidatesToBeFilled),
-            candidatesPronoun: pluralCandidatesToBeFilled ? 'these' : 'this',
-            candidatesHelpingVerb: pluralCandidatesToBeFilled ? 'are' : 'is',
+            filledCandidates: getCandidatesListText(correctlyFilledGroupCandidates),
+            filledCandidatesCountHV: correctlyFilledGroupCandidates.length > 1 ? 'are' : 'is',
+            filledCandidatesHostCells: getCellsAxesValuesListText(filledGroupCells),
+            toBeFilledCandidates: getCandidatesListText(_sortBy(candidatesToBeFilled)),
+            toBeFilledCandidatesPronoun: candidatesToBeFilled.length > 1 ? 'these' : 'it',
         }
         progressMsg = HIDDEN_GROUP.VALID_FILL.PARTIAL
     }
