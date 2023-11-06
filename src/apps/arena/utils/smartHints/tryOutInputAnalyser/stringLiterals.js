@@ -89,12 +89,24 @@ export const XWING = {
 }
 
 export const YWING = {
-    NO_INPUT: 'try filling {{candidatesListText}} in highlighted cells',
-    CELLS_WITHOUT_CANDIDATE: '{{emptyCellsAxesListText}} {{emptyCellsHelpingVerb}} empty. this is an invalid solution.',
-    PIVOT_WILL_BE_EMPTY: '{{wingCellsAxesList}} have only one candidate in them, once {{wingCellsAxesList}} will be filled, {{pivotCellAxes}} will have no candidate left to be filled.',
-    MULTIPLE_NS_IN_HOUSE: '{{nakedSingleCellsAxesList}} have only {{nakedSingleCandidate}} as candidate in them and these cells'
-        + ' are in same {{nakedSingleCellsCommonHouse}}. so one of these cells will be empty once {{nakedSingleCandidate}} is filled in one of them',
-    TRYOUT_PARTIAL_VALID_PROGRESS: 'till now your guesses are correct, fill {{candidatesListText}} in all of these highlighted cells in all combinations to fully understand how this hint works.',
-    TRYOUT_COMPLETE: '{{yWingCellsAxesListText}} are filled and you can see that {{eliminableNote}} is not present in {{eliminableCellsAxesListText}}.'
-    + ' this can be a solution for {{yWingCellsAxesListText}}.',
+    NO_INPUT: 'try to fill {{commonNoteInWings}} where it is highlighted in red color to see why these should be removed',
+    ELIMINABLE_NOTES_CELL_FILLED: {
+        PIVOT_CELL_WITHOUT_CANDIDATE: '{{pivotCell}} is left with no candidates. to fix this error remove {{commonNoteInWings}} from {{eliminableNotesFilledCells}}'
+            + ' and then fill one of these wings cells with {{commonNoteInWings}}',
+        WING_CELL_WITHOUT_CANDIDATE: '{{emptyWingCell}} is left with no candidates. to fix this error remove {{commonNoteInWings}} from {{eliminableNotesFilledCells}}',
+        BOTH_WINGS_WITHOUT_INPUT: 'fill {{wingsCells}} to understand the error in previous steps',
+        ONE_OF_WINGS_WITHOUT_INPUT: 'fill {{emptyWingCell}} to understand the error in previous steps',
+    },
+    PIVOT_CELL_WITHOUT_CANDIDATE: '{{pivotCell}} is left with no candidates. to fix this you will have to fill {{commonNoteInWings}}'
+    + ' in one of these wings cells',
+    ELIMINABLE_NOTES_CELL_WITHOUT_CANDIDATE: '{{eliminableNotesCellsWithoutCandidates}} have no candidates left. to fix this error'
+    + ' try changing numbers in {{filledPivotAndWingsCells}} ',
+    VALID_FILL: {
+        PARTIAL: '{{filledCandidates}} {{filledCandidatesCountHV}} filled without any error. experiment'
+        + ' with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can\'t be filled',
+        FULL: '{{candidatesListText}} are filled in pivot and wings cells without any error.'
+            + ' this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what'
+            + ' will be the exact solution for these cells but we are sure that {{commonNoteInWings}} can\'t'
+            + ' come in {{eliminableNotesHostCells}} cells',
+    },
 }

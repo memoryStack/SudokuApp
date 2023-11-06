@@ -1,5 +1,8 @@
 import _filter from '@lodash/filter'
 import _isEmpty from '@lodash/isEmpty'
+import _some from '@lodash/some'
+
+import { cellHasTryOutInput } from '../../../smartHintHC/helpers'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 
@@ -13,6 +16,11 @@ export const filterFilledCellsInTryOut = cells => {
 
     return _filter(cells, cell => !MainNumbersRecord.isCellFilled(mainNumbers, cell)
         && MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
+}
+
+export const filterCellsWithoutTryoutInput = cells => {
+    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+    return _filter(cells, cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 }
 
 export const noInputInTryOut = focusedCells => _isEmpty(filterFilledCellsInTryOut(focusedCells))
@@ -33,16 +41,18 @@ export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates, groupCan
     .map(candidate => parseInt(candidate, 10))
     .filter(groupCandidate => !correctlyFilledGroupCandidates.includes(groupCandidate))
 
-export const getCellsWithNoCandidates = focusedCells => {
+export const isCellWithoutAnyCandidate = cell => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    return focusedCells.filter(
-        cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
-                && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, cell) === 0,
-    )
+    return !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
+    && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, cell) === 0
 }
+
+export const getCellsWithNoCandidates = focusedCells => focusedCells.filter(cell => isCellWithoutAnyCandidate(cell))
 
 export const anyCellFilledWithGivenCandidate = (cells, candidate) => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
     return cells.some(cell => MainNumbersRecord.isCellFilledWithNumber(tryOutMainNumbers, candidate, cell))
 }
+
+export const anyCellHasTryOutInput = cells => _some(cells, cell => cellHasTryOutInput(cell))

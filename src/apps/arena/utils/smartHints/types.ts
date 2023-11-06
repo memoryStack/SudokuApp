@@ -78,6 +78,10 @@ export type RemovableNotesInfo = {
     [note: NoteValue]: Cell[]
 }
 
+export type CellsRestrictedNumberInputs = {
+    [cellKey: string]: NoteValue[]
+}
+
 // TODO: add more keys here to support for other hints as well
 export type TransformedRawHint = {
     cellsToFocusData: CellsFocusData
@@ -93,7 +97,7 @@ export type TransformedRawHint = {
     inputPanelNumbersVisibility?: InputPanelVisibleNumbers
     clickableCells?: Cell[]
     unclickableCellClickInTryOutMsg?: string
-    cellsRestrictedNumberInputs?: unknown
+    cellsRestrictedNumberInputs?: CellsRestrictedNumberInputs
     restrictedNumberInputMsg?: string
     svgProps?: { data: Chain }
 }

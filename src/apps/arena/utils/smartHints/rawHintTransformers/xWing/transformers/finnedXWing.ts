@@ -20,7 +20,7 @@ import {
     getTryOutInputPanelNumbersVisibility,
     transformCellBGColor,
 } from '../../../util'
-import { getCellsAxesValuesListText } from '../../helpers'
+import { getCellsAxesValuesListText, getHouseNumText } from '../../helpers'
 
 import {
     categorizeLegs,
@@ -33,7 +33,7 @@ import {
 } from '../../../xWing/utils'
 import { XWING_TYPES } from '../../../xWing/constants'
 
-import { getApplyHintData, getHouseNumText, getXWingCrossHouseFullNamePlural } from './helpers'
+import { getApplyHintData, getXWingCrossHouseFullNamePlural } from './helpers'
 import smartHintColorSystemReader from '../../../colorSystem.reader'
 import {
     CellHighlightData, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,

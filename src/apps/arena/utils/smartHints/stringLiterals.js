@@ -131,17 +131,24 @@ export const HINT_EXPLANATION_TEXTS = {
         + ' {{hostHousePluralName}}, {{candidate}} can\'t come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.',
     ],
     [HINTS_IDS.Y_WING]: [
-        'To spot a Y-Wing look for a cell which has only 2 candidates. we will call it pivot cell.'
-        + ' now look for two more cells with only 2 candidates which share a row, column or block with pivot cell'
-        + ' but these two cells themselves shouldn\'t be in same row, column or block.'
-        + ' these two cells will be called wings cells.\n'
-        + 'one candidate in wing cells should be same and the other candidates'
-        + ' from each wing cell should be present in pivot cell.',
 
-        'here {{pivotCell}} is the pivot cell and {{wingCellsText}} are wing cells.'
-        + ' now in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, one of'
-        + ' {{wingCellsText}} will be {{commonNoteInWings}}. so now we can remove {{commonNoteInWings}} from'
-        + ' all the cells which share atleast a row, column or block with both wing cells.\n'
-        + 'so here {{eliminableNotesCells}} are such cells from which we can remove {{commonNoteInWings}}.',
+        'look for a cell which has only two candidates in it. we will call it pivot cell.'
+        + '\nin puzzle {{pivotCell}} is highlighted as pivot cell',
+
+        'now look for two more cells which also have only two candidates in them and which share a row, column or block with'
+        + ' pivot cell. these will be wings cells. wings cells themselves shouldn\'t be in same row, column or block.'
+        + ' here {{wingCellsText}} are wings cells\n{{firstWingCell}} and {{pivotCell}} are in {{firstWingAndPivotCommonHouse}}'
+        + ' and {{secondWingCell}} and {{pivotCell}} are in {{secondWingAndPivotCommonHouse}}. but {{firstWingCell}} and {{secondWingCell}}'
+        + ' are not in any same row, column or block',
+
+        'now notice the arrangements of candidates in pivot and wings cells'
+        + '\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells,'
+        + ' {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}.'
+        + ' and other candidate of both wings cells is same, which is {{commonNoteInWings}} here.',
+
+        'due to this arrangement {{commonNoteInWings}} will be removed from cells which share a row, column or block'
+        + ' with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or'
+        + ' {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}.'
+        + ' so {{removableNotesHostCells}} can\'t have {{commonNoteInWings}} as their solution',
     ],
 }

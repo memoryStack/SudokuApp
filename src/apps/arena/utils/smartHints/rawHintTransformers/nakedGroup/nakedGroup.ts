@@ -23,14 +23,13 @@ import {
 } from '../../util'
 import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.constants'
 
-import { getCellsAxesValuesListText } from '../helpers'
+import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { NakedGroupTransformerArgs } from './types'
 import {
     CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
-import { getHouseNumText } from '../xWing/transformers/helpers'
 
 export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }: NakedGroupTransformerArgs): TransformedRawHint => {
     const { groupCells } = rawHint

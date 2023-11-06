@@ -28,7 +28,7 @@ import {
 } from '../../../util'
 
 import { getHouseCells } from '../../../houseCells'
-import { getCellsAxesValuesListText } from '../helpers'
+import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
@@ -47,7 +47,6 @@ import {
 } from '../../types'
 
 import { GroupCandidate, GroupCandidates, GroupHostCells } from '../../hiddenGroup/types'
-import { getHouseNumText } from '../xWing/transformers/helpers'
 
 export const getRemovableCandidates = (hostCells: GroupHostCells, groupCandidates: GroupCandidates, notesData: Notes) => {
     const result: NoteValue[] = []

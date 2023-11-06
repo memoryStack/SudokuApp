@@ -10,9 +10,7 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selector
 
 import { filterEmptyCells, sortCells } from '../../../util'
 
-import { HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
-import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
-import { getHouseNumText } from '../../rawHintTransformers/xWing/transformers/helpers'
+import { getCellsAxesValuesListText, getHouseNumAndName } from '../../rawHintTransformers/helpers'
 import { getCandidatesListText } from '../../util'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
@@ -53,7 +51,7 @@ const removableGroupCandidatesFilledHostCells = removableGroupCandidatesHostCell
 const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse) => {
     const filledCellsWithNumbers = getRemovableGroupCandidatesFilledCellsWithNumbers(removableGroupCandidatesHostCells)
     const msgPlaceholderValues = {
-        primaryHouseFullName: getHouseFullNumAndName(primaryHouse),
+        primaryHouseFullName: getHouseNumAndName(primaryHouse),
         filledCandidatesListText: getCandidatesListText(getNumbersFromCellsWithNumbers(filledCellsWithNumbers)),
         filledCellsAxesListText: getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers)),
         filledInstancesHelpingVerb: filledCellsWithNumbers.length > 1 ? 'are' : 'is',
@@ -64,9 +62,6 @@ const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
-
-// TODO: make it a util
-const getHouseFullNumAndName = house => `${getHouseNumText(house)} ${HOUSE_TYPE_VS_FULL_NAMES[house.type].FULL_NAME}`
 
 const getRemovableGroupCandidatesFilledCellsWithNumbers = removableGroupCandidatesHostCells => {
     const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
@@ -107,7 +102,7 @@ const getWronglyFilledGroupCellsInfo = (_groupCells, groupCandidates) => {
 // TODO: break down this function
 const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse) => {
     let errorMsg
-    const primaryHouseFullName = getHouseFullNumAndName(primaryHouse)
+    const primaryHouseFullName = getHouseNumAndName(primaryHouse)
     const groupCandidatesToBeFilled = getGroupCandidatesToBeFilled(groupCells, groupCandidates)
 
     const groupCandidatesToBeFilledWithoutHostCells = getGroupCandidatesToBeFilledWithoutHostCells(

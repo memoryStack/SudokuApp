@@ -11,7 +11,7 @@ import {
     HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { getCellsAxesValuesListText } from '../helpers'
+import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
@@ -20,7 +20,6 @@ import { RawOmissionHint } from '../../omission/types'
 import {
     CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
-import { getHouseNumText } from '../xWing/transformers/helpers'
 
 const addHostHouseHighlightData = (
     omission: RawOmissionHint,

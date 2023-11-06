@@ -1,33 +1,52 @@
+import _difference from '@lodash/difference'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _forEach from '@lodash/forEach'
+import _includes from '@lodash/includes'
 import _map from '@lodash/map'
+import _reduce from '@lodash/reduce'
+import _sortBy from '@lodash/sortBy'
+
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
-import { getCellAxesValues } from '../../../util'
+import { getCellAxesValues, getCellsCommonHousesInfo, sortCells } from '../../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     CellHighlightData,
-    CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+    CellsFocusData, CellsRestrictedNumberInputs, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
 import {
-    setCellDataInHintResult, getHintExplanationStepsFromHintChunks, transformCellBGColor, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData,
+    setCellDataInHintResult, getHintExplanationStepsFromHintChunks, transformCellBGColor, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData, getCandidatesListText,
 } from '../../util'
-import { YWingRawHint } from '../../yWing/types'
+import { YWingRawHint, YWingCell } from '../../yWing/types'
 import { getEliminatableNotesCells } from '../../yWing/utils'
 
-import { getCellsAxesValuesListText } from '../helpers'
+import { getCellsAxesValuesListText, getHouseNumAndName } from '../helpers'
 import { YWingTransformerArgs } from './types'
 
-const addPivotUIHighlightData = (pivotCell: Cell, cellsToFocusData: CellsFocusData, smartHintsColorSystem: SmartHintsColorSystem) => {
-    const pivotCellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.yWingPivotCellBGColor(smartHintsColorSystem)) }
-    setCellDataInHintResult(pivotCell, pivotCellHighlightData, cellsToFocusData)
+const addPivotUIHighlightData = (pivot: YWingCell, cellsToFocusData: CellsFocusData, smartHintsColorSystem: SmartHintsColorSystem) => {
+    const pivotCellHighlightData = {
+        bgColor: transformCellBGColor(smartHintColorSystemReader.yWingPivotCellBGColor(smartHintsColorSystem)),
+        notesToHighlightData: _reduce(pivot.notes, (acc: NotesToHighlightData, note: NoteValue) => {
+            acc[note] = { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) }
+            return acc
+        }, {}),
+    }
+    setCellDataInHintResult(pivot.cell, pivotCellHighlightData, cellsToFocusData)
 }
 
-const addWingsUIHighlightData = (wingCells: Cell[], cellsToFocusData: CellsFocusData, smartHintsColorSystem: SmartHintsColorSystem) => {
-    wingCells.forEach(wingCell => {
-        const wingCellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.yWingWingCellBGColor(smartHintsColorSystem)) }
-        setCellDataInHintResult(wingCell, wingCellHighlightData, cellsToFocusData)
+const addWingsUIHighlightData = (wings: YWingCell [], cellsToFocusData: CellsFocusData, smartHintsColorSystem: SmartHintsColorSystem) => {
+    wings.forEach(wing => {
+        const wingCellHighlightData: CellHighlightData = {
+            bgColor: transformCellBGColor(smartHintColorSystemReader.yWingWingCellBGColor(smartHintsColorSystem)),
+            notesToHighlightData: _reduce(wing.notes, (acc: NotesToHighlightData, note: NoteValue) => {
+                acc[note] = { fontColor: smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem) }
+                return acc
+            }, {}),
+        }
+        setCellDataInHintResult(wing.cell, wingCellHighlightData, cellsToFocusData)
     })
 }
 
@@ -49,31 +68,46 @@ const addEliminableNoteCellUIHighlightData = (
 }
 
 const getUICellsToFocusData = ({
-    commonNoteInWings, pivotCell, wingCells, eliminableNotesCells, smartHintsColorSystem,
+    commonNoteInWings, pivot, wings, eliminableNotesCells, smartHintsColorSystem,
 }: {
     commonNoteInWings: NoteValue
-    pivotCell: Cell
-    wingCells: Cell[]
+    pivot: YWingCell
+    wings: YWingCell[]
     eliminableNotesCells: Cell[]
     smartHintsColorSystem: SmartHintsColorSystem
 }) => {
     const cellsToFocusData: CellsFocusData = {}
-    addPivotUIHighlightData(pivotCell, cellsToFocusData, smartHintsColorSystem)
-    addWingsUIHighlightData(wingCells, cellsToFocusData, smartHintsColorSystem)
+    addPivotUIHighlightData(pivot, cellsToFocusData, smartHintsColorSystem)
+    addWingsUIHighlightData(wings, cellsToFocusData, smartHintsColorSystem)
     addEliminableNoteCellUIHighlightData(commonNoteInWings, eliminableNotesCells, cellsToFocusData, smartHintsColorSystem)
     return cellsToFocusData
 }
 
+const getPivotNotesWithWingsHostCellsMap = (pivotNotes: NoteValue[], wings: YWingCell[]) => {
+    const result: {[key: NoteValue] : Cell} = {}
+    pivotNotes.forEach(pivotNote => {
+        result[pivotNote] = _includes(wings[0].notes, pivotNote) ? wings[0].cell : wings[1].cell
+    })
+    return result
+}
+
 const getHintExplainationChunks = ({
-    pivotNotes, commonNoteInWings, pivotCell, wingCells, eliminableNotesCells,
+    pivotNotes, commonNoteInWings, pivotCell, wings, eliminableNotesCells,
 }: {
     pivotNotes: NoteValue[]
     commonNoteInWings: NoteValue
     pivotCell: Cell
-        wingCells: Cell[]
-        eliminableNotesCells: Cell[]
+    wings: YWingCell[]
+    eliminableNotesCells: Cell[]
 }): string[] => {
     const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.Y_WING] as string[]
+
+    const wingCells = wings.map(wing => wing.cell)
+
+    const pivotAndFirstWingCellCommonHouse = getCellsCommonHousesInfo([pivotCell, wingCells[0]])[0]
+    const pivotAndSecondWingCellCommonHouse = getCellsCommonHousesInfo([pivotCell, wingCells[1]])[0]
+
+    const pivotNotesWingsHostCells = getPivotNotesWithWingsHostCellsMap(pivotNotes, wings)
 
     const msgPlaceholdersValues = {
         firstPivotNote: pivotNotes[0],
@@ -82,6 +116,16 @@ const getHintExplainationChunks = ({
         pivotCell: getCellAxesValues(pivotCell),
         wingCellsText: getCellsAxesValuesListText(wingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
         eliminableNotesCells: getCellsAxesValuesListText(eliminableNotesCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        firstWingCell: getCellAxesValues(wingCells[0]),
+        secondWingCell: getCellAxesValues(wingCells[1]),
+        firstWingAndPivotCommonHouse: getHouseNumAndName(pivotAndFirstWingCellCommonHouse),
+        secondWingAndPivotCommonHouse: getHouseNumAndName(pivotAndSecondWingCellCommonHouse),
+
+        pivotCellNotes: getCandidatesListText(_sortBy(pivotNotes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        pivotCellFirstNoteWingHostCell: getCellAxesValues(pivotNotesWingsHostCells[pivotNotes[0]]),
+        pivotCellSecondNoteWingHostCell: getCellAxesValues(pivotNotesWingsHostCells[pivotNotes[1]]),
+
+        removableNotesHostCells: getCellsAxesValuesListText(sortCells(eliminableNotesCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
 
     return msgTemplates.map(msgTemplate => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
@@ -95,6 +139,18 @@ const getApplyHintData = (yWing: YWingRawHint, notesData: Notes): NotesRemovalHi
     }))
 }
 
+const getCellsRestrictedNumberInputs = (commonNoteInWings: NoteValue, eliminableNotesCells: Cell[], notes: Notes) => {
+    const result: CellsRestrictedNumberInputs = {}
+
+    _forEach(eliminableNotesCells, (cell: Cell) => {
+        const cellNotes = NotesRecord.getCellVisibleNotesList(notes, cell)
+        const cellKey = getCellAxesValues(cell)
+        result[cellKey] = _difference(cellNotes, [commonNoteInWings])
+    })
+
+    return result
+}
+
 export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsColorSystem }: YWingTransformerArgs): TransformedRawHint => {
     const { pivot, wings } = yWing
 
@@ -105,8 +161,8 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsCol
     const eliminableNotesCells = getEliminatableNotesCells(yWing, notesData)
     const cellsToFocusData = getUICellsToFocusData({
         commonNoteInWings,
-        pivotCell: pivot.cell,
-        wingCells,
+        pivot,
+        wings,
         eliminableNotesCells,
         smartHintsColorSystem,
     })
@@ -115,7 +171,7 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsCol
         pivotNotes: pivot.notes,
         commonNoteInWings,
         pivotCell: pivot.cell,
-        wingCells,
+        wings,
         eliminableNotesCells,
     })
 
@@ -133,6 +189,10 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsCol
             yWing,
             eliminableNotesCells,
         },
+        removableNotes: { [commonNoteInWings]: eliminableNotesCells } as RemovableNotesInfo,
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([commonNoteInWings, ...pivot.notes]) as InputPanelVisibleNumbers,
+
+        cellsRestrictedNumberInputs: getCellsRestrictedNumberInputs(commonNoteInWings, eliminableNotesCells, notesData),
+        restrictedNumberInputMsg: `please enter only ${commonNoteInWings} here. we are not commenting anything about other numbers in this cell`,
     }
 }

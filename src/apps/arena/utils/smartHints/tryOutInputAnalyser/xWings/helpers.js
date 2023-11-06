@@ -12,9 +12,8 @@ import { getCellHouseForHouseType } from '../../../util'
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
-import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
+import { getCellsAxesValuesListText, getHouseNumText } from '../../rawHintTransformers/helpers'
 import {
-    getHouseNumText,
     getXWingCrossHouseFullName,
     getXWingHouseFullName,
     getXWingHouseFullNamePlural,

@@ -1,14 +1,13 @@
-import { toOrdinal } from '@lodash/toOrdinal'
 import _map from '@lodash/map'
 
 import { Houses } from '../../../../classes/houses'
 import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
-import { getCellHouseForHouseType, getHouseAxesValue } from '../../../../util'
+import { getCellHouseForHouseType } from '../../../../util'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
 import { getCrossHouseType } from '../../../xWing/utils'
-import { getCellsAxesValuesListText } from '../../helpers'
+import { getCellsAxesValuesListText, getHouseNumText } from '../../helpers'
 import { XWingLegs, XWingRawHint } from '../../../xWing/types'
 import { NotesRemovalHintAction } from '../../../types'
 
@@ -32,11 +31,6 @@ const getXWingHousesNums = (houseType: HouseType, xWingLegs: XWingLegs) => ({
     houseANum: getCellHouseForHouseType(houseType, xWingLegs[0].cells[0]).num,
     houseBNum: getCellHouseForHouseType(houseType, xWingLegs[1].cells[0]).num,
 })
-
-export const getHouseNumText = (house: House) => {
-    if (!Houses.isRowHouse(house.type)) return toOrdinal(house.num + 1)
-    return getHouseAxesValue(house)
-}
 
 export const getCrossHouseAxesText = (xWing: XWingRawHint) => {
     const crossHouseType = getCrossHouseType(xWing.houseType)

@@ -1,26 +1,29 @@
 import _sortNumbers from '@lodash/sortNumbers'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _isEmpty from '@lodash/isEmpty'
-import _isNil from '@lodash/isNil'
-import _keys from '@lodash/keys'
-import _find from '@lodash/find'
+import _sortBy from '@lodash/sortBy'
+import _difference from '@lodash/difference'
 
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { getTryOutMainNumbers } from '../../../../store/selectors/smartHintHC.selectors'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
-import { getCellAxesValues, getCellsCommonHouses } from '../../../util'
-import { getCandidatesListText } from '../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
+import { getCellAxesValues, sortCells } from '../../../util'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 import { YWingRawHint } from '../../yWing/types'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import {
-    anyCellFilledWithGivenCandidate, filterFilledCellsInTryOut, getCellsWithNoCandidates, noInputInTryOut,
+    anyCellHasTryOutInput,
+    filterCellsWithoutTryoutInput,
+    filterFilledCellsInTryOut,
+    getCellsWithNoCandidates,
+    getCorrectFilledTryOutCandidates,
+    isCellWithoutAnyCandidate,
+    noInputInTryOut,
 } from '../helpers'
 import { YWING } from '../stringLiterals'
+import { getCandidatesListText } from '../../util'
 
 export const yWingTryOutAnalyser = ({ yWing, eliminableNotesCells }: {
     yWing: YWingRawHint,
@@ -33,97 +36,105 @@ export const yWingTryOutAnalyser = ({ yWing, eliminableNotesCells }: {
     const inputPanelCandidates = _sortNumbers([wingsCommonNote, ...pivot.notes])
 
     if (noInputInTryOut([...wingCells, pivot.cell, ...eliminableNotesCells])) {
-        const msgPlaceholderValues = {
-            candidatesListText: getCandidatesListText(inputPanelCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        }
+        const msgPlaceholderValues = { commonNoteInWings: wingsCommonNote }
         return {
             msg: dynamicInterpolation(YWING.NO_INPUT, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
 
-    // any cell become empty
-    const focusedCells = [pivot.cell, ...eliminableNotesCells, ...wingCells]
-    const cellsWithoutCandidate = getCellsWithNoCandidates(focusedCells)
-    if (!_isEmpty(cellsWithoutCandidate)) {
-        const msgPlaceholderValues = {
-            emptyCellsAxesListText: getCellsAxesValuesListText(cellsWithoutCandidate, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-            emptyCellsHelpingVerb: cellsWithoutCandidate.length > 1 ? 'are' : 'is',
+    if (anyCellHasTryOutInput(eliminableNotesCells)) {
+        if (isCellWithoutAnyCandidate(pivot.cell)) {
+            const msgPlaceholderValues = {
+                pivotCell: getCellAxesValues(pivot.cell),
+                commonNoteInWings: wingsCommonNote,
+                eliminableNotesFilledCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(eliminableNotesCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            }
+            return {
+                msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.PIVOT_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
+                state: TRY_OUT_RESULT_STATES.ERROR,
+            }
         }
 
+        const wingsWithoutAnyCandidate = getCellsWithNoCandidates(wingCells)
+        if (!_isEmpty(wingsWithoutAnyCandidate)) {
+            const msgPlaceholderValues = {
+                emptyWingCell: getCellAxesValues(wingsWithoutAnyCandidate[0]),
+                commonNoteInWings: wingsCommonNote,
+                eliminableNotesFilledCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(eliminableNotesCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            }
+            return {
+                msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.WING_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
+                state: TRY_OUT_RESULT_STATES.ERROR,
+            }
+        }
+
+        const filledWingsCells = filterFilledCellsInTryOut(wingCells)
+        if (_isEmpty(filledWingsCells)) {
+            const msgPlaceholderValues = { wingsCells: getCellsAxesValuesListText(sortCells(wingCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND) }
+            return {
+                msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.BOTH_WINGS_WITHOUT_INPUT, msgPlaceholderValues),
+                state: TRY_OUT_RESULT_STATES.START,
+            }
+        }
+
+        const wingsWithoutTryOutInput = filterCellsWithoutTryoutInput(wingCells)
+        const msgPlaceholderValues = { emptyWingCell: getCellAxesValues(wingsWithoutTryOutInput[0]) }
         return {
-            msg: dynamicInterpolation(YWING.CELLS_WITHOUT_CANDIDATE, msgPlaceholderValues),
+            msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.ONE_OF_WINGS_WITHOUT_INPUT, msgPlaceholderValues),
+            state: TRY_OUT_RESULT_STATES.START,
+        }
+    }
+
+    if (isCellWithoutAnyCandidate(pivot.cell)) {
+        const msgPlaceholderValues = {
+            pivotCell: getCellAxesValues(pivot.cell),
+            commonNoteInWings: wingsCommonNote,
+        }
+        return {
+            msg: dynamicInterpolation(YWING.PIVOT_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.ERROR,
         }
     }
 
-    // any eliminable cell is filled with eliminable candidate
-    const eliminableNotesCellFilledWithEliminableNote = anyCellFilledWithGivenCandidate(eliminableNotesCells, wingsCommonNote)
-    if (eliminableNotesCellFilledWithEliminableNote) {
-        const pivotWillBeEmpty = noInputInTryOut([pivot.cell, ...wingCells])
-
-        if (pivotWillBeEmpty) {
-            const msgPlaceholderValues = {
-                wingCellsAxesList: getCellsAxesValuesListText(wingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-                pivotCellAxes: getCellAxesValues(pivot.cell),
-            }
-            return {
-                msg: dynamicInterpolation(YWING.PIVOT_WILL_BE_EMPTY, msgPlaceholderValues),
-                state: TRY_OUT_RESULT_STATES.ERROR,
-            }
+    const emptyEliminableNotesHostCells = getCellsWithNoCandidates(eliminableNotesCells)
+    if (!_isEmpty(emptyEliminableNotesHostCells)) {
+        const msgPlaceholderValues = {
+            eliminableNotesCellsWithoutCandidates: getCellsAxesValuesListText(sortCells(emptyEliminableNotesHostCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            filledPivotAndWingsCells: getCellsAxesValuesListText(sortCells(filterFilledCellsInTryOut([pivot.cell, ...wingCells])), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
         }
-
-        const multipleNakedSingle = getMultipleNakedSingleInSameHouse(pivot.cell, wingCells)
-        if (!_isNil(multipleNakedSingle)) {
-            const { candidate, cells } = multipleNakedSingle
-            const commonHouses = getCellsCommonHouses(cells)
-            const commonHouseType = _find(_keys(commonHouses), houseType => commonHouses[houseType])
-
-            const msgPlaceholderValues = {
-                nakedSingleCellsAxesList: getCellsAxesValuesListText(cells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-                nakedSingleCandidate: candidate,
-                nakedSingleCellsCommonHouse: HOUSE_TYPE_VS_FULL_NAMES[commonHouseType].FULL_NAME,
-            }
-            return {
-                msg: dynamicInterpolation(YWING.MULTIPLE_NS_IN_HOUSE, msgPlaceholderValues),
-                state: TRY_OUT_RESULT_STATES.ERROR,
-            }
+        return {
+            msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
+            state: TRY_OUT_RESULT_STATES.ERROR,
         }
     }
 
-    // tryout complete
-    if (filterFilledCellsInTryOut([pivot.cell, ...wingCells]).length === 3) {
+    // valid progress cases
+    if (filterFilledCellsInTryOut([pivot.cell, ...wingCells]).length !== 3) {
         const yWingCells = [pivot.cell, ...wingCells]
+        const tryOutMainNumbers = getTryOutMainNumbers(getStoreState()) as MainNumbers
+        const filledCandidates = getCorrectFilledTryOutCandidates(yWingCells, tryOutMainNumbers)
+        const toBeFilledCandidates = _difference(inputPanelCandidates, filledCandidates)
+
         const msgPlaceholderValues = {
-            yWingCellsAxesListText: getCellsAxesValuesListText(yWingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-            eliminableNote: wingsCommonNote,
-            eliminableCellsAxesListText: getCellsAxesValuesListText(eliminableNotesCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            filledCandidates: getCandidatesListText(_sortBy(filledCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            filledCandidatesCountHV: filledCandidates.length > 1 ? 'are' : 'is',
+            toBeFilledCandidates: getCandidatesListText(_sortBy(toBeFilledCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            toBeFilledCandidatesPronoun: toBeFilledCandidates.length > 1 ? 'these' : 'it',
         }
         return {
-            msg: dynamicInterpolation(YWING.TRYOUT_COMPLETE, msgPlaceholderValues),
+            msg: dynamicInterpolation(YWING.VALID_FILL.PARTIAL, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
 
-    return {
-        msg: dynamicInterpolation(YWING.TRYOUT_PARTIAL_VALID_PROGRESS, { candidatesListText: inputPanelCandidates }),
-        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
+    const msgPlaceholderValues = {
+        candidatesListText: getCandidatesListText(_sortBy(inputPanelCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        commonNoteInWings: wingsCommonNote,
+        eliminableNotesHostCells: getCellsAxesValuesListText(sortCells(eliminableNotesCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
-}
-
-const getMultipleNakedSingleInSameHouse = (pivotCell: Cell, wingCells: Cell[]) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState()) as MainNumbers
-    const tryOutNotes = getTryOutNotes(getStoreState()) as Notes
-
-    if (
-        MainNumbersRecord.isCellFilled(tryOutMainNumbers, pivotCell)
-        || NotesRecord.getCellVisibleNotesCount(tryOutNotes, pivotCell) !== 1
-    ) return null
-
-    const wingCellWithSameNSAsPivot = wingCells.find(wingCell => NotesRecord.areSameNotesInCells(tryOutNotes, [pivotCell, wingCell]))
-
     return {
-        candidate: NotesRecord.getCellVisibleNotesList(tryOutNotes, pivotCell)[0],
-        cells: [pivotCell, wingCellWithSameNSAsPivot],
+        msg: dynamicInterpolation(YWING.VALID_FILL.FULL, msgPlaceholderValues),
+        state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }
