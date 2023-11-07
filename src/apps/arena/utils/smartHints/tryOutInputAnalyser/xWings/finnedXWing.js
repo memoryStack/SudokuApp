@@ -21,7 +21,7 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
     }
 
     if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))) {
-        return getRemovableNoteHostCellFilledResult(xWing)
+        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
     }
 
     if (!_isEmpty(filterFilledCellsInTryOut(xWingCells))) {
@@ -36,8 +36,8 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
     }
 }
 
-const getRemovableNoteHostCellFilledResult = xWing => {
-    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing)
+const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells)
     if (noCandidateInALegError) return noCandidateInALegError
 
     return getSameCrossHouseCandidatePossibilitiesResult(xWing)

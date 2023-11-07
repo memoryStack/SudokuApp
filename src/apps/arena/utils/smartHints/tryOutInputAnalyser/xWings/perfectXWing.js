@@ -16,6 +16,8 @@ import {
 } from './helpers'
 import { XWING } from '../stringLiterals'
 import { XWING_TYPES } from '../../xWing/constants'
+import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
 export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
@@ -30,22 +32,23 @@ export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHo
 }
 
 const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
-    const removableNotesHostCellsFilledCount = filterFilledCellsInTryOut(removableNotesHostCells).length
-    if (removableNotesHostCellsFilledCount === 2) {
-        return getBothHouseWithoutCandidateErrorResult(xWing)
+    const removableNotesHostCellsFilled = filterFilledCellsInTryOut(removableNotesHostCells)
+    if (removableNotesHostCellsFilled.length === 2) {
+        return getBothHouseWithoutCandidateErrorResult(xWing, removableNotesHostCellsFilled)
     }
 
-    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing)
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells)
     if (noCandidateInALegError) return noCandidateInALegError
 
     return getSameCrossHouseCandidatePossibilitiesResult(xWing)
 }
 
-const getBothHouseWithoutCandidateErrorResult = xWing => {
+const getBothHouseWithoutCandidateErrorResult = (xWing, removableNotesHostCellsFilled) => {
     const msgPlaceholderValues = {
         ...getXWingHousesTexts(xWing.houseType, xWing.legs),
         candidate: getXWingCandidate(xWing),
         houseFullName: getXWingHouseFullName(xWing),
+        filledRemovableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCellsFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
     return {
         msg: dynamicInterpolation(XWING[XWING_TYPES.PERFECT].BOTH_LEGS_WITHOUT_CANDIDATE, msgPlaceholderValues),

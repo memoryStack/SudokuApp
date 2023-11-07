@@ -34,7 +34,7 @@ describe('Smart Hints try-out msgs', () => {
             await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
             const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
             await gotoTryOutStep(smartHintHC)
-            smartHintHC.getByText('try to fill 3 and 9 where it is highlighted in red color to see why these should be removed')
+            smartHintHC.getByText('try to fill 3 and 9 where it is highlighted in red color to understand why these should be removed')
         })
 
         test('one naked double note filled where it will stay', async () => {
@@ -46,7 +46,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(70))
             fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('3 is filled in H7 without any error. experiment with filling 9 as well to understand where it should be filled')
+            smartHintHC.getByText('3 is filled in H7 without any error. experiment with filling 9 as well to understand where it should be filled and why')
         })
 
         test('both naked double notes filled where these will stay', async () => {
@@ -119,7 +119,7 @@ describe('Smart Hints try-out msgs', () => {
             await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
             const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
             await gotoTryOutStep(smartHintHC)
-            smartHintHC.getByText('try to fill 1, 5 and 9 where it is highlighted in red color to see why these should be removed')
+            smartHintHC.getByText('try to fill 1, 5 and 9 where it is highlighted in red color to understand why these should be removed')
         })
 
         test('one naked tripple note filled where it will stay', async () => {
@@ -130,7 +130,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(4))
             fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('1 is filled in A4 without any error. experiment with filling 5 and 9 as well to understand where these should be filled')
+            smartHintHC.getByText('1 is filled in A4 without any error. experiment with filling 5 and 9 as well to understand where these should be filled and why')
         })
 
         test('two naked tripple notes filled where these will stay', async () => {
@@ -143,7 +143,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(22))
             fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('9 and 1 are filled in C4 and A4 without any error. experiment with filling 5 as well to understand where it should be filled')
+            smartHintHC.getByText('9 and 1 are filled in C4 and A4 without any error. experiment with filling 5 as well to understand where it should be filled and why')
         })
 
         test('all naked tripple notes filled where these will stay', async () => {
@@ -259,7 +259,7 @@ describe('Smart Hints try-out msgs', () => {
             await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
             const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
             await gotoTryOutStep(smartHintHC)
-            smartHintHC.getByText('try filling these numbers in the cells where these are highlighted in red or green color to see why green numbers stays and red numbers will be removed')
+            smartHintHC.getByText('try to fill numbers highlighted in red color to understand why these should be removed from these cells')
         })
 
         test('one group host cell is correctly filled', async () => {
@@ -270,7 +270,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(2))
             fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('try filling 7, 3, 4 as well where these are highlighted to find out in which cells 7, 3, 4 can and can\'t come.')
+            smartHintHC.getByText('2 is filled in A2 without any error. experiment with filling 3, 4, 7 as well to understand where these can or can\'t be filled')
         })
 
         test('all group host cells are correctly filled', async () => {
@@ -283,7 +283,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(3))
             fireEvent.press(getInputPanelNumberIfEnabled(7, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('7, 2 are filled in A2, A3 cells without any error. so only 7, 2 highlighted in green color stays and other red highlighted numbers can be removed.')
+            smartHintHC.getByText('2, 7 are filled in A2, A3 cells without any error. this is one of many ways to fill these cells with 2, 7. till now we are not sure what will be the exact solution for these cells but we are sure that 2, 7 can\'t come in cells other than A2, A3 in this highlighted region.')
         })
 
         test('Wrong Fill: insufficient cells for group candidates', async () => {
@@ -294,7 +294,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(2))
             fireEvent.press(getInputPanelNumberIfEnabled(4, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('2 numbers 7, 2 need to be filled but only 1 empty cell A3 is available for these in the highlighted block. so 1 out of 7, 2 can\'t be filled in this block.')
+            smartHintHC.getByText('2, 7 need to be filled but only A3 is available for these in 1st block. so 1 out of 2, 7 can\'t be filled in this 1st block.\nto fix this error, remove 4 from A2')
         })
 
         test('Wrong Fill: no cells for group candidates', async () => {
@@ -307,7 +307,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(3))
             fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('in the highlighted block, there is no cell where 7, 2 can come.')
+            smartHintHC.getByText('in 1st block 2, 7 can\'t come in any cell\nto fix this error, remove 4, 3 from A2, A3')
         })
     })
 
@@ -318,9 +318,10 @@ describe('Smart Hints try-out msgs', () => {
             await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])
             const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
             await gotoTryOutStep(smartHintHC)
-            smartHintHC.getByText('try filling 2 in 4th and 7th columns to understand why all 2 highlighted in red color can\'t come there and is safe to remove')
+            smartHintHC.getByText('try to fill 2 where it is highlighted in red color to understand why these should be removed')
         })
 
+        // failed
         test('candidate is filled correctly in one leg', async () => {
             await renderScreenAndWaitForPuzzleStart()
             await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])
@@ -329,7 +330,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(49))
             fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('2 is filled in 4th column without any error, try filling it in other places as well where it is highlighted in red or green color')
+            smartHintHC.getByText('2 might come in F4 cell of 4th column in final solution of puzzle\nexperiment with filling 2 in other places as well where it is highlighted in red or green color')
         })
 
         test('candidate is filled correctly in both legs', async () => {
@@ -342,7 +343,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(34))
             fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('2 is filled in 4th and 7th columns without error and all the red colored 2s are also removed.')
+            smartHintHC.getByText('2 is filled in 4th and 7th columns without any error and notice that all the 2s that were in red color are also removed.\nyou can fill 2 in these columns in other combinations as well, in all such combinations all the 2s that were in red color will be removed')
         })
 
         test('Wrong Fill: no candidate left in a leg', async () => {
@@ -353,7 +354,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(42))
             fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('there is no cell in 4th column where 2 can come')
+            smartHintHC.getByText('there is no cell in 4th column where 2 can come\nto fix this error, remove 2 from E6')
         })
 
         test('BUG: in finned X-Wing test possibility of having candidate in same cross house like in perfect X-Wing when some removable candidate was input', async () => {
@@ -365,7 +366,7 @@ describe('Smart Hints try-out msgs', () => {
             fireEvent.press(getCellByPosition(67))
             fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
 
-            smartHintHC.getByText('now to fill 2 in G and I rows we have two cells G7 and I7 but both of these cells are in 7th column')
+            smartHintHC.getByText('now fill 2 in any of G or I rows to understand the error in previous steps')
         })
     })
 

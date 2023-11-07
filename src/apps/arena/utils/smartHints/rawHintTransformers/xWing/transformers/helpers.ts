@@ -5,7 +5,7 @@ import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
 import { getCellHouseForHouseType } from '../../../../util'
 
-import { HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
 import { getCrossHouseType } from '../../../xWing/utils'
 import { getCellsAxesValuesListText, getHouseNumText } from '../../helpers'
 import { XWingLegs, XWingRawHint } from '../../../xWing/types'
@@ -54,8 +54,8 @@ export const getDiagonalsCornersAxesTexts = (xWing: XWingRawHint) => {
         topLeft, topRight, bottomLeft, bottomRight,
     } = getXWingCornerCells(xWing)
     return {
-        topDown: getCellsAxesValuesListText([topLeft, bottomRight]),
-        bottomUp: getCellsAxesValuesListText([bottomLeft, topRight]),
+        topDown: getCellsAxesValuesListText([topLeft, bottomRight], HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        bottomUp: getCellsAxesValuesListText([bottomLeft, topRight], HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
     }
 }
 

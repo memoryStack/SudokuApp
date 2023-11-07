@@ -34,7 +34,7 @@ export const HIDDEN_GROUP = {
 export const NAKED_GROUPS = {
     NO_INPUT:
         'try to fill {{candidatesListText}} where'
-        + ' it is highlighted in red color to see why these should be removed',
+        + ' it is highlighted in red color to understand why these should be removed',
     EMPTY_GROUP_CELL:
         '{{emptyCellsListText}} have no candidate left. in the final'
         + ' solution of puzzle no cell can be empty \nto get back to right track remove'
@@ -68,24 +68,25 @@ export const NAKED_TRIPPLE = {
 }
 
 export const XWING = {
-    NO_INPUT:
-        'try filling {{candidate}} in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}}'
-        + ' to understand why all {{candidate}} highlighted in red color can\'t come there and is safe to remove',
-    SAME_CROSSHOUSE:
-        'now to fill {{candidate}} in {{houseAAxesValue}} and {{houseBAxesValue}}'
-        + ' {{houseFullNamePlural}} we have two cells {{xWingHostCellsTexts}} but both of'
-        + ' these cells are in {{crossHouse}} {{crossHouseFullName}}',
+    NO_INPUT: 'try to fill {{candidate}} where'
+        + ' it is highlighted in red color to understand why these should be removed',
+    SAME_CROSSHOUSE: 'now fill {{candidate}} in any of {{houseAAxesValue}} or {{houseBAxesValue}} {{houseFullNamePlural}}'
+        + ' to understand the error in previous steps',
     ONE_LEG_NO_CANDIDATE:
-        'there is no cell in {{inhabitableHouseAxesText}} {{houseFullName}} where {{candidate}} can come',
-    ONE_LEG_VALID_FILL:
-        '{{candidate}} is filled in {{houseAxesText}} {{houseFullName}} without any error, try filling it'
-        + ' in other places as well where it is highlighted in red or green color',
-    BOTH_LEG_VALID_FILL:
-        '{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} without error'
-        + ' and all the red colored {{candidate}}s are also removed.',
+        'there is no cell in {{inhabitableHouseAxesText}} {{houseFullName}} where {{candidate}} can come'
+        + '\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}',
     [XWING_TYPES.PERFECT]: {
-        BOTH_LEGS_WITHOUT_CANDIDATE: 'there is no cell in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} where {{candidate}} can come',
+        BOTH_LEGS_WITHOUT_CANDIDATE: 'there is no cell in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}}'
+        + ' where {{candidate}} can come\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}',
     },
+    ONE_LEG_VALID_FILL:
+        '{{candidate}} might come in {{filledXWingCornerCell}} cell of {{houseAxesText}} {{houseFullName}} in final solution of puzzle'
+        + '\nexperiment with filling {{candidate}} in other places as well where it is highlighted in red or green color',
+    BOTH_LEG_VALID_FILL:
+        '{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} without any error'
+        + ' and notice that all the {{candidate}}s that were in red color are also removed.'
+        + '\nyou can fill {{candidate}} in these {{houseFullName}} in other combinations as well, in all such combinations'
+        + ' all the {{candidate}}s that were in red color will be removed',
 }
 
 export const YWING = {

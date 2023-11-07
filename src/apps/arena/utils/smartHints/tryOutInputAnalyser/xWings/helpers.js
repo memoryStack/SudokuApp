@@ -10,17 +10,14 @@ import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selector
 
 import { getCellHouseForHouseType } from '../../../util'
 
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
-
 import { getCellsAxesValuesListText, getHouseNumText } from '../../rawHintTransformers/helpers'
 import {
-    getXWingCrossHouseFullName,
     getXWingHouseFullName,
     getXWingHouseFullNamePlural,
     getXWingHousesTexts,
 } from '../../rawHintTransformers/xWing/transformers/helpers'
 
-import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../xWing/utils'
+import { getXWingCandidate, getXWingCells } from '../../xWing/utils'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { filterFilledCellsInTryOut } from '../helpers'
@@ -39,35 +36,18 @@ export const getNoInputResult = xWing => {
 }
 
 export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
-    const candidate = getXWingCandidate(xWing)
-    const xWingCellsWithCandidateAsNote = filterCellsWithXWingCandidateAsNote(getXWingCells(xWing.legs), candidate)
-
     const msgPlaceholdersValues = {
-        candidate,
+        candidate: getXWingCandidate(xWing),
         ...getXWingHousesTexts(xWing.houseType, xWing.legs),
         houseFullNamePlural: getXWingHouseFullNamePlural(xWing),
-        xWingHostCellsTexts: getCellsAxesValuesListText(
-            xWingCellsWithCandidateAsNote,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
-        ),
-        crossHouse: getHouseNumText(
-            getCellHouseForHouseType(getCrossHouseType(xWing.houseType), xWingCellsWithCandidateAsNote[0]),
-        ),
-        crossHouseFullName: getXWingCrossHouseFullName(xWing),
     }
-
     return {
         msg: dynamicInterpolation(XWING.SAME_CROSSHOUSE, msgPlaceholdersValues),
-        state: TRY_OUT_RESULT_STATES.ERROR,
+        state: TRY_OUT_RESULT_STATES.START,
     }
 }
 
-const filterCellsWithXWingCandidateAsNote = (cells, candidate) => {
-    const notes = getTryOutNotes(getStoreState())
-    return cells.filter(cell => NotesRecord.isNotePresentInCell(notes, candidate, cell))
-}
-
-export const getOneLegWithNoCandidateResult = xWing => {
+export const getOneLegWithNoCandidateResult = (xWing, removableNotesHostCells) => {
     const candidate = getXWingCandidate(xWing)
     const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs)
     if (_isEmpty(xWingLegWithCandidateAsInhabitable)) return null
@@ -75,9 +55,8 @@ export const getOneLegWithNoCandidateResult = xWing => {
     const msgPlaceholdersValues = {
         candidate,
         houseFullName: getXWingHouseFullName(xWing),
-        inhabitableHouseAxesText: getHouseNumText(
-            getCellHouseForHouseType(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0]),
-        ),
+        inhabitableHouseAxesText: getHouseNumText(getCellHouseForHouseType(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0])),
+        filledRemovableNotesHostCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(removableNotesHostCells)),
     }
 
     return {
@@ -118,6 +97,7 @@ const getOneLegFilledWithoutErrorResult = xWing => {
         candidate: getXWingCandidate(xWing),
         houseAxesText,
         houseFullName: getXWingHouseFullName(xWing),
+        filledXWingCornerCell: getCellsAxesValuesListText(filledXWingCells),
     }
     return {
         msg: dynamicInterpolation(XWING.ONE_LEG_VALID_FILL, msgPlaceholdersValues),

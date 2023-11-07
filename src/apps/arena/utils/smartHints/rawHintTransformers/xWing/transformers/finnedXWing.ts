@@ -62,10 +62,11 @@ const getPlaceholdersValues = (xWing: XWingRawHint, removableNotesHostCells: Cel
         ),
         cornersText: finnedBlockPerfectCells.length === 1 ? 'corner' : 'corners',
         crossHouseFullNamePlural: getXWingCrossHouseFullNamePlural(xWing),
-        hostHousesAxesListText: `${getHouseNumText(xWingHouses[0])}, ${getHouseNumText(xWingHouses[1])}`,
+        hostHousesAxesListText: `${getHouseNumText(xWingHouses[0])} and ${getHouseNumText(xWingHouses[1])}`,
         hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
-        removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells),
+        removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
         removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',
+        finnCellsPrefix: finnCells.length === 1 ? 'the' : 'any of the',
     }
 }
 
@@ -89,6 +90,7 @@ const getSashimiFinnedHintChunks = (xWing: XWingRawHint, removableNotesHostCells
     const placeholdersValues = {
         ...getPlaceholdersValues(xWing, removableNotesHostCells),
         sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes) as Cell),
+        sashimiCell: getCellAxesValues(getSashimiCell(xWing, notes) as Cell),
     }
 
     return (HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING] as string[])

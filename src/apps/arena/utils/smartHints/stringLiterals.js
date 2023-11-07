@@ -92,43 +92,48 @@ export const HINT_EXPLANATION_TEXTS = {
         ],
     },
     [HINTS_IDS.PERFECT_X_WING]: [
-        'in X-Wing we search for a candidate which is present in exactly 2 cells of 2 rows or columns each.'
-        + ' these cells must form corners of a rectangle.\n'
-        + 'here {{candidate}} is present in exactly 2 cells in {{houseAAxesValue}} and {{houseBAxesValue}}'
-        + ' {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.',
+        'to spot a X-Wing, start with looking for a candidate which is present only in two cells of'
+        + ' any row or column. we need to find either two such rows or two columns.'
+        + '\nthese four cells where the candidate is present in these rows or columns must be aligned'
+        + ' like four corners of a rectangle.',
 
-        'to fill {{candidate}} in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}} it can be'
+        'here {{candidate}} is present only in two cells of {{houseAAxesValue}} and {{houseBAxesValue}}'
+        + ' {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.'
+        + '\ndue to this arrangement of {{candidate}} in these {{houseFullNamePlural}}, any {{candidate}} that is highlighted'
+        + ' in red color in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} can be removed',
+
+        'because to fill {{candidate}} in both {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}}, it can be'
         + ' filled either in {{topDownDiagonalText}} OR in {{bottomUpDiagonalText}} cells.'
-        + ' because of this any other {{candidate}} present in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}}'
-        + ' {{crossHouseFullNamePlural}} except these 4 cells can be removed ',
+        + '\nbecause of this {{candidate}} present in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}}'
+        + ' {{crossHouseFullNamePlural}} in red color will be removed',
     ],
     [HINTS_IDS.FINNED_X_WING]: [
-        'If you don\'t know about X-Wing then you might not be able to understand this hint.\n'
-        + 'when the candidate is present in more than 2 cells in one row or column then it\'s not a perfect X-Wing'
-        + ' but we call it Finned X-Wing and the extra cells where candidate is present are called Finn cells.\n'
-        + 'Note: in other row or column the candidate must be in exactly 2 cells',
+        'If you don\'t understand X-Wing then you should learn that first.'
+        + '\nwhen the candidate is present in more than 2 cells of only one row or column then it\'s not a perfect X-Wing'
+        + ' but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called Finn cells.'
+        + '\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}',
 
-        'notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} wasn\'t present'
-        + ' in {{finnCellsAxesListText}}(finn {{finnCellEnglishText}}) then it would be a perfect X-Wing.'
-        + ' finn cells must be in the same block with one of the X-Wing corner cells, notice'
-        + ' {{finnCellsAxesListText}} {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}',
+        'only one row or column can have these finn cells. and these finn cells must be in the'
+        + ' same block with atleast one of the X-Wing corner cells.\nnotice here that {{finnCellsAxesListText}}'
+        + ' (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}',
 
-        'in this Finned X-Wing we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but'
+        'here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but'
         + ' only from cells which share block with finn cells.'
-        + ' because however we fill {{candidate}} in {{hostHousesAxesListText}} {{hostHousePluralName}}, {{candidate}}'
-        + ' can\'t come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.',
+        + ' because in {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} comes in {{finnCellsPrefix}} finn {{finnCellEnglishText}}'
+        + ' then {{candidate}} can\'t come in {{removableNotesHostCells}} only. and if {{candidate}} doesn\'t come in {{finnCellsPrefix}} finn {{finnCellEnglishText}}'
+        + ' then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}',
     ],
-
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
-        'If you don\'t know about Finned X-Wing then you might not be able to understand this hint.\n'
-        + 'when in Finned X-Wing a candidate is missing in one corner which is in same block'
-        + ' as finn cells then it is called as Sashimi Finned X-Wing.',
+        'If you don\'t understand Finned X-Wing then you should learn that first.'
+        + '\nwhen in Finned X-Wing the candidate is missing in the corner cell which is in same block'
+        + ' as finn cells then it will be called Sashimi Finned X-Wing.',
 
-        'notice in the {{finnedLegAxesText}} {{finnedLegHouseText}} {{candidate}} isn\'t present'
-        + ' in {{sashimiCellAxesText}}. now just like Finned X-Wing in Sashimi X-Wing also we can'
+        'here {{candidate}} isn\'t present in {{sashimiCell}} and this cell is in same'
+        + ' block as {{finnCellsAxesListText}} finn {{finnCellEnglishText}}'
+        + '\njust like Finned X-Wing in Sashimi Finned X-Wing also we can'
         + ' remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which'
         + ' share block with finn cells because however we fill {{candidate}} in {{hostHousesAxesListText}}'
-        + ' {{hostHousePluralName}}, {{candidate}} can\'t come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.',
+        + ' {{hostHousePluralName}}, in all cases {{candidate}} can\'t come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.',
     ],
     [HINTS_IDS.Y_WING]: [
 
