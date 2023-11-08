@@ -6,7 +6,9 @@ import { HOUSES_COLORS } from './boardData/cellsHighlightData'
 
 export const RULES_TEXT_CONFIG = [
     {
-        label: 'A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are already filled.\n\nA puzzle is completed when each number from 1 to 9 appears only once in each of the 9 ',
+        label: 'A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are'
+            + ' already filled. Notice above.\n\nA puzzle is completed when each number from 1 to 9 appears only once'
+            + ' in each of the 9 ',
         key: 'part_1',
     },
     {
@@ -50,3 +52,8 @@ export const RULES_TEXT_CONFIG = [
         key: 'part_8',
     },
 ]
+
+export const PUZZLE = {
+    UNSOLVED: '590803001000700002740002060000036010206010908010950000020300074300004000100605089',
+    SOLVED: '592863741863741592741592863958236417236417958417958236625389174389174625174625389',
+}

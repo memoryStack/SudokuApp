@@ -263,7 +263,6 @@ const Board_: React.FC<Props> = ({
 
     return (
         <>
-
             <View style={styles.boardAndYAxisContainer}>
                 {yAxis}
                 {renderBoard()}

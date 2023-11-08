@@ -26,7 +26,7 @@ import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { Houses } from './classes/houses'
 import { BoardIterators } from './classes/boardIterators'
-import { getBlockAndBoxNum } from './cellTransformers'
+import { convertBoardCellNumToCell, getBlockAndBoxNum } from './cellTransformers'
 
 export const addLeadingZeroIfEligible = (value: number) => {
     if (value > 9) return `${value}`
@@ -266,3 +266,17 @@ export const getCellsSharingHousesWithCells = (cellA: Cell, cellB: Cell): Cell[]
 }
 
 export const sortCells = (cells: Cell[]): Cell[] => _sortBy(cells, ['row', 'col'])
+
+export const generateMainNumbersFromPuzzleString = (puzzle: {unsolved: string, solution: string}): MainNumbers => {
+    const mainNumbers = MainNumbersRecord.initMainNumbers()
+
+    for (let i = 0; i < puzzle.unsolved.length; i++) {
+        const { row, col } = convertBoardCellNumToCell(i)
+        const cellValue = parseInt(puzzle.unsolved[i], 10)
+        mainNumbers[row][col].value = cellValue
+        if (cellValue) mainNumbers[row][col].isClue = true
+        mainNumbers[row][col].solutionValue = parseInt(puzzle.solution[i], 10)
+    }
+
+    return mainNumbers
+}
