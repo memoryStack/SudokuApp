@@ -17,3 +17,6 @@
 
 # sudoku puzzle class
 -keep class com.anujrao.sudokucpp.PuzzleInfo { *; }
+
+# sudoku puzzle solutions count checker class
+-keep class com.anujrao.sudokucpp.PuzzleValidationResult { *; }
