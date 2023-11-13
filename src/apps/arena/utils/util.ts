@@ -8,15 +8,16 @@ import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
 import _areSameValues from '@lodash/areSameValues'
 
+import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
+
 import { getKey } from '@utils/storage'
 
 import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
 
 import _sortBy from '@lodash/sortBy'
 import {
-    BOARD_AXES_VALUES, CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE, PUZZLE_SOLUTION_TYPES,
+    BOARD_AXES_VALUES, HOUSES_COUNT, PUZZLE_SOLUTION_TYPES,
 } from '../constants'
-import { DEFAULT_CELL } from '../default.constants'
 
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSE_TYPE } from './smartHints/constants'
@@ -26,7 +27,7 @@ import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { Houses } from './classes/houses'
 import { BoardIterators } from './classes/boardIterators'
-import { convertBoardCellNumToCell, getBlockAndBoxNum } from './cellTransformers'
+import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from './cellTransformers'
 
 export const addLeadingZeroIfEligible = (value: number) => {
     if (value > 9) return `${value}`
@@ -37,37 +38,25 @@ export const shouldSaveDataOnGameStateChange = (currentState: GAME_STATE, previo
 
 export const isMainNumberPresentInAnyHouseOfCell = (number: number, cell: Cell, mainNumbers: MainNumbers) => mainNumberCountExccedsThresholdInAnyHouseOfCell(number, cell, mainNumbers, 0)
 
-const getSolutionsCountForPuzzleType = (mainNumbers: MainNumbers, { row, col } = DEFAULT_CELL): number => {
-    const isPuzzleSolved = row === CELLS_IN_HOUSE
-    if (isPuzzleSolved) {
-        BoardIterators.forBoardEachCell(({ row: _row, col: _col }: Cell) => {
-            mainNumbers[_row][_col].solutionValue = MainNumbersRecord.getCellMainValue(mainNumbers, { row: _row, col: _col })
-        })
-        return 1
-    }
+export const getPuzzleSolutionType = async (mainNumbers: MainNumbers) => {
+    let puzzleStr = ''
+    BoardIterators.forBoardEachCell(({ row: _row, col: _col }: Cell) => {
+        puzzleStr += mainNumbers[_row][_col].value
+    })
 
-    const isRowComplete = col === CELLS_IN_HOUSE
-    if (isRowComplete) return getSolutionsCountForPuzzleType(mainNumbers, { row: row + 1, col: 0 })
-
-    if (MainNumbersRecord.isCellFilled(mainNumbers, { row, col })) return getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
-
-    let result = 0
-    for (let num = 1; num <= NUMBERS_IN_HOUSE; num++) {
-        if (result > 1) break
-        if (!isMainNumberPresentInAnyHouseOfCell(num, { row, col }, mainNumbers)) {
-            mainNumbers[row][col].value = num
-            result += getSolutionsCountForPuzzleType(mainNumbers, { row, col: col + 1 })
-            mainNumbers[row][col].value = 0
-        }
-    }
-    return result
-}
-
-export const getPuzzleSolutionType = (mainNumbers: MainNumbers) => {
-    const solutionsCount = getSolutionsCountForPuzzleType(mainNumbers)
-    if (solutionsCount === 0) return PUZZLE_SOLUTION_TYPES.NO_SOLUTION
-    if (solutionsCount === 1) return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
-    return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
+    // TODO: handle error case with msg separately
+    return RNSudokuPuzzle.validatePuzzle(puzzleStr)
+        .then(({ count, solution }: { count: number, solution: number[] }) => {
+            if (count === 0) return PUZZLE_SOLUTION_TYPES.NO_SOLUTION
+            if (count === 1) {
+                BoardIterators.forBoardEachCell((cell: Cell) => {
+                    const cellNo = convertBoardCellToNum(cell)
+                    mainNumbers[cell.row][cell.col].solutionValue = solution[cellNo]
+                })
+                return PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION
+            }
+            return PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
+        }).catch(() => PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS)
 }
 
 export const previousInactiveGameExists = async () => {

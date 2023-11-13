@@ -137,7 +137,7 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
     })
 }
 
-const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
+const handleInitSharedPuzzle = async ({ params: puzzleUrl }) => {
     const sharedPuzzleError = getSharedPuzzleError(puzzleUrl)
     if (sharedPuzzleError) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${sharedPuzzleError}. ${LAUNCHING_DEFAULT_PUZZLE}` })
@@ -153,7 +153,7 @@ const handleInitSharedPuzzle = ({ params: puzzleUrl }) => {
         return
     }
 
-    switch (getPuzzleSolutionType(mainNumbers)) {
+    switch (await getPuzzleSolutionType(mainNumbers)) {
         case PUZZLE_SOLUTION_TYPES.NO_SOLUTION:
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${DEEPLINK_PUZZLE_NO_SOLUTIONS} ${LAUNCHING_DEFAULT_PUZZLE}` })
             generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)

@@ -202,7 +202,7 @@ const showSnackBar = ({ msg }) => {
     })
 }
 
-const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) => {
+const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef } }) => {
     const { mainNumbers, startCustomPuzzle } = getState()
 
     if (getCluesCount(mainNumbers) < 18) {
@@ -218,7 +218,7 @@ const handlePlay = ({ setState, getState, params: { ref: customPuzzleHCRef } }) 
         return
     }
 
-    const hasMultipleSolutions = getPuzzleSolutionType(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
+    const hasMultipleSolutions = await getPuzzleSolutionType(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
 
     if (hasMultipleSolutions) {
         showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
