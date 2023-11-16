@@ -1,0 +1,40 @@
+
+# definition
+# pattern to spot
+# valid Naked Tripples
+# Invalid Naked Tripples
+# notes elimination pattern
+# two host houses Naked Tripple
+
+TODO: explain why "Naked" is used here. it's explained for Naked Single.
+
+In Naked Single, we focus on one candidate and one cell only. Naked Double is
+the extension of Naked Single. Here we will focus on two candidates and two cells.
+
+If you can find two cells, both in the same house, that have only the
+same two candidates left, you can eliminate those two candidates from
+all other cells in that house.
+
+example puzzle
+Naked Double in 5th block with 8, 9 candidates
+687004523953002614142356978310007246760000305020000701096001032230000057070000069
+
+cells A, B are both in the same house (row 8) and have both only candidates 8 and 9 left.
+8 and 9 will go in these cells only and nowhere else. if you try to fill 8 or 9 anywhere else then
+one of these cells will be left without any candidate and puzzle will not be solved.
+which cell out of cellA or cellB will have 8 and which will be filled by 9 is still unknown.
+
+either CellA will have 8 and cellB will have 9 like below
+# show by filling these cells in separate colors
+
+or CellA will have 9 and cellB will have 8 like this
+# show by filling these cells in separate colors
+
+Notice in both cases 8 and 9 highlighted above in red color have been removed.
+
+A naked double is not limited to only one house.
+in below example cellA and cellB are part of 8th row and 8th block both. so
+6, 7 candidates make a naked double in 8th row and 8th block houses
+800210047040089100000040000000098005090030000007001409000000000003000254200000008
+
+and 6 and 7 will be removed from all the cells except cellA and cellB in 8th row and 8th block

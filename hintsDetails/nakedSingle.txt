@@ -1,0 +1,11 @@
+Naked Single means that in a specific cell only one candidate remains
+possible in a cell. The candidate must then go into that cell. 
+The last remaining candidate has no other candidates to hide
+behind and is thus Naked. These are very easy to spot.
+
+puzzle with NS in r3c3 cell
+010900740000800003070320690004030200000602000008010300081070030300008000069003020
+
+Quiz puzzle with NS in r6c7
+412736589000000106568010370000850210100000008087090000030070865800000000000908401
+

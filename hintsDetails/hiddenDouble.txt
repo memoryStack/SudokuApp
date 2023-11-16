@@ -1,0 +1,34 @@
+
+# definition
+# pattern to spot
+# valid Hidden Double
+# Invalid Hidden Double
+# notes elimination pattern
+
+# Link between HS and HD
+In Hidden Single, we focus on one candidate and one cell only. Hidden Double is
+the extension of Hidden Single. Here we will focus on two candidates and two cells.
+
+a Hidden Double is formed when two candidates are present together only in two
+cells and nowhere else in any row, column or block.
+
+in 1st block, 4 and 7 have Hidden Double here
+000060000000042736006730040094000068000096407607050923100000085060080271005010094
+
+notice that in 1st block, 4 and 7 are present together only in cellA and cellB. this is a
+Hidden Double in this block. the word "Hidden" is used because in cellA and cellB cells 4 and 7
+are hidden behind other candidates. and it's a little harder to find.
+
+# Invalid Hidden Double
+000065000000042736006730040094000068000096407607050923100000085069080271005010094
+here in 6th column, 8 and 9 are present two times only but these are not in same cells.
+in cell C6 these are together but 2nd 8 and 9 are in F6 and G6 cells respectively.
+so it's an invalid Hidden Double.
+
+# notes elimination pattern
+Logic behind eliminating the candidates
+since these two candidates appear in these two cells only so these cells will be filled by 
+these candidates only and all the other candidates will be removed from these cells.
+000060000000042736006730040094000068000096407607050923100000085060080271005010094
+so in 1st block, A1 and A2 will be filled by 4 and 7 and 1, 2, 3, 5, 8, 9 will be removed.
+which candidate will fill which cell is still unknown.

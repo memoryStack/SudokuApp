@@ -1,0 +1,44 @@
+
+# definition
+# pattern to spot
+# valid Naked Tripples
+# Invalid Naked Tripples
+# notes elimination pattern
+# two host houses Naked Tripple
+
+TODO: explain why "Naked" is used here. it's explained for Naked Single.
+
+In Naked Tripple we deal with three cells and three candidates.
+a Naked Tripple is formed when three cells in any row, column
+or block have candidates from a group of three candidates only.
+Note: each cell must have atleast 2 candidates out of these 3.
+
+example
+    naked tripple is present in 2nd block with 1, 2 and 6 candidates
+    390000700000000650507000349049380506601054983853000400900800134002940865400000297
+    here in above puzzle 1, 2 and 6 make a naked tripple in 2nd block in
+    cellA, cellB, cellC cells.
+
+Valid Naked Tripples
+    396000700000000650507000349049380506601054983853000400900800134002940865400000297
+    in above example that cellA has only 1 and 2 as it's candidates. It's still a valid 
+    Naked tripple because all the cells have atleast two candidates out of three.
+
+    in 8th row naked tripple is present
+    301007006200090041050001007000108060178569432060402000800700090720050003600800704
+    it's also a valid naked tripple because all the cells have 2 candidates out of 3.
+
+Invalid Naked Tripples
+    in 2nd row, take 3rd, 7th and 9th cells. these 3 cells have 4 candidates in total
+    012950300050068010300410007049000000075836140000000270500091008090680020008024790
+
+how the notes will be removed
+    390000700000000650507000349049380506601054983853000400900800134002940865400000297
+    just like Naked Double, 1, 2 and 6 will be filled in cellA, cellB, cellC only. and 1, 2 and 6 
+    will be removed from all the other cells in this block.
+
+Naked Tripple in 2 Houses
+Like Naked Double, Naked Tripple also can eliminate candidates from two houses
+4..5..37.32......4.6.......8....2.3.21.84...........9..7..9.1..94.651.......7....
+here cellA, cellB, cellC are part of 5th row and 6th block houses. so it eliminates 5, 6 and 7
+from all the other cells of these houses.

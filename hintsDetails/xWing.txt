@@ -1,0 +1,7 @@
+
+# definition
+# pattern to spot
+# valid X-Wing
+# Invalid X-Wing
+# notes elimination pattern
+

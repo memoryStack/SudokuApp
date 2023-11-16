@@ -1,0 +1,42 @@
+
+# definition
+# pattern to spot
+# valid Hidden Double
+# Invalid Hidden Double
+# notes elimination pattern
+
+# Link between HS and HD
+In Hidden Double, we focus on two candidates and two cells. In Hidden Tripple number
+of candidates and cells increases to three.
+
+a Hidden Tripple is formed when three candidates are present together only in three
+cells and nowhere else in any row, column or block. and each of these three cells 
+must have atleast two out of these three candidates.
+
+# in 6th column, 2, 5 and 6 make a Hidden Tripple here
+500620037004890000000050000930000000020000605700000003000009000000000700680570002
+
+notice that in 6th column, 2, 5 and 6 are present together only in D6, F6 and H6. this is a
+Hidden Tripple in this column. the word "Hidden" is used because in D6, F6 and H6 2, 5 and 6
+are hidden behind other candidates. and it's a little harder to find.
+Also notice that H6 doesn't have 5 in it. it's still a valid Hidden Tripple because a cell can
+have atleast two out of three candidates and here H6 satisfies that condition.
+
+# Invalid Hidden Tripple
+500620037004890000000050000930000000020000605700000003000009000000000700680570002
+here in 9th row, focus on 1, 3 and 9. these numbers are present in more than three cells.
+if 1 and 3 weren't present in I3 cell then it would have been a valid Hidden Tripple.
+
+500620037004890000000050000930000000020000605700000003000009000200000700680570002
+here in 6th column in H6 only 6 is present out of 2, 5 and 6. H6 must have atleast 2 
+candidates out of 2, 5 and 6. In this example, 2 and 5 make a Hidden Double in D6 and F6 cells.
+And once 6 will be removed from D6 and F6 then 6 will make a Hidden Single in H6.
+ 
+# notes elimination pattern
+Logic behind eliminating the candidates
+since in 6th column in below puzzle three candidates 2, 5 and 6 appear in these three cells D6, F6 and H6
+only so these cells will be filled by these candidates only and all the other candidates 
+will be removed from these cells.
+500620037004890000000050000930000000020000605700000003000009000000000700680570002
+so in 6th column 1, 3, 4, 7, 8 will be removed from D6, F6 and H6.
+which candidate will fill exactly which cell is still unknown.

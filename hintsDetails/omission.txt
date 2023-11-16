@@ -1,0 +1,35 @@
+1st variation
+    Block as Host House
+        If in a block all candidates of a certain number are limited to a row or column, that
+        number cannot appear outside of that block in that row or column.
+    
+    example 
+        it has omission in 1st block with number 5
+        984000000000500040000000002006097200003002000000000010005060003407051890030009700
+
+        In block 1 candidate 5 can only go into row 3. That means, that one of the cells 
+        r3c1 or r3c2 has to be 5, or block 1 would be without 5, which is not possible. It
+        also means, that 5 can be eliminated from r3c7, because r3c7 sees both r3c1 and r3c2.
+
+    quiz puzzle
+        it has omission in 5th block with number 8
+        340006070080000930002000060000010000097000850000002000000000000000608090000923785
+
+2nd variation
+    Row OR Column as Host House
+        It works exactly the other way round: If in a row (or column) all candidates of a 
+        certain digit are limited to one block, that candidate that be eliminated from all
+        other cells in that block.
+    
+    example
+        it has omission in 2nd row with number 7
+        010000400000603000006080003800950100020400058795000000000500700000007000000030641
+        In row 2 candidate 7 can only go into block 1. It can be eliminated from all cells in
+        block 1 that don't belong to row 2, in our case cell r3c2.
+        
+    quiz puzzle
+        it has omission in 6th column with number 4
+        062008001900000006000000080478000000000009073000000420005001000007680300000032708
+
+
+

@@ -1,0 +1,19 @@
+
+in Hidden Single a Candidate is present only once in an entire row, column, or block.
+The cell itself has more than one candidate left, the correct
+digit is thus hidden amongst the rest.
+
+However, this technique requires careful attention from the player, because it can be 
+quite hard to spot the hidden singles.
+
+puzzle with HS in cell r3c4 with 6 as candidate
+028007000016083070000020851137290000000730000000046307290070000000860140000300700
+
+
+quiz puzzle
+
+3 is HS in r6c4
+4 is HS in r4c4
+7 is HS in r8c5
+002193000000007000700040019803000600045000230007000504370080006000600000000534100
+
