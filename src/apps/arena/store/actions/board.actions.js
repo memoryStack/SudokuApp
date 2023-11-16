@@ -298,7 +298,7 @@ const addPossibleNotesOnCorrectlyFilledMainNumberErased = (selectedCell, mainNum
     const cellHouses = getCellHousesInfo(selectedCell)
     cellHouses.forEach(house => {
         getHouseCells(house).forEach(cell => {
-            const shouldSpawnNoteInCell = !MainNumbersRecord.isCellFilled(mainNumbersAfterErase, selectedCell)
+            const shouldSpawnNoteInCell = !MainNumbersRecord.isCellFilled(mainNumbersAfterErase, cell)
                 && !isMainNumberPresentInAnyHouseOfCell(numberRemoved, cell, mainNumbersAfterErase)
             if (shouldSpawnNoteInCell) possibleNotesBunch.push({ cell, note: numberRemoved })
         })

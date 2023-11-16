@@ -1,4 +1,5 @@
 import { waitFor, screen } from '@utils/testing/testingLibrary'
+import { HINT_LABELS } from '../utils/smartHints/constants'
 
 import { HINT_MENU_ITEM_TEST_ID } from './hintsMenu.constants'
 
@@ -24,4 +25,9 @@ export const expectOnHintMenuItems = expectCallback => {
     allHintMenuItems.forEach(element => {
         expectCallback(element)
     })
+}
+
+export const expectHintToBeEnabledInMenu = hintId => {
+    const hintEle = screen.getByText(HINT_LABELS[hintId])
+    expect(hintEle).not.toBeDisabled()
 }
