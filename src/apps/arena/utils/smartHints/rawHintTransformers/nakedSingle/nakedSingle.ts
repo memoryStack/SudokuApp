@@ -30,12 +30,8 @@ import {
 
 import { NakedSingleTransformerArgs } from './types'
 
-// TODO: move it to string literals file
-type NakedSingleExplainationTexts = {
-    SINGLE_HOUSE: string
-    MULTIPLE_HOUSE: string
-}
-const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE] as NakedSingleExplainationTexts
+
+const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE] 
 
 const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell): string => {
     const msgPlaceholdersValues = {

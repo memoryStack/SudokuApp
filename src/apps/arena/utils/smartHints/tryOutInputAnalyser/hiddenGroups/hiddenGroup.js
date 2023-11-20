@@ -177,7 +177,6 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates) => {
                 const cellValue = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell)
                 correctlyFilledGroupCellsInfo.push({ cell, number: cellValue })
             })
-        const correctlyFilledGroupCandidates = getNumbersFromCellsWithNumbers(correctlyFilledGroupCellsInfo)
         const filledGroupCells = getCellsFromCellsWithNumbers(correctlyFilledGroupCellsInfo)
 
         let candidatesToBeFilled = []

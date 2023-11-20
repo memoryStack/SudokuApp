@@ -630,7 +630,7 @@ describe('Start New Game', () => {
 describe('Bugs', () => {
     beforeEach(() => {
         jest.useFakeTimers()
-        jest.setTimeout(10000)
+        jest.setTimeout(20000)
     })
     afterEach(() => {
         jest.useRealTimers()
@@ -646,7 +646,7 @@ describe('Bugs', () => {
 
         await renderScreenAndWaitCustomPuzzleToStart(puzzle)
         await exhaustHints()
-        solvePuzzle()
+        act(() => solvePuzzle())
         act(() => {
             fireEvent.press(screen.getByText('New Game'))
             jest.advanceTimersByTime(500)

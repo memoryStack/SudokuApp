@@ -37,9 +37,7 @@ export const getCorrectFilledTryOutCandidates = (groupCells : Cell[], tryOutMain
     return result
 }
 
-// TODO: fix it's type
 export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates: number[], groupCandidates: number[]) => groupCandidates
-    .map(candidate => parseInt(candidate, 10))
     .filter(groupCandidate => !correctlyFilledGroupCandidates.includes(groupCandidate))
 
 export const isCellWithoutAnyCandidate = (cell: Cell) => {

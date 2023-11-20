@@ -1,11 +1,11 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
-import { cellHasTryOutInput } from 'src/apps/arena/smartHintHC/helpers'
 import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
+import { cellHasTryOutInput } from '../../../../smartHintHC/helpers'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 

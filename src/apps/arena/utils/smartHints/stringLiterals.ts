@@ -16,7 +16,31 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.ALL]: 'hints',
 }
 
-export const HINT_EXPLANATION_TEXTS = {
+type NakedSingleHintExplainationText = {
+    SINGLE_HOUSE: string
+    MULTIPLE_HOUSE: string
+}
+
+type HiddenGroupHintExplainationText = {
+    DEFAULT: string[]
+    REMOVABLE_NOTES_IN_SECONDARY_HOUSE: string[]
+}
+
+type HintExplainationTexts = {
+    [HINTS_IDS.NAKED_SINGLE]: NakedSingleHintExplainationText
+    [HINTS_IDS.HIDDEN_SINGLE]: string
+    [HINTS_IDS.OMISSION]: string
+    [HINTS_IDS.NAKED_DOUBLE]: string[]
+    [HINTS_IDS.NAKED_TRIPPLE]: string[]
+    [HINTS_IDS.HIDDEN_DOUBLE]: HiddenGroupHintExplainationText
+    [HINTS_IDS.HIDDEN_TRIPPLE]: HiddenGroupHintExplainationText
+    [HINTS_IDS.PERFECT_X_WING]: string[]
+    [HINTS_IDS.FINNED_X_WING]: string[]
+    [HINTS_IDS.SASHIMI_FINNED_X_WING]: string[]
+    [HINTS_IDS.Y_WING]: string[]
+}
+
+export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
     [HINTS_IDS.NAKED_SINGLE]: {
         SINGLE_HOUSE: 'in this {{houseType}} only {{cellAxesText}} is empty so {{solutionValue}} will come here',
         MULTIPLE_HOUSE: 'except {{solutionValue}} all other numbers from 1-9 are present in {{cellHousesText}} combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}',

@@ -15,7 +15,7 @@ import { CloseIcon } from '@resources/svgIcons/close'
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS, Styles } from '@ui/atoms/Text'
 
-import { OnAction } from '@utils/hocs/withActions/types'
+import { Action, OnAction } from '@utils/hocs/withActions/types'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
@@ -73,7 +73,7 @@ const SmartHintHC_: React.FC<Props> = ({
 
     const isHintTryOut = useIsHintTryOutStep()
 
-    const onAction = React.useMemo(() => action => {
+    const onAction = React.useMemo(() => (action: Action) => {
         if (action.type === ACTION_TYPES.ON_NUMBER_CLICK) {
             action.payload = {
                 number: action.payload,

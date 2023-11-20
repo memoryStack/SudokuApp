@@ -6,7 +6,7 @@ import _map from '@lodash/map'
 import _reduce from '@lodash/reduce'
 import _sortBy from '@lodash/sortBy'
 
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { getCellAxesValues, getCellsCommonHousesInfo, sortCells } from '../../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
