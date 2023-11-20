@@ -28,7 +28,6 @@ const mockBoardSelectors = () => {
     getStoreState.mockReturnValue({})
 }
 
-// TODO: fix these linting errors for test files
 describe('getAllValidCellsWithPairs()', () => {
     mockBoardSelectors()
     test('returns all the cells which have only 2 notes in them', () => {
