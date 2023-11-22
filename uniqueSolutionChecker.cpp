@@ -630,7 +630,7 @@ vector <Cell> updateNotesAfterEmptyCell(Cell emptiedCell, int num, bool getNewCe
         if (
             col != emptiedCell.col
             && !isCellFilled(newCell)
-            && isNoteVisibleInCell(num, newCell)
+            && !isNoteVisibleInCell(num, newCell)
             && !duplicacyPresent(newCell, num)
         ) {
             updateNoteInCell(newCell, num, false, validityChecksConfig);
@@ -647,7 +647,7 @@ vector <Cell> updateNotesAfterEmptyCell(Cell emptiedCell, int num, bool getNewCe
         if (
             row != emptiedCell.row
             && !isCellFilled(newCell)
-            && isNoteVisibleInCell(num, newCell)
+            && !isNoteVisibleInCell(num, newCell)
             && !duplicacyPresent(newCell, num)
         ) {
             updateNoteInCell(newCell, num, false, validityChecksConfig);
@@ -667,7 +667,7 @@ vector <Cell> updateNotesAfterEmptyCell(Cell emptiedCell, int num, bool getNewCe
         if (row == emptiedCell.row || col == emptiedCell.col) continue;
         if (
             !isCellFilled(cell)
-            && isNoteVisibleInCell(num, cell)
+            && !isNoteVisibleInCell(num, cell)
             && !duplicacyPresent(cell, num)
         ) {
             updateNoteInCell(cell, num, false, validityChecksConfig);
@@ -722,12 +722,30 @@ int recursion(Cell cell) {
             // don't search for singles because that "getSolutionsCountForPuzzleType" will do
             Single s = {cell, note};
             bool invalidState = fillCell(s, false);
-            numberOfSolutions += !invalidState ? getSolutionsCountForPuzzleType() : numberOfSolutions;
+
+            if (!invalidState) {
+                numberOfSolutions += getSolutionsCountForPuzzleType();
+            }
+
             emptyCell(cell, false);
-            if (numberOfSolutions > 1) { break; }
+
+            if (numberOfSolutions > 1) { 
+                
+                break;
+             }
         }
     }
     return numberOfSolutions;
+}
+
+void printBoardState() {
+    cout<<"printing board state: "<<endl;
+    for(int row=0;row<9;row++){
+        for(int col=0;col<9;col++){
+            Cell cell = {row, col};
+            cout<<getCellMainValue(cell)<<" ";
+        }cout<<endl;
+    }
 }
 
 int getSolutionsCountForPuzzleType() {
@@ -741,6 +759,9 @@ int getSolutionsCountForPuzzleType() {
     if (!stats.invalidState) { // keep on solving if the state is valid
         int filledCellsCount = getFilledCellsCount();
         if (filledCellsCount == 81) {
+
+            printBoardState();
+
             numberOfSolutions = 1;
             for (int row=0;row<9;row++) {
                 for (int col=0;col<9;col++) {
@@ -752,6 +773,9 @@ int getSolutionsCountForPuzzleType() {
             // human techniques didn't solve completely, now use computer recursion power
             Cell firstEmptyCell = getCellToStartRecursionFrom();
             numberOfSolutions = recursion(firstEmptyCell);
+
+            cout<<"solutions: "<<numberOfSolutions<<endl;
+
         }
     }
 
@@ -872,8 +896,12 @@ PuzzleSolutions validatePuzzle(string puzzle) {
 int main() {
     // string puzzle = "900008000000004027061027000095000004080010090600000780000850140850600000000300002";
     // string puzzle = "615030700000790010040005030000523090520000008400068000306080970200479006974356281";
-    string puzzle = "409300781320700409700000000600050000050871040000040002000000008506007094178004506";
+    // string puzzle = "409300781320700409700000000600050000050871040000040002000000008506007094178004506";
     // string puzzle = "378659214154328769629471538743005692862947351915236847487593126236004975591762483";
+
+    string puzzle = "000500786007200300000037520406700002320460057070000460000170008789050000100008075";
+
+
 
     PuzzleSolutions ps = validatePuzzle(puzzle);
 
