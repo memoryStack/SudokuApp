@@ -26,6 +26,13 @@ import {
 } from './bottomDragger.constants'
 import { getStyles } from './bottomDragger.styles'
 
+/*
+read below article to understand the use of the anotation just before
+the component's declaration
+    https://stackoverflow.com/questions/66553490/how-do-i-annotate-react-forwardref-with-jsdoc-comments-so-that-intellisense-can
+*/
+
+/** @type {React.ForwardRefRenderFunction<?, Button.propTypes> */
 const BottomDragger_ = React.forwardRef((props, ref) => {
     const {
         parentHeight,
