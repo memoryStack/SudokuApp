@@ -30,8 +30,7 @@ import {
 
 import { NakedSingleTransformerArgs } from './types'
 
-
-const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE] 
+const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE]
 
 const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell): string => {
     const msgPlaceholdersValues = {

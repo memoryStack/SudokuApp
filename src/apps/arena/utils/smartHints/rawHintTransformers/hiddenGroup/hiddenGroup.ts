@@ -257,7 +257,7 @@ const getHintChunks = (
             secondaryHouseRemovableNotesHostCells: getCellsAxesValuesListText(getSecondaryHouseRemovableNotesHostCells(secondaryHostHouse, groupCandidates, groupCells, notes)),
         },
     }
-    return msgTemplates.map((msgTemplate) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    return msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates: GroupCandidates, hostCells: GroupHostCells, notes: Notes): NoteValue[] => {
