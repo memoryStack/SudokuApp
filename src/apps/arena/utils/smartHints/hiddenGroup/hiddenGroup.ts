@@ -121,6 +121,7 @@ export const getHiddenGroupRawHints = (
     groupCandidatesCount: number,
     notesData: Notes,
     mainNumbers: MainNumbers,
+    possibleNotes: Notes,
     maxHintsThreshold: number,
 ) => {
     const result: HiddenGroupRawHint[] = []
@@ -154,7 +155,7 @@ export const getHiddenGroupRawHints = (
                             groupCandidates: group.groupCandidates,
                             hostCells: group.groupCells,
                         },
-                    })
+                    }, possibleNotes)
                 ))
 
                 result.push(...newHiddenGroups)

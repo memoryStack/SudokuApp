@@ -1,7 +1,5 @@
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
-import { makeTestStore } from '../../../../../utils/testing/testingBoilerplate/makeReduxStore'
-import boardReducers, { boardActions } from '../../../store/reducers/board.reducers'
 import { HOUSE_TYPE } from '../constants'
 import {
     filterNakedGroupEligibleCellsInHouse,
@@ -11,14 +9,10 @@ import {
     isHintRemovesNotesFromCells,
 } from './nakedGroup'
 
-const { setPossibleNotes } = boardActions
-
 describe('getNakedGroupRawHints()', () => {
-    const store = makeTestStore({ board: boardReducers })
     const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
-    store.dispatch(setPossibleNotes(notes))
     test('returns selected cells of naked group in an array', () => {
         const expectedResult = [
             {
@@ -28,7 +22,8 @@ describe('getNakedGroupRawHints()', () => {
                 ],
             },
         ]
-        expect(getNakedGroupRawHints(2, notes, mainNumbers)).toStrictEqual(expectedResult)
+        // TODO: write tests for NakedTripple as well
+        expect(getNakedGroupRawHints(2, notes, mainNumbers, possibleNotes)).toStrictEqual(expectedResult)
     })
 })
 

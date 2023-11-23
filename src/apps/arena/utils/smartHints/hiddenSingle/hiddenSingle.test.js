@@ -1,25 +1,11 @@
-/* eslint-disable global-require */
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import { HIDDEN_SINGLE_TYPES } from '../constants'
 import { getHiddenSingleRawHints } from './hiddenSingle'
 
-jest.mock('../../../../../redux/dispatch.helpers')
-jest.mock('../../../store/selectors/board.selectors')
-
-const mockBoardSelectors = mockedNotes => {
-    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
-    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
-    // mocked notes will be same for user input and possibles notes as well
-    getPossibleNotes.mockReturnValue(mockedNotes)
-    getNotesInfo.mockReturnValue(mockedNotes)
-    getStoreState.mockReturnValue({})
-}
-
 test('hidden singles', () => {
     const puzzle = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
     const hiddenSingles = [
         { cell: { row: 0, col: 3 }, mainNumber: 8, type: HIDDEN_SINGLE_TYPES.ROW },
@@ -39,5 +25,5 @@ test('hidden singles', () => {
         { cell: { row: 7, col: 6 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.BLOCK },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenSingleRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(hiddenSingles)
+    expect(getHiddenSingleRawHints(mainNumbers, notes, possibleNotes, maxHintsThreshold)).toStrictEqual(hiddenSingles)
 })

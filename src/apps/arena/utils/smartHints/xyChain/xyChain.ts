@@ -11,7 +11,7 @@ import { NOTES_COUNT_IN_ELIGIBLE_CELLS } from '../remotePairs/remotePairs.consta
 import { cellHasAllPossibleNotes } from '../validityTest/validity.helpers'
 
 // COPY: as it is copy from remotepairs implementation
-export const getAllValidCellsWithPairs = (mainNumbers: MainNumbers, notes: Notes) => {
+export const getAllValidCellsWithPairs = (mainNumbers: MainNumbers, notes: Notes, possibleNotes: Notes) => {
     const result: Cell[] = []
 
     BoardIterators.forEachHouseNum(num => {
@@ -20,7 +20,7 @@ export const getAllValidCellsWithPairs = (mainNumbers: MainNumbers, notes: Notes
             NOTES_COUNT_IN_ELIGIBLE_CELLS,
             mainNumbers,
             notes,
-        ).filter(cell => cellHasAllPossibleNotes(cell, notes))
+        ).filter(cell => cellHasAllPossibleNotes(cell, notes, possibleNotes))
         result.push(...validCells)
     })
     return result

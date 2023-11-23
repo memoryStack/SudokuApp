@@ -1,6 +1,5 @@
-import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import { GROUPS, HINTS_IDS } from '../constants'
+
 import { isValidHiddenSingle } from './hiddenSingle'
 import { isValidNakedSingle } from './nakedSingle'
 import { isValidNakedGroup } from './nakedGroup'
@@ -20,12 +19,11 @@ const HINT_TYPE_VS_VALIDITY_CHECKER = {
     [HINTS_IDS.OMISSION]: isValidOmission,
 }
 
-export const isHintValid = ({ type, data }) => {
+export const isHintValid = ({ type, data }, possibleNotes) => {
     if (!data || !type) return false
 
     const validityChecker = HINT_TYPE_VS_VALIDITY_CHECKER[type]
     if (!validityChecker) return true // default is true
 
-    const possibleNotes = getPossibleNotes(getStoreState())
     return validityChecker(data, possibleNotes)
 }

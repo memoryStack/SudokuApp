@@ -36,8 +36,8 @@ type RemotePairsHostCellsMap = { [notesPairsKey: string]: Cell[] }
 
 type CellCommonHousesCells = { [cellNum: number]: Cell[] }
 
-export const getRemotePairsRawHints = (mainNumbers: MainNumbers, notes: Notes): RemotePairsRawHint[] | null => {
-    const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes)
+export const getRemotePairsRawHints = (mainNumbers: MainNumbers, notes: Notes, possibleNotes: Notes): RemotePairsRawHint[] | null => {
+    const cellsWithValidNotes = getAllValidCellsWithPairs(mainNumbers, notes, possibleNotes)
     const notesPairsHostCells = getHostCellsForEachNotesPair(cellsWithValidNotes, notes)
     deleteInvalidNotesPairsKeys(notesPairsHostCells)
 
@@ -45,7 +45,7 @@ export const getRemotePairsRawHints = (mainNumbers: MainNumbers, notes: Notes): 
     return _isNil(rawHintData) ? null : [rawHintData as RemotePairsRawHint]
 }
 
-export const getAllValidCellsWithPairs = (mainNumbers: MainNumbers, notes: Notes) => {
+export const getAllValidCellsWithPairs = (mainNumbers: MainNumbers, notes: Notes, possibleNotes: Notes) => {
     const result: Cell[] = []
     BoardIterators.forEachHouseNum(num => {
         const validCells = filterNakedGroupEligibleCellsInHouse(
@@ -53,7 +53,7 @@ export const getAllValidCellsWithPairs = (mainNumbers: MainNumbers, notes: Notes
             NOTES_COUNT_IN_ELIGIBLE_CELLS,
             mainNumbers,
             notes,
-        ).filter(cell => cellHasAllPossibleNotes(cell, notes))
+        ).filter(cell => cellHasAllPossibleNotes(cell, notes, possibleNotes))
         result.push(...validCells)
     })
     return result

@@ -1,25 +1,11 @@
-/* eslint-disable global-require */
 import { editNotes, getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import { HOUSE_TYPE } from '../constants'
 import { getHiddenGroupRawHints, validCandidatesInHouseAndTheirLocations } from './hiddenGroup'
 
-jest.mock('../../../../../redux/dispatch.helpers')
-jest.mock('../../../store/selectors/board.selectors')
-
-const mockBoardSelectors = mockedNotes => {
-    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
-    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
-    // mocked notes will be same for user input and possibles notes as well
-    getPossibleNotes.mockReturnValue(mockedNotes)
-    getNotesInfo.mockReturnValue(mockedNotes)
-    getStoreState.mockReturnValue({})
-}
-
 test('hidden doubles valid candidates test 1', () => {
     const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
     const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
 
     const expectedResult = [
         {
@@ -38,7 +24,6 @@ test('hidden doubles valid candidates test 1', () => {
 test('hidden doubles valid candidates test 2', () => {
     const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
     const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
 
     const expectedResult = [
         {
@@ -65,8 +50,8 @@ test('hidden doubles', () => {
     // TODO: doesn't look like the notesData is related to the mainNumbers in the file
     // the notesData here is actually from this hiddenTrippleTestData file
     const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
     const expectedResult = [
@@ -80,14 +65,13 @@ test('hidden doubles', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenGroupRawHints(2, notes, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
+    expect(getHiddenGroupRawHints(2, notes, mainNumbers, possibleNotes, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples', () => {
     const puzzle = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
-    mockBoardSelectors(notes)
     // TODO: order of records is coupled with the algorithm implementation
     // how to decouple this in any way ??
 
@@ -105,12 +89,12 @@ test('hidden tripples', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenGroupRawHints(3, notes, mainNumbers, maxHintsThreshold)).toStrictEqual(expectedResult)
+    expect(getHiddenGroupRawHints(3, notes, mainNumbers, possibleNotes, maxHintsThreshold)).toStrictEqual(expectedResult)
 })
 
 test('hidden tripples duplicate houses with same group cells', () => {
     const puzzle = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
     editNotes(notes, {
         add: { 40: [2] },
         remove: {
@@ -118,7 +102,7 @@ test('hidden tripples duplicate houses with same group cells', () => {
             43: [8],
         },
     })
-    mockBoardSelectors(notes)
+
     // TODO: order of records is coupled with the algorithm implementation
     // DANGER: violating the rule of TDD
     // how to decouple this in any way ??
@@ -155,7 +139,7 @@ test('hidden tripples duplicate houses with same group cells', () => {
         },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenGroupRawHints(3, notes, mainNumbers, maxHintsThreshold)).toStrictEqual(
+    expect(getHiddenGroupRawHints(3, notes, mainNumbers, possibleNotes, maxHintsThreshold)).toStrictEqual(
         expectedResult,
     )
 })

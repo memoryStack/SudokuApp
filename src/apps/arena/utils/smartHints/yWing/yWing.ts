@@ -7,9 +7,7 @@ import { N_CHOOSE_K } from '@resources/constants'
 import { consoleLog } from '@utils/util'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
-import { getStoreState } from '../../../../../redux/dispatch.helpers'
 import { HOUSES_COUNT } from '../../../constants'
-import { getPossibleNotes } from '../../../store/selectors/board.selectors'
 import {
     getCellHousesInfo,
     getCellHouseForHouseType,
@@ -45,9 +43,7 @@ export const isValidYWingCell = (cell: Cell, userInputNotes: Notes, possibleNote
     return userInputNotesCount === VALID_NOTES_COUNT_IN_CELL
 }
 
-export const getAllValidYWingCells = (mainNumbers: MainNumbers, userInputNotes: Notes) => {
-    const possibleNotes = getPossibleNotes(getStoreState())
-
+export const getAllValidYWingCells = (mainNumbers: MainNumbers, userInputNotes: Notes, possibleNotes: Notes) => {
     const result: YWingCell[] = []
     BoardIterators.forBoardEachCell(cell => {
         if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return
@@ -165,10 +161,15 @@ const getHouseYWings = ({ type, num }: House, housesYWingEligibleCells: HousesPo
 
 const yWingRemovesNotes = (yWing: YWingRawHint, notesData: Notes) => !_isEmpty(getEliminatableNotesCells(yWing, notesData))
 
-export const getYWingRawHints = (mainNumbers: MainNumbers, notesData: Notes, maxHintsThreshold: number) => {
+export const getYWingRawHints = (
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+    possibleNotes: Notes,
+    maxHintsThreshold: number,
+) => {
     const result: YWingRawHint[] = []
 
-    const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData))
+    const housesYWingEligibleCells = categorizeYWingCellsInHouses(getAllValidYWingCells(mainNumbers, notesData, possibleNotes))
     const allHouses = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
     allHouses.forEach(houseType => {
         for (let houseNum = 0; houseNum < HOUSES_COUNT; houseNum++) {

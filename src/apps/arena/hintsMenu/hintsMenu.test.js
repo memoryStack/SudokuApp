@@ -9,13 +9,13 @@ import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerato
 import { getStoreState, invokeDispatch } from '../../../redux/dispatch.helpers'
 
 import { boardActions } from '../store/reducers/board.reducers'
-
 import { HINTS_MENU_OVERLAY_TEST_ID } from './hintsMenu.constants'
 import { getHintsMenuVisibilityStatus } from '../store/selectors/boardController.selectors'
-import { ACTION_TYPES } from './actionHandlers'
-import { HintsMenu } from './index'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
+
+import { ACTION_TYPES } from './actionHandlers'
+import { HintsMenu } from './index'
 import { expectOnHintMenuItems, waitForAvailableHintsToBeChecked } from './hintsMenu.testingUtil'
 
 const { ACTION_HANDLERS } = require('./actionHandlers')
@@ -25,10 +25,9 @@ const renderHintsMenu = async props => {
 
     act(() => {
         const puzzle = '900008000000004027061027000095000004080010090600000780000850140850600000000300002'
-        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+        const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
         invokeDispatch(boardActions.setMainNumbers(mainNumbers))
         invokeDispatch(boardActions.setNotes(notes))
-        invokeDispatch(boardActions.setPossibleNotes(possibleNotes))
     })
 
     await waitForAvailableHintsToBeChecked()
@@ -39,7 +38,6 @@ describe('Available Hints Menu', () => {
         jest.clearAllMocks()
         invokeDispatch(boardActions.setMainNumbers(MainNumbersRecord.initMainNumbers()))
         invokeDispatch(boardActions.setNotes(NotesRecord.initNotes()))
-        invokeDispatch(boardActions.setPossibleNotes(NotesRecord.initNotes()))
     })
 
     test('hints menu will contain these hints', async () => {

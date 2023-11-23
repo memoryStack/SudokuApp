@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import {
@@ -10,22 +9,9 @@ import {
 } from './omission'
 import { HOUSE_TYPE } from '../constants'
 
-jest.mock('../../../../../redux/dispatch.helpers')
-jest.mock('../../../store/selectors/board.selectors')
-
-const mockBoardSelectors = mockedNotes => {
-    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
-    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
-
-    getPossibleNotes.mockReturnValue(mockedNotes)
-    getNotesInfo.mockReturnValue(mockedNotes)
-    getStoreState.mockReturnValue({})
-}
-
 test('all omissions', () => {
     const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
     const expectedOmissions = [
         {
@@ -112,13 +98,12 @@ test('all omissions', () => {
     ]
 
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getOmissionRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(expectedOmissions)
+    expect(getOmissionRawHints(mainNumbers, notes, possibleNotes, maxHintsThreshold)).toStrictEqual(expectedOmissions)
 })
 
 test('all Row 1 omissions', () => {
     const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
     const house = { type: HOUSE_TYPE.ROW, num: 0 }
     const expectedOmissions = [
@@ -142,13 +127,12 @@ test('all Row 1 omissions', () => {
         },
     ]
 
-    expect(getHouseOmissions({ type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes)).toStrictEqual(expectedOmissions)
+    expect(getHouseOmissions({ type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes, possibleNotes)).toStrictEqual(expectedOmissions)
 })
 
 test('all Block 2 omissions', () => {
     const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
     const house = { type: HOUSE_TYPE.BLOCK, num: 2 }
     const expectedOmissions = [
@@ -163,13 +147,12 @@ test('all Block 2 omissions', () => {
         },
     ]
 
-    expect(getHouseOmissions(house, mainNumbers, notes)).toStrictEqual(expectedOmissions)
+    expect(getHouseOmissions(house, mainNumbers, notes, possibleNotes)).toStrictEqual(expectedOmissions)
 })
 
 test('does a note form omission in house', () => {
     const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
     const expectedResultOne = {
         present: true,
@@ -179,9 +162,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(2, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes)).toStrictEqual(
-        expectedResultOne,
-    )
+    expect(analyzeOmissionInHouse(2, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResultOne)
 
     const expectedResultTwo = {
         present: false,
@@ -191,9 +172,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(9, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes)).toStrictEqual(
-        expectedResultTwo,
-    )
+    expect(analyzeOmissionInHouse(9, { type: HOUSE_TYPE.ROW, num: 0 }, mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResultTwo)
 
     const expectedResultThree = {
         present: true,
@@ -203,9 +182,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(5, { type: HOUSE_TYPE.BLOCK, num: 2 }, mainNumbers, notes)).toStrictEqual(
-        expectedResultThree,
-    )
+    expect(analyzeOmissionInHouse(5, { type: HOUSE_TYPE.BLOCK, num: 2 }, mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResultThree)
 
     const expectedResultFour = {
         present: true,
@@ -215,9 +192,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.COL, num: 7 }, mainNumbers, notes)).toStrictEqual(
-        expectedResultFour,
-    )
+    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.COL, num: 7 }, mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResultFour)
 
     const expectedResultFive = {
         present: false,
@@ -228,9 +203,7 @@ test('does a note form omission in house', () => {
         ],
     }
 
-    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.BLOCK, num: 5 }, mainNumbers, notes)).toStrictEqual(
-        expectedResultFive,
-    )
+    expect(analyzeOmissionInHouse(8, { type: HOUSE_TYPE.BLOCK, num: 5 }, mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResultFive)
 })
 
 test('note host cells form valid omission', () => {
@@ -270,7 +243,6 @@ test('note host cells form valid omission', () => {
 test('omission removes notes', () => {
     const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
     const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
 
     const testOneOmission = {
         hostHouse: { type: HOUSE_TYPE.BLOCK, num: 0 },

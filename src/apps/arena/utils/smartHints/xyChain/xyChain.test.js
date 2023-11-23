@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 /*
     PS: look if any util can be used or not
 
@@ -18,20 +17,10 @@
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 import { getAllValidCellsWithPairs, getNotesVSHostCellsMap } from './xyChain'
 
-jest.mock('../../../../../redux/dispatch.helpers')
-jest.mock('../../../store/selectors/board.selectors')
-
-const mockBoardSelectors = possibleNotes => {
-    const { getPossibleNotes } = require('../../../store/selectors/board.selectors')
-    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
-    getPossibleNotes.mockReturnValue(possibleNotes)
-    getStoreState.mockReturnValue({})
-}
-
 describe('getAllValidCellsWithPairs()', () => {
     const puzzle = '361749528584000790792000004923574080416000357857631249678000412145287900239416875'
     const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(possibleNotes)
+
     test('returns all the cells which have only 2 notes in them', () => {
         const expectedResult = [
             { row: 1, col: 3 },
@@ -52,14 +41,14 @@ describe('getAllValidCellsWithPairs()', () => {
             { row: 7, col: 8 },
         ]
 
-        expect(getAllValidCellsWithPairs(mainNumbers, notes)).toStrictEqual(expectedResult)
+        expect(getAllValidCellsWithPairs(mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResult)
     })
 })
 
 describe('getNotesVSHostCellsMap()', () => {
     const puzzle = '361749528584000790792000004923574080416000357857631249678000412145287900239416875'
-    const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(possibleNotes)
+    const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
     test('returns a map of notes present in passed cells and their host cells', () => {
         const cells = [
             { row: 1, col: 3 },

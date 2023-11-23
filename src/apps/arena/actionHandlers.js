@@ -38,7 +38,6 @@ import {
     updateMoves,
     updateNotes,
     updateSelectedCell,
-    initPossibleNotes,
 } from './store/actions/board.actions'
 import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
@@ -107,7 +106,6 @@ const startGame = ({
     updateNotes(notes)
     updateSelectedCell(selectedCell)
     updateMoves(moves)
-    initPossibleNotes(mainNumbers)
 
     // refree state
     updateDifficultylevel(difficultyLevel)

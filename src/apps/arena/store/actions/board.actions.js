@@ -14,7 +14,7 @@ import {
 } from '../../utils/util'
 import { boardActions } from '../reducers/board.reducers'
 import {
-    getMainNumbers, getMoves, getNotesInfo, getPossibleNotes, getSelectedCell,
+    getMainNumbers, getMoves, getNotesInfo, getSelectedCell,
 } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
 import { addMistake } from './refree.actions'
@@ -36,9 +36,6 @@ const {
     addMove,
     popMove,
     resetState,
-    setPossibleNotes,
-    setPossibleNotesBunch,
-    erasePossibleNotesBunch,
 } = boardActions
 
 const constructMove = ({ mainNumber = {}, notes = {} }) => {
@@ -151,8 +148,6 @@ const inputMainNumber = number => {
 
         invokeDispatch(eraseNotesBunch(notesBunch))
 
-        erasePossibleNotesOnNumberInput(number, selectedCell)
-
         move.notes = {
             action: BOARD_MOVES_TYPES.REMOVE,
             bunch: notesBunch,
@@ -258,55 +253,6 @@ const removeCellNotesIfEmptyCell = () => {
     if (!MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) removeCellNotes()
 }
 
-export const initPossibleNotes = mainNumbers => {
-    setTimeout(() => {
-        const notes = NotesRecord.initNotes()
-
-        BoardIterators.forBoardEachCell(({ row, col }) => {
-            const cellNotes = getCellAllPossibleNotes({ row, col }, mainNumbers)
-            cellNotes.forEach(({ note }) => {
-                notes[row][col][note - 1].show = 1
-            })
-        })
-
-        invokeDispatch(setPossibleNotes(notes))
-    })
-}
-
-const getCellAllPossibleNotes = (cell, mainNumbers) => {
-    const result = []
-    if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return result
-
-    BoardIterators.forCellEachNote(note => {
-        if (!isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbers)) result.push({ cell, note })
-    })
-
-    return result
-}
-
-function erasePossibleNotesOnNumberInput(number, selectedCell) {
-    const possibleNotesInfo = getPossibleNotes(getStoreState())
-    const possibleNotesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, possibleNotesInfo)
-    invokeDispatch(erasePossibleNotesBunch(possibleNotesBunch))
-}
-
-const addPossibleNotesOnCorrectlyFilledMainNumberErased = (selectedCell, mainNumbersAfterErase) => {
-    const numberRemoved = MainNumbersRecord.getCellSolutionValue(mainNumbersAfterErase, selectedCell)
-
-    const possibleNotesBunch = [...getCellAllPossibleNotes(selectedCell, mainNumbersAfterErase)]
-
-    const cellHouses = getCellHousesInfo(selectedCell)
-    cellHouses.forEach(house => {
-        getHouseCells(house).forEach(cell => {
-            const shouldSpawnNoteInCell = !MainNumbersRecord.isCellFilled(mainNumbersAfterErase, cell)
-                && !isMainNumberPresentInAnyHouseOfCell(numberRemoved, cell, mainNumbersAfterErase)
-            if (shouldSpawnNoteInCell) possibleNotesBunch.push({ cell, note: numberRemoved })
-        })
-    })
-
-    invokeDispatch(setPossibleNotesBunch(possibleNotesBunch))
-}
-
 export const undoAction = () => {
     const moves = getMoves(getStoreState())
     if (!moves.length) return
@@ -324,12 +270,7 @@ const undoMainNumber = previousMove => {
 
     if (mainNumberMove.action === BOARD_MOVES_TYPES.ADD) {
         const cell = previousMove.selectedCell
-        const mainNumbersBeforeErase = getMainNumbers(getStoreState())
         invokeDispatch(eraseCellMainValue(cell))
-        if (MainNumbersRecord.isCellFilledCorrectly(mainNumbersBeforeErase, cell)) {
-            const mainNumbersAfterErase = getMainNumbers(getStoreState())
-            addPossibleNotesOnCorrectlyFilledMainNumberErased(cell, mainNumbersAfterErase)
-        }
     } else {
         // this will be executed only for the mistake made.
         // correct filled numbers are anyway not erasable.
@@ -355,7 +296,6 @@ export const resetStoreState = () => {
             selectedCell: { row: 0, col: 0 },
             notes: NotesRecord.initNotes(),
             moves: [],
-            possibleNotes: NotesRecord.initNotes(),
         }),
     )
 }

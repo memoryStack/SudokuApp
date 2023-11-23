@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import {
@@ -25,24 +24,10 @@ import {
     getSashimiCell,
 } from './utils'
 
-jest.mock('../../../../../redux/dispatch.helpers')
-jest.mock('../../../store/selectors/board.selectors')
-
-const mockBoardSelectors = mockedNotes => {
-    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
-    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
-    // mocked notes will be same for user input and possibles notes as well
-    getPossibleNotes.mockReturnValue(mockedNotes)
-    getNotesInfo.mockReturnValue(mockedNotes)
-    getStoreState.mockReturnValue({})
-}
-
 // all the types of X-Wings. whether removes notes or not
 test('perfect xWing', () => {
     const puzzle = '600095007540007100002800050800000090000078000030000008050002300304500020920030504'
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-
-    mockBoardSelectors(notes)
+    const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
     const expectedXWings = [
         {
@@ -92,7 +77,7 @@ test('perfect xWing', () => {
     ]
 
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getXWingRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(expectedXWings)
+    expect(getXWingRawHints(mainNumbers, notes, possibleNotes, maxHintsThreshold)).toStrictEqual(expectedXWings)
 })
 
 test('xWing getCrossHouseType', () => {
@@ -155,7 +140,6 @@ describe('xWing isPerfectXWing', () => {
 describe('house XWing perfect Legs', () => {
     const puzzle = '600095007540007100002800050800000090000078000030000008050002300304500020920030504'
     const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-    mockBoardSelectors(notes)
 
     test('test 1', () => {
         const house = { type: HOUSE_TYPE.ROW, num: 0 }
@@ -490,7 +474,6 @@ describe(' check if finned X-Wing removes notes or not ', () => {
     test('test 1', () => {
         const puzzle = '600095007540007100002800050800000090000078000030000008050002300304500020920030504'
         const { notes } = getPuzzleDataFromPuzzleString(puzzle)
-        mockBoardSelectors(notes)
 
         const data = {
             houseType: HOUSE_TYPE.ROW,
@@ -528,8 +511,6 @@ describe(' check if finned X-Wing removes notes or not ', () => {
 
         /** */
 
-        mockBoardSelectors(notes)
-
         const data = {
             houseType: HOUSE_TYPE.ROW,
             legs: [
@@ -564,8 +545,6 @@ describe(' check if finned X-Wing removes notes or not ', () => {
         notes[3][5][4].show = true
 
         /** */
-
-        mockBoardSelectors(notes)
 
         const data = {
             houseType: HOUSE_TYPE.COL,
@@ -1020,13 +999,10 @@ describe('transformSashimiXWingLeg()', () => {
 
 // TODO: add more test-cses for this func
 describe('getXWingType()', () => {
-    beforeEach(() => {
-        const puzzle = '300012598001080763080700241700001380403870010108200075519308027030190850804520139'
-        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
-        mockBoardSelectors(notes)
-    })
-
     test('returns XWING_TYPES.FINNED for 1 perfect leg and 1 finned leg and perfect host cells are aligned for perfect leg', () => {
+        const puzzle = '300012598001080763080700241700001380403870010108200075519308027030190850804520139'
+        const { possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
         const xWing = {
             houseType: HOUSE_TYPE.COL,
             legs: [
@@ -1049,11 +1025,13 @@ describe('getXWingType()', () => {
                 },
             ],
         }
-
-        expect(getXWingType(xWing)).toBe(XWING_TYPES.FINNED)
+        expect(getXWingType(xWing, possibleNotes)).toBe(XWING_TYPES.FINNED)
     })
 
     test('returns XWING_TYPES.SASHIMI_FINNED for 1 perfect leg and 1 finned leg but only one cells pair between these legs is aligned', () => {
+        const puzzle = '300012598001080763080700241700001380403870010108200075519308027030190850804520139'
+        const { possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
         const xWing = {
             houseType: HOUSE_TYPE.ROW,
             legs: [
@@ -1077,7 +1055,7 @@ describe('getXWingType()', () => {
             ],
         }
 
-        expect(getXWingType(xWing)).toBe(XWING_TYPES.SASHIMI_FINNED)
+        expect(getXWingType(xWing, possibleNotes)).toBe(XWING_TYPES.SASHIMI_FINNED)
     })
 })
 

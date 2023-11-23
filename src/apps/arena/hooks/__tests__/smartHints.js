@@ -9,13 +9,11 @@ import smartHintHCReducers, { smartHintHCActions } from '../../store/reducers/sm
 
 import { useIsHintTryOutStep } from '../smartHints'
 
-import boardReducers, { boardActions } from '../../store/reducers/board.reducers'
+import boardReducers from '../../store/reducers/board.reducers'
 import { HINTS_IDS } from '../../utils/smartHints/constants'
 import { getRawHints } from '../../utils/smartHints'
 
 const { setHints, setNextHint } = smartHintHCActions
-
-const { setPossibleNotes } = boardActions
 
 // TODO: this test-case will be changed now due to implementation
 // i guess this is what we call testing the implementation. lol ??
@@ -28,7 +26,6 @@ describe.skip('useIsHintTryOutStep()', () => {
 
         const puzzle = '400372196002000870970000400503001760090037504207000300600003907009700240720950600'
         const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-        store.dispatch(setPossibleNotes(notes))
 
         const { result } = renderHook(() => useIsHintTryOutStep(), {
             wrapper: testStoreWrapper,

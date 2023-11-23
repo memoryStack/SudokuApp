@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import {
@@ -15,21 +14,10 @@ import {
     getCellsWithNotesToBeRemoved,
 } from './remotePairs'
 
-jest.mock('../../../../../redux/dispatch.helpers')
-jest.mock('../../../store/selectors/board.selectors')
-
 const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
 const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
-const mockBoardSelectors = () => {
-    const { getPossibleNotes } = require('../../../store/selectors/board.selectors')
-    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
-    getPossibleNotes.mockReturnValue(possibleNotes)
-    getStoreState.mockReturnValue({})
-}
-
 describe('getAllValidCellsWithPairs()', () => {
-    mockBoardSelectors()
     test('returns all the cells which have only 2 notes in them', () => {
         const expectedResult = [
             { row: 0, col: 0 },
@@ -45,7 +33,7 @@ describe('getAllValidCellsWithPairs()', () => {
             { row: 5, col: 2 },
             { row: 5, col: 3 },
         ]
-        expect(getAllValidCellsWithPairs(mainNumbers, notes)).toStrictEqual(expectedResult)
+        expect(getAllValidCellsWithPairs(mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResult)
     })
 })
 
@@ -128,7 +116,7 @@ describe('getRemotePairsRawHints()', () => {
             orderedChainCells: [{ row: 1, col: 4 }, { row: 3, col: 4 }, { row: 5, col: 3 }, { row: 5, col: 2 }],
             removableNotesHostCells: [{ row: 1, col: 2 }],
         }]
-        expect(getRemotePairsRawHints(mainNumbers, notes)).toStrictEqual(expectedResult)
+        expect(getRemotePairsRawHints(mainNumbers, notes, possibleNotes)).toStrictEqual(expectedResult)
     })
 })
 

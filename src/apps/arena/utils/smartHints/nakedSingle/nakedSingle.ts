@@ -33,7 +33,12 @@ const isOnlyOneCellEmptyInHouse = (house: House, mainNumbers: MainNumbers) => {
     return emptyCellsInHouse.length === 1
 }
 
-export const getNakedSingleRawHints = (mainNumbers: MainNumbers, notes: Notes, maxHintsThreshold: number): NakedSingleRawHint[] => {
+export const getNakedSingleRawHints = (
+    mainNumbers: MainNumbers,
+    notes: Notes,
+    possibleNotes: Notes,
+    maxHintsThreshold: number,
+): NakedSingleRawHint[] => {
     const result = []
 
     for (let row = 0; row < CELLS_IN_HOUSE; row++) {
@@ -45,7 +50,7 @@ export const getNakedSingleRawHints = (mainNumbers: MainNumbers, notes: Notes, m
             const cell = { row, col }
             // TODO: change "mainNumber" field name. it doesn't feel right.
             const { present, mainNumber } = isNakedSinglePresent(notes, cell)
-            const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } })
+            const isValid = present && isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell, possibleNotes } }, possibleNotes)
             if (isValid) {
                 result.push({ cell, mainNumber, type: getNakedSingleType(cell, mainNumbers) })
             }

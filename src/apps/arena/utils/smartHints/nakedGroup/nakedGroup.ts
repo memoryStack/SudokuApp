@@ -75,26 +75,26 @@ export const isHintRemovesNotesFromCells = (selectedCells: Cell[], notesData: No
         && groupCandidates.some(groupCandidate => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell)))
 }
 
-const isValidNakedGroupPresentInCells = (selectedCells: Cell[], notesData: Notes) => {
+const isValidNakedGroupPresentInCells = (selectedCells: Cell[], notesData: Notes, possibleNotes: Notes) => {
     const allPossibleNotesPresent = isHintValid({
         type: GROUPS.NAKED_GROUP,
         data: {
             groupCandidates: getUniqueNotesFromCells(selectedCells, notesData),
             hostCells: selectedCells,
         },
-    })
+    }, possibleNotes)
 
     return allPossibleNotesPresent && isHintRemovesNotesFromCells(selectedCells, notesData)
 }
 
-const selectValidGroupCells = (cells: Cell[], groupCandidatesCount: number, notes: Notes): Cell[] => {
+const selectValidGroupCells = (cells: Cell[], groupCandidatesCount: number, notes: Notes, possibleNotes: Notes): Cell[] => {
     const result = []
 
     const cellsSelections = N_CHOOSE_K[cells.length][groupCandidatesCount]
     for (let k = 0; k < cellsSelections.length; k++) {
         const selectedCells = _at(cells, cellsSelections[k])
         if (!selectedCellsMakeGroup(selectedCells, notes, groupCandidatesCount)) continue
-        if (isValidNakedGroupPresentInCells(selectedCells, notes)) {
+        if (isValidNakedGroupPresentInCells(selectedCells, notes, possibleNotes)) {
             result.push(...selectedCells)
             break
         }
@@ -102,7 +102,12 @@ const selectValidGroupCells = (cells: Cell[], groupCandidatesCount: number, note
     return result
 }
 
-export const getNakedGroupRawHints = (groupCandidatesCount: number, notesData: Notes, mainNumbers: MainNumbers) => {
+export const getNakedGroupRawHints = (
+    groupCandidatesCount: number,
+    notesData: Notes,
+    mainNumbers: MainNumbers,
+    possibleNotes: Notes,
+) => {
     const houseTypes = [HOUSE_TYPE.BLOCK, HOUSE_TYPE.ROW, HOUSE_TYPE.COL]
 
     const result: NakedGroupRawHint[] = []
@@ -115,7 +120,7 @@ export const getNakedGroupRawHints = (groupCandidatesCount: number, notesData: N
             // to avoid computing 7C2 and 7C3, because that might be heavy but it's open for research
             if (!_inRange(validCells.length, { start: groupCandidatesCount, end: MAX_VALID_CELLS_COUNT })) continue
 
-            const validGroupCells = selectValidGroupCells(validCells, groupCandidatesCount, notesData)
+            const validGroupCells = selectValidGroupCells(validCells, groupCandidatesCount, notesData, possibleNotes)
 
             if (!_isEmpty(validGroupCells)) result.push({ groupCells: validGroupCells })
         }

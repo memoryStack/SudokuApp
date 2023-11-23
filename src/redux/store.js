@@ -57,7 +57,6 @@ store initial state structure for reference
         "col": 0
         },
         "notes": [],
-        "possibleNotes": [],
         "moves": []
     }
     }

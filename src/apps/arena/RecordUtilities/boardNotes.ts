@@ -5,6 +5,10 @@ import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
 import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE } from '../constants'
+import { BoardIterators } from '../utils/classes/boardIterators'
+import { isMainNumberPresentInAnyHouseOfCell } from '../utils/util'
+
+import { MainNumbersRecord } from './boardMainNumbers'
 
 const getCellNotes = (notes: Notes, cell = {} as Cell): Note[] => _get(notes, [cell.row, cell.col])
 
@@ -43,6 +47,30 @@ const initNotes = () => {
     return result
 }
 
+const getCellAllPossibleNotes = (cell: Cell, mainNumbers: MainNumbers) => {
+    const result: Note[] = []
+    if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return result
+
+    BoardIterators.forCellEachNote(note => {
+        if (!isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbers)) {
+            result.push({ noteValue: note, show: 1 })
+        } else {
+            result.push({ noteValue: note, show: 0 })
+        }
+    })
+
+    return result
+}
+
+const initPossibleNotes = (mainNumbers: MainNumbers) => {
+    const notes = initNotes()
+    BoardIterators.forBoardEachCell((cell: Cell) => {
+        const cellNotes = getCellAllPossibleNotes(cell, mainNumbers)
+        notes[cell.row][cell.col] = cellNotes
+    })
+    return notes
+}
+
 export const NotesRecord = {
     getCellNotes,
     isNotePresentInCell,
@@ -50,4 +78,5 @@ export const NotesRecord = {
     getCellVisibleNotesCount,
     areSameNotesInCells,
     initNotes,
+    initPossibleNotes,
 }

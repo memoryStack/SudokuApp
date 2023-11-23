@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import {
@@ -9,23 +8,10 @@ import {
     getSecondWingExpectedNotes,
 } from './yWing'
 
-jest.mock('../../../../../redux/dispatch.helpers')
-jest.mock('../../../store/selectors/board.selectors')
-
-const mockBoardSelectors = mockedNotes => {
-    const { getPossibleNotes, getNotesInfo } = require('../../../store/selectors/board.selectors')
-    const { getStoreState } = require('../../../../../redux/dispatch.helpers')
-    // mocked notes will be same for user input and possibles notes as well
-    getPossibleNotes.mockReturnValue(mockedNotes)
-    getNotesInfo.mockReturnValue(mockedNotes)
-    getStoreState.mockReturnValue({})
-}
-
 describe('getYWingRawHints()', () => {
     test('returns row data for all yWings in puzzle', () => {
         const puzzle = '800360900009010863063089005924673158386951724571824396432196587698537000000248639'
-        const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-        mockBoardSelectors(notes)
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
         const expectedYWings = [
             {
@@ -54,16 +40,14 @@ describe('getYWingRawHints()', () => {
             },
         ]
         const maxHintsThreshold = Number.POSITIVE_INFINITY
-        expect(getYWingRawHints(mainNumbers, notes, maxHintsThreshold)).toStrictEqual(expectedYWings)
+        expect(getYWingRawHints(mainNumbers, notes, possibleNotes, maxHintsThreshold)).toStrictEqual(expectedYWings)
     })
 })
 
 describe('getAllValidYWingCells()', () => {
     test('returns all valid yWing cells in board based on the notes present in them', () => {
         const puzzle = '800360900009010863063089005924673158386951724571824396432196587698537000000248639'
-        const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
-
-        mockBoardSelectors(notes)
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
         const expectedValidYWingCells = [
             { cell: { row: 0, col: 2 }, notes: [5, 7] },
@@ -83,7 +67,7 @@ describe('getAllValidYWingCells()', () => {
             { cell: { row: 8, col: 2 }, notes: [5, 7] },
         ]
 
-        expect(getAllValidYWingCells(mainNumbers, notes)).toStrictEqual(expectedValidYWingCells)
+        expect(getAllValidYWingCells(mainNumbers, notes, possibleNotes)).toStrictEqual(expectedValidYWingCells)
     })
 })
 

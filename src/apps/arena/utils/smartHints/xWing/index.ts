@@ -152,10 +152,11 @@ export const isSashimiFinnedXWing = (xWing: XWingRawHint): boolean => {
 
 const noLegIsPerfect = (xWing: XWingRawHint): boolean => _every(xWing.legs, (leg: XWingLeg) => !isPerfectLegType(leg))
 
-export const getXWingType = (xWing: XWingRawHint) => {
+// TODO: take out isHintValid() call from here
+export const getXWingType = (xWing: XWingRawHint, possibleNotes: Notes) => {
     if (noLegIsPerfect(xWing)) return XWING_TYPES.INVALID
 
-    const candidateAllNotesNotFilledInLegs = !isHintValid({ type: HINTS_IDS.X_WING, data: xWing })
+    const candidateAllNotesNotFilledInLegs = !isHintValid({ type: HINTS_IDS.X_WING, data: xWing }, possibleNotes)
     if (candidateAllNotesNotFilledInLegs) return XWING_TYPES.INVALID
 
     const { perfectLeg, otherLeg } = categorizeLegs(xWing.legs[0], xWing.legs[1])
@@ -289,6 +290,7 @@ const getCandidateValidXWings = (
     houseType: HouseType,
     candidateXWingLegsInHouses: XWingLeg[],
     notes: Notes,
+    possibleNotes: Notes,
     maxHintsThreshold: number,
 ) => {
     const result: XWingRawHint[] = []
@@ -302,7 +304,7 @@ const getCandidateValidXWings = (
             const xWingType = getXWingType({
                 houseType,
                 legs: [firstLeg, secondLeg],
-            } as XWingRawHint)
+            } as XWingRawHint, possibleNotes)
 
             if (xWingType !== XWING_TYPES.INVALID) {
                 const xWing = {
@@ -318,7 +320,12 @@ const getCandidateValidXWings = (
     return result
 }
 
-export const getXWingRawHints = (mainNumbers: MainNumbers, notesData: Notes, maxHintsThreshold: number) => {
+export const getXWingRawHints = (
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+    possibleNotes: Notes,
+    maxHintsThreshold: number,
+) => {
     const result: XWingRawHint[] = []
 
     const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData)
@@ -332,7 +339,7 @@ export const getXWingRawHints = (mainNumbers: MainNumbers, notesData: Notes, max
 
             const houseType = xWingLegHouseTypes[j]
             const xWingLegsInHouses: XWingLeg[] = _get(candidateXWingLegs, [candidate, houseType], [])
-            result.push(...getCandidateValidXWings(houseType, xWingLegsInHouses, notesData, maxHintsThreshold))
+            result.push(...getCandidateValidXWings(houseType, xWingLegsInHouses, notesData, possibleNotes, maxHintsThreshold))
         }
     }
 
