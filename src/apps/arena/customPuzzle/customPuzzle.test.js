@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import * as React from 'react'
 
 import {
@@ -12,16 +13,18 @@ import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 // eslint-disable-next-line import/no-unresolved
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID, CONTENT_CONTAINER_TEST_ID } from 'src/apps/components/BottomDragger/bottomDragger.constants'
 
-import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
 import { CustomPuzzle } from './index'
 import { CLOSE_ICON_TEST_ID } from './customPuzzle.constants'
 
-jest.mock('fast-sudoku-puzzles', () => ({
-    RNSudokuPuzzle: {
+jest.mock('../../../adapters/puzzle/puzzle', () => {
+    const { Puzzle: ActualPuzzle } = jest.requireActual('../../../adapters/puzzle/puzzle')
+    const Puzzle = {
+        ...ActualPuzzle,
         validatePuzzle: jest.fn(),
-    },
-}))
+    }
+    return { Puzzle }
+})
 
 /*
     routine used to generate puzzle maps in test cases
@@ -201,7 +204,9 @@ describe('Analyze Custom Puzzle', () => {
     test('invalid puzzle if puzzle has multiple solutions', async () => {
         renderCustomPuzzle()
 
-        RNSudokuPuzzle.validatePuzzle.mockImplementation(() => new Promise(resolve => {
+        const { Puzzle } = require('../../../adapters/puzzle')
+
+        Puzzle.validatePuzzle.mockImplementation(() => new Promise(resolve => {
             resolve({
                 count: 2,
                 solution: [],
@@ -253,7 +258,9 @@ describe('Analyze Custom Puzzle', () => {
     // TODO: this test might break because puzzle validity subroutine might take a lot of time
     //          and waitFor() will throw error
     test('for valid puzzle will start puzzle and close the view', async () => {
-        RNSudokuPuzzle.validatePuzzle.mockImplementation(() => new Promise(resolve => {
+        const { Puzzle } = require('../../../adapters/puzzle')
+
+        Puzzle.validatePuzzle.mockImplementation(() => new Promise(resolve => {
             resolve({
                 count: 1,
                 solution: [6, 1, 5, 8, 3, 2, 7, 4, 9, 8, 3, 2, 7, 9, 4, 6, 1, 5, 7, 4, 9, 6, 1, 5, 8, 3, 2, 1, 6, 8, 5, 2, 3, 4, 9, 7, 5, 2, 3, 9, 4, 7, 1, 6, 8, 4, 9, 7, 1, 6, 8, 5, 2, 3, 3, 5, 6, 2, 8, 1, 9, 7, 4, 2, 8, 1, 4, 7, 9, 3, 5, 6, 9, 7, 4, 3, 5, 6, 2, 8, 1],

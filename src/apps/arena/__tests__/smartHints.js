@@ -29,6 +29,8 @@ import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.c
 import { decreaseAvailableHintsCount } from '../store/actions/boardController.actions'
 import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 
+jest.mock('../../../adapters/puzzle/puzzle')
+
 describe('Hint/Smart Hints', () => {
     beforeEach(() => {
         jest.useFakeTimers()

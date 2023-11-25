@@ -12,6 +12,8 @@ import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settings
 
 import { HOME_PAGE_TEST_ID } from '../home.constants'
 
+jest.mock('../../../adapters/puzzle/puzzle')
+
 describe('Home Page', () => {
     test('shows Next Game Menu card on Play button click', async () => {
         renderScreen({

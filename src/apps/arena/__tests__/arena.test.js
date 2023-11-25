@@ -1,5 +1,3 @@
-import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
-
 import {
     screen, fireEvent, waitFor, act, within,
 } from '@utils/testing/testingLibrary'
@@ -38,33 +36,16 @@ import { MAX_AVAILABLE_HINTS } from '../store/state/boardController.state'
 
 const storageUtils = require('@utils/storage')
 
-jest.mock('fast-sudoku-puzzles', () => ({
-    RNSudokuPuzzle: {
-        getSudokuPuzzle: () => Promise.resolve(
-            {
-                clues: [
-                    9, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0,
-                    0, 0, 4, 0, 2, 7, 0, 6, 1, 0, 2, 7,
-                    0, 0, 0, 0, 9, 5, 0, 0, 0, 0, 0, 4,
-                    0, 8, 0, 0, 1, 0, 0, 9, 0, 6, 0, 0,
-                    0, 0, 0, 7, 8, 0, 0, 0, 0, 8, 5, 0,
-                    1, 4, 0, 8, 5, 0, 6, 0, 0, 0, 0, 0,
-                    0, 0, 0, 3, 0, 0, 0, 0, 2,
-                ],
-                solution: [
-                    9, 2, 7, 5, 3, 8, 4, 6, 1, 5, 3, 8,
-                    1, 6, 4, 9, 2, 7, 4, 6, 1, 9, 2, 7,
-                    5, 3, 8, 2, 9, 5, 7, 8, 3, 6, 1, 4,
-                    7, 8, 3, 4, 1, 6, 2, 9, 5, 6, 1, 4,
-                    2, 9, 5, 7, 8, 3, 3, 7, 9, 8, 5, 2,
-                    1, 4, 6, 8, 5, 2, 6, 4, 1, 3, 7, 9,
-                    1, 4, 6, 3, 7, 9, 8, 5, 2,
-                ],
-            },
-        ),
+jest.mock('../../../adapters/puzzle/puzzle', () => {
+    const Puzzle = {
+        getSudokuPuzzle: () => Promise.resolve({
+            clues: [9, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2, 7, 0, 6, 1, 0, 2, 7, 0, 0, 0, 0, 9, 5, 0, 0, 0, 0, 0, 4, 0, 8, 0, 0, 1, 0, 0, 9, 0, 6, 0, 0, 0, 0, 0, 7, 8, 0, 0, 0, 0, 8, 5, 0, 1, 4, 0, 8, 5, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2],
+            solution: [9, 2, 7, 5, 3, 8, 4, 6, 1, 5, 3, 8, 1, 6, 4, 9, 2, 7, 4, 6, 1, 9, 2, 7, 5, 3, 8, 2, 9, 5, 7, 8, 3, 6, 1, 4, 7, 8, 3, 4, 1, 6, 2, 9, 5, 6, 1, 4, 2, 9, 5, 7, 8, 3, 3, 7, 9, 8, 5, 2, 1, 4, 6, 8, 5, 2, 6, 4, 1, 3, 7, 9, 1, 4, 6, 3, 7, 9, 8, 5, 2],
+        }),
         validatePuzzle: jest.fn(),
-    },
-}))
+    }
+    return { Puzzle }
+})
 
 describe('Arena Screen', () => {
     // added this to avoid "ReferenceError: You are trying to `import` a file after the Jest environment has been torn down."
@@ -639,7 +620,10 @@ describe('Bugs', () => {
     test('starting new game after completing current one, allowed hints must be filled back', async () => {
         const puzzle = '409300781320700409700000000600050000050871040000040002000000008506007094178004506'
 
-        RNSudokuPuzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
+        // eslint-disable-next-line global-require
+        const { Puzzle } = require('../../../adapters/puzzle')
+
+        Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [4, 6, 9, 3, 2, 5, 7, 8, 1, 3, 2, 5, 7, 1, 8, 4, 6, 9, 7, 8, 1, 4, 6, 9, 3, 2, 5, 6, 4, 3, 9, 5, 2, 8, 1, 7, 9, 5, 2, 8, 7, 1, 6, 4, 3, 8, 1, 7, 6, 4, 3, 9, 5, 2, 2, 9, 4, 5, 3, 6, 1, 7, 8, 5, 3, 6, 1, 8, 7, 2, 9, 4, 1, 7, 8, 2, 9, 4, 5, 3, 6],
         }))
@@ -657,6 +641,6 @@ describe('Bugs', () => {
 
         assertHintsLeft(MAX_AVAILABLE_HINTS)
 
-        RNSudokuPuzzle.validatePuzzle.mockReset()
+        Puzzle.validatePuzzle.mockReset()
     })
 })
