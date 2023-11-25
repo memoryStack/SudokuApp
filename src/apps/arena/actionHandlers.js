@@ -6,7 +6,6 @@ import _findIndex from '@lodash/findIndex'
 import _isInteger from '@lodash/isInteger'
 import _noop from '@lodash/noop'
 
-import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import { getKey } from '@utils/storage'
 import {
     LAUNCHING_DEFAULT_PUZZLE,
@@ -23,6 +22,7 @@ import {
     DEEPLINK_HOST_NAME,
     PENCIL_STATE,
 } from '@resources/constants'
+import { Puzzle } from '@adapters/puzzle'
 import { emit } from '../../utils/GlobalEventBus'
 import {
     duplicatesInPuzzle,
@@ -45,14 +45,15 @@ import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
-import {
-    BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
-} from './constants'
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 import { NotesRecord } from './RecordUtilities/boardNotes'
 import { BoardIterators } from './utils/classes/boardIterators'
 import { convertBoardCellToNum } from './utils/cellTransformers'
 import { boardControllerActions } from './store/reducers/boardController.reducers'
+
+import {
+    BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
+} from './constants'
 
 const { resetHints } = boardControllerActions
 
@@ -188,7 +189,8 @@ const generateNewPuzzle = difficultyLevel => {
     if (!difficultyLevel) return
     // "minClues" becoz sometimes for the expert levels we get more than desired clues
     const minClues = LEVELS_CLUES_INFO[difficultyLevel]
-    RNSudokuPuzzle.getSudokuPuzzle(minClues)
+
+    Puzzle.getSudokuPuzzle(minClues)
         .then(({ clues, solution }) => {
             const mainNumbers = transformNativeGeneratedPuzzle(clues, solution)
             startNewGame({ difficultyLevel, mainNumbers })

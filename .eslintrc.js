@@ -89,6 +89,7 @@ module.exports = {
                     ['@lodash', './node_modules/lodash/src/utils'],
                     ['@ui', './src/ui'],
                     ['@resources', './src/resources'],
+                    ['@adapters', './src/adapters'],
                 ],
                 extensions: ['.ts', '.js', '.jsx', '.json', '.tsx'],
             },

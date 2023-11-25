@@ -17,6 +17,9 @@
             "@resources/*": [
                 "./src/resources/*"
             ],
+            "@adapters/*": [
+                "./src/adapters/*"
+            ],
         }
     },
     "exclude": [

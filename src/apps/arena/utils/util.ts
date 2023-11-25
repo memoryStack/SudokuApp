@@ -8,13 +8,12 @@ import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
 import _areSameValues from '@lodash/areSameValues'
 
-import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
-
 import { getKey } from '@utils/storage'
 
 import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
 
 import _sortBy from '@lodash/sortBy'
+import { Puzzle } from '@adapters/puzzle'
 import {
     BOARD_AXES_VALUES, HOUSES_COUNT, PUZZLE_SOLUTION_TYPES,
 } from '../constants'
@@ -45,7 +44,7 @@ export const getPuzzleSolutionType = async (mainNumbers: MainNumbers) => {
     })
 
     // TODO: handle error case with msg separately
-    return RNSudokuPuzzle.validatePuzzle(puzzleStr)
+    return Puzzle.validatePuzzle(puzzleStr)
         .then(({ count, solution }: { count: number, solution: number[] }) => {
             if (count === 0) return PUZZLE_SOLUTION_TYPES.NO_SOLUTION
             if (count === 1) {
