@@ -11,6 +11,7 @@ import { render } from '@testing-library/react-native'
 
 import { configureStore } from '@reduxjs/toolkit'
 
+import DependencyProvider from '../../containers/DependencyProvider'
 import ModalProvider from '../../containers/ModalProvider'
 import ThemeProvider from '../../containers/ThemeProvider'
 
@@ -45,14 +46,16 @@ const getNewStore = () => {
 
 const AllTheProviders = ({ children }) => (
     <Provider store={getNewStore()}>
-        <ThemeProvider>
-            <ModalProvider>
-                <>
-                    {children}
-                    <SnackBar />
-                </>
-            </ModalProvider>
-        </ThemeProvider>
+        <DependencyProvider>
+            <ThemeProvider>
+                <ModalProvider>
+                    <>
+                        {children}
+                        <SnackBar />
+                    </>
+                </ModalProvider>
+            </ThemeProvider>
+        </DependencyProvider>
     </Provider>
 )
 

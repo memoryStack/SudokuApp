@@ -8,6 +8,7 @@ import CodePush from 'react-native-code-push'
 
 import { consoleLog } from '@utils/util'
 
+import DependencyProvider from './src/containers/DependencyProvider'
 import ModalProvider from './src/containers/ModalProvider'
 import ThemeProvider from './src/containers/ThemeProvider'
 
@@ -44,14 +45,16 @@ const App = () => {
 
     return (
         <Provider store={store}>
-            <ThemeProvider>
-                <ModalProvider>
-                    <View style={styles.container}>
-                        <NavigationProvider />
-                        <SnackBar />
-                    </View>
-                </ModalProvider>
-            </ThemeProvider>
+            <DependencyProvider>
+                <ThemeProvider>
+                    <ModalProvider>
+                        <View style={styles.container}>
+                            <NavigationProvider />
+                            <SnackBar />
+                        </View>
+                    </ModalProvider>
+                </ThemeProvider>
+            </DependencyProvider>
         </Provider>
     )
 }

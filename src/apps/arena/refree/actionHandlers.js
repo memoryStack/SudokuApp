@@ -1,9 +1,11 @@
 import { GAME_STATE } from '@resources/constants'
 import { updateGameState } from '../store/actions/gameState.actions'
-import { resetStoreState, timerClick } from '../store/actions/refree.actions'
+import { resetStoreState } from '../store/actions/refree.actions'
+import { TimerClickUseCase } from './useCases/timerClickUseCase'
 
-const handleTimerClick = () => {
-    timerClick()
+const handleTimerClick = ({ params: { dependencies } }) => {
+    const { gameStateRepository } = dependencies
+    TimerClickUseCase(gameStateRepository)
 }
 
 const handleMaxMistakesLimitReached = () => {
@@ -22,7 +24,6 @@ const ACTION_TYPES = {
 
 const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_TIMER_CLICK]: handleTimerClick,
-
     [ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED]: handleMaxMistakesLimitReached,
     [ACTION_TYPES.ON_UNMOUNT]: handleResetStoreState,
 }

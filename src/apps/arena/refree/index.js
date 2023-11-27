@@ -7,11 +7,13 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
+import get from '@lodash/get'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
-import get from '@lodash/get'
+
+import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
 import { useCacheGameState } from '../hooks/useCacheGameState'
@@ -42,6 +44,8 @@ const getStyles = (_, theme) => StyleSheet.create({
 })
 
 const Refree_ = ({ onAction }) => {
+    const dependencies = useDependency()
+
     const styles = useStyles(getStyles)
 
     const maxMistakesLimit = useSelector(getMaxMistakesLimit)
@@ -57,9 +61,7 @@ const Refree_ = ({ onAction }) => {
 
     useEffect(() => {
         if (mistakes >= maxMistakesLimit) {
-            onAction({
-                type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED,
-            })
+            onAction({ type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED })
         }
     }, [onAction, mistakes, maxMistakesLimit])
 
@@ -72,8 +74,8 @@ const Refree_ = ({ onAction }) => {
     useCacheGameState(GAME_DATA_KEYS.REFEREE, { difficultyLevel, mistakes, time })
 
     const onTimerClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_TIMER_CLICK })
-    }, [onAction])
+        onAction({ type: ACTION_TYPES.ON_TIMER_CLICK, payload: { dependencies } })
+    }, [onAction, dependencies])
 
     return (
         <View style={styles.refereeContainer}>

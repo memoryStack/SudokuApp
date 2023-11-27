@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const stateHandlers = {
     resetState: state => {
         state.maxMistakesLimit = 3

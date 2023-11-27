@@ -9,5 +9,5 @@ module.exports = {
         '<rootDir>/jestSetupFiles/i18n.js',
     ],
     testResultsProcessor: 'jest-sonar-reporter',
-    collectCoverage: true,
+    // collectCoverage: true,
 }
