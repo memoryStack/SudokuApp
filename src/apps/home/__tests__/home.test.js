@@ -4,8 +4,10 @@ import {
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
+import { TIMER_TEST_ID } from '../../arena/timer/timer.constants'
 import { ROUTES } from '../../../navigation/route.constants'
 
+import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT_TEST_ID } from '../../arena/refree/refree.constants'
 import { NEXT_GAME_MENU_TEST_ID } from '../../arena/nextGameMenu/nextGameMenu.constants'
 import { SETTINGS_BUTTON_TEST_ID } from '../../header/components/settings/settings.constants'
 import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settingsMenu/settingsMenu.constants'
@@ -48,6 +50,26 @@ describe('Home Page', () => {
 
         expect(getScreenName()).toBeTruthy()
         expect(getScreenName()).toBe(ROUTES.ARENA)
+    })
+
+    test('refree default state on game start', async () => {
+        renderScreen({
+            getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
+        })
+
+        fireEvent.press(screen.getByText('PLAY'))
+
+        await waitFor(() => {
+            screen.getByTestId(NEXT_GAME_MENU_TEST_ID)
+        })
+
+        await act(async () => {
+            fireEvent.press(screen.getByText('MEDIUM'))
+        })
+
+        expect(screen.getByTestId(PUZZLE_LEVEL_TEXT_TEST_ID)).toHaveTextContent('MEDIUM')
+        expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 0/)
+        expect(screen.getByTestId(TIMER_TEST_ID)).toHaveTextContent(/00:00:00/)
     })
 })
 

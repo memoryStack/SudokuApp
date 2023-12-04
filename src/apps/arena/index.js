@@ -10,38 +10,45 @@ import _noop from '@lodash/noop'
 import { GAME_STATE } from '@resources/constants'
 import Button from '@ui/molecules/Button'
 import { useStyles } from '@utils/customHooks/useStyles'
+
+import { Timer } from '@utils/classes/timer'
+import { useDependency } from '../../hooks/useDependency'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
+import { usePrevious } from '../../utils/customHooks'
+import withActions from '../../utils/hocs/withActions'
+
 import { Touchable } from '../components/Touchable'
 import { Page } from '../components/Page'
+
+import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
+import { getGameState } from './store/selectors/gameState.selectors'
+import { BoardController } from './cellActions'
+import { getAvailableHintsCount, getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
+import { GameInputPanel } from './GameInputPanel'
+import { PuzzleBoard } from './PuzzleBoard'
+import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
+import { useCacheGameState } from './hooks/useCacheGameState'
+import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
+import { updateGameState } from './store/actions/gameState.actions'
+import { fillPuzzle } from './store/actions/board.actions'
+import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
+import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
+import { GameState } from './utils/classes/gameState'
+import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
+import GameResultCard from './GameResultCard'
 import { NextGameMenu } from './nextGameMenu'
 import { CustomPuzzle } from './customPuzzle'
 import SmartHintHC from './smartHintHC'
 import { HintsMenu } from './hintsMenu'
 import Refree from './refree'
-import { getDifficultyLevel, getMistakes, getTime } from './store/selectors/refree.selectors'
-import { getGameState } from './store/selectors/gameState.selectors'
-import { BoardController } from './cellActions'
-import { getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
-import { GameInputPanel } from './GameInputPanel'
-import { PuzzleBoard } from './PuzzleBoard'
-import withActions from '../../utils/hocs/withActions'
-import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { useCacheGameState } from './hooks/useCacheGameState'
-import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
-import { updateGameState } from './store/actions/gameState.actions'
-import { usePrevious } from '../../utils/customHooks'
-import { fillPuzzle } from './store/actions/board.actions'
-import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
-import { GameState } from './utils/classes/gameState'
-import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
-import GameResultCard from './GameResultCard'
-import { getStyles } from './arena.styles'
 
-const MAX_AVAILABLE_HINTS = 3
+import { getStyles } from './arena.styles'
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
 }) => {
+    const dependencies = useDependency()
+
     const styles = useStyles(getStyles)
 
     const [pageHeight, setPageHeight] = useState(0)
@@ -51,6 +58,9 @@ const Arena_ = ({
     const previousGameState = usePrevious(gameState)
 
     const fadeAnim = useRef(new Animated.Value(0))
+
+    const { refreeRepository } = dependencies
+    const timer = useRef(new Timer(refreeRepository.setTime, refreeRepository.getTime)).current
 
     const boardControllersRef = useRef(null)
 
@@ -66,15 +76,17 @@ const Arena_ = ({
 
     useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
 
+    const hintsLeft = useSelector(getAvailableHintsCount)
+
     // TODO: putting "route" in dependency array here fails test-cases
     useEffect(() => {
         const { params: { puzzleUrl = '', selectedGameMenuItem = '' } = {} } = route || {}
         if (puzzleUrl) {
-            onAction({ type: ACTION_TYPES.ON_INIT_SHARED_PUZZLE, payload: puzzleUrl })
+            onAction({ type: ACTION_TYPES.ON_INIT_SHARED_PUZZLE, payload: { puzzleUrl, dependencies } })
         } else {
-            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: selectedGameMenuItem })
+            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: { selectedGameMenuItem, dependencies } })
         }
-    }, [onAction])
+    }, [onAction, dependencies])
 
     useEffect(() => {
         if (!showSmartHint || !pageHeight || smartHintHCHeight) return
@@ -112,9 +124,9 @@ const Arena_ = ({
     const onStartCustomPuzzle = useCallback(mainNumbers => {
         onAction({
             type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
-            payload: mainNumbers,
+            payload: { mainNumbers, dependencies },
         })
-    }, [onAction])
+    }, [onAction, dependencies])
 
     const onCustomPuzzleHCClosed = () => onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
 
@@ -143,12 +155,12 @@ const Arena_ = ({
             })
     }, [navigation, handleSharePuzzleClick])
 
-    const onNewGameMenuItemClick = useCallback(
-        item => {
-            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: item })
-        },
-        [onAction],
-    )
+    const onNewGameMenuItemClick = useCallback(item => {
+        onAction({
+            type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS,
+            payload: { selectedGameMenuItem: item, dependencies },
+        })
+    }, [onAction, dependencies])
 
     const onNewGameMenuClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_CLOSE })
@@ -214,7 +226,7 @@ const Arena_ = ({
                             mistakes,
                             difficultyLevel,
                             time,
-                            hintsUsed: MAX_AVAILABLE_HINTS - 2,
+                            hintsUsed: REFREE_DEFAULT_STATE.maxMistakesLimit - hintsLeft,
                         }}
                         openNextGameMenu={hideCongratsModal}
                     />
@@ -233,7 +245,7 @@ const Arena_ = ({
         >
             <View style={styles.contentContainer}>
                 {renderFillPuzzleBtn()}
-                <Refree />
+                <Refree timer={timer} />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
                 <BoardController refFromParent={boardControllersRef} />

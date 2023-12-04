@@ -13,11 +13,12 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import { Timer as TimeManager } from '@utils/classes/timer'
+
 import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
 import { useCacheGameState } from '../hooks/useCacheGameState'
-import { startTimer, stopTimer } from '../store/actions/refree.actions'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import {
     getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit,
@@ -27,7 +28,7 @@ import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { GameState } from '../utils/classes/gameState'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { MISTAKES_TEXT_TEST_ID } from './refree.constants'
+import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT_TEST_ID } from './refree.constants'
 
 const getStyles = (_, theme) => StyleSheet.create({
     refereeContainer: {
@@ -56,20 +57,22 @@ const Refree_ = ({ onAction }) => {
     const gameState = useSelector(getGameState)
 
     useEffect(() => () => {
-        onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-    }, [onAction])
+        onAction({ type: ACTION_TYPES.ON_UNMOUNT, payload: { dependencies } })
+    }, [onAction, dependencies])
 
     useEffect(() => {
         if (mistakes >= maxMistakesLimit) {
-            onAction({ type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED })
+            onAction({ type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED, payload: { dependencies } })
         }
-    }, [onAction, mistakes, maxMistakesLimit])
+    }, [onAction, mistakes, maxMistakesLimit, dependencies])
 
     useEffect(() => {
-        if (new GameState(gameState).isGameActive()) startTimer()
+        const stopTimer = () => onAction({ type: ACTION_TYPES.ON_STOP_TIMER })
+        if (new GameState(gameState).isGameActive()) onAction({ type: ACTION_TYPES.ON_START_TIMER })
         else stopTimer()
+
         return () => stopTimer()
-    }, [gameState])
+    }, [onAction, gameState])
 
     useCacheGameState(GAME_DATA_KEYS.REFEREE, { difficultyLevel, mistakes, time })
 
@@ -82,7 +85,13 @@ const Refree_ = ({ onAction }) => {
             <Text style={styles.textColor} testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
                 {`Mistakes: ${mistakes}/${maxMistakesLimit}`}
             </Text>
-            <Text style={styles.textColor} type={TEXT_VARIATIONS.BODY_MEDIUM}>{difficultyLevel}</Text>
+            <Text
+                style={styles.textColor}
+                type={TEXT_VARIATIONS.BODY_MEDIUM}
+                testID={PUZZLE_LEVEL_TEXT_TEST_ID}
+            >
+                {difficultyLevel}
+            </Text>
             <Timer time={time} onClick={onTimerClick} />
         </View>
     )
@@ -92,6 +101,8 @@ export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(Refre
 
 Refree_.propTypes = {
     onAction: PropTypes.func,
+    // eslint-disable-next-line react/no-unused-prop-types
+    timer: PropTypes.instanceOf(TimeManager).isRequired,
 }
 
 Refree_.defaultProps = {

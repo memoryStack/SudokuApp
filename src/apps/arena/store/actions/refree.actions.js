@@ -3,19 +3,14 @@ import { refreeActions } from '../reducers/refree.reducers'
 import { getTime } from '../selectors/refree.selectors'
 
 const {
-    resetMistakes, increaseMistakes, setMistakes, setDifficultylevel, setTime, resetState,
+    increaseMistakes,
+    setTime,
 } = refreeActions
-
-export const clearMistakes = () => invokeDispatch(resetMistakes())
 
 // TODO: maybe change the namings
 export const addMistake = () => {
     invokeDispatch(increaseMistakes())
 }
-
-export const updateMistakes = mistakes => invokeDispatch(setMistakes(mistakes))
-
-export const updateDifficultylevel = level => invokeDispatch(setDifficultylevel(level))
 
 // TODO: are we sure these funcs belong in the actions file ??
 let timerId = null
@@ -35,8 +30,6 @@ const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
     return { hours: nextHour, minutes: nextMinute, seconds: nextSecond }
 }
 
-export const updateTime = time => invokeDispatch(setTime(time))
-
 const incrementTime = () => {
     const time = getTime(getStoreState())
     invokeDispatch(setTime(getNewTime(time)))
@@ -48,8 +41,4 @@ export const startTimer = () => {
 
 export const stopTimer = () => {
     if (timerId) timerId = clearInterval(timerId)
-}
-
-export const resetStoreState = () => {
-    invokeDispatch(resetState())
 }

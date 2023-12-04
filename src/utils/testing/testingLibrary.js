@@ -82,13 +82,15 @@ const customRender = (ui, options) => render(ui, {
 const renderWithEmptyNavigator = (ui, options) => render(ui, {
     wrapper: ({ children }) => (
         <Provider store={getNewStore()}>
-            <ThemeProvider>
-                <ModalProvider>
-                    <NavigationContainer>
-                        {children}
-                    </NavigationContainer>
-                </ModalProvider>
-            </ThemeProvider>
+            <DependencyProvider>
+                <ThemeProvider>
+                    <ModalProvider>
+                        <NavigationContainer>
+                            {children}
+                        </NavigationContainer>
+                    </ModalProvider>
+                </ThemeProvider>
+            </DependencyProvider>
         </Provider>
     ),
     ...options,

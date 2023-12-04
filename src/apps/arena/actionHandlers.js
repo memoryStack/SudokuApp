@@ -39,7 +39,6 @@ import {
     updateNotes,
     updateSelectedCell,
 } from './store/actions/board.actions'
-import { updateDifficultylevel, updateMistakes, updateTime } from './store/actions/refree.actions'
 import { updatePencil } from './store/actions/boardController.actions'
 import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
@@ -100,7 +99,15 @@ const getSharedPuzzleError = url => {
 }
 
 const startGame = ({
-    mainNumbers, notes, selectedCell, moves, difficultyLevel, mistakes, time, pencilState,
+    mainNumbers,
+    notes,
+    selectedCell,
+    moves,
+    difficultyLevel,
+    mistakes,
+    time,
+    pencilState,
+    dependencies,
 }) => {
     // board state
     updateMainNumbers(mainNumbers)
@@ -109,18 +116,20 @@ const startGame = ({
     updateMoves(moves)
 
     // refree state
-    updateDifficultylevel(difficultyLevel)
-    updateMistakes(mistakes)
-    updateTime(time)
+    const { refreeRepository } = dependencies
+    refreeRepository.setGameLevel(difficultyLevel)
+    refreeRepository.setGameMistakesCount(mistakes)
+    refreeRepository.setTime(time)
 
     // cell actions state. TODO: implement support for hints as well
     updatePencil(pencilState || PENCIL_STATE.INACTIVE)
 
     // game state
-    updateGameState(GAME_STATE.ACTIVE)
+    const { gameStateRepository } = dependencies
+    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
-const startNewGame = ({ mainNumbers, difficultyLevel }) => {
+const startNewGame = ({ mainNumbers, difficultyLevel, dependencies }) => {
     const initRefereeData = () => ({
         difficultyLevel,
         mistakes: 0,
@@ -133,14 +142,15 @@ const startNewGame = ({ mainNumbers, difficultyLevel }) => {
         selectedCell: { row: 0, col: 0 },
         moves: [],
         ...initRefereeData(),
+        dependencies,
     })
 }
 
-const handleInitSharedPuzzle = async ({ params: puzzleUrl }) => {
+const handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) => {
     const sharedPuzzleError = getSharedPuzzleError(puzzleUrl)
     if (sharedPuzzleError) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${sharedPuzzleError}. ${LAUNCHING_DEFAULT_PUZZLE}` })
-        generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
+        generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
         return
     }
 
@@ -148,22 +158,22 @@ const handleInitSharedPuzzle = async ({ params: puzzleUrl }) => {
 
     if (duplicatesInPuzzle(mainNumbers).present) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `puzzle is invalid. ${LAUNCHING_DEFAULT_PUZZLE}` })
-        generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
+        generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
         return
     }
 
     switch (await getPuzzleSolutionType(mainNumbers)) {
         case PUZZLE_SOLUTION_TYPES.NO_SOLUTION:
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `${DEEPLINK_PUZZLE_NO_SOLUTIONS} ${LAUNCHING_DEFAULT_PUZZLE}` })
-            generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
+            generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
             break
         case PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION:
-            startNewGame({ difficultyLevel: 'Shared Puzzle', mainNumbers })
+            startNewGame({ difficultyLevel: 'Shared Puzzle', mainNumbers, dependencies })
             break
         case PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS:
         default:
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, { msg: `Puzzle has multiple solutions. ${LAUNCHING_DEFAULT_PUZZLE}` })
-            generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
+            generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
     }
 }
 
@@ -185,7 +195,7 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
     return mainNumbers
 }
 
-const generateNewPuzzle = difficultyLevel => {
+const generateNewPuzzle = (difficultyLevel, dependencies) => {
     if (!difficultyLevel) return
     // "minClues" becoz sometimes for the expert levels we get more than desired clues
     const minClues = LEVELS_CLUES_INFO[difficultyLevel]
@@ -193,20 +203,21 @@ const generateNewPuzzle = difficultyLevel => {
     Puzzle.getSudokuPuzzle(minClues)
         .then(({ clues, solution }) => {
             const mainNumbers = transformNativeGeneratedPuzzle(clues, solution)
-            startNewGame({ difficultyLevel, mainNumbers })
+            startNewGame({ difficultyLevel, mainNumbers, dependencies })
         })
         .catch(error => {
             consoleLog(error)
         })
 }
 
-const resumePreviousGame = () => {
+const resumePreviousGame = dependencies => {
     getKey(PREVIOUS_GAME_DATA_KEY)
         .then(previousGameData => {
             startGame({
                 ...previousGameData[GAME_DATA_KEYS.BOARD_DATA],
                 ...previousGameData[GAME_DATA_KEYS.REFEREE],
                 ...previousGameData[GAME_DATA_KEYS.CELL_ACTIONS],
+                dependencies,
             })
         })
         .catch(error => {
@@ -214,28 +225,28 @@ const resumePreviousGame = () => {
         })
 }
 
-const handleMenuItemPress = ({ setState, params: menuItem }) => {
-    if (isGenerateNewPuzzleItem(menuItem)) {
-        generateNewPuzzle(menuItem)
-        invokeDispatch(resetHints())
+const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, dependencies } }) => {
+    if (isGenerateNewPuzzleItem(selectedGameMenuItem)) {
+        generateNewPuzzle(selectedGameMenuItem, dependencies)
+        invokeDispatch(resetHints()) // TODO: move it from here
         return
     }
 
-    if (menuItem === RESUME) {
-        resumePreviousGame()
+    if (selectedGameMenuItem === RESUME) {
+        resumePreviousGame(dependencies)
         return
     }
 
-    if (menuItem === CUSTOMIZE_YOUR_PUZZLE_TITLE) {
+    if (selectedGameMenuItem === CUSTOMIZE_YOUR_PUZZLE_TITLE) {
         setState({ showCustomPuzzleHC: true })
         return
     }
 
-    generateNewPuzzle(LEVEL_DIFFICULTIES.EASY)
+    generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
 }
 
-const handleStartCustomPuzzle = ({ params: mainNumbers }) => {
-    startNewGame({ mainNumbers, difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE })
+const handleStartCustomPuzzle = ({ params: { mainNumbers, dependencies } }) => {
+    startNewGame({ mainNumbers, difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE, dependencies })
 }
 
 const handleCustomPuzzleHCClose = ({ setState }) => {

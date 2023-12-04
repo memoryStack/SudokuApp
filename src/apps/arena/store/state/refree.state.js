@@ -1,6 +1,3 @@
-export const INITIAL_STATE = {
-    maxMistakesLimit: 3,
-    mistakes: 0,
-    difficultyLevel: '',
-    time: { hours: 0, minutes: 0, seconds: 0 },
-}
+import { DEFAULT_STATE } from '../../refree/refree.constants'
+
+export const INITIAL_STATE = DEFAULT_STATE
