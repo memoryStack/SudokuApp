@@ -12,7 +12,7 @@ type Props = {
 const DependencyProvider: React.FC<Props> = ({ children }) => {
     const contextValues = useMemo(() => ({
         gameStateRepository: GameStateRepository,
-        refreeRepository: RefreeRepository
+        refreeRepository: RefreeRepository,
     }), [])
 
     return (
