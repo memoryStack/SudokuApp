@@ -26,6 +26,8 @@ enum HOUSE_TYPE {
     BLOCK,
 };
 
+
+
 const int CELLS_IN_HOUSE = 9;
 const int HOUSES_COUNT = 9;
 const int NUMBERS_IN_HOUSE = 9;
