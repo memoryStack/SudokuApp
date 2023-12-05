@@ -25,7 +25,16 @@ import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable } from '../../components/Touchable'
 
-import { getApplyHintChanges, getHintHCInfo } from '../store/selectors/smartHintHC.selectors'
+import {
+    getApplyHintChanges,
+    getCurrentHintStepNum,
+    getFocusedCells,
+    getHintStepLogic,
+    getHintTitle,
+    getInputPanelNumbersVisibility,
+    getSelectCellOnClose,
+    getTotalStepsCount,
+} from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../hooks/smartHints'
 
 import { Inputpanel } from '../inputPanel'
@@ -50,18 +59,40 @@ type Props = {
     height: number
 }
 
+const useSmartHintData = () => {
+    const focusedCells = useSelector(getFocusedCells)
+    const title = useSelector(getHintTitle)
+    const logic = useSelector(getHintStepLogic)
+    const selectCellOnClose = useSelector(getSelectCellOnClose)
+    const inputPanelNumbersVisibility = useSelector(getInputPanelNumbersVisibility)
+    const currentHintNum = useSelector(getCurrentHintStepNum)
+    const totalHintsCount = useSelector(getTotalStepsCount)
+
+    return {
+        focusedCells,
+        title,
+        logic,
+        selectCellOnClose,
+        inputPanelNumbersVisibility,
+        currentHintNum,
+        totalHintsCount,
+    }
+}
+
 const SmartHintHC_: React.FC<Props> = ({
     parentHeight = 0,
     onAction: onActionFromProps = _noop,
     height = 0,
 }) => {
     const {
-        hint: {
-            focusedCells, title = '', logic = '', selectCellOnClose, inputPanelNumbersVisibility,
-        } = {},
+        focusedCells,
+        title,
+        logic,
+        selectCellOnClose,
+        inputPanelNumbersVisibility,
         currentHintNum,
         totalHintsCount,
-    } = useSelector(getHintHCInfo)
+    } = useSmartHintData()
 
     const closeByApplyHintClick = useRef(false)
 

@@ -1,24 +1,26 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { getHintHCInfo, getTryOutMainNumbers, getTryOutNotes } from '../store/selectors/smartHintHC.selectors'
+import {
+    getHintHasTryOutStep,
+    getHintTryOutAnalyserData,
+    getHintType,
+    getIsTryOutStep,
+    getTryOutMainNumbers,
+    getTryOutNotes,
+} from '../store/selectors/smartHintHC.selectors'
 
 import { analyseTryOutInput } from '../utils/smartHints/tryOutInputAnalyser'
 import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/constants'
 import { TryOutResult } from '../utils/smartHints/types'
 
-const useIsHintTryOutStep = () => {
-    const { hint: { isTryOut = false } = {} } = useSelector(getHintHCInfo)
-    return isTryOut
-}
+const useIsHintTryOutStep = () => useSelector(getIsTryOutStep)
 
-const useHintHasTryOutStep = () => {
-    const { hint: { hasTryOut = false } = {} } = useSelector(getHintHCInfo)
-    return hasTryOut
-}
+const useHintHasTryOutStep = () => useSelector(getHintHasTryOutStep)
 
 const useHintTryOutAnalyserResult = (): TryOutResult => {
-    const { hint: { type: hintType, tryOutAnalyserData } = {} } = useSelector(getHintHCInfo)
+    const hintType = useSelector(getHintType)
+    const tryOutAnalyserData = useSelector(getHintTryOutAnalyserData)
 
     const [tryOutResult, setTryOutResult] = useState({ state: TRY_OUT_RESULT_STATES.START, msg: '' })
     const mainNumbers = useSelector(getTryOutMainNumbers)

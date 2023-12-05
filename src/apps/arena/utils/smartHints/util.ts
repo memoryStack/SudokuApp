@@ -1,5 +1,5 @@
 import { getStoreState } from '../../../../redux/dispatch.helpers'
-import { getHintHCInfo } from '../../store/selectors/smartHintHC.selectors'
+import { getCellToFocusData } from '../../store/selectors/smartHintHC.selectors'
 import { isCellExists } from '../util'
 import {
     CellHighlightData, CellsFocusData, HintSteps, NotesToHighlightData,
@@ -69,7 +69,7 @@ const getCellsFromCellsToFocusedData = (cellsToFocusData: CellsFocusData) => {
 }
 
 const isCellFocusedInSmartHint = (cell: Cell) => {
-    const { hint: { cellsToFocusData: smartHintCellsHighlightInfo = {} } = {} } = getHintHCInfo(getStoreState())
+    const smartHintCellsHighlightInfo = getCellToFocusData(getStoreState()) || {}
     return !!smartHintCellsHighlightInfo[cell.row]?.[cell.col]
 }
 

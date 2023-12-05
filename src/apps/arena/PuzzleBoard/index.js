@@ -16,7 +16,9 @@ import { Board } from '../gameBoard'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { useGameBoardInputs, useSavePuzzleState } from '../hooks/useGameBoardInputs'
 import { isCellTryOutClickable } from '../smartHintHC/helpers'
-import { getHintHCInfo, getUnclickableCellClickInTryOutMsg } from '../store/selectors/smartHintHC.selectors'
+import {
+    getCellToFocusData, getShowSmartHint, getSvgPropsData, getUnclickableCellClickInTryOutMsg,
+} from '../store/selectors/smartHintHC.selectors'
 import { GameState } from '../utils/classes/gameState'
 import { useHintHasTryOutStep, useIsHintTryOutStep } from '../hooks/smartHints'
 
@@ -28,12 +30,16 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     const hasTryOut = useHintHasTryOutStep()
     const isHintTryOut = useIsHintTryOutStep()
 
+    console.log('@@@@@@@ render board')
+
     const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
 
     useSavePuzzleState()
 
-    const { show: showSmartHint, hint: { cellsToFocusData = {}, svgProps } = {} } = useSelector(getHintHCInfo)
+    const showSmartHint = useSelector(getShowSmartHint)
+    const cellsToFocusData = useSelector(getCellToFocusData)
+    const svgProps = useSelector(getSvgPropsData)
 
     useEffect(() => () => {
         onAction({ type: ACTION_TYPES.ON_UNMOUNT })

@@ -31,7 +31,7 @@ import { useCacheGameState } from './hooks/useCacheGameState'
 import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 import { updateGameState } from './store/actions/gameState.actions'
 import { fillPuzzle } from './store/actions/board.actions'
-import { getHintHCInfo } from './store/selectors/smartHintHC.selectors'
+import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
 import { GameState } from './utils/classes/gameState'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
@@ -66,7 +66,7 @@ const Arena_ = ({
 
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
 
-    const { show: showSmartHint } = useSelector(getHintHCInfo)
+    const showSmartHint = useSelector(getShowSmartHint)
 
     const [smartHintHCHeight, setSmartHintHCHeight] = useState(0)
 
