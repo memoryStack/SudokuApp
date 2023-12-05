@@ -24,6 +24,9 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
           # persist-credentials: global
+      - uses: webfactory/ssh-agent@v0.8.0
+              with:
+                  ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - uses: actions/setup-node@v2
         with:
