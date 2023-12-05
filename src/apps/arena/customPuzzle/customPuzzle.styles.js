@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import get from '@lodash/get'
+import _get from '@lodash/get'
 
 import { fonts } from '@resources/fonts/font'
 
@@ -17,7 +17,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
         marginBottom: 16,
     },
     closeIcon: {
-        color: get(theme, ['colors', 'on-surface-variant']),
+        color: _get(theme, ['colors', 'on-surface-variant']),
     },
     inputPanelContainer: {
         width: '100%',
@@ -43,5 +43,18 @@ export const getStyles = (_, theme) => StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         fontFamily: fonts.regular,
+    },
+    // TODO: use it from tokens
+    selectedCellBGColor: {
+        backgroundColor: 'rgb(255, 245, 187)',
+    },
+    sameHouseSameValueBGColor: {
+        backgroundColor: _get(theme, ['colors', 'error-container']),
+    },
+    wronglyFilledNumColor: {
+        color: _get(theme, ['colors', 'error']),
+    },
+    clueNumColor: {
+        color: 'rgb(12, 25, 22)',
     },
 })

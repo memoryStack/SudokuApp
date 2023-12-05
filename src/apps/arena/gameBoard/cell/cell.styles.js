@@ -21,9 +21,6 @@ export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
     noteText: {
         color: _get(theme, ['colors', 'on-surface-variant']),
         fontSize: CELL_HEIGHT * 0.3,
-    },
-    selectedMainNumberNote: {
-        color: _get(theme, ['colors', 'primary']),
-        fontWeight: FONT_WEIGHTS.HEAVY,
+        fontWeight: FONT_WEIGHTS.REGULAR,
     },
 })

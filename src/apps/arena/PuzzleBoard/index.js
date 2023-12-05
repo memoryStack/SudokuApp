@@ -5,32 +5,39 @@ import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
 
-import { SCREEN_NAME } from '@resources/constants'
+import { GAME_STATE } from '@resources/constants'
 
 import { emit } from '@utils/GlobalEventBus'
 
+import _get from '@lodash/get'
+import { useStyles } from '@utils/customHooks/useStyles'
+import { FONT_WEIGHTS } from '@resources/fonts/font'
 import { EVENTS } from '../../../constants/events'
 import withActions from '../../../utils/hocs/withActions'
 
 import { Board } from '../gameBoard'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { useGameBoardInputs, useSavePuzzleState } from '../hooks/useGameBoardInputs'
-import { isCellTryOutClickable } from '../smartHintHC/helpers'
 import {
     getCellToFocusData, getShowSmartHint, getSvgPropsData, getUnclickableCellClickInTryOutMsg,
 } from '../store/selectors/smartHintHC.selectors'
+import { cellHasTryOutInput, isCellTryOutClickable, removableNoteFilledInCell } from '../smartHintHC/helpers'
 import { GameState } from '../utils/classes/gameState'
 import { useHintHasTryOutStep, useIsHintTryOutStep } from '../hooks/smartHints'
+import { areCommonHouseCells, areSameCells, sameValueInCells } from '../utils/util'
+import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
 import { ACTION_TYPES } from './actionHandlers'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
+import { getStyles } from './puzzleBoard.styles'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const hasTryOut = useHintHasTryOutStep()
-    const isHintTryOut = useIsHintTryOutStep()
+    const isHintTryOut = useIsHintTryOutStep(true)
 
-    console.log('@@@@@@@ render board')
+    const styles = useStyles(getStyles)
 
     const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
@@ -81,18 +88,77 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
     }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut, hasTryOut])
 
+    const showCellContent = [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER_SOLVED, GAME_STATE.OVER_UNSOLVED]
+        .includes(gameState)
+
+    const getSmartHintActiveBgColor = cell => {
+        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) { return styles.selectedCellBGColor }
+        return _get(cellsToFocusData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
+    }
+
+    const getActiveGameBoardCellBgCell = cell => {
+        if (MainNumbersRecord.isCellFilled(mainNumbers, cell) && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
+            return styles.sameHouseSameValueBGColor
+        }
+
+        if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
+        if (areCommonHouseCells(cell, selectedCell)) return styles.sameHouseCellBGColor
+
+        if (sameValueInCells(cell, selectedCell, mainNumbers)) return styles.diffHouseSameValueBGColor
+        return styles.defaultCellBGColor
+    }
+
+    const getCellBGColor = cell => {
+        if (!showCellContent) return null
+        if (showSmartHint) return getSmartHintActiveBgColor(cell)
+        return getActiveGameBoardCellBgCell(cell)
+    }
+
+    const getCellMainNumberFontColor = cell => {
+        if (isHintTryOut && cellHasTryOutInput(cell)) {
+            return removableNoteFilledInCell(cell) ? styles.removableNoteTryOutInputColor
+                : styles.tryOutInputColor
+        }
+
+        if (showSmartHint) return styles.clueNumColor
+        if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
+        if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
+
+        return styles.clueNumColor
+    }
+
+    const selectedCellMainNumber = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell)
+
+    const getNoteStyles = useCallback(({ noteValue, show }, cell) => {
+        if (!show) return null
+        if (showSmartHint) {
+            const noteColor = _get(cellsToFocusData, [cell.row, cell.col, 'notesToHighlightData', noteValue, 'fontColor'], null)
+            if (!noteColor) return null
+            return {
+                color: noteColor,
+                fontWeight: FONT_WEIGHTS.HEAVY,
+            }
+        }
+
+        if (noteValue === selectedCellMainNumber) return styles.selectedMainNumberNote
+
+        return null
+    }, [showSmartHint, cellsToFocusData, selectedCellMainNumber])
+
     return (
         <Board
-            sreenName={SCREEN_NAME.ARENA}
-            gameState={gameState}
             mainNumbers={mainNumbers}
             notes={notes}
-            selectedCell={selectedCell}
             onCellClick={onCellClick}
             isHintTryOut={isHintTryOut}
-            showSmartHint={showSmartHint}
             cellsHighlightData={cellsToFocusData}
             svgProps={svgProps}
+            showCellContent={showCellContent}
+            getCellBGColor={getCellBGColor}
+            getCellMainNumberFontColor={getCellMainNumberFontColor}
+            axisTextStyles={showSmartHint ? styles.smartHintAxisText : null}
+            boardContainerStyles={showSmartHint ? styles.smartHintBoardContainer : null}
+            getNoteStyles={getNoteStyles}
         />
     )
 }

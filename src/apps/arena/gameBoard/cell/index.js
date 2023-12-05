@@ -5,10 +5,8 @@ import { View } from 'react-native'
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
-import _get from '@lodash/get'
 
 import { CloseIcon } from '@resources/svgIcons/close'
-import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
@@ -37,10 +35,8 @@ const Cell_ = ({
     showCellContent,
     displayCrossIcon,
     crossIconColor,
-    smartHintData,
-    selectedMainNumber,
-    showSmartHint,
     notesRefs,
+    getNoteStyles,
 }) => {
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
@@ -49,13 +45,6 @@ const Cell_ = ({
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
-    const getNotesFontColor = noteValue => {
-        if (showSmartHint) {
-            return _get(smartHintData, ['notesToHighlightData', noteValue, 'fontColor'], null)
-        }
-        return null
-    }
-
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
 
@@ -63,7 +52,6 @@ const Cell_ = ({
             const cellNotesRow = looper.map(cellNoteCol => {
                 const noteNum = cellNoteRow * 3 + cellNoteCol
                 const { show, noteValue } = cellNotes[noteNum] || {}
-                const noteFontColor = show ? getNotesFontColor(noteValue) : null
 
                 return (
                     <View
@@ -75,9 +63,7 @@ const Cell_ = ({
                         <Text
                             style={[
                                 styles.noteText,
-                                { fontWeight: FONT_WEIGHTS.REGULAR },
-                                noteFontColor ? { color: noteFontColor, fontWeight: FONT_WEIGHTS.HEAVY } : null,
-                                (!showSmartHint && show && noteValue === selectedMainNumber) ? styles.selectedMainNumberNote : null,
+                                getNoteStyles(cellNotes[noteNum] || {}, { row, col }),
                             ]}
                             testID={CELL_NOTE_TEST_ID}
                             type={TEXT_VARIATIONS.BODY_SMALL}
@@ -148,10 +134,8 @@ Cell_.propTypes = {
     showCellContent: PropTypes.bool,
     displayCrossIcon: PropTypes.bool,
     crossIconColor: PropTypes.string,
-    smartHintData: PropTypes.object,
-    selectedMainNumber: PropTypes.number,
-    showSmartHint: PropTypes.bool,
     notesRefs: PropTypes.array,
+    getNoteStyles: PropTypes.func,
 }
 
 Cell_.defaultProps = {
@@ -165,8 +149,6 @@ Cell_.defaultProps = {
     showCellContent: true,
     displayCrossIcon: false,
     crossIconColor: '',
-    smartHintData: {},
-    selectedMainNumber: 0,
-    showSmartHint: false,
     notesRefs: [],
+    getNoteStyles: _noop,
 }

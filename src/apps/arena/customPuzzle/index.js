@@ -8,7 +8,6 @@ import _noop from '@lodash/noop'
 
 import { CloseIcon } from '@resources/svgIcons/close'
 import { PLAY } from '@resources/stringLiterals'
-import { GAME_STATE } from '@resources/constants'
 import Button from '@ui/molecules/Button'
 import { useStyles } from '@utils/customHooks/useStyles'
 import withActions from '../../../utils/hocs/withActions'
@@ -19,6 +18,7 @@ import { Inputpanel } from '../inputPanel'
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
 import { CLOSE_ICON_TEST_ID, CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
 import { getStyles } from './customPuzzle.styles'
+import { areCommonHouseCells, areSameCells, sameValueInCells } from '../utils/util'
 
 const CustomPuzzle_ = ({
     mainNumbers,
@@ -48,6 +48,19 @@ const CustomPuzzle_ = ({
         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
     }, [onAction])
 
+    const getCellBGColor = cell => {
+        if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
+        const sameValueAsSelectedBox = sameValueInCells(cell, selectedCell, mainNumbers)
+        const hasSameValueInSameHouseAsSelectedCell = sameValueAsSelectedBox && areCommonHouseCells(cell, selectedCell)
+        if (hasSameValueInSameHouseAsSelectedCell) return styles.sameHouseSameValueBGColor
+        return null
+    }
+
+    const getCustomPuzzleMainNumFontColor = cell => {
+        if (mainNumbers[cell.row][cell.col].wronglyPlaced) return styles.wronglyFilledNumColor
+        return styles.clueNumColor
+    }
+
     return (
         <BottomDragger
             ref={customPuzzleRef}
@@ -66,12 +79,12 @@ const CustomPuzzle_ = ({
                     <CloseIcon height={24} width={24} fill={styles.closeIcon.color} />
                 </Touchable>
                 <Board
-                    gameState={GAME_STATE.ACTIVE}
+                    showCellContent
                     mainNumbers={mainNumbers}
                     notes={notes}
-                    selectedCell={selectedCell}
                     onCellClick={onCellClick}
-                    isCustomPuzleScreen
+                    getCellBGColor={getCellBGColor}
+                    getCellMainNumberFontColor={getCustomPuzzleMainNumFontColor}
                 />
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel onAction={onAction} />

@@ -1,14 +1,15 @@
 import React, { memo } from 'react'
 
-import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
-
-import { GAME_STATE } from '@resources/constants'
-
-import { useStyles } from '@utils/customHooks/useStyles'
-
 import { ScrollView } from 'react-native-gesture-handler'
 
 import { View } from 'react-native'
+
+import _get from '@lodash/get'
+
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+
+import { useStyles } from '@utils/customHooks/useStyles'
+
 import { Board } from '../arena/gameBoard'
 import { Page } from '../components/Page'
 import { generateMainNumbersFromPuzzleString } from '../arena/utils/util'
@@ -20,13 +21,18 @@ import { getStyles } from './playGuide.styles'
 const PlayGuide_ = () => {
     const styles = useStyles(getStyles)
 
-    const renderBoard = ({ puzzle, ...restProps }) => (
+    const getCellBGColor = (cell, isPuzzleSolved) => {
+        if (isPuzzleSolved) return null
+        return _get(cellsHighlightData, [cell.row, cell.col, 'bgColor'])
+    }
+
+    const renderBoard = ({ puzzle, isPuzzleSolved, ...restProps }) => (
         <Board
             mainNumbers={generateMainNumbersFromPuzzleString(puzzle)}
-            showSmartHint // this is problamatic, why are we even sending this ??
-            {...restProps}
-            gameState={GAME_STATE.ACTIVE}
             axisTextStyles={styles.axisText}
+            showCellContent
+            getCellBGColor={cell => getCellBGColor(cell, isPuzzleSolved)}
+            {...restProps}
         />
     )
 
@@ -46,7 +52,7 @@ const PlayGuide_ = () => {
                     unsolved: PUZZLE.SOLVED,
                     solution: PUZZLE.SOLVED,
                 },
-                showSmartHint: false,
+                isPuzzleSolved: true,
             })}
         </View>
     )

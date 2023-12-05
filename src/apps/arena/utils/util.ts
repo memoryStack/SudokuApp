@@ -268,3 +268,9 @@ export const generateMainNumbersFromPuzzleString = (puzzle: {unsolved: string, s
 
     return mainNumbers
 }
+
+export const sameValueInCells = (cellA: Cell, cellB: Cell, mainNumbers: MainNumbers) => {
+    const cellAValue = MainNumbersRecord.getCellMainValue(mainNumbers, cellA) || 0
+    const cellBValue = MainNumbersRecord.getCellMainValue(mainNumbers, cellB) || 0
+    return cellAValue !== 0 && cellAValue === cellBValue
+}

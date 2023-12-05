@@ -2,48 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 
-import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
-
 import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
-import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
-
-// TODO: think of a better color scheme mechanism
-const COLOR_SCHEME_STYLES = theme => ({
-    thickBorder: {
-        backgroundColor: 'black',
-    },
-    selectedCellBGColor: {
-        backgroundColor: 'rgb(255, 245, 187)',
-    },
-    // TODO: change it's naming and differentiate between custom puzzle and on going game
-    sameHouseSameValueBGColor: {
-        backgroundColor: _get(theme, ['colors', 'error-container']),
-    },
-    sameHouseCellBGColor: {
-        backgroundColor: _get(theme, ['colors', 'surface-container-high']),
-    },
-    diffHouseSameValueBGColor: {
-        backgroundColor: _get(theme, ['colors', 'primary-container']),
-    },
-    smartHintOutOfFocusBGColor: {
-        backgroundColor: HC_OVERLAY_BG_COLOR,
-    },
-    defaultCellBGColor: {
-        backgroundColor: 'white',
-    },
-    wronglyFilledNumColor: {
-        color: _get(theme, ['colors', 'on-error-container']),
-    },
-    customPuzzleWronglyFilledNumColor: {
-        color: _get(theme, ['colors', 'error']),
-    },
-    userFilledNumColor: {
-        color: _get(theme, ['colors', 'primary']),
-    },
-    clueNumColor: {
-        color: 'rgb(12, 25, 22)',
-    },
-})
 
 export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, theme) => StyleSheet.create({
     board: {
@@ -91,12 +50,11 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
         width: CELL_WIDTH,
         height: CELL_WIDTH,
     },
-    ...COLOR_SCHEME_STYLES(theme),
-    tryOutInputColor: {
-        color: smartHintColorSystemReader.tryOutFilledNumberColor(_get(theme, 'colors.smartHints')),
+    defaultCellBGColor: {
+        backgroundColor: 'white',
     },
-    removableNoteTryOutInputColor: {
-        color: smartHintColorSystemReader.removableNoteTryOutNumberInputColor(_get(theme, 'colors.smartHints')),
+    defaultMainNumberColor: {
+        color: 'rgb(12, 25, 22)',
     },
     yAxis: {
         justifyContent: 'space-around',
@@ -113,9 +71,5 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
     },
     axisText: {
         color: _get(theme, ['colors', 'on-surface-variant-low']),
-    },
-    smartHintAxisText: {
-        color: 'white',
-        zIndex: 100, // TODO: make a constant with name like max_possible z_index
     },
 })

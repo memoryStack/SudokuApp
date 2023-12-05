@@ -1,27 +1,18 @@
-import React, {
-    useMemo, useRef,
-} from 'react'
+import React, { useMemo, useRef } from 'react'
 
-import { View } from 'react-native'
+import { View, StyleProp, ViewStyle } from 'react-native'
 
 import _get from '@lodash/get'
 import _set from '@lodash/set'
 import _noop from '@lodash/noop'
 import _isEmpty from '@lodash/isEmpty'
 
-import { GAME_STATE } from '@resources/constants'
-
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { CellsFocusData, Chain } from '../utils/smartHints/types'
-import {
-    areSameCells,
-    areCommonHouseCells,
-} from '../utils/util'
-import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
-import { cellHasTryOutInput, removableNoteFilledInCell } from '../smartHintHC/helpers'
+
 import {
     BOARD_AXES_VALUES,
     BOARD_GRID_BORDERS_DIRECTION,
@@ -47,39 +38,42 @@ for (let i = 0; i < 8; i++) { bordersLooper.push(i) }
 
 type NotesRefs = Array<Array<Array<React.RefObject<unknown>>>>
 
+type CellBGColorStyle = {
+    backgroundColor: string
+}
+
+type FontColor = {
+    color: string
+}
+
 interface Props {
-    gameState: GAME_STATE
     mainNumbers: MainNumbers
     notes: Notes
-    selectedCell: Cell
-    onCellClick: () => void // TODO: how/where to manage types for these prop drilled functions
-    isHintTryOut: boolean
-    showSmartHint: boolean
-    cellsHighlightData: CellsFocusData
-    axisTextStyles: object
+    onCellClick?: () => void
+    cellsHighlightData?: CellsFocusData
+    axisTextStyles?: StyleProp<ViewStyle>
+    boardContainerStyles?: StyleProp<ViewStyle>
     svgProps: Chain
-    isCustomPuzleScreen: boolean
+    showCellContent: boolean
+    getCellBGColor?: () => CellBGColorStyle | null
+    getCellMainNumberFontColor?: () => FontColor | null
+    getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null
 }
 
 const Board_: React.FC<Props> = ({
-    // gameState = 'skl', // why assigning this value doesn't give error as this is not one of values given to GameState ??
-    gameState = GAME_STATE.INACTIVE,
     mainNumbers = [],
     notes = [],
-    selectedCell = {} as Cell, // why is this type any if type assertion is not used ??
-    onCellClick = _noop, // why is this type any ??
-    isHintTryOut = false,
-    showSmartHint = false,
+    onCellClick = _noop,
     cellsHighlightData = {},
     axisTextStyles = {},
     svgProps = [],
-    isCustomPuzleScreen = false,
+    showCellContent = true,
+    getCellBGColor = _noop,
+    getCellMainNumberFontColor = _noop,
+    boardContainerStyles = null,
+    getNoteStyles = _noop,
 }) => {
     const styles = useStyles(getStyles)
-
-    const selectedCellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell) || 0
-
-    const sameValueAsSelectedBox = (cell: Cell) => selectedCellMainValue && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, selectedCellMainValue, cell)
 
     const boardRef = useRef(null)
 
@@ -104,58 +98,15 @@ const Board_: React.FC<Props> = ({
         />
     )
 
-    const getCustomPuzzleMainNumFontColor = (cell: Cell) => {
-        const isWronglyPlaced = (mainNumbers as CustomPuzzleMainNumbers)[cell.row][cell.col].wronglyPlaced
-        if (isWronglyPlaced) return styles.customPuzzleWronglyFilledNumColor
-        return styles.clueNumColor
-    }
-
-    const getMainNumFontColor = (cell: Cell) => {
+    const getMainNumFontColor = (cell: Cell): FontColor | null => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) return null
-        if (isCustomPuzleScreen) return getCustomPuzzleMainNumFontColor(cell)
-        if (isHintTryOut && cellHasTryOutInput(cell)) {
-            return removableNoteFilledInCell(cell) ? styles.removableNoteTryOutInputColor
-                : styles.tryOutInputColor
-        }
-        if (showSmartHint) return styles.clueNumColor
-        if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
-        if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
-        return styles.clueNumColor
+        if (getCellMainNumberFontColor !== _noop) return getCellMainNumberFontColor(cell)
+        return styles.defaultMainNumberColor
     }
 
-    const getSmartHintActiveBgColor = (cell: Cell) => {
-        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) { return styles.selectedCellBGColor }
-        return _get(cellsHighlightData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
-    }
-
-    const shouldShowCellContent = () => [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER_SOLVED, GAME_STATE.OVER_UNSOLVED].includes(
-        gameState,
-    )
-
-    const hasSameValueInSameHouseAsSelectedCell = (cell: Cell) => areCommonHouseCells(cell, selectedCell) && sameValueAsSelectedBox(cell)
-
-    const getCustomPuzzleBoardCellBgColor = (cell: Cell) => {
-        if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
-        if (hasSameValueInSameHouseAsSelectedCell(cell)) { return styles.sameHouseSameValueBGColor }
-
-        return null
-    }
-
-    const getActiveGameBoardCellBgCell = (cell: Cell) => {
-        if (MainNumbersRecord.isCellFilled(mainNumbers, cell) && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
-            return styles.sameHouseSameValueBGColor
-        }
-        if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
-        if (areCommonHouseCells(cell, selectedCell)) return styles.sameHouseCellBGColor
-        if (sameValueAsSelectedBox(cell)) return styles.diffHouseSameValueBGColor
+    const _getCellBGColor = (cell: Cell): CellBGColorStyle | null => {
+        if (getCellBGColor !== _noop) return getCellBGColor(cell)
         return styles.defaultCellBGColor
-    }
-
-    const getCellBackgroundColor = (cell: Cell) => {
-        if (!shouldShowCellContent()) return null
-        if (showSmartHint) return getSmartHintActiveBgColor(cell)
-        if (isCustomPuzleScreen) return getCustomPuzzleBoardCellBgColor(cell)
-        return getActiveGameBoardCellBgCell(cell)
     }
 
     const getInhabitableCellProps = (cell: Cell) => ({
@@ -184,17 +135,15 @@ const Board_: React.FC<Props> = ({
                             <Cell
                                 row={row}
                                 col={col}
-                                cellBGColor={getCellBackgroundColor(cell)}
+                                cellBGColor={_getCellBGColor(cell)}
                                 mainValueFontColor={getMainNumFontColor(cell)}
                                 cellMainValue={MainNumbersRecord.getCellMainValue(mainNumbers, cell)}
                                 cellNotes={_get(notes, [row, col])}
                                 onCellClick={onCellClick}
                                 {...getInhabitableCellProps(cell)}
-                                smartHintData={_get(cellsHighlightData, [row, col])}
-                                selectedMainNumber={selectedCellMainValue}
-                                showSmartHint={showSmartHint}
-                                showCellContent={shouldShowCellContent()}
+                                showCellContent={showCellContent}
                                 notesRefs={notesRefs[row][col]}
+                                getNoteStyles={getNoteStyles}
                             />
                         </View>
                     )
@@ -229,7 +178,7 @@ const Board_: React.FC<Props> = ({
     const renderAxisText = (label: string) => (
         <Text
             key={label}
-            style={[styles.axisText, showSmartHint ? styles.smartHintAxisText : null, axisTextStyles]}
+            style={[styles.axisText, axisTextStyles]}
             type={TEXT_VARIATIONS.BODY_MEDIUM}
         >
             {label}
@@ -251,7 +200,7 @@ const Board_: React.FC<Props> = ({
     const renderBoard = () => (
         <View
             ref={boardRef}
-            style={[styles.board, showSmartHint ? { zIndex: 1 } : null]}
+            style={[styles.board, boardContainerStyles]}
             collapsable={false}
         >
             {looper.map((row, index) => renderRow(row, `${index}`))}
