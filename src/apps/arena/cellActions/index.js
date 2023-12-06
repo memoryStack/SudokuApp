@@ -49,11 +49,11 @@ const BoardController_ = ({ onAction, refFromParent }) => {
     const { width: windowWidth } = useWindowDimensions()
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 
-    const onUndoClick = () => onAction({ type: ACTION_TYPES.ON_UNDO_CLICK })
+    const onUndoClick = () => onAction({ type: ACTION_TYPES.ON_UNDO_CLICK, payload: { dependencies } })
 
     const onPencilClick = () => onAction({ type: ACTION_TYPES.ON_PENCIL_CLICK, payload: { dependencies } })
 
-    const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK })
+    const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK, payload: { dependencies } })
 
     const onHintClick = () => onAction({ type: ACTION_TYPES.ON_HINT_CLICK, payload: { dependencies } })
 

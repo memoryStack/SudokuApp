@@ -1,12 +1,13 @@
 import { GAME_STATE } from '@resources/constants'
-import { updateSelectedCell, resetStoreState } from '../store/actions/board.actions'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { BOARD_CELLS_COUNT } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../utils/classes/boardIterators'
+import { INITIAL_STATE } from '../store/state/board.state'
 
-const handleCellPress = ({ params: { cell } }) => {
-    updateSelectedCell(cell)
+const handleCellPress = ({ params: { cell, dependencies } }) => {
+    const { boardRepository } = dependencies
+    boardRepository.setSelectedCell(cell)
 }
 
 const handleMainNumbersUpdate = ({ params: { mainNumbers, dependencies } }) => {
@@ -25,8 +26,9 @@ const getCorrectlyFilledCells = mainNumbers => {
     return result
 }
 
-const handleOnUnmount = () => {
-    resetStoreState()
+const handleOnUnmount = ({ params: { dependencies } }) => {
+    const { boardRepository } = dependencies
+    boardRepository.setState(INITIAL_STATE)
 }
 
 const ACTION_TYPES = {

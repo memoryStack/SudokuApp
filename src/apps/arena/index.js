@@ -171,7 +171,7 @@ const Arena_ = ({
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
-        return <Button label="Fill" onPress={fillPuzzle} />
+        return <Button label="Fill" onPress={() => fillPuzzle(dependencies.boardRepository)} />
     }
 
     const renderHintsMenu = () => {
@@ -203,7 +203,7 @@ const Arena_ = ({
 
     const renderInputPanel = () => (
         <View style={styles.inputPanelContainer}>
-            <GameInputPanel />
+            <GameInputPanel dependencies={dependencies} />
         </View>
     )
 

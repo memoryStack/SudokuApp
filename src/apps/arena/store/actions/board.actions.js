@@ -7,36 +7,20 @@ import _map from '@lodash/map'
 import { PENCIL_STATE } from '@resources/constants'
 import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from '../../../../constants/events'
-import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
+import { getStoreState } from '../../../../redux/dispatch.helpers'
 import {
     isMainNumberPresentInAnyHouseOfCell,
     getCellHousesInfo,
 } from '../../utils/util'
-import { boardActions } from '../reducers/board.reducers'
 import {
     getMainNumbers, getMoves, getNotesInfo, getSelectedCell,
 } from '../selectors/board.selectors'
 import { getPencilStatus } from '../selectors/boardController.selectors'
-import { addMistake } from './refree.actions'
 import { getHouseCells } from '../../utils/houseCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../RecordUtilities/boardNotes'
 import { BoardIterators } from '../../utils/classes/boardIterators'
-
-const {
-    setMainNumbers,
-    setCellMainNumber,
-    eraseCellMainValue,
-    setSelectedCell,
-    setNotes,
-    setNotesBunch,
-    eraseNotesBunch,
-    setMoves,
-    addMove,
-    popMove,
-    resetState,
-} = boardActions
 
 const constructMove = ({ mainNumber = {}, notes = {} }) => {
     const selectedCell = getSelectedCell(getStoreState())
@@ -45,49 +29,6 @@ const constructMove = ({ mainNumber = {}, notes = {} }) => {
         mainNumber,
         notes,
     }
-}
-
-export const updateMainNumbers = mainNumbers => {
-    if (!mainNumbers) return
-    invokeDispatch(setMainNumbers(mainNumbers))
-}
-
-export const updateSelectedCell = cell => {
-    if (!cell) return
-    invokeDispatch(setSelectedCell(cell))
-}
-
-export const updateNotes = notes => {
-    if (!notes) return
-    invokeDispatch(setNotes(notes))
-}
-
-export const updateMoves = moves => {
-    invokeDispatch(setMoves(moves))
-}
-
-export const fastPencilAction = () => {
-    const newNotesBunchToAdd = getNewNotesBunchToShow()
-
-    if (!newNotesBunchToAdd.length) return
-
-    invokeDispatch(setNotesBunch(newNotesBunchToAdd))
-
-    const move = {
-        notes: {
-            action: BOARD_MOVES_TYPES.ADD,
-            bunch: newNotesBunchToAdd,
-        },
-    }
-    invokeDispatch(addMove(constructMove(move)))
-
-    // so that i can add things in testData.js files
-    // if (__DEV__) {
-    //     setTimeout(() => {
-    //         consoleLog(getMainNumbers(getStoreState()))
-    //         consoleLog(getNotesInfo(getStoreState()))
-    //     })
-    // }
 }
 
 const getNewNotesBunchToShow = () => {
@@ -110,6 +51,24 @@ const getNewNotesBunchToShow = () => {
     return result
 }
 
+export const fastPencilAction = () => {
+    const newNotesBunchToAdd = getNewNotesBunchToShow()
+
+    if (!newNotesBunchToAdd.length) return {}
+
+    const move = {
+        notes: {
+            action: BOARD_MOVES_TYPES.ADD,
+            bunch: newNotesBunchToAdd,
+        },
+    }
+
+    return {
+        notesBunch: newNotesBunchToAdd,
+        move: constructMove(move),
+    }
+}
+
 const getVisibileNotesBunchInCell = (cell, notes) => _filter(NotesRecord.getCellNotes(notes, cell), ({ show }) => show)
     .map(({ noteValue }) => ({ cell, note: noteValue }))
 
@@ -129,8 +88,7 @@ const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
     return result
 }
 
-// can be used as it is
-const inputMainNumber = number => {
+const inputMainNumber = (number, dependencies) => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
 
@@ -141,12 +99,15 @@ const inputMainNumber = number => {
         },
     }
 
-    if (number !== MainNumbersRecord.getCellSolutionValue(mainNumbers, selectedCell)) addMistake()
-    else {
+    const { boardRepository, refreeRepository } = dependencies
+
+    if (number !== MainNumbersRecord.getCellSolutionValue(mainNumbers, selectedCell)) {
+        const currentMistakesCount = refreeRepository.getGameMistakesCount()
+        refreeRepository.setGameMistakesCount(currentMistakesCount + 1)
+    } else {
         const notes = getNotesInfo(getStoreState())
         const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, notes)
-
-        invokeDispatch(eraseNotesBunch(notesBunch))
+        boardRepository.eraseNotesBunch(notesBunch)
 
         move.notes = {
             action: BOARD_MOVES_TYPES.REMOVE,
@@ -154,11 +115,11 @@ const inputMainNumber = number => {
         }
     }
 
-    invokeDispatch(setCellMainNumber({ cell: selectedCell, number }))
-    invokeDispatch(addMove(constructMove(move)))
+    boardRepository.setCellMainNumber({ cell: selectedCell, number })
+    boardRepository.addMove(constructMove(move))
 }
 
-const inputNoteNumber = number => {
+const inputNoteNumber = (number, boardRepository) => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
     if (isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
@@ -168,8 +129,11 @@ const inputNoteNumber = number => {
 
     const noteAlreadyPresent = NotesRecord.isNotePresentInCell(notes, number, selectedCell)
 
-    if (noteAlreadyPresent) invokeDispatch(eraseNotesBunch(notesBunch))
-    else invokeDispatch(setNotesBunch(notesBunch))
+    if (noteAlreadyPresent) {
+        boardRepository.eraseNotesBunch(notesBunch)
+    } else {
+        boardRepository.setNotesBunch(notesBunch)
+    }
 
     const move = {
         notes: {
@@ -177,10 +141,10 @@ const inputNoteNumber = number => {
             bunch: notesBunch,
         },
     }
-    invokeDispatch(addMove(constructMove(move)))
+    boardRepository.addMove(constructMove(move))
 }
 
-export const inputNumberAction = number => {
+export const inputNumberAction = (number, dependencies) => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
     if (MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) return
@@ -188,25 +152,28 @@ export const inputNumberAction = number => {
     // TODO: check at how many places this pencil state is required
     // if it's more than 1 then move it to store/utils
     const pencilState = getPencilStatus(getStoreState())
-    if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number)
-    else inputMainNumber(number)
+    if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, dependencies.boardRepository)
+    else inputMainNumber(number, dependencies)
 }
 
-const removeCellNotes = () => {
+const removeCellNotes = boardRepository => {
     const selectedCell = getSelectedCell(getStoreState())
     const notes = getNotesInfo(getStoreState())
     const notesBunch = getVisibileNotesBunchInCell(selectedCell, notes)
     if (!notesBunch.length) return
 
-    removeNotesBunchAndAddMove(notesBunch)
+    removeNotesBunchAndAddMove(notesBunch, boardRepository)
 }
 
-const eraseMainNumber = () => {
+const eraseMainNumber = boardRepository => {
     const selectedCell = getSelectedCell(getStoreState())
     const mainNumbers = getMainNumbers(getStoreState())
     const cellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell)
 
-    invokeDispatch(eraseCellMainValue(selectedCell))
+    boardRepository.setCellMainNumber({
+        cell: selectedCell,
+        number: 0,
+    })
 
     const move = {
         mainNumber: {
@@ -214,10 +181,10 @@ const eraseMainNumber = () => {
             value: cellMainValue,
         },
     }
-    invokeDispatch(addMove(constructMove(move)))
+    boardRepository.addMove(constructMove(move))
 }
 
-export const eraseAction = () => {
+export const eraseAction = boardRepository => {
     if (isMainNumberNotEligibleToErase()) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
             msg: 'Clues or Correctly filled cells can not be removed',
@@ -227,9 +194,11 @@ export const eraseAction = () => {
     }
 
     if (isMainNumberEligibleToErase()) {
-        eraseMainNumber()
+        eraseMainNumber(boardRepository)
     } else {
-        removeCellNotesIfEmptyCell()
+        const mainNumbers = getMainNumbers(getStoreState())
+        const selectedCell = getSelectedCell(getStoreState())
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) removeCellNotes(boardRepository)
     }
 }
 
@@ -247,86 +216,76 @@ const isMainNumberEligibleToErase = () => {
         && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, selectedCell)
 }
 
-const removeCellNotesIfEmptyCell = () => {
-    const mainNumbers = getMainNumbers(getStoreState())
-    const selectedCell = getSelectedCell(getStoreState())
-    if (!MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) removeCellNotes()
-}
-
-export const undoAction = () => {
+export const undoAction = boardRepository => {
     const moves = getMoves(getStoreState())
     if (!moves.length) return
 
     const previousMove = moves[moves.length - 1]
-    updateSelectedCell(previousMove.selectedCell)
-    undoMainNumber(previousMove)
-    undoNotes(previousMove)
-    invokeDispatch(popMove())
+    if (!previousMove.selectedCell) boardRepository.setSelectedCell(previousMove.selectedCell)
+
+    undoMainNumber(previousMove, boardRepository)
+    undoNotes(previousMove, boardRepository)
+    boardRepository.popMove()
 }
 
-const undoMainNumber = previousMove => {
+const undoMainNumber = (previousMove, boardRepository) => {
     const mainNumberMove = previousMove.mainNumber
     if (!mainNumberMove.action) return
 
     if (mainNumberMove.action === BOARD_MOVES_TYPES.ADD) {
-        const cell = previousMove.selectedCell
-        invokeDispatch(eraseCellMainValue(cell))
+        boardRepository.setCellMainNumber({ cell: previousMove.selectedCell, number: 0 })
     } else {
         // this will be executed only for the mistake made.
         // correct filled numbers are anyway not erasable.
-        invokeDispatch(setCellMainNumber({ cell: previousMove.selectedCell, number: mainNumberMove.value }))
+        boardRepository.setCellMainNumber({
+            cell: previousMove.selectedCell,
+            number: mainNumberMove.value,
+        })
     }
 }
 
-const undoNotes = previousMove => {
+const undoNotes = (previousMove, boardRepository) => {
     const notesMove = previousMove.notes
     if (_isEmpty(notesMove)) return
 
     if (notesMove.action === BOARD_MOVES_TYPES.ADD) {
-        invokeDispatch(eraseNotesBunch(notesMove.bunch))
+        boardRepository.eraseNotesBunch(notesMove.bunch)
     } else {
-        invokeDispatch(setNotesBunch(notesMove.bunch))
+        boardRepository.setNotesBunch(notesMove.bunch)
     }
 }
 
-export const resetStoreState = () => {
-    invokeDispatch(
-        resetState({
-            mainNumbers: MainNumbersRecord.initMainNumbers(),
-            selectedCell: { row: 0, col: 0 },
-            notes: NotesRecord.initNotes(),
-            moves: [],
-        }),
-    )
-}
-
-export const fillPuzzle = () => {
+export const fillPuzzle = boardRepository => {
     const mainNumbers = getMainNumbers(getStoreState())
 
     BoardIterators.forBoardEachCell(cell => {
-        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) invokeDispatch(setCellMainNumber({ cell, number: MainNumbersRecord.getCellSolutionValue(mainNumbers, cell) }))
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
+            boardRepository.setCellMainNumber({
+                cell,
+                number: MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
+            })
+        }
     })
 }
 
-const removeNotesBunchAndAddMove = notesBunch => {
-    invokeDispatch(eraseNotesBunch(notesBunch))
-
+const removeNotesBunchAndAddMove = (notesBunch, boardRepository) => {
     const move = {
         notes: {
             action: BOARD_MOVES_TYPES.REMOVE,
             bunch: notesBunch,
         },
     }
-    invokeDispatch(addMove(constructMove(move)))
+    boardRepository.addMove(constructMove(move))
+    boardRepository.eraseNotesBunch(notesBunch)
 }
 
-export const applyHintAction = applyHintChanges => {
+export const applyHintAction = (applyHintChanges, dependencies) => {
     /*
         right now if ADD action is present then it will be the only entry.
         so it will not affect in Moves stack as well.
     */
     if (applyHintChanges.length === 1 && _get(applyHintChanges, '0.action.type') === BOARD_MOVES_TYPES.ADD) {
-        inputMainNumber(_get(applyHintChanges, '0.action.mainNumber'))
+        inputMainNumber(_get(applyHintChanges, '0.action.mainNumber'), dependencies)
         return
     }
 
@@ -335,5 +294,5 @@ export const applyHintAction = applyHintChanges => {
         notesBunch.push(..._map(_get(action, 'notes'), note => ({ cell, note })))
     })
 
-    removeNotesBunchAndAddMove(notesBunch)
+    removeNotesBunchAndAddMove(notesBunch, dependencies.boardRepository)
 }

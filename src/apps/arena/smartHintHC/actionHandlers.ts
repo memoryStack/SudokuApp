@@ -4,7 +4,7 @@ import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 import { Dependencies } from '@contexts/DependencyContext'
 import _isEmpty from '@lodash/isEmpty'
 import { NumberEraseData, NumberInputData } from 'src/interfaces/smartHintRepository'
-import { applyHintAction, updateSelectedCell } from '../store/actions/board.actions'
+import { applyHintAction } from '../store/actions/board.actions'
 import {
     inputTryOutNumber,
     eraseTryOutNumber,
@@ -32,9 +32,8 @@ const handleOnInit = ({ setState, params: { focusedCells, styles } } : StateProp
 const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {
         params: { newCellToSelect: SelectCellOnClose, dependencies: Dependencies }
     }) => {
-    if (newCellToSelect) updateSelectedCell(newCellToSelect)
-
-    const { gameStateRepository, smartHintRepository } = dependencies
+    const { gameStateRepository, smartHintRepository, boardRepository } = dependencies
+    if (newCellToSelect) boardRepository.setSelectedCell(newCellToSelect)
     smartHintRepository.removeHints()
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
@@ -90,7 +89,7 @@ const handleEraserClick = ({
 
 const handleApplyHintClick = ({ params: { applyHintChanges, dependencies } } : { params: { applyHintChanges: ApplyHint, dependencies: Dependencies} }) => {
     setTimeout(() => {
-        applyHintAction(applyHintChanges)
+        applyHintAction(applyHintChanges, dependencies)
 
         const { boardControllerRepository } = dependencies
         const availableHints = boardControllerRepository.getHintsLeftCount()

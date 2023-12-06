@@ -1,26 +1,17 @@
 const stateHandlers = {
-    resetState: (state, { payload }) => {
-        state.mainNumbers = payload.mainNumbers
-        state.selectedCell = payload.selectedCell
-        state.notes = payload.notes
-        state.moves = payload.moves
-    },
+    setState: (state, { payload: newState }) => newState,
     setMainNumbers: (state, { payload }) => {
         state.mainNumbers = payload
     },
-    setCellMainNumber: (state, { payload }) => {
-        const { cell, number } = payload
-        state.mainNumbers[cell.row][cell.col].value = number
-    },
-    eraseCellMainValue: (state, { payload }) => {
-        const { row, col } = payload
-        state.mainNumbers[row][col].value = 0
+    setNotes: (state, { payload }) => {
+        state.notes = payload
     },
     setSelectedCell: (state, { payload }) => {
         state.selectedCell = payload
     },
-    setNotes: (state, { payload }) => {
-        state.notes = payload
+    setCellMainNumber: (state, { payload }) => {
+        const { cell, number } = payload
+        state.mainNumbers[cell.row][cell.col].value = number
     },
     setNotesBunch: (state, { payload }) => {
         const notesBunch = payload
@@ -33,9 +24,6 @@ const stateHandlers = {
         notesBunch.forEach(({ cell, note }) => {
             state.notes[cell.row][cell.col][note - 1].show = 0
         })
-    },
-    setMoves: (state, { payload }) => {
-        state.moves = payload
     },
     addMove: (state, { payload }) => {
         state.moves.push(payload)

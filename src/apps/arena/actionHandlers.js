@@ -32,12 +32,7 @@ import {
 
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
 import { consoleLog } from '../../utils/util'
-import {
-    updateMainNumbers,
-    updateMoves,
-    updateNotes,
-    updateSelectedCell,
-} from './store/actions/board.actions'
+
 import { getMainNumbers } from './store/selectors/board.selectors'
 import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
@@ -106,18 +101,19 @@ const startGame = ({
     dependencies,
     hints: hintsLeft,
 }) => {
-    updateMainNumbers(mainNumbers)
-    updateNotes(notes)
-    updateSelectedCell(selectedCell)
-    updateMoves(moves)
+    const {
+        boardRepository, refreeRepository, gameStateRepository, boardControllerRepository,
+    } = dependencies
+
+    boardRepository.setState({
+        mainNumbers, notes, selectedCell, moves,
+    })
 
     // refree state
-    const { refreeRepository } = dependencies
     refreeRepository.setGameLevel(difficultyLevel)
     refreeRepository.setGameMistakesCount(mistakes)
     refreeRepository.setTime(time)
 
-    const { gameStateRepository, boardControllerRepository } = dependencies
     boardControllerRepository.setPencil(pencilState || PENCIL_STATE.INACTIVE)
     boardControllerRepository.setHintsLeftCount(hintsLeft)
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
