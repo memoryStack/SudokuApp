@@ -9,7 +9,6 @@ import {
     inputTryOutNumber,
     eraseTryOutNumber,
 } from '../store/actions/smartHintHC.actions'
-import { decreaseAvailableHintsCount } from '../store/actions/boardController.actions'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 
@@ -89,10 +88,13 @@ const handleEraserClick = ({
     }
 }
 
-const handleApplyHintClick = ({ params: applyHintChanges } : { params: ApplyHint }) => {
+const handleApplyHintClick = ({ params: { applyHintChanges, dependencies } } : { params: { applyHintChanges: ApplyHint, dependencies: Dependencies} }) => {
     setTimeout(() => {
         applyHintAction(applyHintChanges)
-        decreaseAvailableHintsCount()
+
+        const { boardControllerRepository } = dependencies
+        const availableHints = boardControllerRepository.getHintsLeftCount()
+        boardControllerRepository.setHintsLeftCount(availableHints - 1)
     }, SMART_HINT_CHANGES_APPLY_DELAY)
 }
 

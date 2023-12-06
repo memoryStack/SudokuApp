@@ -1,6 +1,5 @@
-import { GAME_STATE } from '@resources/constants'
+import { GAME_STATE, PENCIL_STATE } from '@resources/constants'
 import { fastPencilAction, undoAction } from '../store/actions/board.actions'
-import { updatePencil, setHintsMenuVisibilityAction, resetStoreState } from '../store/actions/boardController.actions'
 import { isGameActive } from '../store/utils'
 
 const handleUndoClick = () => {
@@ -8,9 +7,17 @@ const handleUndoClick = () => {
     undoAction()
 }
 
-const handlePencilClick = () => {
+const getNewPencilState = currentState => {
+    if (!currentState) return PENCIL_STATE.INACTIVE
+    return currentState === PENCIL_STATE.ACTIVE ? PENCIL_STATE.INACTIVE : PENCIL_STATE.ACTIVE
+}
+
+const handlePencilClick = ({ params: { dependencies } }) => {
     if (!isGameActive()) return
-    updatePencil()
+
+    const { boardControllerRepository } = dependencies
+    const currentState = boardControllerRepository.getPencil()
+    boardControllerRepository.setPencil(getNewPencilState(currentState))
 }
 
 const handleFastPencilClick = () => {
@@ -20,14 +27,15 @@ const handleFastPencilClick = () => {
 
 const handleHintClick = ({ params: { dependencies } }) => {
     if (!isGameActive()) return
-    setHintsMenuVisibilityAction(true)
 
-    const { gameStateRepository } = dependencies
+    const { gameStateRepository, boardControllerRepository } = dependencies
     gameStateRepository.setGameState(GAME_STATE.DISPLAY_HINT)
+    boardControllerRepository.setHintsMenuVisibility(true)
 }
 
-const handleUnmount = () => {
-    resetStoreState()
+const handleUnmount = ({ params: { dependencies } }) => {
+    const { boardControllerRepository } = dependencies
+    boardControllerRepository.resetState()
 }
 
 const ACTION_TYPES = {

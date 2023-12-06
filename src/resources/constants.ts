@@ -41,9 +41,9 @@ enum GAME_STATE {
 }
 
 // TODO: should make a general reusable state for these switches kind of states like "ON or OFF" or "ACTIVE or INACTIVE"
-const PENCIL_STATE = {
-    ACTIVE: 'ACTIVE',
-    INACTIVE: 'INACTIVE',
+enum PENCIL_STATE {
+    ACTIVE = 'ACTIVE',
+    INACTIVE = 'INACTIVE',
 }
 
 const SCREEN_NAME = {

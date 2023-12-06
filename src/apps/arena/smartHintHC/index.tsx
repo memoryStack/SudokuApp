@@ -163,7 +163,7 @@ const SmartHintHC_: React.FC<Props> = ({
     const onClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: { newCellToSelect: selectCellOnClose, dependencies } })
         const shouldApplyHint = closeByApplyHintClick.current && !_isEmpty(applyHintChanges)
-        if (shouldApplyHint) onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
+        if (shouldApplyHint) onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: { applyHintChanges, dependencies } })
     }, [onAction, selectCellOnClose, applyHintChanges, dependencies])
 
     const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } = {} } = {} } = {} as ScrollEventType) => {

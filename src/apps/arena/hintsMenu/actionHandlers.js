@@ -7,7 +7,6 @@ import { GAME_STATE } from '@resources/constants'
 import _cloneDeep from '@lodash/cloneDeep'
 import { consoleLog } from '../../../utils/util'
 
-import { setHintsMenuVisibilityAction } from '../store/actions/boardController.actions'
 import { getRawHints, getTransformedRawHints } from '../utils/smartHints'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
@@ -43,16 +42,11 @@ const rawHintsPromise = (hintId, mainNumbers, notes) => new Promise(resolve => {
     })
 })
 
-const handleCloseHintsMenu = () => {
-    setHintsMenuVisibilityAction(false)
-}
-
 const handleMenuItemPress = ({
     getState, params: {
         id, mainNumbers, notes, smartHintsColorSystem, dependencies,
     },
 }) => {
-    handleCloseHintsMenu()
     const { availableRawHints } = getState()
 
     const hints = getTransformedRawHints(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)
@@ -62,16 +56,16 @@ const handleMenuItemPress = ({
         hints,
     }
 
-    const { gameStateRepository, smartHintRepository } = dependencies
+    const { gameStateRepository, smartHintRepository, boardControllerRepository } = dependencies
     smartHintRepository.setHints(hintData)
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+    boardControllerRepository.setHintsMenuVisibility(false)
 }
 
 const handleOverlayPress = ({ params: { dependencies } }) => {
-    handleCloseHintsMenu()
-
-    const { gameStateRepository } = dependencies
+    const { gameStateRepository, boardControllerRepository } = dependencies
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+    boardControllerRepository.setHintsMenuVisibility(false)
 }
 
 const ACTION_TYPES = {

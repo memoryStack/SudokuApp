@@ -38,22 +38,19 @@ import {
     updateNotes,
     updateSelectedCell,
 } from './store/actions/board.actions'
-import { updatePencil } from './store/actions/boardController.actions'
 import { getMainNumbers } from './store/selectors/board.selectors'
-import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
+import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 import { NotesRecord } from './RecordUtilities/boardNotes'
 import { BoardIterators } from './utils/classes/boardIterators'
 import { convertBoardCellToNum } from './utils/cellTransformers'
-import { boardControllerActions } from './store/reducers/boardController.reducers'
 
 import {
     BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
 } from './constants'
-
-const { resetHints } = boardControllerActions
+import { MAX_AVAILABLE_HINTS } from './store/state/boardController.state'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -107,8 +104,8 @@ const startGame = ({
     time,
     pencilState,
     dependencies,
+    hints: hintsLeft,
 }) => {
-    // board state
     updateMainNumbers(mainNumbers)
     updateNotes(notes)
     updateSelectedCell(selectedCell)
@@ -120,11 +117,9 @@ const startGame = ({
     refreeRepository.setGameMistakesCount(mistakes)
     refreeRepository.setTime(time)
 
-    // cell actions state. TODO: implement support for hints as well
-    updatePencil(pencilState || PENCIL_STATE.INACTIVE)
-
-    // game state
-    const { gameStateRepository } = dependencies
+    const { gameStateRepository, boardControllerRepository } = dependencies
+    boardControllerRepository.setPencil(pencilState || PENCIL_STATE.INACTIVE)
+    boardControllerRepository.setHintsLeftCount(hintsLeft)
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
@@ -141,6 +136,7 @@ const startNewGame = ({ mainNumbers, difficultyLevel, dependencies }) => {
         selectedCell: { row: 0, col: 0 },
         moves: [],
         ...initRefereeData(),
+        hints: MAX_AVAILABLE_HINTS,
         dependencies,
     })
 }
@@ -227,7 +223,6 @@ const resumePreviousGame = dependencies => {
 const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, dependencies } }) => {
     if (isGenerateNewPuzzleItem(selectedGameMenuItem)) {
         generateNewPuzzle(selectedGameMenuItem, dependencies)
-        invokeDispatch(resetHints()) // TODO: move it from here
         return
     }
 

@@ -17,6 +17,7 @@ import {
     openSmartHintHC, gotoTryOutStep, getInputPanel, closeSmartHintHC, gotoApplyHintStep,
 } from '@utils/testing/smartHints'
 
+import { BoardControllerRepository } from 'src/repositories/boardControllerRepository'
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import {
@@ -26,7 +27,6 @@ import {
 } from '../smartHintHC/constants'
 
 import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.constants'
-import { decreaseAvailableHintsCount } from '../store/actions/boardController.actions'
 import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 
 jest.mock('../../../adapters/puzzle/puzzle')
@@ -160,7 +160,9 @@ describe('Hint/Smart Hints', () => {
         const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
         await waitFor(() => {
             // coupled with implementation detail
-            decreaseAvailableHintsCount()
+            const currentHintsLeft = BoardControllerRepository.getHintsLeftCount()
+            BoardControllerRepository.setHintsLeftCount(currentHintsLeft - 1)
+
             expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(0)
         })
         fireEvent.press(screen.getByText('Hint'))

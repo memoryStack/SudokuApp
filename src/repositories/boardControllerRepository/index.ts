@@ -1,0 +1,1 @@
+export { BoardControllerRepository } from './BoardControllerRepository'
