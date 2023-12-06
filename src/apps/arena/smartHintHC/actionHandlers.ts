@@ -2,13 +2,10 @@ import { GAME_STATE } from '@resources/constants'
 
 import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 import { Dependencies } from '@contexts/DependencyContext'
+import _isEmpty from '@lodash/isEmpty'
+import { NumberEraseData, NumberInputData } from 'src/interfaces/smartHintRepository'
 import { applyHintAction, updateSelectedCell } from '../store/actions/board.actions'
 import {
-    clearHints,
-    showNextHint,
-    showPrevHint,
-    resetStoreState,
-    updateTryOutSelectedCell,
     inputTryOutNumber,
     eraseTryOutNumber,
 } from '../store/actions/smartHintHC.actions'
@@ -37,39 +34,59 @@ const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {
         params: { newCellToSelect: SelectCellOnClose, dependencies: Dependencies }
     }) => {
     if (newCellToSelect) updateSelectedCell(newCellToSelect)
-    clearHints()
 
-    const { gameStateRepository } = dependencies
+    const { gameStateRepository, smartHintRepository } = dependencies
+    smartHintRepository.removeHints()
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
-const handleNextClick = () => {
-    showNextHint()
+const handleNextClick = ({ params: { dependencies } }: {params: {dependencies : Dependencies}}) => {
+    const { smartHintRepository } = dependencies
+
+    const currentStep = smartHintRepository.getHintStepNumber()
+    smartHintRepository.setHintStepNumber(currentStep + 1)
 }
 
-const handlePrevClick = () => showPrevHint()
+const handlePrevClick = ({ params: { dependencies } }: {params: {dependencies : Dependencies}}) => {
+    const { smartHintRepository } = dependencies
 
-const handleResetStoreState = () => {
-    resetStoreState()
+    const currentStep = smartHintRepository.getHintStepNumber()
+    smartHintRepository.setHintStepNumber(currentStep - 1)
 }
 
-const handleCellClick = ({ params: cell } : { params: Cell }) => {
-    updateTryOutSelectedCell(cell)
+const handleCellClick = ({ params: { cell, dependencies } } : { params: {cell: Cell, dependencies: Dependencies} }) => {
+    const { smartHintRepository } = dependencies
+    smartHintRepository.setTryOutSelectedCell(cell)
 }
 
-const handleNumberClick = ({ getState, params: { number, selectedCell } }: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell } }) => {
+const handleNumberClick = ({
+    getState,
+    setState,
+    params: { number, selectedCell, dependencies },
+}: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell, dependencies: Dependencies } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
 
     const isCellFilledInTryOut = cellHasTryOutInput(selectedCell)
     if (isCellFilledInTryOut) {
-        handleEraserClick({ getState } as StatePropsHandlers)
+        handleEraserClick({ getState, setState, params: { dependencies } })
     }
-    inputTryOutNumber(number, focusedCells, styles.snackBar)
+
+    const boardDataChanges = inputTryOutNumber(number, focusedCells, styles.snackBar) as NumberInputData
+    if (!_isEmpty(boardDataChanges)) {
+        const { smartHintRepository } = dependencies
+        smartHintRepository.updateBoardDataOnTryOutNumberInput(boardDataChanges)
+    }
 }
 
-const handleEraserClick = ({ getState } : StatePropsHandlers) => {
+const handleEraserClick = ({
+    getState, params: { dependencies },
+} : StatePropsHandlers & { params: { dependencies: Dependencies } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
-    eraseTryOutNumber(focusedCells, styles.snackBar)
+    const notesToBeSpawned = eraseTryOutNumber(focusedCells, styles.snackBar) as NumberEraseData
+    if (!_isEmpty(notesToBeSpawned)) {
+        const { smartHintRepository } = dependencies
+        smartHintRepository.updateBoardDataOnTryOutErase(notesToBeSpawned)
+    }
 }
 
 const handleApplyHintClick = ({ params: applyHintChanges } : { params: ApplyHint }) => {
@@ -81,7 +98,6 @@ const handleApplyHintClick = ({ params: applyHintChanges } : { params: ApplyHint
 
 const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
-    ON_UNMOUNT: 'ON_UNMOUNT',
     ON_CLOSE: 'ON_CLOSE',
     ON_NEXT_CLICK: 'ON_NEXT_CLICK',
     ON_PREV_CLICK: 'ON_PREV_CLICK',
@@ -95,7 +111,6 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_CLOSE]: handleOnClose,
     [ACTION_TYPES.ON_NEXT_CLICK]: handleNextClick,
     [ACTION_TYPES.ON_PREV_CLICK]: handlePrevClick,
-    [ACTION_TYPES.ON_UNMOUNT]: handleResetStoreState,
     [ACTION_TYPES.ON_CELL_PRESS]: handleCellClick,
     [ACTION_TYPES.ON_ERASE_CLICK]: handleEraserClick,
     [ACTION_TYPES.ON_NUMBER_CLICK]: handleNumberClick,

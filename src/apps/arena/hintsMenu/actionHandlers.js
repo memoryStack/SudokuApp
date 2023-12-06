@@ -4,11 +4,11 @@ import _isEmpty from '@lodash/isEmpty'
 
 import { GAME_STATE } from '@resources/constants'
 
+import _cloneDeep from '@lodash/cloneDeep'
 import { consoleLog } from '../../../utils/util'
 
 import { setHintsMenuVisibilityAction } from '../store/actions/boardController.actions'
-import { showHintAction } from '../store/actions/smartHintHC.actions'
-import { getRawHints } from '../utils/smartHints'
+import { getRawHints, getTransformedRawHints } from '../utils/smartHints'
 
 import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 
@@ -54,8 +54,16 @@ const handleMenuItemPress = ({
 }) => {
     handleCloseHintsMenu()
     const { availableRawHints } = getState()
-    showHintAction(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)
-    const { gameStateRepository } = dependencies
+
+    const hints = getTransformedRawHints(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)
+    const hintData = {
+        mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
+        notes: hints[0].hasTryOut ? _cloneDeep(notes) : null,
+        hints,
+    }
+
+    const { gameStateRepository, smartHintRepository } = dependencies
+    smartHintRepository.setHints(hintData)
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 

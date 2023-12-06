@@ -1,37 +1,10 @@
 const stateHandlers = {
-    resetState: (state, action) => {
-        const {
-            payload: { show, currentHintNum, hints },
-        } = action
-        state.show = show
-        state.currentHintNum = currentHintNum
-        state.hints = hints
-    },
-    setHints: (state, action) => {
-        const {
-            payload: {
-                hints, mainNumbers, notes,
-            },
-        } = action
-        state.show = true
-        state.currentHintNum = 1
-        state.hints = hints
-        state.tryOut = {
-            mainNumbers,
-            notes,
-        }
-    },
-    removeHints: state => {
-        state.show = false
-        state.currentHintNum = -1
-        state.hints = []
-        state.tryOut = {}
-    },
+    setHints: (state, { payload: hintsState }) => hintsState,
     setNextHint: state => {
         state.currentHintNum += 1
     },
-    setPrevHint: state => {
-        state.currentHintNum -= 1
+    setHintStepNumber: (state, { payload: stepNumber }) => {
+        state.currentHintNum = stepNumber
     },
     setTryOutSelectedCell: (state, { payload: cell }) => {
         state.tryOut.selectedCell = cell

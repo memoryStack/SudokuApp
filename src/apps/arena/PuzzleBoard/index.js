@@ -87,8 +87,8 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         if (!isCellClickable()) return
 
         const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
-        handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
-    }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut, hasTryOut])
+        handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies } })
+    }, [onAction, gameState, smartHintTryOutOnAction, showSmartHint, isHintTryOut, hasTryOut, dependencies])
 
     const showCellContent = [GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT, GAME_STATE.OVER_SOLVED, GAME_STATE.OVER_UNSOLVED]
         .includes(gameState)

@@ -5,7 +5,7 @@ import { BOARD_CELLS_COUNT } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../utils/classes/boardIterators'
 
-const handleCellPress = ({ params: cell }) => {
+const handleCellPress = ({ params: { cell } }) => {
     updateSelectedCell(cell)
 }
 

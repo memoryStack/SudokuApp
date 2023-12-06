@@ -112,16 +112,17 @@ const SmartHintHC_: React.FC<Props> = ({
             action.payload = {
                 number: action.payload,
                 selectedCell,
+                dependencies,
             }
         }
+        if (action.type === ACTION_TYPES.ON_ERASE_CLICK) {
+            action.payload = { dependencies }
+        }
         onActionFromProps(action)
-    }, [selectedCell, onActionFromProps])
+    }, [selectedCell, onActionFromProps, dependencies])
 
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells, styles } })
-        return () => {
-            onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-        }
     }, [])
 
     const smartHintHCRef = useRef(null)
@@ -142,12 +143,12 @@ const SmartHintHC_: React.FC<Props> = ({
     }, [currentHintNum])
 
     const onNextClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_NEXT_CLICK })
-    }, [onAction])
+        onAction({ type: ACTION_TYPES.ON_NEXT_CLICK, payload: { dependencies } })
+    }, [onAction, dependencies])
 
     const onPrevClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_PREV_CLICK })
-    }, [onAction])
+        onAction({ type: ACTION_TYPES.ON_PREV_CLICK, payload: { dependencies } })
+    }, [onAction, dependencies])
 
     const closeView = () => {
         const closeDragger = getCloseDraggerHandler(smartHintHCRef)
