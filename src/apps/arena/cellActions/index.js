@@ -11,6 +11,7 @@ import _noop from '@lodash/noop'
 import { PENCIL_STATE } from '@resources/constants'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
 import { getAvailableHintsCount, getPencilStatus } from '../store/selectors/boardController.selectors'
@@ -28,6 +29,8 @@ import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './
 import { getStyles } from './cellActions.styles'
 
 const BoardController_ = ({ onAction, refFromParent }) => {
+    const dependencies = useDependency()
+
     const styles = useStyles(getStyles)
 
     const pencilState = useSelector(getPencilStatus)
@@ -52,7 +55,7 @@ const BoardController_ = ({ onAction, refFromParent }) => {
 
     const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK })
 
-    const onHintClick = () => onAction({ type: ACTION_TYPES.ON_HINT_CLICK })
+    const onHintClick = () => onAction({ type: ACTION_TYPES.ON_HINT_CLICK, payload: { dependencies } })
 
     // TODO: use a single component for these 4 components, and use them via a config
     return (

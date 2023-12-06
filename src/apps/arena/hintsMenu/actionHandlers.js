@@ -7,7 +7,6 @@ import { GAME_STATE } from '@resources/constants'
 import { consoleLog } from '../../../utils/util'
 
 import { setHintsMenuVisibilityAction } from '../store/actions/boardController.actions'
-import { updateGameState } from '../store/actions/gameState.actions'
 import { showHintAction } from '../store/actions/smartHintHC.actions'
 import { getRawHints } from '../utils/smartHints'
 
@@ -50,18 +49,21 @@ const handleCloseHintsMenu = () => {
 
 const handleMenuItemPress = ({
     getState, params: {
-        id, mainNumbers, notes, smartHintsColorSystem,
+        id, mainNumbers, notes, smartHintsColorSystem, dependencies,
     },
 }) => {
     handleCloseHintsMenu()
     const { availableRawHints } = getState()
     showHintAction(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)
-    updateGameState(GAME_STATE.ACTIVE)
+    const { gameStateRepository } = dependencies
+    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
-const handleOverlayPress = () => {
+const handleOverlayPress = ({ params: { dependencies } }) => {
     handleCloseHintsMenu()
-    updateGameState(GAME_STATE.ACTIVE)
+
+    const { gameStateRepository } = dependencies
+    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
 const ACTION_TYPES = {

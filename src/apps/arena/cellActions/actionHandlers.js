@@ -1,7 +1,6 @@
 import { GAME_STATE } from '@resources/constants'
 import { fastPencilAction, undoAction } from '../store/actions/board.actions'
 import { updatePencil, setHintsMenuVisibilityAction, resetStoreState } from '../store/actions/boardController.actions'
-import { updateGameState } from '../store/actions/gameState.actions'
 import { isGameActive } from '../store/utils'
 
 const handleUndoClick = () => {
@@ -19,10 +18,12 @@ const handleFastPencilClick = () => {
     fastPencilAction()
 }
 
-const handleHintClick = () => {
+const handleHintClick = ({ params: { dependencies } }) => {
     if (!isGameActive()) return
     setHintsMenuVisibilityAction(true)
-    updateGameState(GAME_STATE.DISPLAY_HINT)
+
+    const { gameStateRepository } = dependencies
+    gameStateRepository.setGameState(GAME_STATE.DISPLAY_HINT)
 }
 
 const handleUnmount = () => {

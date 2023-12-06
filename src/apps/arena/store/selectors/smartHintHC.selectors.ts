@@ -19,13 +19,6 @@ export type Hint = {
     svgProps?: HintSvgData['data']
 }
 
-type HintHCInfo = {
-    show: boolean
-    currentHintNum: number
-    totalHintsCount: number
-    hint: Hint
-}
-
 export const getTryOutSelectedCell = (state: RootState) => state.smartHintHC.tryOut.selectedCell
 
 export const getTryOutMainNumbers = (state: RootState) => state.smartHintHC.tryOut.mainNumbers

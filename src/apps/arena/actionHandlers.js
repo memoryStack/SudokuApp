@@ -31,7 +31,6 @@ import {
 } from './utils/util'
 
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
-import { updateGameState } from './store/actions/gameState.actions'
 import { consoleLog } from '../../utils/util'
 import {
     updateMainNumbers,
@@ -275,17 +274,20 @@ const handleSharePuzzle = () => {
         })
 }
 
-const handleScreenOutOfFocus = ({ params: gameState }) => {
+const handleScreenOutOfFocus = ({ params: { gameState, dependencies } }) => {
     if (!new GameState(gameState).isGameActive()) return
-    updateGameState(GAME_STATE.INACTIVE)
+
+    const { gameStateRepository } = dependencies
+    gameStateRepository.setGameState(GAME_STATE.INACTIVE)
 }
 
-const handleScreenInFocus = ({ params: gameState }) => {
+const handleScreenInFocus = ({ params: { gameState, dependencies } }) => {
     if (!new GameState(gameState).isGameInactive()) return
-    updateGameState(GAME_STATE.ACTIVE)
+    const { gameStateRepository } = dependencies
+    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
-const handleHideGameOverCard = ({ setState, params: fadeAnim }) => {
+const handleHideGameOverCard = ({ setState, params: { fadeAnim, dependencies } }) => {
     Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 200,
@@ -294,7 +296,9 @@ const handleHideGameOverCard = ({ setState, params: fadeAnim }) => {
         setState({ showGameSolvedCard: false })
         setTimeout(() => {
             setState({ showNextGameMenu: true })
-            updateGameState(GAME_STATE.GAME_SELECT)
+
+            const { gameStateRepository } = dependencies
+            gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
         }, 100)
     })
 }

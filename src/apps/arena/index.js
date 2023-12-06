@@ -29,7 +29,6 @@ import { PuzzleBoard } from './PuzzleBoard'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { useCacheGameState } from './hooks/useCacheGameState'
 import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
-import { updateGameState } from './store/actions/gameState.actions'
 import { fillPuzzle } from './store/actions/board.actions'
 import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
@@ -108,18 +107,19 @@ const Arena_ = ({
     }, [])
 
     // What is it doing and why ?
+    // this is business logic put in UI
     useEffect(() => {
-        const resetGameState = () => updateGameState(GAME_STATE.GAME_SELECT)
-        return resetGameState
-    }, [])
+        const { gameStateRepository } = dependencies
+        return () => gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
+    }, [dependencies])
 
     const handleGameInFocus = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_IN_FOCUS, payload: gameState })
-    }, [onAction, gameState])
+        onAction({ type: ACTION_TYPES.ON_IN_FOCUS, payload: { gameState, dependencies } })
+    }, [onAction, gameState, dependencies])
 
     const handleGameOutOfFocus = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: gameState })
-    }, [onAction, gameState])
+        onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: { gameState, dependencies } })
+    }, [onAction, gameState, dependencies])
 
     const onStartCustomPuzzle = useCallback(mainNumbers => {
         onAction({
@@ -131,8 +131,11 @@ const Arena_ = ({
     const onCustomPuzzleHCClosed = () => onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
 
     const hideCongratsModal = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD, payload: fadeAnim.current })
-    }, [onAction])
+        onAction({
+            type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD,
+            payload: { fadeAnim: fadeAnim.current, dependencies },
+        })
+    }, [onAction, dependencies])
 
     const isPuzzlePresent = (currentGameState, _previousGameState) => {
         const currentGameStateObj = new GameState(currentGameState)

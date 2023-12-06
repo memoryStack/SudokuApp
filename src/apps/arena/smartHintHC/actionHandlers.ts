@@ -1,8 +1,8 @@
 import { GAME_STATE } from '@resources/constants'
 
 import { StatePropsHandlers } from '@utils/hocs/withActions/types'
+import { Dependencies } from '@contexts/DependencyContext'
 import { applyHintAction, updateSelectedCell } from '../store/actions/board.actions'
-import { updateGameState } from '../store/actions/gameState.actions'
 import {
     clearHints,
     showNextHint,
@@ -33,10 +33,14 @@ const handleOnInit = ({ setState, params: { focusedCells, styles } } : StateProp
     setState({ focusedCells, styles })
 }
 
-const handleOnClose = ({ params: newCellToSelect } : { params: SelectCellOnClose }) => {
+const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {
+        params: { newCellToSelect: SelectCellOnClose, dependencies: Dependencies }
+    }) => {
     if (newCellToSelect) updateSelectedCell(newCellToSelect)
     clearHints()
-    updateGameState(GAME_STATE.ACTIVE)
+
+    const { gameStateRepository } = dependencies
+    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
 const handleNextClick = () => {

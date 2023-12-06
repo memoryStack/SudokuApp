@@ -23,13 +23,13 @@ const FONT_FAMILIES = {
     HEAVY: 'heavy',
 }
 
-export const FONT_WEIGHTS = {
-    REGULAR: '400',
-    MEDIUM: '500',
-    SEMI_BOLD: '600',
-    BOLD: '700',
-    EXTRA_BOLD: '800',
-    HEAVY: '900',
+export enum FONT_WEIGHTS {
+    REGULAR = '400',
+    MEDIUM = '500',
+    SEMI_BOLD = '600',
+    BOLD = '700',
+    EXTRA_BOLD = '800',
+    HEAVY = '900',
 }
 
 // NOTE: semi-bold doesn't exist for Roboto font

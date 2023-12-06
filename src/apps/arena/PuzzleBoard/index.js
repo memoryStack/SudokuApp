@@ -12,6 +12,7 @@ import { emit } from '@utils/GlobalEventBus'
 import _get from '@lodash/get'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
+import { useDependency } from '../../../hooks/useDependency'
 import { EVENTS } from '../../../constants/events'
 import withActions from '../../../utils/hocs/withActions'
 
@@ -34,6 +35,7 @@ import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { getStyles } from './puzzleBoard.styles'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
+    const dependencies = useDependency()
     const hasTryOut = useHintHasTryOutStep()
     const isHintTryOut = useIsHintTryOutStep(true)
 
@@ -55,9 +57,9 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     useEffect(() => {
         onAction({
             type: ACTION_TYPES.ON_MAIN_NUMBERS_UPDATE,
-            payload: mainNumbers,
+            payload: { mainNumbers, dependencies },
         })
-    }, [onAction, mainNumbers])
+    }, [onAction, mainNumbers, dependencies])
 
     const onCellClick = useCallback(cell => {
         const isCellClickable = () => {

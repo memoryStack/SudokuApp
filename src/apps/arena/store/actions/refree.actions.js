@@ -1,44 +1,9 @@
-import { getStoreState, invokeDispatch } from '../../../../redux/dispatch.helpers'
+import { invokeDispatch } from '../../../../redux/dispatch.helpers'
 import { refreeActions } from '../reducers/refree.reducers'
-import { getTime } from '../selectors/refree.selectors'
 
-const {
-    increaseMistakes,
-    setTime,
-} = refreeActions
+const { increaseMistakes } = refreeActions
 
 // TODO: maybe change the namings
 export const addMistake = () => {
     invokeDispatch(increaseMistakes())
-}
-
-// TODO: are we sure these funcs belong in the actions file ??
-let timerId = null
-
-const getNewTime = ({ hours = 0, minutes = 0, seconds = 0 }) => {
-    let nextSecond = seconds + 1
-    let nextMinute = minutes
-    let nextHour = hours
-    if (nextSecond === 60) {
-        nextMinute++
-        nextSecond = 0
-    }
-    if (nextMinute === 60) {
-        nextHour++
-        nextMinute = 0
-    }
-    return { hours: nextHour, minutes: nextMinute, seconds: nextSecond }
-}
-
-const incrementTime = () => {
-    const time = getTime(getStoreState())
-    invokeDispatch(setTime(getNewTime(time)))
-}
-
-export const startTimer = () => {
-    timerId = setInterval(incrementTime, 1000)
-}
-
-export const stopTimer = () => {
-    if (timerId) timerId = clearInterval(timerId)
 }

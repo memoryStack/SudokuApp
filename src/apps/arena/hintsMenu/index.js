@@ -16,6 +16,7 @@ import StopTouchPropagation from '@ui/molecules/StopTouchPropagation'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { emit } from '@utils/GlobalEventBus'
 
+import { useDependency } from '../../../hooks/useDependency'
 import { EVENTS } from '../../../constants/events'
 import withActions from '../../../utils/hocs/withActions'
 
@@ -38,6 +39,8 @@ const COLUMNS_COUNT = 3
 const HintsMenu_ = ({
     onAction, availableRawHints, hintsAnalyzed, availableHintsCount,
 }) => {
+    const dependencies = useDependency()
+
     const { mainNumbers, notes } = useGameBoardInputs()
 
     const styles = useStyles(getStyles)
@@ -65,8 +68,8 @@ const HintsMenu_ = ({
     }, [availableHintsCount, hintsAnalyzed])
 
     const onOverlayContainerClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS })
-    }, [onAction])
+        onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS, payload: { dependencies } })
+    }, [onAction, dependencies])
 
     const onMenuItemClick = id => {
         onAction({
@@ -76,6 +79,7 @@ const HintsMenu_ = ({
                 mainNumbers,
                 notes,
                 smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+                dependencies,
             },
         })
     }

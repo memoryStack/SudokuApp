@@ -19,6 +19,7 @@ import { Action, OnAction } from '@utils/hocs/withActions/types'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import { useDependency } from 'src/hooks/useDependency'
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 
 import withActions from '../../../utils/hocs/withActions'
@@ -84,6 +85,8 @@ const SmartHintHC_: React.FC<Props> = ({
     onAction: onActionFromProps = _noop,
     height = 0,
 }) => {
+    const dependencies = useDependency()
+
     const {
         focusedCells,
         title,
@@ -157,10 +160,10 @@ const SmartHintHC_: React.FC<Props> = ({
     }, [])
 
     const onClosed = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: selectCellOnClose })
+        onAction({ type: ACTION_TYPES.ON_CLOSE, payload: { newCellToSelect: selectCellOnClose, dependencies } })
         const shouldApplyHint = closeByApplyHintClick.current && !_isEmpty(applyHintChanges)
         if (shouldApplyHint) onAction({ type: ACTION_TYPES.ON_APPLY_HINT_CLICK, payload: applyHintChanges })
-    }, [onAction, selectCellOnClose, applyHintChanges])
+    }, [onAction, selectCellOnClose, applyHintChanges, dependencies])
 
     const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } = {} } = {} } = {} as ScrollEventType) => {
         if (hintsScrollPositions.current) hintsScrollPositions.current[currentHintNum] = y
