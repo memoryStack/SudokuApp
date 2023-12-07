@@ -1,5 +1,16 @@
 import { INITIAL_STATE } from '../../apps/arena/store/state/smartHintHC.state'
-import { getCurrentHintStepNum } from '../../apps/arena/store/selectors/smartHintHC.selectors'
+import {
+    getCurrentHintStepNum,
+    getRemovableNotesInfo,
+    getTryOutClickableCells,
+    getTryOutMainNumbers,
+    getTryOutNotes,
+    getTryOutSelectedCell,
+    getTryOutCellsRestrictedNumberInputsMsg,
+    getTryOutCellsRestrictedNumberInputs,
+    getUnclickableCellClickInTryOutMsg,
+    getCellToFocusData,
+} from '../../apps/arena/store/selectors/smartHintHC.selectors'
 import {
     SmartHintRepository as SmartHintRepositoryInterface,
     NumberInputData,
@@ -50,4 +61,13 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
     updateBoardDataOnTryOutErase: (data: NumberEraseData) => {
         invokeDispatch(updateBoardDataOnTryOutErase(data))
     },
+    getTryOutSelectedCell: () => getTryOutSelectedCell(getStoreState()),
+    getTryOutMainNumbers: () => getTryOutMainNumbers(getStoreState()),
+    getTryOutNotes: () => getTryOutNotes(getStoreState()),
+    getTryOutClickableCells: () => getTryOutClickableCells(getStoreState()),
+    getRemovableNotes: () => getRemovableNotesInfo(getStoreState()),
+    getTryOutCellsRestrictedNumberInputsMsg: () => getTryOutCellsRestrictedNumberInputsMsg(getStoreState()),
+    getTryOutCellsRestrictedNumberInputs: () => getTryOutCellsRestrictedNumberInputs(getStoreState()),
+    getUnclickableCellClickInTryOutMsg: () => getUnclickableCellClickInTryOutMsg(getStoreState()),
+    getCellToFocusData: () => getCellToFocusData(getStoreState()),
 }

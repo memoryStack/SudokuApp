@@ -19,25 +19,25 @@ import { XWING_TYPES } from '../../xWing/constants'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
-export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }) => {
-    if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
+export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }, boardInputs) => {
+    if (noInputInTryOut([...xWingCells, ...removableNotesHostCells], boardInputs)) {
         return getNoInputResult(xWing)
     }
 
-    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))) {
-        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
+    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells, boardInputs))) {
+        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells, boardInputs)
     }
 
-    return getLegsFilledWithoutErrorResult(xWing)
+    return getLegsFilledWithoutErrorResult(xWing, boardInputs)
 }
 
-const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
-    const removableNotesHostCellsFilled = filterFilledCellsInTryOut(removableNotesHostCells)
+const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells, boardInputs) => {
+    const removableNotesHostCellsFilled = filterFilledCellsInTryOut(removableNotesHostCells, boardInputs)
     if (removableNotesHostCellsFilled.length === 2) {
         return getBothHouseWithoutCandidateErrorResult(xWing, removableNotesHostCellsFilled)
     }
 
-    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells)
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells, boardInputs)
     if (noCandidateInALegError) return noCandidateInALegError
 
     return getSameCrossHouseCandidatePossibilitiesResult(xWing)

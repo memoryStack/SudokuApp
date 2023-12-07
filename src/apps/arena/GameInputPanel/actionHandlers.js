@@ -1,17 +1,21 @@
 import { ACTION_TYPES } from '../inputPanel/constants'
 import { eraseAction, inputNumberAction } from '../store/actions/board.actions'
-import { isGameActive } from '../store/utils'
+import { isGameActive } from '../utils/util'
 
 const handleNumberClick = ({ getState, params: number }) => {
-    if (!isGameActive()) return
     const { dependencies } = getState()
+    const { gameStateRepository } = dependencies
+    if (!isGameActive(gameStateRepository.getGameState())) return
+
     inputNumberAction(number, dependencies)
 }
 
 const handleEraserClick = ({ getState }) => {
-    if (!isGameActive()) return
     const { dependencies } = getState()
-    eraseAction(dependencies.boardRepository)
+    const { gameStateRepository, boardRepository } = dependencies
+    if (!isGameActive(gameStateRepository.getGameState())) return
+
+    eraseAction(boardRepository)
 }
 
 export const ACTION_HANDLERS = {

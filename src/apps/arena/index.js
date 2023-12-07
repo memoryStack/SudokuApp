@@ -147,9 +147,9 @@ const Arena_ = ({
 
     const handleSharePuzzleClick = useCallback(() => {
         if (isPuzzlePresent(gameState, previousGameState)) {
-            onAction({ type: ACTION_TYPES.ON_SHARE_CLICK })
+            onAction({ type: ACTION_TYPES.ON_SHARE_CLICK, payload: { dependencies } })
         }
-    }, [onAction, gameState, previousGameState])
+    }, [onAction, gameState, previousGameState, dependencies])
 
     useEffect(() => {
         navigation.isFocused()

@@ -1,10 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
-import { getStoreState } from '../../../../../../redux/dispatch.helpers'
-
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from '../../../../smartHintHC/helpers'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
@@ -46,12 +43,12 @@ export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => cell
     }))
     .sort(({ note: noteA }, { note: noteB }) => noteA - noteB)
 
-export const getNakedGroupTryOutInputErrorResult = (groupCandidates, groupCells, focusedCells) => {
-    const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells)
+export const getNakedGroupTryOutInputErrorResult = (groupCandidates, groupCells, focusedCells, boardInputs) => {
+    const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells, boardInputs)
 
     if (cellsWithNoCandidates.length) {
-        const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-        const cellsFilledByRemovableNotes = focusedCells.filter(cell => !isCellExists(cell, groupCells) && cellHasTryOutInput(cell))
+        const { tryOutMainNumbers, actualMainNumbers } = boardInputs
+        const cellsFilledByRemovableNotes = focusedCells.filter(cell => !isCellExists(cell, groupCells) && cellHasTryOutInput(cell, { tryOutMainNumbers, actualMainNumbers }))
             .map(cell => ({
                 number: MainNumbersRecord.getCellMainValue(tryOutMainNumbers, cell),
                 cell,
@@ -60,9 +57,9 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, groupCells,
         return getEmptyCellsErrorResult(cellsWithNoCandidates, cellsFilledByRemovableNotes)
     }
 
-    const multipleCellsNakedSingleCandidates = getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells)
+    const multipleCellsNakedSingleCandidates = getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells, boardInputs)
     if (multipleCellsNakedSingleCandidates.length) {
-        return getMultipleCellsNakedSinglesErrorResult(multipleCellsNakedSingleCandidates, focusedCells)
+        return getMultipleCellsNakedSinglesErrorResult(multipleCellsNakedSingleCandidates, focusedCells, boardInputs)
     }
 
     return null
@@ -87,14 +84,14 @@ const getEmptyCellsErrorResult = (cellsWithNoCandidates, cellsFilledByRemovableN
     }
 }
 
-const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells) => groupCandidates.filter(candidate => {
-    const candidateNakedSingleHostCells = getCandidateNakedSingleHostCells(candidate, focusedCells)
+const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells, boardInputs) => groupCandidates.filter(candidate => {
+    const candidateNakedSingleHostCells = getCandidateNakedSingleHostCells(candidate, focusedCells, boardInputs)
     return candidateNakedSingleHostCells.length > 1
 })
 
-const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells) => {
+const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells, boardInputs) => {
     const firstCandidate = multipleCellsNakedSingleCandidates[0]
-    const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells)
+    const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells, boardInputs)
     const msgPlaceholderValues = {
         candidate: firstCandidate,
         emptyCellsListText: getCellsAxesValuesListText(
@@ -110,12 +107,12 @@ const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandida
     }
 }
 
-const getCandidateNakedSingleHostCells = (candidate, focusedCells) => {
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+const getCandidateNakedSingleHostCells = (candidate, focusedCells, boardInputs) => {
+    const { tryOutNotes } = boardInputs
 
     return focusedCells.filter(
-        cell => NotesRecord.isNotePresentInCell(tryOutNotesInfo, candidate, cell)
-            && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, cell) === 1,
+        cell => NotesRecord.isNotePresentInCell(tryOutNotes, candidate, cell)
+            && NotesRecord.getCellVisibleNotesCount(tryOutNotes, cell) === 1,
     )
 }
 

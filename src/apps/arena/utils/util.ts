@@ -26,6 +26,7 @@ import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { Houses } from './classes/houses'
 import { BoardIterators } from './classes/boardIterators'
+
 import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from './cellTransformers'
 
 export const addLeadingZeroIfEligible = (value: number) => {
@@ -274,3 +275,5 @@ export const sameValueInCells = (cellA: Cell, cellB: Cell, mainNumbers: MainNumb
     const cellBValue = MainNumbersRecord.getCellMainValue(mainNumbers, cellB) || 0
     return cellAValue !== 0 && cellAValue === cellBValue
 }
+
+export const isGameActive = (gameState: GAME_STATE) => new GameState(gameState).isGameActive()

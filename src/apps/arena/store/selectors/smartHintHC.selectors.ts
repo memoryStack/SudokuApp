@@ -1,4 +1,3 @@
-import { getStoreState } from '../../../../redux/dispatch.helpers'
 import { RootState } from '../../../../redux/types'
 
 import { HintStep } from '../../utils/smartHints/types'
@@ -33,10 +32,7 @@ export const getTryOutCellsRestrictedNumberInputsMsg = (state: RootState) => sta
 
 export const getApplyHintChanges = (state: RootState) => state.smartHintHC.hints[0].applyHint
 
-export const getUnclickableCellClickInTryOutMsg = () => {
-    const state = getStoreState()
-    return state.smartHintHC.hints[0].unclickableCellClickInTryOutMsg
-}
+export const getUnclickableCellClickInTryOutMsg = (state: RootState) => state.smartHintHC.hints[0].unclickableCellClickInTryOutMsg
 
 export const getRemovableNotesInfo = (state: RootState) => state.smartHintHC.hints[0].removableNotes
 

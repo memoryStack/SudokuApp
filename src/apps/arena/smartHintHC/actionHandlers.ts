@@ -64,14 +64,17 @@ const handleNumberClick = ({
 }: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell, dependencies: Dependencies } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
 
-    const isCellFilledInTryOut = cellHasTryOutInput(selectedCell)
+    const { smartHintRepository, boardRepository } = dependencies
+    const isCellFilledInTryOut = cellHasTryOutInput(selectedCell, {
+        tryOutMainNumbers: smartHintRepository.getTryOutMainNumbers(),
+        actualMainNumbers: boardRepository.getMainNumbers(),
+    })
     if (isCellFilledInTryOut) {
         handleEraserClick({ getState, setState, params: { dependencies } })
     }
 
-    const boardDataChanges = inputTryOutNumber(number, focusedCells, styles.snackBar) as NumberInputData
+    const boardDataChanges = inputTryOutNumber(number, focusedCells, styles.snackBar, dependencies) as NumberInputData
     if (!_isEmpty(boardDataChanges)) {
-        const { smartHintRepository } = dependencies
         smartHintRepository.updateBoardDataOnTryOutNumberInput(boardDataChanges)
     }
 }
@@ -80,7 +83,7 @@ const handleEraserClick = ({
     getState, params: { dependencies },
 } : StatePropsHandlers & { params: { dependencies: Dependencies } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
-    const notesToBeSpawned = eraseTryOutNumber(focusedCells, styles.snackBar) as NumberEraseData
+    const notesToBeSpawned = eraseTryOutNumber(focusedCells, styles.snackBar, dependencies) as NumberEraseData
     if (!_isEmpty(notesToBeSpawned)) {
         const { smartHintRepository } = dependencies
         smartHintRepository.updateBoardDataOnTryOutErase(notesToBeSpawned)

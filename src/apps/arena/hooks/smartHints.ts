@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { getMainNumbers, getNotesInfo } from '../store/selectors/board.selectors'
 
 import {
     getHintHasTryOutStep,
@@ -23,14 +24,19 @@ const useHintTryOutAnalyserResult = (): TryOutResult => {
     const tryOutAnalyserData = useSelector(getHintTryOutAnalyserData)
 
     const [tryOutResult, setTryOutResult] = useState({ state: TRY_OUT_RESULT_STATES.START, msg: '' })
-    const mainNumbers = useSelector(getTryOutMainNumbers)
-    const notes = useSelector(getTryOutNotes)
     const isHintTryOut = useIsHintTryOutStep()
+    const tryOutMainNumbers = useSelector(getTryOutMainNumbers)
+    const tryOutNotes = useSelector(getTryOutNotes)
+    const actualMainNumbers = useSelector(getMainNumbers)
+    const actualNotes = useSelector(getNotesInfo)
 
     useEffect(() => {
         if (!isHintTryOut) return
-        setTryOutResult(analyseTryOutInput({ hintType, data: tryOutAnalyserData }))
-    }, [isHintTryOut, mainNumbers, notes, tryOutAnalyserData, hintType])
+        const boardInputs = {
+            tryOutMainNumbers, tryOutNotes, actualMainNumbers, actualNotes,
+        }
+        setTryOutResult(analyseTryOutInput({ hintType, data: tryOutAnalyserData, boardInputs }))
+    }, [isHintTryOut, tryOutAnalyserData, hintType, tryOutMainNumbers, tryOutNotes, actualMainNumbers, actualNotes])
 
     return tryOutResult
 }

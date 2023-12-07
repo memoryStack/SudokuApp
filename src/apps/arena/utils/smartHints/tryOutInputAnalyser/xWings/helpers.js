@@ -1,12 +1,8 @@
 import _isEmpty from '@lodash/isEmpty'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
-import { getStoreState } from '../../../../../../redux/dispatch.helpers'
-
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { getMainNumbers } from '../../../../store/selectors/board.selectors'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
 
 import { getCellHouseForHouseType } from '../../../util'
 
@@ -47,16 +43,16 @@ export const getSameCrossHouseCandidatePossibilitiesResult = xWing => {
     }
 }
 
-export const getOneLegWithNoCandidateResult = (xWing, removableNotesHostCells) => {
+export const getOneLegWithNoCandidateResult = (xWing, removableNotesHostCells, boardInputs) => {
     const candidate = getXWingCandidate(xWing)
-    const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs)
+    const xWingLegWithCandidateAsInhabitable = getCandidateInhabitableLeg(candidate, xWing.legs, boardInputs)
     if (_isEmpty(xWingLegWithCandidateAsInhabitable)) return null
 
     const msgPlaceholdersValues = {
         candidate,
         houseFullName: getXWingHouseFullName(xWing),
         inhabitableHouseAxesText: getHouseNumText(getCellHouseForHouseType(xWing.houseType, xWingLegWithCandidateAsInhabitable.cells[0])),
-        filledRemovableNotesHostCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(removableNotesHostCells)),
+        filledRemovableNotesHostCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(removableNotesHostCells, boardInputs)),
     }
 
     return {
@@ -65,31 +61,29 @@ export const getOneLegWithNoCandidateResult = (xWing, removableNotesHostCells) =
     }
 }
 
-const getCandidateInhabitableLeg = (candidate, xWingLegs) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const mainNumbers = getMainNumbers(getStoreState())
-    const notes = getTryOutNotes(getStoreState())
+const getCandidateInhabitableLeg = (candidate, xWingLegs, boardInputs) => {
+    const { tryOutMainNumbers, tryOutNotes, actualMainNumbers } = boardInputs
     // handles sashimi finned x-wing as well
     return xWingLegs.find(({ cells: legXWingCells }) => legXWingCells.every(xWingCell => (
-        (!MainNumbersRecord.isCellFilled(tryOutMainNumbers, xWingCell) || MainNumbersRecord.isCellFilled(mainNumbers, xWingCell))
-        && !NotesRecord.isNotePresentInCell(notes, candidate, xWingCell)
+        (!MainNumbersRecord.isCellFilled(tryOutMainNumbers, xWingCell) || MainNumbersRecord.isCellFilled(actualMainNumbers, xWingCell))
+        && !NotesRecord.isNotePresentInCell(tryOutNotes, candidate, xWingCell)
     )))
 }
 
-export const getLegsFilledWithoutErrorResult = xWing => {
+export const getLegsFilledWithoutErrorResult = (xWing, boardInputs) => {
     const xWingCells = getXWingCells(xWing.legs)
-    const filledXWingCells = filterFilledCellsInTryOut(xWingCells)
+    const filledXWingCells = filterFilledCellsInTryOut(xWingCells, boardInputs)
 
     if (filledXWingCells.length === 1) {
-        return getOneLegFilledWithoutErrorResult(xWing)
+        return getOneLegFilledWithoutErrorResult(xWing, boardInputs)
     }
     return getBothLegsFilledWithoutErrorResult(xWing)
 }
 
 // change name of this function
 // it looks like this function returns some error
-const getOneLegFilledWithoutErrorResult = xWing => {
-    const filledXWingCells = filterFilledCellsInTryOut(getXWingCells(xWing.legs))
+const getOneLegFilledWithoutErrorResult = (xWing, boardInputs) => {
+    const filledXWingCells = filterFilledCellsInTryOut(getXWingCells(xWing.legs), boardInputs)
     const filledLegHouse = getCellHouseForHouseType(xWing.houseType, filledXWingCells[0])
     const houseAxesText = getHouseNumText(filledLegHouse)
 

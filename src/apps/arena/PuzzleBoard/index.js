@@ -20,12 +20,14 @@ import { Board } from '../gameBoard'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { useGameBoardInputs, useSavePuzzleState } from '../hooks/useGameBoardInputs'
 import {
-    getCellToFocusData, getShowSmartHint, getSvgPropsData, getUnclickableCellClickInTryOutMsg,
+    getCellToFocusData, getShowSmartHint, getSvgPropsData,
 } from '../store/selectors/smartHintHC.selectors'
-import { cellHasTryOutInput, isCellTryOutClickable, removableNoteFilledInCell } from '../smartHintHC/helpers'
+import { cellHasTryOutInput, removableNoteFilledInCell } from '../smartHintHC/helpers'
 import { GameState } from '../utils/classes/gameState'
 import { useHintHasTryOutStep, useIsHintTryOutStep } from '../hooks/smartHints'
-import { areCommonHouseCells, areSameCells, sameValueInCells } from '../utils/util'
+import {
+    areCommonHouseCells, areSameCells, isCellExists, sameValueInCells,
+} from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 
@@ -65,10 +67,11 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         const isCellClickable = () => {
             if (showSmartHint) {
                 if (isHintTryOut) {
-                    const isCellClickableInTryOut = isCellTryOutClickable(cell)
+                    const { smartHintRepository } = dependencies
+                    const isCellClickableInTryOut = isCellExists(cell, smartHintRepository.getTryOutClickableCells())
                     if (!isCellClickableInTryOut) {
                         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-                            msg: getUnclickableCellClickInTryOutMsg(),
+                            msg: smartHintRepository.getUnclickableCellClickInTryOutMsg(),
                             visibleTime: 7000,
                         })
                     }
@@ -94,7 +97,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         .includes(gameState)
 
     const getSmartHintActiveBgColor = cell => {
-        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell)) { return styles.selectedCellBGColor }
+        if (isHintTryOut && areSameCells(cell, selectedCell) && isCellFocusedInSmartHint(cell, cellsToFocusData)) { return styles.selectedCellBGColor }
         return _get(cellsToFocusData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
     }
 
@@ -117,8 +120,11 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     }
 
     const getCellMainNumberFontColor = cell => {
-        if (isHintTryOut && cellHasTryOutInput(cell)) {
-            return removableNoteFilledInCell(cell) ? styles.removableNoteTryOutInputColor
+        const { smartHintRepository, boardRepository } = dependencies
+        const actualMainNumbers = boardRepository.getMainNumbers()
+        if (isHintTryOut && cellHasTryOutInput(cell, { tryOutMainNumbers: mainNumbers, actualMainNumbers })) {
+            const removableNotes = smartHintRepository.getRemovableNotes()
+            return removableNoteFilledInCell(cell, removableNotes, mainNumbers) ? styles.removableNoteTryOutInputColor
                 : styles.tryOutInputColor
         }
 

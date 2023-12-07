@@ -6,8 +6,6 @@ import { N_CHOOSE_K } from '@resources/constants'
 
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../../store/selectors/smartHintHC.selectors'
-import { getStoreState } from '../../../../../../redux/dispatch.helpers'
 import {
     getCellAxesValues,
     isCellExists,
@@ -31,71 +29,64 @@ import {
 } from './helpers'
 import { NAKED_TRIPPLE } from '../stringLiterals'
 
-export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }) => {
-    if (noInputInTryOut(focusedCells)) {
+export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }, boardInputs) => {
+    if (noInputInTryOut(focusedCells, boardInputs)) {
         return getNakedGroupNoTryOutInputResult(groupCandidates)
     }
 
-    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells)
+    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells, boardInputs)
     if (tryOutErrorResult) {
         return tryOutErrorResult
     }
 
-    if (allGroupCellsEmpty(groupCells)) {
-        const nakedSinglePairCellError = getNakedSinglePairCellsErrorResultIfExist(groupCells)
+    if (allGroupCellsEmpty(groupCells, boardInputs)) {
+        const nakedSinglePairCellError = getNakedSinglePairCellsErrorResultIfExist(groupCells, boardInputs)
         if (nakedSinglePairCellError) return nakedSinglePairCellError
 
-        const nakedDoublePairCellError = getNakedDoublePairCellsErrorResultIfPresent(groupCells)
+        const nakedDoublePairCellError = getNakedDoublePairCellsErrorResultIfPresent(groupCells, boardInputs)
         if (nakedDoublePairCellError) return nakedDoublePairCellError
     }
 
-    return getValidProgressResult(groupCandidates, groupCells)
+    return getValidProgressResult(groupCandidates, groupCells, boardInputs)
 }
 
-const allGroupCellsEmpty = groupCells => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    return groupCells.every(cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
-}
+const allGroupCellsEmpty = (groupCells, { tryOutMainNumbers }) => groupCells.every(cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 
 // two cells have naked single in them because of that third one
 // will have no candidate in them
-const getNakedSinglePairCellsErrorResultIfExist = groupCells => {
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    const invalidNakedSingleCellsCombination = getNakedSinglesInvalidCombination(groupCells)
+const getNakedSinglePairCellsErrorResultIfExist = (groupCells, { tryOutNotes }) => {
+    const invalidNakedSingleCellsCombination = getNakedSinglesInvalidCombination(groupCells, tryOutNotes)
     if (invalidNakedSingleCellsCombination) {
         const chosenCells = getChosenCells(invalidNakedSingleCellsCombination, groupCells)
         const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-        return getNakedSinglePairErrorResult(chosenCells, notChosenCell, tryOutNotesInfo)
+        return getNakedSinglePairErrorResult(chosenCells, notChosenCell, tryOutNotes)
     }
 
     return null
 }
 
-const getNakedSinglesInvalidCombination = groupCells => {
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    return N_CHOOSE_K[3][2].find(combination => {
-        const chosenCells = getChosenCells(combination, groupCells)
+const getNakedSinglesInvalidCombination = (groupCells, tryOutNotes) => N_CHOOSE_K[3][2].find(combination => {
+    const chosenCells = getChosenCells(combination, groupCells)
 
-        // bug in this func.
-        // i again wish i had implemented this using TDD
-        const allChosenCellsHaveNakedSingle = chosenCells.every(cell => isNakedSinglePresent(tryOutNotesInfo, cell).present)
+    // bug in this func.
+    // i again wish i had implemented this using TDD
+    const allChosenCellsHaveNakedSingle = chosenCells.every(cell => isNakedSinglePresent(tryOutNotes, cell).present)
 
-        if (allChosenCellsHaveNakedSingle) {
-            const chosenCellNotes = chosenCells
-                .map(cell => NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, cell)[0])
+    if (allChosenCellsHaveNakedSingle) {
+        const chosenCellNotes = chosenCells
+            .map(cell => NotesRecord.getCellVisibleNotesList(tryOutNotes, cell)[0])
 
-            const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-            const notChosenCellWillNotHaveCandidate = _isEqual(
-                _sortNumbers(chosenCellNotes),
-                NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, notChosenCell),
-            )
+        const notChosenCell = getNotChosenCell(chosenCells, groupCells)
+        const notChosenCellWillNotHaveCandidate = _isEqual(
+            _sortNumbers(chosenCellNotes),
+            NotesRecord.getCellVisibleNotesList(tryOutNotes, notChosenCell),
+        )
 
-            return notChosenCellWillNotHaveCandidate
-        }
+        return notChosenCellWillNotHaveCandidate
+    }
 
-        return false
-    })
-}
+    return false
+})
 
 const getChosenCells = (combination, groupCells) => combination.map(idx => groupCells[idx])
 
@@ -127,14 +118,13 @@ const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
 
 // two cells have naked double in them because of that third one
 // will have no candidate in it
-const getNakedDoublePairCellsErrorResultIfPresent = groupCells => {
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
-    const invalidNakedDoubleCellsCombination = getNakedDoublesInvalidCombination(groupCells, tryOutNotesInfo)
+const getNakedDoublePairCellsErrorResultIfPresent = (groupCells, { tryOutNotes }) => {
+    const invalidNakedDoubleCellsCombination = getNakedDoublesInvalidCombination(groupCells, tryOutNotes)
     if (!invalidNakedDoubleCellsCombination) return null
 
     const chosenCells = getChosenCells(invalidNakedDoubleCellsCombination, groupCells)
     const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-    return getNakedDoublePairErrorResult(chosenCells, notChosenCell, tryOutNotesInfo)
+    return getNakedDoublePairErrorResult(chosenCells, notChosenCell, tryOutNotes)
 }
 
 const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHOOSE_K[3][2].find(combination => {
@@ -195,8 +185,7 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
     }
 }
 
-const getValidProgressResult = (groupCandidates, groupCells) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
+const getValidProgressResult = (groupCandidates, groupCells, { tryOutMainNumbers }) => {
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         return getAllInputsFilledResult(groupCandidates, groupCells, tryOutMainNumbers)

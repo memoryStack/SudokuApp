@@ -13,19 +13,19 @@ import {
     getSameCrossHouseCandidatePossibilitiesResult,
 } from './helpers'
 
-export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) => {
+export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }, boardInputs) => {
     const xWingCells = getXWingCells(xWing.legs)
 
-    if (noInputInTryOut([...xWingCells, ...removableNotesHostCells])) {
+    if (noInputInTryOut([...xWingCells, ...removableNotesHostCells], boardInputs)) {
         return getNoInputResult(xWing)
     }
 
-    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells))) {
-        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells)
+    if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells, boardInputs))) {
+        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells, boardInputs)
     }
 
-    if (!_isEmpty(filterFilledCellsInTryOut(xWingCells))) {
-        return getLegsFilledWithoutErrorResult(xWing)
+    if (!_isEmpty(filterFilledCellsInTryOut(xWingCells, boardInputs))) {
+        return getLegsFilledWithoutErrorResult(xWing, boardInputs)
     }
 
     // TODO: i should know about this state through some backend api setup
@@ -36,8 +36,8 @@ export const finnedXWingTryOutAnalyser = ({ xWing, removableNotesHostCells }) =>
     }
 }
 
-const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells) => {
-    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells)
+const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells, boardInputs) => {
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells, boardInputs)
     if (noCandidateInALegError) return noCandidateInALegError
 
     return getSameCrossHouseCandidatePossibilitiesResult(xWing)

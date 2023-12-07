@@ -6,24 +6,20 @@ import { cellHasTryOutInput } from '../../../smartHintHC/helpers'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 
-import { getStoreState } from '../../../../../redux/dispatch.helpers'
-import { getMainNumbers } from '../../../store/selectors/board.selectors'
-import { getTryOutMainNumbers, getTryOutNotes } from '../../../store/selectors/smartHintHC.selectors'
+import { BoardInputs } from './types'
 
-export const filterFilledCellsInTryOut = (cells: Cell[]) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState()) as MainNumbers
-    const mainNumbers = getMainNumbers(getStoreState())
-
-    return _filter(cells, (cell: Cell) => !MainNumbersRecord.isCellFilled(mainNumbers, cell)
+export const filterFilledCellsInTryOut = (cells: Cell[], boardInputs: BoardInputs) => {
+    const { tryOutMainNumbers, actualMainNumbers } = boardInputs
+    return _filter(cells, (cell: Cell) => !MainNumbersRecord.isCellFilled(actualMainNumbers, cell)
         && MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 }
 
-export const filterCellsWithoutTryoutInput = (cells: Cell[]) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState()) as MainNumbers
+export const filterCellsWithoutTryoutInput = (cells: Cell[], boardInputs: BoardInputs) => {
+    const { tryOutMainNumbers } = boardInputs
     return _filter(cells, (cell: Cell) => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 }
 
-export const noInputInTryOut = (focusedCells: Cell[]) => _isEmpty(filterFilledCellsInTryOut(focusedCells))
+export const noInputInTryOut = (focusedCells: Cell[], boardInputs: BoardInputs) => _isEmpty(filterFilledCellsInTryOut(focusedCells, boardInputs))
 
 // NOTE: run it only when we are sure that there is no cell
 // which is filled wrongly in the try-out step
@@ -40,18 +36,12 @@ export const getCorrectFilledTryOutCandidates = (groupCells : Cell[], tryOutMain
 export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates: number[], groupCandidates: number[]) => groupCandidates
     .filter(groupCandidate => !correctlyFilledGroupCandidates.includes(groupCandidate))
 
-export const isCellWithoutAnyCandidate = (cell: Cell) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState()) as MainNumbers
-    const tryOutNotesInfo = getTryOutNotes(getStoreState()) as Notes
+export const isCellWithoutAnyCandidate = (cell: Cell, boardInputs: BoardInputs) => {
+    const { tryOutMainNumbers, tryOutNotes } = boardInputs
     return !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
-    && NotesRecord.getCellVisibleNotesCount(tryOutNotesInfo, cell) === 0
+    && NotesRecord.getCellVisibleNotesCount(tryOutNotes, cell) === 0
 }
 
-export const getCellsWithNoCandidates = (focusedCells: Cell[]) => focusedCells.filter(cell => isCellWithoutAnyCandidate(cell))
+export const getCellsWithNoCandidates = (focusedCells: Cell[], boardInputs: BoardInputs) => focusedCells.filter(cell => isCellWithoutAnyCandidate(cell, boardInputs))
 
-export const anyCellFilledWithGivenCandidate = (cells: Cell[], candidate: number) => {
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState()) as MainNumbers
-    return cells.some(cell => MainNumbersRecord.isCellFilledWithNumber(tryOutMainNumbers, candidate, cell))
-}
-
-export const anyCellHasTryOutInput = (cells: Cell[]) => _some(cells, (cell: Cell) => cellHasTryOutInput(cell))
+export const anyCellHasTryOutInput = (cells: Cell[], { tryOutMainNumbers, actualMainNumbers }: BoardInputs) => _some(cells, (cell: Cell) => cellHasTryOutInput(cell, { tryOutMainNumbers, actualMainNumbers }))

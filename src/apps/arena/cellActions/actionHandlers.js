@@ -1,11 +1,13 @@
 import _isEmpty from '@lodash/isEmpty'
 import { GAME_STATE, PENCIL_STATE } from '@resources/constants'
 import { fastPencilAction, undoAction } from '../store/actions/board.actions'
-import { isGameActive } from '../store/utils'
+import { isGameActive } from '../utils/util'
 
 const handleUndoClick = ({ params: { dependencies } }) => {
-    if (!isGameActive()) return
-    undoAction(dependencies.boardRepository)
+    const { boardRepository, gameStateRepository } = dependencies
+    if (!isGameActive(gameStateRepository.getGameState())) return
+
+    undoAction(boardRepository)
 }
 
 const getNewPencilState = currentState => {
@@ -14,20 +16,20 @@ const getNewPencilState = currentState => {
 }
 
 const handlePencilClick = ({ params: { dependencies } }) => {
-    if (!isGameActive()) return
+    const { boardControllerRepository, gameStateRepository } = dependencies
+    if (!isGameActive(gameStateRepository.getGameState())) return
 
-    const { boardControllerRepository } = dependencies
     const currentState = boardControllerRepository.getPencil()
     boardControllerRepository.setPencil(getNewPencilState(currentState))
 }
 
 const handleFastPencilClick = ({ params: { dependencies } }) => {
-    if (!isGameActive()) return
+    const { boardRepository, gameStateRepository } = dependencies
+    if (!isGameActive(gameStateRepository.getGameState())) return
 
-    const fastPencilData = fastPencilAction()
+    const fastPencilData = fastPencilAction(boardRepository)
 
     if (!_isEmpty(fastPencilData)) {
-        const { boardRepository } = dependencies
         const { notesBunch, move } = fastPencilData
         boardRepository.setNotesBunch(notesBunch)
         boardRepository.addMove(move)
@@ -35,9 +37,9 @@ const handleFastPencilClick = ({ params: { dependencies } }) => {
 }
 
 const handleHintClick = ({ params: { dependencies } }) => {
-    if (!isGameActive()) return
-
     const { gameStateRepository, boardControllerRepository } = dependencies
+    if (!isGameActive(gameStateRepository.getGameState())) return
+
     gameStateRepository.setGameState(GAME_STATE.DISPLAY_HINT)
     boardControllerRepository.setHintsMenuVisibility(true)
 }

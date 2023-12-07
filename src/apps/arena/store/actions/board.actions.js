@@ -7,35 +7,27 @@ import _map from '@lodash/map'
 import { PENCIL_STATE } from '@resources/constants'
 import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from '../../../../constants/events'
-import { getStoreState } from '../../../../redux/dispatch.helpers'
 import {
     isMainNumberPresentInAnyHouseOfCell,
     getCellHousesInfo,
 } from '../../utils/util'
-import {
-    getMainNumbers, getMoves, getNotesInfo, getSelectedCell,
-} from '../selectors/board.selectors'
-import { getPencilStatus } from '../selectors/boardController.selectors'
 import { getHouseCells } from '../../utils/houseCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../RecordUtilities/boardNotes'
 import { BoardIterators } from '../../utils/classes/boardIterators'
 
-const constructMove = ({ mainNumber = {}, notes = {} }) => {
-    const selectedCell = getSelectedCell(getStoreState())
-    return {
-        selectedCell,
-        mainNumber,
-        notes,
-    }
-}
+const constructMove = ({ mainNumber = {}, notes = {} }, selectedCell) => ({
+    selectedCell,
+    mainNumber,
+    notes,
+})
 
-const getNewNotesBunchToShow = () => {
+const getNewNotesBunchToShow = boardRepository => {
     const result = []
 
-    const mainNumbers = getMainNumbers(getStoreState())
-    const notes = getNotesInfo(getStoreState())
+    const mainNumbers = boardRepository.getMainNumbers()
+    const notes = boardRepository.getNotes()
 
     BoardIterators.forBoardEachCell(cell => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
@@ -51,8 +43,8 @@ const getNewNotesBunchToShow = () => {
     return result
 }
 
-export const fastPencilAction = () => {
-    const newNotesBunchToAdd = getNewNotesBunchToShow()
+export const fastPencilAction = boardRepository => {
+    const newNotesBunchToAdd = getNewNotesBunchToShow(boardRepository)
 
     if (!newNotesBunchToAdd.length) return {}
 
@@ -65,7 +57,7 @@ export const fastPencilAction = () => {
 
     return {
         notesBunch: newNotesBunchToAdd,
-        move: constructMove(move),
+        move: constructMove(move, boardRepository.getSelectedCell()),
     }
 }
 
@@ -89,8 +81,10 @@ const getNotesToRemoveAfterMainNumberInput = (number, cell, notes) => {
 }
 
 const inputMainNumber = (number, dependencies) => {
-    const selectedCell = getSelectedCell(getStoreState())
-    const mainNumbers = getMainNumbers(getStoreState())
+    const { boardRepository, refreeRepository } = dependencies
+
+    const selectedCell = boardRepository.getSelectedCell()
+    const mainNumbers = boardRepository.getMainNumbers()
 
     const move = {
         mainNumber: {
@@ -99,13 +93,11 @@ const inputMainNumber = (number, dependencies) => {
         },
     }
 
-    const { boardRepository, refreeRepository } = dependencies
-
     if (number !== MainNumbersRecord.getCellSolutionValue(mainNumbers, selectedCell)) {
         const currentMistakesCount = refreeRepository.getGameMistakesCount()
         refreeRepository.setGameMistakesCount(currentMistakesCount + 1)
     } else {
-        const notes = getNotesInfo(getStoreState())
+        const notes = boardRepository.getNotes()
         const notesBunch = getNotesToRemoveAfterMainNumberInput(number, selectedCell, notes)
         boardRepository.eraseNotesBunch(notesBunch)
 
@@ -116,15 +108,15 @@ const inputMainNumber = (number, dependencies) => {
     }
 
     boardRepository.setCellMainNumber({ cell: selectedCell, number })
-    boardRepository.addMove(constructMove(move))
+    boardRepository.addMove(constructMove(move, selectedCell))
 }
 
 const inputNoteNumber = (number, boardRepository) => {
-    const selectedCell = getSelectedCell(getStoreState())
-    const mainNumbers = getMainNumbers(getStoreState())
+    const selectedCell = boardRepository.getSelectedCell()
+    const mainNumbers = boardRepository.getMainNumbers()
     if (isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
 
-    const notes = getNotesInfo(getStoreState())
+    const notes = boardRepository.getNotes()
     const notesBunch = [{ cell: selectedCell, note: number }]
 
     const noteAlreadyPresent = NotesRecord.isNotePresentInCell(notes, number, selectedCell)
@@ -141,24 +133,26 @@ const inputNoteNumber = (number, boardRepository) => {
             bunch: notesBunch,
         },
     }
-    boardRepository.addMove(constructMove(move))
+    boardRepository.addMove(constructMove(move, selectedCell))
 }
 
 export const inputNumberAction = (number, dependencies) => {
-    const selectedCell = getSelectedCell(getStoreState())
-    const mainNumbers = getMainNumbers(getStoreState())
+    const { boardRepository } = dependencies
+    const selectedCell = boardRepository.getSelectedCell()
+    const mainNumbers = boardRepository.getMainNumbers()
     if (MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) return
 
     // TODO: check at how many places this pencil state is required
     // if it's more than 1 then move it to store/utils
-    const pencilState = getPencilStatus(getStoreState())
-    if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, dependencies.boardRepository)
+    const { boardControllerRepository } = dependencies
+    const pencilState = boardControllerRepository.getPencil()
+    if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, boardRepository)
     else inputMainNumber(number, dependencies)
 }
 
 const removeCellNotes = boardRepository => {
-    const selectedCell = getSelectedCell(getStoreState())
-    const notes = getNotesInfo(getStoreState())
+    const selectedCell = boardRepository.getSelectedCell()
+    const notes = boardRepository.getNotes()
     const notesBunch = getVisibileNotesBunchInCell(selectedCell, notes)
     if (!notesBunch.length) return
 
@@ -166,8 +160,8 @@ const removeCellNotes = boardRepository => {
 }
 
 const eraseMainNumber = boardRepository => {
-    const selectedCell = getSelectedCell(getStoreState())
-    const mainNumbers = getMainNumbers(getStoreState())
+    const selectedCell = boardRepository.getSelectedCell()
+    const mainNumbers = boardRepository.getMainNumbers()
     const cellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell)
 
     boardRepository.setCellMainNumber({
@@ -181,11 +175,11 @@ const eraseMainNumber = boardRepository => {
             value: cellMainValue,
         },
     }
-    boardRepository.addMove(constructMove(move))
+    boardRepository.addMove(constructMove(move, selectedCell))
 }
 
 export const eraseAction = boardRepository => {
-    if (isMainNumberNotEligibleToErase()) {
+    if (isMainNumberNotEligibleToErase(boardRepository)) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
             msg: 'Clues or Correctly filled cells can not be removed',
             visibleTime: 5000,
@@ -193,31 +187,31 @@ export const eraseAction = boardRepository => {
         return
     }
 
-    if (isMainNumberEligibleToErase()) {
+    if (isMainNumberEligibleToErase(boardRepository)) {
         eraseMainNumber(boardRepository)
     } else {
-        const mainNumbers = getMainNumbers(getStoreState())
-        const selectedCell = getSelectedCell(getStoreState())
+        const mainNumbers = boardRepository.getMainNumbers()
+        const selectedCell = boardRepository.getSelectedCell()
         if (!MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) removeCellNotes(boardRepository)
     }
 }
 
-const isMainNumberNotEligibleToErase = () => {
-    const selectedCell = getSelectedCell(getStoreState())
-    const mainNumbers = getMainNumbers(getStoreState())
+const isMainNumberNotEligibleToErase = boardRepository => {
+    const selectedCell = boardRepository.getSelectedCell()
+    const mainNumbers = boardRepository.getMainNumbers()
     return MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)
         && MainNumbersRecord.isCellFilledCorrectly(mainNumbers, selectedCell)
 }
 
-const isMainNumberEligibleToErase = () => {
-    const selectedCell = getSelectedCell(getStoreState())
-    const mainNumbers = getMainNumbers(getStoreState())
+const isMainNumberEligibleToErase = boardRepository => {
+    const selectedCell = boardRepository.getSelectedCell()
+    const mainNumbers = boardRepository.getMainNumbers()
     return MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)
         && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, selectedCell)
 }
 
 export const undoAction = boardRepository => {
-    const moves = getMoves(getStoreState())
+    const moves = boardRepository.getMoves()
     if (!moves.length) return
 
     const previousMove = moves[moves.length - 1]
@@ -256,7 +250,7 @@ const undoNotes = (previousMove, boardRepository) => {
 }
 
 export const fillPuzzle = boardRepository => {
-    const mainNumbers = getMainNumbers(getStoreState())
+    const mainNumbers = boardRepository.getMainNumbers()
 
     BoardIterators.forBoardEachCell(cell => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
@@ -275,7 +269,7 @@ const removeNotesBunchAndAddMove = (notesBunch, boardRepository) => {
             bunch: notesBunch,
         },
     }
-    boardRepository.addMove(constructMove(move))
+    boardRepository.addMove(constructMove(move, boardRepository.getSelectedCell()))
     boardRepository.eraseNotesBunch(notesBunch)
 }
 

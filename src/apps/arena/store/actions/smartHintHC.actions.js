@@ -3,7 +3,6 @@ import _isEmpty from '@lodash/isEmpty'
 import _isNil from '@lodash/isNil'
 
 import { EVENTS } from '../../../../constants/events'
-import { getStoreState } from '../../../../redux/dispatch.helpers'
 import { emit } from '../../../../utils/GlobalEventBus'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../RecordUtilities/boardNotes'
@@ -15,18 +14,11 @@ import {
     isMainNumberPresentInAnyHouseOfCell,
     getCellAxesValues,
 } from '../../utils/util'
-import { getNotesInfo } from '../selectors/board.selectors'
-import {
-    getTryOutCellsRestrictedNumberInputs,
-    getTryOutCellsRestrictedNumberInputsMsg,
-    getTryOutMainNumbers,
-    getTryOutNotes,
-    getTryOutSelectedCell,
-} from '../selectors/smartHintHC.selectors'
 
 /* Try Out actions */
-export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) => {
-    const selectedCell = getTryOutSelectedCell(getStoreState())
+export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles, dependencies) => {
+    const { smartHintRepository } = dependencies
+    const selectedCell = smartHintRepository.getTryOutSelectedCell()
     if (_isEmpty(selectedCell)) {
         showSnackBar({
             msg: 'please select some cell before filling number',
@@ -35,7 +27,7 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
         return {}
     }
 
-    if (!isValidInputNumberClick(number)) {
+    if (!isValidInputNumberClick(number, smartHintRepository)) {
         showSnackBar({
             msg: `try filling cell which is empty and has ${number} as a candidate there`,
             customStyles: snackBarCustomStyles,
@@ -43,9 +35,9 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
         return {}
     }
 
-    if (isRestrictedInputClick(number)) {
+    if (isRestrictedInputClick(number, smartHintRepository)) {
         showSnackBar({
-            msg: getTryOutCellsRestrictedNumberInputsMsg(getStoreState()),
+            msg: smartHintRepository.getTryOutCellsRestrictedNumberInputsMsg(),
             customStyles: snackBarCustomStyles,
         })
         return {}
@@ -53,21 +45,21 @@ export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles) =>
 
     return {
         inputNumber: number,
-        removableNotes: getRemovalbeNotesHostCells(number, focusedCells),
+        removableNotes: getRemovalbeNotesHostCells(number, focusedCells, selectedCell, smartHintRepository.getTryOutNotes()),
     }
 }
 
-const isValidInputNumberClick = number => {
-    const selectedCell = getTryOutSelectedCell(getStoreState())
-    const mainNumbers = getTryOutMainNumbers(getStoreState())
-    const notes = getTryOutNotes(getStoreState())
+const isValidInputNumberClick = (number, smartHintRepository) => {
+    const selectedCell = smartHintRepository.getTryOutSelectedCell()
+    const mainNumbers = smartHintRepository.getTryOutMainNumbers()
+    const notes = smartHintRepository.getTryOutNotes()
     return !MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)
         && NotesRecord.isNotePresentInCell(notes, number, selectedCell)
 }
 
-const isRestrictedInputClick = inputNumber => {
-    const cellsRestrictedNumberInputs = getTryOutCellsRestrictedNumberInputs(getStoreState())
-    const selectedCell = getTryOutSelectedCell(getStoreState())
+const isRestrictedInputClick = (inputNumber, smartHintRepository) => {
+    const cellsRestrictedNumberInputs = smartHintRepository.getTryOutCellsRestrictedNumberInputs()
+    const selectedCell = smartHintRepository.getTryOutSelectedCell()
     const selectedCellAxesValue = getCellAxesValues(selectedCell)
     return (cellsRestrictedNumberInputs[selectedCellAxesValue] || []).includes(inputNumber)
 }
@@ -80,11 +72,9 @@ const showSnackBar = ({ msg, customStyles = {} }) => {
     })
 }
 
-const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
+const getRemovalbeNotesHostCells = (inputNumber, focusedCells, selectedCell, notes) => {
     const result = []
 
-    const selectedCell = getTryOutSelectedCell(getStoreState())
-    const notes = getTryOutNotes(getStoreState())
     focusedCells.forEach(cell => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
@@ -102,11 +92,16 @@ const getRemovalbeNotesHostCells = (inputNumber, focusedCells) => {
     return result
 }
 
-export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles) => {
-    const selectedCell = getTryOutSelectedCell(getStoreState())
+export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles, dependencies) => {
+    const { smartHintRepository, boardRepository } = dependencies
+    const selectedCell = smartHintRepository.getTryOutSelectedCell()
     if (_isNil(selectedCell)) return []
 
-    if (!cellHasTryOutInput(selectedCell)) {
+    const boardMainNumbers = {
+        tryOutMainNumbers: smartHintRepository.getTryOutMainNumbers(),
+        actualMainNumbers: boardRepository.getMainNumbers(),
+    }
+    if (!cellHasTryOutInput(selectedCell, boardMainNumbers)) {
         showSnackBar({
             msg: 'you can only erase from cells which were filled after this hint is displayed',
             customStyles: snackBarCustomStyles,
@@ -114,14 +109,14 @@ export const eraseTryOutNumber = (focusedCells, snackBarCustomStyles) => {
         return []
     }
 
-    return getNotesToEnterHostCells(focusedCells)
+    return getNotesToEnterHostCells(focusedCells, dependencies)
 }
 
-const getNotesToEnterHostCells = focusedCells => {
-    const selectedCell = getTryOutSelectedCell(getStoreState())
-    const tryOutMainNumbers = getTryOutMainNumbers(getStoreState())
-    const actualNotesInfo = getNotesInfo(getStoreState())
+const getNotesToEnterHostCells = (focusedCells, dependencies) => {
+    const { smartHintRepository, boardRepository } = dependencies
 
+    const selectedCell = smartHintRepository.getTryOutSelectedCell()
+    const tryOutMainNumbers = smartHintRepository.getTryOutMainNumbers()
     const numberToBeErased = MainNumbersRecord.getCellMainValue(tryOutMainNumbers, selectedCell)
 
     // TODO: make it efficient
@@ -130,15 +125,16 @@ const getNotesToEnterHostCells = focusedCells => {
     mainNumbersStateAfterErase[selectedCell.row][selectedCell.col].value = 0
 
     const result = []
+    const actualNotesInfo = boardRepository.getNotes()
     focusedCells.forEach(cell => {
         if (areSameCells(cell, selectedCell)) {
             result.push({
                 cell,
-                notes: NotesRecord.getCellVisibleNotesList(actualNotesInfo, cell).filter(note => shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase)),
+                notes: NotesRecord.getCellVisibleNotesList(actualNotesInfo, cell).filter(note => shouldSpawnNoteInCell(note, cell, mainNumbersStateAfterErase, dependencies)),
             })
         } else if (
             !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
-            && shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase)
+            && shouldSpawnNoteInCell(numberToBeErased, cell, mainNumbersStateAfterErase, dependencies)
         ) {
             result.push({
                 cell,
@@ -150,9 +146,10 @@ const getNotesToEnterHostCells = focusedCells => {
     return result
 }
 
-const shouldSpawnNoteInCell = (note, cell, mainNumbersStateAfterErase) => {
-    const actualNotesInfo = getNotesInfo(getStoreState())
-    const tryOutNotesInfo = getTryOutNotes(getStoreState())
+const shouldSpawnNoteInCell = (note, cell, mainNumbersStateAfterErase, dependencies) => {
+    const { smartHintRepository, boardRepository } = dependencies
+    const actualNotesInfo = boardRepository.getNotes()
+    const tryOutNotesInfo = smartHintRepository.getTryOutNotes()
     return (
         NotesRecord.isNotePresentInCell(actualNotesInfo, note, cell)
         && !NotesRecord.isNotePresentInCell(tryOutNotesInfo, note, cell)

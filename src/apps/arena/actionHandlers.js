@@ -33,8 +33,6 @@ import {
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
 import { consoleLog } from '../../utils/util'
 
-import { getMainNumbers } from './store/selectors/board.selectors'
-import { getStoreState } from '../../redux/dispatch.helpers'
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
@@ -243,8 +241,9 @@ const handleCustomPuzzleHCClose = ({ setState }) => {
     setState({ showCustomPuzzleHC: false })
 }
 
-const handleSharePuzzle = () => {
-    const mainNumbers = getMainNumbers(getStoreState())
+const handleSharePuzzle = ({ params: { dependencies } }) => {
+    const { boardRepository } = dependencies
+    const mainNumbers = boardRepository.getMainNumbers()
 
     let puzzleString = ''
     BoardIterators.forBoardEachCell(({ row, col }) => {

@@ -27,4 +27,8 @@ export interface BoardRepository {
     eraseNotesBunch: (notesBunch: ToggleNotes) => void;
     addMove: (move: Move) => void;
     popMove: () => void;
+    getMainNumbers: () => MainNumbers;
+    getMoves: () => Move[];
+    getNotes: () => Notes;
+    getSelectedCell: () => Cell;
 }

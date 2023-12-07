@@ -1,6 +1,9 @@
+import {
+    getMainNumbers, getMoves, getNotesInfo, getSelectedCell,
+} from '../../apps/arena/store/selectors/board.selectors'
 import { boardActions } from '../../apps/arena/store/reducers/board.reducers'
 
-import { invokeDispatch } from '../../redux/dispatch.helpers'
+import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 
 import type {
     BoardRepository as BoardRepositoryInterface,
@@ -42,4 +45,8 @@ export const BoardRepository: BoardRepositoryInterface = {
     popMove: () => {
         invokeDispatch(popMove())
     },
+    getMainNumbers: () => getMainNumbers(getStoreState()),
+    getMoves: () => getMoves(getStoreState()),
+    getNotes: () => getNotesInfo(getStoreState()),
+    getSelectedCell: () => getSelectedCell(getStoreState()),
 }
