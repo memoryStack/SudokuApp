@@ -3,7 +3,7 @@ import { GAME_STATE } from '@resources/constants'
 import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 import { Dependencies } from '@contexts/DependencyContext'
 import _isEmpty from '@lodash/isEmpty'
-import { NumberEraseData, NumberInputData } from 'src/interfaces/smartHintRepository'
+import { NumberEraseData, NumberInputData } from '../../../interfaces/smartHintRepository'
 import { applyHintAction } from '../store/actions/board.actions'
 import {
     inputTryOutNumber,
@@ -66,7 +66,7 @@ const handleNumberClick = ({
 
     const { smartHintRepository, boardRepository } = dependencies
     const isCellFilledInTryOut = cellHasTryOutInput(selectedCell, {
-        tryOutMainNumbers: smartHintRepository.getTryOutMainNumbers(),
+        tryOutMainNumbers: smartHintRepository.getTryOutMainNumbers() as MainNumbers,
         actualMainNumbers: boardRepository.getMainNumbers(),
     })
     if (isCellFilledInTryOut) {

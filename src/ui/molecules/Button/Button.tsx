@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { StyleProp, ViewStyle } from 'react-native'
+import { StyleProp, ViewStyle, TextStyle } from 'react-native'
 
 import _noop from '@lodash/noop'
 
@@ -19,7 +19,7 @@ interface Props {
     onPress: () => unknown,
     containerStyle?: StyleProp<ViewStyle>,
     label?: string,
-    textStyles?: StyleProp<ViewStyle>,
+    textStyles?: StyleProp<TextStyle>,
     avoidDefaultContainerStyles?: boolean,
     type?: BUTTON_TYPES,
     state?: BUTTON_STATES,

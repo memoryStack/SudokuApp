@@ -19,11 +19,10 @@ import { Action, OnAction } from '@utils/hocs/withActions/types'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
-import { useDependency } from 'src/hooks/useDependency'
-import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
-
+import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
+import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 import { Touchable } from '../../components/Touchable'
 
 import {

@@ -17,7 +17,7 @@ import {
     openSmartHintHC, gotoTryOutStep, getInputPanel, closeSmartHintHC, gotoApplyHintStep,
 } from '@utils/testing/smartHints'
 
-import { BoardControllerRepository } from 'src/repositories/boardControllerRepository'
+import { BoardControllerRepository } from '../../../repositories/boardControllerRepository'
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import {
