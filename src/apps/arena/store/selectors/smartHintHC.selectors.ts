@@ -104,3 +104,8 @@ export const getTotalStepsCount = (state: RootState) => {
     if (!getShowSmartHint(state)) return 0
     return (state.smartHintHC.hints[0].steps || []).length || 1
 }
+
+export const getTryOutInputsColors = (state: RootState) => {
+    if (!getShowSmartHint(state)) return null
+    return state.smartHintHC.hints[0].tryOutInputsColors
+}

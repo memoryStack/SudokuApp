@@ -111,3 +111,33 @@ export const YWING = {
             + ' come in {{eliminableNotesHostCells}} cells',
     },
 }
+
+export const REMOTE_PAIRS = {
+    NO_INPUT: 'try to fill candidates highlighted in red color to see why these should be removed',
+    CHAIN_CELL_WITHOUT_CANDIDATE: 'no candidate is present in cell',
+    REMOVABLE_NOTES_CELL_FILLED: {
+        ALL_CHAIN_CELLS_EMPTY: 'now fill Chain cells in the sequence given by arrows to understand why {{removableNotesFilled}} shouldn\'t be filled'
+            + ' in {{removableNotesFilledHostCells}}',
+        CHAIN_CELLS_PARTIALLY_FILLED: 'keep filling Chain cells to understand the problem created after filling {{removableNotesFilled}}'
+            + ' in {{removableNotesFilledHostCells}}',
+        CHAIN_CELL_WITHOUT_CANDIDATE: {
+            ONLY_REMOVABLE_NOTES_FILLED: 'no candidates are left for {{emptyCells}}. to fix it, remove number from {{removableNotesFilledHostCells}}',
+            BOTH_COLORS_CANDIDATES_FILLED: 'no candidates are left for {{emptyCells}}. to fill numbers in Chain cells properly, first remove number'
+                + ' from {{removableNotesFilledHostCells}} and then you will have to erase some numbers from Chain cells as well so that Chain cells'
+                + ' are filled by same color numbers only',
+        },
+    },
+    CHAIN_CELLS_BOTH_COLOR_CANDIDATES_FILLED: {
+        CELL_WITH_NO_CANDIDATES_IN_PROGRESS: 'Chain cells are filled with both colors numbers. keep filling the Chain to understand why it will be'
+            + ' filled by same color numbers only',
+        CELL_WITH_NO_CANDIDATES: 'no candidates are left for {{emptyCells}}. to fix this error either remove number from'
+            + ' {{colorACells}} or from {{colorBCells}} because this Chain can be filled by same colors numbers only otherwise'
+            + ' some cells will be left without any candidates.',
+    },
+    VALID_FILL: {
+        PARTIAL: 'till now you have filled Chain cells correctly. fill other cells as well to fully understand this technique',
+        FULL: 'yayy! you have successfully filled all the cells in the Chain. this is one of the solutions to fill these cells.'
+            + ' also notice that all the candidates highlighted in red color from {{removableNotesHostCells}} are removed.'
+        + ' try to fill these Chain cells in another way and you will find that the result will be same.',
+    },
+}

@@ -48,12 +48,15 @@ const GameInputPanel_ = ({ onAction }) => {
         if (!_isEqual(numbersVisible, numbersNewVisibility)) setNumbersVisibility(numbersNewVisibility)
     }, [mainNumbers, numbersVisible])
 
+    const shouldAddNumberInPanel = () => true
+
     return (
         <Inputpanel
             numbersVisible={numbersVisible}
             onAction={onAction}
             disableNumbersInput={!isGameActive}
             disableEraser={!isGameActive}
+            shouldAddNumberInPanel={shouldAddNumberInPanel}
         />
     )
 }

@@ -4,6 +4,7 @@ import { hiddenGroupTryOutAnalyser } from './hiddenGroups'
 import { perfectXWingTryOutAnalyser, finnedXWingTryOutAnalyser } from './xWings'
 import { nakedDoubleTryOutAnalyser, nakedTrippleTryOutAnalyser } from './nakedGroups'
 import { yWingTryOutAnalyser } from './yWing'
+import { remotePairsTryOutAnalyser } from './remotePairs'
 
 const tryOutAnalysers = {
     [HINTS_IDS.NAKED_DOUBLE]: nakedDoubleTryOutAnalyser,
@@ -13,6 +14,7 @@ const tryOutAnalysers = {
     [HINTS_IDS.PERFECT_X_WING]: perfectXWingTryOutAnalyser,
     [HINTS_IDS.FINNED_X_WING]: finnedXWingTryOutAnalyser,
     [HINTS_IDS.Y_WING]: yWingTryOutAnalyser,
+    [HINTS_IDS.REMOTE_PAIRS]: remotePairsTryOutAnalyser,
 }
 
 export const analyseTryOutInput = ({ hintType, data, boardInputs }) => {

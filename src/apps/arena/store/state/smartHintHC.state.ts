@@ -8,6 +8,7 @@ import {
     Chain,
     InputPanelNumbersVisibility,
     RemovableNotesInfo,
+    TryOutInputsColors,
 } from '../../utils/smartHints/types'
 
 export type HintSvgData = {
@@ -31,6 +32,7 @@ export type HintsInfo = {
     cellsRestrictedNumberInputs?: unknown
     restrictedNumberInputMsg?: string
     svgProps?: HintSvgData
+    tryOutInputsColors?: TryOutInputsColors
 }
 
 type SmartHintTryOutBoardData = {

@@ -1,5 +1,7 @@
 // this interface is defined by domain
-import { CellsFocusData, ClickableCells, RemovableNotesInfo } from '../apps/arena/utils/smartHints/types'
+import {
+    CellsFocusData, ClickableCells, RemovableNotesInfo, TryOutInputsColors,
+} from '../apps/arena/utils/smartHints/types'
 
 type ToggleNotes = {
     cell: Cell
@@ -36,4 +38,5 @@ export interface SmartHintRepository {
     getTryOutCellsRestrictedNumberInputsMsg: () => string
     getUnclickableCellClickInTryOutMsg: () => string | undefined
     getCellToFocusData: () => CellsFocusData | null
+    getTryOutInputsColors: () => TryOutInputsColors | null
 }

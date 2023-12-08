@@ -11,7 +11,6 @@ import { OnAction } from '@utils/hocs/withActions/types'
 
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import { BoardIterators, CellEachNoteCallback } from '../utils/classes/boardIterators'
-import { useIsHintTryOutStep } from '../hooks/smartHints'
 
 import { getStyles } from './inputPanel.styles'
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
@@ -26,6 +25,7 @@ interface Props {
     singleRow?: boolean
     disableNumbersInput?: boolean
     disableEraser?: boolean
+    shouldAddNumberInPanel: (number: number) => boolean
 }
 
 const Inputpanel_: React.FC<Props> = ({
@@ -34,9 +34,8 @@ const Inputpanel_: React.FC<Props> = ({
     singleRow = false,
     disableNumbersInput = false,
     disableEraser = false,
+    shouldAddNumberInPanel = _noop,
 }) => {
-    const isHintTryOut = useIsHintTryOutStep()
-
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
     const styles = useMemo(() => getStyles(CELL_WIDTH), [CELL_WIDTH])
@@ -79,8 +78,6 @@ const Inputpanel_: React.FC<Props> = ({
         />
     )
 
-    const isNumberEligibleToAddInPanel = (number: InputNumber) => !isHintTryOut || (isHintTryOut && numbersVisible[number])
-
     const renderHorizontalSeparator = () => <View key="hori_seperator" style={styles.horizontalSeperator} />
 
     const renderPanelRow = (rowItems: React.ReactElement[], key: string) => (
@@ -93,7 +90,7 @@ const Inputpanel_: React.FC<Props> = ({
         const rows = []
         let rowItems: React.ReactElement[] = []
         BoardIterators.forCellEachNote(number => {
-            if (isNumberEligibleToAddInPanel(number)) rowItems.push(renderInputNumber(number))
+            if (shouldAddNumberInPanel(number)) rowItems.push(renderInputNumber(number))
             if (rowItems.length >= 5 && !singleRow) {
                 rows.push(renderPanelRow(rowItems, 'rowOne'))
                 rowItems = []

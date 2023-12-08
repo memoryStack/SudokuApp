@@ -61,6 +61,8 @@ const CustomPuzzle_ = ({
         return styles.clueNumColor
     }
 
+    const shouldAddNumberInPanel = useCallback(() => true, [])
+
     return (
         <BottomDragger
             ref={customPuzzleRef}
@@ -87,7 +89,7 @@ const CustomPuzzle_ = ({
                     getCellMainNumberFontColor={getCustomPuzzleMainNumFontColor}
                 />
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel onAction={onAction} />
+                    <Inputpanel onAction={onAction} shouldAddNumberInPanel={shouldAddNumberInPanel} />
                 </View>
                 <Button containerStyle={styles.playButtonContainer} onPress={handlePlayClick} label={PLAY} />
             </View>

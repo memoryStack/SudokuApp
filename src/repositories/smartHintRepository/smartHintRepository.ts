@@ -10,6 +10,7 @@ import {
     getTryOutCellsRestrictedNumberInputs,
     getUnclickableCellClickInTryOutMsg,
     getCellToFocusData,
+    getTryOutInputsColors,
 } from '../../apps/arena/store/selectors/smartHintHC.selectors'
 import {
     SmartHintRepository as SmartHintRepositoryInterface,
@@ -70,4 +71,5 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
     getTryOutCellsRestrictedNumberInputs: () => getTryOutCellsRestrictedNumberInputs(getStoreState()),
     getUnclickableCellClickInTryOutMsg: () => getUnclickableCellClickInTryOutMsg(getStoreState()),
     getCellToFocusData: () => getCellToFocusData(getStoreState()),
+    getTryOutInputsColors: () => getTryOutInputsColors(getStoreState()),
 }

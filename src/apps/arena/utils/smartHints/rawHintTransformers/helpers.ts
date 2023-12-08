@@ -27,3 +27,5 @@ export const getHouseNumText = (house: House) => {
 }
 
 export const getHouseNumAndName = (house: House) => `${getHouseNumText(house)} ${HOUSE_TYPE_VS_FULL_NAMES[house.type].FULL_NAME}`
+
+export const joinStringsListWithArrow = (list: string[]): string => list.join(` ${String.fromCodePoint(0x279d)} `)

@@ -82,6 +82,12 @@ export type CellsRestrictedNumberInputs = {
     [cellKey: string]: NoteValue[]
 }
 
+export type TryOutInputsColors = {
+    [cellNum: number]: {
+        [mainNumber: number]: string
+    }
+}
+
 // TODO: add more keys here to support for other hints as well
 export type TransformedRawHint = {
     cellsToFocusData: CellsFocusData
@@ -100,6 +106,7 @@ export type TransformedRawHint = {
     cellsRestrictedNumberInputs?: CellsRestrictedNumberInputs
     restrictedNumberInputMsg?: string
     svgProps?: { data: Chain }
+    tryOutInputsColors?: TryOutInputsColors
 }
 
 export type SmartHintsColorSystem = {

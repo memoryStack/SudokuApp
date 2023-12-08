@@ -50,6 +50,7 @@ import {
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
 } from './constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
+import { InputPanelNumbersVisibility } from '../utils/smartHints/types'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -212,7 +213,12 @@ const SmartHintHC_: React.FC<Props> = ({
 
     const renderTryOutContent = () => (
         <>
-            <Inputpanel numbersVisible={inputPanelNumbersVisibility} onAction={onAction} singleRow />
+            <Inputpanel
+                numbersVisible={inputPanelNumbersVisibility}
+                onAction={onAction}
+                singleRow
+                shouldAddNumberInPanel={number => (inputPanelNumbersVisibility as InputPanelNumbersVisibility)[number]}
+            />
             {renderHintText(tryOutResult.msg, [styles.tryOutResult, getTryOutResultTextStyle()])}
         </>
     )

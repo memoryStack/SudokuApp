@@ -12,6 +12,7 @@ import { emit } from '@utils/GlobalEventBus'
 import _get from '@lodash/get'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
+import _isNil from '@lodash/isNil'
 import { useDependency } from '../../../hooks/useDependency'
 import { EVENTS } from '../../../constants/events'
 import withActions from '../../../utils/hocs/withActions'
@@ -35,6 +36,7 @@ import { ACTION_TYPES } from './actionHandlers'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { getStyles } from './puzzleBoard.styles'
+import { convertBoardCellToNum } from '../utils/cellTransformers'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const dependencies = useDependency()
@@ -124,6 +126,15 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         const actualMainNumbers = boardRepository.getMainNumbers()
         if (isHintTryOut && cellHasTryOutInput(cell, { tryOutMainNumbers: mainNumbers, actualMainNumbers })) {
             const removableNotes = smartHintRepository.getRemovableNotes()
+
+            const tryOutInputsColors = smartHintRepository.getTryOutInputsColors()
+            const cellNum = convertBoardCellToNum(cell)
+            const cellMainValue = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
+            const fontColor = _get(tryOutInputsColors, [cellNum, cellMainValue])
+            if (!_isNil(fontColor)) {
+                return { color: fontColor }
+            }
+
             return removableNoteFilledInCell(cell, removableNotes, mainNumbers) ? styles.removableNoteTryOutInputColor
                 : styles.tryOutInputColor
         }

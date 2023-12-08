@@ -38,6 +38,7 @@ type HintExplainationTexts = {
     [HINTS_IDS.FINNED_X_WING]: string[]
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: string[]
     [HINTS_IDS.Y_WING]: string[]
+    [HINTS_IDS.REMOTE_PAIRS]: string[]
 }
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
@@ -160,7 +161,6 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' {{hostHousePluralName}}, in all cases {{candidate}} can\'t come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.',
     ],
     [HINTS_IDS.Y_WING]: [
-
         'look for a cell which has only two candidates in it. we will call it pivot cell.'
         + '\nin puzzle {{pivotCell}} is highlighted as pivot cell',
 
@@ -179,5 +179,14 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or'
         + ' {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}.'
         + ' so {{removableNotesHostCells}} can\'t have {{commonNoteInWings}} as their solution',
+    ],
+    [HINTS_IDS.REMOTE_PAIRS]: [
+        'Notice the Chain of cells {{chain}}. All of these cells have {{remotePairNotes}} as their candidates.'
+        + ' Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either'
+        + ' by candidates in {{colorA}} or by candidates in {{colorB}}',
+
+        'Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.'
+        + '\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can\'t come because'
+        + ' {{remotePairNotes}} will always fill {{exampleChainCells}}',
     ],
 }

@@ -42,6 +42,6 @@ export const isCellWithoutAnyCandidate = (cell: Cell, boardInputs: BoardInputs) 
     && NotesRecord.getCellVisibleNotesCount(tryOutNotes, cell) === 0
 }
 
-export const getCellsWithNoCandidates = (focusedCells: Cell[], boardInputs: BoardInputs) => focusedCells.filter(cell => isCellWithoutAnyCandidate(cell, boardInputs))
+export const getCellsWithNoCandidates = (cells: Cell[], boardInputs: BoardInputs) => cells.filter(cell => isCellWithoutAnyCandidate(cell, boardInputs))
 
 export const anyCellHasTryOutInput = (cells: Cell[], { tryOutMainNumbers, actualMainNumbers }: BoardInputs) => _some(cells, (cell: Cell) => cellHasTryOutInput(cell, { tryOutMainNumbers, actualMainNumbers }))

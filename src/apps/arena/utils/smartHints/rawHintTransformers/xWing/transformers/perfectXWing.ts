@@ -31,6 +31,7 @@ import { XWingRawHint } from '../../../xWing/types'
 import {
     CellsFocusData, SmartHintsColorSystem, CellHighlightData, TransformedRawHint,
 } from '../../../types'
+import { joinStringsListWithArrow } from '../../helpers'
 
 const highlightXWingCells = (
     cells: Cell[],
@@ -114,9 +115,10 @@ const getXWingCornersText = (xWing: XWingRawHint) => {
     const {
         topLeft, topRight, bottomLeft, bottomRight,
     } = getXWingCornerCells(xWing)
-    return [topLeft, topRight, bottomRight, bottomLeft, topLeft]
+
+    const cornersAxesList = [topLeft, topRight, bottomRight, bottomLeft, topLeft]
         .map(cell => getCellAxesValues(cell))
-        .join(` ${String.fromCodePoint(0x279d)} `)
+    return joinStringsListWithArrow(cornersAxesList)
 }
 
 const getHintChunks = (xWing: XWingRawHint) => {
