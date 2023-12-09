@@ -5,6 +5,7 @@ describe('getEmptyRectangleRawHints()', () => {
     test('', () => {
         const puzzle = '700056038108420000000000000500300000040080700001000240003000000000100005050007060'
         const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getEmptyRectangleRawHints()).toEqual({})
+        const expectedResult = {}
+        expect(getEmptyRectangleRawHints()).toEqual(expectedResult)
     })
 })
