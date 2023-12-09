@@ -43,6 +43,7 @@ enum HINTS_IDS {
     Y_WING = 'Y_WING',
     OMISSION = 'OMISSION',
     REMOTE_PAIRS = 'REMOTE_PAIRS',
+    EMPTY_RECTANGLE = 'EMPTY_RECTANGLE',
     ALL = 'ALL',
 }
 
@@ -57,6 +58,7 @@ const HINT_LABELS = {
     [HINTS_IDS.Y_WING]: 'Y-Wing',
     [HINTS_IDS.OMISSION]: 'Omission',
     [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
+    [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
 }
 
 const HINTS_MENU_ITEMS = [
@@ -99,6 +101,10 @@ const HINTS_MENU_ITEMS = [
     {
         label: HINT_LABELS[HINTS_IDS.REMOTE_PAIRS],
         id: HINTS_IDS.REMOTE_PAIRS,
+    },
+    {
+        label: HINT_LABELS[HINTS_IDS.EMPTY_RECTANGLE],
+        id: HINTS_IDS.EMPTY_RECTANGLE,
     },
 ]
 

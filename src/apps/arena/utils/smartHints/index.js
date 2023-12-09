@@ -10,6 +10,7 @@ import { getXWingRawHints } from './xWing'
 import { getYWingRawHints } from './yWing/yWing'
 import { getOmissionRawHints } from './omission/omission'
 import { getRemotePairsRawHints } from './remotePairs/remotePairs'
+import { getEmptyRectangleRawHints } from './emptyRectangle'
 
 import {
     transformNakedSingleRawHint,
@@ -53,6 +54,7 @@ const HINT_ID_VS_HANDLERS = {
     [HINTS_IDS.Y_WING]: (mainNumbers, notesData, possibleNotes) => getYWingRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.OMISSION]: (mainNumbers, notesData, possibleNotes) => getOmissionRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData, possibleNotes) => getRemotePairsRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.EMPTY_RECTANGLE]: (mainNumbers, notesData, possibleNotes) => getEmptyRectangleRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
 }
 
 const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
