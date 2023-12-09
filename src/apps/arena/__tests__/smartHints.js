@@ -9,15 +9,15 @@ import {
     expectMainNumberPresentInCell,
     getCellByPosition,
     renderScreenAndWaitForPuzzleStart,
+    renderScreenAndWaitCustomPuzzleToStart,
 } from '@utils/testing/arena'
 
 import { BADGE_TEST_ID } from '@ui/atoms/Badge'
 
 import {
-    openSmartHintHC, gotoTryOutStep, getInputPanel, closeSmartHintHC, gotoApplyHintStep,
+    openSmartHintHC, gotoTryOutStep, getInputPanel, closeSmartHintHC, gotoApplyHintStep, applyHint,
 } from '@utils/testing/smartHints'
 
-import { BoardControllerRepository } from '../../../repositories/boardControllerRepository'
 import { BOTTOM_DRAGGER_OVERLAY_TEST_ID } from '../../components/BottomDragger/bottomDragger.constants'
 import { HINTS_MENU_CONTAINER_TEST_ID } from '../hintsMenu/hintsMenu.constants'
 import {
@@ -29,7 +29,16 @@ import {
 import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.constants'
 import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 
-jest.mock('../../../adapters/puzzle/puzzle')
+jest.mock('../../../adapters/puzzle/puzzle', () => {
+    const Puzzle = {
+        getSudokuPuzzle: () => Promise.resolve({
+            clues: [9, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2, 7, 0, 6, 1, 0, 2, 7, 0, 0, 0, 0, 9, 5, 0, 0, 0, 0, 0, 4, 0, 8, 0, 0, 1, 0, 0, 9, 0, 6, 0, 0, 0, 0, 0, 7, 8, 0, 0, 0, 0, 8, 5, 0, 1, 4, 0, 8, 5, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2],
+            solution: [9, 2, 7, 5, 3, 8, 4, 6, 1, 5, 3, 8, 1, 6, 4, 9, 2, 7, 4, 6, 1, 9, 2, 7, 5, 3, 8, 2, 9, 5, 7, 8, 3, 6, 1, 4, 7, 8, 3, 4, 1, 6, 2, 9, 5, 6, 1, 4, 2, 9, 5, 7, 8, 3, 3, 7, 9, 8, 5, 2, 1, 4, 6, 8, 5, 2, 6, 4, 1, 3, 7, 9, 1, 4, 6, 3, 7, 9, 8, 5, 2],
+        }),
+        validatePuzzle: jest.fn(),
+    }
+    return { Puzzle }
+})
 
 describe('Hint/Smart Hints', () => {
     beforeEach(() => {
@@ -153,22 +162,26 @@ describe('Hint/Smart Hints', () => {
     })
 
     test('hints menu will not be opened once available hints are 0', async () => {
-        await renderScreenAndWaitForPuzzleStart()
+        // this puzzle will be solved completely by Naked Singles
+        const puzzle = '040300800360007041805200300400090008096578420700020006002004507930700012007002030'
 
-        // exhaust all hints, using this approach of setting store directly
-        //  to make this test-case faster
+        // eslint-disable-next-line global-require
+        const { Puzzle } = require('../../../adapters/puzzle')
+        Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
+            count: 1,
+            solution: [2, 4, 1, 3, 6, 9, 8, 7, 5, 3, 6, 9, 8, 5, 7, 2, 4, 1, 8, 7, 5, 2, 4, 1, 3, 6, 9, 4, 2, 3, 1, 9, 6, 7, 5, 8, 1, 9, 6, 5, 7, 8, 4, 2, 3, 7, 5, 8, 4, 2, 3, 1, 9, 6, 6, 1, 2, 9, 3, 4, 5, 8, 7, 9, 3, 4, 7, 8, 5, 6, 1, 2, 5, 8, 7, 6, 1, 2, 9, 3, 4],
+        }))
+        await renderScreenAndWaitCustomPuzzleToStart(puzzle)
+
         const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
-        await waitFor(() => {
-            // coupled with implementation detail
-            const currentHintsLeft = BoardControllerRepository.getHintsLeftCount()
-            BoardControllerRepository.setHintsLeftCount(currentHintsLeft - 1)
-
+        await waitFor(async () => {
+            await applyHint(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
             expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(0)
-        })
+        }, { timeout: 15000 })
         fireEvent.press(screen.getByText('Hint'))
 
         expect(screen.queryByTestId(HINTS_MENU_CONTAINER_TEST_ID)).not.toBeOnTheScreen()
-    })
+    }, 15000)
 
     test('clicking on Apply Hint will apply the recommended change in puzzle (remove notes)', async () => {
         await renderScreenAndWaitForPuzzleStart()

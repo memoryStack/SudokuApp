@@ -32,7 +32,7 @@ export const getPuzzleDataFromPuzzleString = puzzleString => {
     for (let i = 0; i < puzzleString.length; i++) {
         const { row, col } = convertBoardCellNumToCell(i)
         mainNumbers[row][col].value = parseInt(puzzleString[i], 10)
-        mainNumbers[row][col].isClue = true
+        mainNumbers[row][col].isClue = mainNumbers[row][col].value !== 0
     }
 
     return {

@@ -93,3 +93,13 @@ export const assertHintsLeft = hintsLeft => {
     boardController.getByTestId(BADGE_TEST_ID)
     expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(hintsLeft)
 }
+
+export const applyHint = async hint => {
+    await openSmartHintHC(hint)
+    const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+    await gotoApplyHintStep(smartHintHC)
+    act(() => {
+        fireEvent.press(screen.getByText('Apply Hint'))
+        jest.advanceTimersByTime(500)
+    })
+}
