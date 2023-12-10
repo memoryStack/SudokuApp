@@ -20,7 +20,7 @@ const boardCellToCellNum = ({ row, col }: Cell) => row * HOUSES_COUNT + col
 
 export const convertBoardCellToNum = (cell: Cell) => boardCellToCellNum(cell)
 
-const cellNumToBoardCell = (cellNum: number) => ({
+const cellNumToBoardCell = (cellNum: number): Cell => ({
     row: Math.floor(cellNum / HOUSES_COUNT),
     col: cellNum % HOUSES_COUNT,
 })

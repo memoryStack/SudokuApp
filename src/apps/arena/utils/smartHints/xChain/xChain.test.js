@@ -6,11 +6,11 @@ import {
     getNoteHostCellsInHouse,
     getAllStrongLinks,
     getNoteWeakLinks,
-    getFirstNoteXChain,
+    getRawXChainHints,
     getTrimWeakLinksFromEdges,
     analyzeChain,
     alternateChainLinks,
-    removableNotesCountByChain,
+    getRemovableNotesHostCellsByChain,
     getCellsFromChain,
     getChosenChainFromValidSubChains,
     removeRedundantLinks,
@@ -212,31 +212,24 @@ describe('getNoteWeakLinks()', () => {
     })
 })
 
-describe('getFirstNoteXChain()', () => {
+describe('getRawXChainHints()', () => {
     test('will return first note which has a valid X-Chain cycle', () => {
-        const expectedResult = {
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const expectedResult = [{
             note: 7,
             chain: [
-                {
-                    start: 1, end: 8, type: 'STRONG', isLast: true,
-                },
-                {
-                    start: 8, end: 16, type: 'WEAK', isLast: false,
-                },
-                {
-                    start: 16, end: 61, type: 'STRONG', isLast: false,
-                },
-                {
-                    start: 61, end: 56, type: 'WEAK', isLast: false,
-                },
-                {
-                    start: 56, end: 29, type: 'STRONG', isLast: true,
-                },
+                { row: 0, col: 1 },
+                { row: 0, col: 8 },
+                { row: 1, col: 7 },
+                { row: 6, col: 7 },
+                { row: 6, col: 2 },
+                { row: 3, col: 2 },
             ],
-        }
-        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
-        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getFirstNoteXChain(notes, possibleNotes)).toEqual(expectedResult)
+            removableNotesHostCells: [{ row: 3, col: 1 }],
+        }]
+        expect(getRawXChainHints(mainNumbers, notes, possibleNotes)).toEqual(expectedResult)
     })
 })
 
@@ -423,7 +416,7 @@ describe('getTrimWeakLinksFromEdges()', () => {
 })
 
 describe('analyzeChain()', () => {
-    describe('invalid chains returns passed chain as it is with a flag telling if valid chain found or not', () => {
+    describe('returns empty array as chain for invalid chains', () => {
         test('chain has less than 3 links after trimming weak links from edges', () => {
             const chain = [
                 {
@@ -436,9 +429,11 @@ describe('analyzeChain()', () => {
                     start: 8, end: 16, type: 'STRONG', isLast: true,
                 },
             ]
-            const expectedResult = { foundChain: false, chain }
+
             const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
             const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+
+            const expectedResult = { foundChain: false, chain: [] }
             expect(analyzeChain(7, chain, notes)).toEqual(expectedResult)
         })
 
@@ -463,8 +458,8 @@ describe('analyzeChain()', () => {
                     start: 72, end: 9, type: 'STRONG', isLast: true,
                 },
             ]
-            const expectedResult = { foundChain: false, chain }
 
+            const expectedResult = { foundChain: false, chain: [] }
             expect(analyzeChain(4, chain, _notes)).toEqual(expectedResult)
         })
     })
@@ -493,17 +488,20 @@ describe('analyzeChain()', () => {
             ]
             const expectedResult = {
                 foundChain: true,
-                chain: [
-                    {
-                        start: 40, end: 44, type: 'STRONG', isLast: true,
-                    },
-                    {
-                        start: 44, end: 52, type: 'WEAK', isLast: false,
-                    },
-                    {
-                        start: 52, end: 79, type: 'STRONG', isLast: true,
-                    },
-                ],
+                chain: {
+                    chain: [
+                        {
+                            start: 40, end: 44, type: 'STRONG', isLast: true,
+                        },
+                        {
+                            start: 44, end: 52, type: 'WEAK', isLast: false,
+                        },
+                        {
+                            start: 52, end: 79, type: 'STRONG', isLast: true,
+                        },
+                    ],
+                    removableNotesHostCells: [{ row: 8, col: 4 }],
+                },
             }
 
             expect(analyzeChain(3, chain, _notes)).toEqual(expectedResult)
@@ -535,23 +533,26 @@ describe('analyzeChain()', () => {
             ]
             const expectedResult = {
                 foundChain: true,
-                chain: [
-                    {
-                        start: 1, end: 8, type: 'STRONG', isLast: true,
-                    },
-                    {
-                        start: 8, end: 16, type: 'WEAK', isLast: false,
-                    },
-                    {
-                        start: 16, end: 61, type: 'STRONG', isLast: false,
-                    },
-                    {
-                        start: 61, end: 56, type: 'WEAK', isLast: false,
-                    },
-                    {
-                        start: 56, end: 29, type: 'STRONG', isLast: true,
-                    },
-                ],
+                chain: {
+                    chain: [
+                        {
+                            start: 1, end: 8, type: 'STRONG', isLast: true,
+                        },
+                        {
+                            start: 8, end: 16, type: 'WEAK', isLast: false,
+                        },
+                        {
+                            start: 16, end: 61, type: 'STRONG', isLast: false,
+                        },
+                        {
+                            start: 61, end: 56, type: 'WEAK', isLast: false,
+                        },
+                        {
+                            start: 56, end: 29, type: 'STRONG', isLast: true,
+                        },
+                    ],
+                    removableNotesHostCells: [{ row: 3, col: 1 }],
+                },
             }
             const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
             const { notes } = getPuzzleDataFromPuzzleString(puzzle)
@@ -639,7 +640,7 @@ describe('alternateChainLinks()', () => {
     })
 })
 
-describe('getAllValidSubChains() ', () => {
+describe('getAllValidSubChains()', () => {
     // will analyze all the subchains of odd length, starting at 3
     // subchains must start and end with STRONG link
     // STRONG and WEAK links must be alternate
@@ -679,7 +680,7 @@ describe('getAllValidSubChains() ', () => {
                         start: 52, end: 79, type: 'STRONG', isLast: true,
                     },
                 ],
-                removableNotesCount: 1,
+                removableNotesHostCells: [{ row: 8, col: 4 }],
             },
             {
                 chain: [
@@ -699,7 +700,7 @@ describe('getAllValidSubChains() ', () => {
                         start: 79, end: 69, type: 'STRONG', isLast: true,
                     },
                 ],
-                removableNotesCount: 1,
+                removableNotesHostCells: [{ row: 7, col: 3 }],
             },
         ]
 
@@ -776,7 +777,7 @@ describe('getAllValidSubChains() ', () => {
             }, {
                 start: 17, end: 25, type: 'STRONG', isLast: true,
             }],
-            removableNotesCount: 1,
+            removableNotesHostCells: [{ row: 2, col: 4 }],
         }, {
             chain: [{
                 start: 17, end: 25, type: 'STRONG', isLast: true,
@@ -785,7 +786,7 @@ describe('getAllValidSubChains() ', () => {
             }, {
                 start: 61, end: 62, type: 'STRONG', isLast: true,
             }],
-            removableNotesCount: 2,
+            removableNotesHostCells: [{ row: 7, col: 8 }, { row: 8, col: 8 }],
         }, {
             chain: [{
                 start: 4, end: 14, type: 'STRONG', isLast: true,
@@ -798,14 +799,14 @@ describe('getAllValidSubChains() ', () => {
             }, {
                 start: 61, end: 62, type: 'STRONG', isLast: true,
             }],
-            removableNotesCount: 1,
+            removableNotesHostCells: [{ row: 6, col: 4 }],
         }]
 
         expect(getAllValidSubChains(4, chain, _notes)).toEqual(expectedResult)
     })
 })
 
-describe('removableNotesCountByChain()', () => {
+describe('getRemovableNotesHostCellsByChain()', () => {
     test('will return number of notes the given valid chain can remove', () => {
         const chain = [
             {
@@ -826,7 +827,9 @@ describe('removableNotesCountByChain()', () => {
         ]
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { notes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(removableNotesCountByChain(7, chain, notes)).toBe(1)
+
+        const expectedResult = [{ row: 3, col: 1 }]
+        expect(getRemovableNotesHostCellsByChain(7, chain, notes)).toEqual(expectedResult)
     })
 
     test('return 0 if no notes can be removed', () => {
@@ -843,7 +846,7 @@ describe('removableNotesCountByChain()', () => {
         ]
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { notes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(removableNotesCountByChain(7, chain, notes)).toBe(0)
+        expect(getRemovableNotesHostCellsByChain(7, chain, notes)).toEqual([])
     })
 })
 
@@ -891,7 +894,7 @@ describe('getChosenChainFromValidSubChains()', () => {
                         start: 52, end: 79, type: 'STRONG', isLast: true,
                     },
                 ],
-                removableNotesCount: 1,
+                removableNotesHostCells: [{ row: 8, col: 3 }],
             },
             {
                 chain: [
@@ -911,7 +914,7 @@ describe('getChosenChainFromValidSubChains()', () => {
                         start: 79, end: 69, type: 'STRONG', isLast: true,
                     },
                 ],
-                removableNotesCount: 1,
+                removableNotesHostCells: [{ row: 7, col: 3 }],
             },
             {
                 chain: [
@@ -925,21 +928,24 @@ describe('getChosenChainFromValidSubChains()', () => {
                         start: 52, end: 67, type: 'STRONG', isLast: true,
                     },
                 ],
-                removableNotesCount: 3,
+                removableNotesHostCells: [{ row: 0, col: 4 }, { row: 1, col: 4 }, { row: 2, col: 4 }],
             },
         ]
 
-        const expectedResult = [
-            {
-                start: 40, end: 44, type: 'STRONG', isLast: true,
-            },
-            {
-                start: 44, end: 52, type: 'WEAK', isLast: false,
-            },
-            {
-                start: 52, end: 67, type: 'STRONG', isLast: true,
-            },
-        ]
+        const expectedResult = {
+            chain: [
+                {
+                    start: 40, end: 44, type: 'STRONG', isLast: true,
+                },
+                {
+                    start: 44, end: 52, type: 'WEAK', isLast: false,
+                },
+                {
+                    start: 52, end: 67, type: 'STRONG', isLast: true,
+                },
+            ],
+            removableNotesHostCells: [{ row: 0, col: 4 }, { row: 1, col: 4 }, { row: 2, col: 4 }],
+        }
 
         expect(getChosenChainFromValidSubChains(subChains)).toEqual(expectedResult)
     })
@@ -958,7 +964,7 @@ describe('getChosenChainFromValidSubChains()', () => {
                         start: 70, end: 62, type: 'STRONG', isLast: true,
                     },
                 ],
-                removableNotesCount: 1,
+                removableNotesHostCells: [{ row: 6, col: 1 }],
             },
             {
                 chain: [
@@ -978,21 +984,24 @@ describe('getChosenChainFromValidSubChains()', () => {
                         start: 59, end: 49, type: 'STRONG', isLast: true,
                     },
                 ],
-                removableNotesCount: 3,
+                removableNotesHostCells: [{ row: 5, col: 0 }, { row: 5, col: 1 }, { row: 5, col: 2 }],
             },
         ]
 
-        const expectedResult = [
-            {
-                start: 28, end: 34, type: 'STRONG', isLast: true,
-            },
-            {
-                start: 34, end: 70, type: 'WEAK', isLast: false,
-            },
-            {
-                start: 70, end: 62, type: 'STRONG', isLast: true,
-            },
-        ]
+        const expectedResult = {
+            chain: [
+                {
+                    start: 28, end: 34, type: 'STRONG', isLast: true,
+                },
+                {
+                    start: 34, end: 70, type: 'WEAK', isLast: false,
+                },
+                {
+                    start: 70, end: 62, type: 'STRONG', isLast: true,
+                },
+            ],
+            removableNotesHostCells: [{ row: 6, col: 1 }],
+        }
 
         expect(getChosenChainFromValidSubChains(subChains)).toEqual(expectedResult)
     })

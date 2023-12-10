@@ -44,6 +44,7 @@ enum HINTS_IDS {
     OMISSION = 'OMISSION',
     REMOTE_PAIRS = 'REMOTE_PAIRS',
     EMPTY_RECTANGLE = 'EMPTY_RECTANGLE',
+    X_CHAIN = 'X_CHAIN',
     ALL = 'ALL',
 }
 
@@ -59,6 +60,7 @@ const HINT_LABELS = {
     [HINTS_IDS.OMISSION]: 'Omission',
     [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
     [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
+    [HINTS_IDS.X_CHAIN]: 'X-Chain',
 }
 
 const HINTS_MENU_ITEMS = [
@@ -102,9 +104,13 @@ const HINTS_MENU_ITEMS = [
         label: HINT_LABELS[HINTS_IDS.REMOTE_PAIRS],
         id: HINTS_IDS.REMOTE_PAIRS,
     },
+    // {
+    //     label: HINT_LABELS[HINTS_IDS.EMPTY_RECTANGLE],
+    //     id: HINTS_IDS.EMPTY_RECTANGLE,
+    // },
     {
-        label: HINT_LABELS[HINTS_IDS.EMPTY_RECTANGLE],
-        id: HINTS_IDS.EMPTY_RECTANGLE,
+        label: HINT_LABELS[HINTS_IDS.X_CHAIN],
+        id: HINTS_IDS.X_CHAIN,
     },
 ]
 

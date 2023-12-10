@@ -11,5 +11,6 @@ export type NoteChain = Link[]
 
 export type XChainRawHint = {
     note: NoteValue
-    chain: NoteChain
+    chain: Cell[]
+    removableNotesHostCells: Cell[]
 }
