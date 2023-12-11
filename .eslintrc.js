@@ -86,7 +86,7 @@ module.exports = {
                 map: [
                     ['@utils', './src/utils'],
                     ['@contexts', './src/contexts'],
-                    ['@lodash', './node_modules/lodash/src/utils'],
+                    ['@lodash', './node_modules/my-lodash/src/utils'],
                     ['@ui', './src/ui'],
                     ['@resources', './src/resources'],
                     ['@adapters', './src/adapters'],

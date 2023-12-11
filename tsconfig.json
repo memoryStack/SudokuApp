@@ -35,7 +35,7 @@
                 "./src/contexts/*"
             ],
             "@lodash/*": [
-                "./node_modules/lodash/src/utils/*"
+                "./node_modules/my-lodash/src/utils/*"
             ],
             "@ui/*": [
                 "./src/ui/*"
