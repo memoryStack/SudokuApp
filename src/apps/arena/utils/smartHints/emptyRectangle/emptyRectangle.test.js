@@ -3,7 +3,7 @@ import { getEmptyRectangleRawHints } from './emptyRectangle'
 
 describe('getEmptyRectangleRawHints()', () => {
     test('', () => {
-        const puzzle = '700056038108420000000000000500300000040080700001000240003000000000100005050007060'
+        const puzzle = '724956138168423597935718624500300810040081750081070240013000072000100085050007061'
         const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         const expectedResult = {}
 
