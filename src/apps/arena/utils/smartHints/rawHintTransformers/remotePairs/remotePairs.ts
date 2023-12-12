@@ -212,7 +212,7 @@ export const transformRemotePairsRawHint = ({ rawHint: remotePairs, notesData, s
         type: HINTS_IDS.REMOTE_PAIRS,
         title: HINT_ID_VS_TITLES[HINTS_IDS.REMOTE_PAIRS],
         cellsToFocusData,
-        focusedCells: clickableCells,
+        focusedCells: clickableCells, // TODO: this "focusedCells" field is just simple two faced
         steps: getExplainationStepsText(remotePairs, notesData),
         svgProps: { data: getSvgData(remotePairs) },
         hasTryOut: true,

@@ -22,6 +22,7 @@ import {
     transformYWingRawHint,
     transformOmissionRawHint,
     transformRemotePairsRawHint,
+    transformXChainRawHint,
 } from './rawHintTransformers'
 
 import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
@@ -70,4 +71,5 @@ const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
     [HINTS_IDS.Y_WING]: transformYWingRawHint,
     [HINTS_IDS.OMISSION]: transformOmissionRawHint,
     [HINTS_IDS.REMOTE_PAIRS]: transformRemotePairsRawHint,
+    [HINTS_IDS.X_CHAIN]: transformXChainRawHint,
 }

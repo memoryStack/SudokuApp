@@ -206,7 +206,7 @@ const Board_: React.FC<Props> = ({
             {looper.map((row, index) => renderRow(row, `${index}`))}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
-            {!_isEmpty(cellsHighlightData) && renderHintSvgView()}
+            {!_isEmpty(svgProps) && renderHintSvgView()}
         </View>
     )
 

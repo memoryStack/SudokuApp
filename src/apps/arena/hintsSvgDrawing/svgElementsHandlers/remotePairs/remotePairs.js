@@ -4,6 +4,7 @@ import _compact from '@lodash/compact'
 import _forEach from '@lodash/forEach'
 import _reduce from '@lodash/reduce'
 
+import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/xChain/xChain.constants'
 import { roundToNearestPixel } from '../../../../../utils/util'
 
 import { MARKER_TYPES } from '../../svgDefs/remotePairs/remotePairs.constants'
@@ -21,27 +22,22 @@ import { LINK_ENDPOINTS_OFFSET } from './remotePairs.constants'
 // TODO: hint generator will send this color
 const linkColor = 'rgb(217, 19, 235)'
 
+const STROKE_DASH_ARRAY = '6, 4'
+
 const strokeProps = {
     stroke: linkColor,
     strokeWidth: roundToNearestPixel(2),
     strokeLinejoin: 'round',
-    strokeDasharray: '6, 4',
 }
 
 // TODO: get link color and chain details as well in args
 const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates, svgProps: chainTrack }) => new Promise(resolve => {
-    // consoleLog('@@@@@@ chaintrack', chainTrack)
-
     Promise.all(getAllNotesMeasurePromises(notesRefs, chainTrack)).then(notesRawMeasurements => {
-        // console.log('@@@@@@ notesmeasue', notesRawMeasurements)
-
         const notesMeasurements = transformNotesMeasurementPromisesResult(notesRawMeasurements)
-
-        // console.log('@@@@@@ notesmeasue', notesMeasurements)
 
         const svgElementsArgs = []
         for (let i = 1; i < chainTrack.length; i++) {
-            const { cell: startCell, out: startNote } = chainTrack[i - 1]
+            const { cell: startCell, out: startNote, type: linkType = LINK_TYPES.WEAK } = chainTrack[i - 1]
             const { cell: endCell, in: endNote } = chainTrack[i]
 
             const link = {
@@ -49,8 +45,6 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
                 end: { cell: endCell, note: endNote },
             }
             const linkCoordinates = getLinkCoordinates(link, notesMeasurements, boardPageCordinates)
-
-            // console.log('@@@@@ lc', linkCoordinates)
 
             const linkMarker = isOneStepLink(link) ? MARKER_TYPES.SHORT_LINK : MARKER_TYPES.LONG_LINK
 
@@ -60,6 +54,7 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
                     d: getLinkPathGeometry(link, linkCoordinates),
                     ...strokeProps,
                     markerEnd: `url(#${linkMarker})`,
+                    ...(linkType === LINK_TYPES.WEAK && { strokeDasharray: STROKE_DASH_ARRAY }),
                 },
             })
         }
@@ -107,9 +102,6 @@ const getLinkCoordinates = (link, notesMeasurements, boardPageCordinates) => {
 
     const startCellBoardCoordinates = getNotePositionRelativeToBoard(startCellMeasurements, boardPageCordinates)
     const endCellBoardCoordinates = getNotePositionRelativeToBoard(endCellMeasurements, boardPageCordinates)
-
-    // console.log('@@@@@@ cells measurements', startCellBoardCoordinates, boardPageCordinates)
-    // console.log('@@@@@@ cells measurements', endCellBoardCoordinates)
 
     const cellDimensions = {
         width: startCellMeasurements[2],

@@ -92,7 +92,7 @@ export type TryOutInputsColors = {
 export type TransformedRawHint = {
     cellsToFocusData: CellsFocusData
     title: string // TODO: better get it from enums
-    type?: string // TODO: verify why it's optional
+    type?: string // TODO: verify why it's optional. fix it today
     steps: HintSteps
     applyHint: ApplyHint
     selectCellOnClose?: SelectCellOnClose

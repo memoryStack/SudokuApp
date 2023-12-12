@@ -10,9 +10,10 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.PERFECT_X_WING]: 'X-Wing',
     [HINTS_IDS.FINNED_X_WING]: 'Finned X-Wing',
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: 'Sashimi Finned X-Wing',
-    [HINTS_IDS.Y_WING]: 'Y Wing',
+    [HINTS_IDS.Y_WING]: 'Y-Wing',
     [HINTS_IDS.OMISSION]: 'Omission',
     [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
+    [HINTS_IDS.X_CHAIN]: 'X-Chain',
     [HINTS_IDS.ALL]: 'hints',
 }
 
@@ -39,6 +40,7 @@ type HintExplainationTexts = {
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: string[]
     [HINTS_IDS.Y_WING]: string[]
     [HINTS_IDS.REMOTE_PAIRS]: string[]
+    [HINTS_IDS.X_CHAIN]: string[]
 }
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
@@ -181,6 +183,15 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' so {{removableNotesHostCells}} can\'t have {{commonNoteInWings}} as their solution',
     ],
     [HINTS_IDS.REMOTE_PAIRS]: [
+        'Notice the Chain of cells {{chain}}. All of these cells have {{remotePairNotes}} as their candidates.'
+        + ' Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either'
+        + ' by candidates in {{colorA}} or by candidates in {{colorB}}',
+
+        'Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.'
+        + '\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can\'t come because'
+        + ' {{remotePairNotes}} will always fill {{exampleChainCells}}',
+    ],
+    [HINTS_IDS.X_CHAIN]: [
         'Notice the Chain of cells {{chain}}. All of these cells have {{remotePairNotes}} as their candidates.'
         + ' Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either'
         + ' by candidates in {{colorA}} or by candidates in {{colorB}}',

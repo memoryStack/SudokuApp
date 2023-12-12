@@ -25,7 +25,16 @@ import { BoardIterators } from '../../classes/boardIterators'
 import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTransformers'
 import { getCellsSharingHousesWithCells } from '../../util'
 import { MINIMUM_LINKS_IN_CHAIN, LINK_TYPES } from './xChain.constants'
-import { XChainRawHint, Link, NoteChain } from './types'
+import { XChainRawHint } from './types'
+
+type Link = {
+    start: number
+    end: number
+    type: LINK_TYPES
+    isLast: boolean
+}
+
+type NoteChain = Link[]
 
 type LinkCells = [Cell, Cell]
 
