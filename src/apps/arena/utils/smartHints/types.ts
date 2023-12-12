@@ -24,7 +24,7 @@ export interface CellsFocusData {
     [rowIndex: string]: RowData;
 }
 
-type ChainLink = {
+export type ChainLink = {
     start: { cell: Cell, note: NoteValue }
     end: { cell: Cell, note: NoteValue }
     type: LINK_TYPES

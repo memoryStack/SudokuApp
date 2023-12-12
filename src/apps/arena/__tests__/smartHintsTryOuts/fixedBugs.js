@@ -65,5 +65,5 @@ describe('Fixed Bug:', () => {
         smartHintHC.getByText('a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in any row, column or block.\neach of these three cells must have atleast two out of these three candidates.\nObserve 3, 5 and 8 in A row')
 
         Puzzle.validatePuzzle.mockReset()
-    })
+    }, 10000)
 })

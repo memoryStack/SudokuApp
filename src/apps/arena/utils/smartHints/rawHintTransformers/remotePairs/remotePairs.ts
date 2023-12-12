@@ -157,11 +157,6 @@ const getExplainationStepsText = (remotePairs: RemotePairsRawHint, notes: Notes)
     return getHintExplanationStepsFromHintChunks(explainationTextsWithPlaceholdersFilled)
 }
 
-/*
-BUGS
-    after opening tryout, the input panel of game is changed
-*/
-
 const getApplyHintData = (remotePairs: RemotePairsRawHint, notes: Notes) => {
     const result: NotesRemovalHintAction[] = []
     const { removableNotesHostCells, remotePairNotes } = remotePairs

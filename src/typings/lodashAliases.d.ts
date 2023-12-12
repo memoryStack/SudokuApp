@@ -208,3 +208,9 @@ declare module '@lodash/intersection' {
 
     export default _intersection
 }
+
+declare module '@lodash/compact' {
+    import _compact from '@lodash/compact'
+
+    export default _compact
+}

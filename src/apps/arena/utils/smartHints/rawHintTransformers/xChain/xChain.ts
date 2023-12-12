@@ -3,8 +3,12 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
 import _keys from '@lodash/keys'
 import _isNil from '@lodash/isNil'
+import _compact from '@lodash/compact'
+import _head from '@lodash/head'
+import _reverse from '@lodash/reverse'
+import _last from '@lodash/last'
 
-import { BOARD_MOVES_TYPES } from 'src/apps/arena/constants'
+import { BOARD_MOVES_TYPES } from '../../../../constants'
 import {
     TransformedRawHint,
     SmartHintsColorSystem,
@@ -14,9 +18,10 @@ import {
     NotesRemovalHintAction,
     InputPanelNumbersVisibility,
     TryOutInputsColors,
+    ChainLink,
 } from '../../types'
 import { XChainTransformerArgs } from './types'
-import { HINTS_IDS } from '../../constants'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { XChainRawHint } from '../../xChain/types'
 import { BoardIterators } from '../../../classes/boardIterators'
@@ -30,6 +35,8 @@ import {
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { LINK_TYPES } from '../../xChain/xChain.constants'
 import { convertBoardCellToNum } from '../../../cellTransformers'
+import { getCellsAxesValuesListText, getHouseNumAndName, joinStringsListWithArrow } from '../helpers'
+import { getCellAxesValues, getCellsCommonHousesInfo } from '../../../util'
 
 // TODO: these colors are also used in remote pairs as well
 const CHAIN_CELLS_NOTES_COLORS_TEXT = ['blue', 'green']
@@ -63,11 +70,60 @@ const getUICellsToFocusData = (xChain: XChainRawHint, smartHintsColorSystem: Sma
     return result
 }
 
-const getExplainationStepsText = (xChain: XChainRawHint, notes: Notes) => {
-    const rawExplainationTexts = HINT_EXPLANATION_TEXTS[HINTS_IDS.REMOTE_PAIRS]
-    const placeholdersValues = {}
+const getExplainationStepsText = (xChain: XChainRawHint, chainLinks: Chain) => {
+    const { note, chain, removableNotesHostCells } = xChain
+
+    const chainNotesFillingTextTemplates = {
+        firstLinkExplaination: 'if {{linkSourceCell}} is not {{note}} then {{linkSinkCell}} has to be {{note}}({{note}}'
+            + ' can come only in one of {{linkSourceCell}} or {{linkSinkCell}} in {{firstLinkHostHouse}})',
+        otherLinkExplaination: '{{linkSourceCell}} can\'t be {{note}} then {{linkSinkCell}} has to be {{note}}',
+    }
+
+    const firstWayToFillChainCells = _compact(_map(chainLinks, (link: ChainLink, indx: number) => {
+        const { start, end, type } = link
+        if (type === LINK_TYPES.WEAK) return null
+        const explainationText = indx === 0 ? chainNotesFillingTextTemplates.firstLinkExplaination
+            : chainNotesFillingTextTemplates.otherLinkExplaination
+        const placeholdersValues = {
+            note,
+            firstLinkHostHouse: getHouseNumAndName(_head(getCellsCommonHousesInfo([start.cell, end.cell]))),
+            linkSourceCell: getCellAxesValues(start.cell),
+            linkSinkCell: getCellAxesValues(end.cell),
+        }
+        return dynamicInterpolation(explainationText, placeholdersValues)
+    })).join(', ')
+
+    const reverseOrderChainNotesFillingTextTemplates = {
+        firstLinkExplaination: 'if {{linkSourceCell}} is not {{note}} then {{linkSinkCell}} has to be {{note}}',
+        otherLinkExplaination: '{{linkSourceCell}} can\'t be {{note}} then {{linkSinkCell}} has to be {{note}}',
+    }
+    const secondWayToFillChainCells = _compact(_map(_reverse([...chainLinks]), (link: ChainLink, indx: number) => {
+        const { start, end, type } = link
+        if (type === LINK_TYPES.WEAK) return null
+        const explainationText = indx === 0 ? reverseOrderChainNotesFillingTextTemplates.firstLinkExplaination
+            : reverseOrderChainNotesFillingTextTemplates.otherLinkExplaination
+        const placeholdersValues = {
+            note,
+            firstLinkHostHouse: getHouseNumAndName(_head(getCellsCommonHousesInfo([start.cell, end.cell]))),
+            linkSourceCell: getCellAxesValues(end.cell),
+            linkSinkCell: getCellAxesValues(start.cell),
+        }
+        return dynamicInterpolation(explainationText, placeholdersValues)
+    })).join(', ')
+
+    const placeholdersValues = {
+        note,
+        chain: joinStringsListWithArrow(_map(chain, (chainCell: Cell) => getCellAxesValues(chainCell))),
+        chainFirstCell: getCellAxesValues(_head(chain)),
+        chainLastCell: getCellAxesValues(_last(chain)),
+        removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        firstWayToFillChainCells,
+        secondWayToFillChainCells,
+    }
+
+    const rawExplainationTexts = HINT_EXPLANATION_TEXTS[HINTS_IDS.X_CHAIN]
     const explainationTextsWithPlaceholdersFilled = _map(rawExplainationTexts, (aStepRawText: string) => dynamicInterpolation(aStepRawText, placeholdersValues))
-    return getHintExplanationStepsFromHintChunks(explainationTextsWithPlaceholdersFilled)
+    return getHintExplanationStepsFromHintChunks(explainationTextsWithPlaceholdersFilled, false)
 }
 
 const getSvgData = (xChain: XChainRawHint) => {
@@ -127,21 +183,24 @@ export const transformXChainRawHint = ({ rawHint: xChain, notesData, smartHintsC
     const { note, chain, removableNotesHostCells } = xChain
     const clickableCells = [...chain, ...removableNotesHostCells]
 
-    const tryOutInputsColors = getTryOutInputsColors(clickableCells, cellsToFocusData)
+    // const tryOutInputsColors = getTryOutInputsColors(clickableCells, cellsToFocusData)
+
+    const chainLinks = getSvgData(xChain)
 
     return ({
         type: HINTS_IDS.X_CHAIN,
         title: HINT_ID_VS_TITLES[HINTS_IDS.X_CHAIN],
         cellsToFocusData,
         focusedCells: clickableCells,
-        steps: getExplainationStepsText(xChain, notesData),
-        svgProps: { data: getSvgData(xChain) },
-        hasTryOut: true,
+        steps: getExplainationStepsText(xChain, chainLinks),
+        svgProps: { data: chainLinks },
+        hasTryOut: false, // TODO:
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([note]) as InputPanelNumbersVisibility,
-        tryOutAnalyserData: { xChain, tryOutInputsColors },
+        // tryOutAnalyserData: { xChain, tryOutInputsColors },
+        tryOutAnalyserData: { xChain },
         clickableCells,
         unclickableCellClickInTryOutMsg: 'you can only select Chain cells or cells which have candidates highlighted in red color',
         applyHint: getApplyHintData(xChain),
-        tryOutInputsColors,
+        // tryOutInputsColors,
     })
 }

@@ -83,7 +83,6 @@ export const getCandidateAllStrongLinks = (note: NoteValue, notes: Notes, possib
         const noteAllPossibleHostCells = getNoteHostCellsInHouse(note, house, possibleNotes)
         const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length && noteUserFilledHostCells.length === 2
         if (isValidStrongLink) {
-            // TODO: use lodash util here
             if (_isNil(result[house.type])) result[house.type] = {}
             result[house.type][house.num] = noteUserFilledHostCells as LinkCells
         }

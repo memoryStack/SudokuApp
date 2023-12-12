@@ -192,12 +192,11 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' {{remotePairNotes}} will always fill {{exampleChainCells}}',
     ],
     [HINTS_IDS.X_CHAIN]: [
-        'Notice the Chain of cells {{chain}}. All of these cells have {{remotePairNotes}} as their candidates.'
-        + ' Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either'
-        + ' by candidates in {{colorA}} or by candidates in {{colorB}}',
+        'Notice the Chain of cells {{chain}}. All of these cells have {{note}} as their candidate.'
+        + '\nFollow this Chain from {{chainFirstCell}} to {{chainLastCell}}, {{firstWayToFillChainCells}}.',
 
-        'Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.'
-        + '\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can\'t come because'
-        + ' {{remotePairNotes}} will always fill {{exampleChainCells}}',
+        'another way to fill {{note}} in this Chain is to fill it in reverse order like {{secondWayToFillChainCells}}.'
+        + '\nin both of these ways either {{chainFirstCell}} or {{chainLastCell}} will definitely be {{note}},'
+        + ' due to this {{removableNotesHostCells}} can\'t be {{note}} in any way',
     ],
 }
