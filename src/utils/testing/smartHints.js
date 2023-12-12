@@ -57,7 +57,8 @@ export const openSmartHintHC = async hintItemToClick => {
     })
 }
 
-export const gotoApplyHintStep = async smartHintHC => {
+export const gotoApplyHintStep = async () => {
+    const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
     await waitFor(() => {
         try {
             smartHintHC.getByText('Apply Hint')
@@ -68,8 +69,8 @@ export const gotoApplyHintStep = async smartHintHC => {
     })
 }
 
-// TODO: no need to pass smartHintHC here
-export const gotoTryOutStep = async smartHintHC => {
+export const gotoTryOutStep = async () => {
+    const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
     await waitFor(() => {
         try {
             smartHintHC.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)
@@ -80,8 +81,10 @@ export const gotoTryOutStep = async smartHintHC => {
     })
 }
 
-// TODO: no need to pass smartHintHC here
-export const getInputPanel = smartHintHC => within(smartHintHC.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+export const getInputPanel = () => {
+    const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+    return within(smartHintHC.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+}
 
 export const closeSmartHintHC = () => {
     act(() => {
@@ -98,8 +101,7 @@ export const assertHintsLeft = hintsLeft => {
 
 export const applyHint = async hint => {
     await openSmartHintHC(hint)
-    const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-    await gotoApplyHintStep(smartHintHC)
+    await gotoApplyHintStep()
     act(() => {
         fireEvent.press(screen.getByText('Apply Hint'))
         jest.advanceTimersByTime(500)

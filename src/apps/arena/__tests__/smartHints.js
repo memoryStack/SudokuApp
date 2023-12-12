@@ -131,7 +131,7 @@ describe('Hint/Smart Hints', () => {
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoApplyHintStep(smartHintHC)
+        await gotoApplyHintStep()
 
         expect(isNotePresentInCell(getCellByPosition(11), 3)).toBe(true)
 
@@ -148,7 +148,7 @@ describe('Hint/Smart Hints', () => {
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoApplyHintStep(smartHintHC)
+        await gotoApplyHintStep()
 
         const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
         expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(3)
@@ -188,7 +188,7 @@ describe('Hint/Smart Hints', () => {
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.OMISSION])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoApplyHintStep(smartHintHC)
+        await gotoApplyHintStep()
 
         // notes are present before applying hint
         expect(isNotePresentInCell(getCellByPosition(32), 3)).toBe(true)
@@ -208,7 +208,7 @@ describe('Hint/Smart Hints', () => {
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoApplyHintStep(smartHintHC)
+        await gotoApplyHintStep()
         act(() => {
             fireEvent.press(smartHintHC.getByText('Apply Hint'))
             jest.advanceTimersByTime(200)
@@ -219,26 +219,23 @@ describe('Hint/Smart Hints', () => {
 
     test('BugFix: erasing without selecting any cell will crash app', async () => {
         await renderScreenAndWaitForPuzzleStart()
-
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
-        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoTryOutStep(smartHintHC)
+        await gotoTryOutStep()
 
-        expect(() => fireEvent.press(getInputPanelEraser(getInputPanel(smartHintHC)))).not.toThrow(Error)
+        expect(() => fireEvent.press(getInputPanelEraser(getInputPanel()))).not.toThrow(Error)
     })
 
     test('in try out step, user can fill numbers in cells and see impact', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
-        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoTryOutStep(smartHintHC)
+        await gotoTryOutStep()
         fireEvent.press(getCellByPosition(2))
 
         // before filling the number
         expect(isNotePresentInCell(getCellByPosition(3), 2)).toBe(true)
 
-        fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
+        fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel()))
 
         expectMainNumberPresentInCell(getCellByPosition(2), 2)
         expect(isNotePresentInCell(getCellByPosition(3), 2)).toBe(false)
@@ -248,11 +245,10 @@ describe('Hint/Smart Hints', () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
-        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoTryOutStep(smartHintHC)
+        await gotoTryOutStep()
         fireEvent.press(getCellByPosition(3))
-        fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
-        fireEvent.press(getInputPanelEraser(getInputPanel(smartHintHC)))
+        fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel()))
+        fireEvent.press(getInputPanelEraser(getInputPanel()))
 
         // main number will be removed and note will return in
         // TODO: right now there is no query to run which tells that a Main number is not
@@ -265,10 +261,9 @@ describe('Hint/Smart Hints', () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
-        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoTryOutStep(smartHintHC)
+        await gotoTryOutStep()
         fireEvent.press(getCellByPosition(3))
-        fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel(smartHintHC)))
+        fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel()))
 
         expectMainNumberPresentInCell(getCellByPosition(3), 3)
 
@@ -282,11 +277,10 @@ describe('Hint/Smart Hints', () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
-        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        await gotoTryOutStep(smartHintHC)
+        await gotoTryOutStep()
         fireEvent.press(getCellByPosition(2))
-        fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel(smartHintHC)))
-        fireEvent.press(getInputPanelNumberIfEnabled(4, getInputPanel(smartHintHC)))
+        fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel()))
+        fireEvent.press(getInputPanelNumberIfEnabled(4, getInputPanel()))
 
         expectMainNumberPresentInCell(getCellByPosition(2), 4)
     })
