@@ -130,7 +130,7 @@ describe('getAngleBetweenLines()', () => {
 })
 
 describe('shouldCurveLink()', () => {
-    test('returns false if start and end cells do not make horizontal or vertical straight lines', () => {
+    test('returns false if start and end cells are not in same row or column', () => {
         const link = {
             start: {
                 cell: { row: 0, col: 0 },
@@ -144,7 +144,7 @@ describe('shouldCurveLink()', () => {
         expect(shouldCurveLink(link)).toBe(false)
     })
 
-    test('returns true if cells are in same row and startNote and endNote are in same horizontal line', () => {
+    test('returns false if cells are in same row and startNote and endNote are in same horizontal line but cells are not adjacent to each other', () => {
         const link = {
             start: {
                 cell: { row: 0, col: 0 },
@@ -155,7 +155,7 @@ describe('shouldCurveLink()', () => {
                 note: 3,
             },
         }
-        expect(shouldCurveLink(link)).toBe(true)
+        expect(shouldCurveLink(link)).toBe(false)
     })
 
     test('returns false if cells are in same row but startNote and endNote are not in same horizontal line', () => {
@@ -172,7 +172,7 @@ describe('shouldCurveLink()', () => {
         expect(shouldCurveLink(link)).toBe(false)
     })
 
-    test('returns true if cells are in same column and startNote and endNote are in same vertical line', () => {
+    test('returns false if cells are in same column and startNote and endNote are in same vertical line but cells are not adjacent to each other', () => {
         const link = {
             start: {
                 cell: { row: 2, col: 2 },
@@ -183,7 +183,7 @@ describe('shouldCurveLink()', () => {
                 note: 8,
             },
         }
-        expect(shouldCurveLink(link)).toBe(true)
+        expect(shouldCurveLink(link)).toBe(false)
     })
 
     test('returns false if cells are in same column but startNote and endNote are not in same vertical line', () => {
@@ -195,6 +195,62 @@ describe('shouldCurveLink()', () => {
             end: {
                 cell: { row: 4, col: 2 },
                 note: 9,
+            },
+        }
+        expect(shouldCurveLink(link)).toBe(false)
+    })
+
+    test('returns true if cells are side by side in a row and left cell has note in last column of cell and right cell has note in first column of cell', () => {
+        const link = {
+            start: {
+                cell: { row: 2, col: 2 },
+                note: 3,
+            },
+            end: {
+                cell: { row: 2, col: 3 },
+                note: 7,
+            },
+        }
+        expect(shouldCurveLink(link)).toBe(true)
+    })
+
+    test('returns false if cells are side by side in a row and left cell does not have note in last column of cell and right cell has note in first column of cell', () => {
+        const link = {
+            start: {
+                cell: { row: 2, col: 3 },
+                note: 7,
+            },
+            end: {
+                cell: { row: 2, col: 2 },
+                note: 1,
+            },
+        }
+        expect(shouldCurveLink(link)).toBe(false)
+    })
+
+    test('returns true if cells are up and down adjacent in a column and top cell has note in last row of cell and bottom cell has note in first row of cell', () => {
+        const link = {
+            start: {
+                cell: { row: 2, col: 2 },
+                note: 7,
+            },
+            end: {
+                cell: { row: 3, col: 2 },
+                note: 2,
+            },
+        }
+        expect(shouldCurveLink(link)).toBe(true)
+    })
+
+    test('returns false if cells are up and down adjacent in a column and top cell does not have note in last row of cell and bottom cell has note in first row of cell', () => {
+        const link = {
+            start: {
+                cell: { row: 2, col: 2 },
+                note: 5,
+            },
+            end: {
+                cell: { row: 3, col: 2 },
+                note: 2,
             },
         }
         expect(shouldCurveLink(link)).toBe(false)

@@ -1,4 +1,4 @@
-import { areSameColCells, areSameRowCells } from '../../../../utils/util'
+import { areAdjacentCells, areSameColCells, areSameRowCells } from '../../../../utils/util'
 import LinkReader from '../readers/link.reader'
 
 import { ONE_STEP_LINK_DIRECTIONS, CURVE_DIRECTIONS } from '../remotePairs.constants'
@@ -75,10 +75,21 @@ export const shouldCurveLink = link => {
     const cellsInSameCol = areSameColCells(cellsPair)
     if (!cellsInSameRow && !cellsInSameCol) return false
 
-    const startNoteIndex = LinkReader.startNote(link) - 1
-    const endNoteIndex = LinkReader.endNote(link) - 1
-    if (cellsInSameRow) return Math.floor(startNoteIndex / 3) === Math.floor(endNoteIndex / 3)
-    return (startNoteIndex % 3) === (endNoteIndex % 3)
+    if (areAdjacentCells(...cellsPair)) {
+        const startNoteIndex = LinkReader.startNote(link) - 1
+        const endNoteIndex = LinkReader.endNote(link) - 1
+        if (cellsInSameRow) {
+            const [leftCellNoteIndex, rightCellNoteIndex] = cellsPair[0].col < cellsPair[1].col ? [startNoteIndex, endNoteIndex]
+                : [endNoteIndex, startNoteIndex]
+            return (leftCellNoteIndex % 3 === 2) && (rightCellNoteIndex % 3 === 0)
+        }
+
+        const [topCellNoteIndex, bottomCellNoteIndex] = cellsPair[0].row < cellsPair[1].row ? [startNoteIndex, endNoteIndex]
+            : [endNoteIndex, startNoteIndex]
+        return (Math.floor(topCellNoteIndex / 3) === 2) && (Math.floor(bottomCellNoteIndex / 3) === 0)
+    }
+
+    return false
 }
 
 export const getCurveDirection = link => {

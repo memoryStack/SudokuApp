@@ -13,6 +13,7 @@ import _get from '@lodash/get'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 import _isNil from '@lodash/isNil'
+import _includes from '@lodash/includes'
 import { useDependency } from '../../../hooks/useDependency'
 import { EVENTS } from '../../../constants/events'
 import withActions from '../../../utils/hocs/withActions'
@@ -178,6 +179,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             axisTextStyles={showSmartHint ? styles.smartHintAxisText : null}
             boardContainerStyles={showSmartHint ? styles.smartHintBoardContainer : null}
             getNoteStyles={getNoteStyles}
+            showHintsSVGView={!_isNil(svgProps) && _includes([GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT], gameState)}
         />
     )
 }

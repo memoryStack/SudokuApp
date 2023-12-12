@@ -5,7 +5,6 @@ import { View, StyleProp, ViewStyle } from 'react-native'
 import _get from '@lodash/get'
 import _set from '@lodash/set'
 import _noop from '@lodash/noop'
-import _isEmpty from '@lodash/isEmpty'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
@@ -55,6 +54,7 @@ interface Props {
     boardContainerStyles?: StyleProp<ViewStyle>
     svgProps: Chain
     showCellContent: boolean
+    showHintsSVGView: boolean
     getCellBGColor?: () => CellBGColorStyle | null
     getCellMainNumberFontColor?: () => FontColor | null
     getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null
@@ -68,6 +68,7 @@ const Board_: React.FC<Props> = ({
     axisTextStyles = {},
     svgProps = [],
     showCellContent = true,
+    showHintsSVGView = false,
     getCellBGColor = _noop,
     getCellMainNumberFontColor = _noop,
     boardContainerStyles = null,
@@ -87,16 +88,18 @@ const Board_: React.FC<Props> = ({
         return result
     }, [])
 
-    // TODO: control it's visibility via hints props
-    // hints will mark if svg is needed or not for a particulat hint
-    const renderHintSvgView = () => (
-        <HintsSvgDrawing
-            hint={{ id: HINTS_IDS.REMOTE_PAIRS }}
-            boardRef={boardRef}
-            notesRefs={notesRefs}
-            svgProps={svgProps}
-        />
-    )
+    const renderHintSvgView = () => {
+        if (!showHintsSVGView) return null
+
+        return (
+            <HintsSvgDrawing
+                hint={{ id: HINTS_IDS.REMOTE_PAIRS }}
+                boardRef={boardRef}
+                notesRefs={notesRefs}
+                svgProps={svgProps}
+            />
+        )
+    }
 
     const getMainNumFontColor = (cell: Cell): FontColor | null => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) return null
@@ -206,7 +209,7 @@ const Board_: React.FC<Props> = ({
             {looper.map((row, index) => renderRow(row, `${index}`))}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
-            {!_isEmpty(svgProps) && renderHintSvgView()}
+            {showHintsSVGView && renderHintSvgView()}
         </View>
     )
 

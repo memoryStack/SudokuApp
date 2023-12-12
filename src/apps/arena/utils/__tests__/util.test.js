@@ -26,6 +26,7 @@ import {
     getCellAllHousesCells,
     sortCells,
     getNoteHostCellsInHouse,
+    areAdjacentCells,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -539,5 +540,22 @@ describe('getNoteHostCellsInHouse()', () => {
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { notes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getNoteHostCellsInHouse(3, house, notes)).toEqual([])
+    })
+})
+
+describe('areAdjacentCells()', () => {
+    test('returns true if cells are side by side sharing an edge between them', () => {
+        expect(areAdjacentCells({ row: 0, col: 0 }, { row: 0, col: 1 })).toBeTruthy()
+        expect(areAdjacentCells({ row: 4, col: 3 }, { row: 4, col: 4 })).toBeTruthy()
+    })
+
+    test('returns true if cells are up and down and share an edge between them', () => {
+        expect(areAdjacentCells({ row: 0, col: 0 }, { row: 1, col: 0 })).toBeTruthy()
+        expect(areAdjacentCells({ row: 4, col: 3 }, { row: 5, col: 3 })).toBeTruthy()
+    })
+
+    test('returns false for cells not sharing any edge between them', () => {
+        expect(areAdjacentCells({ row: 0, col: 0 }, { row: 1, col: 1 })).toBeFalsy()
+        expect(areAdjacentCells({ row: 4, col: 3 }, { row: 8, col: 8 })).toBeFalsy()
     })
 })

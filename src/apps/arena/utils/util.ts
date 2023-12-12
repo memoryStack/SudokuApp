@@ -287,3 +287,16 @@ export const getNoteHostCellsInHouse = (note: NoteValue, house: House, notes: No
     })
     return result
 }
+
+export const areAdjacentCells = (cellA: Cell, cellB: Cell) => {
+    const cellsPair = [cellA, cellB]
+    if (areSameRowCells(cellsPair)) {
+        return Math.abs(cellA.col - cellB.col) === 1
+    }
+
+    if (areSameColCells(cellsPair)) {
+        return Math.abs(cellA.row - cellB.row) === 1
+    }
+
+    return false
+}
