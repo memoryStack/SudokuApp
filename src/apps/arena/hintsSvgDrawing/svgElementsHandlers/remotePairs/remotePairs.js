@@ -1,6 +1,5 @@
 import { Path } from 'react-native-svg'
 
-import _compact from '@lodash/compact'
 import _forEach from '@lodash/forEach'
 import _reduce from '@lodash/reduce'
 
@@ -26,7 +25,7 @@ const STROKE_DASH_ARRAY = '6, 4'
 
 const strokeProps = {
     stroke: linkColor,
-    strokeWidth: roundToNearestPixel(2),
+    strokeWidth: roundToNearestPixel(1.75),
     strokeLinejoin: 'round',
 }
 
@@ -36,16 +35,10 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
         const notesMeasurements = transformNotesMeasurementPromisesResult(notesRawMeasurements)
 
         const svgElementsArgs = []
-        for (let i = 1; i < chainTrack.length; i++) {
-            const { cell: startCell, out: startNote, type: linkType = LINK_TYPES.WEAK } = chainTrack[i - 1]
-            const { cell: endCell, in: endNote } = chainTrack[i]
-
-            const link = {
-                start: { cell: startCell, note: startNote },
-                end: { cell: endCell, note: endNote },
-            }
+        for (let i = 0; i < chainTrack.length; i++) {
+            const { start, end, type: linkType = LINK_TYPES.WEAK } = chainTrack[i]
+            const link = { start, end }
             const linkCoordinates = getLinkCoordinates(link, notesMeasurements, boardPageCordinates)
-
             const linkMarker = isOneStepLink(link) ? MARKER_TYPES.SHORT_LINK : MARKER_TYPES.LONG_LINK
 
             svgElementsArgs.push({
@@ -66,9 +59,12 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
 const getAllNotesMeasurePromises = (notesRefs, chainTrack) => {
     const result = []
 
-    _forEach(chainTrack, ({ cell, in: entryNote, out: exitNote }) => {
-        const notesToMeasure = _compact([entryNote, exitNote])
-        _forEach(notesToMeasure, note => {
+    _forEach(chainTrack, link => {
+        const start = LinkReader.start(link)
+        const end = LinkReader.end(link)
+
+        const notesToMeasure = [start, end]
+        _forEach(notesToMeasure, ({ cell, note }) => {
             const noteRef = notesRefs[cell.row][cell.col][note - 1]
             if (noteRef) {
                 result.push(new Promise(resolve => {
@@ -101,6 +97,7 @@ const getLinkCoordinates = (link, notesMeasurements, boardPageCordinates) => {
     const endCellMeasurements = notesMeasurements[endCell.row][endCell.col][endNote]
 
     const startCellBoardCoordinates = getNotePositionRelativeToBoard(startCellMeasurements, boardPageCordinates)
+
     const endCellBoardCoordinates = getNotePositionRelativeToBoard(endCellMeasurements, boardPageCordinates)
 
     const cellDimensions = {

@@ -1,4 +1,5 @@
 import { TRY_OUT_RESULT_STATES } from './tryOutInputAnalyser/constants'
+import { LINK_TYPES } from './xChain/xChain.constants'
 
 export interface NotesToHighlightData {
     [note: string]: {
@@ -23,13 +24,13 @@ export interface CellsFocusData {
     [rowIndex: string]: RowData;
 }
 
-type ChainCell = {
-    cell: Cell
-    in?: NoteValue
-    out?: NoteValue
+type ChainLink = {
+    start: { cell: Cell, note: NoteValue }
+    end: { cell: Cell, note: NoteValue }
+    type: LINK_TYPES
 }
 
-export type Chain = ChainCell[]
+export type Chain = ChainLink[]
 
 export type FocusedCells = Cell[]
 export type SelectCellOnClose = Cell

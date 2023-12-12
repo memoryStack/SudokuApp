@@ -2,12 +2,12 @@ import _forEach from '@lodash/forEach'
 import _map from '@lodash/map'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _keys from '@lodash/keys'
-
 import _intersection from '@lodash/intersection'
 import _at from '@lodash/at'
 import _head from '@lodash/head'
 import _last from '@lodash/last'
 import _isNil from '@lodash/isNil'
+
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
@@ -37,6 +37,7 @@ import { RemotePairsRawHint } from '../../remotePairs/types'
 import { areCommonHouseCells, getCellAxesValues } from '../../../util'
 import { getCellsAxesValuesListText, joinStringsListWithArrow } from '../helpers'
 import { convertBoardCellToNum } from '../../../cellTransformers'
+import { LINK_TYPES } from '../../xChain/xChain.constants'
 
 const REMOTE_PAIRS_COLORS_TEXT = ['green', 'blue']
 
@@ -96,35 +97,27 @@ const getUICellsToFocusData = (remotePairs: RemotePairsRawHint, smartHintsColorS
 }
 
 const getSvgData = ({ remotePairNotes, orderedChainCells }: RemotePairsRawHint): Chain => {
-    let currentNote = remotePairNotes[0]
-
     const getAlternateNote = (note: NoteValue) => (note === remotePairNotes[0] ? remotePairNotes[1] : remotePairNotes[0])
 
-    return _map(orderedChainCells, (cell: Cell, cellIdx: number) => {
-        if (cellIdx === 0) {
-            const data = {
-                cell,
-                out: currentNote,
-            }
-
-            return data
-        }
-
-        if (cellIdx === orderedChainCells.length - 1) {
-            return {
-                cell,
-                in: currentNote,
-            }
-        }
-
-        const data = {
-            cell,
-            in: currentNote,
-            out: getAlternateNote(currentNote),
-        }
-        currentNote = getAlternateNote(currentNote)
-        return data
-    })
+    const result: Chain = []
+    let sourceNote = remotePairNotes[0]
+    let sinkNote = remotePairNotes[1]
+    for (let i = 1; i < orderedChainCells.length; i++) {
+        result.push({
+            start: {
+                cell: orderedChainCells[i - 1],
+                note: sourceNote,
+            },
+            end: {
+                cell: orderedChainCells[i],
+                note: sinkNote,
+            },
+            type: LINK_TYPES.WEAK,
+        })
+        sourceNote = getAlternateNote(sourceNote)
+        sinkNote = getAlternateNote(sinkNote)
+    }
+    return result
 }
 
 const getChainCellsWhichRemoveNotesInCell = (cell: Cell, chainCells: RemotePairsRawHint['orderedChainCells']) => {
@@ -224,39 +217,3 @@ export const transformRemotePairsRawHint = ({ rawHint: remotePairs, notesData, s
         tryOutInputsColors,
     })
 }
-// const chainTrack = [
-//     {
-//         cell: { row: 0, col: 0 },
-//         out: 5,
-//     },
-//     {
-//         cell: { row: 2, col: 2 },
-//         in: 3,
-//         out: 9,
-//     },
-//     {
-//         cell: { row: 5, col: 2 },
-//         in: 1,
-//         out: 7,
-//     },
-//     {
-//         cell: { row: 3, col: 4 },
-//         in: 1,
-//         out: 7,
-//     },
-//     {
-//         cell: { row: 3, col: 6 },
-//         in: 7,
-//         out: 3,
-//     },
-//     {
-//         cell: { row: 4, col: 6 },
-//         in: 7,
-//         out: 3,
-//     },
-//     {
-//         cell: { row: 4, col: 7 },
-//         in: 1,
-//         out: 3,
-//     },
-// ]
