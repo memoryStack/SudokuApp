@@ -4,6 +4,7 @@ import {
     setCellNotesHighlightDataInHintResult,
     getCandidatesListText,
     removeDuplicteCells,
+
 } from './util'
 
 describe('getCellsFromCellsToFocusedData()', () => {

@@ -277,3 +277,13 @@ export const sameValueInCells = (cellA: Cell, cellB: Cell, mainNumbers: MainNumb
 }
 
 export const isGameActive = (gameState: GAME_STATE) => new GameState(gameState).isGameActive()
+
+export const getNoteHostCellsInHouse = (note: NoteValue, house: House, notes: Notes) => {
+    const result: Cell[] = []
+    BoardIterators.forHouseEachCell(house, cell => {
+        if (NotesRecord.isNotePresentInCell(notes, note, cell)) {
+            result.push(cell)
+        }
+    })
+    return result
+}

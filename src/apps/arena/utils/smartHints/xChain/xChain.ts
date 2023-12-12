@@ -23,7 +23,7 @@ import { N_CHOOSE_K } from '@resources/constants'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { BoardIterators } from '../../classes/boardIterators'
 import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTransformers'
-import { getCellsSharingHousesWithCells } from '../../util'
+import { getCellsSharingHousesWithCells, getNoteHostCellsInHouse } from '../../util'
 import { MINIMUM_LINKS_IN_CHAIN, LINK_TYPES } from './xChain.constants'
 import { XChainRawHint } from './types'
 
@@ -73,16 +73,6 @@ type ValidSubChainInfo = {
 
 type CellLinksParticipants = {
     [cellNum: number]: number[]
-}
-
-export const getNoteHostCellsInHouse = (note: NoteValue, house: House, notes: Notes) => {
-    const result: Cell[] = []
-    BoardIterators.forHouseEachCell(house, cell => {
-        if (NotesRecord.isNotePresentInCell(notes, note, cell)) {
-            result.push(cell)
-        }
-    })
-    return result
 }
 
 export const getCandidateAllStrongLinks = (note: NoteValue, notes: Notes, possibleNotes: Notes) => {

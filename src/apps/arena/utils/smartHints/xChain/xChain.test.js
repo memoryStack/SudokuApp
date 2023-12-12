@@ -3,7 +3,6 @@ import { HOUSE_TYPE } from '../constants'
 
 import {
     getCandidateAllStrongLinks,
-    getNoteHostCellsInHouse,
     getAllStrongLinks,
     getNoteWeakLinks,
     getRawXChainHints,
@@ -161,23 +160,6 @@ describe('getCandidateAllStrongLinks()', () => {
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getCandidateAllStrongLinks(2, notes, possibleNotes)).toEqual({})
-    })
-})
-
-describe('getNoteHostCellsInHouse()', () => {
-    test('returns the list of cells from a house in which a note is visible', () => {
-        const house = { type: HOUSE_TYPE.ROW, num: 0 }
-        const expectedResult = [{ row: 0, col: 1 }, { row: 0, col: 8 }]
-        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
-        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getNoteHostCellsInHouse(7, house, notes)).toEqual(expectedResult)
-    })
-
-    test('returns empty array if note is not present anywhere in house', () => {
-        const house = { type: HOUSE_TYPE.BLOCK, num: 0 }
-        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
-        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getNoteHostCellsInHouse(3, house, notes)).toEqual([])
     })
 })
 

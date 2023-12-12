@@ -3,6 +3,7 @@ import _isArray from '@lodash/isArray'
 import _isEmpty from '@lodash/isEmpty'
 
 import { CUSTOMIZED_PUZZLE_LEVEL_TITLE, GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 import { getStoragePromise } from '../../../../utils/testing/testingBoilerplate/storage'
 
 import {
@@ -24,6 +25,7 @@ import {
     getCellsSharingHousesWithCells,
     getCellAllHousesCells,
     sortCells,
+    getNoteHostCellsInHouse,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -520,5 +522,22 @@ describe('sortCells()', () => {
         ]
 
         expect(sortCells(cells)).toEqual(expectedResult)
+    })
+})
+
+describe('getNoteHostCellsInHouse()', () => {
+    test('returns the list of cells from a house in which a note is visible', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 0 }
+        const expectedResult = [{ row: 0, col: 1 }, { row: 0, col: 8 }]
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+        expect(getNoteHostCellsInHouse(7, house, notes)).toEqual(expectedResult)
+    })
+
+    test('returns empty array if note is not present anywhere in house', () => {
+        const house = { type: HOUSE_TYPE.BLOCK, num: 0 }
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes } = getPuzzleDataFromPuzzleString(puzzle)
+        expect(getNoteHostCellsInHouse(3, house, notes)).toEqual([])
     })
 })
