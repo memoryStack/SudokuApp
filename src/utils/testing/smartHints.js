@@ -68,6 +68,7 @@ export const gotoApplyHintStep = async smartHintHC => {
     })
 }
 
+// TODO: no need to pass smartHintHC here
 export const gotoTryOutStep = async smartHintHC => {
     await waitFor(() => {
         try {
@@ -79,6 +80,7 @@ export const gotoTryOutStep = async smartHintHC => {
     })
 }
 
+// TODO: no need to pass smartHintHC here
 export const getInputPanel = smartHintHC => within(smartHintHC.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
 
 export const closeSmartHintHC = () => {
