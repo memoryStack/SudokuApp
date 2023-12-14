@@ -3,7 +3,6 @@ import { HOUSE_TYPE } from '../constants'
 
 import {
     getCandidateAllStrongLinks,
-    getAllStrongLinks,
     getNoteWeakLinks,
     getRawXChainHints,
     getTrimWeakLinksFromEdges,
@@ -35,109 +34,6 @@ import {
         '510076009400509000000004580045000106201600004693040720024700000050900000300458012'
         '070600050069527013125300769096800500587236941001005080600050078910760005750003090'
 */
-
-describe('getAllStrongLinks()', () => {
-    test('returns all the strong links in board', () => {
-        const expectedResult = {
-            1: {
-                [HOUSE_TYPE.ROW]: {
-                    7: [{ row: 7, col: 6 }, { row: 7, col: 8 }],
-                },
-                [HOUSE_TYPE.BLOCK]: {
-                    8: [{ row: 7, col: 6 }, { row: 7, col: 8 }],
-                },
-            },
-            3: {
-                [HOUSE_TYPE.ROW]: {
-                    1: [{ row: 1, col: 3 }, { row: 1, col: 5 }],
-                    6: [{ row: 6, col: 5 }, { row: 6, col: 7 }],
-                    8: [{ row: 8, col: 1 }, { row: 8, col: 7 }],
-                },
-                [HOUSE_TYPE.COL]: {
-                    1: [{ row: 7, col: 1 }, { row: 8, col: 1 }],
-                    3: [{ row: 1, col: 3 }, { row: 7, col: 3 }],
-                    7: [{ row: 6, col: 7 }, { row: 8, col: 7 }],
-                },
-                [HOUSE_TYPE.BLOCK]: {
-                    1: [{ row: 1, col: 3 }, { row: 1, col: 5 }],
-                    6: [{ row: 7, col: 1 }, { row: 8, col: 1 }],
-                    8: [{ row: 6, col: 7 }, { row: 8, col: 7 }],
-                },
-            },
-            4: {
-                [HOUSE_TYPE.COL]: {
-                    1: [{ row: 3, col: 1 }, { row: 8, col: 1 }],
-                    3: [{ row: 1, col: 3 }, { row: 2, col: 3 }],
-                },
-                [HOUSE_TYPE.BLOCK]: {
-                    1: [{ row: 1, col: 3 }, { row: 2, col: 3 }],
-                    6: [{ row: 6, col: 0 }, { row: 8, col: 1 }],
-                },
-            },
-            5: {
-                [HOUSE_TYPE.ROW]: {
-                    1: [{ row: 1, col: 6 }, { row: 1, col: 7 }],
-                    7: [{ row: 7, col: 0 }, { row: 7, col: 5 }],
-                },
-                [HOUSE_TYPE.COL]: {
-                    5: [{ row: 6, col: 5 }, { row: 7, col: 5 }],
-                    7: [{ row: 1, col: 7 }, { row: 4, col: 7 }],
-                },
-                [HOUSE_TYPE.BLOCK]: {
-                    2: [{ row: 1, col: 6 }, { row: 1, col: 7 }],
-                    7: [{ row: 6, col: 5 }, { row: 7, col: 5 }],
-                },
-            },
-            6: {
-                [HOUSE_TYPE.ROW]: {
-                    2: [{ row: 2, col: 5 }, { row: 2, col: 8 }],
-                    4: [{ row: 4, col: 6 }, { row: 4, col: 8 }],
-                },
-                [HOUSE_TYPE.COL]: {
-                    5: [{ row: 0, col: 5 }, { row: 2, col: 5 }],
-                    6: [{ row: 0, col: 6 }, { row: 4, col: 6 }],
-                },
-                [HOUSE_TYPE.BLOCK]: {
-                    1: [{ row: 0, col: 5 }, { row: 2, col: 5 }],
-                    5: [{ row: 4, col: 6 }, { row: 4, col: 8 }],
-                },
-            },
-            7: {
-                [HOUSE_TYPE.ROW]: {
-                    0: [{ row: 0, col: 1 }, { row: 0, col: 8 }],
-                },
-                [HOUSE_TYPE.COL]: {
-                    2: [{ row: 3, col: 2 }, { row: 6, col: 2 }],
-                    7: [{ row: 1, col: 7 }, { row: 6, col: 7 }],
-                },
-            },
-            8: {
-                [HOUSE_TYPE.ROW]: {
-                    5: [{ row: 5, col: 0 }, { row: 5, col: 8 }],
-                },
-                [HOUSE_TYPE.COL]: {
-                    1: [{ row: 1, col: 1 }, { row: 4, col: 1 }],
-                },
-            },
-            9: {
-                [HOUSE_TYPE.ROW]: {
-                    8: [{ row: 8, col: 6 }, { row: 8, col: 7 }],
-                },
-                [HOUSE_TYPE.COL]: {
-                    1: [{ row: 0, col: 1 }, { row: 4, col: 1 }],
-                },
-                [HOUSE_TYPE.BLOCK]: {
-                    0: [{ row: 0, col: 1 }, { row: 2, col: 0 }],
-                    8: [{ row: 8, col: 6 }, { row: 8, col: 7 }],
-                },
-            },
-        }
-
-        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
-        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getAllStrongLinks(notes, possibleNotes)).toEqual(expectedResult)
-    })
-})
 
 // TODO: write a test case for filtering out the notes, possibleNotes difference as well
 describe('getCandidateAllStrongLinks()', () => {
@@ -415,7 +311,7 @@ describe('analyzeChain()', () => {
             const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
             const { notes } = getPuzzleDataFromPuzzleString(puzzle)
 
-            const expectedResult = { foundChain: false, chain: [] }
+            const expectedResult = { foundChain: false, chainResult: null }
             expect(analyzeChain(7, chain, notes)).toEqual(expectedResult)
         })
 
@@ -441,7 +337,7 @@ describe('analyzeChain()', () => {
                 },
             ]
 
-            const expectedResult = { foundChain: false, chain: [] }
+            const expectedResult = { foundChain: false, chainResult: null }
             expect(analyzeChain(4, chain, _notes)).toEqual(expectedResult)
         })
     })
@@ -470,7 +366,7 @@ describe('analyzeChain()', () => {
             ]
             const expectedResult = {
                 foundChain: true,
-                chain: {
+                chainResult: {
                     chain: [
                         {
                             start: 40, end: 44, type: 'STRONG', isLast: true,
@@ -515,7 +411,7 @@ describe('analyzeChain()', () => {
             ]
             const expectedResult = {
                 foundChain: true,
-                chain: {
+                chainResult: {
                     chain: [
                         {
                             start: 1, end: 8, type: 'STRONG', isLast: true,

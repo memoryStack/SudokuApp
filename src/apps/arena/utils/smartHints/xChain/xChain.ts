@@ -17,6 +17,7 @@ import _head from '@lodash/head'
 import _last from '@lodash/last'
 import _slice from '@lodash/slice'
 import _isNil from '@lodash/isNil'
+import _concat from '@lodash/concat'
 
 import { N_CHOOSE_K } from '@resources/constants'
 
@@ -26,16 +27,15 @@ import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTran
 import { getCellsSharingHousesWithCells, getNoteHostCellsInHouse } from '../../util'
 import { MINIMUM_LINKS_IN_CHAIN, LINK_TYPES } from './xChain.constants'
 import { XChainRawHint } from './types'
+import {
+    CellNumber, exploreChain, NewLinkPossibleCells, OnChainExplorationComplete,
+} from '../chainExplorer'
 
-type Link = {
-    start: number
-    end: number
-    type: LINK_TYPES
-    isLast: boolean
-}
+import type {
+    Link, ChainTerminals, Chain, AnalyzedChainResult,
+} from '../chainExplorer'
 
-type NoteChain = Link[]
-
+// TODO: these types mostly will be common among all the chain hints
 type LinkCells = [Cell, Cell]
 
 type NoteAllStrongLinks = {
@@ -54,28 +54,17 @@ type NoteAllWeakLinks = {
     }
 }
 
-type ChainTerminals = {
-    first: Link
-    last: Link
-}
-
-type VisitedCells = { [noteValue: NoteValue]: boolean }
-
-// type Link = {
-//     note: NoteValue
-//     chain: NoteChain
-// }
-
-type ValidSubChainInfo = {
-    chain: NoteChain
-    removableNotesHostCells: Cell[]
-}
+type VisitedCells = { [cellNumber: CellNumber]: boolean }
 
 type CellLinksParticipants = {
-    [cellNum: number]: number[]
+    [cellNumber: CellNumber]: CellNumber[]
 }
 
-export const getCandidateAllStrongLinks = (note: NoteValue, notes: Notes, possibleNotes: Notes) => {
+export const getCandidateAllStrongLinks = (
+    note: NoteValue,
+    notes: Notes,
+    possibleNotes: Notes,
+) => {
     const result: NoteAllStrongLinks = {}
 
     BoardIterators.forEachHouse(house => {
@@ -105,24 +94,9 @@ export const getNoteWeakLinks = (note: NoteValue, notes: Notes, possibleNotes: N
         const noteAllPossibleHostCells = getNoteHostCellsInHouse(note, house, possibleNotes)
         const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length && noteUserFilledHostCells.length === 2
         if (!isValidStrongLink && noteUserFilledHostCells.length > 1) {
-            // TODO: use lodash util here
-            if (!result[house.type]) result[house.type] = {}
+            if (_isNil(result[house.type])) result[house.type] = {}
             const weakLinksGroups = getWeakLinkPairs(noteUserFilledHostCells)
             if (!_isEmpty(weakLinksGroups)) result[house.type][house.num] = weakLinksGroups
-        }
-    })
-
-    return result
-}
-
-// TODO: remove it if not needed anywhere
-export const getAllStrongLinks = (notes: Notes, possibleNotes: Notes) => {
-    const result: { [note: NoteValue]: NoteAllStrongLinks } = {}
-
-    BoardIterators.forCellEachNote(note => {
-        const strongLinks = getCandidateAllStrongLinks(note, notes, possibleNotes)
-        if (!_isEmpty(strongLinks)) {
-            result[note] = strongLinks
         }
     })
 
@@ -174,12 +148,12 @@ const getNoteWeakLinkCellsParticipants = (noteWeakLinks: NoteAllWeakLinks) => {
     return result
 }
 
-const getChainEdgeLinks = (chain: NoteChain): ChainTerminals => ({
+const getChainEdgeLinks = (chain: Chain): ChainTerminals => ({
     first: _head(chain) as typeof chain[0],
     last: _last(chain) as typeof chain[0],
 })
 
-export const getTrimWeakLinksFromEdges = (_chain: NoteChain) => {
+export const getTrimWeakLinksFromEdges = (_chain: Chain) => {
     let chain = _cloneDeep(_chain)
 
     const { first: firstEntry, last: lastEntry } = getChainEdgeLinks(chain)
@@ -190,7 +164,7 @@ export const getTrimWeakLinksFromEdges = (_chain: NoteChain) => {
     return markEdgeLinksAsLastForValidChain(chain)
 }
 
-const switchAllStrongLinksChainLinks = (chain: NoteChain): NoteChain => _map(chain, (link: Link, index: number) => {
+const switchAllStrongLinksChainLinks = (chain: Chain): Chain => _map(chain, (link: Link, index: number) => {
     if (index % 2) {
         return {
             ...link,
@@ -200,7 +174,7 @@ const switchAllStrongLinksChainLinks = (chain: NoteChain): NoteChain => _map(cha
     return link
 })
 
-const switchMixedLinksChainLinks = (chain: NoteChain): NoteChain => {
+const switchMixedLinksChainLinks = (chain: Chain): Chain => {
     const firstWeakLinkIndex = _findIndex(chain, (link: Link) => link.type === LINK_TYPES.WEAK)
     return _map(chain, (link: Link, index: number) => {
         const gap = Math.abs(firstWeakLinkIndex - index)
@@ -214,18 +188,18 @@ const switchMixedLinksChainLinks = (chain: NoteChain): NoteChain => {
     })
 }
 
-export const alternateChainLinks = (chain: NoteChain) => {
+export const alternateChainLinks = (chain: Chain) => {
     if (chainHasAllStrongLinks(chain)) return switchAllStrongLinksChainLinks(chain)
     return switchMixedLinksChainLinks(chain)
 }
 
-export const getCellsFromChain = (chain: NoteChain) => {
+export const getCellsFromChain = (chain: Chain) => {
     const result = _map(chain, (link: Link) => link.start)
     result.push(getChainEdgeLinks(chain).last.end)
     return result
 }
 
-export const getRemovableNotesHostCellsByChain = (note: NoteValue, chain: NoteChain, notes: Notes) => {
+export const getRemovableNotesHostCellsByChain = (note: NoteValue, chain: Chain, notes: Notes) => {
     const chainCells = getCellsFromChain(chain)
     const { first, last } = getChainEdgeLinks(chain)
     const chainFirstCell = convertBoardCellNumToCell(first.start)
@@ -235,28 +209,28 @@ export const getRemovableNotesHostCellsByChain = (note: NoteValue, chain: NoteCh
         .filter(cell => NotesRecord.isNotePresentInCell(notes, note, cell))
 }
 
-const markEdgeLinksAsLastForValidChain = (_chain: NoteChain) => {
+const markEdgeLinksAsLastForValidChain = (_chain: Chain) => {
     if (_isEmpty(_chain)) return _chain
 
-    const chain: NoteChain = _cloneDeep(_chain)
+    const chain: Chain = _cloneDeep(_chain)
     const { first, last } = getChainEdgeLinks(chain)
     first.isLast = true
     last.isLast = true
     return chain
 }
 
-const chainHasStrongEdgeLinks = (chain: NoteChain) => {
+const chainHasStrongEdgeLinks = (chain: Chain) => {
     const { first, last } = getChainEdgeLinks(chain)
     return first.type === LINK_TYPES.STRONG && last.type === LINK_TYPES.STRONG
 }
 
-const chainHasAnyWeakEdgeLink = (chain: NoteChain) => {
+const chainHasAnyWeakEdgeLink = (chain: Chain) => {
     const { first, last } = getChainEdgeLinks(chain)
     return first.type === LINK_TYPES.WEAK || last.type === LINK_TYPES.WEAK
 }
 
-export const getAllValidSubChains = (note: NoteValue, chain: NoteChain, notes: Notes) => {
-    const result: ValidSubChainInfo[] = []
+export const getAllValidSubChains = (note: NoteValue, chain: Chain, notes: Notes) => {
+    const result: AnalyzedChainResult[] = []
 
     let subChainLen = MINIMUM_LINKS_IN_CHAIN
     let subChainsCount = chain.length - subChainLen + 1
@@ -283,7 +257,7 @@ export const getAllValidSubChains = (note: NoteValue, chain: NoteChain, notes: N
 }
 
 // TODO: change it's contract
-export const getChosenChainFromValidSubChains = (subChains: ValidSubChainInfo[]): ValidSubChainInfo | [] => {
+export const getChosenChainFromValidSubChains = (subChains: AnalyzedChainResult[]): AnalyzedChainResult | [] => {
     if (_isEmpty(subChains)) return []
 
     const orderedSubChains = subChains.sort((subChainA, subChainB) => {
@@ -296,12 +270,11 @@ export const getChosenChainFromValidSubChains = (subChains: ValidSubChainInfo[])
     return _get(orderedSubChains, '[0]')
 }
 
-const chainHasAllStrongLinks = (chain: NoteChain): boolean => _every(chain, (link: Link) => link.type === LINK_TYPES.STRONG)
+const chainHasAllStrongLinks = (chain: Chain): boolean => _every(chain, (link: Link) => link.type === LINK_TYPES.STRONG)
 
-// TODO: chainge it's contract for chain, currently it's chain.chain
-export const analyzeChain = (note: NoteValue, _chain: NoteChain, notes: Notes) => {
+export const analyzeChain = (note: NoteValue, _chain: Chain, notes: Notes): ReturnType<OnChainExplorationComplete> => {
     const chain = getTrimWeakLinksFromEdges(_cloneDeep(_chain))
-    if (chain.length < MINIMUM_LINKS_IN_CHAIN) return { foundChain: false, chain: [] }
+    if (chain.length < MINIMUM_LINKS_IN_CHAIN) return { foundChain: false, chainResult: null }
 
     const validSubChains = getAllValidSubChains(note, chain, notes)
     const chosenChain = getChosenChainFromValidSubChains(validSubChains)
@@ -309,119 +282,56 @@ export const analyzeChain = (note: NoteValue, _chain: NoteChain, notes: Notes) =
 
     return {
         foundChain,
-        chain: foundChain ? chosenChain : [],
+        chainResult: foundChain ? (chosenChain as AnalyzedChainResult) : null,
     }
 }
 
-const isChainExplorationComplete = (chain: NoteChain) => {
-    const { first, last } = getChainEdgeLinks(chain)
-    return first.isLast && last.isLast
-}
-
-const getNewLinkPossibleCells = (
-    chain: NoteChain,
+const getNewLinksOptions = (
     strongLinkParticipantCells: CellLinksParticipants,
     weakLinkParticipantCells: CellLinksParticipants,
-) => {
+) => (chain : Chain, exploringFromChainEnd: boolean) => {
     const { first, last } = getChainEdgeLinks(chain)
-    const newLinkConnectingCellInChain = last.isLast ? first.start : last.end
+    const newLinkConnectingCellInChain = exploringFromChainEnd ? last.end : first.start
     const newStrongLinkCells = strongLinkParticipantCells[newLinkConnectingCellInChain] || []
     const newWeakLinkCells = weakLinkParticipantCells[newLinkConnectingCellInChain] || []
 
-    const newLinkConnectingLinkInChain = last.isLast ? first : last
-    const newLinkPossibleCells = newLinkConnectingLinkInChain.type === LINK_TYPES.STRONG
-        ? [...newStrongLinkCells, ...newWeakLinkCells]
-        : newStrongLinkCells
+    let result: NewLinkPossibleCells[] = _map(newStrongLinkCells, (newStrongLinkNode: number) => ({
+        node: newStrongLinkNode,
+        type: LINK_TYPES.STRONG,
+    }))
+
+    const newLinkConnectingLinkInChain = exploringFromChainEnd ? last : first
+    if (newLinkConnectingLinkInChain.type === LINK_TYPES.STRONG) {
+        const newWeakLinks = _map(newWeakLinkCells, (newWeakLinkNode: number) => ({
+            node: newWeakLinkNode,
+            type: LINK_TYPES.WEAK,
+        }))
+        result = _concat(result, newWeakLinks)
+    }
 
     return {
-        connectingCellInChain: newLinkConnectingCellInChain,
-        newLinkPossibleCells,
+        newLinkPossibleCells: result,
     }
 }
 
-const exploreChain = (
-    note: NoteValue,
-    chain: NoteChain,
-    strongLinkParticipantCells: CellLinksParticipants,
-    weakLinkParticipantCells: CellLinksParticipants,
-    notes: Notes,
-    visitedCells: VisitedCells,
-): ValidSubChainInfo | null => {
-    // first explore links on right side, then explore from left side
+const isNodeAvailableToAddInChain = (visitedCells: VisitedCells) => (node: number) => !visitedCells[node]
 
-    const { first: chainFirstLink, last: chainLastLink } = getChainEdgeLinks(chain)
-
-    if (!isChainExplorationComplete(chain)) {
-        const isExtendingFromEnd = !chainLastLink.isLast
-
-        const {
-            newLinkPossibleCells,
-            connectingCellInChain,
-        } = getNewLinkPossibleCells(chain, strongLinkParticipantCells, weakLinkParticipantCells)
-
-        let chainProgressed = false
-        for (let i = 0; i < newLinkPossibleCells.length; i++) {
-            const newLinkCell = newLinkPossibleCells[i]
-            if (visitedCells[newLinkCell]) continue
-
-            visitedCells[newLinkCell] = true
-            chainProgressed = true
-
-            const newLinkPositionInChain = isExtendingFromEnd ? chain.length : 0
-            const chainWithNewLink = [...chain]
-            // no util found for splice in lodash, use this one only for now
-            chainWithNewLink.splice(newLinkPositionInChain, 0, {
-                start: isExtendingFromEnd ? connectingCellInChain : newLinkCell,
-                end: isExtendingFromEnd ? newLinkCell : connectingCellInChain,
-                type: _includes(strongLinkParticipantCells[connectingCellInChain], newLinkCell)
-                    ? LINK_TYPES.STRONG : LINK_TYPES.WEAK,
-                isLast: false,
-            })
-
-            const chainInfo = exploreChain(
-                note,
-                chainWithNewLink,
-                strongLinkParticipantCells,
-                weakLinkParticipantCells,
-                notes,
-                visitedCells,
-            )
-            if (!_isNil(chainInfo)) return chainInfo
-            visitedCells[newLinkCell] = false
-        }
-
-        if (!chainProgressed) {
-            if (isExtendingFromEnd) {
-                chainLastLink.isLast = true
-                const chainInfo = exploreChain(
-                    note,
-                    chain,
-                    strongLinkParticipantCells,
-                    weakLinkParticipantCells,
-                    notes,
-                    visitedCells,
-                )
-                if (!_isNil(chainInfo)) return chainInfo
-            } else {
-                chainFirstLink.isLast = true
-            }
-        }
-    }
-
-    if (isChainExplorationComplete(chain)) {
-        const { foundChain, chain: validChain } = analyzeChain(note, chain, notes)
-        return foundChain ? validChain as ValidSubChainInfo : null
-    }
-
-    return null
+const onAddingNewNodeInChain = (visitedCells: VisitedCells) => (node: number) => {
+    visitedCells[node] = true
 }
+
+const onNodeExplorationFail = (visitedCells: VisitedCells) => (node: number) => {
+    visitedCells[node] = false
+}
+
+const onChainExplorationComplete = (note: NoteValue, notes: Notes) => (chain: Chain) => analyzeChain(note, chain, notes)
 
 const getNoteChain = (
     note: NoteValue,
     strongLinks: NoteAllStrongLinks,
     weakLinks: NoteAllWeakLinks,
     notes: Notes,
-): ValidSubChainInfo | null => {
+): AnalyzedChainResult | null => {
     const strongLinkParticipantCells = getNoteStrongLinkCellsParticipants(strongLinks)
     const weakLinkParticipantCells = getNoteWeakLinkCellsParticipants(weakLinks)
 
@@ -450,23 +360,25 @@ const getNoteChain = (
         pickedStrongLinks[unvisitedLink[0]] = true
         pickedStrongLinks[unvisitedLink[1]] = true
 
+        // link in chain
         const _chain = [{
             start: unvisitedLink[0],
             end: unvisitedLink[1],
             type: LINK_TYPES.STRONG,
             isLast: false,
+            // isTerminal: false,
         }]
 
         visitedCells[unvisitedLink[0]] = true
         visitedCells[unvisitedLink[1]] = true
 
         const exploredChainResult = exploreChain(
-            note,
             _chain,
-            strongLinkParticipantCells,
-            weakLinkParticipantCells,
-            notes,
-            visitedCells,
+            getNewLinksOptions(strongLinkParticipantCells, weakLinkParticipantCells),
+            isNodeAvailableToAddInChain(visitedCells),
+            onAddingNewNodeInChain(visitedCells),
+            onChainExplorationComplete(note, notes),
+            onNodeExplorationFail(visitedCells),
         )
 
         if (!_isNil(exploredChainResult)) {
@@ -477,7 +389,7 @@ const getNoteChain = (
     return null
 }
 
-const getChainCellsFromChain = (chain: NoteChain) => {
+const getChainCellsFromChain = (chain: Chain) => {
     const result: Cell[] = []
 
     _forEach(chain, ({ start: startCellNum, end: endCellNum, isLast }: Link, indx: number) => {
@@ -490,7 +402,11 @@ const getChainCellsFromChain = (chain: NoteChain) => {
     return result
 }
 
-export const getRawXChainHints = (mainNumbers: MainNumbers, notes: Notes, possibleNotes: Notes): XChainRawHint[] => {
+export const getRawXChainHints = (
+    _: MainNumbers,
+    notes: Notes,
+    possibleNotes: Notes,
+): XChainRawHint[] | [] => {
     let result = {} as XChainRawHint
 
     // TODO: add early break support for these iterators

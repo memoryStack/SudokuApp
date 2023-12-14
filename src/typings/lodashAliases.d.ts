@@ -214,3 +214,9 @@ declare module '@lodash/compact' {
 
     export default _compact
 }
+
+declare module '@lodash/concat' {
+    import _concat from '@lodash/concat'
+
+    export default _concat
+}
