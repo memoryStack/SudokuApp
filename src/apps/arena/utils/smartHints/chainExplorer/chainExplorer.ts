@@ -30,7 +30,6 @@ export const exploreChain = (
     onAddingNewNodeInChain: OnAddingNewNodeInChain,
     onChainExplorationComplete: OnChainExplorationComplete,
     onNodeExplorationFail: OnNodeExplorationFail,
-
 ): AnalyzedChainResult | null => {
     if (!isChainExplorationComplete(chain)) {
         const { first: chainFirstLink, last: chainLastLink } = getChainEdgeLinks(chain)

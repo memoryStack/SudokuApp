@@ -10,6 +10,8 @@ import { filterNakedGroupEligibleCellsInHouse } from '../nakedGroup/nakedGroup'
 import { NOTES_COUNT_IN_ELIGIBLE_CELLS } from '../remotePairs/remotePairs.constants'
 import { cellHasAllPossibleNotes } from '../validityTest/validity.helpers'
 
+import { XYChainRawHint } from './types'
+
 // COPY: as it is copy from remotepairs implementation
 export const getAllValidCellsWithPairs = (mainNumbers: MainNumbers, notes: Notes, possibleNotes: Notes) => {
     const result: Cell[] = []
@@ -40,7 +42,11 @@ export const getNotesVSHostCellsMap = (cells: Cell[], notes: Notes) => {
     return result
 }
 
-// export const getRawXYChainHint = (mainNumbers: MainNumbers, notes: Notes, possibleNotes: Notes): XYChainRawHint => {
-//     // const hint = getFirstNoteXChain(notes, possibleNotes)
-//     // if (_isEmpty(hint)) {}
-// }
+export const getRawXYChainHints = (
+    mainNumbers: MainNumbers,
+    notes: Notes,
+    possibleNotes: Notes,
+): XYChainRawHint => {
+    // const hint = getFirstNoteXChain(notes, possibleNotes)
+    // if (_isEmpty(hint)) {}
+}
