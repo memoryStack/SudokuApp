@@ -37,6 +37,7 @@ module.exports = {
     rules: {
         indent: ['error', 4, { SwitchCase: 1 }],
         quotes: ['error', 'single'],
+        'linebreak-style': 'off',
         semi: ['error', 'never'],
         'no-underscore-dangle': 'off',
         'unused-imports/no-unused-imports': 'error',

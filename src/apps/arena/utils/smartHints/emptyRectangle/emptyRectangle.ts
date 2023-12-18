@@ -9,6 +9,7 @@
 */
 
 import { HOUSE_TYPE } from '../constants'
+import { BoardIterators } from '../../classes/boardIterators'
 
 export const findEmptyRectangleInBlock = (note: Note, blockHouse: House, notes: Notes, possibleNotes: Notes) => {
     // const userFilledCells = getNoteHostCellsInHouse(notes)
@@ -37,6 +38,11 @@ export const getEmptyRectangleRawHints = (
     notes: Notes,
     possibleNotes: Notes,
 ) => {
+    for (let i = 0; i < 9; i++){
+        forHouseEachCell(house : Block , i) {
+
+   }
+    }
     const a = 10
     return {
         blockHouse: { type: HOUSE_TYPE.BLOCK, num: 4 },
