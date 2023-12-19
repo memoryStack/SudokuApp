@@ -20,7 +20,7 @@ const getChainEdgeLinks = (chain: Chain): ChainTerminals => ({
 
 const isChainExplorationComplete = (chain: Chain) => {
     const { first, last } = getChainEdgeLinks(chain)
-    return first.isLast && last.isLast
+    return first.isTerminal && last.isTerminal
 }
 
 export const exploreChain = (
@@ -34,7 +34,7 @@ export const exploreChain = (
     if (!isChainExplorationComplete(chain)) {
         const { first: chainFirstLink, last: chainLastLink } = getChainEdgeLinks(chain)
 
-        const sholdExploreFromChainEnd = !chainLastLink.isLast
+        const sholdExploreFromChainEnd = !chainLastLink.isTerminal
 
         const { newLinkPossibleCells } = getNewLinksOptions(chain, sholdExploreFromChainEnd)
 
@@ -57,7 +57,7 @@ export const exploreChain = (
                 start: sholdExploreFromChainEnd ? newLinkConnectingCellInChain : newLinkCell,
                 end: sholdExploreFromChainEnd ? newLinkCell : newLinkConnectingCellInChain,
                 type: newLinkType,
-                isLast: false,
+                isTerminal: false,
             })
 
             const chainInfo = exploreChain(
@@ -76,7 +76,7 @@ export const exploreChain = (
 
         if (!chainProgressed) {
             if (sholdExploreFromChainEnd) {
-                chainLastLink.isLast = true
+                chainLastLink.isTerminal = true
                 const chainInfo = exploreChain(
                     chain,
                     getNewLinksOptions,
@@ -87,7 +87,7 @@ export const exploreChain = (
                 )
                 if (!_isNil(chainInfo)) return chainInfo
             } else {
-                chainFirstLink.isLast = true
+                chainFirstLink.isTerminal = true
             }
         }
     }

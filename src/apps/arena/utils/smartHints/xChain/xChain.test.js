@@ -206,31 +206,31 @@ describe('getTrimWeakLinksFromEdges()', () => {
     test('removes weak links from start and end and will mark links beside these removed weak links as Last', () => {
         const chain = [
             {
-                start: 10, end: 1, type: 'WEAK', isLast: true,
+                start: 10, end: 1, type: 'WEAK', isTerminal: true,
             },
             {
-                start: 1, end: 8, type: 'STRONG', isLast: false,
+                start: 1, end: 8, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 61, type: 'STRONG', isLast: false,
+                start: 16, end: 61, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 61, end: 62, type: 'WEAK', isLast: true,
+                start: 61, end: 62, type: 'WEAK', isTerminal: true,
             },
         ]
 
         const expectedResult = [
             {
-                start: 1, end: 8, type: 'STRONG', isLast: true,
+                start: 1, end: 8, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 61, type: 'STRONG', isLast: true,
+                start: 16, end: 61, type: 'STRONG', isTerminal: true,
             },
         ]
 
@@ -240,28 +240,28 @@ describe('getTrimWeakLinksFromEdges()', () => {
     test('removes weak links from only side if weak link is present only in one side', () => {
         const chain = [
             {
-                start: 10, end: 1, type: 'WEAK', isLast: true,
+                start: 10, end: 1, type: 'WEAK', isTerminal: true,
             },
             {
-                start: 1, end: 8, type: 'STRONG', isLast: false,
+                start: 1, end: 8, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 61, type: 'STRONG', isLast: true,
+                start: 16, end: 61, type: 'STRONG', isTerminal: true,
             },
         ]
 
         const expectedResult = [
             {
-                start: 1, end: 8, type: 'STRONG', isLast: true,
+                start: 1, end: 8, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 61, type: 'STRONG', isLast: true,
+                start: 16, end: 61, type: 'STRONG', isTerminal: true,
             },
         ]
 
@@ -271,13 +271,13 @@ describe('getTrimWeakLinksFromEdges()', () => {
     test('returns chain as it is if there is not weak link in the edge', () => {
         const chain = [
             {
-                start: 1, end: 8, type: 'STRONG', isLast: true,
+                start: 1, end: 8, type: 'STRONG', isTerminal: true,
             },
         ]
 
         const expectedResult = [
             {
-                start: 1, end: 8, type: 'STRONG', isLast: true,
+                start: 1, end: 8, type: 'STRONG', isTerminal: true,
             },
         ]
 
@@ -286,7 +286,7 @@ describe('getTrimWeakLinksFromEdges()', () => {
 
     test('returns empty list if only link is weak', () => {
         const chain = [{
-            start: 1, end: 8, type: 'WEAK', isLast: true,
+            start: 1, end: 8, type: 'WEAK', isTerminal: true,
         }]
 
         expect(getTrimWeakLinksFromEdges(chain)).toEqual([])
@@ -298,13 +298,13 @@ describe('analyzeChain()', () => {
         test('chain has less than 3 links after trimming weak links from edges', () => {
             const chain = [
                 {
-                    start: 10, end: 1, type: 'WEAK', isLast: true,
+                    start: 10, end: 1, type: 'WEAK', isTerminal: true,
                 },
                 {
-                    start: 1, end: 8, type: 'STRONG', isLast: false,
+                    start: 1, end: 8, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 8, end: 16, type: 'STRONG', isLast: true,
+                    start: 8, end: 16, type: 'STRONG', isTerminal: true,
                 },
             ]
 
@@ -321,19 +321,19 @@ describe('analyzeChain()', () => {
 
             const chain = [
                 {
-                    start: 11, end: 47, type: 'STRONG', isLast: true,
+                    start: 11, end: 47, type: 'STRONG', isTerminal: true,
                 },
                 {
-                    start: 47, end: 46, type: 'STRONG', isLast: false,
+                    start: 47, end: 46, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 46, end: 73, type: 'STRONG', isLast: false,
+                    start: 46, end: 73, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 73, end: 72, type: 'STRONG', isLast: false,
+                    start: 73, end: 72, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 72, end: 9, type: 'STRONG', isLast: true,
+                    start: 72, end: 9, type: 'STRONG', isTerminal: true,
                 },
             ]
 
@@ -349,19 +349,19 @@ describe('analyzeChain()', () => {
 
             const chain = [
                 {
-                    start: 30, end: 40, type: 'STRONG', isLast: true,
+                    start: 30, end: 40, type: 'STRONG', isTerminal: true,
                 },
                 {
-                    start: 40, end: 44, type: 'STRONG', isLast: false,
+                    start: 40, end: 44, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 44, end: 52, type: 'STRONG', isLast: false,
+                    start: 44, end: 52, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 52, end: 79, type: 'STRONG', isLast: false,
+                    start: 52, end: 79, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 79, end: 69, type: 'STRONG', isLast: true,
+                    start: 79, end: 69, type: 'STRONG', isTerminal: true,
                 },
             ]
             const expectedResult = {
@@ -369,13 +369,13 @@ describe('analyzeChain()', () => {
                 chainResult: {
                     chain: [
                         {
-                            start: 40, end: 44, type: 'STRONG', isLast: true,
+                            start: 40, end: 44, type: 'STRONG', isTerminal: true,
                         },
                         {
-                            start: 44, end: 52, type: 'WEAK', isLast: false,
+                            start: 44, end: 52, type: 'WEAK', isTerminal: false,
                         },
                         {
-                            start: 52, end: 79, type: 'STRONG', isLast: true,
+                            start: 52, end: 79, type: 'STRONG', isTerminal: true,
                         },
                     ],
                     removableNotesHostCells: [{ row: 8, col: 4 }],
@@ -388,25 +388,25 @@ describe('analyzeChain()', () => {
         test('chain made of mix of STRONG and WEAK links ', () => {
             const chain = [
                 {
-                    start: 9, end: 1, type: 'WEAK', isLast: true,
+                    start: 9, end: 1, type: 'WEAK', isTerminal: true,
                 },
                 {
-                    start: 1, end: 8, type: 'STRONG', isLast: false,
+                    start: 1, end: 8, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 8, end: 16, type: 'WEAK', isLast: false,
+                    start: 8, end: 16, type: 'WEAK', isTerminal: false,
                 },
                 {
-                    start: 16, end: 61, type: 'STRONG', isLast: false,
+                    start: 16, end: 61, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 61, end: 56, type: 'WEAK', isLast: false,
+                    start: 61, end: 56, type: 'WEAK', isTerminal: false,
                 },
                 {
-                    start: 56, end: 29, type: 'STRONG', isLast: false,
+                    start: 56, end: 29, type: 'STRONG', isTerminal: false,
                 },
                 {
-                    start: 29, end: 28, type: 'WEAK', isLast: true,
+                    start: 29, end: 28, type: 'WEAK', isTerminal: true,
                 },
             ]
             const expectedResult = {
@@ -414,19 +414,19 @@ describe('analyzeChain()', () => {
                 chainResult: {
                     chain: [
                         {
-                            start: 1, end: 8, type: 'STRONG', isLast: true,
+                            start: 1, end: 8, type: 'STRONG', isTerminal: true,
                         },
                         {
-                            start: 8, end: 16, type: 'WEAK', isLast: false,
+                            start: 8, end: 16, type: 'WEAK', isTerminal: false,
                         },
                         {
-                            start: 16, end: 61, type: 'STRONG', isLast: false,
+                            start: 16, end: 61, type: 'STRONG', isTerminal: false,
                         },
                         {
-                            start: 61, end: 56, type: 'WEAK', isLast: false,
+                            start: 61, end: 56, type: 'WEAK', isTerminal: false,
                         },
                         {
-                            start: 56, end: 29, type: 'STRONG', isLast: true,
+                            start: 56, end: 29, type: 'STRONG', isTerminal: true,
                         },
                     ],
                     removableNotesHostCells: [{ row: 3, col: 1 }],
@@ -443,36 +443,36 @@ describe('alternateChainLinks()', () => {
     test('will return chain after switching its in-between strong links, for pure Strong Link chain Edge links will always be STRONG', () => {
         const chain = [
             {
-                start: 10, end: 1, type: 'STRONG', isLast: true,
+                start: 10, end: 1, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 1, end: 8, type: 'STRONG', isLast: false,
+                start: 1, end: 8, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 8, end: 16, type: 'STRONG', isLast: false,
+                start: 8, end: 16, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 16, end: 78, type: 'STRONG', isLast: false,
+                start: 16, end: 78, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 78, end: 65, type: 'STRONG', isLast: true,
+                start: 78, end: 65, type: 'STRONG', isTerminal: true,
             },
         ]
         const expectedResult = [
             {
-                start: 10, end: 1, type: 'STRONG', isLast: true,
+                start: 10, end: 1, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 1, end: 8, type: 'WEAK', isLast: false,
+                start: 1, end: 8, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 8, end: 16, type: 'STRONG', isLast: false,
+                start: 8, end: 16, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 16, end: 78, type: 'WEAK', isLast: false,
+                start: 16, end: 78, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 78, end: 65, type: 'STRONG', isLast: true,
+                start: 78, end: 65, type: 'STRONG', isTerminal: true,
             },
         ]
         expect(alternateChainLinks(chain)).toEqual(expectedResult)
@@ -482,36 +482,36 @@ describe('alternateChainLinks()', () => {
     test('for mixed chain, edge links might be WEAK after transformation', () => {
         const chain = [
             {
-                start: 10, end: 1, type: 'STRONG', isLast: true,
+                start: 10, end: 1, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 1, end: 8, type: 'STRONG', isLast: false,
+                start: 1, end: 8, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 78, type: 'STRONG', isLast: false,
+                start: 16, end: 78, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 78, end: 65, type: 'STRONG', isLast: true,
+                start: 78, end: 65, type: 'STRONG', isTerminal: true,
             },
         ]
         const expectedResult = [
             {
-                start: 10, end: 1, type: 'WEAK', isLast: true,
+                start: 10, end: 1, type: 'WEAK', isTerminal: true,
             },
             {
-                start: 1, end: 8, type: 'STRONG', isLast: false,
+                start: 1, end: 8, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 78, type: 'STRONG', isLast: false,
+                start: 16, end: 78, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 78, end: 65, type: 'WEAK', isLast: true,
+                start: 78, end: 65, type: 'WEAK', isTerminal: true,
             },
         ]
         expect(alternateChainLinks(chain)).toEqual(expectedResult)
@@ -529,19 +529,19 @@ describe('getAllValidSubChains()', () => {
 
         const chain = [
             {
-                start: 30, end: 40, type: 'STRONG', isLast: true,
+                start: 30, end: 40, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 40, end: 44, type: 'STRONG', isLast: false,
+                start: 40, end: 44, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 44, end: 52, type: 'STRONG', isLast: false,
+                start: 44, end: 52, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 52, end: 79, type: 'STRONG', isLast: false,
+                start: 52, end: 79, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 79, end: 69, type: 'STRONG', isLast: true,
+                start: 79, end: 69, type: 'STRONG', isTerminal: true,
             },
         ]
 
@@ -549,13 +549,13 @@ describe('getAllValidSubChains()', () => {
             {
                 chain: [
                     {
-                        start: 40, end: 44, type: 'STRONG', isLast: true,
+                        start: 40, end: 44, type: 'STRONG', isTerminal: true,
                     },
                     {
-                        start: 44, end: 52, type: 'WEAK', isLast: false,
+                        start: 44, end: 52, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 52, end: 79, type: 'STRONG', isLast: true,
+                        start: 52, end: 79, type: 'STRONG', isTerminal: true,
                     },
                 ],
                 removableNotesHostCells: [{ row: 8, col: 4 }],
@@ -563,19 +563,19 @@ describe('getAllValidSubChains()', () => {
             {
                 chain: [
                     {
-                        start: 30, end: 40, type: 'STRONG', isLast: true,
+                        start: 30, end: 40, type: 'STRONG', isTerminal: true,
                     },
                     {
-                        start: 40, end: 44, type: 'WEAK', isLast: false,
+                        start: 40, end: 44, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 44, end: 52, type: 'STRONG', isLast: false,
+                        start: 44, end: 52, type: 'STRONG', isTerminal: false,
                     },
                     {
-                        start: 52, end: 79, type: 'WEAK', isLast: false,
+                        start: 52, end: 79, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 79, end: 69, type: 'STRONG', isLast: true,
+                        start: 79, end: 69, type: 'STRONG', isTerminal: true,
                     },
                 ],
                 removableNotesHostCells: [{ row: 7, col: 3 }],
@@ -591,19 +591,19 @@ describe('getAllValidSubChains()', () => {
 
         const chain = [
             {
-                start: 11, end: 47, type: 'STRONG', isLast: true,
+                start: 11, end: 47, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 47, end: 46, type: 'STRONG', isLast: false,
+                start: 47, end: 46, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 46, end: 73, type: 'STRONG', isLast: false,
+                start: 46, end: 73, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 73, end: 72, type: 'STRONG', isLast: false,
+                start: 73, end: 72, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 72, end: 9, type: 'STRONG', isLast: true,
+                start: 72, end: 9, type: 'STRONG', isTerminal: true,
             },
         ]
 
@@ -628,54 +628,54 @@ describe('getAllValidSubChains()', () => {
 
         const chain = [
             {
-                start: 2, end: 4, type: 'STRONG', isLast: true,
+                start: 2, end: 4, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 4, end: 14, type: 'STRONG', isLast: false,
+                start: 4, end: 14, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 14, end: 17, type: 'WEAK', isLast: false,
+                start: 14, end: 17, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 17, end: 25, type: 'STRONG', isLast: false,
+                start: 17, end: 25, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 25, end: 61, type: 'STRONG', isLast: false,
+                start: 25, end: 61, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 61, end: 62, type: 'STRONG', isLast: true,
+                start: 61, end: 62, type: 'STRONG', isTerminal: true,
             },
         ]
 
         const expectedResult = [{
             chain: [{
-                start: 4, end: 14, type: 'STRONG', isLast: true,
+                start: 4, end: 14, type: 'STRONG', isTerminal: true,
             }, {
-                start: 14, end: 17, type: 'WEAK', isLast: false,
+                start: 14, end: 17, type: 'WEAK', isTerminal: false,
             }, {
-                start: 17, end: 25, type: 'STRONG', isLast: true,
+                start: 17, end: 25, type: 'STRONG', isTerminal: true,
             }],
             removableNotesHostCells: [{ row: 2, col: 4 }],
         }, {
             chain: [{
-                start: 17, end: 25, type: 'STRONG', isLast: true,
+                start: 17, end: 25, type: 'STRONG', isTerminal: true,
             }, {
-                start: 25, end: 61, type: 'WEAK', isLast: false,
+                start: 25, end: 61, type: 'WEAK', isTerminal: false,
             }, {
-                start: 61, end: 62, type: 'STRONG', isLast: true,
+                start: 61, end: 62, type: 'STRONG', isTerminal: true,
             }],
             removableNotesHostCells: [{ row: 7, col: 8 }, { row: 8, col: 8 }],
         }, {
             chain: [{
-                start: 4, end: 14, type: 'STRONG', isLast: true,
+                start: 4, end: 14, type: 'STRONG', isTerminal: true,
             }, {
-                start: 14, end: 17, type: 'WEAK', isLast: false,
+                start: 14, end: 17, type: 'WEAK', isTerminal: false,
             }, {
-                start: 17, end: 25, type: 'STRONG', isLast: false,
+                start: 17, end: 25, type: 'STRONG', isTerminal: false,
             }, {
-                start: 25, end: 61, type: 'WEAK', isLast: false,
+                start: 25, end: 61, type: 'WEAK', isTerminal: false,
             }, {
-                start: 61, end: 62, type: 'STRONG', isLast: true,
+                start: 61, end: 62, type: 'STRONG', isTerminal: true,
             }],
             removableNotesHostCells: [{ row: 6, col: 4 }],
         }]
@@ -688,19 +688,19 @@ describe('getRemovableNotesHostCellsByChain()', () => {
     test('will return number of notes the given valid chain can remove', () => {
         const chain = [
             {
-                start: 1, end: 8, type: 'STRONG', isLast: true,
+                start: 1, end: 8, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 61, type: 'STRONG', isLast: false,
+                start: 16, end: 61, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 61, end: 56, type: 'WEAK', isLast: false,
+                start: 61, end: 56, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 56, end: 29, type: 'STRONG', isLast: true,
+                start: 56, end: 29, type: 'STRONG', isTerminal: true,
             },
         ]
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
@@ -713,13 +713,13 @@ describe('getRemovableNotesHostCellsByChain()', () => {
     test('return 0 if no notes can be removed', () => {
         const chain = [
             {
-                start: 1, end: 8, type: 'STRONG', isLast: true,
+                start: 1, end: 8, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 61, type: 'STRONG', isLast: true,
+                start: 16, end: 61, type: 'STRONG', isTerminal: true,
             },
         ]
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
@@ -733,19 +733,19 @@ describe('getCellsFromChain()', () => {
     test('returns list of cells which make chain from start to end of chain', () => {
         const chain = [
             {
-                start: 1, end: 8, type: 'STRONG', isLast: true,
+                start: 1, end: 8, type: 'STRONG', isTerminal: true,
             },
             {
-                start: 8, end: 16, type: 'WEAK', isLast: false,
+                start: 8, end: 16, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 16, end: 61, type: 'STRONG', isLast: false,
+                start: 16, end: 61, type: 'STRONG', isTerminal: false,
             },
             {
-                start: 61, end: 56, type: 'WEAK', isLast: false,
+                start: 61, end: 56, type: 'WEAK', isTerminal: false,
             },
             {
-                start: 56, end: 29, type: 'STRONG', isLast: true,
+                start: 56, end: 29, type: 'STRONG', isTerminal: true,
             },
         ]
 
@@ -763,13 +763,13 @@ describe('getChosenChainFromValidSubChains()', () => {
             {
                 chain: [
                     {
-                        start: 40, end: 44, type: 'STRONG', isLast: true,
+                        start: 40, end: 44, type: 'STRONG', isTerminal: true,
                     },
                     {
-                        start: 44, end: 52, type: 'WEAK', isLast: false,
+                        start: 44, end: 52, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 52, end: 79, type: 'STRONG', isLast: true,
+                        start: 52, end: 79, type: 'STRONG', isTerminal: true,
                     },
                 ],
                 removableNotesHostCells: [{ row: 8, col: 3 }],
@@ -777,19 +777,19 @@ describe('getChosenChainFromValidSubChains()', () => {
             {
                 chain: [
                     {
-                        start: 30, end: 40, type: 'STRONG', isLast: true,
+                        start: 30, end: 40, type: 'STRONG', isTerminal: true,
                     },
                     {
-                        start: 40, end: 44, type: 'WEAK', isLast: false,
+                        start: 40, end: 44, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 44, end: 52, type: 'STRONG', isLast: false,
+                        start: 44, end: 52, type: 'STRONG', isTerminal: false,
                     },
                     {
-                        start: 52, end: 79, type: 'WEAK', isLast: false,
+                        start: 52, end: 79, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 79, end: 69, type: 'STRONG', isLast: true,
+                        start: 79, end: 69, type: 'STRONG', isTerminal: true,
                     },
                 ],
                 removableNotesHostCells: [{ row: 7, col: 3 }],
@@ -797,13 +797,13 @@ describe('getChosenChainFromValidSubChains()', () => {
             {
                 chain: [
                     {
-                        start: 40, end: 44, type: 'STRONG', isLast: true,
+                        start: 40, end: 44, type: 'STRONG', isTerminal: true,
                     },
                     {
-                        start: 44, end: 52, type: 'WEAK', isLast: false,
+                        start: 44, end: 52, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 52, end: 67, type: 'STRONG', isLast: true,
+                        start: 52, end: 67, type: 'STRONG', isTerminal: true,
                     },
                 ],
                 removableNotesHostCells: [{ row: 0, col: 4 }, { row: 1, col: 4 }, { row: 2, col: 4 }],
@@ -813,13 +813,13 @@ describe('getChosenChainFromValidSubChains()', () => {
         const expectedResult = {
             chain: [
                 {
-                    start: 40, end: 44, type: 'STRONG', isLast: true,
+                    start: 40, end: 44, type: 'STRONG', isTerminal: true,
                 },
                 {
-                    start: 44, end: 52, type: 'WEAK', isLast: false,
+                    start: 44, end: 52, type: 'WEAK', isTerminal: false,
                 },
                 {
-                    start: 52, end: 67, type: 'STRONG', isLast: true,
+                    start: 52, end: 67, type: 'STRONG', isTerminal: true,
                 },
             ],
             removableNotesHostCells: [{ row: 0, col: 4 }, { row: 1, col: 4 }, { row: 2, col: 4 }],
@@ -833,13 +833,13 @@ describe('getChosenChainFromValidSubChains()', () => {
             {
                 chain: [
                     {
-                        start: 28, end: 34, type: 'STRONG', isLast: true,
+                        start: 28, end: 34, type: 'STRONG', isTerminal: true,
                     },
                     {
-                        start: 34, end: 70, type: 'WEAK', isLast: false,
+                        start: 34, end: 70, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 70, end: 62, type: 'STRONG', isLast: true,
+                        start: 70, end: 62, type: 'STRONG', isTerminal: true,
                     },
                 ],
                 removableNotesHostCells: [{ row: 6, col: 1 }],
@@ -847,19 +847,19 @@ describe('getChosenChainFromValidSubChains()', () => {
             {
                 chain: [
                     {
-                        start: 28, end: 34, type: 'STRONG', isLast: true,
+                        start: 28, end: 34, type: 'STRONG', isTerminal: true,
                     },
                     {
-                        start: 34, end: 70, type: 'WEAK', isLast: false,
+                        start: 34, end: 70, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 70, end: 62, type: 'STRONG', isLast: false,
+                        start: 70, end: 62, type: 'STRONG', isTerminal: false,
                     },
                     {
-                        start: 62, end: 59, type: 'WEAK', isLast: false,
+                        start: 62, end: 59, type: 'WEAK', isTerminal: false,
                     },
                     {
-                        start: 59, end: 49, type: 'STRONG', isLast: true,
+                        start: 59, end: 49, type: 'STRONG', isTerminal: true,
                     },
                 ],
                 removableNotesHostCells: [{ row: 5, col: 0 }, { row: 5, col: 1 }, { row: 5, col: 2 }],
@@ -869,13 +869,13 @@ describe('getChosenChainFromValidSubChains()', () => {
         const expectedResult = {
             chain: [
                 {
-                    start: 28, end: 34, type: 'STRONG', isLast: true,
+                    start: 28, end: 34, type: 'STRONG', isTerminal: true,
                 },
                 {
-                    start: 34, end: 70, type: 'WEAK', isLast: false,
+                    start: 34, end: 70, type: 'WEAK', isTerminal: false,
                 },
                 {
-                    start: 70, end: 62, type: 'STRONG', isLast: true,
+                    start: 70, end: 62, type: 'STRONG', isTerminal: true,
                 },
             ],
             removableNotesHostCells: [{ row: 6, col: 1 }],

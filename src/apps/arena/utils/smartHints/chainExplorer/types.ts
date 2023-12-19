@@ -5,7 +5,7 @@ export type Link = {
     start: CellNumber
     end: CellNumber
     type: LINK_TYPES
-    isLast: boolean // TODO: rename it to isTerminal
+    isTerminal: boolean
 }
 
 export type Chain = Link[]

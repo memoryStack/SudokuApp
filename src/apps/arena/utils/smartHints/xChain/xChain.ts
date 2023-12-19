@@ -214,8 +214,8 @@ const markEdgeLinksAsLastForValidChain = (_chain: Chain) => {
 
     const chain: Chain = _cloneDeep(_chain)
     const { first, last } = getChainEdgeLinks(chain)
-    first.isLast = true
-    last.isLast = true
+    first.isTerminal = true
+    last.isTerminal = true
     return chain
 }
 
@@ -365,8 +365,7 @@ const getNoteChain = (
             start: unvisitedLink[0],
             end: unvisitedLink[1],
             type: LINK_TYPES.STRONG,
-            isLast: false,
-            // isTerminal: false,
+            isTerminal: false,
         }]
 
         visitedCells[unvisitedLink[0]] = true
@@ -392,9 +391,9 @@ const getNoteChain = (
 const getChainCellsFromChain = (chain: Chain) => {
     const result: Cell[] = []
 
-    _forEach(chain, ({ start: startCellNum, end: endCellNum, isLast }: Link, indx: number) => {
+    _forEach(chain, ({ start: startCellNum, end: endCellNum, isTerminal }: Link, indx: number) => {
         result.push(convertBoardCellNumToCell(startCellNum))
-        if (indx && isLast) {
+        if (indx && isTerminal) {
             result.push(convertBoardCellNumToCell(endCellNum))
         }
     })
