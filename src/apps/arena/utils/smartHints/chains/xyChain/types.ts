@@ -1,5 +1,5 @@
 export type XYChainRawHint = {
-    orderedChainCells: Cell[]
+    note: NoteValue
+    chain: Cell[]
     removableNotesHostCells: Cell[]
-    chainStartNote: NoteValue
 }

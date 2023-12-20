@@ -3,6 +3,7 @@ import { LINK_TYPES } from '../xChain/xChain.constants'
 import {
     generateLinkBetweenCells,
     getAllValidCellsWithPairs,
+    getRawXYChainHints,
     getNotesVSHostCellsMap,
     getNewLinksOptions,
     chainTerminalsRemoveNotes,
@@ -118,7 +119,6 @@ describe('generateLinkBetweenCells()', () => {
 })
 
 describe('getNewLinksOptions()', () => {
-    // TODO: write a test-case for which we get no options at all if end cell is sink cell
     test('returns the new links to explore from the given state of chain', () => {
         const links = {
             12: {
@@ -233,8 +233,8 @@ describe('getNewLinksOptions()', () => {
     })
 })
 
-describe('getRawXYChainHints()', () => {
-    test('get the first valid XY-Chain from the group of bivalue cells', () => {
+describe('getValidXYChainFromCells()', () => {
+    test('passing the group of bivalue cells and returns the first valid XY-Chain and cells from which note will be removed', () => {
         const puzzle = '361749528584000790792000004923574080416000357857631249678000412145287900239416875'
         const { notes } = getPuzzleDataFromPuzzleString(puzzle)
 
@@ -258,24 +258,42 @@ describe('getRawXYChainHints()', () => {
         ]
 
         const expectedResult = {
-            chain: [
-                {
-                    start: 12, end: 57, type: LINK_TYPES.WEAK, isTerminal: true,
-                },
-                {
-                    start: 57, end: 58, type: LINK_TYPES.WEAK, isTerminal: false,
-                },
-                {
-                    start: 58, end: 22, type: LINK_TYPES.WEAK, isTerminal: false,
-                },
-                {
-                    start: 22, end: 24, type: LINK_TYPES.WEAK, isTerminal: true,
-                },
-            ],
-            removableNotesHostCells: [{ row: 1, col: 8 }, { row: 2, col: 3 }],
+            note: 1,
+            chainResult: {
+                chain: [
+                    {
+                        start: 12, end: 57, type: LINK_TYPES.WEAK, isTerminal: true,
+                    },
+                    {
+                        start: 57, end: 58, type: LINK_TYPES.WEAK, isTerminal: false,
+                    },
+                    {
+                        start: 58, end: 22, type: LINK_TYPES.WEAK, isTerminal: false,
+                    },
+                    {
+                        start: 22, end: 24, type: LINK_TYPES.WEAK, isTerminal: true,
+                    },
+                ],
+                removableNotesHostCells: [{ row: 1, col: 8 }, { row: 2, col: 3 }],
+            },
         }
 
         expect(getValidXYChainFromCells(cells, notes)).toEqual(expectedResult)
+    })
+})
+
+describe('getRawXYChainHints()', () => {
+    test('returns the first valid XY-Chain details', () => {
+        const puzzle = '361749528584000790792000004923574080416000357857631249678000412145287900239416875'
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const expectedResult = [{
+            note: 1,
+            chain: [{ row: 1, col: 3 }, { row: 6, col: 3 }, { row: 6, col: 4 }, { row: 2, col: 4 }, { row: 2, col: 6 }],
+            removableNotesHostCells: [{ row: 1, col: 8 }, { row: 2, col: 3 }],
+        }]
+
+        expect(getRawXYChainHints(mainNumbers, notes, possibleNotes)).toEqual(expectedResult)
     })
 })
 

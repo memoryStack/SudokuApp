@@ -29,7 +29,7 @@ import { LINK_TYPES } from '../xChain/xChain.constants'
 import type { Chain } from '../chainExplorer'
 
 import { XYChainRawHint } from './types'
-import { getRemovableNotesHostCellsByChain } from '../chainUtils'
+import { getChainCells, getRemovableNotesHostCellsByChain } from '../chainUtils'
 
 type CellsLinks = {
     [cellNumber: string]: {
@@ -208,7 +208,10 @@ export const getPreferredChainFromValidChains = (validChains: AnalyzedChainResul
     ]))
 }
 
-export const getValidXYChainFromCells = (eligibleCells: Cell[], notes: Notes) :AnalyzedChainResult | null => {
+export const getValidXYChainFromCells = (
+    eligibleCells: Cell[],
+    notes: Notes,
+): { note: NoteValue, chainResult: AnalyzedChainResult } | null => {
     const notesVSHostCells = getNotesVSHostCellsMap(eligibleCells, notes)
     const cellsLinks = generateLinkBetweenCells(eligibleCells, notes)
 
@@ -263,7 +266,10 @@ export const getValidXYChainFromCells = (eligibleCells: Cell[], notes: Notes) :A
                         )
 
                         if (!_isEmpty(chainsConnectingTerminals)) {
-                            return getPreferredChainFromValidChains(chainsConnectingTerminals)
+                            return {
+                                note: commonNoteInCells,
+                                chainResult: getPreferredChainFromValidChains(chainsConnectingTerminals),
+                            }
                         }
                     }
                 }
@@ -278,7 +284,17 @@ export const getRawXYChainHints = (
     mainNumbers: MainNumbers,
     notes: Notes,
     possibleNotes: Notes,
-): XYChainRawHint => {
+): XYChainRawHint[] | [] => {
     const eligibleCells = getAllValidCellsWithPairs(mainNumbers, notes, possibleNotes)
-    const chain = getValidXYChainFromCells(eligibleCells, notes)
+    const validXYChain = getValidXYChainFromCells(eligibleCells, notes)
+
+    if (!_isNil(validXYChain)) {
+        return [{
+            note: validXYChain!.note,
+            chain: getChainCells(validXYChain!.chainResult.chain),
+            removableNotesHostCells: validXYChain!.chainResult.removableNotesHostCells,
+        }]
+    }
+
+    return []
 }

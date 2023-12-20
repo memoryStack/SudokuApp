@@ -26,7 +26,7 @@ import { XChainRawHint } from './types'
 import {
     CellNumber, exploreChain, NewLinkPossibleCells, OnChainExplorationComplete,
 } from '../chainExplorer'
-import { getChainEdgeLinks, getRemovableNotesHostCellsByChain } from '../chainUtils'
+import { getChainCells, getChainEdgeLinks, getRemovableNotesHostCellsByChain } from '../chainUtils'
 
 import type {
     Link, Chain, AnalyzedChainResult,
@@ -364,19 +364,6 @@ const getNoteChain = (
     return null
 }
 
-const getChainCellsFromChain = (chain: Chain) => {
-    const result: Cell[] = []
-
-    _forEach(chain, ({ start: startCellNum, end: endCellNum, isTerminal }: Link, indx: number) => {
-        result.push(convertBoardCellNumToCell(startCellNum))
-        if (indx && isTerminal) {
-            result.push(convertBoardCellNumToCell(endCellNum))
-        }
-    })
-
-    return result
-}
-
 export const getRawXChainHints = (
     _: MainNumbers,
     notes: Notes,
@@ -396,7 +383,7 @@ export const getRawXChainHints = (
             result = {
                 note,
                 removableNotesHostCells: chain!.removableNotesHostCells,
-                chain: getChainCellsFromChain(chain!.chain),
+                chain: getChainCells(chain!.chain),
             }
         }
     })

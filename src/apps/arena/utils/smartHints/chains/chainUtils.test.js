@@ -1,8 +1,8 @@
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
-import { getCellsFromChain, getRemovableNotesHostCellsByChain } from './chainUtils'
+import { getChainCellsNumbers, getRemovableNotesHostCellsByChain } from './chainUtils'
 
-describe('getCellsFromChain()', () => {
+describe('getChainCellsNumbers()', () => {
     // this function expects a chain whose length is odd and which contains alternate STRONG and WEAK links
     test('returns list of cells which make chain from start to end of chain', () => {
         const chain = [
@@ -23,7 +23,7 @@ describe('getCellsFromChain()', () => {
             },
         ]
 
-        expect(getCellsFromChain(chain)).toEqual([1, 8, 16, 61, 56, 29])
+        expect(getChainCellsNumbers(chain)).toEqual([1, 8, 16, 61, 56, 29])
     })
 })
 

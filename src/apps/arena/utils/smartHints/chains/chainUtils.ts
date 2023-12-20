@@ -17,18 +17,21 @@ export const getChainEdgeLinks = (chain: Chain): ChainTerminals => ({
     last: _last(chain),
 })
 
-export const getCellsFromChain = (chain: Chain): CellNumber[] => {
+export const getChainCellsNumbers = (chain: Chain): CellNumber[] => {
     const result = _map(chain, (link: Link) => link.start)
     result.push(getChainEdgeLinks(chain).last.end)
     return result
 }
+
+export const getChainCells = (chain: Chain) => getChainCellsNumbers(chain)
+    .map(cellNumber => convertBoardCellNumToCell(cellNumber))
 
 export const getRemovableNotesHostCellsByChain = (
     note: NoteValue,
     chain: Chain,
     notes: Notes,
 ) => {
-    const chainCells = getCellsFromChain(chain)
+    const chainCells = getChainCellsNumbers(chain)
     const { first, last } = getChainEdgeLinks(chain)
     const chainFirstCell = convertBoardCellNumToCell(first.start)
     const chainLastCell = convertBoardCellNumToCell(last.end)
