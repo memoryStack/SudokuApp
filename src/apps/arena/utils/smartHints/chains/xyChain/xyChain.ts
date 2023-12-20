@@ -112,12 +112,11 @@ export const getNewLinksOptions = (
     chainSinkCellNum: CellNumber,
 ) => (chain: Chain) => {
     const chainEndTerminalCell = _last(chain).end
-
-    // TODO: write this behavior in test-cases
-    if (chainEndTerminalCell === chainSinkCellNum) return { newLinkPossibleCells: [] }
+    if (chainEndTerminalCell === chainSinkCellNum) {
+        return { newLinkPossibleCells: [] }
+    }
 
     const numberFilledInTerminal = numbersFilledInChainCells[chainEndTerminalCell].filledNumber as unknown as NoteValue
-
     const result = _map(links[chainEndTerminalCell][numberFilledInTerminal], (cellNumber: CellNumber) => ({
         node: cellNumber,
         type: LINK_TYPES.WEAK,

@@ -8,31 +8,28 @@ import _flatten from '@lodash/flatten'
 import _values from '@lodash/values'
 import _keys from '@lodash/keys'
 import _find from '@lodash/find'
-import _includes from '@lodash/includes'
 import _get from '@lodash/get'
 import _every from '@lodash/every'
 import _unique from '@lodash/unique'
 import _findIndex from '@lodash/findIndex'
-import _head from '@lodash/head'
-import _last from '@lodash/last'
 import _slice from '@lodash/slice'
 import _isNil from '@lodash/isNil'
 import _concat from '@lodash/concat'
 
 import { N_CHOOSE_K } from '@resources/constants'
 
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { BoardIterators } from '../../../classes/boardIterators'
 import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../../cellTransformers'
-import { getCellsSharingHousesWithCells, getNoteHostCellsInHouse } from '../../../util'
+import { getNoteHostCellsInHouse } from '../../../util'
 import { MINIMUM_LINKS_IN_CHAIN, LINK_TYPES } from './xChain.constants'
 import { XChainRawHint } from './types'
 import {
     CellNumber, exploreChain, NewLinkPossibleCells, OnChainExplorationComplete,
 } from '../chainExplorer'
+import { getChainEdgeLinks, getRemovableNotesHostCellsByChain } from '../chainUtils'
 
 import type {
-    Link, ChainTerminals, Chain, AnalyzedChainResult,
+    Link, Chain, AnalyzedChainResult,
 } from '../chainExplorer'
 
 // TODO: these types mostly will be common among all the chain hints
@@ -148,11 +145,6 @@ const getNoteWeakLinkCellsParticipants = (noteWeakLinks: NoteAllWeakLinks) => {
     return result
 }
 
-const getChainEdgeLinks = (chain: Chain): ChainTerminals => ({
-    first: _head(chain) as typeof chain[0],
-    last: _last(chain) as typeof chain[0],
-})
-
 export const getTrimWeakLinksFromEdges = (_chain: Chain) => {
     let chain = _cloneDeep(_chain)
 
@@ -191,23 +183,6 @@ const switchMixedLinksChainLinks = (chain: Chain): Chain => {
 export const alternateChainLinks = (chain: Chain) => {
     if (chainHasAllStrongLinks(chain)) return switchAllStrongLinksChainLinks(chain)
     return switchMixedLinksChainLinks(chain)
-}
-
-export const getCellsFromChain = (chain: Chain) => {
-    const result = _map(chain, (link: Link) => link.start)
-    result.push(getChainEdgeLinks(chain).last.end)
-    return result
-}
-
-// TODO: how to use this for all the chains
-export const getRemovableNotesHostCellsByChain = (note: NoteValue, chain: Chain, notes: Notes) => {
-    const chainCells = getCellsFromChain(chain)
-    const { first, last } = getChainEdgeLinks(chain)
-    const chainFirstCell = convertBoardCellNumToCell(first.start)
-    const chainLastCell = convertBoardCellNumToCell(last.end)
-    return getCellsSharingHousesWithCells(chainFirstCell, chainLastCell)
-        .filter(cell => !_includes(chainCells, convertBoardCellToNum(cell)))
-        .filter(cell => NotesRecord.isNotePresentInCell(notes, note, cell))
 }
 
 const markEdgeLinksAsLastForValidChain = (_chain: Chain) => {

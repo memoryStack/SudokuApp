@@ -1,11 +1,10 @@
 import _cloneDeep from '@lodash/cloneDeep'
-import _head from '@lodash/head'
 import _isNil from '@lodash/isNil'
-import _last from '@lodash/last'
+
+import { getChainEdgeLinks } from '../chainUtils'
 
 import type {
     Chain,
-    ChainTerminals,
     GetNewLinksOptions,
     IsNodeAvailableToAdd,
     OnAddingNewNodeInChain,
@@ -13,11 +12,6 @@ import type {
     OnNodeExplorationFail,
     AnalyzedChainResult,
 } from './types'
-
-const getChainEdgeLinks = (chain: Chain): ChainTerminals => ({
-    first: _head(chain),
-    last: _last(chain),
-})
 
 const isChainExplorationComplete = (chain: Chain) => {
     const { first, last } = getChainEdgeLinks(chain)

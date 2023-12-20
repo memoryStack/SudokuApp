@@ -5,7 +5,6 @@ import {
     getAllValidCellsWithPairs,
     getNotesVSHostCellsMap,
     getNewLinksOptions,
-    getRawXYChainHints,
     chainTerminalsRemoveNotes,
     onAddingNewNodeInChain,
     getPreferredChainFromValidChains,
@@ -188,6 +187,47 @@ describe('getNewLinksOptions()', () => {
             start: 12, end: 12, type: LINK_TYPES.STRONG, isTerminal: false,
         }]
         const newLinksFinder = getNewLinksOptions(links, numbersFilledInChainCells, 12, 24)
+        const expectedResult = { newLinkPossibleCells: [] }
+        expect(newLinksFinder(chain)).toEqual(expectedResult)
+    })
+
+    test('returns empty list if chian end cell has been included in chain', () => {
+        const links = {
+            12: { 3: [14, 57] },
+            13: { 2: [14, 40], 6: [22] },
+            14: { 2: [13, 41], 3: [12, 59] },
+            22: { 5: [58], 6: [13, 24, 25] },
+            24: { 1: [33], 6: [22, 25, 33] },
+            25: { 3: [70], 6: [22, 24, 70] },
+            33: { 1: [24, 35], 6: [24, 35] },
+            35: { 1: [33], 6: [33, 71] },
+            39: { 8: [41], 9: [40, 57] },
+            40: { 2: [13, 41], 9: [39, 58] },
+            41: { 2: [14, 40], 8: [39] },
+            57: { 3: [12, 59], 9: [39, 58] },
+            58: { 5: [22, 59], 9: [40, 57] },
+            59: { 3: [14, 57], 5: [58] },
+            70: { 3: [25, 71], 6: [25, 71] },
+            71: { 3: [70], 6: [35, 70] },
+        }
+        const numbersFilledInChainCells = {
+            12: { filledNumber: 1, parent: -1 },
+            57: { filledNumber: 9, parent: 12 },
+            58: { filledNumber: 5, parent: 57 },
+            lastNode: 58,
+        }
+        const chain = [
+            {
+                start: 12, end: 12, type: LINK_TYPES.STRONG, isTerminal: false,
+            },
+            {
+                start: 12, end: 57, type: LINK_TYPES.STRONG, isTerminal: false,
+            },
+            {
+                start: 57, end: 58, type: LINK_TYPES.STRONG, isTerminal: false,
+            },
+        ]
+        const newLinksFinder = getNewLinksOptions(links, numbersFilledInChainCells, 12, 58)
         const expectedResult = { newLinkPossibleCells: [] }
         expect(newLinksFinder(chain)).toEqual(expectedResult)
     })

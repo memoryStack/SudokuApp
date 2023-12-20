@@ -9,17 +9,15 @@ import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTran
 import { getCellsSharingHousesWithCells } from '../../util'
 
 import type {
-    Link, ChainTerminals, Chain, AnalyzedChainResult,
+    Link, ChainTerminals, Chain, CellNumber,
 } from './chainExplorer'
-
-// TODO: re-use these utils
 
 export const getChainEdgeLinks = (chain: Chain): ChainTerminals => ({
     first: _head(chain),
     last: _last(chain),
 })
 
-export const getCellsFromChain = (chain: Chain) => {
+export const getCellsFromChain = (chain: Chain): CellNumber[] => {
     const result = _map(chain, (link: Link) => link.start)
     result.push(getChainEdgeLinks(chain).last.end)
     return result
