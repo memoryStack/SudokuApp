@@ -14,6 +14,7 @@ import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
 
 import _sortBy from '@lodash/sortBy'
 import { Puzzle } from '@adapters/puzzle'
+import _intersection from '@lodash/intersection'
 import {
     BOARD_AXES_VALUES, HOUSES_COUNT, PUZZLE_SOLUTION_TYPES,
 } from '../constants'
@@ -299,4 +300,10 @@ export const areAdjacentCells = (cellA: Cell, cellB: Cell) => {
     }
 
     return false
+}
+
+export const getCommonNoteInCells = (cellA: Cell, cellB: Cell, notes: Notes) => {
+    const cellANotes = NotesRecord.getCellVisibleNotesList(notes, cellA)
+    const cellBNotes = NotesRecord.getCellVisibleNotesList(notes, cellB)
+    return _intersection(cellANotes, cellBNotes)
 }

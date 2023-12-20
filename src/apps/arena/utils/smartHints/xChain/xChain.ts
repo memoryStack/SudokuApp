@@ -199,6 +199,7 @@ export const getCellsFromChain = (chain: Chain) => {
     return result
 }
 
+// TODO: how to use this for all the chains
 export const getRemovableNotesHostCellsByChain = (note: NoteValue, chain: Chain, notes: Notes) => {
     const chainCells = getCellsFromChain(chain)
     const { first, last } = getChainEdgeLinks(chain)

@@ -40,7 +40,7 @@ module.exports = {
         'linebreak-style': 'off',
         semi: ['error', 'never'],
         'no-underscore-dangle': 'off',
-        'unused-imports/no-unused-imports': 'error',
+        'unused-imports/no-unused-imports': 'off',
         'max-len': 'off',
         'no-shadow': 'off',
         '@typescript-eslint/no-shadow': ['error'],

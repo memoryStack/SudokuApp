@@ -1,3 +1,4 @@
+import _cloneDeep from '@lodash/cloneDeep'
 import _head from '@lodash/head'
 import _isNil from '@lodash/isNil'
 import _last from '@lodash/last'
@@ -24,13 +25,14 @@ const isChainExplorationComplete = (chain: Chain) => {
 }
 
 export const exploreChain = (
-    chain: Chain,
+    _chain: Chain,
     getNewLinksOptions: GetNewLinksOptions,
     isNodeAvailableToAdd: IsNodeAvailableToAdd,
     onAddingNewNodeInChain: OnAddingNewNodeInChain,
     onChainExplorationComplete: OnChainExplorationComplete,
     onNodeExplorationFail: OnNodeExplorationFail,
 ): AnalyzedChainResult | null => {
+    const chain = _cloneDeep(_chain)
     if (!isChainExplorationComplete(chain)) {
         const { first: chainFirstLink, last: chainLastLink } = getChainEdgeLinks(chain)
 
@@ -67,7 +69,6 @@ export const exploreChain = (
                 onAddingNewNodeInChain,
                 onChainExplorationComplete,
                 onNodeExplorationFail,
-
             )
             if (!_isNil(chainInfo)) return chainInfo
 
@@ -92,6 +93,8 @@ export const exploreChain = (
         }
     }
     // NOTE: don't use "else" conditional block here
+    // NOTE: chains with only 1 node and that can't be progressed are getting ananlyzed
+    //      2 times, saw this issue in XY-Chains hint
     if (isChainExplorationComplete(chain)) {
         const { foundChain, chainResult } = onChainExplorationComplete(chain)
         return foundChain ? chainResult : null

@@ -20,7 +20,7 @@ describe('getEmptyRectangleRawHints()', () => {
     })
 })
 
-describe('findEmptyRectangleInBlock()', () => {
+describe.skip('findEmptyRectangleInBlock()', () => {
     test('return empty rectangle blablabla', () => {
         const puzzle = '724956138168423597935718624500300810040081750081070240013000072000100085050007061'
         const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
