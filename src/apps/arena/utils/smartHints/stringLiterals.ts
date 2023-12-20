@@ -14,6 +14,7 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.OMISSION]: 'Omission',
     [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
     [HINTS_IDS.X_CHAIN]: 'X-Chain',
+    [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
     [HINTS_IDS.ALL]: 'hints',
 }
 

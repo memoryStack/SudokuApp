@@ -12,6 +12,7 @@ import { getOmissionRawHints } from './omission/omission'
 import { getRemotePairsRawHints } from './chains/remotePairs/remotePairs'
 import { getEmptyRectangleRawHints } from './emptyRectangle'
 import { getRawXChainHints } from './chains/xChain'
+import { getRawXYChainHints } from './chains/xyChain'
 
 import {
     transformNakedSingleRawHint,
@@ -23,6 +24,7 @@ import {
     transformOmissionRawHint,
     transformRemotePairsRawHint,
     transformXChainRawHint,
+    transformXYChainRawHint,
 } from './rawHintTransformers'
 
 import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
@@ -58,6 +60,7 @@ const HINT_ID_VS_HANDLERS = {
     [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData, possibleNotes) => getRemotePairsRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.EMPTY_RECTANGLE]: (mainNumbers, notesData, possibleNotes) => getEmptyRectangleRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.X_CHAIN]: (mainNumbers, notesData, possibleNotes) => getRawXChainHints(mainNumbers, notesData, possibleNotes),
+    [HINTS_IDS.XY_CHAIN]: (mainNumbers, notesData, possibleNotes) => getRawXYChainHints(mainNumbers, notesData, possibleNotes),
 }
 
 const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
@@ -72,4 +75,5 @@ const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
     [HINTS_IDS.OMISSION]: transformOmissionRawHint,
     [HINTS_IDS.REMOTE_PAIRS]: transformRemotePairsRawHint,
     [HINTS_IDS.X_CHAIN]: transformXChainRawHint,
+    [HINTS_IDS.XY_CHAIN]: transformXYChainRawHint,
 }

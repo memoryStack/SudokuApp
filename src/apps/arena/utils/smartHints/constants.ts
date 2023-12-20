@@ -45,6 +45,7 @@ enum HINTS_IDS {
     REMOTE_PAIRS = 'REMOTE_PAIRS',
     EMPTY_RECTANGLE = 'EMPTY_RECTANGLE',
     X_CHAIN = 'X_CHAIN',
+    XY_CHAIN = 'XY_CHAIN',
     ALL = 'ALL',
 }
 
@@ -61,6 +62,7 @@ const HINT_LABELS = {
     [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
     [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
     [HINTS_IDS.X_CHAIN]: 'X-Chain',
+    [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
 }
 
 const HINTS_MENU_ITEMS = [
@@ -111,6 +113,10 @@ const HINTS_MENU_ITEMS = [
     {
         label: HINT_LABELS[HINTS_IDS.X_CHAIN],
         id: HINTS_IDS.X_CHAIN,
+    },
+    {
+        label: HINT_LABELS[HINTS_IDS.XY_CHAIN],
+        id: HINTS_IDS.XY_CHAIN,
     },
 ]
 
