@@ -1,4 +1,4 @@
-import { XChainRawHint } from '../../xChain/types'
+import { XChainRawHint } from '../../chains/xChain/types'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import {

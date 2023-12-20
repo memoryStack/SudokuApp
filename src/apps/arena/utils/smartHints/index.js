@@ -9,9 +9,9 @@ import { getHiddenGroupRawHints } from './hiddenGroup/hiddenGroup'
 import { getXWingRawHints } from './xWing'
 import { getYWingRawHints } from './yWing/yWing'
 import { getOmissionRawHints } from './omission/omission'
-import { getRemotePairsRawHints } from './remotePairs/remotePairs'
+import { getRemotePairsRawHints } from './chains/remotePairs/remotePairs'
 import { getEmptyRectangleRawHints } from './emptyRectangle'
-import { getRawXChainHints } from './xChain'
+import { getRawXChainHints } from './chains/xChain'
 
 import {
     transformNakedSingleRawHint,

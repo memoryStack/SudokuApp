@@ -9,22 +9,22 @@ import _isEmpty from '@lodash/isEmpty'
 import _cloneDeep from '@lodash/cloneDeep'
 import _sortBy from '@lodash/sortBy'
 
-import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 
-import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTransformers'
-import { BoardIterators } from '../../classes/boardIterators'
+import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../../cellTransformers'
+import { BoardIterators } from '../../../classes/boardIterators'
 import {
     areCommonHouseCells,
     areSameCells,
     getCellsSharingHousesWithCells,
     getCommonNoteInCells,
-} from '../../util'
+} from '../../../util'
 
 import { AnalyzedChainResult, CellNumber, exploreChain } from '../chainExplorer'
-import { HOUSE_TYPE } from '../constants'
-import { filterNakedGroupEligibleCellsInHouse } from '../nakedGroup/nakedGroup'
+import { HOUSE_TYPE } from '../../constants'
+import { filterNakedGroupEligibleCellsInHouse } from '../../nakedGroup/nakedGroup'
 import { NOTES_COUNT_IN_ELIGIBLE_CELLS } from '../remotePairs/remotePairs.constants'
-import { cellHasAllPossibleNotes } from '../validityTest/validity.helpers'
+import { cellHasAllPossibleNotes } from '../../validityTest/validity.helpers'
 import { LINK_TYPES } from '../xChain/xChain.constants'
 import type { Chain } from '../chainExplorer'
 

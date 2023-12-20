@@ -1,5 +1,5 @@
 import { generateCustomNotes, getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
-import { HOUSE_TYPE } from '../constants'
+import { HOUSE_TYPE } from '../../constants'
 
 import {
     getCandidateAllStrongLinks,

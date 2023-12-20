@@ -23,7 +23,7 @@ import {
 import { XChainTransformerArgs } from './types'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { XChainRawHint } from '../../xChain/types'
+import { XChainRawHint } from '../../chains/xChain/types'
 import { BoardIterators } from '../../../classes/boardIterators'
 import {
     getHintExplanationStepsFromHintChunks,
@@ -33,7 +33,7 @@ import {
     getTryOutInputPanelNumbersVisibility,
 } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { LINK_TYPES } from '../../xChain/xChain.constants'
+import { LINK_TYPES } from '../../chains/xChain/xChain.constants'
 import { convertBoardCellToNum } from '../../../cellTransformers'
 import { getCellsAxesValuesListText, getHouseNumAndName, joinStringsListWithArrow } from '../helpers'
 import { getCellAxesValues, getCellsCommonHousesInfo } from '../../../util'

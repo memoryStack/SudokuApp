@@ -11,13 +11,13 @@ import _at from '@lodash/at'
 
 import { Combination, Combinations, N_CHOOSE_K } from '@resources/constants'
 
-import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 
-import { areCommonHouseCells, isCellExists } from '../../util'
+import { areCommonHouseCells, isCellExists } from '../../../util'
 
-import { filterNakedGroupEligibleCellsInHouse } from '../nakedGroup/nakedGroup'
-import { cellHasAllPossibleNotes } from '../validityTest/validity.helpers'
-import { HOUSE_TYPE } from '../constants'
+import { filterNakedGroupEligibleCellsInHouse } from '../../nakedGroup/nakedGroup'
+import { cellHasAllPossibleNotes } from '../../validityTest/validity.helpers'
+import { HOUSE_TYPE } from '../../constants'
 
 import {
     NOTES_COUNT_IN_ELIGIBLE_CELLS,
@@ -27,8 +27,8 @@ import {
     MIDDLE_CELLS_VALID_COMMON_HOUSES_CELLS_COUNT,
     CHAIN_VS_REMOVABLE_NOTES_CELL_PARAMETERS,
 } from './remotePairs.constants'
-import { BoardIterators } from '../../classes/boardIterators'
-import { convertBoardCellToNum, convertBoardCellNumToCell } from '../../cellTransformers'
+import { BoardIterators } from '../../../classes/boardIterators'
+import { convertBoardCellToNum, convertBoardCellNumToCell } from '../../../cellTransformers'
 
 import { RemotePairsRawHint } from './types'
 

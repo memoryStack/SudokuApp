@@ -1,5 +1,5 @@
 import { TRY_OUT_RESULT_STATES } from './tryOutInputAnalyser/constants'
-import { LINK_TYPES } from './xChain/xChain.constants'
+import { LINK_TYPES } from './chains/xChain/xChain.constants'
 
 export interface NotesToHighlightData {
     [note: string]: {

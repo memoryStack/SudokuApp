@@ -3,7 +3,7 @@ import { Path } from 'react-native-svg'
 import _forEach from '@lodash/forEach'
 import _reduce from '@lodash/reduce'
 
-import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/xChain/xChain.constants'
+import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
 import { roundToNearestPixel } from '../../../../../utils/util'
 
 import { MARKER_TYPES } from '../../svgDefs/remotePairs/remotePairs.constants'

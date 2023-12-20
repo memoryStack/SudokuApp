@@ -21,10 +21,10 @@ import _concat from '@lodash/concat'
 
 import { N_CHOOSE_K } from '@resources/constants'
 
-import { NotesRecord } from '../../../RecordUtilities/boardNotes'
-import { BoardIterators } from '../../classes/boardIterators'
-import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTransformers'
-import { getCellsSharingHousesWithCells, getNoteHostCellsInHouse } from '../../util'
+import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { BoardIterators } from '../../../classes/boardIterators'
+import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../../cellTransformers'
+import { getCellsSharingHousesWithCells, getNoteHostCellsInHouse } from '../../../util'
 import { MINIMUM_LINKS_IN_CHAIN, LINK_TYPES } from './xChain.constants'
 import { XChainRawHint } from './types'
 import {

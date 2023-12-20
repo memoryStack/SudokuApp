@@ -24,7 +24,7 @@ import {
 import { REMOTE_PAIRS } from '../stringLiterals'
 import { BoardInputs } from '../types'
 import { getCandidatesListText } from '../../util'
-import { RemotePairsRawHint } from '../../remotePairs/types'
+import { RemotePairsRawHint } from '../../chains/remotePairs/types'
 
 const getNoInputResult = () => ({
     msg: REMOTE_PAIRS.NO_INPUT,

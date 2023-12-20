@@ -2,9 +2,11 @@ import _head from '@lodash/head'
 import _includes from '@lodash/includes'
 import _last from '@lodash/last'
 import _map from '@lodash/map'
-import { NotesRecord } from '../../RecordUtilities/boardNotes'
-import { convertBoardCellNumToCell, convertBoardCellToNum } from '../cellTransformers'
-import { getCellsSharingHousesWithCells } from '../util'
+
+import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+
+import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../cellTransformers'
+import { getCellsSharingHousesWithCells } from '../../util'
 
 import type {
     Link, ChainTerminals, Chain, AnalyzedChainResult,
