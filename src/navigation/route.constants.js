@@ -12,6 +12,7 @@ export const ROUTES = {
     ARENA: 'arena',
     SOME_PAGE: 'somepage',
     PLAY_GUIDE: 'play_guide',
+    HINTS_VOCABULARY_EXPLAINATION: 'hints_vocabulary_explaination',
     ...DESIGN_SYSTEM_ROUTES,
 }
 

@@ -3,9 +3,9 @@ import _noop from '@lodash/noop'
 
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from './headerSection.constants'
 
-const handleBackPress = ({ navigation }) => () => navigation && navigation.goBack()
-
 const handlePress = (route, pressHandlerKey) => _get(route, ['params', pressHandlerKey], _noop)()
+
+const handleBackPress = ({ navigation, route }) => () => _get(route, ['params', HEADER_ITEMS_PRESS_HANDLERS_KEYS.BACK], (navigation?.goBack || _noop))()
 
 const handlerSettingsPress = ({ route }) => () => handlePress(route, HEADER_ITEMS_PRESS_HANDLERS_KEYS.SETTINGS)
 

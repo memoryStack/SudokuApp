@@ -121,6 +121,13 @@ const Home_ = ({ navigation }) => {
                 {renderSudokuText()}
                 {renderPlayButton()}
                 {renderGameRulesCTA()}
+                <Button
+                    onPress={() => {
+                        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: 'candidate' })
+                    }}
+                    label="move to hints page"
+                    containerStyle={styles.playButtonContainer}
+                />
             </View>
             {renderNewGameMenu()}
         </View>

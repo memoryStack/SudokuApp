@@ -1,6 +1,7 @@
 import { Arena } from '../apps/arena'
 import { Home } from '../apps/home'
 import { PlayGuide } from '../apps/playGuide'
+import HintsVocabulary from '../apps/hintsVocabulary'
 import DesignSystem from '../apps/designSystemScreen'
 import Badge from '../apps/designSystemScreen/componentsScreens/Badge'
 import Typography from '../apps/designSystemScreen/componentsScreens/Typography'
@@ -92,6 +93,15 @@ export const routes = [
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },
+    {
+        name: ROUTES.HINTS_VOCABULARY_EXPLAINATION,
+        component: HintsVocabulary,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.HINTS_VOCABULARY_EXPLAINATION],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+
     {
         name: ROUTES.SOME_PAGE,
         component: TempScreen,
