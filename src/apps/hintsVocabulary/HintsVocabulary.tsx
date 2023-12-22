@@ -15,19 +15,17 @@ import { Stack } from '@utils/classes/stack'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
-import { useTranslation } from '../../i18n/hooks/useTranslation'
-import { ROUTES } from '../../navigation/route.constants'
-import { EVENTS } from '../../constants/events'
 
-import { NextGameMenu } from '../arena/nextGameMenu'
+import { EVENTS } from '../../constants/events'
 
 import { getStyles } from './hintsVocabulary.styles'
 import { Page } from '../components/Page'
 import { HINTS_VOCAB_TITLE, NAVIGATION_PARAMS } from './hintsVocabulary.constants'
 
+import { VOCAB_COMPONENTS } from './vocabExplainations'
+
 /*
 TODOs:
-    centeralize vocabKeyword value
     read param from some kind of util so that updating navigation becomes easier
 */
 
@@ -75,14 +73,21 @@ const HintsVocabulary_ = ({ navigation, route }) => {
         return () => backHandler.remove()
     }, [navigation, route])
 
-    const smartHintText = '<p>Please visit <a href="hidden_single">here</a>.'
-    + ' some more bla blab bal and then a link <a href="naked_single">here</a> and some more text</p>'
+    const renderNoExplainationFound = () => (
+        <Text type={TEXT_VARIATIONS.DISPLAY_SMALL} style={styles.notFoundText}>
+            {'Oops! Couldn\'t find what you were looking for.'}
+        </Text>
+    )
+
+    const renderVocabularyExplaination = () => {
+        const VocabComponent = VOCAB_COMPONENTS[currentVocabKeyword]
+        if (_isNil(VocabComponent)) return renderNoExplainationFound()
+        return <VocabComponent />
+    }
 
     return (
-        <Page>
-            <SmartHintText
-                text={smartHintText}
-            />
+        <Page style={styles.page}>
+            {renderVocabularyExplaination()}
         </Page>
     )
 }
