@@ -19,6 +19,7 @@ import { Action, OnAction } from '@utils/hocs/withActions/types'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import SmartHintText from '@ui/molecules/SmartHintText'
 import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
@@ -201,7 +202,10 @@ const SmartHintHC_: React.FC<Props> = ({
 
     const renderHintText = (text: string, textStyles: Styles) => (
         <ScrollView ref={scrollViewRef} onScroll={handleOnScroll}>
-            <Text style={textStyles}>{text}</Text>
+            <SmartHintText
+                style={textStyles}
+                text={text}
+            />
         </ScrollView>
     )
 

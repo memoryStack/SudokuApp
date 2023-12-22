@@ -4,8 +4,6 @@ import React, {
 
 import { View, BackHandler, BackPressEventName } from 'react-native'
 
-import PropTypes from 'prop-types'
-
 import _get from '@lodash/get'
 import _isNil from '@lodash/isNil'
 
@@ -15,6 +13,7 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { Stack } from '@utils/classes/stack'
 
+import SmartHintText from '@ui/molecules/SmartHintText'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
 import { useTranslation } from '../../i18n/hooks/useTranslation'
 import { ROUTES } from '../../navigation/route.constants'
@@ -23,12 +22,13 @@ import { EVENTS } from '../../constants/events'
 import { NextGameMenu } from '../arena/nextGameMenu'
 
 import { getStyles } from './hintsVocabulary.styles'
+import { Page } from '../components/Page'
+import { HINTS_VOCAB_TITLE, NAVIGATION_PARAMS } from './hintsVocabulary.constants'
 
 /*
 TODOs:
     centeralize vocabKeyword value
     read param from some kind of util so that updating navigation becomes easier
-    listen to some event that will push more entries in vocab stack
 */
 
 const HintsVocabulary_ = ({ navigation, route }) => {
@@ -36,12 +36,10 @@ const HintsVocabulary_ = ({ navigation, route }) => {
 
     const stack = useRef(new Stack<string>()).current
 
-    const { t } = useTranslation()
-
     const styles = useStyles(getStyles)
 
     useEffect(() => {
-        const vocabKeyword = _get(route, ['params', 'vocabKeyword'])
+        const vocabKeyword = _get(route, ['params', NAVIGATION_PARAMS.VOCAB_KEYWORD])
         if (_isNil(vocabKeyword) || stack.peek() === vocabKeyword) return
 
         stack.push(vocabKeyword)
@@ -50,7 +48,7 @@ const HintsVocabulary_ = ({ navigation, route }) => {
 
     useEffect(() => {
         if (!_isNil(currentVocabKeyword)) {
-            navigation.setOptions({ title: currentVocabKeyword })
+            navigation.setOptions({ title: HINTS_VOCAB_TITLE[currentVocabKeyword] || '' })
         }
     }, [navigation, currentVocabKeyword])
 
@@ -77,28 +75,16 @@ const HintsVocabulary_ = ({ navigation, route }) => {
         return () => backHandler.remove()
     }, [navigation, route])
 
+    const smartHintText = '<p>Please visit <a href="hidden_single">here</a>.'
+    + ' some more bla blab bal and then a link <a href="naked_single">here</a> and some more text</p>'
+
     return (
-        <>
-            <View style={{
-                height: 100, width: 100, backgroundColor: 'red', marginTop: 100,
-            }}
+        <Page>
+            <SmartHintText
+                text={smartHintText}
             />
-            <Button onPress={() => {
-                navigation.navigate('hints_vocabulary_explaination', {
-                    vocabKeyword: 'naked single',
-                })
-            }}
-            />
-        </>
+        </Page>
     )
 }
 
 export default React.memo(HintsVocabulary_)
-
-HintsVocabulary_.propTypes = {
-    navigation: PropTypes.object,
-}
-
-HintsVocabulary_.defaultProps = {
-    navigation: {},
-}

@@ -1,3 +1,4 @@
+import { HINTS_VOCAB_IDS } from './rawHintTransformers/constants'
 import { HINTS_IDS } from './constants'
 
 export const HINT_ID_VS_TITLES = {
@@ -59,10 +60,10 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' so wherever we try to fill {{note}} in this {{hostHouseFullName}},'
         + ' {{note}} in {{removableNotesHostCellsListText}} can\'t come',
     [HINTS_IDS.NAKED_DOUBLE]: [
-        'A Naked Double occurs when two cells in any row, column, or block'
-        + ' contain only two possible candidates, and these two cells share the same set of candidates.'
+        '<p>A Naked Double occurs when two cells in any row, column, or block'
+        + ` contain only two possible <a href="${HINTS_VOCAB_IDS.CANDIDATE}">candidates</a>, and these two cells share the same set of candidates.`
         + '\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}}'
-        + ' as their candidates so this forms a Naked Double in {{hostHouses}}.',
+        + ' as their candidates so this forms a Naked Double in {{hostHouses}}.</p>',
 
         'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear.'
         + ' but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',

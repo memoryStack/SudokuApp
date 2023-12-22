@@ -124,14 +124,8 @@ const Home_ = ({ navigation }) => {
                 {renderSudokuText()}
                 {renderPlayButton()}
                 {renderGameRulesCTA()}
-                <Button
-                    onPress={() => {
-                        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: 'candidate' })
-                    }}
-                    label="move to hints page"
-                    containerStyle={styles.playButtonContainer}
-                />
                 <SmartHintText
+                    style={[styles.gameDisplayName]}
                     text={'<p>Please visit <a href="http://jsdf.co">here</a>.</p>'}
                     type={TEXT_VARIATIONS.DISPLAY_MEDIUM}
                 />
