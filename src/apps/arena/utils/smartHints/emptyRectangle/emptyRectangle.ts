@@ -9,11 +9,8 @@
 */
 
 import { HOUSE_TYPE } from '../constants'
-<<<<<<< Updated upstream
-=======
 import { BoardIterators } from '../../classes/boardIterators'
 import { getNoteHostCellsInHouse } from '../../util'
->>>>>>> Stashed changes
 
 function countRowAndColumnFrequency(objects) {
     const rowsData = []
@@ -21,7 +18,7 @@ function countRowAndColumnFrequency(objects) {
     for (let i = 0; i < objects.length; i++) {
         const obj = objects[i]
         // Check if the row present
-        const rowIndex = rowsData.findIndex((rowObj) => rowObj.row === obj.row)
+        const rowIndex = rowsData.findIndex(rowObj => rowObj.row === obj.row)
         if (rowIndex !== -1) {
         // If the row exists,count increases
             rowsData[rowIndex].count++
@@ -30,12 +27,11 @@ function countRowAndColumnFrequency(objects) {
             rowsData.push({ row: obj.row, count: 1 })
         }
         // Check if the column is present
-        const columnIndex = columnsData.findIndex((colObj) => colObj.column === obj.column)
+        const columnIndex = columnsData.findIndex(colObj => colObj.column === obj.column)
         if (columnIndex !== -1) {
             // If the column exists,count increases
             columnsData[columnIndex].count++
-        }
-        else {
+        } else {
         // If the column doesn't exist, push it in columnsData
             columnsData.push({ column: obj.column, count: 1 })
         }
@@ -49,7 +45,7 @@ export const findEmptyRectangleInBlock = (note: Note, blockHouse: House, notes: 
     // if (!areSameCellsSets(userFilledCells, possibleHostCells)) return null
     // Define a function called countRowAndColumnOccurrences that takes an array of objects as a parameter
     const storeinfo = countRowAndColumnFrequency(notes)
-    for(let i = 0; i < storeinfo.length(); i++){
+    for (let i = 0; i < storeinfo.length(); i++) {
 
     }
 
@@ -75,16 +71,10 @@ export const getEmptyRectangleRawHints = (
     notes: Notes,
     possibleNotes: Notes,
 ) => {
-<<<<<<< Updated upstream
-    for (let i = 0; i < 9; i++) {
-        // forHouseEachCell(house : Block , i) {
-        //    }
-=======
     for (let varNote = 1; varNote <= 9; varNote++) {
         BoardIterators.forEachHouseNum(houseNum => {
-            let arr = getNoteHostCellsInHouse(varNote, { type: 'block', num: houseNum }, notes)
+            const arr = getNoteHostCellsInHouse(varNote, { type: 'block', num: houseNum }, notes)
         })
->>>>>>> Stashed changes
     }
     return {
         blockHouse: { type: HOUSE_TYPE.BLOCK, num: 4 },

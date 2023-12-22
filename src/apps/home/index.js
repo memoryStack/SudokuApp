@@ -13,6 +13,9 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 import { consoleLog } from '@utils/util'
+
+import SmartHintText from '@ui/molecules/SmartHintText'
+
 import { useTranslation } from '../../i18n/hooks/useTranslation'
 
 import { EVENTS } from '../../constants/events'
@@ -127,6 +130,10 @@ const Home_ = ({ navigation }) => {
                     }}
                     label="move to hints page"
                     containerStyle={styles.playButtonContainer}
+                />
+                <SmartHintText
+                    text={'<p>Please visit <a href="http://jsdf.co">here</a>.</p>'}
+                    type={TEXT_VARIATIONS.DISPLAY_MEDIUM}
                 />
             </View>
             {renderNewGameMenu()}

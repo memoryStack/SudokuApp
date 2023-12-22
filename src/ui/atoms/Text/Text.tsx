@@ -17,7 +17,7 @@ type Style = StyleProp<ViewStyle>
 type StyleArray = StyleProp<ViewStyle>[]
 export type Styles = Style | StyleArray
 
-interface Props {
+export interface Props {
     type?: TEXT_VARIATIONS
     style?: Styles
     withoutLineHeight?: boolean
