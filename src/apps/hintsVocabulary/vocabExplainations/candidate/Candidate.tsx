@@ -1,20 +1,61 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+
+import { View } from 'react-native'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
+import { Board } from 'src/apps/arena/gameBoard'
+import { areSameCells } from 'src/apps/arena/utils/util'
+import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
+import { useStyles } from '@utils/customHooks/useStyles'
+import { getStyles } from './candidate.styles'
+
+const examplePuzzle = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
 
 const Candidate = () => {
-    const a = 10
+    const styles = useStyles(getStyles)
+
+    const zoomableViewRef = useRef(null)
+
+    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(examplePuzzle)
+
+    const Example = (
+        <View style={styles.exampleBoardContainer}>
+            <ReactNativeZoomableView
+                ref={zoomableViewRef}
+                initialZoom={2}
+                zoomEnabled={false}
+                initialOffsetX={70}
+                initialOffsetY={90}
+                disableShifting
+            >
+                <Board
+                    mainNumbers={mainNumbers}
+                    notes={notes}
+                    showCellContent
+                    getCellBGColor={(cell: Cell) => {
+                        if (areSameCells(cell, { row: 2, col: 2 })) return styles.highlightedCell
+                        return null
+                    }}
+                />
+            </ReactNativeZoomableView>
+        </View>
+    )
+
     return (
-        <SmartHintText
-            text={
-                '<p>A Candidate in Sudoku is a digit that could be placed into a <a href="CELL">cell</a>, but you\'re not'
-                + ' totally sure it goes in that cell yet. Some people call this "pencil marking", since many solvers'
-                + ' write small numbers or other notes in pencil to denote a possible solution.</p>'
-            }
-        />
-
-    // render a board here and demonstrate that
-
+        <View style={styles.container}>
+            <SmartHintText
+                text={
+                    '<p>A Candidate in Sudoku is a digit that could be placed into a <a href="CELL">cell</a>, but you\'re not'
+                    + ' totally sure it goes in that cell yet. Some people call this "pencil marking", since many solvers'
+                    + ' write small numbers or other notes in pencil to denote a possible solution.</p>'
+                }
+            />
+            {Example}
+            <SmartHintText
+                text={'Here in the highlighted cell above 2, 4, 8 and 9 are it\'s candidates'}
+            />
+        </View>
     )
 }
 
