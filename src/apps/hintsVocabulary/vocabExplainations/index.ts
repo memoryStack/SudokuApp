@@ -6,6 +6,7 @@ import Row from './row'
 import Column from './column'
 import Block from './block'
 import NakedSingle from './nakedSingle'
+import HiddenSingle from './hiddenSingle'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -14,4 +15,5 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.COLUMN]: Column,
     [HINTS_VOCAB_IDS.BLOCK]: Block,
     [HINTS_VOCAB_IDS.NAKED_SINGLE]: NakedSingle,
+    [HINTS_VOCAB_IDS.HIDDEN_SINGLE]: HiddenSingle,
 }

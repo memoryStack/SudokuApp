@@ -9,13 +9,15 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Board } from 'src/apps/arena/gameBoard'
 
-import { areSameCells } from 'src/apps/arena/utils/util'
+import { areCommonHouseCells, areSameCells } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { useBoardData } from '../hooks/useBoardData'
 
 import { getStyles } from './nakedSingle.styles'
 
 const examplePuzzle = '007005068005800100008197005010050600704286903002010050400539800009008400820400500'
+
+const nakedSingleHostCell = { row: 3, col: 2 }
 
 const NakedSingle = () => {
     const styles = useStyles(getStyles)
@@ -28,7 +30,8 @@ const NakedSingle = () => {
                 {...boardData}
                 showCellContent
                 getCellBGColor={(cell: Cell) => {
-                    if (areSameCells(cell, { row: 3, col: 2 })) return styles.highlightedCell
+                    if (areSameCells(cell, nakedSingleHostCell)) return styles.nakedSingleHostCell
+                    if (areCommonHouseCells(cell, nakedSingleHostCell)) return styles.sameHouseAsNSHostCell
                     return null
                 }}
             />
