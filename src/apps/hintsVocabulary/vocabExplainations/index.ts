@@ -4,4 +4,5 @@ import Candidate from './candidate'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
+    [HINTS_VOCAB_IDS.CELL]: Candidate,
 }

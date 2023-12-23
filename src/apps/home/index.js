@@ -126,7 +126,7 @@ const Home_ = ({ navigation }) => {
                 {renderGameRulesCTA()}
                 <SmartHintText
                     style={[styles.gameDisplayName]}
-                    text={'<p>Please visit <a href="http://jsdf.co">here</a>.</p>'}
+                    text={'<p>Please visit <a href="CANDIDATE">here</a>.</p>'}
                     type={TEXT_VARIATIONS.DISPLAY_MEDIUM}
                 />
             </View>

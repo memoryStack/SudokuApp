@@ -4,4 +4,5 @@ export const HINTS_VOCAB_IDS = {
     HIDDEN_SINGLE: 'HIDDEN_SINGLE',
     HIDDEN_DOUBLE: 'HIDDEN_DOUBLE',
     HOUSE: 'HOUSE',
+    CELL: 'CELL',
 }

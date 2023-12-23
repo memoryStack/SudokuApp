@@ -1,19 +1,18 @@
-import React, {
-    useCallback, useState, useEffect, useRef,
-} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
-import { View, BackHandler, BackPressEventName } from 'react-native'
+import {
+    BackHandler, BackPressEventName, ScrollView, NativeSyntheticEvent, NativeScrollEvent,
+} from 'react-native'
 
 import _get from '@lodash/get'
 import _isNil from '@lodash/isNil'
 
-import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 import { Stack } from '@utils/classes/stack'
 
-import SmartHintText from '@ui/molecules/SmartHintText'
+import _noop from '@lodash/noop'
 import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
 
 import { EVENTS } from '../../constants/events'
@@ -24,31 +23,47 @@ import { HINTS_VOCAB_TITLE, NAVIGATION_PARAMS } from './hintsVocabulary.constant
 
 import { VOCAB_COMPONENTS } from './vocabExplainations'
 
-/*
-TODOs:
-    read param from some kind of util so that updating navigation becomes easier
-*/
+type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
+
+type StackEntry = {
+    keyword: string
+    scrollPosition: number
+}
 
 const HintsVocabulary_ = ({ navigation, route }) => {
-    const [currentVocabKeyword, setCurrentVocabKeyword] = useState('')
+    const [currentVocab, setCurrentVocabKeyword] = useState<StackEntry>({ keyword: '', scrollPosition: 0 })
 
-    const stack = useRef(new Stack<string>()).current
+    const scrollViewRef = useRef(null)
+    const scrollPosition = useRef(0)
+
+    const stack = useRef(new Stack<StackEntry>()).current
 
     const styles = useStyles(getStyles)
 
     useEffect(() => {
         const vocabKeyword = _get(route, ['params', NAVIGATION_PARAMS.VOCAB_KEYWORD])
-        if (_isNil(vocabKeyword) || stack.peek() === vocabKeyword) return
+        if (_isNil(vocabKeyword) || stack.peek()?.keyword === vocabKeyword) return
 
-        stack.push(vocabKeyword)
-        setCurrentVocabKeyword(vocabKeyword)
-    }, [route?.params?.vocabKeyword])
+        const previousVocab = stack.pop()
+        if (!_isNil(previousVocab)) {
+            stack.push({
+                ...previousVocab,
+                scrollPosition: scrollPosition.current,
+            } as StackEntry)
+        }
+
+        const newVocab = { keyword: vocabKeyword, scrollPosition: 0 }
+        stack.push(newVocab)
+        setCurrentVocabKeyword(newVocab)
+    }, [route?.params?.[NAVIGATION_PARAMS.VOCAB_KEYWORD]])
 
     useEffect(() => {
-        if (!_isNil(currentVocabKeyword)) {
-            navigation.setOptions({ title: HINTS_VOCAB_TITLE[currentVocabKeyword] || '' })
+        if (currentVocab.keyword) {
+            navigation.setOptions({ title: HINTS_VOCAB_TITLE[currentVocab.keyword] || 'Not Found' })
+            const scrollHandler = _get(scrollViewRef, 'current.scrollTo', _noop)
+            scrollHandler({ x: 0, y: currentVocab.scrollPosition, animated: true })
         }
-    }, [navigation, currentVocabKeyword])
+    }, [navigation, currentVocab])
 
     useEffect(() => {
         const backPressHandler = () => {
@@ -56,7 +71,10 @@ const HintsVocabulary_ = ({ navigation, route }) => {
                 navigation.goBack()
             } else {
                 stack.pop()
-                setCurrentVocabKeyword(stack.peek() as string)
+                setCurrentVocabKeyword(stack.peek() as StackEntry)
+                navigation.setParams({
+                    [NAVIGATION_PARAMS.VOCAB_KEYWORD]: stack.peek()?.keyword,
+                })
             }
             return true
         }
@@ -80,14 +98,20 @@ const HintsVocabulary_ = ({ navigation, route }) => {
     )
 
     const renderVocabularyExplaination = () => {
-        const VocabComponent = VOCAB_COMPONENTS[currentVocabKeyword]
+        const VocabComponent = VOCAB_COMPONENTS[currentVocab.keyword]
         if (_isNil(VocabComponent)) return renderNoExplainationFound()
         return <VocabComponent />
     }
 
+    const handleOnScroll = ({ nativeEvent: { contentOffset: { y = 0 } = {} } = {} } = {} as ScrollEventType) => {
+        scrollPosition.current = y
+    }
+
     return (
         <Page style={styles.page}>
-            {renderVocabularyExplaination()}
+            <ScrollView ref={scrollViewRef} onScroll={handleOnScroll}>
+                {renderVocabularyExplaination()}
+            </ScrollView>
         </Page>
     )
 }
