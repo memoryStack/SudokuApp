@@ -125,9 +125,13 @@ const Home_ = ({ navigation }) => {
                 {renderPlayButton()}
                 {renderGameRulesCTA()}
                 <SmartHintText
-                    style={[styles.gameDisplayName]}
-                    text={'<p>Please visit <a href="CANDIDATE">here</a>.</p>'}
-                    type={TEXT_VARIATIONS.DISPLAY_MEDIUM}
+                    text={'<p>Please visit <a href="COLUMN">column</a>.</p>'}
+                />
+                <SmartHintText
+                    text={'<p>Please visit <a href="BLOCK">block</a>.</p>'}
+                />
+                <SmartHintText
+                    text={'<p>Please visit <a href="CANDIDATE">Candidate</a>.</p>'}
                 />
             </View>
             {renderNewGameMenu()}

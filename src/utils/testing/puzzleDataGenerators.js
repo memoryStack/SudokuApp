@@ -27,7 +27,7 @@ const getNewNotesBunchToShow = mainNumbers => {
 }
 
 // TODO: this logic is almost duplicated with customPuzzle handler
-export const getPuzzleDataFromPuzzleString = puzzleString => {
+export const getPuzzleDataFromPuzzleString = (puzzleString, shouldGeneratePossibleNotes = true) => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
     for (let i = 0; i < puzzleString.length; i++) {
         const { row, col } = convertBoardCellNumToCell(i)
@@ -38,7 +38,7 @@ export const getPuzzleDataFromPuzzleString = puzzleString => {
     return {
         mainNumbers,
         notes: getNewNotesBunchToShow(mainNumbers),
-        possibleNotes: getNewNotesBunchToShow(mainNumbers),
+        ...shouldGeneratePossibleNotes && { possibleNotes: getNewNotesBunchToShow(mainNumbers) },
     }
 }
 

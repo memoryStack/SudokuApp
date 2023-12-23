@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { View } from 'react-native'
+
+import _isNil from '@lodash/isNil'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { Board } from 'src/apps/arena/gameBoard'
@@ -17,9 +19,17 @@ const Candidate = () => {
 
     const zoomableViewRef = useRef(null)
 
-    const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(examplePuzzle)
+    const [boardData, setBoardData] = useState({ mainNumbers: null, notes: null })
 
-    const Example = (
+    useEffect(() => {
+        setTimeout(() => {
+            const generatePossibleNotes = false
+            const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(examplePuzzle, generatePossibleNotes)
+            setBoardData({ mainNumbers, notes })
+        })
+    }, [])
+
+    const Example = !_isNil(boardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
             <ReactNativeZoomableView
                 ref={zoomableViewRef}
@@ -30,8 +40,7 @@ const Candidate = () => {
                 disableShifting
             >
                 <Board
-                    mainNumbers={mainNumbers}
-                    notes={notes}
+                    {...boardData}
                     showCellContent
                     getCellBGColor={(cell: Cell) => {
                         if (areSameCells(cell, { row: 2, col: 2 })) return styles.highlightedCell
@@ -40,7 +49,7 @@ const Candidate = () => {
                 />
             </ReactNativeZoomableView>
         </View>
-    )
+    ) : null
 
     return (
         <View style={styles.container}>

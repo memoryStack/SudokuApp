@@ -11,4 +11,7 @@ export const HINTS_VOCAB_TITLE = {
     [HINTS_VOCAB_IDS.HIDDEN_DOUBLE]: 'Hidden Double',
     [HINTS_VOCAB_IDS.HOUSE]: 'House',
     [HINTS_VOCAB_IDS.CELL]: 'Cell',
+    [HINTS_VOCAB_IDS.ROW]: 'Row',
+    [HINTS_VOCAB_IDS.COLUMN]: 'Column',
+    [HINTS_VOCAB_IDS.BLOCK]: 'Block',
 }

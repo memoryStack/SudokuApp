@@ -9,8 +9,6 @@ import Button from '../apps/designSystemScreen/componentsScreens/Button'
 import Divider from '../apps/designSystemScreen/componentsScreens/Divider'
 import Dialog from '../apps/designSystemScreen/componentsScreens/Dialog'
 
-import { TempScreen } from '../apps/vocabularyExplaination/temp'
-
 import { HEADER_ITEMS, HEADER_SECTION } from './headerSection/headerSection.constants'
 
 import {
@@ -98,14 +96,6 @@ export const routes = [
         component: HintsVocabulary,
         headerItems: {
             title: ROUTE_HEADER_TITLES[ROUTES.HINTS_VOCABULARY_EXPLAINATION],
-            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
-        },
-    },
-
-    {
-        name: ROUTES.SOME_PAGE,
-        component: TempScreen,
-        headerItems: {
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },

@@ -34,7 +34,6 @@ const Cell = () => {
                 }
             />
             {Example}
-
             <SmartHintText text="Here notice that some cells are already filled with numbers from 1 to 9 and some are empty." />
         </View>
     )
