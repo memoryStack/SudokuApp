@@ -2,11 +2,15 @@ import React from 'react'
 
 import { View } from 'react-native'
 
+import _isNil from '@lodash/isNil'
+
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { Board } from 'src/apps/arena/gameBoard'
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 import { useStyles } from '@utils/customHooks/useStyles'
+
 import { getStyles } from './cell.styles'
+import { useBoardData } from '../hooks/useBoardData'
 
 const examplePuzzle = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
 
@@ -15,7 +19,9 @@ const Cell = () => {
 
     const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(examplePuzzle)
 
-    const Example = (
+    const boardData = useBoardData(examplePuzzle)
+
+    const Example = !_isNil(boardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
             <Board
                 mainNumbers={mainNumbers}
@@ -23,7 +29,7 @@ const Cell = () => {
                 showCellContent
             />
         </View>
-    )
+    ) : null
 
     return (
         <View style={styles.container}>

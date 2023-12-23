@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 
 import { View } from 'react-native'
 
@@ -6,27 +6,20 @@ import _isNil from '@lodash/isNil'
 import _inRange from '@lodash/inRange'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
-import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Board } from 'src/apps/arena/gameBoard'
 
 import { getStyles } from './block.styles'
+import { useBoardData } from '../hooks/useBoardData'
 
 const examplePuzzle = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
 
 const Block = () => {
     const styles = useStyles(getStyles)
 
-    const [boardData, setBoardData] = useState({ mainNumbers: null, notes: null })
-
-    useEffect(() => {
-        setTimeout(() => {
-            const generatePossibleNotes = false
-            const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(examplePuzzle, generatePossibleNotes)
-            setBoardData({ mainNumbers, notes })
-        })
-    }, [])
+    const boardData = useBoardData(examplePuzzle)
 
     const Example = !_isNil(boardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>

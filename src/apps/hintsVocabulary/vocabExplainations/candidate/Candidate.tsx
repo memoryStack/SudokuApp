@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 
 import { View } from 'react-native'
 
@@ -7,10 +7,11 @@ import _isNil from '@lodash/isNil'
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { Board } from 'src/apps/arena/gameBoard'
 import { areSameCells } from 'src/apps/arena/utils/util'
-import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { getStyles } from './candidate.styles'
+import { useBoardData } from '../hooks/useBoardData'
 
 const examplePuzzle = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
 
@@ -19,15 +20,7 @@ const Candidate = () => {
 
     const zoomableViewRef = useRef(null)
 
-    const [boardData, setBoardData] = useState({ mainNumbers: null, notes: null })
-
-    useEffect(() => {
-        setTimeout(() => {
-            const generatePossibleNotes = false
-            const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(examplePuzzle, generatePossibleNotes)
-            setBoardData({ mainNumbers, notes })
-        })
-    }, [])
+    const boardData = useBoardData(examplePuzzle)
 
     const Example = !_isNil(boardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
