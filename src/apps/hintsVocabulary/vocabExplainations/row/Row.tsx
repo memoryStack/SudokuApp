@@ -7,6 +7,7 @@ import _isNil from '@lodash/isNil'
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { Board } from 'src/apps/arena/gameBoard'
 import { useStyles } from '@utils/customHooks/useStyles'
+import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { getStyles } from './row.styles'
 import { useBoardData } from '../hooks/useBoardData'
 
@@ -35,7 +36,7 @@ const Row = () => {
             <SmartHintText
                 text={
                     '<p>'
-                    + 'In Sudoku, a Row refers to a horizontal line of 9 <a href="CELL">cells</a> from left to right.'
+                    + `In Sudoku, a Row refers to a horizontal line of 9 <a href="${HINTS_VOCAB_IDS.CELL}">cells</a> from left to right.`
                     + ' There are 9 rows from top to bottom labeled as Row A, Row B, ..., Row I'
                     + ' and each row contains 9 cells placed side by side horizontally.'
                     + '</p>'

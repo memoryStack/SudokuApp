@@ -124,15 +124,10 @@ const Home_ = ({ navigation }) => {
                 {renderSudokuText()}
                 {renderPlayButton()}
                 {renderGameRulesCTA()}
-                <SmartHintText
-                    text={'<p>Please visit <a href="COLUMN">column</a>.</p>'}
-                />
-                <SmartHintText
-                    text={'<p>Please visit <a href="BLOCK">block</a>.</p>'}
-                />
-                <SmartHintText
-                    text={'<p>Please visit <a href="CANDIDATE">Candidate</a>.</p>'}
-                />
+                <SmartHintText text={'<p>Please visit <a href="COLUMN">column</a>.</p>'} />
+                <SmartHintText text={'<p>Please visit <a href="BLOCK">block</a>.</p>'} />
+                <SmartHintText text={'<p>Please visit <a href="CANDIDATE">Candidate</a>.</p>'} />
+                <SmartHintText text={'<p>Please visit <a href="NAKED_SINGLE">Naked Single</a>.</p>'} />
             </View>
             {renderNewGameMenu()}
         </View>

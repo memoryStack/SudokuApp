@@ -10,6 +10,7 @@ import { areSameCells } from 'src/apps/arena/utils/util'
 
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import { useStyles } from '@utils/customHooks/useStyles'
+import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { getStyles } from './candidate.styles'
 import { useBoardData } from '../hooks/useBoardData'
 
@@ -48,7 +49,7 @@ const Candidate = () => {
         <View style={styles.container}>
             <SmartHintText
                 text={
-                    '<p>A Candidate in Sudoku is a digit that could be placed into a <a href="CELL">cell</a>, but you\'re not'
+                    `<p>A Candidate in Sudoku is a digit that could be placed into a <a href="${HINTS_VOCAB_IDS.CELL}">cell</a>, but you're not`
                     + ' totally sure it goes in that cell yet. Some people call this "pencil marking", since many solvers'
                     + ' write small numbers or other notes in pencil to denote a possible solution.</p>'
                 }
