@@ -62,7 +62,7 @@ const getRemovableNotesCells = (groupCells :Cell[], groupCandidates: NoteValue[]
     return _some(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
 })
 
-const getCellsHighlightData = (
+export const getCellsHighlightData = (
     cells: Cell[],
     groupCells: Cell[],
     groupCandidates: NoteValue[],

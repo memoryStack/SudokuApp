@@ -44,7 +44,8 @@ const NakedSingle = () => {
                 text={
                     '<p>'
                     + `Naked Single means that in a <a href="${HINTS_VOCAB_IDS.CELL}">cell</a> only one <a href="${HINTS_VOCAB_IDS.CANDIDATE}">candidate</a> remains`
-                    + ' possible and that candidate must fill the cell.'
+                    + ' possible and that candidate must fill the cell.\n'
+                    + 'The last remaining candidate has no other candidates to hide behind, that\'s why it is called "Naked" single. These are very easy to spot.'
                     + '</p>'
                 }
             />

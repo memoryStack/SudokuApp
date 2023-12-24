@@ -6,7 +6,7 @@ type BoardData = {
     notes: Notes
 }
 
-export const useBoardData = (puzzle: string) => {
+export const useBoardData = (puzzle: string, delayInGeneratingData = 0) => {
     const [boardData, setBoardData] = useState<BoardData>({ mainNumbers: null, notes: null } as unknown as BoardData)
 
     useEffect(() => {
@@ -14,8 +14,8 @@ export const useBoardData = (puzzle: string) => {
             const generatePossibleNotes = false
             const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle, generatePossibleNotes)
             setBoardData({ mainNumbers, notes } as BoardData)
-        })
-    }, [puzzle])
+        }, delayInGeneratingData)
+    }, [puzzle, delayInGeneratingData])
 
     return boardData
 }

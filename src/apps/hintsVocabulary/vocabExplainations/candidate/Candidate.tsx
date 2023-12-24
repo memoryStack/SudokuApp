@@ -19,14 +19,11 @@ const examplePuzzle = '760059080050100004000700000603090820005020600021070405000
 const Candidate = () => {
     const styles = useStyles(getStyles)
 
-    const zoomableViewRef = useRef(null)
-
     const boardData = useBoardData(examplePuzzle)
 
     const Example = !_isNil(boardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
             <ReactNativeZoomableView
-                ref={zoomableViewRef}
                 initialZoom={2}
                 zoomEnabled={false}
                 initialOffsetX={70}
