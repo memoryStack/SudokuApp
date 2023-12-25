@@ -133,6 +133,7 @@ const Home_ = ({ navigation }) => {
                 <SmartHintText text={'<p>Please visit <a href="NAKED_TRIPPLE">Naked Tripple</a>.</p>'} />
                 <SmartHintText text={'<p>Please visit <a href="HIDDEN_SINGLE">Hidden Single</a>.</p>'} />
                 <SmartHintText text={'<p>Please visit <a href="HIDDEN_DOUBLE">Hidden Double</a>.</p>'} />
+                <SmartHintText text={'<p>Please visit <a href="HIDDEN_TRIPPLE">Hidden Tripple</a>.</p>'} />
                 <SmartHintText text={'<p>Please visit <a href="OMISSION">Omission</a>.</p>'} />
             </View>
             {renderNewGameMenu()}

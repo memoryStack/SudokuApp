@@ -3,25 +3,21 @@ import React from 'react'
 import { View } from 'react-native'
 
 import _isNil from '@lodash/isNil'
+import _get from '@lodash/get'
+import _cloneDeep from '@lodash/cloneDeep'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Board } from 'src/apps/arena/gameBoard'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
-import {
-    getHousesCellsSharedByCells, isCellExists,
-} from 'src/apps/arena/utils/util'
+import { isCellExists } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
-import _cloneDeep from '@lodash/cloneDeep'
 import { CellsFocusData } from 'src/apps/arena/utils/smartHints/types'
-import { getCellsHighlightData } from 'src/apps/arena/utils/smartHints/rawHintTransformers/nakedGroup/nakedGroup'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
-import _get from '@lodash/get'
 import { getCellsAxesValuesListText } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
 import { getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
 import { highlightPrimaryHouseCells } from 'src/apps/arena/utils/smartHints/rawHintTransformers/hiddenGroup/hiddenGroup'
@@ -43,19 +39,10 @@ const oneHostHouseDetails = {
     candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
 }
 
-const twoHostHouse = '400500370320000004060000000800002030210840000000000090070090106940651000000070500'
-const twoHostHouseHostCells = [{ row: 4, col: 7 }, { row: 4, col: 8 }]
-const twoHostHouseGroupCandidates = [4, 7]
-const twoHostHouseDetails = {
-    cellsListText: getCellsAxesValuesListText(twoHostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-    candidatesListText: getCandidatesListText(twoHostHouseGroupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-}
-
 const HiddenDouble = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
     const oneHostHosueBoardData = useBoardData(oneHostHouse)
-    const twoHostHosueBoardData = useBoardData(twoHostHouse, 200)
 
     const Example = !_isNil(oneHostHosueBoardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
@@ -72,7 +59,7 @@ const HiddenDouble = () => {
 
                     '<p>'
                     + `Notice in above Sudoku Puzzle in 1st ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} ${oneHostHouseDetails.candidatesListText} are present`
-                    + ` together only only ${oneHostHouseDetails.cellsListText} as candidates. So, it's a Hidden Double.`
+                    + ` together only in ${oneHostHouseDetails.cellsListText} as candidates. So, it's a Hidden Double.`
                     + `\nIt is called "Hidden" because in ${oneHostHouseDetails.cellsListText} cells ${oneHostHouseDetails.candidatesListText} are hidden behind other candidates`
                     + ' due to this it\'s a little harder to find.'
                     + '</p>'
@@ -162,76 +149,6 @@ const HiddenDouble = () => {
         )
     }
 
-    const twoHostHouseExample = () => {
-        if (_isNil(twoHostHosueBoardData.mainNumbers)) return null
-
-        const hostHouseCellsWithoutHostCells = getHousesCellsSharedByCells(twoHostHouseHostCells)
-            .filter(cell => !isCellExists(cell, twoHostHouseHostCells))
-        const cellsFocusData = getCellsHighlightData(
-            hostHouseCellsWithoutHostCells,
-            twoHostHouseHostCells,
-            [5, 6, 7],
-            twoHostHosueBoardData.notes,
-            _get(theme, 'colors.smartHints'),
-        )
-
-        return (
-            <View style={styles.removableNotesExampleContainer}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>Naked Tripple in more than one House:</Text>
-                <Text>
-                    {
-                        'If the three cells are part of two houses simultaneously then Naked Tripple will affect cells of'
-                        + ` both houses. See in example below, cells ${twoHostHouseDetails.cellsListText} are part of row E and 6th block.`
-                    }
-                </Text>
-                <View style={styles.exampleBoardContainer}>
-                    <Board
-                        {...twoHostHosueBoardData}
-                        showCellContent
-                        getCellBGColor={(cell: Cell) => {
-                            if (isCellExists(cell, twoHostHouseHostCells)) return styles.nakedDoubleHostCell
-                            return null
-                        }}
-                        getNoteStyles={({ noteValue, show }: Note, cell: Cell) => {
-                            if (!show) return null
-                            const noteColor = _get(cellsFocusData, [cell.row, cell.col, 'notesToHighlightData', noteValue, 'fontColor'], null)
-                            if (!noteColor) return null
-                            return {
-                                color: noteColor,
-                                fontWeight: FONT_WEIGHTS.HEAVY,
-                            }
-                        }}
-                    />
-                </View>
-            </View>
-        )
-    }
-
-    const typesOfValidNakedTripples = () => {
-        if (_isNil(oneHostHosueBoardData.mainNumbers) || _isNil(twoHostHosueBoardData.mainNumbers)) return null
-        const firstExampleHostCells = [{ row: 0, col: 7 }, { row: 0, col: 8 }, { row: 1, col: 8 }]
-        const secondExampleHostCells = [{ row: 4, col: 6 }, { row: 4, col: 7 }, { row: 4, col: 8 }]
-
-        return (
-            <View>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + '<b>Note:</b> It is not necessary that the cells must have all three candidates to make a Naked Tripple.'
-                        + ' Cells must have atleast two out of these three candidates. So below examples are also correct Naked Tripples.'
-                        + '</p>'
-                    }
-                />
-                {/* take care of this style name */}
-                <View style={styles.waysToFillBoardContainer}>
-                    {renderTruncatedBoardForExample(oneHostHosueBoardData.mainNumbers, oneHostHosueBoardData.notes, {}, firstExampleHostCells, { initialOffsetX: -120, initialOffsetY: 120 })}
-                    <Text>OR</Text>
-                    {renderTruncatedBoardForExample(twoHostHosueBoardData.mainNumbers, twoHostHosueBoardData.notes, {}, secondExampleHostCells, { initialOffsetX: -120 })}
-                </View>
-            </View>
-        )
-    }
-
     const invalidHiddenDouble = () => {
         if (_isNil(oneHostHosueBoardData.mainNumbers)) return null
         const firstExampleHostCells = [{ row: 7, col: 1 }, { row: 7, col: 2 }, { row: 8, col: 1 }]
@@ -270,10 +187,6 @@ const HiddenDouble = () => {
             {Example}
             {invalidHiddenDouble()}
             {removableNotesHighlight()}
-            {/* {typesOfValidNakedTripples()}
-            {invalidNakedTripples()}
-            {removableNotesHighlight()}
-            {twoHostHouseExample()} */}
         </View>
     )
 }
