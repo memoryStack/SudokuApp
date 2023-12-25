@@ -82,7 +82,7 @@ const getCellNotesHighlightData = (
     return result
 }
 
-const highlightPrimaryHouseCells = (
+export const highlightPrimaryHouseCells = (
     house: House,
     groupCandidates: GroupCandidates,
     groupHostCells: GroupHostCells,
