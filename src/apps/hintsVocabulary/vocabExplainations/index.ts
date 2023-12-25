@@ -8,6 +8,7 @@ import Column from './column'
 import Block from './block'
 import NakedSingle from './nakedSingle'
 import NakedDouble from './nakedDouble'
+import NakedTripple from './nakedTripple'
 import HiddenSingle from './hiddenSingle'
 // import Omission from './omission'
 
@@ -20,6 +21,7 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.BLOCK]: Block,
     [HINTS_VOCAB_IDS.NAKED_SINGLE]: NakedSingle,
     [HINTS_VOCAB_IDS.NAKED_DOUBLE]: NakedDouble,
+    [HINTS_VOCAB_IDS.NAKED_TRIPPLE]: NakedTripple,
     [HINTS_VOCAB_IDS.HIDDEN_SINGLE]: HiddenSingle,
     // [HINTS_VOCAB_IDS.OMISSION]: Omission,
 }

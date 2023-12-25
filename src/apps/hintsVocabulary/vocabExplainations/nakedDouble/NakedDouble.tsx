@@ -14,7 +14,7 @@ import {
 } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
-import Text from '@ui/atoms/Text'
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import _cloneDeep from '@lodash/cloneDeep'
 import { CellsFocusData } from 'src/apps/arena/utils/smartHints/types'
@@ -151,10 +151,11 @@ const NakedDouble = () => {
 
         return (
             <View style={styles.removableNotesExampleContainer}>
+                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>Naked Tripple in more than one House:</Text>
                 <Text>
                     {
-                        'A Naked Double can be formed in more than one house as well. See in example below,'
-                        + ' cells H5 and H6 are part of row H and 8th block.'
+                        'If the two cells are part of two houses simultaneously then Naked Double will affect cells of'
+                        + ' both houses. See in example below, cells H5 and H6 are part of row H and 8th block.'
                     }
                 </Text>
                 <View style={styles.exampleBoardContainer}>
