@@ -12,6 +12,7 @@ import NakedTripple from './nakedTripple'
 import HiddenSingle from './hiddenSingle'
 import HiddenDouble from './hiddenDouble'
 import HiddenTripple from './hiddenTripple'
+import ChainLinks from './chainLinks'
 // import Omission from './omission'
 
 export const VOCAB_COMPONENTS = {
@@ -27,5 +28,6 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.HIDDEN_SINGLE]: HiddenSingle,
     [HINTS_VOCAB_IDS.HIDDEN_DOUBLE]: HiddenDouble,
     [HINTS_VOCAB_IDS.HIDDEN_TRIPPLE]: HiddenTripple,
+    [HINTS_VOCAB_IDS.CHAIN_LINKS]: ChainLinks,
     // [HINTS_VOCAB_IDS.OMISSION]: Omission,
 }

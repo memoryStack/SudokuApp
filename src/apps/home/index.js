@@ -113,6 +113,10 @@ const Home_ = ({ navigation }) => {
         )
     }
 
+    useEffect(() => {
+        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: 'CHAIN_LINKS' })
+    }, [])
+
     // TODO: use <Page /> here
     return (
         <View
@@ -124,17 +128,6 @@ const Home_ = ({ navigation }) => {
                 {renderSudokuText()}
                 {renderPlayButton()}
                 {renderGameRulesCTA()}
-                <SmartHintText text={'<p>Please visit <a href="COLUMN">column</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="HOUSE">House</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="BLOCK">block</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="CANDIDATE">Candidate</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="NAKED_SINGLE">Naked Single</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="NAKED_DOUBLE">Naked Double</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="NAKED_TRIPPLE">Naked Tripple</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="HIDDEN_SINGLE">Hidden Single</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="HIDDEN_DOUBLE">Hidden Double</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="HIDDEN_TRIPPLE">Hidden Tripple</a>.</p>'} />
-                <SmartHintText text={'<p>Please visit <a href="OMISSION">Omission</a>.</p>'} />
             </View>
             {renderNewGameMenu()}
         </View>

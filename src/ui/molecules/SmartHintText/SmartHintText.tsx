@@ -28,6 +28,11 @@ const CustomTextComponent = ({ style, ...restProps }: { style: Styles[] }) => {
     )
 }
 
+/*
+    TODO: explore https://www.npmjs.com/package/react-native-render-html
+    i guess it offers a lot of cool things
+*/
+
 const SmartHintText: React.FC<Props> = ({
     text,
     ...textProps

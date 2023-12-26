@@ -32,7 +32,7 @@ const oneHostHouseDetails = {
     candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
 }
 
-const HiddenDouble = () => {
+const HiddenTripple = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
     const oneHostHosueBoardData = useBoardData(oneHostHouse)
@@ -138,4 +138,4 @@ const HiddenDouble = () => {
     )
 }
 
-export default React.memo(HiddenDouble)
+export default React.memo(HiddenTripple)

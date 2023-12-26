@@ -56,7 +56,6 @@ const HiddenDouble = () => {
             />
             <SmartHintText
                 text={
-
                     '<p>'
                     + `Notice in above Sudoku Puzzle in 1st ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} ${oneHostHouseDetails.candidatesListText} are present`
                     + ` together only in ${oneHostHouseDetails.cellsListText} as candidates. So, it's a Hidden Double.`
