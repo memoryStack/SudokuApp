@@ -11,15 +11,12 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Board } from 'src/apps/arena/gameBoard'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
-import { getCellAxesValues, isCellExists } from 'src/apps/arena/utils/util'
+import { getCellAxesValues } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS, transformRemotePairsRawHint } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
-import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
-import { getCellsAxesList, getCellsAxesValuesListText, joinStringsListWithArrow } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
-import { getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
+import { getCellsAxesList, joinStringsListWithArrow } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
 import _head from '@lodash/head'
 import _last from '@lodash/last'
 import { getStyles } from './remotePairs.styles'
@@ -28,7 +25,7 @@ import { getLinkHTMLText } from '../utils'
 
 const puzzle = '798452316603781092012030870370265048820143760060897023980014237107028050200070081'
 
-const HiddenTripple = () => {
+const RemotePairs = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
 
@@ -113,16 +110,14 @@ const HiddenTripple = () => {
         )
     }
 
-    const renderChainEffectOnPuzzle = () => {
-        const a = 10
-        return (
-            <View style={{ marginTop: 12 }}>
-                <SmartHintText
-                    text={
-                        '<p>'
+    const renderChainEffectOnPuzzle = () => (
+        <View style={{ marginTop: 12 }}>
+            <SmartHintText
+                text={
+                    '<p>'
                             + '<b>How is Remote Pairs chain useful ?</b>'
                             + '<br />'
-                            + 'Cells in this chain can be filled in two ways. Let\'s try to it in both ways'
+                            + 'Cells in this chain can be filled in two ways. Let\'s try to fill it in both ways'
                             + ' and see the conclusion. But first understand the rules to fill these cells.'
                             + '<br />'
                             + '<b>Rules to fill chain cells:</b>'
@@ -132,11 +127,11 @@ const HiddenTripple = () => {
                                 + `<li>Links will be used alternatively like ${joinStringsListWithArrow(['Strong', 'Weak', 'Strong'])} ...</li>`
                             + '</ol>'
                         + '</p>'
-                    }
-                />
-                <SmartHintText
-                    text={
-                        '<p>'
+                }
+            />
+            <SmartHintText
+                text={
+                    '<p>'
                             + '<b>First Way to fill the Chain:</b>'
                             + '<br />'
                             + 'Follow the logic with the puzzle given below.'
@@ -151,21 +146,21 @@ const HiddenTripple = () => {
                                 + `<li>since 5 is false in ${chainCellsAxesList[3]} then 4 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
                             + '</ul>'
                         + '</p>'
-                    }
-                />
-                {Example}
-                <SmartHintText
-                    text={
-                        '<p>'
+                }
+            />
+            {Example}
+            <SmartHintText
+                text={
+                    '<p>'
                             + 'Notice in the above logic, by following the rules of filling these cells we found'
                             + ` that if candidate 4 can not be filled in ${_head(chainCellsAxesList)} then it will surely be`
                             + ` filled in ${_last(chainCellsAxesList)}. It means that if ${_head(chainCellsAxesList)} is 5 then ${_last(chainCellsAxesList)} must be 4.`
                         + '</p>'
-                    }
-                />
-                <SmartHintText
-                    text={
-                        '<p>'
+                }
+            />
+            <SmartHintText
+                text={
+                    '<p>'
                             + '<b>Second Way to fill the Chain:</b>'
                             + '<br />'
                             + 'Follow the logic with the puzzle given above.'
@@ -180,32 +175,47 @@ const HiddenTripple = () => {
                                 + `<li>since 4 is false in ${chainCellsAxesList[3]} then 5 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
                             + '</ul>'
                         + '</p>'
-                    }
-                />
-                <SmartHintText
-                    text={
-                        '<p>'
+                }
+            />
+            <SmartHintText
+                text={
+                    '<p>'
                             + `Notice in the second way of filling these cells if candidate 5 can not be filled in ${_head(chainCellsAxesList)} then it will surely be`
                             + ` filled in ${_last(chainCellsAxesList)}. It means that if ${_head(chainCellsAxesList)} is 4 then ${_last(chainCellsAxesList)} must be 5.`
                         + '</p>'
-                    }
-                />
-                <View style={{ marginTop: 8 }}>
-                    <SmartHintText
-                        text={
-                            '<p>'
+                }
+            />
+            <View style={{ marginTop: 8 }}>
+                <SmartHintText
+                    text={
+                        '<p>'
                             + 'So in both of these ways, it is sure that one end of chain will be 4 and other end will be 5.'
                             + ` so any cell which is in the same ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')} as first and`
                             + ' last cells of chain can not have 4 and 5 as it\'s candidates. Hence in the example above, F7 cell'
                             + ` shares same ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} with F1 and shares same ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} with B7.`
                             + ' so from F7 candidate 5 can be removed.'
                             + '</p>'
-                        }
-                    />
-                </View>
+                    }
+                />
             </View>
-        )
-    }
+        </View>
+    )
+
+    const renderValidChainLengthDetails = () => (
+        <View style={{ marginTop: 12 }}>
+            <SmartHintText
+                text={
+                    '<p>'
+                    + '<b>Note:</b> In a valid Remote Pairs chain the number of participating cells'
+                    + ' must be <b>even</b> and greater than 3 like 4, 6, 8 ... Otherwise the chain\'s first'
+                    + ' and last cells will be filled by same candidates and we won\'t be able to remove any candidate.'
+                    + ' And a Remote Pairs chain shouldn\'t have only 2 cells because that is just a Naked Double.'
+                    + '\nTry this out by yourself.'
+                    + '</p>'
+                }
+            />
+        </View>
+    )
 
     return (
         <View style={styles.container}>
@@ -223,8 +233,9 @@ const HiddenTripple = () => {
             {Example}
             {renderChainFormationDetails()}
             {renderChainEffectOnPuzzle()}
+            {renderValidChainLengthDetails()}
         </View>
     )
 }
 
-export default React.memo(HiddenTripple)
+export default React.memo(RemotePairs)

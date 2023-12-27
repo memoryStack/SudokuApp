@@ -14,6 +14,7 @@ import HiddenDouble from './hiddenDouble'
 import HiddenTripple from './hiddenTripple'
 import ChainLinks from './chainLinks'
 import RemotePairs from './remotePairs'
+import XChain from './xChain'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -30,5 +31,6 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.HIDDEN_TRIPPLE]: HiddenTripple,
     [HINTS_VOCAB_IDS.CHAIN_LINKS]: ChainLinks,
     [HINTS_VOCAB_IDS.REMOTE_PAIRS]: RemotePairs,
+    [HINTS_VOCAB_IDS.X_CHAIN]: XChain,
     // [HINTS_VOCAB_IDS.OMISSION]: Omission,
 }
