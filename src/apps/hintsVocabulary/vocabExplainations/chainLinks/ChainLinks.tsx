@@ -399,7 +399,8 @@ const ChainLinks = () => {
             <SmartHintText
                 text={
                     '<p>'
-                    + `Links are the building blocks of all chains. Links define a relationship between ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} of two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')}`
+                    + 'Links are the building blocks of all chains. If you don\'t understand Links then you will not be able to understand'
+                    + ` Chain techniques.\nLinks define a relationship between ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} of two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')}`
                     + ` in a ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'house')} or candidates of a single cell as well. There are two types of links <b>Strong</b> link and <b>Weak</b> link.`
                     + '</p>'
                 }

@@ -13,7 +13,7 @@ import HiddenSingle from './hiddenSingle'
 import HiddenDouble from './hiddenDouble'
 import HiddenTripple from './hiddenTripple'
 import ChainLinks from './chainLinks'
-// import Omission from './omission'
+import RemotePairs from './remotePairs'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -29,5 +29,6 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.HIDDEN_DOUBLE]: HiddenDouble,
     [HINTS_VOCAB_IDS.HIDDEN_TRIPPLE]: HiddenTripple,
     [HINTS_VOCAB_IDS.CHAIN_LINKS]: ChainLinks,
+    [HINTS_VOCAB_IDS.REMOTE_PAIRS]: RemotePairs,
     // [HINTS_VOCAB_IDS.OMISSION]: Omission,
 }

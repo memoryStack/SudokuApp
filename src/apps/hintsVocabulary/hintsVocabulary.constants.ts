@@ -18,5 +18,9 @@ export const HINTS_VOCAB_TITLE = {
     [HINTS_VOCAB_IDS.HIDDEN_DOUBLE]: 'Hidden Double',
     [HINTS_VOCAB_IDS.HIDDEN_TRIPPLE]: 'Hidden Tripple',
     [HINTS_VOCAB_IDS.OMISSION]: 'Omission',
+    [HINTS_VOCAB_IDS.CHAIN]: 'Chain',
     [HINTS_VOCAB_IDS.CHAIN_LINKS]: 'Chain Links',
+    [HINTS_VOCAB_IDS.REMOTE_PAIRS]: 'Remote Pairs',
+    [HINTS_VOCAB_IDS.X_CHAIN]: 'X-Chain',
+    [HINTS_VOCAB_IDS.XY_CHAIN]: 'XY-Chain',
 }

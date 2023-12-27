@@ -114,7 +114,7 @@ const Home_ = ({ navigation }) => {
     }
 
     useEffect(() => {
-        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: 'CHAIN_LINKS' })
+        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: 'REMOTE_PAIRS' })
     }, [])
 
     // TODO: use <Page /> here
