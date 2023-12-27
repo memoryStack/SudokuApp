@@ -25,6 +25,7 @@ import { NextGameMenu } from '../arena/nextGameMenu'
 
 import { HOME_PAGE_TEST_ID } from './home.constants'
 import { getStyles } from './home.styles'
+import { HINTS_VOCAB_IDS } from '../arena/utils/smartHints/rawHintTransformers'
 
 const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)
@@ -114,7 +115,7 @@ const Home_ = ({ navigation }) => {
     }
 
     useEffect(() => {
-        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: 'REMOTE_PAIRS' })
+        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: HINTS_VOCAB_IDS.CHAIN_LINKS })
     }, [])
 
     // TODO: use <Page /> here

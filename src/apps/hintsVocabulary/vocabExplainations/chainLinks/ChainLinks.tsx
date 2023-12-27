@@ -16,9 +16,10 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 
 import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
+import { getHouseCells } from 'src/apps/arena/utils/houseCells'
 import { getStyles } from './chainLinks.styles'
 import { useBoardData } from '../hooks/useBoardData'
-import { getLinkHTMLText } from '../utils'
+import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
 
 const puzzle = '027958600900003000603000050009780000080634010000019700070000304000300001004571890'
 
@@ -45,6 +46,8 @@ const ChainLinks = () => {
                 },
             ]
 
+            const trimmedBoardData = getTrimmedBoardData(boardData, getHouseCells({ type: HOUSE_TYPE.ROW, num: 1 }))
+
             return (
                 <>
                     <View style={{ width: '100%', height: 60 }}>
@@ -56,7 +59,7 @@ const ChainLinks = () => {
                             disableShifting
                         >
                             <Board
-                                {...boardData}
+                                {...trimmedBoardData}
                                 showCellContent
                                 showHintsSVGView
                                 svgProps={chain}
@@ -97,6 +100,8 @@ const ChainLinks = () => {
                 initialOffsetY: 120,
             }
 
+            const trimmedBoardData = getTrimmedBoardData(boardData, getHouseCells({ type: HOUSE_TYPE.BLOCK, num: 1 }))
+
             return (
                 <>
                     <View style={{ width: 200, height: 200, alignSelf: 'center' }}>
@@ -108,7 +113,7 @@ const ChainLinks = () => {
                             disableShifting
                         >
                             <Board
-                                {...boardData}
+                                {...trimmedBoardData}
                                 showCellContent
                                 getNoteStyles={({ show }: Note, cell: Cell) => {
                                     if (!show || !areSameCells(cell, { row: 1, col: 4 })) return null
@@ -167,6 +172,9 @@ const ChainLinks = () => {
         )
     }
 
+    const firstRowTrimmedBoardData = !_isNil(boardData.mainNumbers)
+        ? getTrimmedBoardData(boardData, getHouseCells({ type: HOUSE_TYPE.ROW, num: 0 })) : {}
+
     const renderStrongLinkDefinition = () => {
         const renderStrongLinkExamplesInRow = () => {
             if (_isNil(boardData.mainNumbers)) return null
@@ -196,7 +204,7 @@ const ChainLinks = () => {
                             disableShifting
                         >
                             <Board
-                                {...boardData}
+                                {...firstRowTrimmedBoardData}
                                 showCellContent
                                 showHintsSVGView
                                 svgProps={chain}
@@ -233,6 +241,13 @@ const ChainLinks = () => {
                 initialOffsetY: 90,
             }
 
+            const focusedCells = [
+                { row: 1, col: 4 }, { row: 1, col: 5 }, { row: 1, col: 6 },
+                { row: 2, col: 4 }, { row: 2, col: 5 }, { row: 2, col: 6 },
+                { row: 3, col: 4 }, { row: 3, col: 5 }, { row: 3, col: 6 },
+            ]
+            const trimmedBoardData = getTrimmedBoardData(boardData, focusedCells)
+
             return (
                 <>
                     <View style={{ width: 200, height: 200, alignSelf: 'center' }}>
@@ -244,7 +259,7 @@ const ChainLinks = () => {
                             disableShifting
                         >
                             <Board
-                                {...boardData}
+                                {...trimmedBoardData}
                                 showCellContent
                                 getNoteStyles={({ show }: Note, cell: Cell) => {
                                     if (!show || !areSameCells(cell, { row: 2, col: 5 })) return null
@@ -341,7 +356,7 @@ const ChainLinks = () => {
                         disableShifting
                     >
                         <Board
-                            {...boardData}
+                            {...firstRowTrimmedBoardData}
                             showCellContent
                             showHintsSVGView
                             svgProps={chain}
