@@ -249,10 +249,73 @@ export const areSameHouses = (houseA: House, houseB: House) => houseA.type === h
 
 export const getCellAllHousesCells = (cell: Cell) => getHousesCellsSharedByCells([cell, cell])
 
+const isRowPartOfBlock = (rowNum: number, blockNum: number) => Math.floor(rowNum / 3) === Math.floor(blockNum / 3)
+
+const isColPartOfBlock = (colNum: number, blockNum: number) => Math.floor(colNum / 3) === blockNum % 3
+
 export const getCellsSharingHousesWithCells = (cellA: Cell, cellB: Cell): Cell[] => {
-    const cellAAllHousesCells = getCellAllHousesCells(cellA)
-    const cellBAllHousesCells = getCellAllHousesCells(cellB)
-    return _filter(cellBAllHousesCells, (cell: Cell) => isCellExists(cell, cellAAllHousesCells))
+    const cellsCommonHouses = getPairCellsCommonHouses(cellA, cellB)
+
+    if (cellsCommonHouses[HOUSE_TYPE.BLOCK]) {
+        const commonLinearHouse = {
+            type: cellsCommonHouses[HOUSE_TYPE.ROW] ? HOUSE_TYPE.ROW
+                : cellsCommonHouses[HOUSE_TYPE.COL] ? HOUSE_TYPE.COL : null,
+            num: cellsCommonHouses[HOUSE_TYPE.ROW] ? cellA.row
+                : cellsCommonHouses[HOUSE_TYPE.COL] ? cellA.col : -1,
+        }
+        const blockCells = getHouseCells({ type: HOUSE_TYPE.BLOCK, num: getBlockAndBoxNum(cellA).blockNum })
+            .filter(cell => cell[commonLinearHouse.type] !== commonLinearHouse.num)
+        return [...getHouseCells(commonLinearHouse as House), ...blockCells]
+    }
+
+    if (cellsCommonHouses[HOUSE_TYPE.ROW] || cellsCommonHouses[HOUSE_TYPE.COL]) {
+        const house = {
+            type: cellsCommonHouses[HOUSE_TYPE.ROW] ? HOUSE_TYPE.ROW : HOUSE_TYPE.COL,
+            num: cellsCommonHouses[HOUSE_TYPE.ROW] ? cellA.row : cellA.col,
+        }
+        return getHouseCells(house)
+    }
+
+    const result: Cell[] = []
+
+    const cellABlockHouseNum = getBlockAndBoxNum(cellA).blockNum
+    const cellBBlockHouseNum = getBlockAndBoxNum(cellB).blockNum
+
+    const cellARowInBBlock = isRowPartOfBlock(cellA.row, cellBBlockHouseNum)
+    const cellAColInBBlock = isColPartOfBlock(cellA.col, cellBBlockHouseNum)
+
+    const cellBRowInABlock = isRowPartOfBlock(cellB.row, cellABlockHouseNum)
+    const cellBColInABlock = isColPartOfBlock(cellB.col, cellABlockHouseNum)
+
+    if (cellARowInBBlock || cellAColInBBlock || cellBRowInABlock || cellBColInABlock) {
+        const blockACells = getHouseCells({ type: HOUSE_TYPE.BLOCK, num: cellABlockHouseNum })
+        const blockBCells = getHouseCells({ type: HOUSE_TYPE.BLOCK, num: cellBBlockHouseNum })
+        if (cellARowInBBlock) {
+            blockBCells.forEach(cell => {
+                cell.row === cellA.row && result.push(cell)
+            })
+            blockACells.forEach(cell => {
+                cell.row === cellB.row && result.push(cell)
+            })
+        }
+        if (cellAColInBBlock) {
+            blockBCells.forEach(cell => {
+                cell.col === cellA.col && result.push(cell)
+            })
+            blockACells.forEach(cell => {
+                cell.col === cellB.col && result.push(cell)
+            })
+        }
+    }
+
+    if (_isEmpty(result)) {
+        result.push(
+            { row: cellA.row, col: cellB.col },
+            { row: cellB.row, col: cellA.col },
+        )
+    }
+
+    return result
 }
 
 export const sortCells = (cells: Cell[]): Cell[] => _sortBy(cells, ['row', 'col'])

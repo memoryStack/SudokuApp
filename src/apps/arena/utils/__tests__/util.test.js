@@ -462,18 +462,67 @@ describe('getHouseAxesValue()', () => {
 })
 
 describe('getCellsSharingHousesWithCells()', () => {
-    test('returns cells which share any house with both of given cells', () => {
-        const cellA = { row: 0, col: 1 }
-        const cellB = { row: 3, col: 2 }
-        const expectedResult = [
-            { row: 3, col: 1 },
-            { row: 4, col: 1 },
-            { row: 5, col: 1 },
-            { row: 0, col: 2 },
-            { row: 1, col: 2 },
-            { row: 2, col: 2 },
-        ]
-        expect(getCellsSharingHousesWithCells(cellA, cellB)).toEqual(expectedResult)
+    describe('returns cells which share any house with both of given cells', () => {
+        test('when each cell have a column in other cell block', () => {
+            const cellA = { row: 0, col: 1 }
+            const cellB = { row: 3, col: 2 }
+            const expectedResult = [
+                { row: 3, col: 1 },
+                { row: 4, col: 1 },
+                { row: 5, col: 1 },
+                { row: 0, col: 2 },
+                { row: 1, col: 2 },
+                { row: 2, col: 2 },
+            ]
+            expect(getCellsSharingHousesWithCells(cellA, cellB)).toEqual(expectedResult)
+        })
+
+        test('when each cell have a row on other cell block', () => {
+            const cellA = { row: 3, col: 2 }
+            const cellB = { row: 5, col: 6 }
+            const expectedResult = [
+                { row: 3, col: 6 },
+                { row: 3, col: 7 },
+                { row: 3, col: 8 },
+                { row: 5, col: 0 },
+                { row: 5, col: 1 },
+                { row: 5, col: 2 },
+            ]
+            expect(getCellsSharingHousesWithCells(cellA, cellB)).toEqual(expectedResult)
+        })
+
+        test('when only two cells share house', () => {
+            const cellA = { row: 0, col: 1 }
+            const cellB = { row: 8, col: 8 }
+            const expectedResult = [
+                { row: 0, col: 8 },
+                { row: 8, col: 1 },
+            ]
+            expect(getCellsSharingHousesWithCells(cellA, cellB)).toEqual(expectedResult)
+        })
+
+        test('when cells are in same block and same row', () => {
+            const cellA = { row: 4, col: 3 }
+            const cellB = { row: 4, col: 5 }
+            const expectedResult = [
+                { row: 4, col: 0 },
+                { row: 4, col: 1 },
+                { row: 4, col: 2 },
+                { row: 4, col: 3 },
+                { row: 4, col: 4 },
+                { row: 4, col: 5 },
+                { row: 4, col: 6 },
+                { row: 4, col: 7 },
+                { row: 4, col: 8 },
+                { row: 3, col: 3 },
+                { row: 3, col: 4 },
+                { row: 3, col: 5 },
+                { row: 5, col: 3 },
+                { row: 5, col: 4 },
+                { row: 5, col: 5 },
+            ]
+            expect(getCellsSharingHousesWithCells(cellA, cellB)).toEqual(expectedResult)
+        })
     })
 })
 
