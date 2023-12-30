@@ -20,6 +20,8 @@ import { Action, OnAction } from '@utils/hocs/withActions/types'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
+import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
+import _isNil from '@lodash/isNil'
 import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
@@ -32,6 +34,7 @@ import {
     getFocusedCells,
     getHintStepLogic,
     getHintTitle,
+    getHintType,
     getInputPanelNumbersVisibility,
     getSelectCellOnClose,
     getTotalStepsCount,
@@ -49,9 +52,11 @@ import {
     CLOSE_ICON_TEST_ID,
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
     SMART_HINT_HC_STEP_COUNT_TEXT_TEST_ID,
+    HINT_VS_VOCAB_ID,
 } from './constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { InputPanelNumbersVisibility } from '../utils/smartHints/types'
+import { HINTS_IDS } from '../utils/smartHints/constants'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -69,8 +74,10 @@ const useSmartHintData = () => {
     const inputPanelNumbersVisibility = useSelector(getInputPanelNumbersVisibility)
     const currentHintNum = useSelector(getCurrentHintStepNum)
     const totalHintsCount = useSelector(getTotalStepsCount)
+    const id = useSelector(getHintType)
 
     return {
+        id,
         focusedCells,
         title,
         logic,
@@ -89,6 +96,7 @@ const SmartHintHC_: React.FC<Props> = ({
     const dependencies = useDependency()
 
     const {
+        id: hintId,
         focusedCells,
         title,
         logic,
@@ -177,6 +185,9 @@ const SmartHintHC_: React.FC<Props> = ({
     const displayNextButton = !(isOnlyHint || isLastHint)
     const displayPrevButton = !(isOnlyHint || isFirstHint)
 
+    const hintVocabId = HINT_VS_VOCAB_ID[hintId]
+    const learnMoreAvailable = !_isNil(hintVocabId)
+
     const renderHeader = () => (
         <View style={styles.headerContainer}>
             <View style={styles.hintTitleContainer}>
@@ -190,6 +201,7 @@ const SmartHintHC_: React.FC<Props> = ({
                     </Text>
                 ) : null}
             </View>
+
             <Touchable
                 onPress={closeView}
                 addHitSlop
@@ -197,6 +209,7 @@ const SmartHintHC_: React.FC<Props> = ({
             >
                 <CloseIcon height={24} width={24} fill={styles.closeIcon.color} />
             </Touchable>
+
         </View>
     )
 
@@ -227,15 +240,31 @@ const SmartHintHC_: React.FC<Props> = ({
         </>
     )
 
+    const renderLearnMoreLink = () => {
+        if (!learnMoreAvailable) return null
+        return (
+            <SmartHintText text={getLinkHTMLText(hintVocabId, 'Learn More')} />
+        )
+    }
+
+    const renderFooterLeftSection = () => (
+        <>
+            {displayPrevButton || !learnMoreAvailable ? (
+                <Button
+                    label={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
+                    onPress={displayPrevButton ? onPrevClick : _noop}
+                    avoidDefaultContainerStyles
+                    textStyles={styles.footerButtonText}
+                    type={BUTTON_TYPES.TEXT}
+                />
+            ) : null}
+            {renderLearnMoreLink()}
+        </>
+    )
     const renderFooter = () => (
         <View style={styles.footerContainer}>
-            <Button
-                label={displayPrevButton ? FOOTER_BUTTONS_TEXT.PREV : ''}
-                onPress={displayPrevButton ? onPrevClick : _noop}
-                avoidDefaultContainerStyles
-                textStyles={styles.footerButtonText}
-                type={BUTTON_TYPES.TEXT}
-            />
+            {renderFooterLeftSection()}
+
             <Button
                 label={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
                 onPress={displayNextButton ? onNextClick : onApplyHintClick}

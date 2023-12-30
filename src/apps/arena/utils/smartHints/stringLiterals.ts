@@ -1,3 +1,4 @@
+import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { HINTS_VOCAB_IDS } from './rawHintTransformers/constants'
 import { HINTS_IDS } from './constants'
 
@@ -47,49 +48,52 @@ type HintExplainationTexts = {
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
     [HINTS_IDS.NAKED_SINGLE]: {
-        SINGLE_HOUSE: 'in this {{houseType}} only {{cellAxesText}} is empty so {{solutionValue}} will come here',
-        MULTIPLE_HOUSE: 'except {{solutionValue}} all other numbers from 1-9 are present in {{cellHousesText}} combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}',
+        SINGLE_HOUSE: `<p>in this {{houseType}} only {{cellAxesText}} ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} is empty so {{solutionValue}} will come here</p>`,
+        MULTIPLE_HOUSE: '<p>except {{solutionValue}} all other numbers from 1-9 are present in {{cellHousesText}} combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}</p>',
     },
     [HINTS_IDS.HIDDEN_SINGLE]:
-        'in the highlighted {{houseType}}, {{solutionValue}} can\'t come in crossed'
-        + ' cells because of {{solutionValue}} in {{filledCellsWithSolutionValue}}. so in {{hostCell}} only'
-        + ' {{solutionValue}} can come',
+        '<p>in the highlighted {{houseType}}, {{solutionValue}} can\'t come in crossed'
+        + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} because of {{solutionValue}} in {{filledCellsWithSolutionValue}}. so in {{hostCell}} only`
+        + ' {{solutionValue}} can come</p>',
     [HINTS_IDS.OMISSION]:
-        'in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of'
-        + ' {{hostHouseHostCellsListText}} and all of these cells are part of {{secondaryHouseNumText}} as well.'
+        '<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of'
+        + ` {{hostHouseHostCellsListText}} and all of these ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} are part of {{secondaryHouseNumText}} as well.`
         + ' so wherever we try to fill {{note}} in this {{hostHouseFullName}},'
-        + ' {{note}} in {{removableNotesHostCellsListText}} can\'t come',
+        + ' {{note}} in {{removableNotesHostCellsListText}} can\'t come</p>',
     [HINTS_IDS.NAKED_DOUBLE]: [
-        '<p>A Naked Double occurs when two cells in any row, column, or block'
-        + ` contain only two possible <a href="${HINTS_VOCAB_IDS.CANDIDATE}">candidates</a>, and these two cells share the same set of candidates.`
+        `<p>A Naked Double occurs when two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} in any ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}`
+        + ` contain only two possible ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')}, and these`
+        + ' two cells share the same set of candidates.'
         + '\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}}'
         + ' as their candidates so this forms a Naked Double in {{hostHouses}}.</p>',
 
-        'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear.'
+        'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out'
+        + ' of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear.'
         + ' but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',
     ],
     [HINTS_IDS.NAKED_TRIPPLE]: [
-        'a Naked Tripple is formed when three cells in any row, column or block have candidates only from a set of 3 candidates.'
-        + ' and each cell must have atleast 2 candidates out of these 3.\n'
-        + 'here {{groupCellsText}} have a Naked Tripple in {{hostHouses}}.',
+        `<p>a Naked Tripple is formed when three ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} in any`
+        + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')} have ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} only from a`
+        + ' set of 3 candidates. and each cell must have atleast 2 candidates out of these 3.\n'
+        + 'here {{groupCellsText}} have a Naked Tripple in {{hostHouses}}.</p>',
 
         'here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear.'
         + ' but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.',
     ],
     [HINTS_IDS.HIDDEN_DOUBLE]: {
         DEFAULT: [
-            'a Hidden Double is formed when two candidates are present together only in two cells and nowhere else'
-            + ' in any row, column or block.'
-            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
+            `<p>a Hidden Double is formed when two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} are present together only in two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} and nowhere else`
+            + ` in any ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.`
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>',
 
             '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
             + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
             + ' removed from {{primaryHouseRemovableNotesHostCells}}',
         ],
         REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            'a Hidden Double is formed when two candidates are present together only in two cells and nowhere else'
-            + ' in any row, column or block.'
-            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
+            `<p>a Hidden Double is formed when two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} are present together only in two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} and nowhere else`
+            + ` in any ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.`
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>',
 
             '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
             + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
@@ -100,18 +104,18 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
     },
     [HINTS_IDS.HIDDEN_TRIPPLE]: {
         DEFAULT: [
-            'a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else'
-            + ' in any row, column or block.\neach of these three cells must have atleast two out of these three candidates.'
-            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
+            `<p>a Hidden Tripple is formed when three ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} are present together only in three ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} and nowhere else`
+            + ` in any ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.\neach of these three cells must have atleast two out of these three candidates.`
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>',
 
             '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
             + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
             + ' removed from {{primaryHouseRemovableNotesHostCells}}',
         ],
         REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            'a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else'
-            + ' in any row, column or block.\neach of these three cells must have atleast two out of these three candidates.'
-            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}',
+            `<p>a Hidden Tripple is formed when three ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} are present together only in three ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} and nowhere else`
+            + ` in any ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.\neach of these three cells must have atleast two out of these three candidates.`
+            + '\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>',
 
             '{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}},'
             + ' so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be'
@@ -121,10 +125,11 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         ],
     },
     [HINTS_IDS.PERFECT_X_WING]: [
-        'to spot a X-Wing, start with looking for a candidate which is present only in two cells of'
-        + ' any row or column. we need to find either two such rows or two columns.'
+        `<p>to spot an X-Wing, start with looking for a ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} which is`
+        + ` present only in two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} of`
+        + ` any ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')}. we need to find either two such rows or two columns.`
         + '\nthese four cells where the candidate is present in these rows or columns must be aligned'
-        + ' like four corners of a rectangle.',
+        + ' like four corners of a rectangle.</p>',
 
         'here {{candidate}} is present only in two cells of {{houseAAxesValue}} and {{houseBAxesValue}}'
         + ' {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.'
@@ -137,14 +142,14 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' {{crossHouseFullNamePlural}} in red color will be removed',
     ],
     [HINTS_IDS.FINNED_X_WING]: [
-        'If you don\'t understand X-Wing then you should learn that first.'
-        + '\nwhen the candidate is present in more than 2 cells of only one row or column then it\'s not a perfect X-Wing'
+        '<p>If you don\'t understand X-Wing then you should learn that first.'
+        + `\nwhen the ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} is present in more than 2 ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} of only one ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} then it's not a perfect X-Wing`
         + ' but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called Finn cells.'
-        + '\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}',
+        + '\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>',
 
-        'only one row or column can have these finn cells. and these finn cells must be in the'
-        + ' same block with atleast one of the X-Wing corner cells.\nnotice here that {{finnCellsAxesListText}}'
-        + ' (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}',
+        '<p>only one row or column can have these finn cells. and these finn cells must be in the'
+        + ` same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with atleast one of the X-Wing corner cells.\nnotice here that {{finnCellsAxesListText}}`
+        + ' (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}</p>',
 
         'here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but'
         + ' only from cells which share block with finn cells.'
@@ -153,9 +158,10 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}',
     ],
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
-        'If you don\'t understand Finned X-Wing then you should learn that first.'
-        + '\nwhen in Finned X-Wing the candidate is missing in the corner cell which is in same block'
-        + ' as finn cells then it will be called Sashimi Finned X-Wing.',
+        '<p>If you don\'t understand Finned X-Wing then you should learn that first.'
+        + `\nwhen in Finned X-Wing the ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} is missing in the`
+        + ` corner ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} which is in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
+        + ' as finn cells then it will be called Sashimi Finned X-Wing.</p>',
 
         'here {{candidate}} isn\'t present in {{sashimiCell}} and this cell is in same'
         + ' block as {{finnCellsAxesListText}} finn {{finnCellEnglishText}}'
@@ -165,37 +171,37 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' {{hostHousePluralName}}, in all cases {{candidate}} can\'t come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.',
     ],
     [HINTS_IDS.Y_WING]: [
-        'look for a cell which has only two candidates in it. we will call it pivot cell.'
-        + '\nin puzzle {{pivotCell}} is highlighted as pivot cell',
+        `<p>look for a ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} which has only two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')}`
+        + 'in it. we will call it pivot cell.\nin puzzle {{pivotCell}} is highlighted as pivot cell</p>',
 
-        'now look for two more cells which also have only two candidates in them and which share a row, column or block with'
-        + ' pivot cell. these will be wings cells. wings cells themselves shouldn\'t be in same row, column or block.'
+        `<p>now look for two more cells which also have only two candidates in them and which share a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')} with`
+        + ' pivot cell. these will be wings cells. wings cells themselves shouldn\'t be in same house.'
         + ' here {{wingCellsText}} are wings cells\n{{firstWingCell}} and {{pivotCell}} are in {{firstWingAndPivotCommonHouse}}'
         + ' and {{secondWingCell}} and {{pivotCell}} are in {{secondWingAndPivotCommonHouse}}. but {{firstWingCell}} and {{secondWingCell}}'
-        + ' are not in any same row, column or block',
+        + ' are not in any same house</p>',
 
-        'now notice the arrangements of candidates in pivot and wings cells'
+        '<p>now notice the arrangements of candidates in pivot and wings cells'
         + '\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells,'
         + ' {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}.'
-        + ' and other candidate of both wings cells is same, which is {{commonNoteInWings}} here.',
+        + ` and other ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} of both wings cells is same, which is {{commonNoteInWings}} here.</p>`,
 
-        'due to this arrangement {{commonNoteInWings}} will be removed from cells which share a row, column or block'
+        'due to this arrangement {{commonNoteInWings}} will be removed from cells which share a house'
         + ' with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or'
         + ' {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}.'
         + ' so {{removableNotesHostCells}} can\'t have {{commonNoteInWings}} as their solution',
     ],
     [HINTS_IDS.REMOTE_PAIRS]: [
-        'Notice the Chain of cells {{chain}}. All of these cells have {{remotePairNotes}} as their candidates.'
+        `<p>Notice the Chain of ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} {{chain}}. All of these cells have {{remotePairNotes}} as their ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')}.`
         + ' Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either'
-        + ' by candidates in {{colorA}} or by candidates in {{colorB}}',
+        + ' by candidates in {{colorA}} or by candidates in {{colorB}}</p>',
 
         'Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.'
         + '\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can\'t come because'
         + ' {{remotePairNotes}} will always fill {{exampleChainCells}}',
     ],
     [HINTS_IDS.X_CHAIN]: [
-        'Notice the Chain of cells {{chain}}. All of these cells have {{note}} as their candidate.'
-        + '\nFollow this Chain from {{chainFirstCell}} to {{chainLastCell}}, {{firstWayToFillChainCells}}.',
+        `<p>Notice the Chain of ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} {{chain}}. All of these cells have {{note}} as their ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')}.`
+        + '\nFollow this Chain from {{chainFirstCell}} to {{chainLastCell}}, {{firstWayToFillChainCells}}.</p>',
 
         'another way to fill {{note}} in this Chain is to fill it in reverse order like {{secondWayToFillChainCells}}.'
         + '\nin both of these ways either {{chainFirstCell}} or {{chainLastCell}} will definitely be {{note}},'

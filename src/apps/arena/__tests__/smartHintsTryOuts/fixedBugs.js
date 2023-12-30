@@ -49,7 +49,7 @@ describe('Fixed Bug:', () => {
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_TRIPPLE])
         let smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
 
-        smartHintHC.getByText('a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in any row, column or block.\neach of these three cells must have atleast two out of these three candidates.\nObserve 3, 5 and 8 in A row')
+        smartHintHC.getByText('a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in any house.\neach of these three cells must have atleast two out of these three candidates.\nObserve 3, 5 and 8 in A row')
 
         closeSmartHintHC()
 
@@ -62,7 +62,7 @@ describe('Fixed Bug:', () => {
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_TRIPPLE])
 
         smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
-        smartHintHC.getByText('a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in any row, column or block.\neach of these three cells must have atleast two out of these three candidates.\nObserve 3, 5 and 8 in A row')
+        smartHintHC.getByText('a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in any house.\neach of these three cells must have atleast two out of these three candidates.\nObserve 3, 5 and 8 in A row')
 
         Puzzle.validatePuzzle.mockReset()
     }, 10000)

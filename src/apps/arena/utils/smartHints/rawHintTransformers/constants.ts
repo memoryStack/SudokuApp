@@ -1,3 +1,5 @@
+import { HOUSE_TYPE } from '../constants'
+
 export enum HINTS_VOCAB_IDS {
     CANDIDATE = 'CANDIDATE',
     HOUSE = 'HOUSE',
@@ -17,4 +19,10 @@ export enum HINTS_VOCAB_IDS {
     REMOTE_PAIRS = 'REMOTE_PAIRS',
     X_CHAIN = 'X_CHAIN',
     XY_CHAIN = 'XY_CHAIN',
+}
+
+export const HOUSE_TYPE_VS_VOCAB_ID = {
+    [HOUSE_TYPE.ROW]: HINTS_VOCAB_IDS.ROW,
+    [HOUSE_TYPE.COL]: HINTS_VOCAB_IDS.COLUMN,
+    [HOUSE_TYPE.BLOCK]: HINTS_VOCAB_IDS.BLOCK,
 }

@@ -223,7 +223,6 @@ export const getFinnedXWingUIData = (
     const focusedCells = getCellsFromCellsToFocusedData(cellsToFocusData)
     const tryOutProps = {
         hasTryOut: true,
-        type: HINTS_IDS.FINNED_X_WING,
         focusedCells,
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([candidate]) as InputPanelVisibleNumbers,
         clickableCells: [...removableNotesHostCells, ...getXWingCells(xWing.legs)],
@@ -239,6 +238,7 @@ export const getFinnedXWingUIData = (
         : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData)
 
     return {
+        type: finnedXWingType === XWING_TYPES.FINNED ? HINTS_IDS.FINNED_X_WING : HINTS_IDS.SASHIMI_FINNED_X_WING,
         cellsToFocusData,
         title:
             finnedXWingType === XWING_TYPES.FINNED

@@ -1,6 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _map from '@lodash/map'
 
+import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { getHouseCells } from '../../../houseCells'
 import { isCellExists } from '../../../util'
@@ -20,6 +21,7 @@ import { RawOmissionHint } from '../../omission/types'
 import {
     CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
+import { HOUSE_TYPE_VS_VOCAB_ID } from '../constants'
 
 const addHostHouseHighlightData = (
     omission: RawOmissionHint,
@@ -92,7 +94,7 @@ const getHintExplaination = (omission: RawOmissionHint, notes: Notes) => {
 
     const msgPlaceholdersValues = {
         note,
-        hostHouseFullName: HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME,
+        hostHouseFullName: getLinkHTMLText(HOUSE_TYPE_VS_VOCAB_ID[hostHouse.type], HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME),
         hostHouseHostCellsListText,
         secondaryHouseNumText: `${getHouseNumText(removableNotesHostHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME}`,
         removableNotesHostCellsListText: getCellsAxesValuesListText(getRemovableNotesHostCells(omission, notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
@@ -111,6 +113,7 @@ const getApplyHintData = (omission: RawOmissionHint, notes: Notes): NotesRemoval
 }
 
 export const transformOmissionRawHint = ({ rawHint: omission, notesData, smartHintsColorSystem }: OmissionTransformerArgs): TransformedRawHint => ({
+    type: HINTS_IDS.OMISSION,
     cellsToFocusData: getUICellsToFocusData(omission, notesData, smartHintsColorSystem),
     title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],
     steps: [{ text: getHintExplaination(omission, notesData) }],

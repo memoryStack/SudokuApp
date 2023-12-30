@@ -391,8 +391,8 @@ export const transformHiddenGroupRawHint = ({
     )
 
     return {
-        hasTryOut: true,
         type: isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE,
+        hasTryOut: true,
         title: isHiddenDoubles
             ? HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_DOUBLE]
             : HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_TRIPPLE],

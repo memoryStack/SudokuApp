@@ -14,6 +14,7 @@ const tryOutAnalysers = {
     [HINTS_IDS.HIDDEN_TRIPPLE]: hiddenGroupTryOutAnalyser,
     [HINTS_IDS.PERFECT_X_WING]: perfectXWingTryOutAnalyser,
     [HINTS_IDS.FINNED_X_WING]: finnedXWingTryOutAnalyser,
+    [HINTS_IDS.SASHIMI_FINNED_X_WING]: finnedXWingTryOutAnalyser,
     [HINTS_IDS.Y_WING]: yWingTryOutAnalyser,
     [HINTS_IDS.REMOTE_PAIRS]: remotePairsTryOutAnalyser,
     [HINTS_IDS.X_CHAIN]: xChainTryOutAnalyser,

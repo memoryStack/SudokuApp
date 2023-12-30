@@ -2,6 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
 import { toOrdinal } from '@lodash/toOrdinal'
 
+import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
     NAKED_SINGLE_TYPES,
@@ -29,6 +30,7 @@ import {
 } from '../../types'
 
 import { NakedSingleTransformerArgs } from './types'
+import { HINTS_VOCAB_IDS } from '../constants'
 
 const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE]
 
@@ -47,7 +49,7 @@ const getCellHousesText = (cell: Cell) => {
     const cellHouses = getCellHousesInfo(cell)
     const columnNum = toOrdinal(cellHouses[1].num + 1)
     const blockNum = toOrdinal(cellHouses[2].num + 1)
-    return `${getHouseAxesValue(cellHouses[0])} row, ${columnNum} column and ${blockNum} block`
+    return `${getHouseAxesValue(cellHouses[0])} ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')}, ${columnNum} ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} and ${blockNum} ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
 }
 
 const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell): string => {
@@ -142,6 +144,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
     }
 
     return {
+        type: HINTS_IDS.NAKED_SINGLE,
         cellsToFocusData,
         title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
         steps: [{ text: logic }],

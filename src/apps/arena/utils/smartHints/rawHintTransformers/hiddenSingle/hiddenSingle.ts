@@ -1,6 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _isNil from '@lodash/isNil'
 
+import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 
@@ -37,6 +38,7 @@ import {
 } from '../../types'
 import { HiddenSingleRawHint } from '../../hiddenSingle/types'
 import { HiddenSingleTransformerArgs } from './types'
+import { HOUSE_TYPE_VS_VOCAB_ID } from '../constants'
 
 // this file has highlighting for Block Type Hidden Single
 type NeighbourHouseImpact = {
@@ -234,7 +236,7 @@ const getHiddenSingleInBlockHighlightData = (hostCell: Cell, mainNumbers: MainNu
 const getHiddenSingleLogic = (rawHint: HiddenSingleRawHint, solutionValue: SolutionValue, filledCellsWithSolutionValue: Cell[]) => {
     const { type: houseType, cell } = rawHint
     const msgPlaceholdersValues = {
-        houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
+        houseType: getLinkHTMLText(HOUSE_TYPE_VS_VOCAB_ID[houseType], HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME),
         solutionValue,
         hostCell: getCellAxesValues(cell),
         filledCellsWithSolutionValue: getCellsAxesValuesListText(
@@ -269,6 +271,7 @@ export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers, smartHintsC
         .filter(aCell => MainNumbersRecord.isCellFilledWithNumber(mainNumbers, hiddenSingleCellSolutionValue, aCell))
 
     return {
+        type: HINTS_IDS.HIDDEN_SINGLE,
         cellsToFocusData,
         title: HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_SINGLE],
         steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue, filledCellsWithSolutionValue) }],
