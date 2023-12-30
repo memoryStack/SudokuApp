@@ -36,7 +36,7 @@ import { getStyles } from './hintsMenu.styles'
 const COLUMNS_COUNT = 3
 
 const HintsMenu_ = ({
-    onAction, availableRawHints, hintsAnalyzed, availableHintsCount,
+    onAction, availableRawHints, hintsAnalyzed, availableHintsCount, hintTime,
 }) => {
     const { mainNumbers, notes } = useGameBoardInputs()
 
@@ -96,6 +96,9 @@ const HintsMenu_ = ({
                 >
                     <Text style={[styles.menuItemText, isNotAvailable ? styles.disabledMenuItemText : null]}>
                         {label}
+                    </Text>
+                    <Text style={[styles.menuItemText, isNotAvailable ? styles.disabledMenuItemText : null]}>
+                        {hintTime && (hintTime[id].end - hintTime[id].start)}
                     </Text>
                 </Touchable>
             </StopTouchPropagation>

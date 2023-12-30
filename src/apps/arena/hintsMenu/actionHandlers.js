@@ -20,6 +20,8 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
 
     let availableHintsCount = 0
 
+    const t = Date.now()
+
     await Promise.all(allHintsPromises)
         .then(rawHints => {
             _forEach(rawHints, ({ id, data } = {}) => {
@@ -31,9 +33,12 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
     _forEach(HINTS_MENU_ITEMS, ({ id }) => {
         consoleLog('@@@@@@@', id, (hintTime[id].end - hintTime[id].start), 'ms')
     })
+    consoleLog('@@@@@@@ total time taken', Date.now() - t)
 
     const { unmounting } = getState()
-    !unmounting && setState({ availableRawHints, availableHintsCount, hintsAnalyzed: true })
+    !unmounting && setState({
+        availableRawHints, availableHintsCount, hintsAnalyzed: true, hintTime,
+    })
 }
 
 // TODO: analyze the asynchronous behaviour of this handler
