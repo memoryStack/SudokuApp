@@ -11,6 +11,8 @@ import {
     getChosenChainFromValidSubChains,
     removeRedundantLinks,
     getAllValidSubChains,
+    getStrongLinksList,
+    linksPairsHaveSufficientCells,
 } from './xChain'
 
 /*
@@ -36,7 +38,27 @@ import {
 // TODO: write a test case for filtering out the notes, possibleNotes difference as well
 describe('getCandidateAllStrongLinks()', () => {
     test('returns all the strong links for a candidate grouped by houses, returned DS will contain each strong link house info as keys and will contain in which cells that note is present', () => {
-        const expectedResult = {
+        const expectedResult = [
+            [{ row: 0, col: 1 }, { row: 0, col: 8 }],
+            [{ row: 3, col: 2 }, { row: 6, col: 2 }],
+            [{ row: 1, col: 7 }, { row: 6, col: 7 }],
+        ]
+
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+        expect(getCandidateAllStrongLinks(7, notes, possibleNotes)).toEqual(expectedResult)
+    })
+
+    test('returns empty array if no strong links are found for a note in any house', () => {
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+        expect(getCandidateAllStrongLinks(2, notes, possibleNotes)).toEqual([])
+    })
+})
+
+describe('getStrongLinksList()', () => {
+    test('@@@@', () => {
+        const linksOlderFormat = {
             [HOUSE_TYPE.ROW]: {
                 0: [{ row: 0, col: 1 }, { row: 0, col: 8 }],
             },
@@ -45,43 +67,49 @@ describe('getCandidateAllStrongLinks()', () => {
                 7: [{ row: 1, col: 7 }, { row: 6, col: 7 }],
             },
         }
-        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
-        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getCandidateAllStrongLinks(7, notes, possibleNotes)).toEqual(expectedResult)
+        const expectedResult = [
+            [{ row: 0, col: 1 }, { row: 0, col: 8 }],
+            [{ row: 3, col: 2 }, { row: 6, col: 2 }],
+            [{ row: 1, col: 7 }, { row: 6, col: 7 }],
+        ]
+        expect(getStrongLinksList(linksOlderFormat)).toEqual(expectedResult)
+    })
+})
+
+describe('linksPairsHaveSufficientCells()', () => {
+    test('returns true when links do not have any common cell in them', () => {
+        const firstLink = [{ row: 0, col: 1 }, { row: 0, col: 8 }]
+        const secondLink = [{ row: 6, col: 4 }, { row: 6, col: 7 }]
+        expect(linksPairsHaveSufficientCells(firstLink, secondLink)).toBe(true)
     })
 
-    test('returns empty object if no strong links are found for a note in any house', () => {
-        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
-        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getCandidateAllStrongLinks(2, notes, possibleNotes)).toEqual({})
+    test('returns false when links have any common cell in them', () => {
+        const firstLink = [{ row: 0, col: 1 }, { row: 0, col: 8 }]
+        const secondLink = [{ row: 0, col: 8 }, { row: 6, col: 8 }]
+        expect(linksPairsHaveSufficientCells(firstLink, secondLink)).toBe(false)
     })
 })
 
 describe('getNoteWeakLinks()', () => {
     test('returns weak links for a note in all houses', () => {
-        const expectedResult = {
-            [HOUSE_TYPE.ROW]: {
-                1: [[{ row: 1, col: 0 }, { row: 1, col: 1 }], [{ row: 1, col: 0 }, { row: 1, col: 6 }], [{ row: 1, col: 0 }, { row: 1, col: 8 }], [{ row: 1, col: 1 }, { row: 1, col: 6 }], [{ row: 1, col: 1 }, { row: 1, col: 8 }], [{ row: 1, col: 6 }, { row: 1, col: 8 }]],
-                2: [[{ row: 2, col: 0 }, { row: 2, col: 2 }], [{ row: 2, col: 0 }, { row: 2, col: 8 }], [{ row: 2, col: 2 }, { row: 2, col: 8 }]],
-                4: [[{ row: 4, col: 0 }, { row: 4, col: 1 }], [{ row: 4, col: 0 }, { row: 4, col: 2 }], [{ row: 4, col: 1 }, { row: 4, col: 2 }]],
-                6: [[{ row: 6, col: 0 }, { row: 6, col: 2 }], [{ row: 6, col: 0 }, { row: 6, col: 6 }], [{ row: 6, col: 0 }, { row: 6, col: 8 }], [{ row: 6, col: 2 }, { row: 6, col: 6 }], [{ row: 6, col: 2 }, { row: 6, col: 8 }], [{ row: 6, col: 6 }, { row: 6, col: 8 }]],
-                7: [[{ row: 7, col: 0 }, { row: 7, col: 1 }], [{ row: 7, col: 0 }, { row: 7, col: 6 }], [{ row: 7, col: 0 }, { row: 7, col: 8 }], [{ row: 7, col: 1 }, { row: 7, col: 6 }], [{ row: 7, col: 1 }, { row: 7, col: 8 }], [{ row: 7, col: 6 }, { row: 7, col: 8 }]],
-            },
-            [HOUSE_TYPE.COL]: {
-                0: [[{ row: 1, col: 0 }, { row: 2, col: 0 }], [{ row: 1, col: 0 }, { row: 4, col: 0 }], [{ row: 1, col: 0 }, { row: 6, col: 0 }], [{ row: 1, col: 0 }, { row: 7, col: 0 }], [{ row: 2, col: 0 }, { row: 4, col: 0 }], [{ row: 2, col: 0 }, { row: 6, col: 0 }], [{ row: 2, col: 0 }, { row: 7, col: 0 }], [{ row: 4, col: 0 }, { row: 6, col: 0 }], [{ row: 4, col: 0 }, { row: 7, col: 0 }], [{ row: 6, col: 0 }, { row: 7, col: 0 }]],
-                1: [[{ row: 1, col: 1 }, { row: 4, col: 1 }], [{ row: 1, col: 1 }, { row: 7, col: 1 }], [{ row: 4, col: 1 }, { row: 7, col: 1 }]],
-                2: [[{ row: 2, col: 2 }, { row: 4, col: 2 }], [{ row: 2, col: 2 }, { row: 6, col: 2 }], [{ row: 4, col: 2 }, { row: 6, col: 2 }]],
-                6: [[{ row: 1, col: 6 }, { row: 6, col: 6 }], [{ row: 1, col: 6 }, { row: 7, col: 6 }], [{ row: 6, col: 6 }, { row: 7, col: 6 }]],
-                8: [[{ row: 1, col: 8 }, { row: 2, col: 8 }], [{ row: 1, col: 8 }, { row: 6, col: 8 }], [{ row: 1, col: 8 }, { row: 7, col: 8 }], [{ row: 2, col: 8 }, { row: 6, col: 8 }], [{ row: 2, col: 8 }, { row: 7, col: 8 }], [{ row: 6, col: 8 }, { row: 7, col: 8 }]],
-            },
-            [HOUSE_TYPE.BLOCK]: {
-                0: [[{ row: 1, col: 0 }, { row: 1, col: 1 }], [{ row: 1, col: 0 }, { row: 2, col: 0 }], [{ row: 1, col: 0 }, { row: 2, col: 2 }], [{ row: 1, col: 1 }, { row: 2, col: 0 }], [{ row: 1, col: 1 }, { row: 2, col: 2 }], [{ row: 2, col: 0 }, { row: 2, col: 2 }]],
-                2: [[{ row: 1, col: 6 }, { row: 1, col: 8 }], [{ row: 1, col: 6 }, { row: 2, col: 8 }], [{ row: 1, col: 8 }, { row: 2, col: 8 }]],
-                3: [[{ row: 4, col: 0 }, { row: 4, col: 1 }], [{ row: 4, col: 0 }, { row: 4, col: 2 }], [{ row: 4, col: 1 }, { row: 4, col: 2 }]],
-                6: [[{ row: 6, col: 0 }, { row: 6, col: 2 }], [{ row: 6, col: 0 }, { row: 7, col: 0 }], [{ row: 6, col: 0 }, { row: 7, col: 1 }], [{ row: 6, col: 2 }, { row: 7, col: 0 }], [{ row: 6, col: 2 }, { row: 7, col: 1 }], [{ row: 7, col: 0 }, { row: 7, col: 1 }]],
-                8: [[{ row: 6, col: 6 }, { row: 6, col: 8 }], [{ row: 6, col: 6 }, { row: 7, col: 6 }], [{ row: 6, col: 6 }, { row: 7, col: 8 }], [{ row: 6, col: 8 }, { row: 7, col: 6 }], [{ row: 6, col: 8 }, { row: 7, col: 8 }], [{ row: 7, col: 6 }, { row: 7, col: 8 }]],
-            },
-        }
+        const expectedResult = [
+            [{ row: 1, col: 0 }, { row: 1, col: 1 }], [{ row: 1, col: 0 }, { row: 1, col: 6 }], [{ row: 1, col: 0 }, { row: 1, col: 8 }], [{ row: 1, col: 1 }, { row: 1, col: 6 }], [{ row: 1, col: 1 }, { row: 1, col: 8 }], [{ row: 1, col: 6 }, { row: 1, col: 8 }],
+            [{ row: 2, col: 0 }, { row: 2, col: 2 }], [{ row: 2, col: 0 }, { row: 2, col: 8 }], [{ row: 2, col: 2 }, { row: 2, col: 8 }],
+            [{ row: 4, col: 0 }, { row: 4, col: 1 }], [{ row: 4, col: 0 }, { row: 4, col: 2 }], [{ row: 4, col: 1 }, { row: 4, col: 2 }],
+            [{ row: 6, col: 0 }, { row: 6, col: 2 }], [{ row: 6, col: 0 }, { row: 6, col: 6 }], [{ row: 6, col: 0 }, { row: 6, col: 8 }], [{ row: 6, col: 2 }, { row: 6, col: 6 }], [{ row: 6, col: 2 }, { row: 6, col: 8 }], [{ row: 6, col: 6 }, { row: 6, col: 8 }],
+            [{ row: 7, col: 0 }, { row: 7, col: 1 }], [{ row: 7, col: 0 }, { row: 7, col: 6 }], [{ row: 7, col: 0 }, { row: 7, col: 8 }], [{ row: 7, col: 1 }, { row: 7, col: 6 }], [{ row: 7, col: 1 }, { row: 7, col: 8 }], [{ row: 7, col: 6 }, { row: 7, col: 8 }],
+            [{ row: 1, col: 0 }, { row: 2, col: 0 }], [{ row: 1, col: 0 }, { row: 4, col: 0 }], [{ row: 1, col: 0 }, { row: 6, col: 0 }], [{ row: 1, col: 0 }, { row: 7, col: 0 }], [{ row: 2, col: 0 }, { row: 4, col: 0 }], [{ row: 2, col: 0 }, { row: 6, col: 0 }], [{ row: 2, col: 0 }, { row: 7, col: 0 }], [{ row: 4, col: 0 }, { row: 6, col: 0 }], [{ row: 4, col: 0 }, { row: 7, col: 0 }], [{ row: 6, col: 0 }, { row: 7, col: 0 }],
+            [{ row: 1, col: 1 }, { row: 4, col: 1 }], [{ row: 1, col: 1 }, { row: 7, col: 1 }], [{ row: 4, col: 1 }, { row: 7, col: 1 }],
+            [{ row: 2, col: 2 }, { row: 4, col: 2 }], [{ row: 2, col: 2 }, { row: 6, col: 2 }], [{ row: 4, col: 2 }, { row: 6, col: 2 }],
+            [{ row: 1, col: 6 }, { row: 6, col: 6 }], [{ row: 1, col: 6 }, { row: 7, col: 6 }], [{ row: 6, col: 6 }, { row: 7, col: 6 }],
+            [{ row: 1, col: 8 }, { row: 2, col: 8 }], [{ row: 1, col: 8 }, { row: 6, col: 8 }], [{ row: 1, col: 8 }, { row: 7, col: 8 }], [{ row: 2, col: 8 }, { row: 6, col: 8 }], [{ row: 2, col: 8 }, { row: 7, col: 8 }], [{ row: 6, col: 8 }, { row: 7, col: 8 }],
+            [{ row: 1, col: 0 }, { row: 1, col: 1 }], [{ row: 1, col: 0 }, { row: 2, col: 0 }], [{ row: 1, col: 0 }, { row: 2, col: 2 }], [{ row: 1, col: 1 }, { row: 2, col: 0 }], [{ row: 1, col: 1 }, { row: 2, col: 2 }], [{ row: 2, col: 0 }, { row: 2, col: 2 }],
+            [{ row: 1, col: 6 }, { row: 1, col: 8 }], [{ row: 1, col: 6 }, { row: 2, col: 8 }], [{ row: 1, col: 8 }, { row: 2, col: 8 }],
+            [{ row: 4, col: 0 }, { row: 4, col: 1 }], [{ row: 4, col: 0 }, { row: 4, col: 2 }], [{ row: 4, col: 1 }, { row: 4, col: 2 }],
+            [{ row: 6, col: 0 }, { row: 6, col: 2 }], [{ row: 6, col: 0 }, { row: 7, col: 0 }], [{ row: 6, col: 0 }, { row: 7, col: 1 }], [{ row: 6, col: 2 }, { row: 7, col: 0 }], [{ row: 6, col: 2 }, { row: 7, col: 1 }], [{ row: 7, col: 0 }, { row: 7, col: 1 }],
+            [{ row: 6, col: 6 }, { row: 6, col: 8 }], [{ row: 6, col: 6 }, { row: 7, col: 6 }], [{ row: 6, col: 6 }, { row: 7, col: 8 }], [{ row: 6, col: 8 }, { row: 7, col: 6 }], [{ row: 6, col: 8 }, { row: 7, col: 8 }], [{ row: 7, col: 6 }, { row: 7, col: 8 }],
+        ]
+
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
         expect(getNoteWeakLinks(2, notes, possibleNotes)).toEqual(expectedResult)

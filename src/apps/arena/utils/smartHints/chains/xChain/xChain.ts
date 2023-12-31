@@ -18,9 +18,12 @@ import _concat from '@lodash/concat'
 
 import { N_CHOOSE_K } from '@resources/constants'
 
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import { BoardIterators } from '../../../classes/boardIterators'
-import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../../cellTransformers'
-import { getNoteHostCellsInHouse } from '../../../util'
+import { convertBoardCellToNum } from '../../../cellTransformers'
+import {
+    areSameCells, getCellsSharingHousesWithCells, getNoteHostCellsInHouse, isCellExists,
+} from '../../../util'
 import { MINIMUM_LINKS_IN_CHAIN, LINK_TYPES } from './xChain.constants'
 import { XChainRawHint } from './types'
 import {
@@ -62,15 +65,14 @@ export const getCandidateAllStrongLinks = (
     notes: Notes,
     possibleNotes: Notes,
 ) => {
-    const result: NoteAllStrongLinks = {}
+    const result: LinkCells[] = []
 
     BoardIterators.forEachHouse(house => {
         const noteUserFilledHostCells = getNoteHostCellsInHouse(note, house, notes)
         const noteAllPossibleHostCells = getNoteHostCellsInHouse(note, house, possibleNotes)
         const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length && noteUserFilledHostCells.length === 2
         if (isValidStrongLink) {
-            if (_isNil(result[house.type])) result[house.type] = {}
-            result[house.type][house.num] = noteUserFilledHostCells as LinkCells
+            result.push(noteUserFilledHostCells as LinkCells)
         }
     })
 
@@ -84,16 +86,15 @@ const getWeakLinkPairs = (hostCells: Cell[]) => {
 }
 
 export const getNoteWeakLinks = (note: NoteValue, notes: Notes, possibleNotes: Notes) => {
-    const result: NoteAllWeakLinks = {}
+    const result: LinkCells[] = []
 
     BoardIterators.forEachHouse(house => {
         const noteUserFilledHostCells = getNoteHostCellsInHouse(note, house, notes)
         const noteAllPossibleHostCells = getNoteHostCellsInHouse(note, house, possibleNotes)
         const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length && noteUserFilledHostCells.length === 2
         if (!isValidStrongLink && noteUserFilledHostCells.length > 1) {
-            if (_isNil(result[house.type])) result[house.type] = {}
             const weakLinksGroups = getWeakLinkPairs(noteUserFilledHostCells)
-            if (!_isEmpty(weakLinksGroups)) result[house.type][house.num] = weakLinksGroups
+            result.push(...weakLinksGroups)
         }
     })
 
@@ -119,26 +120,22 @@ export const removeRedundantLinks = (links: CellLinksParticipants) => {
     })
 }
 
-const getNoteStrongLinkCellsParticipants = (noteStrongLinks: NoteAllStrongLinks) => {
+const getNoteStrongLinkCellsParticipants = (noteStrongLinks: LinkCells[]) => {
     const result: CellLinksParticipants = {}
 
-    const strongLinkHostHousesType: HouseType[] = _keys(noteStrongLinks)
-    _forEach(strongLinkHostHousesType, (houseType: HouseType) => {
-        const strongLinksCellsPairs = _values(noteStrongLinks[houseType])
-        addCellsPairsLinks(strongLinksCellsPairs, result)
+    _forEach(noteStrongLinks, (strongLinksCellsPairs: LinkCells) => {
+        addCellsPairsLinks([strongLinksCellsPairs], result)
     })
     removeRedundantLinks(result)
 
     return result
 }
 
-const getNoteWeakLinkCellsParticipants = (noteWeakLinks: NoteAllWeakLinks) => {
+const getNoteWeakLinkCellsParticipants = (noteWeakLinks: LinkCells[]) => {
     const result: CellLinksParticipants = {}
 
-    const weakLinkHostHousesType: HouseType[] = _keys(noteWeakLinks)
-    _forEach(weakLinkHostHousesType, (houseType: HouseType) => {
-        const weakLinksCellsPairs = _flatten(_values(noteWeakLinks[houseType]))
-        addCellsPairsLinks(weakLinksCellsPairs, result)
+    _forEach(noteWeakLinks, (weakLink: LinkCells) => {
+        addCellsPairsLinks([weakLink], result)
     })
     removeRedundantLinks(result)
 
@@ -265,9 +262,16 @@ export const analyzeChain = (note: NoteValue, _chain: Chain, notes: Notes): Retu
 const getNewLinksOptions = (
     strongLinkParticipantCells: CellLinksParticipants,
     weakLinkParticipantCells: CellLinksParticipants,
-) => (chain : Chain, exploringFromChainEnd: boolean) => {
-    const { first, last } = getChainEdgeLinks(chain)
-    const newLinkConnectingCellInChain = exploringFromChainEnd ? last.end : first.start
+    chainSourceCellNum: CellNumber,
+    chainSinkCellNum: CellNumber,
+) => (chain: Chain, exploringFromChainEnd: boolean) => {
+    const { last } = getChainEdgeLinks(chain)
+    const newLinkConnectingCellInChain = last.end
+
+    if (newLinkConnectingCellInChain === chainSinkCellNum) {
+        return { newLinkPossibleCells: [] }
+    }
+
     const newStrongLinkCells = strongLinkParticipantCells[newLinkConnectingCellInChain] || []
     const newWeakLinkCells = weakLinkParticipantCells[newLinkConnectingCellInChain] || []
 
@@ -276,8 +280,7 @@ const getNewLinksOptions = (
         type: LINK_TYPES.STRONG,
     }))
 
-    const newLinkConnectingLinkInChain = exploringFromChainEnd ? last : first
-    if (newLinkConnectingLinkInChain.type === LINK_TYPES.STRONG) {
+    if (chain.length % 2) {
         const newWeakLinks = _map(newWeakLinkCells, (newWeakLinkNode: number) => ({
             node: newWeakLinkNode,
             type: LINK_TYPES.WEAK,
@@ -290,7 +293,16 @@ const getNewLinksOptions = (
     }
 }
 
-const isNodeAvailableToAddInChain = (visitedCells: VisitedCells) => (node: number) => !visitedCells[node]
+const isNodeAvailableToAddInChain = (
+    visitedCells: VisitedCells,
+    removableNotesHostCells: Cell[],
+) => {
+    const removableCells: {[cellNumber: number]: boolean} = {}
+    _forEach(removableNotesHostCells, (cell: Cell) => {
+        removableCells[convertBoardCellToNum(cell)] = true
+    })
+    return (node: number) => !visitedCells[node] && !removableCells[node]
+}
 
 const onAddingNewNodeInChain = (visitedCells: VisitedCells) => (node: number) => {
     visitedCells[node] = true
@@ -300,64 +312,141 @@ const onNodeExplorationFail = (visitedCells: VisitedCells) => (node: number) => 
     visitedCells[node] = false
 }
 
-const onChainExplorationComplete = (note: NoteValue, notes: Notes) => (chain: Chain) => analyzeChain(note, chain, notes)
+const onChainExplorationComplete = (
+    note: NoteValue,
+    notes: Notes,
+    removableNotesHostCells: Cell[],
+    firstLinkEndPoint: CellNumber,
+    lastLinkEndPoint: CellNumber,
+    endCell: CellNumber,
+) => (chain: Chain) => {
+    const { first, last } = getChainEdgeLinks(chain)
+    if (last.end === endCell && (chain.length % 2 === 0)) {
+        const finalChain = _cloneDeep(chain)
+        finalChain.push({
+            start: last.end,
+            end: lastLinkEndPoint,
+            type: LINK_TYPES.STRONG,
+            isTerminal: true,
+        })
+
+        finalChain[0] = {
+            ...finalChain[0],
+            start: firstLinkEndPoint,
+        }
+
+        return {
+            foundChain: true,
+            chainResult: {
+                chain: finalChain,
+                removableNotesHostCells,
+            },
+        }
+    }
+    return { foundChain: false, chainResult: null }
+}
+
+export const getStrongLinksList = (strongLinks: NoteAllStrongLinks) => {
+    const result: LinkCells[] = []
+
+    const houses = Object.keys(strongLinks)
+
+    houses.forEach(houseType => {
+        const houseTypeStrongLinks = Object.values(strongLinks[houseType])
+        result.push(...houseTypeStrongLinks)
+    })
+
+    return result
+}
+
+export const linksPairsHaveSufficientCells = (firstLink: LinkCells, secondLink: LinkCells) => {
+    const cells = {}
+    const allCells = [...firstLink, ...secondLink]
+    allCells.forEach(cell => {
+        cells[convertBoardCellToNum(cell)] = true
+    })
+    return Object.keys(cells).length === 4
+}
+
+const getHostCellsWithNoteInCellsCommonHouse = (note: NoteValue, cellA: Cell, cellB: Cell, notes: Notes) => getCellsSharingHousesWithCells(cellA, cellB)
+    .filter(cell => NotesRecord.isNotePresentInCell(notes, note, cell)).filter(cell => !isCellExists(cell, [cellA, cellB]))
+
+const weakLinksParticipantsCellsHandler = (note: NoteValue, notes: Notes, possibleNotes: Notes) => {
+    let weakLinksParticipantCells: CellLinksParticipants = {}
+    return () => {
+        if (_isEmpty(weakLinksParticipantCells)) {
+            const weakLinks = getNoteWeakLinks(note, notes, possibleNotes)
+            weakLinksParticipantCells = getNoteWeakLinkCellsParticipants(weakLinks)
+        }
+        return weakLinksParticipantCells
+    }
+}
 
 const getNoteChain = (
     note: NoteValue,
-    strongLinks: NoteAllStrongLinks,
-    weakLinks: NoteAllWeakLinks,
     notes: Notes,
+    possibleNotes: Notes,
 ): AnalyzedChainResult | null => {
-    const strongLinkParticipantCells = getNoteStrongLinkCellsParticipants(strongLinks)
-    const weakLinkParticipantCells = getNoteWeakLinkCellsParticipants(weakLinks)
+    const strongLinksList = getCandidateAllStrongLinks(note, notes, possibleNotes)
+    const strongLinkParticipantCells = getNoteStrongLinkCellsParticipants(strongLinksList)
+
+    const getWeakLinksParticipantCells = weakLinksParticipantsCellsHandler(note, notes, possibleNotes)
 
     const visitedCells: VisitedCells = {}
 
-    const pickedStrongLinks = {} as VisitedCells
-    const getUnvisitedStrongLink = () => {
-        const strongLinkCellsNums = _keys(strongLinkParticipantCells)
+    for (let i = 0; i < strongLinksList.length; i++) {
+        for (let j = 1; j < strongLinksList.length; j++) {
+            const firstLink = strongLinksList[i]
+            const secondLink = strongLinksList[j]
+            if (linksPairsHaveSufficientCells(firstLink, secondLink)) {
+                for (let k = 0; k < firstLink.length; k++) {
+                    for (let l = 0; l < secondLink.length; l++) {
+                        const firstLinkCell = firstLink[k]
+                        const secondLinkCell = secondLink[l]
+                        const sourceCell = firstLink[1 - k]
+                        const endCell = secondLink[1 - l]
 
-        for (let i = 0; i < strongLinkCellsNums.length; i++) {
-            const cellA = strongLinkCellsNums[i]
-            const cellB = _find(strongLinkParticipantCells[cellA], (cell: number) => !pickedStrongLinks[cellA] && !pickedStrongLinks[cell])
-            if (cellB) { return [parseInt(cellA, 10), parseInt(cellB, 10)] }
-        }
+                        const firstLinkCellNum = convertBoardCellToNum(firstLinkCell)
+                        const secondLinkCellNum = convertBoardCellToNum(secondLinkCell)
+                        const sourceCellNum = convertBoardCellToNum(sourceCell)
+                        const endCellNum = convertBoardCellToNum(endCell)
 
-        return []
-    }
+                        const removableNotesHostCells = getHostCellsWithNoteInCellsCommonHouse(note, firstLinkCell, secondLinkCell, notes)
+                            .filter(cell => !(areSameCells(cell, sourceCell) || areSameCells(cell, endCell)))
+                        if (!_isEmpty(removableNotesHostCells)) {
+                            const _chain = [{
+                                start: sourceCellNum,
+                                end: sourceCellNum,
+                                type: LINK_TYPES.STRONG,
+                                isTerminal: false,
+                            }]
 
-    const foundChain = false
-    while (!foundChain) {
-        // capture this DS is test-cases for the ease of understanding
-        // unvisitedLink -> ['81', '12']
-        const unvisitedLink = getUnvisitedStrongLink()
-        if (_isEmpty(unvisitedLink)) return null
+                            visitedCells[sourceCellNum] = true
+                            visitedCells[firstLinkCellNum] = true
+                            visitedCells[secondLinkCellNum] = true
 
-        pickedStrongLinks[unvisitedLink[0]] = true
-        pickedStrongLinks[unvisitedLink[1]] = true
+                            const weakLinkParticipantCells = getWeakLinksParticipantCells()
 
-        // link in chain
-        const _chain = [{
-            start: unvisitedLink[0],
-            end: unvisitedLink[1],
-            type: LINK_TYPES.STRONG,
-            isTerminal: false,
-        }]
+                            const exploredChainResult = exploreChain(
+                                _chain,
+                                getNewLinksOptions(strongLinkParticipantCells, weakLinkParticipantCells, sourceCellNum, endCellNum),
+                                isNodeAvailableToAddInChain(visitedCells, removableNotesHostCells),
+                                onAddingNewNodeInChain(visitedCells),
+                                onChainExplorationComplete(note, notes, removableNotesHostCells, firstLinkCellNum, secondLinkCellNum, endCellNum),
+                                onNodeExplorationFail(visitedCells),
+                            )
 
-        visitedCells[unvisitedLink[0]] = true
-        visitedCells[unvisitedLink[1]] = true
+                            if (!_isNil(exploredChainResult)) {
+                                return exploredChainResult
+                            }
 
-        const exploredChainResult = exploreChain(
-            _chain,
-            getNewLinksOptions(strongLinkParticipantCells, weakLinkParticipantCells),
-            isNodeAvailableToAddInChain(visitedCells),
-            onAddingNewNodeInChain(visitedCells),
-            onChainExplorationComplete(note, notes),
-            onNodeExplorationFail(visitedCells),
-        )
-
-        if (!_isNil(exploredChainResult)) {
-            return exploredChainResult
+                            visitedCells[sourceCellNum] = false
+                            visitedCells[firstLinkCellNum] = false
+                            visitedCells[secondLinkCellNum] = false
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -374,11 +463,7 @@ export const getRawXChainHints = (
     // TODO: add early break support for these iterators
     BoardIterators.forCellEachNote(note => {
         if (!_isEmpty(result)) return
-
-        const strongLinks = getCandidateAllStrongLinks(note, notes, possibleNotes)
-        const weakLinks = getNoteWeakLinks(note, notes, possibleNotes)
-        const chain = getNoteChain(note, strongLinks, weakLinks, notes)
-
+        const chain = getNoteChain(note, notes, possibleNotes)
         if (!_isNil(chain)) {
             result = {
                 note,
