@@ -10,6 +10,7 @@ import _last from '@lodash/last'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
 import _difference from '@lodash/difference'
+import _intersection from '@lodash/intersection'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import {
     TransformedRawHint,
@@ -37,8 +38,10 @@ import {
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { LINK_TYPES } from '../../chains/xChain/xChain.constants'
 import { convertBoardCellToNum } from '../../../cellTransformers'
-import { getCellsAxesValuesListText, getHouseNumAndName, joinStringsListWithArrow } from '../helpers'
-import { getCellAxesValues, getCellsCommonHousesInfo } from '../../../util'
+import {
+    getCellsAxesList, getCellsAxesValuesListText, getHouseNumAndName, joinStringsListWithArrow,
+} from '../helpers'
+import { getCellAxesValues, getCellsCommonHousesInfo, getCommonNoteInCells } from '../../../util'
 import { XYChainRawHint } from '../../chains/xyChain/types'
 
 const CHAIN_CELLS_NOTES_COLORS_TEXT = ['blue', 'green']
@@ -76,11 +79,41 @@ const getUICellsToFocusData = (
     return result
 }
 
-const getExplainationStepsText = () => {
-    const a = 10
-    return [{
-        text: 'explaination coming soon',
-    }]
+const getExplainationStepsText = (xyChain: XYChainRawHint, notes: Notes) => {
+    const { note: removableNote, chain, removableNotesHostCells } = xyChain
+    const chainFirstCellAxesText = getCellAxesValues(chain[0])
+    const chainSecondCellAxesText = getCellAxesValues(chain[1])
+    const chainLastCellAxesText = getCellAxesValues(_last(chain))
+
+    const firstCellCandidateOtherThanRemovableCandidate = _difference(NotesRecord.getCellVisibleNotesList(notes, chain[0]), [removableNote])[0]
+
+    const chainCellFillingText = '{{cell}} must be filled by {{candidate}}'
+
+    let previousCellFilledCandidate = firstCellCandidateOtherThanRemovableCandidate
+    const chainFillingWay = _compact(_map(chain, (cell: Cell, index: number) => {
+        if (index === 0) return null
+
+        const currentCellCandidate = _difference(NotesRecord.getCellVisibleNotesList(notes, cell), [previousCellFilledCandidate])[0]
+        previousCellFilledCandidate = currentCellCandidate
+        return dynamicInterpolation(chainCellFillingText, { cell: getCellAxesValues(cell), candidate: currentCellCandidate })
+    }))
+
+    const placeholdersValues = {
+        chainFirstCell: chainFirstCellAxesText,
+        chainSecondCell: chainSecondCellAxesText,
+        chainLastCell: chainLastCellAxesText,
+        chain: joinStringsListWithArrow(getCellsAxesList(chain)),
+        firstLinkCommonCandidate: getCommonNoteInCells(chain[0], chain[1], notes),
+        removableNote,
+        firstCellCandidateOtherThanRemovableCandidate,
+        chainFillingWay: chainFillingWay.join(', '),
+        removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+    }
+
+    const rawExplainationTexts = HINT_EXPLANATION_TEXTS[HINTS_IDS.XY_CHAIN]
+    const explainationTextsWithPlaceholdersFilled = _map(rawExplainationTexts, (aStepRawText: string) => dynamicInterpolation(aStepRawText, placeholdersValues))
+
+    return getHintExplanationStepsFromHintChunks(explainationTextsWithPlaceholdersFilled, false)
 }
 
 const getNumberToFillInChainCell = (cell: Cell, numberNotToFill: number, notes: Notes) => _head(
@@ -130,29 +163,39 @@ const addLinkCellsNotesHighlightedColor = (
     highlightLinkTerminal(_last(chainLinks).end)
 }
 
+const getApplyHintData = (xyChain: XYChainRawHint) => {
+    const result: NotesRemovalHintAction[] = []
+
+    const { note, removableNotesHostCells } = xyChain
+    _forEach(removableNotesHostCells, (cell: Cell) => {
+        result.push({
+            cell,
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: [note] },
+        })
+    })
+    return result
+}
+
 export const transformXYChainRawHint = ({ rawHint: xyChain, notesData, smartHintsColorSystem }: XYChainTransformerArgs): TransformedRawHint => {
     const chainLinks = getSvgData(xyChain, notesData)
     const cellsToFocusData = getUICellsToFocusData(xyChain, smartHintsColorSystem, notesData)
     addLinkCellsNotesHighlightedColor(chainLinks, notesData, cellsToFocusData)
-    // const { note, chain, removableNotesHostCells } = xChain
-    // const clickableCells = [...chain, ...removableNotesHostCells]
-
-    // const tryOutInputsColors = getTryOutInputsColors(clickableCells, cellsToFocusData)
 
     return ({
         type: HINTS_IDS.XY_CHAIN,
         title: HINT_ID_VS_TITLES[HINTS_IDS.XY_CHAIN],
         cellsToFocusData,
         // focusedCells: clickableCells,
-        steps: getExplainationStepsText(),
+        steps: getExplainationStepsText(xyChain, notesData),
         svgProps: { data: chainLinks },
+        applyHint: getApplyHintData(xyChain),
         hasTryOut: false, // TODO:
         // inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([note]) as InputPanelNumbersVisibility,
         // // tryOutAnalyserData: { xChain, tryOutInputsColors },
         // tryOutAnalyserData: { xChain },
         // clickableCells,
         // unclickableCellClickInTryOutMsg: 'you can only select Chain cells or cells which have candidates highlighted in red color',
-        // applyHint: getApplyHintData(xChain),
+
         // tryOutInputsColors,
     })
 }

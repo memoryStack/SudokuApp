@@ -44,6 +44,7 @@ type HintExplainationTexts = {
     [HINTS_IDS.Y_WING]: string[]
     [HINTS_IDS.REMOTE_PAIRS]: string[]
     [HINTS_IDS.X_CHAIN]: string[]
+    [HINTS_IDS.XY_CHAIN]: string[]
 }
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
@@ -206,5 +207,25 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         'another way to fill {{note}} in this Chain is to fill it in reverse order like {{secondWayToFillChainCells}}.'
         + '\nin both of these ways either {{chainFirstCell}} or {{chainLastCell}} will definitely be {{note}},'
         + ' due to this {{removableNotesHostCells}} can\'t be {{note}} in any way',
+    ],
+    [HINTS_IDS.XY_CHAIN]: [
+        `<p>Notice the Chain of ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} {{chain}}. All of these cells have`
+        + ` two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} and any two consecutive cells have one candidate`
+        + ' common. For Example, {{chainFirstCell}} and {{chainSecondCell}} both have {{firstLinkCommonCandidate}} as their candidate.'
+        + ' And also note that {{chainFirstCell}}(first cell) and {{chainLastCell}}(last cell) both have {{removableNote}} as their candidate in them.'
+        + `\nThis type of chain of cells is called ${HINT_ID_VS_TITLES[HINTS_IDS.XY_CHAIN]}.`
+        + '</p>',
+
+        '<p>Now {{chainFirstCell}} can be filled in two ways.'
+        + '<br />'
+        + '<b>First:</b> Fill {{removableNote}} here.'
+        + '<br />'
+        + '<b>Second:</b> Fill {{firstCellCandidateOtherThanRemovableCandidate}} here. Due to this {{chainFillingWay}}.'
+        + '<br />'
+        + 'Notice that in both ways, either {{chainFirstCell}} or {{chainLastCell}} will be filled by {{removableNote}}.'
+        + '<br />'
+        + `So all the {{removableNote}}s from {{removableNotesHostCells}} will be removed because these cells share ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}`
+        + ' with first and last cell of this chain.'
+        + '</p>',
     ],
 }
