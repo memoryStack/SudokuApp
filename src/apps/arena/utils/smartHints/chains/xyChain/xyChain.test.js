@@ -297,6 +297,38 @@ describe('getRawXYChainHints()', () => {
     })
 })
 
+describe('getRawXYChainHints() Bug fixes', () => {
+    test('hint was crashing for cells which have two notes but do not have a link with other cells', () => {
+        const puzzle = '109356800006082109040000000010960400000020000008013060000000080607240500004591607'
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+        expect(() => getRawXYChainHints(mainNumbers, notes, possibleNotes)).not.toThrow(Error)
+    })
+
+    test('XY-chain should not Naked Doubles', () => {
+        const puzzle = '008000730900003000030050016040861020061070540020549060180090070000200004073000600'
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const expectedResult = [{
+            note: 5,
+            chain: [{ row: 0, col: 1 }, { row: 1, col: 1 }],
+            removableNotesHostCells: [{ row: 7, col: 1 }, { row: 0, col: 0 }, { row: 1, col: 2 }],
+        }]
+        expect(getRawXYChainHints(mainNumbers, notes, possibleNotes)).not.toEqual(expectedResult)
+    })
+
+    test('XY-chain should not Naked Tripples, Naked Quads etc etc', () => {
+        const puzzle = '000004200050021003200700050079300002045182670800009340030006008400210030008500000'
+        const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const expectedResult = [{
+            note: 7,
+            chain: [{ row: 7, col: 5 }, { row: 2, col: 5 }, { row: 8, col: 5 }],
+            removableNotesHostCells: [{ row: 6, col: 4 }, { row: 8, col: 4 }],
+        }]
+        expect(getRawXYChainHints(mainNumbers, notes, possibleNotes)).not.toEqual(expectedResult)
+    })
+})
+
 describe('chainTerminalsRemoveNotes()', () => {
     test('returns true if any cell is present which sees both terminals and also have the common note from terminals visible in it', () => {
         const puzzle = '361749528584000790792000004923574080416000357857631249678000412145287900239416875'

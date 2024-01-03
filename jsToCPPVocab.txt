@@ -1,0 +1,23 @@
+getBlockAndBoxNum is changed to getBlockCellFromBoardCell
+    { blockNum, boxNum } is changed to 
+        struct BlockCell {
+            int blockNum;
+            int cellNum;
+        };
+
+
+HOUSE_TYPE = {
+    ROW, COL, BLOCK 
+} 
+is changed to 
+HOUSE_TYPE = {
+    ROW, COLUMN, BLOCK 
+} 
+
+blockCellToBoardCell() is changed to getBoardCellFromBlockCell()
+
+convertBoardCellNumToCell() is changed to getCellFromCellNum()
+
+convertBoardCellToNum() is changed to getBoardCellNum()
+
+getNewNotesBunchToShow is changed to generatePuzzleNotes()

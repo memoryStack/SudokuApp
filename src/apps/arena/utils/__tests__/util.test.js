@@ -27,6 +27,7 @@ import {
     sortCells,
     getNoteHostCellsInHouse,
     areAdjacentCells,
+    areCellsFromSameHouse,
 } from '../util'
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -606,5 +607,22 @@ describe('areAdjacentCells()', () => {
     test('returns false for cells not sharing any edge between them', () => {
         expect(areAdjacentCells({ row: 0, col: 0 }, { row: 1, col: 1 })).toBeFalsy()
         expect(areAdjacentCells({ row: 4, col: 3 }, { row: 8, col: 8 })).toBeFalsy()
+    })
+})
+
+describe('areCellsFromSameHouse()', () => {
+    test('returns true when cells are in same row', () => {
+        const cells = [{ row: 0, col: 0 }, { row: 0, col: 4 }, { row: 0, col: 7 }]
+        expect(areCellsFromSameHouse(cells)).toBe(true)
+    })
+
+    test('returns true when cells are in same block', () => {
+        const cells = [{ row: 3, col: 3 }, { row: 4, col: 4 }, { row: 4, col: 5 }]
+        expect(areCellsFromSameHouse(cells)).toBe(true)
+    })
+
+    test('returns false when cells are not in same house', () => {
+        const cells = [{ row: 3, col: 3 }, { row: 4, col: 4 }, { row: 4, col: 8 }]
+        expect(areCellsFromSameHouse(cells)).toBe(false)
     })
 })

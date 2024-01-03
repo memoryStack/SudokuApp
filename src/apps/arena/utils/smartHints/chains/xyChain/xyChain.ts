@@ -9,11 +9,13 @@ import _isEmpty from '@lodash/isEmpty'
 import _cloneDeep from '@lodash/cloneDeep'
 import _sortBy from '@lodash/sortBy'
 
+import _get from '@lodash/get'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 
 import { convertBoardCellNumToCell, convertBoardCellToNum } from '../../../cellTransformers'
 import { BoardIterators } from '../../../classes/boardIterators'
 import {
+    areCellsFromSameHouse,
     areCommonHouseCells,
     areSameCells,
     getCellsSharingHousesWithCells,
@@ -117,14 +119,13 @@ export const getNewLinksOptions = (
     }
 
     const numberFilledInTerminal = numbersFilledInChainCells[chainEndTerminalCell].filledNumber as unknown as NoteValue
-    const result = _map(links[chainEndTerminalCell][numberFilledInTerminal], (cellNumber: CellNumber) => ({
+    const result = _map(_get(links, [chainEndTerminalCell, numberFilledInTerminal]), (cellNumber: CellNumber) => ({
         node: cellNumber,
         type: LINK_TYPES.WEAK,
     }))
 
     return { newLinkPossibleCells: result }
 }
-
 const isNodeAvailableToAdd = (visitedCells: VisitedCells) => (node: CellNumber) => !visitedCells[node]
 
 export const onAddingNewNodeInChain = (
@@ -157,6 +158,9 @@ const onChainExplorationComplete = (
         _chain.shift()
         _chain[0].isTerminal = true
         _chain[_chain.length - 1].isTerminal = true
+
+        if (areCellsFromSameHouse(getChainCells(_chain))) return { foundChain: false, chainResult: null }
+
         // check if chain really removes notes or not
         // TODO: add checks for valid chains like it's length, it should be a naked tripple etc etc
         const removableNotesHostCells = getRemovableNotesHostCellsByChain(

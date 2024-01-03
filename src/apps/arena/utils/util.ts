@@ -159,6 +159,8 @@ export const areCommonHouseCells = (cellA: Cell, cellB: Cell) => {
     return Object.values(cellsPairCommonHouses).some(isCommonHouse => isCommonHouse)
 }
 
+export const areCellsFromSameHouse = (cells: Cell[]) => areSameRowCells(cells) || areSameColCells(cells) || areSameBlockCells(cells)
+
 export const getUniqueNotesFromCells = (cells: Cell[], notesData: Notes): NoteValue[] => {
     const result: NoteValue[] = []
     _forEach(cells, (cell: Cell) => {

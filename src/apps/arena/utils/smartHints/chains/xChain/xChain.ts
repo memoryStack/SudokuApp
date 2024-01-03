@@ -19,10 +19,13 @@ import _concat from '@lodash/concat'
 import { N_CHOOSE_K } from '@resources/constants'
 
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import _last from '@lodash/last'
+import _head from '@lodash/head'
+import _compact from '@lodash/compact'
 import { BoardIterators } from '../../../classes/boardIterators'
 import { convertBoardCellToNum } from '../../../cellTransformers'
 import {
-    areSameCells, getCellsSharingHousesWithCells, getNoteHostCellsInHouse, isCellExists,
+    areSameCells, areSameHouses, getCellHouseForHouseType, getCellsCommonHousesInfo, getCellsSharingHousesWithCells, getNoteHostCellsInHouse, getPairCellsCommonHouses, isCellExists,
 } from '../../../util'
 import { MINIMUM_LINKS_IN_CHAIN, LINK_TYPES } from './xChain.constants'
 import { XChainRawHint } from './types'
@@ -34,6 +37,7 @@ import { getChainCells, getChainEdgeLinks, getRemovableNotesHostCellsByChain } f
 import type {
     Link, Chain, AnalyzedChainResult,
 } from '../chainExplorer'
+import { getHouseNoteHostCells } from '../../rawHintTransformers/omission/omission'
 
 // TODO: these types mostly will be common among all the chain hints
 type LinkCells = [Cell, Cell]
@@ -202,6 +206,23 @@ const chainHasAnyWeakEdgeLink = (chain: Chain) => {
     return first.type === LINK_TYPES.WEAK || last.type === LINK_TYPES.WEAK
 }
 
+export const chainIsOmission = (
+    xChain: XChainRawHint,
+    notes: Notes,
+) => {
+    const { note, chain: chainCells, removableNotesHostCells } = xChain
+    const chainFirstCell = _head(chainCells)
+    const chainLastCell = _last(chainCells)
+
+    const chainTerminalCellsCommonHouses = getCellsCommonHousesInfo([chainFirstCell, chainLastCell])
+    if (chainTerminalCellsCommonHouses.length < 2) return false
+
+    const commonHousesWithAnyRemovableNoteHostCell = getCellsCommonHousesInfo([chainFirstCell, removableNotesHostCells[0]])
+    const houseToCheckForOmission = _find(chainTerminalCellsCommonHouses, (chainTerminalsCommonHouse: House) => !areSameHouses(chainTerminalsCommonHouse, commonHousesWithAnyRemovableNoteHostCell[0]))
+    const noteHostCells = getHouseNoteHostCells(note, houseToCheckForOmission, notes)
+    return noteHostCells.length <= 2
+}
+
 export const getAllValidSubChains = (note: NoteValue, chain: Chain, notes: Notes) => {
     const result: AnalyzedChainResult[] = []
 
@@ -215,12 +236,11 @@ export const getAllValidSubChains = (note: NoteValue, chain: Chain, notes: Notes
             if (chainHasAnyWeakEdgeLink(chainWithLinksSwitched)) continue
 
             const removableNotesHostCells = getRemovableNotesHostCellsByChain(note, chainWithLinksSwitched, notes)
-            if (!_isEmpty(removableNotesHostCells)) {
-                result.push({
-                    chain: markEdgeLinksAsLastForValidChain(chainWithLinksSwitched),
-                    removableNotesHostCells,
-                })
-            }
+
+            result.push({
+                chain: markEdgeLinksAsLastForValidChain(chainWithLinksSwitched),
+                removableNotesHostCells,
+            })
         }
         subChainLen += 2 // chain length will always be odd
         subChainsCount = chain.length - subChainLen + 1
@@ -334,6 +354,14 @@ const onChainExplorationComplete = (
             ...finalChain[0],
             start: firstLinkEndPoint,
         }
+
+        const rawXChain: XChainRawHint = {
+            note,
+            chain: getChainCells(finalChain),
+            removableNotesHostCells,
+        }
+
+        if (chainIsOmission(rawXChain, notes)) return { foundChain: false, chainResult: null }
 
         return {
             foundChain: true,
