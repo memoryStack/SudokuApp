@@ -56,7 +56,6 @@ import {
 } from './constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { InputPanelNumbersVisibility } from '../utils/smartHints/types'
-import { HINTS_IDS } from '../utils/smartHints/constants'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 

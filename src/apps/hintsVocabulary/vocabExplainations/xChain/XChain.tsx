@@ -97,8 +97,8 @@ const XChain = () => {
                     '<p>'
                         + '<b>How is X-Chain useful ?</b>'
                         + '<br />'
-                        + 'Cells in this chain can be filled in two ways. Let\'s try to it in both ways'
-                        + ' and see the conclusion. But first understand the rules to fill these cells.'
+                        + 'Cells in this chain can be filled in two ways. Let\'s try to fill it in both ways'
+                        + ' and see the conclusion.'
                     + '</p>'
                 }
             />

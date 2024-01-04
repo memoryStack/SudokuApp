@@ -16,6 +16,7 @@ import Chain from './chain'
 import ChainLinks from './chainLinks'
 import RemotePairs from './remotePairs'
 import XChain from './xChain'
+import XYChain from './xyChain'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -34,5 +35,6 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CHAIN_LINKS]: ChainLinks,
     [HINTS_VOCAB_IDS.REMOTE_PAIRS]: RemotePairs,
     [HINTS_VOCAB_IDS.X_CHAIN]: XChain,
+    [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
     // [HINTS_VOCAB_IDS.OMISSION]: Omission,
 }
