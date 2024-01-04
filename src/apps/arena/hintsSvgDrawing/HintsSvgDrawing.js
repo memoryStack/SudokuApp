@@ -31,13 +31,17 @@ const HintsSvgDrawing = ({
         // have to put this delay, else notes and board
         // measurements are all empty
         // TODO: it needs some serious searching
-        setTimeout(measureBoard, 100)
+
+        // increased the delay from 100 to 1000 because when screen navigation happens and we go back to Arena page
+        // then these is a difference of some pixels in board and notes measurements sometimes
+        setTimeout(measureBoard, 1000)
     }, [])
 
     useEffect(() => {
         const handler = async () => {
             const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
             if (_isEmpty(boardPageCordinates) || !_isFunction(svgElementsHandler) || _isEmpty(svgProps)) return
+
             setSvgElementsConfigs(await svgElementsHandler({ notesRefs, boardPageCordinates, svgProps }))
         }
         handler()

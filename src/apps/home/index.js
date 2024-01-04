@@ -114,10 +114,6 @@ const Home_ = ({ navigation }) => {
         )
     }
 
-    useEffect(() => {
-        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, { vocabKeyword: HINTS_VOCAB_IDS.CHAIN })
-    }, [])
-
     // TODO: use <Page /> here
     return (
         <View

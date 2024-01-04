@@ -94,6 +94,7 @@ const SmartHintHC_: React.FC<Props> = ({
     height = 0,
 }) => {
     const dependencies = useDependency()
+    const styles = useStyles(getStyles)
 
     const {
         id: hintId,
@@ -132,11 +133,12 @@ const SmartHintHC_: React.FC<Props> = ({
 
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells, styles } })
+        return () => {
+            onAction({ type: ACTION_TYPES.ON_CLOSE, payload: { newCellToSelect: selectCellOnClose, dependencies } })
+        }
     }, [])
 
     const smartHintHCRef = useRef(null)
-
-    const styles = useStyles(getStyles)
 
     const scrollViewRef = useRef(null)
     const hintsScrollPositions = useRef({} as {[key: number]: number})
