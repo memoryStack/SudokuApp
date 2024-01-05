@@ -1,6 +1,10 @@
+import _reduce from '@lodash/reduce'
+import { convertBoardCellToNum } from '../cellTransformers'
 import { isCellExists } from '../util'
+import { HiddenSingleRawHint } from './hiddenSingle/types'
+import { NakedSingleRawHint } from './nakedSingle/types'
 import {
-    CellHighlightData, CellsFocusData, HintSteps, NotesToHighlightData,
+    CellHighlightData, CellsFocusData, HintSteps, NotesToHighlightData, Singles,
 } from './types'
 
 const setCellDataInHintResult = (
@@ -70,6 +74,15 @@ const isCellFocusedInSmartHint = (cell: Cell, cellsToFocusData: CellsFocusData) 
 
 const transformCellBGColor = (color: string) => ({ backgroundColor: color })
 
+const generateSinglesMap = (nakedSingles: NakedSingleRawHint | HiddenSingleRawHint[]) => {
+    const result: Singles = {}
+    _reduce(nakedSingles, (acc: Singles, nakedSingle: NakedSingleRawHint) => {
+        acc[convertBoardCellToNum(nakedSingle.cell)] = nakedSingle.mainNumber
+        return acc
+    }, result)
+    return result
+}
+
 export {
     setCellDataInHintResult,
     setCellNotesHighlightDataInHintResult,
@@ -81,4 +94,5 @@ export {
     getCellsFromCellsToFocusedData,
     isCellFocusedInSmartHint,
     transformCellBGColor,
+    generateSinglesMap,
 }

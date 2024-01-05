@@ -27,13 +27,15 @@ import {
     transformXYChainRawHint,
 } from './rawHintTransformers'
 
-import { GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD } from './constants'
+import {
+    GROUPS, HINTS_IDS, UI_HINTS_COUNT_THRESHOLD, ALL_HINTS_COUNT_THRESHOLD,
+} from './constants'
 import { NotesRecord } from '../../RecordUtilities/boardNotes'
 
-export const getRawHints = async (hintId, mainNumbers, notesData) => {
+export const getRawHints = async (hintId, mainNumbers, notesData, singles) => {
     const handler = HINT_ID_VS_HANDLERS[hintId] || _noop
     const possibleNotes = NotesRecord.initPossibleNotes(mainNumbers)
-    return handler(mainNumbers, notesData, possibleNotes)
+    return handler(mainNumbers, notesData, possibleNotes, singles)
 }
 
 export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData, smartHintsColorSystem) => {
@@ -46,8 +48,8 @@ export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData,
 // TODO: fix the contract of this module. it returns null and receiving all
 // sorts of things from it's dependent modules
 const HINT_ID_VS_HANDLERS = {
-    [HINTS_IDS.NAKED_SINGLE]: (mainNumbers, notesData, possibleNotes) => getNakedSingleRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.HIDDEN_SINGLE]: (mainNumbers, notesData, possibleNotes) => getHiddenSingleRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.NAKED_SINGLE]: (mainNumbers, notesData, possibleNotes) => getNakedSingleRawHints(mainNumbers, notesData, possibleNotes, ALL_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.HIDDEN_SINGLE]: (mainNumbers, notesData, possibleNotes, singles) => getHiddenSingleRawHints(mainNumbers, notesData, possibleNotes, singles, ALL_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.NAKED_DOUBLE]: (mainNumbers, notesData, possibleNotes) => HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](2, mainNumbers, notesData, possibleNotes),
     [HINTS_IDS.NAKED_TRIPPLE]: (mainNumbers, notesData, possibleNotes) => HINT_ID_VS_HANDLERS[GROUPS.NAKED_GROUP](3, mainNumbers, notesData, possibleNotes),
     [HINTS_IDS.HIDDEN_DOUBLE]: (mainNumbers, notesData, possibleNotes) => HINT_ID_VS_HANDLERS[GROUPS.HIDDEN_GROUP](2, mainNumbers, notesData, possibleNotes),
@@ -56,7 +58,7 @@ const HINT_ID_VS_HANDLERS = {
     [GROUPS.HIDDEN_GROUP]: (candidatesCount, mainNumbers, notesData, possibleNotes) => getHiddenGroupRawHints(candidatesCount, notesData, mainNumbers, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.X_WING]: (mainNumbers, notesData, possibleNotes) => getXWingRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.Y_WING]: (mainNumbers, notesData, possibleNotes) => getYWingRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.OMISSION]: (mainNumbers, notesData, possibleNotes) => getOmissionRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
+    [HINTS_IDS.OMISSION]: (mainNumbers, notesData, possibleNotes, singles) => getOmissionRawHints(mainNumbers, notesData, possibleNotes, singles, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData, possibleNotes) => getRemotePairsRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.EMPTY_RECTANGLE]: (mainNumbers, notesData, possibleNotes) => getEmptyRectangleRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.X_CHAIN]: (mainNumbers, notesData, possibleNotes) => getRawXChainHints(mainNumbers, notesData, possibleNotes),

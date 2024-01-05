@@ -1,9 +1,11 @@
+import { HIDDEN_SINGLE_TYPES, NAKED_SINGLE_TYPES } from './constants'
 import {
     getCellsFromCellsToFocusedData,
     setCellDataInHintResult,
     setCellNotesHighlightDataInHintResult,
     getCandidatesListText,
     removeDuplicteCells,
+    generateSinglesMap,
 } from './util'
 
 describe('getCellsFromCellsToFocusedData()', () => {
@@ -187,5 +189,71 @@ describe('removeDuplicteCells()', () => {
             { row: 0, col: 1 },
         ]
         expect(removeDuplicteCells(cells)).toEqual(expectedResult)
+    })
+})
+
+describe('generateSinglesMap()', () => {
+    test('returns a map of Singles from Naked Singles present in puzzle, it will be used by other hints to not report overlapping hints', () => {
+        const nakedSingles = [
+            { cell: { row: 1, col: 0 }, mainNumber: 8, type: NAKED_SINGLE_TYPES.MIX },
+            { cell: { row: 2, col: 4 }, mainNumber: 1, type: NAKED_SINGLE_TYPES.MIX },
+            { cell: { row: 6, col: 1 }, mainNumber: 5, type: NAKED_SINGLE_TYPES.MIX },
+            { cell: { row: 7, col: 7 }, mainNumber: 5, type: NAKED_SINGLE_TYPES.MIX },
+            { cell: { row: 8, col: 4 }, mainNumber: 5, type: NAKED_SINGLE_TYPES.MIX },
+            { cell: { row: 8, col: 5 }, mainNumber: 6, type: NAKED_SINGLE_TYPES.MIX },
+        ]
+        const expectedResult = {
+            9: 8,
+            22: 1,
+            55: 5,
+            70: 5,
+            76: 5,
+            77: 6,
+        }
+        expect(generateSinglesMap(nakedSingles)).toEqual(expectedResult)
+    })
+
+    test('returns a map of Singles from Hidden Singles present in puzzle', () => {
+        const hiddenSingles = [
+            { cell: { row: 0, col: 3 }, mainNumber: 8, type: HIDDEN_SINGLE_TYPES.ROW },
+            { cell: { row: 0, col: 8 }, mainNumber: 9, type: HIDDEN_SINGLE_TYPES.ROW },
+            { cell: { row: 1, col: 6 }, mainNumber: 6, type: HIDDEN_SINGLE_TYPES.ROW },
+            { cell: { row: 2, col: 2 }, mainNumber: 9, type: HIDDEN_SINGLE_TYPES.BLOCK },
+            { cell: { row: 2, col: 3 }, mainNumber: 6, type: HIDDEN_SINGLE_TYPES.BLOCK },
+            { cell: { row: 3, col: 0 }, mainNumber: 1, type: HIDDEN_SINGLE_TYPES.COL },
+            { cell: { row: 3, col: 1 }, mainNumber: 6, type: HIDDEN_SINGLE_TYPES.BLOCK },
+            { cell: { row: 4, col: 4 }, mainNumber: 4, type: HIDDEN_SINGLE_TYPES.COL },
+            { cell: { row: 4, col: 5 }, mainNumber: 7, type: HIDDEN_SINGLE_TYPES.BLOCK },
+            { cell: { row: 4, col: 7 }, mainNumber: 6, type: HIDDEN_SINGLE_TYPES.COL },
+            { cell: { row: 5, col: 1 }, mainNumber: 9, type: HIDDEN_SINGLE_TYPES.COL },
+            { cell: { row: 5, col: 8 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.COL },
+            { cell: { row: 6, col: 8 }, mainNumber: 4, type: HIDDEN_SINGLE_TYPES.BLOCK },
+            { cell: { row: 7, col: 2 }, mainNumber: 1, type: HIDDEN_SINGLE_TYPES.BLOCK },
+            { cell: { row: 7, col: 6 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.BLOCK },
+        ]
+        const expectedResult = {
+            3: 8,
+            8: 9,
+            15: 6,
+            20: 9,
+            21: 6,
+            27: 1,
+            28: 6,
+            40: 4,
+            41: 7,
+            43: 6,
+            46: 9,
+            53: 3,
+            62: 4,
+            65: 1,
+            69: 3,
+        }
+        expect(generateSinglesMap(hiddenSingles)).toEqual(expectedResult)
+    })
+
+    test('will return empty object if no singles are present', () => {
+        const nakedSingles = []
+        const expectedResult = {}
+        expect(generateSinglesMap(nakedSingles)).toEqual(expectedResult)
     })
 })

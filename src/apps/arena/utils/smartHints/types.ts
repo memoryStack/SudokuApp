@@ -129,3 +129,12 @@ export type SmartHintsColorSystem = {
         finnCellBGColor: string
     }
 }
+
+export type Singles = {
+    [cellNumber: number]: NoteValue
+}
+
+export type PuzzleSingles = {
+    nakedSingles: Singles,
+    hiddenSingles: Singles,
+}

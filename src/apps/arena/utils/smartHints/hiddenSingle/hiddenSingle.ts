@@ -1,3 +1,5 @@
+import _isNil from '@lodash/isNil'
+import _get from '@lodash/get'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { CELLS_IN_HOUSE } from '../../../constants'
@@ -7,6 +9,8 @@ import { maxHintsLimitReached } from '../util'
 import { HIDDEN_SINGLE_TYPES, HINTS_IDS } from '../constants'
 
 import { HiddenSingleRawHint } from './types'
+import { PuzzleSingles, Singles } from '../types'
+import { convertBoardCellToNum } from '../../cellTransformers'
 
 type CellHiddenSingle = {
     present: boolean
@@ -53,6 +57,7 @@ export const getHiddenSingleRawHints = (
     mainNumbers: MainNumbers,
     notesData: Notes,
     possibleNotes: Notes,
+    singles: PuzzleSingles,
     maxHintsThreshold: number,
 ): HiddenSingleRawHint[] => {
     const result = []
@@ -63,7 +68,7 @@ export const getHiddenSingleRawHints = (
 
             const cell = { row, col }
             const skipCheckingHiddenSingle = MainNumbersRecord.isCellFilled(mainNumbers, cell)
-                || isHintValid({ type: HINTS_IDS.NAKED_SINGLE, data: { cell } }, possibleNotes)
+                || !_isNil(_get(singles, ['nakedSingles', convertBoardCellToNum(cell)]))
             if (skipCheckingHiddenSingle) continue
 
             const { present, type, mainNumber } = getCellHiddenSingle(cell, notesData, possibleNotes)

@@ -1,3 +1,4 @@
+import _get from '@lodash/get'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
@@ -15,11 +16,20 @@ import { isHintValid } from '../validityTest'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 
 import { RawOmissionHint } from './types'
+import { PuzzleSingles } from '../types'
+import { convertBoardCellToNum } from '../../cellTransformers'
 
 const HOST_CELLS_COMMON_HOUSES_COUNT = 2
 
-export const areValidOmissionHostCells = (hostCells: Cell[]) => {
+export const areValidOmissionHostCells = (note: NoteValue, hostCells: Cell[], singles: PuzzleSingles) => {
     if (hostCells.length < 2) return false
+
+    const singleInAnyHostCell = hostCells.some(hostCell => {
+        const cellNumber = convertBoardCellToNum(hostCell)
+        return _get(singles, ['nakedSingles', cellNumber]) === note
+            || _get(singles, ['hiddenSingles', cellNumber]) === note
+    })
+    if (singleInAnyHostCell) return false
 
     const cellsCommonHouses = Object.values(getCellsCommonHouses(hostCells)).filter(value => value)
     return cellsCommonHouses.length === HOST_CELLS_COMMON_HOUSES_COUNT
@@ -31,6 +41,7 @@ export const analyzeOmissionInHouse = (
     mainNumbers: MainNumbers,
     notesData: Notes,
     possibleNotes: Notes,
+    singles: PuzzleSingles,
 ) => {
     const houseCells = getHouseCells(house)
 
@@ -39,7 +50,7 @@ export const analyzeOmissionInHouse = (
         .filter(cell => NotesRecord.isNotePresentInCell(notesData, note, cell))
 
     const isValidOmission = isHintValid({ type: HINTS_IDS.OMISSION, data: { houseCells, note, userNotesHostCells: hostCells } }, possibleNotes)
-        && areValidOmissionHostCells(hostCells)
+        && areValidOmissionHostCells(note, hostCells, singles)
     return {
         present: isValidOmission,
         hostCells,
@@ -51,10 +62,16 @@ const getRemovableNotesHostHouse = (hostCells: Cell[], hostHouse: House): House 
     return getCellHousesInfo(hostCells[0]).filter(house => commonHouses[house.type] && house.type !== hostHouse.type)[0]
 }
 
-export const getHouseOmissions = (house: House, mainNumbers: MainNumbers, notesData: Notes, possibleNotes: Notes): RawOmissionHint[] => {
+export const getHouseOmissions = (
+    house: House,
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+    possibleNotes: Notes,
+    singles: PuzzleSingles,
+): RawOmissionHint[] => {
     const result = []
     for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
-        const { present, hostCells } = analyzeOmissionInHouse(note, house, mainNumbers, notesData, possibleNotes)
+        const { present, hostCells } = analyzeOmissionInHouse(note, house, mainNumbers, notesData, possibleNotes, singles)
         if (present) {
             result.push({
                 hostHouse: house,
@@ -86,6 +103,7 @@ export const getOmissionRawHints = (
     mainNumbers: MainNumbers,
     notesData: Notes,
     possibleNotes: Notes,
+    singles: PuzzleSingles,
     maxHintsThreshold: number,
 ) => {
     const result: RawOmissionHint[] = []
@@ -96,7 +114,7 @@ export const getOmissionRawHints = (
             if (maxHintsLimitReached(result, maxHintsThreshold)) break
 
             const house = { type: houseType, num: houseNum }
-            const newOmissions = getHouseOmissions(house, mainNumbers, notesData, possibleNotes)
+            const newOmissions = getHouseOmissions(house, mainNumbers, notesData, possibleNotes, singles)
                 .filter(newOmission => !isDuplicateOmission(newOmission, result)
                     && removesNotes(newOmission, mainNumbers, notesData))
             result.push(...newOmissions)
