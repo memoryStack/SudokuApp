@@ -47,7 +47,6 @@ describe('Finned X-Wing', () => {
         smartHintHC.getByText('try to fill 2 where it is highlighted in red color to understand why these should be removed')
     })
 
-    // failed
     test('candidate is filled correctly in one leg', async () => {
         await renderScreenAndWaitForPuzzleStart()
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.X_WING])

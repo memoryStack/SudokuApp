@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import {
@@ -23,6 +24,10 @@ import {
     categorizeSashimiXWingPerfectLegCells,
     getSashimiCell,
 } from './utils'
+
+import { generateSinglesMap } from '../util'
+import { getNakedSingleRawHints } from '../nakedSingle/nakedSingle'
+import { getHiddenSingleRawHints } from '../hiddenSingle/hiddenSingle'
 
 // all the types of X-Wings. whether removes notes or not
 test('perfect xWing', () => {
@@ -230,6 +235,31 @@ describe('house XWing perfect Legs', () => {
         ]
 
         expect(getHouseXWingLegs(house, mainNumbers, notes)).toStrictEqual(expectedXWingLegs)
+    })
+
+    describe('Enhancements', () => {
+        test('should not return xwing legs with Singles host cells', () => {
+            const puzzle = '300070001608200000400300070000900210080040030014006000090065002000001703100090005'
+            const { mainNumbers, notes } = getPuzzleDataFromPuzzleString(puzzle)
+
+            const house = { type: HOUSE_TYPE.COL, num: 5 }
+            const singles = {
+                nakedSingles: {},
+                hiddenSingles: {
+                    3: 6, 7: 2, 10: 7, 13: 1, 15: 3, 20: 1, 35: 4, 39: 1, 49: 3, 56: 3, 60: 1, 70: 9, 77: 3,
+                },
+            }
+
+            const xWingLegWithSinglesInHostCell = {
+                candidate: 3,
+                cells: [{ row: 3, col: 5 }, { row: 8, col: 5 }],
+                type: LEG_TYPES.PERFECT,
+            }
+
+            expect(getHouseXWingLegs(house, mainNumbers, notes, singles)).toEqual(
+                expect.not.arrayContaining([xWingLegWithSinglesInHostCell]),
+            )
+        })
     })
 })
 

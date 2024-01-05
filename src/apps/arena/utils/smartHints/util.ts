@@ -1,10 +1,11 @@
+import _get from '@lodash/get'
 import _reduce from '@lodash/reduce'
 import { convertBoardCellToNum } from '../cellTransformers'
 import { isCellExists } from '../util'
 import { HiddenSingleRawHint } from './hiddenSingle/types'
 import { NakedSingleRawHint } from './nakedSingle/types'
 import {
-    CellHighlightData, CellsFocusData, HintSteps, NotesToHighlightData, Singles,
+    CellHighlightData, CellsFocusData, HintSteps, NotesToHighlightData, PuzzleSingles, Singles,
 } from './types'
 
 const setCellDataInHintResult = (
@@ -83,6 +84,12 @@ const generateSinglesMap = (nakedSingles: NakedSingleRawHint | HiddenSingleRawHi
     return result
 }
 
+const isSinglesPresentInCellForNote = (note: NoteValue, cell: Cell, singles: PuzzleSingles) => {
+    const cellNumber = convertBoardCellToNum(cell)
+    return _get(singles, ['nakedSingles', cellNumber]) === note
+            || _get(singles, ['hiddenSingles', cellNumber]) === note
+}
+
 export {
     setCellDataInHintResult,
     setCellNotesHighlightDataInHintResult,
@@ -95,4 +102,5 @@ export {
     isCellFocusedInSmartHint,
     transformCellBGColor,
     generateSinglesMap,
+    isSinglesPresentInCellForNote,
 }

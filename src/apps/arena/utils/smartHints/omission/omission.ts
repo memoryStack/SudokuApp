@@ -1,4 +1,3 @@
-import _get from '@lodash/get'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 import { HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../../constants'
@@ -11,24 +10,19 @@ import {
     isCellExists,
 } from '../../util'
 
-import { maxHintsLimitReached } from '../util'
+import { isSinglesPresentInCellForNote, maxHintsLimitReached } from '../util'
 import { isHintValid } from '../validityTest'
 import { HINTS_IDS, HOUSE_TYPE } from '../constants'
 
 import { RawOmissionHint } from './types'
 import { PuzzleSingles } from '../types'
-import { convertBoardCellToNum } from '../../cellTransformers'
 
 const HOST_CELLS_COMMON_HOUSES_COUNT = 2
 
 export const areValidOmissionHostCells = (note: NoteValue, hostCells: Cell[], singles: PuzzleSingles) => {
     if (hostCells.length < 2) return false
 
-    const singleInAnyHostCell = hostCells.some(hostCell => {
-        const cellNumber = convertBoardCellToNum(hostCell)
-        return _get(singles, ['nakedSingles', cellNumber]) === note
-            || _get(singles, ['hiddenSingles', cellNumber]) === note
-    })
+    const singleInAnyHostCell = hostCells.some(hostCell => isSinglesPresentInCellForNote(note, hostCell, singles))
     if (singleInAnyHostCell) return false
 
     const cellsCommonHouses = Object.values(getCellsCommonHouses(hostCells)).filter(value => value)

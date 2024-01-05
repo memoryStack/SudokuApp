@@ -38,11 +38,12 @@ import {
     getXWingCandidate,
     isPerfectLegType,
 } from './utils'
-import { maxHintsLimitReached } from '../util'
+import { isSinglesPresentInCellForNote, maxHintsLimitReached } from '../util'
 import { Houses } from '../../classes/houses'
 import { BoardIterators } from '../../classes/boardIterators'
 import { getBlockAndBoxNum } from '../../cellTransformers'
 import { XWingLeg, XWingLegs, XWingRawHint } from './types'
+import { PuzzleSingles } from '../types'
 
 type NotesXWingLegs = {
     [note: NoteValue]: {
@@ -209,18 +210,28 @@ export const isFinnedLeg = (hostCells: Cell[]) => {
     return _some(Object.keys(hostCellsGroupsByBlock), (blockNum: number) => hostCellsGroupsByBlock[blockNum].length === 1)
 }
 
+// implement here
 const getXWingLegType = (candidateHostCells: Cell[]) => {
     if (candidateHostCells.length === 2) return LEG_TYPES.PERFECT
     if (isFinnedLeg(candidateHostCells)) return LEG_TYPES.FINNED
     return LEG_TYPES.INVALID
 }
 
-export const getHouseXWingLegs = (house: House, mainNumbers: MainNumbers, notesData: Notes) => {
+// will be affected
+export const getHouseXWingLegs = (
+    house: House,
+    mainNumbers: MainNumbers,
+    notesData: Notes,
+    singles: PuzzleSingles,
+) => {
     const result: XWingLeg[] = []
 
     const candidatesHostCells = getAllCandidatesOccurencesInHouse(house, notesData, mainNumbers)
     for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
         if (!candidatesHostCells[note]) continue
+
+        const noteIsSinglesForCell = candidatesHostCells[note].some((cell: Cell) => isSinglesPresentInCellForNote(note, cell, singles))
+        if (noteIsSinglesForCell) continue
         const legType = getXWingLegType(candidatesHostCells[note])
         if ([LEG_TYPES.PERFECT, LEG_TYPES.FINNED].includes(legType)) {
             result.push({ candidate: note, cells: candidatesHostCells[note], type: legType })
@@ -269,14 +280,14 @@ const addCandidateXWingLeg = ({ candidate, cells, type: legType }: XWingLeg, hou
     candidateXWingLegs[candidate][houseType].push({ candidate, cells, type: legType }) // TODO: we don't need to add candidate here
 }
 
-const getAllXWingEligibleCandidates = (mainNumbers: MainNumbers, notesData: Notes) => {
+const getAllXWingEligibleCandidates = (mainNumbers: MainNumbers, notesData: Notes, singles: PuzzleSingles) => {
     const result: NotesXWingLegs = {}
 
     const searchableHouses = [HOUSE_TYPE.COL, HOUSE_TYPE.ROW]
     searchableHouses.forEach(houseType => {
         BoardIterators.forEachHouseNum(houseNum => {
             const house = { type: houseType, num: houseNum }
-            getHouseXWingLegs(house, mainNumbers, notesData).forEach(xWingLeg => {
+            getHouseXWingLegs(house, mainNumbers, notesData, singles).forEach(xWingLeg => {
                 addCandidateXWingLeg(xWingLeg, houseType, result)
             })
         })
@@ -324,11 +335,12 @@ export const getXWingRawHints = (
     mainNumbers: MainNumbers,
     notesData: Notes,
     possibleNotes: Notes,
+    singles: PuzzleSingles,
     maxHintsThreshold: number,
 ) => {
     const result: XWingRawHint[] = []
 
-    const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData)
+    const candidateXWingLegs = getAllXWingEligibleCandidates(mainNumbers, notesData, singles)
 
     const candidatesWithXWingLegs = Object.keys(candidateXWingLegs)
     for (let i = 0; i < candidatesWithXWingLegs.length; i++) {
