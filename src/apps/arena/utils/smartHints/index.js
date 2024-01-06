@@ -61,7 +61,7 @@ const HINT_ID_VS_HANDLERS = {
     [HINTS_IDS.OMISSION]: (mainNumbers, notesData, possibleNotes, singles) => getOmissionRawHints(mainNumbers, notesData, possibleNotes, singles, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.REMOTE_PAIRS]: (mainNumbers, notesData, possibleNotes) => getRemotePairsRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
     [HINTS_IDS.EMPTY_RECTANGLE]: (mainNumbers, notesData, possibleNotes) => getEmptyRectangleRawHints(mainNumbers, notesData, possibleNotes, UI_HINTS_COUNT_THRESHOLD),
-    [HINTS_IDS.X_CHAIN]: (mainNumbers, notesData, possibleNotes) => getRawXChainHints(mainNumbers, notesData, possibleNotes),
+    [HINTS_IDS.X_CHAIN]: (mainNumbers, notesData, possibleNotes, singles) => getRawXChainHints(mainNumbers, notesData, possibleNotes, singles),
     [HINTS_IDS.XY_CHAIN]: (mainNumbers, notesData, possibleNotes) => getRawXYChainHints(mainNumbers, notesData, possibleNotes),
 }
 

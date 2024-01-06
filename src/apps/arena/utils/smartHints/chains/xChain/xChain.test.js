@@ -39,21 +39,53 @@ import {
 // TODO: write a test case for filtering out the notes, possibleNotes difference as well
 describe('getCandidateAllStrongLinks()', () => {
     test('returns all the strong links for a candidate grouped by houses, returned DS will contain each strong link house info as keys and will contain in which cells that note is present', () => {
+        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+        const singles = {
+            nakedSingles: {},
+            hiddenSingles: {},
+        }
+
         const expectedResult = [
             [{ row: 0, col: 1 }, { row: 0, col: 8 }],
             [{ row: 3, col: 2 }, { row: 6, col: 2 }],
             [{ row: 1, col: 7 }, { row: 6, col: 7 }],
         ]
-
-        const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
-        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getCandidateAllStrongLinks(7, notes, possibleNotes)).toEqual(expectedResult)
+        expect(getCandidateAllStrongLinks(7, notes, possibleNotes, singles)).toEqual(expectedResult)
     })
 
     test('returns empty array if no strong links are found for a note in any house', () => {
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getCandidateAllStrongLinks(2, notes, possibleNotes)).toEqual([])
+
+        const singles = {
+            nakedSingles: {},
+            hiddenSingles: {},
+        }
+
+        expect(getCandidateAllStrongLinks(2, notes, possibleNotes, singles)).toEqual([])
+    })
+
+    test('strong links with Singles host cells will not be included', () => {
+        const puzzle = '001800060804326070003000000098105000005030700000708140000000300080263009020009400'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const singles = {
+            nakedSingles: {
+                10: 5, 31: 4, 49: 9, 65: 7, 69: 5, 75: 5,
+            },
+            hiddenSingles: {
+                8: 3, 15: 9, 17: 1, 24: 8, 27: 7, 33: 6, 34: 3, 39: 6, 41: 2, 43: 9, 46: 3, 47: 2, 49: 9, 53: 5, 56: 9, 63: 4, 72: 3,
+            },
+        }
+
+        const excludedLinks = [
+            [{ row: 3, col: 0 }, { row: 3, col: 4 }],
+        ]
+
+        expect(getCandidateAllStrongLinks(4, notes, possibleNotes, singles)).toEqual(
+            expect.not.arrayContaining(excludedLinks),
+        )
     })
 })
 
@@ -92,7 +124,7 @@ describe('linksPairsHaveSufficientCells()', () => {
 })
 
 describe('getNoteWeakLinks()', () => {
-    test('returns weak links for a note in all houses', () => {
+    test('returns weak links for a note in all houses  ', () => {
         const expectedResult = [
             [{ row: 1, col: 0 }, { row: 1, col: 1 }], [{ row: 1, col: 0 }, { row: 1, col: 6 }], [{ row: 1, col: 0 }, { row: 1, col: 8 }], [{ row: 1, col: 1 }, { row: 1, col: 6 }], [{ row: 1, col: 1 }, { row: 1, col: 8 }], [{ row: 1, col: 6 }, { row: 1, col: 8 }],
             [{ row: 2, col: 0 }, { row: 2, col: 2 }], [{ row: 2, col: 0 }, { row: 2, col: 8 }], [{ row: 2, col: 2 }, { row: 2, col: 8 }],
@@ -113,7 +145,42 @@ describe('getNoteWeakLinks()', () => {
 
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
-        expect(getNoteWeakLinks(2, notes, possibleNotes)).toEqual(expectedResult)
+        const singles = { nakedSingles: {}, hiddenSingles: {} }
+        expect(getNoteWeakLinks(2, notes, possibleNotes, singles)).toEqual(expectedResult)
+    })
+
+    test('links with Singles host cells will be excluded', () => {
+        const puzzle = '001800060804326070003000000098105000005030700000708140000000300080263009020009400'
+        const { notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const singles = {
+            nakedSingles: {
+                10: 5, 31: 4, 49: 9, 65: 7, 69: 5, 75: 5,
+            },
+            hiddenSingles: {
+                8: 3, 15: 9, 17: 1, 24: 8, 27: 7, 33: 6, 34: 3, 39: 6, 41: 2, 43: 9, 46: 3, 47: 2, 49: 9, 53: 5, 56: 9, 63: 4, 72: 3,
+            },
+        }
+
+        const excludedWeakLinks = [
+            [{ row: 3, col: 0 }, { row: 6, col: 0 }],
+            [{ row: 3, col: 0 }, { row: 7, col: 0 }],
+            [{ row: 4, col: 0 }, { row: 6, col: 0 }],
+            [{ row: 4, col: 0 }, { row: 7, col: 0 }],
+            [{ row: 6, col: 0 }, { row: 7, col: 0 }],
+            [{ row: 0, col: 4 }, { row: 3, col: 4 }],
+            [{ row: 0, col: 4 }, { row: 6, col: 4 }],
+            [{ row: 2, col: 4 }, { row: 3, col: 4 }],
+            [{ row: 2, col: 4 }, { row: 6, col: 4 }],
+            [{ row: 3, col: 4 }, { row: 6, col: 4 }],
+            [{ row: 3, col: 4 }, { row: 4, col: 3 }],
+            [{ row: 3, col: 4 }, { row: 4, col: 5 }],
+            [{ row: 6, col: 1 }, { row: 7, col: 0 }],
+        ]
+
+        expect(getNoteWeakLinks(4, notes, possibleNotes, singles)).toEqual(
+            expect.not.arrayContaining(excludedWeakLinks),
+        )
     })
 })
 
@@ -121,6 +188,11 @@ describe('getRawXChainHints()', () => {
     test('will return first note which has a valid X-Chain cycle', () => {
         const puzzle = '304520080006090000050070300000689023000734000063152700010960000009040060608217005'
         const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+        const singles = {
+            nakedSingles: {},
+            hiddenSingles: {},
+        }
 
         const expectedResult = [{
             note: 7,
@@ -134,13 +206,22 @@ describe('getRawXChainHints()', () => {
             ],
             removableNotesHostCells: [{ row: 3, col: 1 }],
         }]
-        expect(getRawXChainHints(mainNumbers, notes, possibleNotes)).toEqual(expectedResult)
+        expect(getRawXChainHints(mainNumbers, notes, possibleNotes, singles)).toEqual(expectedResult)
     })
 
     describe('Enhancements: ', () => {
         test('omissions will not be treated as x-chain', () => {
             const puzzle = '080300506000405207500007000023710000009654800000023710000100004108506000604002030'
             const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+            const singles = {
+                nakedSingles: {
+                    4: 9, 36: 7, 43: 2, 69: 9,
+                },
+                hiddenSingles: {
+                    5: 1, 21: 2, 24: 3, 37: 1, 44: 3, 67: 4,
+                },
+            }
 
             const omissionCumXChain = [{
                 note: 1,
@@ -152,7 +233,67 @@ describe('getRawXChainHints()', () => {
                 ],
                 removableNotesHostCells: [{ row: 2, col: 1 }, { row: 2, col: 2 }],
             }]
-            expect(getRawXChainHints(mainNumbers, notes, possibleNotes)).not.toEqual(omissionCumXChain)
+            expect(getRawXChainHints(mainNumbers, notes, possibleNotes, singles)).not.toEqual(omissionCumXChain)
+        })
+
+        test('chains with Hidden Single cells will not be returned', () => {
+            const puzzle = '918062030062740000700010500090820040006374100040095020009051003000037680070689250'
+            const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+            const singles = {
+                nakedSingles: {
+                    3: 5, 19: 3, 21: 9, 32: 6, 43: 9, 48: 1, 61: 7,
+                },
+                hiddenSingles: {
+                    3: 5, 9: 5, 15: 9, 16: 1, 19: 3, 20: 4, 21: 9, 25: 6, 26: 2, 32: 6, 48: 1, 53: 6, 54: 6, 61: 7, 71: 9,
+                },
+            }
+
+            const chainWithHiddenSinglesHostCells = [{
+                note: 4,
+                chain: [
+                    { row: 2, col: 2 },
+                    { row: 2, col: 8 },
+                    { row: 0, col: 6 },
+                    { row: 6, col: 6 },
+                    { row: 6, col: 3 },
+                    { row: 7, col: 3 },
+                ],
+                removableNotesHostCells: [{ row: 7, col: 2 }],
+            }]
+
+            expect(getRawXChainHints(mainNumbers, notes, possibleNotes, singles)).toEqual(
+                expect.not.arrayContaining(chainWithHiddenSinglesHostCells),
+            )
+        })
+
+        test('chains with Naked Single cells will not be returned', () => {
+            const puzzle = '001800060804326070003000000098105000005030700000708140000000300080263009020009400'
+            const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
+
+            const singles = {
+                nakedSingles: {
+                    10: 5, 31: 4, 49: 9, 65: 7, 69: 5, 75: 5,
+                },
+                hiddenSingles: {
+                    8: 3, 15: 9, 17: 1, 24: 8, 27: 7, 33: 6, 34: 3, 39: 6, 41: 2, 43: 9, 46: 3, 47: 2, 49: 9, 53: 5, 56: 9, 63: 4, 72: 3,
+                },
+            }
+
+            const chainWithNakedSinglesHostCells = [{
+                note: 4,
+                chain: [
+                    { row: 3, col: 4 },
+                    { row: 3, col: 0 },
+                    { row: 4, col: 1 },
+                    { row: 6, col: 1 },
+                ],
+                removableNotesHostCells: [{ row: 6, col: 4 }],
+            }]
+
+            expect(getRawXChainHints(mainNumbers, notes, possibleNotes, singles)).toEqual(
+                expect.not.arrayContaining(chainWithNakedSinglesHostCells),
+            )
         })
     })
 })

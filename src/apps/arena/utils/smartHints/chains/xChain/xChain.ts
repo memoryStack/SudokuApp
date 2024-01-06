@@ -38,6 +38,8 @@ import type {
     Link, Chain, AnalyzedChainResult,
 } from '../chainExplorer'
 import { getHouseNoteHostCells } from '../../rawHintTransformers/omission/omission'
+import { PuzzleSingles } from '../../types'
+import { isSinglesPresentInCellForNote } from '../../util'
 
 // TODO: these types mostly will be common among all the chain hints
 type LinkCells = [Cell, Cell]
@@ -68,13 +70,16 @@ export const getCandidateAllStrongLinks = (
     note: NoteValue,
     notes: Notes,
     possibleNotes: Notes,
+    singles: PuzzleSingles,
 ) => {
     const result: LinkCells[] = []
 
     BoardIterators.forEachHouse(house => {
         const noteUserFilledHostCells = getNoteHostCellsInHouse(note, house, notes)
         const noteAllPossibleHostCells = getNoteHostCellsInHouse(note, house, possibleNotes)
-        const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length && noteUserFilledHostCells.length === 2
+        const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length
+            && noteUserFilledHostCells.length === 2
+            && noteUserFilledHostCells.every((hostCell: Cell) => !isSinglesPresentInCellForNote(note, hostCell, singles))
         if (isValidStrongLink) {
             result.push(noteUserFilledHostCells as LinkCells)
         }
@@ -89,14 +94,21 @@ const getWeakLinkPairs = (hostCells: Cell[]) => {
     return _map(combinations, (combination: number[]) => _at(hostCells, _reverse(_cloneDeep(combination))))
 }
 
-export const getNoteWeakLinks = (note: NoteValue, notes: Notes, possibleNotes: Notes) => {
+export const getNoteWeakLinks = (
+    note: NoteValue,
+    notes: Notes,
+    possibleNotes: Notes,
+    singles: PuzzleSingles,
+) => {
     const result: LinkCells[] = []
 
     BoardIterators.forEachHouse(house => {
         const noteUserFilledHostCells = getNoteHostCellsInHouse(note, house, notes)
         const noteAllPossibleHostCells = getNoteHostCellsInHouse(note, house, possibleNotes)
-        const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length && noteUserFilledHostCells.length === 2
-        if (!isValidStrongLink && noteUserFilledHostCells.length > 1) {
+        const isValidStrongLink = noteUserFilledHostCells.length === noteAllPossibleHostCells.length
+            && noteUserFilledHostCells.length === 2
+        const isSinglesHostCellPresent = noteUserFilledHostCells.some((hostCell: Cell) => isSinglesPresentInCellForNote(note, hostCell, singles))
+        if (!isValidStrongLink && !isSinglesHostCellPresent && noteUserFilledHostCells.length > 1) {
             const weakLinksGroups = getWeakLinkPairs(noteUserFilledHostCells)
             result.push(...weakLinksGroups)
         }
@@ -399,11 +411,16 @@ export const linksPairsHaveSufficientCells = (firstLink: LinkCells, secondLink: 
 const getHostCellsWithNoteInCellsCommonHouse = (note: NoteValue, cellA: Cell, cellB: Cell, notes: Notes) => getCellsSharingHousesWithCells(cellA, cellB)
     .filter(cell => NotesRecord.isNotePresentInCell(notes, note, cell)).filter(cell => !isCellExists(cell, [cellA, cellB]))
 
-const weakLinksParticipantsCellsHandler = (note: NoteValue, notes: Notes, possibleNotes: Notes) => {
+const weakLinksParticipantsCellsHandler = (
+    note: NoteValue,
+    notes: Notes,
+    possibleNotes: Notes,
+    singles: PuzzleSingles,
+) => {
     let weakLinksParticipantCells: CellLinksParticipants = {}
     return () => {
         if (_isEmpty(weakLinksParticipantCells)) {
-            const weakLinks = getNoteWeakLinks(note, notes, possibleNotes)
+            const weakLinks = getNoteWeakLinks(note, notes, possibleNotes, singles)
             weakLinksParticipantCells = getNoteWeakLinkCellsParticipants(weakLinks)
         }
         return weakLinksParticipantCells
@@ -414,11 +431,12 @@ const getNoteChain = (
     note: NoteValue,
     notes: Notes,
     possibleNotes: Notes,
+    singles: PuzzleSingles,
 ): AnalyzedChainResult | null => {
-    const strongLinksList = getCandidateAllStrongLinks(note, notes, possibleNotes)
+    const strongLinksList = getCandidateAllStrongLinks(note, notes, possibleNotes, singles)
     const strongLinkParticipantCells = getNoteStrongLinkCellsParticipants(strongLinksList)
 
-    const getWeakLinksParticipantCells = weakLinksParticipantsCellsHandler(note, notes, possibleNotes)
+    const getWeakLinksParticipantCells = weakLinksParticipantsCellsHandler(note, notes, possibleNotes, singles)
 
     const visitedCells: VisitedCells = {}
 
@@ -485,13 +503,14 @@ export const getRawXChainHints = (
     _: MainNumbers,
     notes: Notes,
     possibleNotes: Notes,
+    singles: PuzzleSingles,
 ): XChainRawHint[] | [] => {
     let result = {} as XChainRawHint
 
     // TODO: add early break support for these iterators
     BoardIterators.forCellEachNote(note => {
         if (!_isEmpty(result)) return
-        const chain = getNoteChain(note, notes, possibleNotes)
+        const chain = getNoteChain(note, notes, possibleNotes, singles)
         if (!_isNil(chain)) {
             result = {
                 note,
