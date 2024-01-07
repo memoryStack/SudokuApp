@@ -58,6 +58,7 @@ interface Props {
     getCellBGColor?: () => CellBGColorStyle | null
     getCellMainNumberFontColor?: () => FontColor | null
     getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null
+    hideSVGDrawingsMarkersEnd?: boolean
 }
 
 const Board_: React.FC<Props> = ({
@@ -73,6 +74,7 @@ const Board_: React.FC<Props> = ({
     getCellMainNumberFontColor = _noop,
     boardContainerStyles = null,
     getNoteStyles = _noop,
+    hideSVGDrawingsMarkersEnd = false,
 }) => {
     const styles = useStyles(getStyles)
 
@@ -97,6 +99,7 @@ const Board_: React.FC<Props> = ({
                 boardRef={boardRef}
                 notesRefs={notesRefs}
                 svgProps={svgProps}
+                hideMarkersEnd={hideSVGDrawingsMarkersEnd}
             />
         )
     }

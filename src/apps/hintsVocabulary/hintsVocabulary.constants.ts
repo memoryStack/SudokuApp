@@ -23,4 +23,5 @@ export const HINTS_VOCAB_TITLE = {
     [HINTS_VOCAB_IDS.REMOTE_PAIRS]: 'Remote Pairs',
     [HINTS_VOCAB_IDS.X_CHAIN]: 'X-Chain',
     [HINTS_VOCAB_IDS.XY_CHAIN]: 'XY-Chain',
+    [HINTS_VOCAB_IDS.PERFECT_X_WING]: 'X-Wing',
 }

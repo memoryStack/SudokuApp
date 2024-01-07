@@ -16,7 +16,7 @@ import { HINT_ID_VS_SVG_DEFS } from './svgDefs'
 import { HINT_ID_VS_SVG_ELEMENTS_HANDLER } from './svgElementsHandlers'
 
 const HintsSvgDrawing = ({
-    boardRef, notesRefs, hint, svgProps,
+    boardRef, notesRefs, hint, svgProps, hideMarkersEnd,
 }) => {
     const [svgElementsConfigs, setSvgElementsConfigs] = useState([])
 
@@ -42,10 +42,12 @@ const HintsSvgDrawing = ({
             const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
             if (_isEmpty(boardPageCordinates) || !_isFunction(svgElementsHandler) || _isEmpty(svgProps)) return
 
-            setSvgElementsConfigs(await svgElementsHandler({ notesRefs, boardPageCordinates, svgProps }))
+            setSvgElementsConfigs(await svgElementsHandler({
+                notesRefs, boardPageCordinates, svgProps, hideMarkersEnd,
+            }))
         }
         handler()
-    }, [boardPageCordinates, boardRef, notesRefs, hint, svgProps])
+    }, [boardPageCordinates, boardRef, notesRefs, hint, svgProps, hideMarkersEnd])
 
     if (_isEmpty(svgElementsConfigs)) return null
 
@@ -80,6 +82,7 @@ const HintsSvgDrawing = ({
 // TODO: fix these proptypes
 HintsSvgDrawing.propTypes = {
     hint: PropTypes.object,
+    hideMarkersEnd: PropTypes.bool,
     // boardRef: PropTypes.oneOfType([
     //     PropTypes.func,
     //     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
@@ -93,6 +96,7 @@ HintsSvgDrawing.propTypes = {
 
 HintsSvgDrawing.defaultProps = {
     hint: {},
+    hideMarkersEnd: false,
     // boardRef: {},
 }
 

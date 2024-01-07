@@ -25,10 +25,6 @@ import {
     getSashimiCell,
 } from './utils'
 
-import { generateSinglesMap } from '../util'
-import { getNakedSingleRawHints } from '../nakedSingle/nakedSingle'
-import { getHiddenSingleRawHints } from '../hiddenSingle/hiddenSingle'
-
 // all the types of X-Wings. whether removes notes or not
 test('perfect xWing', () => {
     const puzzle = '600095007540007100002800050800000090000078000030000008050002300304500020920030504'

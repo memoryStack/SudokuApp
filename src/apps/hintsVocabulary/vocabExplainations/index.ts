@@ -17,6 +17,7 @@ import ChainLinks from './chainLinks'
 import RemotePairs from './remotePairs'
 import XChain from './xChain'
 import XYChain from './xyChain'
+import PerfectXWing from './perfectXWing'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -36,5 +37,7 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.REMOTE_PAIRS]: RemotePairs,
     [HINTS_VOCAB_IDS.X_CHAIN]: XChain,
     [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
-    // [HINTS_VOCAB_IDS.OMISSION]: Omission,
+    [HINTS_VOCAB_IDS.PERFECT_X_WING]: PerfectXWing,
+    // [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
+    // [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
 }

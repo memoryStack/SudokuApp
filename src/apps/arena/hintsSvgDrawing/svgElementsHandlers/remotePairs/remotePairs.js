@@ -30,7 +30,9 @@ const strokeProps = {
 }
 
 // TODO: get link color and chain details as well in args
-const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates, svgProps: chainTrack }) => new Promise(resolve => {
+const getRemotePairsSvgElementsConfigs = async ({
+    notesRefs, boardPageCordinates, svgProps: chainTrack, hideMarkersEnd,
+}) => new Promise(resolve => {
     Promise.all(getAllNotesMeasurePromises(notesRefs, chainTrack)).then(notesRawMeasurements => {
         const notesMeasurements = transformNotesMeasurementPromisesResult(notesRawMeasurements)
 
@@ -46,7 +48,7 @@ const getRemotePairsSvgElementsConfigs = async ({ notesRefs, boardPageCordinates
                 props: {
                     d: getLinkPathGeometry(link, linkCoordinates),
                     ...strokeProps,
-                    markerEnd: `url(#${linkMarker})`,
+                    ...(!hideMarkersEnd && { markerEnd: `url(#${linkMarker})` }),
                     ...(linkType === LINK_TYPES.WEAK && { strokeDasharray: STROKE_DASH_ARRAY }),
                 },
             })

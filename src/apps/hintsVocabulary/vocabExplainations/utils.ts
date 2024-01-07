@@ -10,15 +10,29 @@ type BoardData = {
     mainNumbers: MainNumbers,
     notes: Notes
 }
-export const getTrimmedBoardData = (boardData:BoardData, focusedCells: Cell[]): BoardData => {
+
+type TrimConfig = {
+    trimMainNumbers?: boolean,
+    trimNotes?: boolean
+}
+
+const DEFAULT_TRIM_CONFIGS = {
+    trimMainNumbers: true,
+    trimNotes: true,
+}
+
+export const getTrimmedBoardData = (
+    boardData: BoardData,
+    focusedCells: Cell[],
+    configs: TrimConfig = DEFAULT_TRIM_CONFIGS,
+): BoardData => {
     const mainNumbers = _cloneDeep(boardData.mainNumbers)
     const notes = _cloneDeep(boardData.notes)
     BoardIterators.forBoardEachCell((cell: Cell) => {
         if (!isCellExists(cell, focusedCells)) {
-            mainNumbers[cell.row][cell.col].value = 0
-            notes[cell.row][cell.col] = []
+            if (configs.trimMainNumbers) mainNumbers[cell.row][cell.col].value = 0
+            if (configs.trimNotes) notes[cell.row][cell.col] = []
         }
     })
-
     return { mainNumbers, notes }
 }
