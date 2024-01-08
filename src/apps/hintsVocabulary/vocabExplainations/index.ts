@@ -18,6 +18,7 @@ import RemotePairs from './remotePairs'
 import XChain from './xChain'
 import XYChain from './xyChain'
 import PerfectXWing from './perfectXWing'
+import FinnedXWing from './finnedXWing'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -38,6 +39,6 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.X_CHAIN]: XChain,
     [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
     [HINTS_VOCAB_IDS.PERFECT_X_WING]: PerfectXWing,
-    // [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
+    [HINTS_VOCAB_IDS.FINNED_X_WING]: FinnedXWing,
     // [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
 }

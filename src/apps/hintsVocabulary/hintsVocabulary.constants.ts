@@ -24,4 +24,6 @@ export const HINTS_VOCAB_TITLE = {
     [HINTS_VOCAB_IDS.X_CHAIN]: 'X-Chain',
     [HINTS_VOCAB_IDS.XY_CHAIN]: 'XY-Chain',
     [HINTS_VOCAB_IDS.PERFECT_X_WING]: 'X-Wing',
+    [HINTS_VOCAB_IDS.FINNED_X_WING]: 'Finned X-Wing',
+    [HINTS_VOCAB_IDS.SASHIMI_FINNED_X_WING]: 'Sashimi Finned X-Wing',
 }
