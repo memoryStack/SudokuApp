@@ -7,8 +7,11 @@ test('hidden singles', () => {
     const puzzle = '615030700000790010040005030000523090520000008400068000306080970200479006974356281'
     const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
-    const nakedSingles = {
-        9: 8, 22: 1, 55: 5, 70: 5,
+    const puzzleSingles = {
+        nakedSingles: {
+            9: 8, 22: 1, 55: 5, 70: 5,
+        },
+        hiddenSingles: {},
     }
 
     const hiddenSingles = [
@@ -29,16 +32,16 @@ test('hidden singles', () => {
         { cell: { row: 7, col: 6 }, mainNumber: 3, type: HIDDEN_SINGLE_TYPES.BLOCK },
     ]
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenSingleRawHints(mainNumbers, notes, possibleNotes, nakedSingles, maxHintsThreshold)).toStrictEqual(hiddenSingles)
+    expect(getHiddenSingleRawHints(mainNumbers, notes, possibleNotes, puzzleSingles, maxHintsThreshold)).toStrictEqual(hiddenSingles)
 })
 
 test('naked singles and hidden singles will not be reported for same cells', () => {
     const puzzle = '497518362518632497362497518945781623781263945623945781174859236859326174236174850'
     const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
-    const nakedSingles = { 80: 9 }
+    const puzzleSingles = { nakedSingles: { 80: 9 }, hiddenSingles: {} }
 
     const hiddenSingles = []
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getHiddenSingleRawHints(mainNumbers, notes, possibleNotes, nakedSingles, maxHintsThreshold)).toStrictEqual(hiddenSingles)
+    expect(getHiddenSingleRawHints(mainNumbers, notes, possibleNotes, puzzleSingles, maxHintsThreshold)).toStrictEqual(hiddenSingles)
 })
