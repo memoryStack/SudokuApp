@@ -143,13 +143,13 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' {{crossHouseFullNamePlural}} in red color will be removed',
     ],
     [HINTS_IDS.FINNED_X_WING]: [
-        '<p>If you don\'t understand X-Wing then you should learn that first.'
+        `<p>If you don't understand ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} then you should learn that first.`
         + `\nwhen the ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} is present in more than 2 ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} of only one ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} then it's not a perfect X-Wing`
-        + ' but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called Finn cells.'
+        + ` but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_FINN_CELLS, 'Finn Cells')}.`
         + '\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>',
 
         '<p>only one row or column can have these finn cells. and these finn cells must be in the'
-        + ` same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with atleast one of the X-Wing corner cells.\nnotice here that {{finnCellsAxesListText}}`
+        + ` same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with atleast one of the X-Wing ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_CORNER_CELLS, 'corner cells')}.\nnotice here that {{finnCellsAxesListText}}`
         + ' (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}</p>',
 
         'here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but'
@@ -159,10 +159,10 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}',
     ],
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
-        '<p>If you don\'t understand Finned X-Wing then you should learn that first.'
-        + `\nwhen in Finned X-Wing the ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} is missing in the`
-        + ` corner ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} which is in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
-        + ' as finn cells then it will be called Sashimi Finned X-Wing.</p>',
+        `<p>If you don't understand ${getLinkHTMLText(HINTS_VOCAB_IDS.FINNED_X_WING, 'Finned X-Wing')} then you should learn that first.`
+        + `\nwhen in Finned X-Wing the ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} is missing in one of the`
+        + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_CORNER_CELLS, 'corner')}  ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} which is in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
+        + ` as ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_FINN_CELLS, 'finn cells')} then it will be called Sashimi Finned X-Wing.</p>`,
 
         'here {{candidate}} isn\'t present in {{sashimiCell}} and this cell is in same'
         + ' block as {{finnCellsAxesListText}} finn {{finnCellEnglishText}}'
