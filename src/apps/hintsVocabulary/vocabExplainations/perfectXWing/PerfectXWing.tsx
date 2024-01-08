@@ -125,7 +125,8 @@ const PerfectXWing = () => {
             text={
                 '<p>'
                 + 'In above puzzle, both columns 1st and 5th have 1 as candidate in their 2nd and 5th cells and these 4 cells where 1 is present make'
-                + ' an <b>X</b> letter shape.'
+                + ' an <b>X</b> letter shape. Let\'s call these 4 cells as X-Wing <b>corner</b> cells because they are like 4 corners of a rectangle.'
+                + ' This "corner" term will be used again and again.'
                 + '</p>'
             }
         />
@@ -210,11 +211,11 @@ const PerfectXWing = () => {
             <SmartHintText
                 text={
                     '<p>'
-                            + '<b>Second way</b>'
-                            + '<br />'
-                            + 'In 1st column if 1 will be filled in E1 cell then 1 can\'t be filled in B1 and E5 cells, hence in 5th column'
-                            + ' 1 can be filled only in B5.'
-                        + '</p>'
+                        + '<b>Second way</b>'
+                        + '<br />'
+                        + 'In 1st column if 1 will be filled in E1 cell then 1 can\'t be filled in B1 and E5 cells, hence in 5th column'
+                        + ' 1 can be filled only in B5.'
+                    + '</p>'
                 }
             />
             <View style={{ marginTop: 8 }}>
@@ -223,6 +224,13 @@ const PerfectXWing = () => {
                         '<p>'
                             + 'There are no other ways to fill 1 in these two columns. So 1 will come in either B1 and E5 cells or in E1 and B5 cells.'
                             + 'Hence in row B and E, 1 can be eliminated as candidate from all the cells where it is highlighted in red color.'
+                            + '<br />'
+                            + '<br />'
+                            + '<b>Conclusion</b>'
+                            + '<br />'
+                            + 'If X-Wing is found using columns then candidate will be removed from rows in which the X-Wing corner cells are present.'
+                            + '<br />'
+                            + 'And if X-Wing is found using rows then candidate will be removed from columns in which the X-Wing corner cells are present.'
                         + '</p>'
                     }
                 />

@@ -19,6 +19,7 @@ import XChain from './xChain'
 import XYChain from './xyChain'
 import PerfectXWing from './perfectXWing'
 import FinnedXWing from './finnedXWing'
+import SashimiFinnedXWing from './sashimiFinnedXWing'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -40,5 +41,5 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
     [HINTS_VOCAB_IDS.PERFECT_X_WING]: PerfectXWing,
     [HINTS_VOCAB_IDS.FINNED_X_WING]: FinnedXWing,
-    // [HINTS_VOCAB_IDS.XY_CHAIN]: XYChain,
+    [HINTS_VOCAB_IDS.SASHIMI_FINNED_X_WING]: SashimiFinnedXWing,
 }

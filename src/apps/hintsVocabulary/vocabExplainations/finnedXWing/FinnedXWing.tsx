@@ -17,33 +17,13 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
 import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/constants'
-import { getXWingCells } from 'src/apps/arena/utils/smartHints/xWing/utils'
-import { isCellExists } from 'src/apps/arena/utils/util'
 import { getHouseCells } from 'src/apps/arena/utils/houseCells'
-import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import { getStyles } from './finnedXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
 
 const puzzle = '500000000002009010730004000106008090020793050090100408000200073060900800000000001'
-
-const faultyXWingWithMoreThanTwoCrossHouses = {
-    houseType: HOUSE_TYPE.ROW,
-    type: XWING_TYPES.PERFECT,
-    legs: [
-        {
-            candidate: 2,
-            cells: [{ row: 1, col: 6 }, { row: 1, col: 8 }],
-            type: LEG_TYPES.PERFECT,
-        },
-        {
-            candidate: 2,
-            cells: [{ row: 3, col: 3 }, { row: 3, col: 8 }],
-            type: LEG_TYPES.PERFECT,
-        },
-    ],
-}
 
 const focusedCellsInExample = [
     ...getHouseCells({ type: HOUSE_TYPE.ROW, num: 0 }),
@@ -83,27 +63,12 @@ const FinnedXWing = () => {
         smartHintsColorSystem: _get(theme, 'colors.smartHints'),
     })
 
-    const XWingCrossConfigs = [
-        {
-            start: { cell: { row: 1, col: 0 }, note: 1 },
-            end: { cell: { row: 4, col: 4 }, note: 1 },
-            type: LINK_TYPES.STRONG,
-        },
-        {
-            start: { cell: { row: 4, col: 0 }, note: 1 },
-            end: { cell: { row: 1, col: 4 }, note: 1 },
-            type: LINK_TYPES.STRONG,
-        },
-    ]
-
     const Example = !_isNil(boardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
             <Board
                 {...getTrimmedBoardData(boardData, focusedCellsInExample, { trimNotes: true })}
                 showCellContent
                 showHintsSVGView
-                svgProps={XWingCrossConfigs}
-                hideSVGDrawingsMarkersEnd
                 getCellBGColor={(cell: Cell) => {
                     const { cellsToFocusData } = transformedXWing
                     return _get(cellsToFocusData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
@@ -122,75 +87,6 @@ const FinnedXWing = () => {
         </View>
     ) : null
 
-    const explainXWingFormationInExample = () => (
-        <SmartHintText
-            text={
-                '<p>'
-                + 'In above puzzle, both columns 1st and 5th have 1 as candidate in their 2nd and 5th cells and these 4 cells where 1 is present make'
-                + ' an <b>X</b> letter shape.'
-                + '</p>'
-            }
-        />
-    )
-
-    const explainInvalidXWing = () => {
-        const focusedCellsInExample = [
-            ...getHouseCells({ type: HOUSE_TYPE.ROW, num: 1 }),
-            ...getHouseCells({ type: HOUSE_TYPE.ROW, num: 3 }),
-            ...getHouseCells({ type: HOUSE_TYPE.COL, num: 3 }),
-            ...getHouseCells({ type: HOUSE_TYPE.COL, num: 6 }),
-            ...getHouseCells({ type: HOUSE_TYPE.COL, num: 8 }),
-        ]
-        const transformedXWing = transformXWingRawHint({
-            rawHint: faultyXWingWithMoreThanTwoCrossHouses,
-            notesData: boardData.notes,
-            mainNumbers: boardData.mainNumbers,
-            smartHintsColorSystem: _get(theme, 'colors.smartHints'),
-        })
-        const xWingCells = getXWingCells(faultyXWingWithMoreThanTwoCrossHouses.legs)
-        const boardExample = !_isNil(boardData.mainNumbers) ? (
-            <View style={styles.exampleBoardContainer}>
-                <Board
-                    {...getTrimmedBoardData(boardData, focusedCellsInExample, { trimNotes: true })}
-                    showCellContent
-                    showHintsSVGView
-                    getCellBGColor={(cell: Cell) => {
-                        const { cellsToFocusData } = transformedXWing
-                        return _get(cellsToFocusData, [cell.row, cell.col, 'bgColor'], styles.smartHintOutOfFocusBGColor)
-                    }}
-                    getNoteStyles={({ noteValue, show }: Note, cell: Cell) => {
-                        if (!show || !isCellExists(cell, xWingCells)) return null
-                        const { cellsToFocusData } = transformedXWing
-                        const noteColor = _get(cellsToFocusData, [cell.row, cell.col, 'notesToHighlightData', noteValue, 'fontColor'], null)
-                        if (!noteColor) return null
-                        return {
-                            color: noteColor,
-                            fontWeight: FONT_WEIGHTS.HEAVY,
-                        }
-                    }}
-                />
-            </View>
-        ) : null
-
-        return (
-            <View style={{ marginTop: 12 }}>
-                <SmartHintText text="<p><b>Invalid X-Wing example</b></p>" />
-                {boardExample}
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'Notice in above puzzle, in both rows B and D candidate 2 is present only two times'
-                        + ' but cells positions are not same in these rows.'
-                        + '<br />'
-                        + ' In row B, it\'s in 7th and 9th cell and in row D'
-                        + ' it\'s in 4th and 9th cell. Hence it\'s not a valid X-Wing.'
-                        + '</p>'
-                    }
-                />
-            </View>
-        )
-    }
-
     const renderFinnCellsLocationDetails = () => (
         <>
             <SmartHintText text="<p><b>Location of Finn Cells for a valid Finned X-Wing</b></p>" />
@@ -200,7 +96,6 @@ const FinnedXWing = () => {
                         '<p>'
                                 + '<ul>'
                                     + '<li>Only one row or column can have Finn Cells</li>'
-                                    // TODO: add X-Wing corner cells info in X-Wing hint
                                     + `<li>Finn Cells must be in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} as one of the 4 ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} corner cells</li>`
                                 + '</ul>'
                             + '</p>'
@@ -439,6 +334,10 @@ const FinnedXWing = () => {
                             + ' in all the cases of filling 2nd and 6th columns with 1.'
                             + '<br />'
                             + 'So at this point we can remove 1 from G5 only.'
+                            + '<br />'
+                            + '<br />'
+                            + 'Hence, in general in Finned X-Wing candidate will be removed from cells which share'
+                            + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with Finn Cells.`
                         + '</p>'
                     }
                 />
@@ -466,11 +365,6 @@ const FinnedXWing = () => {
             {renderFinnCellsLocationDetails()}
             {renderInvalidFinnCellsPatterns()}
             {renderTechniqueEffectOnPuzzle()}
-            {/* {Example}
-            {explainXWingFormationInExample()}
-            {explainInvalidXWing()}
-            {renderXWingEffectOnPuzzle()}
-            {renderXWingInRowHouse()} */}
         </View>
     )
 }
