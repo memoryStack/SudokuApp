@@ -94,11 +94,12 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                                + '<ul>'
-                                    + '<li>Only one row or column can have Finn Cells</li>'
-                                    + `<li>Finn Cells must be in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} as one of the 4 ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} corner cells</li>`
-                                + '</ul>'
-                            + '</p>'
+                            + '<ul>'
+                                + '<li>Only one row or column can have Finn Cells</li>'
+                                + `<li>Finn Cells must be in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
+                                + ` as one of the 4 X-Wing ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_CORNER_CELLS, 'corner')} cells</li>`
+                            + '</ul>'
+                        + '</p>'
                     }
                 />
             </View>

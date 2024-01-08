@@ -184,7 +184,7 @@ const FinnedXWing = () => {
                     + `Before learning this technique, you should be comfortable in understanding ${getLinkHTMLText(HINTS_VOCAB_IDS.FINNED_X_WING, 'Finned X-Wing')} technique.`
                     + '<br />'
                     + `Now the difference between Finned X-Wing and Sashimi Finned X-Wing is that in one of the ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'rows')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'columns')}`
-                    + ` the ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} on which we are focusing on, will not be present in one of the X-Wing corner cells.`
+                    + ` the ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} on which we are focusing on, will not be present in one of the X-Wing ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_CORNER_CELLS, 'corner')} cells.`
                     + 'Notice Sashimi Finned X-Wing example in below puzzle. Here candidate 3 is not present in F4 cell of 4th column.'
                     + ' If 3 was present here then it would have been Finned X-Wing but it will be called as Sashimi Finned X-Wing and D4 is the Finn Cell here.'
                     + '</p>'

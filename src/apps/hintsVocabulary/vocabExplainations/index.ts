@@ -20,6 +20,8 @@ import XYChain from './xyChain'
 import PerfectXWing from './perfectXWing'
 import FinnedXWing from './finnedXWing'
 import SashimiFinnedXWing from './sashimiFinnedXWing'
+import XWingCornerCells from './xWingCornerCells'
+import XWingFinnCells from './xWingFinnCells'
 
 export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.CANDIDATE]: Candidate,
@@ -42,4 +44,6 @@ export const VOCAB_COMPONENTS = {
     [HINTS_VOCAB_IDS.PERFECT_X_WING]: PerfectXWing,
     [HINTS_VOCAB_IDS.FINNED_X_WING]: FinnedXWing,
     [HINTS_VOCAB_IDS.SASHIMI_FINNED_X_WING]: SashimiFinnedXWing,
+    [HINTS_VOCAB_IDS.X_WING_CORNER_CELLS]: XWingCornerCells,
+    [HINTS_VOCAB_IDS.X_WING_FINN_CELLS]: XWingFinnCells,
 }
