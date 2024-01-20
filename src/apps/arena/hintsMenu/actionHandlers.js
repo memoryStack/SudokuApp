@@ -5,17 +5,51 @@ import _isEmpty from '@lodash/isEmpty'
 import { GAME_STATE } from '@resources/constants'
 
 import _cloneDeep from '@lodash/cloneDeep'
+import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
+import _includes from '@lodash/includes'
 import { consoleLog } from '../../../utils/util'
 
 import { getRawHints, getTransformedRawHints } from '../utils/smartHints'
 
 import { HINTS_IDS, HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
 import { generateSinglesMap } from '../utils/smartHints/util'
+import { BoardIterators } from '../utils/classes/boardIterators'
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+
+const getPuzzleString = mainNumbers => {
+    const result = []
+    BoardIterators.forBoardEachCell(cell => {
+        result.push(MainNumbersRecord.getCellMainValue(mainNumbers, cell))
+    })
+    return result.join('')
+}
+
+const getNativeRawHints = async (mainNumbers, notes) => {
+    const hints = await RNSudokuPuzzle.getRawHints(getPuzzleString(mainNumbers), notes)
+
+    const result = {}
+
+    const hintsIds = Object.keys(hints)
+    hintsIds.forEach(hintId => {
+        result[hintId] = [
+            hints[hintId],
+        ]
+    })
+
+    return result
+}
 
 const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
     let availableHintsCount = 0
     const availableRawHints = {}
     let nakedSinglesMap = {}
+
+    // const hints = await RNSudokuPuzzle.getRawHints('sdfs', notes)
+    // consoleLog('@@@@@@ hints', hints)
+
+    const nativeHints = await getNativeRawHints(mainNumbers, notes)
+    consoleLog('@@@@@@ native hints', JSON.stringify(nativeHints))
+
     await rawHintsPromise(HINTS_IDS.NAKED_SINGLE, mainNumbers, notes)
         .then(({ id, data: allNakedSingles }) => {
             availableRawHints[id] = !_isEmpty(allNakedSingles) ? [allNakedSingles[0]] : allNakedSingles
@@ -26,11 +60,25 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
         }).then(({ id: hiddenSingleHintId, data: allHiddenSingles }) => {
             availableRawHints[hiddenSingleHintId] = !_isEmpty(allHiddenSingles) ? [allHiddenSingles[0]] : allHiddenSingles
             if (!_isEmpty(allHiddenSingles)) availableHintsCount++
-            const hintsExceptSingles = HINTS_MENU_ITEMS.filter(({ id: hintId }) => hintId !== HINTS_IDS.NAKED_SINGLE && hintId !== HINTS_IDS.HIDDEN_SINGLE)
+
+            const hintsToExclude = [
+                HINTS_IDS.NAKED_SINGLE,
+                HINTS_IDS.HIDDEN_SINGLE,
+                HINTS_IDS.NAKED_DOUBLE,
+                HINTS_IDS.NAKED_TRIPPLE,
+                HINTS_IDS.HIDDEN_DOUBLE,
+                HINTS_IDS.HIDDEN_TRIPPLE,
+                HINTS_IDS.Y_WING,
+            ]
+
+            const hintsExceptSingles = HINTS_MENU_ITEMS.filter(({ id: hintId }) => !_includes(hintsToExclude, hintId))
             const puzzleSingles = {
                 nakedSingles: nakedSinglesMap,
                 hiddenSingles: generateSinglesMap(allHiddenSingles),
             }
+
+            console.log('@@@@ singles', JSON.stringify(puzzleSingles))
+
             const allHintsPromises = _map(hintsExceptSingles, ({ id: hintId }) => rawHintsPromise(hintId, mainNumbers, notes, puzzleSingles))
             return Promise.all(allHintsPromises)
                 .then(rawHints => {
@@ -41,8 +89,12 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
                 })
         })
 
+    console.log('@@@@ js hints ywing', JSON.stringify(availableRawHints.X_WING))
+
+
     const { unmounting } = getState()
-    !unmounting && setState({ availableRawHints, availableHintsCount, hintsAnalyzed: true })
+    !unmounting && setState({ availableRawHints: { ...availableRawHints, ...nativeHints }, availableHintsCount, hintsAnalyzed: true })
+    // !unmounting && setState({ availableRawHints, availableHintsCount, hintsAnalyzed: true })
 }
 
 // TODO: analyze the asynchronous behaviour of this handler

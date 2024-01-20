@@ -13,7 +13,7 @@
         "check-types": "tsc --noemit",
         "prettier": "prettier --write '**/*.{ts,tsx,js}'",
         "create-design-tokens": "node ./sd.config.js",
-        "pushStage": "./scripts/bundlePushSudoku s 1.7",
+        "pushStage": "./scripts/bundlePushSudoku s 1.8",
         "pushProd": "./scripts/bundlePushSudoku p 1.7",
         "debugApk": "./scripts/debugApk",
         "stageApk": "./scripts/stageApk",

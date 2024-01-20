@@ -13,6 +13,13 @@ test('all omissions', () => {
     const puzzle = '400005608370806490008402370940257006200000900086900000000009060039001020800720500'
     const { mainNumbers, notes, possibleNotes } = getPuzzleDataFromPuzzleString(puzzle)
 
+    const puzzleSingles = {
+        nakedSingles: { 7: 1, 13: 1 },
+        hiddenSingles: {
+            4: 7, 17: 2, 41: 8, 51: 2, 73: 6, 80: 9,
+        },
+    }
+
     const expectedOmissions = [
         {
             hostHouse: { type: HOUSE_TYPE.BLOCK, num: 2 },
@@ -21,15 +28,6 @@ test('all omissions', () => {
             hostCells: [
                 { row: 1, col: 8 },
                 { row: 2, col: 8 },
-            ],
-        },
-        {
-            hostHouse: { type: HOUSE_TYPE.BLOCK, num: 4 },
-            removableNotesHostHouse: { type: HOUSE_TYPE.ROW, num: 4 },
-            note: 8,
-            hostCells: [
-                { row: 4, col: 4 },
-                { row: 4, col: 5 },
             ],
         },
         {
@@ -98,7 +96,8 @@ test('all omissions', () => {
     ]
 
     const maxHintsThreshold = Number.POSITIVE_INFINITY
-    expect(getOmissionRawHints(mainNumbers, notes, possibleNotes, maxHintsThreshold)).toStrictEqual(expectedOmissions)
+
+    expect(getOmissionRawHints(mainNumbers, notes, possibleNotes, puzzleSingles, maxHintsThreshold)).toStrictEqual(expectedOmissions)
 })
 
 test('all Row 1 omissions', () => {

@@ -172,8 +172,8 @@ describe('house XWing perfect Legs', () => {
                 type: LEG_TYPES.FINNED,
             },
         ]
-
-        expect(getHouseXWingLegs(house, mainNumbers, notes)).toStrictEqual(expectedXWingLegs)
+        const puzzleSingles = { "nakedSingles": {}, "hiddenSingles": {} }
+        expect(getHouseXWingLegs(house, mainNumbers, notes, puzzleSingles)).toStrictEqual(expectedXWingLegs)
     })
 
     test('test 2', () => {
@@ -205,8 +205,8 @@ describe('house XWing perfect Legs', () => {
                 type: LEG_TYPES.PERFECT,
             },
         ]
-
-        expect(getHouseXWingLegs(house, mainNumbers, notes)).toStrictEqual(expectedXWingLegs)
+        const puzzleSingles = { "nakedSingles": {}, "hiddenSingles": {} }
+        expect(getHouseXWingLegs(house, mainNumbers, notes, puzzleSingles)).toStrictEqual(expectedXWingLegs)
     })
 
     test('test 4', () => {
@@ -229,8 +229,9 @@ describe('house XWing perfect Legs', () => {
                 type: LEG_TYPES.PERFECT,
             },
         ]
+        const puzzleSingles = { "nakedSingles": {}, "hiddenSingles": {} }
 
-        expect(getHouseXWingLegs(house, mainNumbers, notes)).toStrictEqual(expectedXWingLegs)
+        expect(getHouseXWingLegs(house, mainNumbers, notes, puzzleSingles)).toStrictEqual(expectedXWingLegs)
     })
 
     describe('Enhancements', () => {
