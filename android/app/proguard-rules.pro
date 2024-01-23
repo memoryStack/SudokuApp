@@ -35,3 +35,6 @@
 -keep class com.anujrao.sudokucpp.NakedGroup { *; }
 -keep class com.anujrao.sudokucpp.YWingCell { *; }
 -keep class com.anujrao.sudokucpp.NakedSingle { *; }
+-keep class com.anujrao.sudokucpp.RemotePairs { *; }
+-keep class com.anujrao.sudokucpp.XChain { *; }
+-keep class com.anujrao.sudokucpp.XYChain { *; }
