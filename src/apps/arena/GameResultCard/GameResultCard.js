@@ -67,10 +67,10 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
                         <Text style={styles.textColor}>Mistakes</Text>
                         <Text style={styles.textColor}>{mistakes}</Text>
                     </View>
-                    <View style={styles.statContainer}>
+                    {/* <View style={styles.statContainer}>
                         <Text style={styles.textColor}>Hints Used</Text>
                         <Text style={styles.textColor}>{hintsUsed}</Text>
-                    </View>
+                    </View> */}
                 </View>
             </>
         )

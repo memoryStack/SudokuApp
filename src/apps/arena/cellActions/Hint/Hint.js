@@ -24,7 +24,7 @@ const Hint = ({
     const styles = useStyles(getStyles)
 
     const renderHintsCount = () => {
-        if (disabled) return null
+        if (disabled || true) return null
         return <Badge label={hints} />
     }
 
