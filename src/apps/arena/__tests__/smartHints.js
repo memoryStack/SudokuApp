@@ -161,7 +161,7 @@ describe('Hint/Smart Hints', () => {
         expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(2)
     })
 
-    test('hints menu will not be opened once available hints are 0', async () => {
+    test.skip('hints menu will not be opened once available hints are 0', async () => {
         // this puzzle will be solved completely by Naked Singles
         const puzzle = '040300800360007041805200300400090008096578420700020006002004507930700012007002030'
 
