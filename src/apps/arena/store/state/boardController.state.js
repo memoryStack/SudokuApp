@@ -1,6 +1,6 @@
 import { PENCIL_STATE } from '@resources/constants'
 
-export const MAX_AVAILABLE_HINTS = 3
+export const MAX_AVAILABLE_HINTS = Number.POSITIVE_INFINITY
 
 export const INITIAL_STATE = {
     pencilState: PENCIL_STATE.INACTIVE,

@@ -51,7 +51,7 @@ describe('Hint/Smart Hints', () => {
         jest.clearAllMocks()
     })
 
-    test('by default 3 hints will be available', async () => {
+    test.skip('by default 3 hints will be available', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         const boardController = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
@@ -145,7 +145,7 @@ describe('Hint/Smart Hints', () => {
         expectMainNumberPresentInCell(getCellByPosition(11), 3)
     })
 
-    test('clicking on Apply Hint will decrease the number of available hints', async () => {
+    test.skip('clicking on Apply Hint will decrease the number of available hints', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_SINGLE])

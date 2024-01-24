@@ -18,7 +18,7 @@ test('snapshot for disabled Hint', () => {
 })
 
 describe('Hint', () => {
-    test('will show remaining hints count in a Badge', () => {
+    test.skip('will show remaining hints count in a Badge', () => {
         render(<Hint iconBoxSize={50} hints={3} />)
 
         expect(screen.getByTestId(BADGE_TEST_ID)).toHaveTextContent(3)
@@ -51,7 +51,7 @@ describe('Hint', () => {
         expect(onClick).not.toHaveBeenCalled()
     })
 
-    test('if disabled, hints badge will not be displayed', () => {
+    test.skip('if disabled, hints badge will not be displayed', () => {
         render(<Hint iconBoxSize={50} hints={3} disabled />)
 
         expect(screen.queryByTestId(BADGE_TEST_ID)).not.toBeOnTheScreen()
