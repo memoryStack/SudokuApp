@@ -20,7 +20,9 @@ import { SMART_HINT_HC_TEST_ID } from '../../smartHintHC/constants'
 import { HINTS_IDS, HINT_LABELS } from '../../utils/smartHints/constants'
 
 jest.mock('../../../../adapters/puzzle/puzzle', () => {
+    const originalModule = jest.requireActual('../../../../adapters/puzzle/puzzle')
     const Puzzle = {
+        ...originalModule.Puzzle,
         getSudokuPuzzle: jest.fn(),
         validatePuzzle: jest.fn(),
     }

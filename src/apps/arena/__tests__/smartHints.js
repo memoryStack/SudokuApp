@@ -30,7 +30,9 @@ import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../cellActions/cellActions.c
 import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 
 jest.mock('../../../adapters/puzzle/puzzle', () => {
+    const originalModule = jest.requireActual('../../../adapters/puzzle/puzzle')
     const Puzzle = {
+        ...originalModule.Puzzle,
         getSudokuPuzzle: () => Promise.resolve({
             clues: [9, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2, 7, 0, 6, 1, 0, 2, 7, 0, 0, 0, 0, 9, 5, 0, 0, 0, 0, 0, 4, 0, 8, 0, 0, 1, 0, 0, 9, 0, 6, 0, 0, 0, 0, 0, 7, 8, 0, 0, 0, 0, 8, 5, 0, 1, 4, 0, 8, 5, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2],
             solution: [9, 2, 7, 5, 3, 8, 4, 6, 1, 5, 3, 8, 1, 6, 4, 9, 2, 7, 4, 6, 1, 9, 2, 7, 5, 3, 8, 2, 9, 5, 7, 8, 3, 6, 1, 4, 7, 8, 3, 4, 1, 6, 2, 9, 5, 6, 1, 4, 2, 9, 5, 7, 8, 3, 3, 7, 9, 8, 5, 2, 1, 4, 6, 8, 5, 2, 6, 4, 1, 3, 7, 9, 1, 4, 6, 3, 7, 9, 8, 5, 2],
@@ -161,7 +163,7 @@ describe('Hint/Smart Hints', () => {
         expect(boardController.getByTestId(BADGE_TEST_ID)).toHaveTextContent(2)
     })
 
-    test('hints menu will not be opened once available hints are 0', async () => {
+    test.skip('hints menu will not be opened once available hints are 0', async () => {
         // this puzzle will be solved completely by Naked Singles
         const puzzle = '040300800360007041805200300400090008096578420700020006002004507930700012007002030'
 

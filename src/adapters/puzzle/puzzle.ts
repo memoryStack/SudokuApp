@@ -10,10 +10,20 @@ type GeneratedPuzzle = {
     solution: number[]
 }
 
+type RawHints = {
+    [hintId: string]: object
+}
+
 const getSudokuPuzzle = (minClues: number): Promise<GeneratedPuzzle> => RNSudokuPuzzle.getSudokuPuzzle(minClues)
+
 const validatePuzzle = (puzzle: string): Promise<PuzzleValidationResult> => RNSudokuPuzzle.validatePuzzle(puzzle)
+
+const getRawHints = (puzzle: string, notes: Notes): Promise<RawHints> => {
+    return RNSudokuPuzzle.getRawHints(puzzle, notes)
+}
 
 export const Puzzle = {
     getSudokuPuzzle,
     validatePuzzle,
+    getRawHints,
 }

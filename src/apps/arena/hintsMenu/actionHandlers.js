@@ -5,24 +5,24 @@ import _isEmpty from '@lodash/isEmpty'
 import { GAME_STATE } from '@resources/constants'
 
 import _cloneDeep from '@lodash/cloneDeep'
-import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import _includes from '@lodash/includes'
 
 import { getTransformedRawHints } from '../utils/smartHints'
 
-import { BoardIterators } from '../utils/classes/boardIterators'
-import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { Puzzle } from '@adapters/puzzle'
 
-const getPuzzleString = mainNumbers => {
-    const result = []
-    BoardIterators.forBoardEachCell(cell => {
-        result.push(MainNumbersRecord.getCellMainValue(mainNumbers, cell))
-    })
-    return result.join('')
-}
+import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { BoardIterators } from '../utils/classes/boardIterators'
 
 const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
-    const rawHints = await RNSudokuPuzzle.getRawHints(getPuzzleString(mainNumbers), notes)
+    const puzzleMainNumbers = []
+    BoardIterators.forBoardEachCell(cell => {
+        puzzleMainNumbers.push(MainNumbersRecord.getCellMainValue(mainNumbers, cell))
+    })
+    const puzzle = puzzleMainNumbers.join('')
+
+    const rawHints = await Puzzle.getRawHints(puzzle, notes)
+
     const availableRawHints = {}
     const hintsIds = Object.keys(rawHints)
     hintsIds.forEach(hintId => {

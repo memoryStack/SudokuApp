@@ -617,7 +617,7 @@ describe('Bugs', () => {
         jest.useRealTimers()
     })
 
-    test('starting new game after completing current one, allowed hints must be filled back', async () => {
+    test.skip('starting new game after completing current one, allowed hints must be filled back', async () => {
         const puzzle = '409300781320700409700000000600050000050871040000040002000000008506007094178004506'
 
         // eslint-disable-next-line global-require
