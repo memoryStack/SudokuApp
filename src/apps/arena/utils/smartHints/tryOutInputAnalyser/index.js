@@ -6,6 +6,7 @@ import { nakedDoubleTryOutAnalyser, nakedTrippleTryOutAnalyser } from './nakedGr
 import { yWingTryOutAnalyser } from './yWing'
 import { remotePairsTryOutAnalyser } from './remotePairs'
 import { xChainTryOutAnalyser } from './xChain'
+import { emptyRectangleTryOutAnalyser } from './emptyRectangle'
 
 const tryOutAnalysers = {
     [HINTS_IDS.NAKED_DOUBLE]: nakedDoubleTryOutAnalyser,
@@ -18,6 +19,7 @@ const tryOutAnalysers = {
     [HINTS_IDS.Y_WING]: yWingTryOutAnalyser,
     [HINTS_IDS.REMOTE_PAIRS]: remotePairsTryOutAnalyser,
     [HINTS_IDS.X_CHAIN]: xChainTryOutAnalyser,
+    [HINTS_IDS.EMPTY_RECTANGLE]: emptyRectangleTryOutAnalyser
 }
 
 export const analyseTryOutInput = ({ hintType, data, boardInputs }) => {

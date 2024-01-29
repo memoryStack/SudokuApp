@@ -11,31 +11,18 @@ import _difference from '@lodash/difference'
 
 import _isNil from '@lodash/isNil'
 import _intersection from '@lodash/intersection'
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
 import {
-    HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES,
+    HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import {
-    areSameBlockCells,
-    areSameColCells,
-    areSameRowCells,
-    getCellAxesValues,
-    getNoteHostCellsInHouse,
-    isCellExists,
-    sortCells,
-} from '../../../util'
+import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 
-import { getHouseCells } from '../../../houseCells'
-import { getCellsAxesValuesListText, getHouseNumAndName, getHouseNumText } from '../helpers'
+import { getHouseNumAndName, getHouseNumText } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
     getTryOutInputPanelNumbersVisibility,
-    removeDuplicteCells,
-    getCandidatesListText,
     transformCellBGColor,
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
@@ -48,19 +35,13 @@ import {
 import { EmptyRectangleRawHint } from '../../emptyRectangle/types'
 import { HOUSE_TYPE_VS_VOCAB_ID } from '../constants'
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
+import { getBlockHostHouse } from '../../emptyRectangle/helpers'
 
 // TODO: colors are copied from XY-Chain hint
 // put them in theme object
 const CELLS_NOTES_COLORS = {
     CONJUGATE_HOUSE: 'green',
     BLOCK_HOST_HOUSE: '#4B61D1'
-}
-
-const getBlockHostHouse = (emptyRectangle: EmptyRectangleRawHint) => {
-    return {
-        type: HOUSE_TYPE.BLOCK,
-        num: emptyRectangle.hostHouse.block
-    }
 }
 
 // TODO: make it an independent util
@@ -144,7 +125,7 @@ const getHintExplanationText = (emptyRectangle: EmptyRectangleRawHint) => {
     }
 
     const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
-    return getHintExplanationStepsFromHintChunks(hintChunks, false)
+    return getHintExplanationStepsFromHintChunks(hintChunks)
 }
 
 export const transformEmptyRectangleRawHint = ({
@@ -162,31 +143,18 @@ export const transformEmptyRectangleRawHint = ({
 
     return {
         type: HINTS_IDS.EMPTY_RECTANGLE,
-        hasTryOut: false,
+        hasTryOut: true,
         title: HINT_ID_VS_TITLES[HINTS_IDS.EMPTY_RECTANGLE],
         steps: getHintExplanationText(emptyRectangle),
         cellsToFocusData: getCellsToFocusData(emptyRectangle, notesData, smartHintsColorSystem),
         focusedCells,
         applyHint: getApplyHintData(emptyRectangle),
         tryOutAnalyserData: {
-            // groupCandidates,
-            // focusedCells,
-            // groupCells: hostCells,
-            // removableCandidates: getRemovableCandidates(hostCells, groupCandidates, notesData),
-            // removableGroupCandidatesHostCells,
-            // primaryHouse: group.house,
+            emptyRectangle,
         },
-        // removableNotes: getRemovableNotesHostCellsMap(groupCandidates, hostCells, removableGroupCandidatesHostCells, notesData),
-        // inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates) as InputPanelVisibleNumbers,
-        // clickableCells: _cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
-        // unclickableCellClickInTryOutMsg: 'you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.',
-        // cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(
-        //     removableGroupCandidatesHostCells,
-        //     groupCandidates,
-        //     notesData,
-        // ),
-        restrictedNumberInputMsg:
-            'input the numbers which are highlighted in red color in this cell. other numbers don\'t help in learning this hint.',
+        removableNotes: { [emptyRectangle.note]: [emptyRectangle.removableNotesHostCell] },
+        inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([emptyRectangle.note]) as InputPanelVisibleNumbers,
+        clickableCells: _cloneDeep(focusedCells),
+        unclickableCellClickInTryOutMsg: 'you can only select the cells which are highlighted here.',
     }
-
 }

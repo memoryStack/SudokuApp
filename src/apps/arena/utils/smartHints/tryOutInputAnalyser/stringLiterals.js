@@ -11,7 +11,7 @@ export const HIDDEN_GROUP = {
         + '\nto fix this error, remove {{filledCandidatesListText}} from {{filledCellsAxesListText}}',
     INVALID_CANDIDATE_IN_GROUP_CELL: {
         NO_HOST_CELL_FOR_GROUP_CANDIDATES: 'in {{primaryHouseFullName}} {{candidatesListText}} can\'t come in any cell'
-        + '\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}',
+            + '\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}',
         INSUFFICIENT_HOST_CELLS:
             '{{candidatesListText}} need to be filled but only {{emptyCellsAxesListText}} {{emptyGroupCellsHelpingVerb}}'
             + ' available for these in {{primaryHouseFullName}}. so {{candidatesCountWithoutCells}} out of {{candidatesListText}}'
@@ -77,7 +77,7 @@ export const XWING = {
         + '\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}',
     [XWING_TYPES.PERFECT]: {
         BOTH_LEGS_WITHOUT_CANDIDATE: 'there is no cell in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}}'
-        + ' where {{candidate}} can come\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}',
+            + ' where {{candidate}} can come\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}',
     },
     ONE_LEG_VALID_FILL:
         '{{candidate}} might come in {{filledXWingCornerCell}} cell of {{houseAxesText}} {{houseFullName}} in final solution of puzzle'
@@ -99,12 +99,12 @@ export const YWING = {
         ONE_OF_WINGS_WITHOUT_INPUT: 'fill {{emptyWingCell}} to understand the error in previous steps',
     },
     PIVOT_CELL_WITHOUT_CANDIDATE: '{{pivotCell}} is left with no candidates. to fix this you will have to fill {{commonNoteInWings}}'
-    + ' in one of these wings cells',
+        + ' in one of these wings cells',
     ELIMINABLE_NOTES_CELL_WITHOUT_CANDIDATE: '{{eliminableNotesCellsWithoutCandidates}} have no candidates left. to fix this error'
-    + ' try changing numbers in {{filledPivotAndWingsCells}} ',
+        + ' try changing numbers in {{filledPivotAndWingsCells}} ',
     VALID_FILL: {
         PARTIAL: '{{filledCandidates}} {{filledCandidatesCountHV}} filled without any error. experiment'
-        + ' with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can\'t be filled',
+            + ' with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can\'t be filled',
         FULL: '{{candidatesListText}} are filled in pivot and wings cells without any error.'
             + ' this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what'
             + ' will be the exact solution for these cells but we are sure that {{commonNoteInWings}} can\'t'
@@ -138,6 +138,24 @@ export const REMOTE_PAIRS = {
         PARTIAL: 'till now you have filled Chain cells correctly. fill other cells as well to fully understand this technique',
         FULL: 'yayy! you have successfully filled all the cells in the Chain. this is one of the solutions to fill these cells.'
             + ' also notice that all the candidates highlighted in red color from {{removableNotesHostCells}} are removed.'
-        + ' try to fill these Chain cells in another way and you will find that the result will be same.',
+            + ' try to fill these Chain cells in another way and you will find that the result will be same.',
     },
+}
+
+export const EMPTY_RECTANGLE = {
+    NO_INPUT: 'Fill {{candidate}} in any of these highlighted cells to understand why {{candidate}} can not come in {{removableNoteHostCell}}',
+    REMOVABLE_NOTE_CELL_FILLED: {
+        BLOCK_OR_CONJUGATE_HOUSE_FILLED: 'Notice that there is no cell left for {{candidate}} in {{candidateInhabitableHostHouse}}. To fix this error, remove {{candidate}} from {{removableNoteHostCell}} and start again',
+        BLOCK_OR_CONJUGATE_HOUSE_NOT_FILLED: 'Now fill {{candidate}} either in {{conjugateHouse}} or {{blockHostHouse}} to know the fault in previous step',
+    },
+    CONJUGATE_HOUSE_AND_BLOCK_HOST_HOUSE_FILLED: '{{candidate}} might be filled in this combination in {{conjugateHouse}} and {{blockHostHouse}} in the final solution of the puzzle. Try to fill {{candidate}} in other'
+        + ' combinations, in all of them {{candidate}} will be removed from {{removableNoteHostCell}}',
+    CONJUGATE_HOUSE_FILLED: {
+        REMOVABLE_NOTE_PRESENT: 'Now fill {{candidate}} anywhere in {{blockHostHouse}} or fill it in {{removableNoteHostCell}}',
+        REMOVABLE_NOTE_REMOVED: 'If {{candidate}} is filled in {{filledHostCell}} then {{candidate}} can not come in {{removableNoteHostCell}}'
+    },
+    BLOCK_HOST_HOUSE_FILLED: {
+        REMOVABLE_NOTE_PRESENT: 'Now fill {{candidate}} anywhere in {{conjugateHouse}} or fill it in {{removableNoteHostCell}}',
+        REMOVABLE_NOTE_REMOVED: 'If {{candidate}} is filled in {{filledHostCell}} then {{candidate}} can not come in {{removableNoteHostCell}}'
+    }
 }

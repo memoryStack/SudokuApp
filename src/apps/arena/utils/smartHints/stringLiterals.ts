@@ -233,7 +233,8 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
     [HINTS_IDS.EMPTY_RECTANGLE]: [
         `<p>Notice ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} {{candidate}} in {{conjugateHouseWithHouseTypeLink}} and {{hostBlockHouseWithHouseTypeLink}}.`
         + ' No matter where {{candidate}} is filled in {{conjugateHouse}} and {{hostBlockHouse}}, {{candidate}} will always be removed'
-        + ` from {{removableNoteHostCell}} ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')}`
+        + ` from {{removableNoteHostCell}} ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')}.`
+        + '\nClick on Next button to exercise this hint.'
         + '</p>'
     ],
 }
