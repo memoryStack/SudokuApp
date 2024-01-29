@@ -17,6 +17,7 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
     [HINTS_IDS.X_CHAIN]: 'X-Chain',
     [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
+    [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
     [HINTS_IDS.ALL]: 'hints',
 }
 
@@ -45,6 +46,7 @@ type HintExplainationTexts = {
     [HINTS_IDS.REMOTE_PAIRS]: string[]
     [HINTS_IDS.X_CHAIN]: string[]
     [HINTS_IDS.XY_CHAIN]: string[]
+    [HINTS_IDS.EMPTY_RECTANGLE]: string[]
 }
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
@@ -227,5 +229,11 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + `So all the {{removableNote}}s from {{removableNotesHostCells}} will be removed because these cells share ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}`
         + ' with first and last cell of this chain.'
         + '</p>',
+    ],
+    [HINTS_IDS.EMPTY_RECTANGLE]: [
+        `<p>Notice ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} {{candidate}} in {{conjugateHouseWithHouseTypeLink}} and {{hostBlockHouseWithHouseTypeLink}}.`
+        + ' No matter where {{candidate}} is filled in {{conjugateHouse}} and {{hostBlockHouse}}, {{candidate}} will always be removed'
+        + ` from {{removableNoteHostCell}} ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')}`
+        + '</p>'
     ],
 }

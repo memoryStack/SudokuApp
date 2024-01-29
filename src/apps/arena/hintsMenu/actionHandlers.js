@@ -23,6 +23,8 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
 
     const rawHints = await Puzzle.getRawHints(puzzle, notes)
 
+    console.log('@@@@@@ raw hints', JSON.stringify(rawHints))
+
     const availableRawHints = {}
     const hintsIds = Object.keys(rawHints)
     hintsIds.forEach(hintId => {

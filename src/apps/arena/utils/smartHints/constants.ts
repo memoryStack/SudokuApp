@@ -96,13 +96,13 @@ const HINTS_MENU_ITEMS = [
         id: HINTS_IDS.Y_WING,
     },
     {
+        label: HINT_LABELS[HINTS_IDS.EMPTY_RECTANGLE],
+        id: HINTS_IDS.EMPTY_RECTANGLE,
+    },
+    {
         label: HINT_LABELS[HINTS_IDS.REMOTE_PAIRS],
         id: HINTS_IDS.REMOTE_PAIRS,
     },
-    // {
-    //     label: HINT_LABELS[HINTS_IDS.EMPTY_RECTANGLE],
-    //     id: HINTS_IDS.EMPTY_RECTANGLE,
-    // },
     {
         label: HINT_LABELS[HINTS_IDS.X_CHAIN],
         id: HINTS_IDS.X_CHAIN,

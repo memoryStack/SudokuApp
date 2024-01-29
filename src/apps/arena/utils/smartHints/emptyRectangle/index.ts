@@ -1,1 +1,0 @@
-export { getEmptyRectangleRawHints } from './emptyRectangle'
