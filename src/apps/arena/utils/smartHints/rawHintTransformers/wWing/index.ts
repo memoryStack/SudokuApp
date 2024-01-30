@@ -1,0 +1,1 @@
+export { transformWWingRawHint } from './wWing'

@@ -5,8 +5,16 @@ import { isCellExists } from '../util'
 import { HiddenSingleRawHint } from './hiddenSingle/types'
 import { NakedSingleRawHint } from './nakedSingle/types'
 import {
-    CellHighlightData, CellsFocusData, HintSteps, NotesToHighlightData, PuzzleSingles, Singles,
+    CellHighlightData,
+    CellsFocusData,
+    HintSteps,
+    NotesToHighlightData,
+    PuzzleSingles,
+    Singles,
+    SmartHintsColorSystem
 } from './types'
+import smartHintColorSystemReader from './colorSystem.reader'
+import _isNil from '@lodash/isNil'
 
 const setCellDataInHintResult = (
     cell: Cell,
@@ -87,7 +95,26 @@ const generateSinglesMap = (nakedSingles: NakedSingleRawHint | HiddenSingleRawHi
 const isSinglesPresentInCellForNote = (note: NoteValue, cell: Cell, singles: PuzzleSingles) => {
     const cellNumber = convertBoardCellToNum(cell)
     return _get(singles, ['nakedSingles', cellNumber]) === note
-            || _get(singles, ['hiddenSingles', cellNumber]) === note
+        || _get(singles, ['hiddenSingles', cellNumber]) === note
+}
+
+const highlightNoteInCellsWithGivenColor = (
+    note: NoteValue,
+    cells: Cell[],
+    fontColor: string,
+    smartHintsColorSystem: SmartHintsColorSystem,
+    cellsToFocusData: CellsFocusData
+) => {
+    cells.forEach((cell) => {
+        const cellHighlightData: CellHighlightData = !_isNil(_get(cellsToFocusData, [cell.row, cell.col]))
+            ? _get(cellsToFocusData, [cell.row, cell.col]) : { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
+
+        cellHighlightData.notesToHighlightData = {
+            ...cellHighlightData.notesToHighlightData,
+            [note]: { fontColor }
+        }
+        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+    })
 }
 
 export {
@@ -103,4 +130,5 @@ export {
     transformCellBGColor,
     generateSinglesMap,
     isSinglesPresentInCellForNote,
+    highlightNoteInCellsWithGivenColor,
 }

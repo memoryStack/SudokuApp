@@ -13,7 +13,7 @@ import _isNil from '@lodash/isNil'
 import _intersection from '@lodash/intersection'
 
 import {
-    HINTS_IDS, HOUSE_TYPE, HOUSE_TYPE_VS_FULL_NAMES,
+    HINTS_IDS, HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
@@ -21,15 +21,14 @@ import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 import { getHouseNumAndName, getHouseNumText } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
-    setCellDataInHintResult,
     getTryOutInputPanelNumbersVisibility,
-    transformCellBGColor,
+    highlightNoteInCellsWithGivenColor
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { EmptyRectangleTransformerArgs } from './types'
 import {
-    CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+    CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
 
 import { EmptyRectangleRawHint } from '../../emptyRectangle/types'
@@ -42,23 +41,6 @@ import { getBlockHostHouse } from '../../emptyRectangle/helpers'
 const CELLS_NOTES_COLORS = {
     CONJUGATE_HOUSE: 'green',
     BLOCK_HOST_HOUSE: '#4B61D1'
-}
-
-// TODO: make it an independent util
-const highlightNoteInCellsWithGivenColor = (
-    note: NoteValue,
-    cells: Cell[],
-    fontColor: string,
-    smartHintsColorSystem: SmartHintsColorSystem,
-    cellsToFocusData: CellsFocusData
-) => {
-    cells.forEach((cell) => {
-        const cellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem)) }
-        cellHighlightData.notesToHighlightData = {
-            [note]: { fontColor }
-        }
-        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
-    })
 }
 
 const getCellsToFocusData = (

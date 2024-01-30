@@ -18,6 +18,7 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.X_CHAIN]: 'X-Chain',
     [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
     [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
+    [HINTS_IDS.W_WING]: 'W-Wing',
     [HINTS_IDS.ALL]: 'hints',
 }
 
@@ -47,6 +48,7 @@ type HintExplainationTexts = {
     [HINTS_IDS.X_CHAIN]: string[]
     [HINTS_IDS.XY_CHAIN]: string[]
     [HINTS_IDS.EMPTY_RECTANGLE]: string[]
+    [HINTS_IDS.W_WING]: string[]
 }
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
@@ -235,6 +237,15 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ' No matter where {{candidate}} is filled in {{conjugateHouse}} and {{hostBlockHouse}}, {{candidate}} will always be removed'
         + ` from {{removableNoteHostCell}} ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')}.`
         + '\nClick on Next button to exercise this hint.'
+        + '</p>'
+    ],
+    [HINTS_IDS.W_WING]: [
+        '<p>'
+        + 'Notice that in {{conjguateHouse}} no matter where you fill {{conjugateHouseNote}}, one of {{nakedPairHostCells}} have to be filled by'
+        + ' {{removableNote}}.'
+        + '\nIf {{conjugateHouseNote}} is filled in {{firstConjugateHouseCell}} then {{firstNakedPairHostCell}} have to be {{removableNote}} and if'
+        + ' {{conjugateHouseNote}} is filled in {{secondConjugateHouseCell}} then {{secondNakedPairHostCell}} have to be {{removableNote}}.'
+        + '\nSo all the {{removableNote}} in red color can be removed.'
         + '</p>'
     ],
 }
