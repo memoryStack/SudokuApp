@@ -7,8 +7,9 @@ import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 
 import { BoardInputs } from './types'
+import { isNakedSinglePresent } from '../nakedSingle/nakedSingle'
 
-export const filterFilledCellsInTryOut = (cells: Cell[], boardInputs: BoardInputs) => {
+export const filterFilledCellsInTryOut = (cells: Cell[], boardInputs: BoardInputs): Cell[] => {
     const { tryOutMainNumbers, actualMainNumbers } = boardInputs
     return _filter(cells, (cell: Cell) => !MainNumbersRecord.isCellFilled(actualMainNumbers, cell)
         && MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
@@ -23,7 +24,7 @@ export const noInputInTryOut = (focusedCells: Cell[], boardInputs: BoardInputs) 
 
 // NOTE: run it only when we are sure that there is no cell
 // which is filled wrongly in the try-out step
-export const getCorrectFilledTryOutCandidates = (groupCells : Cell[], tryOutMainNumbers: MainNumbers) => {
+export const getCorrectFilledTryOutCandidates = (groupCells: Cell[], tryOutMainNumbers: MainNumbers) => {
     const result: number[] = []
     groupCells.forEach(cell => {
         if (MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)) {
@@ -39,9 +40,15 @@ export const getCandidatesToBeFilled = (correctlyFilledGroupCandidates: number[]
 export const isCellWithoutAnyCandidate = (cell: Cell, boardInputs: BoardInputs) => {
     const { tryOutMainNumbers, tryOutNotes } = boardInputs
     return !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell)
-    && NotesRecord.getCellVisibleNotesCount(tryOutNotes, cell) === 0
+        && NotesRecord.getCellVisibleNotesCount(tryOutNotes, cell) === 0
 }
 
 export const getCellsWithNoCandidates = (cells: Cell[], boardInputs: BoardInputs) => cells.filter(cell => isCellWithoutAnyCandidate(cell, boardInputs))
 
 export const anyCellHasTryOutInput = (cells: Cell[], { tryOutMainNumbers, actualMainNumbers }: BoardInputs) => _some(cells, (cell: Cell) => cellHasTryOutInput(cell, { tryOutMainNumbers, actualMainNumbers }))
+
+export const filterNakedSingleCells = (cells: Cell[], boardInputs: BoardInputs) => {
+    return cells.filter((cell) => {
+        return NotesRecord.getCellVisibleNotesCount(boardInputs.tryOutNotes, cell) === 1
+    })
+}

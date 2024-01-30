@@ -1,4 +1,6 @@
+import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { XWING_TYPES } from '../xWing/constants'
+import { HINTS_VOCAB_IDS } from '../rawHintTransformers'
 
 export const UNATTAINABLE_TRY_OUT_STATE = 'not sure how we reached here'
 
@@ -158,4 +160,29 @@ export const EMPTY_RECTANGLE = {
         REMOVABLE_NOTE_PRESENT: 'Now fill {{candidate}} anywhere in {{conjugateHouse}} or fill it in {{removableNoteHostCell}}',
         REMOVABLE_NOTE_REMOVED: 'If {{candidate}} is filled in {{filledHostCell}} then {{candidate}} can not come in {{removableNoteHostCell}}'
     }
+}
+
+export const W_WING = {
+    NO_INPUT: 'Fill {{nakedPairCandidates}} in any of these highlighted cells to understand why {{removableCandidate}} can not come in {{removableNoteHostCells}}',
+    REMOVABLE_NOTE_CELL_FILLED: {
+        NO_OTHER_CELL_FILLED: `<p>Notice the ${getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_SINGLE, 'Naked Single')} created in {{nakedSinglesCells}}. Now fill these cells to understand the fault in previous step</p>`,
+        CONJUGATE_HOUSE_FILLED: 'there are no candidates left for {{nakedPairCellWithNoCandidates}}. to fix it, remove {{removableNote}} from {{filledRemovableNoteHostCell}} and try some other combination to fill these cells',
+        ONE_NAKED_PAIR_CELL_FILLED: 'Fill {{emptyNakedPairCell}} as well because it has Naked Single in it',
+        BOTH_NAKED_PAIR_CELLS_FILLED: 'Notice that now there is no cell in {{conjugateHouse}} where {{conjugateHouseNote}} can be filled. to fix it remove {{removableNote}} from {{filledRemovableNoteHostCell}} and start again',
+    },
+    CONJUGATE_CELL_FILLED: {
+        NO_OTHER_CELL_FILLED: `<p>Notice the ${getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_SINGLE, 'Naked Single')} created in {{nakedSinglesCells}}. Now this cell has to be filled with {{removableNote}}</p>`,
+        ONE_NAKED_PAIR_CELL_FILLED: {
+            REMOVABLE_NOTE_FILLED_IN_NAKED_PAIR_CELL: 'now you can fill {{candidatesChoicesInEmptyCell}} in {{emptyCell}} if you want. in the final solution these cells might be filled in this combination'
+                + ' and notice that all the {{removableNote}} highlighted in red color have been removed also',
+            CONJUGATE_NOTE_FILLED_IN_NAKED_PAIR_CELL: 'now fill Naked Single in {{emptyCell}}'
+        },
+        BOTH_NAKED_PAIR_CELL_FILLED: 'in the final solution these cells might be filled in this combination'
+            + ' and notice that all the {{removableNote}} highlighted in red color have been removed also'
+    },
+    NAKED_PAIR_CELL_FILLED: {
+        FILLED_WITH_REMOVABLE_NOTE: 'If {{removableNote}} comes in {{filledNakedPairCells}} in the final solution then definitely {{removableNote}} can not come in the cells where it was highlighted in red color',
+        ONE_NAKED_PAIR_CELL_FILLED_WITH_CONJUGATE_NOTE: `<p>Notice the ${getLinkHTMLText(HINTS_VOCAB_IDS.HIDDEN_SINGLE, 'Hidden Single')} created in {{conjugateHouse}} in {{hiddenSingleCell}}. Now this cell has to be filled with {{conjugateNote}}</p>`,
+        NO_PLACE_FOR_CONJUGATE_NOTE_IN_CONJUGATE_HOUSE: 'Notice that now there is no cell in {{conjugateHouse}} where {{conjugateHouseNote}} can be filled. to fix it remove {{conjugateHouseNote}} from one of {{nakedPairCells}} and start again'
+    },
 }

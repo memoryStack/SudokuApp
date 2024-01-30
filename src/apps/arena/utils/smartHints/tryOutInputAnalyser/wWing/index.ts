@@ -1,0 +1,1 @@
+export { wWingTryOutAnalyser } from './wWing'

@@ -5,10 +5,8 @@ import _isEmpty from '@lodash/isEmpty'
 import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
-
 import _sortBy from '@lodash/sortBy'
 import _difference from '@lodash/difference'
-
 import _isNil from '@lodash/isNil'
 import _intersection from '@lodash/intersection'
 
