@@ -12,7 +12,7 @@ import _intersection from '@lodash/intersection'
 
 import { HINTS_IDS } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { areSameColCells, areSameRowCells, getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
+import { areCellsFromSameHouse, areSameCells, areSameColCells, areSameRowCells, getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 
 import { getCellsAxesValuesListText, getHouseNumAndName } from '../helpers'
 import {
@@ -34,21 +34,32 @@ const CELLS_NOTES_COLORS = {
     NAKED_PAIR_OTHER_NOTE: 'green'
 }
 
-const getConjugateHouseAndNakedPairCellsPairing = (wWing: WWingRawHint, notes: Notes) => {
+export const getConjugateHouseAndNakedPairCellsPairing = (wWing: WWingRawHint, notes: Notes) => {
     const result: { [conjugateHouseCell: string]: string } = {}
     const conjugateHouseCells = getNoteHostCellsInHouse(wWing.conjugateNote, wWing.conjugateHouse, notes)
 
     const cellsPairing = conjugateHouseCells.map((conjguateHouseCell) => {
-        const nakedPairCellSharingLinearHouse = wWing.nakedPairCells.find((nakedPairCell) => {
-            const cells = [conjguateHouseCell, nakedPairCell]
-            return areSameColCells(cells) || areSameRowCells(cells)
+        const nakedPairCellsSharingLinearHouse = wWing.nakedPairCells.filter((nakedPairCell) => {
+            return areCellsFromSameHouse([conjguateHouseCell, nakedPairCell])
         })
-        return [conjguateHouseCell, nakedPairCellSharingLinearHouse]
+        return [conjguateHouseCell, nakedPairCellsSharingLinearHouse]
     })
 
-    cellsPairing.forEach(([conjugateHouseCell, nakedPairCell]) => {
-        if (!_isNil(conjugateHouseCell) && !_isNil(nakedPairCell)) {
-            result[getCellAxesValues(conjugateHouseCell as Cell)] = getCellAxesValues(nakedPairCell as Cell)
+    const cellsPairingWithOneToOne = cellsPairing.find(([conjugateHouseCell, nakedPairCells]) => {
+        return nakedPairCells.length === 1
+    })
+
+    cellsPairing.forEach(([conjugateHouseCell, nakedPairCells], index) => {
+        if (nakedPairCells.length !== 1) {
+            cellsPairing[index][1] = nakedPairCells.filter((nakedPairCell) => {
+                return !areSameCells(nakedPairCell, cellsPairingWithOneToOne[1][0])
+            })
+        }
+    })
+
+    cellsPairing.forEach(([conjugateHouseCell, nakedPairCells]) => {
+        if (!_isNil(conjugateHouseCell) && !_isNil(nakedPairCells[0])) {
+            result[getCellAxesValues(conjugateHouseCell as Cell)] = getCellAxesValues(nakedPairCells[0] as Cell)
         }
     })
 
@@ -60,8 +71,6 @@ const getHintExplanationText = (wWing: WWingRawHint, notes: Notes) => {
     const conjugateHouseCellsKeys = Object.keys(conjugateHouseCellsAndNakedPairCellsPairing)
     const firstConjugateHouseCell = conjugateHouseCellsKeys[0]
     const secondConjugateHouseCell = conjugateHouseCellsKeys[1]
-
-
 
     const msgTemplates = HINT_EXPLANATION_TEXTS.W_WING
     const msgPlaceholdersValues = {
