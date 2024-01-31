@@ -7,7 +7,6 @@ import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
 
 import { BoardInputs } from './types'
-import { isNakedSinglePresent } from '../nakedSingle/nakedSingle'
 
 export const filterFilledCellsInTryOut = (cells: Cell[], boardInputs: BoardInputs): Cell[] => {
     const { tryOutMainNumbers, actualMainNumbers } = boardInputs

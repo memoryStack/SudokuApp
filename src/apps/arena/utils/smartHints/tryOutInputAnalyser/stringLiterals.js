@@ -186,3 +186,17 @@ export const W_WING = {
         NO_PLACE_FOR_CONJUGATE_NOTE_IN_CONJUGATE_HOUSE: 'Notice that now there is no cell in {{conjugateHouse}} where {{conjugateHouseNote}} can be filled. to fix it remove {{conjugateHouseNote}} from one of {{nakedPairCells}} and start again'
     },
 }
+
+export const XYZ_WING = {
+    NO_INPUT: 'fill {{xyzCellsCandidates}} in any of these highlighted cells to understand why {{removableCandidate}} can not come in {{removableNoteHostCells}}',
+    REMOVABLE_NOTE_CELL_FILLED: {
+        NO_OTHER_CELL_FILLED: `<p>notice the ${getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_SINGLE, 'Naked Single')} created in {{nakedSinglesCells}}. Now fill these cells to understand the fault in previous step</p>`,
+        CELLS_HAVE_NAKED_SINGLE: 'now {{nakedSinglesCells}} have Naked Single, next step can be to fill {{nakedSinglesCells}}.',
+        CELL_WITHOUT_CANDIDATES: 'there are no candidates left for {{cellsWithNoCandidates}}. to fix it, remove {{removableCandidate}} from {{filledRemovableNoteHostCell}} and try some other combination to fill these highlighted cells',
+    },
+    ALL_CELLS_FILLED_PROPERLY: 'Yayy! you have filled {{xyzCells}} without any error. this combination may or may not be the final solution for these cells.'
+        + ' but notice that all the {{removableCandidate}} highlighted in red color have been removed',
+    COMMON_NOTE_FILLED_IN_ANY_WING_CELLS: 'you can fill {{emptyWingCells}} if you want but if {{removableCandidate}} fills {{wingCellsFilledWithRemovableCandidate}} in the final solution of puzzle'
+        + ' then {{removableCandidate}} can not come in {{removableNoteHostCells}}. as you can see that {{removableCandidate}} has been removed from {{removableNoteHostCells}}',
+    PARTIALLY_FILLED: 'till now you have filled cells without any error. fill other cells as well with the candidates highlighted in them'
+}

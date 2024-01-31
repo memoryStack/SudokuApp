@@ -14,11 +14,15 @@ import {
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import {
-    CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+    CellsFocusData, CellsRestrictedNumberInputs, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
 
 import { XYZWingTransformerArgs } from './types'
 import { XYZWingRawHint } from '../../xyzWing/types'
+import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { convertBoardCellToNum } from '../../../cellTransformers'
+import _difference from '@lodash/difference'
+import { getCellAxesValues } from '../../../util'
 
 const WING_CELLS_NOTES_COLORS = {
     OTHER_NOTES: 'green',
@@ -100,6 +104,18 @@ const getAllFocusedCellsCoordinates = (xyzWing: XYZWingRawHint) => {
     ]
 }
 
+const getTryOutCellsRestrictedNumberInputs = (xyzWing: XYZWingRawHint, notes: Notes) => {
+    const result: CellsRestrictedNumberInputs = {}
+
+    xyzWing.removableNoteHostCells.forEach((removableNoteHostCell) => {
+        const cellNotes = NotesRecord.getCellVisibleNotesList(notes, removableNoteHostCell)
+        const cellKey = getCellAxesValues(removableNoteHostCell)
+        result[cellKey] = _difference(cellNotes, [xyzWing.wingsAndPivotCommonNote])
+    })
+
+    return result
+}
+
 export const transformXYZWingRawHint = ({
     rawHint: xyzWing,
     notesData,
@@ -119,6 +135,8 @@ export const transformXYZWingRawHint = ({
         removableNotes: { [xyzWing.wingsAndPivotCommonNote]: xyzWing.removableNoteHostCells },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(xyzWing.pivot.notes) as InputPanelVisibleNumbers,
         clickableCells: getAllFocusedCellsCoordinates(xyzWing),
+        cellsRestrictedNumberInputs: getTryOutCellsRestrictedNumberInputs(xyzWing, notesData),
         unclickableCellClickInTryOutMsg: 'you can only select the cells which are highlighted here.',
+        restrictedNumberInputMsg: `you can only fill ${xyzWing.wingsAndPivotCommonNote} because we are not commenting about any other number in this cell`
     }
 }

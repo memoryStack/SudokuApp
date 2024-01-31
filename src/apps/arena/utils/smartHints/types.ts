@@ -3,7 +3,7 @@ import { LINK_TYPES } from './chains/xChain/xChain.constants'
 
 export interface NotesToHighlightData {
     [note: string]: {
-      fontColor: string
+        fontColor: string
     }
 }
 
@@ -38,7 +38,7 @@ export type ClickableCells = Cell[]
 
 export type HintStep = {
     text: string
-    isTryOut?:boolean
+    isTryOut?: boolean
 }
 
 export type HintSteps = HintStep[]
@@ -80,7 +80,7 @@ export type RemovableNotesInfo = {
 }
 
 export type CellsRestrictedNumberInputs = {
-    [cellKey: string]: NoteValue[]
+    [cellAxesKey: string]: NoteValue[]
 }
 
 export type TryOutInputsColors = {
