@@ -19,6 +19,7 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
     [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
     [HINTS_IDS.W_WING]: 'W-Wing',
+    [HINTS_IDS.XYZ_WING]: 'XYZ-Wing',
     [HINTS_IDS.ALL]: 'hints',
 }
 
@@ -49,6 +50,7 @@ type HintExplainationTexts = {
     [HINTS_IDS.XY_CHAIN]: string[]
     [HINTS_IDS.EMPTY_RECTANGLE]: string[]
     [HINTS_IDS.W_WING]: string[]
+    [HINTS_IDS.XYZ_WING]: string[]
 }
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
@@ -246,6 +248,13 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + '\nIf {{conjugateHouseNote}} is filled in {{firstConjugateHouseCell}} then {{firstNakedPairHostCell}} have to be {{removableNote}} and if'
         + ' {{conjugateHouseNote}} is filled in {{secondConjugateHouseCell}} then {{secondNakedPairHostCell}} have to be {{removableNote}}.'
         + '\nSo all the {{removableNote}} in red color can be removed.'
+        + '</p>'
+    ],
+    [HINTS_IDS.XYZ_WING]: [
+        '<p>'
+        + `Notice three ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} {{xyzWingCells}}, these have their ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} only from {{xyzWingCandidates}}.`
+        + ' You can fill {{xyzWingCandidates}} in {{xyzWingCells}} in any combination, one of these cells must be filled by {{wingsAndPivotCommonNote}} for sure.'
+        + '\nHence {{wingsAndPivotCommonNote}} can be removed from {{removableNoteHostCells}}'
         + '</p>'
     ],
 }
