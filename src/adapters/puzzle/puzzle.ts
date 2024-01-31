@@ -18,8 +18,8 @@ const getSudokuPuzzle = (minClues: number): Promise<GeneratedPuzzle> => RNSudoku
 
 const validatePuzzle = (puzzle: string): Promise<PuzzleValidationResult> => RNSudokuPuzzle.validatePuzzle(puzzle)
 
-const getRawHints = (puzzle: string, notes: Notes): Promise<RawHints> => {
-    return RNSudokuPuzzle.getRawHints(puzzle, notes)
+const getRawHints = (puzzle: string, notes: Notes, disabledHints: string[]): Promise<RawHints> => {
+    return RNSudokuPuzzle.getRawHints(puzzle, notes, disabledHints)
 }
 
 export const Puzzle = {

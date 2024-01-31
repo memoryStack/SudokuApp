@@ -13,6 +13,7 @@ import { Puzzle } from '@adapters/puzzle'
 
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '../utils/classes/boardIterators'
+import { HINTS_IDS } from '../utils/smartHints/constants'
 
 const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
     const puzzleMainNumbers = []
@@ -21,9 +22,8 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
     })
     const puzzle = puzzleMainNumbers.join('')
 
-    const rawHints = await Puzzle.getRawHints(puzzle, notes)
-
-    console.log('@@@@@@ raw hints', JSON.stringify(rawHints))
+    const disabledHints = []
+    const rawHints = await Puzzle.getRawHints(puzzle, notes, disabledHints)
 
     const availableRawHints = {}
     const hintsIds = Object.keys(rawHints)
