@@ -143,7 +143,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
             break
         case NAKED_SINGLE_TYPES.MIX:
             cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell, smartHintsColorSystem)
-            const getLogicHandler = (rawHint.isComposite || true) ? SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getCompositeHintMsg
+            const getLogicHandler = rawHint.isComposite ? SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getCompositeHintMsg
                 : SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg
             logic = getLogicHandler(MainNumbersRecord.getCellSolutionValue(mainNumbers, cell), cell)
             break
