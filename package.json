@@ -18,6 +18,7 @@
         "debugApk": "./scripts/debugApk",
         "stageApk": "./scripts/stageApk",
         "appAAB": "./scripts/appAAB.sh",
+        "buildAll": "npm run debugApk && npm run stageApk && npm run appAAB",
         "createComponent": "./scripts/createComponent"
     },
     "dependencies": {
