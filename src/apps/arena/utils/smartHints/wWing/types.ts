@@ -1,4 +1,5 @@
 export type WWingRawHint = {
+    isComposite: boolean
     nakedPairCells: Cell[],
     nakedPairNotes: NoteValue[],
     conjugateNote: NoteValue,

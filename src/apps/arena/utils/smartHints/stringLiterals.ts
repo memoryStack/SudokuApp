@@ -136,7 +136,7 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ` present only in two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} of`
         + ` any ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')}. we need to find either two such rows or two columns.`
         + '\nthese four cells where the candidate is present in these rows or columns must be aligned'
-        + ' like four corners of a rectangle.</p>',
+        + ' like four corners of a rectangle.</p>', // or square
 
         'here {{candidate}} is present only in two cells of {{houseAAxesValue}} and {{houseBAxesValue}}'
         + ' {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.'
@@ -179,7 +179,7 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
     ],
     [HINTS_IDS.Y_WING]: [
         `<p>look for a ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} which has only two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')}`
-        + 'in it. we will call it pivot cell.\nin puzzle {{pivotCell}} is highlighted as pivot cell</p>',
+        + ' in it. we will call it pivot cell.\nin puzzle {{pivotCell}} is highlighted as pivot cell</p>',
 
         `<p>now look for two more cells which also have only two candidates in them and which share a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')} with`
         + ' pivot cell. these will be wings cells. wings cells themselves shouldn\'t be in same house.'
@@ -257,4 +257,14 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + '\nHence {{wingsAndPivotCommonNote}} can be removed from {{removableNoteHostCells}}'
         + '</p>'
     ],
+}
+
+export const COMPOSITE_HINT_EXPLANATION_TEXTS = {
+    [HINTS_IDS.NAKED_SINGLE]:
+        '<p>except {{solutionValue}} no other number from 1-9 can come in {{cellAxesText}}, so'
+        + ' only {{solutionValue}} can come in {{cellAxesText}}.</p>'
+    ,
+    [HINTS_IDS.HIDDEN_SINGLE]:
+        '<p>in the highlighted {{houseType}}, {{solutionValue}} can\'t come in any other'
+        + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} except {{hostCell}} so in {{hostCell}} only {{solutionValue}} will come</p>`
 }

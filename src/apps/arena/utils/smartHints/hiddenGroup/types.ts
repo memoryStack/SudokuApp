@@ -1,4 +1,5 @@
 export type HiddenGroupRawHint = {
+    isComposite: boolean
     house: House
     groupCandidates: NoteValue[] // TODO: is this number of MainNumber or NoteVale ??
     groupCells: Cell[]

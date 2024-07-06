@@ -258,7 +258,9 @@ const getApplyHintData = (rawHint: HiddenSingleRawHint): AddMainNumberHintAction
     ]
 }
 
-export const transformHiddenSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem } : HiddenSingleTransformerArgs): TransformedRawHint => {
+export const transformHiddenSingleRawHint = ({
+    rawHint, mainNumbers, smartHintsColorSystem
+}: HiddenSingleTransformerArgs): TransformedRawHint => {
     const { cell, type } = rawHint
 
     const cellsToFocusData = type === HIDDEN_SINGLE_TYPES.BLOCK

@@ -4,6 +4,7 @@ export type XYZWingCell = {
 }
 
 export type XYZWingRawHint = {
+    isComposite: boolean
     wingsAndPivotCommonNote: number,
     pivot: XYZWingCell,
     wings: XYZWingCell[],

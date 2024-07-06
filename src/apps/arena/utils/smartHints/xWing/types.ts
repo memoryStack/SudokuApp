@@ -7,6 +7,7 @@ export type XWingLeg = {
 }
 
 export type XWingRawHint = {
+    isComposite: boolean
     houseType: HouseType
     type: XWING_TYPES
     legs: XWingLeg[]

@@ -5,6 +5,7 @@ export type HostHouse = {
 }
 
 export type EmptyRectangleRawHint = {
+    isComposite: boolean
     note: NoteValue,
     conjugateHouse: House,
     hostHouse: HostHouse,

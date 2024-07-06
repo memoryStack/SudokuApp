@@ -4,6 +4,7 @@ export type YWingCell = {
 }
 
 export type YWingRawHint = {
+    isComposite: boolean
     pivot: YWingCell
     wings: [YWingCell, YWingCell]
     wingsCommonNote: NoteValue

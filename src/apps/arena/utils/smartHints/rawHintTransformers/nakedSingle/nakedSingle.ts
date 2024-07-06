@@ -10,7 +10,7 @@ import {
     HOUSE_TYPE_VS_FULL_NAMES,
     HOUSE_TYPE,
 } from '../../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { COMPOSITE_HINT_EXPLANATION_TEXTS, HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     areSameCells,
@@ -61,12 +61,21 @@ const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, ce
     return dynamicInterpolation(explainations.MULTIPLE_HOUSE, msgPlaceholdersValues)
 }
 
+const getCompositeHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell): string => {
+    const msgPlaceholdersValues = {
+        solutionValue,
+        cellAxesText: getCellAxesValues(cell),
+    }
+    return dynamicInterpolation(COMPOSITE_HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE], msgPlaceholdersValues)
+}
+
 const SMART_HINTS_TECHNIQUES = {
     NAKED_SINGLE: {
         TITLE: HINT_ID_VS_TITLES[HINTS_IDS.NAKED_SINGLE],
         DESCRIPTION: {
             getSingleHouseMsg: getSingleHouseNakedSingleDescription,
             getMultipleHouseMsg: getMultipleHousesNakeSingleDescription,
+            getCompositeHintMsg: getCompositeHousesNakeSingleDescription
         },
     },
 }
@@ -101,7 +110,7 @@ const getApplyHintData = (rawHint: NakedSingleRawHint): AddMainNumberHintAction[
     ]
 }
 
-export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem } : NakedSingleTransformerArgs): TransformedRawHint => {
+export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem }: NakedSingleTransformerArgs): TransformedRawHint => {
     const { type, cell } = rawHint
 
     const { row, col } = cell
@@ -134,10 +143,9 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
             break
         case NAKED_SINGLE_TYPES.MIX:
             cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell, smartHintsColorSystem)
-            logic = SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg(
-                MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
-                cell,
-            )
+            const getLogicHandler = (rawHint.isComposite || true) ? SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getCompositeHintMsg
+                : SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg
+            logic = getLogicHandler(MainNumbersRecord.getCellSolutionValue(mainNumbers, cell), cell)
             break
         default:
             break
