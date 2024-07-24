@@ -2,7 +2,6 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { isRowHouse } from '@domain/board/utils/housesAndCells'
 
-import { Houses } from '../../../../classes/houses'
 import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
 
 import { getHouseCells } from '@domain/board/utils/housesAndCells'

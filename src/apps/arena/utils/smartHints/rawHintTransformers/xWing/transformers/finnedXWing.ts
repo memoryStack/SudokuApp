@@ -1,6 +1,5 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
-import { Houses } from '../../../../classes/houses'
 import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
 
 import {

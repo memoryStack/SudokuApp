@@ -25,7 +25,6 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { GameState } from './classes/gameState'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
-import { Houses } from './classes/houses'
 import { BoardIterators } from './classes/boardIterators'
 
 import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from './cellTransformers'

@@ -41,7 +41,6 @@ import {
     transformCellBGColor,
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
-import { Houses } from '../../../classes/houses'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { getBlockAndBoxNum } from '../../../cellTransformers'
 import { HiddenGroupTransformerArgs } from './types'
