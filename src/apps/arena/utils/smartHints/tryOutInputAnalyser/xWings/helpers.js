@@ -4,7 +4,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
-import { getCellHouseForHouseType } from '../../../util'
+import { getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 
 import { getCellsAxesValuesListText, getHouseNumText } from '../../rawHintTransformers/helpers'
 import {

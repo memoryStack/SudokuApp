@@ -16,13 +16,11 @@ import { COMPOSITE_HINT_EXPLANATION_TEXTS, HINT_EXPLANATION_TEXTS, HINT_ID_VS_TI
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     areSameCells,
-    getCellColHouseInfo,
-    getCellBlockHouseInfo,
     getCellAxesValues,
     getCellHousesInfo,
     getHouseAxesValue,
 } from '../../../util'
-import { getHouseCells } from '@domain/board/utils/housesAndCells'
+import { getHouseCells, getCellColHouseInfo, getCellBlockHouseInfo } from '@domain/board/utils/housesAndCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { NakedSingleRawHint } from '../../nakedSingle/types'

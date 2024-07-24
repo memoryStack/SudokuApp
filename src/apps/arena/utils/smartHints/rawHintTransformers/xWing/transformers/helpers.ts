@@ -1,10 +1,8 @@
 import _map from '@lodash/map'
 
-import { isColHouse } from '@domain/board/utils/housesAndCells'
+import { isColHouse, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 
 import { BOARD_MOVES_TYPES } from '../../../../../constants'
-
-import { getCellHouseForHouseType } from '../../../../util'
 
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../../constants'
 import { getCrossHouseType } from '../../../xWing/utils'

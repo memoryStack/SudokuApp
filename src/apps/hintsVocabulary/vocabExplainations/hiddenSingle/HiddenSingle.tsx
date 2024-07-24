@@ -9,7 +9,9 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Board } from 'src/apps/arena/gameBoard'
 
-import { areSameCells, getCellHouseForHouseType, isCellExists } from 'src/apps/arena/utils/util'
+import { getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
+
+import { areSameCells, isCellExists } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'

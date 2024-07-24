@@ -2,9 +2,9 @@ import _isNil from '@lodash/isNil'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { getBlockAndBoxNum } from '../../../cellTransformers'
-import { getHouseCells } from '@domain/board/utils/housesAndCells'
+import { getHouseCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 import {
-    areSameCells, getCellHouseForHouseType, getHousesCommonCells,
+    areSameCells, getHousesCommonCells,
 } from '../../../util'
 
 import smartHintColorSystemReader from '../../colorSystem.reader'

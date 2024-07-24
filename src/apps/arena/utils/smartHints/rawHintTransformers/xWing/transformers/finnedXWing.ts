@@ -3,7 +3,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
 
 import {
-    getHouseCells, isRowHouse
+    getHouseCells, isRowHouse, getCellHouseForHouseType
 } from '@domain/board/utils/housesAndCells'
 
 import {
@@ -13,7 +13,7 @@ import {
     HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
-import { getCellAxesValues, getCellHouseForHouseType } from '../../../../util'
+import { getCellAxesValues } from '../../../../util'
 
 import {
     getCellsFromCellsToFocusedData,

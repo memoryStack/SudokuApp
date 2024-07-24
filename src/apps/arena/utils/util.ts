@@ -30,7 +30,8 @@ import { BoardIterators } from './classes/boardIterators'
 import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from './cellTransformers'
 
 import {
-    getCellRowHouseInfo, isRowHouse, isColHouse, isBlockHouse
+    getCellRowHouseInfo, isBlockHouse,
+    getCellHouseForHouseType, getCellColHouseInfo, getCellBlockHouseInfo
 } from '@domain/board/utils/housesAndCells'
 
 export const addLeadingZeroIfEligible = (value: number) => {
@@ -84,23 +85,6 @@ export const areSameRowCells = (cells: Cell[]): boolean => _areSameValues(cells,
 export const areSameColCells = (cells: Cell[]): boolean => _areSameValues(cells, 'col')
 
 export const isCellExists = (cell: Cell, store: Cell[]) => store.some(storedCell => areSameCells(storedCell, cell))
-
-export const getCellColHouseInfo = (cell: Cell): House => ({
-    type: HOUSE_TYPE.COL,
-    num: cell.col,
-})
-
-export const getCellBlockHouseInfo = (cell: Cell): House => ({
-    type: HOUSE_TYPE.BLOCK,
-    num: getBlockAndBoxNum(cell).blockNum,
-})
-
-export const getCellHouseForHouseType = (houseType: HouseType, cell: Cell): House => {
-    if (isRowHouse(houseType)) return getCellRowHouseInfo(cell)
-    if (isColHouse(houseType)) return getCellColHouseInfo(cell)
-    if (isBlockHouse(houseType)) return getCellBlockHouseInfo(cell)
-    throw new Error('un-identified house')
-}
 
 export const getCellHousesInfo = (cell: Cell) => {
     const result = [getCellRowHouseInfo(cell), getCellColHouseInfo(cell), getCellBlockHouseInfo(cell)]

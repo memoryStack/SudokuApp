@@ -8,9 +8,8 @@ import { BOARD_MOVES_TYPES } from '../../../../constants'
 import {
     areSameCells,
     getCellAxesValues,
-    getCellHouseForHouseType,
 } from '../../../util'
-import { getHouseCells } from '@domain/board/utils/housesAndCells'
+import { getHouseCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'

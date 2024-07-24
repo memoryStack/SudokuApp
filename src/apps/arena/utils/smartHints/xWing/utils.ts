@@ -4,13 +4,11 @@ import { isRowHouse } from '@domain/board/utils/housesAndCells'
 
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 
-import { getHouseCells } from '@domain/board/utils/housesAndCells'
+import { getHouseCells, getCellHouseForHouseType, getCellBlockHouseInfo } from '@domain/board/utils/housesAndCells'
 import {
     areSameColCells,
     areSameRowCells,
-    getCellHouseForHouseType,
     isCellExists,
-    getCellBlockHouseInfo,
     areSameBlockCells,
 } from '../../util'
 

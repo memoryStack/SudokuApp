@@ -9,13 +9,11 @@ import {
     areSameCells,
     getCellAxesValues,
     getBlockStartCell,
-    getCellBlockHouseInfo,
     getHousesCommonCells,
-    getCellHouseForHouseType,
     areSameHouses,
 } from '../../../util'
 import {
-    getHouseCells, isRowHouse, isColHouse
+    getHouseCells, isRowHouse, isColHouse, getCellHouseForHouseType, getCellBlockHouseInfo
 } from '@domain/board/utils/housesAndCells'
 
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult, transformCellBGColor } from '../../util'
