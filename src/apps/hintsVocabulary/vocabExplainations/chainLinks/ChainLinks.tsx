@@ -16,7 +16,7 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 
 import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getStyles } from './chainLinks.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
@@ -83,7 +83,7 @@ const ChainLinks = () => {
                                 + ' So candidate 8s are Weakly linked with each other in these cells of this row.'
                                 + '<br />'
                                 + `Here row is taken as an example, but with the same logic Weak links can be found in ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} and ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} houses.`
-                            + '</p>'
+                                + '</p>'
                             }
                         />
                     </View>
@@ -133,7 +133,7 @@ const ChainLinks = () => {
                                 + ' The logic would be same as we applied before. Here the cell has three candidates 2, 4 and 6.'
                                 + ' If any one of these three is <b>true</b> then all the other candidates have to be <b>false</b>.'
                                 + ' Hence Weak links can be formed in a Single Cell as well.'
-                            + '</p>'
+                                + '</p>'
                             }
                         />
                     </View>
@@ -147,9 +147,9 @@ const ChainLinks = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + 'If two candidates are Weakly linked, they cannot be <b>true</b> at the same time.'
-                            + '\nIf one of them is <b>true</b>, then the other must be <b>false</b>. Visually Weak Links are drawn'
-                            + ' in dotted lines. See the examples below.'
+                        + 'If two candidates are Weakly linked, they cannot be <b>true</b> at the same time.'
+                        + '\nIf one of them is <b>true</b>, then the other must be <b>false</b>. Visually Weak Links are drawn'
+                        + ' in dotted lines. See the examples below.'
                         + '</p>'
                     }
                 />
@@ -222,8 +222,8 @@ const ChainLinks = () => {
                         <SmartHintText
                             text={
                                 '<p>'
-                                    + 'Here in above example, if candidate 4 is not filled or <b>false</b> in 1st cell of this row then this candidate'
-                                    + ' has to be <b>true</b> in 8th cell of this row. So there is a Strong link between candidate 4 in this row.'
+                                + 'Here in above example, if candidate 4 is not filled or <b>false</b> in 1st cell of this row then this candidate'
+                                + ' has to be <b>true</b> in 8th cell of this row. So there is a Strong link between candidate 4 in this row.'
                                 + '</p>'
                             }
                         />
@@ -279,7 +279,7 @@ const ChainLinks = () => {
                                 + ' The logic would be same as we applied before. Here the cell has two candidates 2 and 7.'
                                 + ' If any one of these two is <b>false</b> then the other candidate has to be <b>true</b>.'
                                 + ' Hence Strong link can be formed in a Single Cell as well.'
-                            + '</p>'
+                                + '</p>'
                             }
                         />
                     </View>
@@ -293,10 +293,10 @@ const ChainLinks = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + 'When two candidates are Strongly linked, they cannot be <b>false</b> at the same time.'
-                            + '\nIf one of them is <b>false</b>, then the other must be <b>true</b>. Notice the difference'
-                            + ' between Strong link and Weak link definition.'
-                            + '\nVisually Strong Links are drawn in solid lines. See the examples below.'
+                        + 'When two candidates are Strongly linked, they cannot be <b>false</b> at the same time.'
+                        + '\nIf one of them is <b>false</b>, then the other must be <b>true</b>. Notice the difference'
+                        + ' between Strong link and Weak link definition.'
+                        + '\nVisually Strong Links are drawn in solid lines. See the examples below.'
                         + '</p>'
                     }
                 />
@@ -310,7 +310,7 @@ const ChainLinks = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<b>Note:</b> In general we can say that Strong Link is formed only in two ways'
+                        + '<b>Note:</b> In general we can say that Strong Link is formed only in two ways'
                         + '</p>'
                     }
                 />
@@ -320,7 +320,7 @@ const ChainLinks = () => {
                             '<ol>'
                             + '<li>When a candidate is present in only two cells of a house</li>'
                             + '<li>When only two candidates are present in a cell</li>'
-                        + '</ol>'
+                            + '</ol>'
                         }
                     />
                 </View>

@@ -19,7 +19,7 @@ import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-vi
 import _cloneDeep from '@lodash/cloneDeep'
 import { CellsFocusData } from 'src/apps/arena/utils/smartHints/types'
 import { getCellsHighlightData } from 'src/apps/arena/utils/smartHints/rawHintTransformers/nakedGroup/nakedGroup'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import _get from '@lodash/get'
 import { getCellsAxesValuesListText } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'

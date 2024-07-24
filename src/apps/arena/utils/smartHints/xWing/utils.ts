@@ -2,7 +2,7 @@ import _flatten from '@lodash/flatten'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { Houses } from '../../classes/houses'
 
-import { getHouseCells } from '../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import {
     areSameColCells,
     areSameRowCells,

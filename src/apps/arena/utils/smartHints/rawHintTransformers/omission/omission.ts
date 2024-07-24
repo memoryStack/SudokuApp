@@ -3,7 +3,7 @@ import _map from '@lodash/map'
 
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
-import { getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { isCellExists } from '../../../util'
 
 import {

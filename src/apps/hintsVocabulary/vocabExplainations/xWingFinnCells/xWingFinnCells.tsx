@@ -17,7 +17,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
 import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/constants'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getStyles } from './xWingFinnCells.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'

@@ -17,7 +17,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
 import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/constants'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
 import { getStyles } from './xWingCornerCells.styles'
 import { useBoardData } from '../hooks/useBoardData'
@@ -106,10 +106,10 @@ const XWingCornerCells = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + `An ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} is formed using two ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'rows')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'columns')}.`
-                        + ' And these two rows or columns have candidate present in two cells only. so combinedly we have 4 cells where'
-                        + ' the candiate is present. These 4 cells are known as X-Wing corner cells.'
-                        + 'Notice 1st and 5th columns in X-Wing in below puzzle.'
+                    + `An ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} is formed using two ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'rows')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'columns')}.`
+                    + ' And these two rows or columns have candidate present in two cells only. so combinedly we have 4 cells where'
+                    + ' the candiate is present. These 4 cells are known as X-Wing corner cells.'
+                    + 'Notice 1st and 5th columns in X-Wing in below puzzle.'
                     + '</p>'
                 }
             />

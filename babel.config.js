@@ -23,6 +23,7 @@ module.exports = {
                     '@ui': './src/ui',
                     '@resources': './src/resources',
                     '@adapters': './src/adapters',
+                    '@domain': './src/domain',
                 },
             },
         ],

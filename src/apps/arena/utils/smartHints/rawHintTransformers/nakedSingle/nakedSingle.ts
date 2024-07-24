@@ -2,6 +2,8 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
 import { toOrdinal } from '@lodash/toOrdinal'
 
+import { getCellRowHouseInfo } from '@domain/board/utils/housesAndCells'
+
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
@@ -14,14 +16,13 @@ import { COMPOSITE_HINT_EXPLANATION_TEXTS, HINT_EXPLANATION_TEXTS, HINT_ID_VS_TI
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     areSameCells,
-    getCellRowHouseInfo,
     getCellColHouseInfo,
     getCellBlockHouseInfo,
     getCellAxesValues,
     getCellHousesInfo,
     getHouseAxesValue,
 } from '../../../util'
-import { getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { NakedSingleRawHint } from '../../nakedSingle/types'

@@ -19,7 +19,7 @@ import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/constants'
 import { getXWingCells } from 'src/apps/arena/utils/smartHints/xWing/utils'
 import { isCellExists } from 'src/apps/arena/utils/util'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
 import { getStyles } from './perfectXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
@@ -195,26 +195,26 @@ const PerfectXWing = () => {
             <SmartHintText
                 text={
                     '<p>'
-                            + '<b>How is X-Wing useful ?</b>'
-                            + '<br />'
-                            + 'In below puzzle, to fill 1 in 1st and 5th columns, there are two ways. Let\'s try both of these'
-                            + ' ways and see the conclusion.'
-                            + '<br />'
-                            + '<b>First way</b>'
-                            + '<br />'
-                            + 'In 1st column if 1 will be filled in B1 cell then 1 can\'t be filled in E1 and B5 cells, hence in 5th column'
-                            + ' 1 can be filled only in E5.'
-                        + '</p>'
+                    + '<b>How is X-Wing useful ?</b>'
+                    + '<br />'
+                    + 'In below puzzle, to fill 1 in 1st and 5th columns, there are two ways. Let\'s try both of these'
+                    + ' ways and see the conclusion.'
+                    + '<br />'
+                    + '<b>First way</b>'
+                    + '<br />'
+                    + 'In 1st column if 1 will be filled in B1 cell then 1 can\'t be filled in E1 and B5 cells, hence in 5th column'
+                    + ' 1 can be filled only in E5.'
+                    + '</p>'
                 }
             />
             {Example}
             <SmartHintText
                 text={
                     '<p>'
-                        + '<b>Second way</b>'
-                        + '<br />'
-                        + 'In 1st column if 1 will be filled in E1 cell then 1 can\'t be filled in B1 and E5 cells, hence in 5th column'
-                        + ' 1 can be filled only in B5.'
+                    + '<b>Second way</b>'
+                    + '<br />'
+                    + 'In 1st column if 1 will be filled in E1 cell then 1 can\'t be filled in B1 and E5 cells, hence in 5th column'
+                    + ' 1 can be filled only in B5.'
                     + '</p>'
                 }
             />
@@ -222,15 +222,15 @@ const PerfectXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + 'There are no other ways to fill 1 in these two columns. So 1 will come in either B1 and E5 cells or in E1 and B5 cells.'
-                            + 'Hence in row B and E, 1 can be eliminated as candidate from all the cells where it is highlighted in red color.'
-                            + '<br />'
-                            + '<br />'
-                            + '<b>Conclusion</b>'
-                            + '<br />'
-                            + 'If X-Wing is found using columns then candidate will be removed from rows in which the X-Wing corner cells are present.'
-                            + '<br />'
-                            + 'And if X-Wing is found using rows then candidate will be removed from columns in which the X-Wing corner cells are present.'
+                        + 'There are no other ways to fill 1 in these two columns. So 1 will come in either B1 and E5 cells or in E1 and B5 cells.'
+                        + 'Hence in row B and E, 1 can be eliminated as candidate from all the cells where it is highlighted in red color.'
+                        + '<br />'
+                        + '<br />'
+                        + '<b>Conclusion</b>'
+                        + '<br />'
+                        + 'If X-Wing is found using columns then candidate will be removed from rows in which the X-Wing corner cells are present.'
+                        + '<br />'
+                        + 'And if X-Wing is found using rows then candidate will be removed from columns in which the X-Wing corner cells are present.'
                         + '</p>'
                     }
                 />
@@ -323,11 +323,11 @@ const PerfectXWing = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + `In X-Wing, we focus on a single ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} in ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'rows')} and ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'columns')}.`
-                        + ' An X-Wing is formed when a candidate is present only twice in two rows or columns such that both of these rows or columns have that candidate'
-                        + ' in same positions.'
-                        + '<br />'
-                        + 'Notice an X-Wing in below puzzle.'
+                    + `In X-Wing, we focus on a single ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} in ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'rows')} and ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'columns')}.`
+                    + ' An X-Wing is formed when a candidate is present only twice in two rows or columns such that both of these rows or columns have that candidate'
+                    + ' in same positions.'
+                    + '<br />'
+                    + 'Notice an X-Wing in below puzzle.'
                     + '</p>'
                 }
             />

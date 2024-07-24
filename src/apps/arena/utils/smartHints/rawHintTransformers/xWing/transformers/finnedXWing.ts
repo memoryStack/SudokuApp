@@ -2,7 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { Houses } from '../../../../classes/houses'
 import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
-import { getHouseCells } from '../../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 
 import {
     HINTS_IDS,
@@ -99,7 +99,7 @@ const getSashimiFinnedHintChunks = (xWing: XWingRawHint, removableNotesHostCells
 
 // doing 2 things
 const defaultHighlightHouseCells = (
-    { houseType, cells }: {houseType: HouseType, cells: Cell[][]},
+    { houseType, cells }: { houseType: HouseType, cells: Cell[][] },
     cellsToFocusData: CellsFocusData,
     smartHintsColorSystem: SmartHintsColorSystem,
 ) => {
@@ -116,7 +116,7 @@ const defaultHighlightHouseCells = (
 }
 
 const defaultHighlightCrossHouseCells = (
-    { houseType, cells }: {houseType: HouseType, cells: Cell[][]},
+    { houseType, cells }: { houseType: HouseType, cells: Cell[][] },
     cellsToFocusData: CellsFocusData,
     smartHintsColorSystem: SmartHintsColorSystem,
 ) => {

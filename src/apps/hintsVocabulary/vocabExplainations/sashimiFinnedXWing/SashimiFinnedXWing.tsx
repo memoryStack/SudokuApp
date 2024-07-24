@@ -17,7 +17,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
 import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/constants'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getStyles } from './sashimiFinnedXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
@@ -91,19 +91,19 @@ const FinnedXWing = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + '<b>How is Sashimi Finned X-Wing useful ?</b>'
-                        + '<br />'
-                        + 'Here in below puzzle we will follow the same logic as we did in Finned X-Wing to draw our conclusion.'
-                        + '<br />'
-                        + 'So in below puzzle to fill 3 in 4th and 7th columns, there are two ways. Let\'s try both of these'
-                        + ' ways and see the conclusion.'
-                        + '<br />'
-                        + '<b>First way</b>'
-                        + '<br />'
-                        + 'If we fill 3 in F7 cell of 7th column then 3 can\'t be filled in I7 cell, hence in 4th column'
-                        + ' 3 will be filled in one of D4 and I4. And it would look like below'
-                        + '<br />'
-                        + 'Case 1: 3 is filled in F7 and D4'
+                    + '<b>How is Sashimi Finned X-Wing useful ?</b>'
+                    + '<br />'
+                    + 'Here in below puzzle we will follow the same logic as we did in Finned X-Wing to draw our conclusion.'
+                    + '<br />'
+                    + 'So in below puzzle to fill 3 in 4th and 7th columns, there are two ways. Let\'s try both of these'
+                    + ' ways and see the conclusion.'
+                    + '<br />'
+                    + '<b>First way</b>'
+                    + '<br />'
+                    + 'If we fill 3 in F7 cell of 7th column then 3 can\'t be filled in I7 cell, hence in 4th column'
+                    + ' 3 will be filled in one of D4 and I4. And it would look like below'
+                    + '<br />'
+                    + 'Case 1: 3 is filled in F7 and D4'
                     + '</p>'
                 }
             />
@@ -111,10 +111,10 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>in row F, 3 will be removed from F5</li>'
-                                + '<li>in row I, 3 will <b>not</b> be removed from I5</li>'
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>in row F, 3 will be removed from F5</li>'
+                        + '<li>in row I, 3 will <b>not</b> be removed from I5</li>'
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -124,10 +124,10 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>in row F, 3 will be removed from F5</li>'
-                                + '<li>in row I, 3 will be removed from I5</li>'
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>in row F, 3 will be removed from F5</li>'
+                        + '<li>in row I, 3 will be removed from I5</li>'
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -136,10 +136,10 @@ const FinnedXWing = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + '<b>Second way</b>'
-                        + '<br />'
-                        + 'If we fill 3 in I7 cell of 7th column then 3 can\'t be filled in I4 and F7 cells, hence in 4th column'
-                        + ' 3 will be filled in D4 only. And it would look like below'
+                    + '<b>Second way</b>'
+                    + '<br />'
+                    + 'If we fill 3 in I7 cell of 7th column then 3 can\'t be filled in I4 and F7 cells, hence in 4th column'
+                    + ' 3 will be filled in D4 only. And it would look like below'
                     + '</p>'
                 }
             />
@@ -147,10 +147,10 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>in row F, 3 will be removed from F5</li>'
-                                + '<li>in row I, 3 will be removed from I5</li>'
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>in row F, 3 will be removed from F5</li>'
+                        + '<li>in row I, 3 will be removed from I5</li>'
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -159,16 +159,16 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<b>Conclusion</b>'
-                            + '<br />'
-                            + 'There are no other ways to fill 3 in these two columns. And notice carefully that in all such cases'
-                            + ' F5 is the only cell where 3 can\'t come. In the I5 candidate 3 can\'t be removed'
-                            + ' in all the cases of filling 4th and 7th columns with 3.'
-                            + ' So at this point we can remove 3 from F5 only.'
-                            + '<br />'
-                            + '<br />'
-                            + 'Hence, in general in Sashimi Finned X-Wing candidate will be removed from cells which share'
-                            + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with Finn Cells.`
+                        + '<b>Conclusion</b>'
+                        + '<br />'
+                        + 'There are no other ways to fill 3 in these two columns. And notice carefully that in all such cases'
+                        + ' F5 is the only cell where 3 can\'t come. In the I5 candidate 3 can\'t be removed'
+                        + ' in all the cases of filling 4th and 7th columns with 3.'
+                        + ' So at this point we can remove 3 from F5 only.'
+                        + '<br />'
+                        + '<br />'
+                        + 'Hence, in general in Sashimi Finned X-Wing candidate will be removed from cells which share'
+                        + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with Finn Cells.`
                         + '</p>'
                     }
                 />

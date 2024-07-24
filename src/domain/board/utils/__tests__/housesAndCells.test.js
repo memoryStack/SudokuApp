@@ -1,5 +1,6 @@
-import { getHouseCells } from '../houseCells'
-import { HOUSE_TYPE } from '../smartHints/constants'
+import { HOUSE_TYPE } from '../../board.constants'
+
+import { getHouseCells, isRowHouse, isColHouse, isBlockHouse } from '../housesAndCells'
 
 describe('getHouseCells', () => {
     test('returns row house cells in order from left to right', () => {
@@ -53,5 +54,19 @@ describe('getHouseCells', () => {
     test('returns empty array if house type is not one of row, column or block', () => {
         const house = { type: 't', num: 0 }
         expect(getHouseCells(house)).toEqual([])
+    })
+})
+
+describe('Houses Type Check', () => {
+    test('isRowHouse() class method verifies if passed houseType is row or not', () => {
+        expect(isRowHouse(HOUSE_TYPE.ROW)).toBeTruthy()
+    })
+
+    test('isColumnHouse() class method verifies if passed houseType is row or not', () => {
+        expect(isColHouse(HOUSE_TYPE.COL)).toBeTruthy()
+    })
+
+    test('isBlockHouse() class method verifies if passed houseType is row or not', () => {
+        expect(isBlockHouse(HOUSE_TYPE.BLOCK)).toBeTruthy()
     })
 })

@@ -20,6 +20,9 @@
             "@adapters/*": [
                 "./src/adapters/*"
             ],
+            "@domain/*": [
+                "./src/domain/*"
+            ],
         }
     },
     "exclude": [

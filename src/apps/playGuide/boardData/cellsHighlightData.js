@@ -2,7 +2,7 @@ import _isEmpty from '@lodash/isEmpty'
 import _get from '@lodash/get'
 
 import { BoardIterators } from '../../arena/utils/classes/boardIterators'
-import { getHouseCells } from '../../arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { HOUSE_TYPE } from '../../arena/utils/smartHints/constants'
 import { setCellDataInHintResult } from '../../arena/utils/smartHints/util'
 

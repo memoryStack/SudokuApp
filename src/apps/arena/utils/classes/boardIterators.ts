@@ -2,7 +2,7 @@ import _forEach from '@lodash/forEach'
 
 import { CELLS_IN_HOUSE, HOUSES_COUNT, NUMBERS_IN_HOUSE } from '../../constants'
 
-import { getHouseCells } from '../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { HOUSE_TYPE } from '../smartHints/constants'
 
 type EachCellCallback = (cell: Cell) => void

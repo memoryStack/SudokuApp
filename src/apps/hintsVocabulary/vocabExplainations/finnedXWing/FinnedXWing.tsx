@@ -17,7 +17,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
 import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/constants'
-import { getHouseCells } from 'src/apps/arena/utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import { getStyles } from './finnedXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
@@ -94,11 +94,11 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>Only one row or column can have Finn Cells</li>'
-                                + `<li>Finn Cells must be in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
-                                + ` as one of the 4 X-Wing ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_CORNER_CELLS, 'corner')} cells</li>`
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>Only one row or column can have Finn Cells</li>'
+                        + `<li>Finn Cells must be in same ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
+                        + ` as one of the 4 X-Wing ${getLinkHTMLText(HINTS_VOCAB_IDS.X_WING_CORNER_CELLS, 'corner')} cells</li>`
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -107,18 +107,18 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + 'Now notice that in above puzzle, these two conditions are satisfied.'
-                            + '</p>'
+                        + 'Now notice that in above puzzle, these two conditions are satisfied.'
+                        + '</p>'
                     }
                 />
                 <View style={{ marginLeft: 8 }}>
                     <SmartHintText
                         text={
                             '<p>'
-                                + '<ul>'
-                                    + '<li>out of 2nd and 6th columns only 6th column have Finn Cells</li>'
-                                    + '<li>H6 Finn Cell is in same block as G6 X-Wing corner cell</li>'
-                                + '</ul>'
+                            + '<ul>'
+                            + '<li>out of 2nd and 6th columns only 6th column have Finn Cells</li>'
+                            + '<li>H6 Finn Cell is in same block as G6 X-Wing corner cell</li>'
+                            + '</ul>'
                             + '</p>'
                         }
                     />
@@ -220,8 +220,8 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + 'Here 4th and 5th cells are Finn Cells in row C, but these are not in same block'
-                            + ' with X-Wing corner cells. It violates 2nd condition mentioned above.'
+                        + 'Here 4th and 5th cells are Finn Cells in row C, but these are not in same block'
+                        + ' with X-Wing corner cells. It violates 2nd condition mentioned above.'
                         + '</p>'
                     }
                 />
@@ -229,8 +229,8 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + 'Here 5th and 7th cells are Finn Cells in row B, but these are in same block with'
-                            + ' both of X-Wing corner cells. It too violates 2nd condition mentioned above.'
+                        + 'Here 5th and 7th cells are Finn Cells in row B, but these are in same block with'
+                        + ' both of X-Wing corner cells. It too violates 2nd condition mentioned above.'
                         + '</p>'
                     }
                 />
@@ -243,21 +243,21 @@ const FinnedXWing = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + '<b>How is Finned X-Wing useful ?</b>'
-                        + '<br />'
-                        + 'In below puzzle, if it was a proper X-Wing then we could have removed all candidate 1 from'
-                        + ' row A and G except 4 corner cells. But due to Finn Cell in 6th column, now we would be able to remove'
-                        + ' candidate 1 from only G5. Read below to understand the reasoning behind it.'
-                        + '<br />'
-                        + 'To fill 1 in 2nd and 6th columns, there are two ways. Let\'s try both of these'
-                        + ' ways and see the conclusion.'
-                        + '<br />'
-                        + '<b>First way</b>'
-                        + '<br />'
-                        + 'If we fill 1 in A2 cell of 2nd column then 1 can\'t be filled in G2 and A6 cells, hence in 6th column'
-                        + ' 1 will be filled in G6 or H6 cells. And it would look like below'
-                        + '<br />'
-                        + 'Case 1: 1 is filled in A2 and G6'
+                    + '<b>How is Finned X-Wing useful ?</b>'
+                    + '<br />'
+                    + 'In below puzzle, if it was a proper X-Wing then we could have removed all candidate 1 from'
+                    + ' row A and G except 4 corner cells. But due to Finn Cell in 6th column, now we would be able to remove'
+                    + ' candidate 1 from only G5. Read below to understand the reasoning behind it.'
+                    + '<br />'
+                    + 'To fill 1 in 2nd and 6th columns, there are two ways. Let\'s try both of these'
+                    + ' ways and see the conclusion.'
+                    + '<br />'
+                    + '<b>First way</b>'
+                    + '<br />'
+                    + 'If we fill 1 in A2 cell of 2nd column then 1 can\'t be filled in G2 and A6 cells, hence in 6th column'
+                    + ' 1 will be filled in G6 or H6 cells. And it would look like below'
+                    + '<br />'
+                    + 'Case 1: 1 is filled in A2 and G6'
                     + '</p>'
                 }
             />
@@ -265,10 +265,10 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>in row A, 1 will be removed from A3, A5</li>'
-                                + '<li>in row G, 1 will be removed from G3, G5</li>'
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>in row A, 1 will be removed from A3, A5</li>'
+                        + '<li>in row G, 1 will be removed from G3, G5</li>'
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -278,10 +278,10 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>in row A, 1 will be removed from A3, A5</li>'
-                                + '<li>in row G, 1 will be removed from G5 only</li>'
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>in row A, 1 will be removed from A3, A5</li>'
+                        + '<li>in row G, 1 will be removed from G5 only</li>'
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -290,12 +290,12 @@ const FinnedXWing = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + '<b>Second way</b>'
-                        + '<br />'
-                        + 'If we fill 1 in G2 cell of 2nd column then 1 can\'t be filled in A2 and G6 cells, hence in 6th column'
-                        + ' 1 will be filled in A6 or H6 cells. And it would look like below'
-                        + '<br />'
-                        + 'Case 1: 1 is filled in G2 and A6'
+                    + '<b>Second way</b>'
+                    + '<br />'
+                    + 'If we fill 1 in G2 cell of 2nd column then 1 can\'t be filled in A2 and G6 cells, hence in 6th column'
+                    + ' 1 will be filled in A6 or H6 cells. And it would look like below'
+                    + '<br />'
+                    + 'Case 1: 1 is filled in G2 and A6'
                     + '</p>'
                 }
             />
@@ -303,10 +303,10 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>in row A, 1 will be removed from A3, A5</li>'
-                                + '<li>in row G, 1 will be removed from G3, G5</li>'
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>in row A, 1 will be removed from A3, A5</li>'
+                        + '<li>in row G, 1 will be removed from G3, G5</li>'
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -316,10 +316,10 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<ul>'
-                                + '<li>in row A, 1 <b>can\'t</b> be removed from A3 or A5 now</li>'
-                                + '<li>in row G, 1 will be removed from G3, G5</li>'
-                            + '</ul>'
+                        + '<ul>'
+                        + '<li>in row A, 1 <b>can\'t</b> be removed from A3 or A5 now</li>'
+                        + '<li>in row G, 1 will be removed from G3, G5</li>'
+                        + '</ul>'
                         + '</p>'
                     }
                 />
@@ -328,17 +328,17 @@ const FinnedXWing = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + '<b>Conclusion</b>'
-                            + '<br />'
-                            + 'There are no other ways to fill 1 in these two columns. And notice carefully that in all such cases'
-                            + ' G5 is the only cell where 1 can\'t come. In the other cells like A3, A5, G3 candidate 1 can\'t be removed'
-                            + ' in all the cases of filling 2nd and 6th columns with 1.'
-                            + '<br />'
-                            + 'So at this point we can remove 1 from G5 only.'
-                            + '<br />'
-                            + '<br />'
-                            + 'Hence, in general in Finned X-Wing candidate will be removed from cells which share'
-                            + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with Finn Cells.`
+                        + '<b>Conclusion</b>'
+                        + '<br />'
+                        + 'There are no other ways to fill 1 in these two columns. And notice carefully that in all such cases'
+                        + ' G5 is the only cell where 1 can\'t come. In the other cells like A3, A5, G3 candidate 1 can\'t be removed'
+                        + ' in all the cases of filling 2nd and 6th columns with 1.'
+                        + '<br />'
+                        + 'So at this point we can remove 1 from G5 only.'
+                        + '<br />'
+                        + '<br />'
+                        + 'Hence, in general in Finned X-Wing candidate will be removed from cells which share'
+                        + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} with Finn Cells.`
                         + '</p>'
                     }
                 />

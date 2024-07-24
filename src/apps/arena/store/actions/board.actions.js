@@ -11,7 +11,7 @@ import {
     isMainNumberPresentInAnyHouseOfCell,
     getCellHousesInfo,
 } from '../../utils/util'
-import { getHouseCells } from '../../utils/houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../RecordUtilities/boardNotes'

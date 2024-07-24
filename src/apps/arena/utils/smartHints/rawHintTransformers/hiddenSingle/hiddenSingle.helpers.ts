@@ -2,7 +2,7 @@ import _find from '@lodash/find'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { BLOCKS_COUNT_IN_ROW, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../../constants'
-import { getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getCellHouseForHouseType, getHousesCommonCells } from '../../../util'
 import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE } from '../../constants'
 import { transformCellBGColor } from '../../util'

@@ -3,7 +3,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { Houses } from '../../../../classes/houses'
 import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
 
-import { getHouseCells } from '../../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getCellAxesValues, isCellExists } from '../../../../util'
 
 import { HINTS_IDS } from '../../../constants'
@@ -58,7 +58,7 @@ const highlightXWingCells = (
 
 // TODO: synchronize the structre in which cells is passed around for all xWings
 const highlightHouseCells = (
-    { houseType, cells }: {houseType: HouseType, cells: Cell[][]},
+    { houseType, cells }: { houseType: HouseType, cells: Cell[][] },
     cellsToFocusData: CellsFocusData,
     smartHintsColorSystem: SmartHintsColorSystem,
 ) => {
@@ -82,7 +82,7 @@ const highlightHouseCells = (
 }
 
 const highlightCrossHouseCells = (
-    { houseType, cells, candidate }: {houseType: HouseType, cells: Cell[][], candidate: NoteValue},
+    { houseType, cells, candidate }: { houseType: HouseType, cells: Cell[][], candidate: NoteValue },
     notesData: Notes,
     cellsToFocusData: CellsFocusData,
     smartHintsColorSystem: SmartHintsColorSystem,

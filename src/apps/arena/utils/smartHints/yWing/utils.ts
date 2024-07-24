@@ -2,7 +2,7 @@ import _filter from '@lodash/filter'
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
 import { convertBoardCellToNum, convertBoardCellNumToCell } from '../../cellTransformers'
 
-import { getHouseCells } from '../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getCellHousesInfo } from '../../util'
 import { YWingRawHint } from './types'
 

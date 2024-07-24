@@ -27,7 +27,7 @@ import {
     sortCells,
 } from '../../../util'
 
-import { getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
@@ -278,7 +278,7 @@ const getRemovableGroupCandidatesHostCellsRestrictedNumberInputs = (
         result[getCellAxesValues(cell)] = restrictedInputsForCell
     }
     return result
-}, {} as {[key: string]: NoteValue[]})
+}, {} as { [key: string]: NoteValue[] })
 
 const getApplyHintData = (
     groupCandidates: GroupCandidates,

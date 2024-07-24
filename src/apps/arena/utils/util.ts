@@ -21,7 +21,7 @@ import {
 
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSE_TYPE } from './smartHints/constants'
-import { getHouseCells } from './houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { GameState } from './classes/gameState'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
@@ -30,14 +30,18 @@ import { BoardIterators } from './classes/boardIterators'
 
 import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from './cellTransformers'
 
+import { getCellRowHouseInfo } from '@domain/board/utils/housesAndCells'
+
 export const addLeadingZeroIfEligible = (value: number) => {
     if (value > 9) return `${value}`
     return `0${value}`
 }
 
-export const shouldSaveDataOnGameStateChange = (currentState: GAME_STATE, previousState: GAME_STATE) => new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
+export const shouldSaveDataOnGameStateChange = (currentState: GAME_STATE, previousState: GAME_STATE) =>
+    new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
 
-export const isMainNumberPresentInAnyHouseOfCell = (number: number, cell: Cell, mainNumbers: MainNumbers) => mainNumberCountExccedsThresholdInAnyHouseOfCell(number, cell, mainNumbers, 0)
+export const isMainNumberPresentInAnyHouseOfCell = (number: number, cell: Cell, mainNumbers: MainNumbers) =>
+    mainNumberCountExccedsThresholdInAnyHouseOfCell(number, cell, mainNumbers, 0)
 
 export const getPuzzleSolutionType = async (mainNumbers: MainNumbers) => {
     let puzzleStr = ''
@@ -79,11 +83,6 @@ export const areSameRowCells = (cells: Cell[]): boolean => _areSameValues(cells,
 export const areSameColCells = (cells: Cell[]): boolean => _areSameValues(cells, 'col')
 
 export const isCellExists = (cell: Cell, store: Cell[]) => store.some(storedCell => areSameCells(storedCell, cell))
-
-export const getCellRowHouseInfo = (cell: Cell): House => ({
-    type: HOUSE_TYPE.ROW,
-    num: cell.row,
-})
 
 export const getCellColHouseInfo = (cell: Cell): House => ({
     type: HOUSE_TYPE.COL,
@@ -322,7 +321,7 @@ export const getCellsSharingHousesWithCells = (cellA: Cell, cellB: Cell): Cell[]
 
 export const sortCells = (cells: Cell[]): Cell[] => _sortBy(cells, ['row', 'col'])
 
-export const generateMainNumbersFromPuzzleString = (puzzle: {unsolved: string, solution: string}): MainNumbers => {
+export const generateMainNumbersFromPuzzleString = (puzzle: { unsolved: string, solution: string }): MainNumbers => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
 
     for (let i = 0; i < puzzle.unsolved.length; i++) {

@@ -91,6 +91,7 @@ module.exports = {
                     ['@ui', './src/ui'],
                     ['@resources', './src/resources'],
                     ['@adapters', './src/adapters'],
+                    ['@domain', './src/domain'],
                 ],
                 extensions: ['.ts', '.js', '.jsx', '.json', '.tsx'],
             },

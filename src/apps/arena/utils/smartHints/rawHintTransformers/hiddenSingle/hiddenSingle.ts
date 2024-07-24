@@ -14,7 +14,7 @@ import {
     getCellHouseForHouseType,
     areSameHouses,
 } from '../../../util'
-import { getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { Houses } from '../../../classes/houses'
 
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult, transformCellBGColor } from '../../util'

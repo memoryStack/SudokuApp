@@ -10,7 +10,7 @@ import {
     getCellAxesValues,
     getCellHouseForHouseType,
 } from '../../../util'
-import { getHouseCells } from '../../../houseCells'
+import { getHouseCells } from '@domain/board/utils/housesAndCells'
 
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
