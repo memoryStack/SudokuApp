@@ -13,7 +13,7 @@ import { EVENTS } from '../../../constants/events'
 import { CELLS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
-import { BoardIterators } from '../utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { blockCellToBoardCell, getBlockAndBoxNum, convertBoardCellNumToCell } from '../utils/cellTransformers'
 
 const initBoardData = () => {

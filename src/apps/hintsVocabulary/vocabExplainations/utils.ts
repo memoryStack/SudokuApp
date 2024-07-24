@@ -1,6 +1,6 @@
 import _cloneDeep from '@lodash/cloneDeep'
 
-import { BoardIterators } from 'src/apps/arena/utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { isCellExists } from 'src/apps/arena/utils/util'
 

@@ -27,7 +27,7 @@ import { XYChainTransformerArgs } from './types'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { XChainRawHint } from '../../chains/xChain/types'
-import { BoardIterators } from '../../../classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,

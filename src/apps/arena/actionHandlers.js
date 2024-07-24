@@ -37,8 +37,9 @@ import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 import { NotesRecord } from './RecordUtilities/boardNotes'
-import { BoardIterators } from './utils/classes/boardIterators'
 import { convertBoardCellToNum } from './utils/cellTransformers'
+
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import {
     BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,

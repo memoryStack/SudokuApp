@@ -15,7 +15,7 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../../RecordUtilities/boardNotes'
-import { BoardIterators } from '../../utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 const constructMove = ({ mainNumber = {}, notes = {} }, selectedCell) => ({
     selectedCell,

@@ -22,7 +22,7 @@ import {
 import HintsSvgDrawing from '../hintsSvgDrawing'
 import { HINTS_IDS } from '../utils/smartHints/constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
-import { BoardIterators } from '../utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import { getStyles } from './gameBoard.styles'
 import { Cell } from './cell'
@@ -136,7 +136,7 @@ const Board_: React.FC<Props> = ({
                     const cellAdditionalStyles = { marginLeft: getSpacingDueToBorders(col) }
 
                     return (
-                    // eslint-disable-next-line react/no-array-index-key
+                        // eslint-disable-next-line react/no-array-index-key
                         <View style={[styles.cellContainer, cellAdditionalStyles]} key={index}>
                             <Cell
                                 row={row}

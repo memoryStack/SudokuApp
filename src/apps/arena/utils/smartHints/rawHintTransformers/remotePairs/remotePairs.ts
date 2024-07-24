@@ -20,7 +20,7 @@ import {
     setCellNotesHighlightDataInHintResult,
     transformCellBGColor,
 } from '../../util'
-import { BoardIterators } from '../../../classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { RemotePairsTransformerArgs } from './types'
 import {
@@ -174,7 +174,7 @@ const getTryOutInputsColors = (
     chainCells: Cell[],
     cellsToFocusData: CellsFocusData,
 ) => {
-    const result: TryOutInputsColors = { }
+    const result: TryOutInputsColors = {}
 
     _forEach(chainCells, (cell: Cell) => {
         const cellNum = convertBoardCellToNum(cell)

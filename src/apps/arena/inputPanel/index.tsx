@@ -4,16 +4,18 @@ import { View, Image, ImageStyle } from 'react-native'
 
 import _noop from '@lodash/noop'
 
+import { BoardIterators, CellEachNoteCallback } from '@domain/board/utils/boardIterators'
+
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 import { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { OnAction } from '@utils/hocs/withActions/types'
 
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
-import { BoardIterators, CellEachNoteCallback } from '../utils/classes/boardIterators'
 
 import { getStyles } from './inputPanel.styles'
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
 

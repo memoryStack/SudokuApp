@@ -32,7 +32,7 @@ import {
 import { HOUSE_TYPE } from '../smartHints/constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
-import { BoardIterators } from '../classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 jest.mock('@utils/storage')
 

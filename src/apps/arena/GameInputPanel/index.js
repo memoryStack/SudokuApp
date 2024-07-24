@@ -17,7 +17,7 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { ACTION_HANDLERS } from './actionHandlers'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
-import { BoardIterators } from '../utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 const getInstancesCounts = mainNumbers => {
     const instancesCount = new Array(10).fill(0)

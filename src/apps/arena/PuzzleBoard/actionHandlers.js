@@ -2,7 +2,7 @@ import { GAME_STATE } from '@resources/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 import { BOARD_CELLS_COUNT } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
-import { BoardIterators } from '../utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { INITIAL_STATE } from '../store/state/board.state'
 
 const handleCellPress = ({ params: { cell, dependencies } }) => {

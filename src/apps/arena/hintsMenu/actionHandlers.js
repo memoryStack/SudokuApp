@@ -12,7 +12,7 @@ import { getTransformedRawHints } from '../utils/smartHints'
 import { Puzzle } from '@adapters/puzzle'
 
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
-import { BoardIterators } from '../utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { HINTS_IDS } from '../utils/smartHints/constants'
 
 const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {

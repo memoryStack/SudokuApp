@@ -24,7 +24,7 @@ import { XChainTransformerArgs } from './types'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { XChainRawHint } from '../../chains/xChain/types'
-import { BoardIterators } from '../../../classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
@@ -162,7 +162,7 @@ const getTryOutInputsColors = (
     chainCells: Cell[],
     cellsToFocusData: CellsFocusData,
 ) => {
-    const result: TryOutInputsColors = { }
+    const result: TryOutInputsColors = {}
 
     _forEach(chainCells, (cell: Cell) => {
         const cellNum = convertBoardCellToNum(cell)

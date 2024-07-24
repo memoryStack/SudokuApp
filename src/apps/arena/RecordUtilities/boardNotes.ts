@@ -5,7 +5,7 @@ import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
 import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE } from '../constants'
-import { BoardIterators } from '../utils/classes/boardIterators'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { isMainNumberPresentInAnyHouseOfCell } from '../utils/util'
 
 import { MainNumbersRecord } from './boardMainNumbers'
