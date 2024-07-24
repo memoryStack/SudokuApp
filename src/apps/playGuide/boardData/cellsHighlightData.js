@@ -3,7 +3,7 @@ import _get from '@lodash/get'
 
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
-import { HOUSE_TYPE } from '../../arena/utils/smartHints/constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { setCellDataInHintResult } from '../../arena/utils/smartHints/util'
 
 export const HOUSES_COLORS = {

@@ -6,6 +6,8 @@ import _isNil from '@lodash/isNil'
 import _get from '@lodash/get'
 import _cloneDeep from '@lodash/cloneDeep'
 
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { useStyles } from '@utils/customHooks/useStyles'
 
@@ -13,7 +15,7 @@ import { Board } from 'src/apps/arena/gameBoard'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 import { isCellExists } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from 'src/apps/arena/utils/smartHints/constants'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import { CellsFocusData } from 'src/apps/arena/utils/smartHints/types'
@@ -176,10 +178,10 @@ const HiddenDouble = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + `In ${getLinkHTMLText(HINTS_VOCAB_IDS.HIDDEN_SINGLE, 'Hidden Single')}, we focus on only one ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} and one ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} in a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.`
-                        + ' Hidden Double is the extension of Hidden Single and here we will focus on two candidates and two cells in a house.'
-                        + '<br/>'
-                        + 'A Hidden Double is formed when two candidates are present together only in two cells of a house.'
+                    + `In ${getLinkHTMLText(HINTS_VOCAB_IDS.HIDDEN_SINGLE, 'Hidden Single')}, we focus on only one ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} and one ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} in a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.`
+                    + ' Hidden Double is the extension of Hidden Single and here we will focus on two candidates and two cells in a house.'
+                    + '<br/>'
+                    + 'A Hidden Double is formed when two candidates are present together only in two cells of a house.'
                     + '</p>'
                 }
             />

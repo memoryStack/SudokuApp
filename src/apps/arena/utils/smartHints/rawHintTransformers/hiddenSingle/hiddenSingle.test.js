@@ -1,7 +1,8 @@
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
 import { GRID_TRAVERSALS } from '../../../../constants'
-import { HOUSE_TYPE } from '../../constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+
 import {
     getEmptyCellsCountAndCandidatePosition,
     getBlockCellRowOrColNeighbourHousesInBlock,

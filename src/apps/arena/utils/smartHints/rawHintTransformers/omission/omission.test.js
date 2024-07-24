@@ -1,6 +1,6 @@
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
-import { HOUSE_TYPE } from '../../constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 
 import { getHouseNoteHostCells } from './omission'
 

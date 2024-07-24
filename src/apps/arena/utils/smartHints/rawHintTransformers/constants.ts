@@ -1,4 +1,4 @@
-import { HOUSE_TYPE } from '../constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 
 export enum HINTS_VOCAB_IDS {
     CANDIDATE = 'CANDIDATE',

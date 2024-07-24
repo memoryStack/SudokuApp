@@ -2,7 +2,7 @@ import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 import _isNil from '@lodash/isNil'
 
-import { CELLS_IN_HOUSE, HOUSES_COUNT } from '../constants'
+import { CELLS_IN_A_HOUSE, HOUSES_COUNT_OF_A_TYPE } from '@domain/board/board.constants'
 
 const getCellMainValue = (mainNumbers: MainNumbers, cell = {} as Cell): MainNumberValue => _get(mainNumbers, [cell.row, cell.col, 'value'])
 
@@ -25,9 +25,9 @@ const isClueCell = (mainNumbers: MainNumbers, cell = {} as Cell): boolean => _ge
 
 const initMainNumbers = () => {
     const result = []
-    for (let i = 0; i < HOUSES_COUNT; i++) {
+    for (let i = 0; i < HOUSES_COUNT_OF_A_TYPE; i++) {
         const rowData = []
-        for (let j = 0; j < CELLS_IN_HOUSE; j++) {
+        for (let j = 0; j < CELLS_IN_A_HOUSE; j++) {
             rowData.push(getCellMainNumberDefaultValue())
         }
         result.push(rowData)

@@ -29,7 +29,7 @@ import {
     areAdjacentCells,
     areCellsFromSameHouse,
 } from '../util'
-import { HOUSE_TYPE } from '../smartHints/constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
 import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '@domain/board/utils/boardIterators'

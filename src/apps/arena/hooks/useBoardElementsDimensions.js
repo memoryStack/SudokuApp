@@ -5,17 +5,17 @@ import { roundToNearestPixel } from '../../../utils/util'
 
 import {
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
-    CELLS_IN_HOUSE,
     BOARD_TO_WINDOW_WIDTH_RATIO,
     THICK_BORDER_COUNT,
     THIN_BORDER_COUNT,
 } from '../constants'
+import { CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
 
 export const useBoardElementsDimensions = () => {
     const { width: windowWidth } = useWindowDimensions()
 
     const cellWidth = getCellWidth(windowWidth)
-    const boardGridWidth = cellWidth * CELLS_IN_HOUSE + getAllBordersTotalSpace()
+    const boardGridWidth = cellWidth * CELLS_IN_A_HOUSE + getAllBordersTotalSpace()
 
     const boardElementsDimensions = useMemo(() => ({
         BOARD_GRID_WIDTH: boardGridWidth,
@@ -28,7 +28,7 @@ export const useBoardElementsDimensions = () => {
 }
 
 const getCellWidth = windowWidth => {
-    const cellWidth = (getBoardGridWidth(windowWidth) - getAllBordersTotalSpace()) / CELLS_IN_HOUSE
+    const cellWidth = (getBoardGridWidth(windowWidth) - getAllBordersTotalSpace()) / CELLS_IN_A_HOUSE
     return roundToNearestPixel(cellWidth)
 }
 

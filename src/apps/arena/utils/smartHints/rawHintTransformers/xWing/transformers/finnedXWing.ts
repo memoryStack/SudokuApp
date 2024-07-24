@@ -6,10 +6,11 @@ import {
     getHouseCells, isRowHouse, getCellHouseForHouseType
 } from '@domain/board/utils/housesAndCells'
 
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+
 import {
     HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
-    HOUSE_TYPE,
     HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'

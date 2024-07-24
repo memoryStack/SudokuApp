@@ -44,17 +44,17 @@ import { NotesRecord } from './RecordUtilities/boardNotes'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import {
-    BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
+    DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
 } from './constants'
 import { MAX_AVAILABLE_HINTS } from './store/state/boardController.state'
-
+import { BOARD_CELLS_COUNT, CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
 
-    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+    for (let row = 0; row < CELLS_IN_A_HOUSE; row++) {
         const rowData = []
-        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
+        for (let col = 0; col < CELLS_IN_A_HOUSE; col++) {
             const cellNo = convertBoardCellToNum({ row, col })
             const clueIntValue = parseInt(puzzle[cellNo], 10)
             rowData.push({
@@ -172,9 +172,9 @@ const handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) =
 
 const transformNativeGeneratedPuzzle = (clues, solution) => {
     const mainNumbers = []
-    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+    for (let row = 0; row < CELLS_IN_A_HOUSE; row++) {
         const rowData = []
-        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
+        for (let col = 0; col < CELLS_IN_A_HOUSE; col++) {
             const cellNo = convertBoardCellToNum({ row, col })
             const cellvalue = clues[cellNo]
             rowData.push({

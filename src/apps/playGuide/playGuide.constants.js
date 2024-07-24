@@ -1,6 +1,6 @@
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 
-import { HOUSE_TYPE } from '../arena/utils/smartHints/constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 
 import { HOUSES_COLORS } from './boardData/cellsHighlightData'
 

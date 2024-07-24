@@ -16,11 +16,13 @@ import _sortBy from '@lodash/sortBy'
 import { Puzzle } from '@adapters/puzzle'
 import _intersection from '@lodash/intersection'
 import {
-    BOARD_AXES_VALUES, HOUSES_COUNT, PUZZLE_SOLUTION_TYPES,
+    BOARD_AXES_VALUES, PUZZLE_SOLUTION_TYPES,
 } from '../constants'
 
 import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
-import { HOUSE_TYPE } from './smartHints/constants'
+
+import { HOUSES_COUNT_OF_A_TYPE, HOUSE_TYPE } from '@domain/board/board.constants'
+
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { GameState } from './classes/gameState'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
@@ -103,8 +105,8 @@ const mainNumberCountExccedsThresholdInAnyHouseOfCell = (number: number, cell: C
 }
 
 export const duplicatesInPuzzle = (mainNumbers: MainNumbers) => {
-    for (let row = 0; row < HOUSES_COUNT; row++) {
-        for (let col = 0; col < HOUSES_COUNT; col++) {
+    for (let row = 0; row < HOUSES_COUNT_OF_A_TYPE; row++) {
+        for (let col = 0; col < HOUSES_COUNT_OF_A_TYPE; col++) {
             if (!MainNumbersRecord.isCellFilled(mainNumbers, { row, col })) continue
 
             if (areMultipleMainNumbersInAnyHouseOfCell(

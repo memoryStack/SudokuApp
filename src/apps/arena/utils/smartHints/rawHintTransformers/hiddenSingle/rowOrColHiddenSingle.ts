@@ -2,13 +2,15 @@ import _isNil from '@lodash/isNil'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import { getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+
 import { getHouseCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 import {
     areSameCells, getHousesCommonCells,
 } from '../../../util'
 
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE } from '../../constants'
+import { HIDDEN_SINGLE_TYPES } from '../../constants'
 import { HiddenSingleRawHint } from '../../hiddenSingle/types'
 import { CellsFocusData, SmartHintsColorSystem } from '../../types'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'

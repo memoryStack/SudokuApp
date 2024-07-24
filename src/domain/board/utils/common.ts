@@ -4,7 +4,7 @@ import _every from '@lodash/every'
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
-import { CELLS_IN_A_HOUSE, NUMBERS_IN_A_HOUSE, HOUSES_COUNT, HOUSE_TYPE } from '../board.constants'
+import { CELLS_IN_A_HOUSE, NUMBERS_IN_A_HOUSE, HOUSES_COUNT_OF_A_TYPE, HOUSE_TYPE } from '../board.constants'
 import { BoardIterators } from './boardIterators'
 
 import { MainNumbersRecord } from '../records/mainNumbersRecord'
@@ -14,7 +14,7 @@ const getCellMainNumberDefaultValue = (): MainNumber => ({ value: 0, solutionVal
 
 const initMainNumbers = () => {
     const result = []
-    for (let i = 0; i < HOUSES_COUNT; i++) {
+    for (let i = 0; i < HOUSES_COUNT_OF_A_TYPE; i++) {
         const rowData = []
         for (let j = 0; j < CELLS_IN_A_HOUSE; j++) {
             rowData.push(getCellMainNumberDefaultValue())

@@ -10,11 +10,12 @@ import {
 
 import { emit } from '../../../utils/GlobalEventBus'
 import { EVENTS } from '../../../constants/events'
-import { CELLS_IN_HOUSE, PUZZLE_SOLUTION_TYPES } from '../constants'
+import { PUZZLE_SOLUTION_TYPES } from '../constants'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { blockCellToBoardCell, getBlockAndBoxNum, convertBoardCellNumToCell } from '@domain/board/utils/cellsTransformers'
+import { CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -123,17 +124,17 @@ const handleInputNumberClick = ({ setState, getState, params: newInputValue }) =
         setTimeout(() => {
             let nextCol = col + 1
             let nextRow = row
-            if (nextCol === CELLS_IN_HOUSE) {
+            if (nextCol === CELLS_IN_A_HOUSE) {
                 nextCol = 0
                 nextRow++
             }
-            if (nextRow !== CELLS_IN_HOUSE) setState({ selectedCell: { row: nextRow, col: nextCol } })
+            if (nextRow !== CELLS_IN_A_HOUSE) setState({ selectedCell: { row: nextRow, col: nextCol } })
         }, 0)
     }
 }
 
 const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbers) => {
-    for (let col = 0; col < CELLS_IN_HOUSE; col++) {
+    for (let col = 0; col < CELLS_IN_A_HOUSE; col++) {
         if (isCellEligibleForStatusUpdate(cell.row, col)) {
             mainNumbers[cell.row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
@@ -142,7 +143,7 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
             )
         }
     }
-    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+    for (let row = 0; row < CELLS_IN_A_HOUSE; row++) {
         if (isCellEligibleForStatusUpdate(row, cell.col)) {
             mainNumbers[row][cell.col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(
                 mainNumbers,
@@ -152,7 +153,7 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
         }
     }
     const { blockNum } = getBlockAndBoxNum(cell)
-    for (let box = 0; box < CELLS_IN_HOUSE; box++) {
+    for (let box = 0; box < CELLS_IN_A_HOUSE; box++) {
         const { row, col } = blockCellToBoardCell({ blockNum, boxNum: box })
         if (mainNumbers[row][col].wronglyPlaced && MainNumbersRecord.isCellFilledWithNumber(mainNumbers, oldInputValue, { row, col })) {
             mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(

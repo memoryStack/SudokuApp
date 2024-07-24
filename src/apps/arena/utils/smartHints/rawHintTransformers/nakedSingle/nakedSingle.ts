@@ -4,13 +4,14 @@ import { toOrdinal } from '@lodash/toOrdinal'
 
 import { getCellRowHouseInfo } from '@domain/board/utils/housesAndCells'
 
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 import {
     NAKED_SINGLE_TYPES,
     HINTS_IDS,
     HOUSE_TYPE_VS_FULL_NAMES,
-    HOUSE_TYPE,
 } from '../../constants'
 import { COMPOSITE_HINT_EXPLANATION_TEXTS, HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'

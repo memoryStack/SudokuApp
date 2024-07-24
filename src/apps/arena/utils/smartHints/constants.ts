@@ -1,8 +1,4 @@
-const HOUSE_TYPE = {
-    ROW: 'row',
-    COL: 'col',
-    BLOCK: 'block',
-}
+import { HOUSE_TYPE } from "@domain/board/board.constants"
 
 enum NAKED_SINGLE_TYPES {
     ROW = 'row',
@@ -149,7 +145,6 @@ export {
     NAKED_SINGLE_TYPES,
     HIDDEN_SINGLE_TYPES,
     NUMBER_TO_TEXT,
-    HOUSE_TYPE,
     HINTS_MENU_ITEMS,
     HINTS_IDS,
     HINT_LABELS,

@@ -1,3 +1,5 @@
+import { BOARD_CELLS_COUNT } from '@domain/board/board.constants'
+
 import { roundToNearestPixel } from '../../utils/util'
 
 export const BOARD_AXES_VALUES = {
@@ -5,11 +7,6 @@ export const BOARD_AXES_VALUES = {
     X_AXIS: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
 }
 
-export const BOARD_CELLS_COUNT = 81
-export const MAX_INSTANCES_OF_NUMBER = 9
-export const CELLS_IN_HOUSE = 9
-export const NUMBERS_IN_HOUSE = 9
-export const HOUSES_COUNT = 9
 export const BOARD_TO_WINDOW_WIDTH_RATIO = 0.94
 export const THICK_BORDER_COUNT = 2
 export const THIN_BORDER_COUNT = 6

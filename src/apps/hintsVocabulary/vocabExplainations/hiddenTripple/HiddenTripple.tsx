@@ -12,8 +12,9 @@ import { Board } from 'src/apps/arena/gameBoard'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 import { isCellExists } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from 'src/apps/arena/utils/smartHints/constants'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 

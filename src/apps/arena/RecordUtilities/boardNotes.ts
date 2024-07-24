@@ -4,11 +4,11 @@ import _every from '@lodash/every'
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
-import { CELLS_IN_HOUSE, NUMBERS_IN_HOUSE } from '../constants'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { isMainNumberPresentInAnyHouseOfCell } from '../utils/util'
 
 import { MainNumbersRecord } from './boardMainNumbers'
+import { CELLS_IN_A_HOUSE, NUMBERS_IN_A_HOUSE } from '@domain/board/board.constants'
 
 const getCellNotes = (notes: Notes, cell = {} as Cell): Note[] => _get(notes, [cell.row, cell.col])
 
@@ -32,11 +32,11 @@ const areSameNotesInCells = (notes: Notes, cells: Cell[]) => {
 
 const initNotes = () => {
     const result: Notes = []
-    for (let row = 0; row < CELLS_IN_HOUSE; row++) {
+    for (let row = 0; row < CELLS_IN_A_HOUSE; row++) {
         const rowNotes = []
-        for (let col = 0; col < CELLS_IN_HOUSE; col++) {
+        for (let col = 0; col < CELLS_IN_A_HOUSE; col++) {
             const boxNotes = []
-            for (let note = 1; note <= NUMBERS_IN_HOUSE; note++) {
+            for (let note = 1; note <= NUMBERS_IN_A_HOUSE; note++) {
                 // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
                 boxNotes.push({ noteValue: note, show: 0 })
             }

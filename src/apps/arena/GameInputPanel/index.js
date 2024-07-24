@@ -10,7 +10,7 @@ import _isEqual from '@lodash/isEqual'
 import withActions from '../../../utils/hocs/withActions'
 
 import { Inputpanel } from '../inputPanel'
-import { MAX_INSTANCES_OF_NUMBER } from '../constants'
+
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { GameState } from '../utils/classes/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
@@ -18,6 +18,7 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { ACTION_HANDLERS } from './actionHandlers'
 import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
+import { MAX_INSTANCES_OF_A_NUMBER } from '@domain/board/board.constants'
 
 const getInstancesCounts = mainNumbers => {
     const instancesCount = new Array(10).fill(0)
@@ -39,7 +40,8 @@ const GameInputPanel_ = ({ onAction }) => {
 
     const getNumbersVisibilityStatus = instancesCount => {
         const numbersVisibility = [true]
-        for (let i = 1; i <= MAX_INSTANCES_OF_NUMBER; i++) numbersVisibility.push(instancesCount[i] !== MAX_INSTANCES_OF_NUMBER)
+        for (let i = 1; i <= MAX_INSTANCES_OF_A_NUMBER; i++)
+            numbersVisibility.push(instancesCount[i] !== MAX_INSTANCES_OF_A_NUMBER)
         return numbersVisibility
     }
 

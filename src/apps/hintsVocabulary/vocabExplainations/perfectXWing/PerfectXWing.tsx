@@ -15,7 +15,7 @@ import { HINTS_VOCAB_IDS, transformXWingRawHint } from 'src/apps/arena/utils/sma
 
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
-import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/constants'
 import { getXWingCells } from 'src/apps/arena/utils/smartHints/xWing/utils'
 import { isCellExists } from 'src/apps/arena/utils/util'

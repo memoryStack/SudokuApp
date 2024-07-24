@@ -4,6 +4,8 @@ import { View } from 'react-native'
 
 import _isNil from '@lodash/isNil'
 
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { useStyles } from '@utils/customHooks/useStyles'
 
@@ -13,7 +15,6 @@ import { getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 
 import { areSameCells, isCellExists } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
-import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { useBoardData } from '../hooks/useBoardData'
 

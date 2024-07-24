@@ -1,10 +1,12 @@
 import _find from '@lodash/find'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { BLOCKS_COUNT_IN_ROW, GRID_TRAVERSALS, HOUSES_COUNT } from '../../../../constants'
+import { BLOCKS_COUNT_IN_ROW, GRID_TRAVERSALS } from '../../../../constants'
 import { getHouseCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
+import { HOUSE_TYPE, HOUSES_COUNT_OF_A_TYPE } from '@domain/board/board.constants'
+
 import { getHousesCommonCells } from '../../../util'
-import { HIDDEN_SINGLE_TYPES, HOUSE_TYPE } from '../../constants'
+import { HIDDEN_SINGLE_TYPES } from '../../constants'
 import { transformCellBGColor } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { SmartHintsColorSystem } from '../../types'
@@ -33,7 +35,7 @@ const getNextBlockInRow = (currentBlockNumIdx: number) => {
     return result
 }
 
-const getNextBlockInCol = (currentBlockNumIdx: number) => (currentBlockNumIdx + BLOCKS_COUNT_IN_ROW) % HOUSES_COUNT
+const getNextBlockInCol = (currentBlockNumIdx: number) => (currentBlockNumIdx + BLOCKS_COUNT_IN_ROW) % HOUSES_COUNT_OF_A_TYPE
 
 export const getNextBlockSearchDirection = (hiddenSingleType: HIDDEN_SINGLE_TYPES) => (hiddenSingleType === HIDDEN_SINGLE_TYPES.ROW ? GRID_TRAVERSALS.ROW : GRID_TRAVERSALS.COL)
 

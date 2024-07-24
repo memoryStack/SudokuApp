@@ -13,7 +13,7 @@ import {
     getHousesCellsSharedByCells, isCellExists,
 } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
-import { HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import _cloneDeep from '@lodash/cloneDeep'

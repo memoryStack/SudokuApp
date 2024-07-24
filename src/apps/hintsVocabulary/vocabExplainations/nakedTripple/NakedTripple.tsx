@@ -7,13 +7,15 @@ import _isNil from '@lodash/isNil'
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+
 import { Board } from 'src/apps/arena/gameBoard'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 import {
     getHousesCellsSharedByCells, isCellExists,
 } from 'src/apps/arena/utils/util'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE } from 'src/apps/arena/utils/smartHints/constants'
+import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from 'src/apps/arena/utils/smartHints/constants'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import _cloneDeep from '@lodash/cloneDeep'

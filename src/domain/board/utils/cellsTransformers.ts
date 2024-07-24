@@ -1,4 +1,4 @@
-import { HOUSES_COUNT } from "../board.constants"
+import { HOUSES_COUNT_OF_A_TYPE } from "../board.constants"
 
 const blockCellToBoardCell = ({ blockNum, boxNum }: BlockCell) => {
     const addToRow = (boxNum - (boxNum % 3)) / 3
@@ -16,13 +16,13 @@ const boardCellToBlockCell = (cell: Cell) => {
 
 const getBlockAndBoxNum = (cell: Cell) => boardCellToBlockCell(cell)
 
-const boardCellToCellNum = ({ row, col }: Cell) => row * HOUSES_COUNT + col
+const boardCellToCellNum = ({ row, col }: Cell) => row * HOUSES_COUNT_OF_A_TYPE + col
 
 const convertBoardCellToNum = (cell: Cell) => boardCellToCellNum(cell)
 
 const cellNumToBoardCell = (cellNum: number): Cell => ({
-    row: Math.floor(cellNum / HOUSES_COUNT),
-    col: cellNum % HOUSES_COUNT,
+    row: Math.floor(cellNum / HOUSES_COUNT_OF_A_TYPE),
+    col: cellNum % HOUSES_COUNT_OF_A_TYPE,
 })
 
 const convertBoardCellNumToCell = (cellNum: number): Cell => cellNumToBoardCell(cellNum)
