@@ -1,7 +1,7 @@
 import _isNil from '@lodash/isNil'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
-import { getBlockAndBoxNum } from '../../../cellTransformers'
+import { getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
 import { getHouseCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 import {
     areSameCells, getHousesCommonCells,

@@ -1,4 +1,4 @@
-import { blockCellToBoardCell, getBlockAndBoxNum } from '../cellTransformers'
+import { blockCellToBoardCell, getBlockAndBoxNum } from '../cellsTransformers'
 
 describe('blockCellToBoardCell()', () => {
     test('returns cell row and col upon passing block number and box number in the block', () => {

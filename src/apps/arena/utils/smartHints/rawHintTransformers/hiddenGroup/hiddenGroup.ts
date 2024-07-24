@@ -42,7 +42,7 @@ import {
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { getBlockAndBoxNum } from '../../../cellTransformers'
+import { getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
 import { HiddenGroupTransformerArgs } from './types'
 import {
     CellHighlightData, CellsFocusData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,

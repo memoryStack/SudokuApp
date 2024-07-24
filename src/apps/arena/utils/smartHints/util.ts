@@ -1,6 +1,6 @@
 import _get from '@lodash/get'
 import _reduce from '@lodash/reduce'
-import { convertBoardCellToNum } from '../cellTransformers'
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 import { isCellExists } from '../util'
 import { HiddenSingleRawHint } from './hiddenSingle/types'
 import { NakedSingleRawHint } from './nakedSingle/types'

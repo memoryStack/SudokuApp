@@ -36,7 +36,7 @@ import {
 import { RemotePairsRawHint } from '../../chains/remotePairs/types'
 import { areCommonHouseCells, getCellAxesValues } from '../../../util'
 import { getCellsAxesValuesListText, joinStringsListWithArrow } from '../helpers'
-import { convertBoardCellToNum } from '../../../cellTransformers'
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 import { LINK_TYPES } from '../../chains/xChain/xChain.constants'
 
 const REMOTE_PAIRS_COLORS_TEXT = ['green', 'blue']

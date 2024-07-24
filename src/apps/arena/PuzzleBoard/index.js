@@ -37,7 +37,7 @@ import { ACTION_TYPES } from './actionHandlers'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { getStyles } from './puzzleBoard.styles'
-import { convertBoardCellToNum } from '../utils/cellTransformers'
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const dependencies = useDependency()

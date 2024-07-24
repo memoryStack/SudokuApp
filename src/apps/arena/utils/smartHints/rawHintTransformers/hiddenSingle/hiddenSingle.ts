@@ -31,7 +31,7 @@ import { getCellsAxesValuesListText } from '../helpers'
 
 import { getHiddenSingleInRowOrColHighlightData } from './rowOrColHiddenSingle'
 import { getCellFilledWithNumberInHouse, getInhabitableCellData } from './hiddenSingle.helpers'
-import { getBlockAndBoxNum } from '../../../cellTransformers'
+import { getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
 import {
     AddMainNumberHintAction, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'

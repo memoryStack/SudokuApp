@@ -8,7 +8,7 @@ import _unique from '@lodash/unique'
 
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
-import { convertBoardCellToNum } from '../../../cellTransformers'
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'

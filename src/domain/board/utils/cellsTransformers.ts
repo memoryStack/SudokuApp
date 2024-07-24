@@ -25,7 +25,7 @@ const cellNumToBoardCell = (cellNum: number): Cell => ({
     col: cellNum % HOUSES_COUNT,
 })
 
-const convertBoardCellNumToCell = (cellNum: number) => cellNumToBoardCell(cellNum)
+const convertBoardCellNumToCell = (cellNum: number): Cell => cellNumToBoardCell(cellNum)
 
 export {
     blockCellToBoardCell,

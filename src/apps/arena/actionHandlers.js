@@ -23,6 +23,9 @@ import {
     PENCIL_STATE,
 } from '@resources/constants'
 import { Puzzle } from '@adapters/puzzle'
+
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
+
 import { emit } from '../../utils/GlobalEventBus'
 import {
     duplicatesInPuzzle,
@@ -37,7 +40,6 @@ import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
 import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
 import { NotesRecord } from './RecordUtilities/boardNotes'
-import { convertBoardCellToNum } from './utils/cellTransformers'
 
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
@@ -45,6 +47,7 @@ import {
     BOARD_CELLS_COUNT, CELLS_IN_HOUSE, DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
 } from './constants'
 import { MAX_AVAILABLE_HINTS } from './store/state/boardController.state'
+
 
 const getMainNumbersFromString = puzzle => {
     const result = []

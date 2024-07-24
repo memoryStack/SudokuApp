@@ -34,7 +34,7 @@ import {
 } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { LINK_TYPES } from '../../chains/xChain/xChain.constants'
-import { convertBoardCellToNum } from '../../../cellTransformers'
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 import { getCellsAxesValuesListText, getHouseNumAndName, joinStringsListWithArrow } from '../helpers'
 import { getCellAxesValues, getCellsCommonHousesInfo } from '../../../util'
 

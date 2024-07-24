@@ -3,7 +3,7 @@ import _keys from '@lodash/keys'
 import _forEach from '@lodash/forEach'
 
 import { NotesRecord } from '../../apps/arena/RecordUtilities/boardNotes'
-import { convertBoardCellNumToCell } from '../../apps/arena/utils/cellTransformers'
+import { convertBoardCellNumToCell } from '@domain/board/utils/cellsTransformers'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { isMainNumberPresentInAnyHouseOfCell } from '../../apps/arena/utils/util'
 import { MainNumbersRecord } from '../../apps/arena/RecordUtilities/boardMainNumbers'

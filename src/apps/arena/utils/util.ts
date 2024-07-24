@@ -27,7 +27,7 @@ import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
 import { NotesRecord } from '../RecordUtilities/boardNotes'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
-import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from './cellTransformers'
+import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
 
 import {
     getCellRowHouseInfo, isBlockHouse,

@@ -20,7 +20,7 @@ import {
 import { XYZWingTransformerArgs } from './types'
 import { XYZWingRawHint } from '../../xyzWing/types'
 import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
-import { convertBoardCellToNum } from '../../../cellTransformers'
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 import _difference from '@lodash/difference'
 import { getCellAxesValues } from '../../../util'
 
