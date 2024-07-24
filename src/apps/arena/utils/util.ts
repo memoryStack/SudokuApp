@@ -30,7 +30,9 @@ import { BoardIterators } from './classes/boardIterators'
 
 import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from './cellTransformers'
 
-import { getCellRowHouseInfo } from '@domain/board/utils/housesAndCells'
+import {
+    getCellRowHouseInfo, isRowHouse, isColHouse, isBlockHouse
+} from '@domain/board/utils/housesAndCells'
 
 export const addLeadingZeroIfEligible = (value: number) => {
     if (value > 9) return `${value}`
@@ -95,9 +97,9 @@ export const getCellBlockHouseInfo = (cell: Cell): House => ({
 })
 
 export const getCellHouseForHouseType = (houseType: HouseType, cell: Cell): House => {
-    if (Houses.isRowHouse(houseType)) return getCellRowHouseInfo(cell)
-    if (Houses.isColHouse(houseType)) return getCellColHouseInfo(cell)
-    if (Houses.isBlockHouse(houseType)) return getCellBlockHouseInfo(cell)
+    if (isRowHouse(houseType)) return getCellRowHouseInfo(cell)
+    if (isColHouse(houseType)) return getCellColHouseInfo(cell)
+    if (isBlockHouse(houseType)) return getCellBlockHouseInfo(cell)
     throw new Error('un-identified house')
 }
 
@@ -207,7 +209,7 @@ export const getCellAxesValues = (cell: Cell) => {
 }
 
 export const getHouseAxesValue = ({ type, num }: House) => {
-    if (Houses.isBlockHouse(type)) return ''
+    if (isBlockHouse(type)) return ''
 
     const HOUSE_TYPE_VS_AXES_VALUES = {
         [HOUSE_TYPE.ROW]: BOARD_AXES_VALUES.Y_AXIS,

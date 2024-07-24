@@ -1,5 +1,7 @@
 import _map from '@lodash/map'
 
+import { isColHouse } from '@domain/board/utils/housesAndCells'
+
 import { Houses } from '../../../../classes/houses'
 import { BOARD_MOVES_TYPES } from '../../../../../constants'
 
@@ -64,8 +66,8 @@ export const getXWingCornerCells = (xWing: XWingRawHint) => {
     const xWingLegs = xWing.legs
     return {
         topLeft: xWingLegs[0].cells[0],
-        topRight: Houses.isColHouse(houseType) ? xWingLegs[1].cells[0] : xWingLegs[0].cells[1],
-        bottomLeft: Houses.isColHouse(houseType) ? xWingLegs[0].cells[1] : xWingLegs[1].cells[0],
+        topRight: isColHouse(houseType) ? xWingLegs[1].cells[0] : xWingLegs[0].cells[1],
+        bottomLeft: isColHouse(houseType) ? xWingLegs[0].cells[1] : xWingLegs[1].cells[0],
         bottomRight: xWingLegs[1].cells[1],
     }
 }

@@ -14,8 +14,9 @@ import {
     getCellHouseForHouseType,
     areSameHouses,
 } from '../../../util'
-import { getHouseCells } from '@domain/board/utils/housesAndCells'
-import { Houses } from '../../../classes/houses'
+import {
+    getHouseCells, isRowHouse, isColHouse
+} from '@domain/board/utils/housesAndCells'
 
 import { getCellsFromCellsToFocusedData, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
@@ -104,9 +105,9 @@ const setNewNeighbourHouseWithCandidateToHighlight = (
     highlightableNeighbourHousesWinnerCandidates: NeighbourHousesCandidateToHighlight,
 ) => {
     const instanceHouseType = getNewHighlightableInstanceHouseType({ row, col }, neighbourRows, neighbourCols)
-    if (Houses.isRowHouse(instanceHouseType)) {
+    if (isRowHouse(instanceHouseType)) {
         highlightableNeighbourHousesWinnerCandidates.rows[row] = true
-    } else if (Houses.isColHouse(instanceHouseType)) {
+    } else if (isColHouse(instanceHouseType)) {
         highlightableNeighbourHousesWinnerCandidates.cols[col] = true
     }
 }

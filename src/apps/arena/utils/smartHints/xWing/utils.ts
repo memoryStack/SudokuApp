@@ -1,6 +1,8 @@
 import _flatten from '@lodash/flatten'
+
+import { isRowHouse } from '@domain/board/utils/housesAndCells'
+
 import { NotesRecord } from '../../../RecordUtilities/boardNotes'
-import { Houses } from '../../classes/houses'
 
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import {
@@ -42,7 +44,7 @@ export const categorizeFinnedLegCells = (perfectLegHostCells: Cell[], finnedLegH
     }
 }
 
-export const getCrossHouseType = (houseType: HouseType): HouseType => (Houses.isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+export const getCrossHouseType = (houseType: HouseType): HouseType => (isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
 
 export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }: XWingRawHint, notesData: Notes): Cell[] => {
     const { perfectLeg, otherLeg } = categorizeLegs(legs[0], legs[1])
@@ -55,7 +57,7 @@ export const getFinnedXWingRemovableNotesHostCells = ({ houseType, legs }: XWing
         ) return false
         return finnedLegPerfectCells.some(perfectCell => {
             const cellsPair = [cell, perfectCell]
-            if (Houses.isRowHouse(getCrossHouseType(houseType))) return areSameRowCells(cellsPair)
+            if (isRowHouse(getCrossHouseType(houseType))) return areSameRowCells(cellsPair)
             return areSameColCells(cellsPair)
         })
     })
@@ -71,7 +73,7 @@ export const addCellInXWingLeg = (cell: Cell, legCells: Cell[], houseType: House
     const crossHouseType = getCrossHouseType(houseType)
     legCells.push(cell)
     legCells.sort((cellA, cellB) => {
-        if (Houses.isRowHouse(crossHouseType)) return cellA.row - cellB.row
+        if (isRowHouse(crossHouseType)) return cellA.row - cellB.row
         return cellA.col - cellB.col
     })
 }
@@ -86,7 +88,7 @@ export const getSashimiCell = ({ houseType, legs }: XWingRawHint): Cell => {
     const { perfectLeg, otherLeg } = categorizeLegs(legs[0], legs[1])
     const { sashimiAligned } = categorizeSashimiXWingPerfectLegCells(perfectLeg.cells, otherLeg.cells)
 
-    if (Houses.isRowHouse(houseType)) {
+    if (isRowHouse(houseType)) {
         return {
             row: otherLeg.cells[0].row,
             col: sashimiAligned.col,

@@ -1,5 +1,7 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
+import { isRowHouse } from '@domain/board/utils/housesAndCells'
+
 import { Houses } from '../../../../classes/houses'
 import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
 
@@ -63,8 +65,8 @@ const highlightHouseCells = (
     smartHintsColorSystem: SmartHintsColorSystem,
 ) => {
     // TODO: this logic is repeated
-    const firstHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].row : cells[0][0].col
-    const secondHouseNum = Houses.isRowHouse(houseType) ? cells[1][0].row : cells[1][0].col
+    const firstHouseNum = isRowHouse(houseType) ? cells[0][0].row : cells[0][0].col
+    const secondHouseNum = isRowHouse(houseType) ? cells[1][0].row : cells[1][0].col
 
     const xWingCells = [...cells[0], ...cells[1]]
 
@@ -88,8 +90,8 @@ const highlightCrossHouseCells = (
     smartHintsColorSystem: SmartHintsColorSystem,
 ) => {
     const xWingCells = [...cells[0], ...cells[1]]
-    const firstCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][0].col : cells[0][0].row
-    const secondCrossHouseNum = Houses.isRowHouse(houseType) ? cells[0][1].col : cells[0][1].row
+    const firstCrossHouseNum = isRowHouse(houseType) ? cells[0][0].col : cells[0][0].row
+    const secondCrossHouseNum = isRowHouse(houseType) ? cells[0][1].col : cells[0][1].row
     const crossHousesNum = [firstCrossHouseNum, secondCrossHouseNum]
     crossHousesNum.forEach(houseNum => {
         const crossHouseType = getCrossHouseType(houseType)

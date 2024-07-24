@@ -5,12 +5,15 @@ import _isEmpty from '@lodash/isEmpty'
 import _filter from '@lodash/filter'
 import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
-
 import _sortBy from '@lodash/sortBy'
 import _difference from '@lodash/difference'
-
 import _isNil from '@lodash/isNil'
 import _intersection from '@lodash/intersection'
+
+import {
+    isRowHouse, isColHouse, isBlockHouse
+} from '@domain/board/utils/housesAndCells'
+
 import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
 import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
 
@@ -108,7 +111,7 @@ export const highlightPrimaryHouseCells = (
     })
 }
 
-const isRowOrColHouse = (houseType: HouseType) => Houses.isRowHouse(houseType) || Houses.isColHouse(houseType)
+const isRowOrColHouse = (houseType: HouseType) => isRowHouse(houseType) || isColHouse(houseType)
 
 const getSecondaryHostHouse = (primaryHouseType: HouseType, groupHostCells: Cell[]) => {
     // TODO: nested ifs. can it be made linear or refactor into better readability ??
@@ -119,7 +122,7 @@ const getSecondaryHostHouse = (primaryHouseType: HouseType, groupHostCells: Cell
             type: HOUSE_TYPE.BLOCK,
             num: getBlockAndBoxNum(groupHostCells[0]).blockNum,
         }
-    } else if (Houses.isBlockHouse(primaryHouseType)) {
+    } else if (isBlockHouse(primaryHouseType)) {
         if (areSameRowCells(groupHostCells)) {
             result = {
                 type: HOUSE_TYPE.ROW,

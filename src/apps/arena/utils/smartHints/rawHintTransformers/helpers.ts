@@ -2,8 +2,9 @@ import { toOrdinal } from '@lodash/toOrdinal'
 import _map from '@lodash/map'
 import _isEmpty from '@lodash/isEmpty'
 
+import { isRowHouse } from '@domain/board/utils/housesAndCells'
+
 import { getCellAxesValues, getHouseAxesValue } from '../../util'
-import { Houses } from '../../classes/houses'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 
@@ -22,7 +23,7 @@ export const getCellsAxesValuesListText = (cells: Cell[], lastCellConjugation: s
 export const getCellsAxesList = (cells: Cell[]) => _map(cells, (cell: Cell) => getCellAxesValues(cell))
 
 export const getHouseNumText = (house: House) => {
-    if (!Houses.isRowHouse(house.type)) return toOrdinal(house.num + 1)
+    if (!isRowHouse(house.type)) return toOrdinal(house.num + 1)
     return getHouseAxesValue(house)
 }
 
