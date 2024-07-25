@@ -8,7 +8,7 @@ import _head from '@lodash/head'
 import _reverse from '@lodash/reverse'
 import _last from '@lodash/last'
 
-import { NotesRecord } from 'src/apps/arena/RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import _difference from '@lodash/difference'
 import _intersection from '@lodash/intersection'
 import { BOARD_MOVES_TYPES } from '../../../../constants'

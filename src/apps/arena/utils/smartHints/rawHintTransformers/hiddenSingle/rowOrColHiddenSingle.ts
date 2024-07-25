@@ -1,6 +1,6 @@
 import _isNil from '@lodash/isNil'
 
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 

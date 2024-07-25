@@ -19,7 +19,7 @@ import { BoardInputs } from '../types'
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { XYZWingRawHint } from '../../xyzWing/types'
 
 const getWingsCellsCoordinates = (xyzWing: XYZWingRawHint) => {

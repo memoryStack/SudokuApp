@@ -3,8 +3,8 @@ import _isEmpty from '@lodash/isEmpty'
 import _some from '@lodash/some'
 
 import { cellHasTryOutInput } from '../../../smartHintHC/helpers'
-import { NotesRecord } from '../../../RecordUtilities/boardNotes'
-import { MainNumbersRecord } from '../../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '@domain/board/records/notesRecord'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 import { BoardInputs } from './types'
 

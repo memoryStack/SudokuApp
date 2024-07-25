@@ -38,8 +38,6 @@ import { consoleLog } from '../../utils/util'
 
 import { EVENTS } from '../../constants/events'
 import { GameState } from './utils/classes/gameState'
-import { MainNumbersRecord } from './RecordUtilities/boardMainNumbers'
-import { NotesRecord } from './RecordUtilities/boardNotes'
 
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
@@ -48,6 +46,8 @@ import {
 } from './constants'
 import { MAX_AVAILABLE_HINTS } from './store/state/boardController.state'
 import { BOARD_CELLS_COUNT, CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 const getMainNumbersFromString = puzzle => {
     const result = []

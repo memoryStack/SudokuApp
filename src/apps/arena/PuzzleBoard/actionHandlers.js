@@ -1,6 +1,6 @@
 import { GAME_STATE } from '@resources/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
-import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { INITIAL_STATE } from '../store/state/board.state'
 import { BOARD_CELLS_COUNT } from '@domain/board/board.constants'

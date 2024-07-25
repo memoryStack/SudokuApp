@@ -1,8 +1,8 @@
 import _isEmpty from '@lodash/isEmpty'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '@domain/board/records/notesRecord'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 import { getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 

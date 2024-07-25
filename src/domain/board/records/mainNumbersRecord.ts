@@ -2,6 +2,8 @@ import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 import _isNil from '@lodash/isNil'
 
+import { initMainNumbers as _initMainNumbers } from '../utils/common'
+
 const getCellMainValue = (mainNumbers: MainNumbers, cell = {} as Cell): MainNumberValue =>
     _get(mainNumbers, [cell.row, cell.col, 'value'])
 
@@ -25,6 +27,10 @@ const isCellFilledCorrectly = (mainNumbers: MainNumbers, cell: Cell) => {
 const isClueCell = (mainNumbers: MainNumbers, cell = {} as Cell): boolean =>
     _get(mainNumbers, [cell.row, cell.col, 'isClue'])
 
+const initMainNumbers = () => {
+    return _initMainNumbers()
+}
+
 export const MainNumbersRecord = {
     getCellMainValue,
     getCellSolutionValue,
@@ -32,4 +38,5 @@ export const MainNumbersRecord = {
     isCellFilledWithNumber,
     isCellFilled,
     isClueCell,
+    initMainNumbers,
 }

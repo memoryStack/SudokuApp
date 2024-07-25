@@ -8,7 +8,7 @@ import { CELLS_IN_A_HOUSE, NUMBERS_IN_A_HOUSE } from './board.constants'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { isMainNumberPresentInAnyHouseOfCell } from './utils/common'
 
-import { MainNumbersRecord } from './records/mainNumbersRecord'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { NotesRecord } from './records/notesRecord'
 
 const initNotes = () => {

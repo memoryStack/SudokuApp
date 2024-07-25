@@ -2,7 +2,7 @@ import _flatten from '@lodash/flatten'
 
 import { isRowHouse } from '@domain/board/utils/housesAndCells'
 
-import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 import { getHouseCells, getCellHouseForHouseType, getCellBlockHouseInfo } from '@domain/board/utils/housesAndCells'
 import {

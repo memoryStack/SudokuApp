@@ -16,7 +16,7 @@ import { GameState } from '../utils/classes/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { ACTION_HANDLERS } from './actionHandlers'
-import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { MAX_INSTANCES_OF_A_NUMBER } from '@domain/board/board.constants'
 

@@ -1,6 +1,6 @@
 import _find from '@lodash/find'
 
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BLOCKS_COUNT_IN_ROW, GRID_TRAVERSALS } from '../../../../constants'
 import { getHouseCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 import { HOUSE_TYPE, HOUSES_COUNT_OF_A_TYPE } from '@domain/board/board.constants'

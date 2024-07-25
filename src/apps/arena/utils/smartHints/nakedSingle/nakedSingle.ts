@@ -1,4 +1,4 @@
-import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 // TODO: put it in utils and refactore it with unit test cases
 export const isNakedSinglePresent = (notes: Notes, cell: Cell): { present: boolean, mainNumber: MainNumberValue } => {

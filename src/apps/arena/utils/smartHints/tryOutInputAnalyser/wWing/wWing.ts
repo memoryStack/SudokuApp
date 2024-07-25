@@ -3,7 +3,7 @@ import _sortBy from '@lodash/sortBy'
 import _unique from '@lodash/unique'
 import _head from '@lodash/head'
 
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 
@@ -24,7 +24,7 @@ import { WWingRawHint } from '../../wWing/types'
 import { getCandidatesListText } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import _isEmpty from '@lodash/isEmpty'
-import { MainNumbersRecord } from 'src/apps/arena/RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 export const wWingTryOutAnalyser = (
     { wWing }: { wWing: WWingRawHint },

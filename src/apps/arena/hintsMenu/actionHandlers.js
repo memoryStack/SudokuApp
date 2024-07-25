@@ -11,9 +11,8 @@ import { getTransformedRawHints } from '../utils/smartHints'
 
 import { Puzzle } from '@adapters/puzzle'
 
-import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
-import { HINTS_IDS } from '../utils/smartHints/constants'
 
 const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
     const puzzleMainNumbers = []

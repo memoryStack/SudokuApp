@@ -4,6 +4,8 @@ import _every from '@lodash/every'
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
+import { initNotes as _initNotes, initPossibleNotes as _initPossibleNotes } from '../utils/common'
+
 const getCellNotes = (notes: Notes, cell = {} as Cell): Note[] => _get(notes, [cell.row, cell.col])
 
 const isNotePresentInCell = (notes: Notes, note: NoteValue, cell = {} as Cell) => {
@@ -24,10 +26,16 @@ const areSameNotesInCells = (notes: Notes, cells: Cell[]) => {
     return _every(cellsNotes, (aCellNotes: Note[]) => _isEqual(aCellNotes, cellsNotes[0]))
 }
 
+const initNotes = () => _initNotes()
+
+const initPossibleNotes = (mainNumbers: MainNumbers) => _initPossibleNotes(mainNumbers)
+
 export const NotesRecord = {
     getCellNotes,
     isNotePresentInCell,
     getCellVisibleNotesList,
     getCellVisibleNotesCount,
     areSameNotesInCells,
+    initNotes,
+    initPossibleNotes,
 }

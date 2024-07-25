@@ -13,8 +13,8 @@ import {
 } from '../../utils/util'
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { BOARD_MOVES_TYPES } from '../../constants'
-import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
-import { NotesRecord } from '../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 const constructMove = ({ mainNumber = {}, notes = {} }, selectedCell) => ({

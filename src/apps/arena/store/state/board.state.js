@@ -1,5 +1,5 @@
-import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
-import { NotesRecord } from '../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 export const INITIAL_STATE = {
     mainNumbers: MainNumbersRecord.initMainNumbers(),

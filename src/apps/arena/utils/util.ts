@@ -25,8 +25,8 @@ import { HOUSES_COUNT_OF_A_TYPE, HOUSE_TYPE } from '@domain/board/board.constant
 
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { GameState } from './classes/gameState'
-import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
-import { NotesRecord } from '../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import { convertBoardCellNumToCell, convertBoardCellToNum, getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'

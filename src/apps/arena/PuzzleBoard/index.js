@@ -31,7 +31,7 @@ import {
     areCommonHouseCells, areSameCells, isCellExists, sameValueInCells,
 } from '../utils/util'
 import { isCellFocusedInSmartHint } from '../utils/smartHints/util'
-import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 import { ACTION_TYPES } from './actionHandlers'
 import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'

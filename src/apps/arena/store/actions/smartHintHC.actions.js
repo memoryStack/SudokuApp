@@ -4,8 +4,8 @@ import _isNil from '@lodash/isNil'
 
 import { EVENTS } from '../../../../constants/events'
 import { emit } from '../../../../utils/GlobalEventBus'
-import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
-import { NotesRecord } from '../../RecordUtilities/boardNotes'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 import { cellHasTryOutInput } from '../../smartHintHC/helpers'
 import {

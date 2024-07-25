@@ -14,8 +14,8 @@ import {
     isRowHouse, isColHouse, isBlockHouse
 } from '@domain/board/utils/housesAndCells'
 
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { NotesRecord } from '@domain/board/records/notesRecord'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 

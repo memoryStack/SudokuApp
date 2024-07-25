@@ -6,7 +6,7 @@ import _keys from '@lodash/keys'
 import _map from '@lodash/map'
 import _unique from '@lodash/unique'
 
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 

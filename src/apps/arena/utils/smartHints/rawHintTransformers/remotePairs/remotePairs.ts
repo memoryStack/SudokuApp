@@ -9,7 +9,7 @@ import _last from '@lodash/last'
 import _isNil from '@lodash/isNil'
 
 import { BOARD_MOVES_TYPES } from '../../../../constants'
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {

@@ -21,7 +21,7 @@ import {
 
 import HintsSvgDrawing from '../hintsSvgDrawing'
 import { HINTS_IDS } from '../utils/smartHints/constants'
-import { MainNumbersRecord } from '../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import { getStyles } from './gameBoard.styles'

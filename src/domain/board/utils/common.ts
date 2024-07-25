@@ -7,7 +7,7 @@ import _map from '@lodash/map'
 import { CELLS_IN_A_HOUSE, NUMBERS_IN_A_HOUSE, HOUSES_COUNT_OF_A_TYPE, HOUSE_TYPE } from '../board.constants'
 import { BoardIterators } from './boardIterators'
 
-import { MainNumbersRecord } from '../records/mainNumbersRecord'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { getHouseCells, getCellHouseForHouseType } from './housesAndCells'
 
 const getCellMainNumberDefaultValue = (): MainNumber => ({ value: 0, solutionValue: 0, isClue: false })

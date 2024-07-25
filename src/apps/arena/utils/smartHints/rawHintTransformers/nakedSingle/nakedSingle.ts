@@ -7,7 +7,7 @@ import { getCellRowHouseInfo } from '@domain/board/utils/housesAndCells'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import {
     NAKED_SINGLE_TYPES,
     HINTS_IDS,

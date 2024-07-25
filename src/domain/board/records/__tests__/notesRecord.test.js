@@ -1,6 +1,6 @@
 import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
 
-import { NotesRecord } from './boardNotes'
+import { NotesRecord } from '../notesRecord'
 
 describe('NotesRecord', () => {
     test('returns notes data for a particular cell from all notes record', () => {
@@ -272,3 +272,4 @@ describe('NotesRecord.areSameNotesInCells()', () => {
         expect(NotesRecord.areSameNotesInCells(notes, cells)).toBe(false)
     })
 })
+

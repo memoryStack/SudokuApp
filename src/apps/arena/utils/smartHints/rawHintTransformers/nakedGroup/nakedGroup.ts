@@ -6,7 +6,7 @@ import _some from '@lodash/some'
 
 import _isNil from '@lodash/isNil'
 import _intersection from '@lodash/intersection'
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import {
     getCellsCommonHousesInfo,
     getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists, sortCells,
@@ -57,7 +57,7 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
     }
 }
 
-const getRemovableNotesCells = (groupCells :Cell[], groupCandidates: NoteValue[], focusedCells: Cell[], notesData: Notes) => _filter(focusedCells, (cell: Cell) => {
+const getRemovableNotesCells = (groupCells: Cell[], groupCandidates: NoteValue[], focusedCells: Cell[], notesData: Notes) => _filter(focusedCells, (cell: Cell) => {
     if (isCellExists(cell, groupCells)) return false
     return _some(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
 })

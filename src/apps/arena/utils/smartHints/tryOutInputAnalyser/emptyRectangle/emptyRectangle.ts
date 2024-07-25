@@ -3,7 +3,7 @@ import _sortBy from '@lodash/sortBy'
 import _unique from '@lodash/unique'
 import _head from '@lodash/head'
 
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 

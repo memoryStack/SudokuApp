@@ -2,7 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _map from '@lodash/map'
 
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { isCellExists } from '../../../util'
 

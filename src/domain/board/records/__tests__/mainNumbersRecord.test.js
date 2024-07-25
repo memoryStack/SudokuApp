@@ -1,4 +1,4 @@
-import { MainNumbersRecord } from './boardMainNumbers'
+import { MainNumbersRecord } from '../mainNumbersRecord'
 
 describe('isCellFilledCorrectly()', () => {
     test('returns false when input value is different than solution value of cell', () => {

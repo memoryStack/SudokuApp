@@ -31,7 +31,7 @@ import {
 } from '../util'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
-import { MainNumbersRecord } from '../../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 jest.mock('@utils/storage')

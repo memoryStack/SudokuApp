@@ -6,7 +6,7 @@ import _map from '@lodash/map'
 import _reduce from '@lodash/reduce'
 import _sortBy from '@lodash/sortBy'
 
-import { NotesRecord } from '../../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import { getCellAxesValues, getCellsCommonHousesInfo, sortCells } from '../../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
@@ -37,7 +37,7 @@ const addPivotUIHighlightData = (pivot: YWingCell, cellsToFocusData: CellsFocusD
     setCellDataInHintResult(pivot.cell, pivotCellHighlightData, cellsToFocusData)
 }
 
-const addWingsUIHighlightData = (wings: YWingCell [], cellsToFocusData: CellsFocusData, smartHintsColorSystem: SmartHintsColorSystem) => {
+const addWingsUIHighlightData = (wings: YWingCell[], cellsToFocusData: CellsFocusData, smartHintsColorSystem: SmartHintsColorSystem) => {
     wings.forEach(wing => {
         const wingCellHighlightData: CellHighlightData = {
             bgColor: transformCellBGColor(smartHintColorSystemReader.yWingWingCellBGColor(smartHintsColorSystem)),
@@ -84,7 +84,7 @@ const getUICellsToFocusData = ({
 }
 
 const getPivotNotesWithWingsHostCellsMap = (pivotNotes: NoteValue[], wings: YWingCell[]) => {
-    const result: {[key: NoteValue] : Cell} = {}
+    const result: { [key: NoteValue]: Cell } = {}
     pivotNotes.forEach(pivotNote => {
         result[pivotNote] = _includes(wings[0].notes, pivotNote) ? wings[0].cell : wings[1].cell
     })

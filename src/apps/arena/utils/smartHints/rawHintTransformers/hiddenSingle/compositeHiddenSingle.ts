@@ -2,7 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _isNil from '@lodash/isNil'
 
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
-import { MainNumbersRecord } from '../../../../RecordUtilities/boardMainNumbers'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 
 import {

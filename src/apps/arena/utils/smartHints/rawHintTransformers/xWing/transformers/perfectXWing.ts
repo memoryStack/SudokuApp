@@ -2,7 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 import { isRowHouse } from '@domain/board/utils/housesAndCells'
 
-import { NotesRecord } from '../../../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getCellAxesValues, isCellExists } from '../../../../util'

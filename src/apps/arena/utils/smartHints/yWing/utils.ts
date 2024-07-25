@@ -1,5 +1,5 @@
 import _filter from '@lodash/filter'
-import { NotesRecord } from '../../../RecordUtilities/boardNotes'
+import { NotesRecord } from '@domain/board/records/notesRecord'
 import { convertBoardCellToNum, convertBoardCellNumToCell } from '@domain/board/utils/cellsTransformers'
 
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
