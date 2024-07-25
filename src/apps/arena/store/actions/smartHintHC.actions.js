@@ -11,9 +11,9 @@ import { cellHasTryOutInput } from '../../smartHintHC/helpers'
 import {
     areCommonHouseCells,
     areSameCells,
-    isMainNumberPresentInAnyHouseOfCell,
     getCellAxesValues,
 } from '../../utils/util'
+import { isMainNumberPresentInAnyHouseOfCell } from '@domain/board/utils/common'
 
 /* Try Out actions */
 export const inputTryOutNumber = (number, focusedCells, snackBarCustomStyles, dependencies) => {

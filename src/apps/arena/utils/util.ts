@@ -75,19 +75,25 @@ export const previousInactiveGameExists = async () => {
     return [GAME_STATE.INACTIVE, GAME_STATE.DISPLAY_HINT].includes(previousGameData[GAME_DATA_KEYS.STATE])
 }
 
+// MOVE TO DOMAIN
 export const areSameCells = (cellA: Cell, cellB: Cell) => {
     if (_isEmpty(cellA) || _isEmpty(cellB)) return false
     return _isEqual(cellA, cellB)
 }
 
+// MOVE TO DOMAIN
 export const areSameBlockCells = (cells: Cell[]): boolean => _areSameValues(cells.map(cell => getBlockAndBoxNum(cell).blockNum))
 
+// MOVE TO DOMAIN
 export const areSameRowCells = (cells: Cell[]): boolean => _areSameValues(cells, 'row')
 
+// MOVE TO DOMAIN
 export const areSameColCells = (cells: Cell[]): boolean => _areSameValues(cells, 'col')
 
+// what about this ??
 export const isCellExists = (cell: Cell, store: Cell[]) => store.some(storedCell => areSameCells(storedCell, cell))
 
+// MOVE TO DOMAIN, ALREADY MOVED
 export const getCellHousesInfo = (cell: Cell) => {
     const result = [getCellRowHouseInfo(cell), getCellColHouseInfo(cell), getCellBlockHouseInfo(cell)]
     return result
@@ -104,6 +110,7 @@ const mainNumberCountExccedsThresholdInAnyHouseOfCell = (number: number, cell: C
     })
 }
 
+// MOVE TO DOMAIN
 export const duplicatesInPuzzle = (mainNumbers: MainNumbers) => {
     for (let row = 0; row < HOUSES_COUNT_OF_A_TYPE; row++) {
         for (let col = 0; col < HOUSES_COUNT_OF_A_TYPE; col++) {
@@ -125,6 +132,7 @@ export const duplicatesInPuzzle = (mainNumbers: MainNumbers) => {
     return { present: false }
 }
 
+// MOVE IT
 export const getPairCellsCommonHouses = (cellA: Cell, cellB: Cell) => {
     const cellAHouses = getCellHousesInfo(cellA)
     const cellBHouses = getCellHousesInfo(cellB)
@@ -138,6 +146,7 @@ export const getPairCellsCommonHouses = (cellA: Cell, cellB: Cell) => {
     return result
 }
 
+// MOVE IT
 export const areCommonHouseCells = (cellA: Cell, cellB: Cell) => {
     if (_isEmpty(cellA) || _isEmpty(cellB)) return false
 
@@ -145,6 +154,7 @@ export const areCommonHouseCells = (cellA: Cell, cellB: Cell) => {
     return Object.values(cellsPairCommonHouses).some(isCommonHouse => isCommonHouse)
 }
 
+// MOVE IT
 export const areCellsFromSameHouse = (cells: Cell[]) => areSameRowCells(cells) || areSameColCells(cells) || areSameBlockCells(cells)
 
 export const getUniqueNotesFromCells = (cells: Cell[], notesData: Notes): NoteValue[] => {

@@ -16,6 +16,7 @@ import { NotesRecord } from '@domain/board/records/notesRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { blockCellToBoardCell, getBlockAndBoxNum, convertBoardCellNumToCell } from '@domain/board/utils/cellsTransformers'
 import { CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
+import { Board } from '@domain/board/board'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -183,14 +184,6 @@ const handleCellClick = ({ setState, getState, params: cell }) => {
     setState({ selectedCell: cell })
 }
 
-const getCluesCount = mainNumbers => {
-    let cluesCount = 0
-    BoardIterators.forBoardEachCell(cell => {
-        if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) cluesCount++
-    })
-    return cluesCount
-}
-
 const handleOnClose = ({ params: ref }) => {
     const closeDragger = getCloseDraggerHandler(ref)
     closeDragger()
@@ -206,7 +199,7 @@ const showSnackBar = ({ msg }) => {
 const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef } }) => {
     const { mainNumbers, startCustomPuzzle } = getState()
 
-    if (getCluesCount(mainNumbers) < 18) {
+    if (Board.getCluesCount(mainNumbers) < 18) {
         showSnackBar({ msg: 'clues are less than 18' })
         return
     }

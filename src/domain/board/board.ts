@@ -32,7 +32,8 @@ type Board = {
     isMainNumberNotEligibleToErase: (cell: Cell, mainNumbers: MainNumbers) => boolean,
     getNotesToRemoveAfterMainNumberInput: (number: number, cell: Cell, notes: Notes) => { cell: Cell, note: NoteValue }[],
     getEmptyCellsAndTheirSolution: (mainNumbers: MainNumbers) => EmptyCellsAndSolutions,
-    madeMistake: (inputNumber: MainNumberValue, cell: Cell, mainNumbers: MainNumbers) => boolean
+    madeMistake: (inputNumber: MainNumberValue, cell: Cell, mainNumbers: MainNumbers) => boolean,
+    getCluesCount: (mainNumbers: MainNumbers) => number,
 }
 
 const getNewNotesToSpawn = (mainNumbers: MainNumbers, notes: Notes): NotesToSpawn => {
@@ -106,6 +107,14 @@ const madeMistake = (inputNumber: MainNumberValue, cell: Cell, mainNumbers: Main
     return inputNumber !== MainNumbersRecord.getCellSolutionValue(mainNumbers, cell)
 }
 
+const getCluesCount = (mainNumbers: MainNumbers) => {
+    let cluesCount = 0
+    BoardIterators.forBoardEachCell(cell => {
+        if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) cluesCount++
+    })
+    return cluesCount
+}
+
 export const Board: Board = {
     getNewNotesToSpawn,
     isPuzzleSolved,
@@ -114,4 +123,5 @@ export const Board: Board = {
     getNotesToRemoveAfterMainNumberInput,
     getEmptyCellsAndTheirSolution,
     madeMistake,
+    getCluesCount,
 }
