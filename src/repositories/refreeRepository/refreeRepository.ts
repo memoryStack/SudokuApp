@@ -7,7 +7,7 @@ import type {
     DefaultState,
     RefreeRepository as RefreeRepositoryInterface,
     Time,
-} from '../../interfaces/refreeRepository'
+} from '@application/adapterInterfaces/stateManagers/refreeRepository'
 
 const {
     setMistakes,

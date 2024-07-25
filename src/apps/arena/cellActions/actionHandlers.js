@@ -1,14 +1,14 @@
 import _isEmpty from '@lodash/isEmpty'
 import { GAME_STATE, PENCIL_STATE } from '@resources/constants'
-import { undoAction } from '../store/actions/board.actions'
+
 import { isGameActive } from '../utils/util'
-import { fastPencilUseCase } from '@application/usecases/board'
+import { fastPencilUseCase, undoUseCase } from '@application/usecases/board'
 
 const handleUndoClick = ({ params: { dependencies } }) => {
     const { boardRepository, gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    undoAction(boardRepository)
+    undoUseCase(boardRepository)
 }
 
 const getNewPencilState = currentState => {
@@ -27,14 +27,7 @@ const handlePencilClick = ({ params: { dependencies } }) => {
 const handleFastPencilClick = ({ params: { dependencies } }) => {
     const { boardRepository, gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
-
-    const fastPencilData = fastPencilUseCase(boardRepository)
-
-    if (!_isEmpty(fastPencilData)) {
-        const { notesBunch, move } = fastPencilData
-        boardRepository.setNotesBunch(notesBunch)
-        boardRepository.addMove(move)
-    }
+    fastPencilUseCase(boardRepository)
 }
 
 const handleHintClick = ({ params: { dependencies } }) => {

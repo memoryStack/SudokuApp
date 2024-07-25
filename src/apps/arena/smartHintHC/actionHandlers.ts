@@ -4,7 +4,6 @@ import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 import { Dependencies } from '@contexts/DependencyContext'
 import _isEmpty from '@lodash/isEmpty'
 import { NumberEraseData, NumberInputData } from '../../../interfaces/smartHintRepository'
-import { applyHintAction } from '../store/actions/board.actions'
 import {
     inputTryOutNumber,
     eraseTryOutNumber,
@@ -17,6 +16,7 @@ import { ApplyHint, SelectCellOnClose } from '../utils/smartHints/types'
 import { InputNumber } from '../inputPanel'
 import { Hint } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from './helpers'
+import { applyHintUseCase } from '@application/usecases/board'
 
 type StateMaintainedByWithActionHOC = {
     focusedCells: Hint['focusedCells']
@@ -25,34 +25,34 @@ type StateMaintainedByWithActionHOC = {
     }
 }
 
-const handleOnInit = ({ setState, params: { focusedCells, styles } } : StatePropsHandlers & { params: StateMaintainedByWithActionHOC }) => {
+const handleOnInit = ({ setState, params: { focusedCells, styles } }: StatePropsHandlers & { params: StateMaintainedByWithActionHOC }) => {
     setState({ focusedCells, styles })
 }
 
 const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {
-        params: { newCellToSelect: SelectCellOnClose, dependencies: Dependencies }
-    }) => {
+    params: { newCellToSelect: SelectCellOnClose, dependencies: Dependencies }
+}) => {
     const { gameStateRepository, smartHintRepository, boardRepository } = dependencies
     if (newCellToSelect) boardRepository.setSelectedCell(newCellToSelect)
     smartHintRepository.removeHints()
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
 
-const handleNextClick = ({ params: { dependencies } }: {params: {dependencies : Dependencies}}) => {
+const handleNextClick = ({ params: { dependencies } }: { params: { dependencies: Dependencies } }) => {
     const { smartHintRepository } = dependencies
 
     const currentStep = smartHintRepository.getHintStepNumber()
     smartHintRepository.setHintStepNumber(currentStep + 1)
 }
 
-const handlePrevClick = ({ params: { dependencies } }: {params: {dependencies : Dependencies}}) => {
+const handlePrevClick = ({ params: { dependencies } }: { params: { dependencies: Dependencies } }) => {
     const { smartHintRepository } = dependencies
 
     const currentStep = smartHintRepository.getHintStepNumber()
     smartHintRepository.setHintStepNumber(currentStep - 1)
 }
 
-const handleCellClick = ({ params: { cell, dependencies } } : { params: {cell: Cell, dependencies: Dependencies} }) => {
+const handleCellClick = ({ params: { cell, dependencies } }: { params: { cell: Cell, dependencies: Dependencies } }) => {
     const { smartHintRepository } = dependencies
     smartHintRepository.setTryOutSelectedCell(cell)
 }
@@ -81,7 +81,7 @@ const handleNumberClick = ({
 
 const handleEraserClick = ({
     getState, params: { dependencies },
-} : StatePropsHandlers & { params: { dependencies: Dependencies } }) => {
+}: StatePropsHandlers & { params: { dependencies: Dependencies } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
     const notesToBeSpawned = eraseTryOutNumber(focusedCells, styles.snackBar, dependencies) as NumberEraseData
     if (!_isEmpty(notesToBeSpawned)) {
@@ -90,9 +90,9 @@ const handleEraserClick = ({
     }
 }
 
-const handleApplyHintClick = ({ params: { applyHintChanges, dependencies } } : { params: { applyHintChanges: ApplyHint, dependencies: Dependencies} }) => {
+const handleApplyHintClick = ({ params: { applyHintChanges, dependencies } }: { params: { applyHintChanges: ApplyHint, dependencies: Dependencies } }) => {
     setTimeout(() => {
-        applyHintAction(applyHintChanges, dependencies)
+        applyHintUseCase(applyHintChanges, dependencies)
 
         const { boardControllerRepository } = dependencies
         const availableHints = boardControllerRepository.getHintsLeftCount()

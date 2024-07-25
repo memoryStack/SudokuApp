@@ -1,6 +1,4 @@
-// this interface is defined by domain
-
-import { PENCIL_STATE } from '@resources/constants'
+import { PENCIL_STATE } from '../../constants'
 
 export interface BoardControllerRepository {
     getHintsLeftCount: () => number

@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
-import { BoardControllerRepository } from '../interfaces/boardControllerRepository'
-import { RefreeRepository } from '../interfaces/refreeRepository'
+import { BoardControllerRepository } from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
+import { RefreeRepository } from '@application/adapterInterfaces/stateManagers/refreeRepository'
 import { GameStateRepository } from '../apps/arena/refree/useCases/timerClickUseCase'
 import { SmartHintRepository } from '../interfaces/smartHintRepository'
 import { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'

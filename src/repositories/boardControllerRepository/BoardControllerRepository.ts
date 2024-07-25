@@ -7,7 +7,7 @@ import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 
 import type {
     BoardControllerRepository as BoardControllerRepositoryInterface,
-} from '../../interfaces/boardControllerRepository'
+} from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
 
 const {
     setPencil, setHints, resetState, setHintsMenu,

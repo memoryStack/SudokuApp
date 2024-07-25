@@ -1,3 +1,5 @@
+import { BOARD_MOVES_TYPES } from "../../constants"
+
 export type State = {
     mainNumbers: MainNumbers
     selectedCell: Cell
@@ -15,7 +17,17 @@ export type ToggleNotes = {
     note: NoteValue
 }[]
 
-export type Move = unknown
+export type Move = {
+    selectedCell: Cell,
+    mainNumber: {
+        action: BOARD_MOVES_TYPES,
+        value: number,
+    } | {},
+    notes: {
+        action: BOARD_MOVES_TYPES,
+        bunch: ToggleNotes
+    } | {}
+}
 
 export interface BoardRepository {
     setState: (state: State) => void;

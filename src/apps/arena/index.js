@@ -29,7 +29,7 @@ import { PuzzleBoard } from './PuzzleBoard'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { useCacheGameState } from './hooks/useCacheGameState'
 import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
-import { fillPuzzle } from './store/actions/board.actions'
+
 import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
 import { GameState } from './utils/classes/gameState'
@@ -42,6 +42,7 @@ import { HintsMenu } from './hintsMenu'
 import Refree from './refree'
 
 import { getStyles } from './arena.styles'
+import { fillPuzzleUseCase } from '@application/usecases/board'
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
@@ -171,7 +172,7 @@ const Arena_ = ({
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
-        return <Button label="Fill" onPress={() => fillPuzzle(dependencies.boardRepository)} />
+        return <Button label="Fill" onPress={() => fillPuzzleUseCase(dependencies.boardRepository)} />
     }
 
     const renderHintsMenu = () => {

@@ -1,5 +1,5 @@
+import { eraseCellUseCase, inputNumberUseCase } from '@application/usecases/board'
 import { ACTION_TYPES } from '../inputPanel/constants'
-import { eraseAction, inputNumberAction } from '../store/actions/board.actions'
 import { isGameActive } from '../utils/util'
 
 const handleNumberClick = ({ getState, params: number }) => {
@@ -7,7 +7,7 @@ const handleNumberClick = ({ getState, params: number }) => {
     const { gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    inputNumberAction(number, dependencies)
+    inputNumberUseCase(number, dependencies)
 }
 
 const handleEraserClick = ({ getState }) => {
@@ -15,7 +15,7 @@ const handleEraserClick = ({ getState }) => {
     const { gameStateRepository, boardRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    eraseAction(boardRepository)
+    eraseCellUseCase(boardRepository)
 }
 
 export const ACTION_HANDLERS = {
