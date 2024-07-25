@@ -7,6 +7,7 @@ import { RefreeRepository } from '../../repositories/refreeRepository'
 import { SmartHintRepository } from '../../repositories/smartHintRepository'
 import { BoardControllerRepository } from '../../repositories/boardControllerRepository'
 import { BoardRepository } from '../../repositories/boardRepository'
+import { snackBarAdapter } from '@adapters/snackbar'
 
 type Props = {
     children: React.ReactNode
@@ -19,6 +20,7 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         smartHintRepository: SmartHintRepository,
         boardControllerRepository: BoardControllerRepository,
         boardRepository: BoardRepository,
+        snackBarAdapter,
     }), [])
 
     return (

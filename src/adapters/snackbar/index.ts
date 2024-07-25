@@ -1,0 +1,1 @@
+export { snackBarAdapter } from './snackbar'

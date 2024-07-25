@@ -12,10 +12,10 @@ const handleNumberClick = ({ getState, params: number }) => {
 
 const handleEraserClick = ({ getState }) => {
     const { dependencies } = getState()
-    const { gameStateRepository, boardRepository } = dependencies
+    const { gameStateRepository, boardRepository, snackBarAdapter } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    eraseCellUseCase(boardRepository)
+    eraseCellUseCase(boardRepository, snackBarAdapter)
 }
 
 export const ACTION_HANDLERS = {

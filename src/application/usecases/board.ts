@@ -1,10 +1,12 @@
+import _get from '@lodash/get'
+import _forEach from '@lodash/forEach'
+import _map from '@lodash/map'
+import _isEmpty from '@lodash/isEmpty'
 
 import { Board } from '@domain/board/board'
 
 import type {
     BoardRepository,
-    State,
-    CellMainNumber,
     ToggleNotes,
     Move,
 } from '../adapterInterfaces/stateManagers/boardRepository'
@@ -16,17 +18,12 @@ import type {
 import type {
     RefreeRepository
 } from '../adapterInterfaces/stateManagers/refreeRepository'
+import { SnackBarAdapter } from '../adapterInterfaces/snackbar'
 
 import { BOARD_MOVES_TYPES, PENCIL_STATE } from '../constants'
 import { isMainNumberPresentInAnyHouseOfCell } from '@domain/board/utils/common'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
-import { emit } from '@utils/GlobalEventBus'
-import { EVENTS } from 'src/constants/events'
-import _get from '@lodash/get'
-import _forEach from '@lodash/forEach'
-import _map from '@lodash/map'
-import _isEmpty from '@lodash/isEmpty'
 
 type StateManagersDependencies = {
     boardRepository: BoardRepository,
@@ -187,17 +184,15 @@ const eraseMainNumber = (boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const eraseCellUseCase = (boardRepository: BoardRepository) => {
+export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapter: SnackBarAdapter) => {
     const mainNumbers = boardRepository.getMainNumbers()
     const selectedCell = boardRepository.getSelectedCell()
 
     if (Board.isMainNumberNotEligibleToErase(selectedCell, mainNumbers)) {
-        // TODO: DEPENDENCY ROLE BROKE
-        // this calling should happen via dependency
-        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-            msg: 'Clues or Correctly filled cells can not be removed',
-            visibleTime: 5000,
-        })
+        snackBarAdapter.show(
+            'Clues or Correctly filled cells can not be removed',
+            5000
+        )
         return
     }
 

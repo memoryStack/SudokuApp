@@ -7,7 +7,7 @@ import _map from '@lodash/map'
 import { HOUSE_TYPE } from '../board.constants'
 import { BoardIterators } from './boardIterators'
 
-import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { MainNumbersRecord } from '../records/mainNumbersRecord'
 import { getHouseCells, getCellHouseForHouseType } from './housesAndCells'
 
 const mainNumberCountExccedsThresholdInAnyHouseOfCell = (number: number, cell: Cell, mainNumbers: MainNumbers, threshold: number) => {
