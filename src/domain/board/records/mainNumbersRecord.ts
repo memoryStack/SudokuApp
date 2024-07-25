@@ -2,7 +2,7 @@ import _get from '@lodash/get'
 import _isEmpty from '@lodash/isEmpty'
 import _isNil from '@lodash/isNil'
 
-import { initMainNumbers as _initMainNumbers } from '../utils/common'
+import { CELLS_IN_A_HOUSE, HOUSES_COUNT_OF_A_TYPE } from '../board.constants'
 
 const getCellMainValue = (mainNumbers: MainNumbers, cell = {} as Cell): MainNumberValue =>
     _get(mainNumbers, [cell.row, cell.col, 'value'])
@@ -27,8 +27,18 @@ const isCellFilledCorrectly = (mainNumbers: MainNumbers, cell: Cell) => {
 const isClueCell = (mainNumbers: MainNumbers, cell = {} as Cell): boolean =>
     _get(mainNumbers, [cell.row, cell.col, 'isClue'])
 
+const getCellMainNumberDefaultValue = (): MainNumber => ({ value: 0, solutionValue: 0, isClue: false })
+
 const initMainNumbers = () => {
-    return _initMainNumbers()
+    const result = []
+    for (let i = 0; i < HOUSES_COUNT_OF_A_TYPE; i++) {
+        const rowData = []
+        for (let j = 0; j < CELLS_IN_A_HOUSE; j++) {
+            rowData.push(getCellMainNumberDefaultValue())
+        }
+        result.push(rowData)
+    }
+    return result
 }
 
 export const MainNumbersRecord = {

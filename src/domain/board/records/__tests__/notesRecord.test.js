@@ -1,4 +1,4 @@
-import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+import { getPuzzleDataFromPuzzleString } from '@domain/board/testingUtils/puzzleDataGenerator'
 
 import { NotesRecord } from '../notesRecord'
 

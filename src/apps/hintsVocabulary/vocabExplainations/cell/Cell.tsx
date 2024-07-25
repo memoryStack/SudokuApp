@@ -6,7 +6,7 @@ import _isNil from '@lodash/isNil'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { Board } from 'src/apps/arena/gameBoard'
-import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+import { getPuzzleDataFromPuzzleString } from '@domain/board/testingUtils/puzzleDataGenerator'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './cell.styles'

@@ -4,7 +4,7 @@ import {
     fireEvent, render, screen, act,
 } from '@utils/testing/testingLibrary'
 
-import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+import { getPuzzleDataFromPuzzleString } from '@domain/board/testingUtils/puzzleDataGenerator'
 
 import { getStoreState, invokeDispatch } from '../../../redux/dispatch.helpers'
 

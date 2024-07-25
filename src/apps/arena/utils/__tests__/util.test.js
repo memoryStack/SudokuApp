@@ -3,7 +3,7 @@ import _isArray from '@lodash/isArray'
 import _isEmpty from '@lodash/isEmpty'
 
 import { CUSTOMIZED_PUZZLE_LEVEL_TITLE, GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
-import { getPuzzleDataFromPuzzleString } from '@utils/testing/puzzleDataGenerators'
+import { getPuzzleDataFromPuzzleString } from '@domain/board/testingUtils/puzzleDataGenerator'
 import { getStoragePromise } from '../../../../utils/testing/testingBoilerplate/storage'
 
 import {
