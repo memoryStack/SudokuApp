@@ -23,6 +23,9 @@
             "@domain/*": [
                 "./src/domain/*"
             ],
+            "@application/*": [
+                "./src/application/*"
+            ],
         }
     },
     "exclude": [

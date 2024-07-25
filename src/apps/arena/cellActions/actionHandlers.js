@@ -1,7 +1,8 @@
 import _isEmpty from '@lodash/isEmpty'
 import { GAME_STATE, PENCIL_STATE } from '@resources/constants'
-import { fastPencilAction, undoAction } from '../store/actions/board.actions'
+import { undoAction } from '../store/actions/board.actions'
 import { isGameActive } from '../utils/util'
+import { fastPencilUseCase } from '@application/usecases/board'
 
 const handleUndoClick = ({ params: { dependencies } }) => {
     const { boardRepository, gameStateRepository } = dependencies
@@ -27,7 +28,7 @@ const handleFastPencilClick = ({ params: { dependencies } }) => {
     const { boardRepository, gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    const fastPencilData = fastPencilAction(boardRepository)
+    const fastPencilData = fastPencilUseCase(boardRepository)
 
     if (!_isEmpty(fastPencilData)) {
         const { notesBunch, move } = fastPencilData

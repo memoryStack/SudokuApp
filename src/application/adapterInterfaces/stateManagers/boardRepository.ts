@@ -1,9 +1,7 @@
-// this interface is defined by domain
-
 export type State = {
-    mainNumbers : MainNumbers
-    selectedCell : Cell
-    notes : Notes
+    mainNumbers: MainNumbers
+    selectedCell: Cell
+    notes: Notes
     moves: unknown[]
 }
 

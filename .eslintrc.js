@@ -92,6 +92,7 @@ module.exports = {
                     ['@resources', './src/resources'],
                     ['@adapters', './src/adapters'],
                     ['@domain', './src/domain'],
+                    ['@application', './src/application'],
                 ],
                 extensions: ['.ts', '.js', '.jsx', '.json', '.tsx'],
             },

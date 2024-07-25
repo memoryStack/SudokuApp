@@ -11,7 +11,7 @@ import type {
     CellMainNumber,
     ToggleNotes,
     Move,
-} from '../../interfaces/boardRepository'
+} from '@application/adapterInterfaces/stateManagers/boardRepository'
 
 const {
     setState,

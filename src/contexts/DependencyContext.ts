@@ -4,7 +4,7 @@ import { BoardControllerRepository } from '../interfaces/boardControllerReposito
 import { RefreeRepository } from '../interfaces/refreeRepository'
 import { GameStateRepository } from '../apps/arena/refree/useCases/timerClickUseCase'
 import { SmartHintRepository } from '../interfaces/smartHintRepository'
-import { BoardRepository } from '../interfaces/boardRepository'
+import { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'
 
 export type Dependencies = {
     gameStateRepository: GameStateRepository

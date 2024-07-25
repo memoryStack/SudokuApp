@@ -11,7 +11,6 @@ import { EVENTS } from '../../../../constants/events'
 import { BOARD_MOVES_TYPES } from '../../constants'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { NotesRecord } from '@domain/board/records/notesRecord'
-import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { Board } from '@domain/board/board'
 import { isMainNumberPresentInAnyHouseOfCell } from '@domain/board/utils/common'
 
@@ -20,26 +19,6 @@ const constructMove = ({ mainNumber = {}, notes = {} }, selectedCell) => ({
     mainNumber,
     notes,
 })
-
-export const fastPencilAction = boardRepository => {
-    const mainNumbers = boardRepository.getMainNumbers()
-    const notes = boardRepository.getNotes()
-    const newNotesBunchToAdd = Board.getNewNotesToSpawn(mainNumbers, notes)
-
-    if (!newNotesBunchToAdd.length) return {}
-
-    const move = {
-        notes: {
-            action: BOARD_MOVES_TYPES.ADD,
-            bunch: newNotesBunchToAdd,
-        },
-    }
-
-    return {
-        notesBunch: newNotesBunchToAdd,
-        move: constructMove(move, boardRepository.getSelectedCell()),
-    }
-}
 
 const inputMainNumber = (number, dependencies) => {
     const { boardRepository, refreeRepository } = dependencies
