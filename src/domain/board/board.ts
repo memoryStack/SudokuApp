@@ -4,53 +4,14 @@ import _every from '@lodash/every'
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
-import { CELLS_IN_A_HOUSE, NUMBERS_IN_A_HOUSE } from './board.constants'
-import { BoardIterators } from '@domain/board/utils/boardIterators'
+import { BoardIterators } from './utils/boardIterators'
 import { isMainNumberPresentInAnyHouseOfCell } from './utils/common'
 
-import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { MainNumbersRecord } from './records/mainNumbersRecord'
+
 import { NotesRecord } from './records/notesRecord'
-
-const initNotes = () => {
-    const result: Notes = []
-    for (let row = 0; row < CELLS_IN_A_HOUSE; row++) {
-        const rowNotes = []
-        for (let col = 0; col < CELLS_IN_A_HOUSE; col++) {
-            const boxNotes = []
-            for (let note = 1; note <= NUMBERS_IN_A_HOUSE; note++) {
-                // this structure can be re-written using [0, 0, 0, 4, 0, 6, 0, 0, 0] represenstion. but let's ignore it for now
-                boxNotes.push({ noteValue: note, show: 0 })
-            }
-            rowNotes.push(boxNotes)
-        }
-        result.push(rowNotes)
-    }
-    return result
-}
-
-const getCellAllPossibleNotes = (cell: Cell, mainNumbers: MainNumbers) => {
-    const result: Note[] = []
-    if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return result
-
-    BoardIterators.forCellEachNote(note => {
-        if (!isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbers)) {
-            result.push({ noteValue: note, show: 1 })
-        } else {
-            result.push({ noteValue: note, show: 0 })
-        }
-    })
-
-    return result
-}
-
-const initPossibleNotes = (mainNumbers: MainNumbers) => {
-    const notes = initNotes()
-    BoardIterators.forBoardEachCell((cell: Cell) => {
-        const cellNotes = getCellAllPossibleNotes(cell, mainNumbers)
-        notes[cell.row][cell.col] = cellNotes
-    })
-    return notes
-}
+import { BOARD_CELLS_COUNT } from './board.constants'
+import { getCellHousesInfo, getHouseCells } from './utils/housesAndCells'
 
 type NoteToSpawn = {
     cell: Cell,
@@ -59,8 +20,19 @@ type NoteToSpawn = {
 
 type NotesToSpawn = Array<NoteToSpawn>
 
+type EmptyCellsAndSolutions = {
+    cell: Cell,
+    solution: MainNumberValue
+}[]
+
 type Board = {
-    getNewNotesToSpawn: (mainNumbers: MainNumbers, notes: Notes) => NotesToSpawn
+    getNewNotesToSpawn: (mainNumbers: MainNumbers, notes: Notes) => NotesToSpawn,
+    isPuzzleSolved: (mainNumbers: MainNumbers) => boolean,
+    isMainNumberEligibleToErase: (cell: Cell, mainNumbers: MainNumbers) => boolean,
+    isMainNumberNotEligibleToErase: (cell: Cell, mainNumbers: MainNumbers) => boolean,
+    getNotesToRemoveAfterMainNumberInput: (number: number, cell: Cell, notes: Notes) => { cell: Cell, note: NoteValue }[],
+    getEmptyCellsAndTheirSolution: (mainNumbers: MainNumbers) => EmptyCellsAndSolutions,
+    madeMistake: (inputNumber: MainNumberValue, cell: Cell, mainNumbers: MainNumbers) => boolean
 }
 
 const getNewNotesToSpawn = (mainNumbers: MainNumbers, notes: Notes): NotesToSpawn => {
@@ -80,6 +52,66 @@ const getNewNotesToSpawn = (mainNumbers: MainNumbers, notes: Notes): NotesToSpaw
     return result
 }
 
+const isPuzzleSolved = (mainNumbers: MainNumbers) => {
+    let result = 0
+    BoardIterators.forBoardEachCell(cell => {
+        if (MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) result++
+    })
+    return result === BOARD_CELLS_COUNT
+}
+
+const isMainNumberEligibleToErase = (cell: Cell, mainNumbers: MainNumbers) => {
+    return MainNumbersRecord.isCellFilled(mainNumbers, cell)
+        && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)
+}
+
+const isMainNumberNotEligibleToErase = (cell: Cell, mainNumbers: MainNumbers) => {
+    return MainNumbersRecord.isCellFilled(mainNumbers, cell)
+        && MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)
+}
+
+const getNotesToRemoveAfterMainNumberInput = (number: number, cell: Cell, notes: Notes) => {
+    const visibleNotes = NotesRecord.getCellVisibleNotesList(notes, cell)
+
+    const result = visibleNotes.map((noteValue) => ({ cell, note: noteValue }))
+
+    const cellHouses = getCellHousesInfo(cell)
+    cellHouses.forEach(house => {
+        getHouseCells(house).forEach(houseCell => {
+            if (NotesRecord.isNotePresentInCell(notes, number, houseCell)) {
+                result.push({ cell: houseCell, note: number })
+            }
+        })
+    })
+
+    return result
+}
+
+const getEmptyCellsAndTheirSolution = (mainNumbers: MainNumbers): EmptyCellsAndSolutions => {
+    const result: EmptyCellsAndSolutions = []
+
+    BoardIterators.forBoardEachCell(cell => {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
+            result.push({
+                cell,
+                solution: MainNumbersRecord.getCellSolutionValue(mainNumbers, cell)
+            })
+        }
+    })
+
+    return result
+}
+
+const madeMistake = (inputNumber: MainNumberValue, cell: Cell, mainNumbers: MainNumbers) => {
+    return inputNumber !== MainNumbersRecord.getCellSolutionValue(mainNumbers, cell)
+}
+
 export const Board: Board = {
-    getNewNotesToSpawn
+    getNewNotesToSpawn,
+    isPuzzleSolved,
+    isMainNumberEligibleToErase,
+    isMainNumberNotEligibleToErase,
+    getNotesToRemoveAfterMainNumberInput,
+    getEmptyCellsAndTheirSolution,
+    madeMistake,
 }

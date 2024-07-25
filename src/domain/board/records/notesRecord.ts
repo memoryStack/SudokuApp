@@ -6,8 +6,7 @@ import _map from '@lodash/map'
 
 import { CELLS_IN_A_HOUSE, NUMBERS_IN_A_HOUSE } from '../board.constants'
 import { BoardIterators } from '../utils/boardIterators'
-import { MainNumbersRecord } from './mainNumbersRecord'
-import { isMainNumberPresentInAnyHouseOfCell } from '../utils/common'
+import { getCellAllPossibleNotes } from '../utils/common'
 
 const getCellNotes = (notes: Notes, cell = {} as Cell): Note[] => _get(notes, [cell.row, cell.col])
 
@@ -46,22 +45,8 @@ const initNotes = () => {
     return result
 }
 
-const getCellAllPossibleNotes = (cell: Cell, mainNumbers: MainNumbers) => {
-    const result: Note[] = []
-
-    if (MainNumbersRecord.isCellFilled(mainNumbers, cell)) return result
-
-    BoardIterators.forCellEachNote(note => {
-        if (!isMainNumberPresentInAnyHouseOfCell(note, cell, mainNumbers)) {
-            result.push({ noteValue: note, show: 1 })
-        } else {
-            result.push({ noteValue: note, show: 0 })
-        }
-    })
-
-    return result
-}
-
+// TODO: think about moving it to board.ts to remove circular dependency
+// or move it to "common" utils
 const initPossibleNotes = (mainNumbers: MainNumbers) => {
     const notes = initNotes()
     BoardIterators.forBoardEachCell((cell: Cell) => {

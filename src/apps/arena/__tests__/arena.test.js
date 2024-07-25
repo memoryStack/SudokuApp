@@ -316,6 +316,28 @@ describe('Board Cell fill MainValue in Notes filled cell', () => {
         expect(isNotePresentInCell(cell, 3)).toBe(false)
         expectMainNumberPresentInCell(cell, 2)
     })
+
+    test('will remove notes of main value from any other cell which has a house common with to be filled cell', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        fireEvent.press(screen.getByText('Fast Pencil'))
+        const cellA = screen.getAllByTestId(BOARD_CELL_TEST_ID)[7]
+        const cellB = screen.getAllByTestId(BOARD_CELL_TEST_ID)[25]
+        const cellC = screen.getAllByTestId(BOARD_CELL_TEST_ID)[78]
+        expect(isNotePresentInCell(cellA, 5)).toBe(true)
+        expect(isNotePresentInCell(cellB, 5)).toBe(true)
+        expect(isNotePresentInCell(cellC, 5)).toBe(true)
+
+        const cellToBeFilled = screen.getAllByTestId(BOARD_CELL_TEST_ID)[79]
+        fireEvent.press(cellToBeFilled)
+        fireEvent.press(getInputPanelNumberIfEnabled(5))
+
+        expect(isNotePresentInCell(cellA, 5)).toBe(false)
+        expect(isNotePresentInCell(cellB, 5)).toBe(false)
+        expect(isNotePresentInCell(cellC, 5)).toBe(false)
+
+        expectMainNumberPresentInCell(cellToBeFilled, 5)
+    })
 })
 
 describe('Erase Board Cell Main Number', () => {

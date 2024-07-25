@@ -66,6 +66,15 @@ const getCellHouseForHouseType = (houseType: HouseType, cell: Cell): House => {
     return getCellBlockHouseInfo(cell)
 }
 
+const getCellHousesInfo = (cell: Cell) => {
+    const result = [
+        getCellRowHouseInfo(cell),
+        getCellColHouseInfo(cell),
+        getCellBlockHouseInfo(cell)
+    ]
+    return result
+}
+
 export {
     isRowHouse,
     isColHouse,
@@ -74,5 +83,6 @@ export {
     getCellRowHouseInfo,
     getCellColHouseInfo,
     getCellBlockHouseInfo,
-    getCellHouseForHouseType
+    getCellHouseForHouseType,
+    getCellHousesInfo
 }
