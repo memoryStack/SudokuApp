@@ -25,7 +25,6 @@ import {
 } from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { GameState } from '../utils/classes/gameState'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT_TEST_ID } from './refree.constants'
@@ -54,25 +53,9 @@ const Refree_ = ({ onAction }) => {
     const difficultyLevel = useSelector(getDifficultyLevel)
     const time = useSelector(getTime)
 
-    const gameState = useSelector(getGameState)
-
     useEffect(() => () => {
         onAction({ type: ACTION_TYPES.ON_UNMOUNT, payload: { dependencies } })
     }, [onAction, dependencies])
-
-    useEffect(() => {
-        if (mistakes >= maxMistakesLimit) {
-            onAction({ type: ACTION_TYPES.MAX_MISTAKES_LIMIT_REACHED, payload: { dependencies } })
-        }
-    }, [onAction, mistakes, maxMistakesLimit, dependencies])
-
-    useEffect(() => {
-        const stopTimer = () => onAction({ type: ACTION_TYPES.ON_STOP_TIMER })
-        if (new GameState(gameState).isGameActive()) onAction({ type: ACTION_TYPES.ON_START_TIMER })
-        else stopTimer()
-
-        return () => stopTimer()
-    }, [onAction, gameState])
 
     useCacheGameState(GAME_DATA_KEYS.REFEREE, { difficultyLevel, mistakes, time })
 

@@ -25,7 +25,7 @@ import {
     getCellToFocusData, getShowSmartHint, getSvgPropsData,
 } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput, removableNoteFilledInCell } from '../smartHintHC/helpers'
-import { GameState } from '../utils/classes/gameState'
+import { GameState } from '@application/utils/gameState'
 import { useHintHasTryOutStep, useIsHintTryOutStep } from '../hooks/smartHints'
 import {
     areCommonHouseCells, areSameCells, isCellExists, sameValueInCells,

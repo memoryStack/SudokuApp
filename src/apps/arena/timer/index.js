@@ -15,7 +15,7 @@ import { Touchable } from '../../components/Touchable'
 
 import { getGameState } from '../store/selectors/gameState.selectors'
 
-import { GameState } from '../utils/classes/gameState'
+import { GameState } from '@application/utils/gameState'
 
 import { TIMER_TEST_ID, TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID } from './timer.constants'
 

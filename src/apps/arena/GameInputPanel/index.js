@@ -12,7 +12,7 @@ import withActions from '../../../utils/hocs/withActions'
 import { Inputpanel } from '../inputPanel'
 
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
-import { GameState } from '../utils/classes/gameState'
+import { GameState } from '@application/utils/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { ACTION_HANDLERS } from './actionHandlers'

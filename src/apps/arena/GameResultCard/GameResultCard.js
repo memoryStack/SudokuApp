@@ -15,7 +15,7 @@ import Button from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
-import { GameState } from '../utils/classes/gameState'
+import { GameState } from '@application/utils/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { GAME_OVER_CARD_TEST_ID } from './gameResultCard.constants'

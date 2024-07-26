@@ -24,7 +24,7 @@ import { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS } from './cacheGameHandler'
 import { HOUSES_COUNT_OF_A_TYPE, HOUSE_TYPE } from '@domain/board/board.constants'
 
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
-import { GameState } from './classes/gameState'
+import { GameState } from '@application/utils/gameState'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'

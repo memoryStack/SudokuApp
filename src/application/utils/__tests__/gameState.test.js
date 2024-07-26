@@ -1,4 +1,5 @@
-import { GAME_STATE } from '@resources/constants'
+import { GAME_STATE } from '../../constants'
+
 import { GameState } from '../gameState'
 
 describe('GameState class', () => {

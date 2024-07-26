@@ -32,7 +32,7 @@ import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 
 import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
-import { GameState } from './utils/classes/gameState'
+import { GameState } from '@application/utils/gameState'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
 import GameResultCard from './GameResultCard'
 import { NextGameMenu } from './nextGameMenu'
@@ -169,6 +169,11 @@ const Arena_ = ({
     const onNewGameMenuClosed = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_CLOSE })
     }, [onAction])
+
+    useEffect(() => {
+        if (new GameState(gameState).isGameActive()) timer.startTimer()
+        else timer.stopTimer()
+    }, [gameState])
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null

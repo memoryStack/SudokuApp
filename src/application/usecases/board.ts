@@ -5,31 +5,21 @@ import _isEmpty from '@lodash/isEmpty'
 
 import { Board } from '@domain/board/board'
 
+import { isMainNumberPresentInAnyHouseOfCell } from '@domain/board/utils/common'
+import { NotesRecord } from '@domain/board/records/notesRecord'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+
 import type {
     BoardRepository,
     ToggleNotes,
     Move,
 } from '../adapterInterfaces/stateManagers/boardRepository'
 
-import type {
-    BoardControllerRepository
-} from '../adapterInterfaces/stateManagers/boardControllerRepository'
-
-import type {
-    RefreeRepository
-} from '../adapterInterfaces/stateManagers/refreeRepository'
 import { SnackBarAdapter } from '../adapterInterfaces/snackbar'
 
-import { BOARD_MOVES_TYPES, PENCIL_STATE } from '../constants'
-import { isMainNumberPresentInAnyHouseOfCell } from '@domain/board/utils/common'
-import { NotesRecord } from '@domain/board/records/notesRecord'
-import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { BOARD_MOVES_TYPES, GAME_STATE, PENCIL_STATE } from '../constants'
 
-type StateManagersDependencies = {
-    boardRepository: BoardRepository,
-    boardControllerRepository: BoardControllerRepository,
-    refreeRepository: RefreeRepository,
-}
+import type { Dependencies } from '../type'
 
 type AddMainNumberHintAction = {
     cell: Cell
@@ -75,7 +65,7 @@ export const fastPencilUseCase = (boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, boardRepository.getSelectedCell()))
 }
 
-const inputMainNumber = (number: number, dependencies: StateManagersDependencies) => {
+const inputMainNumber = (number: number, dependencies: Dependencies) => {
     const { boardRepository, refreeRepository } = dependencies
 
     const selectedCell = boardRepository.getSelectedCell()
@@ -89,8 +79,12 @@ const inputMainNumber = (number: number, dependencies: StateManagersDependencies
     }
 
     if (Board.madeMistake(number, selectedCell, mainNumbers)) {
-        const currentMistakesCount = refreeRepository.getGameMistakesCount()
-        refreeRepository.setGameMistakesCount(currentMistakesCount + 1)
+        const newMistakesCount = refreeRepository.getGameMistakesCount() + 1
+        refreeRepository.setGameMistakesCount(newMistakesCount)
+        if (newMistakesCount === refreeRepository.getMaxMistakesCount()) {
+            const { gameStateRepository } = dependencies
+            gameStateRepository.setGameState(GAME_STATE.OVER_UNSOLVED)
+        }
     } else {
         const notes = boardRepository.getNotes()
         const notesBunch = Board.getNotesToRemoveAfterMainNumberInput(number, selectedCell, notes)
@@ -131,7 +125,7 @@ const inputNoteNumber = (number: number, boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const inputNumberUseCase = (number: number, dependencies: StateManagersDependencies) => {
+export const inputNumberUseCase = (number: number, dependencies: Dependencies) => {
     const { boardRepository } = dependencies
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
@@ -203,7 +197,7 @@ export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapt
     }
 }
 
-export const applyHintUseCase = (applyHintChanges: ApplyHintData, dependencies: StateManagersDependencies) => {
+export const applyHintUseCase = (applyHintChanges: ApplyHintData, dependencies: Dependencies) => {
     if (_get(applyHintChanges, '0.action.type') === BOARD_MOVES_TYPES.ADD) {
         inputMainNumber(_get(applyHintChanges, '0.action.mainNumber'), dependencies)
         return

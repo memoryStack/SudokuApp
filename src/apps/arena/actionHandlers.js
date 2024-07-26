@@ -37,8 +37,7 @@ import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler
 import { consoleLog } from '../../utils/util'
 
 import { EVENTS } from '../../constants/events'
-import { GameState } from './utils/classes/gameState'
-
+import { GameState } from '@application/utils/gameState'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import {

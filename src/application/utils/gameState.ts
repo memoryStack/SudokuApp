@@ -1,4 +1,4 @@
-import { GAME_STATE } from '@resources/constants'
+import { GAME_STATE } from '../constants'
 
 export class GameState {
     private state: GAME_STATE

@@ -1,10 +1,10 @@
-import { GAME_STATE } from '@resources/constants'
+import { GameState } from "../utils/gameState"
 
-import { GameState } from '../../../utils/classes/gameState'
+import { GAME_STATE } from "../constants"
 
-import { GameStateRepository } from './types'
+import type { GameStateRepository } from '../adapterInterfaces/stateManagers/gameStateRepository'
 
-export const TimerClickUseCase = (repository: GameStateRepository): void => {
+export const timerClickUseCase = (repository: GameStateRepository): void => {
     const gameState = repository.getGameState()
 
     const gameStateObj = new GameState(gameState)

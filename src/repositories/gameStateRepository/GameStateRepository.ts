@@ -1,6 +1,7 @@
 import { GAME_STATE } from '@resources/constants'
 
-import type { GameStateRepository as GameStateRepositoryInterface } from '../../apps/arena/refree/useCases/timerClickUseCase'
+import type { GameStateRepository as GameStateRepositoryInterface } from '@application/adapterInterfaces/stateManagers/gameStateRepository'
+
 import { gameStateActions } from '../../apps/arena/store/reducers/gameState.reducers'
 import { getGameState } from '../../apps/arena/store/selectors/gameState.selectors'
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'

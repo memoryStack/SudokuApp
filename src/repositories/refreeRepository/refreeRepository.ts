@@ -1,5 +1,5 @@
 import { refreeActions } from '../../apps/arena/store/reducers/refree.reducers'
-import { getMistakes, getDifficultyLevel, getTime } from '../../apps/arena/store/selectors/refree.selectors'
+import { getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit } from '../../apps/arena/store/selectors/refree.selectors'
 
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 
@@ -17,6 +17,7 @@ const {
 } = refreeActions
 
 export const RefreeRepository: RefreeRepositoryInterface = {
+    getMaxMistakesCount: () => getMaxMistakesLimit(getStoreState()),
     getGameMistakesCount: () => getMistakes(getStoreState()),
     setGameMistakesCount: (mistakes: number) => {
         invokeDispatch(setMistakes(mistakes))

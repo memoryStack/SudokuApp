@@ -2,7 +2,7 @@ import { createContext } from 'react'
 
 import { BoardControllerRepository } from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
 import { RefreeRepository } from '@application/adapterInterfaces/stateManagers/refreeRepository'
-import { GameStateRepository } from '../apps/arena/refree/useCases/timerClickUseCase'
+import { GameStateRepository } from '@application/adapterInterfaces/stateManagers/gameStateRepository'
 import { SmartHintRepository } from '../interfaces/smartHintRepository'
 import { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'
 import { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'

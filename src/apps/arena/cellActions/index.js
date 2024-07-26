@@ -18,7 +18,7 @@ import { getAvailableHintsCount, getPencilStatus } from '../store/selectors/boar
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 import { useCacheGameState } from '../hooks/useCacheGameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { GameState } from '../utils/classes/gameState'
+import { GameState } from '@application/utils/gameState'
 
 import Undo from './Undo'
 import Pencil from './Pencil'

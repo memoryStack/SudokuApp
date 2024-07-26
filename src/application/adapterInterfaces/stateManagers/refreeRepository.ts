@@ -15,6 +15,7 @@ export type DefaultState = {
 export interface RefreeRepository {
     getGameMistakesCount: () => number;
     setGameMistakesCount: (mistakes: number) => void;
+    getMaxMistakesCount: () => number;
     getGameLevel: () => string;
     setGameLevel: (level: string) => void;
     getTime: () => Time;
