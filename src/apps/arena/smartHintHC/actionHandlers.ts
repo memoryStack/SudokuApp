@@ -3,11 +3,6 @@ import { GAME_STATE } from '@resources/constants'
 import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 import { Dependencies } from '@contexts/DependencyContext'
 import _isEmpty from '@lodash/isEmpty'
-import { NumberEraseData, NumberInputData } from '../../../interfaces/smartHintRepository'
-import {
-    inputTryOutNumber,
-    eraseTryOutNumber,
-} from '../store/actions/smartHintHC.actions'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
 
@@ -17,6 +12,7 @@ import { InputNumber } from '../inputPanel'
 import { Hint } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from './helpers'
 import { applyHintUseCase } from '@application/usecases/board'
+import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase } from '@application/usecases/smartHint/smartHint'
 
 type StateMaintainedByWithActionHOC = {
     focusedCells: Hint['focusedCells']
@@ -73,21 +69,14 @@ const handleNumberClick = ({
         handleEraserClick({ getState, setState, params: { dependencies } })
     }
 
-    const boardDataChanges = inputTryOutNumber(number, focusedCells, styles.snackBar, dependencies) as NumberInputData
-    if (!_isEmpty(boardDataChanges)) {
-        smartHintRepository.updateBoardDataOnTryOutNumberInput(boardDataChanges)
-    }
+    inputTryOutNumberUseCase(number, focusedCells, styles.snackBar, dependencies)
 }
 
 const handleEraserClick = ({
     getState, params: { dependencies },
 }: StatePropsHandlers & { params: { dependencies: Dependencies } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
-    const notesToBeSpawned = eraseTryOutNumber(focusedCells, styles.snackBar, dependencies) as NumberEraseData
-    if (!_isEmpty(notesToBeSpawned)) {
-        const { smartHintRepository } = dependencies
-        smartHintRepository.updateBoardDataOnTryOutErase(notesToBeSpawned)
-    }
+    eraseTryOutNumberUseCase(focusedCells, styles.snackBar, dependencies)
 }
 
 const handleApplyHintClick = ({ params: { applyHintChanges, dependencies } }: { params: { applyHintChanges: ApplyHint, dependencies: Dependencies } }) => {

@@ -14,10 +14,10 @@ import {
 } from '../../apps/arena/store/selectors/smartHintHC.selectors'
 import {
     SmartHintRepository as SmartHintRepositoryInterface,
-    NumberInputData,
-    NumberEraseData,
     HintData,
 } from '../../interfaces/smartHintRepository'
+
+import type { NumberInputData, NumberEraseData } from '@application/adapterInterfaces/stateManagers/smartHintHCRepository'
 
 import { invokeDispatch, getStoreState } from '../../redux/dispatch.helpers'
 import { smartHintHCActions } from '../../apps/arena/store/reducers/smartHintHC.reducers'

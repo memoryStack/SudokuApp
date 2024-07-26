@@ -1,3 +1,6 @@
+import _isEmpty from "@lodash/isEmpty"
+import _isEqual from "@lodash/isEqual"
+
 import { CELLS_IN_A_HOUSE, HOUSE_TYPE } from "../board.constants"
 
 import { blockCellToBoardCell, getBlockAndBoxNum } from "./cellsTransformers"
@@ -75,6 +78,42 @@ const getCellHousesInfo = (cell: Cell) => {
     return result
 }
 
+const areSameCells = (cellA: Cell, cellB: Cell) => {
+    if (_isEmpty(cellA) || _isEmpty(cellB)) return false
+    return _isEqual(cellA, cellB)
+}
+
+const getPairCellsCommonHouses = (cellA: Cell, cellB: Cell) => {
+    const cellAHouses = getCellHousesInfo(cellA)
+    const cellBHouses = getCellHousesInfo(cellB)
+
+    const result: { [key: string]: boolean } = {}
+    for (let i = 0; i < cellAHouses.length; i++) {
+        const houseType: HouseType = cellAHouses[i].type
+        result[houseType] = cellAHouses[i].num === cellBHouses[i].num
+    }
+
+    return result
+}
+
+const areCommonHouseCells = (cellA: Cell, cellB: Cell) => {
+    if (_isEmpty(cellA) || _isEmpty(cellB)) return false
+
+    const cellsPairCommonHouses = getPairCellsCommonHouses(cellA, cellB)
+    return Object.values(cellsPairCommonHouses).some(isCommonHouse => isCommonHouse)
+}
+
+// TODO: this will be removed anyway
+const getCellAxesValues = (cell: Cell) => {
+    const BOARD_AXES_VALUES = {
+        Y_AXIS: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
+        X_AXIS: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    }
+    const yAxisTexts = BOARD_AXES_VALUES.Y_AXIS
+    const xAxisTexts = BOARD_AXES_VALUES.X_AXIS
+    return `${yAxisTexts[cell.row]}${xAxisTexts[cell.col]}`
+}
+
 export {
     isRowHouse,
     isColHouse,
@@ -84,5 +123,8 @@ export {
     getCellColHouseInfo,
     getCellBlockHouseInfo,
     getCellHouseForHouseType,
-    getCellHousesInfo
+    getCellHousesInfo,
+    areSameCells,
+    areCommonHouseCells,
+    getCellAxesValues,
 }

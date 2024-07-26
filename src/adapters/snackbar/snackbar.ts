@@ -5,10 +5,11 @@ import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from 'src/constants/events'
 
 export const snackBarAdapter: SnackBarInterface = {
-    show: (msg = '', visibleTime) => {
+    show: ({ msg = '', visibleTime, customStyles = null }) => {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
             msg: msg,
             visibleTime,
+            customStyles,
         })
     }
 }
