@@ -122,13 +122,6 @@ const Arena_ = ({
         onAction({ type: ACTION_TYPES.ON_OUT_OF_FOCUS, payload: { gameState, dependencies } })
     }, [onAction, gameState, dependencies])
 
-    const onStartCustomPuzzle = useCallback(mainNumbers => {
-        onAction({
-            type: ACTION_TYPES.ON_START_CUSTOM_PUZZLE,
-            payload: { mainNumbers, dependencies },
-        })
-    }, [onAction, dependencies])
-
     const onCustomPuzzleHCClosed = () => onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
 
     const hideCongratsModal = useCallback(() => {
@@ -191,7 +184,6 @@ const Arena_ = ({
             <CustomPuzzle
                 parentHeight={pageHeight}
                 onCustomPuzzleClosed={onCustomPuzzleHCClosed}
-                startCustomPuzzle={onStartCustomPuzzle}
             />
         )
     }

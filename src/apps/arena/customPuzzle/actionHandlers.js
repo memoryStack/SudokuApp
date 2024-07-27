@@ -17,6 +17,8 @@ import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { blockCellToBoardCell, getBlockAndBoxNum, convertBoardCellNumToCell } from '@domain/board/utils/cellsTransformers'
 import { CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
 import { Board } from '@domain/board/board'
+import { startGameUseCase } from '@application/usecases/startGameUseCase'
+import { CUSTOMIZED_PUZZLE_LEVEL_TITLE } from '@resources/constants'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -196,8 +198,8 @@ const showSnackBar = ({ msg }) => {
     })
 }
 
-const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef } }) => {
-    const { mainNumbers, startCustomPuzzle } = getState()
+const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef, dependencies } }) => {
+    const { mainNumbers } = getState()
 
     if (Board.getCluesCount(mainNumbers) < 18) {
         showSnackBar({ msg: 'clues are less than 18' })
@@ -218,7 +220,11 @@ const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef
         showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
     } else {
         transformMainNumbersForValidPuzzle(mainNumbers)
-        startCustomPuzzle(mainNumbers)
+        startGameUseCase({
+            mainNumbers,
+            difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE,
+            dependencies
+        })
         handleOnClose({ params: customPuzzleHCRef })
     }
 }

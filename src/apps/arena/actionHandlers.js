@@ -6,7 +6,6 @@ import _findIndex from '@lodash/findIndex'
 import _isInteger from '@lodash/isInteger'
 import _noop from '@lodash/noop'
 
-import { getKey } from '@utils/storage'
 import {
     LAUNCHING_DEFAULT_PUZZLE,
     DEEPLINK_PUZZLE_NO_SOLUTIONS,
@@ -29,7 +28,6 @@ import {
     isGenerateNewPuzzleItem,
 } from './utils/util'
 
-import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from './utils/cacheGameHandler'
 import { consoleLog } from '../../utils/util'
 
 import { EVENTS } from '../../constants/events'
@@ -42,8 +40,9 @@ import {
 import { BOARD_CELLS_COUNT, CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { startGameUseCase } from '@application/usecases/startGameUseCase'
-import { generateAndStartNewGameUseCase } from '@application/usecases/generateAndStartNewGameUseCase'
+import { generateAndStartNewGameUseCase } from '@application/usecases/generateAndStartNewGame'
 import { LEVEL_DIFFICULTIES } from '@application/constants'
+import { resumeGameUseCase } from '@application/usecases/resumeGame'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -87,6 +86,20 @@ const getSharedPuzzleError = url => {
     return ''
 }
 
+/*
+    steps in starting a shared puzzle
+        1. extract the puzzle string
+        2. puzzle validations
+            a. string length
+            b. invalid characters in string
+            c. duplicates in puzzle
+            d. duplicate solutions in puzzle
+                if duplicate solutions exist then launch an easy level puzzle
+        
+        
+
+*/
+
 const handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) => {
     const sharedPuzzleError = getSharedPuzzleError(puzzleUrl)
     if (sharedPuzzleError) {
@@ -118,44 +131,10 @@ const handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) =
     }
 }
 
-const transformNativeGeneratedPuzzle = (clues, solution) => {
-    const mainNumbers = []
-    for (let row = 0; row < CELLS_IN_A_HOUSE; row++) {
-        const rowData = []
-        for (let col = 0; col < CELLS_IN_A_HOUSE; col++) {
-            const cellNo = convertBoardCellToNum({ row, col })
-            const cellvalue = clues[cellNo]
-            rowData.push({
-                value: cellvalue,
-                solutionValue: solution[cellNo],
-                isClue: cellvalue !== 0,
-            })
-        }
-        mainNumbers.push(rowData)
-    }
-    return mainNumbers
-}
-
 const generateNewPuzzle = (difficultyLevel, dependencies) => {
     if (!difficultyLevel) return
     // "minClues" becoz sometimes for the expert levels we get more than desired clues
-
     generateAndStartNewGameUseCase(difficultyLevel, dependencies)
-        .catch(error => {
-            consoleLog(error)
-        })
-}
-
-const resumePreviousGame = dependencies => {
-    getKey(PREVIOUS_GAME_DATA_KEY)
-        .then(previousGameData => {
-            startGameUseCase({
-                ...previousGameData[GAME_DATA_KEYS.BOARD_DATA],
-                ...previousGameData[GAME_DATA_KEYS.REFEREE],
-                ...previousGameData[GAME_DATA_KEYS.CELL_ACTIONS],
-                dependencies,
-            })
-        })
         .catch(error => {
             consoleLog(error)
         })
@@ -168,7 +147,7 @@ const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, depende
     }
 
     if (selectedGameMenuItem === RESUME) {
-        resumePreviousGame(dependencies)
+        resumeGameUseCase(dependencies)
         return
     }
 
@@ -178,10 +157,6 @@ const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, depende
     }
 
     generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
-}
-
-const handleStartCustomPuzzle = ({ params: { mainNumbers, dependencies } }) => {
-    startGameUseCase({ mainNumbers, difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE, dependencies })
 }
 
 const handleCustomPuzzleHCClose = ({ setState }) => {
@@ -271,7 +246,6 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_SHARE_CLICK]: handleSharePuzzle,
     [ACTION_TYPES.ON_INIT_SHARED_PUZZLE]: handleInitSharedPuzzle,
     [ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS]: handleMenuItemPress,
-    [ACTION_TYPES.ON_START_CUSTOM_PUZZLE]: handleStartCustomPuzzle,
     [ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE]: handleCustomPuzzleHCClose,
     [ACTION_TYPES.ON_OUT_OF_FOCUS]: handleScreenOutOfFocus,
     [ACTION_TYPES.ON_IN_FOCUS]: handleScreenInFocus,

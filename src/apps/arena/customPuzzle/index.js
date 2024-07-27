@@ -19,6 +19,7 @@ import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers
 import { CLOSE_ICON_TEST_ID, CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
 import { getStyles } from './customPuzzle.styles'
 import { areCommonHouseCells, areSameCells, sameValueInCells } from '../utils/util'
+import { useDependency } from 'src/hooks/useDependency'
 
 const CustomPuzzle_ = ({
     mainNumbers,
@@ -28,6 +29,8 @@ const CustomPuzzle_ = ({
     onCustomPuzzleClosed,
     onAction,
 }) => {
+    const dependencies = useDependency()
+
     const styles = useStyles(getStyles)
 
     const customPuzzleRef = useRef(null)
@@ -41,8 +44,8 @@ const CustomPuzzle_ = ({
     }, [onAction])
 
     const handlePlayClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef } })
-    }, [onAction])
+        onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef, dependencies } })
+    }, [onAction, dependencies])
 
     const onCellClick = useCallback(cell => {
         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })

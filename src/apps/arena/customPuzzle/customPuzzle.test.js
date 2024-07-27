@@ -268,10 +268,8 @@ describe('Analyze Custom Puzzle', () => {
         }))
 
         const onClosed = jest.fn()
-        const onStartPuzzle = jest.fn()
         renderCustomPuzzle({
             onCustomPuzzleClosed: onClosed,
-            startCustomPuzzle: onStartPuzzle,
         })
 
         const PUZZLE_CELL_VS_MAIN_NUMBER = {
@@ -318,9 +316,6 @@ describe('Analyze Custom Puzzle', () => {
         }
         fillCustomPuzzle(PUZZLE_CELL_VS_MAIN_NUMBER)
         fireEvent.press(screen.getByText('Play'))
-        await waitFor(() => {
-            expect(onStartPuzzle).toBeCalledTimes(1)
-        })
 
         act(() => {
             jest.runAllTimers()

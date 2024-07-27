@@ -9,6 +9,7 @@ import { BoardControllerRepository } from '../../repositories/boardControllerRep
 import { BoardRepository } from '../../repositories/boardRepository'
 import { snackBarAdapter } from '@adapters/snackbar'
 import { Puzzle } from '@adapters/puzzle'
+import { getPausedGameData } from '@adapters/getPausedGameData'
 
 type Props = {
     children: React.ReactNode
@@ -22,7 +23,8 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         boardControllerRepository: BoardControllerRepository,
         boardRepository: BoardRepository,
         snackBarAdapter,
-        newPuzzleGenerator: Puzzle
+        newPuzzleGenerator: Puzzle,
+        getPausedGameData
     }), [])
 
     return (

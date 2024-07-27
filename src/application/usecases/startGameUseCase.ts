@@ -12,7 +12,7 @@ type Time = {
     seconds: number
 }
 
-type StartGameData = {
+export type StartGameData = {
     mainNumbers: MainNumbers
     difficultyLevel: string
     notes?: Notes
