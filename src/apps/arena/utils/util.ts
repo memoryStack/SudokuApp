@@ -10,7 +10,7 @@ import _areSameValues from '@lodash/areSameValues'
 
 import { getKey } from '@utils/storage'
 
-import { GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
+import { GAME_STATE } from '@resources/constants'
 
 import _sortBy from '@lodash/sortBy'
 import { Puzzle } from '@adapters/puzzle'
@@ -35,6 +35,7 @@ import {
     getCellRowHouseInfo, isBlockHouse,
     getCellHouseForHouseType, getCellColHouseInfo, getCellBlockHouseInfo
 } from '@domain/board/utils/housesAndCells'
+import { LEVEL_DIFFICULTIES } from '@application/constants'
 
 export const addLeadingZeroIfEligible = (value: number) => {
     if (value > 9) return `${value}`

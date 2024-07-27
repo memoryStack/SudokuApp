@@ -11,7 +11,7 @@ import _noop from '@lodash/noop'
 
 import { RestartIcon } from '@resources/svgIcons/restart'
 import { PersonalizePuzzleIcon } from '@resources/svgIcons/personalizePuzzle'
-import { LEVEL_DIFFICULTIES, SCREEN_NAME } from '@resources/constants'
+import { SCREEN_NAME } from '@resources/constants'
 import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '@resources/stringLiterals'
 
 import Text from '@ui/atoms/Text'
@@ -32,6 +32,7 @@ import {
 } from './nextGameMenu.constants'
 
 import { getStyles } from './nextGameMenu.styles'
+import { LEVEL_DIFFICULTIES } from '@application/constants'
 
 const getBarPath = barNum => [
     'M', 75 + 100 * barNum, '450',

@@ -8,6 +8,7 @@ import { SmartHintRepository } from '../../repositories/smartHintRepository'
 import { BoardControllerRepository } from '../../repositories/boardControllerRepository'
 import { BoardRepository } from '../../repositories/boardRepository'
 import { snackBarAdapter } from '@adapters/snackbar'
+import { Puzzle } from '@adapters/puzzle'
 
 type Props = {
     children: React.ReactNode
@@ -21,6 +22,7 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         boardControllerRepository: BoardControllerRepository,
         boardRepository: BoardRepository,
         snackBarAdapter,
+        newPuzzleGenerator: Puzzle
     }), [])
 
     return (

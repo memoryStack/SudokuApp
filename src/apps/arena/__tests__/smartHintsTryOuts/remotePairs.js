@@ -19,8 +19,8 @@ import { SMART_HINT_HC_TEST_ID } from '../../smartHintHC/constants'
 
 import { HINTS_IDS, HINT_LABELS } from '../../utils/smartHints/constants'
 
-jest.mock('../../../../adapters/puzzle/puzzle', () => {
-    const originalModule = jest.requireActual('../../../../adapters/puzzle/puzzle')
+jest.mock('../../../../adapters/puzzle', () => {
+    const originalModule = jest.requireActual('../../../../adapters/puzzle')
     const Puzzle = {
         ...originalModule.Puzzle,
         getSudokuPuzzle: jest.fn(),
@@ -40,7 +40,7 @@ describe('Remote Pairs Hint', () => {
 
     test('Remote Pairs hint explaination texts', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],
@@ -69,7 +69,7 @@ describe('Remote Pairs Try-Out', () => {
 
     test('no inputs are filled in try-out', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],
@@ -85,7 +85,7 @@ describe('Remote Pairs Try-Out', () => {
 
     test('removable note is filled in cell', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],
@@ -104,7 +104,7 @@ describe('Remote Pairs Try-Out', () => {
 
     test('partially filled chain', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],
@@ -123,7 +123,7 @@ describe('Remote Pairs Try-Out', () => {
 
     test('fully filled chain', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],
@@ -148,7 +148,7 @@ describe('Remote Pairs Try-Out', () => {
 
     test('multi color numbers are filled in chain', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],
@@ -169,7 +169,7 @@ describe('Remote Pairs Try-Out', () => {
 
     test('multi color numbers are filled and some cell in chain is left without candidates', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],
@@ -192,7 +192,7 @@ describe('Remote Pairs Try-Out', () => {
 
     test('multi color numbers are filled and removable notes are also filled and due to this some cell in chain is left without candidates', async () => {
         const puzzle = '080023400620409508410085020040906082068542000290038654154267893872394165936851247'
-        const { Puzzle } = require('../../../../adapters/puzzle/puzzle')
+        const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
             count: 1,
             solution: [5, 8, 9, 1, 2, 3, 4, 7, 6, 6, 2, 3, 4, 7, 9, 5, 1, 8, 4, 1, 7, 6, 8, 5, 3, 2, 9, 3, 4, 5, 9, 1, 6, 7, 8, 2, 7, 6, 8, 5, 4, 2, 9, 3, 1, 2, 9, 1, 7, 3, 8, 6, 5, 4, 1, 5, 4, 2, 6, 7, 8, 9, 3, 8, 7, 2, 3, 9, 4, 1, 6, 5, 9, 3, 6, 8, 5, 1, 2, 4, 7],

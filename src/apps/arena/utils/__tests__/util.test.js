@@ -2,7 +2,7 @@
 import _isArray from '@lodash/isArray'
 import _isEmpty from '@lodash/isEmpty'
 
-import { CUSTOMIZED_PUZZLE_LEVEL_TITLE, GAME_STATE, LEVEL_DIFFICULTIES } from '@resources/constants'
+import { CUSTOMIZED_PUZZLE_LEVEL_TITLE, GAME_STATE } from '@resources/constants'
 import { getPuzzleDataFromPuzzleString } from '@domain/board/testingUtils/puzzleDataGenerator'
 import { getStoragePromise } from '../../../../utils/testing/testingBoilerplate/storage'
 
@@ -33,6 +33,7 @@ import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
+import { LEVEL_DIFFICULTIES } from '@application/constants'
 
 jest.mock('@utils/storage')
 

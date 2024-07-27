@@ -1,17 +1,3 @@
-enum LEVEL_DIFFICULTIES {
-    EASY = 'EASY',
-    MEDIUM = 'MEDIUM',
-    HARD = 'HARD',
-    EXPERT = 'EXPERT',
-}
-
-const LEVELS_CLUES_INFO = {
-    [LEVEL_DIFFICULTIES.EASY]: 36,
-    [LEVEL_DIFFICULTIES.MEDIUM]: 32,
-    [LEVEL_DIFFICULTIES.HARD]: 28,
-    [LEVEL_DIFFICULTIES.EXPERT]: 24,
-}
-
 const DEFAULT_BEST_STATS = {
     Easy: {
         time: {},
@@ -437,8 +423,6 @@ const N_CHOOSE_K: { [n: number]: { [k: number]: Combinations } } = {
 }
 
 export {
-    LEVEL_DIFFICULTIES,
-    LEVELS_CLUES_INFO,
     DEFAULT_BEST_STATS,
     PENCIL_STATE,
     GAME_STATE,

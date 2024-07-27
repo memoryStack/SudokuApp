@@ -15,14 +15,10 @@ import {
     SOMETHING_WENT_WRONG,
 } from '@resources/stringLiterals'
 import {
-    LEVEL_DIFFICULTIES,
     GAME_STATE,
-    LEVELS_CLUES_INFO,
     CUSTOMIZED_PUZZLE_LEVEL_TITLE,
     DEEPLINK_HOST_NAME,
-    PENCIL_STATE,
 } from '@resources/constants'
-import { Puzzle } from '@adapters/puzzle'
 
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 
@@ -43,10 +39,11 @@ import { BoardIterators } from '@domain/board/utils/boardIterators'
 import {
     DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
 } from './constants'
-import { MAX_AVAILABLE_HINTS } from './store/state/boardController.state'
 import { BOARD_CELLS_COUNT, CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
-import { NotesRecord } from '@domain/board/records/notesRecord'
+import { startGameUseCase } from '@application/usecases/startGameUseCase'
+import { generateAndStartNewGameUseCase } from '@application/usecases/generateAndStartNewGameUseCase'
+import { LEVEL_DIFFICULTIES } from '@application/constants'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -90,54 +87,6 @@ const getSharedPuzzleError = url => {
     return ''
 }
 
-const startGame = ({
-    mainNumbers,
-    notes,
-    selectedCell,
-    moves,
-    difficultyLevel,
-    mistakes,
-    time,
-    pencilState,
-    dependencies,
-    hints: hintsLeft,
-}) => {
-    const {
-        boardRepository, refreeRepository, gameStateRepository, boardControllerRepository,
-    } = dependencies
-
-    boardRepository.setState({
-        mainNumbers, notes, selectedCell, moves,
-    })
-
-    // refree state
-    refreeRepository.setGameLevel(difficultyLevel)
-    refreeRepository.setGameMistakesCount(mistakes)
-    refreeRepository.setTime(time)
-
-    boardControllerRepository.setPencil(pencilState || PENCIL_STATE.INACTIVE)
-    boardControllerRepository.setHintsLeftCount(hintsLeft)
-    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
-}
-
-const startNewGame = ({ mainNumbers, difficultyLevel, dependencies }) => {
-    const initRefereeData = () => ({
-        difficultyLevel,
-        mistakes: 0,
-        time: { hours: 0, minutes: 0, seconds: 0 },
-    })
-
-    startGame({
-        mainNumbers,
-        notes: NotesRecord.initNotes(),
-        selectedCell: { row: 0, col: 0 },
-        moves: [],
-        ...initRefereeData(),
-        hints: MAX_AVAILABLE_HINTS,
-        dependencies,
-    })
-}
-
 const handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) => {
     const sharedPuzzleError = getSharedPuzzleError(puzzleUrl)
     if (sharedPuzzleError) {
@@ -160,7 +109,7 @@ const handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) =
             generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
             break
         case PUZZLE_SOLUTION_TYPES.UNIQUE_SOLUTION:
-            startNewGame({ difficultyLevel: 'Shared Puzzle', mainNumbers, dependencies })
+            startGameUseCase({ difficultyLevel: 'Shared Puzzle', mainNumbers, dependencies })
             break
         case PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS:
         default:
@@ -190,13 +139,8 @@ const transformNativeGeneratedPuzzle = (clues, solution) => {
 const generateNewPuzzle = (difficultyLevel, dependencies) => {
     if (!difficultyLevel) return
     // "minClues" becoz sometimes for the expert levels we get more than desired clues
-    const minClues = LEVELS_CLUES_INFO[difficultyLevel]
 
-    Puzzle.getSudokuPuzzle(minClues)
-        .then(({ clues, solution }) => {
-            const mainNumbers = transformNativeGeneratedPuzzle(clues, solution)
-            startNewGame({ difficultyLevel, mainNumbers, dependencies })
-        })
+    generateAndStartNewGameUseCase(difficultyLevel, dependencies)
         .catch(error => {
             consoleLog(error)
         })
@@ -205,7 +149,7 @@ const generateNewPuzzle = (difficultyLevel, dependencies) => {
 const resumePreviousGame = dependencies => {
     getKey(PREVIOUS_GAME_DATA_KEY)
         .then(previousGameData => {
-            startGame({
+            startGameUseCase({
                 ...previousGameData[GAME_DATA_KEYS.BOARD_DATA],
                 ...previousGameData[GAME_DATA_KEYS.REFEREE],
                 ...previousGameData[GAME_DATA_KEYS.CELL_ACTIONS],
@@ -237,7 +181,7 @@ const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, depende
 }
 
 const handleStartCustomPuzzle = ({ params: { mainNumbers, dependencies } }) => {
-    startNewGame({ mainNumbers, difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE, dependencies })
+    startGameUseCase({ mainNumbers, difficultyLevel: CUSTOMIZED_PUZZLE_LEVEL_TITLE, dependencies })
 }
 
 const handleCustomPuzzleHCClose = ({ setState }) => {

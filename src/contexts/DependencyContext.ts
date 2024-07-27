@@ -1,11 +1,12 @@
 import { createContext } from 'react'
 
-import { BoardControllerRepository } from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
-import { RefreeRepository } from '@application/adapterInterfaces/stateManagers/refreeRepository'
-import { GameStateRepository } from '@application/adapterInterfaces/stateManagers/gameStateRepository'
-import { SmartHintRepository } from '../interfaces/smartHintRepository'
-import { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'
-import { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
+import type { BoardControllerRepository } from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
+import type { RefreeRepository } from '@application/adapterInterfaces/stateManagers/refreeRepository'
+import type { GameStateRepository } from '@application/adapterInterfaces/stateManagers/gameStateRepository'
+import type { SmartHintRepository } from '../interfaces/smartHintRepository'
+import type { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'
+import type { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
+import type { NewPuzzleGenerator } from '@application/adapterInterfaces/puzzleGenerator'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {
@@ -15,6 +16,7 @@ export type Dependencies = {
     boardControllerRepository: BoardControllerRepository
     boardRepository: BoardRepository
     snackBarAdapter: SnackBarAdapter
+    newPuzzleGenerator: NewPuzzleGenerator
 };
 
 const DependencyContext = createContext<Dependencies | undefined>(undefined)
