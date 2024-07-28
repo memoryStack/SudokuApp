@@ -1,16 +1,14 @@
 
-
-// this interface has to be implemented by the UI/Ploc layer
-
 import _includes from "@lodash/includes"
 import _values from "@lodash/values"
 
 import { GAME_STATE } from "../../constants"
 
 import { generateAndStartNewGameUseCase } from "../generateAndStartNewGame"
-import { resumeGameUseCase } from "../resumeGame"
 import { Dependencies } from "@application/type"
 import { AUTO_GENERATED_NEW_GAME_IDS, START_GAME_MENU_ITEMS_IDS } from "./constants"
+import { startGameUseCase } from "../startGameUseCase"
+import type { PausedGameData } from '../../adapterInterfaces/gamePersistenceAdapter'
 
 // and this usecase will use this
 // the toggler can be implemented by any means, either via local state
@@ -27,6 +25,25 @@ export const isGenerateNewPuzzleItem = (itemId: START_GAME_MENU_ITEMS_IDS) => {
     return newGameMenuItems.includes(itemId as unknown as AUTO_GENERATED_NEW_GAME_IDS)
 }
 
+const startPersistedGameUseCase = async (dependencies: Dependencies) => {
+
+    const { gamePersistenceAdapter } = dependencies
+
+    // TODO: to tell ts that this value will not be null
+    gamePersistenceAdapter.getPausedGameData()
+        .then((pausedGameData: PausedGameData) => {
+            startGameUseCase({
+                ...pausedGameData,
+                dependencies,
+            })
+            gamePersistenceAdapter.removePausedGameData()
+        })
+        .catch((error) => {
+            // start some other game
+        })
+}
+
+
 export const handleMenuItemPress = (
     itemId: START_GAME_MENU_ITEMS_IDS,
     dependencies: Dependencies
@@ -41,7 +58,7 @@ export const handleMenuItemPress = (
     }
 
     if (itemId === START_GAME_MENU_ITEMS_IDS.RESUME) {
-        resumeGameUseCase(dependencies)
+        startPersistedGameUseCase(dependencies)
         return
     }
 
@@ -54,7 +71,7 @@ export const handleMenuItemPress = (
 }
 
 export const getMenuItemsToShow = async (dependencies: Dependencies) => {
-    const { pausedGameAdapter } = dependencies
+    const { gamePersistenceAdapter } = dependencies
 
     const defaultMenuItems = [
         START_GAME_MENU_ITEMS_IDS.EASY,
@@ -64,7 +81,7 @@ export const getMenuItemsToShow = async (dependencies: Dependencies) => {
         START_GAME_MENU_ITEMS_IDS.CUSTOMIZE_PUZZLE,
     ]
 
-    return pausedGameAdapter.getPausedGameData()
+    return gamePersistenceAdapter.getPausedGameData()
         .then((pausedGameData) => {
             const { gameState: pausedGameState } = pausedGameData || {}
             const pausedGameExists = [GAME_STATE.INACTIVE, GAME_STATE.DISPLAY_HINT].includes(pausedGameState)

@@ -5,7 +5,7 @@ import type { GameStateRepository } from './adapterInterfaces/stateManagers/game
 import type { BoardControllerRepository } from './adapterInterfaces/stateManagers/boardControllerRepository'
 import type { PuzzleAdapter } from './adapterInterfaces/puzzleGenerator'
 import type { SnackBarAdapter } from './adapterInterfaces/snackbar'
-import type { PausedGameAdapter } from './adapterInterfaces/pausedGame'
+import type { GamePersistenceAdapter } from './adapterInterfaces/'
 import type { CustomPuzzleInputToggler } from './adapterInterfaces/customPuzzle'
 
 export type Dependencies = {
@@ -16,6 +16,6 @@ export type Dependencies = {
     snackBarAdapter: SnackBarAdapter
     boardControllerRepository: BoardControllerRepository
     puzzle: PuzzleAdapter
-    pausedGameAdapter: PausedGameAdapter
+    gamePersistenceAdapter: GamePersistenceAdapter
     customPuzzleInputToggler: CustomPuzzleInputToggler
 }

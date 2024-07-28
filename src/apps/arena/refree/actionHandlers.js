@@ -3,8 +3,7 @@ import { timerClickUseCase } from '@application/usecases/refree'
 import { DEFAULT_STATE } from './refree.constants'
 
 const handleTimerClick = ({ params: { dependencies } }) => {
-    const { gameStateRepository } = dependencies
-    timerClickUseCase(gameStateRepository)
+    timerClickUseCase(dependencies)
 }
 
 const handleResetStoreState = ({ params: { dependencies } }) => {

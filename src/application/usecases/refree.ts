@@ -1,15 +1,15 @@
 import { GameState } from "../utils/gameState"
 
-import { GAME_STATE } from "../constants"
+import { pauseGame } from "./pauseGame"
+import { resumeGame } from "./resumeGame"
+import { Dependencies } from "../type"
 
-import type { GameStateRepository } from '../adapterInterfaces/stateManagers/gameStateRepository'
-
-export const timerClickUseCase = (repository: GameStateRepository): void => {
-    const gameState = repository.getGameState()
-
+export const timerClickUseCase = (dependencies: Dependencies): void => {
+    const { gameStateRepository } = dependencies
+    const gameState = gameStateRepository.getGameState()
     const gameStateObj = new GameState(gameState)
     if (!(gameStateObj.isGameActive() || gameStateObj.isGameInactive())) return
 
-    const newGameState = gameStateObj.isGameActive() ? GAME_STATE.INACTIVE : GAME_STATE.ACTIVE
-    repository.setGameState(newGameState)
+    if (gameStateObj.isGameActive()) pauseGame(gameState, dependencies)
+    else resumeGame(dependencies)
 }

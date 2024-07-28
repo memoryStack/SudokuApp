@@ -1,4 +1,4 @@
-import type { PausedGameData, PausedGameAdapter } from '@application/adapterInterfaces/pausedGame'
+import type { PausedGameData, GamePersistenceAdapter, GameDataToPersist } from '@application/adapterInterfaces/'
 import _isEmpty from '@lodash/isEmpty'
 import { getKey, setKey } from '@utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from 'src/apps/arena/utils/cacheGameHandler'
@@ -26,7 +26,12 @@ const removePausedGameData = async () => {
     return setKey(PREVIOUS_GAME_DATA_KEY, {})
 }
 
-export const pausedGameAdapter: PausedGameAdapter = {
+const persistGameData = async (data: GameDataToPersist) => {
+    return setKey(PREVIOUS_GAME_DATA_KEY, data)
+}
+
+export const gamePersistenceAdapter: GamePersistenceAdapter = {
     getPausedGameData,
-    removePausedGameData
+    removePausedGameData,
+    persistGameData
 }

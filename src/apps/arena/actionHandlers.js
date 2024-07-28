@@ -6,9 +6,7 @@ import _findIndex from '@lodash/findIndex'
 import _isInteger from '@lodash/isInteger'
 import _noop from '@lodash/noop'
 
-import {
-    SOMETHING_WENT_WRONG,
-} from '@resources/stringLiterals'
+import { SOMETHING_WENT_WRONG } from '@resources/stringLiterals'
 import {
     GAME_STATE,
     DEEPLINK_HOST_NAME,
@@ -19,12 +17,13 @@ import { emit } from '../../utils/GlobalEventBus'
 import { consoleLog } from '../../utils/util'
 
 import { EVENTS } from '../../constants/events'
-import { GameState } from '@application/utils/gameState'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { handleMenuItemPress as handleMenuItemPressUseCase } from '@application/usecases/newGameMenu'
 
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { handleInitSharedPuzzle } from '@application/usecases/startSharedPuzzle'
+import { pauseGame } from '@application/usecases/pauseGame'
+import { resumeGame } from '@application/usecases/resumeGame'
 
 const _handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) => {
     handleInitSharedPuzzle(puzzleUrl, dependencies)
@@ -66,21 +65,12 @@ const handleSharePuzzle = ({ params: { dependencies } }) => {
         })
 }
 
-// TODO: these also needs to be moved out
 const handleScreenOutOfFocus = ({ params: { gameState, dependencies } }) => {
-    if (!new GameState(gameState).isGameActive()) return
-
-    const { gameStateRepository } = dependencies
-    gameStateRepository.setGameState(GAME_STATE.INACTIVE)
+    pauseGame(gameState, dependencies)
 }
 
-// TODO: these also needs to be moved out
-const handleScreenInFocus = ({ params: { gameState, dependencies } }) => {
-    // this is basically resuming the paused game
-    // it's responsibilities should be, pause the game and persist the state of game
-    if (!new GameState(gameState).isGameInactive()) return
-    const { gameStateRepository } = dependencies
-    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+const handleScreenInFocus = ({ params: { dependencies } }) => {
+    resumeGame(dependencies)
 }
 
 const handleHideGameOverCard = ({ setState, params: { fadeAnim, dependencies } }) => {

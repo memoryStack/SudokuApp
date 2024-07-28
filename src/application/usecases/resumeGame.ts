@@ -1,23 +1,10 @@
-import type { Dependencies } from '../type'
+import { GAME_STATE } from "../constants";
+import { Dependencies } from "../type";
+import { GameState } from "../utils/gameState";
 
-import { startGameUseCase } from "./startGameUseCase"
-
-import type { PausedGameData } from '../adapterInterfaces/pausedGame'
-
-export const resumeGameUseCase = async (dependencies: Dependencies) => {
-
-    const { pausedGameAdapter } = dependencies
-
-    // TODO: to tell ts that this value will not be null
-    pausedGameAdapter.getPausedGameData()
-        .then((pausedGameData: PausedGameData) => {
-            startGameUseCase({
-                ...pausedGameData,
-                dependencies,
-            })
-            pausedGameAdapter.removePausedGameData()
-        })
-        .catch((error) => {
-            // start some other game
-        })
+export const resumeGame = (dependencies: Dependencies) => {
+    const { gameStateRepository } = dependencies
+    const currentGameState = gameStateRepository.getGameState()
+    if (!new GameState(currentGameState).isGameInactive()) return
+    gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }
