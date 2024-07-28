@@ -69,6 +69,7 @@ export const getPuzzleSolutionType = async (mainNumbers: MainNumbers) => {
         }).catch(() => PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS)
 }
 
+// TODO: plan to remove this
 export const previousInactiveGameExists = async () => {
     const previousGameData = await getKey(PREVIOUS_GAME_DATA_KEY)
     if (!previousGameData) return false

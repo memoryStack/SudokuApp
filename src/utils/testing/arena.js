@@ -20,6 +20,7 @@ import { fireLayoutEvent } from './fireEvent.utils'
 import {
     assertHintsLeft, gotoApplyHintStep, openSmartHintHC,
 } from './smartHints'
+import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 
 export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
     renderScreen({
@@ -36,7 +37,7 @@ export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
     renderScreen({
         route: ROUTES.ARENA,
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
-        routeOptions: { selectedGameMenuItem: CUSTOMIZE_YOUR_PUZZLE_TITLE },
+        routeOptions: { selectedGameMenuItem: NEW_GAME_IDS.CUSTOMIZE_PUZZLE },
     })
 
     act(() => {

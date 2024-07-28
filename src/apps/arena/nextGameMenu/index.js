@@ -11,28 +11,25 @@ import _noop from '@lodash/noop'
 
 import { RestartIcon } from '@resources/svgIcons/restart'
 import { PersonalizePuzzleIcon } from '@resources/svgIcons/personalizePuzzle'
-import { SCREEN_NAME } from '@resources/constants'
-import { CUSTOMIZE_YOUR_PUZZLE_TITLE, RESUME } from '@resources/stringLiterals'
 
 import Text from '@ui/atoms/Text'
 
-import { consoleLog } from '@utils/util'
-
 import { useStyles } from '@utils/customHooks/useStyles'
-import { useScreenName } from '../../../utils/customHooks'
 
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 import { Touchable } from '../../components/Touchable'
 
-import { previousInactiveGameExists } from '../utils/util'
-
 import {
     LEVEL_ICON_DIMENSION,
+    MENU_ITEMS_LABELS,
     NEXT_GAME_MENU_TEST_ID,
 } from './nextGameMenu.constants'
 
 import { getStyles } from './nextGameMenu.styles'
-import { LEVEL_DIFFICULTIES } from '@application/constants'
+
+import { START_GAME_MENU_ITEMS_IDS } from '@application/usecases/newGameMenu/constants'
+import { getMenuItemsToShow } from '@application/usecases/newGameMenu/newGameMenu'
+import { useDependency } from 'src/hooks/useDependency'
 
 const getBarPath = barNum => [
     'M', 75 + 100 * barNum, '450',
@@ -46,25 +43,17 @@ const getBarPath = barNum => [
 const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
     const styles = useStyles(getStyles)
 
-    const screenName = useScreenName()
-
-    const isHomeScreen = screenName === SCREEN_NAME.HOME
+    const dependencies = useDependency()
 
     const nextGameMenuRef = useRef(null)
 
-    const [pendingGame, setPendingGame] = useState({ checkedStatus: !isHomeScreen, available: false })
+    const [pendingGame, setPendingGame] = useState({ checkedStatus: false, menuItems: [] })
 
     useEffect(() => {
-        if (!isHomeScreen) return
-        previousInactiveGameExists()
-            .then(pendingGameAvailable => {
-                setPendingGame({ available: pendingGameAvailable, checkedStatus: true })
-            })
-            .catch(error => {
-                setPendingGame(_pendingGame => ({ ..._pendingGame, checkedStatus: true }))
-                consoleLog(error)
-            })
-    }, [isHomeScreen])
+        getMenuItemsToShow(dependencies).then((menuItems) => {
+            setPendingGame({ menuItems, checkedStatus: true })
+        })
+    }, [])
 
     const getBarStrokeAndFillProps = (barNum, difficultyLevelIndex) => ({
         stroke: styles.levelIcon.color,
@@ -90,6 +79,23 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
         )
     }
 
+    const MENU_ITEM_VS_ICON = {
+        [START_GAME_MENU_ITEMS_IDS.EASY]: () => getLevelIcon(0),
+        [START_GAME_MENU_ITEMS_IDS.MEDIUM]: () => getLevelIcon(1),
+        [START_GAME_MENU_ITEMS_IDS.HARD]: () => getLevelIcon(2),
+        [START_GAME_MENU_ITEMS_IDS.EXPERT]: () => getLevelIcon(3),
+        [START_GAME_MENU_ITEMS_IDS.CUSTOMIZE_PUZZLE]: () => {
+            return (
+                <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} fill={styles.levelIcon.color} />
+            )
+        },
+        [START_GAME_MENU_ITEMS_IDS.RESUME]: () => {
+            return (
+                <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} fill={styles.levelIcon.color} />
+            )
+        },
+    }
+
     const closeView = () => {
         const closeDragger = getCloseDraggerHandler(nextGameMenuRef)
         closeDragger()
@@ -104,36 +110,17 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
 
     const getNextGameMenu = () => (
         <View style={styles.nextGameMenuContainer}>
-            {Object.keys(LEVEL_DIFFICULTIES).map((levelText, index) => (
-                <View key={levelText}>
+            {pendingGame.menuItems.map((levelID) => (
+                <View key={levelID}>
                     <Touchable
                         style={styles.levelContainer}
-                        onPress={() => nextGameMenuItemClicked(levelText)}
+                        onPress={() => nextGameMenuItemClicked(levelID)}
                     >
-                        {getLevelIcon(index)}
-                        <Text style={styles.levelText}>{levelText}</Text>
+                        {MENU_ITEM_VS_ICON[levelID]()}
+                        <Text style={styles.levelText}>{MENU_ITEMS_LABELS[levelID]}</Text>
                     </Touchable>
                 </View>
             ))}
-            {/* TODO: make these options a little more configurable */}
-            <Touchable
-                key={CUSTOMIZE_YOUR_PUZZLE_TITLE}
-                style={styles.levelContainer}
-                onPress={() => nextGameMenuItemClicked(CUSTOMIZE_YOUR_PUZZLE_TITLE)}
-            >
-                <PersonalizePuzzleIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} fill={styles.levelIcon.color} />
-                <Text style={styles.levelText}>{CUSTOMIZE_YOUR_PUZZLE_TITLE}</Text>
-            </Touchable>
-            {isHomeScreen && pendingGame.available ? (
-                <Touchable
-                    key={RESUME}
-                    style={styles.levelContainer}
-                    onPress={() => nextGameMenuItemClicked(RESUME)}
-                >
-                    <RestartIcon width={LEVEL_ICON_DIMENSION} height={LEVEL_ICON_DIMENSION} fill={styles.levelIcon.color} />
-                    <Text style={styles.levelText}>{RESUME}</Text>
-                </Touchable>
-            ) : null}
         </View>
     )
 

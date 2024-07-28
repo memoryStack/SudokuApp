@@ -7,7 +7,7 @@
         "ios": "react-native run-ios",
         "start": "react-native start",
         "start-remove-cache": "react-native start --reset-cache",
-        "test": "jest",
+        "test": "jest --forceExit",
         "update-ui-snapshots": "jest --updateSnapshot",
         "lint": "eslint .",
         "check-types": "tsc --noemit",

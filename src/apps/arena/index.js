@@ -43,6 +43,7 @@ import Refree from './refree'
 
 import { getStyles } from './arena.styles'
 import { fillPuzzleUseCase } from '@application/usecases/board'
+import { MENU_ITEMS_LABELS } from './nextGameMenu/nextGameMenu.constants'
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
@@ -71,7 +72,7 @@ const Arena_ = ({
     const [smartHintHCHeight, setSmartHintHCHeight] = useState(0)
 
     const mistakes = useSelector(getMistakes)
-    const difficultyLevel = useSelector(getDifficultyLevel)
+    const difficultyLevelID = useSelector(getDifficultyLevel)
     const time = useSelector(getTime)
 
     useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
@@ -225,7 +226,7 @@ const Arena_ = ({
                     <GameResultCard
                         stats={{
                             mistakes,
-                            difficultyLevel,
+                            difficultyLevel: MENU_ITEMS_LABELS[difficultyLevelID],
                             time,
                             hintsUsed: REFREE_DEFAULT_STATE.maxMistakesLimit - hintsLeft,
                         }}

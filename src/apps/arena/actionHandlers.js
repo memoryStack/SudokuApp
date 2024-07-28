@@ -9,13 +9,10 @@ import _noop from '@lodash/noop'
 import {
     LAUNCHING_DEFAULT_PUZZLE,
     DEEPLINK_PUZZLE_NO_SOLUTIONS,
-    RESUME,
-    CUSTOMIZE_YOUR_PUZZLE_TITLE,
     SOMETHING_WENT_WRONG,
 } from '@resources/stringLiterals'
 import {
     GAME_STATE,
-    CUSTOMIZED_PUZZLE_LEVEL_TITLE,
     DEEPLINK_HOST_NAME,
 } from '@resources/constants'
 
@@ -25,7 +22,6 @@ import { emit } from '../../utils/GlobalEventBus'
 import {
     duplicatesInPuzzle,
     getPuzzleSolutionType,
-    isGenerateNewPuzzleItem,
 } from './utils/util'
 
 import { consoleLog } from '../../utils/util'
@@ -33,6 +29,7 @@ import { consoleLog } from '../../utils/util'
 import { EVENTS } from '../../constants/events'
 import { GameState } from '@application/utils/gameState'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
+import { handleMenuItemPress as handleMenuItemPressUseCase } from '@application/usecases/newGameMenu'
 
 import {
     DEEPLINK_PUZZLE_URL_ERRORS, PUZZLE_SOLUTION_TYPES,
@@ -42,7 +39,6 @@ import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { startGameUseCase } from '@application/usecases/startGameUseCase'
 import { generateAndStartNewGameUseCase } from '@application/usecases/generateAndStartNewGame'
 import { LEVEL_DIFFICULTIES } from '@application/constants'
-import { resumeGameUseCase } from '@application/usecases/resumeGame'
 
 const getMainNumbersFromString = puzzle => {
     const result = []
@@ -100,6 +96,7 @@ const getSharedPuzzleError = url => {
 
 */
 
+// TODO: take it out
 const handleInitSharedPuzzle = async ({ params: { puzzleUrl, dependencies } }) => {
     const sharedPuzzleError = getSharedPuzzleError(puzzleUrl)
     if (sharedPuzzleError) {
@@ -141,28 +138,18 @@ const generateNewPuzzle = (difficultyLevel, dependencies) => {
 }
 
 const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, dependencies } }) => {
-    if (isGenerateNewPuzzleItem(selectedGameMenuItem)) {
-        generateNewPuzzle(selectedGameMenuItem, dependencies)
-        return
+    const customPuzzleInputToggler = {
+        open: () => setState({ showCustomPuzzleHC: true }),
+        close: () => setState({ showCustomPuzzleHC: false })
     }
-
-    if (selectedGameMenuItem === RESUME) {
-        resumeGameUseCase(dependencies)
-        return
-    }
-
-    if (selectedGameMenuItem === CUSTOMIZE_YOUR_PUZZLE_TITLE) {
-        setState({ showCustomPuzzleHC: true })
-        return
-    }
-
-    generateNewPuzzle(LEVEL_DIFFICULTIES.EASY, dependencies)
+    handleMenuItemPressUseCase(selectedGameMenuItem, { ...dependencies, customPuzzleInputToggler })
 }
 
 const handleCustomPuzzleHCClose = ({ setState }) => {
     setState({ showCustomPuzzleHC: false })
 }
 
+// TODO: take it out
 const handleSharePuzzle = ({ params: { dependencies } }) => {
     const { boardRepository } = dependencies
     const mainNumbers = boardRepository.getMainNumbers()
@@ -186,6 +173,7 @@ const handleSharePuzzle = ({ params: { dependencies } }) => {
         })
 }
 
+// TODO: these also needs to be moved out
 const handleScreenOutOfFocus = ({ params: { gameState, dependencies } }) => {
     if (!new GameState(gameState).isGameActive()) return
 
@@ -193,7 +181,10 @@ const handleScreenOutOfFocus = ({ params: { gameState, dependencies } }) => {
     gameStateRepository.setGameState(GAME_STATE.INACTIVE)
 }
 
+// TODO: these also needs to be moved out
 const handleScreenInFocus = ({ params: { gameState, dependencies } }) => {
+    // this is basically resuming the paused game
+    // it's responsibilities should be, pause the game and persist the state of game
     if (!new GameState(gameState).isGameInactive()) return
     const { gameStateRepository } = dependencies
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)

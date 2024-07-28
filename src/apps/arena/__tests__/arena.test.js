@@ -614,6 +614,7 @@ describe('Start New Game', () => {
             fireEvent.press(screen.getByText('New Game'))
             jest.advanceTimersByTime(200)
         })
+        expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
         const newGameMenu = within(screen.getByTestId(NEXT_GAME_MENU_TEST_ID))
         fireEvent.press(newGameMenu.getByText('EASY'))
 
@@ -628,6 +629,7 @@ describe('Start New Game', () => {
             fireEvent.press(screen.getByTestId(GAME_OVER_CARD_OVERLAY_TEST_ID))
             jest.advanceTimersByTime(200)
         })
+        expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
         const newGameMenu = within(screen.getByTestId(NEXT_GAME_MENU_TEST_ID))
         fireEvent.press(newGameMenu.getByText('EASY'))
 

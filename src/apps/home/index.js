@@ -14,8 +14,6 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { consoleLog } from '@utils/util'
 
-import SmartHintText from '@ui/molecules/SmartHintText'
-
 import { useTranslation } from '../../i18n/hooks/useTranslation'
 
 import { EVENTS } from '../../constants/events'
@@ -25,7 +23,6 @@ import { NextGameMenu } from '../arena/nextGameMenu'
 
 import { HOME_PAGE_TEST_ID } from './home.constants'
 import { getStyles } from './home.styles'
-import { HINTS_VOCAB_IDS } from '../arena/utils/smartHints/rawHintTransformers'
 
 const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)

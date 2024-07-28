@@ -7,7 +7,7 @@ import type { SmartHintRepository } from '../interfaces/smartHintRepository'
 import type { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'
 import type { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
 import type { NewPuzzleGenerator } from '@application/adapterInterfaces/puzzleGenerator'
-import type { GetPausedGameData } from '@application/adapterInterfaces/pausedGameDataGetter'
+import type { PausedGameAdapter } from '@application/adapterInterfaces/pausedGame'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {
@@ -18,7 +18,7 @@ export type Dependencies = {
     boardRepository: BoardRepository
     snackBarAdapter: SnackBarAdapter
     newPuzzleGenerator: NewPuzzleGenerator
-    getPausedGameData: GetPausedGameData
+    pausedGameAdapter: PausedGameAdapter
 };
 
 const DependencyContext = createContext<Dependencies | undefined>(undefined)
