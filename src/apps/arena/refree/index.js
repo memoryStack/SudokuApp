@@ -19,7 +19,7 @@ import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
 import { useCacheGameState } from '../hooks/useCacheGameState'
-import { getGameState } from '../store/selectors/gameState.selectors'
+
 import {
     getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit,
 } from '../store/selectors/refree.selectors'
@@ -27,8 +27,7 @@ import { Timer } from '../timer'
 import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT_TEST_ID } from './refree.constants'
-import { MENU_ITEMS_LABELS as NEW_GAME_MENU_ITEMS_LABELS } from '../nextGameMenu/nextGameMenu.constants'
+import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT, PUZZLE_LEVEL_TEXT_TEST_ID } from './refree.constants'
 
 const getStyles = (_, theme) => StyleSheet.create({
     refereeContainer: {
@@ -74,7 +73,7 @@ const Refree_ = ({ onAction }) => {
                 type={TEXT_VARIATIONS.BODY_MEDIUM}
                 testID={PUZZLE_LEVEL_TEXT_TEST_ID}
             >
-                {NEW_GAME_MENU_ITEMS_LABELS[difficultyLevelID]}
+                {PUZZLE_LEVEL_TEXT[difficultyLevelID]}
             </Text>
             <Timer time={time} onClick={onTimerClick} />
         </View>

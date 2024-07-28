@@ -6,7 +6,7 @@ import type { GameStateRepository } from '@application/adapterInterfaces/stateMa
 import type { SmartHintRepository } from '../interfaces/smartHintRepository'
 import type { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'
 import type { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
-import type { NewPuzzleGenerator } from '@application/adapterInterfaces/puzzleGenerator'
+import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import type { PausedGameAdapter } from '@application/adapterInterfaces/pausedGame'
 
 // TODO: organise these dependencies into relevant hierarchy
@@ -17,7 +17,7 @@ export type Dependencies = {
     boardControllerRepository: BoardControllerRepository
     boardRepository: BoardRepository
     snackBarAdapter: SnackBarAdapter
-    newPuzzleGenerator: NewPuzzleGenerator
+    puzzle: PuzzleAdapter
     pausedGameAdapter: PausedGameAdapter
 };
 

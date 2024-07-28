@@ -5,8 +5,8 @@ import { AUTO_GENERATED_NEW_GAME_IDS, NEW_GAME_IDS } from "./newGameMenu/constan
 import { startGameUseCase } from "./startGameUseCase"
 
 export const generateAndStartNewGameUseCase = async (gameLevel: AUTO_GENERATED_NEW_GAME_IDS, dependencies: Dependencies) => {
-    const { newPuzzleGenerator } = dependencies
-    return newPuzzleGenerator.getSudokuPuzzle(GAME_LEVEL_VS_CLUES[gameLevel])
+    const { puzzle } = dependencies
+    return puzzle.getSudokuPuzzle(GAME_LEVEL_VS_CLUES[gameLevel])
         .then((mainNumbers: MainNumbers) => {
             startGameUseCase({
                 mainNumbers,

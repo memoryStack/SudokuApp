@@ -23,7 +23,7 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         boardControllerRepository: BoardControllerRepository,
         boardRepository: BoardRepository,
         snackBarAdapter,
-        newPuzzleGenerator: Puzzle,
+        puzzle: Puzzle,
         pausedGameAdapter
     }), [])
 

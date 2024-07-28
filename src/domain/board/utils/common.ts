@@ -4,7 +4,7 @@ import _every from '@lodash/every'
 import _isEqual from '@lodash/isEqual'
 import _map from '@lodash/map'
 
-import { HOUSE_TYPE } from '../board.constants'
+import { HOUSES_COUNT_OF_A_TYPE, HOUSE_TYPE } from '../board.constants'
 import { BoardIterators } from './boardIterators'
 
 import { MainNumbersRecord } from '../records/mainNumbersRecord'
@@ -36,6 +36,30 @@ const getCellAllPossibleNotes = (cell: Cell, mainNumbers: MainNumbers) => {
     })
 
     return result
+}
+
+const areMultipleMainNumbersInAnyHouseOfCell = (mainNumbers: MainNumbers, cell: Cell, number: number) =>
+    mainNumberCountExccedsThresholdInAnyHouseOfCell(number, cell, mainNumbers, 1)
+
+export const duplicatesInPuzzle = (mainNumbers: MainNumbers) => {
+    for (let row = 0; row < HOUSES_COUNT_OF_A_TYPE; row++) {
+        for (let col = 0; col < HOUSES_COUNT_OF_A_TYPE; col++) {
+            if (!MainNumbersRecord.isCellFilled(mainNumbers, { row, col })) continue
+
+            if (areMultipleMainNumbersInAnyHouseOfCell(
+                mainNumbers,
+                { row, col },
+                MainNumbersRecord.getCellMainValue(mainNumbers, { row, col }),
+            )) {
+                return {
+                    present: true,
+                    cell: { row, col },
+                }
+            }
+        }
+    }
+
+    return { present: false }
 }
 
 export {

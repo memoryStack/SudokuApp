@@ -1,12 +1,7 @@
 import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 
-import type { NewPuzzleGenerator } from '@application/adapterInterfaces/puzzleGenerator'
+import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import { transformNativeGeneratedPuzzle } from './nativeGeneratedPuzzleTransformer'
-
-type PuzzleValidationResult = {
-    count: number
-    solution: number[]
-}
 
 type GeneratedPuzzle = {
     clues: number[]
@@ -23,13 +18,13 @@ const getSudokuPuzzle = async (minClues: number): Promise<MainNumbers> => {
     })
 }
 
-const validatePuzzle = (puzzle: string): Promise<PuzzleValidationResult> => RNSudokuPuzzle.validatePuzzle(puzzle)
+const validatePuzzle = (puzzle: string) => RNSudokuPuzzle.validatePuzzle(puzzle)
 
 const getRawHints = (puzzle: string, notes: Notes, disabledHints: string[]): Promise<RawHints> => {
     return RNSudokuPuzzle.getRawHints(puzzle, notes, disabledHints)
 }
 
-export const Puzzle: NewPuzzleGenerator = {
+export const Puzzle: PuzzleAdapter = {
     getSudokuPuzzle,
     validatePuzzle,
     getRawHints,

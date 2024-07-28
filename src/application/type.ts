@@ -3,7 +3,7 @@ import type { SmartHintRepository } from './adapterInterfaces/stateManagers/smar
 import type { BoardRepository } from './adapterInterfaces/stateManagers/boardRepository'
 import type { GameStateRepository } from './adapterInterfaces/stateManagers/gameStateRepository'
 import type { BoardControllerRepository } from './adapterInterfaces/stateManagers/boardControllerRepository'
-import type { NewPuzzleGenerator } from './adapterInterfaces/puzzleGenerator'
+import type { PuzzleAdapter } from './adapterInterfaces/puzzleGenerator'
 import type { SnackBarAdapter } from './adapterInterfaces/snackbar'
 import type { PausedGameAdapter } from './adapterInterfaces/pausedGame'
 import type { CustomPuzzleInputToggler } from './adapterInterfaces/customPuzzle'
@@ -15,7 +15,7 @@ export type Dependencies = {
     gameStateRepository: GameStateRepository
     snackBarAdapter: SnackBarAdapter
     boardControllerRepository: BoardControllerRepository
-    newPuzzleGenerator: NewPuzzleGenerator
+    puzzle: PuzzleAdapter
     pausedGameAdapter: PausedGameAdapter
     customPuzzleInputToggler: CustomPuzzleInputToggler
 }
