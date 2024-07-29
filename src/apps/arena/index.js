@@ -27,8 +27,6 @@ import { getAvailableHintsCount, getHintsMenuVisibilityStatus } from './store/se
 import { GameInputPanel } from './GameInputPanel'
 import { PuzzleBoard } from './PuzzleBoard'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { useCacheGameState } from './hooks/useCacheGameState'
-import { GAME_DATA_KEYS } from './utils/cacheGameHandler'
 
 import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
@@ -44,6 +42,7 @@ import Refree from './refree'
 import { getStyles } from './arena.styles'
 import { fillPuzzleUseCase } from '@application/usecases/board'
 import { MENU_ITEMS_LABELS } from './nextGameMenu/nextGameMenu.constants'
+import { INITIAL_STATE } from './store/state/board.state'
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
@@ -75,8 +74,6 @@ const Arena_ = ({
     const difficultyLevelID = useSelector(getDifficultyLevel)
     const time = useSelector(getTime)
 
-    useCacheGameState(GAME_DATA_KEYS.STATE, gameState)
-
     const hintsLeft = useSelector(getAvailableHintsCount)
 
     // TODO: putting "route" in dependency array here fails test-cases
@@ -103,17 +100,28 @@ const Arena_ = ({
         }
     }, [gameState, onAction])
 
+    useEffect(() => {
+        // reset the store state for Game
+        return () => {
+            const {
+                boardRepository,
+                smartHintRepository,
+                gameStateRepository,
+                refreeRepository,
+                boardControllerRepository
+            } = dependencies
+            boardRepository.setState(INITIAL_STATE)
+            gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
+            smartHintRepository.removeHints()
+            refreeRepository.setState(REFREE_DEFAULT_STATE)
+            boardControllerRepository.resetState()
+        }
+    }, [])
+
     const onParentLayout = useCallback(e => {
         const { nativeEvent: { layout: { height = 0 } = {} } = {} } = e
         setPageHeight(height)
     }, [])
-
-    // What is it doing and why ?
-    // this is business logic put in UI
-    useEffect(() => {
-        const { gameStateRepository } = dependencies
-        return () => gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
-    }, [dependencies])
 
     const handleGameInFocus = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_IN_FOCUS, payload: { gameState, dependencies } })

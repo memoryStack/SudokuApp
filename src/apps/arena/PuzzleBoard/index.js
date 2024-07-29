@@ -20,7 +20,7 @@ import withActions from '../../../utils/hocs/withActions'
 
 import { Board } from '../gameBoard'
 import { getGameState } from '../store/selectors/gameState.selectors'
-import { useGameBoardInputs, useSavePuzzleState } from '../hooks/useGameBoardInputs'
+import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import {
     getCellToFocusData, getShowSmartHint, getSvgPropsData,
 } from '../store/selectors/smartHintHC.selectors'
@@ -49,15 +49,9 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     const { mainNumbers, selectedCell, notes } = useGameBoardInputs()
     const gameState = useSelector(getGameState)
 
-    useSavePuzzleState()
-
     const showSmartHint = useSelector(getShowSmartHint)
     const cellsToFocusData = useSelector(getCellToFocusData)
     const svgProps = useSelector(getSvgPropsData)
-
-    useEffect(() => () => {
-        onAction({ type: ACTION_TYPES.ON_UNMOUNT })
-    }, [onAction])
 
     useEffect(() => {
         onAction({

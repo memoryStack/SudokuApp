@@ -16,21 +16,14 @@ const handleMainNumbersUpdate = ({ params: { mainNumbers, dependencies } }) => {
     }
 }
 
-const handleOnUnmount = ({ params: { dependencies } }) => {
-    const { boardRepository } = dependencies
-    boardRepository.setState(INITIAL_STATE)
-}
-
 const ACTION_TYPES = {
     ...BOARD_GENERIC_ACTION_TYPES,
     ON_MAIN_NUMBERS_UPDATE: 'ON_MAIN_NUMBERS_UPDATE',
-    ON_UNMOUNT: 'ON_UNMOUNT',
 }
 
 const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_CELL_PRESS]: handleCellPress,
     [ACTION_TYPES.ON_MAIN_NUMBERS_UPDATE]: handleMainNumbersUpdate,
-    [ACTION_TYPES.ON_UNMOUNT]: handleOnUnmount,
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }

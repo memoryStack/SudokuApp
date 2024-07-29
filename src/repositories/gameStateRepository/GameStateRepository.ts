@@ -10,5 +10,7 @@ const { setGameState } = gameStateActions
 
 export const GameStateRepository: GameStateRepositoryInterface = {
     getGameState: () => getGameState(getStoreState()),
-    setGameState: (state: GAME_STATE) => invokeDispatch(setGameState(state)),
+    setGameState: (state: GAME_STATE) => {
+        invokeDispatch(setGameState(state))
+    },
 }

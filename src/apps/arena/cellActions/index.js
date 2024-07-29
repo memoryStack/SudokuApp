@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { View, useWindowDimensions } from 'react-native'
 
@@ -15,8 +15,6 @@ import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
 import { getAvailableHintsCount, getPencilStatus } from '../store/selectors/boardController.selectors'
-import { GAME_DATA_KEYS } from '../utils/cacheGameHandler'
-import { useCacheGameState } from '../hooks/useCacheGameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 import { GameState } from '@application/utils/gameState'
 
@@ -39,12 +37,6 @@ const BoardController_ = ({ onAction, refFromParent }) => {
     const gameState = useSelector(getGameState)
 
     const disableControllers = !(new GameState(gameState).isGameActive())
-
-    useCacheGameState(GAME_DATA_KEYS.CELL_ACTIONS, { pencilState, hints })
-
-    useEffect(() => () => {
-        onAction({ type: ACTION_TYPES.ON_UNMOUNT, payload: { dependencies } })
-    }, [onAction, dependencies])
 
     const { width: windowWidth } = useWindowDimensions()
     const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
