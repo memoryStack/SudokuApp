@@ -28,4 +28,5 @@ export const HINTS_VOCAB_TITLE = {
     [HINTS_VOCAB_IDS.SASHIMI_FINNED_X_WING]: 'Sashimi Finned X-Wing',
     [HINTS_VOCAB_IDS.X_WING_CORNER_CELLS]: 'X-Wing Corner Cells',
     [HINTS_VOCAB_IDS.X_WING_FINN_CELLS]: 'X-Wing Finn Cells',
+    [HINTS_VOCAB_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
 }

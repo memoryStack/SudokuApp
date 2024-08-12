@@ -1,5 +1,6 @@
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 
+// TODO: it should be in hints vocabulary folder instead of here
 export enum HINTS_VOCAB_IDS {
     CANDIDATE = 'CANDIDATE',
     HOUSE = 'HOUSE',
@@ -23,7 +24,8 @@ export enum HINTS_VOCAB_IDS {
     FINNED_X_WING = 'FINNED_X_WING',
     SASHIMI_FINNED_X_WING = 'SASHIMI_FINNED_X_WING',
     X_WING_CORNER_CELLS = 'X_WING_CORNER_CELLS',
-    X_WING_FINN_CELLS = 'X_WING_FINN_CELLS'
+    X_WING_FINN_CELLS = 'X_WING_FINN_CELLS',
+    EMPTY_RECTANGLE = 'EMPTY_RECTANGLE'
 }
 
 export const HOUSE_TYPE_VS_VOCAB_ID = {
