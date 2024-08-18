@@ -1,1 +1,1 @@
-export { default } from './xWingFinnCells'
+export { default } from './emptyRectangle'

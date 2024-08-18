@@ -57,8 +57,9 @@ interface Props {
     showHintsSVGView: boolean
     getCellBGColor?: () => CellBGColorStyle | null
     getCellMainNumberFontColor?: () => FontColor | null
-    getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null
+    getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null // this signature is wrong, first argument is Note, not NoteValue
     hideSVGDrawingsMarkersEnd?: boolean
+    showAxes?: boolean
 }
 
 const Board_: React.FC<Props> = ({
@@ -75,6 +76,7 @@ const Board_: React.FC<Props> = ({
     boardContainerStyles = null,
     getNoteStyles = _noop,
     hideSVGDrawingsMarkersEnd = false,
+    showAxes = true
 }) => {
     const styles = useStyles(getStyles)
 
@@ -219,10 +221,10 @@ const Board_: React.FC<Props> = ({
     return (
         <>
             <View style={styles.boardAndYAxisContainer}>
-                {yAxis}
+                {showAxes ? yAxis : null}
                 {renderBoard()}
             </View>
-            {xAxis}
+            {showAxes ? xAxis : null}
         </>
     )
 }
