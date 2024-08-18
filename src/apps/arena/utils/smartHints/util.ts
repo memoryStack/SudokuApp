@@ -15,6 +15,7 @@ import {
 } from './types'
 import smartHintColorSystemReader from './colorSystem.reader'
 import _isNil from '@lodash/isNil'
+import _forEach from '@lodash/forEach'
 
 const setCellDataInHintResult = (
     cell: Cell,
@@ -98,6 +99,23 @@ const isSinglesPresentInCellForNote = (note: NoteValue, cell: Cell, singles: Puz
         || _get(singles, ['hiddenSingles', cellNumber]) === note
 }
 
+const setCellBGColor = (cell: Cell, color: string, cellsToFocusData: CellsFocusData) => {
+    const cellHighlightData: CellHighlightData = { bgColor: transformCellBGColor(color) }
+    setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+}
+
+const setCellNotesColor = (cell: Cell, notes: NoteValue[], color: string, cellsToFocusData: CellsFocusData) => {
+    _forEach(notes, (note: NoteValue) => {
+        const cellHighlightData: CellHighlightData = !_isNil(_get(cellsToFocusData, [cell.row, cell.col]))
+            ? _get(cellsToFocusData, [cell.row, cell.col]) : {}
+        cellHighlightData.notesToHighlightData = {
+            ...cellHighlightData.notesToHighlightData,
+            [note]: { fontColor: color }
+        }
+        setCellDataInHintResult(cell, cellHighlightData, cellsToFocusData)
+    })
+}
+
 const highlightNoteInCellsWithGivenColor = (
     note: NoteValue,
     cells: Cell[],
@@ -131,4 +149,6 @@ export {
     generateSinglesMap,
     isSinglesPresentInCellForNote,
     highlightNoteInCellsWithGivenColor,
+    setCellBGColor,
+    setCellNotesColor
 }

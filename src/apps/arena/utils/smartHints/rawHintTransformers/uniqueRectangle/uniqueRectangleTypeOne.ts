@@ -1,0 +1,167 @@
+import _cloneDeep from '@lodash/cloneDeep'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import _forEach from '@lodash/forEach'
+import _isEmpty from '@lodash/isEmpty'
+import _filter from '@lodash/filter'
+import _unique from '@lodash/unique'
+import _sortNumbers from '@lodash/sortNumbers'
+import _sortBy from '@lodash/sortBy'
+import _difference from '@lodash/difference'
+import _isNil from '@lodash/isNil'
+import _intersection from '@lodash/intersection'
+
+import { BaseURRawHint, CellAndRemovableNotes, URTransformerArgs, UniqueRectangleRawHint } from '../../types/uniqueRectangle'
+
+import { TransformedRawHint, NotesRemovalHintAction, CellsFocusData, SmartHintsColorSystem } from '../../types'
+import { BOARD_MOVES_TYPES } from '../../../../constants'
+import _map from '@lodash/map'
+import { getCandidatesListText, getHintExplanationStepsFromHintChunks, highlightNoteInCellsWithGivenColor, setCellBGColor, setCellNotesColor } from '../../util'
+import smartHintColorSystemReader from '../../colorSystem.reader'
+import { areSameCells, getCellAxesValues } from '@domain/board/utils/housesAndCells'
+import { NotesRecord } from '@domain/board/records/notesRecord'
+import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
+import { HINT_EXPLANATION_TEXTS } from '../../stringLiterals'
+import { UR_TYPES } from '../../uniqueRectangle/constants'
+
+/*
+    {
+    "UNIQUE_RECTANGLE": {
+        "cellAndRemovableNotes": [
+            {
+                "notes": [
+                    8,
+                    9
+                ],
+                "cell": {
+                    "col": 1,
+                    "row": 1
+                }
+            }
+        ],
+        "hostCells": [
+            {
+                "col": 1,
+                "row": 1
+            },
+            {
+                "col": 2,
+                "row": 1
+            },
+            {
+                "col": 2,
+                "row": 5
+            },
+            {
+                "col": 1,
+                "row": 5
+            }
+        ],
+        "type": "UR-1",
+        "urNotes": [
+            8,
+            9
+        ],
+        "isComposite": false
+    }
+}
+
+*/
+
+// TODO: every hint will use it, move it outside
+const getApplyHintData = (ur: BaseURRawHint): NotesRemovalHintAction[] => {
+    return _map(ur.cellAndRemovableNotes, (cellRemovableNotes: CellAndRemovableNotes) => {
+        return {
+            cell: cellRemovableNotes.cell,
+            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: cellRemovableNotes.notes },
+        }
+    })
+}
+
+// move it in helpers
+const getRemovableNotesVsHostCells = (ur: BaseURRawHint) => {
+    const result: { [key: NoteValue]: Cell[] } = []
+    _forEach(ur.cellAndRemovableNotes, (cellRemovableNotes: CellAndRemovableNotes) => {
+        _forEach(cellRemovableNotes.notes, (note: NoteValue) => {
+            if (!result[note]) result[note] = []
+            result[note].push(cellRemovableNotes.cell)
+        })
+    })
+    return result
+}
+
+const getCellsToFocusData = (
+    ur: BaseURRawHint,
+    notes: Notes,
+    smartHintsColorSystem: SmartHintsColorSystem,
+) => {
+    const cellsToFocusData: CellsFocusData = {}
+
+    _forEach(ur.hostCells, (cell: Cell) => {
+        setCellBGColor(cell, smartHintColorSystemReader.cellDefaultBGColor(smartHintsColorSystem), cellsToFocusData)
+    })
+
+    const removableNotesHostCell = ur.cellAndRemovableNotes[0].cell
+    const safeCells = ur.hostCells.filter((cell) => {
+        return !areSameCells(cell, removableNotesHostCell)
+    })
+
+    setCellNotesColor(removableNotesHostCell, ur.urNotes, smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem), cellsToFocusData)
+    _forEach(safeCells, (cell: Cell) => {
+        setCellNotesColor(cell, ur.urNotes, smartHintColorSystemReader.safeNoteColor(smartHintsColorSystem), cellsToFocusData)
+    })
+
+    return cellsToFocusData
+}
+
+const getHintExplanationText = (ur: BaseURRawHint, notes: Notes) => {
+    const removableNotesHostCell = ur.cellAndRemovableNotes[0].cell
+    const cellNotes = NotesRecord.getCellVisibleNotesList(notes, removableNotesHostCell)
+    const extraNotes = _difference(cellNotes, ur.urNotes)
+
+    const extraNotesText = getCandidatesListText(extraNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
+    const firstURNote = ur.urNotes[0]
+    const secondURNote = ur.urNotes[1]
+    const cellWithExtraCandidates = getCellAxesValues(removableNotesHostCell)
+    const firstHostCell = getCellAxesValues(ur.hostCells[0])
+    const secondHostCell = getCellAxesValues(ur.hostCells[1])
+    const thirdHostCell = getCellAxesValues(ur.hostCells[2])
+    const fourthHostCell = getCellAxesValues(ur.hostCells[3])
+
+    const msgTemplates = extraNotes.length === 1 ? HINT_EXPLANATION_TEXTS[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_ONE].singleExtraCandidateMsg
+        : HINT_EXPLANATION_TEXTS[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_ONE].multipleExtraCandidateMsg
+
+    const msgPlaceholdersValues = {
+        extraNotesText,
+        firstURNote,
+        secondURNote,
+        cellWithExtraCandidates,
+        firstHostCell,
+        secondHostCell,
+        thirdHostCell,
+        fourthHostCell,
+    }
+
+    const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    return getHintExplanationStepsFromHintChunks(hintChunks, false)
+}
+
+export const transformURTypeOne = ({
+    rawHint: ur,
+    notesData,
+    smartHintsColorSystem
+}: URTransformerArgs): TransformedRawHint => {
+    return {
+        hasTryOut: false,
+        steps: getHintExplanationText(ur, notesData),
+        cellsToFocusData: getCellsToFocusData(ur, notesData, smartHintsColorSystem),
+        focusedCells: ur.hostCells,
+        applyHint: getApplyHintData(ur),
+        // tryOutAnalyserData: {
+        //     wWing,
+        // },
+        // removableNotes: getRemovableNotesVsHostCells(ur), // how it's used ??
+        // inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(wWing.nakedPairNotes) as InputPanelVisibleNumbers,
+        // clickableCells: _cloneDeep(focusedCells),
+        // unclickableCellClickInTryOutMsg: 'you can only select the cells which are highlighted here.',
+    }
+}

@@ -93,13 +93,15 @@ const EmptyRectangle = () => {
 
         return (
             <>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + '<b>valid patterns of the candidate in the block:</b>'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + '<b>valid patterns of the candidate in the block:</b>'
+                            + '</p>'
+                        }
+                    />
+                </View>
                 <View style={styles.exampleBoardContainer}>
                     <ReactNativeZoomableView
                         initialZoom={1}
@@ -120,15 +122,17 @@ const EmptyRectangle = () => {
                         />
                     </ReactNativeZoomableView>
                 </View>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'in all of the blocks displayed above, the candidate is present in only <b>one row and one column</b>.'
-                        + ' And the rows and columns are also highlighted which contains these candidates in each block house.'
-                        + ' For Example, in 1st block, candidate 4 is present in 1st column and Ath row only.'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + 'in all of the blocks displayed above, the candidate is present in only <b>one row and one column</b>.'
+                            + ' And the rows and columns are also highlighted which contains these candidates in each block house.'
+                            + ' For Example, in 1st block, candidate 4 is present in 1st column and Ath row only.'
+                            + '</p>'
+                        }
+                    />
+                </View>
             </>
         )
     }
@@ -162,13 +166,15 @@ const EmptyRectangle = () => {
 
         return (
             <>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + '<b>invalid patterns of the candidate in block:</b>'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + '<b>invalid patterns of the candidate in block:</b>'
+                            + '</p>'
+                        }
+                    />
+                </View>
                 <View style={styles.exampleBoardContainer}>
                     <ReactNativeZoomableView
                         initialZoom={1}
@@ -183,21 +189,23 @@ const EmptyRectangle = () => {
                         />
                     </ReactNativeZoomableView>
                 </View>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'Why above patterns are invalid ?'
-                        + '<br/>'
-                        + '<ul>'
-                        + `<li><b>3rd block:</b> candidates in this block can not be fitted into any pair of a row and a column. if we choose one column, let's say 9th, then we need two rows B and C and if we choose one row, let's say C, then we need two columns 8th and 9th</li>`
-                        + '<li><b>5th block:</b> here all the candidates can be fitted into row E only and no candidates are left that can be fitted into a column as well</li>'
-                        + '<li><b>7th block:</b> candidate is present only two times in the block. we need it to be present atleast three times</li>'
-                        // TODO: add a link that explains why candidate has to be present atleast three times.
-                        + '<li><b>9th block:</b> same reason as explained above for 3rd block</li>'
-                        + '</ul>'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + 'Why above patterns are invalid ?'
+                            + '<br/>'
+                            + '<ul>'
+                            + `<li><b>3rd block:</b> candidates in this block can not be fitted into any pair of a row and a column. if we choose one column, let's say 9th, then we need two rows B and C and if we choose one row, let's say C, then we need two columns 8th and 9th</li>`
+                            + '<li><b>5th block:</b> here all the candidates can be fitted into row E only and no candidates are left that can be fitted into a column as well</li>'
+                            + '<li><b>7th block:</b> candidate is present only two times in the block. we need it to be present atleast three times</li>'
+                            // TODO: add a link that explains why candidate has to be present atleast three times.
+                            + '<li><b>9th block:</b> same reason as explained above for 3rd block</li>'
+                            + '</ul>'
+                            + '</p>'
+                        }
+                    />
+                </View>
             </>
         )
     }
@@ -243,15 +251,17 @@ const EmptyRectangle = () => {
 
         return (
             <>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'Once you are able to find a valid arrangement of the candidate in a block house, now focus on the'
-                        + ' intersection of the row and column in which the candidate is present in the block. This <b>intersection cell</b> is'
-                        + ' important.'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + 'Once you are able to find a valid arrangement of the candidate in a block house, now focus on the'
+                            + ' intersection of the row and column in which the candidate is present in the block. This <b>intersection cell</b> is'
+                            + ' important.'
+                            + '</p>'
+                        }
+                    />
+                </View>
                 <View style={styles.exampleBoardContainer}>
                     <ReactNativeZoomableView
                         initialZoom={1}
@@ -270,14 +280,16 @@ const EmptyRectangle = () => {
                         />
                     </ReactNativeZoomableView>
                 </View>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'in all of the blocks displayed above, the intersection cell has been highlighted.'
-                        + ' For Example, in 5th block, candidate 4 is present in row E and column 5 and this row and column intersect at E5 cell.'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + 'in all of the blocks displayed above, the intersection cell has been highlighted.'
+                            + ' For Example, in 5th block, candidate 4 is present in row E and column 5 and this row and column intersect at E5 cell.'
+                            + '</p>'
+                        }
+                    />
+                </View>
             </>
         )
     }
@@ -316,16 +328,18 @@ const EmptyRectangle = () => {
 
         return (
             <>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'Now we need to find either a row or a column which is not part of the block house and in which this candidate can come <b>only 2 times</b>.'
-                        + ` Let's call such a row or column as <b>Side House</b>.`
-                        + '<br/>'
-                        + '<b>Note:</b> One cell of this side house in which this candidate is present has to be seen by the intersection cell of the block house.'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + 'Now we need to find either a row or a column which is not part of the block house and in which this candidate can come <b>only 2 times</b>.'
+                            + ` Let's call such a row or column as <b>Side House</b>.`
+                            + '<br/>'
+                            + '<b>Note:</b> One cell of this side house in which this candidate is present has to be seen by the intersection cell of the block house.'
+                            + '</p>'
+                        }
+                    />
+                </View>
                 <View style={styles.exampleBoardContainer}>
                     <ReactNativeZoomableView
                         initialZoom={1}
@@ -346,15 +360,17 @@ const EmptyRectangle = () => {
                         />
                     </ReactNativeZoomableView>
                 </View>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'In the above puzzle, row H and column 2nd are shown as an example of a valid Side House. In both of these'
-                        + ' side houses candidate 4 is present only 2 times and one cell of each house is seen by the intersection cell'
-                        + ' of the 3rd block house.'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + 'In the above puzzle, row H and column 2nd are shown as an example of a valid Side House. In both of these'
+                            + ' side houses candidate 4 is present only 2 times and one cell of each house is seen by the intersection cell'
+                            + ' of the 3rd block house.'
+                            + '</p>'
+                        }
+                    />
+                </View>
             </>
         )
     }
@@ -390,16 +406,18 @@ const EmptyRectangle = () => {
 
         return (
             <>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + '<b>How this hint removes notes:</b>'
-                        + '<br />'
-                        + `Once you have identified a block house and a row of column house with the properties explained above, it's time to find`
-                        + ` the cell from which the candidate can be removed. Let's use the above example to understand this.`
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + '<b>How this hint removes notes:</b>'
+                            + '<br />'
+                            + `Once you have identified a block house and a row of column house with the properties explained above, it's time to find`
+                            + ` the cell from which the candidate can be removed. Let's use the above example to understand this.`
+                            + '</p>'
+                        }
+                    />
+                </View>
                 <View style={styles.exampleBoardContainer}>
                     <ReactNativeZoomableView
                         initialZoom={1}
@@ -424,40 +442,40 @@ const EmptyRectangle = () => {
                         />
                     </ReactNativeZoomableView>
                 </View>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + 'here 3rd block and row H makes Empty Rectangle with candidate 4. And H9 cell of Side House sees intersection cell and H4'
-                        + ' is the other cell which does not see intersection cell in the block.'
-                        + '<br />'
-                        + 'The candidate 4 will be removed from the cell which sees the intersection cell (B9 here) and the other cell of Side House'
-                        + ' which does not see intersection cell (H4 here).'
-                        + '<br />'
-                        + 'So, B4 is that cell from which candidate 4 will be removed. Other candidates of this cell will be safe.'
-                        + '<br />'
-                        + 'Now try to apply this hint in your real puzzles'
-                        + '</p>'
-                    }
-                />
+                <View style={styles.paragraphMarginTop}>
+                    <SmartHintText
+                        text={
+                            '<p>'
+                            + 'here 3rd block and row H makes Empty Rectangle with candidate 4. And H9 cell of Side House sees intersection cell and H4'
+                            + ' is the other cell which does not see intersection cell in the block.'
+                            + '<br />'
+                            + 'The candidate 4 will be removed from the cell which sees the intersection cell (B9 here) and the other cell of Side House'
+                            + ' which does not see intersection cell (H4 here).'
+                            + '<br />'
+                            + 'So, B4 is that cell from which candidate 4 will be removed. Other candidates of this cell will be safe.'
+                            + '<br />'
+                            + 'Now try to apply this hint in your real puzzles'
+                            + '</p>'
+                        }
+                    />
+                </View>
             </>
         )
     }
 
     return (
         <View style={styles.container}>
-            <View style={styles.resetParagraphMarginTop}>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + `To find an Empty Rectangle, we will focus on a single ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} in a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'block house')}.`
-                        + ' if this candidate is present only in one row and one column in that block house then this candidate'
-                        + ' might make an Empty Rectangle.'
-                        + '<br />'
-                        + 'Note: the candidate has to be present <b>more than two times</b> in that block.'
-                        + '</p>'
-                    }
-                />
-            </View>
+            <SmartHintText
+                text={
+                    '<p>'
+                    + `To find an Empty Rectangle, we will focus on a single ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} in a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'block house')}.`
+                    + ' if this candidate is present only in one row and one column in that block house then this candidate'
+                    + ' might make an Empty Rectangle.'
+                    + '<br />'
+                    + 'Note: the candidate has to be present <b>more than two times</b> in that block.'
+                    + '</p>'
+                }
+            />
             {renderCandidateValidPattenInBlockExamples()}
             {renderCandidateInvalidPattenInBlockExamples()}
             {renderIntersectionCellExamples()}

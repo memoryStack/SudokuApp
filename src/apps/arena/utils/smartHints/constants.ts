@@ -37,6 +37,7 @@ enum HINTS_IDS {
     XY_CHAIN = 'XY_CHAIN',
     W_WING = 'W_WING',
     XYZ_WING = 'XYZ_WING',
+    UNIQUE_RECTANGLE = 'UNIQUE_RECTANGLE',
     ALL = 'ALL',
 }
 
@@ -55,7 +56,8 @@ const HINT_LABELS = {
     [HINTS_IDS.X_CHAIN]: 'X-Chain',
     [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
     [HINTS_IDS.W_WING]: 'W-Wing',
-    [HINTS_IDS.XYZ_WING]: 'XYZ-Wing'
+    [HINTS_IDS.XYZ_WING]: 'XYZ-Wing',
+    [HINTS_IDS.UNIQUE_RECTANGLE]: 'Unique\nRectangle'
 }
 
 const HINTS_MENU_ITEMS = [
@@ -118,6 +120,10 @@ const HINTS_MENU_ITEMS = [
     {
         label: HINT_LABELS[HINTS_IDS.XYZ_WING],
         id: HINTS_IDS.XYZ_WING,
+    },
+    {
+        label: HINT_LABELS[HINTS_IDS.UNIQUE_RECTANGLE],
+        id: HINTS_IDS.UNIQUE_RECTANGLE,
     },
 ]
 

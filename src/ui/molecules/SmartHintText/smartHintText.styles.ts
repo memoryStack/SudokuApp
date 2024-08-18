@@ -6,8 +6,5 @@ export const getStyles = (_: unknown, theme) => StyleSheet.create({
     a: {
         color: _get(theme, ['colors', 'primary']),
         textDecorationLine: 'underline',
-    },
-    p: {
-        marginTop: 16
     }
 })

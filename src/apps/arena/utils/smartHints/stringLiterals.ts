@@ -1,6 +1,7 @@
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { HINTS_VOCAB_IDS } from './rawHintTransformers/constants'
 import { HINTS_IDS } from './constants'
+import { UR_TYPES } from './uniqueRectangle/constants'
 
 export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.NAKED_SINGLE]: 'Naked Single',
@@ -20,6 +21,7 @@ export const HINT_ID_VS_TITLES = {
     [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
     [HINTS_IDS.W_WING]: 'W-Wing',
     [HINTS_IDS.XYZ_WING]: 'XYZ-Wing',
+    [HINTS_IDS.UNIQUE_RECTANGLE]: 'Unique Rectangle',
     [HINTS_IDS.ALL]: 'hints',
 }
 
@@ -51,6 +53,7 @@ type HintExplainationTexts = {
     [HINTS_IDS.EMPTY_RECTANGLE]: string[]
     [HINTS_IDS.W_WING]: string[]
     [HINTS_IDS.XYZ_WING]: string[]
+    [HINTS_IDS.UNIQUE_RECTANGLE]: {}
 }
 
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
@@ -257,6 +260,34 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + '\nHence {{wingsAndPivotCommonNote}} can be removed from {{removableNoteHostCells}}'
         + '</p>'
     ],
+    [HINTS_IDS.UNIQUE_RECTANGLE]: {
+        [UR_TYPES.TYPE_ONE]: {
+            singleExtraCandidateMsg: [
+                `<p>If {{extraNotesText}} doesn't come in {{cellWithExtraCandidates}} then each of these 4 cells will be left`
+                + ' with two candidates {{firstURNote}} and {{secondURNote}}. It will result in two ways to fill these cells without impacting other cells in any way.'
+                + '<br/>'
+                + 'One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}}'
+                + ' in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}.'
+                + ' And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}}'
+                + ' in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}'
+                + '</p>',
+                'This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}.'
+                + ' So in {{cellWithExtraCandidates}} {{firstURNote}} and {{secondURNote}} have to be removed.'
+            ],
+            multipleExtraCandidateMsg: [
+                '<p>If none of {{extraNotesText}} comes in {{cellWithExtraCandidates}} then each of these 4 cells will be left'
+                + ' with two candidates {{firstURNote}} and {{secondURNote}}. It will result in two ways to fill these cells without impacting other cells in any way.'
+                + '<br/>'
+                + 'One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}}'
+                + ' in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}.'
+                + ' And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}}'
+                + ' in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}'
+                + '</p>',
+                'This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}.'
+                + ' So in {{cellWithExtraCandidates}} {{firstURNote}} and {{secondURNote}} have to be removed.'
+            ]
+        }
+    }
 }
 
 export const COMPOSITE_HINT_EXPLANATION_TEXTS = {

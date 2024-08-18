@@ -6,8 +6,8 @@ export const getStyles = (_: unknown, theme) => StyleSheet.create({
     container: {
         paddingHorizontal: 16,
     },
-    resetParagraphMarginTop: {
-        marginTop: -16
+    paragraphMarginTop: {
+        marginTop: 16
     },
     intersectionCell: {
         backgroundColor: _get(theme, ['colors', 'smartHints', 'selectedCellBGColor']),

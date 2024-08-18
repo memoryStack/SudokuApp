@@ -15,7 +15,8 @@ import {
     transformXYChainRawHint,
     transformEmptyRectangleRawHint,
     transformWWingRawHint,
-    transformXYZWingRawHint
+    transformXYZWingRawHint,
+    transformURRawHint
 } from './rawHintTransformers'
 
 import { HINTS_IDS } from './constants'
@@ -42,5 +43,6 @@ const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
     [HINTS_IDS.XY_CHAIN]: transformXYChainRawHint,
     [HINTS_IDS.EMPTY_RECTANGLE]: transformEmptyRectangleRawHint,
     [HINTS_IDS.W_WING]: transformWWingRawHint,
-    [HINTS_IDS.XYZ_WING]: transformXYZWingRawHint
+    [HINTS_IDS.XYZ_WING]: transformXYZWingRawHint,
+    [HINTS_IDS.UNIQUE_RECTANGLE]: transformURRawHint
 }
