@@ -22,6 +22,9 @@ const validatePuzzle = (puzzle: string) => RNSudokuPuzzle.validatePuzzle(puzzle)
 
 const getRawHints = (puzzle: string, notes: Notes, disabledHints: string[]): Promise<RawHints> => {
     return RNSudokuPuzzle.getRawHints(puzzle, notes, disabledHints)
+        .then((data) => {
+            return data
+        })
 }
 
 export const Puzzle: PuzzleAdapter = {
