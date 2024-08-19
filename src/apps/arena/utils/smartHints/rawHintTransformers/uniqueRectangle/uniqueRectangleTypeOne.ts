@@ -1,81 +1,18 @@
-import _cloneDeep from '@lodash/cloneDeep'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
-import _isEmpty from '@lodash/isEmpty'
-import _filter from '@lodash/filter'
-import _unique from '@lodash/unique'
-import _sortNumbers from '@lodash/sortNumbers'
-import _sortBy from '@lodash/sortBy'
 import _difference from '@lodash/difference'
-import _isNil from '@lodash/isNil'
-import _intersection from '@lodash/intersection'
 
-import { BaseURRawHint, CellAndRemovableNotes, URTransformerArgs, UniqueRectangleRawHint } from '../../types/uniqueRectangle'
+import { BaseURRawHint, CellAndRemovableNotes, URTransformerArgs } from '../../types/uniqueRectangle'
 
-import { TransformedRawHint, NotesRemovalHintAction, CellsFocusData, SmartHintsColorSystem } from '../../types'
-import { BOARD_MOVES_TYPES } from '../../../../constants'
+import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem } from '../../types'
 import _map from '@lodash/map'
-import { getCandidatesListText, getHintExplanationStepsFromHintChunks, highlightNoteInCellsWithGivenColor, setCellBGColor, setCellNotesColor } from '../../util'
+import { getCandidatesListText, getHintExplanationStepsFromHintChunks, setCellBGColor, setCellNotesColor } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { areSameCells, getCellAxesValues } from '@domain/board/utils/housesAndCells'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS } from '../../stringLiterals'
 import { UR_TYPES } from '../../uniqueRectangle/constants'
-
-/*
-    {
-    "UNIQUE_RECTANGLE": {
-        "cellAndRemovableNotes": [
-            {
-                "notes": [
-                    8,
-                    9
-                ],
-                "cell": {
-                    "col": 1,
-                    "row": 1
-                }
-            }
-        ],
-        "hostCells": [
-            {
-                "col": 1,
-                "row": 1
-            },
-            {
-                "col": 2,
-                "row": 1
-            },
-            {
-                "col": 2,
-                "row": 5
-            },
-            {
-                "col": 1,
-                "row": 5
-            }
-        ],
-        "type": "UR-1",
-        "urNotes": [
-            8,
-            9
-        ],
-        "isComposite": false
-    }
-}
-
-*/
-
-// TODO: every hint will use it, move it outside
-const getApplyHintData = (ur: BaseURRawHint): NotesRemovalHintAction[] => {
-    return _map(ur.cellAndRemovableNotes, (cellRemovableNotes: CellAndRemovableNotes) => {
-        return {
-            cell: cellRemovableNotes.cell,
-            action: { type: BOARD_MOVES_TYPES.REMOVE, notes: cellRemovableNotes.notes },
-        }
-    })
-}
 
 // move it in helpers
 const getRemovableNotesVsHostCells = (ur: BaseURRawHint) => {
@@ -91,7 +28,6 @@ const getRemovableNotesVsHostCells = (ur: BaseURRawHint) => {
 
 const getCellsToFocusData = (
     ur: BaseURRawHint,
-    notes: Notes,
     smartHintsColorSystem: SmartHintsColorSystem,
 ) => {
     const cellsToFocusData: CellsFocusData = {}
@@ -153,9 +89,8 @@ export const transformURTypeOne = ({
     return {
         hasTryOut: false,
         steps: getHintExplanationText(ur, notesData),
-        cellsToFocusData: getCellsToFocusData(ur, notesData, smartHintsColorSystem),
+        cellsToFocusData: getCellsToFocusData(ur, smartHintsColorSystem),
         focusedCells: ur.hostCells,
-        applyHint: getApplyHintData(ur),
         // tryOutAnalyserData: {
         //     wWing,
         // },

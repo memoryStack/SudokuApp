@@ -261,6 +261,7 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + '</p>'
     ],
     [HINTS_IDS.UNIQUE_RECTANGLE]: {
+        // TODO: there is a lot of copy pasting here for the same msg, fix it
         [UR_TYPES.TYPE_ONE]: {
             singleExtraCandidateMsg: [
                 `<p>If {{extraNotesText}} doesn't come in {{cellWithExtraCandidates}} then each of these 4 cells will be left`
@@ -286,7 +287,19 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
                 'This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}.'
                 + ' So in {{cellWithExtraCandidates}} {{firstURNote}} and {{secondURNote}} have to be removed.'
             ]
-        }
+        },
+        [UR_TYPES.TYPE_TWO]: [
+            `<p>If {{extraNote}} doesn't comes in any of {{cellsWithExtraCandidateList}} then each of these 4 cells {{urHostCellsList}} will be left`
+            + ' with two candidates {{firstURNote}} and {{secondURNote}}. It will result in two ways to fill these cells without impacting other cells in any way.'
+            + '<br/>'
+            + 'One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}}'
+            + ' in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}.'
+            + ' And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}}'
+            + ' in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}'
+            + '</p>',
+            'This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}.'
+            + ' So in one of {{cellsWithExtraCandidateList}} {{extraNote}} will come and due to that {{extraNote}} will be removed from the cells where it is highlighted in red color.'
+        ]
     }
 }
 
