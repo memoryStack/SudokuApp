@@ -15,6 +15,7 @@ const smartHintColorSystemReader = {
     xWingTopLeftBottomRightCellBGColor: _property('xWing.topLeftBottomRightCellsBGColor'),
     xWingTopRightBottomLeftCellBGColor: _property('xWing.topRightBottomLeftCellsBGColor'),
     xWingFinnCellBGColor: _property('xWing.finnCellBGColor'),
+    urTypeThreeNPNotes: _property('ur.typeThree.nakedPairNotes'),
 }
 
 export default smartHintColorSystemReader

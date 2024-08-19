@@ -21,6 +21,11 @@ module.exports = {
                 topRightBottomLeftCellsBGColor: { value: '#c8e6ff' },
                 finnCellBGColor: { value: '#e9ddff' },
             },
+            ur: {
+                typeThree: {
+                    nakedPairNotes: { value: '#4B61D1' }
+                }
+            }
         },
     },
 }

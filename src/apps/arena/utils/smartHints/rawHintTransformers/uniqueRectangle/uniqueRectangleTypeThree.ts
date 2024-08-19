@@ -3,7 +3,7 @@ import _forEach from '@lodash/forEach'
 import _filter from '@lodash/filter'
 import _difference from '@lodash/difference'
 
-import { BaseURRawHint, CellAndRemovableNotes, URTransformerArgs } from '../../types/uniqueRectangle'
+import { BaseURRawHint, CellAndRemovableNotes, URTransformerArgs, UniqueRectangleTypeThreeRawHint } from '../../types/uniqueRectangle'
 
 import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem } from '../../types'
 import _map from '@lodash/map'
@@ -17,7 +17,7 @@ import { getCellsAxesValuesListText } from '../helpers'
 import { getURHostCellsWithExtraCandidates, getExtraNotesInURCells } from './helpers'
 
 const getCellsToFocusData = (
-    ur: BaseURRawHint,
+    ur: UniqueRectangleTypeThreeRawHint,
     smartHintsColorSystem: SmartHintsColorSystem,
 ) => {
     const cellsToFocusData: CellsFocusData = {}
@@ -31,11 +31,14 @@ const getCellsToFocusData = (
     _forEach(ur.cellAndRemovableNotes, ({ cell, notes }: CellAndRemovableNotes) => {
         setCellNotesColor(cell, notes, smartHintColorSystemReader.toBeRemovedNoteColor(smartHintsColorSystem), cellsToFocusData)
     })
+    _forEach(ur.nakedPairCells, (cell: Cell) => {
+        setCellNotesColor(cell, ur.nakedPairNotes, smartHintColorSystemReader.urTypeThreeNPNotes(smartHintsColorSystem), cellsToFocusData)
+    })
 
     return cellsToFocusData
 }
 
-const getHintExplanationText = (ur: BaseURRawHint, notes: Notes) => {
+const getHintExplanationText = (ur: UniqueRectangleTypeThreeRawHint, notes: Notes) => {
     const cellsWithExtraCandidates = getURHostCellsWithExtraCandidates(ur, notes)
     const msgPlaceholdersValues = {
         extraNote: getExtraNotesInURCells(ur, notes)[0],
@@ -54,10 +57,10 @@ const getHintExplanationText = (ur: BaseURRawHint, notes: Notes) => {
     return getHintExplanationStepsFromHintChunks(hintChunks, false)
 }
 
-const getCellsToFocus = (ur: BaseURRawHint) => {
+const getCellsToFocus = (ur: UniqueRectangleTypeThreeRawHint) => {
     let result: Cell[] = []
 
-    result = [...ur.hostCells]
+    result = [...ur.hostCells, ...ur.nakedPairCells]
     _forEach(ur.cellAndRemovableNotes, ({ cell }: CellAndRemovableNotes) => {
         result.push(cell)
     })
@@ -66,15 +69,16 @@ const getCellsToFocus = (ur: BaseURRawHint) => {
 }
 
 export const transformURTypeThree = ({
-    rawHint: ur,
+    rawHint: _ur,
     notesData,
     smartHintsColorSystem
 }: URTransformerArgs): TransformedRawHint => {
+    const ur = _ur as UniqueRectangleTypeThreeRawHint
     return {
         hasTryOut: false,
         steps: getHintExplanationText(ur, notesData),
         cellsToFocusData: getCellsToFocusData(ur, smartHintsColorSystem),
-        focusedCells: getCellsToFocus(ur),
+        focusedCells: getCellsToFocus(ur as UniqueRectangleTypeThreeRawHint),
         // tryOutAnalyserData: {
         //     wWing,
         // },

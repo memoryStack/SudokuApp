@@ -13,6 +13,13 @@ export type BaseURRawHint = {
     isComposite: boolean
 }
 
+export type UniqueRectangleTypeFourRawHint = BaseURRawHint & {
+    urNoteOmission: {
+        house: House,
+        note: NoteValue
+    }
+}
+
 export type UniqueRectangleTypeThreeRawHint = BaseURRawHint & {
     nakedPairCells: Cell[]
     nakedPairNotes: number[]
