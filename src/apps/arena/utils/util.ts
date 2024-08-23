@@ -7,6 +7,7 @@ import _values from '@lodash/values'
 import _unique from '@lodash/unique'
 import _sortNumbers from '@lodash/sortNumbers'
 import _areSameValues from '@lodash/areSameValues'
+import _differenceWith from '@lodash/differenceWith'
 
 import { getKey } from '@utils/storage'
 
@@ -369,4 +370,10 @@ export const getCommonNoteInCells = (cellA: Cell, cellB: Cell, notes: Notes) => 
     const cellANotes = NotesRecord.getCellVisibleNotesList(notes, cellA)
     const cellBNotes = NotesRecord.getCellVisibleNotesList(notes, cellB)
     return _intersection(cellANotes, cellBNotes)
+}
+
+export const getCellsDifference = (superSet: Cell[], subSet: Cell[]) => {
+    return _differenceWith(superSet, subSet, (superSetCell: Cell, subSetCell: Cell) => {
+        return areSameCells(superSetCell, subSetCell)
+    })
 }

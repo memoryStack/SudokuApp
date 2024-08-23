@@ -28,6 +28,7 @@ import {
     getNoteHostCellsInHouse,
     areAdjacentCells,
     areCellsFromSameHouse,
+    getCellsDifference,
 } from '../util'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { GAME_DATA_KEYS } from '../cacheGameHandler'
@@ -625,5 +626,14 @@ describe('areCellsFromSameHouse()', () => {
     test('returns false when cells are not in same house', () => {
         const cells = [{ row: 3, col: 3 }, { row: 4, col: 4 }, { row: 4, col: 8 }]
         expect(areCellsFromSameHouse(cells)).toBe(false)
+    })
+})
+
+describe('getCellsDifference()', () => {
+    test('returns the cells from superSet which are not present in subSet', () => {
+        const superSet = [{ row: 0, col: 0 }, { row: 0, col: 4 }, { row: 0, col: 7 }]
+        const subSet = [{ row: 0, col: 4 }]
+        const expectedResult = [{ row: 0, col: 0 }, { row: 0, col: 7 }]
+        expect(getCellsDifference(superSet, subSet)).toEqual(expectedResult)
     })
 })

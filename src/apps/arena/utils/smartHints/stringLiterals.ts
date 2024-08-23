@@ -299,6 +299,22 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
             + '</p>',
             'This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}.'
             + ' So in one of {{cellsWithExtraCandidateList}} {{extraNote}} will come and due to that {{extraNote}} will be removed from the cells where it is highlighted in red color.'
+        ],
+        [UR_TYPES.TYPE_FOUR]: [
+            `<p>Notice that {{omissonNote}} is making an ${getLinkHTMLText(HINTS_VOCAB_IDS.OMISSION, 'Omission')} in {{omissionHostHouse}}.`
+            + ' It means that {{omissonNote}} has to come in one of {{cellsWithExtraCandidatesOrConcat}}. And if {{removableNote}} also come in {{cellsWithExtraCandidatesOrConcat}}'
+            + ' then it will result in two ways to fill these 4 cells without impacting other cells in any way.'
+            + '<br/>'
+            + 'One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}}'
+            + ' in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}.'
+            + ' And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}}'
+            + ' in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}'
+            + '</p>',
+            '<p>This puzzle has only one valid solution so it is impossible to fill all of these 4 cells with just {{firstURNote}} and {{secondURNote}}.'
+            + ' So only option left is to remove {{removableNote}} from {{cellsWithExtraCandidatesAndConcat}} because of two reasons. First, {{omissonNote}} will definitely come in'
+            + ` one of {{cellsWithExtraCandidatesOrConcat}} and second, {{firstURNote}} and {{secondURNote}} make a ${getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_DOUBLE, 'Naked Double')}`
+            + ' in {{cellsHavingOnlyURNotes}} cells so {{firstURNote}} and {{secondURNote}} both will definitely come in these two cells.'
+            + '</p>'
         ]
     }
 }

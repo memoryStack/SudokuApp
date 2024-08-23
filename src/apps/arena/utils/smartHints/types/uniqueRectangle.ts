@@ -14,6 +14,7 @@ export type BaseURRawHint = {
 }
 
 export type UniqueRectangleTypeFourRawHint = BaseURRawHint & {
+    removableURNote: number,
     urNoteOmission: {
         house: House,
         note: NoteValue

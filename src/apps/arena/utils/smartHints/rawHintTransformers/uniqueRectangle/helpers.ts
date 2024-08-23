@@ -9,6 +9,7 @@ import { CellsFocusData, SmartHintsColorSystem } from '../../types'
 import { BaseURRawHint, CellAndRemovableNotes, } from '../../types/uniqueRectangle'
 import { setCellNotesColor } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
+import { getCellsDifference } from '../../../util'
 
 // USELESS UTIL
 export const highlightURNotesAndRemovableNotes = (
@@ -46,4 +47,9 @@ export const getExtraNotesInURCells = (ur: BaseURRawHint, notes: Notes) => {
     })
 
     return result
+}
+
+export const getURHostCellsHavingURNotesOnly = (ur: BaseURRawHint, notes: Notes) => {
+    const cellsWithExtraCandidates = getURHostCellsWithExtraCandidates(ur, notes)
+    return getCellsDifference(ur.hostCells, cellsWithExtraCandidates)
 }

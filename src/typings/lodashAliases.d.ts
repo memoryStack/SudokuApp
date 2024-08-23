@@ -220,3 +220,9 @@ declare module '@lodash/concat' {
 
     export default _concat
 }
+
+declare module '@lodash/differenceWith' {
+    import _differenceWith from '@lodash/differenceWith'
+
+    export default _differenceWith
+}
