@@ -31,13 +31,18 @@ export const getURHostCellsWithExtraCandidates = (ur: BaseURRawHint, notes: Note
     })
 }
 
+export const getExtraNotesInURCell = (ur: BaseURRawHint, cell: Cell, notes: Notes) => {
+    const extraNotes: NoteValue[] = _difference(NotesRecord.getCellVisibleNotesList(notes, cell), ur.urNotes)
+    return extraNotes
+}
+
 export const getExtraNotesInURCells = (ur: BaseURRawHint, notes: Notes) => {
     let result: NoteValue[] = []
     const cellsWithExtraNotes = getURHostCellsWithExtraCandidates(ur, notes)
 
     const notesPresent: { [key: NoteValue]: boolean } = {}
     cellsWithExtraNotes.forEach((cell: Cell) => {
-        const extraNotes = _difference(NotesRecord.getCellVisibleNotesList(notes, cell), ur.urNotes)
+        const extraNotes = getExtraNotesInURCell(ur, cell, notes)
         extraNotes.forEach((extraNote: NoteValue) => {
             notesPresent[extraNote] = true
         })

@@ -300,6 +300,23 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
             'This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}.'
             + ' So in one of {{cellsWithExtraCandidateList}} {{extraNote}} will come and due to that {{extraNote}} will be removed from the cells where it is highlighted in red color.'
         ],
+        [UR_TYPES.TYPE_THREE]: [
+            '<p>If none of {{ngCandidates}} come in {{cellsWithExtraCandidates}} then these'
+            + ' 4 cells {{urHostCells}} will be filled by {{urNotes}} only and it would lead to two ways of solving this puzzle'
+            + '<br/>'
+            + 'One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}}'
+            + ' in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}.'
+            + ' And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}}'
+            + ' in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}.'
+            + ' This is not possible since this puzzle has only one solution.'
+            + '</p>',
+            '<p>'
+            + 'So conclusion is that either in {{firstCellWithExtraCandidates}} one of {{firstCellExtraCandidates}}'
+            + ' has to come or in {{secondCellWithExtraCandidates}} one of {{secondCellExtraCandidates}} has to come.'
+            + ' Whichever is the case, either {{firstNGCells}} will make a {{ngHintText}} or {{secondNGCells}} will make a {{ngHintText}}.'
+            + ' And due to this we can remove the numbers highlighted in red color.'
+            + '</p>'
+        ],
         [UR_TYPES.TYPE_FOUR]: [
             `<p>Notice that {{omissonNote}} is making an ${getLinkHTMLText(HINTS_VOCAB_IDS.OMISSION, 'Omission')} in {{omissionHostHouse}}.`
             + ' It means that {{omissonNote}} has to come in one of {{cellsWithExtraCandidatesOrConcat}}. And if {{removableNote}} also come in {{cellsWithExtraCandidatesOrConcat}}'

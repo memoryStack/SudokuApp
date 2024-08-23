@@ -75,7 +75,7 @@ export const transformURTypeFour = ({
     return {
         type: 'UNIQUE_RECTANGLE',
         hasTryOut: true,
-        title: 'Unique Rectangle 4', // this is not reflected
+        title: 'Unique Rectangle-4', // this is not reflected
 
         cellsToFocusData: getCellsToFocusData(ur as UniqueRectangleTypeFourRawHint, notesData, smartHintsColorSystem),
         focusedCells: getCellsToFocus(ur as UniqueRectangleTypeFourRawHint),

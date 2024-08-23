@@ -36,7 +36,6 @@ export const transformURRawHint = (args: URTransformerArgs): TransformedRawHint 
     if (URTypeChecker.isURTypeSix(rawHint)) result = transformURTypeSix(args)
 
     result.type = HINTS_IDS.UNIQUE_RECTANGLE
-    result.title = HINT_ID_VS_TITLES[HINTS_IDS.UNIQUE_RECTANGLE]
     result.applyHint = getApplyHintData(rawHint)
 
     return result

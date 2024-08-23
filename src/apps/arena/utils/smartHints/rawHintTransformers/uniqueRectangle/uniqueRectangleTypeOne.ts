@@ -87,6 +87,7 @@ export const transformURTypeOne = ({
     smartHintsColorSystem
 }: URTransformerArgs): TransformedRawHint => {
     return {
+        title: 'Unique Rectangle-1',
         hasTryOut: false,
         steps: getHintExplanationText(ur, notesData),
         cellsToFocusData: getCellsToFocusData(ur, smartHintsColorSystem),
