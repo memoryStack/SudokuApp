@@ -36,7 +36,7 @@ const startPersistedGameUseCase = async (dependencies: Dependencies) => {
                 ...pausedGameData,
                 dependencies,
             })
-            // gamePersistenceAdapter.removePausedGameData()
+            gamePersistenceAdapter.removePausedGameData()
         })
         .catch((error) => {
             // start some other game
