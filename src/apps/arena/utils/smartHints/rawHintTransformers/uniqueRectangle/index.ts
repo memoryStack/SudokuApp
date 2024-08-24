@@ -11,7 +11,6 @@ import { transformURTypeThree } from './uniqueRectangleTypeThree'
 import { transformURTypeFour } from './uniqueRectangleTypeFour'
 import { transformURTypeFive } from './uniqueRectangleTypeFive'
 import { transformURTypeSix } from './uniqueRectangleTypeSix'
-import { HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { HINTS_IDS } from '../../constants'
 
 const getApplyHintData = (ur: BaseURRawHint): NotesRemovalHintAction[] => {
@@ -22,7 +21,6 @@ const getApplyHintData = (ur: BaseURRawHint): NotesRemovalHintAction[] => {
         }
     })
 }
-
 
 export const transformURRawHint = (args: URTransformerArgs): TransformedRawHint => {
     let result: TransformedRawHint = {}
@@ -36,7 +34,7 @@ export const transformURRawHint = (args: URTransformerArgs): TransformedRawHint 
     if (URTypeChecker.isURTypeSix(rawHint)) result = transformURTypeSix(args)
 
     result.type = HINTS_IDS.UNIQUE_RECTANGLE
-    result.applyHint = getApplyHintData(rawHint)
+    if (!result.applyHint) result.applyHint = getApplyHintData(rawHint)
 
     return result
 }

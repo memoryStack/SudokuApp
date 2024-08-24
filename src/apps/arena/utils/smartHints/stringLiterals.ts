@@ -302,7 +302,7 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         ],
         [UR_TYPES.TYPE_THREE]: [
             '<p>If none of {{ngCandidates}} come in {{cellsWithExtraCandidates}} then these'
-            + ' 4 cells {{urHostCells}} will be filled by {{urNotes}} only and it would lead to two ways of solving this puzzle'
+            + ' 4 cells {{urHostCells}} will be filled by {{urNotes}} only and it would lead to two ways of solving this puzzle.'
             + '<br/>'
             + 'One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}}'
             + ' in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}.'
@@ -311,8 +311,8 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
             + ' This is not possible since this puzzle has only one solution.'
             + '</p>',
             '<p>'
-            + 'So conclusion is that either in {{firstCellWithExtraCandidates}} one of {{firstCellExtraCandidates}}'
-            + ' has to come or in {{secondCellWithExtraCandidates}} one of {{secondCellExtraCandidates}} has to come.'
+            + 'So conclusion is that either in {{firstCellWithExtraCandidates}} {{firstCellExtraCandidates}}'
+            + ' has to come or in {{secondCellWithExtraCandidates}} {{secondCellExtraCandidates}} has to come.'
             + ' Whichever is the case, either {{firstNGCells}} will make a {{ngHintText}} or {{secondNGCells}} will make a {{ngHintText}}.'
             + ' And due to this we can remove the numbers highlighted in red color.'
             + '</p>'
@@ -332,7 +332,33 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
             + ` one of {{cellsWithExtraCandidatesOrConcat}} and second, {{firstURNote}} and {{secondURNote}} make a ${getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_DOUBLE, 'Naked Double')}`
             + ' in {{cellsHavingOnlyURNotes}} cells so {{firstURNote}} and {{secondURNote}} both will definitely come in these two cells.'
             + '</p>'
-        ]
+        ],
+        [UR_TYPES.TYPE_SIX]: [
+            '<p>'
+            + 'If in {{cellsWithExtraCandidateList}} only {{urNotes}} comes then this puzzle will have two solutions.'
+            + ' One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}}'
+            + ' in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}.'
+            + ' And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}}'
+            + ' in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}.'
+            + ' But this puzzle has only one solution so these 4 cells can not be filled with just {{urNotes}}.'
+            + '</p>',
+            '<p>'
+            + 'Now there are two options to avoid the impossible scenario, either {{firstCellWithExtraCandidates}} gets filled by {{extraCandidatesInFirstCell}}'
+            + ' or {{secondCellWithExtraCandidates}} gets filled by {{extraCandidatesInSecondCell}}. Or both of these might be true as well.'
+            + ' In all of these options there is one thing that will always be true, {{removableCandidate}} will be removed from {{cellsWithExtraCandidateList}}.'
+            + ` Notice that {{xWingCandidate}} makes an ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} in {{rowHostHouses}} and {{columnHostHouses}}.`
+            + ' This is the key to understand this.'
+            + '</p>',
+            '<p>'
+            + 'If {{extraCandidatesInFirstCell}} fills {{firstCellWithExtraCandidates}} then <b>{{urHostCellInSameRowWithFirstCellWithExtraCandidates}} and'
+            + ' {{urHostCellInSameColWithFirstCellWithExtraCandidates}}</b> are the only cells in {{firstCellWithExtraCandidatesRowHouse}} and {{firstCellWithExtraCandidatesColumnHouse}}'
+            + ' respectively where {{xWingCandidate}} can come.'
+            + ' And If {{extraCandidatesInSecondCell}} fills {{secondCellWithExtraCandidates}} then <b>{{urHostCellInSameRowWithSecondCellWithExtraCandidates}} and'
+            + ' {{urHostCellInSameColWithSecondCellWithExtraCandidates}}</b> are the only cells in {{secondCellWithExtraCandidatesRowHouse}} and {{secondCellWithExtraCandidatesColumnHouse}}'
+            + ' respectively where {{xWingCandidate}} can come.'
+            + ' In both the cases {{xWingCandidate}} will be filled in <b>{{cellsHavingOnlyURNotes}}</b>, so we can remove {{xWingCandidate}} from {{cellsWithExtraCandidateList}}.'
+            + '</p>',
+        ],
     }
 }
 

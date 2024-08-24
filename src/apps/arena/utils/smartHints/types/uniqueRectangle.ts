@@ -13,6 +13,11 @@ export type BaseURRawHint = {
     isComposite: boolean
 }
 
+export type UniqueRectangleTypeThreeRawHint = BaseURRawHint & {
+    nakedPairCells: Cell[]
+    nakedPairNotes: number[]
+}
+
 export type UniqueRectangleTypeFourRawHint = BaseURRawHint & {
     removableURNote: number,
     urNoteOmission: {
@@ -21,9 +26,14 @@ export type UniqueRectangleTypeFourRawHint = BaseURRawHint & {
     }
 }
 
-export type UniqueRectangleTypeThreeRawHint = BaseURRawHint & {
-    nakedPairCells: Cell[]
-    nakedPairNotes: number[]
+export type UniqueRectangleTypeSixRawHint = BaseURRawHint & {
+    xWing: {
+        candidate: number,
+        houses: {
+            rows: House[],
+            columns: House[]
+        }
+    }
 }
 
 export type UniqueRectangleRawHint = BaseURRawHint | UniqueRectangleTypeThreeRawHint

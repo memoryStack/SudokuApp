@@ -135,6 +135,10 @@ const highlightNoteInCellsWithGivenColor = (
     })
 }
 
+export const joinStringsWithComma = (strings: string[]) => {
+    return strings.join(', ')
+}
+
 export {
     setCellDataInHintResult,
     setCellNotesHighlightDataInHintResult,

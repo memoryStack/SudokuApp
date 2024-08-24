@@ -65,10 +65,11 @@ export const fastPencilUseCase = (boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, boardRepository.getSelectedCell()))
 }
 
-const inputMainNumber = (number: number, dependencies: Dependencies) => {
+// TODO: make it isolated from selectedCell
+const inputMainNumber = (number: number, cell: Cell, dependencies: Dependencies) => {
     const { boardRepository, refreeRepository } = dependencies
 
-    const selectedCell = boardRepository.getSelectedCell()
+    const selectedCell = cell
     const mainNumbers = boardRepository.getMainNumbers()
 
     const move: Move = {
@@ -134,7 +135,7 @@ export const inputNumberUseCase = (number: number, dependencies: Dependencies) =
     const { boardControllerRepository } = dependencies
     const pencilState = boardControllerRepository.getPencil()
     if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, boardRepository)
-    else inputMainNumber(number, dependencies)
+    else inputMainNumber(number, selectedCell, dependencies)
 }
 
 const removeNotesBunchAndAddMove = (notesBunch: ToggleNotes, boardRepository: BoardRepository) => {
@@ -198,17 +199,15 @@ export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapt
 }
 
 export const applyHintUseCase = (applyHintChanges: ApplyHintData, dependencies: Dependencies) => {
-    if (_get(applyHintChanges, '0.action.type') === BOARD_MOVES_TYPES.ADD) {
-        inputMainNumber(_get(applyHintChanges, '0.action.mainNumber'), dependencies)
-        return
-    }
-
     const notesBunch: ToggleNotes = []
     _forEach(applyHintChanges, ({ cell, action }) => {
-        notesBunch.push(..._map(_get(action, 'notes'), note => ({ cell, note })))
+        if (action.type === BOARD_MOVES_TYPES.ADD) {
+            inputMainNumber(action.mainNumber, cell, dependencies)
+        } else {
+            notesBunch.push(..._map(_get(action, 'notes'), note => ({ cell, note })))
+        }
     })
-
-    removeNotesBunchAndAddMove(notesBunch, dependencies.boardRepository)
+    if (!_isEmpty(notesBunch)) removeNotesBunchAndAddMove(notesBunch, dependencies.boardRepository)
 }
 
 export const fillPuzzleUseCase = (boardRepository: BoardRepository) => {

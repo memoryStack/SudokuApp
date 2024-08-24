@@ -372,7 +372,7 @@ export const getCommonNoteInCells = (cellA: Cell, cellB: Cell, notes: Notes) => 
     return _intersection(cellANotes, cellBNotes)
 }
 
-export const getCellsDifference = (superSet: Cell[], subSet: Cell[]) => {
+export const getCellsDifference = (superSet: Cell[], subSet: Cell[]): Cell[] => {
     return _differenceWith(superSet, subSet, (superSetCell: Cell, subSetCell: Cell) => {
         return areSameCells(superSetCell, subSetCell)
     })
