@@ -1,6 +1,4 @@
-
-
-import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
+import { NEW_GAME_IDS, START_GAME_MENU_ITEMS_IDS } from '@application/usecases/newGameMenu/constants'
 import { MENU_ITEMS_LABELS as NEW_GAME_MENU_ITEMS_LABELS } from '../nextGameMenu/nextGameMenu.constants'
 
 export const DEFAULT_STATE = {
@@ -16,5 +14,6 @@ export const PUZZLE_LEVEL_TEXT_TEST_ID = 'PUZZLE_LEVEL_TEXT_TEST_ID'
 
 export const PUZZLE_LEVEL_TEXT = {
     ...NEW_GAME_MENU_ITEMS_LABELS,
+    [START_GAME_MENU_ITEMS_IDS.CUSTOMIZE_PUZZLE]: 'Customized Puzzle',
     [NEW_GAME_IDS.SHARED_PUZZLE]: 'Shared Puzzle'
 }
