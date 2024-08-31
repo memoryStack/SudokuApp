@@ -19,7 +19,7 @@
         "stageApk": "./scripts/stageApk",
         "appAAB": "./scripts/appAAB.sh",
         "buildAll": "npm run debugApk && npm run stageApk && npm run appAAB",
-        "createComponent": "./scripts/createComponent"
+        "createComponent": "./scripts/createComponent.sh"
     },
     "dependencies": {
         "@openspacelabs/react-native-zoomable-view": "git@github.com:memoryStack/react-native-zoomable-view.git",

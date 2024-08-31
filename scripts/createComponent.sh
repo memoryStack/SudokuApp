@@ -17,16 +17,16 @@ cd $folderPath
 
 componentSubFilesPrefix=$(echo $component | awk '{print tolower(substr($1,1,1)) substr($1,2)}')
 
-touch index.js
-touch ${component}.js
-touch ${componentSubFilesPrefix}.styles.js
-touch ${componentSubFilesPrefix}.constants.js
+touch index.ts
+touch ${component}.tsx
+touch ${componentSubFilesPrefix}.styles.ts
+touch ${componentSubFilesPrefix}.constants.ts
 
 ######## above code will create files only
 
 # add boilerplate to the index.js file
 echo "export { default } from './${component}'
-export * from './${componentSubFilesPrefix}.constants'" > index.js
+export * from './${componentSubFilesPrefix}.constants'" > index.ts
 
 # add boilerplate to the .styles.js file
 echo "import { StyleSheet } from 'react-native'
@@ -37,7 +37,7 @@ export const getStyles = ({}, theme) => {
     return StyleSheet.create({
 
     })
-}" > ${componentSubFilesPrefix}.styles.js
+}" > ${componentSubFilesPrefix}.styles.ts
 
 #add boilerplate to component.js file
 
@@ -74,4 +74,4 @@ ${component}.propTypes = {
 
 ${component}.defaultProps = {
     
-}" > ${component}.js
+}" > ${component}.tsx

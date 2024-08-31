@@ -32,6 +32,10 @@ const BUTTONS_MAP = [
         label: 'Dialog',
         routeKey: ROUTES.DIALOG,
     },
+    {
+        label: 'Level Card',
+        routeKey: ROUTES.LEVEL_CARD,
+    },
 ]
 
 const DesignSystem = ({ navigation }) => {

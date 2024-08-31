@@ -8,6 +8,7 @@ import Typography from '../apps/designSystemScreen/componentsScreens/Typography'
 import Button from '../apps/designSystemScreen/componentsScreens/Button'
 import Divider from '../apps/designSystemScreen/componentsScreens/Divider'
 import Dialog from '../apps/designSystemScreen/componentsScreens/Dialog'
+import LevelCard from '../apps/designSystemScreen/componentsScreens/LevelCard'
 
 import { HEADER_ITEMS, HEADER_SECTION } from './headerSection/headerSection.constants'
 
@@ -62,6 +63,14 @@ const DESIGN_SYSTEM_SCREENS = [
         component: Dialog,
         headerItems: {
             title: ROUTE_HEADER_TITLES[ROUTES.DIALOG],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+    {
+        name: ROUTES.LEVEL_CARD,
+        component: LevelCard,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.LEVEL_CARD],
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },

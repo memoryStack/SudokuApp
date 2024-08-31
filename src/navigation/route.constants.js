@@ -5,6 +5,7 @@ const DESIGN_SYSTEM_ROUTES = {
     BUTTON: 'button',
     DIVIDER: 'divider',
     DIALOG: 'dialog',
+    LEVEL_CARD: 'level_card',
 }
 
 export const ROUTES = {
@@ -23,4 +24,5 @@ export const ROUTE_HEADER_TITLES = {
     [ROUTES.BUTTON]: 'Button',
     [ROUTES.DIVIDER]: 'Divder',
     [ROUTES.DIALOG]: 'Dialog',
+    [ROUTES.LEVEL_CARD]: 'Level Card',
 }

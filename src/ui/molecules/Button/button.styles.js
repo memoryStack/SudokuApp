@@ -41,7 +41,7 @@ const getStyles = ({
     })
 }
 
-const getContainerBackgroundColor = ({ type, state }, theme) => {
+export const getContainerBackgroundColor = ({ type, state }, theme) => {
     const { background = 'transparent', opacity } = _get(theme, ['button', type, 'color', 'container', state], {})
     return hexToRGBA(background, opacity)
 }
@@ -71,7 +71,7 @@ const getContainerOutlineStyles = ({ type, state }, theme) => {
     }
 }
 
-const getTextColor = ({ type, state }, theme) => {
+export const getTextColor = ({ type, state }, theme) => {
     const { color, opacity } = _get(theme, ['button', type, 'color', 'label-text', state], {})
     return hexToRGBA(color, opacity)
 }
