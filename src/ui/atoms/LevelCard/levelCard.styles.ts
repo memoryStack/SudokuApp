@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 import { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
-import { LEVEL_STATES } from './levelCard.constants'
+import { CARD_DIMENSIONS, LEVEL_STATES } from './levelCard.constants'
 import { getContainerBackgroundColor, getTextColor } from '@ui/molecules/Button/button.styles'
 
 const disabledButtonConfig = {
@@ -20,8 +20,8 @@ export const getStyles = ({ levelState }, theme) => {
         container: {
             display: 'flex',
             alignItems: 'center',
-            height: 65,
-            width: 75,
+            height: CARD_DIMENSIONS.HEIGHT,
+            width: CARD_DIMENSIONS.WIDTH,
             padding: 8,
             borderRadius: 8,
             borderWidth: 1,

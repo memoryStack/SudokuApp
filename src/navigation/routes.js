@@ -9,6 +9,7 @@ import Button from '../apps/designSystemScreen/componentsScreens/Button'
 import Divider from '../apps/designSystemScreen/componentsScreens/Divider'
 import Dialog from '../apps/designSystemScreen/componentsScreens/Dialog'
 import LevelCard from '../apps/designSystemScreen/componentsScreens/LevelCard'
+import Levels from '../apps/levels/Levels'
 
 import { HEADER_ITEMS, HEADER_SECTION } from './headerSection/headerSection.constants'
 
@@ -105,6 +106,14 @@ export const routes = [
         component: HintsVocabulary,
         headerItems: {
             title: ROUTE_HEADER_TITLES[ROUTES.HINTS_VOCABULARY_EXPLAINATION],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+    {
+        name: ROUTES.LEVELS,
+        component: Levels,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.LEVELS],
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },

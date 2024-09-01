@@ -33,6 +33,7 @@ const LevelCard: React.FC<Props> = ({
     levelNum = 0,
     state = LEVEL_STATES.LOCKED,
     activeStars = 0,
+    containerStyle,
 }) => {
     const styles = useStyles(getStyles, { levelState: state })
 
@@ -91,7 +92,7 @@ const LevelCard: React.FC<Props> = ({
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyle]}>
             {state === LEVEL_STATES.COMPLETED ? renderCompletedLevel() : null}
             {state === LEVEL_STATES.LOCKED ? renderLockedLevel() : null}
             {state === LEVEL_STATES.UNLOCKED ? renderUnlockedLevel() : null}

@@ -13,6 +13,7 @@ export const ROUTES = {
     ARENA: 'arena',
     PLAY_GUIDE: 'play_guide',
     HINTS_VOCABULARY_EXPLAINATION: 'hints_vocabulary_explaination',
+    LEVELS: 'levels',
     ...DESIGN_SYSTEM_ROUTES,
 }
 
@@ -25,4 +26,5 @@ export const ROUTE_HEADER_TITLES = {
     [ROUTES.DIVIDER]: 'Divder',
     [ROUTES.DIALOG]: 'Dialog',
     [ROUTES.LEVEL_CARD]: 'Level Card',
+    [ROUTES.LEVELS]: 'Choose Your Game',
 }
