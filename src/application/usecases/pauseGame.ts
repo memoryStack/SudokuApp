@@ -26,6 +26,7 @@ const persistGameData = (
         [GAME_DATA_KEYS.STATE]: gameStateRepository.getGameState(),
         [GAME_DATA_KEYS.REFEREE]: {
             difficultyLevel: refreeRepository.getGameLevel(),
+            levelNum: refreeRepository.getGameLevelNumber(),
             mistakes: refreeRepository.getGameMistakesCount(),
             time: refreeRepository.getTime(),
         },
@@ -37,7 +38,8 @@ const persistGameData = (
         },
         [GAME_DATA_KEYS.CELL_ACTIONS]: {
             pencilState: boardControllerRepository.getPencil(),
-            hints: boardControllerRepository.getHintsLeftCount()
+            hints: boardControllerRepository.getHintsLeftCount(),
+            hintsUsed: boardControllerRepository.getHintsUsed(),
         }
     }
 

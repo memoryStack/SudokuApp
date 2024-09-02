@@ -6,7 +6,7 @@ import { GAME_STATE } from "../../constants"
 
 import { generateAndStartNewGameUseCase } from "../generateAndStartNewGame"
 import { Dependencies } from "@application/type"
-import { AUTO_GENERATED_NEW_GAME_IDS, START_GAME_MENU_ITEMS_IDS } from "./constants"
+import { AUTO_GENERATED_NEW_GAME_IDS, NEW_GAME_IDS, START_GAME_MENU_ITEMS_IDS } from "./constants"
 import { startGameUseCase } from "../startGameUseCase"
 import type { PausedGameData } from '../../adapterInterfaces/gamePersistenceAdapter'
 
@@ -43,9 +43,9 @@ const startPersistedGameUseCase = async (dependencies: Dependencies) => {
         })
 }
 
-
+// update the contract here
 export const handleMenuItemPress = (
-    itemId: START_GAME_MENU_ITEMS_IDS,
+    { itemId, levelNum }: { itemId: NEW_GAME_IDS, levelNum: number },
     dependencies: Dependencies
 ) => {
     const { customPuzzleInputToggler } = dependencies
@@ -53,7 +53,10 @@ export const handleMenuItemPress = (
     if (isGenerateNewPuzzleItem(itemId)) {
         // TODO: test this behaviour properly like
         // what would happen if i change the order or keys in these two enums
-        generateAndStartNewGameUseCase(itemId as unknown as AUTO_GENERATED_NEW_GAME_IDS, dependencies)
+        generateAndStartNewGameUseCase({
+            difficultyLevel: itemId as unknown as AUTO_GENERATED_NEW_GAME_IDS,
+            levelNum
+        }, dependencies)
         return
     }
 
@@ -67,7 +70,8 @@ export const handleMenuItemPress = (
         return
     }
 
-    generateAndStartNewGameUseCase(AUTO_GENERATED_NEW_GAME_IDS.EASY, dependencies)
+    // TODO: show some error popup for this case
+    // generateAndStartNewGameUseCase(AUTO_GENERATED_NEW_GAME_IDS.EASY, dependencies)
 }
 
 export const getMenuItemsToShow = async (dependencies: Dependencies) => {

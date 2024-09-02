@@ -10,7 +10,7 @@ import type {
 } from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
 
 const {
-    setPencil, setHints, resetState, setHintsMenu, incrementHintsUsed
+    setPencil, setHints, resetState, setHintsMenu, incrementHintsUsed, setHintsUsed
 } = boardControllerActions
 
 export const BoardControllerRepository: BoardControllerRepositoryInterface = {
@@ -38,4 +38,5 @@ export const BoardControllerRepository: BoardControllerRepositoryInterface = {
         invokeDispatch(incrementHintsUsed())
     },
     getHintsUsed: () => getHintsUsed(getStoreState()),
+    setHintsUsed: (hintsUsed: number) => invokeDispatch(setHintsUsed(hintsUsed))
 }

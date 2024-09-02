@@ -14,6 +14,7 @@ export type GameDataToPersist = {
     state: GAME_STATE,
     referee: {
         difficultyLevel: NEW_GAME_IDS,
+        levelNum: number,
         mistakes: number,
         time: Time,
     },
@@ -25,7 +26,8 @@ export type GameDataToPersist = {
     },
     cellActionsData: {
         pencilState: PENCIL_STATE,
-        hints: number
+        hints: number // these are hints left if there is a limit
+        hintsUsed: number
     }
 }
 

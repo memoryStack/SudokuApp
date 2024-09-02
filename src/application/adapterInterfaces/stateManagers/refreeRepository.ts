@@ -23,4 +23,6 @@ export interface RefreeRepository {
     getTime: () => Time;
     setTime: (time: Time) => void;
     setState: (state: DefaultState) => void;
+    getGameLevelNumber: () => number;
+    setGameLevelNumber: (levelNum: number) => void;
 }

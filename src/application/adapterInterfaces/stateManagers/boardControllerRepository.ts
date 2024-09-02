@@ -6,6 +6,7 @@ export interface BoardControllerRepository {
     setHintsLeftCount: (hints: number) => void
     incrementHintsUsed: () => void
     getHintsUsed: () => number
+    setHintsUsed: (hintsUsed: number) => void
     setPencil: (pencilState: PENCIL_STATE) => void
     getPencil: () => PENCIL_STATE
     setHintsMenuVisibility: (visible: boolean) => void

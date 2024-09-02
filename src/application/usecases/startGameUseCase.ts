@@ -16,6 +16,7 @@ type Time = {
 export type StartGameData = {
     mainNumbers: MainNumbers
     difficultyLevel: NEW_GAME_IDS
+    levelNum?: number
     notes?: Notes
     selectedCell?: Cell
     moves?: Move[]
@@ -23,6 +24,7 @@ export type StartGameData = {
     time?: Time
     pencilState?: PENCIL_STATE
     hints?: number
+    hintsUsed?: number
     dependencies: Dependencies
 }
 
@@ -31,12 +33,14 @@ export const startGameUseCase = ({
     difficultyLevel,
     notes = NotesRecord.initNotes(),
     selectedCell = { row: 0, col: 0 },
+    levelNum = 0,
     moves = [],
     mistakes = 0,
     time = { hours: 0, minutes: 0, seconds: 0 },
     pencilState = PENCIL_STATE.INACTIVE,
     dependencies,
     hints: hintsLeft = MAX_AVAILABLE_HINTS,
+    hintsUsed = 0,
 }: StartGameData) => {
     const {
         boardRepository, refreeRepository, gameStateRepository, boardControllerRepository,
@@ -47,9 +51,11 @@ export const startGameUseCase = ({
     refreeRepository.setGameLevel(difficultyLevel)
     refreeRepository.setGameMistakesCount(mistakes)
     refreeRepository.setTime(time)
+    refreeRepository.setGameLevelNumber(levelNum)
 
     boardControllerRepository.setPencil(pencilState || PENCIL_STATE.INACTIVE)
     boardControllerRepository.setHintsLeftCount(hintsLeft)
+    boardControllerRepository.setHintsUsed(hintsUsed)
 
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 }

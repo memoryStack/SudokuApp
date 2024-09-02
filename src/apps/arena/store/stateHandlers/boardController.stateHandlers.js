@@ -14,6 +14,9 @@ const stateHandlers = {
     },
     incrementHintsUsed: (state, { }) => {
         state.hintsUsed++
+    },
+    setHintsUsed: (state, { payload }) => {
+        state.hintsUsed = payload
     }
 }
 

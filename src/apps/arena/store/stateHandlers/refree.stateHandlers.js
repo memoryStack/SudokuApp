@@ -9,6 +9,9 @@ const stateHandlers = {
     setTime: (state, { payload }) => {
         state.time = payload
     },
+    setLevelNumber: (state, { payload }) => {
+        state.levelNumber = payload
+    }
 }
 
 export default stateHandlers

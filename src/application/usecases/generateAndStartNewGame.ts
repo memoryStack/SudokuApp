@@ -4,13 +4,19 @@ import type { Dependencies } from '../type'
 import { AUTO_GENERATED_NEW_GAME_IDS, NEW_GAME_IDS } from "./newGameMenu/constants"
 import { startGameUseCase } from "./startGameUseCase"
 
-export const generateAndStartNewGameUseCase = async (gameLevel: AUTO_GENERATED_NEW_GAME_IDS, dependencies: Dependencies) => {
+export type Game = {
+    difficultyLevel: AUTO_GENERATED_NEW_GAME_IDS,
+    levelNum: number
+}
+
+export const generateAndStartNewGameUseCase = async ({ difficultyLevel, levelNum }: Game, dependencies: Dependencies) => {
     const { puzzle } = dependencies
-    return puzzle.getSudokuPuzzle(GAME_LEVEL_VS_CLUES[gameLevel])
+    return puzzle.getSudokuPuzzle(GAME_LEVEL_VS_CLUES[difficultyLevel])
         .then((mainNumbers: MainNumbers) => {
             startGameUseCase({
                 mainNumbers,
-                difficultyLevel: gameLevel as unknown as NEW_GAME_IDS,
+                difficultyLevel: difficultyLevel as unknown as NEW_GAME_IDS,
+                levelNum,
                 dependencies
             })
         })

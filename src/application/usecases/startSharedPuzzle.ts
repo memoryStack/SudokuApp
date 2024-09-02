@@ -61,6 +61,8 @@ const getSharedPuzzleError = (url: string) => {
 
 const generateNewPuzzle = (difficultyLevel, dependencies) => {
     if (!difficultyLevel) return
+    return
+    // TODO: let the user choose the game level by opening up the levels flow
     generateAndStartNewGameUseCase(difficultyLevel, dependencies)
         .catch(error => { })
 }

@@ -79,11 +79,11 @@ const Arena_ = ({
 
     // TODO: putting "route" in dependency array here fails test-cases
     useEffect(() => {
-        const { params: { puzzleUrl = '', selectedGameMenuItem = '' } = {} } = route || {}
+        const { params: { puzzleUrl = '', selectedGameMenuItem = '', levelNum = 0 } = {} } = route || {}
         if (puzzleUrl) {
             onAction({ type: ACTION_TYPES.ON_INIT_SHARED_PUZZLE, payload: { puzzleUrl, dependencies } })
         } else {
-            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: { selectedGameMenuItem, dependencies } })
+            onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: { selectedGameMenuItem, levelNum, dependencies } })
         }
     }, [onAction, dependencies])
 
@@ -98,11 +98,11 @@ const Arena_ = ({
     // don't put the route in the dependency here, else this hook will render two times
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
-            const { boardControllerRepository } = dependencies
+            const { boardControllerRepository, refreeRepository } = dependencies
             const stats = {
                 mistakes,
                 level: difficultyLevelID,
-                levelNum: getRouteParamValue('levelNum', route),
+                levelNum: refreeRepository.getGameLevelNumber(),
                 time,
                 starsEarned: 2, // TODO: implement this
                 hintsUsed: boardControllerRepository.getHintsUsed(),
