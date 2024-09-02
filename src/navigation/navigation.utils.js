@@ -23,3 +23,7 @@ export const getRouteHeaderTitle = route => {
     const routeName = getRouteNameFromRoute(route)
     return _get(routesHeaderItems, [routeName, 'title'], '')
 }
+
+export const getRouteParamValue = (paramKey, route) => {
+    return _get(route, ['params', paramKey], '')
+}

@@ -47,7 +47,7 @@ const Home_ = ({ navigation }) => {
     const handleMenuItemClicked = useCallback(
         item => {
             setShowNextGameMenu(false)
-            navigation.navigate(ROUTES.ARENA, { selectedGameMenuItem: item })
+            navigation.navigate(ROUTES.LEVELS, { selectedGameMenuItem: item })
         },
         [navigation],
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View } from 'react-native'
+import { StyleProp, ViewStyle, View } from 'react-native'
 
 import _get from '@lodash/get'
 import _noop from '@lodash/noop'
@@ -10,16 +10,18 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './levelCard.styles'
-import { LEVEL_STATES } from './levelCard.constants'
+
 import { LevelStarIcon } from '@resources/svgIcons/levelStar'
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import { LockIcon } from '@resources/svgIcons/lock'
 import { PlayIcon } from '@resources/svgIcons/play'
+import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
 
 export interface Props {
     state: LEVEL_STATES
     levelNum: number
     activeStars: number
+    containerStyle?: StyleProp<ViewStyle>,
 }
 
 const getStarsActiveInfo = (activeStars: number) => {

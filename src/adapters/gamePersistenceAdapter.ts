@@ -1,4 +1,4 @@
-import type { PausedGameData, GamePersistenceAdapter, GameDataToPersist } from '@application/adapterInterfaces/'
+import type { PausedGameData, GamePersistenceAdapter, GameDataToPersist } from '@application/adapterInterfaces/gamePersistenceAdapter'
 import _isEmpty from '@lodash/isEmpty'
 import { getKey, setKey } from '@utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from 'src/apps/arena/utils/cacheGameHandler'

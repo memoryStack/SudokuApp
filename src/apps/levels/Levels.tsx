@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import _get from '@lodash/get'
 import _noop from '@lodash/noop'
@@ -8,32 +8,21 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { getStyles } from './levels.styles'
 
 import { Page } from '../components/Page'
-import LevelCard, { LEVEL_STATES } from '@ui/atoms/LevelCard'
+import LevelCard from '@ui/atoms/LevelCard'
 import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview";
 import {
     ITEM_WIDTH, ITEM_HEIGHT, itemHorizontalMargin, ROWS_GAP
 } from './levels.constants'
+import { ACTION_HANDLERS, ACTION_TYPES } from './levels.actionHandlers'
+import withActions from '@utils/hocs/withActions'
+import { Touchable } from '../components/Touchable'
 
-// just give 1000 puzzles and add more later on 
-const getLevelCards = (start = 0) => {
-    const result = []
-    for (let i = start; i < start + 1000; i++) {
-        if (i === start + 23) {
-            result.push({
-                state: LEVEL_STATES.UNLOCKED,
-                activeStars: 1,
-                levelNum: i + 1
-            })
-            continue
-        }
-        result.push({
-            state: i < start + 23 ? LEVEL_STATES.COMPLETED : LEVEL_STATES.LOCKED,
-            activeStars: 1,
-            levelNum: i + 1
-        })
-    }
-    return result
-}
+import { Level } from '@application/usecases/gameLevels/type'
+import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
+import { useDependency } from 'src/hooks/useDependency'
+import _cloneDeep from '@lodash/cloneDeep'
+import _isEqual from '@lodash/isEqual'
+import _isNil from '@lodash/isNil'
 
 const itemEqualityChecker = new DataProvider((r1, r2) => {
     return r1 !== r2
@@ -48,31 +37,59 @@ const layoutProvider = new LayoutProvider(
 )
 
 const Levels: React.FC<Props> = ({
-
+    onAction, levels
 }) => {
     const styles = useStyles(getStyles)
 
-    const [dataProvider, setDataProvider] = useState(itemEqualityChecker.cloneWithRows(getLevelCards()))
+    const dependencies = useDependency()
+
+    const [dataProvider, setDataProvider] = useState(itemEqualityChecker.cloneWithRows(levels || []))
     const listRef = useRef(null)
 
-    const rowRenderer = (type, data) => {
+    useEffect(() => {
+        onAction({ type: ACTION_TYPES.ON_INIT, payload: dependencies })
+    }, [])
+
+    useEffect(() => {
+        if (_isNil(levels)) return
+        setDataProvider(itemEqualityChecker.cloneWithRows(_cloneDeep(levels)))
+    }, [levels])
+
+    const rowRenderer = (type, data: Level) => {
         return (
-            <LevelCard {...data} containerStyle={styles.levelContainer} />
+            <Touchable
+                onPress={() => {
+                    onAction({
+                        type: ACTION_TYPES.ON_LEVEL_CLICK,
+                        payload: {
+                            levelNum: data.levelNum
+                        }
+                    })
+                }}
+                disabled={data.state === LEVEL_STATES.LOCKED}
+            >
+                <LevelCard {...data} containerStyle={styles.levelContainer} />
+            </Touchable>
         )
     }
 
     return (
-        <Page style={styles.container}>
+        <Page
+            style={styles.container}
+            onFocus={() => {
+                onAction({ type: ACTION_TYPES.ON_INIT, payload: dependencies })
+            }}
+        >
             <RecyclerListView
                 ref={listRef}
                 layoutProvider={layoutProvider}
                 dataProvider={dataProvider}
                 rowRenderer={rowRenderer}
                 renderAheadOffset={1000}
-            // initialRenderIndex={491}
+            // initialRenderIndex={491} // TODO: implement it
             />
         </Page>
     )
 }
 
-export default React.memo(Levels)
+export default React.memo(withActions({ actionHandlers: ACTION_HANDLERS })(Levels))

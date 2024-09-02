@@ -43,6 +43,7 @@ import { getStyles } from './arena.styles'
 import { fillPuzzleUseCase } from '@application/usecases/board'
 import { MENU_ITEMS_LABELS } from './nextGameMenu/nextGameMenu.constants'
 import { INITIAL_STATE } from './store/state/board.state'
+import { getRouteParamValue } from 'src/navigation/navigation.utils'
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
@@ -94,11 +95,27 @@ const Arena_ = ({
         })
     }, [showSmartHint, smartHintHCHeight, pageHeight])
 
+    // don't put the route in the dependency here, else this hook will render two times
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
-            onAction({ type: ACTION_TYPES.ON_GAME_OVER, payload: fadeAnim.current })
+            const stats = {
+                mistakes,
+                level: difficultyLevelID,
+                levelNum: getRouteParamValue('levelNum', route),
+                time,
+                starsEarned: 2, // TODO: implement this
+                hintsUsed: 5, // TODO: implement this count
+            }
+            onAction({
+                type: ACTION_TYPES.ON_GAME_OVER, payload: {
+                    hcAnimatedValue: fadeAnim.current,
+                    gameStats: stats,
+                    gameState,
+                    dependencies
+                }
+            })
         }
-    }, [gameState, onAction])
+    }, [gameState, mistakes, time, dependencies, onAction])
 
     useEffect(() => {
         // reset the store state for Game

@@ -2,8 +2,9 @@ import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 import { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
-import { CARD_DIMENSIONS, LEVEL_STATES } from './levelCard.constants'
+import { CARD_DIMENSIONS } from './levelCard.constants'
 import { getContainerBackgroundColor, getTextColor } from '@ui/molecules/Button/button.styles'
+import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
 
 const disabledButtonConfig = {
     type: BUTTON_TYPES.FILLED,

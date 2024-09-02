@@ -7,6 +7,7 @@ import type { PuzzleAdapter } from './adapterInterfaces/puzzleGenerator'
 import type { SnackBarAdapter } from './adapterInterfaces/snackbar'
 import type { GamePersistenceAdapter } from './adapterInterfaces/'
 import type { CustomPuzzleInputToggler } from './adapterInterfaces/customPuzzle'
+import type { GameLevelsAdapter } from './adapterInterfaces/gameLevels'
 
 export type Dependencies = {
     refreeRepository: RefreeRepository
@@ -18,4 +19,5 @@ export type Dependencies = {
     puzzle: PuzzleAdapter
     gamePersistenceAdapter: GamePersistenceAdapter
     customPuzzleInputToggler: CustomPuzzleInputToggler
+    gameLevelsAdapter: GameLevelsAdapter
 }

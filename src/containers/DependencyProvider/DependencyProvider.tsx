@@ -10,6 +10,7 @@ import { BoardRepository } from '../../repositories/boardRepository'
 import { snackBarAdapter } from '@adapters/snackbar'
 import { Puzzle } from '@adapters/puzzle'
 import { gamePersistenceAdapter } from '@adapters/gamePersistenceAdapter'
+import { gameLevelsAdapter } from '@adapters/gameLevelsAdapter'
 
 type Props = {
     children: React.ReactNode
@@ -24,7 +25,8 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         boardRepository: BoardRepository,
         snackBarAdapter,
         puzzle: Puzzle,
-        gamePersistenceAdapter
+        gamePersistenceAdapter,
+        gameLevelsAdapter
     }), [])
 
     return (

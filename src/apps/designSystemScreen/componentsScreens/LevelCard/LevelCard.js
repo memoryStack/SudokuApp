@@ -4,9 +4,10 @@ import { View } from 'react-native'
 
 import _noop from '@lodash/noop'
 
-import LevelCard, { LEVEL_STATES } from '@ui/atoms/LevelCard'
+import LevelCard from '@ui/atoms/LevelCard'
 
 import { styles } from './levelCard.styles'
+import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
 
 const DividerDemo = () => {
     const renderGap = () => (

@@ -8,6 +8,7 @@ import type { BoardRepository } from '@application/adapterInterfaces/stateManage
 import type { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
 import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import type { GamePersistenceAdapter } from '@application/adapterInterfaces/'
+import { GameLevelsAdapter } from '@application/adapterInterfaces/gameLevels'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {
@@ -19,6 +20,7 @@ export type Dependencies = {
     snackBarAdapter: SnackBarAdapter
     puzzle: PuzzleAdapter
     gamePersistenceAdapter: GamePersistenceAdapter
+    gameLevelsAdapter: GameLevelsAdapter
 };
 
 const DependencyContext = createContext<Dependencies | undefined>(undefined)
