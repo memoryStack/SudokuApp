@@ -6,4 +6,5 @@ export const INITIAL_STATE = {
     pencilState: PENCIL_STATE.INACTIVE,
     hintsLeft: MAX_AVAILABLE_HINTS,
     showHintsMenu: false,
+    hintsUsed: 0,
 }

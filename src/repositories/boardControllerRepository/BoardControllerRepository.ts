@@ -1,7 +1,7 @@
 import { PENCIL_STATE } from '@resources/constants'
 
 import { MAX_AVAILABLE_HINTS } from '../../apps/arena/store/state/boardController.state'
-import { getAvailableHintsCount, getPencilStatus } from '../../apps/arena/store/selectors/boardController.selectors'
+import { getAvailableHintsCount, getPencilStatus, getHintsUsed } from '../../apps/arena/store/selectors/boardController.selectors'
 import { boardControllerActions } from '../../apps/arena/store/reducers/boardController.reducers'
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 
@@ -10,7 +10,7 @@ import type {
 } from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
 
 const {
-    setPencil, setHints, resetState, setHintsMenu,
+    setPencil, setHints, resetState, setHintsMenu, incrementHintsUsed
 } = boardControllerActions
 
 export const BoardControllerRepository: BoardControllerRepositoryInterface = {
@@ -20,6 +20,7 @@ export const BoardControllerRepository: BoardControllerRepositoryInterface = {
             pencilState: PENCIL_STATE.INACTIVE,
             hintsLeft: MAX_AVAILABLE_HINTS,
             showHintsMenu: false,
+            hintsUsed: 0,
         }
         invokeDispatch(resetState(state))
     },
@@ -33,4 +34,8 @@ export const BoardControllerRepository: BoardControllerRepositoryInterface = {
     setHintsMenuVisibility: (visible: boolean) => {
         invokeDispatch(setHintsMenu(visible))
     },
+    incrementHintsUsed: () => {
+        invokeDispatch(incrementHintsUsed())
+    },
+    getHintsUsed: () => getHintsUsed(getStoreState()),
 }

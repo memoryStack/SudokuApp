@@ -1,8 +1,6 @@
 const stateHandlers = {
     resetState: (state, { payload }) => {
-        state.pencilState = payload.pencilState
-        state.hintsLeft = payload.hintsLeft
-        state.showHintsMenu = payload.showHintsMenu
+        state = payload
     },
     setPencil: (state, { payload }) => {
         state.pencilState = payload
@@ -14,6 +12,9 @@ const stateHandlers = {
     setHintsMenu: (state, { payload }) => {
         state.showHintsMenu = payload
     },
+    incrementHintsUsed: (state, { }) => {
+        state.hintsUsed++
+    }
 }
 
 export default stateHandlers

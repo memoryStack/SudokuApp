@@ -98,13 +98,14 @@ const Arena_ = ({
     // don't put the route in the dependency here, else this hook will render two times
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
+            const { boardControllerRepository } = dependencies
             const stats = {
                 mistakes,
                 level: difficultyLevelID,
                 levelNum: getRouteParamValue('levelNum', route),
                 time,
                 starsEarned: 2, // TODO: implement this
-                hintsUsed: 5, // TODO: implement this count
+                hintsUsed: boardControllerRepository.getHintsUsed(),
             }
             onAction({
                 type: ACTION_TYPES.ON_GAME_OVER, payload: {

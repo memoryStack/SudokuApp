@@ -160,6 +160,8 @@ const SmartHintHC_: React.FC<Props> = ({
     const closeView = () => {
         const closeDragger = getCloseDraggerHandler(smartHintHCRef)
         closeDragger()
+        const { boardControllerRepository } = dependencies
+        boardControllerRepository.incrementHintsUsed()
     }
 
     const onApplyHintClick = useCallback(() => {
