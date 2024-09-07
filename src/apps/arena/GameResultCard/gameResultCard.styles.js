@@ -38,4 +38,11 @@ export const getStyles = (_, theme) => StyleSheet.create({
     timeStatContainer: {
         flexDirection: 'row',
     },
+    starsContainer: {
+        marginTop: 28,
+    },
+    middleStar: {
+        bottom: 28,
+        marginHorizontal: 12
+    }
 })

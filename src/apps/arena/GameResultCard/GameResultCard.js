@@ -20,6 +20,7 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { GAME_OVER_CARD_TEST_ID } from './gameResultCard.constants'
 import { getStyles } from './gameResultCard.styles'
+import LevelStars, { ICON_SIZE_TYPES } from '@ui/atoms/LevelStars'
 
 const getTimeView = (time, styles) => {
     const { hours = 0, minutes = 0, seconds = 0 } = time || {}
@@ -34,7 +35,7 @@ const getTimeView = (time, styles) => {
 
 const GameResultCard = ({ stats, openNextGameMenu }) => {
     const {
-        mistakes, difficultyLevel, time, hintsUsed,
+        mistakes, time, hintsUsed, starsEarned
     } = stats
 
     const styles = useStyles(getStyles)
@@ -54,11 +55,17 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
                 <Text style={[styles.congratsText, styles.textColor]} type={TEXT_VARIATIONS.HEADING_SMALL}>
                     Congratulations!
                 </Text>
+                {
+                    starsEarned ?
+                        <LevelStars
+                            activeStars={starsEarned}
+                            containerStyle={styles.starsContainer}
+                            middleStarStyle={styles.middleStar}
+                            iconSizeType={ICON_SIZE_TYPES.LARGE}
+                        />
+                        : null
+                }
                 <View style={styles.statsContainer}>
-                    <View style={styles.statContainer}>
-                        <Text style={styles.textColor}>Difficulty</Text>
-                        <Text style={styles.textColor}>{difficultyLevel}</Text>
-                    </View>
                     <View style={styles.statContainer}>
                         <Text style={styles.textColor}>Time</Text>
                         {getTimeView(time, styles)}

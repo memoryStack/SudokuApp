@@ -16,6 +16,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import { LockIcon } from '@resources/svgIcons/lock'
 import { PlayIcon } from '@resources/svgIcons/play'
 import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
+import LevelStars from '../LevelStars'
 
 export interface Props {
     state: LEVEL_STATES
@@ -71,7 +72,11 @@ const LevelCard: React.FC<Props> = ({
     const renderCompletedLevel = () => {
         return (
             <>
-                {renderStars()}
+                <LevelStars
+                    activeStars={activeStars}
+                    containerStyle={styles.starsContainer}
+                    middleStarStyle={styles.middleStar}
+                />
                 {levelNumberView()}
             </>
         )

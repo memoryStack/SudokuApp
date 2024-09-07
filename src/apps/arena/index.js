@@ -128,7 +128,7 @@ const Arena_ = ({
                 level: difficultyLevelID,
                 levelNum: refreeRepository.getGameLevelNumber(),
                 time,
-                starsEarned: 2, // TODO: implement this
+                starsEarned: currentAvailableStars.current,
                 hintsUsed: boardControllerRepository.getHintsUsed(),
             }
             onAction({
@@ -276,9 +276,9 @@ const Arena_ = ({
                     <GameResultCard
                         stats={{
                             mistakes,
-                            difficultyLevel: MENU_ITEMS_LABELS[difficultyLevelID],
                             time,
                             hintsUsed: REFREE_DEFAULT_STATE.maxMistakesLimit - hintsLeft,
+                            starsEarned: currentAvailableStars.current
                         }}
                         openNextGameMenu={hideCongratsModal}
                     />

@@ -31,12 +31,9 @@ export const getStyles = ({ levelState }, theme) => {
         },
         levelText: { marginTop: 4 },
         starsContainer: {
-            display: 'flex',
-            flexDirection: 'row',
             marginTop: 8,
         },
         middleStar: {
-            position: 'relative',
             bottom: 8,
             marginHorizontal: 4
         },
