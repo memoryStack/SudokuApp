@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 
@@ -42,6 +42,12 @@ export const getStyles = (_, theme) => {
             justifyContent: 'center',
             marginRight: HEADER_HORIZONTAL_MARGIN,
         },
-        availableStarsText: { marginLeft: 8 }
+        availableStarsText: { marginLeft: 8 },
+        levelsListContainer: {
+            height: (Dimensions.get('window').height) * 0.8,
+            width: Dimensions.get('window').width,
+            paddingTop: 24,
+            paddingHorizontal: 16
+        }
     })
 }

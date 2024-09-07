@@ -2,7 +2,7 @@ import { GameLevelsInfo } from '@application/usecases/gameLevels/type'
 import { getGameLevelsUseCase } from '@application/usecases/gameLevels/gameLevels'
 
 const onInit = async ({ setState, getState, params: dependencies }) => {
-    const { route, puzzleType } = getState()
+    const { puzzleType } = getState()
     getGameLevelsUseCase(puzzleType, dependencies)
         .then(({ levels, nextPuzzleIndex, starsEarned, maxStars }: GameLevelsInfo) => {
             setState({ levels, levelToFocusIndex: nextPuzzleIndex, maxStars, starsEarned })
