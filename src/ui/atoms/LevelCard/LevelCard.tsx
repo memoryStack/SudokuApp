@@ -22,6 +22,7 @@ export interface Props {
     levelNum: number
     activeStars: number
     containerStyle?: StyleProp<ViewStyle>,
+    testID?: string
 }
 
 const getStarsActiveInfo = (activeStars: number) => {
@@ -36,6 +37,7 @@ const LevelCard: React.FC<Props> = ({
     state = LEVEL_STATES.LOCKED,
     activeStars = 0,
     containerStyle,
+    testID = ''
 }) => {
     const styles = useStyles(getStyles, { levelState: state })
 
@@ -94,7 +96,7 @@ const LevelCard: React.FC<Props> = ({
     }
 
     return (
-        <View style={[styles.container, containerStyle]}>
+        <View style={[styles.container, containerStyle]} testID={testID}>
             {state === LEVEL_STATES.COMPLETED ? renderCompletedLevel() : null}
             {state === LEVEL_STATES.LOCKED ? renderLockedLevel() : null}
             {state === LEVEL_STATES.UNLOCKED ? renderUnlockedLevel() : null}

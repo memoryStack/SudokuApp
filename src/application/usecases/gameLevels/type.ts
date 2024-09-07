@@ -5,3 +5,10 @@ export type Level = {
     activeStars: number,
     levelNum: number
 }
+
+export type GameLevelsInfo = {
+    levels: Level[]
+    nextPuzzleIndex: number
+    starsEarned: number
+    maxStars: number
+}

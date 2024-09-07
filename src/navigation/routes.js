@@ -90,7 +90,7 @@ export const routes = [
         component: Arena,
         headerItems: {
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
-            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SHARE],
+            // [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SHARE],
         },
     },
     {

@@ -26,6 +26,7 @@ export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = 
     renderScreen({
         route: ROUTES.ARENA,
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
+        routeOptions: { selectedGameMenuItem: NEW_GAME_IDS.EASY, levelNum: 1 },
     })
 
     await hasPuzzleStarted()

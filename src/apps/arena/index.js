@@ -43,7 +43,21 @@ import { getStyles } from './arena.styles'
 import { fillPuzzleUseCase } from '@application/usecases/board'
 import { MENU_ITEMS_LABELS } from './nextGameMenu/nextGameMenu.constants'
 import { INITIAL_STATE } from './store/state/board.state'
-import { getRouteParamValue } from 'src/navigation/navigation.utils'
+import { getPuzzleAvailableStars } from '@application/usecases/puzzleStars'
+import { LevelStarIcon } from '@resources/svgIcons/levelStar'
+import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+
+const renderAvailableStars = (availableStars, styles) => {
+    if (!availableStars) return null
+    return (
+        <View style={styles.availableStarsContainer}>
+            <LevelStarIcon height={28} width={28} />
+            <Text type={TEXT_VARIATIONS.HEADING_SMALL} style={styles.availableStarsText}>
+                {availableStars}
+            </Text>
+        </View>
+    )
+}
 
 const Arena_ = ({
     navigation, route, onAction, showCustomPuzzleHC, showGameSolvedCard, showNextGameMenu,
@@ -65,6 +79,8 @@ const Arena_ = ({
 
     const boardControllersRef = useRef(null)
 
+    const currentAvailableStars = useRef(0)
+
     const showHintsMenu = useSelector(getHintsMenuVisibilityStatus)
 
     const showSmartHint = useSelector(getShowSmartHint)
@@ -81,7 +97,7 @@ const Arena_ = ({
     useEffect(() => {
         const { params: { puzzleUrl = '', selectedGameMenuItem = '', levelNum = 0 } = {} } = route || {}
         if (puzzleUrl) {
-            onAction({ type: ACTION_TYPES.ON_INIT_SHARED_PUZZLE, payload: { puzzleUrl, dependencies } })
+            // onAction({ type: ACTION_TYPES.ON_INIT_SHARED_PUZZLE, payload: { puzzleUrl, dependencies } })
         } else {
             onAction({ type: ACTION_TYPES.ON_NEW_GAME_MENU_ITEM_PRESS, payload: { selectedGameMenuItem, levelNum, dependencies } })
         }
@@ -94,6 +110,14 @@ const Arena_ = ({
             setSmartHintHCHeight(Math.min(pageHeight - _pageY, SMART_HEIGHT_HC_MAX_HEIGHT))
         })
     }, [showSmartHint, smartHintHCHeight, pageHeight])
+
+    useEffect(() => {
+        const availableStars = getPuzzleAvailableStars({ time, puzzleType: difficultyLevelID })
+        if (availableStars !== currentAvailableStars.current) {
+            currentAvailableStars.current = availableStars
+            navigation.setOptions({ headerRight: () => renderAvailableStars(availableStars, styles) })
+        }
+    }, [time, difficultyLevelID, styles])
 
     // don't put the route in the dependency here, else this hook will render two times
     useEffect(() => {

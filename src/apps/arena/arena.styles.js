@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
 
 import { hexToRGBA } from '@utils/util'
+import { HEADER_HORIZONTAL_MARGIN } from 'src/navigation/headerSection/headerSection.constants'
 
 export const getStyles = (_, theme) => {
     const { color: scrimColor, opacity: scrimOpacity } = _get(theme, ['dialog', 'scrim'])
@@ -35,5 +36,12 @@ export const getStyles = (_, theme) => {
             width: '100%',
             marginVertical: 20,
         },
+        availableStarsContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginRight: HEADER_HORIZONTAL_MARGIN,
+        },
+        availableStarsText: { marginLeft: 8 }
     })
 }

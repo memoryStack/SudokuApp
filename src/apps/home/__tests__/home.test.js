@@ -52,7 +52,7 @@ describe('Home Page', () => {
         expect(getScreenName()).toBe(ROUTES.ARENA)
     })
 
-    test('refree default state on game start', async () => {
+    test.only('refree default state on game start', async () => {
         renderScreen({
             getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
         })

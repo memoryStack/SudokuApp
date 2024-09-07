@@ -12,8 +12,12 @@ export type COMPLETED_GAME_STATS = {
     hintsUsed: number
 }
 
-// TODO: add an adapter to cache the result as well
+export type CompletedLevelsDetails = {
+    levels: Level[]
+    starsEarned: number
+}
+
 export type GameLevelsAdapter = {
-    getGameLevels: (selectedLevel: AUTO_GENERATED_NEW_GAME_IDS) => Promise<Level[]>
+    getGameLevels: (selectedLevel: AUTO_GENERATED_NEW_GAME_IDS) => Promise<CompletedLevelsDetails>
     saveCompletedGame: (gameStats: COMPLETED_GAME_STATS) => Promise<void>
 }

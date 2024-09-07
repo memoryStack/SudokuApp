@@ -30,13 +30,17 @@ export const gameLevelsAdapter: GameLevelsAdapter = {
     getGameLevels: async (selectedLevel) => {
         const completedGames: COMPLETED_GAMES = await getKey(COMPLETED_LEVELS_STORAGE_KEY)
         const completedLevels = _get(completedGames, [selectedLevel, 'levels'], [])
-        return _map(completedLevels, (game: COMPLETED_GAME_STATS) => {
+
+        let totalStarsEarned = 0
+        const levels = _map(completedLevels, (game: COMPLETED_GAME_STATS) => {
+            totalStarsEarned += game.starsEarned
             return {
                 levelNum: game.levelNum,
                 activeStars: game.starsEarned,
                 state: LEVEL_STATES.COMPLETED
             }
         })
+        return { levels, starsEarned: totalStarsEarned }
     },
     saveCompletedGame: async (gameStats: COMPLETED_GAME_STATS) => {
         const allCompletedGames: COMPLETED_GAMES = await getKey(COMPLETED_LEVELS_STORAGE_KEY) || {}
