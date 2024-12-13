@@ -8,6 +8,8 @@ export enum ANIMATABLE_PROPERTIES {
     BG_COLOR = 'bgColor',
     FONT_SIZE = 'fontSize',
     TEXT_COLOR = 'textColor',
+    BORDER_WIDTH = 'borderWidth',
+    BORDER_COLOR = 'borderColor',
 }
 
 type NativeAnimationConfig = Animated.TimingAnimationConfig
@@ -26,7 +28,8 @@ const EMPTY_ANIMATION_CONFIG = {
 
 const JS_DRIVEN_ANIMATION_PROPERTIES = [
     ANIMATABLE_PROPERTIES.TEXT_COLOR,
-    ANIMATABLE_PROPERTIES.BG_COLOR
+    ANIMATABLE_PROPERTIES.BG_COLOR,
+    ANIMATABLE_PROPERTIES.BORDER_COLOR,
 ]
 
 const shouldUseNativeDriver = (propertyToAnimate: ANIMATABLE_PROPERTIES) => {

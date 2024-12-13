@@ -177,16 +177,24 @@ const Board_: React.FC<Props> = ({
 
     useEffect(() => {
         setAnimationsConfig({
-            'fontSize': {
-                config: { toValue: 1.5, duration: 2000, useNativeDriver: true }
-            }
+            // 'fontSize': {
+            //     config: { toValue: 1.5, duration: 2000, useNativeDriver: true }
+            // }
         })
 
         setTimeout(() => {
             setAnimationsConfig({
-                'bgColor': {
-                    config: { toValue: 1, duration: 2000, useNativeDriver: false },
-                    output: ['#000000', '#ff0000'],
+                'borderWidth': {
+                    config: { toValue: 3, duration: 1000, useNativeDriver: false },
+                }
+            })
+        }, 1000)
+
+        setTimeout(() => {
+            setAnimationsConfig({
+                'borderColor': {
+                    config: { toValue: 1, duration: 2000, useNativeDriver: false, },
+                    output: ['#000000', '#ff0000']
                 }
             })
         }, 1000)

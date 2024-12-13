@@ -33,6 +33,8 @@ const DEFAULT_ANIMATION_VALUES = {
     [ANIMATABLE_PROPERTIES.FONT_SIZE]: 1,
     [ANIMATABLE_PROPERTIES.TEXT_COLOR]: 0,
     [ANIMATABLE_PROPERTIES.BG_COLOR]: 0,
+    [ANIMATABLE_PROPERTIES.BORDER_WIDTH]: 0,
+    [ANIMATABLE_PROPERTIES.BORDER_COLOR]: 0,
 }
 
 const ANIMATION_TRANSITION_VALUES = {
@@ -46,6 +48,14 @@ const ANIMATION_TRANSITION_VALUES = {
     },
     [ANIMATABLE_PROPERTIES.BG_COLOR]: {
         from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BG_COLOR],
+        to: -1
+    },
+    [ANIMATABLE_PROPERTIES.BORDER_WIDTH]: {
+        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_WIDTH],
+        to: -1
+    },
+    [ANIMATABLE_PROPERTIES.BORDER_COLOR]: {
+        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_COLOR],
         to: -1
     },
 }
@@ -69,14 +79,18 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
-    const mainNumberFontAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.FONT_SIZE])).current;
-    const mainNumberColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.TEXT_COLOR])).current; // it's text color
-    const bgColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BG_COLOR])).current;
+    const mainNumberFontAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.FONT_SIZE])).current
+    const mainNumberColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.TEXT_COLOR])).current // it's text color
+    const bgColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BG_COLOR])).current
+    const borderWidthAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_WIDTH])).current
+    const borderColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_COLOR])).current
 
     const ANIMATED_PROPERTY_VS_ANIM_VALUE = {
         [ANIMATABLE_PROPERTIES.FONT_SIZE]: mainNumberFontAnim,
         [ANIMATABLE_PROPERTIES.TEXT_COLOR]: mainNumberColorAnim,
         [ANIMATABLE_PROPERTIES.BG_COLOR]: bgColorAnim,
+        [ANIMATABLE_PROPERTIES.BORDER_WIDTH]: borderWidthAnim,
+        [ANIMATABLE_PROPERTIES.BORDER_COLOR]: borderColorAnim,
     }
 
     const originalAnimatedValuesBeforeAnimationStarted = useRef(ANIMATION_TRANSITION_VALUES).current
@@ -199,6 +213,10 @@ const Cell_ = ({
         inputRange: [0, 1],
         outputRange: animationConfigsMerge.current['bgColor']?.output
     }) : undefined
+    const borderColor = animationConfigsMerge.current['borderColor']?.output ? borderColorAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: animationConfigsMerge.current['borderColor']?.output
+    }) : undefined
 
     // TODO: had to use <Animated.View /> because can't animate color + scale animation 
     // on <Animated.Text /> in parallel (throws errors). try to upgrade react native version
@@ -226,6 +244,14 @@ const Cell_ = ({
         return getCellNotes()
     }
 
+    const animateCell = [
+        ANIMATABLE_PROPERTIES.BG_COLOR,
+        ANIMATABLE_PROPERTIES.BORDER_WIDTH,
+        ANIMATABLE_PROPERTIES.BORDER_COLOR,
+    ].some((animatableProperty) => {
+        return animatableProperty in animationConfigsMerge.current
+    })
+
     return (
         // let's use opacity only, this supports passing null as child as well
         <Touchable
@@ -233,8 +259,8 @@ const Cell_ = ({
             style={[styles.cell, cellBGColor]}
             onPress={() => onCellClick({ row, col })}
             testID={BOARD_CELL_TEST_ID}
-            isAnimated={ANIMATABLE_PROPERTIES.BG_COLOR in animationConfigsMerge.current}
-            animatableStyles={[styles.cell, { backgroundColor: bgColor }]}
+            isAnimated={animateCell}
+            animatableStyles={[styles.cell, { backgroundColor: bgColor, borderWidth: borderWidthAnim, borderColor: borderColor }]}
         >
             {showCellContent ? getCellContent() : null}
         </Touchable>
