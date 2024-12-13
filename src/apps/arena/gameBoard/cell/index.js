@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
-import { View } from 'react-native'
+import { View, Animated } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -17,11 +17,38 @@ import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensio
 
 import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from './cell.constants'
 import { getStyles } from './cell.styles'
+import { usePrevious } from '@utils/customHooks'
+import _isEqual from '@lodash/isEqual'
+import { ANIMATABLE_PROPERTIES, createAnimationInstance } from './animationUtils'
+import _isEmpty from '@lodash/isEmpty'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
 // becoz only 3 notes are there in a row
 const looper = []
 for (let i = 0; i < 3; i++) looper.push(i)
+
+const DEFAULT_ANIMATION_CONFIG = {}
+
+const DEFAULT_ANIMATION_VALUES = {
+    [ANIMATABLE_PROPERTIES.FONT_SIZE]: 1,
+    [ANIMATABLE_PROPERTIES.TEXT_COLOR]: 0,
+    [ANIMATABLE_PROPERTIES.BG_COLOR]: 0,
+}
+
+const ANIMATION_TRANSITION_VALUES = {
+    [ANIMATABLE_PROPERTIES.FONT_SIZE]: {
+        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.FONT_SIZE],
+        to: -1
+    },
+    [ANIMATABLE_PROPERTIES.TEXT_COLOR]: {
+        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.TEXT_COLOR],
+        to: -1
+    },
+    [ANIMATABLE_PROPERTIES.BG_COLOR]: {
+        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BG_COLOR],
+        to: -1
+    },
+}
 
 // test for these default values and their types
 const Cell_ = ({
@@ -37,13 +64,85 @@ const Cell_ = ({
     crossIconColor,
     notesRefs,
     getNoteStyles,
+    cellAnimationsConfig = DEFAULT_ANIMATION_CONFIG,
 }) => {
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
+    const mainNumberFontAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.FONT_SIZE])).current;
+    const mainNumberColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.TEXT_COLOR])).current; // it's text color
+    const bgColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BG_COLOR])).current;
+
+    const ANIMATED_PROPERTY_VS_ANIM_VALUE = {
+        [ANIMATABLE_PROPERTIES.FONT_SIZE]: mainNumberFontAnim,
+        [ANIMATABLE_PROPERTIES.TEXT_COLOR]: mainNumberColorAnim,
+        [ANIMATABLE_PROPERTIES.BG_COLOR]: bgColorAnim,
+    }
+
+    const originalAnimatedValuesBeforeAnimationStarted = useRef(ANIMATION_TRANSITION_VALUES).current
+
     const styles = useStyles(getStyles)
 
+    const animationObj = useRef({})
+
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
+
+    const previousAnimationsConfig = usePrevious(cellAnimationsConfig)
+
+    const animationConfigsMerge = useRef({})
+
+    animationConfigsMerge.current = {
+        ...animationConfigsMerge.current,
+        ...previousAnimationsConfig,
+        ...cellAnimationsConfig
+    }
+
+    useEffect(() => {
+        const allAnimations = animationConfigsMerge.current
+        const listenersIDs = []
+        Object.keys(allAnimations).forEach((animatableProperty) => {
+            // TODO: add check for animatableProperty if that's supported or not
+            if (allAnimations[animatableProperty].stop) {
+                const animationInstance = animationObj.current[animatableProperty]
+                animationInstance && animationInstance.stop()
+            } else if (allAnimations[animatableProperty].start) {
+                const animationInstance = animationObj.current[animatableProperty]
+                animationInstance && animationInstance.start()
+            } else {
+                // add safety checks in case animation instance is not returned
+                const animation = createAnimationInstance(
+                    ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty],
+                    originalAnimatedValuesBeforeAnimationStarted[animatableProperty].from,
+                    animatableProperty,
+                    allAnimations[animatableProperty]
+                )
+
+                animation.start()
+
+                animationObj.current[animatableProperty] = animation
+                // WARN: don't move the below .from update logic above createAnimationInstance function
+                if (originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to !== -1) {
+                    originalAnimatedValuesBeforeAnimationStarted[animatableProperty].from
+                        = originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to
+                }
+                ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty].addListener(({ value }) => {
+                    if (!Number.isNaN(value)) {
+                        originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to = value
+                    }
+                })
+
+                listenersIDs.push(ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty])
+            }
+        })
+
+        return () => {
+            Object.keys(allAnimations).forEach((animatableProperty) => {
+                const animatedValue = ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty]
+                animatedValue.stopAnimation()
+                animatedValue.removeAllListeners()
+            })
+        }
+    }, [cellAnimationsConfig, previousAnimationsConfig])
 
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
@@ -91,15 +190,34 @@ const Cell_ = ({
         />
     )
 
+    // JUST GET THE CONFIG FOR OUTPUT
+    const mainNumberColorInterpolation = animationConfigsMerge.current['textColor']?.output ? mainNumberColorAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: animationConfigsMerge.current['textColor']?.output
+    }) : undefined
+    const bgColor = animationConfigsMerge.current['bgColor']?.output ? bgColorAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: animationConfigsMerge.current['bgColor']?.output
+    }) : undefined
+
+    // TODO: had to use <Animated.View /> because can't animate color + scale animation 
+    // on <Animated.Text /> in parallel (throws errors). try to upgrade react native version
     const renderCellMainValue = () => (
-        <Text
-            style={[styles.mainNumberText, mainValueFontColor]}
-            testID={CELL_MAIN_VALUE_TEST_ID}
-            type={TEXT_VARIATIONS.HEADING_LARGE}
-            withoutLineHeight
-        >
-            {cellMainValue}
-        </Text>
+        <Animated.View style={{ transform: [{ scale: ANIMATED_PROPERTY_VS_ANIM_VALUE[ANIMATABLE_PROPERTIES.FONT_SIZE] }] }}>
+            <Text
+                style={[
+                    styles.mainNumberText,
+                    mainValueFontColor,
+                    mainNumberColorInterpolation && { color: mainNumberColorInterpolation }
+                ]}
+                testID={CELL_MAIN_VALUE_TEST_ID}
+                type={TEXT_VARIATIONS.HEADING_LARGE}
+                withoutLineHeight
+                animated={ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge.current}
+            >
+                {cellMainValue}
+            </Text>
+        </Animated.View>
     )
 
     const getCellContent = () => {
@@ -115,6 +233,8 @@ const Cell_ = ({
             style={[styles.cell, cellBGColor]}
             onPress={() => onCellClick({ row, col })}
             testID={BOARD_CELL_TEST_ID}
+            isAnimated={ANIMATABLE_PROPERTIES.BG_COLOR in animationConfigsMerge.current}
+            animatableStyles={[styles.cell, { backgroundColor: bgColor }]}
         >
             {showCellContent ? getCellContent() : null}
         </Touchable>

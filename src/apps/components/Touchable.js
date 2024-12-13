@@ -6,6 +6,7 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity,
     ViewPropTypes,
+    Animated,
 } from 'react-native'
 
 import PropTypes from 'prop-types'
@@ -56,6 +57,8 @@ export const Touchable = props => {
         children,
         avoidDefaultStyles,
         addHitSlop,
+        isAnimated,
+        animatableStyles,
         ...rest
     } = props
 
@@ -65,6 +68,16 @@ export const Touchable = props => {
 
     const TouchableComponent = getTouchable(touchable)
 
+    // due to this wrapper onPress propogation is not working
+    // TODO: figure it out
+    const Wrapper = ({ children }: any) => {
+        console.log('@@@@ is animated', isAnimated)
+        if (isAnimated) {
+            return <Animated.View>{children}</Animated.View>
+        }
+        return <>{children}</>
+    }
+
     return (
         <TouchableComponent
             style={[avoidDefaultStyles ? null : styles.container, style]}
@@ -72,7 +85,13 @@ export const Touchable = props => {
             hitSlop={hitSlop}
             {...rest}
         >
-            {children}
+            {
+                isAnimated ? (
+                    <Animated.View style={animatableStyles}>
+                        {children}
+                    </Animated.View>
+                ) : children
+            }
         </TouchableComponent>
     )
 }

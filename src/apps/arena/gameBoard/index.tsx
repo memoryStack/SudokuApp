@@ -1,6 +1,6 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { View, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleProp, ViewStyle, Animated } from 'react-native'
 
 import _get from '@lodash/get'
 import _set from '@lodash/set'
@@ -45,6 +45,55 @@ type FontColor = {
     color: string
 }
 
+type Animation = {
+    animatedValue: number,
+    config: {
+        toValue: number,
+        duration: number,
+        useNativeDriver?: boolean
+    },
+    loopIteration?: number
+}
+
+// will be re-used to reset the animation
+type CellPropertiesVsAnimation = {
+    [key: string]: Animation
+}
+
+// when this changes then reset/stop all the changed animations
+// first and then start the changing animations
+type AnimationsComposition = {
+    currentAnimation: 'cell property',
+    subAnimations: AnimationsComposition,
+    composeType: string,
+    loopIteration: number, // to know if it's loop or not
+}
+
+type CellAnimation = {
+    currentAnimation: Animation,
+    subAnimations: CellAnimation,
+    composeType: string,
+    loopIteration: number,
+}
+
+// contract for animations
+const animations = {
+    currentAnimation: {
+        animatedValue: '', // animated value,
+        config: {
+            toValue: '',
+            duration: '',
+            useNativeDriver: true
+        },
+        loopIteration: '',
+    },
+    subAnimations: {
+        // it will have same config as above
+    },
+    composeType: ['parallel', 'sequence'], // one of these
+    loopIteration: '',
+}
+
 interface Props {
     mainNumbers: MainNumbers
     notes: Notes
@@ -61,6 +110,8 @@ interface Props {
     hideSVGDrawingsMarkersEnd?: boolean
     showAxes?: boolean
 }
+
+const DFF = {}
 
 const Board_: React.FC<Props> = ({
     mainNumbers = [],
@@ -122,6 +173,52 @@ const Board_: React.FC<Props> = ({
         crossIconColor: _get(cellsHighlightData, [cell.row, cell.col, 'crossIconColor'], ''),
     })
 
+    const [animationsConfig, setAnimationsConfig] = useState({})
+
+    useEffect(() => {
+        setAnimationsConfig({
+            'fontSize': {
+                config: { toValue: 1.5, duration: 2000, useNativeDriver: true }
+            }
+        })
+
+        setTimeout(() => {
+            setAnimationsConfig({
+                'bgColor': {
+                    config: { toValue: 1, duration: 2000, useNativeDriver: false },
+                    output: ['#000000', '#ff0000'],
+                }
+            })
+        }, 1000)
+
+        // setTimeout(() => {
+        //     setAnimationsConfig({
+        //         'fontSize': {
+        //             config: { duration: 2000 },
+        //             stop: true
+        //         }
+        //     })
+        // }, 1500)
+
+        // setTimeout(() => {
+        //     setAnimationsConfig({
+        //         'fontSize': {
+        //             config: { duration: 2000 },
+        //             resetToPrevious: true
+        //         }
+        //     })
+        // }, 6000)
+
+        // setTimeout(() => {
+        //     setAnimationsConfig({
+        //         'textColor': {
+        //             config: { toValue: 1, duration: 2000, useNativeDriver: false, },
+        //             output: ['#000000', '#ff0000']
+        //         }
+        //     })
+        // }, 3000)
+    }, [])
+
     // TODO: decide over these partial types for Cell.row and Cell.col
     const renderRow = (row: number, key: string) => {
         const getSpacingDueToBorders = (rowOrColNum: number) => {
@@ -136,6 +233,9 @@ const Board_: React.FC<Props> = ({
                 {looper.map((col, index) => {
                     const cell = { row, col }
                     const cellAdditionalStyles = { marginLeft: getSpacingDueToBorders(col) }
+
+                    const cellAnimationsConfig = index === 3 && MainNumbersRecord.getCellMainValue(mainNumbers, cell)
+                        ? animationsConfig : DFF
 
                     return (
                         // eslint-disable-next-line react/no-array-index-key
@@ -152,6 +252,7 @@ const Board_: React.FC<Props> = ({
                                 showCellContent={showCellContent}
                                 notesRefs={notesRefs[row][col]}
                                 getNoteStyles={getNoteStyles}
+                                cellAnimationsConfig={cellAnimationsConfig}
                             />
                         </View>
                     )

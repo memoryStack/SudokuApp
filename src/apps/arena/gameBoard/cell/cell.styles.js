@@ -4,14 +4,21 @@ import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
     cell: {
+        display: 'flex',
         flex: 1,
+        height: '100%',
+        width: '100%',
     },
     notesRow: {
         flex: 1,
         flexDirection: 'row',
     },
     mainNumberText: {
+        width: '100%',
+        height: '100%',
         fontSize: CELL_HEIGHT * 0.8,
+        textAlign: 'center',
+        textAlignVertical: 'center'
     },
     noteContainer: {
         flex: 1,

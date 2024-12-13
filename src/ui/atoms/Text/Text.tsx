@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Text as RNText, StyleProp, ViewStyle } from 'react-native'
+import { Text as RNText, StyleProp, ViewStyle, Animated } from 'react-native'
 
 import _get from '@lodash/get'
 import _isArray from '@lodash/isArray'
@@ -23,6 +23,7 @@ export interface Props {
     withoutLineHeight?: boolean
     children: string | React.ReactNode
     testID?: string
+    animated?: boolean
 }
 
 const getFinalStyles = (styleProp: Styles, type: TEXT_VARIATIONS, withoutLineHeight: boolean, theme: unknown) => {
@@ -43,6 +44,7 @@ const Text: React.FC<Props> = ({
     type = TEXT_VARIATIONS.BODY_LARGE,
     withoutLineHeight = false,
     testID = '',
+    animated = false,
     ...rest
 }) => {
     const theme = useThemeValues()
@@ -59,8 +61,10 @@ const Text: React.FC<Props> = ({
         textAlignVertical: 'center',
     }
 
+    const TextWrapper = animated ? Animated.Text : RNText
+
     return (
-        <RNText
+        <TextWrapper
             style={stylesWithFont}
             testID={testID}
             {...rest}
