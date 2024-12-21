@@ -19,6 +19,7 @@ type NativeAnimationConfig = Animated.TimingAnimationConfig
 
 type AnimationConfig = {
     resetToPrevious?: boolean,
+    loopConfig?: any,
     config: NativeAnimationConfig
 }
 
@@ -59,6 +60,18 @@ export const createAnimationInstance = (
             useNativeDriver: getNativeDriverValue(currentConfig.config, propertyToAnimate) // TODO: send the property config here
         })
     }
+
+    if (currentConfig.loopConfig) {
+        return Animated.loop(
+            Animated.sequence([
+                Animated.timing(animatedValue, currentConfig.config),
+                Animated.timing(animatedValue, {
+                    ...currentConfig.config,
+                    toValue: originalAnimatedValueBeforeAnimationStarted,
+                }),
+            ]), currentConfig.loopConfig)
+    }
+
     return Animated.timing(animatedValue, {
         ...currentConfig.config,
         useNativeDriver: getNativeDriverValue(currentConfig.config, propertyToAnimate) // TODO: send the property config here

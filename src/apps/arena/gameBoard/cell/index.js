@@ -23,6 +23,7 @@ import _isEmpty from '@lodash/isEmpty'
 import { useAnimateView } from './useAnimateView'
 import CellNumberInput from './CellNumberInput'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
+import { ViewAnimationConfig } from './animationConfigType'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
 // becoz only 3 notes are there in a row
@@ -78,7 +79,7 @@ const Cell_ = ({
     crossIconColor,
     notesRefs,
     getNoteStyles,
-    cellAnimationsConfig = DEFAULT_ANIMATION_CONFIG,
+    cellAnimationsConfig,
 }) => {
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
@@ -88,13 +89,11 @@ const Cell_ = ({
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
     const {
-        fontSizeAnim: mainNumberFontAnim,
         borderWidthAnim,
         bgColorInterpolation: bgColor,
-        textColorInterpolation: mainNumberColorInterpolation,
         borderColorInterpolation: borderColor,
         animationConfigsMerge,
-    } = useAnimateView(cellAnimationsConfig)
+    } = useAnimateView(cellAnimationsConfig.mainNumber)
 
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
@@ -104,24 +103,6 @@ const Cell_ = ({
                 const noteNum = cellNoteRow * 3 + cellNoteCol
                 const { show, noteValue } = cellNotes[noteNum] || {}
 
-                const animationsConfig = {
-                    // 'bgColor': {
-                    //     config: { toValue: 1, duration: 2000, useNativeDriver: false, },
-                    //     output: ['#000000', '#ff0000']
-                    // },
-                    // 'fontSize': {
-                    //     config: { toValue: 1.5, duration: 2000, useNativeDriver: true }
-                    // },
-
-                    // 'borderWidth': {
-                    //     config: { toValue: 1, duration: 500, useNativeDriver: false },
-                    // },
-                    // 'borderColor': {
-                    //     config: { toValue: 1, duration: 500, useNativeDriver: false, },
-                    //     output: ['#000000', '#ff0000']
-                    // },
-                }
-
                 let fontCustomizedStyles = getNoteStyles(cellNotes[noteNum] || {}, { row, col })
                 if (fontCustomizedStyles?.fontWeight === FONT_WEIGHTS.HEAVY) {
                     fontCustomizedStyles = {
@@ -129,6 +110,7 @@ const Cell_ = ({
                         ...styles.noteTextBold
                     }
                 }
+
                 return (
                     <CellNote
                         refProp={notesRefs[noteNum]}
@@ -140,8 +122,7 @@ const Cell_ = ({
                         ]}
                         value={show ? `${noteValue}` : ''}
                         noteContainerStyles={styles.noteContainer}
-                        animationsConfig={(noteValue === 1 || noteValue === 5) && (row === 0 && col === 0) ? animationsConfig : null}
-                    // animationsConfig={(row === 0 && col === 0) ? animationsConfig : null}
+                        animationsConfig={cellAnimationsConfig?.notes?.[noteValue]}
                     />
                 )
             })
@@ -163,7 +144,7 @@ const Cell_ = ({
     )
 
     // TODO: had to use <Animated.View /> because can't animate color + scale animation 
-    // on <Animated.Text /> in parallel (throws errors). try to upgrade react native version
+    // on <Animated.Text /> in parallel (throws errors). try to upgrade react native version    
     const renderCellMainValue = () => (
         <CellNumberInput
             testID={CELL_MAIN_VALUE_TEST_ID}
@@ -174,7 +155,7 @@ const Cell_ = ({
             value={cellMainValue}
             textType={TEXT_VARIATIONS.HEADING_LARGE}
             withoutLineHeight
-            animationsConfig={cellAnimationsConfig}
+            animationsConfig={cellAnimationsConfig.mainNumber}
             animated={ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge}
         />
     )
@@ -223,6 +204,10 @@ Cell_.propTypes = {
     crossIconColor: PropTypes.string,
     notesRefs: PropTypes.array,
     getNoteStyles: PropTypes.func,
+    cellAnimationsConfig: PropTypes.shape({
+        mainNumber: ViewAnimationConfig,
+        notes: PropTypes.objectOf(ViewAnimationConfig)
+    })
 }
 
 Cell_.defaultProps = {
@@ -238,4 +223,5 @@ Cell_.defaultProps = {
     crossIconColor: '',
     notesRefs: [],
     getNoteStyles: _noop,
+    cellAnimationsConfig: DEFAULT_ANIMATION_CONFIG,
 }
