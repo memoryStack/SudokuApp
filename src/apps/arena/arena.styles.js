@@ -40,6 +40,7 @@ export const getStyles = (_, theme) => {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center',
+            alignItems: 'center',
             marginRight: HEADER_HORIZONTAL_MARGIN,
         },
         availableStarsText: { marginLeft: 8 },

@@ -122,7 +122,6 @@ const Cell_ = ({
                     // },
                 }
 
-                // noteTextBold
                 let fontCustomizedStyles = getNoteStyles(cellNotes[noteNum] || {}, { row, col })
                 if (fontCustomizedStyles?.fontWeight === FONT_WEIGHTS.HEAVY) {
                     fontCustomizedStyles = {

@@ -10,4 +10,4 @@ export const PAGE_PADDINGS = 16
 export const ITEM_WIDTH = CARD_DIMENSIONS.WIDTH
 export const ITEM_HEIGHT = CARD_DIMENSIONS.HEIGHT
 export const ROWS_GAP = 24
-export const itemHorizontalMargin = ((SCREEN_WIDTH - 2 * PAGE_PADDINGS) / NUM_COLUMNS - ITEM_WIDTH) / 2
+export const itemHorizontalMargin = Math.floor(((SCREEN_WIDTH - 2 * PAGE_PADDINGS) / NUM_COLUMNS - ITEM_WIDTH) / 2)

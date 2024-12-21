@@ -4,7 +4,7 @@ import { START_GAME_MENU_ITEMS_IDS } from '@application/usecases/newGameMenu/con
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 export const NUM_COLUMNS = 3
-export const PAGE_PADDINGS = 16 // IT SHOULD COME FROM A CENTRAL PLACE
+export const PAGE_PADDINGS = 16 // IT SHOULD COME FROM A CENTRAL PLACE or it would be better if the component which is rendering it passes it as prop
 export const ITEM_WIDTH = CARD_DIMENSIONS.WIDTH
 export const ITEM_HEIGHT = CARD_DIMENSIONS.HEIGHT
 export const ROWS_GAP = 24

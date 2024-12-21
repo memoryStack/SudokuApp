@@ -11,10 +11,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { getStyles } from './levels.styles'
 
 import { Page } from '../components/Page'
-import { DataProvider, LayoutProvider } from "recyclerlistview";
-import {
-    ITEM_WIDTH, ITEM_HEIGHT, itemHorizontalMargin, ROWS_GAP, GAME_LEVELS_TEXT, NUM_COLUMNS
-} from './levels.constants'
+import { GAME_LEVELS_TEXT, NUM_COLUMNS } from './levels.constants'
 import { ACTION_HANDLERS, ACTION_TYPES } from './levels.actionHandlers'
 import withActions from '@utils/hocs/withActions'
 import { useDependency } from 'src/hooks/useDependency'
@@ -24,20 +21,6 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import GameLevelsList from '../components/GameLevelsList/GameLevelsList'
 import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from 'src/constants/events'
-
-const itemEqualityChecker = () => new DataProvider((r1, r2) => {
-    return r1 !== r2
-})
-
-const getLayoutProvider = () => {
-    return new LayoutProvider(
-        index => 0,
-        (type, dim) => {
-            dim.width = ITEM_WIDTH + 2 * itemHorizontalMargin
-            dim.height = ITEM_HEIGHT + ROWS_GAP
-        }
-    )
-}
 
 const renderStarsEarning = (starsEarned, maxStars, styles) => {
     if (!starsEarned) return null
@@ -78,8 +61,6 @@ const Levels: React.FC<Props> = ({
             onFocus={() => emit(EVENTS.LOCAL.REFRESH_GAME_LEVELS_INFO)}
         >
             <GameLevelsList
-                layoutProvider={getLayoutProvider()}
-                dataProvider={itemEqualityChecker()}
                 puzzleType={getRouteParamValue('selectedGameMenuItem', route)}
                 onPuzzleClick={({ levelNum }) => {
                     onAction({
