@@ -53,9 +53,16 @@ const Text: React.FC<Props> = ({
     // extract this type calculation to font.js if needs at another place
     const fontWeight: keyof typeof FONT_WEIGHT_VS_FONT_FAMILY = _get(styles, 'fontWeight', FONT_WEIGHTS.REGULAR)
 
+    // picking font family based on the font-weight
+    // is it a good approach, i don't think so. let's revisit this
+    const getFontFamily = () => {
+        const fontFamily = styles.fontFamily ? styles.fontFamily : FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]
+        return fonts && fonts[fontFamily]
+    }
+
     const stylesWithFont = {
         ...styles,
-        fontFamily: fonts && fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],
+        fontFamily: getFontFamily(),
         fontWeight,
         includeFontPadding: false,
         textAlignVertical: 'center',

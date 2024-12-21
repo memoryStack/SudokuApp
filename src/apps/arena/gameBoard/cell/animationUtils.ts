@@ -50,7 +50,8 @@ export const createAnimationInstance = (
     currentConfig: AnimationConfig = EMPTY_ANIMATION_CONFIG
 ) => {
     if (currentConfig.resetToPrevious) {
-        // animatedValue.stopAnimation() // uncommenting it didn't make any difference
+        // uncommenting the below line doesn't make any difference
+        // animatedValue.stopAnimation()
         return Animated.timing(animatedValue, {
             ...currentConfig.config,
             toValue: originalAnimatedValueBeforeAnimationStarted,

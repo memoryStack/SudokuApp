@@ -182,22 +182,22 @@ const Board_: React.FC<Props> = ({
             // }
         })
 
-        setTimeout(() => {
-            setAnimationsConfig({
-                'borderWidth': {
-                    config: { toValue: 3, duration: 1000, useNativeDriver: false },
-                }
-            })
-        }, 1000)
+        // setTimeout(() => {
+        //     setAnimationsConfig({
+        //         'borderWidth': {
+        //             config: { toValue: 3, duration: 1000, useNativeDriver: false },
+        //         }
+        //     })
+        // }, 1000)
 
-        setTimeout(() => {
-            setAnimationsConfig({
-                'borderColor': {
-                    config: { toValue: 1, duration: 2000, useNativeDriver: false, },
-                    output: ['#000000', '#ff0000']
-                }
-            })
-        }, 1000)
+        // setTimeout(() => {
+        //     setAnimationsConfig({
+        //         'borderColor': {
+        //             config: { toValue: 1, duration: 2000, useNativeDriver: false, },
+        //             output: ['#000000', '#ff0000']
+        //         }
+        //     })
+        // }, 1000)
 
         // setTimeout(() => {
         //     setAnimationsConfig({

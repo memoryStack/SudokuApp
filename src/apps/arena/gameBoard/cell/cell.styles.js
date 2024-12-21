@@ -1,11 +1,10 @@
 import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
-import { FONT_WEIGHTS } from '@resources/fonts/font'
+import { FONT_FAMILIES, FONT_WEIGHTS } from '@resources/fonts/font'
 
 export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
     cell: {
         display: 'flex',
-        flex: 1,
         height: '100%',
         width: '100%',
     },
@@ -27,7 +26,13 @@ export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
     },
     noteText: {
         color: _get(theme, ['colors', 'on-surface-variant']),
-        fontSize: CELL_HEIGHT * 0.3,
+        fontSize: CELL_HEIGHT * 0.33,
+        lineHeight: CELL_HEIGHT * 0.33,
         fontWeight: FONT_WEIGHTS.REGULAR,
+        fontFamily: FONT_FAMILIES.WITHOUT_ASCENDER_DESCENDER,
     },
+    noteTextBold: {
+        fontSize: CELL_HEIGHT * 0.36,
+        lineHeight: CELL_HEIGHT * 0.36,
+    }
 })

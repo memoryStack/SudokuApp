@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 
 import { View, Animated } from 'react-native'
 
@@ -17,10 +17,12 @@ import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensio
 
 import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from './cell.constants'
 import { getStyles } from './cell.styles'
-import { usePrevious } from '@utils/customHooks'
 import _isEqual from '@lodash/isEqual'
-import { ANIMATABLE_PROPERTIES, createAnimationInstance } from './animationUtils'
+import { ANIMATABLE_PROPERTIES } from './animationUtils'
 import _isEmpty from '@lodash/isEmpty'
+import { useAnimateView } from './useAnimateView'
+import CellNumberInput from './CellNumberInput'
+import { FONT_WEIGHTS } from '@resources/fonts/font'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
 // becoz only 3 notes are there in a row
@@ -29,35 +31,37 @@ for (let i = 0; i < 3; i++) looper.push(i)
 
 const DEFAULT_ANIMATION_CONFIG = {}
 
-const DEFAULT_ANIMATION_VALUES = {
-    [ANIMATABLE_PROPERTIES.FONT_SIZE]: 1,
-    [ANIMATABLE_PROPERTIES.TEXT_COLOR]: 0,
-    [ANIMATABLE_PROPERTIES.BG_COLOR]: 0,
-    [ANIMATABLE_PROPERTIES.BORDER_WIDTH]: 0,
-    [ANIMATABLE_PROPERTIES.BORDER_COLOR]: 0,
-}
+const CellNote = ({
+    animationsConfig,
+    textStyles,
+    refProp,
+    noteContainerStyles,
+    value,
+}) => {
 
-const ANIMATION_TRANSITION_VALUES = {
-    [ANIMATABLE_PROPERTIES.FONT_SIZE]: {
-        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.FONT_SIZE],
-        to: -1
-    },
-    [ANIMATABLE_PROPERTIES.TEXT_COLOR]: {
-        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.TEXT_COLOR],
-        to: -1
-    },
-    [ANIMATABLE_PROPERTIES.BG_COLOR]: {
-        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BG_COLOR],
-        to: -1
-    },
-    [ANIMATABLE_PROPERTIES.BORDER_WIDTH]: {
-        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_WIDTH],
-        to: -1
-    },
-    [ANIMATABLE_PROPERTIES.BORDER_COLOR]: {
-        from: DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_COLOR],
-        to: -1
-    },
+    const { bgColorInterpolation, borderWidthAnim, borderColorInterpolation }
+        = useAnimateView(animationsConfig)
+
+    return (
+        <Animated.View
+            ref={refProp}
+            style={[
+                noteContainerStyles,
+                bgColorInterpolation && { backgroundColor: bgColorInterpolation },
+                borderWidthAnim && { borderWidth: borderWidthAnim },
+                borderColorInterpolation && { borderColor: borderColorInterpolation }
+            ]}
+            collapsable={false}
+        >
+            <CellNumberInput
+                testID={CELL_NOTE_TEST_ID}
+                textStyles={textStyles}
+                value={value}
+                type={TEXT_VARIATIONS.BODY_SMALL}
+                animationsConfig={animationsConfig}
+            />
+        </Animated.View>
+    )
 }
 
 // test for these default values and their types
@@ -79,84 +83,18 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
-    const mainNumberFontAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.FONT_SIZE])).current
-    const mainNumberColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.TEXT_COLOR])).current // it's text color
-    const bgColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BG_COLOR])).current
-    const borderWidthAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_WIDTH])).current
-    const borderColorAnim = useRef(new Animated.Value(DEFAULT_ANIMATION_VALUES[ANIMATABLE_PROPERTIES.BORDER_COLOR])).current
-
-    const ANIMATED_PROPERTY_VS_ANIM_VALUE = {
-        [ANIMATABLE_PROPERTIES.FONT_SIZE]: mainNumberFontAnim,
-        [ANIMATABLE_PROPERTIES.TEXT_COLOR]: mainNumberColorAnim,
-        [ANIMATABLE_PROPERTIES.BG_COLOR]: bgColorAnim,
-        [ANIMATABLE_PROPERTIES.BORDER_WIDTH]: borderWidthAnim,
-        [ANIMATABLE_PROPERTIES.BORDER_COLOR]: borderColorAnim,
-    }
-
-    const originalAnimatedValuesBeforeAnimationStarted = useRef(ANIMATION_TRANSITION_VALUES).current
-
     const styles = useStyles(getStyles)
-
-    const animationObj = useRef({})
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
-    const previousAnimationsConfig = usePrevious(cellAnimationsConfig)
-
-    const animationConfigsMerge = useRef({})
-
-    animationConfigsMerge.current = {
-        ...animationConfigsMerge.current,
-        ...previousAnimationsConfig,
-        ...cellAnimationsConfig
-    }
-
-    useEffect(() => {
-        const allAnimations = animationConfigsMerge.current
-        const listenersIDs = []
-        Object.keys(allAnimations).forEach((animatableProperty) => {
-            // TODO: add check for animatableProperty if that's supported or not
-            if (allAnimations[animatableProperty].stop) {
-                const animationInstance = animationObj.current[animatableProperty]
-                animationInstance && animationInstance.stop()
-            } else if (allAnimations[animatableProperty].start) {
-                const animationInstance = animationObj.current[animatableProperty]
-                animationInstance && animationInstance.start()
-            } else {
-                // add safety checks in case animation instance is not returned
-                const animation = createAnimationInstance(
-                    ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty],
-                    originalAnimatedValuesBeforeAnimationStarted[animatableProperty].from,
-                    animatableProperty,
-                    allAnimations[animatableProperty]
-                )
-
-                animation.start()
-
-                animationObj.current[animatableProperty] = animation
-                // WARN: don't move the below .from update logic above createAnimationInstance function
-                if (originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to !== -1) {
-                    originalAnimatedValuesBeforeAnimationStarted[animatableProperty].from
-                        = originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to
-                }
-                ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty].addListener(({ value }) => {
-                    if (!Number.isNaN(value)) {
-                        originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to = value
-                    }
-                })
-
-                listenersIDs.push(ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty])
-            }
-        })
-
-        return () => {
-            Object.keys(allAnimations).forEach((animatableProperty) => {
-                const animatedValue = ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty]
-                animatedValue.stopAnimation()
-                animatedValue.removeAllListeners()
-            })
-        }
-    }, [cellAnimationsConfig, previousAnimationsConfig])
+    const {
+        fontSizeAnim: mainNumberFontAnim,
+        borderWidthAnim,
+        bgColorInterpolation: bgColor,
+        textColorInterpolation: mainNumberColorInterpolation,
+        borderColorInterpolation: borderColor,
+        animationConfigsMerge,
+    } = useAnimateView(cellAnimationsConfig)
 
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
@@ -166,25 +104,46 @@ const Cell_ = ({
                 const noteNum = cellNoteRow * 3 + cellNoteCol
                 const { show, noteValue } = cellNotes[noteNum] || {}
 
+                const animationsConfig = {
+                    // 'bgColor': {
+                    //     config: { toValue: 1, duration: 2000, useNativeDriver: false, },
+                    //     output: ['#000000', '#ff0000']
+                    // },
+                    // 'fontSize': {
+                    //     config: { toValue: 1.5, duration: 2000, useNativeDriver: true }
+                    // },
+
+                    // 'borderWidth': {
+                    //     config: { toValue: 1, duration: 500, useNativeDriver: false },
+                    // },
+                    // 'borderColor': {
+                    //     config: { toValue: 1, duration: 500, useNativeDriver: false, },
+                    //     output: ['#000000', '#ff0000']
+                    // },
+                }
+
+                // noteTextBold
+                let fontCustomizedStyles = getNoteStyles(cellNotes[noteNum] || {}, { row, col })
+                if (fontCustomizedStyles?.fontWeight === FONT_WEIGHTS.HEAVY) {
+                    fontCustomizedStyles = {
+                        ...fontCustomizedStyles,
+                        ...styles.noteTextBold
+                    }
+                }
                 return (
-                    <View
+                    <CellNote
+                        refProp={notesRefs[noteNum]}
                         key={`${noteNum}`}
-                        ref={notesRefs[noteNum]}
-                        style={styles.noteContainer}
-                        collapsable={false}
-                    >
-                        <Text
-                            style={[
-                                styles.noteText,
-                                getNoteStyles(cellNotes[noteNum] || {}, { row, col }),
-                            ]}
-                            testID={CELL_NOTE_TEST_ID}
-                            type={TEXT_VARIATIONS.BODY_SMALL}
-                            withoutLineHeight
-                        >
-                            {show ? `${noteValue}` : ''}
-                        </Text>
-                    </View>
+                        cellNotes={cellNotes}
+                        textStyles={[
+                            styles.noteText,
+                            fontCustomizedStyles,
+                        ]}
+                        value={show ? `${noteValue}` : ''}
+                        noteContainerStyles={styles.noteContainer}
+                        animationsConfig={(noteValue === 1 || noteValue === 5) && (row === 0 && col === 0) ? animationsConfig : null}
+                    // animationsConfig={(row === 0 && col === 0) ? animationsConfig : null}
+                    />
                 )
             })
             return (
@@ -204,38 +163,21 @@ const Cell_ = ({
         />
     )
 
-    // JUST GET THE CONFIG FOR OUTPUT
-    const mainNumberColorInterpolation = animationConfigsMerge.current['textColor']?.output ? mainNumberColorAnim.interpolate({
-        inputRange: [0, 1],
-        outputRange: animationConfigsMerge.current['textColor']?.output
-    }) : undefined
-    const bgColor = animationConfigsMerge.current['bgColor']?.output ? bgColorAnim.interpolate({
-        inputRange: [0, 1],
-        outputRange: animationConfigsMerge.current['bgColor']?.output
-    }) : undefined
-    const borderColor = animationConfigsMerge.current['borderColor']?.output ? borderColorAnim.interpolate({
-        inputRange: [0, 1],
-        outputRange: animationConfigsMerge.current['borderColor']?.output
-    }) : undefined
-
     // TODO: had to use <Animated.View /> because can't animate color + scale animation 
     // on <Animated.Text /> in parallel (throws errors). try to upgrade react native version
     const renderCellMainValue = () => (
-        <Animated.View style={{ transform: [{ scale: ANIMATED_PROPERTY_VS_ANIM_VALUE[ANIMATABLE_PROPERTIES.FONT_SIZE] }] }}>
-            <Text
-                style={[
-                    styles.mainNumberText,
-                    mainValueFontColor,
-                    mainNumberColorInterpolation && { color: mainNumberColorInterpolation }
-                ]}
-                testID={CELL_MAIN_VALUE_TEST_ID}
-                type={TEXT_VARIATIONS.HEADING_LARGE}
-                withoutLineHeight
-                animated={ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge.current}
-            >
-                {cellMainValue}
-            </Text>
-        </Animated.View>
+        <CellNumberInput
+            testID={CELL_MAIN_VALUE_TEST_ID}
+            textStyles={[
+                styles.mainNumberText,
+                mainValueFontColor,
+            ]}
+            value={cellMainValue}
+            textType={TEXT_VARIATIONS.HEADING_LARGE}
+            withoutLineHeight
+            animationsConfig={cellAnimationsConfig}
+            animated={ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge}
+        />
     )
 
     const getCellContent = () => {
@@ -249,7 +191,7 @@ const Cell_ = ({
         ANIMATABLE_PROPERTIES.BORDER_WIDTH,
         ANIMATABLE_PROPERTIES.BORDER_COLOR,
     ].some((animatableProperty) => {
-        return animatableProperty in animationConfigsMerge.current
+        return animatableProperty in animationConfigsMerge
     })
 
     return (

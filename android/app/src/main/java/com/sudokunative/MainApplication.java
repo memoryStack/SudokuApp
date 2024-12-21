@@ -52,6 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
     public void onCreate() {
         super.onCreate();
         ReactFontManager.getInstance().addCustomFont(this, "Roboto", R.font.roboto);
+        ReactFontManager.getInstance().addCustomFont(this, "Roboto-No-Ascender-Descender", R.font.roboto_no_ascender_descender);
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     }

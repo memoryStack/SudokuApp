@@ -14,16 +14,19 @@ import { Platform } from 'react-native'
                 that this costom-fonts is only available for API >= 28
 */
 
-const FONT_FAMILIES = {
+export const FONT_FAMILIES = {
+    CUSTOM: 'custom',
     REGULAR: 'regular',
     MEDIUM: 'medium',
     SEMI_BOLD: 'semibold',
     BOLD: 'bold',
     EXTRA_BOLD: 'extra_bold',
     HEAVY: 'heavy',
+    WITHOUT_ASCENDER_DESCENDER: 'no_ascender_descender'
 }
 
 export enum FONT_WEIGHTS {
+    CUSTOM = '200',
     REGULAR = '400',
     MEDIUM = '500',
     SEMI_BOLD = '600',
@@ -34,6 +37,7 @@ export enum FONT_WEIGHTS {
 
 // NOTE: semi-bold doesn't exist for Roboto font
 export const FONT_WEIGHT_VS_FONT_FAMILY = {
+    [FONT_WEIGHTS.CUSTOM]: FONT_FAMILIES.CUSTOM,
     [FONT_WEIGHTS.REGULAR]: FONT_FAMILIES.REGULAR,
     [FONT_WEIGHTS.MEDIUM]: FONT_FAMILIES.MEDIUM,
     // [FONT_WEIGHTS.SEMI_BOLD]: FONT_FAMILIES.SEMI_BOLD,
@@ -44,12 +48,14 @@ export const FONT_WEIGHT_VS_FONT_FAMILY = {
 
 export const fonts = Platform.select({
     android: {
+        [FONT_FAMILIES.CUSTOM]: 'Roboto',
         [FONT_FAMILIES.REGULAR]: 'Roboto',
         [FONT_FAMILIES.MEDIUM]: 'Roboto',
         // [FONT_FAMILIES.SEMI_BOLD]: 'Roboto',
         [FONT_FAMILIES.BOLD]: 'Roboto',
         [FONT_FAMILIES.EXTRA_BOLD]: 'Roboto',
         [FONT_FAMILIES.HEAVY]: 'Roboto',
+        [FONT_FAMILIES.WITHOUT_ASCENDER_DESCENDER]: 'Roboto-No-Ascender-Descender',
     },
     ios: {
         // TODO: test for iOS
