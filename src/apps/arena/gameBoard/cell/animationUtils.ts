@@ -10,6 +10,7 @@ export enum ANIMATABLE_PROPERTIES {
     TEXT_COLOR = 'textColor',
     BORDER_WIDTH = 'borderWidth',
     BORDER_COLOR = 'borderColor',
+    OPACITY = 'opacity',
 }
 
 type NativeAnimationConfig = Animated.TimingAnimationConfig
@@ -28,6 +29,7 @@ const EMPTY_ANIMATION_CONFIG = {
 }
 
 const JS_DRIVEN_ANIMATION_PROPERTIES = [
+    ANIMATABLE_PROPERTIES.FONT_SIZE,
     ANIMATABLE_PROPERTIES.TEXT_COLOR,
     ANIMATABLE_PROPERTIES.BG_COLOR,
     ANIMATABLE_PROPERTIES.BORDER_COLOR,
@@ -46,7 +48,7 @@ const getNativeDriverValue = (config: NativeAnimationConfig = {}, propertyToAnim
 // if in config the value is not passed
 export const createAnimationInstance = (
     animatedValue: Animated.Value,
-    originalAnimatedValueBeforeAnimationStarted: number,
+    prevAnimationTransition: { from: number, to: number },
     propertyToAnimate: ANIMATABLE_PROPERTIES,
     currentConfig: AnimationConfig = EMPTY_ANIMATION_CONFIG
 ) => {
@@ -55,7 +57,7 @@ export const createAnimationInstance = (
         // animatedValue.stopAnimation()
         return Animated.timing(animatedValue, {
             ...currentConfig.config,
-            toValue: originalAnimatedValueBeforeAnimationStarted,
+            toValue: prevAnimationTransition.from,
             duration: currentConfig.config?.duration || DEFAULT_TIME_TO_RESET,
             useNativeDriver: getNativeDriverValue(currentConfig.config, propertyToAnimate) // TODO: send the property config here
         })
@@ -67,7 +69,7 @@ export const createAnimationInstance = (
                 Animated.timing(animatedValue, currentConfig.config),
                 Animated.timing(animatedValue, {
                     ...currentConfig.config,
-                    toValue: originalAnimatedValueBeforeAnimationStarted,
+                    toValue: prevAnimationTransition.to,
                 }),
             ]), currentConfig.loopConfig)
     }

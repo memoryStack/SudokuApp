@@ -80,6 +80,7 @@ const Cell_ = ({
     notesRefs,
     getNoteStyles,
     cellAnimationsConfig,
+    animateNumberInsertion,
 }) => {
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
@@ -93,7 +94,7 @@ const Cell_ = ({
         bgColorInterpolation: bgColor,
         borderColorInterpolation: borderColor,
         animationConfigsMerge,
-    } = useAnimateView(cellAnimationsConfig.mainNumber)
+    } = useAnimateView({ ...cellAnimationsConfig.mainNumber })
 
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
@@ -157,6 +158,7 @@ const Cell_ = ({
             withoutLineHeight
             animationsConfig={cellAnimationsConfig.mainNumber}
             animated={ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge}
+            animateNumberInsertion={animateNumberInsertion}
         />
     )
 
@@ -207,7 +209,8 @@ Cell_.propTypes = {
     cellAnimationsConfig: PropTypes.shape({
         mainNumber: ViewAnimationConfig,
         notes: PropTypes.objectOf(ViewAnimationConfig)
-    })
+    }),
+    animateNumberInsertion: PropTypes.bool,
 }
 
 Cell_.defaultProps = {
@@ -224,4 +227,5 @@ Cell_.defaultProps = {
     notesRefs: [],
     getNoteStyles: _noop,
     cellAnimationsConfig: DEFAULT_ANIMATION_CONFIG,
+    animateNumberInsertion: false,
 }

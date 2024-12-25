@@ -331,7 +331,7 @@ const Arena_ = ({
             onLayout={onParentLayout}
         >
             <View style={styles.contentContainer}>
-                {renderFillPuzzleBtn()}
+                {/* {renderFillPuzzleBtn()} */}
                 <Refree timer={timer} />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}

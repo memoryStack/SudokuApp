@@ -174,6 +174,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             boardContainerStyles={showSmartHint ? styles.smartHintBoardContainer : null}
             getNoteStyles={getNoteStyles}
             showHintsSVGView={!_isNil(svgProps) && _includes([GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT], gameState)}
+            animateNumberInsertion
         />
     )
 }

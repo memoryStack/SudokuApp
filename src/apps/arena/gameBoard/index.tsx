@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { View, StyleProp, ViewStyle } from 'react-native'
 
@@ -60,6 +60,7 @@ interface Props {
     getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null // this signature is wrong, first argument is Note, not NoteValue
     hideSVGDrawingsMarkersEnd?: boolean
     showAxes?: boolean
+    animateNumberInsertion?: boolean
 }
 
 const DFF = {}
@@ -78,11 +79,55 @@ const Board_: React.FC<Props> = ({
     boardContainerStyles = null,
     getNoteStyles = _noop,
     hideSVGDrawingsMarkersEnd = false,
-    showAxes = true
+    showAxes = true,
+    animateNumberInsertion = false,
 }) => {
     const styles = useStyles(getStyles)
 
     const boardRef = useRef(null)
+
+    const [cellsAnimationConfigs, setCellsAnimationConfigs] = useState({})
+
+    useEffect(() => {
+
+        const cells = [
+            { row: 0, col: 1 },
+            { row: 2, col: 4 },
+            { row: 2, col: 3 },
+            { row: 3, col: 2 },
+
+            { row: 2, col: 6 },
+            { row: 2, col: 1 },
+            { row: 5, col: 2 },
+            { row: 2, col: 7 },
+        ]
+        const initialDelay = 500
+        const animationLength = 1200
+        cells.forEach((cell, index) => {
+            const animationConfig = {
+                'mainNumber': {
+                    'fontSize': {
+                        config: { toValue: 1.5, duration: 500, useNativeDriver: true },
+                        loopConfig: { iterations: 1 },
+                    },
+                    'textColor': {
+                        config: { toValue: 1, duration: 500, useNativeDriver: false, },
+                        loopConfig: { iterations: 1 },
+                        output: ['#000000', '#2653d3']
+                    }
+                }
+            }
+
+            const animatinDelay = initialDelay + animationLength * (index + 1)
+
+            setTimeout(() => {
+                setCellsAnimationConfigs((prevConfig) => {
+                    const newConfig = { ...prevConfig }
+                    return _set(newConfig, [cell.row, cell.col], animationConfig)
+                })
+            }, animatinDelay)
+        })
+    }, [])
 
     const notesRefs = useMemo(() => {
         const result: NotesRefs = []
@@ -138,7 +183,7 @@ const Board_: React.FC<Props> = ({
                     const cell = { row, col }
                     const cellAdditionalStyles = { marginLeft: getSpacingDueToBorders(col) }
 
-                    const cellAnimationsConfig = {}
+                    const cellAnimationsConfig = _get(cellsAnimationConfigs, [row, col], {})
 
                     return (
                         // eslint-disable-next-line react/no-array-index-key
@@ -156,6 +201,7 @@ const Board_: React.FC<Props> = ({
                                 notesRefs={notesRefs[row][col]}
                                 getNoteStyles={getNoteStyles}
                                 cellAnimationsConfig={cellAnimationsConfig}
+                                animateNumberInsertion={animateNumberInsertion}
                             />
                         </View>
                     )
