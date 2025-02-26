@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 import { View, Image, ImageStyle } from 'react-native'
 
@@ -15,6 +15,8 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { getStyles } from './inputPanel.styles'
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
+import { EVENTS } from 'src/constants/events'
+import { addListener } from '@utils/GlobalEventBus'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
@@ -43,6 +45,13 @@ const Inputpanel_: React.FC<Props> = ({
     const styles = useMemo(() => getStyles(CELL_WIDTH), [CELL_WIDTH])
 
     const onNumberClicked = (number: InputNumber) => onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
+
+    useEffect(() => {
+        addListener(EVENTS.LOCAL.NUMBER_INPUT, (number: InputNumber) => {
+            console.log('@@@@@@ number clickkkk')
+            onNumberClicked(number)
+        })
+    }, [])
 
     const onEraserClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_ERASE_CLICK })

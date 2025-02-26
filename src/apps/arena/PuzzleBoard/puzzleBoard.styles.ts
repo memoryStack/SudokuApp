@@ -9,13 +9,16 @@ import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
 
 export const getStyles = (_: unknown, theme: unknown) => StyleSheet.create({
     selectedCellBGColor: {
-        backgroundColor: 'rgb(255, 245, 187)',
+        // backgroundColor: 'rgb(255, 245, 187)',
+        backgroundColor: 'transparent',
     },
     sameHouseSameValueBGColor: {
         backgroundColor: _get(theme, ['colors', 'error-container']),
     },
     sameHouseCellBGColor: {
-        backgroundColor: _get(theme, ['colors', 'surface-container-high']),
+        backgroundColor: 'transparent',
+        // backgroundColor: _get(theme, ['colors', 'surface-container-high']),
+
     },
     diffHouseSameValueBGColor: {
         backgroundColor: _get(theme, ['colors', 'primary-container']),
@@ -24,7 +27,8 @@ export const getStyles = (_: unknown, theme: unknown) => StyleSheet.create({
         backgroundColor: HC_OVERLAY_BG_COLOR,
     },
     defaultCellBGColor: {
-        backgroundColor: 'white',
+        // backgroundColor: _get(theme, ['colors', 'surface']),
+        backgroundColor: 'transparent',
     },
     tryOutInputColor: {
         color: smartHintColorSystemReader.tryOutFilledNumberColor(_get(theme, 'colors.smartHints')),

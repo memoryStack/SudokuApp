@@ -1,7 +1,7 @@
 import React, {
     useState, useCallback, useEffect, useRef,
 } from 'react'
-import { View, Animated } from 'react-native'
+import { View, Animated, ImageBackground } from 'react-native'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -121,7 +121,7 @@ const Arena_ = ({
         const availableStars = getPuzzleAvailableStars({ time, puzzleType: difficultyLevelID })
         if (availableStars !== currentAvailableStars.current) {
             currentAvailableStars.current = availableStars
-            navigation.setOptions({ headerRight: () => renderAvailableStars(availableStars, styles) })
+            // navigation.setOptions({ headerRight: () => renderAvailableStars(availableStars, styles) })
         }
     }, [time, difficultyLevelID, styles])
 
@@ -330,20 +330,30 @@ const Arena_ = ({
             onBlur={handleGameOutOfFocus}
             onLayout={onParentLayout}
         >
+            <ImageBackground
+                style={[styles.bgImg]}
+                source={require('@resources/assets/white-parchment-paper.jpg')}
+            />
             <View style={styles.contentContainer}>
                 {/* {renderFillPuzzleBtn()} */}
-                <Refree timer={timer} />
-                <PuzzleBoard />
+                {/* <Refree timer={timer} /> */}
+                <View style={{ marginTop: 80, marginLeft: -8 }}>
+                    <PuzzleBoard />
+                </View>
+                {/* <PuzzleBoard /> */}
                 {/* TODO: it can be named better */}
-                <BoardController refFromParent={boardControllersRef} />
-                {renderInputPanel()}
+                {/* <BoardController refFromParent={boardControllersRef} /> */}
+                {/* {renderInputPanel()} */}
+                {/* <View style={{ opacity: 0 }}>
+                    {renderInputPanel()}
+                </View> */}
             </View>
-            {renderSmartHintHC()}
+            {/* {renderSmartHintHC()}
             {renderHintsMenu()}
             {renderNextGameMenu()}
             {renderCustomPuzzleHC()}
             {renderGameOverCard()}
-            {renderGameLevelsList()}
+            {renderGameLevelsList()} */}
         </Page>
     )
 }

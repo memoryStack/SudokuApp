@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { View, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleProp, ViewStyle, Animated } from 'react-native'
 
 import _get from '@lodash/get'
 import _set from '@lodash/set'
@@ -26,6 +26,17 @@ import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import { getStyles } from './gameBoard.styles'
 import { Cell } from './cell'
+import { getCellHouseForHouseType, getHouseCells } from '@domain/board/utils/housesAndCells'
+import { HOUSE_TYPE } from '@domain/board/board.constants'
+import { Board as BoardDomain } from '@domain/board/board'
+import { areSameCells, filterEmptyCells, filterHouseCells } from '../utils/util'
+import { hexToRGBA } from '@utils/util'
+import { emit } from '@utils/GlobalEventBus'
+import { EVENTS } from 'src/constants/events'
+import { useDependency } from 'src/hooks/useDependency'
+import { GAME_STATE } from '@application/constants'
+import { useAnimateView } from './cell/useAnimateView'
+import { fillPuzzleUseCase } from '@application/usecases/board'
 
 const looper: number[] = []
 const bordersLooper: number[] = []
@@ -88,45 +99,101 @@ const Board_: React.FC<Props> = ({
 
     const [cellsAnimationConfigs, setCellsAnimationConfigs] = useState({})
 
+    const dependencies = useDependency()
+
+    const { gameStateRepository } = dependencies
+
+    const [boardAnimConfig, setBoardAnimConfig] = useState({})
+
+    const { bgColorInterpolation } = useAnimateView(boardAnimConfig)
+
+    Board
+
     useEffect(() => {
+        gameStateRepository.setGameState(GAME_STATE.INACTIVE)
 
-        const cells = [
-            { row: 0, col: 1 },
-            { row: 2, col: 4 },
-            { row: 2, col: 3 },
-            { row: 3, col: 2 },
-
-            { row: 2, col: 6 },
-            { row: 2, col: 1 },
-            { row: 5, col: 2 },
-            { row: 2, col: 7 },
-        ]
-        const initialDelay = 500
-        const animationLength = 1200
-        cells.forEach((cell, index) => {
-            const animationConfig = {
-                'mainNumber': {
-                    'fontSize': {
-                        config: { toValue: 1.5, duration: 500, useNativeDriver: true },
-                        loopConfig: { iterations: 1 },
-                    },
-                    'textColor': {
-                        config: { toValue: 1, duration: 500, useNativeDriver: false, },
-                        loopConfig: { iterations: 1 },
-                        output: ['#000000', '#2653d3']
-                    }
-                }
-            }
-
-            const animatinDelay = initialDelay + animationLength * (index + 1)
+        setTimeout(() => {
+            gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 
             setTimeout(() => {
+                const _animationConfig = {}
+                BoardDomain.getEmptyCellsAndTheirSolution(dependencies?.boardRepository.getMainNumbers())
+                    .forEach(({ cell }) => {
+                        const animationConfig = {
+                            'mainNumber': {
+                                'bgColor': {
+                                    config: { toValue: 1, duration: 300, useNativeDriver: false, },
+                                    loopConfig: { iterations: 2 },
+                                    output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+                                },
+                            }
+                        }
+                        _set(_animationConfig, [cell.row, cell.col], animationConfig)
+                    })
                 setCellsAnimationConfigs((prevConfig) => {
-                    const newConfig = { ...prevConfig }
-                    return _set(newConfig, [cell.row, cell.col], animationConfig)
+                    const newConfig = { ..._animationConfig }
+                    return newConfig
                 })
-            }, animatinDelay)
-        })
+            }, 2000)
+
+        }, 5000)
+
+        setTimeout(() => {
+            setCellsAnimationConfigs({})
+            // fill all the cells here
+            fillPuzzleUseCase(dependencies?.boardRepository)
+        }, 9000)
+
+        // setTimeout(() => {
+        //     setBoardAnimConfig({
+        //         // 'borderWidth': {
+        //         //     config: { toValue: 2, duration: 500, useNativeDriver: false },
+        //         //     loopConfig: { iterations: 3 },
+        //         // },
+        //         'bgColor': {
+        //             config: { toValue: 1, duration: 400, useNativeDriver: false, },
+        //             loopConfig: { iterations: 1 },
+        //             output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+        //         }
+        //     })
+        // }, 1000)
+    }, [gameStateRepository, dependencies])
+
+    useEffect(() => {
+        const focusCell = { row: 4, col: 4 }
+        const filterCallback = (cell) => {
+            return true
+            return !areSameCells(cell, focusCell)
+        }
+        const blockCells = filterHouseCells(getCellHouseForHouseType(HOUSE_TYPE.BLOCK, focusCell), filterCallback)
+        const rowCells = filterHouseCells(getCellHouseForHouseType(HOUSE_TYPE.ROW, focusCell), filterCallback)
+        const columnCells = filterHouseCells(getCellHouseForHouseType(HOUSE_TYPE.COL, focusCell), filterCallback)
+
+        const animatinDelay = 1500
+
+        // setTimeout(() => {
+        //     const _animationConfig = {}
+        //     blockCells.forEach((cell) => {
+        //         const animationConfig = {
+        //             'mainNumber': {
+        //                 'bgColor': {
+        //                     config: { toValue: 1, duration: 200, useNativeDriver: false, },
+        //                     loopConfig: { iterations: 3 },
+        //                     // output: ['#e9e7ec', '#90a7ff']
+        //                     output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+        //                 },
+        //             }
+        //         }
+
+        //         _set(_animationConfig, [cell.row, cell.col], animationConfig)
+        //     })
+
+        //     setCellsAnimationConfigs((prevConfig) => {
+        //         const newConfig = { ..._animationConfig }
+        //         return newConfig
+        //     })
+        // }, animatinDelay)
+
     }, [])
 
     const notesRefs = useMemo(() => {
@@ -238,6 +305,7 @@ const Board_: React.FC<Props> = ({
             key={label}
             style={[styles.axisText, axisTextStyles]}
             type={TEXT_VARIATIONS.BODY_MEDIUM}
+            withoutLineHeight
         >
             {label}
         </Text>
@@ -256,16 +324,22 @@ const Board_: React.FC<Props> = ({
     )
 
     const renderBoard = () => (
-        <View
+        <Animated.View
             ref={boardRef}
-            style={[styles.board, boardContainerStyles]}
+            style={[
+                styles.board,
+                boardContainerStyles,
+                // borderWidthAnim && { borderWidth: borderWidthAnim },
+                // borderColorInterpolation && { borderColor: borderColorInterpolation }
+                bgColorInterpolation && { backgroundColor: bgColorInterpolation }
+            ]}
             collapsable={false}
         >
             {looper.map((row, index) => renderRow(row, `${index}`))}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.HORIZONTAL)}
             {renderBordersGrid(BOARD_GRID_BORDERS_DIRECTION.VERTICAL)}
             {showHintsSVGView && renderHintSvgView()}
-        </View>
+        </Animated.View>
     )
 
     return (

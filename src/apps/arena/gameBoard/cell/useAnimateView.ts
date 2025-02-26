@@ -31,7 +31,9 @@ const getInitialToAndFromValues = (animInitialValues) => {
     }, {})
 }
 
-const useAnimateView = (cellAnimationsConfig, animInitialValues = {}) => {
+// NOTE: DON'T UPDATE THE cellAnimationsConfig WHILE THE ANIMATIONS ARE GOING ON
+//      ELSE PREVIOUS ANIMATION WILL STOP AND WON'T START AGAIN
+const useAnimateView = (cellAnimationsConfig = {}, animInitialValues = {}) => {
 
     const originalAnimatedValuesBeforeAnimationStarted = useRef(getInitialToAndFromValues(animInitialValues)).current
 
@@ -58,8 +60,8 @@ const useAnimateView = (cellAnimationsConfig, animInitialValues = {}) => {
     const animationConfigsMerge = useRef({})
 
     animationConfigsMerge.current = {
-        ...animationConfigsMerge.current,
-        ...previousAnimationsConfig,
+        // ...animationConfigsMerge.current,
+        // ...previousAnimationsConfig,
         ...cellAnimationsConfig
     }
 
@@ -103,7 +105,7 @@ const useAnimateView = (cellAnimationsConfig, animInitialValues = {}) => {
             Object.keys(allAnimations).forEach((animatableProperty) => {
                 const animatedValue = ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty]
                 animatedValue.stopAnimation((currentValue) => {
-                    animatedValue.setValue(currentValue);
+                    animatedValue.setValue(currentValue)
                 })
                 animatedValue.removeAllListeners()
             })

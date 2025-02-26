@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, LogBox } from 'react-native'
 
 import { Provider } from 'react-redux'
 
@@ -37,6 +37,10 @@ const styles = StyleSheet.create({
 const App = () => {
     // TODO: codepush is giving some error for ios
     // {"status":400,"name":"Error","message":"Missing required query parameter \"deployment_key\""}
+
+    LogBox.ignoreAllLogs(true);
+
+
     useEffect(() => {
         CodePush.sync({ installMode: CodePush.InstallMode.IMMEDIATE }, status => {
             consoleLog('@@@@@@@ JS update installed status', status)

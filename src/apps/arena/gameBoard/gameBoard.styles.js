@@ -9,7 +9,7 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
         display: 'flex',
         height: BOARD_GRID_HEIGHT,
         width: BOARD_GRID_WIDTH,
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         borderWidth: STATIC_BOARD_ELEMENTS_DIMENSIONS.BOARD_BORDER_WIDTH,
         borderColor: _get(theme, ['colors', 'outline']),
     },
@@ -44,14 +44,15 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
         flexDirection: 'row',
         height: CELL_WIDTH,
         width: '100%',
-        backgroundColor: 'white',
+        // backgroundColor: 'green',
     },
     cellContainer: {
         width: CELL_WIDTH,
         height: CELL_WIDTH,
     },
     defaultCellBGColor: {
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
+        backgroundColor: 'transparent'
     },
     defaultMainNumberColor: {
         color: 'rgb(12, 25, 22)',

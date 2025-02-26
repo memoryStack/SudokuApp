@@ -10,11 +10,22 @@ export const getStyles = (_, theme) => {
     return StyleSheet.create({
         page: {
             display: 'flex',
+            // backgroundColor: 'transparent',
+            // zIndex: 1
+        },
+        bgImg: {
+            position: 'absolute',
+            width: '100%',
+            height: 822,
+            top: 0,
+            bottom: 0,
+            zIndex: 0
         },
         contentContainer: {
             flex: 1,
             width: '100%',
             alignItems: 'center',
+            backgroundColor: 'transparent',
             marginTop: 40,
         },
         gameOverCardAbsoluteBG: {

@@ -27,18 +27,18 @@ export interface Props {
 const useNumberInputAnimationConfig = (
     value,
     animateNumberInsertion,
-    animationsConfig
+    animationsConfig = {},
+    cell
 ) => {
     const previousValue = usePreviousRenderValue(value)
     const valueInserted = !previousValue && value
-
     if (valueInserted && animateNumberInsertion && _isEmpty(animationsConfig)) {
         const config = {
             [ANIMATABLE_PROPERTIES.FONT_SIZE]: {
-                config: { toValue: 1, duration: 300, useNativeDriver: true },
+                config: { toValue: 1, duration: 500, useNativeDriver: true },
             },
             [ANIMATABLE_PROPERTIES.OPACITY]: {
-                config: { toValue: 1, duration: 300, useNativeDriver: true },
+                config: { toValue: 1, duration: 500, useNativeDriver: true },
             }
         }
         const initialValues = {
@@ -48,7 +48,24 @@ const useNumberInputAnimationConfig = (
         return [config, initialValues]
     }
 
-    return [animationsConfig, {}]
+    if (ANIMATABLE_PROPERTIES.FONT_SIZE in animationsConfig) {
+        return [animationsConfig, {}]
+    }
+
+    const anim = {
+        ...animationsConfig,
+        [ANIMATABLE_PROPERTIES.FONT_SIZE]: {
+            config: { toValue: 1, duration: 300, useNativeDriver: true },
+        },
+        [ANIMATABLE_PROPERTIES.OPACITY]: {
+            config: { toValue: 1, duration: 300, useNativeDriver: true },
+        }
+    }
+
+    return [anim, {
+        [ANIMATABLE_PROPERTIES.FONT_SIZE]: 1.8,
+        [ANIMATABLE_PROPERTIES.OPACITY]: 0
+    }]
 }
 
 const CellNumberInput: React.FC<Props> = ({
@@ -60,9 +77,10 @@ const CellNumberInput: React.FC<Props> = ({
     withoutLineHeight,
     animationsConfig: _animationsConfig,
     animateNumberInsertion = false,
+    cell
 }) => {
 
-    const [animationConfig, animInitialValues] = useNumberInputAnimationConfig(value, animateNumberInsertion, _animationsConfig)
+    const [animationConfig, animInitialValues] = useNumberInputAnimationConfig(value, animateNumberInsertion, _animationsConfig, cell)
 
     const {
         fontSizeAnim,

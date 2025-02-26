@@ -111,7 +111,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     }
 
     const getCellBGColor = cell => {
-        if (!showCellContent) return null
+        // if (!showCellContent) return null
         if (showSmartHint) return getSmartHintActiveBgColor(cell)
         return getActiveGameBoardCellBgCell(cell)
     }

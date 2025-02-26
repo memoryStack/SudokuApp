@@ -85,6 +85,8 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
+    console.log('@@@@ cellBGColor', cellBGColor)
+
     const styles = useStyles(getStyles)
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
@@ -93,7 +95,6 @@ const Cell_ = ({
         borderWidthAnim,
         bgColorInterpolation: bgColor,
         borderColorInterpolation: borderColor,
-        animationConfigsMerge,
     } = useAnimateView({ ...cellAnimationsConfig.mainNumber })
 
     const getCellNotes = () => {
@@ -157,8 +158,9 @@ const Cell_ = ({
             textType={TEXT_VARIATIONS.HEADING_LARGE}
             withoutLineHeight
             animationsConfig={cellAnimationsConfig.mainNumber}
-            animated={ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge}
             animateNumberInsertion={animateNumberInsertion}
+            cell={{ row, col }}
+            animated
         />
     )
 
@@ -168,23 +170,19 @@ const Cell_ = ({
         return getCellNotes()
     }
 
-    const animateCell = [
-        ANIMATABLE_PROPERTIES.BG_COLOR,
-        ANIMATABLE_PROPERTIES.BORDER_WIDTH,
-        ANIMATABLE_PROPERTIES.BORDER_COLOR,
-    ].some((animatableProperty) => {
-        return animatableProperty in animationConfigsMerge
-    })
-
     return (
         // let's use opacity only, this supports passing null as child as well
         <Touchable
             activeOpacity={1}
-            style={[styles.cell, cellBGColor]}
+            style={[styles.cell]}
             onPress={() => onCellClick({ row, col })}
             testID={BOARD_CELL_TEST_ID}
-            isAnimated={animateCell}
-            animatableStyles={[styles.cell, { backgroundColor: bgColor, borderWidth: borderWidthAnim, borderColor: borderColor }]}
+            animatableStyles={[styles.cell, {
+                backgroundColor: bgColor,
+                borderWidth: borderWidthAnim,
+                borderColor: borderColor
+            }]}
+            isAnimated
         >
             {showCellContent ? getCellContent() : null}
         </Touchable>
