@@ -2,6 +2,7 @@ import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 
 import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import { transformNativeGeneratedPuzzle } from './nativeGeneratedPuzzleTransformer'
+import { HINTS_IDS } from 'src/apps/arena/utils/smartHints/constants'
 
 type GeneratedPuzzle = {
     clues: number[]
@@ -20,7 +21,7 @@ const getSudokuPuzzle = async (minClues: number): Promise<MainNumbers> => {
 
 const validatePuzzle = (puzzle: string) => RNSudokuPuzzle.validatePuzzle(puzzle)
 
-const getRawHints = (puzzle: string, notes: Notes, disabledHints: string[]): Promise<RawHints> => {
+const getRawHints = (puzzle: string, notes: Notes, disabledHints: HINTS_IDS[]): Promise<RawHints> => {
     return RNSudokuPuzzle.getRawHints(puzzle, notes, disabledHints)
         .then((data) => {
             return data

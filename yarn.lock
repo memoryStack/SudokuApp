@@ -4070,7 +4070,7 @@
   "version" "2.1.1"
 
 "fast-sudoku-puzzles@git@github.com:memoryStack/SudokuPuzzleCPPModule.git#master":
-  "resolved" "git+ssh://git@github.com/memoryStack/SudokuPuzzleCPPModule.git#5223543bff7136e2fa9449f2a476443bc3fc9862"
+  "resolved" "git+ssh://git@github.com/memoryStack/SudokuPuzzleCPPModule.git#fedd66588f0620ebca795a7cf1ec85d95bda6003"
   "version" "0.0.1"
 
 "fastq@^1.6.0":
@@ -7506,10 +7506,10 @@
     "semver" "^5.4.1"
     "source-map" "^0.5.6"
 
-"react-native@>= 0.30.0", "react-native@>=0.54.0", "react-native@0.66.3":
-  "integrity" "sha512-B/dQpuvta9YvF5MihDWefoGlTvxzUHK5X5RjdrXHAu/ihTehJXxEA+m6z/tufp1ZUMDjU+tMZK6gnehzCuYfzw=="
-  "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.66.3.tgz"
-  "version" "0.66.3"
+"react-native@>= 0.30.0", "react-native@>=0.54.0", "react-native@0.66.3", "react-native@0.66.5":
+  "integrity" "sha512-dC5xmE1anT+m8eGU0N/gv2XUWZygii6TTqbwZPsN+uMhVvjxt4FsTqpZOFFvA5sxLPR/NDEz8uybTvItNBMClw=="
+  "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.66.5.tgz"
+  "version" "0.66.5"
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"
