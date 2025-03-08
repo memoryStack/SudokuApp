@@ -230,6 +230,10 @@ const Arena_ = ({
         return <Button label="Fill" onPress={() => fillPuzzleUseCase(dependencies.boardRepository)} />
     }
 
+    const renderHuntPuzzles = () => {
+        return <Button label="Hunt Puzzles" onPress={() => onAction({ type: ACTION_TYPES.HUNT_PUZZLES, payload: { dependencies } })} />
+    }
+
     const renderHintsMenu = () => {
         if (!showHintsMenu) return null
         return <HintsMenu />
@@ -332,6 +336,7 @@ const Arena_ = ({
         >
             <View style={styles.contentContainer}>
                 {/* {renderFillPuzzleBtn()} */}
+                {renderHuntPuzzles()}
                 <Refree timer={timer} />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}

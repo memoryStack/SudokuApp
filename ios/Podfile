@@ -14,6 +14,8 @@ target 'SudokuNative' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'SudokuNativeTests' do
     inherit! :complete
     # Pods for testing

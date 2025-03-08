@@ -28,7 +28,7 @@ export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData,
     }))
 }
 
-const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
+export const HINT_ID_VS_RAW_HINT_TRANSFORMERS = {
     [HINTS_IDS.NAKED_SINGLE]: transformNakedSingleRawHint,
     [HINTS_IDS.HIDDEN_SINGLE]: transformHiddenSingleRawHint,
     [HINTS_IDS.NAKED_DOUBLE]: transformNakedGroupRawHint,
