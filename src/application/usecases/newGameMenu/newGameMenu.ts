@@ -20,7 +20,7 @@ export const isGenerateNewPuzzleItem = (itemId: START_GAME_MENU_ITEMS_IDS) => {
         AUTO_GENERATED_NEW_GAME_IDS.EASY,
         AUTO_GENERATED_NEW_GAME_IDS.MEDIUM,
         AUTO_GENERATED_NEW_GAME_IDS.HARD,
-        AUTO_GENERATED_NEW_GAME_IDS.EXPERT,
+        // AUTO_GENERATED_NEW_GAME_IDS.EXPERT,
     ]
     return newGameMenuItems.includes(itemId as unknown as AUTO_GENERATED_NEW_GAME_IDS)
 }
@@ -81,7 +81,7 @@ export const getMenuItemsToShow = async (dependencies: Dependencies) => {
         START_GAME_MENU_ITEMS_IDS.EASY,
         START_GAME_MENU_ITEMS_IDS.MEDIUM,
         START_GAME_MENU_ITEMS_IDS.HARD,
-        START_GAME_MENU_ITEMS_IDS.EXPERT,
+        // START_GAME_MENU_ITEMS_IDS.EXPERT,
         START_GAME_MENU_ITEMS_IDS.CUSTOMIZE_PUZZLE,
     ]
 

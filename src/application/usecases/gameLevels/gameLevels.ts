@@ -4,7 +4,7 @@ import { GameLevelsInfo } from "./type"
 import { LEVEL_STATES } from "./constants"
 import { COMPLETED_GAME_STATS } from "@application/adapterInterfaces/gameLevels"
 
-const MAX_GAMES_IN_LEVEL = 1000
+const MAX_GAMES_IN_LEVEL = 200
 
 export const getGameLevelsUseCase = async (
     selectedLevel: AUTO_GENERATED_NEW_GAME_IDS,
@@ -15,11 +15,13 @@ export const getGameLevelsUseCase = async (
 
     const maxStars = completedGames.length * 3 // TODO : put it in a central place
 
-    if (completedGames.length === MAX_GAMES_IN_LEVEL) return {
-        levels: completedGames,
-        nextPuzzleIndex: completedGames.length - 1,
-        maxStars,
-        starsEarned
+    if (completedGames.length === MAX_GAMES_IN_LEVEL) {
+        return {
+            levels: completedGames,
+            nextPuzzleIndex: completedGames.length - 1,
+            maxStars,
+            starsEarned
+        }
     }
 
     completedGames.push({
