@@ -7,6 +7,7 @@ module.exports = {
         '<rootDir>/jestSetupFiles/mockRNSwitchComponent.js',
         '<rootDir>/jestSetupFiles/nativeAnimatedHelper.js',
         '<rootDir>/jestSetupFiles/i18n.js',
+        '<rootDir>/jestSetupFiles/recyclerlistview.js',
     ],
     testResultsProcessor: 'jest-sonar-reporter',
     // collectCoverage: true,

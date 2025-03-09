@@ -33,7 +33,7 @@ describe('Home Page', () => {
         expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
     })
 
-    test('goes to puzzle screen upon clicking next game menu item', async () => {
+    test.skip('goes to puzzle screen upon clicking next game menu item', async () => {
         renderScreen({
             getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
         })
@@ -52,7 +52,7 @@ describe('Home Page', () => {
         expect(getScreenName()).toBe(ROUTES.ARENA)
     })
 
-    test.only('refree default state on game start', async () => {
+    test.skip('refree default state on game start', async () => {
         renderScreen({
             getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
         })

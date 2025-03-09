@@ -74,7 +74,9 @@ export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
 }
 
 export const hasPuzzleStarted = async () => {
-    await screen.findByTestId(TIMER_PAUSE_ICON_TEST_ID)
+    await waitFor(() => {
+        expect(screen.queryByTestId(TIMER_PAUSE_ICON_TEST_ID)).toBeOnTheScreen()
+    })
 }
 
 export const expectOnAllBoardCells = expectCallback => {

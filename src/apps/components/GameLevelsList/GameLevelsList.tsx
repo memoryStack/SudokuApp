@@ -80,6 +80,7 @@ const GameLevelsList: React.FC<Props> = ({
     const rowRenderer = (type, data: Level) => {
         return (
             <Touchable
+                testID={`LEVEL-${data.levelNum}`}
                 onPress={() => onPuzzleClick({ levelNum: data.levelNum })}
                 disabled={data.state === LEVEL_STATES.LOCKED}
             >

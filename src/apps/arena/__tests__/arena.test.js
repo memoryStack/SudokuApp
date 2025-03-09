@@ -27,14 +27,23 @@ import { assertHintsLeft } from '@utils/testing/smartHints'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
-import { GAME_OVER_CARD_OVERLAY_TEST_ID } from '../constants'
+import { GAME_OVER_CARD_OVERLAY_TEST_ID, PUZZLES_LEVELS_LIST_CONTAINER } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
 import { NEXT_GAME_MENU_TEST_ID } from '../nextGameMenu/nextGameMenu.constants'
 import { MAX_AVAILABLE_HINTS } from '../store/state/boardController.state'
+import { getGameLevelsUseCase } from '@application/usecases/gameLevels/gameLevels'
+import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
 
 const storageUtils = require('@utils/storage')
+
+jest.mock('@application/usecases/gameLevels/gameLevels', () => {
+    return {
+        ...jest.requireActual('@application/usecases/gameLevels/gameLevels'),
+        getGameLevelsUseCase: jest.fn(),
+    }
+})
 
 jest.mock('../../../adapters/puzzle', () => {
     const originalPuzzleModule = jest.requireActual('../../../adapters/puzzle')
@@ -601,6 +610,18 @@ describe('Game Over Card', () => {
 describe('Start New Game', () => {
     beforeEach(() => {
         jest.useFakeTimers()
+        getGameLevelsUseCase.mockImplementation(() => {
+            return Promise.resolve({
+                levels: [{
+                    state: LEVEL_STATES.UNLOCKED,
+                    activeStars: 0,
+                    levelNum: 1,
+                }],
+                nextPuzzleIndex: 1,
+                starsEarned: 0,
+                maxStars: 3,
+            })
+        })
     })
     afterEach(() => {
         jest.useRealTimers()
@@ -614,9 +635,17 @@ describe('Start New Game', () => {
             fireEvent.press(screen.getByText('New Game'))
             jest.advanceTimersByTime(200)
         })
+
         expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
         const newGameMenu = within(screen.getByTestId(NEXT_GAME_MENU_TEST_ID))
         fireEvent.press(newGameMenu.getByText('EASY'))
+
+        await waitFor(() => {
+            expect(screen.queryByTestId('LEVEL-1')).toBeOnTheScreen()
+        })
+        act(() => {
+            fireEvent.press(screen.queryByTestId('LEVEL-1'))
+        })
 
         await hasPuzzleStarted()
     })
@@ -632,6 +661,13 @@ describe('Start New Game', () => {
         expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
         const newGameMenu = within(screen.getByTestId(NEXT_GAME_MENU_TEST_ID))
         fireEvent.press(newGameMenu.getByText('EASY'))
+
+        await waitFor(() => {
+            expect(screen.queryByTestId('LEVEL-1')).toBeOnTheScreen()
+        })
+        act(() => {
+            fireEvent.press(screen.queryByTestId('LEVEL-1'))
+        })
 
         await hasPuzzleStarted()
     })
