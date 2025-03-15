@@ -11,7 +11,7 @@ export type Game = {
 
 export const generateAndStartNewGameUseCase = async ({ difficultyLevel, levelNum }: Game, dependencies: Dependencies) => {
     const { puzzle } = dependencies
-    return puzzle.getSudokuPuzzle(GAME_LEVEL_VS_CLUES[difficultyLevel])
+    return puzzle.getSudokuPuzzle({ difficultyLevel, levelNum })
         .then((mainNumbers: MainNumbers) => {
             startGameUseCase({
                 mainNumbers,

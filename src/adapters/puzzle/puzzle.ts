@@ -3,19 +3,27 @@ import { RNSudokuPuzzle } from 'fast-sudoku-puzzles'
 import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import { transformNativeGeneratedPuzzle } from './nativeGeneratedPuzzleTransformer'
 import { HINTS_IDS } from 'src/apps/arena/utils/smartHints/constants'
-
-type GeneratedPuzzle = {
-    clues: number[]
-    solution: number[]
-}
+import { Game } from '@application/usecases/generateAndStartNewGame'
+import { ALL_PUZZLES } from './constants'
 
 type RawHints = {
     [hintId: string]: object
 }
 
-const getSudokuPuzzle = async (minClues: number): Promise<MainNumbers> => {
-    return RNSudokuPuzzle.getSudokuPuzzle(minClues).then((puzzle: GeneratedPuzzle) => {
-        return transformNativeGeneratedPuzzle(puzzle)
+const convertPuzzleStringToArrayOfNumbers = (puzzle: string) => {
+    const result = []
+    for (let i = 0; i < puzzle.length; i++) {
+        result.push(Number(puzzle[i]))
+    }
+    return result
+}
+
+const getSudokuPuzzle = async ({ difficultyLevel, levelNum }: Game): Promise<MainNumbers> => {
+    const puzzle = ALL_PUZZLES[difficultyLevel]?.[levelNum - 1]
+    if (!puzzle) throw `Invalid difficultyLevel ${difficultyLevel} or levelNum ${levelNum}`
+    return transformNativeGeneratedPuzzle({
+        clues: convertPuzzleStringToArrayOfNumbers(puzzle.clues),
+        solution: convertPuzzleStringToArrayOfNumbers(puzzle.solution)
     })
 }
 
