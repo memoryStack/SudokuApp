@@ -12,7 +12,6 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import withActions from '@utils/hocs/withActions'
 
 import { Level } from '@application/usecases/gameLevels/type'
-import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
 import { useDependency } from 'src/hooks/useDependency'
 import _isNil from '@lodash/isNil'
 import { addListener, removeListener } from '@utils/GlobalEventBus'
@@ -82,7 +81,6 @@ const GameLevelsList: React.FC<Props> = ({
             <Touchable
                 testID={`LEVEL-${data.levelNum}`}
                 onPress={() => onPuzzleClick({ levelNum: data.levelNum })}
-                disabled={data.state === LEVEL_STATES.LOCKED}
             >
                 <LevelCard {...data} containerStyle={styles.levelContainer} />
             </Touchable>

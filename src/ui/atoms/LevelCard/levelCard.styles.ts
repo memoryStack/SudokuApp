@@ -3,17 +3,11 @@ import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
 import { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 import { CARD_DIMENSIONS } from './levelCard.constants'
-import { getContainerBackgroundColor, getTextColor } from '@ui/molecules/Button/button.styles'
-import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
+import { getTextColor } from '@ui/molecules/Button/button.styles'
 
 const disabledButtonConfig = {
     type: BUTTON_TYPES.FILLED,
     state: BUTTON_STATES.DISABLED
-}
-
-const getContainerBGColor = (levelState, theme) => {
-    if (levelState !== LEVEL_STATES.LOCKED) return null
-    return getContainerBackgroundColor(disabledButtonConfig, theme)
 }
 
 export const getStyles = ({ levelState }, theme) => {
@@ -27,7 +21,6 @@ export const getStyles = ({ levelState }, theme) => {
             borderRadius: 8,
             borderWidth: 1,
             borderColor: _get(theme, ['colors', 'outline-variant']),
-            backgroundColor: getContainerBGColor(levelState, theme)
         },
         levelText: { marginTop: 4 },
         starsContainer: {

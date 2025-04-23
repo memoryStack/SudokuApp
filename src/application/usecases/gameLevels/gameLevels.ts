@@ -3,8 +3,7 @@ import { AUTO_GENERATED_NEW_GAME_IDS } from "../newGameMenu/constants"
 import { GameLevelsInfo } from "./type"
 import { LEVEL_STATES } from "./constants"
 import { COMPLETED_GAME_STATS } from "@application/adapterInterfaces/gameLevels"
-
-const MAX_GAMES_IN_LEVEL = 200
+import { ALL_PUZZLES } from "@adapters/puzzle/constants"
 
 export const getGameLevelsUseCase = async (
     selectedLevel: AUTO_GENERATED_NEW_GAME_IDS,
@@ -13,7 +12,9 @@ export const getGameLevelsUseCase = async (
     const { gameLevelsAdapter } = dependencies
     const { levels: completedGames, starsEarned } = await gameLevelsAdapter.getGameLevels(selectedLevel)
 
-    const maxStars = completedGames.length * 3 // TODO : put it in a central place
+    const MAX_GAMES_IN_LEVEL = ALL_PUZZLES[selectedLevel].length
+
+    const maxStars = MAX_GAMES_IN_LEVEL * 3 // TODO : put it in a central place
 
     if (completedGames.length === MAX_GAMES_IN_LEVEL) {
         return {

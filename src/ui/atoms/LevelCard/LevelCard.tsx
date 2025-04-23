@@ -11,7 +11,6 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './levelCard.styles'
 
-import { LevelStarIcon } from '@resources/svgIcons/levelStar'
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import { LockIcon } from '@resources/svgIcons/lock'
 import { PlayIcon } from '@resources/svgIcons/play'
@@ -26,13 +25,6 @@ export interface Props {
     testID?: string
 }
 
-const getStarsActiveInfo = (activeStars: number) => {
-    if (activeStars === 1) return { 0: true, 1: false, 2: false, }
-    if (activeStars === 2) return { 0: true, 1: false, 2: true, }
-    if (activeStars === 3) return { 0: true, 1: true, 2: true, }
-    return { 0: false, 1: false, 2: false, }
-}
-
 const LevelCard: React.FC<Props> = ({
     levelNum = 0,
     state = LEVEL_STATES.LOCKED,
@@ -43,19 +35,6 @@ const LevelCard: React.FC<Props> = ({
     const styles = useStyles(getStyles, { levelState: state })
 
     const theme = useThemeValues()
-
-    const renderStars = () => {
-        const starsActiveInfo = getStarsActiveInfo(activeStars)
-        return (
-            <View style={styles.starsContainer}>
-                <LevelStarIcon active={starsActiveInfo[0]} />
-                <View style={styles.middleStar}>
-                    <LevelStarIcon active={starsActiveInfo[1]} />
-                </View>
-                <LevelStarIcon active={starsActiveInfo[2]} />
-            </View>
-        )
-    }
 
     const levelNumberView = (style = null) => {
         return (
@@ -85,7 +64,12 @@ const LevelCard: React.FC<Props> = ({
     const renderLockedLevel = () => {
         return (
             <>
-                <LockIcon fill={styles.disabledLevelText.color} />
+                {/* <LockIcon fill={styles.disabledLevelText.color} /> */}
+                <LevelStars
+                    activeStars={0}
+                    containerStyle={styles.starsContainer}
+                    middleStarStyle={styles.middleStar}
+                />
                 {levelNumberView(styles.disabledLevelText)}
             </>
         )
