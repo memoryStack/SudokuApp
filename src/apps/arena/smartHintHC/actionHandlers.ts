@@ -1,7 +1,6 @@
 import { GAME_STATE } from '@resources/constants'
 
 import { StatePropsHandlers } from '@utils/hocs/withActions/types'
-import { Dependencies } from '@contexts/DependencyContext'
 import _isEmpty from '@lodash/isEmpty'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
@@ -13,16 +12,24 @@ import { Hint } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from './helpers'
 import { applyHintUseCase } from '@application/usecases/board'
 import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase } from '@application/usecases/smartHint/smartHint'
+import { ArenaAnalyticsHandler, HintVisibleEventData, ScreenAnalyticsHandlers } from '@application/analyticsInterfaces/types'
+import type { Dependencies } from '@contexts/DependencyContext'
 
 type StateMaintainedByWithActionHOC = {
     focusedCells: Hint['focusedCells']
     styles: {
         snackBar: object
     }
+    analyticsData: HintVisibleEventData
+    // analytics: ScreenAnalyticsHandlers
+    analytics: ArenaAnalyticsHandler
 }
 
-const handleOnInit = ({ setState, params: { focusedCells, styles } }: StatePropsHandlers & { params: StateMaintainedByWithActionHOC }) => {
+const handleOnInit = ({ setState, params: { focusedCells, styles, analytics, analyticsData } }: StatePropsHandlers & {
+    params: StateMaintainedByWithActionHOC
+}) => {
     setState({ focusedCells, styles })
+    analytics?.sendSmartHintVisibleEvent?.(analyticsData)
 }
 
 const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {

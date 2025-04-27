@@ -4,7 +4,7 @@ import _isNil from '@lodash/isNil'
 
 import { consoleLog } from './util'
 
-const getKey = async (KEY: string) => {
+const getKey = async <T>(KEY: string): Promise<T | null> => {
     if (!KEY) return null
     try {
         const value = await AsyncStorage.getItem(KEY)

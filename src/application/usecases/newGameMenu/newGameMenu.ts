@@ -45,7 +45,7 @@ const startPersistedGameUseCase = async (dependencies: Dependencies) => {
 
 // update the contract here
 export const handleMenuItemPress = (
-    { itemId, levelNum }: { itemId: NEW_GAME_IDS, levelNum: number },
+    { itemId, levelNum }: { itemId: START_GAME_MENU_ITEMS_IDS, levelNum: number },
     dependencies: Dependencies
 ) => {
     const { customPuzzleInputToggler } = dependencies
@@ -66,7 +66,7 @@ export const handleMenuItemPress = (
     }
 
     if (itemId === START_GAME_MENU_ITEMS_IDS.CUSTOMIZE_PUZZLE) {
-        customPuzzleInputToggler.open()
+        customPuzzleInputToggler?.open()
         return
     }
 

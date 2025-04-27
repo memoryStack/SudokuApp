@@ -17,7 +17,7 @@ import { ROUTES } from '../../../navigation/route.constants'
 import { NAVIGATION_PARAMS as HINTS_VOCABULARY_SCREEN_PARAMS } from '../../../apps/hintsVocabulary'
 import { getStyles } from './smartHintText.styles'
 
-interface Props extends TextProps {
+interface Props extends Omit<TextProps, 'children'> {
     text: string
 }
 

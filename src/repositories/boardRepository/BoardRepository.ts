@@ -12,6 +12,8 @@ import type {
     ToggleNotes,
     Move,
 } from '@application/adapterInterfaces/stateManagers/boardRepository'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 const {
     setState,
@@ -49,4 +51,13 @@ export const BoardRepository: BoardRepositoryInterface = {
     getMoves: () => getMoves(getStoreState()),
     getNotes: () => getNotesInfo(getStoreState()),
     getSelectedCell: () => getSelectedCell(getStoreState()),
+    getPuzzleString: () => {
+        const mainNumbers = getMainNumbers(getStoreState())
+        let result = ''
+        BoardIterators.forBoardEachCell((cell) => {
+            const cellValue = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
+            result += cellValue
+        })
+        return result
+    }
 }

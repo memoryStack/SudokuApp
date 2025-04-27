@@ -5,9 +5,10 @@ import type { GameStateRepository } from './adapterInterfaces/stateManagers/game
 import type { BoardControllerRepository } from './adapterInterfaces/stateManagers/boardControllerRepository'
 import type { PuzzleAdapter } from './adapterInterfaces/puzzleGenerator'
 import type { SnackBarAdapter } from './adapterInterfaces/snackbar'
-import type { GamePersistenceAdapter } from './adapterInterfaces/'
+import type { GamePersistenceAdapter } from './adapterInterfaces/gamePersistenceAdapter'
 import type { CustomPuzzleInputToggler } from './adapterInterfaces/customPuzzle'
 import type { GameLevelsAdapter } from './adapterInterfaces/gameLevels'
+import type { ScreenAnalyticsHandlers } from './analyticsInterfaces/types'
 
 export type Dependencies = {
     refreeRepository: RefreeRepository
@@ -18,6 +19,7 @@ export type Dependencies = {
     boardControllerRepository: BoardControllerRepository
     puzzle: PuzzleAdapter
     gamePersistenceAdapter: GamePersistenceAdapter
-    customPuzzleInputToggler: CustomPuzzleInputToggler
+    customPuzzleInputToggler?: CustomPuzzleInputToggler
     gameLevelsAdapter: GameLevelsAdapter
+    analytics: ScreenAnalyticsHandlers
 }

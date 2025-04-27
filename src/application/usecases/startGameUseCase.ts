@@ -43,7 +43,7 @@ export const startGameUseCase = ({
     hintsUsed = 0,
 }: StartGameData) => {
     const {
-        boardRepository, refreeRepository, gameStateRepository, boardControllerRepository,
+        boardRepository, refreeRepository, gameStateRepository, boardControllerRepository, analytics
     } = dependencies
 
     boardRepository.setState({ mainNumbers, notes, selectedCell, moves })
@@ -58,4 +58,10 @@ export const startGameUseCase = ({
     boardControllerRepository.setHintsUsed(hintsUsed)
 
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+
+    analytics?.sendPuzzleLifeCycleEvent({
+        puzzle: boardRepository.getPuzzleString(),
+        level: difficultyLevel,
+        status: GAME_STATE.ACTIVE
+    })
 }

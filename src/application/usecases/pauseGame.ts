@@ -49,8 +49,13 @@ const persistGameData = (
 export const pauseGame = (currentGameState: GAME_STATE, dependencies: Dependencies) => {
     if (!new GameState(currentGameState).isGameActive()) return
 
-    const { gameStateRepository } = dependencies
+    const { gameStateRepository, boardRepository, refreeRepository, analytics } = dependencies
     gameStateRepository.setGameState(GAME_STATE.INACTIVE)
     const previousGameState = currentGameState
     persistGameData(GAME_STATE.INACTIVE, previousGameState, dependencies)
+    analytics?.sendPuzzleLifeCycleEvent?.({
+        puzzle: boardRepository.getPuzzleString(),
+        level: refreeRepository.getGameLevel(),
+        status: GAME_STATE.INACTIVE
+    })
 }

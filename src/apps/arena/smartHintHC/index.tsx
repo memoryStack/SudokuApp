@@ -131,7 +131,24 @@ const SmartHintHC_: React.FC<Props> = ({
     }, [selectedCell, onActionFromProps, dependencies])
 
     useEffect(() => {
-        onAction({ type: ACTION_TYPES.ON_INIT, payload: { focusedCells, styles } })
+        const {
+            boardRepository,
+            refreeRepository,
+            analytics
+        } = dependencies
+        onAction({
+            type: ACTION_TYPES.ON_INIT,
+            payload: {
+                focusedCells,
+                styles,
+                analytics,
+                analyticsData: {
+                    puzzle: boardRepository.getPuzzleString(),
+                    level: refreeRepository.getGameLevel(),
+                    hint: hintId
+                }
+            }
+        })
     }, [])
 
     const smartHintHCRef = useRef(null)

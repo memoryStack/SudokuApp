@@ -38,3 +38,29 @@ export enum PUZZLE_SOLUTION_TYPES {
     UNIQUE_SOLUTION = 'UNIQUE_SOLUTION',
     MULTIPLE_SOLUTIONS = 'MULTIPLE_SOLUTIONS',
 }
+
+// these are copy from "src/navigation/route.constants.ts"
+enum DESIGN_SYSTEM_ROUTES {
+    DESIGN_SYSTEM = 'design_system',
+    BADGE = 'badge',
+    TYPOGRAPHY = 'typography',
+    BUTTON = 'button',
+    DIVIDER = 'divider',
+    DIALOG = 'dialog',
+    LEVEL_CARD = 'level_card',
+}
+
+export enum ROUTES {
+    HOME = 'home',
+    ARENA = 'arena',
+    PLAY_GUIDE = 'play_guide',
+    HINTS_VOCABULARY_EXPLAINATION = 'hints_vocabulary_explaination',
+    LEVELS = 'levels',
+    DESIGN_SYSTEM = DESIGN_SYSTEM_ROUTES.DESIGN_SYSTEM,
+    BADGE = DESIGN_SYSTEM_ROUTES.BADGE,
+    TYPOGRAPHY = DESIGN_SYSTEM_ROUTES.TYPOGRAPHY,
+    BUTTON = DESIGN_SYSTEM_ROUTES.BUTTON,
+    DIVIDER = DESIGN_SYSTEM_ROUTES.DIVIDER,
+    DIALOG = DESIGN_SYSTEM_ROUTES.DIALOG,
+    LEVEL_CARD = DESIGN_SYSTEM_ROUTES.LEVEL_CARD,
+}

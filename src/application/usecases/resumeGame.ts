@@ -7,4 +7,10 @@ export const resumeGame = (dependencies: Dependencies) => {
     const currentGameState = gameStateRepository.getGameState()
     if (!new GameState(currentGameState).isGameInactive()) return
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+    const { refreeRepository, boardRepository, analytics } = dependencies
+    analytics?.sendPuzzleLifeCycleEvent?.({
+        puzzle: boardRepository.getPuzzleString(),
+        level: refreeRepository.getGameLevel(),
+        status: GAME_STATE.ACTIVE
+    })
 }

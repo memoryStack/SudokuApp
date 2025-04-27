@@ -41,4 +41,5 @@ export interface BoardRepository {
     getMoves: () => Move[];
     getNotes: () => Notes;
     getSelectedCell: () => Cell;
+    getPuzzleString: () => string;
 }
