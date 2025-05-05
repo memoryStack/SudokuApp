@@ -18,10 +18,15 @@ class AnalyticsService {
         try {
             const response = await fetch(`${this.hostname}/api/sendEvent`, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // ← Critical header
+                    'Accept': 'application/json',       // ← Optional but good practice
+                },
                 body: JSON.stringify(eventData),
             });
         } catch (error) {
             // throw error;
+            console.log('@@@@@ error', error)
         }
     }
 }
