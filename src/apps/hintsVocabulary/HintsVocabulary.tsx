@@ -22,6 +22,8 @@ import { Page } from '../components/Page'
 import { HINTS_VOCAB_TITLE, NAVIGATION_PARAMS } from './hintsVocabulary.constants'
 
 import { VOCAB_COMPONENTS } from './vocabExplainations'
+import { useDependency } from 'src/hooks/useDependency'
+import { type HintsVocobularyAnalyticsHandler } from '@application/analyticsInterfaces/types'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -39,6 +41,8 @@ const HintsVocabulary_ = ({ navigation, route }) => {
     const stack = useRef(new Stack<StackEntry>()).current
 
     const styles = useStyles(getStyles)
+
+    const { analytics } = useDependency()
 
     useEffect(() => {
         const vocabKeyword = _get(route, ['params', NAVIGATION_PARAMS.VOCAB_KEYWORD])
@@ -90,6 +94,12 @@ const HintsVocabulary_ = ({ navigation, route }) => {
         const backHandler = BackHandler.addEventListener(EVENTS.HARDWARE_BACK_PRESS as BackPressEventName, backPressHandler)
         return () => backHandler.remove()
     }, [navigation, route])
+
+    useEffect(() => {
+        if (currentVocab?.keyword) {
+            (analytics as HintsVocobularyAnalyticsHandler)?.sendVocabularyViewEvent({ vocabulary: currentVocab.keyword })
+        }
+    }, [currentVocab, analytics])
 
     const renderNoExplainationFound = () => (
         <Text type={TEXT_VARIATIONS.DISPLAY_SMALL} style={styles.notFoundText}>

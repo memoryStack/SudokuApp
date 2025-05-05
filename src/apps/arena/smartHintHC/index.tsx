@@ -56,6 +56,7 @@ import {
 } from './constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { InputPanelNumbersVisibility } from '../utils/smartHints/types'
+import { ArenaAnalyticsHandler } from '@application/analyticsInterfaces/types'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -122,13 +123,14 @@ const SmartHintHC_: React.FC<Props> = ({
                 number: action.payload,
                 selectedCell,
                 dependencies,
+                hintId
             }
         }
         if (action.type === ACTION_TYPES.ON_ERASE_CLICK) {
-            action.payload = { dependencies }
+            action.payload = { dependencies, hintId }
         }
         onActionFromProps(action)
-    }, [selectedCell, onActionFromProps, dependencies])
+    }, [hintId, selectedCell, onActionFromProps, dependencies])
 
     useEffect(() => {
         const {

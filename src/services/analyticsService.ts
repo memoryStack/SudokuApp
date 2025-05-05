@@ -24,6 +24,7 @@ class AnalyticsService {
                 },
                 body: JSON.stringify(eventData),
             });
+            console.log('@@@@@ analytics resp', response)
         } catch (error) {
             // throw error;
             console.log('@@@@@ error', error)

@@ -23,6 +23,7 @@ type StateMaintainedByWithActionHOC = {
     analyticsData: HintVisibleEventData
     // analytics: ScreenAnalyticsHandlers
     analytics: ArenaAnalyticsHandler
+    sentHintTryoutEvent: boolean
 }
 
 const handleOnInit = ({ setState, params: { focusedCells, styles, analytics, analyticsData } }: StatePropsHandlers & {
@@ -60,11 +61,24 @@ const handleCellClick = ({ params: { cell, dependencies } }: { params: { cell: C
     smartHintRepository.setTryOutSelectedCell(cell)
 }
 
+const sendTryoutUsedEvent = ({
+    getState,
+    setState,
+    dependencies,
+    hintId
+}: StatePropsHandlers & { dependencies: Dependencies, hintId: string }) => {
+    const { sentHintTryoutEvent = false } = getState() as StateMaintainedByWithActionHOC
+    if (!sentHintTryoutEvent) {
+        (dependencies?.analytics as ArenaAnalyticsHandler).sendHintTryoutUsedEvent({ hint: hintId })
+        setState({ sentHintTryoutEvent: true })
+    }
+}
+
 const handleNumberClick = ({
     getState,
     setState,
-    params: { number, selectedCell, dependencies },
-}: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell, dependencies: Dependencies } }) => {
+    params: { number, selectedCell, dependencies, hintId },
+}: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell, dependencies: Dependencies, hintId: string } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
 
     const { smartHintRepository, boardRepository } = dependencies
@@ -77,13 +91,26 @@ const handleNumberClick = ({
     }
 
     inputTryOutNumberUseCase(number, focusedCells, styles.snackBar, dependencies)
+
+    sendTryoutUsedEvent({
+        getState,
+        setState,
+        dependencies,
+        hintId
+    })
 }
 
 const handleEraserClick = ({
-    getState, params: { dependencies },
-}: StatePropsHandlers & { params: { dependencies: Dependencies } }) => {
+    getState, setState, params: { dependencies, hintId },
+}: StatePropsHandlers & { params: { dependencies: Dependencies, hintId: string } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
     eraseTryOutNumberUseCase(focusedCells, styles.snackBar, dependencies)
+    sendTryoutUsedEvent({
+        getState,
+        setState,
+        dependencies,
+        hintId
+    })
 }
 
 const handleApplyHintClick = ({ params: { applyHintChanges, dependencies } }: { params: { applyHintChanges: ApplyHint, dependencies: Dependencies } }) => {

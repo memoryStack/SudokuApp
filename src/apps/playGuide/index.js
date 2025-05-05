@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -17,9 +17,16 @@ import { generateMainNumbersFromPuzzleString } from '../arena/utils/util'
 import { cellsHighlightData } from './boardData'
 import { RULES_TEXT_CONFIG, PUZZLE } from './playGuide.constants'
 import { getStyles } from './playGuide.styles'
+import { useDependency } from 'src/hooks/useDependency'
 
 const PlayGuide_ = () => {
     const styles = useStyles(getStyles)
+
+    const { analytics } = useDependency()
+
+    useEffect(() => {
+        analytics.sendPlayGuideOpenedEvent()
+    }, [])
 
     const getCellBGColor = (cell, isPuzzleSolved) => {
         if (isPuzzleSolved) return null
