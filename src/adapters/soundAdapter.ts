@@ -1,4 +1,5 @@
 import _forEach from '@lodash/forEach';
+import { consoleLog } from '@utils/util';
 import Sound from 'react-native-sound';
 
 import { SOUNDS, SoundAdapter } from "src/interfaces/soundAdapter"
@@ -10,9 +11,9 @@ interface Adapter extends SoundAdapter {
 
 const SoundResources: Record<SOUNDS, string> = {
     [SOUNDS.CELL_CLICK]: require('@resources/sounds/cell_click.mp3'),
-    [SOUNDS.ERASER_CLICK]: require('@resources/sounds/eraser_sound.mp3'),
-    [SOUNDS.NUMBER_INPUT]: require('@resources/sounds/cell_click.mp3'),
-    [SOUNDS.MISTAKE]: require('@resources/sounds/mistake.mp3'),
+    [SOUNDS.ERASER_CLICK]: require('@resources/sounds/eraser.mp3'),
+    [SOUNDS.NUMBER_INPUT]: require('@resources/sounds/number_input.mp3'),
+    [SOUNDS.MISTAKE]: require('@resources/sounds/error.mp3'),
     [SOUNDS.GAME_OVER]: require('@resources/sounds/game_over.mp3'),
     [SOUNDS.GAME_SOLVED]: require('@resources/sounds/game_solved.mp3'),
 }
@@ -26,17 +27,29 @@ const Sounds: Record<SOUNDS, Sound | null> = {
     [SOUNDS.GAME_SOLVED]: null,
 }
 
+const SoundsViolume: Record<SOUNDS, number> = {
+    [SOUNDS.CELL_CLICK]: 0.5,
+    [SOUNDS.ERASER_CLICK]: 1,
+    [SOUNDS.MISTAKE]: 1,
+    [SOUNDS.NUMBER_INPUT]: 1,
+    [SOUNDS.GAME_OVER]: 1,
+    [SOUNDS.GAME_SOLVED]: 1,
+}
+
 export const soundAdapter: Adapter = {
     initialized: false,
     initializationInProgress: false,
     init: async () => {
         Sound.setCategory('Playback')
         for (const [soundKey, resource] of Object.entries(SoundResources)) {
+            consoleLog('@@@@@ soundd', resource)
             const sound = new Sound(resource, (error) => {
                 // TODO: for some reason this callback is getting called only for success
                 if (error) {
-                    console.log('Failed to load sound');
+                    console.log('Failed to load sound', error);
                 } else {
+                    consoleLog('@@@@@ sound loading', soundKey)
+                    sound.setVolume(SoundsViolume[soundKey as SOUNDS] || 1)
                     Sounds[soundKey as SOUNDS] = sound
                 }
             });
@@ -46,6 +59,7 @@ export const soundAdapter: Adapter = {
     },
     play: async (sound: SOUNDS) => {
         if (!soundAdapter.initialized) return
+        consoleLog('@@@@', sound)
         Sounds[sound]?.play()
     }
 }
