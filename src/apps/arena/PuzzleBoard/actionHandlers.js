@@ -1,11 +1,16 @@
 import { GAME_STATE } from '@resources/constants'
 import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionTypes'
-import { INITIAL_STATE } from '../store/state/board.state'
 import { Board } from '@domain/board/board'
+import { SOUNDS } from 'src/interfaces/soundAdapter'
+import { areSameCells } from '@domain/board/utils/housesAndCells'
 
 const handleCellPress = ({ params: { cell, dependencies } }) => {
-    const { boardRepository } = dependencies
-    boardRepository.setSelectedCell(cell)
+    const { boardRepository, soundAdapter } = dependencies
+
+    if (!areSameCells(cell, boardRepository.getSelectedCell())) {
+        soundAdapter.play(SOUNDS.CELL_CLICK)
+        boardRepository.setSelectedCell(cell)
+    }
 }
 
 const handleMainNumbersUpdate = ({ params: { mainNumbers, dependencies } }) => {

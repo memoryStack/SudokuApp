@@ -1,11 +1,16 @@
 import { useMemo, useContext } from 'react'
 
 import DependencyContext from '@contexts/DependencyContext'
-import { Dependencies } from '@application/type'
+import { Dependencies as ApplicationLayerDependencies } from '@application/type'
 import { useRoute } from '@react-navigation/native'
 import { getRouteNameFromRoute } from 'src/navigation/navigation.utils'
 import { AnalyticsHandlers } from '@adapters/analytics'
 import { ROUTES } from '@application/constants'
+import { SoundAdapter } from 'src/interfaces/soundAdapter'
+
+interface Dependencies extends ApplicationLayerDependencies {
+    soundAdapter: SoundAdapter
+}
 
 export const useDependency = (): Dependencies => {
     const dependencies = useContext(DependencyContext)

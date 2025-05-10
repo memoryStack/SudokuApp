@@ -41,6 +41,14 @@ type NotesRemovalHintAction = {
 // anywhere else
 type ApplyHintData = AddMainNumberHintAction[] | NotesRemovalHintAction[]
 
+interface InputNumberUseCaseDependencies extends Omit<Dependencies, 'sound'> {
+    sound: {
+        mistake: Sound,
+        addNumber: Sound,
+        removeNumber: Sound,
+    }
+}
+
 const constructMove = ({ mainNumber = {}, notes = {} }, selectedCell: Cell) => ({
     selectedCell,
     mainNumber,
@@ -66,8 +74,10 @@ export const fastPencilUseCase = (boardRepository: BoardRepository) => {
 }
 
 // TODO: make it isolated from selectedCell
-const inputMainNumber = (number: number, cell: Cell, dependencies: Dependencies) => {
-    const { boardRepository, refreeRepository } = dependencies
+const inputMainNumber = (number: number, cell: Cell, dependencies: InputNumberUseCaseDependencies) => {
+    const { boardRepository, refreeRepository, sound } = dependencies
+
+    console.log('@@@@@ sounss', sound)
 
     const selectedCell = cell
     const mainNumbers = boardRepository.getMainNumbers()
@@ -86,6 +96,7 @@ const inputMainNumber = (number: number, cell: Cell, dependencies: Dependencies)
             const { gameStateRepository } = dependencies
             gameStateRepository.setGameState(GAME_STATE.OVER_UNSOLVED)
         }
+        sound?.mistake?.play?.()
     } else {
         const notes = boardRepository.getNotes()
         const notesBunch = Board.getNotesToRemoveAfterMainNumberInput(number, selectedCell, notes)
@@ -95,13 +106,14 @@ const inputMainNumber = (number: number, cell: Cell, dependencies: Dependencies)
             action: BOARD_MOVES_TYPES.REMOVE,
             bunch: notesBunch,
         }
+        sound?.addNumber?.play?.()
     }
 
     boardRepository.setCellMainNumber({ cell: selectedCell, number })
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-const inputNoteNumber = (number: number, boardRepository: BoardRepository) => {
+const inputNoteNumber = (number: number, boardRepository: BoardRepository, sound: InputNumberUseCaseDependencies['sound']) => {
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
     if (isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
@@ -113,8 +125,10 @@ const inputNoteNumber = (number: number, boardRepository: BoardRepository) => {
 
     if (noteAlreadyPresent) {
         boardRepository.eraseNotesBunch(notesBunch)
+        sound?.removeNumber?.play?.()
     } else {
         boardRepository.setNotesBunch(notesBunch)
+        sound?.addNumber?.play?.()
     }
 
     const move = {
@@ -126,7 +140,7 @@ const inputNoteNumber = (number: number, boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const inputNumberUseCase = (number: number, dependencies: Dependencies) => {
+export const inputNumberUseCase = (number: number, dependencies: InputNumberUseCaseDependencies) => {
     const { boardRepository } = dependencies
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
@@ -134,7 +148,7 @@ export const inputNumberUseCase = (number: number, dependencies: Dependencies) =
 
     const { boardControllerRepository } = dependencies
     const pencilState = boardControllerRepository.getPencil()
-    if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, boardRepository)
+    if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, boardRepository, dependencies.sound)
     else inputMainNumber(number, selectedCell, dependencies)
 }
 
@@ -179,7 +193,7 @@ const eraseMainNumber = (boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapter: SnackBarAdapter) => {
+export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapter: SnackBarAdapter, sound: Sound) => {
     const mainNumbers = boardRepository.getMainNumbers()
     const selectedCell = boardRepository.getSelectedCell()
 
@@ -193,8 +207,12 @@ export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapt
 
     if (Board.isMainNumberEligibleToErase(selectedCell, mainNumbers)) {
         eraseMainNumber(boardRepository)
+        sound?.play?.()
     } else {
-        if (!MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) removeCellNotes(boardRepository)
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) {
+            removeCellNotes(boardRepository)
+            sound?.play?.()
+        }
     }
 }
 

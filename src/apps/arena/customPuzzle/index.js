@@ -36,7 +36,7 @@ const CustomPuzzle_ = ({
     const customPuzzleRef = useRef(null)
 
     useEffect(() => {
-        onAction({ type: ACTION_TYPES.ON_INIT })
+        onAction({ type: ACTION_TYPES.ON_INIT, payload: { dependencies } })
     }, [onAction])
 
     const handleOnClose = useCallback(() => {
@@ -48,7 +48,7 @@ const CustomPuzzle_ = ({
     }, [onAction, dependencies])
 
     const onCellClick = useCallback(cell => {
-        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: cell })
+        onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies } })
     }, [onAction])
 
     const getCellBGColor = cell => {

@@ -22,4 +22,5 @@ export type Dependencies = {
     customPuzzleInputToggler?: CustomPuzzleInputToggler
     gameLevelsAdapter: GameLevelsAdapter
     analytics: ScreenAnalyticsHandlers
+    sound: Sound
 }

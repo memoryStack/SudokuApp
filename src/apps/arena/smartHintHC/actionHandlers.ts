@@ -11,9 +11,13 @@ import { InputNumber } from '../inputPanel'
 import { Hint } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from './helpers'
 import { applyHintUseCase } from '@application/usecases/board'
-import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase } from '@application/usecases/smartHint/smartHint'
+import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase, isValidInputNumberClick } from '@application/usecases/smartHint/smartHint'
 import { ArenaAnalyticsHandler, HintVisibleEventData, ScreenAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 import type { Dependencies } from '@contexts/DependencyContext'
+import { areSameCells } from '@domain/board/utils/housesAndCells'
+import { SOUNDS } from 'src/interfaces/soundAdapter'
+import _noop from '@lodash/noop'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 type StateMaintainedByWithActionHOC = {
     focusedCells: Hint['focusedCells']
@@ -58,7 +62,10 @@ const handlePrevClick = ({ params: { dependencies } }: { params: { dependencies:
 
 const handleCellClick = ({ params: { cell, dependencies } }: { params: { cell: Cell, dependencies: Dependencies } }) => {
     const { smartHintRepository } = dependencies
+
+    if (areSameCells(cell, smartHintRepository.getTryOutSelectedCell() as Cell)) return
     smartHintRepository.setTryOutSelectedCell(cell)
+    dependencies?.soundAdapter?.play(SOUNDS.CELL_CLICK)
 }
 
 const sendTryoutUsedEvent = ({
@@ -82,15 +89,25 @@ const handleNumberClick = ({
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
 
     const { smartHintRepository, boardRepository } = dependencies
+    const tryOutMainNumbers = smartHintRepository.getTryOutMainNumbers()
+    const filledNumberInCell = MainNumbersRecord.getCellMainValue(tryOutMainNumbers as MainNumbers, selectedCell)
+    if (filledNumberInCell === number) return
+
     const isCellFilledInTryOut = cellHasTryOutInput(selectedCell, {
-        tryOutMainNumbers: smartHintRepository.getTryOutMainNumbers() as MainNumbers,
+        tryOutMainNumbers: tryOutMainNumbers as MainNumbers,
         actualMainNumbers: boardRepository.getMainNumbers(),
     })
-    if (isCellFilledInTryOut) {
-        handleEraserClick({ getState, setState, params: { dependencies } })
-    }
 
-    inputTryOutNumberUseCase(number, focusedCells, styles.snackBar, dependencies)
+    const numberWillBeInserted = isValidInputNumberClick(number, smartHintRepository)
+    if (numberWillBeInserted && isCellFilledInTryOut) {
+        handleEraserClick({ getState, setState, params: { dependencies, hintId, avoidEraseSound: true } })
+    }
+    inputTryOutNumberUseCase(number, focusedCells, styles.snackBar, {
+        ...dependencies,
+        sound: {
+            play: () => dependencies?.soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
+        }
+    })
 
     sendTryoutUsedEvent({
         getState,
@@ -101,10 +118,15 @@ const handleNumberClick = ({
 }
 
 const handleEraserClick = ({
-    getState, setState, params: { dependencies, hintId },
-}: StatePropsHandlers & { params: { dependencies: Dependencies, hintId: string } }) => {
+    getState, setState, params: { dependencies, hintId, avoidEraseSound },
+}: StatePropsHandlers & { params: { dependencies: Dependencies, hintId: string, avoidEraseSound?: boolean } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
-    eraseTryOutNumberUseCase(focusedCells, styles.snackBar, dependencies)
+    eraseTryOutNumberUseCase(focusedCells, styles.snackBar, {
+        ...dependencies,
+        sound: {
+            play: avoidEraseSound ? _noop : () => dependencies?.soundAdapter?.play?.(SOUNDS.ERASER_CLICK)
+        }
+    })
     sendTryoutUsedEvent({
         getState,
         setState,

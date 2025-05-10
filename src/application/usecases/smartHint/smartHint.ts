@@ -13,7 +13,7 @@ import { cellHasTryOutInput } from "./utils"
 
 const SNACKBAR_VISIBLE_TIME = 4000
 
-const isValidInputNumberClick = (number: MainNumberValue, smartHintRepository: SmartHintRepository) => {
+export const isValidInputNumberClick = (number: MainNumberValue, smartHintRepository: SmartHintRepository) => {
     const selectedCell = smartHintRepository.getTryOutSelectedCell() as Cell
     const mainNumbers = smartHintRepository.getTryOutMainNumbers() as MainNumbers
     const notes = smartHintRepository.getTryOutNotes() as Notes
@@ -60,7 +60,7 @@ export const inputTryOutNumberUseCase = (
     snackBarCustomStyles: any,
     dependencies: Dependencies
 ) => {
-    const { smartHintRepository, snackBarAdapter } = dependencies
+    const { smartHintRepository, snackBarAdapter, sound } = dependencies
     const selectedCell = smartHintRepository.getTryOutSelectedCell()
     if (_isEmpty(selectedCell)) {
         snackBarAdapter.show({
@@ -93,6 +93,8 @@ export const inputTryOutNumberUseCase = (
         inputNumber: number,
         removableNotes: getRemovalbeNotesHostCells(number, focusedCells, selectedCell, smartHintRepository.getTryOutNotes()),
     })
+
+    sound?.play?.()
 }
 
 const shouldSpawnNoteInCell = (
@@ -151,7 +153,7 @@ export const eraseTryOutNumberUseCase = (
     snackBarCustomStyles: any,
     dependencies: Dependencies
 ) => {
-    const { smartHintRepository, boardRepository, snackBarAdapter } = dependencies
+    const { smartHintRepository, boardRepository, snackBarAdapter, sound } = dependencies
     const selectedCell = smartHintRepository.getTryOutSelectedCell()
     if (_isNil(selectedCell)) return
 
@@ -170,4 +172,5 @@ export const eraseTryOutNumberUseCase = (
 
     const notesToBeSpawned = getNotesToEnterHostCells(focusedCells, dependencies)
     smartHintRepository.updateBoardDataOnTryOutErase(notesToBeSpawned)
+    sound?.play?.()
 }

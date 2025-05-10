@@ -20,6 +20,7 @@ import { Board } from '@domain/board/board'
 import { startGameUseCase } from '@application/usecases/startGameUseCase'
 import { CUSTOMIZED_PUZZLE_LEVEL_TITLE } from '@resources/constants'
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
+import { SOUNDS } from 'src/interfaces/soundAdapter'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -105,12 +106,12 @@ const initBoardData = () => {
 
 export const getInitialState = () => initBoardData()
 
-const handleInit = ({ setState }) => {
-    setState({ ...initBoardData() })
+const handleInit = ({ setState, params: { dependencies } }) => {
+    setState({ ...initBoardData(), dependencies })
 }
 
 const handleInputNumberClick = ({ setState, getState, params: newInputValue }) => {
-    const { selectedCell, mainNumbers } = getState()
+    const { selectedCell, mainNumbers, dependencies } = getState()
     const { row, col } = selectedCell
     if (MainNumbersRecord.isCellFilledWithNumber(mainNumbers, newInputValue, selectedCell)) return
 
@@ -135,6 +136,7 @@ const handleInputNumberClick = ({ setState, getState, params: newInputValue }) =
             if (nextRow !== CELLS_IN_A_HOUSE) setState({ selectedCell: { row: nextRow, col: nextCol } })
         }, 0)
     }
+    dependencies?.soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
 }
 
 const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbers) => {
@@ -174,17 +176,19 @@ const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbe
 }
 
 const handleEraseClick = ({ setState, getState }) => {
-    const { selectedCell, mainNumbers } = getState()
+    const { selectedCell, mainNumbers, dependencies } = getState()
     const cellInputValue = mainNumbers[selectedCell.row][selectedCell.col].value
     mainNumbers[selectedCell.row][selectedCell.col].value = 0
     updateWronglyPlacedNumbersStatusInHouses(cellInputValue, selectedCell, mainNumbers)
     setState({ mainNumbers: [...mainNumbers] })
+    dependencies?.soundAdapter?.play(SOUNDS.ERASER_CLICK)
 }
 
-const handleCellClick = ({ setState, getState, params: cell }) => {
+const handleCellClick = ({ setState, getState, params: { cell, dependencies } }) => {
     const { selectedCell } = getState()
     if (areSameCells(selectedCell, cell)) return
     setState({ selectedCell: cell })
+    dependencies?.soundAdapter?.play?.(SOUNDS.CELL_CLICK)
 }
 
 const handleOnClose = ({ params: ref }) => {
