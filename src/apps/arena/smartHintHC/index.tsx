@@ -56,7 +56,7 @@ import {
 } from './constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { InputPanelNumbersVisibility } from '../utils/smartHints/types'
-import { ArenaAnalyticsHandler } from '@application/analyticsInterfaces/types'
+import { ArenaAnalyticsHandler } from '@application/adapterInterfaces/analytics'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 

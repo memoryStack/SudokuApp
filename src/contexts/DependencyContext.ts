@@ -9,7 +9,7 @@ import type { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
 import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import type { GamePersistenceAdapter } from '@application/adapterInterfaces/gamePersistenceAdapter'
 import { GameLevelsAdapter } from '@application/adapterInterfaces/gameLevels'
-import type { AllAnalyticsHandlers } from '@application/analyticsInterfaces/types'
+import type { AllAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {

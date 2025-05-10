@@ -12,7 +12,7 @@ import { Hint } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from './helpers'
 import { applyHintUseCase } from '@application/usecases/board'
 import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase } from '@application/usecases/smartHint/smartHint'
-import { ArenaAnalyticsHandler, HintVisibleEventData, ScreenAnalyticsHandlers } from '@application/analyticsInterfaces/types'
+import { ArenaAnalyticsHandler, HintVisibleEventData, ScreenAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 import type { Dependencies } from '@contexts/DependencyContext'
 
 type StateMaintainedByWithActionHOC = {

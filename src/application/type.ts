@@ -8,7 +8,7 @@ import type { SnackBarAdapter } from './adapterInterfaces/snackbar'
 import type { GamePersistenceAdapter } from './adapterInterfaces/gamePersistenceAdapter'
 import type { CustomPuzzleInputToggler } from './adapterInterfaces/customPuzzle'
 import type { GameLevelsAdapter } from './adapterInterfaces/gameLevels'
-import type { ScreenAnalyticsHandlers } from './analyticsInterfaces/types'
+import type { ScreenAnalyticsHandlers } from './adapterInterfaces/analytics'
 
 export type Dependencies = {
     refreeRepository: RefreeRepository

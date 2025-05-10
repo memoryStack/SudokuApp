@@ -1,6 +1,6 @@
 import {
     type PlayGuideAnalyticsHandler, PlayGuideStates
-} from "@application/analyticsInterfaces/types";
+} from "@application/adapterInterfaces/analytics";
 import { getClient, getEventCommonData } from "../helpers";
 
 const EVENT_NAMES = {

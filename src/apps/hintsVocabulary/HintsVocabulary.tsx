@@ -23,7 +23,7 @@ import { HINTS_VOCAB_TITLE, NAVIGATION_PARAMS } from './hintsVocabulary.constant
 
 import { VOCAB_COMPONENTS } from './vocabExplainations'
 import { useDependency } from 'src/hooks/useDependency'
-import { type HintsVocobularyAnalyticsHandler } from '@application/analyticsInterfaces/types'
+import { type HintsVocobularyAnalyticsHandler } from '@application/adapterInterfaces/analytics'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
