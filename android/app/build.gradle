@@ -188,6 +188,11 @@ android {
     }
     buildTypes {
         debug {
+            // flavour variables
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            buildConfigField "boolean", "IS_STAGE", "false"
+            buildConfigField "boolean", "IS_PROD", "false"
+
             debuggable true
             signingConfig signingConfigs.debug
             // Note: CodePush updates shouldn't be tested in Debug mode as they're overriden by the RN packager. However, because CodePush checks for updates in all modes, we must supply a key.
@@ -201,6 +206,10 @@ android {
             }
         }
         releaseStaging {
+            // flavour variables
+            buildConfigField "boolean", "IS_DEBUG", "false"
+            buildConfigField "boolean", "IS_STAGE", "true"
+            buildConfigField "boolean", "IS_PROD", "false"
             // adding this buildType to test the changes on release staging area just before making any bundle push
             // it will be exactly like release build
             signingConfig signingConfigs.releaseStaging
@@ -214,6 +223,10 @@ android {
             applicationIdSuffix ".releaseStaging"
         }
         release {
+            // flavour variables
+            buildConfigField "boolean", "IS_DEBUG", "false"
+            buildConfigField "boolean", "IS_STAGE", "false"
+            buildConfigField "boolean", "IS_PROD", "true"
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release

@@ -1,24 +1,27 @@
 package com.sudokunative;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
+
+import android.os.Build;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.zmxv.RNSound.RNSoundPackage;
-import com.horcrux.svg.SvgPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.views.text.ReactFontManager;
 import com.facebook.soloader.SoLoader;
+import com.microsoft.codepush.react.CodePush;
+
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import com.microsoft.codepush.react.CodePush;
-import org.jetbrains.annotations.Nullable;
-import android.content.BroadcastReceiver;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -35,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
             // Packages that cannot be autolinked yet can be added manually here, for
             // example:
             // packages.add(new MyReactNativePackage());
+               packages.add(new BuildConfigPackage());
             return packages;
         }
 

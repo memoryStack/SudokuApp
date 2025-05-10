@@ -1,3 +1,6 @@
+import { Platform } from "@utils/classes/platform";
+import { consoleLog } from "@utils/util";
+
 type EventPayload = Record<string, any>;
 
 class AnalyticsService {
@@ -13,18 +16,18 @@ class AnalyticsService {
             ...payload,
         };
 
-        console.log('@@@@@ event data', eventData)
-
         try {
             const response = await fetch(`${this.hostname}/api/sendEvent`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // ← Critical header
                     'Accept': 'application/json',       // ← Optional but good practice
+                    'dev': String(!Platform.isProd()),
                 },
+
                 body: JSON.stringify(eventData),
             });
-            console.log('@@@@@ analytics resp', response)
+            consoleLog('@@@@@ analytics resp', response)
         } catch (error) {
             // throw error;
             console.log('@@@@@ error', error)
