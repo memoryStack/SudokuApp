@@ -3,6 +3,7 @@ import _isEmpty from '@lodash/isEmpty'
 import _isNil from '@lodash/isNil'
 
 import { CELLS_IN_A_HOUSE, HOUSES_COUNT_OF_A_TYPE } from '../board.constants'
+import { BoardIterators } from '../utils/boardIterators'
 
 const getCellMainValue = (mainNumbers: MainNumbers, cell = {} as Cell): MainNumberValue =>
     _get(mainNumbers, [cell.row, cell.col, 'value'])
@@ -41,6 +42,23 @@ const initMainNumbers = () => {
     return result
 }
 
+const getOriginalPuzzleMainNumbers = (mainNumbers: MainNumbers) => {
+    const result: MainNumberValue[] = []
+    BoardIterators.forBoardEachCell(cell => {
+        const cellMainNumber: MainNumber = _get(mainNumbers, [cell.row, cell.col])
+        result.push(cellMainNumber.isClue ? cellMainNumber.value : 0)
+    })
+    return result
+}
+
+const getPuzzleCurrentMainNumbers = (mainNumbers: MainNumbers) => {
+    const result: MainNumberValue[] = []
+    BoardIterators.forBoardEachCell(cell => {
+        result.push(getCellMainValue(mainNumbers, cell))
+    })
+    return result
+}
+
 export const MainNumbersRecord = {
     getCellMainValue,
     getCellSolutionValue,
@@ -49,4 +67,6 @@ export const MainNumbersRecord = {
     isCellFilled,
     isClueCell,
     initMainNumbers,
+    getOriginalPuzzleMainNumbers,
+    getPuzzleCurrentMainNumbers,
 }

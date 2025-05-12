@@ -42,7 +42,6 @@ export const soundAdapter: Adapter = {
     init: async () => {
         Sound.setCategory('Playback')
         for (const [soundKey, resource] of Object.entries(SoundResources)) {
-            consoleLog('@@@@@ soundd', resource)
             const sound = new Sound(resource, (error) => {
                 // TODO: for some reason this callback is getting called only for success
                 if (error) {
@@ -59,7 +58,6 @@ export const soundAdapter: Adapter = {
     },
     play: async (sound: SOUNDS) => {
         if (!soundAdapter.initialized) return
-        consoleLog('@@@@', sound)
         Sounds[sound]?.play()
     }
 }

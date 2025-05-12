@@ -5,10 +5,10 @@ import { isGameActive } from '../utils/util'
 import { fastPencilUseCase, undoUseCase } from '@application/usecases/board'
 
 const handleUndoClick = ({ params: { dependencies } }) => {
-    const { boardRepository, gameStateRepository } = dependencies
+    const { boardRepository, gameStateRepository, analytics } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    undoUseCase(boardRepository)
+    undoUseCase(boardRepository, analytics)
 }
 
 const getNewPencilState = currentState => {
@@ -21,13 +21,17 @@ const handlePencilClick = ({ params: { dependencies } }) => {
     if (!isGameActive(gameStateRepository.getGameState())) return
 
     const currentState = boardControllerRepository.getPencil()
-    boardControllerRepository.setPencil(getNewPencilState(currentState))
+    const pencilNewState = getNewPencilState(currentState)
+    boardControllerRepository.setPencil(pencilNewState)
+    dependencies?.analytics?.sendPencilClickEvent?.({
+        statusAfterClick: pencilNewState
+    })
 }
 
 const handleFastPencilClick = ({ params: { dependencies } }) => {
-    const { boardRepository, gameStateRepository } = dependencies
+    const { boardRepository, gameStateRepository, analytics } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
-    fastPencilUseCase(boardRepository)
+    fastPencilUseCase(boardRepository, analytics)
 }
 
 const handleHintClick = ({ params: { dependencies } }) => {

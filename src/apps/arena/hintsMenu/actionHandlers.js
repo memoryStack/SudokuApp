@@ -12,15 +12,14 @@ import { getTransformedRawHints } from '../utils/smartHints'
 import { Puzzle } from '@adapters/puzzle'
 
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { emit } from '@utils/GlobalEventBus'
+import { EVENTS } from 'src/constants/events'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
+import { NotesRecord } from '@domain/board/records/notesRecord'
+import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 
-const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) => {
-    const puzzleMainNumbers = []
-    BoardIterators.forBoardEachCell(cell => {
-        puzzleMainNumbers.push(MainNumbersRecord.getCellMainValue(mainNumbers, cell))
-    })
-    const puzzle = puzzleMainNumbers.join('')
-
+const onInit = async ({ setState, getState, params: { mainNumbers, notes, dependencies } }) => {
+    const puzzle = MainNumbersRecord.getPuzzleCurrentMainNumbers(mainNumbers).join('')
     const disabledHints = []
     const rawHints = await Puzzle.getRawHints(puzzle, notes, disabledHints)
 
@@ -32,8 +31,32 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes } }) =>
         ]
     })
 
+    const availableHintsCount = hintsIds.length
     const { unmounting } = getState()
-    !unmounting && setState({ availableRawHints, availableHintsCount: hintsIds.length, hintsAnalyzed: true })
+    !unmounting && setState({ availableRawHints, availableHintsCount, hintsAnalyzed: true })
+
+    if (availableHintsCount === 0) {
+        emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
+            msg: 'Oops! no hints are found\nPlease check if all the cells are filled with all the guesses properly. Use Pencil if not done already.',
+            visibleTime: 3000,
+            customStyles: {
+                bottom: 50,
+            },
+        })
+
+        const boardNotes = {}
+        BoardIterators.forBoardEachCell((cell) => {
+            const cellNotes = NotesRecord.getCellVisibleNotesList(notes, cell)
+            if (cellNotes.length) boardNotes[convertBoardCellToNum(cell)] = cellNotes.join('')
+        })
+        dependencies?.analytics.sendNoHintsFoundEvent?.({
+            originalPuzzle: MainNumbersRecord.getOriginalPuzzleMainNumbers(mainNumbers).join(''),
+            puzzleCurrentState: {
+                mainNumbers: puzzle,
+                notes: boardNotes
+            }
+        })
+    }
 }
 
 const handleMenuItemPress = ({

@@ -1,4 +1,5 @@
 import { userDetailsAdapter } from "@adapters/userDetails";
+import { Platform } from "@utils/classes/platform";
 import AnalyticsService from "src/services/analyticsService";
 
 const getUserId = (() => {
@@ -21,6 +22,7 @@ export const getClient = (() => {
 export const getEventCommonData = async () => {
     return {
         userId: await getUserId(),
-        time: new Date().toString()
+        time: new Date().toString(),
+        build: Platform.getBuildDetails(),
     }
 }

@@ -24,4 +24,12 @@ export class Platform {
     static isProd() {
         return Platform.isAndroid() ? NativeModules.BuildConfig?.IS_PROD : !__DEV__
     }
+
+    static getBuildDetails() {
+        return {
+            version: Platform.isAndroid() ? NativeModules.BuildConfig?.VERSION : undefined,
+            versionCode: Platform.isAndroid() ? NativeModules.BuildConfig?.VERSION_CODE : undefined,
+            type: Platform.isAndroid() ? NativeModules.BuildConfig?.BUILD_TYPE : undefined,
+        }
+    }
 }
