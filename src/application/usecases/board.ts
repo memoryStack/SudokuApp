@@ -55,7 +55,7 @@ const constructMove = ({ mainNumber = {}, notes = {} }, selectedCell: Cell) => (
     notes,
 })
 
-export const fastPencilUseCase = (boardRepository: BoardRepository) => {
+export const fastPencilUseCase = (boardRepository: BoardRepository, analytics: Dependencies['analytics']) => {
     const mainNumbers = boardRepository.getMainNumbers()
     const notes = boardRepository.getNotes()
     const newNotesBunchToAdd = Board.getNewNotesToSpawn(mainNumbers, notes)
@@ -71,14 +71,12 @@ export const fastPencilUseCase = (boardRepository: BoardRepository) => {
 
     boardRepository.setNotesBunch(newNotesBunchToAdd)
     boardRepository.addMove(constructMove(move, boardRepository.getSelectedCell()))
+    analytics?.sendFastPencilClickEvent?.()
 }
 
 // TODO: make it isolated from selectedCell
 const inputMainNumber = (number: number, cell: Cell, dependencies: InputNumberUseCaseDependencies) => {
     const { boardRepository, refreeRepository, sound } = dependencies
-
-    console.log('@@@@@ sounss', sound)
-
     const selectedCell = cell
     const mainNumbers = boardRepository.getMainNumbers()
 
@@ -265,14 +263,15 @@ const undoNotes = (previousMove: any, boardRepository: BoardRepository) => {
     }
 }
 
-export const undoUseCase = (boardRepository: BoardRepository) => {
+export const undoUseCase = (boardRepository: BoardRepository, analytics: Dependencies['analytics']) => {
     const moves = boardRepository.getMoves()
-    if (!moves.length) return
+    if (moves.length) {
+        const previousMove = moves[moves.length - 1]
+        if (!previousMove.selectedCell) boardRepository.setSelectedCell(previousMove.selectedCell)
 
-    const previousMove = moves[moves.length - 1]
-    if (!previousMove.selectedCell) boardRepository.setSelectedCell(previousMove.selectedCell)
-
-    undoMainNumber(previousMove, boardRepository)
-    undoNotes(previousMove, boardRepository)
-    boardRepository.popMove()
+        undoMainNumber(previousMove, boardRepository)
+        undoNotes(previousMove, boardRepository)
+        boardRepository.popMove()
+    }
+    analytics?.sendUndoClickEvent?.()
 }

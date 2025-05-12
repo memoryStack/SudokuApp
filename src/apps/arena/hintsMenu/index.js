@@ -14,10 +14,9 @@ import Text from '@ui/atoms/Text'
 import StopTouchPropagation from '@ui/molecules/StopTouchPropagation'
 
 import { useStyles } from '@utils/customHooks/useStyles'
-import { emit } from '@utils/GlobalEventBus'
+
 
 import { useDependency } from '../../../hooks/useDependency'
-import { EVENTS } from '../../../constants/events'
 import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
@@ -36,9 +35,7 @@ import { getStyles } from './hintsMenu.styles'
 
 const COLUMNS_COUNT = 3
 
-const HintsMenu_ = ({
-    onAction, availableRawHints, hintsAnalyzed, availableHintsCount,
-}) => {
+const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const dependencies = useDependency()
 
     const { mainNumbers, notes } = useGameBoardInputs()
@@ -51,21 +48,9 @@ const HintsMenu_ = ({
         if (_isEmpty(mainNumbers) || _isEmpty(notes)) return
         onAction({
             type: ACTION_TYPES.ON_INIT,
-            payload: { mainNumbers, notes },
+            payload: { mainNumbers, notes, dependencies },
         })
     }, [onAction, mainNumbers, notes])
-
-    useEffect(() => {
-        if (hintsAnalyzed && availableHintsCount === 0) {
-            emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-                msg: 'Oops! no hints are found\nPlease check if all the cells are filled with all the guesses properly. Use Pencil if not done already.',
-                visibleTime: 7000,
-                customStyles: {
-                    bottom: 50,
-                },
-            })
-        }
-    }, [availableHintsCount, hintsAnalyzed])
 
     const onOverlayContainerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS, payload: { dependencies } })

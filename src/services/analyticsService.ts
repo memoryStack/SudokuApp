@@ -13,7 +13,7 @@ class AnalyticsService {
     async sendEvent(eventName: string, payload: EventPayload = {}): Promise<void> {
         const eventData = {
             event: eventName,
-            ...payload,
+            data: payload,
         };
 
         try {

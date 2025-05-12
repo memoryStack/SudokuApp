@@ -7,6 +7,10 @@ const EVENT_NAMES = {
     PUZZLE_LIFE_CYCLE: 'puzzleLifeCycle',
     SMART_HINT_VISIBLE: 'smartHintVisible',
     HINT_TRYOUT_USED: 'hintTryoutUsed',
+    PENCIL_CLICK: 'pencilClick',
+    FAST_PENCIL_CLICK: 'fastPencilClick',
+    NO_HINTS_FOUND: 'noHintsFound',
+    UNDO_CLICK: 'undoClick',
 }
 
 export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
@@ -24,5 +28,25 @@ export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
         const client = getClient()
         const commonData = await getEventCommonData()
         return client.sendEvent(EVENT_NAMES.HINT_TRYOUT_USED, { ...commonData, ...data })
+    },
+    sendPencilClickEvent: async (data) => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.PENCIL_CLICK, { ...commonData, ...data })
+    },
+    sendFastPencilClickEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.FAST_PENCIL_CLICK, { ...commonData })
+    },
+    sendNoHintsFoundEvent: async (data) => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.NO_HINTS_FOUND, { ...commonData, puzzle: data })
+    },
+    sendUndoClickEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.UNDO_CLICK, { ...commonData })
     },
 }

@@ -1,4 +1,4 @@
-import { ROUTES } from "@application/constants"
+import { PENCIL_STATE, ROUTES } from "@application/constants"
 
 export type HintVisibleEventData = {
     hint: string,
@@ -16,10 +16,26 @@ export type HintTryoutUsedEventData = {
     hint: string, // TODO: use enums here
 }
 
+export type PencilClickEventData = {
+    statusAfterClick: PENCIL_STATE
+}
+
+export type NoHintsFoundEventData = {
+    originalPuzzle: string,
+    puzzleCurrentState: {
+        mainNumbers: string,
+        notes: { [key: string]: number[] }
+    }
+}
+
 export type ArenaAnalyticsHandler = {
     sendSmartHintVisibleEvent: (data: HintVisibleEventData) => Promise<void>,
     sendPuzzleLifeCycleEvent: (data: PuzzleLifeCycleEvent) => Promise<void>,
     sendHintTryoutUsedEvent: (data: HintTryoutUsedEventData) => Promise<void>,
+    sendPencilClickEvent: (data: PencilClickEventData) => Promise<void>,
+    sendFastPencilClickEvent: () => Promise<void>,
+    sendNoHintsFoundEvent: (data: NoHintsFoundEventData) => Promise<void>,
+    sendUndoClickEvent: () => Promise<void>,
 }
 
 export type PlayGuideEventData = {
