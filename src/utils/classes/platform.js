@@ -27,9 +27,9 @@ export class Platform {
 
     static getBuildDetails() {
         return {
-            version: Platform.isAndroid() ? NativeModules.BuildConfig?.VERSION : undefined,
-            versionCode: Platform.isAndroid() ? NativeModules.BuildConfig?.VERSION_CODE : undefined,
-            type: Platform.isAndroid() ? NativeModules.BuildConfig?.BUILD_TYPE : undefined,
+            version: Platform.isAndroid() ? '1.13' : undefined,
+            versionCode: Platform.isAndroid() ? 426 : undefined,
+            type: Platform.isAndroid() ? 'release' : undefined,
         }
     }
 }
