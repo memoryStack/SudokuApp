@@ -1,3 +1,4 @@
+import { COMPLETED_GAME_STATS } from "@application/adapterInterfaces/gameLevels"
 import { PENCIL_STATE, ROUTES } from "@application/constants"
 
 export type HintVisibleEventData = {
@@ -6,10 +7,13 @@ export type HintVisibleEventData = {
     puzzle: string,
 }
 
+type GameStats = Omit<COMPLETED_GAME_STATS, 'level' | 'levelNum'>
+
 export type PuzzleLifeCycleEvent = {
     puzzle: string,
     level: string,
     status: string,
+    stats?: GameStats
 }
 
 export type HintTryoutUsedEventData = {
