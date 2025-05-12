@@ -129,6 +129,7 @@ const Arena_ = ({
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
             const { boardControllerRepository, refreeRepository } = dependencies
+            if (!new GameState(gameState).isGameSolved()) currentAvailableStars.current = 0
             const stats = {
                 mistakes,
                 level: difficultyLevelID,
