@@ -1,13 +1,13 @@
 # TODO: make these inputs configurable or take these from some central place
 if [ "$1" = "p" ]
 then 
-	environmentType="Production"
+	environmentType="appcenter_Production"
 elif [ "$1" = "s" ]
 then
-	environmentType="Staging"
+	environmentType="appcenter_Staging"
 else
 	echo "Error: unknown deployment environment" >&2
 	exit 1
 fi
 appVersionName=$2
-appcenter codepush release-react -a anujabo186-gmail.com/Sudoku -d $environmentType -t $appVersionName
+revopush release-react Sudoku_Aacharya_android android -d $environmentType -t $appVersionName
