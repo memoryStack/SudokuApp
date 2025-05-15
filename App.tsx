@@ -11,6 +11,7 @@ import { consoleLog } from '@utils/util'
 import DependencyProvider from './src/containers/DependencyProvider'
 import ModalProvider from './src/containers/ModalProvider'
 import ThemeProvider from './src/containers/ThemeProvider'
+import SpotlightTourProvider from './src/containers/SpotlightTourProvider'
 
 import { SnackBar } from './src/apps/components/SnackBar/SnackBar'
 
@@ -48,10 +49,12 @@ const App = () => {
             <DependencyProvider>
                 <ThemeProvider>
                     <ModalProvider>
-                        <View style={styles.container}>
-                            <NavigationProvider />
-                            <SnackBar />
-                        </View>
+                        <SpotlightTourProvider>
+                            <View style={styles.container}>
+                                <NavigationProvider />
+                                <SnackBar />
+                            </View>
+                        </SpotlightTourProvider>
                     </ModalProvider>
                 </ThemeProvider>
             </DependencyProvider>
