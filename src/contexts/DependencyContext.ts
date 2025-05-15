@@ -11,6 +11,7 @@ import type { GamePersistenceAdapter } from '@application/adapterInterfaces/game
 import { GameLevelsAdapter } from '@application/adapterInterfaces/gameLevels'
 import type { AllAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 import { SoundAdapter } from 'src/interfaces/soundAdapter'
+import type { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {
@@ -25,6 +26,7 @@ export type Dependencies = {
     gameLevelsAdapter: GameLevelsAdapter
     analytics: AllAnalyticsHandlers
     soundAdapter: SoundAdapter
+    coachMarksAdapter: CoachMarksAdapterUIInterface
 };
 
 const DependencyContext = createContext<Dependencies | undefined>(undefined)

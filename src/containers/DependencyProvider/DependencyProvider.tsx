@@ -13,6 +13,7 @@ import { gamePersistenceAdapter } from '@adapters/gamePersistenceAdapter'
 import { gameLevelsAdapter } from '@adapters/gameLevelsAdapter'
 import { AnalyticsHandlers } from '@adapters/analytics'
 import { soundAdapter } from '@adapters/soundAdapter'
+import { coachMarksAdapter } from '@adapters/coachMarksToursAdapter'
 
 type Props = {
     children: React.ReactNode
@@ -31,6 +32,7 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         gameLevelsAdapter,
         analytics: AnalyticsHandlers,
         soundAdapter,
+        coachMarksAdapter,
     }), [])
 
     return (

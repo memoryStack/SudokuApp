@@ -7,9 +7,11 @@ import { getRouteNameFromRoute } from 'src/navigation/navigation.utils'
 import { AnalyticsHandlers } from '@adapters/analytics'
 import { ROUTES } from '@application/constants'
 import { SoundAdapter } from 'src/interfaces/soundAdapter'
+import { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
 
 interface Dependencies extends ApplicationLayerDependencies {
     soundAdapter: SoundAdapter
+    coachMarksAdapter: CoachMarksAdapterUIInterface
 }
 
 export const useDependency = (): Dependencies => {
