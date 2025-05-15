@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { View, useWindowDimensions } from 'react-native'
 
 import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
+
+import { useCopilot } from "react-native-copilot";
 
 import _noop from '@lodash/noop'
 
@@ -25,6 +27,10 @@ import Hint from './Hint'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './cellActions.constants'
 import { getStyles } from './cellActions.styles'
+import SpotlightTourProvider from 'src/containers/SpotlightTourProvider';
+import { addListener, removeListener } from '@utils/GlobalEventBus';
+import { EVENTS } from 'src/constants/events';
+import { consoleLog } from '@utils/util';
 
 const BoardController_ = ({ onAction, refFromParent }) => {
     const dependencies = useDependency()
@@ -35,6 +41,35 @@ const BoardController_ = ({ onAction, refFromParent }) => {
     const hints = useSelector(getAvailableHintsCount)
 
     const gameState = useSelector(getGameState)
+
+    const { start, copilotEvents } = useCopilot()
+    const wentoff = useRef(false)
+
+    useEffect(() => {
+        copilotEvents.on("start", () => {
+            dependencies?.analytics.sendHowToGetHintsCoachmarkVisibleEvent?.()
+        })
+        copilotEvents.on("stepChange", (step) => {
+            dependencies?.analytics.sendHowToGetHintsCoachmarkStepChangeEvent?.({ name: step.name, position: step.order })
+        })
+        copilotEvents.on("stop", () => {
+            dependencies?.analytics.sendHowToGetHintsCoachmarkCompletedEvent?.()
+            dependencies?.coachMarksAdapter?.setUserLearnedToGetHints?.()
+        })
+    }, [copilotEvents])
+
+    useEffect(() => {
+        if (wentoff.current) return
+        const handler = () => {
+            start()
+            wentoff.current = true
+        }
+        addListener(EVENTS.LOCAL.COACHMARKS.HOW_TO_GET_HINTS, handler)
+
+        return () => {
+            removeListener(EVENTS.LOCAL.COACHMARKS.HOW_TO_GET_HINTS, handler)
+        }
+    }, [start])
 
     const disableControllers = !(new GameState(gameState).isGameActive())
 
@@ -86,7 +121,17 @@ const BoardController_ = ({ onAction, refFromParent }) => {
     )
 }
 
-export const BoardController = withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_)
+const BoardControllerComp = withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_)
+
+const WrappedBoardController = ({ refFromParent }) => {
+    return (
+        <SpotlightTourProvider>
+            <BoardControllerComp refFromParent={refFromParent} />
+        </SpotlightTourProvider>
+    )
+}
+
+export const BoardController = React.memo(WrappedBoardController)
 
 BoardController_.propTypes = {
     onAction: PropTypes.func,

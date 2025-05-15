@@ -48,7 +48,7 @@ const getFinalTouchableType = touchableFromProps => {
 
 const getTouchable = touchable => TouchablesMap[getFinalTouchableType(touchable)]
 
-export const Touchable = props => {
+export const Touchable = (props) => {
     const {
         style,
         touchable,
@@ -56,6 +56,7 @@ export const Touchable = props => {
         children,
         avoidDefaultStyles,
         addHitSlop,
+        copilot,
         ...rest
     } = props
 
@@ -70,6 +71,7 @@ export const Touchable = props => {
             style={[avoidDefaultStyles ? null : styles.container, style]}
             underlayColor={underlayColor}
             hitSlop={hitSlop}
+            {...copilot}
             {...rest}
         >
             {children}

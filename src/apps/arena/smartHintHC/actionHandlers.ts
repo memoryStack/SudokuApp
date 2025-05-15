@@ -28,13 +28,15 @@ type StateMaintainedByWithActionHOC = {
     // analytics: ScreenAnalyticsHandlers
     analytics: ArenaAnalyticsHandler
     sentHintTryoutEvent: boolean
+    dependencies: Dependencies
 }
 
-const handleOnInit = ({ setState, params: { focusedCells, styles, analytics, analyticsData } }: StatePropsHandlers & {
+const handleOnInit = ({ setState, params: { focusedCells, styles, dependencies, analytics, analyticsData } }: StatePropsHandlers & {
     params: StateMaintainedByWithActionHOC
 }) => {
     setState({ focusedCells, styles })
     analytics?.sendSmartHintVisibleEvent?.(analyticsData)
+    dependencies?.smartHintRepository?.setUserSawAHint()
 }
 
 const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {

@@ -2,6 +2,8 @@ import React from 'react'
 
 import PropTypes from 'prop-types'
 
+import { CopilotStep } from "react-native-copilot";
+
 import _noop from '@lodash/noop'
 
 import { PencilIcon } from '@resources/svgIcons/pencil'
@@ -13,13 +15,21 @@ import { Touchable } from '../../../components/Touchable'
 
 import { getStyles } from '../cellActions.styles'
 
+const copilotText = "To get Hints in puzzle\n\nFirst press on Fast Pencil to fill some notes in puzzle"
+
 const FastPencil = ({ iconBoxSize, onClick, ...rest }) => {
     const styles = useStyles(getStyles)
     return (
-        <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
-            <PencilIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
-            <Text style={styles.actionText}>Fast Pencil</Text>
-        </Touchable>
+        <CopilotStep
+            name="clickFastPencil"
+            text={copilotText}
+            order={1}
+        >
+            <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
+                <PencilIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
+                <Text style={styles.actionText}>Fast Pencil</Text>
+            </Touchable>
+        </CopilotStep>
     )
 }
 export default React.memo(FastPencil)

@@ -144,6 +144,7 @@ const SmartHintHC_: React.FC<Props> = ({
                 focusedCells,
                 styles,
                 analytics,
+                dependencies,
                 analyticsData: {
                     puzzle: boardRepository.getPuzzleString(),
                     level: refreeRepository.getGameLevel(),

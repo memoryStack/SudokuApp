@@ -52,6 +52,12 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         })
     }, [onAction, mainNumbers, notes])
 
+    useEffect(() => {
+        return () => {
+            onAction({ type: ACTION_TYPES.ON_UNMOUNT, payload: { dependencies } })
+        }
+    }, [])
+
     const onOverlayContainerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS, payload: { dependencies } })
     }, [onAction, dependencies])

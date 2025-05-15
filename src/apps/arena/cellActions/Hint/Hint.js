@@ -2,6 +2,8 @@ import React from 'react'
 
 import PropTypes from 'prop-types'
 
+import { CopilotStep } from "react-native-copilot";
+
 import _noop from '@lodash/noop'
 
 import { HintIcon } from '@resources/svgIcons/hint'
@@ -17,6 +19,8 @@ import { getStyles } from '../cellActions.styles'
 // TODO: i should make it as a part of settings so that users can change it according to their confidence level
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their
 // comfort and confidence level
+
+const copilotText = "Now press on \"Hint\"\n\nApp will use notes filled in previous step to find hints in puzzle"
 
 const Hint = ({
     iconBoxSize, hints, onClick, disabled, ...rest
@@ -38,10 +42,16 @@ const Hint = ({
     const noAvailableHints = hints === 0
 
     return (
-        <Touchable style={styles.actionContainer} onPress={onClick} disabled={disabled || noAvailableHints} {...rest}>
-            {renderIcon()}
-            <Text style={styles.actionText}>Hint</Text>
-        </Touchable>
+        <CopilotStep
+            name="clickHints"
+            text={copilotText}
+            order={2}
+        >
+            <Touchable style={styles.actionContainer} onPress={onClick} disabled={disabled || noAvailableHints} {...rest}>
+                {renderIcon()}
+                <Text style={styles.actionText}>Hint</Text>
+            </Touchable>
+        </CopilotStep>
     )
 }
 

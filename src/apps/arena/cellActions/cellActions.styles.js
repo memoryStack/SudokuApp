@@ -14,6 +14,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     actionContainer: {
         display: 'flex',
         alignItems: 'center',
+        flex: 1
     },
     actionText: {
         marginTop: 8,

@@ -17,6 +17,7 @@ import { EVENTS } from 'src/constants/events'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
+import { showHowToGetHintsCoachMarksUseCase } from '@application/usecases/smartHint/smartHint'
 
 const onInit = async ({ setState, getState, params: { mainNumbers, notes, dependencies } }) => {
     const puzzle = MainNumbersRecord.getPuzzleCurrentMainNumbers(mainNumbers).join('')
@@ -59,6 +60,23 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes, depend
     }
 }
 
+const onUnmount = async ({ getState, params: { dependencies } }) => {
+    const {
+        availableHintsCount
+    } = getState()
+
+    const showCoachMarks = await showHowToGetHintsCoachMarksUseCase(
+        availableHintsCount,
+        dependencies
+    )
+
+    if (showCoachMarks) {
+        setTimeout(() => {
+            emit(EVENTS.LOCAL.COACHMARKS.HOW_TO_GET_HINTS)
+        }, 1000)
+    }
+}
+
 const handleMenuItemPress = ({
     getState, params: {
         id, mainNumbers, notes, smartHintsColorSystem, dependencies,
@@ -87,12 +105,14 @@ const handleOverlayPress = ({ params: { dependencies } }) => {
 
 const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
+    ON_UNMOUNT: 'ON_UNMOUNT',
     ON_OVERLAY_CONTAINER_PRESS: 'ON_OVERLAY_CONTAINER_PRESS',
     ON_MENU_ITEM_PRESS: 'ON_MENU_ITEM_PRESS',
 }
 
 const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_INIT]: onInit,
+    [ACTION_TYPES.ON_UNMOUNT]: onUnmount,
     [ACTION_TYPES.ON_OVERLAY_CONTAINER_PRESS]: handleOverlayPress,
     [ACTION_TYPES.ON_MENU_ITEM_PRESS]: handleMenuItemPress,
 }

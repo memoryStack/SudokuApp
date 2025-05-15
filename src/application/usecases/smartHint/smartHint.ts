@@ -174,3 +174,20 @@ export const eraseTryOutNumberUseCase = (
     smartHintRepository.updateBoardDataOnTryOutErase(notesToBeSpawned)
     sound?.play?.()
 }
+
+export const showHowToGetHintsCoachMarksUseCase = async (
+    availableHints: number,
+    dependencies: Dependencies
+): Promise<boolean> => {
+    if (availableHints) return false
+
+    const {
+        smartHintRepository,
+        coachMarksAdapter,
+    } = dependencies
+
+    const userSawAHintYet = await smartHintRepository.getUserSawAHint()
+    const userLearnedToGetHints = await coachMarksAdapter.getUserLearnedToGetHints()
+
+    return !userSawAHintYet && !userLearnedToGetHints
+}

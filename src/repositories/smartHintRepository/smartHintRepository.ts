@@ -21,6 +21,7 @@ import type { NumberInputData, NumberEraseData } from '@application/adapterInter
 
 import { invokeDispatch, getStoreState } from '../../redux/dispatch.helpers'
 import { smartHintHCActions } from '../../apps/arena/store/reducers/smartHintHC.reducers'
+import { getKey, setKey } from '@utils/storage'
 
 const {
     setHintStepNumber,
@@ -72,4 +73,10 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
     getUnclickableCellClickInTryOutMsg: () => getUnclickableCellClickInTryOutMsg(getStoreState()),
     getCellToFocusData: () => getCellToFocusData(getStoreState()),
     getTryOutInputsColors: () => getTryOutInputsColors(getStoreState()),
+    setUserSawAHint: async () => {
+        return setKey('userSawAHint', true)
+    },
+    getUserSawAHint: async () => {
+        return getKey('userSawAHint')
+    },
 }
