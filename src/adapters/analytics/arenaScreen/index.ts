@@ -11,6 +11,9 @@ const EVENT_NAMES = {
     FAST_PENCIL_CLICK: 'fastPencilClick',
     NO_HINTS_FOUND: 'noHintsFound',
     UNDO_CLICK: 'undoClick',
+    HOW_TO_GET_HINTS_COACHMARK_VISIBLE: 'howToGetHintsCoachmarkVisible',
+    HOW_TO_GET_HINTS_COACHMARK_STEP_CHANGE: 'howToGetHintsCoachmarkStepChange',
+    HOW_TO_GET_HINTS_COACHMARK_COMPELTED: 'howToGetHintsCoachmarkCompleted',
 }
 
 export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
@@ -49,4 +52,19 @@ export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
         const commonData = await getEventCommonData()
         return client.sendEvent(EVENT_NAMES.UNDO_CLICK, { ...commonData })
     },
+    sendHowToGetHintsCoachmarkVisibleEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.HOW_TO_GET_HINTS_COACHMARK_VISIBLE, { ...commonData })
+    },
+    sendHowToGetHintsCoachmarkStepChangeEvent: async (data) => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.HOW_TO_GET_HINTS_COACHMARK_STEP_CHANGE, { ...commonData, step: data })
+    },
+    sendHowToGetHintsCoachmarkCompletedEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.HOW_TO_GET_HINTS_COACHMARK_COMPELTED, { ...commonData })
+    }
 }

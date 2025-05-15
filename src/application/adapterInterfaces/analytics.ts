@@ -32,6 +32,11 @@ export type NoHintsFoundEventData = {
     }
 }
 
+export type CoachmarkStepChangeEventData = {
+    name: string,
+    position: number
+}
+
 export type ArenaAnalyticsHandler = {
     sendSmartHintVisibleEvent: (data: HintVisibleEventData) => Promise<void>,
     sendPuzzleLifeCycleEvent: (data: PuzzleLifeCycleEvent) => Promise<void>,
@@ -40,6 +45,9 @@ export type ArenaAnalyticsHandler = {
     sendFastPencilClickEvent: () => Promise<void>,
     sendNoHintsFoundEvent: (data: NoHintsFoundEventData) => Promise<void>,
     sendUndoClickEvent: () => Promise<void>,
+    sendHowToGetHintsCoachmarkVisibleEvent: () => Promise<void>,
+    sendHowToGetHintsCoachmarkStepChangeEvent: (data: CoachmarkStepChangeEventData) => Promise<void>,
+    sendHowToGetHintsCoachmarkCompletedEvent: () => Promise<void>,
 }
 
 export type PlayGuideEventData = {
