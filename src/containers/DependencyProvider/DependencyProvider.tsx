@@ -16,6 +16,7 @@ import { soundAdapter } from '@adapters/soundAdapter'
 import { coachMarksAdapter } from '@adapters/coachMarksToursAdapter'
 import { ArenaServiceAdapter } from '@adapters/services/arenaServiceAdapter'
 import { userDetailsAdapter } from '@adapters/userDetails'
+import { AppVersionsAdapter } from '@adapters/services/appVersionsServiceAdapter'
 
 type Props = {
     children: React.ReactNode
@@ -37,7 +38,8 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         coachMarksAdapter,
         userDetailsAdapter: userDetailsAdapter,
         services: {
-            arena: ArenaServiceAdapter
+            arena: ArenaServiceAdapter,
+            appVersion: AppVersionsAdapter
         }
     }), [])
 

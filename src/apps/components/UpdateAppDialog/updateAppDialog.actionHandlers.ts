@@ -11,24 +11,22 @@ const onInit = async ({ params: {
 
     const { showModal, hideModal } = modalContextValues
 
-    const featuresList = [
-        'Fixed Bugs',
-        'Unlocked all puzzles',
-        'Fixed Memory Leaks'
-    ]
+    const serviceAdapter = dependencies?.services?.appVersion
 
-    const isMandatoryUpdate = false
+    const { features, mandatory } = await serviceAdapter?.getAppUpdate()
 
-    showModal({
-        closeOnBackdropClick: !isMandatoryUpdate,
-        Component: UpdateAppDialogBody,
-        props: {
-            features: featuresList,
-            cancellable: !isMandatoryUpdate,
-            onCancelPress: hideModal,
-            onUpdatePress,
-        },
-    })
+    if (features.length) {
+        showModal({
+            closeOnBackdropClick: !mandatory,
+            Component: UpdateAppDialogBody,
+            props: {
+                features,
+                cancellable: !mandatory,
+                onCancelPress: hideModal,
+                onUpdatePress,
+            },
+        })
+    }
 }
 
 const onUpdatePress = async () => {

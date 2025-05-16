@@ -14,6 +14,7 @@ import { SoundAdapter } from 'src/interfaces/soundAdapter'
 import type { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
 import { ArenaServiceAdapterInterface } from 'src/interfaces/arenaServiceAdapter'
 import { UserDetailsAdapter } from 'src/interfaces/userDetailsAdapter'
+import { AppVersionsServiceAdapter } from 'src/interfaces/appVersionsServiceAdapter'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {
@@ -32,6 +33,7 @@ export type Dependencies = {
     userDetailsAdapter: UserDetailsAdapter
     services: {
         arena: ArenaServiceAdapterInterface
+        appVersion: AppVersionsServiceAdapter
     }
 };
 
