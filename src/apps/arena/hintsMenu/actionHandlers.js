@@ -61,6 +61,7 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes, depend
 }
 
 const onUnmount = async ({ getState, params: { dependencies } }) => {
+    return
     const {
         availableHintsCount
     } = getState()

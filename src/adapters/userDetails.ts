@@ -5,13 +5,7 @@ import _isEmpty from '@lodash/isEmpty'
 import { getKey, setKey } from '@utils/storage'
 import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from 'src/apps/arena/utils/cacheGameHandler'
 
-type UserDetails = {
-    id: string
-}
-
-type UserDetailsAdapter = {
-    getUserId: () => Promise<UserDetails['id']>
-}
+import { UserDetails, UserDetailsAdapter } from 'src/interfaces/userDetailsAdapter'
 
 /*
     this function will know the format in which data is stored in persistence
