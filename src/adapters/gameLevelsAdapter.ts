@@ -11,13 +11,11 @@ import _cloneDeep from "@lodash/cloneDeep"
 
 const COMPLETED_LEVELS_STORAGE_KEY = 'completed_levels'
 
-type COMPLETED_GAMES = {
-    [key: AUTO_GENERATED_NEW_GAME_IDS]: {
-        levels: COMPLETED_GAME_STATS[],
-        totalStarsEarned: number, // sum of all the stars in all the completed levels
-        bestTime: Time, // TODO: let's store the number of seconds instead of hours: , minutes: , seconds: object for brevity
-    }
-}
+type COMPLETED_GAMES = Record<AUTO_GENERATED_NEW_GAME_IDS, {
+    levels: COMPLETED_GAME_STATS[],
+    totalStarsEarned: number,
+    bestTime: Time,
+}>
 
 // TODO: move it to some utils
 const getSmallerTime = (timeA: Time, timeB: Time) => {
@@ -48,16 +46,24 @@ export const gameLevelsAdapter: GameLevelsAdapter = {
         const starsEarnedYet = _get(allCompletedGames, [gameStats.level, 'totalStarsEarned'], 0)
         const bestTimeYet = _get(allCompletedGames, [gameStats.level, 'bestTime'], { hours: 0, minutes: 0, seconds: 0 }) // TODO: get this from a central constants
 
+        const puzzleAlreadySolvedIndx = levelsCompletedYet.findIndex(({ levelNum: alreadySolvedLevelNum }: COMPLETED_GAME_STATS) => {
+            return alreadySolvedLevelNum === gameStats.levelNum
+        })
+
+        let starsDiff = 0
         const finalCompletedLevels = _cloneDeep(levelsCompletedYet)
-        if (gameStats.levelNum > levelsCompletedYet.length) {
-            finalCompletedLevels.push(gameStats)
+        if (puzzleAlreadySolvedIndx !== -1) {
+            const puzzleAlreadySolvedStats = levelsCompletedYet[puzzleAlreadySolvedIndx]
+            finalCompletedLevels[puzzleAlreadySolvedIndx] = gameStats
+            starsDiff = gameStats.starsEarned - puzzleAlreadySolvedStats.starsEarned
         } else {
-            finalCompletedLevels[gameStats.levelNum - 1] = gameStats
+            finalCompletedLevels.push(gameStats)
+            starsDiff += gameStats.starsEarned
         }
 
         allCompletedGames[gameStats.level] = {
             levels: finalCompletedLevels,
-            totalStarsEarned: starsEarnedYet + gameStats.starsEarned,
+            totalStarsEarned: starsEarnedYet + starsDiff,
             bestTime: getSmallerTime(bestTimeYet, gameStats.time),
         }
         await setKey(COMPLETED_LEVELS_STORAGE_KEY, allCompletedGames)
