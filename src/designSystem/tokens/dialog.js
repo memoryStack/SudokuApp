@@ -74,7 +74,7 @@ module.exports = {
                 value: '{colors.scrim}',
             },
             opacity: {
-                value: '20%',
+                value: '40%',
                 type: 'colorOpacity',
             },
         },
