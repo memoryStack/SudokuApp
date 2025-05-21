@@ -8,8 +8,8 @@ export const getStyles = (_, theme) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-        width: '100%',
         marginTop: 20,
+        // maxWidth: 10,
     },
     actionContainer: {
         display: 'flex',
@@ -18,6 +18,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     actionText: {
         marginTop: 8,
         color: get(theme, ['colors', 'on-surface-variant-low']),
+        fontSize: 24
     },
     activeState: {
         color: get(theme, ['colors', 'primary']),

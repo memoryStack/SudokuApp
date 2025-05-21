@@ -85,7 +85,7 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
-    console.log('@@@@ cellBGColor', cellBGColor)
+    // console.log('@@@@ cellBGColor', cellBGColor)
 
     const styles = useStyles(getStyles)
 
@@ -165,6 +165,17 @@ const Cell_ = ({
     )
 
     const getCellContent = () => {
+        const showIconAndMainNumber = displayCrossIcon && cellMainValue
+        if (showIconAndMainNumber) {
+            return (
+                <>
+                    <View style={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                        {getCellCrossIcon()}
+                    </View>
+                    {renderCellMainValue()}
+                </>
+            )
+        }
         if (displayCrossIcon) return getCellCrossIcon()
         if (cellMainValue) return renderCellMainValue()
         return getCellNotes()

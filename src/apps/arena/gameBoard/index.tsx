@@ -26,17 +26,17 @@ import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import { getStyles } from './gameBoard.styles'
 import { Cell } from './cell'
-import { getCellHouseForHouseType, getHouseCells } from '@domain/board/utils/housesAndCells'
+import { getCellBlockHouseInfo, getCellColHouseInfo, getCellHouseForHouseType, getCellRowHouseInfo, getHouseCells } from '@domain/board/utils/housesAndCells'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { Board as BoardDomain } from '@domain/board/board'
-import { areSameCells, filterEmptyCells, filterHouseCells } from '../utils/util'
+import { areSameCells, filterEmptyCells, filterHouseCells, getCellAllHousesCells, getCellsSharingHousesWithCells } from '../utils/util'
 import { hexToRGBA } from '@utils/util'
 import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from 'src/constants/events'
 import { useDependency } from 'src/hooks/useDependency'
 import { GAME_STATE } from '@application/constants'
 import { useAnimateView } from './cell/useAnimateView'
-import { fillPuzzleUseCase } from '@application/usecases/board'
+import { fillPuzzleUseCase, inputNumberUseCase } from '@application/usecases/board'
 
 const looper: number[] = []
 const bordersLooper: number[] = []
@@ -76,6 +76,12 @@ interface Props {
 
 const DFF = {}
 
+const getSleepPromise = (time) => {
+    return new Promise(r => {
+        setTimeout(r, time)
+    })
+}
+
 const Board_: React.FC<Props> = ({
     mainNumbers = [],
     notes = [],
@@ -99,6 +105,8 @@ const Board_: React.FC<Props> = ({
 
     const [cellsAnimationConfigs, setCellsAnimationConfigs] = useState({})
 
+    const [localCellsHighlightData, setLocalCellsHighlightData] = useState({})
+
     const dependencies = useDependency()
 
     const { gameStateRepository } = dependencies
@@ -107,94 +115,257 @@ const Board_: React.FC<Props> = ({
 
     const { bgColorInterpolation } = useAnimateView(boardAnimConfig)
 
-    Board
+    // useEffect(() => {
+    //     const timerId = setTimeout(async () => {
+
+    //         onCellClick({ row: 2, col: 2 })
+
+    //         await getSleepPromise(1000)
+
+    //         gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+    //         const NS_CELL = { row: 2, col: 2 }
+    //         const SelectedCellBgColor = 'rgb(255, 245, 187)'
+
+    //         const _animationConfig = {}
+    //         const p = new Promise((r) => {
+    //             const animationConfig = {
+    //                 'mainNumber': {
+    //                     'bgColor': {
+    //                         config: { toValue: 1, duration: 200, useNativeDriver: false, },
+    //                         loopConfig: { iterations: 3 },
+    //                         output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+    //                     },
+    //                 }
+    //             }
+    //             _set(_animationConfig, [NS_CELL.row, NS_CELL.col], animationConfig)
+    //             setCellsAnimationConfigs((prevConfig) => {
+    //                 const newConfig = { ..._animationConfig }
+    //                 return newConfig
+    //             })
+    //             setTimeout(r, 1150)
+    //         }).then(() => {
+    //             const animationConfig = {
+    //                 'mainNumber': {
+    //                     'bgColor': {
+    //                         config: { toValue: 1, duration: 0, useNativeDriver: false, },
+    //                         output: ['#acaaaf', SelectedCellBgColor]
+    //                     },
+    //                 }
+    //             }
+    //             _set(_animationConfig, [NS_CELL.row, NS_CELL.col], animationConfig)
+    //             setCellsAnimationConfigs((prevConfig) => {
+    //                 const newConfig = { ..._animationConfig }
+    //                 return newConfig
+    //             })
+    //             return getSleepPromise(1000)
+    //         }).then(() => {
+    //             // highlight row house cells
+    //             const rowCells = getHouseCells(getCellRowHouseInfo(NS_CELL))
+    //                 .filter((houseCell) => !areSameCells(NS_CELL, houseCell))
+    //             rowCells.forEach(cell => {
+    //                 const animationConfig = {
+    //                     'mainNumber': {
+    //                         'bgColor': {
+    //                             config: { toValue: 1, duration: 200, useNativeDriver: false, },
+    //                             loopConfig: { iterations: 3 },
+    //                             output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+    //                         },
+    //                     }
+    //                 }
+    //                 _set(_animationConfig, [cell.row, cell.col], animationConfig)
+    //             });
+    //             setCellsAnimationConfigs((prevConfig) => {
+    //                 const newConfig = { ..._animationConfig }
+    //                 return newConfig
+    //             })
+    //             return getSleepPromise(2000)
+    //         }).then(() => {
+    //             // highlight column house cells
+    //             const rowCells = getHouseCells(getCellColHouseInfo(NS_CELL))
+    //                 .filter((houseCell) => !areSameCells(NS_CELL, houseCell))
+    //             rowCells.forEach(cell => {
+    //                 const animationConfig = {
+    //                     'mainNumber': {
+    //                         'bgColor': {
+    //                             config: { toValue: 1, duration: 200, useNativeDriver: false, },
+    //                             loopConfig: { iterations: 3 },
+    //                             output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+    //                         },
+    //                     }
+    //                 }
+    //                 _set(_animationConfig, [cell.row, cell.col], animationConfig)
+    //             });
+    //             setCellsAnimationConfigs((prevConfig) => {
+    //                 const newConfig = { ..._animationConfig }
+    //                 return newConfig
+    //             })
+    //             return getSleepPromise(2000)
+    //         }).then(() => {
+    //             // highlight block house cells
+    //             const rowCells = getHouseCells(getCellBlockHouseInfo(NS_CELL))
+    //                 .filter((houseCell) => !areSameCells(NS_CELL, houseCell))
+    //             rowCells.forEach(cell => {
+    //                 const animationConfig = {
+    //                     'mainNumber': {
+    //                         'bgColor': {
+    //                             config: { toValue: 1, duration: 200, useNativeDriver: false, },
+    //                             loopConfig: { iterations: 3 },
+    //                             output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+    //                         },
+    //                     }
+    //                 }
+    //                 _set(_animationConfig, [cell.row, cell.col], animationConfig)
+    //             });
+    //             setCellsAnimationConfigs((prevConfig) => {
+    //                 const newConfig = { ..._animationConfig }
+    //                 return newConfig
+    //             })
+    //             return getSleepPromise(2000)
+    //         }).then(async () => {
+    //             const hostCells = [
+    //                 { row: 0, col: 1 },
+    //                 { row: 2, col: 4 },
+    //                 { row: 2, col: 3 },
+    //                 { row: 3, col: 2 },
+    //                 { row: 2, col: 6 },
+    //                 { row: 2, col: 1 },
+    //                 { row: 5, col: 2 },
+    //                 { row: 2, col: 7 },
+    //             ]
+
+    //             for (let i = 0; i < hostCells.length; i++) {
+    //                 const cell = hostCells[i]
+    //                 const animationConfig = {
+    //                     'mainNumber': {
+    //                         'fontSize': {
+    //                             config: { toValue: 1.5, duration: 300, useNativeDriver: true }
+    //                         },
+    //                         'textColor': {
+    //                             config: { toValue: 1, duration: 300, useNativeDriver: false, },
+    //                             output: ['rgb(12, 25, 22)', '#2653d3']
+    //                         }
+    //                     }
+    //                 }
+    //                 _set(_animationConfig, [cell.row, cell.col], animationConfig)
+    //                 setCellsAnimationConfigs((prevConfig) => {
+    //                     const newConfig = { ..._animationConfig }
+    //                     return newConfig
+    //                 })
+    //                 await getSleepPromise(300)
+    //                 const newAnimationConfig = {
+    //                     mainNumber: {
+    //                         ...animationConfig.mainNumber,
+    //                         'fontSize': {
+    //                             config: { duration: 300 },
+    //                             resetToPrevious: true
+    //                         },
+    //                     },
+    //                 }
+    //                 _set(_animationConfig, [cell.row, cell.col], newAnimationConfig)
+    //                 setCellsAnimationConfigs((prevConfig) => {
+    //                     const newConfig = { ..._animationConfig }
+    //                     return newConfig
+    //                 })
+    //                 await getSleepPromise(1000)
+    //             }
+    //             await getSleepPromise(2000)
+    //         }).then(async () => {
+    //             setCellsAnimationConfigs({})
+    //             await getSleepPromise(1000)
+    //             inputNumberUseCase(5, dependencies)
+    //         })
+    //     }, 5000)
+
+    //     return () => {
+    //         clearTimeout(timerId)
+    //     }
+    // }, [gameStateRepository, dependencies])
 
     useEffect(() => {
-        gameStateRepository.setGameState(GAME_STATE.INACTIVE)
+        const timerId = setTimeout(async () => {
 
-        setTimeout(() => {
-            gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+            const exampleCells = [
+                { row: 3, col: 3 },
+                { row: 6, col: 4 },
+            ]
 
-            setTimeout(() => {
+            for (let i = 0; i < exampleCells.length; i++) {
+                const TARGET_CELL = exampleCells[i]
+                onCellClick(TARGET_CELL)
+                const SelectedCellBgColor = 'rgb(255, 245, 187)'
+                await getSleepPromise(1000)
+
+                gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+
                 const _animationConfig = {}
-                BoardDomain.getEmptyCellsAndTheirSolution(dependencies?.boardRepository.getMainNumbers())
-                    .forEach(({ cell }) => {
+                const p = await new Promise((r) => {
+                    const animationConfig = {
+                        'mainNumber': {
+                            'bgColor': {
+                                config: { toValue: 1, duration: 0, useNativeDriver: false, },
+                                output: [SelectedCellBgColor, SelectedCellBgColor]
+                            },
+                        }
+                    }
+                    _set(_animationConfig, [TARGET_CELL.row, TARGET_CELL.col], animationConfig)
+                    setCellsAnimationConfigs((prevConfig) => {
+                        const newConfig = { ..._animationConfig }
+                        return newConfig
+                    })
+                    setTimeout(r, 1000)
+                }).then(async () => {
+                    inputNumberUseCase(7, dependencies)
+                    await getSleepPromise(1000)
+                }).then(async () => {
+                    const houseSharingCells = getCellAllHousesCells(TARGET_CELL)
+                        .filter((cell) => !areSameCells(cell, TARGET_CELL))
+                    houseSharingCells.forEach((cell) => {
                         const animationConfig = {
                             'mainNumber': {
-                                'bgColor': {
-                                    config: { toValue: 1, duration: 300, useNativeDriver: false, },
-                                    loopConfig: { iterations: 2 },
-                                    output: ['rgba(244, 243, 238, 0)', '#acaaaf']
+                                'opacity': {
+                                    config: { toValue: 0.4, duration: 0, useNativeDriver: true, },
                                 },
                             }
                         }
                         _set(_animationConfig, [cell.row, cell.col], animationConfig)
+                        setCellsAnimationConfigs((prevConfig) => {
+                            const newConfig = { ..._animationConfig }
+                            return newConfig
+                        })
                     })
-                setCellsAnimationConfigs((prevConfig) => {
-                    const newConfig = { ..._animationConfig }
-                    return newConfig
+
+                    await getSleepPromise(2000)
+
+                    const _setLocalCellsHighlightData = {}
+                    houseSharingCells.forEach((cell) => {
+                        const data = { inhabitable: true, crossIconColor: '#b81f1e' }
+                        _set(_setLocalCellsHighlightData, [cell.row, cell.col], data)
+                    })
+                    setLocalCellsHighlightData(_setLocalCellsHighlightData)
+
+                    // await getSleepPromise(400)
+                    // const { boardRepository } = dependencies
+                    // houseSharingCells.forEach((cell) => {
+                    //     boardRepository.setCellMainNumber({ cell, number: 7 })
+                    // })
+
+                    await getSleepPromise(2000)
+                }).then(() => {
+                    const { boardRepository } = dependencies
+                    boardRepository.setCellMainNumber({ cell: TARGET_CELL, number: 0 })
+                    setCellsAnimationConfigs({})
+                    setLocalCellsHighlightData({})
+                    return getSleepPromise(1000)
                 })
-            }, 2000)
+            }
+
 
         }, 5000)
 
-        setTimeout(() => {
-            setCellsAnimationConfigs({})
-            // fill all the cells here
-            fillPuzzleUseCase(dependencies?.boardRepository)
-        }, 9000)
-
-        // setTimeout(() => {
-        //     setBoardAnimConfig({
-        //         // 'borderWidth': {
-        //         //     config: { toValue: 2, duration: 500, useNativeDriver: false },
-        //         //     loopConfig: { iterations: 3 },
-        //         // },
-        //         'bgColor': {
-        //             config: { toValue: 1, duration: 400, useNativeDriver: false, },
-        //             loopConfig: { iterations: 1 },
-        //             output: ['rgba(244, 243, 238, 0)', '#acaaaf']
-        //         }
-        //     })
-        // }, 1000)
-    }, [gameStateRepository, dependencies])
-
-    useEffect(() => {
-        const focusCell = { row: 4, col: 4 }
-        const filterCallback = (cell) => {
-            return true
-            return !areSameCells(cell, focusCell)
+        return () => {
+            clearTimeout(timerId)
         }
-        const blockCells = filterHouseCells(getCellHouseForHouseType(HOUSE_TYPE.BLOCK, focusCell), filterCallback)
-        const rowCells = filterHouseCells(getCellHouseForHouseType(HOUSE_TYPE.ROW, focusCell), filterCallback)
-        const columnCells = filterHouseCells(getCellHouseForHouseType(HOUSE_TYPE.COL, focusCell), filterCallback)
-
-        const animatinDelay = 1500
-
-        // setTimeout(() => {
-        //     const _animationConfig = {}
-        //     blockCells.forEach((cell) => {
-        //         const animationConfig = {
-        //             'mainNumber': {
-        //                 'bgColor': {
-        //                     config: { toValue: 1, duration: 200, useNativeDriver: false, },
-        //                     loopConfig: { iterations: 3 },
-        //                     // output: ['#e9e7ec', '#90a7ff']
-        //                     output: ['rgba(244, 243, 238, 0)', '#acaaaf']
-        //                 },
-        //             }
-        //         }
-
-        //         _set(_animationConfig, [cell.row, cell.col], animationConfig)
-        //     })
-
-        //     setCellsAnimationConfigs((prevConfig) => {
-        //         const newConfig = { ..._animationConfig }
-        //         return newConfig
-        //     })
-        // }, animatinDelay)
-
-    }, [])
+    }, [gameStateRepository, dependencies])
 
     const notesRefs = useMemo(() => {
         const result: NotesRefs = []
@@ -231,9 +402,14 @@ const Board_: React.FC<Props> = ({
         return styles.defaultCellBGColor
     }
 
+    // const getInhabitableCellProps = (cell: Cell) => ({
+    //     displayCrossIcon: _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false),
+    //     crossIconColor: _get(cellsHighlightData, [cell.row, cell.col, 'crossIconColor'], ''),
+    // })
+
     const getInhabitableCellProps = (cell: Cell) => ({
-        displayCrossIcon: _get(cellsHighlightData, [cell.row, cell.col, 'inhabitable'], false),
-        crossIconColor: _get(cellsHighlightData, [cell.row, cell.col, 'crossIconColor'], ''),
+        displayCrossIcon: _get(localCellsHighlightData, [cell.row, cell.col, 'inhabitable'], false),
+        crossIconColor: _get(localCellsHighlightData, [cell.row, cell.col, 'crossIconColor'], ''),
     })
 
     const renderRow = (row: number, key: string) => {

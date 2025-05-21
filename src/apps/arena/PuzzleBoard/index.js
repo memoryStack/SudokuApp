@@ -84,7 +84,8 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             }
             return new GameState(gameState).isGameActive()
         }
-        if (!isCellClickable()) return
+        // console.log('@@@@@@ ', isCellClickable())
+        // if (!isCellClickable()) return
 
         const handler = isHintTryOut ? smartHintTryOutOnAction : onAction
         handler({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies } })

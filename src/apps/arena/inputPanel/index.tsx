@@ -86,6 +86,7 @@ const Inputpanel_: React.FC<Props> = ({
             textStyles={styles.textStyle}
             textType={TEXT_VARIATIONS.DISPLAY_SMALL}
             testID={INPUT_PANEL_ITEM_TEST_ID}
+            withoutLineHeight
         />
     )
 

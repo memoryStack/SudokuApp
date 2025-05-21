@@ -87,7 +87,8 @@ const initBoardData = () => {
     // const str = '090000070800000000576390800900014005004070900700930014003089657000060403050020180'
     // const str = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
     // const str = '000000260009080043500030090000215000350000109180379004800054900004000000005023410'
-    const str = '010900740000800003070320690004030200000602000008010300081070030300008000069003020'
+    // const str = '010900740000800003070320690004030200000602000008010300081070030300008000069003020'
+    const str = '000000000000000000000000000000000000000000000000000000000000000000000000000000000'
     // const str = ''
     if (__DEV__) {
         for (let i = 0; i < str.length; i++) {
@@ -203,32 +204,38 @@ const showSnackBar = ({ msg }) => {
 const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef, dependencies } }) => {
     const { mainNumbers } = getState()
 
-    if (Board.getCluesCount(mainNumbers) < 18) {
-        showSnackBar({ msg: 'clues are less than 18' })
-        return
+    const avoidChecks = true
+
+    if (!avoidChecks) {
+        if (Board.getCluesCount(mainNumbers) < 18) {
+            showSnackBar({ msg: 'clues are less than 18' })
+            return
+        }
+
+        const duplicateNumber = duplicatesInPuzzle(mainNumbers)
+        if (duplicateNumber.present) {
+            const { cell } = duplicateNumber
+            setState({ selectedCell: cell })
+            showSnackBar({ msg: `puzzle has multiple instances of ${MainNumbersRecord.getCellMainValue(mainNumbers, cell)} in same house` })
+            return
+        }
+
+        const hasMultipleSolutions = await getPuzzleSolutionType(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
+
+        if (hasMultipleSolutions) {
+            showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
+            return
+        }
     }
 
-    const duplicateNumber = duplicatesInPuzzle(mainNumbers)
-    if (duplicateNumber.present) {
-        const { cell } = duplicateNumber
-        setState({ selectedCell: cell })
-        showSnackBar({ msg: `puzzle has multiple instances of ${MainNumbersRecord.getCellMainValue(mainNumbers, cell)} in same house` })
-        return
-    }
+    transformMainNumbersForValidPuzzle(mainNumbers)
+    startGameUseCase({
+        mainNumbers,
+        difficultyLevel: NEW_GAME_IDS.CUSTOMIZE_PUZZLE,
+        dependencies
+    })
+    handleOnClose({ params: customPuzzleHCRef })
 
-    const hasMultipleSolutions = await getPuzzleSolutionType(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
-
-    if (hasMultipleSolutions) {
-        showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
-    } else {
-        transformMainNumbersForValidPuzzle(mainNumbers)
-        startGameUseCase({
-            mainNumbers,
-            difficultyLevel: NEW_GAME_IDS.CUSTOMIZE_PUZZLE,
-            dependencies
-        })
-        handleOnClose({ params: customPuzzleHCRef })
-    }
 }
 
 const transformMainNumbersForValidPuzzle = mainNumbers => {

@@ -19,10 +19,10 @@ export enum GRID_TRAVERSALS {
 }
 
 export const STATIC_BOARD_ELEMENTS_DIMENSIONS = {
-    THICK_BORDER_WIDTH: roundToNearestPixel(3),
-    THIN_BORDER_WIDTH: roundToNearestPixel(1),
-    AXIS_WIDTH: roundToNearestPixel(20),
-    BOARD_BORDER_WIDTH: roundToNearestPixel(1),
+    THICK_BORDER_WIDTH: roundToNearestPixel(6),
+    THIN_BORDER_WIDTH: roundToNearestPixel(2),
+    AXIS_WIDTH: roundToNearestPixel(30),
+    BOARD_BORDER_WIDTH: roundToNearestPixel(2),
 }
 
 export const DEEPLINK_PUZZLE_URL_ERRORS = {

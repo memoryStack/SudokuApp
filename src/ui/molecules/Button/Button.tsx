@@ -37,6 +37,7 @@ const Button_: React.FC<Props> = ({
     state = BUTTON_STATES.ENABLED,
     children = null,
     textType,
+    withoutLineHeight = false,
     ...rest
 }) => {
     const { t } = useTranslation()
@@ -51,7 +52,7 @@ const Button_: React.FC<Props> = ({
     const getTextFinalStyles = () => Object.assign({}, styles.labelDefaultColor, !textType && styles.labelDefaultFont, textStyles)
 
     const renderLabel = () => (
-        <Text style={getTextFinalStyles()} type={textType}>
+        <Text style={getTextFinalStyles()} type={textType} withoutLineHeight={withoutLineHeight}>
             {t(label)}
         </Text>
     )

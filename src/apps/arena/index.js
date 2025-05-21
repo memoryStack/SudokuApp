@@ -334,20 +334,28 @@ const Arena_ = ({
                 style={[styles.bgImg]}
                 source={require('@resources/assets/white-parchment-paper.jpg')}
             />
-            <View style={styles.contentContainer}>
+            <View style={[styles.contentContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
                 {/* {renderFillPuzzleBtn()} */}
                 {/* <Refree timer={timer} /> */}
-                <View style={{ marginTop: 80, marginLeft: -8 }}>
+                <View style={{ marginTop: 0 }}>
                     <PuzzleBoard />
                 </View>
                 {/* <PuzzleBoard /> */}
                 {/* TODO: it can be named better */}
-                {/* <BoardController refFromParent={boardControllersRef} /> */}
-                {/* {renderInputPanel()} */}
-                {/* <View style={{ opacity: 0 }}>
-                    {renderInputPanel()}
-                </View> */}
+                <View style={{ width: '40%' }}>
+                    <View style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        flexGrow: 1
+                    }}>
+                        <BoardController refFromParent={boardControllersRef} />
+                        <View style={{ marginTop: 100 }}>
+                            {renderInputPanel()}
+                        </View>
+                    </View>
+                </View>
             </View>
+            {renderCustomPuzzleHC()}
             {/* {renderSmartHintHC()}
             {renderHintsMenu()}
             {renderNextGameMenu()}

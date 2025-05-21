@@ -7,6 +7,9 @@ export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
         display: 'flex',
         height: '100%',
         width: '100%',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     notesRow: {
         flex: 1,

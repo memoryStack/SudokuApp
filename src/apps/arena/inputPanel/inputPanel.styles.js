@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native'
 
-import { FONT_WEIGHTS } from '@resources/fonts/font'
+import { FONT_FAMILIES, FONT_WEIGHTS } from '@resources/fonts/font'
 
 export const getStyles = CELL_WIDTH => {
     const INPUT_NUMBER_DIMENSION = CELL_WIDTH * 1.5 // 1.5 times the size of the board cells
     return StyleSheet.create({
         container: {
-            width: '100%',
+            // width: '100%',
         },
         rowContainer: {
             flexDirection: 'row',
@@ -27,7 +27,9 @@ export const getStyles = CELL_WIDTH => {
             height: 4,
         },
         textStyle: {
-            fontWeight: FONT_WEIGHTS.MEDIUM,
+            fontWeight: FONT_WEIGHTS.SEMI_BOLD,
+            fontSize: 64,
+            fontFamily: FONT_FAMILIES.WITHOUT_ASCENDER_DESCENDER
         },
         eraser: {
             width: '50%',

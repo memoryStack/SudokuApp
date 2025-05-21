@@ -53,13 +53,13 @@ const useNumberInputAnimationConfig = (
     }
 
     const anim = {
-        ...animationsConfig,
         [ANIMATABLE_PROPERTIES.FONT_SIZE]: {
             config: { toValue: 1, duration: 300, useNativeDriver: true },
         },
         [ANIMATABLE_PROPERTIES.OPACITY]: {
             config: { toValue: 1, duration: 300, useNativeDriver: true },
-        }
+        },
+        ...animationsConfig
     }
 
     return [anim, {

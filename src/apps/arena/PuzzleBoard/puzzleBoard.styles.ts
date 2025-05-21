@@ -37,11 +37,13 @@ export const getStyles = (_: unknown, theme: unknown) => StyleSheet.create({
         color: smartHintColorSystemReader.removableNoteTryOutNumberInputColor(_get(theme, 'colors.smartHints')),
     },
     wronglyFilledNumColor: {
-        color: _get(theme, ['colors', 'on-error-container']),
+        // color: _get(theme, ['colors', 'on-error-container']),
+        color: 'rgb(12, 25, 22)',
     },
 
     userFilledNumColor: {
-        color: _get(theme, ['colors', 'primary']),
+        // color: _get(theme, ['colors', 'primary']),
+        color: 'rgb(12, 25, 22)',
     },
     clueNumColor: {
         color: 'rgb(12, 25, 22)',
