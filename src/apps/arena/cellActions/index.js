@@ -31,6 +31,8 @@ import SpotlightTourProvider from 'src/containers/SpotlightTourProvider';
 import { addListener, removeListener } from '@utils/GlobalEventBus';
 import { EVENTS } from 'src/constants/events';
 import { consoleLog } from '@utils/util';
+import _get from '@lodash/get';
+import { useThemeValues } from '../hooks/useTheme';
 
 const BoardController_ = ({ onAction, refFromParent }) => {
     const dependencies = useDependency()
@@ -41,6 +43,8 @@ const BoardController_ = ({ onAction, refFromParent }) => {
     const hints = useSelector(getAvailableHintsCount)
 
     const gameState = useSelector(getGameState)
+
+    const theme = useThemeValues()
 
     const { start, copilotEvents } = useCopilot()
     const wentoff = useRef(false)
@@ -82,7 +86,7 @@ const BoardController_ = ({ onAction, refFromParent }) => {
 
     const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK, payload: { dependencies } })
 
-    const onHintClick = () => onAction({ type: ACTION_TYPES.ON_HINT_CLICK, payload: { dependencies } })
+    const onHintClick = () => onAction({ type: ACTION_TYPES.ON_HINT_CLICK, payload: { dependencies, smartHintsColorSystem: _get(theme, 'colors.smartHints'), } })
 
     // TODO: use a single component for these 4 components, and use them via a config
     return (

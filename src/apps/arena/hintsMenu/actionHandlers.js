@@ -24,6 +24,8 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes, depend
     const disabledHints = []
     const rawHints = await Puzzle.getRawHints(puzzle, notes, disabledHints)
 
+    console.log('@@@@@@ raw hintsss', rawHints)
+
     const availableRawHints = {}
     const hintsIds = Object.keys(rawHints)
     hintsIds.forEach(hintId => {
@@ -38,7 +40,7 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes, depend
 
     if (availableHintsCount === 0) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-            msg: 'Oops! no hints are found\nPlease check if all the cells are filled with all the guesses properly. Use Pencil if not done already.',
+            msg: 'Oops! no hints are found\nPlease check if all the cells are filled with all the guesses properly. Use Fast Pencil if not done already.',
             visibleTime: 3000,
             customStyles: {
                 bottom: 50,
@@ -78,14 +80,15 @@ const onUnmount = async ({ getState, params: { dependencies } }) => {
     }
 }
 
-const handleMenuItemPress = ({
-    getState, params: {
-        id, mainNumbers, notes, smartHintsColorSystem, dependencies,
-    },
+export const showHintHCUseCase = ({
+    mainNumbers,
+    notes,
+    hintDetails,
+    smartHintsColorSystem,
+    dependencies
 }) => {
-    const { availableRawHints } = getState()
-
-    const hints = getTransformedRawHints(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)
+    const { id, hint } = hintDetails
+    const hints = getTransformedRawHints(id, hint, mainNumbers, notes, smartHintsColorSystem)
     const hintData = {
         mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
         notes: hints[0].hasTryOut ? _cloneDeep(notes) : null,
@@ -96,6 +99,30 @@ const handleMenuItemPress = ({
     smartHintRepository.setHints(hintData)
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
     boardControllerRepository.setHintsMenuVisibility(false)
+}
+
+const handleMenuItemPress = ({
+    getState, params: {
+        id, mainNumbers, notes, smartHintsColorSystem, dependencies,
+    },
+}) => {
+    const { availableRawHints } = getState()
+
+    showHintHCUseCase({
+        mainNumbers, notes, smartHintsColorSystem, hintDetails: { id, hint: availableRawHints[id] }, dependencies
+    })
+
+    // const hints = getTransformedRawHints(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)
+    // const hintData = {
+    //     mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
+    //     notes: hints[0].hasTryOut ? _cloneDeep(notes) : null,
+    //     hints,
+    // }
+
+    // const { gameStateRepository, smartHintRepository, boardControllerRepository } = dependencies
+    // smartHintRepository.setHints(hintData)
+    // gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+    // boardControllerRepository.setHintsMenuVisibility(false)
 }
 
 const handleOverlayPress = ({ params: { dependencies } }) => {
