@@ -20,10 +20,10 @@ const handleNumberClick = ({ getState, params: number }) => {
 
 const handleEraserClick = ({ getState }) => {
     const { dependencies } = getState()
-    const { gameStateRepository, boardRepository, snackBarAdapter } = dependencies
+    const { gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    eraseCellUseCase(boardRepository, snackBarAdapter, {
+    eraseCellUseCase(dependencies, {
         play: () => dependencies?.soundAdapter.play(SOUNDS.ERASER_CLICK)
     })
 }

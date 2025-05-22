@@ -7,6 +7,7 @@ export const DEFAULT_STATE = {
     difficultyLevel: '',
     time: { hours: 0, minutes: 0, seconds: 0 },
     levelNumber: 0,
+    lastActivityTime: { hours: 0, minutes: 0, seconds: 0 },
 }
 
 export const MISTAKES_TEXT_TEST_ID = 'MISTAKES_TEXT_TEST_ID'

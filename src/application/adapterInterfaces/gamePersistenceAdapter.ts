@@ -17,6 +17,7 @@ export type GameDataToPersist = {
         levelNum: number,
         mistakes: number,
         time: Time,
+        lastActivityTime: Time,
     },
     boardData: {
         mainNumbers: MainNumbers,

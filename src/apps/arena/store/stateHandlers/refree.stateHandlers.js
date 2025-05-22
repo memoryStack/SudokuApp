@@ -11,7 +11,10 @@ const stateHandlers = {
     },
     setLevelNumber: (state, { payload }) => {
         state.levelNumber = payload
-    }
+    },
+    setLastActivityTime: (state, { payload }) => {
+        state.lastActivityTime = payload
+    },
 }
 
 export default stateHandlers

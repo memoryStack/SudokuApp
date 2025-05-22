@@ -1,5 +1,5 @@
 import { refreeActions } from '../../apps/arena/store/reducers/refree.reducers'
-import { getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit, getLevelNumber } from '../../apps/arena/store/selectors/refree.selectors'
+import { getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit, getLevelNumber, getLastActivityTime } from '../../apps/arena/store/selectors/refree.selectors'
 
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 
@@ -14,7 +14,8 @@ const {
     setDifficultylevel,
     setTime,
     setState,
-    setLevelNumber
+    setLevelNumber,
+    setLastActivityTime
 } = refreeActions
 
 export const RefreeRepository: RefreeRepositoryInterface = {
@@ -31,6 +32,10 @@ export const RefreeRepository: RefreeRepositoryInterface = {
     getTime: () => getTime(getStoreState()),
     setTime: (time: Time) => {
         invokeDispatch(setTime(time))
+    },
+    getLastActivityTime: () => getLastActivityTime(getStoreState()),
+    setLastActivityTime: (time: Time) => {
+        invokeDispatch(setLastActivityTime(time))
     },
     setState: (newState: DefaultState) => {
         invokeDispatch(setState(newState))

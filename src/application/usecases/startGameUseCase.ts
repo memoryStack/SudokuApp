@@ -22,6 +22,7 @@ export type StartGameData = {
     moves?: Move[]
     mistakes?: number
     time?: Time
+    lastActivityTime?: Time
     pencilState?: PENCIL_STATE
     hints?: number
     hintsUsed?: number
@@ -37,6 +38,7 @@ export const startGameUseCase = ({
     moves = [],
     mistakes = 0,
     time = { hours: 0, minutes: 0, seconds: 0 },
+    lastActivityTime = { hours: 0, minutes: 0, seconds: 0 },
     pencilState = PENCIL_STATE.INACTIVE,
     dependencies,
     hints: hintsLeft = MAX_AVAILABLE_HINTS,
@@ -51,6 +53,7 @@ export const startGameUseCase = ({
     refreeRepository.setGameLevel(difficultyLevel)
     refreeRepository.setGameMistakesCount(mistakes)
     refreeRepository.setTime(time)
+    refreeRepository.setLastActivityTime(lastActivityTime)
     refreeRepository.setGameLevelNumber(levelNum)
 
     boardControllerRepository.setPencil(pencilState || PENCIL_STATE.INACTIVE)

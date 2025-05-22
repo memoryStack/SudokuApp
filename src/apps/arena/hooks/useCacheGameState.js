@@ -8,6 +8,7 @@ import { getGameState } from '../store/selectors/gameState.selectors'
 import { cacheGameData } from '../utils/cacheGameHandler'
 import { shouldSaveDataOnGameStateChange } from '../utils/util'
 
+// TODO: remove unused code
 export const useCacheGameState = (key, data) => {
     const gameState = useSelector(getGameState)
     const previousGameState = usePreviousRenderValue(gameState)

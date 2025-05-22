@@ -15,10 +15,9 @@ import _isNil from '@lodash/isNil'
 import { showHintHCUseCase } from '../hintsMenu/actionHandlers'
 
 const handleUndoClick = ({ params: { dependencies } }) => {
-    const { boardRepository, gameStateRepository, analytics } = dependencies
+    const { gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
-
-    undoUseCase(boardRepository, analytics)
+    undoUseCase(dependencies)
 }
 
 const getNewPencilState = currentState => {
@@ -39,9 +38,9 @@ const handlePencilClick = ({ params: { dependencies } }) => {
 }
 
 const handleFastPencilClick = ({ params: { dependencies } }) => {
-    const { boardRepository, gameStateRepository, analytics } = dependencies
+    const { gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
-    fastPencilUseCase(boardRepository, analytics)
+    fastPencilUseCase(dependencies)
 }
 
 const getEasiestHintData = (allHints) => {
@@ -94,7 +93,6 @@ const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem }
         const hintsIds = Object.keys(rawHints)
         if (hintsIds.length) {
             const easiestHint = getEasiestHintData(rawHints)
-            console.log(easiestHint)
             showHintHCUseCase({
                 mainNumbers,
                 notes,

@@ -4,6 +4,7 @@ import { Dependencies } from "@application/type";
 import { GameState } from "@application/utils/gameState";
 import { GAME_DATA_KEYS } from "src/apps/arena/utils/cacheGameHandler"; // VIOLATION OF DIP
 
+// TODO: it's defined in 
 export const shouldSaveDataOnGameStateChange = (currentState: GAME_STATE, previousState: GAME_STATE) =>
     new GameState(previousState).isGameActive() && !new GameState(currentState).isGameActive()
 
@@ -29,6 +30,7 @@ const persistGameData = (
             levelNum: refreeRepository.getGameLevelNumber(),
             mistakes: refreeRepository.getGameMistakesCount(),
             time: refreeRepository.getTime(),
+            lastActivityTime: refreeRepository.getLastActivityTime(),
         },
         [GAME_DATA_KEYS.BOARD_DATA]: {
             mainNumbers: boardRepository.getMainNumbers(),

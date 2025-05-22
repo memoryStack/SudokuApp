@@ -21,6 +21,8 @@ export interface RefreeRepository {
     getGameLevel: () => NEW_GAME_IDS;
     setGameLevel: (level: NEW_GAME_IDS) => void;
     getTime: () => Time;
+    getLastActivityTime: () => Time;
+    setLastActivityTime: (time: Time) => void;
     setTime: (time: Time) => void;
     setState: (state: DefaultState) => void;
     getGameLevelNumber: () => number;

@@ -10,7 +10,7 @@ import { ApplyHint, SelectCellOnClose } from '../utils/smartHints/types'
 import { InputNumber } from '../inputPanel'
 import { Hint } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from './helpers'
-import { applyHintUseCase } from '@application/usecases/board'
+import { applyHintUseCase, updateUserActivityTime } from '@application/usecases/board'
 import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase, isValidInputNumberClick } from '@application/usecases/smartHint/smartHint'
 import { ArenaAnalyticsHandler, HintVisibleEventData, ScreenAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 import type { Dependencies } from '@contexts/DependencyContext'
@@ -46,6 +46,7 @@ const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {
     if (newCellToSelect) boardRepository.setSelectedCell(newCellToSelect)
     smartHintRepository.removeHints()
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+    updateUserActivityTime(dependencies)
 }
 
 const handleNextClick = ({ params: { dependencies } }: { params: { dependencies: Dependencies } }) => {

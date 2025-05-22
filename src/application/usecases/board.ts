@@ -55,7 +55,14 @@ const constructMove = ({ mainNumber = {}, notes = {} }, selectedCell: Cell) => (
     notes,
 })
 
-export const fastPencilUseCase = (boardRepository: BoardRepository, analytics: Dependencies['analytics']) => {
+// it's actually a util
+export const updateUserActivityTime = (dependencies: Dependencies) => {
+    const { refreeRepository } = dependencies
+    refreeRepository.setLastActivityTime(refreeRepository.getTime())
+}
+
+export const fastPencilUseCase = (dependencies: Dependencies) => {
+    const { boardRepository, analytics } = dependencies
     const mainNumbers = boardRepository.getMainNumbers()
     const notes = boardRepository.getNotes()
     const newNotesBunchToAdd = Board.getNewNotesToSpawn(mainNumbers, notes)
@@ -68,9 +75,9 @@ export const fastPencilUseCase = (boardRepository: BoardRepository, analytics: D
             bunch: newNotesBunchToAdd,
         },
     }
-
     boardRepository.setNotesBunch(newNotesBunchToAdd)
     boardRepository.addMove(constructMove(move, boardRepository.getSelectedCell()))
+    updateUserActivityTime(dependencies)
     analytics?.sendFastPencilClickEvent?.()
 }
 
@@ -148,6 +155,7 @@ export const inputNumberUseCase = (number: number, dependencies: InputNumberUseC
     const pencilState = boardControllerRepository.getPencil()
     if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, boardRepository, dependencies.sound)
     else inputMainNumber(number, selectedCell, dependencies)
+    updateUserActivityTime(dependencies as unknown as Dependencies)
 }
 
 const removeNotesBunchAndAddMove = (notesBunch: ToggleNotes, boardRepository: BoardRepository) => {
@@ -191,15 +199,16 @@ const eraseMainNumber = (boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapter: SnackBarAdapter, sound: Sound) => {
+export const eraseCellUseCase = (dependencies: Dependencies, sound: Sound) => {
+    const { boardRepository, snackBarAdapter } = dependencies
     const mainNumbers = boardRepository.getMainNumbers()
     const selectedCell = boardRepository.getSelectedCell()
 
     if (Board.isMainNumberNotEligibleToErase(selectedCell, mainNumbers)) {
-        snackBarAdapter.show(
-            'Clues or Correctly filled cells can not be removed',
-            5000
-        )
+        snackBarAdapter.show({
+            msg: 'Clues or Correctly filled cells can not be removed',
+            visibleTime: 5000
+        })
         return
     }
 
@@ -212,6 +221,7 @@ export const eraseCellUseCase = (boardRepository: BoardRepository, snackBarAdapt
             sound?.play?.()
         }
     }
+    updateUserActivityTime(dependencies)
 }
 
 export const applyHintUseCase = (applyHintChanges: ApplyHintData, dependencies: Dependencies) => {
@@ -263,7 +273,8 @@ const undoNotes = (previousMove: any, boardRepository: BoardRepository) => {
     }
 }
 
-export const undoUseCase = (boardRepository: BoardRepository, analytics: Dependencies['analytics']) => {
+export const undoUseCase = (dependencies: Dependencies) => {
+    const { boardRepository, analytics } = dependencies
     const moves = boardRepository.getMoves()
     if (moves.length) {
         const previousMove = moves[moves.length - 1]
@@ -272,6 +283,7 @@ export const undoUseCase = (boardRepository: BoardRepository, analytics: Depende
         undoMainNumber(previousMove, boardRepository)
         undoNotes(previousMove, boardRepository)
         boardRepository.popMove()
+        updateUserActivityTime(dependencies)
     }
     analytics?.sendUndoClickEvent?.()
 }
