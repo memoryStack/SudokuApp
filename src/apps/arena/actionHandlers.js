@@ -43,7 +43,9 @@ const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, levelNu
         { itemId: selectedGameMenuItem, levelNum },
         { ...dependencies, customPuzzleInputToggler }
     )
+}
 
+const handleShowHowToGetHintsCoachmarks = ({ params: { dependencies } }) => {
     setTimeout(async () => {
         const { gameStateRepository } = dependencies || {}
         const gameState = gameStateRepository?.getGameState?.()
@@ -57,8 +59,7 @@ const handleMenuItemPress = ({ setState, params: { selectedGameMenuItem, levelNu
         const userId = await userDetailsAdapter?.getUserId()
         const isUserFamiliarWithHints = await arena?.getUserFamiliarWithHints?.({ userId })
         !isUserFamiliarWithHints && emit(EVENTS.LOCAL.COACHMARKS.HOW_TO_GET_HINTS)
-    }, 3000)
-
+    }, 700)
 }
 
 const handleCustomPuzzleHCClose = ({ setState }) => {
@@ -166,6 +167,7 @@ const ACTION_TYPES = {
     ON_HIDE_GAME_OVER_CARD: 'ON_HIDE_GAME_OVER_CARD',
     ON_NEW_GAME_MENU_CLOSE: 'ON_NEW_GAME_MENU_CLOSE',
     ON_GAME_OVER: 'ON_GAME_OVER',
+    ON_SHOW_GET_HINTS_COACHMARKS: 'ON_SHOW_GET_HINTS_COACHMARKS',
 }
 
 const ACTION_HANDLERS = {
@@ -178,6 +180,7 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_HIDE_GAME_OVER_CARD]: handleHideGameOverCard,
     [ACTION_TYPES.ON_NEW_GAME_MENU_CLOSE]: handleNewGameMenuClose,
     [ACTION_TYPES.ON_GAME_OVER]: handleGameOver,
+    [ACTION_TYPES.ON_SHOW_GET_HINTS_COACHMARKS]: handleShowHowToGetHintsCoachmarks,
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }

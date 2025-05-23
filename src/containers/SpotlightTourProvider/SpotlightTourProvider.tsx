@@ -6,12 +6,15 @@ import { useStyles } from '@utils/customHooks/useStyles';
 
 import { getStyles } from './spotlightTourProvider.styles'
 
-const SpotlightTourProvider = ({ children }) => {
+const SpotlightTourProvider = ({ children, ...rest }) => {
 
     const styles = useStyles(getStyles)
 
     return (
-        <CopilotProvider customStyles={styles}>
+        <CopilotProvider
+            customStyles={styles}
+            {...rest}
+        >
             {children}
         </CopilotProvider>
     )

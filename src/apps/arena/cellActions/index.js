@@ -46,8 +46,14 @@ const BoardController_ = ({ onAction, refFromParent }) => {
 
     const theme = useThemeValues()
 
-    const { start, copilotEvents } = useCopilot()
+    const { start, copilotEvents, currentStepNumber, totalStepsNumber, goToNext, stop, visible } = useCopilot()
     const wentoff = useRef(false)
+
+    useEffect(() => {
+        if (!visible) return
+        const functionToCall = currentStepNumber !== totalStepsNumber ? goToNext : stop
+        setTimeout(functionToCall, 3000)
+    }, [currentStepNumber, totalStepsNumber, goToNext, stop, visible])
 
     useEffect(() => {
         copilotEvents.on("start", () => {
@@ -129,7 +135,7 @@ const BoardControllerComp = withActions({ actionHandlers: ACTION_HANDLERS })(Boa
 
 const WrappedBoardController = ({ refFromParent }) => {
     return (
-        <SpotlightTourProvider>
+        <SpotlightTourProvider showFooter={false}>
             <BoardControllerComp refFromParent={refFromParent} />
         </SpotlightTourProvider>
     )

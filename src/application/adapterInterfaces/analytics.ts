@@ -48,6 +48,8 @@ export type ArenaAnalyticsHandler = {
     sendHowToGetHintsCoachmarkVisibleEvent: () => Promise<void>,
     sendHowToGetHintsCoachmarkStepChangeEvent: (data: CoachmarkStepChangeEventData) => Promise<void>,
     sendHowToGetHintsCoachmarkCompletedEvent: () => Promise<void>,
+    sendNeedHintSuggestionConfirmEvent: () => Promise<void>,
+    sendDNDByHintSuggestionEvent: () => Promise<void>,
 }
 
 export type PlayGuideEventData = {

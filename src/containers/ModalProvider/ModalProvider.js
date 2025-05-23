@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect, useCallback } from 'react'
 
 import { View } from 'react-native'
 
@@ -14,11 +14,23 @@ import { Touchable, TouchableTypes } from '../../apps/components/Touchable'
 
 import { DEFAULT_STATE, MODAL_TEST_ID } from './modalProvider.constants'
 import { getStyles } from './modalProvider.style'
+import _noop from '@lodash/noop'
+import { usePrevious } from '@utils/customHooks'
 
 const ModalProvider = ({ children }) => {
     const [modal, setModal] = useState(DEFAULT_STATE)
 
     const styles = useStyles(getStyles)
+
+    const previousModal = usePrevious(modal)
+
+    useEffect(() => {
+        const wasVisible = previousModal && previousModal.show
+        const isVisible = modal.show
+        if (wasVisible && !isVisible) {
+            previousModal.onCloseCallback()
+        }
+    }, [previousModal, modal])
 
     const handleBackdropPress = () => {
         if (!modal.closeOnBackdropClick) return
@@ -44,19 +56,25 @@ const ModalProvider = ({ children }) => {
         )
     }
 
+    const showModal = useCallback(({ Component, props, closeOnBackdropClick = true, onCloseCallback = _noop }) => {
+        setModal({
+            show: true,
+            Component,
+            props,
+            closeOnBackdropClick,
+            onCloseCallback
+        })
+    }, [])
+
+    const hideModal = useCallback(() => {
+        setModal(DEFAULT_STATE)
+    }, [])
+
     const contextValues = useMemo(() => ({
-        showModal: ({ Component, props, closeOnBackdropClick = true }) => {
-            setModal({
-                show: true,
-                Component,
-                props,
-                closeOnBackdropClick,
-            })
-        },
-        hideModal: () => {
-            setModal(DEFAULT_STATE)
-        },
-    }), [])
+        show: modal.show,
+        showModal,
+        hideModal,
+    }), [modal.show, showModal, hideModal])
 
     return (
         <ModalContext.Provider value={contextValues}>

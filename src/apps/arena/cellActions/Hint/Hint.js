@@ -20,7 +20,8 @@ import { getStyles } from '../cellActions.styles'
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their
 // comfort and confidence level
 
-const copilotText = "Now press on \"Hint\"\n\nApp will use notes filled in previous step to find hints in puzzle"
+// const copilotText = "Now press on \"Hint\"\n\nApp will use notes filled in previous step to find hints in puzzle"
+const copilotText = "Now press on \"Hint\""
 
 const Hint = ({
     iconBoxSize, hints, onClick, disabled, ...rest

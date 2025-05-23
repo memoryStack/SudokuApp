@@ -14,6 +14,7 @@ import Text from '../../atoms/Text'
 import Button, { BUTTON_TYPES } from '../Button'
 
 import { getStyles } from './dialog.styles'
+import { consoleLog } from '@utils/util'
 
 const Dialog = ({
     styles: stylesProp,
@@ -49,15 +50,18 @@ const Dialog = ({
     const renderActionButtons = () => (
         <View style={styles.footerButtonsContainer}>
             {
-                _map(footerButtonsConfig, ({ label, onClick }, index) => (
-                    <Button
-                        key={label}
-                        type={BUTTON_TYPES.TEXT}
-                        style={[styles.footerButton, index ? styles.footerButtonsGap : null]}
-                        label={label}
-                        onPress={onClick}
-                    />
-                ))
+                _map(footerButtonsConfig, ({ label, onClick, type }, index) => {
+                    return (
+                        <Button
+                            key={label}
+                            type={type || BUTTON_TYPES.TEXT}
+                            containerStyle={[styles.footerButton, index ? styles.footerButtonsGap : null]}
+                            label={label}
+                            onPress={onClick}
+                        />
+                    )
+                }
+                )
             }
         </View>
     )
@@ -86,6 +90,7 @@ Dialog.propTypes = {
     footerButtonsConfig: PropTypes.arrayOf(PropTypes.shape({
         label: PropTypes.string.isRequired,
         onClick: PropTypes.func.isRequired,
+        type: PropTypes.oneOf(Object.values(BUTTON_TYPES)),
     })),
     styles: ViewPropTypes.style,
 }

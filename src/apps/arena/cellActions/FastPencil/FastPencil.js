@@ -15,7 +15,7 @@ import { Touchable } from '../../../components/Touchable'
 
 import { getStyles } from '../cellActions.styles'
 
-const copilotText = "To get Hints in puzzle\n\nFirst press on Fast Pencil to fill some notes in puzzle"
+const copilotText = "To get Hints when you wish\n\nFirst press on Fast Pencil"
 
 const FastPencil = ({ iconBoxSize, onClick, ...rest }) => {
     const styles = useStyles(getStyles)

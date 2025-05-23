@@ -14,6 +14,8 @@ const EVENT_NAMES = {
     HOW_TO_GET_HINTS_COACHMARK_VISIBLE: 'howToGetHintsCoachmarkVisible',
     HOW_TO_GET_HINTS_COACHMARK_STEP_CHANGE: 'howToGetHintsCoachmarkStepChange',
     HOW_TO_GET_HINTS_COACHMARK_COMPELTED: 'howToGetHintsCoachmarkCompleted',
+    NEED_HINT_SUGGESTION_CONFIRM: 'needHintSuggestionConfirm',
+    DND_BY_HINT_SUGGESTION: 'dndByHintSuggestion',
 }
 
 export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
@@ -66,5 +68,15 @@ export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
         const client = getClient()
         const commonData = await getEventCommonData()
         return client.sendEvent(EVENT_NAMES.HOW_TO_GET_HINTS_COACHMARK_COMPELTED, { ...commonData })
-    }
+    },
+    sendNeedHintSuggestionConfirmEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.NEED_HINT_SUGGESTION_CONFIRM, { ...commonData })
+    },
+    sendDNDByHintSuggestionEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.DND_BY_HINT_SUGGESTION, { ...commonData })
+    },
 }

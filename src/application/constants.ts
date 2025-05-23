@@ -1,4 +1,4 @@
-import { AUTO_GENERATED_NEW_GAME_IDS } from "./usecases/newGameMenu/constants"
+import { AUTO_GENERATED_NEW_GAME_IDS, NEW_GAME_IDS } from "./usecases/newGameMenu/constants"
 
 export enum BOARD_MOVES_TYPES {
     ADD = 'ADD',
@@ -63,4 +63,13 @@ export enum ROUTES {
     DIVIDER = DESIGN_SYSTEM_ROUTES.DIVIDER,
     DIALOG = DESIGN_SYSTEM_ROUTES.DIALOG,
     LEVEL_CARD = DESIGN_SYSTEM_ROUTES.LEVEL_CARD,
+}
+
+// in seconds
+export const INACTIVITY_THRESHOLD_FOR_HINT_SUGGESTION = {
+    [NEW_GAME_IDS.EASY]: 90,
+    [NEW_GAME_IDS.MEDIUM]: 120,
+    [NEW_GAME_IDS.HARD]: 180,
+    [NEW_GAME_IDS.CUSTOMIZE_PUZZLE]: 180, // let's keep hard and customized as same
+    DEFAULT: 90
 }
