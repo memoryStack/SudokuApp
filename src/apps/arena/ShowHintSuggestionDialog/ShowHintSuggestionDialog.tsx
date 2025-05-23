@@ -11,6 +11,8 @@ import { getStyles } from './showHintSuggestionDialog.styles'
 import Dialog from '@ui/molecules/Dialog'
 import { BUTTON_TYPES } from '@ui/molecules/Button'
 
+import LottieView from 'lottie-react-native';
+
 type Props = {
     description: string,
     onSnoozeClick: () => void,
@@ -23,7 +25,12 @@ const ShowHintSuggestionDialog: React.FC<Props> = ({
 }) => {
     const styles = useStyles(getStyles)
 
-    const languagesOptionsView = <View style={{ width: 100, backgroundColor: 'red', height: 100 }}></View>
+    const languagesOptionsView = <LottieView
+        style={styles.animationContainer}
+        source={require('./animations/hintAnimation.lottie')}
+        autoPlay
+        loop
+    />
 
     return (
         <Dialog

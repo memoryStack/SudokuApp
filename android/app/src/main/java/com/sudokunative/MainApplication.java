@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 
 import android.os.Build;
+import com.airbnb.android.react.lottie.LottiePackage;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -38,7 +39,8 @@ public class MainApplication extends Application implements ReactApplication {
             // Packages that cannot be autolinked yet can be added manually here, for
             // example:
             // packages.add(new MyReactNativePackage());
-               packages.add(new BuildConfigPackage());
+                packages.add(new LottiePackage());
+                packages.add(new BuildConfigPackage());
             return packages;
         }
 
