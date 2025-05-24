@@ -75,7 +75,10 @@ export type HintsVocobularyAnalyticsHandler = {
     sendVocabularyViewEvent: (data: HintVocabularyViewData) => Promise<void>,
 }
 
-type HomeAnalyticsHandlers = {}
+export type HomeAnalyticsHandlers = {
+    sendUpdateCancelledEvent: () => Promise<void>,
+    sendUpdateConfirmedEvent: () => Promise<void>,
+}
 
 export type ScreenAnalyticsHandlers = ArenaAnalyticsHandler |
     HomeAnalyticsHandlers |
