@@ -57,6 +57,7 @@ import {
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { InputPanelNumbersVisibility } from '../utils/smartHints/types'
 import { ArenaAnalyticsHandler } from '@application/adapterInterfaces/analytics'
+import { updateUserActivityTime } from '@application/usecases/board'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -182,6 +183,7 @@ const SmartHintHC_: React.FC<Props> = ({
         closeDragger()
         const { boardControllerRepository } = dependencies
         boardControllerRepository.incrementHintsUsed()
+        updateUserActivityTime(dependencies)
     }
 
     const onApplyHintClick = useCallback(() => {

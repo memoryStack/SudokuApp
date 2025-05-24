@@ -38,7 +38,7 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes, depend
 
     if (availableHintsCount === 0) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-            msg: 'Oops! no hints are found\nPlease check if all the cells are filled with all the guesses properly. Use Fast Pencil if not done already.',
+            msg: 'Oops! no hints are found\nFill some guesses in puzzle and then click "Hint"',
             visibleTime: 3000,
             customStyles: {
                 bottom: 50,

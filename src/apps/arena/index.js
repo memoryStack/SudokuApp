@@ -184,14 +184,14 @@ const Arena_ = ({
 
     useEffect(() => {
         const timeDifference = getTimeDifferenceInSeconds(time, lastActivityTime)
-        const inactivityThreshold = 10 || INACTIVITY_THRESHOLD_FOR_HINT_SUGGESTION[difficultyLevelID]
+        const inactivityThreshold = INACTIVITY_THRESHOLD_FOR_HINT_SUGGESTION[difficultyLevelID]
             || INACTIVITY_THRESHOLD_FOR_HINT_SUGGESTION.DEFAULT
 
-        if (timeDifference < inactivityThreshold) return
+        if (timeDifference < inactivityThreshold || showSmartHint || !(new GameState(gameState).isGameActive())) return
 
         getKey(HINT_SUGGESTION_TOGGLE_KEY)
             .then((showHintSuggestion) => {
-                if (new GameState(gameState).isGameActive() && !showSmartHint && showHintSuggestion !== false) {
+                if (showHintSuggestion !== false) {
                     showModal({
                         Component: ShowHintSuggestionDialog,
                         onCloseCallback: () => updateUserActivityTime(dependencies),

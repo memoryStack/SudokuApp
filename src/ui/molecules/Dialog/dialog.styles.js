@@ -4,7 +4,7 @@ import _get from '@lodash/get'
 
 export const getStyles = ({ isIconPresent, windowWidth }, theme) => StyleSheet.create({
     container: {
-        backgroundColor: _get(theme, 'dialog.container.color'),
+        backgroundColor: 'white', // _get(theme, 'dialog.container.color'),
         borderRadius: _get(theme, 'dialog.container.layout.shape.borderRadius'),
         padding: _get(theme, 'dialog.container.layout.padding'),
         width: Math.min(windowWidth - 48, _get(theme, 'dialog.container.layout.width.max')), // TODO: take care of this 48 here

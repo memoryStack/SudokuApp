@@ -12,7 +12,7 @@ interface Adapter extends SoundAdapter {
 const SoundResources: Record<SOUNDS, string> = {
     [SOUNDS.CELL_CLICK]: require('@resources/sounds/cell_click.mp3'),
     [SOUNDS.ERASER_CLICK]: require('@resources/sounds/eraser.mp3'),
-    [SOUNDS.NUMBER_INPUT]: require('@resources/sounds/number_input.mp3'),
+    [SOUNDS.NUMBER_INPUT]: require('@resources/sounds/number_input4.mp3'),
     [SOUNDS.MISTAKE]: require('@resources/sounds/error.mp3'),
     [SOUNDS.GAME_OVER]: require('@resources/sounds/game_over.mp3'),
     [SOUNDS.GAME_SOLVED]: require('@resources/sounds/game_solved.mp3'),
@@ -28,12 +28,12 @@ const Sounds: Record<SOUNDS, Sound | null> = {
 }
 
 const SoundsViolume: Record<SOUNDS, number> = {
-    [SOUNDS.CELL_CLICK]: 0.5,
-    [SOUNDS.ERASER_CLICK]: 1,
-    [SOUNDS.MISTAKE]: 1,
-    [SOUNDS.NUMBER_INPUT]: 1,
-    [SOUNDS.GAME_OVER]: 1,
-    [SOUNDS.GAME_SOLVED]: 1,
+    [SOUNDS.CELL_CLICK]: 0.1,
+    [SOUNDS.ERASER_CLICK]: 0.1,
+    [SOUNDS.MISTAKE]: 0.1,
+    [SOUNDS.NUMBER_INPUT]: 0.2,
+    [SOUNDS.GAME_OVER]: 0.1,
+    [SOUNDS.GAME_SOLVED]: 0.1,
 }
 
 export const soundAdapter: Adapter = {

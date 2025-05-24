@@ -46,7 +46,6 @@ const handleOnClose = ({ params: { newCellToSelect, dependencies } }: {
     if (newCellToSelect) boardRepository.setSelectedCell(newCellToSelect)
     smartHintRepository.removeHints()
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
-    updateUserActivityTime(dependencies)
 }
 
 const handleNextClick = ({ params: { dependencies } }: { params: { dependencies: Dependencies } }) => {
