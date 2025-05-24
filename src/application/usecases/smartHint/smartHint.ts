@@ -186,7 +186,7 @@ export const showHowToGetHintsCoachMarksUseCase = async (
         coachMarksAdapter,
     } = dependencies
 
-    const userSawAHintYet = await smartHintRepository.getUserSawAHint()
+    const userSawAHintYet = false // await smartHintRepository.getUserSawAHint()
     const userLearnedToGetHints = await coachMarksAdapter.getUserLearnedToGetHints()
 
     return !userSawAHintYet && !userLearnedToGetHints
