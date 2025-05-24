@@ -3,6 +3,7 @@ import { Linking } from 'react-native'
 import { Platform } from '@utils/classes/platform'
 
 import { DialogBody as UpdateAppDialogBody } from './components/UpdateAppDialogBody'
+import { HomeAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 
 const onInit = async ({ params: {
     dependencies, modalContextValues
@@ -12,6 +13,7 @@ const onInit = async ({ params: {
     const { showModal, hideModal } = modalContextValues
 
     const serviceAdapter = dependencies?.services?.appVersion
+    const analytics = dependencies?.analytics as HomeAnalyticsHandlers
 
     const { features, mandatory } = await serviceAdapter?.getAppUpdate()
 
@@ -22,8 +24,14 @@ const onInit = async ({ params: {
             props: {
                 features,
                 cancellable: !mandatory,
-                onCancelPress: hideModal,
-                onUpdatePress,
+                onCancelPress: () => {
+                    analytics?.sendUpdateCancelledEvent?.()
+                    hideModal()
+                },
+                onUpdatePress: () => {
+                    onUpdatePress()
+                    analytics?.sendUpdateConfirmedEvent?.()
+                },
             },
         })
     }
