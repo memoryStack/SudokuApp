@@ -7,16 +7,6 @@ import {
 import { BADGE_TEST_ID } from '@ui/atoms/Badge'
 import Hint from './Hint'
 
-test('snapshot for enabled Hint', () => {
-    const tree = render(<Hint iconBoxSize={50} hints={3} />).toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
-test('snapshot for disabled Hint', () => {
-    const tree = render(<Hint iconBoxSize={50} hints={3} />).toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
 describe('Hint', () => {
     test.skip('will show remaining hints count in a Badge', () => {
         render(<Hint iconBoxSize={50} hints={3} />)

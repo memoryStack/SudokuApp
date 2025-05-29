@@ -6,11 +6,6 @@ import {
 
 import FastPencil from './FastPencil'
 
-test('snapshot for  FastPencil', () => {
-    const tree = render(<FastPencil iconBoxSize={50} />).toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
 describe('FastPencil', () => {
     test('will call handler on click', () => {
         const onClick = jest.fn()

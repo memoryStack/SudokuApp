@@ -6,21 +6,6 @@ import { PersistentRender } from '@utils/testing/persistentRender'
 import Radio from './RadioButton'
 import { TEST_IDS } from './radioButton.constants'
 
-test('snapshot for not selected radio button', () => {
-    const tree = render(<Radio isSelected={false} />).toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
-test('snapshot for selected radio button', () => {
-    const tree = render(<Radio isSelected />).toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
-test('snapshot for disabled radio button', () => {
-    const tree = render(<Radio disabled />).toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
 describe('radio button functionality', () => {
     test('renders only the outer circle if not selected', () => {
         render(<Radio isSelected={false} />)

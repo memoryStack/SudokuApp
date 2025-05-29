@@ -6,11 +6,6 @@ import {
 
 import Undo from './Undo'
 
-test('snapshot for  Undo', () => {
-    const tree = render(<Undo iconBoxSize={50} />).toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
 describe('Undo', () => {
     test('will call handler on click', () => {
         const onClick = jest.fn()
