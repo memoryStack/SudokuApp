@@ -26,6 +26,9 @@
             "@application/*": [
                 "./src/application/*"
             ],
+            "@interfaces/*": [
+                "./src/interfaces/*"
+            ],
         }
     },
     "exclude": [

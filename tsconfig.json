@@ -52,6 +52,9 @@
             "@application/*": [
                 "./src/application/*"
             ],
+            "@interfaces/*": [
+                "./src/interfaces/*"
+            ],
         },
         // "rootDirs": [],  /* Allow multiple folders to be treated as one when resolving modules. */
         "typeRoots": [
