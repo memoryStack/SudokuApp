@@ -92,7 +92,16 @@ const BoardController_ = ({ onAction, refFromParent }) => {
 
     const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK, payload: { dependencies } })
 
-    const onHintClick = () => onAction({ type: ACTION_TYPES.ON_HINT_CLICK, payload: { dependencies, smartHintsColorSystem: _get(theme, 'colors.smartHints'), } })
+    const onHintClick = (showAllHints = false) => {
+        onAction({
+            type: ACTION_TYPES.ON_HINT_CLICK,
+            payload: {
+                dependencies,
+                smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+                showAllHints
+            }
+        })
+    }
 
     // TODO: use a single component for these 4 components, and use them via a config
     return (

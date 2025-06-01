@@ -10,6 +10,12 @@ export enum PENCIL_STATE {
     INACTIVE = 'INACTIVE',
 }
 
+// TODO: right now while displaying hint the game_state is considered as ACTIVE
+// we should have a clear distinction so that we can build a game_state machine
+// to build out logic around these states
+// it's usecase came up while writing "shouldShowHintsMenuTooltip", here i don't want to
+// show tooltip while game is not ACTIVE but turns out while displaying hint the game_state is ACTIVE
+// and i was expecting that game_state would be DISPLAY_HINT
 export enum GAME_STATE {
     ACTIVE = 'ACTIVE',
     INACTIVE = 'INACTIVE',

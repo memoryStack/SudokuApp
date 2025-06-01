@@ -73,11 +73,9 @@ const getEasiestHintData = (allHints) => {
     }
 }
 
-const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem } }) => {
+const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, showAllHints } }) => {
     const { gameStateRepository, boardControllerRepository, boardRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
-
-    const showAllHints = false
 
     if (showAllHints) {
         gameStateRepository.setGameState(GAME_STATE.DISPLAY_HINT)

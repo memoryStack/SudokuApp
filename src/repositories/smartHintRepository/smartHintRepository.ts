@@ -11,6 +11,7 @@ import {
     getUnclickableCellClickInTryOutMsg,
     getCellToFocusData,
     getTryOutInputsColors,
+    getShowSmartHint
 } from '../../apps/arena/store/selectors/smartHintHC.selectors'
 import {
     SmartHintRepository as SmartHintRepositoryInterface,
@@ -73,6 +74,7 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
     getUnclickableCellClickInTryOutMsg: () => getUnclickableCellClickInTryOutMsg(getStoreState()),
     getCellToFocusData: () => getCellToFocusData(getStoreState()),
     getTryOutInputsColors: () => getTryOutInputsColors(getStoreState()),
+    getShowSmartHint: () => getShowSmartHint(getStoreState()),
     setUserSawAHint: async () => {
         return setKey('userSawAHint', true)
     },

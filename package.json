@@ -41,6 +41,7 @@
         "react-native-copilot": "git@github.com:memoryStack/react-native-copilot.git#master",
         "react-native-gesture-handler": "^1.10.3",
         "react-native-htmlview": "^0.17.0",
+        "react-native-popable": "git@github.com:memoryStack/react-native-popable.git#main",
         "react-native-safe-area-context": "^3.3.2",
         "react-native-screens": "^3.10.0",
         "react-native-share": "^7.3.0",

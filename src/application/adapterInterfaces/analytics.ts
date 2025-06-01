@@ -37,6 +37,10 @@ export type CoachmarkStepChangeEventData = {
     position: number
 }
 
+export type HintsMenuTooltipShownEventData = {
+    count: number
+}
+
 export type ArenaAnalyticsHandler = {
     sendSmartHintVisibleEvent: (data: HintVisibleEventData) => Promise<void>,
     sendPuzzleLifeCycleEvent: (data: PuzzleLifeCycleEvent) => Promise<void>,
@@ -50,6 +54,7 @@ export type ArenaAnalyticsHandler = {
     sendHowToGetHintsCoachmarkCompletedEvent: () => Promise<void>,
     sendNeedHintSuggestionConfirmEvent: () => Promise<void>,
     sendDNDByHintSuggestionEvent: () => Promise<void>,
+    sendHintsMenuTooltipShownEvent: (data: HintsMenuTooltipShownEventData) => Promise<void>,
 }
 
 export type PlayGuideEventData = {

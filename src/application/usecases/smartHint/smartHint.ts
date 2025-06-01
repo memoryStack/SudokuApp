@@ -10,6 +10,10 @@ import type { Dependencies } from "../../type"
 import { areCommonHouseCells, areSameCells, getCellAxesValues } from "@domain/board/utils/housesAndCells"
 import { isMainNumberPresentInAnyHouseOfCell } from "@domain/board/utils/common"
 import { cellHasTryOutInput } from "./utils"
+import { INACTIVITY_THRESHOLD_FOR_HINT_SUGGESTION } from "@application/constants"
+import { GameState } from "@application/utils/gameState"
+import { Time } from '../../adapterInterfaces/stateManagers/refreeRepository'
+import { MAX_HINTS_MENU_TOOLTIP_SHOWN_COUNT } from "@application/adapterInterfaces/coachMarks"
 
 const SNACKBAR_VISIBLE_TIME = 4000
 
@@ -190,4 +194,31 @@ export const showHowToGetHintsCoachMarksUseCase = async (
     const userLearnedToGetHints = await coachMarksAdapter.getUserLearnedToGetHints()
 
     return !userSawAHintYet && !userLearnedToGetHints
+}
+
+// TODO: this is copied from arena utils, take care of it
+export const getTimeDifferenceInSeconds = (timeA: Time, timeB: Time) => {
+    const timeAInSeconds = timeA.hours * 3600 + timeA.minutes * 60 + timeA.seconds;
+    const timeBInSeconds = timeB.hours * 3600 + timeB.minutes * 60 + timeB.seconds;
+    return Math.abs(timeAInSeconds - timeBInSeconds);
+}
+
+export const shouldShowHintsMenuTooltip = async (dependencies: Dependencies) => {
+    const {
+        gameStateRepository,
+        coachMarksAdapter,
+        refreeRepository,
+        smartHintRepository
+    } = dependencies
+
+    if (!new GameState(gameStateRepository.getGameState()).isGameActive() || smartHintRepository.getShowSmartHint()) return
+
+    const inactivityTime = getTimeDifferenceInSeconds(refreeRepository.getLastActivityTime(), refreeRepository.getTime())
+
+    const inactivityThreshold = INACTIVITY_THRESHOLD_FOR_HINT_SUGGESTION[refreeRepository.getGameLevel()]
+        || INACTIVITY_THRESHOLD_FOR_HINT_SUGGESTION.DEFAULT
+
+    if (Math.abs(inactivityThreshold - inactivityTime) < 5) return false
+
+    return await coachMarksAdapter.getHintsMenuTooltipCount() < MAX_HINTS_MENU_TOOLTIP_SHOWN_COUNT
 }
