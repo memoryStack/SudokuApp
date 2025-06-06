@@ -5,7 +5,7 @@ import { View } from 'react-native'
 import _isNil from '@lodash/isNil'
 
 import SmartHintText from '@ui/molecules/SmartHintText'
-import { Board } from 'src/apps/arena/gameBoard'
+import { Board, CellBGColorStyle } from 'src/apps/arena/gameBoard'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { getStyles } from './row.styles'
@@ -24,7 +24,7 @@ const Row = () => {
                 {...boardData}
                 showCellContent
                 getCellBGColor={(cell: Cell) => {
-                    if (cell.row === 3) return styles.highlightedCell
+                    if (cell.row === 3) return styles.highlightedCell as CellBGColorStyle
                     return null
                 }}
             />

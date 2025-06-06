@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { StyleProp, ViewStyle, View, ViewPropTypes } from 'react-native'
-
-import PropTypes from 'prop-types'
+import { StyleProp, ViewStyle, View } from 'react-native'
 
 import _get from '@lodash/get'
 import _noop from '@lodash/noop'
@@ -13,20 +11,20 @@ import { getStyles } from './levelStars.styles'
 
 import { LevelStarIcon } from '@resources/svgIcons/levelStar'
 
+// TODO: move these to the contants in the UI layer
+export enum ICON_SIZE_TYPES {
+    EXTRA_SMALL = 'EXTRA_SMALL',
+    SMALL = 'SMALL',
+    MEDIUM = 'MEDIUM',
+    LARGE = 'LARGE',
+    EXTRA_LARGE = 'EXTRA_LARGE'
+}
+
 export interface Props {
     activeStars: number
     containerStyle?: StyleProp<ViewStyle>,
     middleStarStyle?: StyleProp<ViewStyle>,
-    iconSizeType?: string
-}
-
-// TODO: move these to the contants in the UI layer
-export const ICON_SIZE_TYPES = {
-    EXTRA_SMALL: 'EXTRA_SMALL',
-    SMALL: 'SMALL',
-    MEDIUM: 'MEDIUM',
-    LARGE: 'LARGE',
-    EXTRA_LARGE: 'EXTRA_LARGE'
+    iconSizeType?: ICON_SIZE_TYPES
 }
 
 export const ICON_SIZES = {
@@ -48,7 +46,7 @@ const LevelStars: React.FC<Props> = ({
     activeStars,
     containerStyle,
     middleStarStyle,
-    iconSizeType
+    iconSizeType = ICON_SIZE_TYPES.SMALL
 }) => {
     const styles = useStyles(getStyles)
     const starsActiveInfo = getStarsActiveInfo(activeStars)
@@ -73,15 +71,3 @@ const LevelStars: React.FC<Props> = ({
 }
 
 export default React.memo(LevelStars)
-
-LevelStars.propTypes = {
-    activeStars: PropTypes.number,
-    containerStyle: ViewPropTypes.style,
-    middleStarStyle: ViewPropTypes.style,
-}
-
-LevelStars.defaultProps = {
-    activeStars: 0,
-    containerStyle: null,
-    middleStarStyle: null,
-}

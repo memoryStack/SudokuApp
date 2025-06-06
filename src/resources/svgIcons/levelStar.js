@@ -14,7 +14,7 @@ const activeColors = {
     1: "#f7a928"
 }
 
-const SvgComponent = ({ active, ...restProps }) => {
+const SvgComponent = ({ active = true, ...restProps }) => {
     const iconColorConfig = active ? activeColors : inactiveColors
     return (
         <Svg width={16} height={16} id="star" viewBox="0 0 16 16" {...restProps}>

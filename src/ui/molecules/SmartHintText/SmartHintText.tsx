@@ -42,10 +42,9 @@ const SmartHintText: React.FC<Props> = ({
     const navigation = useNavigation()
 
     const onLinkPress = (vocabKeyword: string) => {
-        // TODO: fix this 'never' issue
-        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION as never, {
+        navigation.navigate(ROUTES.HINTS_VOCABULARY_EXPLAINATION, {
             [HINTS_VOCABULARY_SCREEN_PARAMS.VOCAB_KEYWORD]: vocabKeyword,
-        } as never)
+        })
     }
 
     return (

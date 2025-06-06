@@ -4,8 +4,9 @@ import { ROUTES } from 'src/navigation/route.constants'
 
 import { GameLevelsInfo } from '@application/usecases/gameLevels/type'
 import { getGameLevelsUseCase } from '@application/usecases/gameLevels/gameLevels'
+import { StatePropsHandlers } from '@utils/hocs/withActions/types'
 
-const onInit = async ({ setState, getState, params: dependencies }) => {
+const onInit = async ({ setState, getState, params: dependencies }: StatePropsHandlers) => {
     const { route } = getState()
     const selectedLevel = getRouteParamValue('selectedGameMenuItem', route)
     getGameLevelsUseCase(selectedLevel, dependencies)

@@ -12,7 +12,6 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { getStyles } from './levelCard.styles'
 
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
-import { LockIcon } from '@resources/svgIcons/lock'
 import { PlayIcon } from '@resources/svgIcons/play'
 import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
 import LevelStars from '../LevelStars'

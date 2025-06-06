@@ -37,7 +37,7 @@ for (let i = 0; i < 8; i++) { bordersLooper.push(i) }
 
 type NotesRefs = Array<Array<Array<React.RefObject<unknown>>>>
 
-type CellBGColorStyle = {
+export type CellBGColorStyle = {
     backgroundColor: string
 }
 
@@ -52,10 +52,10 @@ interface Props {
     cellsHighlightData?: CellsFocusData
     axisTextStyles?: StyleProp<ViewStyle>
     boardContainerStyles?: StyleProp<ViewStyle>
-    svgProps: Chain
+    svgProps?: Chain
     showCellContent: boolean
-    showHintsSVGView: boolean
-    getCellBGColor?: () => CellBGColorStyle | null
+    showHintsSVGView?: boolean
+    getCellBGColor?: (cell: Cell) => CellBGColorStyle | null
     getCellMainNumberFontColor?: () => FontColor | null
     getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null // this signature is wrong, first argument is Note, not NoteValue
     hideSVGDrawingsMarkersEnd?: boolean

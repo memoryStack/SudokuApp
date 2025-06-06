@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 
 import { View } from 'react-native'
 
+import { StackNavigationProp } from '@react-navigation/stack';
+
 import _get from '@lodash/get'
 import _noop from '@lodash/noop'
 import _isEmpty from '@lodash/isEmpty'
@@ -24,6 +26,8 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import GameLevelsList from '../components/GameLevelsList/GameLevelsList'
 import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from 'src/constants/events'
+import { AUTO_GENERATED_NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants';
+import { StyleSheetObject } from 'src/apps/types'
 
 const itemEqualityChecker = () => new DataProvider((r1, r2) => {
     return r1 !== r2
@@ -39,7 +43,7 @@ const getLayoutProvider = () => {
     )
 }
 
-const renderStarsEarning = (starsEarned, maxStars, styles) => {
+const renderStarsEarning = (starsEarned: number, maxStars: number, styles: StyleSheetObject) => {
     if (!starsEarned) return null
     return (
         <View style={styles.performanceContainer}>
@@ -49,6 +53,14 @@ const renderStarsEarning = (starsEarned, maxStars, styles) => {
             </Text>
         </View>
     )
+}
+
+type Props = {
+    onAction: Function
+    navigation: StackNavigationProp<any, any>
+    route: any
+    maxStars: number
+    starsEarned: number
 }
 
 const Levels: React.FC<Props> = ({
@@ -63,7 +75,7 @@ const Levels: React.FC<Props> = ({
     }, [])
 
     useEffect(() => {
-        const selectedLevel = getRouteParamValue('selectedGameMenuItem', route)
+        const selectedLevel = getRouteParamValue('selectedGameMenuItem', route) as AUTO_GENERATED_NEW_GAME_IDS
         const title = `${GAME_LEVELS_TEXT[selectedLevel]} Levels`
         title && navigation.setOptions({ title })
     }, [])
@@ -81,7 +93,7 @@ const Levels: React.FC<Props> = ({
                 layoutProvider={getLayoutProvider()}
                 dataProvider={itemEqualityChecker()}
                 puzzleType={getRouteParamValue('selectedGameMenuItem', route)}
-                onPuzzleClick={({ levelNum }) => {
+                onPuzzleClick={({ levelNum }: { levelNum: number }) => {
                     onAction({
                         type: ACTION_TYPES.ON_LEVEL_CLICK,
                         payload: { levelNum }

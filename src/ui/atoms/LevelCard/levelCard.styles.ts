@@ -10,7 +10,7 @@ const disabledButtonConfig = {
     state: BUTTON_STATES.DISABLED
 }
 
-export const getStyles = ({ levelState }, theme) => {
+export const getStyles = (_: any, theme) => {
     return StyleSheet.create({
         container: {
             display: 'flex',

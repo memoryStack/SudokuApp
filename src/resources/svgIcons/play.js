@@ -2,9 +2,7 @@ import React, { memo } from 'react'
 
 import Svg, { Path, G } from 'react-native-svg'
 
-import PropTypes from 'prop-types'
-
-const SvgComponent = ({ fill, width, height, ...restProps }) => (
+const SvgComponent = ({ fill = '#595bd4', width = 24, height = 24, ...restProps }) => (
     <Svg height={height} width={width} viewBox="0 0 6 7" id="Play" {...restProps}>
         <G fillRule="evenodd">
             <G fill={fill} transform="translate(-347 -3766)">
@@ -20,15 +18,3 @@ const SvgComponent = ({ fill, width, height, ...restProps }) => (
 );
 
 export const PlayIcon = memo(SvgComponent)
-
-SvgComponent.propTypes = {
-    fill: PropTypes.string,
-    width: PropTypes.number,
-    height: PropTypes.number,
-}
-
-SvgComponent.defaultProps = {
-    fill: "#595bd4",
-    width: 24,
-    height: 24,
-}

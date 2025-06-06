@@ -28,9 +28,9 @@ const OUT_OF_FOCUS_APP_STATES = ['inactive', 'background']
 
 const Page_ = ({
     children,
-    onLayout,
-    onFocus,
-    onBlur,
+    onLayout = _noop,
+    onFocus = _noop,
+    onBlur = _noop,
     style: styleProp,
     ...restProps
 }) => {
@@ -112,7 +112,7 @@ const Page_ = ({
 export const Page = React.memo(Page_)
 
 Page_.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]).isRequired,
     onLayout: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
@@ -120,7 +120,6 @@ Page_.propTypes = {
 }
 
 Page_.defaultProps = {
-    children: null,
     onLayout: _noop,
     onFocus: _noop,
     onBlur: _noop,

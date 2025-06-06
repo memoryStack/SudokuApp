@@ -23,5 +23,5 @@ export interface SmartHintRepository extends ApplicationLayerSmartHintRepoInterf
     getRemovableNotes: () => RemovableNotesInfo | undefined
     getUnclickableCellClickInTryOutMsg: () => string | undefined
     getCellToFocusData: () => CellsFocusData | null
-    getTryOutInputsColors: () => TryOutInputsColors | null
+    getTryOutInputsColors: () => TryOutInputsColors | null | undefined
 }

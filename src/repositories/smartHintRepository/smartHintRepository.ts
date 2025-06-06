@@ -76,9 +76,9 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
     getTryOutInputsColors: () => getTryOutInputsColors(getStoreState()),
     getShowSmartHint: () => getShowSmartHint(getStoreState()),
     setUserSawAHint: async () => {
-        return setKey('userSawAHint', true)
+        await setKey('userSawAHint', true)
     },
     getUserSawAHint: async () => {
-        return getKey('userSawAHint')
+        return !!getKey('userSawAHint')
     },
 }

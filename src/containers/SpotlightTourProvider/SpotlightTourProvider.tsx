@@ -6,7 +6,11 @@ import { useStyles } from '@utils/customHooks/useStyles';
 
 import { getStyles } from './spotlightTourProvider.styles'
 
-const SpotlightTourProvider = ({ children, ...rest }) => {
+type Props = {
+    children: React.ReactElement
+}
+
+const SpotlightTourProvider: React.FC<Props> = ({ children, ...rest }) => {
 
     const styles = useStyles(getStyles)
 
