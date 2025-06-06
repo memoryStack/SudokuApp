@@ -17,12 +17,10 @@ import { MAX_HINTS_MENU_TOOLTIP_SHOWN_COUNT } from "@application/adapterInterfac
 
 const SNACKBAR_VISIBLE_TIME = 4000
 
-export const isValidInputNumberClick = (number: MainNumberValue, smartHintRepository: SmartHintRepository) => {
+export const isValidInputNumberClick = (number: MainNumberValue, smartHintRepository: SmartHintRepository, boardRepository: Dependencies['boardRepository']) => {
     const selectedCell = smartHintRepository.getTryOutSelectedCell() as Cell
-    const mainNumbers = smartHintRepository.getTryOutMainNumbers() as MainNumbers
-    const notes = smartHintRepository.getTryOutNotes() as Notes
-    return !MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)
-        && NotesRecord.isNotePresentInCell(notes, number, selectedCell)
+    const notes = boardRepository.getNotes() as Notes
+    return NotesRecord.isNotePresentInCell(notes, number, selectedCell)
 }
 
 const isRestrictedInputClick = (inputNumber: MainNumberValue, smartHintRepository: SmartHintRepository) => {
@@ -64,7 +62,7 @@ export const inputTryOutNumberUseCase = (
     snackBarCustomStyles: any,
     dependencies: Dependencies
 ) => {
-    const { smartHintRepository, snackBarAdapter, sound } = dependencies
+    const { smartHintRepository, snackBarAdapter, sound, boardRepository } = dependencies
     const selectedCell = smartHintRepository.getTryOutSelectedCell()
     if (_isEmpty(selectedCell)) {
         snackBarAdapter.show({
@@ -75,9 +73,9 @@ export const inputTryOutNumberUseCase = (
         return
     }
 
-    if (!isValidInputNumberClick(number, smartHintRepository)) {
+    if (!isValidInputNumberClick(number, smartHintRepository, boardRepository)) {
         snackBarAdapter.show({
-            msg: `try filling cell which is empty and has ${number} as a candidate there`,
+            msg: `${number} can't go in this cell. try filling it where ${number} is a candidate`,
             visibleTime: SNACKBAR_VISIBLE_TIME,
             customStyles: snackBarCustomStyles,
         })

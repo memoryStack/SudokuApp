@@ -307,7 +307,7 @@ describe('Hint/Smart Hints', () => {
         }, { timeout: 5000 })
     }, 10000)
 
-    test.skip('in try out step, input in cell shoule be able to change by just clicking another number in cell like Custom Puzzle', async () => {
+    test('in try out step, input in cell should be able to change by just clicking another number in cell when a number is already filled in the cell like Custom Puzzle', async () => {
         await renderScreenAndWaitForPuzzleStart()
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE])
         await gotoTryOutStep()

@@ -100,7 +100,7 @@ const handleNumberClick = ({
         actualMainNumbers: boardRepository.getMainNumbers(),
     })
 
-    const numberWillBeInserted = isValidInputNumberClick(number, smartHintRepository)
+    const numberWillBeInserted = isValidInputNumberClick(number, smartHintRepository, boardRepository)
     if (numberWillBeInserted && isCellFilledInTryOut) {
         handleEraserClick({ getState, setState, params: { dependencies, hintId, avoidEraseSound: true } })
     }
