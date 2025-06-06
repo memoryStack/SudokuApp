@@ -1,13 +1,29 @@
 import * as React from 'react'
 
+import { useRoute } from '@react-navigation/native'
+
 import {
     fireEvent, render, screen,
 } from '@utils/testing/testingLibrary'
 
 import { BADGE_TEST_ID } from '@ui/atoms/Badge'
 import Hint from './Hint'
+import { ROUTES } from '@application/constants'
+
+jest.mock('@react-navigation/native', () => ({
+    ...jest.requireActual('@react-navigation/native'),
+    useRoute: jest.fn(),
+}))
 
 describe('Hint', () => {
+    beforeEach(() => {
+        useRoute.mockReturnValue({ name: ROUTES.ARENA })
+    })
+
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
     test.skip('will show remaining hints count in a Badge', () => {
         render(<Hint iconBoxSize={50} hints={3} />)
 

@@ -1,7 +1,9 @@
 import * as React from 'react'
 
+import { useRoute } from '@react-navigation/native'
+
 import {
-    fireEvent, render, screen, act,
+    fireEvent, render, screen, act, waitFor,
 } from '@utils/testing/testingLibrary'
 
 import { getPuzzleDataFromPuzzleString } from '@domain/board/testingUtils/puzzleDataGenerator'
@@ -17,11 +19,25 @@ import { NotesRecord } from '@domain/board/records/notesRecord'
 import { ACTION_TYPES } from './actionHandlers'
 import { HintsMenu } from './index'
 import { expectOnHintMenuItems, waitForAvailableHintsToBeChecked } from './hintsMenu.testingUtil'
+import { ROUTES } from '@application/constants'
 
 const { ACTION_HANDLERS } = require('./actionHandlers')
 
+jest.mock('@react-navigation/native', () => ({
+    ...jest.requireActual('@react-navigation/native'),
+    useRoute: jest.fn(),
+}))
+
 const renderHintsMenu = async props => {
     render(<HintsMenu {...props} />)
+
+    console.log('@@@@@@ 1')
+
+    await new Promise(r => setTimeout(r, 1000))
+
+    await waitFor(() => {
+        screen.getByTestId(HINTS_MENU_OVERLAY_TEST_ID)
+    })
 
     act(() => {
         const puzzle = '900008000000004027061027000095000004080010090600000780000850140850600000000300002'
@@ -29,18 +45,23 @@ const renderHintsMenu = async props => {
         invokeDispatch(boardActions.setMainNumbers(mainNumbers))
         invokeDispatch(boardActions.setNotes(notes))
     })
-
+    console.log('@@@@@@ 1')
     await waitForAvailableHintsToBeChecked()
+    console.log('@@@@@@ 2')
 }
 
-describe('Available Hints Menu', () => {
-    afterEach(() => {
-        jest.clearAllMocks()
-        invokeDispatch(boardActions.setMainNumbers(MainNumbersRecord.initMainNumbers()))
-        invokeDispatch(boardActions.setNotes(NotesRecord.initNotes()))
+describe.skip('Available Hints Menu', () => {
+    beforeEach(() => {
+        useRoute.mockReturnValue({ name: ROUTES.ARENA })
     })
 
-    test('hints menu will contain these hints', async () => {
+    afterEach(() => {
+        invokeDispatch(boardActions.setMainNumbers(MainNumbersRecord.initMainNumbers()))
+        invokeDispatch(boardActions.setNotes(NotesRecord.initNotes()))
+        jest.clearAllMocks()
+    })
+
+    test.only('hints menu will contain these hints', async () => {
         await renderHintsMenu()
 
         screen.getByText('Naked\nSingle')

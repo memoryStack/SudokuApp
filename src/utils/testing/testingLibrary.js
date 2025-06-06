@@ -26,6 +26,8 @@ import boardControllerReducers from '../../apps/arena/store/reducers/boardContro
 import boardReducers from '../../apps/arena/store/reducers/board.reducers'
 
 import { initDispatch, initGetState } from '../../redux/dispatch.helpers'
+import { NavigationProvider } from 'src/navigation/navigator'
+import SpotlightTourProvider from 'src/containers/SpotlightTourProvider'
 
 const getNewStore = () => {
     const store = configureStore({
@@ -49,10 +51,12 @@ const AllTheProviders = ({ children }) => (
         <DependencyProvider>
             <ThemeProvider>
                 <ModalProvider>
-                    <>
-                        {children}
-                        <SnackBar />
-                    </>
+                    <SpotlightTourProvider>
+                        <>
+                            {children}
+                            <SnackBar />
+                        </>
+                    </SpotlightTourProvider>
                 </ModalProvider>
             </ThemeProvider>
         </DependencyProvider>
@@ -85,9 +89,11 @@ const renderWithEmptyNavigator = (ui, options) => render(ui, {
             <DependencyProvider>
                 <ThemeProvider>
                     <ModalProvider>
-                        <NavigationContainer>
-                            {children}
-                        </NavigationContainer>
+                        <SpotlightTourProvider>
+                            <NavigationContainer>
+                                {children}
+                            </NavigationContainer>
+                        </SpotlightTourProvider>
                     </ModalProvider>
                 </ThemeProvider>
             </DependencyProvider>
@@ -103,3 +109,5 @@ export {
     render as isolatedRender,
     renderWithEmptyNavigator,
 }
+
+export { waitFor } from '@testing-library/dom'

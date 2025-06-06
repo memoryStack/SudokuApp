@@ -17,6 +17,14 @@ import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
 import { CustomPuzzle } from './index'
 import { CLOSE_ICON_TEST_ID } from './customPuzzle.constants'
 
+import { useRoute } from '@react-navigation/native'
+import { ROUTES } from '@application/constants'
+
+jest.mock('@react-navigation/native', () => ({
+    ...jest.requireActual('@react-navigation/native'),
+    useRoute: jest.fn(),
+}))
+
 jest.mock('../../../adapters/puzzle/puzzle', () => {
     const { Puzzle: ActualPuzzle } = jest.requireActual('../../../adapters/puzzle/puzzle')
     const Puzzle = {
@@ -45,14 +53,15 @@ const fillCustomPuzzle = cellVsMainNumbers => {
         fireEvent.press(cell)
         act(() => {
             fireEvent.press(getInputPanelNumberIfEnabled(cellVsMainNumbers[cellNo]))
-            jest.runAllTimers()
-            // jest.advanceTimersByTime(500)
+            jest.advanceTimersByTime(500)
         })
     }
 }
 
-const renderCustomPuzzle = props => {
-    render(<CustomPuzzle parentHeight={1000} {...props} />)
+const renderCustomPuzzle = async props => {
+    render(
+        <CustomPuzzle parentHeight={1000} {...props} />
+    )
 
     // this just got coupled with the implementation
     act(() => {
@@ -66,28 +75,37 @@ const renderCustomPuzzle = props => {
         })
         // TODO: jest.runAllTimers(), jest.advanceTimersByTime() also works here
         //      need to understand the proper relation of these timers with Animated components
-        jest.runAllTimers()
+        // jest.runAllTimers()
     })
+
+    await waitFor(() => {
+        screen.getByTestId(BOTTOM_DRAGGER_OVERLAY_TEST_ID)
+    })
+
+    jest.advanceTimersByTime(500)
 }
 
 describe('Custom Puzzle', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+        useRoute.mockReturnValue({ name: ROUTES.ARENA })
     })
     afterEach(() => {
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
-    test('should fill a number on Input Number click', () => {
-        renderCustomPuzzle()
-
+    test('should fill a number on Input Number click', async () => {
+        await renderCustomPuzzle()
         fillCustomPuzzle({ 1: 2 })
-
         expect(getCellByPosition(1)).toHaveTextContent(2)
     })
 
-    test('filled number can be overriden by another number', () => {
-        renderCustomPuzzle()
+    test('filled number can be overriden by another number', async () => {
+        await renderCustomPuzzle()
 
         fillCustomPuzzle({ 1: 2 })
         fillCustomPuzzle({ 1: 4 })
@@ -95,8 +113,8 @@ describe('Custom Puzzle', () => {
         expect(getCellByPosition(1)).toHaveTextContent(4)
     })
 
-    test('eraser will remove number from the cell', () => {
-        renderCustomPuzzle()
+    test('eraser will remove number from the cell', async () => {
+        await renderCustomPuzzle()
 
         const cell = getFirstEmptyCell()
         fillCustomPuzzle({ 1: 2 })
@@ -106,26 +124,27 @@ describe('Custom Puzzle', () => {
         expect(isEmptyElement(cell)).toBe(true)
     })
 
-    test('clicking on close icon will close the whole view', () => {
+    test('clicking on close icon will close the whole view', async () => {
         const onClosed = jest.fn()
-        renderCustomPuzzle({ onCustomPuzzleClosed: onClosed })
+        await renderCustomPuzzle({ onCustomPuzzleClosed: onClosed })
 
         act(() => {
             fireEvent.press(screen.getByTestId(CLOSE_ICON_TEST_ID))
-            jest.runAllTimers()
+            jest.advanceTimersByTime(500)
         })
 
-        expect(onClosed).toBeCalledTimes(1)
+        await waitFor(() => {
+            expect(onClosed).toBeCalledTimes(1)
+        })
     })
 
-    test('clicking on background overlay will not close the view', () => {
+    test('clicking on background overlay will not close the view', async () => {
         const onClosed = jest.fn()
-        renderCustomPuzzle({ onCustomPuzzleClosed: onClosed })
+        await renderCustomPuzzle({ onCustomPuzzleClosed: onClosed })
 
-        // don't remove jest.runAllTimers from here
         act(() => {
             fireEvent.press(screen.getByTestId(BOTTOM_DRAGGER_OVERLAY_TEST_ID))
-            jest.runAllTimers()
+            jest.advanceTimersByTime(200)
         })
 
         expect(onClosed).toBeCalledTimes(0)
@@ -134,14 +153,19 @@ describe('Custom Puzzle', () => {
 
 describe('Analyze Custom Puzzle', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        });
+        useRoute.mockReturnValue({ name: ROUTES.ARENA })
     })
     afterEach(() => {
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
     test('invalid puzzle if clues are less than minimum required', async () => {
-        renderCustomPuzzle()
+        await renderCustomPuzzle()
 
         const PUZZLE_CELL_VS_MAIN_NUMBER = { 1: 2 }
         fillCustomPuzzle(PUZZLE_CELL_VS_MAIN_NUMBER)
@@ -157,7 +181,7 @@ describe('Analyze Custom Puzzle', () => {
     })
 
     test('invalid puzzle if same number is present multiple times in a row, column or block', async () => {
-        renderCustomPuzzle()
+        await renderCustomPuzzle()
 
         const PUZZLE_CELL_VS_MAIN_NUMBER = {
             1: 9,
@@ -202,7 +226,7 @@ describe('Analyze Custom Puzzle', () => {
     })
 
     test('invalid puzzle if puzzle has multiple solutions', async () => {
-        renderCustomPuzzle()
+        await renderCustomPuzzle()
 
         const { Puzzle } = require('../../../adapters/puzzle')
 
@@ -268,7 +292,7 @@ describe('Analyze Custom Puzzle', () => {
         }))
 
         const onClosed = jest.fn()
-        renderCustomPuzzle({
+        await renderCustomPuzzle({
             onCustomPuzzleClosed: onClosed,
         })
 
@@ -315,11 +339,16 @@ describe('Analyze Custom Puzzle', () => {
             81: 1,
         }
         fillCustomPuzzle(PUZZLE_CELL_VS_MAIN_NUMBER)
-        fireEvent.press(screen.getByText('Play'))
 
         act(() => {
-            jest.runAllTimers()
+            fireEvent.press(screen.getByText('Play'))
         })
-        expect(onClosed).toBeCalledTimes(1)
+
+        act(() => {
+            jest.advanceTimersByTime(500)
+        })
+        await waitFor(() => {
+            expect(onClosed).toBeCalledTimes(1)
+        })
     })
 })

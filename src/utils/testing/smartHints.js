@@ -1,5 +1,5 @@
 import {
-    screen, fireEvent, waitFor, act, within,
+    screen, fireEvent, act, within, waitFor
 } from '@utils/testing/testingLibrary'
 
 import { BADGE_TEST_ID } from '@ui/atoms/Badge'
@@ -7,7 +7,6 @@ import { BADGE_TEST_ID } from '@ui/atoms/Badge'
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
 
 import { BOARD_CONTROLLER_CONTAINER_TEST_ID } from '../../apps/arena/cellActions/cellActions.constants'
-import { BoardController } from '../../apps/arena/cellActions'
 import { waitForAvailableHintsToBeChecked } from '../../apps/arena/hintsMenu/hintsMenu.testingUtil'
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../../apps/arena/inputPanel/constants'
 import {
@@ -16,26 +15,30 @@ import {
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
 } from '../../apps/arena/smartHintHC/constants'
 
-const mockBoardControllersRef = () => {
+const mockBoardControllersRef = async () => {
     // TODO: how to do it by mocking measure function mentioned
     // in "react-native/jest/MockNativeMethods"
     // this implementation contains implementatin details of the component and
     // it's fragile if my imlementation changes or if ReactNativeTestingLibrary changes
     // it's implementation
-    const boardControllerDimensionMeasurer = screen.UNSAFE_getByType(BoardController).props.refFromParent.current.measure
-    boardControllerDimensionMeasurer.mockImplementation(cb => {
-        cb(0, 0, 392.72, 50.90, 0, 551.27)
+    // const boardControllerDimensionMeasurer = screen.UNSAFE_getByType(BoardController).props.refFromParent.current.measure
+    /*
+        UPDATE 1: have updated it once, spent around 30mins to make the change
+    */
+    await waitFor(() => {
+        const boardControllerDimensionMeasurer = screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID)._fiber._debugOwner.ref.current.measure
+        boardControllerDimensionMeasurer.mockImplementation(cb => {
+            cb(0, 0, 392.72, 50.90, 0, 551.27)
+        })
     })
 }
 
 export const openSmartHintHC = async hintItemToClick => {
-    mockBoardControllersRef()
+    await mockBoardControllersRef()
     fireEvent.press(screen.getByText('Fast Pencil'))
-    fireEvent.press(screen.getByText('Hint'))
+    longPressHintCTA()
     await waitForAvailableHintsToBeChecked()
-
     fireEvent.press(screen.getByText(hintItemToClick))
-
     await waitFor(() => {
         screen.getByTestId(SMART_HINT_HC_TEST_ID)
     })
@@ -106,4 +109,8 @@ export const applyHint = async hint => {
         fireEvent.press(screen.getByText('Apply Hint'))
         jest.advanceTimersByTime(500)
     })
+}
+
+export const longPressHintCTA = () => {
+    fireEvent(screen.getByText('Hint'), 'onLongPress')
 }

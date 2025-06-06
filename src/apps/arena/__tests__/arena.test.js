@@ -66,11 +66,14 @@ describe('Arena Screen', () => {
     // error due to timer setTimeout
     // TODO: read more about the jest.useFakeTimers() and this cleanup func
     beforeEach(() => {
-        jest.useFakeTimers()
-        jest.clearAllMocks()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
     })
     afterEach(() => {
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
     test('should go back to home page on back button press', async () => {
@@ -83,11 +86,14 @@ describe('Arena Screen', () => {
 
 describe('Timer Click Once', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
-        jest.clearAllMocks()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
     })
     afterEach(() => {
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
     const clickTimerOnce = () => fireEvent.press(screen.getByTestId(TIMER_TEST_ID))
@@ -142,11 +148,14 @@ describe('Timer Click Once', () => {
 
 describe('Timer Click Twice', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
-        jest.clearAllMocks()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
     })
     afterEach(() => {
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
     const clickTimerTwice = async () => {
@@ -202,6 +211,17 @@ describe('Timer Click Twice', () => {
 })
 
 describe('Board Cell Fill Values', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('should fill main number in an empty cell', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -276,6 +296,17 @@ describe('Board Cell Fill Values', () => {
 })
 
 describe('Board Cell Fill Notes', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('should fill note in an empty cell if that number is not present in row, col and block', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -315,6 +346,17 @@ describe('Board Cell Fill Notes', () => {
 })
 
 describe('Board Cell fill MainValue in Notes filled cell', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('will remove notes and show main value', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -355,6 +397,17 @@ describe('Board Cell fill MainValue in Notes filled cell', () => {
 })
 
 describe('Erase Board Cell Main Number', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('can erase wrongly filled value', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -401,6 +454,17 @@ describe('Erase Board Cell Main Number', () => {
 })
 
 describe('Erase Board Cell Notes', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('eraser will erase all the notes in cell', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -419,6 +483,17 @@ describe('Erase Board Cell Notes', () => {
 })
 
 describe('Fast Pencil', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('will add all possible notes to all the empty cells', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -459,6 +534,17 @@ describe('Fast Pencil', () => {
 })
 
 describe('Undo', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('will remove correctly filled main number', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -584,6 +670,17 @@ describe('Undo', () => {
 })
 
 describe('Game Over Card', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
     test('clicking on NewGame Button after puzzle was solved will open Next Game Menu to start new puzzle', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
@@ -609,7 +706,11 @@ describe('Game Over Card', () => {
 
 describe('Start New Game', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+            legacyFakeTimers: false
+        })
         getGameLevelsUseCase.mockImplementation(() => {
             return Promise.resolve({
                 levels: [{
@@ -624,13 +725,18 @@ describe('Start New Game', () => {
         })
     })
     afterEach(() => {
+        jest.runOnlyPendingTimers() // TODO: let's read about this in depth
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
     test('select new game from New Game button on game over card ', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        solvePuzzle()
+        act(() => {
+            solvePuzzle()
+        })
+
         act(() => {
             fireEvent.press(screen.getByText('New Game'))
             jest.advanceTimersByTime(200)
@@ -646,6 +752,8 @@ describe('Start New Game', () => {
         act(() => {
             fireEvent.press(screen.queryByTestId('LEVEL-1'))
         })
+
+        jest.advanceTimersByTime(500)
 
         await hasPuzzleStarted()
     })
@@ -675,11 +783,15 @@ describe('Start New Game', () => {
 
 describe('Bugs', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
         jest.setTimeout(20000)
     })
     afterEach(() => {
         jest.useRealTimers()
+        jest.clearAllMocks()
     })
 
     test.skip('starting new game after completing current one, allowed hints must be filled back', async () => {

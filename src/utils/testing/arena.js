@@ -28,9 +28,7 @@ export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = 
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
         routeOptions: { selectedGameMenuItem: NEW_GAME_IDS.EASY, levelNum: 1 },
     })
-
     await hasPuzzleStarted()
-
     await executeMoreSetupSteps()
 }
 
@@ -121,7 +119,7 @@ export const isNotePresentInCell = (cellElement, note) => {
     return allNotes.some(noteElement => {
         let found
         try {
-            expect(noteElement).toHaveTextContent(note)
+            expect(noteElement).toHaveTextContent(`${note}`)
             found = true
         } catch (error) {
             found = false

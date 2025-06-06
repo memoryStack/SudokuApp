@@ -36,7 +36,10 @@ jest.mock('../../../../adapters/puzzle', () => {
 
 describe('Finned X-Wing', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
     })
     afterEach(() => {
         jest.useRealTimers()

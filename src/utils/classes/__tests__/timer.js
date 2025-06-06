@@ -2,7 +2,10 @@ import { Timer } from '../timer'
 
 describe('Timer', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
     })
 
     afterEach(() => {
