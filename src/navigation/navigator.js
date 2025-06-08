@@ -20,7 +20,7 @@ const getNavigator = () => {
     const Stack = createStackNavigator()
     return (
         <Stack.Navigator
-            initialRouteName={ROUTES.HOME}
+            initialRouteName={ROUTES.LEVELS}
             screenOptions={{
                 headerShown: true,
                 headerTransparent: true,

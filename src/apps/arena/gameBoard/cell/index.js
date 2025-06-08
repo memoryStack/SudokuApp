@@ -95,7 +95,7 @@ const Cell_ = ({
         borderWidthAnim,
         bgColorInterpolation: bgColor,
         borderColorInterpolation: borderColor,
-    } = useAnimateView({ ...cellAnimationsConfig.mainNumber })
+    } = useAnimateView(cellAnimationsConfig.mainNumber, {}, { row, col })
 
     const getCellNotes = () => {
         if (!shouldRenderNotes()) return null
@@ -177,7 +177,7 @@ const Cell_ = ({
             )
         }
         if (displayCrossIcon) return getCellCrossIcon()
-        if (cellMainValue) return renderCellMainValue()
+        if (cellMainValue || true) return renderCellMainValue()
         return getCellNotes()
     }
 

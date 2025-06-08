@@ -1,9 +1,12 @@
 import { Animated } from "react-native"
 import { useEffect, useRef } from "react"
 
+import _merge from "@lodash/merge"
+
 import { usePrevious } from "@utils/customHooks"
 
 import { ANIMATABLE_PROPERTIES, createAnimationInstance } from "./animationUtils"
+import _isEmpty from "@lodash/isEmpty"
 
 const DEFAULT_ANIM_VALUES: Record<ANIMATABLE_PROPERTIES, any> = {
     [ANIMATABLE_PROPERTIES.FONT_SIZE]: 1,
@@ -31,18 +34,29 @@ const getInitialToAndFromValues = (animInitialValues) => {
     }, {})
 }
 
-// NOTE: DON'T UPDATE THE cellAnimationsConfig WHILE THE ANIMATIONS ARE GOING ON
-//      ELSE PREVIOUS ANIMATION WILL STOP AND WON'T START AGAIN
-const useAnimateView = (cellAnimationsConfig = {}, animInitialValues = {}) => {
+const debounce = (func, delay) => {
+    return func
+    let timeoutId;
+
+    return (...args) => {
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+};
+
+const useAnimateView = (cellAnimationsConfig, animInitialValues = {}, cell = false) => {
 
     const originalAnimatedValuesBeforeAnimationStarted = useRef(getInitialToAndFromValues(animInitialValues)).current
 
-    const mainNumberFontAnim = new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.FONT_SIZE].to)
-    const mainNumberColorAnim = new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.TEXT_COLOR].to)
-    const bgColorAnim = new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.BG_COLOR].to)
-    const borderWidthAnim = new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.BORDER_WIDTH].to)
-    const borderColorAnim = new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.BORDER_COLOR].to)
-    const opacityAnim = new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.OPACITY].to)
+    const mainNumberFontAnim = useRef(new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.FONT_SIZE].to)).current
+    const mainNumberColorAnim = useRef(new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.TEXT_COLOR].to)).current
+    const bgColorAnim = useRef(new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.BG_COLOR].to)).current
+    const borderWidthAnim = useRef(new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.BORDER_WIDTH].to)).current
+    const borderColorAnim = useRef(new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.BORDER_COLOR].to)).current
+    const opacityAnim = useRef(new Animated.Value(originalAnimatedValuesBeforeAnimationStarted[ANIMATABLE_PROPERTIES.OPACITY].to)).current
 
     const ANIMATED_PROPERTY_VS_ANIM_VALUE = {
         [ANIMATABLE_PROPERTIES.FONT_SIZE]: mainNumberFontAnim,
@@ -55,15 +69,9 @@ const useAnimateView = (cellAnimationsConfig = {}, animInitialValues = {}) => {
 
     const animationObj = useRef({})
 
-    const previousAnimationsConfig = usePrevious(cellAnimationsConfig)
-
     const animationConfigsMerge = useRef({})
 
-    animationConfigsMerge.current = {
-        // ...animationConfigsMerge.current,
-        // ...previousAnimationsConfig,
-        ...cellAnimationsConfig
-    }
+    animationConfigsMerge.current = _merge(animationConfigsMerge.current, cellAnimationsConfig)
 
     useEffect(() => {
         const allAnimations = animationConfigsMerge.current
@@ -82,23 +90,26 @@ const useAnimateView = (cellAnimationsConfig = {}, animInitialValues = {}) => {
                     ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty],
                     originalAnimatedValuesBeforeAnimationStarted[animatableProperty],
                     animatableProperty,
-                    allAnimations[animatableProperty]
+                    allAnimations[animatableProperty] // this is the config
                 )
 
-                animation.start()
-
-                animationObj.current[animatableProperty] = animation
                 // WARN: don't move the below .from update logic above createAnimationInstance function
                 if (originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to !== -1) {
                     originalAnimatedValuesBeforeAnimationStarted[animatableProperty].from
                         = originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to
                 }
-                ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty].addListener(({ value }) => {
-                    if (!Number.isNaN(value)) {
-                        originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to = value
-                    }
-                })
+
+                animation.start()
+
+                animationObj.current[animatableProperty] = animation
+
             }
+
+            ANIMATED_PROPERTY_VS_ANIM_VALUE[animatableProperty].addListener(({ value }) => {
+                if (!Number.isNaN(value)) {
+                    originalAnimatedValuesBeforeAnimationStarted[animatableProperty].to = value
+                }
+            })
         })
 
         return () => {
@@ -110,8 +121,9 @@ const useAnimateView = (cellAnimationsConfig = {}, animInitialValues = {}) => {
                 animatedValue.removeAllListeners()
             })
         }
-    }, [cellAnimationsConfig, previousAnimationsConfig])
+    }, [cellAnimationsConfig])
 
+    // this below should be configured properly from platform independent code to platform dependent code.
     const mainNumberColorInterpolation = animationConfigsMerge.current[ANIMATABLE_PROPERTIES.TEXT_COLOR]?.output ? mainNumberColorAnim.interpolate({
         inputRange: [0, 1],
         outputRange: animationConfigsMerge.current[ANIMATABLE_PROPERTIES.TEXT_COLOR]?.output

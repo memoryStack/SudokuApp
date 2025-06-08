@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Animated } from 'react-native'
 
@@ -11,6 +11,7 @@ import { useAnimateView } from '../useAnimateView'
 import { ANIMATABLE_PROPERTIES } from '../animationUtils'
 import { usePreviousRenderValue } from '@utils/customHooks'
 import _isEmpty from '@lodash/isEmpty'
+import { areSameCells } from '@domain/board/utils/housesAndCells'
 
 export interface Props {
     textType?: TEXT_VARIATIONS
@@ -80,14 +81,14 @@ const CellNumberInput: React.FC<Props> = ({
     cell
 }) => {
 
-    const [animationConfig, animInitialValues] = useNumberInputAnimationConfig(value, animateNumberInsertion, _animationsConfig, cell)
+    // const [animationConfig, animInitialValues] = useNumberInputAnimationConfig(value, animateNumberInsertion, _animationsConfig, cell)
 
     const {
         fontSizeAnim,
         textColorInterpolation,
         opacityAnim,
         animationConfigsMerge,
-    } = useAnimateView(animationConfig, animInitialValues)
+    } = useAnimateView(_animationsConfig, {}, cell)
 
     const textStyles = _isArray(_textStyles) ? [..._textStyles] : [_textStyles]
     if (textColorInterpolation) textStyles.push({ color: textColorInterpolation })
@@ -103,7 +104,7 @@ const CellNumberInput: React.FC<Props> = ({
                 withoutLineHeight={withoutLineHeight}
                 animated={animated || ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge}
             >
-                {value}
+                {'1'}
             </Text>
         </Animated.View>
     )

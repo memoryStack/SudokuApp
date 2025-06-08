@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { View, StyleProp, ViewStyle, Animated } from 'react-native'
 
@@ -37,6 +37,8 @@ import { useDependency } from 'src/hooks/useDependency'
 import { GAME_STATE } from '@application/constants'
 import { useAnimateView } from './cell/useAnimateView'
 import { fillPuzzleUseCase, inputNumberUseCase } from '@application/usecases/board'
+import _cloneDeep from '@lodash/cloneDeep'
+import _isEmpty from '@lodash/isEmpty'
 
 const looper: number[] = []
 const bordersLooper: number[] = []
@@ -282,90 +284,131 @@ const Board_: React.FC<Props> = ({
     // }, [gameStateRepository, dependencies])
 
     useEffect(() => {
-        const timerId = setTimeout(async () => {
+        gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 
-            const exampleCells = [
-                { row: 3, col: 3 },
-                { row: 6, col: 4 },
-            ]
+        // const timerId = setTimeout(async () => {
 
-            for (let i = 0; i < exampleCells.length; i++) {
-                const TARGET_CELL = exampleCells[i]
-                onCellClick(TARGET_CELL)
-                const SelectedCellBgColor = 'rgb(255, 245, 187)'
-                await getSleepPromise(1000)
+        //     const exampleCells = [
+        //         { row: 0, col: 1 },
+        //         { row: 0, col: 5 },
+        //         { row: 2, col: 5 },
+        //         { row: 2, col: 8 },
+        //         // { row: 6, col: 4 },
+        //     ]
 
-                gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+        //     for (let i = 0; i < exampleCells.length; i++) {
+        //         const TARGET_CELL = exampleCells[i]
+        //         // onCellClick(TARGET_CELL)
+        //         const SelectedCellBgColor = 'rgb(255, 245, 187)'
+        //         await getSleepPromise(1000)
 
-                const _animationConfig = {}
-                const p = await new Promise((r) => {
-                    const animationConfig = {
-                        'mainNumber': {
-                            'bgColor': {
-                                config: { toValue: 1, duration: 0, useNativeDriver: false, },
-                                output: [SelectedCellBgColor, SelectedCellBgColor]
-                            },
-                        }
+        //         const iterationCount = i
+
+        //         gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+        //         console.log('@@@@@ iteration')
+        //         const _animationConfig = {}
+        //         const p = await new Promise((r) => {
+        //             const animationConfig = {
+        //                 'mainNumber': {
+        //                     'bgColor': {
+        //                         config: { toValue: 1, duration: 6000 },
+        //                         output: [SelectedCellBgColor, SelectedCellBgColor]
+        //                     },
+        //                     'fontSize': {
+        //                         config: { toValue: 1.5, duration: 6000 }
+        //                     }
+        //                 }
+        //             }
+        //             _set(_animationConfig, [TARGET_CELL.row, TARGET_CELL.col], animationConfig)
+        //             setCellsAnimationConfigs((prevConfig) => {
+        //                 const newConfig = { ..._animationConfig }
+        //                 return newConfig
+        //             })
+        //             setTimeout(r, 3000)
+        //         }).then(async () => {
+        //             // inputNumberUseCase(7, dependencies)
+        //             // await getSleepPromise(3000)
+        //             const cells = [
+        //                 { row: 1, col: 2 },
+        //                 { row: 4, col: 2 },
+        //                 { row: 4, col: 4 },
+        //                 { row: 5, col: 8 },
+        //             ]
+
+        //             for (let i = 0; i < cells.length; i++) {
+        //                 const TARGET_CELL = cells[i]
+        //                 const animationConfig = {
+        //                     'mainNumber': {
+        //                         'bgColor': {
+        //                             config: { toValue: 1, duration: 3000 },
+        //                             output: ['transparent', 'red']
+        //                         },
+        //                         'fontSize': {
+        //                             config: { toValue: iterationCount % 2 === 0 ? 3 : 1, duration: 3000 }
+        //                         }
+        //                     }
+        //                 }
+        //                 _set(_animationConfig, [TARGET_CELL.row, TARGET_CELL.col], animationConfig)
+        //             }
+        //             setCellsAnimationConfigs((prevConfig) => {
+        //                 // const newConfig = { ..._animationConfig }
+        //                 const newConfig = _cloneDeep(_animationConfig)
+        //                 return newConfig
+        //             })
+        //         })
+        //     }
+        // }, 5000)
+
+        // return () => {
+        //     clearTimeout(timerId)
+        // }
+    }, [gameStateRepository, dependencies])
+
+    const handleCellClick = useCallback((cell) => {
+        const TARGET_CELL = cell
+
+        let cellNewConfigs = {
+            'mainNumber': {
+                'fontSize': {
+                    config: { toValue: 1.8, duration: 0 }
+                },
+                'bgColor': {
+                    config: { toValue: 1, duration: 3000 },
+                    output: ['transparent', 'red']
+                },
+                opacity: {
+                    config: { toValue: 0, duration: 0 }
+                }
+            }
+        }
+
+        setCellsAnimationConfigs((prevConfig) => {
+            const newConfig = { ...prevConfig }
+            _set(newConfig, [TARGET_CELL.row, TARGET_CELL.col], cellNewConfigs)
+            return newConfig
+        })
+
+        setTimeout(() => {
+            let cellNewConfigs = {
+                'mainNumber': {
+                    'fontSize': {
+                        config: { toValue: 1, duration: 300 }
+                    },
+                    opacity: {
+                        config: { toValue: 1, duration: 300 }
                     }
-                    _set(_animationConfig, [TARGET_CELL.row, TARGET_CELL.col], animationConfig)
-                    setCellsAnimationConfigs((prevConfig) => {
-                        const newConfig = { ..._animationConfig }
-                        return newConfig
-                    })
-                    setTimeout(r, 1000)
-                }).then(async () => {
-                    inputNumberUseCase(7, dependencies)
-                    await getSleepPromise(1000)
-                }).then(async () => {
-                    const houseSharingCells = getCellAllHousesCells(TARGET_CELL)
-                        .filter((cell) => !areSameCells(cell, TARGET_CELL))
-                    houseSharingCells.forEach((cell) => {
-                        const animationConfig = {
-                            'mainNumber': {
-                                'opacity': {
-                                    config: { toValue: 0.4, duration: 0, useNativeDriver: true, },
-                                },
-                            }
-                        }
-                        _set(_animationConfig, [cell.row, cell.col], animationConfig)
-                        setCellsAnimationConfigs((prevConfig) => {
-                            const newConfig = { ..._animationConfig }
-                            return newConfig
-                        })
-                    })
-
-                    await getSleepPromise(2000)
-
-                    const _setLocalCellsHighlightData = {}
-                    houseSharingCells.forEach((cell) => {
-                        const data = { inhabitable: true, crossIconColor: '#b81f1e' }
-                        _set(_setLocalCellsHighlightData, [cell.row, cell.col], data)
-                    })
-                    setLocalCellsHighlightData(_setLocalCellsHighlightData)
-
-                    // await getSleepPromise(400)
-                    // const { boardRepository } = dependencies
-                    // houseSharingCells.forEach((cell) => {
-                    //     boardRepository.setCellMainNumber({ cell, number: 7 })
-                    // })
-
-                    await getSleepPromise(2000)
-                }).then(() => {
-                    const { boardRepository } = dependencies
-                    boardRepository.setCellMainNumber({ cell: TARGET_CELL, number: 0 })
-                    setCellsAnimationConfigs({})
-                    setLocalCellsHighlightData({})
-                    return getSleepPromise(1000)
-                })
+                }
             }
 
+            setCellsAnimationConfigs((prevConfig) => {
+                const newConfig = { ...prevConfig }
+                _set(newConfig, [TARGET_CELL.row, TARGET_CELL.col], cellNewConfigs)
+                return newConfig
+            })
+        })
 
-        }, 5000)
-
-        return () => {
-            clearTimeout(timerId)
-        }
-    }, [gameStateRepository, dependencies])
+        // onCellClick(cell)
+    }, [cellsAnimationConfigs, onCellClick])
 
     const notesRefs = useMemo(() => {
         const result: NotesRefs = []
@@ -438,7 +481,7 @@ const Board_: React.FC<Props> = ({
                                 mainValueFontColor={getMainNumFontColor(cell)}
                                 cellMainValue={MainNumbersRecord.getCellMainValue(mainNumbers, cell)}
                                 cellNotes={_get(notes, [row, col])}
-                                onCellClick={onCellClick}
+                                onCellClick={handleCellClick}
                                 {...getInhabitableCellProps(cell)}
                                 showCellContent={showCellContent}
                                 notesRefs={notesRefs[row][col]}

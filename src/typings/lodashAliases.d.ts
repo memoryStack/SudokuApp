@@ -226,3 +226,9 @@ declare module '@lodash/differenceWith' {
 
     export default _differenceWith
 }
+
+declare module '@lodash/merge' {
+    import _merge from '@lodash/merge'
+
+    export default _merge
+}
