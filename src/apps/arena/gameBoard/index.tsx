@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from 'react'
 
-import { View, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleProp, ViewStyle, TextStyle } from 'react-native'
 
 import _get from '@lodash/get'
 import _set from '@lodash/set'
@@ -57,7 +57,7 @@ interface Props {
     showHintsSVGView?: boolean
     getCellBGColor?: (cell: Cell) => CellBGColorStyle | null
     getCellMainNumberFontColor?: () => FontColor | null
-    getNoteStyles?: (note: NoteValue, cell: Cell) => StyleProp<ViewStyle> | null // this signature is wrong, first argument is Note, not NoteValue
+    getNoteStyles?: (note: Note, cell: Cell) => StyleProp<TextStyle> | null // this signature is wrong, first argument is Note, not NoteValue
     hideSVGDrawingsMarkersEnd?: boolean
     showAxes?: boolean
 }

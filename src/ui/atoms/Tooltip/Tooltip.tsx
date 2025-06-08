@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Popable } from 'react-native-popable';
+import type { PopableManager } from 'react-native-popable';
 
 import _get from '@lodash/get'
 import _noop from '@lodash/noop'
@@ -16,7 +17,7 @@ type Props = {
     showOnPress?: boolean
 }
 
-const Tooltip = React.forwardRef<React.ReactElement, Props>((props, ref) => {
+const Tooltip = React.forwardRef<PopableManager, Props>((props, ref) => {
     const {
         content,
         children,

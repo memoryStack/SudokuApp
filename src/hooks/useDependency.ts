@@ -9,7 +9,7 @@ import { ROUTES } from '@application/constants'
 import { SoundAdapter } from 'src/interfaces/soundAdapter'
 import { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
 
-interface Dependencies extends ApplicationLayerDependencies {
+interface Dependencies extends Omit<ApplicationLayerDependencies, 'sound'> {
     soundAdapter: SoundAdapter
     coachMarksAdapter: CoachMarksAdapterUIInterface
 }
