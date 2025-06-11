@@ -4,13 +4,14 @@ import _get from '@lodash/get'
 import { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 import { CARD_DIMENSIONS } from './levelCard.constants'
 import { getTextColor } from '@ui/molecules/Button/button.styles'
+import { Theme } from 'src/containers/ThemeProvider'
 
 const disabledButtonConfig = {
     type: BUTTON_TYPES.FILLED,
     state: BUTTON_STATES.DISABLED
 }
 
-export const getStyles = (_: any, theme) => {
+export const getStyles = (_: any, theme: Theme) => {
     return StyleSheet.create({
         container: {
             display: 'flex',

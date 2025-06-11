@@ -3,8 +3,9 @@ import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
 
 import { TEXT_VARIATIONS, TEXT_VARIATION_VS_TOKENS_PATH } from '@ui/atoms/Text/text.constants'
+import { Theme } from '../ThemeProvider'
 
-export const getStyles = (_, theme) => StyleSheet.create({
+export const getStyles = (_, theme: Theme) => StyleSheet.create({
     stepNumber: {
         containerStyles: {
             backgroundColor: _get(theme, ['colors', 'primary']),

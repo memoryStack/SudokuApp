@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
+import { Theme } from 'src/containers/ThemeProvider'
 
-export const getStyles = ({ CELL_WIDTH }, theme) => StyleSheet.create({
+export const getStyles = ({ }, theme: Theme) => StyleSheet.create({
     container: {
         paddingHorizontal: 16,
         // alignItems: 'center',
