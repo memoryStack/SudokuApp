@@ -23,7 +23,7 @@ const getApplyHintData = (ur: BaseURRawHint): NotesRemovalHintAction[] => {
 }
 
 export const transformURRawHint = (args: URTransformerArgs): TransformedRawHint => {
-    let result: TransformedRawHint = {}
+    let result = {} as TransformedRawHint
 
     const { rawHint } = args
     if (URTypeChecker.isURTypeOne(rawHint)) result = transformURTypeOne(args)

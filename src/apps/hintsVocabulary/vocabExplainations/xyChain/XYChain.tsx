@@ -29,6 +29,7 @@ const XYChain = () => {
     const boardData = useBoardData(puzzle)
 
     const rawXYChain = {
+        isComposite: false,
         note: 3,
         chain: [
             { row: 6, col: 3 },
@@ -88,16 +89,16 @@ const XYChain = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                                + '<ul>'
-                                    + '<li><b>Strong</b> Link between candidate 3 and candidate 9 in G4</li>'
-                                    + '<li><b>Weak</b> Link between candidate 9 of G4 and candidate 9 of E4</li>'
-                                    + '<li><b>Strong</b> Link between candidate 9 and candidate 8 in E4</li>'
-                                    + '<li><b>Weak</b> Link between candidate 8 of E4 and candidate 8 of E6</li>'
-                                    + '<li><b>Strong</b> Link between candidate 8 and candidate 2 in E6</li>'
-                                    + '<li><b>Weak</b> Link between candidate 2 of E6 and candidate 2 of B6</li>'
-                                    + '<li><b>Strong</b> Link between candidate 2 and candidate 3 in B6</li>'
-                                + '</ul>'
-                            + '</p>'
+                        + '<ul>'
+                        + '<li><b>Strong</b> Link between candidate 3 and candidate 9 in G4</li>'
+                        + '<li><b>Weak</b> Link between candidate 9 of G4 and candidate 9 of E4</li>'
+                        + '<li><b>Strong</b> Link between candidate 9 and candidate 8 in E4</li>'
+                        + '<li><b>Weak</b> Link between candidate 8 of E4 and candidate 8 of E6</li>'
+                        + '<li><b>Strong</b> Link between candidate 8 and candidate 2 in E6</li>'
+                        + '<li><b>Weak</b> Link between candidate 2 of E6 and candidate 2 of B6</li>'
+                        + '<li><b>Strong</b> Link between candidate 2 and candidate 3 in B6</li>'
+                        + '</ul>'
+                        + '</p>'
                     }
                 />
             </View>
@@ -109,54 +110,54 @@ const XYChain = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + '<b>How is XY-Chain useful ?</b>'
-                        + '<br />'
-                        + 'This XY-Chain starts from G4 and ends in B6. Both of these cells have 3 as their candidate.'
-                        + ' Let\'s take G4 and try to fill this chain with an assumption that what if 3 can not be the solution for G4 cell.'
+                    + '<b>How is XY-Chain useful ?</b>'
+                    + '<br />'
+                    + 'This XY-Chain starts from G4 and ends in B6. Both of these cells have 3 as their candidate.'
+                    + ' Let\'s take G4 and try to fill this chain with an assumption that what if 3 can not be the solution for G4 cell.'
                     + '</p>'
                 }
             />
             <SmartHintText
                 text={
                     '<p>'
-                        + '<b>First Way to fill the Chain:</b>'
-                        + '<br />'
-                        + 'Follow the logic with the puzzle given below.'
-                        + '<br />'
-                        + '<ul>'
-                            + `<li>if 3 is false in ${chainCellsAxesList[0]} then 9 has to be true in ${chainCellsAxesList[0]}. (Strong Link)</li>`
-                            + `<li>since 9 is true in ${chainCellsAxesList[0]} then 9 has to be false in ${chainCellsAxesList[1]}. (Weak Link)</li>`
-                            + `<li>since 9 is false in ${chainCellsAxesList[1]} then 8 has to be true in ${chainCellsAxesList[1]}. (Strong Link)</li>`
-                            + `<li>since 8 is true in ${chainCellsAxesList[1]} then 8 has to be false in ${chainCellsAxesList[2]}. (Weak Link)</li>`
-                            + `<li>since 8 is false in ${chainCellsAxesList[2]} then 2 has to be true in ${chainCellsAxesList[2]}. (Strong Link)</li>`
-                            + `<li>since 2 is true in ${chainCellsAxesList[2]} then 2 has to be false in ${chainCellsAxesList[3]}. (Weak Link)</li>`
-                            + `<li>since 2 is false in ${chainCellsAxesList[3]} then 3 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
-                        + '</ul>'
-                        + `So according to this, if 3 is false in ${chainCellsAxesList[0]} then it has to be true in ${chainCellsAxesList[3]}`
-                        + '</p>'
+                    + '<b>First Way to fill the Chain:</b>'
+                    + '<br />'
+                    + 'Follow the logic with the puzzle given below.'
+                    + '<br />'
+                    + '<ul>'
+                    + `<li>if 3 is false in ${chainCellsAxesList[0]} then 9 has to be true in ${chainCellsAxesList[0]}. (Strong Link)</li>`
+                    + `<li>since 9 is true in ${chainCellsAxesList[0]} then 9 has to be false in ${chainCellsAxesList[1]}. (Weak Link)</li>`
+                    + `<li>since 9 is false in ${chainCellsAxesList[1]} then 8 has to be true in ${chainCellsAxesList[1]}. (Strong Link)</li>`
+                    + `<li>since 8 is true in ${chainCellsAxesList[1]} then 8 has to be false in ${chainCellsAxesList[2]}. (Weak Link)</li>`
+                    + `<li>since 8 is false in ${chainCellsAxesList[2]} then 2 has to be true in ${chainCellsAxesList[2]}. (Strong Link)</li>`
+                    + `<li>since 2 is true in ${chainCellsAxesList[2]} then 2 has to be false in ${chainCellsAxesList[3]}. (Weak Link)</li>`
+                    + `<li>since 2 is false in ${chainCellsAxesList[3]} then 3 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
+                    + '</ul>'
+                    + `So according to this, if 3 is false in ${chainCellsAxesList[0]} then it has to be true in ${chainCellsAxesList[3]}`
+                    + '</p>'
                 }
             />
             {Example}
             <SmartHintText
                 text={
                     '<p>'
-                        + 'Now let\'s take B6 and try to fill this chain with an assumption that what if 3 can not be the solution for B6 cell.'
-                        + '<br />'
-                        + '<b>Second Way to fill the Chain:</b>'
-                        + '<br />'
-                        + 'Imagine that if all the links are reversed in the above puzzle then:'
-                        + '<br />'
-                        + '<ul>'
-                            + `<li>if 3 is false in ${chainCellsAxesList[3]} then 2 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
-                            + `<li>since 2 is true in ${chainCellsAxesList[3]} then 2 has to be false in ${chainCellsAxesList[2]}. (Weak Link)</li>`
-                            + `<li>since 2 is false in ${chainCellsAxesList[2]} then 8 has to be true in ${chainCellsAxesList[2]}. (Strong Link)</li>`
-                            + `<li>since 8 is true in ${chainCellsAxesList[2]} then 8 has to be false in ${chainCellsAxesList[1]}. (Weak Link)</li>`
-                            + `<li>since 8 is false in ${chainCellsAxesList[1]} then 9 has to be true in ${chainCellsAxesList[1]}. (Strong Link)</li>`
-                            + `<li>since 9 is true in ${chainCellsAxesList[1]} then 9 has to be false in ${chainCellsAxesList[0]}. (Weak Link)</li>`
-                            + `<li>since 9 is false in ${chainCellsAxesList[0]} then 3 has to be true in ${chainCellsAxesList[0]}. (Strong Link)</li>`
-                        + '</ul>'
-                        + '<br />'
-                        + `So according to this, if 3 is false in ${chainCellsAxesList[3]} then it has to be true in ${chainCellsAxesList[0]}`
+                    + 'Now let\'s take B6 and try to fill this chain with an assumption that what if 3 can not be the solution for B6 cell.'
+                    + '<br />'
+                    + '<b>Second Way to fill the Chain:</b>'
+                    + '<br />'
+                    + 'Imagine that if all the links are reversed in the above puzzle then:'
+                    + '<br />'
+                    + '<ul>'
+                    + `<li>if 3 is false in ${chainCellsAxesList[3]} then 2 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
+                    + `<li>since 2 is true in ${chainCellsAxesList[3]} then 2 has to be false in ${chainCellsAxesList[2]}. (Weak Link)</li>`
+                    + `<li>since 2 is false in ${chainCellsAxesList[2]} then 8 has to be true in ${chainCellsAxesList[2]}. (Strong Link)</li>`
+                    + `<li>since 8 is true in ${chainCellsAxesList[2]} then 8 has to be false in ${chainCellsAxesList[1]}. (Weak Link)</li>`
+                    + `<li>since 8 is false in ${chainCellsAxesList[1]} then 9 has to be true in ${chainCellsAxesList[1]}. (Strong Link)</li>`
+                    + `<li>since 9 is true in ${chainCellsAxesList[1]} then 9 has to be false in ${chainCellsAxesList[0]}. (Weak Link)</li>`
+                    + `<li>since 9 is false in ${chainCellsAxesList[0]} then 3 has to be true in ${chainCellsAxesList[0]}. (Strong Link)</li>`
+                    + '</ul>'
+                    + '<br />'
+                    + `So according to this, if 3 is false in ${chainCellsAxesList[3]} then it has to be true in ${chainCellsAxesList[0]}`
                     + '</p>'
                 }
             />
@@ -164,11 +165,11 @@ const XYChain = () => {
                 <SmartHintText
                     text={
                         '<p>'
-                            + 'So it is sure that either <b>First</b> or <b>Last</b> cell will be filled by 3. Because of this, all the cells'
-                            + ` which are in same ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')} with first and last cells`
-                            + ' of the XY-Chain, can\'t have 3 as their candidate.'
-                            + '<br />'
-                            + 'So in the puzzle above, 7 can be removed as candidate from B3, C3 and G6 cells.'
+                        + 'So it is sure that either <b>First</b> or <b>Last</b> cell will be filled by 3. Because of this, all the cells'
+                        + ` which are in same ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')} with first and last cells`
+                        + ' of the XY-Chain, can\'t have 3 as their candidate.'
+                        + '<br />'
+                        + 'So in the puzzle above, 7 can be removed as candidate from B3, C3 and G6 cells.'
                         + '</p>'
                     }
                 />
@@ -181,14 +182,14 @@ const XYChain = () => {
             <SmartHintText
                 text={
                     '<p>'
-                        + `XY-Chain is the ${getLinkHTMLText(HINTS_VOCAB_IDS.CHAIN, 'chain')} that is built using ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')}`
-                        + ` which have only two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} (similar to ${getLinkHTMLText(HINTS_VOCAB_IDS.REMOTE_PAIRS, 'Remote Pairs')}) in them`
-                        + ' but unlike Remote Pairs in XY-Chain any two cells in the chain can have different candidates.'
-                        + '<br />'
-                        + '<b>Note:</b> Any two consecutive cells in the chain must have atleast one candidate common and <b>First</b>'
-                        + ' and <b>Last</b> cells also must have atleast one candidate common.'
-                        + '<br />'
-                        + 'Notice an XY-Chain in below puzzle.'
+                    + `XY-Chain is the ${getLinkHTMLText(HINTS_VOCAB_IDS.CHAIN, 'chain')} that is built using ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')}`
+                    + ` which have only two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} (similar to ${getLinkHTMLText(HINTS_VOCAB_IDS.REMOTE_PAIRS, 'Remote Pairs')}) in them`
+                    + ' but unlike Remote Pairs in XY-Chain any two cells in the chain can have different candidates.'
+                    + '<br />'
+                    + '<b>Note:</b> Any two consecutive cells in the chain must have atleast one candidate common and <b>First</b>'
+                    + ' and <b>Last</b> cells also must have atleast one candidate common.'
+                    + '<br />'
+                    + 'Notice an XY-Chain in below puzzle.'
                     + '</p>'
                 }
             />

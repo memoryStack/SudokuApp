@@ -28,6 +28,7 @@ import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
 const puzzle = '980062753065003000327050006790030500050009000832045009673591428249687005518020007'
 
 const faultyXWingWithMoreThanTwoCrossHouses = {
+    isComposite: false,
     houseType: HOUSE_TYPE.ROW,
     type: XWING_TYPES.PERFECT,
     legs: [
@@ -58,6 +59,7 @@ const PerfectXWing = () => {
     const boardData = useBoardData(puzzle)
 
     const xWing = {
+        isComposite: false,
         houseType: HOUSE_TYPE.COL,
         type: XWING_TYPES.PERFECT,
         legs: [
@@ -240,6 +242,7 @@ const PerfectXWing = () => {
 
     const renderXWingInRowHouse = () => {
         const xWingInRow = {
+            isComposite: false,
             houseType: HOUSE_TYPE.ROW,
             type: XWING_TYPES.PERFECT,
             legs: [

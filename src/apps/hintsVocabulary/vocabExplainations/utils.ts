@@ -6,7 +6,7 @@ import { isCellExists } from 'src/apps/arena/utils/util'
 
 export const getLinkHTMLText = (href: HINTS_VOCAB_IDS, text: string) => `<a href="${href}">${text}</a>`
 
-type BoardData = {
+export type BoardData = {
     mainNumbers: MainNumbers,
     notes: Notes
 }

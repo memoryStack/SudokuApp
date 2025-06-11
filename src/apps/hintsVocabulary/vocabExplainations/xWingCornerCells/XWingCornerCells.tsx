@@ -39,6 +39,7 @@ const XWingCornerCells = () => {
     const boardData = useBoardData(puzzle)
 
     const xWing = {
+        isComposite: false,
         houseType: HOUSE_TYPE.COL,
         type: XWING_TYPES.PERFECT,
         legs: [

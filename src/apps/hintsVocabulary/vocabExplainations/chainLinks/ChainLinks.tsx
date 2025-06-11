@@ -19,7 +19,7 @@ import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getStyles } from './chainLinks.styles'
 import { useBoardData } from '../hooks/useBoardData'
-import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
+import { BoardData, getLinkHTMLText, getTrimmedBoardData } from '../utils'
 
 const puzzle = '027958600900003000603000050009780000080634010000019700070000304000300001004571890'
 
@@ -33,6 +33,7 @@ const ChainLinks = () => {
             if (_isNil(boardData.mainNumbers)) return null
 
             const zoomableViewConfigs = {
+                initialZoom: 1,
                 initialOffsetX: 0,
                 initialOffsetY: 125,
             }
@@ -52,7 +53,7 @@ const ChainLinks = () => {
                 <>
                     <View style={{ width: '100%', height: 60 }}>
                         <ReactNativeZoomableView
-                            initialZoom={zoomableViewConfigs.initialZoom || 1}
+                            initialZoom={zoomableViewConfigs.initialZoom}
                             zoomEnabled={false}
                             initialOffsetX={zoomableViewConfigs.initialOffsetX || -10}
                             initialOffsetY={zoomableViewConfigs.initialOffsetY || 10}
@@ -173,13 +174,14 @@ const ChainLinks = () => {
     }
 
     const firstRowTrimmedBoardData = !_isNil(boardData.mainNumbers)
-        ? getTrimmedBoardData(boardData, getHouseCells({ type: HOUSE_TYPE.ROW, num: 0 })) : {}
+        ? getTrimmedBoardData(boardData, getHouseCells({ type: HOUSE_TYPE.ROW, num: 0 })) : {} as BoardData
 
     const renderStrongLinkDefinition = () => {
         const renderStrongLinkExamplesInRow = () => {
             if (_isNil(boardData.mainNumbers)) return null
 
             const zoomableViewConfigs = {
+                initialZoom: 1,
                 initialOffsetX: 0,
                 initialOffsetY: 165,
             }
@@ -197,14 +199,15 @@ const ChainLinks = () => {
                 <>
                     <View style={{ width: '100%', height: 60 }}>
                         <ReactNativeZoomableView
-                            initialZoom={zoomableViewConfigs.initialZoom || 1}
+                            initialZoom={zoomableViewConfigs.initialZoom}
                             zoomEnabled={false}
                             initialOffsetX={zoomableViewConfigs.initialOffsetX || -10}
                             initialOffsetY={zoomableViewConfigs.initialOffsetY || 10}
                             disableShifting
                         >
                             <Board
-                                {...firstRowTrimmedBoardData}
+                                mainNumbers={firstRowTrimmedBoardData.mainNumbers}
+                                notes={firstRowTrimmedBoardData.notes}
                                 showCellContent
                                 showHintsSVGView
                                 svgProps={chain}
@@ -333,6 +336,7 @@ const ChainLinks = () => {
             if (_isNil(boardData.mainNumbers)) return null
 
             const zoomableViewConfigs = {
+                initialZoom: 1,
                 initialOffsetX: 0,
                 initialOffsetY: 165,
             }
@@ -349,7 +353,7 @@ const ChainLinks = () => {
             return (
                 <View style={{ width: '100%', height: 60 }}>
                     <ReactNativeZoomableView
-                        initialZoom={zoomableViewConfigs.initialZoom || 1}
+                        initialZoom={zoomableViewConfigs.initialZoom}
                         zoomEnabled={false}
                         initialOffsetX={zoomableViewConfigs.initialOffsetX || -10}
                         initialOffsetY={zoomableViewConfigs.initialOffsetY || 10}

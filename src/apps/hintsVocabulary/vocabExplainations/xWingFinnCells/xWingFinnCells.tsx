@@ -39,6 +39,7 @@ const XWingFinnCells = () => {
     const boardData = useBoardData(puzzle)
 
     const finnedXWing = {
+        isComposite: false,
         houseType: HOUSE_TYPE.COL,
         type: XWING_TYPES.FINNED,
         legs: [

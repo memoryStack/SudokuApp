@@ -22,6 +22,7 @@ import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-vi
 import { getStyles } from './finnedXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
+import { TransformedRawHint } from 'src/apps/arena/utils/smartHints/types'
 
 const puzzle = '500000000002009010730004000106008090020793050090100408000200073060900800000000001'
 
@@ -40,6 +41,7 @@ const FinnedXWing = () => {
     const boardData = useBoardData(puzzle)
 
     const finnedXWing = {
+        isComposite: false,
         houseType: HOUSE_TYPE.COL,
         type: XWING_TYPES.FINNED,
         legs: [
@@ -131,6 +133,7 @@ const FinnedXWing = () => {
         if (_isNil(boardData.mainNumbers)) return null
 
         const firstInvalidXWing = {
+            isComposite: false,
             houseType: HOUSE_TYPE.ROW,
             type: XWING_TYPES.FINNED,
             legs: [
@@ -148,6 +151,7 @@ const FinnedXWing = () => {
         }
 
         const secondInvalidXWing = {
+            isComposite: false,
             houseType: HOUSE_TYPE.ROW,
             type: XWING_TYPES.FINNED,
             legs: [
@@ -181,8 +185,7 @@ const FinnedXWing = () => {
         const firstExampleFocusedCells = getHouseCells({ type: HOUSE_TYPE.ROW, num: 2 })
         const secondExampleFocusedCells = getHouseCells({ type: HOUSE_TYPE.ROW, num: 1 })
 
-        const renderTruncatedRow = (transformedXWing, focusedCells, zoomableViewConfig) => {
-            const a = 1
+        const renderTruncatedRow = (transformedXWing: TransformedRawHint, focusedCells: Cell[], zoomableViewConfig: { initialOffsetY: number }) => {
             return (
                 <View style={[{ height: 80 }, styles.exampleBoardContainer]}>
                     <ReactNativeZoomableView

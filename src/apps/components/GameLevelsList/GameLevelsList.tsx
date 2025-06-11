@@ -24,6 +24,7 @@ import {
 } from './constants'
 
 import { getStyles } from './styles'
+import { OnAction } from '@utils/hocs/withActions/types'
 
 // this is done so that unsolved level will be scrolled
 // in the middle of the screen
@@ -44,7 +45,7 @@ const layoutProvider = new LayoutProvider(
 )
 
 type Props = {
-    onAction: () => {},
+    onAction: OnAction,
     levels: Level[],
     levelToFocusIndex: number,
     onPuzzleClick: ({ levelNum }: { levelNum: number }) => {},
@@ -76,7 +77,7 @@ const GameLevelsList: React.FC<Props> = ({
         setDataProvider(_dataProvider.cloneWithRows(levels))
     }, [levels])
 
-    const rowRenderer = (type, data: Level) => {
+    const rowRenderer = (type: any, data: Level) => {
         return (
             <Touchable
                 testID={`LEVEL-${data.levelNum}`}
