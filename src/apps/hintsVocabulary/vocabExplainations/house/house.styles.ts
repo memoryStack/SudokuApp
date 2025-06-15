@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native'
 
-export const getStyles = (_: unknown, theme) => StyleSheet.create({
+import { Theme } from 'src/containers/ThemeProvider'
+
+export const getStyles = (_: unknown, theme: Theme) => StyleSheet.create({
     container: {
         paddingHorizontal: 16,
     },

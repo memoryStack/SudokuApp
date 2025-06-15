@@ -2,7 +2,9 @@ import { StyleSheet } from 'react-native'
 
 import get from '@lodash/get'
 
-export const getStyles = (_, theme) => StyleSheet.create({
+import { Theme } from 'src/containers/ThemeProvider'
+
+export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
     container: {
         maxHeight: 500,
     },
