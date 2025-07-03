@@ -5,10 +5,10 @@ import { SOUNDS } from 'src/interfaces/soundAdapter'
 import { areSameCells } from '@domain/board/utils/housesAndCells'
 
 const handleCellPress = ({ params: { cell, dependencies } }) => {
-    const { boardRepository, soundAdapter } = dependencies
+    const { boardRepository, soundAdapter, gameSettingsAdapter } = dependencies
 
     if (!areSameCells(cell, boardRepository.getSelectedCell())) {
-        soundAdapter.play(SOUNDS.CELL_CLICK)
+        gameSettingsAdapter.soundsEnabled() && soundAdapter.play(SOUNDS.CELL_CLICK)
         boardRepository.setSelectedCell(cell)
     }
 }

@@ -48,7 +48,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     selectedCellBGColor: {
         backgroundColor: 'rgb(255, 245, 187)',
     },
-    sameHouseSameValueBGColor: {
+    mistakeCellBGColor: {
         backgroundColor: _get(theme, ['colors', 'error-container']),
     },
     wronglyFilledNumColor: {

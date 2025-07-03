@@ -15,6 +15,7 @@ import type { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksTour
 import { ArenaServiceAdapterInterface } from 'src/interfaces/arenaServiceAdapter'
 import { UserDetailsAdapter } from 'src/interfaces/userDetailsAdapter'
 import { AppVersionsServiceAdapter } from 'src/interfaces/appVersionsServiceAdapter'
+import { GameSettingsAdapter } from '@interfaces/gameSettingsAdapter'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {
@@ -35,6 +36,7 @@ export type Dependencies = {
         arena: ArenaServiceAdapterInterface
         appVersion: AppVersionsServiceAdapter
     }
+    gameSettingsAdapter: GameSettingsAdapter
 };
 
 const DependencyContext = createContext<Dependencies | undefined>(undefined)

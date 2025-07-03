@@ -139,7 +139,8 @@ const handleGameOver = ({ setState, params: { hcAnimatedValue: fadeAnim, gameSta
         refreeRepository,
         boardControllerRepository,
         analytics,
-        soundAdapter
+        soundAdapter,
+        gameSettingsAdapter
     } = dependencies
     analytics?.sendPuzzleLifeCycleEvent?.({
         puzzle: boardRepository.getPuzzleString(),
@@ -153,7 +154,8 @@ const handleGameOver = ({ setState, params: { hcAnimatedValue: fadeAnim, gameSta
         }
     })
 
-    soundAdapter.play(isGameSolved ? SOUNDS.GAME_SOLVED : SOUNDS.GAME_OVER)
+    const soundsEnabled = gameSettingsAdapter.soundsEnabled()
+    soundsEnabled && soundAdapter.play(isGameSolved ? SOUNDS.GAME_SOLVED : SOUNDS.GAME_OVER)
 }
 
 const ACTION_TYPES = {

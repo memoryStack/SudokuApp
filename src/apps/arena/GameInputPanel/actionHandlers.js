@@ -2,29 +2,38 @@ import { eraseCellUseCase, inputNumberUseCase } from '@application/usecases/boar
 import { ACTION_TYPES } from '../inputPanel/constants'
 import { isGameActive } from '../utils/util'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
+import { PENCIL_STATE } from '@application/constants'
 
-const handleNumberClick = ({ getState, params: number }) => {
+const handleNumberClick = async ({ getState, params: { number, isLongPress } }) => {
     const { dependencies } = getState()
-    const { gameStateRepository } = dependencies
+    const { gameStateRepository, boardControllerRepository, gameSettingsAdapter, soundAdapter } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    inputNumberUseCase(number, {
-        ...dependencies,
-        sound: {
-            mistake: { play: () => dependencies?.soundAdapter.play(SOUNDS.MISTAKE) },
-            addNumber: { play: () => dependencies?.soundAdapter.play(SOUNDS.NUMBER_INPUT) },
-            removeNumber: { play: () => dependencies?.soundAdapter.play(SOUNDS.ERASER_CLICK) },
+    const pencilState = boardControllerRepository.getPencil()
+    const fillNoteOnShortClick = await gameSettingsAdapter.fillNoteOnShortClick()
+    const fillAsNote = fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE
+    const soundsEnabled = gameSettingsAdapter.soundsEnabled()
+    await inputNumberUseCase(
+        number,
+        fillAsNote,
+        {
+            ...dependencies,
+            sound: {
+                mistake: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.MISTAKE) },
+                addNumber: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.NUMBER_INPUT) },
+                removeNumber: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.ERASER_CLICK) },
+            }
         }
-    })
+    )
 }
 
 const handleEraserClick = ({ getState }) => {
     const { dependencies } = getState()
-    const { gameStateRepository } = dependencies
+    const { gameStateRepository, gameSettingsAdapter, soundAdapter } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
     eraseCellUseCase(dependencies, {
-        play: () => dependencies?.soundAdapter.play(SOUNDS.ERASER_CLICK)
+        play: () => gameSettingsAdapter.soundsEnabled() && soundAdapter.play(SOUNDS.ERASER_CLICK)
     })
 }
 

@@ -55,7 +55,7 @@ const CustomPuzzle_ = ({
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
         const sameValueAsSelectedBox = sameValueInCells(cell, selectedCell, mainNumbers)
         const hasSameValueInSameHouseAsSelectedCell = sameValueAsSelectedBox && areCommonHouseCells(cell, selectedCell)
-        if (hasSameValueInSameHouseAsSelectedCell) return styles.sameHouseSameValueBGColor
+        if (hasSameValueInSameHouseAsSelectedCell) return styles.mistakeCellBGColor
         return null
     }
 

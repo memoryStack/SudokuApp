@@ -19,6 +19,7 @@ import {
     renderScreenAndWaitForPuzzleStart,
     exhaustHints,
     renderScreenAndWaitCustomPuzzleToStart,
+    isMainNumberNotPresentInCell,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -35,6 +36,7 @@ import { NEXT_GAME_MENU_TEST_ID } from '../nextGameMenu/nextGameMenu.constants'
 import { MAX_AVAILABLE_HINTS } from '../store/state/boardController.state'
 import { getGameLevelsUseCase } from '@application/usecases/gameLevels/gameLevels'
 import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
+import { consoleLog } from '@utils/util'
 
 const storageUtils = require('@utils/storage')
 
@@ -230,7 +232,9 @@ describe('Board Cell Fill Values', () => {
         const inputPanelItemToPress = getFirstEnabledInputPanelNumber()
         fireEvent.press(inputPanelItemToPress.element)
 
-        expectMainNumberPresentInCell(emptyCell, inputPanelItemToPress.inputNumber)
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, inputPanelItemToPress.inputNumber)
+        })
     })
 
     test('mistakes count will remain same on filling correct number', async () => {
@@ -256,7 +260,9 @@ describe('Board Cell Fill Values', () => {
         const numberToInputInEmptyCell = 5 // 5 is not the solution of the empty cell above
         fireEvent.press(getInputPanelNumberIfEnabled(numberToInputInEmptyCell))
 
-        expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 1/)
+        await waitFor(() => {
+            expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 1/)
+        })
     })
 
     test('clicked number wont change clue cell value', async () => {
@@ -267,7 +273,9 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(clueCell)
         fireEvent.press(getInputPanelNumberIfEnabled(5))
 
-        expectMainNumberPresentInCell(clueCell, 9)
+        await waitFor(() => {
+            expectMainNumberPresentInCell(clueCell, 9)
+        })
     })
 
     test('clicked number wont change value in correctly filled cell as well', async () => {
@@ -279,7 +287,9 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(2)) // fill correct value
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
-        expectMainNumberPresentInCell(cell, 2)
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cell, 2)
+        })
     })
 
     test('clicked number wont change value in wrongly filled cell as well', async () => {
@@ -290,8 +300,9 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(cell)
         fireEvent.press(getInputPanelNumberIfEnabled(5)) // fill wrong value
         fireEvent.press(getInputPanelNumberIfEnabled(9))
-
-        expectMainNumberPresentInCell(cell, 5)
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cell, 5)
+        })
     })
 })
 
@@ -314,8 +325,9 @@ describe('Board Cell Fill Notes', () => {
         fireEvent.press(cell)
         fireEvent.press(screen.getByText('Pencil'))
         fireEvent.press(getInputPanelNumberIfEnabled(2)) // 2 can be entered as not in the cell
-
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+        })
     })
 
     test('will not fill note in an empty cell if that number is present in row, col and block', async () => {
@@ -337,11 +349,13 @@ describe('Board Cell Fill Notes', () => {
         fireEvent.press(screen.getByText('Pencil'))
         fireEvent.press(getInputPanelNumberIfEnabled(2))
 
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+        })
         fireEvent.press(getInputPanelNumberIfEnabled(2))
-
-        expect(isNotePresentInCell(cell, 2)).toBe(false)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(false)
+        })
     })
 })
 
@@ -370,7 +384,9 @@ describe('Board Cell fill MainValue in Notes filled cell', () => {
 
         expect(isNotePresentInCell(cell, 2)).toBe(false)
         expect(isNotePresentInCell(cell, 3)).toBe(false)
-        expectMainNumberPresentInCell(cell, 2)
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cell, 2)
+        })
     })
 
     test('will remove notes of main value from any other cell which has a house common with to be filled cell', async () => {
@@ -380,19 +396,24 @@ describe('Board Cell fill MainValue in Notes filled cell', () => {
         const cellA = screen.getAllByTestId(BOARD_CELL_TEST_ID)[7]
         const cellB = screen.getAllByTestId(BOARD_CELL_TEST_ID)[25]
         const cellC = screen.getAllByTestId(BOARD_CELL_TEST_ID)[78]
-        expect(isNotePresentInCell(cellA, 5)).toBe(true)
-        expect(isNotePresentInCell(cellB, 5)).toBe(true)
-        expect(isNotePresentInCell(cellC, 5)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cellA, 5)).toBe(true)
+            expect(isNotePresentInCell(cellB, 5)).toBe(true)
+            expect(isNotePresentInCell(cellC, 5)).toBe(true)
+        })
 
         const cellToBeFilled = screen.getAllByTestId(BOARD_CELL_TEST_ID)[79]
         fireEvent.press(cellToBeFilled)
         fireEvent.press(getInputPanelNumberIfEnabled(5))
 
-        expect(isNotePresentInCell(cellA, 5)).toBe(false)
-        expect(isNotePresentInCell(cellB, 5)).toBe(false)
-        expect(isNotePresentInCell(cellC, 5)).toBe(false)
-
-        expectMainNumberPresentInCell(cellToBeFilled, 5)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cellA, 5)).toBe(false)
+            expect(isNotePresentInCell(cellB, 5)).toBe(false)
+            expect(isNotePresentInCell(cellC, 5)).toBe(false)
+        })
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cellToBeFilled, 5)
+        })
     })
 })
 
@@ -427,6 +448,9 @@ describe('Erase Board Cell Main Number', () => {
         fireEvent.press(cell)
         // 2 is the correct solution of the empty cell above
         fireEvent.press(getInputPanelNumberIfEnabled(2))
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cell, 2)
+        })
         fireEvent.press(getInputPanelEraser())
 
         expect(isEmptyElement(cell)).toBe(false)
@@ -501,15 +525,19 @@ describe('Fast Pencil', () => {
 
         // assuming if it works for two random cells then will work for other cells as well
         const cellA = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
-        expect(isNotePresentInCell(cellA, 2)).toBe(true)
-        expect(isNotePresentInCell(cellA, 3)).toBe(true)
-        expect(isNotePresentInCell(cellA, 4)).toBe(true)
-        expect(isNotePresentInCell(cellA, 7)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cellA, 2)).toBe(true)
+            expect(isNotePresentInCell(cellA, 3)).toBe(true)
+            expect(isNotePresentInCell(cellA, 4)).toBe(true)
+            expect(isNotePresentInCell(cellA, 7)).toBe(true)
+        })
 
         const cellB = screen.getAllByTestId(BOARD_CELL_TEST_ID)[53]
-        expect(isNotePresentInCell(cellB, 1)).toBe(true)
-        expect(isNotePresentInCell(cellB, 3)).toBe(true)
-        expect(isNotePresentInCell(cellB, 5)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cellB, 1)).toBe(true)
+            expect(isNotePresentInCell(cellB, 3)).toBe(true)
+            expect(isNotePresentInCell(cellB, 5)).toBe(true)
+        })
 
         expectOnAllBoardCells(element => {
             expect(isEmptyElement(element)).toBe(false)
@@ -526,10 +554,12 @@ describe('Fast Pencil', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(3))
         fireEvent.press(screen.getByText('Fast Pencil'))
 
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-        expect(isNotePresentInCell(cell, 3)).toBe(true)
-        expect(isNotePresentInCell(cell, 4)).toBe(true)
-        expect(isNotePresentInCell(cell, 7)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+            expect(isNotePresentInCell(cell, 4)).toBe(true)
+            expect(isNotePresentInCell(cell, 7)).toBe(true)
+        })
     })
 })
 
@@ -576,18 +606,23 @@ describe('Undo', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(2))
         fireEvent.press(getInputPanelNumberIfEnabled(3))
 
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-        expect(isNotePresentInCell(cell, 3)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+        })
 
         fireEvent.press(screen.getByText('Undo'))
 
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-        expect(isNotePresentInCell(cell, 3)).toBe(false)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(false)
+        })
 
         fireEvent.press(screen.getByText('Undo'))
-
-        expect(isNotePresentInCell(cell, 2)).toBe(false)
-        expect(isNotePresentInCell(cell, 3)).toBe(false)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(false)
+            expect(isNotePresentInCell(cell, 3)).toBe(false)
+        })
     })
 
     test('will bring back removed main number from cell', async () => {
@@ -599,7 +634,9 @@ describe('Undo', () => {
         fireEvent.press(getInputPanelEraser())
         fireEvent.press(screen.getByText('Undo'))
 
-        expect(cell).toHaveTextContent(3)
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cell, 3)
+        })
     })
 
     test('will bring back removed notes from cell', async () => {
@@ -613,8 +650,10 @@ describe('Undo', () => {
         fireEvent.press(getInputPanelEraser())
         fireEvent.press(screen.getByText('Undo'))
 
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-        expect(isNotePresentInCell(cell, 3)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+        })
     })
 
     test('will bring back the notes which were present before filling main number', async () => {
@@ -625,16 +664,24 @@ describe('Undo', () => {
         fireEvent.press(screen.getByText('Pencil'))
         fireEvent.press(getInputPanelNumberIfEnabled(2))
         fireEvent.press(getInputPanelNumberIfEnabled(3))
-        fireEvent.press(screen.getByText('Pencil'))
+        act(() => {
+            fireEvent.press(screen.getByText('Pencil'))
+        })
+
         fireEvent.press(getInputPanelNumberIfEnabled(2))
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cell, 2)
+        })
 
         expect(isNotePresentInCell(cell, 2)).toBe(false)
         expect(isNotePresentInCell(cell, 3)).toBe(false)
 
         fireEvent.press(screen.getByText('Undo'))
-
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-        expect(isNotePresentInCell(cell, 3)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+        })
     })
 
     test('will bring back the note which was removed by toggling the note', async () => {
@@ -646,10 +693,16 @@ describe('Undo', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(2))
         fireEvent.press(getInputPanelNumberIfEnabled(3))
         fireEvent.press(getInputPanelNumberIfEnabled(2))
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(false)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+        })
         fireEvent.press(screen.getByText('Undo'))
 
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-        expect(isNotePresentInCell(cell, 3)).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+        })
     })
 
     test('will remove notes added by Fast Pencil click, rest will survive', async () => {
@@ -660,12 +713,23 @@ describe('Undo', () => {
         fireEvent.press(screen.getByText('Pencil'))
         fireEvent.press(getInputPanelNumberIfEnabled(2)) // add notes by normal pencil
         fireEvent.press(getInputPanelNumberIfEnabled(3))
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+        })
+
         fireEvent.press(screen.getByText('Fast Pencil'))
+
+        await waitFor(() => {
+            expect(isEmptyElement(screen.getAllByTestId(BOARD_CELL_TEST_ID)[53])).toBe(false)
+        })
         fireEvent.press(screen.getByText('Undo'))
 
-        expect(isNotePresentInCell(cell, 2)).toBe(true)
-        expect(isNotePresentInCell(cell, 3)).toBe(true)
-        expect(isEmptyElement(screen.getAllByTestId(BOARD_CELL_TEST_ID)[53])).toBe(true)
+        await waitFor(() => {
+            expect(isNotePresentInCell(cell, 2)).toBe(true)
+            expect(isNotePresentInCell(cell, 3)).toBe(true)
+            expect(isEmptyElement(screen.getAllByTestId(BOARD_CELL_TEST_ID)[53])).toBe(true)
+        })
     })
 })
 
@@ -695,9 +759,14 @@ describe('Game Over Card', () => {
     test('clicking on NewGame Button after puzzle was not solved will open Next Game Menu to start new puzzle', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
-        gameOverByMistakes()
-        fireEvent.press(screen.getByText('New Game'))
+        await gameOverByMistakes()
 
+        await waitFor(() => {
+            screen.getByText('New Game')
+        })
+        act(() => {
+            fireEvent.press(screen.getByText('New Game'))
+        })
         await waitFor(() => {
             expect(screen.getByTestId(NEXT_GAME_MENU_TEST_ID)).toBeVisible()
         })

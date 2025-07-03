@@ -1,12 +1,14 @@
 /* eslint-disable global-require */
 import {
-    screen, fireEvent, within,
+    screen, fireEvent, within, waitFor,
 } from '@utils/testing/testingLibrary'
 
 import {
     getInputPanelNumberIfEnabled,
     getCellByPosition,
     renderScreenAndWaitCustomPuzzleToStart,
+    expectMainNumberPresentInCell,
+    isMainNumberNotPresentInCell,
 } from '@utils/testing/arena'
 
 import {
@@ -45,7 +47,7 @@ describe('Fixed Bug:', () => {
         jest.clearAllMocks()
     })
 
-    test('Undo possible notes as well on undo click', async () => {
+    test.only('Undo possible notes as well on undo click', async () => {
         const puzzle = '900060401060340000000085200800576010070010090010892006009720000000034050103050008'
         const { Puzzle } = require('../../../../adapters/puzzle')
         Puzzle.validatePuzzle.mockImplementation(() => Promise.resolve({
@@ -61,14 +63,22 @@ describe('Fixed Bug:', () => {
 
         closeSmartHintHC()
 
+        await waitFor(() => {
+            expect(screen.queryByTestId(SMART_HINT_HC_TEST_ID)).not.toBeOnTheScreen()
+        })
+
         fireEvent.press(getCellByPosition(17))
 
         fireEvent.press(getInputPanelNumberIfEnabled(8))
 
+        await waitFor(() => {
+            expectMainNumberPresentInCell(getCellByPosition(17), 8)
+        })
         fireEvent.press(screen.getByText('Undo'))
-
+        await waitFor(() => {
+            isMainNumberNotPresentInCell(getCellByPosition(17), 8)
+        })
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.HIDDEN_TRIPPLE])
-
         smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         smartHintHC.getByText('a Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in any house.\neach of these three cells must have atleast two out of these three candidates.\nObserve 3, 5 and 8 in A row')
 

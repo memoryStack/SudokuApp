@@ -91,6 +91,7 @@ Touchable.propTypes = {
     disabled: PropTypes.bool,
     accessibilityRole: PropTypes.string,
     testID: PropTypes.string,
+    onLongPress: PropTypes.func,
 }
 
 Touchable.defaultProps = {
@@ -105,6 +106,7 @@ Touchable.defaultProps = {
     style: null,
     underlayColor: 'white',
     onPress: _noop,
+    onLongPress: _noop,
     disabled: false,
     accessibilityRole: null,
     testID: '',

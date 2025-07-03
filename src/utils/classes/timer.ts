@@ -64,4 +64,8 @@ export class Timer {
             this.timerId = null
         }
     }
+
+    isActive() {
+        return this.timerId !== null
+    }
 }

@@ -21,6 +21,7 @@ import {
     assertHintsLeft, gotoApplyHintStep, openSmartHintHC,
 } from './smartHints'
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
+import { MISTAKES_TEXT_TEST_ID } from 'src/apps/arena/refree/refree.constants'
 
 export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
     renderScreen({
@@ -134,7 +135,7 @@ export const expectMainNumberPresentInCell = (cellElement, mainNumber) => {
 }
 
 export const isMainNumberNotPresentInCell = (cellElement, mainNumber) => {
-    expect(within(cellElement).getByTestId(CELL_MAIN_VALUE_TEST_ID)).not.toHaveTextContent(mainNumber)
+    expect(within(cellElement).queryByTestId(CELL_MAIN_VALUE_TEST_ID)).not.toBeOnTheScreen()
 }
 
 export const getFirstEnabledInputPanelNumber = () => {
@@ -178,13 +179,26 @@ export const solvePuzzle = () => {
     fireEvent.press(screen.getByText('Fill'))
 }
 
-export const gameOverByMistakes = () => {
-    fireEvent.press(screen.getAllByTestId(BOARD_CELL_TEST_ID)[1])
-    fireEvent.press(getInputPanelNumberIfEnabled(3))
-    fireEvent.press(getInputPanelEraser())
-    fireEvent.press(getInputPanelNumberIfEnabled(3))
-    fireEvent.press(getInputPanelEraser())
-    fireEvent.press(getInputPanelNumberIfEnabled(3))
+export const gameOverByMistakes = async () => {
+    const cell = screen.getAllByTestId(BOARD_CELL_TEST_ID)[1]
+    act(() => {
+        fireEvent.press(cell)
+    })
+    for (let i = 0; i < 3; i++) {
+        fireEvent.press(getInputPanelEraser())
+        await waitFor(() => {
+            expect(within(cell).queryByTestId(CELL_MAIN_VALUE_TEST_ID)).not.toBeOnTheScreen()
+        })
+        act(() => {
+            fireEvent.press(getInputPanelNumberIfEnabled(3))
+        })
+        await waitFor(() => {
+            expectMainNumberPresentInCell(cell, 3)
+        })
+        await waitFor(() => {
+            expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(`Mistakes: ${i + 1}/3`)
+        })
+    }
 }
 
 // timelimit might fail in case number of hints increase in future

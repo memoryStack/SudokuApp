@@ -1,6 +1,6 @@
 export type Action = {
     type: string
-    payload?: unknown
+    payload?: any
 }
 export type OnAction = (action: Action) => unknown
 

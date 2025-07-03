@@ -121,7 +121,7 @@ const SmartHintHC_: React.FC<Props> = ({
     const onAction = React.useMemo(() => (action: Action) => {
         if (action.type === ACTION_TYPES.ON_NUMBER_CLICK) {
             action.payload = {
-                number: action.payload,
+                ...(action.payload),
                 selectedCell,
                 dependencies,
                 hintId

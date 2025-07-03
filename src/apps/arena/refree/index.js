@@ -10,6 +10,7 @@ import _noop from '@lodash/noop'
 import get from '@lodash/get'
 
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
+import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
@@ -34,13 +35,14 @@ const getStyles = (_, theme) => StyleSheet.create({
         alignItems: 'center',
         width: '94%',
         marginBottom: 8,
+        paddingLeft: 20
     },
     textColor: {
         color: get(theme, ['colors', 'on-surface-variant-low']),
     },
 })
 
-const Refree_ = ({ onAction }) => {
+const Refree_ = ({ timer, onAction }) => {
     const dependencies = useDependency()
 
     const styles = useStyles(getStyles)
@@ -54,11 +56,25 @@ const Refree_ = ({ onAction }) => {
         onAction({ type: ACTION_TYPES.ON_TIMER_CLICK, payload: { dependencies } })
     }, [onAction, dependencies])
 
+    const showTimer = dependencies?.gameSettingsAdapter?.showTimer()
+
+    const showPlayCTA = !timer.isActive()
+
     return (
         <View style={styles.refereeContainer}>
             <Text style={styles.textColor} testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
                 {`Mistakes: ${mistakes}/${maxMistakesLimit}`}
             </Text>
+            {!showTimer ?
+                <Button
+                    label={showPlayCTA ? 'Play' : 'Pause'}
+                    onPress={onTimerClick}
+                    avoidDefaultContainerStyles
+                    textStyles={styles.footerButtonText}
+                    type={BUTTON_TYPES.TEXT}
+                />
+                : null
+            }
             <Text
                 style={styles.textColor}
                 type={TEXT_VARIATIONS.BODY_MEDIUM}
@@ -66,7 +82,7 @@ const Refree_ = ({ onAction }) => {
             >
                 {PUZZLE_LEVEL_TEXT[difficultyLevelID]}
             </Text>
-            <Timer time={time} onClick={onTimerClick} />
+            {showTimer ? <Timer time={time} onClick={onTimerClick} /> : null}
         </View>
     )
 }

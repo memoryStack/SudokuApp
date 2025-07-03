@@ -26,7 +26,7 @@ type EmptyCellsAndSolutions = {
 }[]
 
 type Board = {
-    getNewNotesToSpawn: (mainNumbers: MainNumbers, notes: Notes) => NotesToSpawn,
+    getNewNotesToSpawn: (mainNumbers: MainNumbers, notes: Notes, allowAnyNoteInCell: boolean) => NotesToSpawn,
     isPuzzleSolved: (mainNumbers: MainNumbers) => boolean,
     isMainNumberEligibleToErase: (cell: Cell, mainNumbers: MainNumbers) => boolean,
     isMainNumberNotEligibleToErase: (cell: Cell, mainNumbers: MainNumbers) => boolean,
@@ -36,14 +36,16 @@ type Board = {
     getCluesCount: (mainNumbers: MainNumbers) => number,
 }
 
-const getNewNotesToSpawn = (mainNumbers: MainNumbers, notes: Notes): NotesToSpawn => {
+const getNewNotesToSpawn = (mainNumbers: MainNumbers, notes: Notes, allowAnyNoteInCell = false): NotesToSpawn => {
     const result: NotesToSpawn = []
 
     BoardIterators.forBoardEachCell(cell => {
         if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
             _filter(
                 NotesRecord.getCellNotes(notes, cell),
-                ({ noteValue, show }: Note) => !show && !isMainNumberPresentInAnyHouseOfCell(noteValue, cell, mainNumbers),
+                ({ noteValue, show }: Note) => {
+                    return !show && (allowAnyNoteInCell ? true : !isMainNumberPresentInAnyHouseOfCell(noteValue, cell, mainNumbers))
+                },
             ).forEach(({ noteValue }: Note) => {
                 result.push({ cell, note: noteValue })
             })

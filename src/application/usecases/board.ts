@@ -15,11 +15,10 @@ import type {
     Move,
 } from '../adapterInterfaces/stateManagers/boardRepository'
 
-import { SnackBarAdapter } from '../adapterInterfaces/snackbar'
-
 import { BOARD_MOVES_TYPES, GAME_STATE, PENCIL_STATE } from '../constants'
 
 import type { Dependencies } from '../type'
+import { GameSettingsAdapter } from '@application/adapterInterfaces/gameSettings'
 
 type AddMainNumberHintAction = {
     cell: Cell
@@ -61,11 +60,12 @@ export const updateUserActivityTime = (dependencies: Dependencies) => {
     refreeRepository.setLastActivityTime(refreeRepository.getTime())
 }
 
-export const fastPencilUseCase = (dependencies: Dependencies) => {
-    const { boardRepository, analytics } = dependencies
+export const fastPencilUseCase = async (dependencies: Dependencies) => {
+    const { boardRepository, analytics, gameSettingsAdapter } = dependencies
     const mainNumbers = boardRepository.getMainNumbers()
     const notes = boardRepository.getNotes()
-    const newNotesBunchToAdd = Board.getNewNotesToSpawn(mainNumbers, notes)
+    const allowAnyNoteInCell = await gameSettingsAdapter.allowAnyNoteInCell()
+    const newNotesBunchToAdd = Board.getNewNotesToSpawn(mainNumbers, notes, allowAnyNoteInCell)
 
     if (!newNotesBunchToAdd.length) return
 
@@ -118,10 +118,16 @@ const inputMainNumber = (number: number, cell: Cell, dependencies: InputNumberUs
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-const inputNoteNumber = (number: number, boardRepository: BoardRepository, sound: InputNumberUseCaseDependencies['sound']) => {
+const inputNoteNumber = async (
+    number: number,
+    boardRepository: BoardRepository,
+    gameSettingsAdapter: GameSettingsAdapter,
+    sound: InputNumberUseCaseDependencies['sound']
+) => {
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
-    if (isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
+    const allowAnyNoteInCell = await gameSettingsAdapter.allowAnyNoteInCell()
+    if (!allowAnyNoteInCell && isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
 
     const notes = boardRepository.getNotes()
     const notesBunch = [{ cell: selectedCell, note: number }]
@@ -145,15 +151,13 @@ const inputNoteNumber = (number: number, boardRepository: BoardRepository, sound
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const inputNumberUseCase = (number: number, dependencies: InputNumberUseCaseDependencies) => {
+export const inputNumberUseCase = async (number: number, fillAsNote: boolean, dependencies: InputNumberUseCaseDependencies) => {
     const { boardRepository } = dependencies
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
     if (MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) return
 
-    const { boardControllerRepository } = dependencies
-    const pencilState = boardControllerRepository.getPencil()
-    if (pencilState === PENCIL_STATE.ACTIVE) inputNoteNumber(number, boardRepository, dependencies.sound)
+    if (fillAsNote) await inputNoteNumber(number, boardRepository, dependencies.gameSettingsAdapter, dependencies.sound)
     else inputMainNumber(number, selectedCell, dependencies)
     updateUserActivityTime(dependencies as unknown as Dependencies)
 }

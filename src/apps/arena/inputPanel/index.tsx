@@ -42,7 +42,13 @@ const Inputpanel_: React.FC<Props> = ({
 
     const styles = useMemo(() => getStyles(CELL_WIDTH), [CELL_WIDTH])
 
-    const onNumberClicked = (number: InputNumber) => onAction({ type: ACTION_TYPES.ON_NUMBER_CLICK, payload: number })
+    const onNumberClicked = (number: InputNumber, isLongPress: boolean) => onAction({
+        type: ACTION_TYPES.ON_NUMBER_CLICK,
+        payload: {
+            number,
+            isLongPress
+        }
+    })
 
     const onEraserClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_ERASE_CLICK })
@@ -72,7 +78,8 @@ const Inputpanel_: React.FC<Props> = ({
             type={BUTTON_TYPES.TONAL}
             state={getButtonState(number)}
             containerStyle={styles.numberButtonContainer}
-            onPress={() => onNumberClicked(number)}
+            onPress={() => onNumberClicked(number, false)}
+            onLongPress={() => onNumberClicked(number, true)}
             label={`${number}`}
             textStyles={styles.textStyle}
             textType={TEXT_VARIATIONS.DISPLAY_SMALL}

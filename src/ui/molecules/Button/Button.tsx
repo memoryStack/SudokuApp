@@ -16,7 +16,8 @@ import { BUTTON_STATES, BUTTON_TYPES } from './button.constants'
 
 interface Props {
     children?: React.ReactNode,
-    onPress: () => unknown,
+    onPress: () => void,
+    onLongPress?: () => void,
     containerStyle?: StyleProp<ViewStyle>,
     label?: string,
     textStyles?: StyleProp<TextStyle>,
@@ -29,6 +30,7 @@ interface Props {
 
 const Button_: React.FC<Props> = ({
     onPress = _noop,
+    onLongPress = _noop,
     containerStyle = null,
     label = '',
     textStyles = {},
@@ -61,6 +63,7 @@ const Button_: React.FC<Props> = ({
             style={[avoidDefaultContainerStyles ? null : styles.defaultContainer, containerStyle]}
             avoidDefaultStyles={avoidDefaultContainerStyles}
             onPress={onPress}
+            onLongPress={onLongPress}
             disabled={state === BUTTON_STATES.DISABLED}
             addHitSlop={type === BUTTON_TYPES.TEXT}
             accessibilityRole="button"

@@ -17,6 +17,7 @@ import { coachMarksAdapter } from '@adapters/coachMarksToursAdapter'
 import { ArenaServiceAdapter } from '@adapters/services/arenaServiceAdapter'
 import { userDetailsAdapter } from '@adapters/userDetails'
 import { AppVersionsAdapter } from '@adapters/services/appVersionsServiceAdapter'
+import { gameSettingsAdapter } from '@adapters/gameSettings'
 
 type Props = {
     children: React.ReactNode
@@ -40,7 +41,8 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
         services: {
             arena: ArenaServiceAdapter,
             appVersion: AppVersionsAdapter
-        }
+        },
+        gameSettingsAdapter
     }), [])
 
     return (

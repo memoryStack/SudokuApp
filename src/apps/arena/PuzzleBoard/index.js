@@ -99,8 +99,17 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     }
 
     const getActiveGameBoardCellBgCell = cell => {
+        const { gameSettingsAdapter } = dependencies
+
+        const highlightCells = gameSettingsAdapter.highlightCells()
+
+        if (!highlightCells) {
+            if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
+            return styles.defaultCellBGColor
+        }
+
         if (MainNumbersRecord.isCellFilled(mainNumbers, cell) && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
-            return styles.sameHouseSameValueBGColor
+            return styles.mistakeCellBGColor
         }
 
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
@@ -117,7 +126,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
     }
 
     const getCellMainNumberFontColor = cell => {
-        const { smartHintRepository, boardRepository } = dependencies
+        const { smartHintRepository, boardRepository, gameSettingsAdapter } = dependencies
         const actualMainNumbers = boardRepository.getMainNumbers()
         if (isHintTryOut && cellHasTryOutInput(cell, { tryOutMainNumbers: mainNumbers, actualMainNumbers })) {
             const removableNotes = smartHintRepository.getRemovableNotes()
@@ -135,8 +144,12 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         }
 
         if (showSmartHint) return styles.clueNumColor
-        if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
-        if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
+
+        const highlightNumbersFonts = gameSettingsAdapter.highlightNumbersFonts()
+        if (highlightNumbersFonts) {
+            if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
+            if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
+        }
 
         return styles.clueNumColor
     }
@@ -154,10 +167,12 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             }
         }
 
-        if (noteValue === selectedCellMainNumber) return styles.selectedMainNumberNote
+        const { gameSettingsAdapter } = dependencies
+        const highlightNumbersFonts = gameSettingsAdapter.highlightNumbersFonts()
+        if (highlightNumbersFonts && noteValue === selectedCellMainNumber) return styles.selectedMainNumberNote
 
         return null
-    }, [showSmartHint, cellsToFocusData, selectedCellMainNumber])
+    }, [showSmartHint, cellsToFocusData, selectedCellMainNumber, dependencies])
 
     return (
         <Board

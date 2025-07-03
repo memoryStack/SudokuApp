@@ -110,7 +110,7 @@ const handleInit = ({ setState, params: { dependencies } }) => {
     setState({ ...initBoardData(), dependencies })
 }
 
-const handleInputNumberClick = ({ setState, getState, params: newInputValue }) => {
+const handleInputNumberClick = ({ setState, getState, params: { number: newInputValue } }) => {
     const { selectedCell, mainNumbers, dependencies } = getState()
     const { row, col } = selectedCell
     if (MainNumbersRecord.isCellFilledWithNumber(mainNumbers, newInputValue, selectedCell)) return
@@ -136,7 +136,12 @@ const handleInputNumberClick = ({ setState, getState, params: newInputValue }) =
             if (nextRow !== CELLS_IN_A_HOUSE) setState({ selectedCell: { row: nextRow, col: nextCol } })
         }, 0)
     }
-    dependencies?.soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
+
+    const {
+        gameSettingsAdapter,
+        soundAdapter
+    } = dependencies
+    gameSettingsAdapter.soundsEnabled() && soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
 }
 
 const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbers) => {
@@ -181,14 +186,22 @@ const handleEraseClick = ({ setState, getState }) => {
     mainNumbers[selectedCell.row][selectedCell.col].value = 0
     updateWronglyPlacedNumbersStatusInHouses(cellInputValue, selectedCell, mainNumbers)
     setState({ mainNumbers: [...mainNumbers] })
-    dependencies?.soundAdapter?.play(SOUNDS.ERASER_CLICK)
+    const {
+        soundAdapter,
+        gameSettingsAdapter
+    } = dependencies || {}
+    gameSettingsAdapter.soundsEnabled() && soundAdapter?.play(SOUNDS.ERASER_CLICK)
 }
 
 const handleCellClick = ({ setState, getState, params: { cell, dependencies } }) => {
     const { selectedCell } = getState()
     if (areSameCells(selectedCell, cell)) return
     setState({ selectedCell: cell })
-    dependencies?.soundAdapter?.play?.(SOUNDS.CELL_CLICK)
+    const {
+        soundAdapter,
+        gameSettingsAdapter
+    } = dependencies || {}
+    gameSettingsAdapter.soundsEnabled() && soundAdapter?.play?.(SOUNDS.CELL_CLICK)
 }
 
 const handleOnClose = ({ params: ref }) => {

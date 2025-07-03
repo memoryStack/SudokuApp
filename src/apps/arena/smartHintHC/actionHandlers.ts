@@ -63,11 +63,12 @@ const handlePrevClick = ({ params: { dependencies } }: { params: { dependencies:
 }
 
 const handleCellClick = ({ params: { cell, dependencies } }: { params: { cell: Cell, dependencies: Dependencies } }) => {
-    const { smartHintRepository } = dependencies
+    const { smartHintRepository, gameSettingsAdapter } = dependencies
 
     if (areSameCells(cell, smartHintRepository.getTryOutSelectedCell() as Cell)) return
     smartHintRepository.setTryOutSelectedCell(cell)
-    dependencies?.soundAdapter?.play(SOUNDS.CELL_CLICK)
+    const soundsEnabled = gameSettingsAdapter.soundsEnabled()
+    soundsEnabled && dependencies?.soundAdapter?.play(SOUNDS.CELL_CLICK)
 }
 
 const sendTryoutUsedEvent = ({
@@ -90,7 +91,7 @@ const handleNumberClick = ({
 }: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell, dependencies: Dependencies, hintId: string } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
 
-    const { smartHintRepository, boardRepository } = dependencies
+    const { smartHintRepository, boardRepository, gameSettingsAdapter } = dependencies
     const tryOutMainNumbers = smartHintRepository.getTryOutMainNumbers()
     const filledNumberInCell = MainNumbersRecord.getCellMainValue(tryOutMainNumbers as MainNumbers, selectedCell)
     if (filledNumberInCell === number) return
@@ -104,10 +105,11 @@ const handleNumberClick = ({
     if (numberWillBeInserted && isCellFilledInTryOut) {
         handleEraserClick({ getState, setState, params: { dependencies, hintId, avoidEraseSound: true } })
     }
+    const soundsEnabled = gameSettingsAdapter.soundsEnabled()
     inputTryOutNumberUseCase(number, focusedCells, styles.snackBar, {
         ...dependencies,
         sound: {
-            play: () => dependencies?.soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
+            play: () => soundsEnabled && dependencies?.soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
         }
     })
 
@@ -123,10 +125,12 @@ const handleEraserClick = ({
     getState, setState, params: { dependencies, hintId, avoidEraseSound },
 }: StatePropsHandlers & { params: { dependencies: Dependencies, hintId: string, avoidEraseSound?: boolean } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
+    const { gameSettingsAdapter } = dependencies
+    const soundsEnabled = gameSettingsAdapter.soundsEnabled()
     eraseTryOutNumberUseCase(focusedCells, styles.snackBar, {
         ...dependencies,
         sound: {
-            play: avoidEraseSound ? _noop : () => dependencies?.soundAdapter?.play?.(SOUNDS.ERASER_CLICK)
+            play: (avoidEraseSound || !soundsEnabled) ? _noop : () => dependencies?.soundAdapter?.play?.(SOUNDS.ERASER_CLICK)
         }
     })
     sendTryoutUsedEvent({
