@@ -2,12 +2,33 @@ import type {
     GameSettingsAdapter as ApplicationLayerGameSettingsAdapter
 } from "@application/adapterInterfaces/gameSettings";
 
+export enum GAME_SETTINGS_KEYS {
+    ALLOW_ANY_NOTE_IN_CELL = 'ALLOW_ANY_NOTE_IN_CELL',
+    FILL_NOTE_ON_SHORT_CLICK = 'FILL_NOTE_ON_SHORT_CLICK',
+    HIGHLIGHT_CELLS = 'HIGHLIGHT_CELLS',
+    HIGHLIGHT_NUMBERS_FONTS = 'HIGHLIGHT_NUMBERS_FONTS',
+    SOUNDS_ENABLED = 'SOUNDS_ENABLED',
+    SHOW_TIMER = 'SHOW_TIMER',
+    MISTAKES_LIMIT = 'MISTAKES_LIMIT',
+    REMIND_TO_TAKE_HINT = 'REMIND_TO_TAKE_HINT',
+}
+
+export type AllGameSettingsValues = Record<GAME_SETTINGS_KEYS, boolean | number>
+
+export type UpdateGameSettingValueArgs = {
+    key: GAME_SETTINGS_KEYS,
+    value: boolean | number
+}
+
 export interface GameSettingsAdapter extends ApplicationLayerGameSettingsAdapter {
-    fillNoteOnShortClick: () => Promise<boolean>
+    init: () => Promise<void>
+    fillNoteOnShortClick: () => boolean
     highlightCells: () => boolean
     highlightNumbersFonts: () => boolean
     soundsEnabled: () => boolean
     showTimer: () => boolean
     getMistakesLimit: () => number
     remindToTakeHint: () => boolean
+    getAllGameSettingsValues: () => Promise<AllGameSettingsValues>
+    updateGameSettingValue: (args: UpdateGameSettingValueArgs) => Promise<void>
 }

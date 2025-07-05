@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     },
     rightHeaderContainer: {
         display: 'flex',
+        flexDirection: 'row',
         alignItems: 'center',
         marginRight: HEADER_HORIZONTAL_MARGIN,
     },

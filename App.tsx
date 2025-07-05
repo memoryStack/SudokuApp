@@ -13,6 +13,7 @@ import ModalProvider from './src/containers/ModalProvider'
 import ThemeProvider from './src/containers/ThemeProvider'
 import SpotlightTourProvider from './src/containers/SpotlightTourProvider'
 import AsyncStoreStateInitializationProvider from './src/containers/AsyncStoreStateInitializationProvider'
+import UIComponentsProvider from './src/containers/UIComponentsProvider'
 
 import { SnackBar } from './src/apps/components/SnackBar/SnackBar'
 
@@ -50,14 +51,16 @@ const App = () => {
             <AsyncStoreStateInitializationProvider>
                 <DependencyProvider>
                     <ThemeProvider>
-                        <ModalProvider>
-                            <SpotlightTourProvider>
-                                <View style={styles.container}>
-                                    <NavigationProvider />
-                                    <SnackBar />
-                                </View>
-                            </SpotlightTourProvider>
-                        </ModalProvider>
+                        <UIComponentsProvider>
+                            <ModalProvider>
+                                <SpotlightTourProvider>
+                                    <View style={styles.container}>
+                                        <NavigationProvider />
+                                        <SnackBar />
+                                    </View>
+                                </SpotlightTourProvider>
+                            </ModalProvider>
+                        </UIComponentsProvider>
                     </ThemeProvider>
                 </DependencyProvider>
             </AsyncStoreStateInitializationProvider>

@@ -24,10 +24,16 @@ const handleDesignSystemPress = ({ params }) => {
     navigation.navigate(ROUTES.DESIGN_SYSTEM)
 }
 
+const handleChooseExperiencePress = ({ params }) => {
+    const { navigation } = params
+    navigation.navigate(ROUTES.GAME_SETTINGS)
+}
+
 const ITEM_VS_PRESS_HANDLER = {
     [ITEMS_KEYS.HOW_TO_PLAY]: handleHowToPlayPress,
     [ITEMS_KEYS.SELECT_LANGUAGE]: handleLanguageSelectPress,
     [ITEMS_KEYS.DESIGN_SYSTEM]: handleDesignSystemPress,
+    [ITEMS_KEYS.CHOOSE_EXPERIENCE]: handleChooseExperiencePress,
 }
 
 const handleItemPress = ({ getState, setState, params }) => {

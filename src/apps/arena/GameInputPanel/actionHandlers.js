@@ -10,7 +10,7 @@ const handleNumberClick = async ({ getState, params: { number, isLongPress } }) 
     if (!isGameActive(gameStateRepository.getGameState())) return
 
     const pencilState = boardControllerRepository.getPencil()
-    const fillNoteOnShortClick = await gameSettingsAdapter.fillNoteOnShortClick()
+    const fillNoteOnShortClick = gameSettingsAdapter.fillNoteOnShortClick()
     const fillAsNote = fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE
     const soundsEnabled = gameSettingsAdapter.soundsEnabled()
     await inputNumberUseCase(

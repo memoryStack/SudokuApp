@@ -24,7 +24,6 @@ export const refreeSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchRefreeDataFromFromLocalStorage.pending, (state) => {
-                console.log('@@@@@@@ pendingggg')
                 state.loading = true;
                 state.error = null;
             })
@@ -36,7 +35,6 @@ export const refreeSlice = createSlice({
                 }
             })
             .addCase(fetchRefreeDataFromFromLocalStorage.rejected, (state, action) => {
-                console.log('@@@@@@@ rejectedddd')
                 state.loading = false;
                 state.error = action.payload;
             });

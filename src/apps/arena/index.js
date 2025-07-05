@@ -12,7 +12,7 @@ import Button from '@ui/molecules/Button'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { Timer } from '@utils/classes/timer'
 import { useDependency } from '../../hooks/useDependency'
-import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS } from '../../navigation/headerSection/headerSection.constants'
+import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_RIGHT_CUSTOM_ELEMENTS } from '../../navigation/headerSection/headerSection.constants'
 import { usePrevious } from '../../utils/customHooks'
 import withActions from '../../utils/hocs/withActions'
 
@@ -55,13 +55,26 @@ import { useThemeValues } from './hooks/useTheme'
 import _get from '@lodash/get'
 import { getKey, setKey } from '@utils/storage'
 
-const renderAvailableStars = (availableStars, styles) => {
-    if (!availableStars) return null
+const AvailableStarsHeaderView = ({
+    styles,
+    currentAvailableStars,
+    difficultyLevelID
+}) => {
+    const time = useSelector(getTime)
+
+    useEffect(() => {
+        const availableStars = getPuzzleAvailableStars({ time, puzzleType: difficultyLevelID })
+        if (availableStars !== currentAvailableStars.current) {
+            currentAvailableStars.current = availableStars
+        }
+    }, [time, difficultyLevelID, styles])
+
+    if (!currentAvailableStars.current) return null
     return (
         <View style={styles.availableStarsContainer}>
             <LevelStarIcon height={28} width={28} />
             <Text type={TEXT_VARIATIONS.HEADING_SMALL} style={styles.availableStarsText}>
-                {availableStars}
+                {currentAvailableStars.current}
             </Text>
         </View>
     )
@@ -129,14 +142,6 @@ const Arena_ = ({
             setSmartHintHCHeight(Math.min(pageHeight - _pageY, SMART_HEIGHT_HC_MAX_HEIGHT))
         })
     }, [showSmartHint, smartHintHCHeight, pageHeight])
-
-    useEffect(() => {
-        const availableStars = getPuzzleAvailableStars({ time, puzzleType: difficultyLevelID })
-        if (availableStars !== currentAvailableStars.current) {
-            currentAvailableStars.current = availableStars
-            navigation.setOptions({ headerRight: () => renderAvailableStars(availableStars, styles) })
-        }
-    }, [time, difficultyLevelID, styles])
 
     // don't put the route in the dependency here, else this hook will render two times
     useEffect(() => {
@@ -263,6 +268,18 @@ const Arena_ = ({
         navigation.isFocused()
             && navigation.setParams({
                 [HEADER_ITEMS_PRESS_HANDLERS_KEYS[HEADER_ITEMS.SHARE]]: handleSharePuzzleClick,
+                [HEADER_RIGHT_CUSTOM_ELEMENTS]: [{
+                    position: 1,
+                    renderer: () => {
+                        return (
+                            <AvailableStarsHeaderView
+                                currentAvailableStars={currentAvailableStars}
+                                difficultyLevelID={difficultyLevelID}
+                                styles={styles}
+                            />
+                        )
+                    }
+                }]
             })
     }, [navigation, handleSharePuzzleClick])
 

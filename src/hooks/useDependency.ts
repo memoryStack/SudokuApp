@@ -7,11 +7,13 @@ import { getRouteNameFromRoute } from 'src/navigation/navigation.utils'
 import { AnalyticsHandlers } from '@adapters/analytics'
 import { ROUTES } from '@application/constants'
 import { SoundAdapter } from 'src/interfaces/soundAdapter'
+import { GameSettingsAdapter } from 'src/interfaces/gameSettingsAdapter'
 import { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
 
 interface Dependencies extends Omit<ApplicationLayerDependencies, 'sound'> {
     soundAdapter: SoundAdapter
     coachMarksAdapter: CoachMarksAdapterUIInterface
+    gameSettingsAdapter: GameSettingsAdapter
 }
 
 export const useDependency = (): Dependencies => {

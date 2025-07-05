@@ -1,5 +1,12 @@
 module.exports = {
     presets: ['module:metro-react-native-babel-preset', '@babel/preset-typescript'],
+    env: {
+        production: {
+            plugins: [
+                'react-native-paper/babel'
+            ],
+        },
+    },
     plugins: [
         [
             'module-resolver',
@@ -25,6 +32,7 @@ module.exports = {
                     '@adapters': './src/adapters',
                     '@domain': './src/domain',
                     '@application': './src/application',
+                    '@interfaces': './src/interfaces'
                 },
             },
         ],

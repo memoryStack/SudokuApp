@@ -1,45 +1,60 @@
-import { GameSettingsAdapter } from "@interfaces/gameSettingsAdapter"
+import { getKey, setKey } from "@utils/storage"
+import { INITIAL_STATE } from "src/apps/arena/store/state/refree.state"
+import { AllGameSettingsValues, GAME_SETTINGS_KEYS, GameSettingsAdapter, UpdateGameSettingValueArgs } from "src/interfaces/gameSettingsAdapter"
 
 const DEFAULT_SETTING = {
-    ALLOW_ANY_NOTE_IN_CELL: false,
-    FILL_NOTE_ON_SHORT_CLICK: false,
-    HIGHLIGHT_CELLS: true,
-    HIGHLIGHT_NUMBERS_FONTS: true,
-    SOUNDS_ENABLED: true,
-    SHOW_TIMER: true,
-    MISTAKES_LIMIT: 3,
-    REMIND_TO_TAKE_HINT: true,
+    [GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL]: false,
+    [GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK]: false,
+    [GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS]: true,
+    [GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS]: true,
+    [GAME_SETTINGS_KEYS.SOUNDS_ENABLED]: true,
+    [GAME_SETTINGS_KEYS.SHOW_TIMER]: true,
+    [GAME_SETTINGS_KEYS.MISTAKES_LIMIT]: INITIAL_STATE.maxMistakesLimit,
+    [GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT]: true,
 }
 
-/*
-    1. init a local object here and make all of these queries sync
-    2. add handler for updating the settings and refresh the local object
-        with new settings
-*/
+let currentSettings = {} as AllGameSettingsValues
+
+const GAME_SETTINGS_STORAGE_KEY = 'GAME_SETTINGS_STORAGE'
 
 export const gameSettingsAdapter: GameSettingsAdapter = {
-    allowAnyNoteInCell: async () => {
-        return DEFAULT_SETTING.ALLOW_ANY_NOTE_IN_CELL
+    init: async () => {
+        currentSettings = await getKey(GAME_SETTINGS_STORAGE_KEY) ?? { ...DEFAULT_SETTING }
     },
-    fillNoteOnShortClick: async () => {
-        return DEFAULT_SETTING.FILL_NOTE_ON_SHORT_CLICK
+    allowAnyNoteInCell: async () => {
+        return currentSettings[GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL] as boolean
+    },
+    fillNoteOnShortClick: () => {
+        return currentSettings[GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK] as boolean
     },
     highlightCells: () => {
-        return DEFAULT_SETTING.HIGHLIGHT_CELLS
+        return currentSettings[GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS] as boolean
     },
     highlightNumbersFonts: () => {
-        return DEFAULT_SETTING.HIGHLIGHT_NUMBERS_FONTS
+        return currentSettings[GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS] as boolean
     },
     soundsEnabled: () => {
-        return DEFAULT_SETTING.SOUNDS_ENABLED
+        return currentSettings[GAME_SETTINGS_KEYS.SOUNDS_ENABLED] as boolean
     },
     showTimer: () => {
-        return DEFAULT_SETTING.SHOW_TIMER
+        return currentSettings[GAME_SETTINGS_KEYS.SHOW_TIMER] as boolean
     },
     getMistakesLimit: () => {
-        return DEFAULT_SETTING.MISTAKES_LIMIT
+        return currentSettings[GAME_SETTINGS_KEYS.MISTAKES_LIMIT] as number
     },
     remindToTakeHint: () => {
-        return DEFAULT_SETTING.REMIND_TO_TAKE_HINT
-    }
+        return currentSettings[GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT] as boolean
+    },
+    getAllGameSettingsValues: async () => {
+        return { ...currentSettings }
+    },
+    updateGameSettingValue: async (args: UpdateGameSettingValueArgs) => {
+        await setKey(GAME_SETTINGS_STORAGE_KEY, {
+            ...currentSettings,
+            [args.key]: args.value
+        })
+        currentSettings = await getKey(GAME_SETTINGS_STORAGE_KEY) ?? { ...DEFAULT_SETTING }
+    },
 }
+
+gameSettingsAdapter.init()

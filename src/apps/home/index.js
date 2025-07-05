@@ -35,18 +35,17 @@ const Home_ = ({ navigation }) => {
 
     const styles = useStyles(getStyles)
 
-    const { soundAdapter } = useDependency()
 
     useEffect(() => {
-        fetch('http://52.66.253.10:3000/getRecords')
-            .then(response => response.json())
-            .then(json => {
-                console.log('@@@@@@ data', json)
-            })
-            .catch(err => {
-                console.log('@@@@@', err.message)
-                // setError(err.message);
-            });
+        // fetch('http://52.66.253.10:3000/getRecords')
+        //     .then(response => response.json())
+        //     .then(json => {
+        //         console.log('@@@@@@ data', json)
+        //     })
+        //     .catch(err => {
+        //         console.log('@@@@@', err.message)
+        //         // setError(err.message);
+        //     });
     }, []);
 
     const handlePlayOfflineClick = useCallback(() => {

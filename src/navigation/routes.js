@@ -10,6 +10,7 @@ import Divider from '../apps/designSystemScreen/componentsScreens/Divider'
 import Dialog from '../apps/designSystemScreen/componentsScreens/Dialog'
 import LevelCard from '../apps/designSystemScreen/componentsScreens/LevelCard'
 import Levels from '../apps/levels/Levels'
+import { GameSettings } from '../apps/gameSettings'
 
 import { HEADER_ITEMS, HEADER_SECTION } from './headerSection/headerSection.constants'
 
@@ -82,7 +83,7 @@ export const routes = [
         name: ROUTES.HOME,
         component: Home,
         headerItems: {
-            [HEADER_SECTION.RIGHT]: __DEV__ ? [HEADER_ITEMS.SETTINGS] : [],
+            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SETTINGS],
         },
     },
     {
@@ -91,6 +92,7 @@ export const routes = [
         headerItems: {
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
             // [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SHARE],
+            [HEADER_SECTION.RIGHT]: [HEADER_ITEMS.SETTINGS],
         },
     },
     {
@@ -98,6 +100,14 @@ export const routes = [
         component: PlayGuide,
         headerItems: {
             title: ROUTE_HEADER_TITLES[ROUTES.PLAY_GUIDE],
+            [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
+        },
+    },
+    {
+        name: ROUTES.GAME_SETTINGS,
+        component: GameSettings,
+        headerItems: {
+            title: ROUTE_HEADER_TITLES[ROUTES.GAME_SETTINGS],
             [HEADER_SECTION.LEFT]: [HEADER_ITEMS.BACK],
         },
     },

@@ -79,18 +79,24 @@ HeaderItem.propTypes = {
 
 const renderHeaderSectionItems = ({
     containerStyle, items, navigation, route,
-}) => (
-    <View style={containerStyle}>
-        {_map(items, (item, index) => (
-            <HeaderItem
-                item={item}
-                index={index}
-                route={route}
-                navigation={navigation}
-            />
-        ))}
-    </View>
-)
+}) => {
+    return (
+        <View style={containerStyle}>
+            {_map(items, (item, index) => {
+                if (_isFunction(item.renderer)) return item.renderer()
+                return (
+                    <HeaderItem
+                        item={item}
+                        index={index}
+                        route={route}
+                        navigation={navigation}
+                    />
+                )
+            }
+            )}
+        </View>
+    )
+}
 
 export const renderLeftHeader = ({ navigation, route }) => renderHeaderSectionItems({
     containerStyle: styles.leftHeaderContainer,

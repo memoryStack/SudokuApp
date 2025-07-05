@@ -3,14 +3,8 @@ import { StyleSheet } from 'react-native'
 
 export const getStyles = (_, theme) => StyleSheet.create({
     menuContainer: {
-        display: 'flex',
-        borderRadius: 4,
-        position: 'absolute',
-        right: 8,
-        top: 40,
-        elevation: 10,
-        backgroundColor: get(theme, ['colors', 'surface-container-low']),
-        paddingHorizontal: 16,
+        padding: 16,
+        backgroundColor: 'white'
     },
     menuItemContainer: {
         height: 40,
@@ -19,5 +13,8 @@ export const getStyles = (_, theme) => StyleSheet.create({
     },
     menuItemText: {
         color: get(theme, ['colors', 'on-surface']),
+    },
+    icon: {
+        color: get(theme, ['colors', 'on-surface-variant']),
     },
 })
