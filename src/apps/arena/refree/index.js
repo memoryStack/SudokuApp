@@ -57,7 +57,6 @@ const Refree_ = ({ timer, onAction }) => {
     }, [onAction, dependencies])
 
     const showTimer = dependencies?.gameSettingsAdapter?.showTimer()
-
     const showPlayCTA = !timer.isActive()
 
     return (

@@ -35,7 +35,6 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
     const { groupCells } = rawHint
     const focusedCells = getHousesCellsSharedByCells(groupCells)
     const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)
-
     const removableNotesHostCells = getRemovableNotesCells(groupCells, groupCandidates, focusedCells, notesData)
     return {
         hasTryOut: true,

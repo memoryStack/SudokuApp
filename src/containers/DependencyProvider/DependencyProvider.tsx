@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import DependencyContext from '@contexts/DependencyContext'
 
@@ -24,26 +24,39 @@ type Props = {
 }
 
 const DependencyProvider: React.FC<Props> = ({ children }) => {
-    const contextValues = useMemo(() => ({
-        gameStateRepository: GameStateRepository,
-        refreeRepository: RefreeRepository,
-        smartHintRepository: SmartHintRepository,
-        boardControllerRepository: BoardControllerRepository,
-        boardRepository: BoardRepository,
-        snackBarAdapter,
-        puzzle: Puzzle,
-        gamePersistenceAdapter,
-        gameLevelsAdapter,
-        analytics: AnalyticsHandlers,
-        soundAdapter,
-        coachMarksAdapter,
-        userDetailsAdapter: userDetailsAdapter,
-        services: {
-            arena: ArenaServiceAdapter,
-            appVersion: AppVersionsAdapter
-        },
-        gameSettingsAdapter
-    }), [])
+    const [gameSettingsInitialized, setGameSettingsInitialized] = useState(false)
+    useEffect(() => {
+        gameSettingsAdapter.init()
+            .then(() => {
+                setGameSettingsInitialized(true)
+            })
+    }, [])
+
+    const contextValues = useMemo(() => {
+        return {
+            state: {
+                gameSettingsInitialized
+            },
+            gameStateRepository: GameStateRepository,
+            refreeRepository: RefreeRepository,
+            smartHintRepository: SmartHintRepository,
+            boardControllerRepository: BoardControllerRepository,
+            boardRepository: BoardRepository,
+            snackBarAdapter,
+            puzzle: Puzzle,
+            gamePersistenceAdapter,
+            gameLevelsAdapter,
+            analytics: AnalyticsHandlers,
+            soundAdapter,
+            coachMarksAdapter,
+            userDetailsAdapter: userDetailsAdapter,
+            services: {
+                arena: ArenaServiceAdapter,
+                appVersion: AppVersionsAdapter
+            },
+            gameSettingsAdapter
+        }
+    }, [gameSettingsInitialized])
 
     return (
         <DependencyContext.Provider value={contextValues}>

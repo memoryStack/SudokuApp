@@ -14,6 +14,8 @@ import {
     CLOSE_ICON_TEST_ID as SMART_HINT_HC_CLOSE_ICON_TEST_ID,
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
 } from '../../apps/arena/smartHintHC/constants'
+import { getFirstEmptyCell, isNotePresentInCell } from './arena'
+import { isEmptyElement } from './touchable'
 
 const mockBoardControllersRef = async () => {
     // TODO: how to do it by mocking measure function mentioned
@@ -35,7 +37,9 @@ const mockBoardControllersRef = async () => {
 
 export const openSmartHintHC = async hintItemToClick => {
     await mockBoardControllersRef()
-    fireEvent.press(screen.getByText('Fast Pencil'))
+    act(() => {
+        fireEvent.press(screen.getByText('Fast Pencil'))
+    })
     longPressHintCTA()
     await waitForAvailableHintsToBeChecked()
     fireEvent.press(screen.getByText(hintItemToClick))

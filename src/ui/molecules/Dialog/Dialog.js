@@ -17,6 +17,7 @@ import { getStyles } from './dialog.styles'
 import { consoleLog } from '@utils/util'
 
 const Dialog = ({
+    testID,
     styles: stylesProp,
     title,
     description,
@@ -68,7 +69,7 @@ const Dialog = ({
 
     // TODO: think over the divider's uses
     return (
-        <View style={[styles.container, stylesProp]}>
+        <View style={[styles.container, stylesProp]} testID={testID}>
             {renderIcon()}
             {renderTitle()}
             {renderDescription()}
@@ -83,6 +84,7 @@ const Dialog = ({
 export default React.memo(Dialog)
 
 Dialog.propTypes = {
+    testID: PropTypes.string,
     title: PropTypes.string,
     description: PropTypes.string,
     // showDivider: PropTypes.bool,
@@ -96,6 +98,7 @@ Dialog.propTypes = {
 }
 
 Dialog.defaultProps = {
+    testID: '',
     title: '',
     description: '',
     // showDivider: false,

@@ -11,6 +11,8 @@ import { BOARD_CONTROLLER_TEST_ID } from '../../apps/arena/cellActions/cellActio
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../../apps/arena/inputPanel/constants'
 import { HINT_MENU_ITEM_TEST_ID } from '../../apps/arena/hintsMenu/hintsMenu.constants'
 
+import { waitFor as rntlWaitFor } from '@testing-library/react-native'
+
 import {
     screen, within, fireEvent, act, waitFor,
 } from './testingLibrary'
@@ -22,6 +24,7 @@ import {
 } from './smartHints'
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 import { MISTAKES_TEXT_TEST_ID } from 'src/apps/arena/refree/refree.constants'
+import { addListener } from '@utils/GlobalEventBus'
 
 export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
     renderScreen({
@@ -34,12 +37,22 @@ export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = 
 }
 
 export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
+    jest.useRealTimers()
     renderScreen({
         route: ROUTES.ARENA,
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
         routeOptions: { selectedGameMenuItem: NEW_GAME_IDS.CUSTOMIZE_PUZZLE },
     })
 
+    await new Promise(r => {
+        addListener('RENDER_CALLED_EVENT', r)
+    })
+
+    await rntlWaitFor(() => {
+        expect(screen.queryByTestId(CONTENT_CONTAINER_TEST_ID)).toBeOnTheScreen()
+    })
+
+    jest.useFakeTimers()
     act(() => {
         fireLayoutEvent(screen.getByTestId(CONTENT_CONTAINER_TEST_ID), {
             width: 400,
@@ -49,7 +62,6 @@ export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
         })
         jest.advanceTimersByTime(500)
     })
-
     const customPuzzleContainer = within(screen.getByTestId(CUSTOM_PUZZLE_TEST_ID))
     const inputPanel = within(customPuzzleContainer.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
     for (let i = 0; i < puzzle.length; i++) {
@@ -64,11 +76,9 @@ export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
     }
 
     fireEvent.press(customPuzzleContainer.getByText('Play'))
-
     await waitFor(() => {
         expect(screen.queryByTestId(CUSTOM_PUZZLE_TEST_ID)).not.toBeOnTheScreen()
     }, { timeout: 5000 })
-
     await hasPuzzleStarted()
 }
 

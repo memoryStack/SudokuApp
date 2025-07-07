@@ -19,6 +19,9 @@ import { GameSettingsAdapter } from '@interfaces/gameSettingsAdapter'
 
 // TODO: organise these dependencies into relevant hierarchy
 export type Dependencies = {
+    state: {
+        gameSettingsInitialized: boolean
+    },
     gameStateRepository: GameStateRepository
     refreeRepository: RefreeRepository
     smartHintRepository: SmartHintRepository

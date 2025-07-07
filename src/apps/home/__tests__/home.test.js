@@ -1,6 +1,6 @@
 // TODO: merge renderScreen util with the testingLibrary exports
 import {
-    screen, fireEvent, waitFor, act,
+    screen, fireEvent, act,
 } from '@utils/testing/testingLibrary'
 import { getScreenName, renderScreen } from '@utils/testing/renderScreen'
 
@@ -13,6 +13,7 @@ import { SETTINGS_BUTTON_TEST_ID } from '../../header/components/settings/settin
 import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settingsMenu/settingsMenu.constants'
 
 import { HOME_PAGE_TEST_ID } from '../home.constants'
+import { waitFor } from '@testing-library/react-native'
 
 jest.mock('../../../adapters/puzzle/puzzle')
 
@@ -25,12 +26,17 @@ describe('Home Page', () => {
             getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
         })
 
+        await waitFor(() => {
+            expect(screen.queryByText('PLAY')).toBeOnTheScreen()
+        })
         fireEvent.press(screen.getByText('PLAY'))
 
         // TODO: learn async act() more deeply to understand
         //          react renders due to component internally like network call, setTimeouts etc
         //          https://callstack.github.io/react-native-testing-library/docs/understanding-act#asynchronous-act
-        expect(await screen.findByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
+        await waitFor(() => {
+            expect(screen.queryByTestId(NEXT_GAME_MENU_TEST_ID)).toBeOnTheScreen()
+        })
     })
 
     test.skip('goes to puzzle screen upon clicking next game menu item', async () => {
@@ -77,6 +83,10 @@ describe('Home Page Header Settings Button', () => {
     test('opens and closes the settings menu click', async () => {
         renderScreen({
             getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
+        })
+
+        await waitFor(() => {
+            expect(screen.queryByTestId(SETTINGS_BUTTON_TEST_ID)).toBeOnTheScreen()
         })
 
         fireEvent.press(screen.getByTestId(SETTINGS_BUTTON_TEST_ID))

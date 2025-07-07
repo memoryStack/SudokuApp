@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 
 import { Provider } from 'react-redux'
 
@@ -28,6 +28,11 @@ import boardReducers from '../../apps/arena/store/reducers/board.reducers'
 import { initDispatch, initGetState } from '../../redux/dispatch.helpers'
 import { NavigationProvider } from 'src/navigation/navigator'
 import SpotlightTourProvider from 'src/containers/SpotlightTourProvider'
+import AsyncStoreStateInitializationProvider from 'src/containers/AsyncStoreStateInitializationProvider'
+import UIComponentsProvider from 'src/containers/UIComponentsProvider'
+import { useDependency } from 'src/hooks/useDependency'
+import { emit } from '@utils/GlobalEventBus'
+import DependencyContext from '@contexts/DependencyContext'
 
 const getNewStore = () => {
     const store = configureStore({
@@ -49,16 +54,20 @@ const getNewStore = () => {
 const AllTheProviders = ({ children }) => (
     <Provider store={getNewStore()}>
         <DependencyProvider>
-            <ThemeProvider>
-                <ModalProvider>
-                    <SpotlightTourProvider>
-                        <>
-                            {children}
-                            <SnackBar />
-                        </>
-                    </SpotlightTourProvider>
-                </ModalProvider>
-            </ThemeProvider>
+            <AsyncStoreStateInitializationProvider>
+                <ThemeProvider>
+                    <UIComponentsProvider>
+                        <ModalProvider>
+                            <SpotlightTourProvider>
+                                <>
+                                    {children}
+                                    <SnackBar />
+                                </>
+                            </SpotlightTourProvider>
+                        </ModalProvider>
+                    </UIComponentsProvider>
+                </ThemeProvider>
+            </AsyncStoreStateInitializationProvider>
         </DependencyProvider>
     </Provider>
 )
@@ -71,9 +80,27 @@ AllTheProviders.defaultProps = {
     children: null,
 }
 
+const FireEventForPageMount = () => {
+    const { state: { gameSettingsInitialized = false } = {} } = useContext(DependencyContext) || {}
+
+    useEffect(() => {
+        if (gameSettingsInitialized) {
+            setTimeout(() => {
+                emit('RENDER_CALLED_EVENT')
+            }, 100)
+        }
+    }, [gameSettingsInitialized])
+    return null
+}
+
 const customRender = (ui, options) => render(ui, {
     wrapper: ({ children }) => (
-        <AllTheProviders>{children}</AllTheProviders>
+        <AllTheProviders>
+            <>
+                {children}
+                <FireEventForPageMount />
+            </>
+        </AllTheProviders>
     ),
     ...options,
 })
@@ -87,15 +114,22 @@ const renderWithEmptyNavigator = (ui, options) => render(ui, {
     wrapper: ({ children }) => (
         <Provider store={getNewStore()}>
             <DependencyProvider>
-                <ThemeProvider>
-                    <ModalProvider>
-                        <SpotlightTourProvider>
-                            <NavigationContainer>
-                                {children}
-                            </NavigationContainer>
-                        </SpotlightTourProvider>
-                    </ModalProvider>
-                </ThemeProvider>
+                <AsyncStoreStateInitializationProvider>
+                    <ThemeProvider>
+                        <UIComponentsProvider>
+                            <ModalProvider>
+                                <SpotlightTourProvider>
+                                    <NavigationContainer>
+                                        <>
+                                            {children}
+                                            <FireEventForPageMount />
+                                        </>
+                                    </NavigationContainer>
+                                </SpotlightTourProvider>
+                            </ModalProvider>
+                        </UIComponentsProvider>
+                    </ThemeProvider>
+                </AsyncStoreStateInitializationProvider>
             </DependencyProvider>
         </Provider>
     ),

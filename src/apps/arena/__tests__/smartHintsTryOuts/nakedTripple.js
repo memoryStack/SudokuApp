@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 import {
-    screen, fireEvent, within,
+    screen, fireEvent, within, waitFor,
 } from '@utils/testing/testingLibrary'
 
 import {
@@ -185,6 +185,10 @@ describe('Naked Tripple', () => {
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         await gotoTryOutStep()
+
+        await waitFor(() => {
+            getInputPanelNumberIfEnabled(5, getInputPanel())
+        })
         fireEvent.press(getCellByPosition(40))
         fireEvent.press(getInputPanelNumberIfEnabled(5, getInputPanel()))
         fireEvent.press(getCellByPosition(14))

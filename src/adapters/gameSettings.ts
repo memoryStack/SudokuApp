@@ -13,7 +13,9 @@ const DEFAULT_SETTING = {
     [GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT]: true,
 }
 
-let currentSettings = {} as AllGameSettingsValues
+let currentSettings = {
+    ...DEFAULT_SETTING
+} as AllGameSettingsValues
 
 const GAME_SETTINGS_STORAGE_KEY = 'GAME_SETTINGS_STORAGE'
 
@@ -21,7 +23,7 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
     init: async () => {
         currentSettings = await getKey(GAME_SETTINGS_STORAGE_KEY) ?? { ...DEFAULT_SETTING }
     },
-    allowAnyNoteInCell: async () => {
+    allowAnyNoteInCell: () => {
         return currentSettings[GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL] as boolean
     },
     fillNoteOnShortClick: () => {
@@ -56,5 +58,3 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
         currentSettings = await getKey(GAME_SETTINGS_STORAGE_KEY) ?? { ...DEFAULT_SETTING }
     },
 }
-
-gameSettingsAdapter.init()

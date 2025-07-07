@@ -63,6 +63,10 @@ const renderCustomPuzzle = async props => {
         <CustomPuzzle parentHeight={1000} {...props} />
     )
 
+    await waitFor(() => {
+        expect(screen.queryByTestId(CONTENT_CONTAINER_TEST_ID)).toBeOnTheScreen()
+    })
+
     // this just got coupled with the implementation
     act(() => {
         // event used by BottomDragger component to

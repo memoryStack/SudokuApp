@@ -47,9 +47,7 @@ export const SettingsMenu_ = ({ onAction }) => {
             onPress={toggleMenuVisibility}
             testID={SETTINGS_BUTTON_TEST_ID}
         >
-            <View collapsable={false}>
-                <SettingsIcon iconBoxSize={32} fill={styles.icon.color} />
-            </View>
+            <SettingsIcon iconBoxSize={32} fill={styles.icon.color} />
         </Touchable>
     )
 

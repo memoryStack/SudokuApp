@@ -14,7 +14,6 @@ export const waitForAvailableHintsToBeChecked = async () => {
                 // eslint-disable-next-line no-empty
             } catch (error) { }
         })
-
         expect(enabledHintsCount).not.toBe(0)
     })
 }

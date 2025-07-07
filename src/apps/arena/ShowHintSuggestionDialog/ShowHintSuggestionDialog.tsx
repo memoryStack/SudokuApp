@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { View } from 'react-native'
-
 import _get from '@lodash/get'
 import _noop from '@lodash/noop'
 
@@ -12,6 +10,7 @@ import Dialog from '@ui/molecules/Dialog'
 import { BUTTON_TYPES } from '@ui/molecules/Button'
 
 import LottieView from 'lottie-react-native';
+import { HINT_SUGGESTION_DIALOG_TEST_ID } from './showHintSuggestionDialog.constants'
 
 type Props = {
     description: string,
@@ -34,6 +33,7 @@ const ShowHintSuggestionDialog: React.FC<Props> = ({
 
     return (
         <Dialog
+            testID={HINT_SUGGESTION_DIALOG_TEST_ID}
             title={'Want Help?'}
             description={description}
             body={languagesOptionsView}

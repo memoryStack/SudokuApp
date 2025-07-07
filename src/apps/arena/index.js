@@ -31,7 +31,7 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
 import { GameState } from '@application/utils/gameState'
-import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, HINT_SUGGESTION_TOGGLE_KEY, PUZZLES_LEVELS_LIST_CONTAINER, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
+import { ARENA_PAGE_TEST_ID, AVAILABLE_STARS_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, HINT_SUGGESTION_TOGGLE_KEY, PUZZLES_LEVELS_LIST_CONTAINER, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
 import GameResultCard from './GameResultCard'
 import { NextGameMenu } from './nextGameMenu'
 import { CustomPuzzle } from './customPuzzle'
@@ -71,7 +71,7 @@ const AvailableStarsHeaderView = ({
 
     if (!currentAvailableStars.current) return null
     return (
-        <View style={styles.availableStarsContainer}>
+        <View key={'AVAILABLE_STARS'} style={styles.availableStarsContainer} testID={AVAILABLE_STARS_TEST_ID}>
             <LevelStarIcon height={28} width={28} />
             <Text type={TEXT_VARIATIONS.HEADING_SMALL} style={styles.availableStarsText}>
                 {currentAvailableStars.current}
@@ -194,7 +194,6 @@ const Arena_ = ({
         const { gameSettingsAdapter } = dependencies
         const remindToTakeHint = gameSettingsAdapter.remindToTakeHint()
         if (!remindToTakeHint || timeDifference < inactivityThreshold || showSmartHint || !(new GameState(gameState).isGameActive())) return
-
         getKey(HINT_SUGGESTION_TOGGLE_KEY)
             .then((showHintSuggestion) => {
                 if (showHintSuggestion !== false) {

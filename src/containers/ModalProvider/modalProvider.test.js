@@ -11,6 +11,7 @@ import ModalContext from '@contexts/ModalContext'
 import { fireEvent, render, screen } from '@utils/testing/testingLibrary'
 
 import { MODAL_TEST_ID } from './modalProvider.constants'
+import { waitFor } from '@testing-library/react-native'
 
 const TestingComponent = ({
     uiCustomProps = {},
@@ -51,18 +52,26 @@ TestingComponent.defaultProps = {
 }
 
 describe('ModalProvider', () => {
-    test('will show UI on request', () => {
+    test('will show UI on request', async () => {
         render(<TestingComponent />)
 
         expect(screen.queryByTestId('dummy-ui')).not.toBeOnTheScreen()
+
+        await waitFor(() => {
+            expect(screen.queryByText('Open')).toBeOnTheScreen()
+        })
 
         fireEvent.press(screen.getByText('Open'))
 
         screen.getByTestId('dummy-ui')
     })
 
-    test('will close UI on request from child', () => {
+    test('will close UI on request from child', async () => {
         render(<TestingComponent />)
+
+        await waitFor(() => {
+            expect(screen.queryByText('Open')).toBeOnTheScreen()
+        })
 
         fireEvent.press(screen.getByText('Open'))
 
@@ -73,8 +82,12 @@ describe('ModalProvider', () => {
         expect(screen.queryByTestId('dummy-ui')).not.toBeOnTheScreen()
     })
 
-    test('will close UI on overlay click by default', () => {
+    test('will close UI on overlay click by default', async () => {
         render(<TestingComponent />)
+
+        await waitFor(() => {
+            expect(screen.queryByText('Open')).toBeOnTheScreen()
+        })
 
         fireEvent.press(screen.getByText('Open'))
 
@@ -85,8 +98,12 @@ describe('ModalProvider', () => {
         expect(screen.queryByTestId('dummy-ui')).not.toBeOnTheScreen()
     })
 
-    test('close UI on overlay click can be disabled', () => {
+    test('close UI on overlay click can be disabled', async () => {
         render(<TestingComponent closeOnBackdropClick={false} />)
+
+        await waitFor(() => {
+            expect(screen.queryByText('Open')).toBeOnTheScreen()
+        })
 
         fireEvent.press(screen.getByText('Open'))
 
@@ -97,13 +114,17 @@ describe('ModalProvider', () => {
         screen.getByTestId('dummy-ui')
     })
 
-    test('lets to override the props applied to the child element', () => {
+    test('lets to override the props applied to the child element', async () => {
         render(<TestingComponent
             closeOnBackdropClick={false}
             uiCustomProps={{
                 testProp: 'testProp',
             }}
         />)
+
+        await waitFor(() => {
+            expect(screen.queryByText('Open')).toBeOnTheScreen()
+        })
 
         fireEvent.press(screen.getByText('Open'))
 

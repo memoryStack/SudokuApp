@@ -4,7 +4,7 @@ import { isGameActive } from '../utils/util'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
 import { PENCIL_STATE } from '@application/constants'
 
-const handleNumberClick = async ({ getState, params: { number, isLongPress } }) => {
+const handleNumberClick = ({ getState, params: { number, isLongPress } }) => {
     const { dependencies } = getState()
     const { gameStateRepository, boardControllerRepository, gameSettingsAdapter, soundAdapter } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
@@ -13,7 +13,7 @@ const handleNumberClick = async ({ getState, params: { number, isLongPress } }) 
     const fillNoteOnShortClick = gameSettingsAdapter.fillNoteOnShortClick()
     const fillAsNote = fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE
     const soundsEnabled = gameSettingsAdapter.soundsEnabled()
-    await inputNumberUseCase(
+    inputNumberUseCase(
         number,
         fillAsNote,
         {

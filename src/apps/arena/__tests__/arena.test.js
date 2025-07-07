@@ -28,7 +28,7 @@ import { assertHintsLeft } from '@utils/testing/smartHints'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
-import { GAME_OVER_CARD_OVERLAY_TEST_ID, PUZZLES_LEVELS_LIST_CONTAINER } from '../constants'
+import { AVAILABLE_STARS_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, PUZZLES_LEVELS_LIST_CONTAINER } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
 import { BOARD_CELL_TEST_ID } from '../gameBoard/cell/cell.constants'
@@ -37,8 +37,23 @@ import { MAX_AVAILABLE_HINTS } from '../store/state/boardController.state'
 import { getGameLevelsUseCase } from '@application/usecases/gameLevels/gameLevels'
 import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
 import { consoleLog } from '@utils/util'
+import { SETTINGS_BUTTON_TEST_ID } from 'src/apps/header/components/settings/settings.constants'
+import { SETTINGS_MENU_TEST_ID } from 'src/apps/header/components/settings/settingsMenu/settingsMenu.constants'
+import { getTimeDifferenceInSeconds } from '../utils/util'
+import { HINT_SUGGESTION_DIALOG_TEST_ID } from '../ShowHintSuggestionDialog/showHintSuggestionDialog.constants'
+
 
 const storageUtils = require('@utils/storage')
+
+jest.mock('lottie-react-native', () => {
+    const MockComponent = () => {
+        return null
+    }
+    return {
+        __esModule: true,
+        default: MockComponent
+    }
+})
 
 jest.mock('@application/usecases/gameLevels/gameLevels', () => {
     return {
@@ -63,6 +78,14 @@ jest.mock('../../../adapters/puzzle', () => {
     return { Puzzle }
 })
 
+jest.mock('../utils/util', () => {
+    const original = jest.requireActual('../utils/util')
+    return {
+        ...original,
+        getTimeDifferenceInSeconds: jest.fn(() => 10),
+    }
+})
+
 describe('Arena Screen', () => {
     // added this to avoid "ReferenceError: You are trying to `import` a file after the Jest environment has been torn down."
     // error due to timer setTimeout
@@ -80,7 +103,10 @@ describe('Arena Screen', () => {
 
     test('should go back to home page on back button press', async () => {
         await renderScreenAndWaitForPuzzleStart()
-        fireEvent.press(screen.getByTestId(HEADER_ITEM_VS_TEST_ID[HEADER_ITEMS.BACK]))
+
+        act(() => {
+            fireEvent.press(screen.getByTestId(HEADER_ITEM_VS_TEST_ID[HEADER_ITEMS.BACK]))
+        })
 
         expect(getScreenName()).toBe(ROUTES.HOME)
     })
@@ -888,5 +914,79 @@ describe('Bugs', () => {
         assertHintsLeft(MAX_AVAILABLE_HINTS)
 
         Puzzle.validatePuzzle.mockReset()
+    })
+})
+
+describe('Header Items', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+        jest.setTimeout(20000)
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
+    test('should render available stars view in header', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await waitFor(() => {
+            screen.getByTestId(AVAILABLE_STARS_TEST_ID)
+        })
+    })
+
+    test('navigate to game settings screen on Customize Experience option click', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        act(() => {
+            fireEvent.press(screen.getByTestId(SETTINGS_BUTTON_TEST_ID))
+        })
+        await waitFor(() => {
+            screen.getByTestId(SETTINGS_MENU_TEST_ID)
+        })
+        await act(async () => {
+            fireEvent.press(screen.getByText('Customize Experience'))
+        })
+
+        expect(getScreenName()).toBe(ROUTES.GAME_SETTINGS)
+    })
+})
+
+describe('Hint Suggestion Card', () => {
+    beforeEach(() => {
+        // global.clearInterval = jest.fn();
+        // global.setInterval = jest.fn();
+        // global.clearTimeout = jest.fn();
+        // global.setTimeout = jest.fn();
+
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'], // Allows waitFor to work
+            timerLimit: 100, // Optional safety measure
+        })
+        // jest.useFakeTimers('legacy')
+        jest.setTimeout(20000)
+    })
+    afterEach(() => {
+        // if (global.clearInterval.mock) {
+        //     global.clearInterval.mockClear();
+        // }
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
+    test('should nudge user to take a hint if no activity has been recorded for a time limit', async () => {
+        getTimeDifferenceInSeconds.mockImplementation(() => {
+            return 500 // it's enough to show the hint suggestion modal
+        })
+        await renderScreenAndWaitForPuzzleStart()
+
+        jest.advanceTimersByTime(500 * 1000); // Advance by 500 seconds
+
+        await waitFor(() => {
+            screen.getByTestId(HINT_SUGGESTION_DIALOG_TEST_ID)
+        })
     })
 })

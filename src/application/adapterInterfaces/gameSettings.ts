@@ -1,3 +1,3 @@
 export type GameSettingsAdapter = {
-    allowAnyNoteInCell: () => Promise<boolean>
+    allowAnyNoteInCell: () => boolean
 }

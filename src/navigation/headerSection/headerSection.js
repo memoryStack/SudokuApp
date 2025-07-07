@@ -58,7 +58,7 @@ const HeaderItem = ({
     const IconRenderer = HEADER_ITEM_VS_ICON[item]
 
     return (
-        <View key={item} style={{ marginLeft: index !== 0 ? 16 : 0 }}>
+        <View style={{ marginLeft: index !== 0 ? 16 : 0 }}>
             {_isFunction(IconRenderer)
                 ? IconRenderer({ ...commonProps, navigation })
                 : renderIconBtn({
@@ -86,6 +86,7 @@ const renderHeaderSectionItems = ({
                 if (_isFunction(item.renderer)) return item.renderer()
                 return (
                     <HeaderItem
+                        key={item}
                         item={item}
                         index={index}
                         route={route}

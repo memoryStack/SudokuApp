@@ -60,11 +60,11 @@ export const updateUserActivityTime = (dependencies: Dependencies) => {
     refreeRepository.setLastActivityTime(refreeRepository.getTime())
 }
 
-export const fastPencilUseCase = async (dependencies: Dependencies) => {
+export const fastPencilUseCase = (dependencies: Dependencies) => {
     const { boardRepository, analytics, gameSettingsAdapter } = dependencies
     const mainNumbers = boardRepository.getMainNumbers()
     const notes = boardRepository.getNotes()
-    const allowAnyNoteInCell = await gameSettingsAdapter.allowAnyNoteInCell()
+    const allowAnyNoteInCell = gameSettingsAdapter.allowAnyNoteInCell()
     const newNotesBunchToAdd = Board.getNewNotesToSpawn(mainNumbers, notes, allowAnyNoteInCell)
 
     if (!newNotesBunchToAdd.length) return
@@ -118,7 +118,7 @@ const inputMainNumber = (number: number, cell: Cell, dependencies: InputNumberUs
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-const inputNoteNumber = async (
+const inputNoteNumber = (
     number: number,
     boardRepository: BoardRepository,
     gameSettingsAdapter: GameSettingsAdapter,
@@ -126,7 +126,7 @@ const inputNoteNumber = async (
 ) => {
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
-    const allowAnyNoteInCell = await gameSettingsAdapter.allowAnyNoteInCell()
+    const allowAnyNoteInCell = gameSettingsAdapter.allowAnyNoteInCell()
     if (!allowAnyNoteInCell && isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
 
     const notes = boardRepository.getNotes()
@@ -151,13 +151,13 @@ const inputNoteNumber = async (
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const inputNumberUseCase = async (number: number, fillAsNote: boolean, dependencies: InputNumberUseCaseDependencies) => {
+export const inputNumberUseCase = (number: number, fillAsNote: boolean, dependencies: InputNumberUseCaseDependencies) => {
     const { boardRepository } = dependencies
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
     if (MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) return
 
-    if (fillAsNote) await inputNoteNumber(number, boardRepository, dependencies.gameSettingsAdapter, dependencies.sound)
+    if (fillAsNote) inputNoteNumber(number, boardRepository, dependencies.gameSettingsAdapter, dependencies.sound)
     else inputMainNumber(number, selectedCell, dependencies)
     updateUserActivityTime(dependencies as unknown as Dependencies)
 }

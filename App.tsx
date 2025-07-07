@@ -48,8 +48,8 @@ const App = () => {
 
     return (
         <Provider store={store}>
-            <AsyncStoreStateInitializationProvider>
-                <DependencyProvider>
+            <DependencyProvider>
+                <AsyncStoreStateInitializationProvider>
                     <ThemeProvider>
                         <UIComponentsProvider>
                             <ModalProvider>
@@ -62,8 +62,8 @@ const App = () => {
                             </ModalProvider>
                         </UIComponentsProvider>
                     </ThemeProvider>
-                </DependencyProvider>
-            </AsyncStoreStateInitializationProvider>
+                </AsyncStoreStateInitializationProvider>
+            </DependencyProvider>
         </Provider>
     )
 }

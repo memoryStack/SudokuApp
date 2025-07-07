@@ -15,7 +15,7 @@ import { NavigationProvider, navigationRef } from '../../navigation/navigator'
 import { ROUTES } from '../../navigation/route.constants'
 
 import { fireLayoutEvent } from './fireEvent.utils'
-import { render, screen, act } from './testingLibrary'
+import { render, screen, act, waitFor } from './testingLibrary'
 
 const HOME_SCREEN_LAYOUT = {
     height: 768,
@@ -54,13 +54,11 @@ const NavigateToRoute_ = ({
 
     React.useEffect(() => {
         if (!isScreenRendered || !renderCalled) return
-
         fireLayoutEvent(getScreenRootElement(), HOME_SCREEN_LAYOUT)
     }, [isScreenRendered, renderCalled, getScreenRootElement])
 
     React.useEffect(() => {
         const handler = () => setRenderCalled(true)
-
         addListener(RENDER_CALLED_EVENT, handler)
 
         return () => {
@@ -123,12 +121,16 @@ export const renderScreen = ({
             >
                 {children}
             </NavigateToRoute>
-        </NavigationProvider>,
+        </NavigationProvider>
     )
 
-    act(() => {
-        emit(RENDER_CALLED_EVENT)
-    })
+    // await waitFor(() => {
+    //     expect(screen.queryByTestId()).toBeOnTheScreen()
+    // })
+
+    // act(() => {
+    //     emit(RENDER_CALLED_EVENT)
+    // })
 
     return {
         ...renderResult,
