@@ -9,9 +9,9 @@ import PropTypes from 'prop-types'
 import _noop from '@lodash/noop'
 import _prependZero from '@lodash/prependZero'
 
-import { NEW_GAME } from '@resources/stringLiterals'
+import { NEW_GAME, RESTART_GAME } from '@resources/stringLiterals'
 
-import Button from '@ui/molecules/Button'
+import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
@@ -33,7 +33,7 @@ const getTimeView = (time, styles) => {
     )
 }
 
-const GameResultCard = ({ stats, openNextGameMenu }) => {
+const GameResultCard = ({ stats, openNextGameMenu, onRestartGame }) => {
     const {
         mistakes, time, hintsUsed, starsEarned
     } = stats
@@ -41,6 +41,8 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
     const styles = useStyles(getStyles)
 
     const gameState = useSelector(getGameState)
+
+    const isGameSolved = new GameState(gameState).isGameSolved()
 
     const getGameSolvedView = () => {
         if (!new GameState(gameState).isGameSolved()) return null
@@ -92,8 +94,18 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
         )
     }
 
+    const renderRestartButton = () => (
+        <Button
+            type={BUTTON_TYPES.FILLED}
+            label={RESTART_GAME}
+            onPress={onRestartGame}
+            containerStyle={styles.newGameButtonContainer}
+        />
+    )
+
     const renderNewGameButton = () => (
         <Button
+            type={isGameSolved ? BUTTON_TYPES.FILLED : BUTTON_TYPES.OUTLINED}
             label={NEW_GAME}
             onPress={openNextGameMenu}
             containerStyle={styles.newGameButtonContainer}
@@ -108,6 +120,7 @@ const GameResultCard = ({ stats, openNextGameMenu }) => {
         >
             {getGameSolvedView()}
             {getGameUnsolvedView()}
+            {!isGameSolved ? renderRestartButton() : null}
             {renderNewGameButton()}
         </View>
     )
@@ -118,9 +131,11 @@ export default React.memo(GameResultCard)
 GameResultCard.propTypes = {
     stats: PropTypes.object,
     openNextGameMenu: PropTypes.func,
+    onRestartGame: PropTypes.func,
 }
 
 GameResultCard.defaultProps = {
     stats: {},
     openNextGameMenu: _noop,
+    onRestartGame: _noop,
 }

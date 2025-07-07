@@ -242,11 +242,15 @@ const Arena_ = ({
 
     const onCustomPuzzleHCClosed = () => onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
 
-    const hideCongratsModal = useCallback(() => {
+    const closeGameOverDialogAndOpenNewGameMenu = useCallback(() => {
         onAction({
             type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD,
             payload: { fadeAnim: fadeAnim.current, dependencies },
         })
+    }, [onAction, dependencies])
+
+    const handleRestartGame = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_RESTART_GAME, payload: { fadeAnim: fadeAnim.current, dependencies } })
     }, [onAction, dependencies])
 
     const isPuzzlePresent = (currentGameState, _previousGameState) => {
@@ -347,6 +351,7 @@ const Arena_ = ({
 
         return <SmartHintHC parentHeight={pageHeight} height={smartHintHCHeight} />
     }
+
     const renderGameOverCard = () => {
         if (!showGameSolvedCard) return null
 
@@ -354,7 +359,7 @@ const Arena_ = ({
             <Touchable
                 activeOpacity={1}
                 style={styles.gameOverCardAbsoluteBG}
-                onPress={hideCongratsModal}
+                onPress={closeGameOverDialogAndOpenNewGameMenu}
                 testID={GAME_OVER_CARD_OVERLAY_TEST_ID}
             >
                 <Animated.View style={[styles.gameOverAnimatedBG, { opacity: fadeAnim.current }]}>
@@ -365,7 +370,8 @@ const Arena_ = ({
                             hintsUsed: REFREE_DEFAULT_STATE.maxMistakesLimit - hintsLeft,
                             starsEarned: currentAvailableStars.current
                         }}
-                        openNextGameMenu={hideCongratsModal}
+                        openNextGameMenu={closeGameOverDialogAndOpenNewGameMenu}
+                        onRestartGame={handleRestartGame}
                     />
                 </Animated.View>
             </Touchable>

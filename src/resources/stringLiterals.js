@@ -9,3 +9,4 @@ export const DEEPLINK_PUZZLE_MULTIPLE_SOLUTIONS = 'Puzzle has multiple solutions
 export const START_GAME = 'Start Game'
 export const CUSTOMIZE_YOUR_PUZZLE_TITLE = 'Customize Your Puzzle'
 export const RESUME = 'Resume'
+export const RESTART_GAME = 'Restart'

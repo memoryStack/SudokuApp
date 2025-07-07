@@ -1,7 +1,12 @@
 import { CELLS_IN_A_HOUSE } from "@domain/board/board.constants"
 import { convertBoardCellToNum } from "@domain/board/utils/cellsTransformers"
 
-export const transformNativeGeneratedPuzzle = ({ clues, solution }): MainNumbers => {
+type Puzzle = {
+    clues: number[]
+    solution: number[]
+}
+
+export const transformRawPuzzleToStateMainNumbers = ({ clues, solution }: Puzzle): MainNumbers => {
     const mainNumbers = []
     for (let row = 0; row < CELLS_IN_A_HOUSE; row++) {
         const rowData = []

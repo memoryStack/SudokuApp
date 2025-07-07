@@ -51,6 +51,15 @@ const getOriginalPuzzleMainNumbers = (mainNumbers: MainNumbers) => {
     return result
 }
 
+const getOriginalSolution = (mainNumbers: MainNumbers): number[] => {
+    const result: MainNumberValue[] = []
+    BoardIterators.forBoardEachCell(cell => {
+        const cellMainNumber: MainNumber = _get(mainNumbers, [cell.row, cell.col])
+        result.push(cellMainNumber.solutionValue)
+    })
+    return result
+}
+
 const getPuzzleCurrentMainNumbers = (mainNumbers: MainNumbers) => {
     const result: MainNumberValue[] = []
     BoardIterators.forBoardEachCell(cell => {
@@ -69,4 +78,5 @@ export const MainNumbersRecord = {
     initMainNumbers,
     getOriginalPuzzleMainNumbers,
     getPuzzleCurrentMainNumbers,
+    getOriginalSolution
 }
