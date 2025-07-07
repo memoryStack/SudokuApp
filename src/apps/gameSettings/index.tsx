@@ -37,13 +37,13 @@ const SETTINGS_ = [
                 key: GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: 'Highlight related cells when selecting a number'
+                description: 'Highlight related cells with a different background'
             },
             {
                 key: GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: 'Highlight numbers with different fonts or styles'
+                description: 'Highlight clues, solution, wrongly filled numbers with different colors'
             }
         ]
     },
@@ -54,13 +54,13 @@ const SETTINGS_ = [
                 key: GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: 'Allow filling multiple notes in a single cell'
+                description: 'Allow filling all the notes in cell'
             },
             {
                 key: GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: 'Fill notes with a short click instead of requiring a long press'
+                description: 'Fill notes with short press and cell solution number with long press'
             }
         ]
     },
