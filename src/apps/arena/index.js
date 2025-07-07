@@ -180,7 +180,7 @@ const Arena_ = ({
             boardRepository.setState(INITIAL_STATE)
             gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
             smartHintRepository.removeHints()
-            refreeRepository.setState(REFREE_DEFAULT_STATE)
+            // refreeRepository.setState(REFREE_DEFAULT_STATE)
             boardControllerRepository.resetState()
             hideModal()
         }
