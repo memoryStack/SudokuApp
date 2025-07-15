@@ -71,7 +71,7 @@ export const handleMenuItemPress = (
     }
 
     // TODO: show some error popup for this case
-    // generateAndStartNewGameUseCase(AUTO_GENERATED_NEW_GAME_IDS.EASY, dependencies)
+    generateAndStartNewGameUseCase(AUTO_GENERATED_NEW_GAME_IDS.EASY, dependencies)
 }
 
 export const getMenuItemsToShow = async (dependencies: Dependencies) => {

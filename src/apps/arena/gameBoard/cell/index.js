@@ -177,7 +177,7 @@ const Cell_ = ({
             )
         }
         if (displayCrossIcon) return getCellCrossIcon()
-        if (cellMainValue || true) return renderCellMainValue()
+        if (cellMainValue) return renderCellMainValue()
         return getCellNotes()
     }
 

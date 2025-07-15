@@ -104,7 +104,7 @@ const CellNumberInput: React.FC<Props> = ({
                 withoutLineHeight={withoutLineHeight}
                 animated={animated || ANIMATABLE_PROPERTIES.TEXT_COLOR in animationConfigsMerge}
             >
-                {'1'}
+                {value}
             </Text>
         </Animated.View>
     )
