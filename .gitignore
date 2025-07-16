@@ -8,14 +8,22 @@ ios/*.DS_Store
 *.xcuserstate
 ios/*.ipa
 ios/*.xcuserstate
+ios/.xcode.env.local
 
-# CocoaPods
+# Ruby / CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
 # you should judge for yourself, the pros and cons are mentioned at:
 # http://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 #
 ios/Pods/
+/vendor/bundle/
+ 
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+ 
+# testing
+/coverage
 
 # android
 android/local.properties
@@ -31,7 +39,15 @@ main.jsbundle.meta
 .vscode/settings.json
 
 *.hprof
+.cxx/
+*.keystore
+!debug.keystore
 
 .scannerwork/*
 
 coverage/*
+
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output

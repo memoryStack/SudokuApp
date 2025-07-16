@@ -27,13 +27,17 @@ import { MISTAKES_TEXT_TEST_ID } from 'src/apps/arena/refree/refree.constants'
 import { addListener } from '@utils/GlobalEventBus'
 
 export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
+    console.log('@@@@@@@ 1.1')
     renderScreen({
         route: ROUTES.ARENA,
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
         routeOptions: { selectedGameMenuItem: NEW_GAME_IDS.EASY, levelNum: 1 },
     })
+    console.log('@@@@@@@ 1.2')
     await hasPuzzleStarted()
+    console.log('@@@@@@@ 1.3')
     await executeMoreSetupSteps()
+    console.log('@@@@@@@ 1.4')
 }
 
 export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {

@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 import {
-    screen, fireEvent, within, waitFor,
+    screen, fireEvent, within, waitFor, cleanup,
 } from '@utils/testing/testingLibrary'
 
 import {
@@ -44,6 +44,7 @@ describe('Naked Tripple', () => {
     afterEach(() => {
         jest.useRealTimers()
         jest.clearAllMocks()
+        cleanup()
     })
 
     test('by default nudge user to input something', async () => {
@@ -138,15 +139,23 @@ describe('Naked Tripple', () => {
     })
 
     test('Wrong Fill: Naked Single in 2 group host cells with same candidate', async () => {
+        console.log('@@@@@@ 1')
         await renderScreenAndWaitForPuzzleStart()
+        console.log('@@@@@@ 2')
         await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE])
+        console.log('@@@@@@ 3')
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        console.log('@@@@@@ 4')
         await gotoTryOutStep()
+        console.log('@@@@@@ 5')
         fireEvent.press(getCellByPosition(40))
+        console.log('@@@@@@ 6')
         fireEvent.press(getInputPanelNumberIfEnabled(5, getInputPanel()))
+        console.log('@@@@@@ 7')
         fireEvent.press(getCellByPosition(4))
+        console.log('@@@@@@ 8')
         fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel()))
-
+        console.log('@@@@@@ 9')
         smartHintHC.getByText('9 is Naked Single for B4 and C4. fill 9 in one of these cells to know the fault in previous steps')
     })
 

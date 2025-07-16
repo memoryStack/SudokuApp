@@ -144,4 +144,4 @@ export {
     renderWithEmptyNavigator,
 }
 
-export { waitFor } from '@testing-library/dom'
+// export { waitFor } from '@testing-library/dom'

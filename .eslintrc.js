@@ -6,7 +6,7 @@ module.exports = {
         node: true,
         'jest/globals': true,
     },
-    extends: ['plugin:react/recommended', 'airbnb'],
+    extends: ['plugin:react/recommended', 'airbnb', '@react-native'],
     overrides: [
         {
             files: ['*.ts', '*.tsx'],
