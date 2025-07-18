@@ -54,11 +54,15 @@ const NavigateToRoute_ = ({
 
     React.useEffect(() => {
         if (!isScreenRendered || !renderCalled) return
-        fireLayoutEvent(getScreenRootElement(), HOME_SCREEN_LAYOUT)
+        setTimeout(() => {
+            fireLayoutEvent(getScreenRootElement(), HOME_SCREEN_LAYOUT)
+        }, 0)
     }, [isScreenRendered, renderCalled, getScreenRootElement])
 
     React.useEffect(() => {
-        const handler = () => setRenderCalled(true)
+        const handler = () => {
+            setRenderCalled(true)
+        }
         addListener(RENDER_CALLED_EVENT, handler)
 
         return () => {

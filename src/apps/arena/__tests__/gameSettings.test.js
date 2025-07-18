@@ -201,7 +201,7 @@ describe('Game Settings', () => {
         fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(emptyCell, 2)
+            expectMainNumberPresentInCell(emptyCell, '2')
         })
     })
 })

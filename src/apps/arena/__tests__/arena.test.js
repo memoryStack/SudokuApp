@@ -259,7 +259,7 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(inputPanelItemToPress.element)
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(emptyCell, inputPanelItemToPress.inputNumber)
+            expectMainNumberPresentInCell(emptyCell, `${inputPanelItemToPress.inputNumber}`)
         })
     })
 
@@ -300,7 +300,7 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(5))
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(clueCell, 9)
+            expectMainNumberPresentInCell(clueCell, '9')
         })
     })
 
@@ -314,7 +314,7 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(9))
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(cell, 2)
+            expectMainNumberPresentInCell(cell, '2')
         })
     })
 
@@ -327,7 +327,7 @@ describe('Board Cell Fill Values', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(5)) // fill wrong value
         fireEvent.press(getInputPanelNumberIfEnabled(9))
         await waitFor(() => {
-            expectMainNumberPresentInCell(cell, 5)
+            expectMainNumberPresentInCell(cell, '5')
         })
     })
 })
@@ -411,7 +411,7 @@ describe('Board Cell fill MainValue in Notes filled cell', () => {
         expect(isNotePresentInCell(cell, 2)).toBe(false)
         expect(isNotePresentInCell(cell, 3)).toBe(false)
         await waitFor(() => {
-            expectMainNumberPresentInCell(cell, 2)
+            expectMainNumberPresentInCell(cell, '2')
         })
     })
 
@@ -438,7 +438,7 @@ describe('Board Cell fill MainValue in Notes filled cell', () => {
             expect(isNotePresentInCell(cellC, 5)).toBe(false)
         })
         await waitFor(() => {
-            expectMainNumberPresentInCell(cellToBeFilled, 5)
+            expectMainNumberPresentInCell(cellToBeFilled, '5')
         })
     })
 })
@@ -475,7 +475,7 @@ describe('Erase Board Cell Main Number', () => {
         // 2 is the correct solution of the empty cell above
         fireEvent.press(getInputPanelNumberIfEnabled(2))
         await waitFor(() => {
-            expectMainNumberPresentInCell(cell, 2)
+            expectMainNumberPresentInCell(cell, '2')
         })
         fireEvent.press(getInputPanelEraser())
 
@@ -661,7 +661,7 @@ describe('Undo', () => {
         fireEvent.press(screen.getByText('Undo'))
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(cell, 3)
+            expectMainNumberPresentInCell(cell, '3')
         })
     })
 
@@ -697,7 +697,7 @@ describe('Undo', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(2))
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(cell, 2)
+            expectMainNumberPresentInCell(cell, '2')
         })
 
         expect(isNotePresentInCell(cell, 2)).toBe(false)
@@ -1005,7 +1005,9 @@ describe('Hint Suggestion Card', () => {
         })
         await renderScreenAndWaitForPuzzleStart()
 
-        jest.advanceTimersByTime(500 * 1000); // Advance by 500 seconds
+        act(() => {
+            jest.advanceTimersByTime(500 * 1000); // Advance by 500 seconds
+        })
 
         await waitFor(() => {
             screen.getByTestId(HINT_SUGGESTION_DIALOG_TEST_ID)

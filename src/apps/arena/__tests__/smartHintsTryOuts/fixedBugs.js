@@ -72,7 +72,7 @@ describe('Fixed Bug:', () => {
         fireEvent.press(getInputPanelNumberIfEnabled(8))
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(getCellByPosition(17), 8)
+            expectMainNumberPresentInCell(getCellByPosition(17), '8')
         })
         fireEvent.press(screen.getByText('Undo'))
         await waitFor(() => {

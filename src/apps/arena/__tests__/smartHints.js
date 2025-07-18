@@ -151,7 +151,7 @@ describe('Hint/Smart Hints', () => {
         })
 
         await waitFor(() => {
-            expectMainNumberPresentInCell(getCellByPosition(11), 3)
+            expectMainNumberPresentInCell(getCellByPosition(11), '3')
         })
     })
 
@@ -254,7 +254,7 @@ describe('Hint/Smart Hints', () => {
 
         fireEvent.press(getInputPanelNumberIfEnabled(2, getInputPanel()))
 
-        expectMainNumberPresentInCell(getCellByPosition(2), 2)
+        expectMainNumberPresentInCell(getCellByPosition(2), '2')
         expect(isNotePresentInCell(getCellByPosition(3), 2)).toBe(false)
     })
 
@@ -290,7 +290,7 @@ describe('Hint/Smart Hints', () => {
         fireEvent.press(getCellByPosition(3))
         fireEvent.press(getInputPanelNumberIfEnabled(3, getInputPanel()))
 
-        expectMainNumberPresentInCell(getCellByPosition(3), 3)
+        expectMainNumberPresentInCell(getCellByPosition(3), '3')
 
         closeSmartHintHC()
 
@@ -322,6 +322,6 @@ describe('Hint/Smart Hints', () => {
             fireEvent.press(getInputPanelNumberIfEnabled(4, getInputPanel()))
         })
 
-        expectMainNumberPresentInCell(getCellByPosition(2), 4)
+        expectMainNumberPresentInCell(getCellByPosition(2), '4')
     })
 })

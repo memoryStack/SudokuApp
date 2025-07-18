@@ -86,7 +86,9 @@ const renderCustomPuzzle = async props => {
         screen.getByTestId(BOTTOM_DRAGGER_OVERLAY_TEST_ID)
     })
 
-    jest.advanceTimersByTime(500)
+    act(() => {
+        jest.advanceTimersByTime(500)
+    })
 }
 
 describe('Custom Puzzle', () => {
@@ -105,7 +107,7 @@ describe('Custom Puzzle', () => {
     test('should fill a number on Input Number click', async () => {
         await renderCustomPuzzle()
         fillCustomPuzzle({ 1: 2 })
-        expect(getCellByPosition(1)).toHaveTextContent(2)
+        expect(getCellByPosition(1)).toHaveTextContent('2')
     })
 
     test('filled number can be overriden by another number', async () => {
@@ -114,7 +116,7 @@ describe('Custom Puzzle', () => {
         fillCustomPuzzle({ 1: 2 })
         fillCustomPuzzle({ 1: 4 })
 
-        expect(getCellByPosition(1)).toHaveTextContent(4)
+        expect(getCellByPosition(1)).toHaveTextContent('4')
     })
 
     test('eraser will remove number from the cell', async () => {

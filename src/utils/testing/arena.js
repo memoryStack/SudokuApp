@@ -27,17 +27,13 @@ import { MISTAKES_TEXT_TEST_ID } from 'src/apps/arena/refree/refree.constants'
 import { addListener } from '@utils/GlobalEventBus'
 
 export const renderScreenAndWaitForPuzzleStart = async (executeMoreSetupSteps = async () => { }) => {
-    console.log('@@@@@@@ 1.1')
     renderScreen({
         route: ROUTES.ARENA,
         getScreenRootElement: () => screen.getByTestId(ARENA_PAGE_TEST_ID),
         routeOptions: { selectedGameMenuItem: NEW_GAME_IDS.EASY, levelNum: 1 },
     })
-    console.log('@@@@@@@ 1.2')
     await hasPuzzleStarted()
-    console.log('@@@@@@@ 1.3')
     await executeMoreSetupSteps()
-    console.log('@@@@@@@ 1.4')
 }
 
 export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
@@ -87,9 +83,12 @@ export const renderScreenAndWaitCustomPuzzleToStart = async puzzle => {
 }
 
 export const hasPuzzleStarted = async () => {
-    await waitFor(() => {
+    // jest.useRealTimers()
+    // await waitFor(() => {
+    await rntlWaitFor(async () => {
         expect(screen.queryByTestId(TIMER_PAUSE_ICON_TEST_ID)).toBeOnTheScreen()
     })
+    // jest.useFakeTimers()
 }
 
 export const expectOnAllBoardCells = expectCallback => {
@@ -199,7 +198,10 @@ export const gameOverByMistakes = async () => {
         fireEvent.press(cell)
     })
     for (let i = 0; i < 3; i++) {
-        fireEvent.press(getInputPanelEraser())
+        act(() => {
+            fireEvent.press(getInputPanelEraser())
+        })
+
         await waitFor(() => {
             expect(within(cell).queryByTestId(CELL_MAIN_VALUE_TEST_ID)).not.toBeOnTheScreen()
         })
@@ -207,7 +209,7 @@ export const gameOverByMistakes = async () => {
             fireEvent.press(getInputPanelNumberIfEnabled(3))
         })
         await waitFor(() => {
-            expectMainNumberPresentInCell(cell, 3)
+            expectMainNumberPresentInCell(cell, '3')
         })
         await waitFor(() => {
             expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(`Mistakes: ${i + 1}/3`)

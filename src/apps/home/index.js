@@ -90,8 +90,8 @@ const Home_ = ({ navigation }) => {
         const handler = ({ url }) => {
             launchDeeplinkPuzzle(url)
         }
-        Linking.addEventListener(EVENTS.LINKING_URL, handler)
-        return () => Linking.removeEventListener(EVENTS.LINKING_URL, handler)
+        const sub = Linking.addEventListener(EVENTS.LINKING_URL, handler)
+        return () => sub?.remove()
     }, [])
 
     const renderSudokuText = () => (

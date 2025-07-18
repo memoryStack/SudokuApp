@@ -27,8 +27,9 @@ const mockBoardControllersRef = async () => {
     /*
         UPDATE 1: have updated it once, spent around 30mins to make the change
     */
-    await waitFor(() => {
-        const boardControllerDimensionMeasurer = screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID)._fiber._debugOwner.ref.current.measure
+    await waitFor(async () => {
+        const view = await screen.findByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID)
+        const boardControllerDimensionMeasurer = view._fiber._debugOwner.ref.current.measure
         boardControllerDimensionMeasurer.mockImplementation(cb => {
             cb(0, 0, 392.72, 50.90, 0, 551.27)
         })
@@ -37,8 +38,11 @@ const mockBoardControllersRef = async () => {
 
 export const openSmartHintHC = async hintItemToClick => {
     await mockBoardControllersRef()
-    act(() => {
-        fireEvent.press(screen.getByText('Fast Pencil'))
+    await waitFor(() => {
+        expect(screen.queryByText('Fast Pencil')).toBeOnTheScreen()
+    })
+    await act(async () => {
+        fireEvent.press(await screen.findByText('Fast Pencil'))
     })
     longPressHintCTA()
     await waitForAvailableHintsToBeChecked()
