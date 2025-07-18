@@ -17,7 +17,7 @@ const onInit = async ({ params: {
 
     const { features, mandatory } = await serviceAdapter?.getAppUpdate()
 
-    if (features.length) {
+    if (features?.length) {
         showModal({
             closeOnBackdropClick: !mandatory,
             Component: UpdateAppDialogBody,

@@ -14,8 +14,13 @@ import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settings
 
 import { HOME_PAGE_TEST_ID } from '../home.constants'
 import { waitFor } from '@testing-library/react-native'
+import { server } from 'src/mocks/node'
 
 jest.mock('../../../adapters/puzzle/puzzle')
+
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 
 describe('Home Page', () => {
     test('shows Next Game Menu card on Play button click', async () => {

@@ -41,7 +41,7 @@ import { SETTINGS_BUTTON_TEST_ID } from 'src/apps/header/components/settings/set
 import { SETTINGS_MENU_TEST_ID } from 'src/apps/header/components/settings/settingsMenu/settingsMenu.constants'
 import { getTimeDifferenceInSeconds } from '../utils/util'
 import { HINT_SUGGESTION_DIALOG_TEST_ID } from '../ShowHintSuggestionDialog/showHintSuggestionDialog.constants'
-
+import { server } from 'src/mocks/node'
 
 const storageUtils = require('@utils/storage')
 
@@ -86,19 +86,26 @@ jest.mock('../utils/util', () => {
     }
 })
 
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
+
 describe('Arena Screen', () => {
     // added this to avoid "ReferenceError: You are trying to `import` a file after the Jest environment has been torn down."
     // error due to timer setTimeout
     // TODO: read more about the jest.useFakeTimers() and this cleanup func
     beforeEach(() => {
         jest.useFakeTimers({
-            doNotFake: ['nextTick'], // Allows waitFor to work
+            doNotFake: [
+                'nextTick',
+            ],
             timerLimit: 100, // Optional safety measure
         })
     })
     afterEach(() => {
         jest.useRealTimers()
         jest.clearAllMocks()
+        server.resetHandlers()
     })
 
     test('should go back to home page on back button press', async () => {
