@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Animated } from 'react-native'
+import { View, Animated, Image } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -81,11 +81,10 @@ const Cell_ = ({
     getNoteStyles,
     cellAnimationsConfig,
     animateNumberInsertion,
+    displayTickIcon
 }) => {
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
-
-    // console.log('@@@@ cellBGColor', cellBGColor)
 
     const styles = useStyles(getStyles)
 
@@ -145,6 +144,10 @@ const Cell_ = ({
         />
     )
 
+    const getTickIcon = () => (
+        <Image style={{ width: 80, height: 80 }} source={require('@resources/assets/tick.png')} />
+    )
+
     // TODO: had to use <Animated.View /> because can't animate color + scale animation 
     // on <Animated.Text /> in parallel (throws errors). try to upgrade react native version    
     const renderCellMainValue = () => (
@@ -177,6 +180,7 @@ const Cell_ = ({
             )
         }
         if (displayCrossIcon) return getCellCrossIcon()
+        if (displayTickIcon) return getTickIcon()
         if (cellMainValue) return renderCellMainValue()
         return getCellNotes()
     }

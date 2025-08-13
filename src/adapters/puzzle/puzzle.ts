@@ -14,7 +14,7 @@ type RawHints = {
 }
 
 const getSudokuPuzzle = async (minClues: number = 80): Promise<MainNumbers> => {
-    console.log('@@@@@ minClues', minClues)
+    // console.log('@@@@@ minClues', minClues)
     return RNSudokuPuzzle.getSudokuPuzzle(minClues).then((_puzzle: GeneratedPuzzle) => {
         const clues = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'.split("").map((char) => {
             return parseInt(char)

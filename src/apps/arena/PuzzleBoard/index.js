@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect } from 'react'
+
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import PropTypes from 'prop-types'
@@ -38,6 +39,9 @@ import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { getStyles } from './puzzleBoard.styles'
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
+import { BAND_DIRECTIONS, ELEMENTS_TYPES } from '../hintsSvgDrawing/svgElementsHandlers/rectangularHighlights'
+import { NativeEventEmitter, NativeModules } from 'react-native';
+import { useAnimationConfigs } from '../hooks/useAnimationConfigs'
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const dependencies = useDependency()
@@ -51,7 +55,11 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
 
     const showSmartHint = useSelector(getShowSmartHint)
     const cellsToFocusData = useSelector(getCellToFocusData)
-    const svgProps = useSelector(getSvgPropsData)
+    // const svgProps = useSelector(getSvgPropsData)
+    // const [svgProps, setSvgProps] = useState([])
+
+    const { svgProps } = useAnimationConfigs()
+    console.log('@@@@@@', svgProps)
 
     useEffect(() => {
         onAction({
@@ -174,7 +182,8 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
             axisTextStyles={showSmartHint ? styles.smartHintAxisText : null}
             boardContainerStyles={showSmartHint ? styles.smartHintBoardContainer : null}
             getNoteStyles={getNoteStyles}
-            showHintsSVGView={!_isNil(svgProps) && _includes([GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT], gameState)}
+            // showHintsSVGView={!_isNil(svgProps) && _includes([GAME_STATE.ACTIVE, GAME_STATE.DISPLAY_HINT], gameState)}
+            showHintsSVGView
             animateNumberInsertion
         />
     )

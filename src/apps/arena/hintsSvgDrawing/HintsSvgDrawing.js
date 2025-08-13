@@ -5,7 +5,7 @@ import { View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
-import { Svg } from 'react-native-svg'
+import { Path, Svg } from 'react-native-svg'
 
 import _map from '@lodash/map'
 import _isNil from '@lodash/isNil'
@@ -14,6 +14,13 @@ import _isFunction from '@lodash/isFunction'
 
 import { HINT_ID_VS_SVG_DEFS } from './svgDefs'
 import { HINT_ID_VS_SVG_ELEMENTS_HANDLER } from './svgElementsHandlers'
+import { SimplePathConfigs } from './svgElementsHandlers/remotePairs/remotePairs'
+import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
+import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
+import { roundToNearestPixel } from '@utils/util'
+import { getRectangularHighlightsPaths } from './svgElementsHandlers/rectangularHighlights'
+
+const svgBoardSizeDiff = 40 // 40 units bigger than the main board
 
 const HintsSvgDrawing = ({
     boardRef, notesRefs, hint, svgProps, hideMarkersEnd,
@@ -21,6 +28,8 @@ const HintsSvgDrawing = ({
     const [svgElementsConfigs, setSvgElementsConfigs] = useState([])
 
     const [boardPageCordinates, setBoardPageCordinates] = useState(null)
+
+    const { BOARD_GRID_WIDTH } = useBoardElementsDimensions()
 
     useEffect(() => {
         const measureBoard = () => {
@@ -40,11 +49,14 @@ const HintsSvgDrawing = ({
     useEffect(() => {
         const handler = async () => {
             const svgElementsHandler = HINT_ID_VS_SVG_ELEMENTS_HANDLER[hint.id]
-            if (_isEmpty(boardPageCordinates) || !_isFunction(svgElementsHandler) || _isEmpty(svgProps)) return
+            // if (_isEmpty(boardPageCordinates) || !_isFunction(svgElementsHandler) || _isEmpty(svgProps)) return
+            if (_isEmpty(boardPageCordinates)) return
 
-            setSvgElementsConfigs(await svgElementsHandler({
-                notesRefs, boardPageCordinates, svgProps, hideMarkersEnd,
-            }))
+            setSvgElementsConfigs(getRectangularHighlightsPaths(svgProps))
+
+            // setSvgElementsConfigs(await svgElementsHandler({
+            //     notesRefs, boardPageCordinates, svgProps, hideMarkersEnd,
+            // }))
         }
         handler()
     }, [boardPageCordinates, boardRef, notesRefs, hint, svgProps, hideMarkersEnd])
@@ -53,11 +65,13 @@ const HintsSvgDrawing = ({
 
     const getContianerStyles = () => ({
         position: 'absolute',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0,
+        width: roundToNearestPixel(BOARD_GRID_WIDTH + svgBoardSizeDiff),
+        height: roundToNearestPixel(BOARD_GRID_WIDTH + svgBoardSizeDiff),
+        top: -roundToNearestPixel(svgBoardSizeDiff / 2 + STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH),
+        left: -roundToNearestPixel(svgBoardSizeDiff / 2 + STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH),
         overflow: 'visible',
+        zIndex: 1,
+        // backgroundColor: 'rgba(255, 0, 0, 0.2)',
     })
 
     const getDefs = () => {

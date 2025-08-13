@@ -54,6 +54,7 @@ export const createAnimationInstance = (
     if (currentConfig.resetToPrevious) {
         // uncommenting the below line doesn't make any difference
         // animatedValue.stopAnimation()
+        console.log('@@@@@@@@@ xx resetttt', currentConfig, prevAnimationTransition)
         return Animated.timing(animatedValue, {
             ...currentConfig.config,
             toValue: prevAnimationTransition.from,

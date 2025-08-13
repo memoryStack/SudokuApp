@@ -1,5 +1,6 @@
-import { Path } from 'react-native-svg'
 
+import { Path, Rect, Svg } from 'react-native-svg'
+import { View } from 'react-native'
 import _forEach from '@lodash/forEach'
 import _reduce from '@lodash/reduce'
 
@@ -17,9 +18,12 @@ import {
 } from './helpers/remotePairs.helpers'
 import LinkReader from './readers/link.reader'
 import { LINK_ENDPOINTS_OFFSET } from './remotePairs.constants'
+import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from 'src/apps/arena/constants'
+import { getBlockStartCell } from 'src/apps/arena/utils/util'
+import { getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
 
 // TODO: hint generator will send this color
-const linkColor = 'rgb(217, 19, 235)'
+const linkColor = 'rgba(217, 19, 235, 1)'
 
 const STROKE_DASH_ARRAY = '6, 4'
 

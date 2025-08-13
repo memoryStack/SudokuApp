@@ -29,7 +29,7 @@ import { Cell } from './cell'
 import { getCellBlockHouseInfo, getCellColHouseInfo, getCellHouseForHouseType, getCellRowHouseInfo, getHouseCells } from '@domain/board/utils/housesAndCells'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { Board as BoardDomain } from '@domain/board/board'
-import { areSameCells, filterEmptyCells, filterHouseCells, getCellAllHousesCells, getCellsSharingHousesWithCells } from '../utils/util'
+import { areSameCells, filterEmptyCells, filterHouseCells, getCellAllHousesCells, getCellsSharingHousesWithCells, isCellExists } from '../utils/util'
 import { hexToRGBA } from '@utils/util'
 import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from 'src/constants/events'
@@ -39,6 +39,9 @@ import { useAnimateView } from './cell/useAnimateView'
 import { fillPuzzleUseCase, inputNumberUseCase } from '@application/usecases/board'
 import _cloneDeep from '@lodash/cloneDeep'
 import _isEmpty from '@lodash/isEmpty'
+import { useAnimationConfigs } from '../hooks/useAnimationConfigs'
+import { useThemeValues } from '../hooks/useTheme'
+import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
 
 const looper: number[] = []
 const bordersLooper: number[] = []
@@ -105,13 +108,17 @@ const Board_: React.FC<Props> = ({
 
     const boardRef = useRef(null)
 
-    const [cellsAnimationConfigs, setCellsAnimationConfigs] = useState({})
+    // const [cellsAnimationConfigs, setCellsAnimationConfigs] = useState({})
 
     const [localCellsHighlightData, setLocalCellsHighlightData] = useState({})
+    const theme = useThemeValues()
+    const smartHintsColorSystem = _get(theme, 'colors.smartHints')
 
     const dependencies = useDependency()
 
     const { gameStateRepository } = dependencies
+
+    const { cellsAnimationConfigs, inhabitableCells, greenTickCells } = useAnimationConfigs()
 
     const [boardAnimConfig, setBoardAnimConfig] = useState({})
 
@@ -365,49 +372,7 @@ const Board_: React.FC<Props> = ({
     }, [gameStateRepository, dependencies])
 
     const handleCellClick = useCallback((cell) => {
-        const TARGET_CELL = cell
-
-        let cellNewConfigs = {
-            'mainNumber': {
-                'fontSize': {
-                    config: { toValue: 1.8, duration: 0 }
-                },
-                'bgColor': {
-                    config: { toValue: 1, duration: 3000 },
-                    output: ['transparent', 'red']
-                },
-                opacity: {
-                    config: { toValue: 0, duration: 0 }
-                }
-            }
-        }
-
-        setCellsAnimationConfigs((prevConfig) => {
-            const newConfig = { ...prevConfig }
-            _set(newConfig, [TARGET_CELL.row, TARGET_CELL.col], cellNewConfigs)
-            return newConfig
-        })
-
-        setTimeout(() => {
-            let cellNewConfigs = {
-                'mainNumber': {
-                    'fontSize': {
-                        config: { toValue: 1, duration: 300 }
-                    },
-                    opacity: {
-                        config: { toValue: 1, duration: 300 }
-                    }
-                }
-            }
-
-            setCellsAnimationConfigs((prevConfig) => {
-                const newConfig = { ...prevConfig }
-                _set(newConfig, [TARGET_CELL.row, TARGET_CELL.col], cellNewConfigs)
-                return newConfig
-            })
-        })
-
-        // onCellClick(cell)
+        onCellClick(cell)
     }, [cellsAnimationConfigs, onCellClick])
 
     const notesRefs = useMemo(() => {
@@ -422,7 +387,6 @@ const Board_: React.FC<Props> = ({
 
     const renderHintSvgView = () => {
         if (!showHintsSVGView) return null
-
         return (
             <HintsSvgDrawing
                 hint={{ id: HINTS_IDS.REMOTE_PAIRS }}
@@ -451,8 +415,8 @@ const Board_: React.FC<Props> = ({
     // })
 
     const getInhabitableCellProps = (cell: Cell) => ({
-        displayCrossIcon: _get(localCellsHighlightData, [cell.row, cell.col, 'inhabitable'], false),
-        crossIconColor: _get(localCellsHighlightData, [cell.row, cell.col, 'crossIconColor'], ''),
+        displayCrossIcon: isCellExists(cell, inhabitableCells),
+        crossIconColor: smartHintColorSystemReader.inhabitableCellCrossColor(smartHintsColorSystem)
     })
 
     const renderRow = (row: number, key: string) => {
@@ -488,6 +452,9 @@ const Board_: React.FC<Props> = ({
                                 getNoteStyles={getNoteStyles}
                                 cellAnimationsConfig={cellAnimationsConfig}
                                 animateNumberInsertion={animateNumberInsertion}
+                                displayTickIcon={
+                                    isCellExists({ row, col }, greenTickCells)
+                                }
                             />
                         </View>
                     )

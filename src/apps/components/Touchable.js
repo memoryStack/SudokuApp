@@ -84,6 +84,8 @@ export const Touchable = props => {
             underlayColor={underlayColor}
             hitSlop={hitSlop}
             {...rest}
+            accessible={false}
+            focusable={false}
         >
             {
                 isAnimated ? (

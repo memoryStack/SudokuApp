@@ -75,7 +75,7 @@ const useAnimateView = (cellAnimationsConfig, animInitialValues = {}, cell = fal
 
     useEffect(() => {
         const allAnimations = animationConfigsMerge.current
-
+        cell && cell.row === 0 && cell.col === 1 && console.log('@@@@@@ all animations', allAnimations)
         Object.keys(allAnimations).forEach((animatableProperty) => {
             // TODO: add check for animatableProperty if that's supported or not
             if (allAnimations[animatableProperty].stop) {
@@ -121,7 +121,7 @@ const useAnimateView = (cellAnimationsConfig, animInitialValues = {}, cell = fal
                 animatedValue.removeAllListeners()
             })
         }
-    }, [cellAnimationsConfig])
+    }, [cell && cell?.row, cell && cell?.col, cellAnimationsConfig])
 
     // this below should be configured properly from platform independent code to platform dependent code.
     const mainNumberColorInterpolation = animationConfigsMerge.current[ANIMATABLE_PROPERTIES.TEXT_COLOR]?.output ? mainNumberColorAnim.interpolate({

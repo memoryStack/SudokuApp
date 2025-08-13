@@ -12,6 +12,8 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
         backgroundColor: 'transparent',
         borderWidth: STATIC_BOARD_ELEMENTS_DIMENSIONS.BOARD_BORDER_WIDTH,
         borderColor: _get(theme, ['colors', 'outline']),
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     boardAndYAxisContainer: {
         flexDirection: 'row',

@@ -3,8 +3,10 @@ package com.sudokunative;
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.KeyEvent;
 
 public class MainActivity extends ReactActivity {
+    private KeyEventModule keyEventModule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,5 +43,18 @@ public class MainActivity extends ReactActivity {
     @Override
     protected String getMainComponentName() {
         return "SudokuNative";
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (this.keyEventModule != null) {
+            this.keyEventModule.onKeyDown(keyCode, event);
+        }
+        return true;
+        // return super.onKeyDown(keyCode, event);
+    }
+
+    public void setKeyEventModule(KeyEventModule module) {
+        this.keyEventModule = module;
     }
 }
