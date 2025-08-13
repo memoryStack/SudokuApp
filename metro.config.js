@@ -29,6 +29,7 @@ const config = {
             'db', 'zip',
             'lottie', // Explicitly add .lottie extension
         ],
+        // blacklistRE: /(ios|android|node_modules\/.*)/,
     },
 };
 
