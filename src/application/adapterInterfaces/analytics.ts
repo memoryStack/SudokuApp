@@ -85,9 +85,15 @@ export type HomeAnalyticsHandlers = {
     sendUpdateConfirmedEvent: () => Promise<void>,
 }
 
-export type ScreenAnalyticsHandlers = ArenaAnalyticsHandler |
-    HomeAnalyticsHandlers |
-    PlayGuideAnalyticsHandler |
-    HintsVocobularyAnalyticsHandler
+export type GameSettingsAnalyticsHandlers = {
+    sendScreenVisitedEvent: () => Promise<void>,
+    sendOnChangeOptionEvent: ({ option, value }: { option: string, value: any }) => Promise<void>
+}
+
+export type ScreenAnalyticsHandlers = ArenaAnalyticsHandler
+    | HomeAnalyticsHandlers
+    | PlayGuideAnalyticsHandler
+    | HintsVocobularyAnalyticsHandler
+    | GameSettingsAnalyticsHandlers
 
 export type AllAnalyticsHandlers = Partial<Record<ROUTES, ScreenAnalyticsHandlers>>

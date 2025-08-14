@@ -146,6 +146,8 @@ const GameSettings_ = () => {
 
     useEffect(() => {
         fetchGameSettingsValues()
+        const { analytics } = dependencies
+        analytics?.sendScreenVisitedEvent?.()
     }, [])
 
     const fetchGameSettingsValues = () => {
@@ -159,12 +161,16 @@ const GameSettings_ = () => {
     }
 
     const updateValue = async (newValue, item) => {
-        const { gameSettingsAdapter } = dependencies
+        const { gameSettingsAdapter, analytics } = dependencies
         await gameSettingsAdapter.updateGameSettingValue({
             key: item.key,
             value: newValue
         })
         fetchGameSettingsValues()
+        analytics?.sendOnChangeOptionEvent?.({
+            option: item.key,
+            value: newValue
+        })
     }
 
     const SETTINGS = useMemo(() => {

@@ -56,12 +56,14 @@ enum DESIGN_SYSTEM_ROUTES {
     LEVEL_CARD = 'level_card',
 }
 
+// TODO: this is duplicate of ROUTES in naviation folder, manage it properly
 export enum ROUTES {
     HOME = 'home',
     ARENA = 'arena',
     PLAY_GUIDE = 'play_guide',
     HINTS_VOCABULARY_EXPLAINATION = 'hints_vocabulary_explaination',
     LEVELS = 'levels',
+    GAME_SETTINGS = 'game_settings',
     DESIGN_SYSTEM = DESIGN_SYSTEM_ROUTES.DESIGN_SYSTEM,
     BADGE = DESIGN_SYSTEM_ROUTES.BADGE,
     TYPOGRAPHY = DESIGN_SYSTEM_ROUTES.TYPOGRAPHY,
