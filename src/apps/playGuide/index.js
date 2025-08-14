@@ -25,7 +25,7 @@ const PlayGuide_ = () => {
     const { analytics } = useDependency()
 
     useEffect(() => {
-        analytics.sendPlayGuideOpenedEvent()
+        analytics?.sendPlayGuideOpenedEvent?.()
     }, [])
 
     const getCellBGColor = (cell, isPuzzleSolved) => {

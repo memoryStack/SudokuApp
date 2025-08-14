@@ -13,6 +13,15 @@ import { SETTINGS_MENU_TEST_ID } from './settingsMenu.constants'
 import { SETTINGS_BUTTON_TEST_ID } from '../settings.constants'
 import { waitFor } from '@testing-library/react-native'
 
+// __mocks__/@react-navigation/native.ts
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native');
+    return {
+        ...actualNav,
+        useRoute: jest.fn(),
+    };
+});
+
 describe('SettingsMenu', () => {
     test('will close the Menu if any item is clicked', async () => {
         renderWithEmptyNavigator(<SettingsMenu />)

@@ -37,6 +37,7 @@ import { getTimeDifferenceInSeconds } from '../utils/util'
 import { HINT_SUGGESTION_DIALOG_TEST_ID } from '../ShowHintSuggestionDialog/showHintSuggestionDialog.constants'
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 import { soundAdapter } from '@adapters/soundAdapter'
+import { gameSettingsAdapter } from '@adapters/gameSettings'
 
 const storageUtils = require('@utils/storage')
 
@@ -59,6 +60,7 @@ jest.mock('@adapters/gameSettings', () => {
             showTimer: jest.fn(() => false),
             soundsEnabled: jest.fn(() => false),
             fillNoteOnShortClick: jest.fn(() => true),
+            shouldGameOverOnMistakesThresholdCrossed: jest.fn(() => false),
         }
     }
 })
@@ -156,6 +158,10 @@ describe('Game Settings', () => {
     })
 
     test('should show number of mistakes limit taken from settings', async () => {
+        gameSettingsAdapter.shouldGameOverOnMistakesThresholdCrossed.mockImplementation(() => {
+            return true
+        })
+
         await renderScreenAndWaitForPuzzleStart()
 
         await waitFor(() => {

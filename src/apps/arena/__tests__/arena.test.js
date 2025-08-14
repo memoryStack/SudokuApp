@@ -42,6 +42,17 @@ import { SETTINGS_MENU_TEST_ID } from 'src/apps/header/components/settings/setti
 import { getTimeDifferenceInSeconds } from '../utils/util'
 import { HINT_SUGGESTION_DIALOG_TEST_ID } from '../ShowHintSuggestionDialog/showHintSuggestionDialog.constants'
 import { server } from 'src/mocks/node'
+import { gameSettingsAdapter } from '@adapters/gameSettings'
+
+jest.mock('@adapters/gameSettings', () => {
+    const originalModule = jest.requireActual('@adapters/gameSettings');
+    return {
+        gameSettingsAdapter: {
+            ...originalModule.gameSettingsAdapter,
+            shouldGameOverOnMistakesThresholdCrossed: jest.fn(() => false),
+        }
+    }
+})
 
 const storageUtils = require('@utils/storage')
 
@@ -790,6 +801,10 @@ describe('Game Over Card', () => {
     })
 
     test('clicking on NewGame Button after puzzle was not solved will open Next Game Menu to start new puzzle', async () => {
+        gameSettingsAdapter.shouldGameOverOnMistakesThresholdCrossed.mockImplementation(() => {
+            return true
+        })
+
         await renderScreenAndWaitForPuzzleStart()
 
         await gameOverByMistakes()
@@ -806,6 +821,10 @@ describe('Game Over Card', () => {
     })
 
     test('should allow user to restart game again once game is over unsolved', async () => {
+        gameSettingsAdapter.shouldGameOverOnMistakesThresholdCrossed.mockImplementation(() => {
+            return true
+        })
+
         await renderScreenAndWaitForPuzzleStart()
 
         await gameOverByMistakes()
