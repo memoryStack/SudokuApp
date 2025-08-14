@@ -13,13 +13,14 @@ const handleNumberClick = ({ getState, params: { number, isLongPress } }) => {
     const fillNoteOnShortClick = gameSettingsAdapter.fillNoteOnShortClick()
     const fillAsNote = fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE
     const soundsEnabled = gameSettingsAdapter.soundsEnabled()
+    const mistakeFeedbackOn = gameSettingsAdapter.showFeedbackOnMistake()
     inputNumberUseCase(
         number,
         fillAsNote,
         {
             ...dependencies,
             sound: {
-                mistake: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.MISTAKE) },
+                mistake: { play: () => soundsEnabled && soundAdapter.play(mistakeFeedbackOn ? SOUNDS.MISTAKE : SOUNDS.NUMBER_INPUT) },
                 addNumber: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.NUMBER_INPUT) },
                 removeNumber: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.ERASER_CLICK) },
             }

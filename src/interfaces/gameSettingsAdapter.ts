@@ -11,6 +11,8 @@ export enum GAME_SETTINGS_KEYS {
     SHOW_TIMER = 'SHOW_TIMER',
     MISTAKES_LIMIT = 'MISTAKES_LIMIT',
     REMIND_TO_TAKE_HINT = 'REMIND_TO_TAKE_HINT',
+    GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED = 'GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED',
+    SHOW_FEEDBACK_ON_MISTAKE = 'SHOW_FEEDBACK_ON_MISTAKE'
 }
 
 export type AllGameSettingsValues = Record<GAME_SETTINGS_KEYS, boolean | number>
@@ -31,4 +33,6 @@ export interface GameSettingsAdapter extends ApplicationLayerGameSettingsAdapter
     remindToTakeHint: () => boolean
     getAllGameSettingsValues: () => Promise<AllGameSettingsValues>
     updateGameSettingValue: (args: UpdateGameSettingValueArgs) => Promise<void>
+    shouldGameOverOnMistakesThresholdCrossed: () => boolean
+    showFeedbackOnMistake: () => boolean
 }

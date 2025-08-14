@@ -57,13 +57,31 @@ const Refree_ = ({ timer, onAction }) => {
     }, [onAction, dependencies])
 
     const showTimer = dependencies?.gameSettingsAdapter?.showTimer()
+
     const showPlayCTA = !timer.isActive()
+
+    const renderMistakesView = () => {
+        const { gameSettingsAdapter } = dependencies
+        const gameOverOnMistakesThresholdCrossed = gameSettingsAdapter.shouldGameOverOnMistakesThresholdCrossed()
+        const mistakeFeedbackOn = gameSettingsAdapter.showFeedbackOnMistake()
+        if (!mistakeFeedbackOn) return null
+
+        let mistakesText = ''
+        if (gameOverOnMistakesThresholdCrossed) {
+            mistakesText = `Mistakes: ${mistakes}/${maxMistakesLimit}`
+        } else {
+            mistakesText = `Mistakes: ${mistakes}`
+        }
+        return (
+            <Text style={styles.textColor} testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
+                {mistakesText}
+            </Text>
+        )
+    }
 
     return (
         <View style={styles.refereeContainer}>
-            <Text style={styles.textColor} testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
-                {`Mistakes: ${mistakes}/${maxMistakesLimit}`}
-            </Text>
+            {renderMistakesView()}
             {!showTimer ?
                 <Button
                     label={showPlayCTA ? 'Play' : 'Pause'}

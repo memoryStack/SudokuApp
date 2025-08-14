@@ -102,13 +102,18 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         const { gameSettingsAdapter } = dependencies
 
         const highlightCells = gameSettingsAdapter.highlightCells()
+        const showFeedbackOnMistake = gameSettingsAdapter.showFeedbackOnMistake()
 
         if (!highlightCells) {
             if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
             return styles.defaultCellBGColor
         }
 
-        if (MainNumbersRecord.isCellFilled(mainNumbers, cell) && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
+        if (
+            MainNumbersRecord.isCellFilled(mainNumbers, cell)
+            && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)
+            && showFeedbackOnMistake
+        ) {
             return styles.mistakeCellBGColor
         }
 
@@ -146,11 +151,13 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         if (showSmartHint) return styles.clueNumColor
 
         const highlightNumbersFonts = gameSettingsAdapter.highlightNumbersFonts()
+        const showFeedbackOnMistake = gameSettingsAdapter.showFeedbackOnMistake()
         if (highlightNumbersFonts) {
-            if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) return styles.wronglyFilledNumColor
+            if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell) && showFeedbackOnMistake) return styles.wronglyFilledNumColor
             if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
         }
 
+        if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
         return styles.clueNumColor
     }
 

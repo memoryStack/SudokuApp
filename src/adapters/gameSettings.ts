@@ -11,6 +11,8 @@ const DEFAULT_SETTING = {
     [GAME_SETTINGS_KEYS.SHOW_TIMER]: true,
     [GAME_SETTINGS_KEYS.MISTAKES_LIMIT]: INITIAL_STATE.maxMistakesLimit,
     [GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT]: true,
+    [GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED]: false,
+    [GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE]: true,
 }
 
 let currentSettings = {
@@ -39,6 +41,7 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
         return currentSettings[GAME_SETTINGS_KEYS.SOUNDS_ENABLED] as boolean
     },
     showTimer: () => {
+        return true
         return currentSettings[GAME_SETTINGS_KEYS.SHOW_TIMER] as boolean
     },
     getMistakesLimit: () => {
@@ -49,6 +52,12 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
     },
     getAllGameSettingsValues: async () => {
         return { ...currentSettings }
+    },
+    shouldGameOverOnMistakesThresholdCrossed: () => {
+        return currentSettings[GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED] as boolean
+    },
+    showFeedbackOnMistake: () => {
+        return currentSettings[GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE] as boolean
     },
     updateGameSettingValue: async (args: UpdateGameSettingValueArgs) => {
         await setKey(GAME_SETTINGS_STORAGE_KEY, {

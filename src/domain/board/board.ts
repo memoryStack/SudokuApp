@@ -69,8 +69,9 @@ const isMainNumberEligibleToErase = (cell: Cell, mainNumbers: MainNumbers) => {
 }
 
 const isMainNumberNotEligibleToErase = (cell: Cell, mainNumbers: MainNumbers) => {
-    return MainNumbersRecord.isCellFilled(mainNumbers, cell)
-        && MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)
+    return MainNumbersRecord.isClueCell(mainNumbers, cell)
+    // return MainNumbersRecord.isCellFilled(mainNumbers, cell)
+    //     && MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)
 }
 
 const getNotesToRemoveAfterMainNumberInput = (number: number, cell: Cell, notes: Notes) => {

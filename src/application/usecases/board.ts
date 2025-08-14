@@ -97,10 +97,6 @@ const inputMainNumber = (number: number, cell: Cell, dependencies: InputNumberUs
     if (Board.madeMistake(number, selectedCell, mainNumbers)) {
         const newMistakesCount = refreeRepository.getGameMistakesCount() + 1
         refreeRepository.setGameMistakesCount(newMistakesCount)
-        if (newMistakesCount === refreeRepository.getMaxMistakesCount()) {
-            const { gameStateRepository } = dependencies
-            gameStateRepository.setGameState(GAME_STATE.OVER_UNSOLVED)
-        }
         sound?.mistake?.play?.()
     } else {
         const notes = boardRepository.getNotes()
@@ -210,7 +206,7 @@ export const eraseCellUseCase = (dependencies: Dependencies, sound: Sound) => {
 
     if (Board.isMainNumberNotEligibleToErase(selectedCell, mainNumbers)) {
         snackBarAdapter.show({
-            msg: 'Clues or Correctly filled cells can not be removed',
+            msg: 'Clues can not be removed',
             visibleTime: 5000
         })
         return

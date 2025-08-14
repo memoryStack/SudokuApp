@@ -149,10 +149,10 @@ const Arena_ = ({
             const { boardControllerRepository, refreeRepository } = dependencies
             if (!new GameState(gameState).isGameSolved()) currentAvailableStars.current = 0
             const stats = {
-                mistakes,
-                level: difficultyLevelID,
+                mistakes: refreeRepository.getGameMistakesCount(),
+                level: refreeRepository.getGameLevel(),
                 levelNum: refreeRepository.getGameLevelNumber(),
-                time,
+                time: refreeRepository.getTime(),
                 starsEarned: currentAvailableStars.current,
                 hintsUsed: boardControllerRepository.getHintsUsed(),
             }
@@ -165,7 +165,7 @@ const Arena_ = ({
                 }
             })
         }
-    }, [gameState, mistakes, time, dependencies, onAction])
+    }, [gameState, dependencies, onAction])
 
     useEffect(() => {
         // reset the store state for Game
@@ -301,6 +301,15 @@ const Arena_ = ({
         if (new GameState(gameState).isGameActive() && !modalVisible) timer.startTimer()
         else timer.stopTimer()
     }, [gameState, modalVisible])
+
+    useEffect(() => {
+        const { refreeRepository, gameStateRepository, gameSettingsAdapter } = dependencies
+        const gameOverOnMistakesThresholdCrossed = gameSettingsAdapter.shouldGameOverOnMistakesThresholdCrossed()
+        if (new GameState(gameState).isGameActive() && gameOverOnMistakesThresholdCrossed) {
+            const maxMistakesLimit = refreeRepository.getMaxMistakesCount()
+            if (mistakes >= maxMistakesLimit) gameStateRepository.setGameState(GAME_STATE.OVER_UNSOLVED)
+        }
+    }, [gameState, mistakes, dependencies])
 
     const renderFillPuzzleBtn = () => {
         if (!__DEV__) return null
