@@ -17,4 +17,12 @@ export const getStyles = (_, theme) => StyleSheet.create({
     icon: {
         color: get(theme, ['colors', 'on-surface-variant']),
     },
+    tooltipContainer: {
+        width: 250,
+        left: -120
+    },
+    tooltipText: {
+        padding: 8,
+        color: 'white'
+    }
 })

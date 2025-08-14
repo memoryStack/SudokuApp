@@ -9,6 +9,8 @@ export const getRouteNameFromRoute = route => _get(route, 'name', '')
 
 export const isHomeRoute = route => getRouteNameFromRoute(route) === ROUTES.HOME
 
+export const isRouteMatches = (route, routeToMatch) => getRouteNameFromRoute(route) === routeToMatch
+
 export const getHeaderRightItems = route => {
     const routeName = getRouteNameFromRoute(route)
     const customItems = route?.params?.[HEADER_RIGHT_CUSTOM_ELEMENTS]

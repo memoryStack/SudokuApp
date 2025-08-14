@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import PropTypes from 'prop-types'
 
@@ -43,7 +43,7 @@ const Hint = ({
                     hintsMenuTooltipShown.current = true
                     show()
                     // it would be nice to have auto hide
-                    setTimeout(hide, 3000)
+                    setTimeout(hide, 8000)
                     const {
                         coachMarksAdapter,
                         analytics

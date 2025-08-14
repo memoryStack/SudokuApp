@@ -5,7 +5,7 @@ import _get from '@lodash/get'
 export const getStyles = ({ }) => {
     return StyleSheet.create({
         container: {
-            marginRight: 160
+            marginRight: 160,
         },
         text: {
 

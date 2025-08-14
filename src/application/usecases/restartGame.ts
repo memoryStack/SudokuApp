@@ -20,6 +20,6 @@ export const restartGame = (dependencies: Dependencies) => {
     analytics?.sendPuzzleLifeCycleEvent?.({
         puzzle: boardRepository.getPuzzleString(),
         level: refreeRepository.getGameLevel(),
-        status: 'RESTART'
+        status: 'RESTART' // get this from enums
     })
 }

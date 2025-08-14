@@ -15,6 +15,7 @@ type Props = {
     content: string | React.ReactElement
     children: React.ReactElement
     showOnPress?: boolean
+    containerStyle?: ViewStyle
 }
 
 const Tooltip = React.forwardRef<PopableManager, Props>((props, ref) => {
@@ -22,6 +23,7 @@ const Tooltip = React.forwardRef<PopableManager, Props>((props, ref) => {
         content,
         children,
         showOnPress = false,
+        containerStyle,
         ...rest
     } = props
     const styles = useStyles(getStyles)
@@ -31,7 +33,7 @@ const Tooltip = React.forwardRef<PopableManager, Props>((props, ref) => {
             ref={ref}
             content={content}
             action={showOnPress ? undefined : "none"}
-            style={styles.container}
+            style={[styles.container, containerStyle]}
             textStyle={{ lineHeight: 16 } as ViewStyle}
             {...rest}
         >
