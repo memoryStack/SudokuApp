@@ -19,11 +19,11 @@ import withActions from '../../utils/hocs/withActions'
 import { Touchable } from '../components/Touchable'
 import { Page } from '../components/Page'
 
-import { getDifficultyLevel, getLastActivityTime, getMistakes, getTime } from './store/selectors/refree.selectors'
+import { getDifficultyLevel, getLastActivityTime, getMistakes, getTime, getMaxMistakesLimit } from './store/selectors/refree.selectors'
 import { getGameState } from './store/selectors/gameState.selectors'
 import { BoardController } from './cellActions'
 import { ACTION_HANDLERS as BOARD_CONTROLLER_ACTION_HANDLERS, ACTION_TYPES as BOARD_CONTROLLER_ACTION_TYPES } from './cellActions/actionHandlers'
-import { getAvailableHintsCount, getHintsMenuVisibilityStatus } from './store/selectors/boardController.selectors'
+import { getAvailableHintsCount, getHintsMenuVisibilityStatus, getPencilStatus } from './store/selectors/boardController.selectors'
 import { GameInputPanel } from './GameInputPanel'
 import { PuzzleBoard } from './PuzzleBoard'
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
@@ -56,7 +56,6 @@ import _get from '@lodash/get'
 import { getKey, setKey } from '@utils/storage'
 import { shouldShowCustomizeExperienceTooltipUseCase } from '@application/usecases/customizeExperience'
 import { COACHMARKS } from '@application/adapterInterfaces/coachMarks'
-import { NAVIGATION_PARAMS } from '../hintsVocabulary'
 
 const AvailableStarsHeaderView = ({
     styles,
@@ -121,7 +120,10 @@ const Arena_ = ({
 
     const [smartHintHCHeight, setSmartHintHCHeight] = useState(0)
 
+    const pencilState = useSelector(getPencilStatus)
+
     const mistakes = useSelector(getMistakes)
+    const maxMistakesLimit = useSelector(getMaxMistakesLimit)
     const difficultyLevelID = useSelector(getDifficultyLevel)
     const time = useSelector(getTime)
     const lastActivityTime = useSelector(getLastActivityTime)
@@ -447,10 +449,20 @@ const Arena_ = ({
         >
             <View style={styles.contentContainer}>
                 {renderFillPuzzleBtn()}
-                <Refree timer={timer} />
+                <Refree
+                    timer={timer}
+                    time={time}
+                    mistakes={mistakes}
+                    difficultyLevelID={difficultyLevelID}
+                    maxMistakesLimit={maxMistakesLimit}
+                />
                 <PuzzleBoard />
                 {/* TODO: it can be named better */}
-                <BoardController refFromParent={boardControllersRef} />
+                <BoardController
+                    refFromParent={boardControllersRef}
+                    gameState={gameState}
+                    pencilState={pencilState}
+                />
                 {renderInputPanel()}
             </View>
             {renderSmartHintHC()}

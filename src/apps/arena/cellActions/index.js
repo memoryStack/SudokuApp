@@ -16,8 +16,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
-import { getAvailableHintsCount, getPencilStatus } from '../store/selectors/boardController.selectors'
-import { getGameState } from '../store/selectors/gameState.selectors'
+import { getAvailableHintsCount } from '../store/selectors/boardController.selectors'
 import { GameState } from '@application/utils/gameState'
 
 import Undo from './Undo'
@@ -30,19 +29,15 @@ import { getStyles } from './cellActions.styles'
 import SpotlightTourProvider from 'src/containers/SpotlightTourProvider';
 import { addListener, removeListener } from '@utils/GlobalEventBus';
 import { EVENTS } from 'src/constants/events';
-import { consoleLog } from '@utils/util';
 import _get from '@lodash/get';
 import { useThemeValues } from '../hooks/useTheme';
 
-const BoardController_ = ({ onAction, refFromParent }) => {
+const BoardController_ = ({ onAction, refFromParent, gameState, pencilState }) => {
     const dependencies = useDependency()
 
     const styles = useStyles(getStyles)
 
-    const pencilState = useSelector(getPencilStatus)
     const hints = useSelector(getAvailableHintsCount)
-
-    const gameState = useSelector(getGameState)
 
     const theme = useThemeValues()
 
@@ -140,12 +135,16 @@ const BoardController_ = ({ onAction, refFromParent }) => {
     )
 }
 
-const BoardControllerComp = withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_)
+export const BoardControllerComp = withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_)
 
-const WrappedBoardController = ({ refFromParent }) => {
+const WrappedBoardController = ({ refFromParent, gameState, pencilState }) => {
     return (
         <SpotlightTourProvider showFooter={false}>
-            <BoardControllerComp refFromParent={refFromParent} />
+            <BoardControllerComp
+                refFromParent={refFromParent}
+                gameState={gameState}
+                pencilState={pencilState}
+            />
         </SpotlightTourProvider>
     )
 }
@@ -155,6 +154,8 @@ export const BoardController = React.memo(WrappedBoardController)
 BoardController_.propTypes = {
     onAction: PropTypes.func,
     refFromParent: PropTypes.object,
+    gameState: PropTypes.string,
+    pencilState: PropTypes.string,
 }
 
 BoardController_.defaultProps = {

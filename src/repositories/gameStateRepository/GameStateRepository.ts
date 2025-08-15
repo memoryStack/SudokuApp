@@ -6,11 +6,21 @@ import { gameStateActions } from '../../apps/arena/store/reducers/gameState.redu
 import { getGameState } from '../../apps/arena/store/selectors/gameState.selectors'
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 
-const { setGameState } = gameStateActions
+export const createGameStateRepositoryHandlers = (actions, stateReaders: StateReaders): GameStateRepositoryInterface => {
+    const {
+        setGameState
+    } = actions
 
-export const GameStateRepository: GameStateRepositoryInterface = {
-    getGameState: () => getGameState(getStoreState()),
-    setGameState: (state: GAME_STATE) => {
-        invokeDispatch(setGameState(state))
-    },
+    const {
+        getGameState
+    } = stateReaders
+
+    return {
+        getGameState: () => getGameState(getStoreState()),
+        setGameState: (state: GAME_STATE) => {
+            invokeDispatch(setGameState(state))
+        }
+    }
 }
+
+export const GameStateRepository = createGameStateRepositoryHandlers(gameStateActions, { getGameState })

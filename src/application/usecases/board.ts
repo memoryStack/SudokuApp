@@ -15,7 +15,7 @@ import type {
     Move,
 } from '../adapterInterfaces/stateManagers/boardRepository'
 
-import { BOARD_MOVES_TYPES, GAME_STATE, PENCIL_STATE } from '../constants'
+import { BOARD_MOVES_TYPES } from '../constants'
 
 import type { Dependencies } from '../type'
 import { GameSettingsAdapter } from '@application/adapterInterfaces/gameSettings'
@@ -83,6 +83,7 @@ export const fastPencilUseCase = (dependencies: Dependencies) => {
 
 // TODO: make it isolated from selectedCell
 const inputMainNumber = (number: number, cell: Cell, dependencies: InputNumberUseCaseDependencies) => {
+    console.log('@@@@@@ input main number')
     const { boardRepository, refreeRepository, sound } = dependencies
     const selectedCell = cell
     const mainNumbers = boardRepository.getMainNumbers()

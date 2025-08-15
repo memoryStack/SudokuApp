@@ -9,34 +9,44 @@ import type {
     BoardControllerRepository as BoardControllerRepositoryInterface,
 } from '@application/adapterInterfaces/stateManagers/boardControllerRepository'
 
-const {
-    setPencil, setHints, resetState, setHintsMenu, incrementHintsUsed, setHintsUsed
-} = boardControllerActions
+export const createBoardControllerRepositoryHandlers = (boardControllerActions, stateReaders): BoardControllerRepositoryInterface => {
+    const {
+        setPencil, setHints, resetState, setHintsMenu, incrementHintsUsed, setHintsUsed
+    } = boardControllerActions
 
-export const BoardControllerRepository: BoardControllerRepositoryInterface = {
-    getHintsLeftCount: () => getAvailableHintsCount(getStoreState()) as number,
-    resetState: () => {
-        const state = {
-            pencilState: PENCIL_STATE.INACTIVE,
-            hintsLeft: MAX_AVAILABLE_HINTS,
-            showHintsMenu: false,
-            hintsUsed: 0,
-        }
-        invokeDispatch(resetState(state))
-    },
-    setHintsLeftCount: (hintsLeft: number) => {
-        invokeDispatch(setHints(hintsLeft))
-    },
-    setPencil: (pencilState: PENCIL_STATE) => {
-        invokeDispatch(setPencil(pencilState))
-    },
-    getPencil: () => getPencilStatus(getStoreState()) as PENCIL_STATE,
-    setHintsMenuVisibility: (visible: boolean) => {
-        invokeDispatch(setHintsMenu(visible))
-    },
-    incrementHintsUsed: () => {
-        invokeDispatch(incrementHintsUsed())
-    },
-    getHintsUsed: () => getHintsUsed(getStoreState()),
-    setHintsUsed: (hintsUsed: number) => invokeDispatch(setHintsUsed(hintsUsed))
+    const {
+        getAvailableHintsCount, getPencilStatus, getHintsUsed
+    } = stateReaders
+
+    return {
+        getHintsLeftCount: () => getAvailableHintsCount(getStoreState()) as number,
+        resetState: () => {
+            const state = {
+                pencilState: PENCIL_STATE.INACTIVE,
+                hintsLeft: MAX_AVAILABLE_HINTS,
+                showHintsMenu: false,
+                hintsUsed: 0,
+            }
+            invokeDispatch(resetState(state))
+        },
+        setHintsLeftCount: (hintsLeft: number) => {
+            invokeDispatch(setHints(hintsLeft))
+        },
+        setPencil: (pencilState: PENCIL_STATE) => {
+            invokeDispatch(setPencil(pencilState))
+        },
+        getPencil: () => getPencilStatus(getStoreState()) as PENCIL_STATE,
+        setHintsMenuVisibility: (visible: boolean) => {
+            invokeDispatch(setHintsMenu(visible))
+        },
+        incrementHintsUsed: () => {
+            invokeDispatch(incrementHintsUsed())
+        },
+        getHintsUsed: () => getHintsUsed(getStoreState()),
+        setHintsUsed: (hintsUsed: number) => invokeDispatch(setHintsUsed(hintsUsed))
+    }
 }
+
+export const BoardControllerRepository = createBoardControllerRepositoryHandlers(boardControllerActions, {
+    getAvailableHintsCount, getPencilStatus, getHintsUsed
+})

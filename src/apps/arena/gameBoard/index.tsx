@@ -48,7 +48,7 @@ type FontColor = {
 interface Props {
     mainNumbers: MainNumbers
     notes: Notes
-    onCellClick?: () => void
+    onCellClick?: (cell: Cell) => void
     cellsHighlightData?: CellsFocusData
     axisTextStyles?: StyleProp<ViewStyle>
     boardContainerStyles?: StyleProp<ViewStyle>
@@ -56,7 +56,7 @@ interface Props {
     showCellContent: boolean
     showHintsSVGView?: boolean
     getCellBGColor?: (cell: Cell) => CellBGColorStyle | null
-    getCellMainNumberFontColor?: () => FontColor | null
+    getCellMainNumberFontColor?: (cell: Cell) => FontColor | null
     getNoteStyles?: (note: Note, cell: Cell) => StyleProp<TextStyle> | null // this signature is wrong, first argument is Note, not NoteValue
     hideSVGDrawingsMarkersEnd?: boolean
     showAxes?: boolean

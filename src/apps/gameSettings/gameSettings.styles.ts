@@ -10,8 +10,15 @@ export const getStyles = () => StyleSheet.create({
     categoryItemsContainer: {
         marginLeft: 16
     },
-    categoryTitle: {
+    categoryHeaderContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 12,
+    },
+    categoryTitle: {
+
     },
     itemContainer: {
         flexDirection: 'row',
@@ -20,6 +27,9 @@ export const getStyles = () => StyleSheet.create({
     },
     itemsGap: {
         marginTop: 8,
+    },
+    previewContainer: {
+        marginTop: 16
     },
     textContainer: {
         flex: 1,

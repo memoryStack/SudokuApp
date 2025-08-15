@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import smartHintHCReducers from '../apps/arena/store/reducers/smartHintHC.reducers'
 import refreeReducers from '../apps/arena/store/reducers/refree.reducers'
@@ -8,18 +8,47 @@ import boardReducers from '../apps/arena/store/reducers/board.reducers'
 
 import { initDispatch, initGetState } from './dispatch.helpers'
 
+const staticReducers = {
+    smartHintHC: smartHintHCReducers,
+    refree: refreeReducers,
+    gameState: gameStateReducers,
+    boardController: boardControllerReducers,
+    board: boardReducers,
+}
+
 const store = configureStore({
-    reducer: {
-        smartHintHC: smartHintHCReducers,
-        refree: refreeReducers,
-        gameState: gameStateReducers,
-        boardController: boardControllerReducers,
-        board: boardReducers,
-    },
+    reducer: staticReducers
 })
 
 initDispatch(store.dispatch)
 initGetState(store.getState)
+
+export const injectReducer = (key, reducer) => {
+    if (!key || store.asyncReducers?.[key]) return
+
+    store.asyncReducers = { ...store.asyncReducers, [key]: reducer }
+    store.replaceReducer(
+        combineReducers({
+            ...staticReducers,
+            ...store.asyncReducers,
+        })
+    )
+}
+
+export const removeReducer = (key) => {
+    if (!store.asyncReducers?.[key]) return
+
+    const newAsyncReducers = { ...store.asyncReducers }
+    delete newAsyncReducers[key]
+
+    store.asyncReducers = newAsyncReducers
+    store.replaceReducer(
+        combineReducers({
+            ...staticReducers,
+            ...newAsyncReducers,
+        })
+    )
+}
 
 export default store
 

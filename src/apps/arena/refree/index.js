@@ -2,8 +2,6 @@ import React, { useCallback } from 'react'
 
 import { View, StyleSheet } from 'react-native'
 
-import { useSelector } from 'react-redux'
-
 import PropTypes from 'prop-types'
 
 import _noop from '@lodash/noop'
@@ -19,9 +17,6 @@ import { Timer as TimeManager } from '@utils/classes/timer'
 import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
-import {
-    getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit,
-} from '../store/selectors/refree.selectors'
 import { Timer } from '../timer'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
@@ -42,15 +37,10 @@ const getStyles = (_, theme) => StyleSheet.create({
     },
 })
 
-const Refree_ = ({ timer, onAction }) => {
+const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelID, time }) => {
     const dependencies = useDependency()
 
     const styles = useStyles(getStyles)
-
-    const maxMistakesLimit = useSelector(getMaxMistakesLimit)
-    const mistakes = useSelector(getMistakes)
-    const difficultyLevelID = useSelector(getDifficultyLevel)
-    const time = useSelector(getTime)
 
     const onTimerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_TIMER_CLICK, payload: { dependencies } })

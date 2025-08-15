@@ -1,5 +1,7 @@
 import React, {
     useEffect, useMemo,
+    useRef,
+    useState,
 } from 'react'
 import { View, ScrollView } from 'react-native'
 
@@ -25,7 +27,32 @@ import { useThemeValues } from '../arena/hooks/useTheme'
 import { fetchRefreeDataFromFromLocalStorage } from '../arena/store/reducers/refree.reducers'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { getContainerBackgroundColor } from '@ui/molecules/Button/button.styles'
-import { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
+import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
+import { getActiveGameBoardCellBgCell, getActiveGameCellMainNumberFontColor, getActiveGameNoteStyles } from '../arena/PuzzleBoard'
+import { getStyles as puzzleBoardStylesHandler } from '../arena/PuzzleBoard/puzzleBoard.styles'
+
+import { Board } from '../arena/gameBoard'
+import { transformRawPuzzleToStateMainNumbers } from '@domain/board/utils/puzzleDataTransformers'
+import { createBoardStateSlice } from '../arena/store/reducers/board.reducers'
+import { injectReducer, removeReducer } from 'src/redux/store'
+import { createBoardRepositoryHandlers } from 'src/repositories/boardRepository/BoardRepository'
+
+import { boardStateSelectors, boardControllerSelectors, gameStateSelectors } from './state.selectors'
+import { NotesRecord } from '@domain/board/records/notesRecord'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import withActions from '@utils/hocs/withActions'
+import { ACTION_TYPES, ACTION_HANDLERS } from './gameSettings.actionHandlers'
+import Refree from '../arena/refree'
+import { BoardControllerComp } from '../arena/cellActions'
+import { START_GAME_MENU_ITEMS_IDS } from '@application/usecases/newGameMenu/constants'
+import { Timer } from '@utils/classes/timer'
+import { Inputpanel } from '../arena/inputPanel'
+import { createBoardControllerRepositoryHandlers } from 'src/repositories/boardControllerRepository/BoardControllerRepository'
+import { GAME_SETTINGS_STATE } from './constants'
+import { createBoardControllerSlice } from '../arena/store/reducers/boardController.reducers'
+import { createGameStateSlice } from '../arena/store/reducers/gameState.reducers'
+import { createGameStateRepositoryHandlers } from 'src/repositories/gameStateRepository/GameStateRepository'
+import { GAME_STATE } from '@application/constants'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
@@ -39,6 +66,7 @@ enum DYNAMIC_DATA_KEYS {
 const SETTINGS_ = [
     {
         title: 'Game Over',
+        hasPreview: false,
         items: [
             {
                 key: GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED,
@@ -69,6 +97,7 @@ const SETTINGS_ = [
     },
     {
         title: 'Visual Highlights',
+        hasPreview: true,
         items: [
             {
                 key: GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE,
@@ -92,6 +121,7 @@ const SETTINGS_ = [
     },
     {
         title: 'Fill Numbers',
+        hasPreview: true,
         items: [
             {
                 key: GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL,
@@ -109,6 +139,7 @@ const SETTINGS_ = [
     },
     {
         title: 'Sounds',
+        hasPreview: false,
         items: [
             {
                 key: GAME_SETTINGS_KEYS.SOUNDS_ENABLED,
@@ -120,6 +151,7 @@ const SETTINGS_ = [
     },
     {
         title: 'Hints',
+        hasPreview: false,
         items: [
             {
                 key: GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT,
@@ -131,12 +163,23 @@ const SETTINGS_ = [
     }
 ]
 
-const GameSettings_ = () => {
-    const dependencies = useDependency()
+const clues = [0, 0, 0, 0, 0, 2, 0, 0, 0, 5, 9, 0, 3, 0, 0, 0, 1, 0, 0, 6, 3, 4, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 8, 7, 0, 0, 8, 6, 3, 0, 0, 5, 6, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 1, 3, 8, 0, 0, 5, 0, 0, 0, 8, 0, 7, 4, 0, 0, 0, 9, 0, 0, 0, 0, 0]
+const solution = [4, 1, 7, 5, 9, 2, 8, 6, 3, 5, 9, 2, 3, 8, 6, 4, 1, 7, 8, 6, 3, 4, 1, 7, 5, 9, 2, 1, 4, 5, 7, 2, 9, 6, 3, 8, 7, 2, 9, 8, 6, 3, 1, 4, 5, 6, 3, 8, 1, 4, 5, 7, 2, 9, 9, 7, 4, 2, 5, 1, 3, 8, 6, 2, 5, 1, 6, 3, 8, 9, 7, 4, 3, 8, 6, 9, 7, 4, 2, 5, 1]
+
+const GameSettings_ = ({
+    onAction
+}) => {
+    const _dependencies = useDependency()
 
     const [settingsConfigsOnOffValue, setSettingsConfigsOnOffValue] = React.useState<AllGameSettingsValues>({} as AllGameSettingsValues);
 
     const styles = useStyles(getStyles)
+
+    const boardStyles = useStyles(puzzleBoardStylesHandler)
+
+    const timer = useRef(new Timer(_noop, _noop)).current
+
+    const [previewSection, setPreviewSection] = useState('')
 
     const mistakesLimit = useSelector(getMaxMistakesLimit)
 
@@ -144,14 +187,67 @@ const GameSettings_ = () => {
 
     const dispatch = useDispatch()
 
+    const selectedCell = useSelector(boardStateSelectors.getSelectedCell)
+    const mainNumbers = useSelector(boardStateSelectors.getMainNumbers)
+    const notes = useSelector(boardStateSelectors.getNotesInfo)
+    const gameState = useSelector(gameStateSelectors.getGameState)
+    const pencilState = useSelector(boardControllerSelectors.getPencilStatus)
+
+    const selectedCellMainNumber = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell)
+
+    const dependencies = useRef(_dependencies)
+
+    useEffect(() => {
+        const slice = createBoardStateSlice(GAME_SETTINGS_STATE.BOARD)
+        const boardControllerSlice = createBoardControllerSlice(GAME_SETTINGS_STATE.BOARD_CONTROLLER)
+        const gameStateSlice = createGameStateSlice(GAME_SETTINGS_STATE.GAME_STATE)
+
+        injectReducer(GAME_SETTINGS_STATE.BOARD, slice.reducer)
+        injectReducer(GAME_SETTINGS_STATE.BOARD_CONTROLLER, boardControllerSlice.reducer)
+        injectReducer(GAME_SETTINGS_STATE.GAME_STATE, gameStateSlice.reducer)
+
+        const boardRepository = createBoardRepositoryHandlers(slice.actions, boardStateSelectors)
+        const boardControllerRepository = createBoardControllerRepositoryHandlers(boardControllerSlice.actions, boardControllerSelectors)
+        const gameStateRepository = createGameStateRepositoryHandlers(gameStateSlice.actions, gameStateSelectors)
+
+        boardRepository.setState({
+            mainNumbers: transformRawPuzzleToStateMainNumbers({
+                clues, solution
+            }),
+            selectedCell: { row: 0, col: 0 },
+            notes: NotesRecord.initNotes(),
+            moves: []
+        })
+
+        gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+
+        dependencies.current = {
+            ...dependencies.current,
+            boardRepository,
+            boardControllerRepository,
+            gameStateRepository
+        }
+
+        onAction({
+            type: ACTION_TYPES.ON_INIT,
+            payload: dependencies.current
+        })
+
+        return () => {
+            removeReducer(GAME_SETTINGS_STATE.BOARD)
+            removeReducer(GAME_SETTINGS_STATE.BOARD_CONTROLLER)
+            removeReducer(GAME_SETTINGS_STATE.GAME_STATE)
+        }
+    }, [])
+
     useEffect(() => {
         fetchGameSettingsValues()
-        const { analytics } = dependencies
+        const { analytics } = dependencies.current
         analytics?.sendScreenVisitedEvent?.()
     }, [])
 
     const fetchGameSettingsValues = () => {
-        const { gameSettingsAdapter } = dependencies
+        const { gameSettingsAdapter } = dependencies.current
         gameSettingsAdapter.getAllGameSettingsValues()
             .then((settings: AllGameSettingsValues) => {
                 if (_isEmpty(settings)) setSettingsConfigsOnOffValue({} as AllGameSettingsValues)
@@ -161,7 +257,7 @@ const GameSettings_ = () => {
     }
 
     const updateValue = async (newValue, item) => {
-        const { gameSettingsAdapter, analytics } = dependencies
+        const { gameSettingsAdapter, analytics } = dependencies.current
         await gameSettingsAdapter.updateGameSettingValue({
             key: item.key,
             value: newValue
@@ -253,7 +349,20 @@ const GameSettings_ = () => {
                 {SETTINGS.map((category, index) => (
                     <View key={index}>
                         <View style={styles.categoryContainer}>
-                            <Text style={styles.categoryTitle} type={TEXT_VARIATIONS.TITLE_MEDIUM}>{category.title}</Text>
+                            <View style={styles.categoryHeaderContainer}>
+                                <Text style={styles.categoryTitle} type={TEXT_VARIATIONS.TITLE_MEDIUM}>{category.title}</Text>
+                                {
+                                    category.hasPreview ?
+                                        <Button
+                                            type={BUTTON_TYPES.TEXT}
+                                            label={'Preview'}
+                                            onPress={() => setPreviewSection((current) => {
+                                                return current === category.title ? '' : category.title
+                                            })}
+                                        />
+                                        : null
+                                }
+                            </View>
                             <View style={styles.categoryItemsContainer}>
                                 {category.items.map((item, itemIndex) => (
                                     <View key={item.key} style={[styles.itemContainer, itemIndex ? styles.itemsGap : null]}>
@@ -270,6 +379,58 @@ const GameSettings_ = () => {
                                     </View>
                                 ))}
                             </View>
+                            {
+                                previewSection === category.title ?
+                                    (
+                                        <View style={styles.previewContainer}>
+
+                                            <Refree
+                                                timer={timer}
+                                                time={{ hours: 0, minutes: 11, seconds: 32 }}
+                                                mistakes={2}
+                                                difficultyLevelID={START_GAME_MENU_ITEMS_IDS.MEDIUM}
+                                                maxMistakesLimit={5}
+                                                onAction={onAction}
+                                            />
+
+                                            <Board
+                                                showCellContent
+                                                mainNumbers={mainNumbers}
+                                                notes={notes}
+                                                onCellClick={(cell) => onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies: dependencies.current } })}
+                                                getCellBGColor={(cell) => {
+                                                    return getActiveGameBoardCellBgCell(
+                                                        cell, boardStyles, dependencies.current, selectedCell, mainNumbers
+                                                    )
+                                                }}
+                                                getCellMainNumberFontColor={(cell) => {
+                                                    return getActiveGameCellMainNumberFontColor(
+                                                        cell, mainNumbers, boardStyles, dependencies.current
+                                                    )
+                                                }}
+                                                getNoteStyles={(noteInfo) => {
+                                                    return getActiveGameNoteStyles(
+                                                        noteInfo, selectedCellMainNumber, boardStyles, dependencies.current
+                                                    )
+                                                }}
+                                            />
+                                            <BoardControllerComp
+                                                onAction={onAction}
+                                                refFromParent={React.createRef()}
+                                                gameState={gameState}
+                                                pencilState={pencilState}
+                                            />
+                                            <Inputpanel
+                                                numbersVisible={new Array(10).fill(true)}
+                                                onAction={onAction}
+                                                disableNumbersInput={false}
+                                                disableEraser={false}
+                                                shouldAddNumberInPanel={() => true}
+                                            />
+                                        </View>
+                                    )
+                                    : null
+                            }
                         </View>
                         {index < SETTINGS.length - 1 && <Divider style={styles.divider} />}
                     </View>
@@ -280,4 +441,6 @@ const GameSettings_ = () => {
     )
 }
 
-export const GameSettings = React.memo(GameSettings_)
+export const GameSettings = React.memo(
+    withActions({ actionHandlers: ACTION_HANDLERS })(GameSettings_),
+)
