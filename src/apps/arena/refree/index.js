@@ -37,7 +37,7 @@ const getStyles = (_, theme) => StyleSheet.create({
     },
 })
 
-const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelID, time }) => {
+const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelID, time, containerStyles }) => {
     const dependencies = useDependency()
 
     const styles = useStyles(getStyles)
@@ -70,7 +70,7 @@ const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelI
     }
 
     return (
-        <View style={styles.refereeContainer}>
+        <View style={[styles.refereeContainer, containerStyles]}>
             {renderMistakesView()}
             {!showTimer ?
                 <Button
@@ -100,6 +100,7 @@ Refree_.propTypes = {
     onAction: PropTypes.func,
     // eslint-disable-next-line react/no-unused-prop-types
     timer: PropTypes.instanceOf(TimeManager).isRequired,
+    containerStyles: PropTypes.style
 }
 
 Refree_.defaultProps = {

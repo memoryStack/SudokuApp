@@ -27,7 +27,7 @@ import { useDependency } from 'src/hooks/useDependency';
 const copilotText = "Now press on \"Hint\""
 
 const Hint = ({
-    iconBoxSize, hints, onClick, disabled, ...rest
+    iconBoxSize, hints, onClick, disabled, textStyles, ...rest
 }) => {
     const styles = useStyles(getStyles)
 
@@ -98,7 +98,7 @@ const Hint = ({
                         {renderIcon()}
                     </Touchable>
                 </Tooltip>
-                <Text style={styles.actionText}>Hint</Text>
+                <Text style={[styles.actionText, textStyles]}>Hint</Text>
             </Touchable>
         </CopilotStep>
     )

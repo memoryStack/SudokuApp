@@ -37,11 +37,12 @@ const Cell_ = ({
     crossIconColor,
     notesRefs,
     getNoteStyles,
+    customWindowWidth
 }) => {
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
-    const styles = useStyles(getStyles)
+    const styles = useStyles(getStyles, {}, customWindowWidth)
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
@@ -136,6 +137,7 @@ Cell_.propTypes = {
     crossIconColor: PropTypes.string,
     notesRefs: PropTypes.array,
     getNoteStyles: PropTypes.func,
+    customWindowWidth: PropTypes.number
 }
 
 Cell_.defaultProps = {

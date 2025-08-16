@@ -15,13 +15,13 @@ import { Touchable } from '../../../components/Touchable'
 import { getStyles } from '../cellActions.styles'
 
 const Pencil = ({
-    iconBoxSize, isActive, onClick, ...rest
+    iconBoxSize, isActive, onClick, textStyles, ...rest
 }) => {
     const styles = useStyles(getStyles)
     return (
         <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
             <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? styles.activeState.color : styles.inactiveState.color} />
-            <Text style={[styles.actionText, isActive ? styles.activeState : styles.inactiveState]}>
+            <Text style={[styles.actionText, isActive ? styles.activeState : styles.inactiveState, textStyles]}>
                 Pencil
             </Text>
         </Touchable>

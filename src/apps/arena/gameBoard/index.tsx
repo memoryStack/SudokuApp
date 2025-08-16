@@ -60,6 +60,8 @@ interface Props {
     getNoteStyles?: (note: Note, cell: Cell) => StyleProp<TextStyle> | null // this signature is wrong, first argument is Note, not NoteValue
     hideSVGDrawingsMarkersEnd?: boolean
     showAxes?: boolean
+    customWindowWidth?: number
+    mainNumberTextType?: TEXT_VARIATIONS
 }
 
 const Board_: React.FC<Props> = ({
@@ -76,9 +78,11 @@ const Board_: React.FC<Props> = ({
     boardContainerStyles = null,
     getNoteStyles = _noop,
     hideSVGDrawingsMarkersEnd = false,
-    showAxes = true
+    showAxes = true,
+    customWindowWidth,
+    mainNumberTextType
 }) => {
-    const styles = useStyles(getStyles)
+    const styles = useStyles(getStyles, {}, customWindowWidth)
 
     const boardRef = useRef(null)
 
@@ -152,6 +156,7 @@ const Board_: React.FC<Props> = ({
                                 showCellContent={showCellContent}
                                 notesRefs={notesRefs[row][col]}
                                 getNoteStyles={getNoteStyles}
+                                customWindowWidth={customWindowWidth}
                             />
                         </View>
                     )

@@ -108,6 +108,12 @@ const SETTINGS_ = [
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
                 description: 'Highlight cells with different different background colors'
+            },
+            {
+                key: GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS,
+                inputType: INPUT_TYPES.TOGGLE,
+                value: false,
+                description: 'Highlight numbers in different different colors'
             }
         ]
     },
@@ -393,7 +399,6 @@ const GameSettings_ = ({
                                 previewSection === category.title ?
                                     (
                                         <View style={styles.previewContainer}>
-
                                             <Refree
                                                 timer={timer}
                                                 time={{ hours: 0, minutes: 11, seconds: 32 }}
@@ -401,8 +406,8 @@ const GameSettings_ = ({
                                                 difficultyLevelID={START_GAME_MENU_ITEMS_IDS.MEDIUM}
                                                 maxMistakesLimit={5}
                                                 onAction={onAction}
+                                                containerStyles={styles.refreeContainer}
                                             />
-
                                             <Board
                                                 showCellContent
                                                 mainNumbers={mainNumbers}
@@ -423,8 +428,13 @@ const GameSettings_ = ({
                                                         noteInfo, selectedCellMainNumber, boardStyles, dependencies.current
                                                     )
                                                 }}
+                                                showAxes={false}
+                                                customWindowWidth={350}
+                                                mainNumberTextType={TEXT_VARIATIONS.HEADING_SMALL}
                                             />
                                             <BoardControllerComp
+                                                containerStyles={styles.boardControllerContainerStyles}
+                                                textStyles={styles.boardControllerTextStyles}
                                                 onAction={onAction}
                                                 refFromParent={React.createRef()}
                                                 gameState={gameState}
@@ -436,6 +446,8 @@ const GameSettings_ = ({
                                                 disableNumbersInput={false}
                                                 disableEraser={false}
                                                 shouldAddNumberInPanel={() => true}
+                                                cellWidth={30}
+                                                textType={TEXT_VARIATIONS.HEADING_MEDIUM}
                                             />
                                         </View>
                                     )
@@ -464,8 +476,10 @@ export const GameSettings = React.memo(
 )
 
 /*
-    fix styles
 
     TODO: add a tooltip as well to use the preview CTA
     TODO: mock gameSettings adapter or tooltips visibility of various kind
+    TODO: when notes have been filled and settings is changed, now remove the extra notes
+            as well from state
+
 */

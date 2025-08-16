@@ -32,7 +32,7 @@ import { EVENTS } from 'src/constants/events';
 import _get from '@lodash/get';
 import { useThemeValues } from '../hooks/useTheme';
 
-const BoardController_ = ({ onAction, refFromParent, gameState, pencilState }) => {
+const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, containerStyles, textStyles }) => {
     const dependencies = useDependency()
 
     const styles = useStyles(getStyles)
@@ -102,7 +102,7 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState }) =
     return (
         <View
             ref={refFromParent}
-            style={styles.cellActionsContainer}
+            style={[styles.cellActionsContainer, containerStyles]}
             testID={BOARD_CONTROLLER_CONTAINER_TEST_ID}
         >
             <Undo
@@ -110,6 +110,7 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState }) =
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                 onClick={onUndoClick}
                 testID={BOARD_CONTROLLER_TEST_ID}
+                textStyles={textStyles}
             />
             <Pencil
                 disabled={disableControllers}
@@ -117,12 +118,14 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState }) =
                 isActive={pencilState === PENCIL_STATE.ACTIVE}
                 onClick={onPencilClick}
                 testID={BOARD_CONTROLLER_TEST_ID}
+                textStyles={textStyles}
             />
             <FastPencil
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                 onClick={onFastPencilClick}
                 testID={BOARD_CONTROLLER_TEST_ID}
+                textStyles={textStyles}
             />
             <Hint
                 disabled={disableControllers}
@@ -130,6 +133,7 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState }) =
                 hints={hints}
                 onClick={onHintClick}
                 testID={BOARD_CONTROLLER_TEST_ID}
+                textStyles={textStyles}
             />
         </View>
     )

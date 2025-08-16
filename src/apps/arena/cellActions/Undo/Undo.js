@@ -13,12 +13,12 @@ import { Touchable } from '../../../components/Touchable'
 
 import { getStyles } from '../cellActions.styles'
 
-const Undo = ({ iconBoxSize, onClick, ...rest }) => {
+const Undo = ({ iconBoxSize, onClick, textStyles, ...rest }) => {
     const styles = useStyles(getStyles)
     return (
         <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
             <UndoIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
-            <Text style={styles.actionText}>Undo</Text>
+            <Text style={[styles.actionText, textStyles]}>Undo</Text>
         </Touchable>
     )
 }
@@ -27,6 +27,7 @@ export default React.memo(Undo)
 Undo.propTypes = {
     iconBoxSize: PropTypes.number,
     onClick: PropTypes.func,
+    textStyles: PropTypes.style
 }
 
 Undo.defaultProps = {

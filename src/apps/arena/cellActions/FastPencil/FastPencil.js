@@ -17,7 +17,7 @@ import { getStyles } from '../cellActions.styles'
 
 const copilotText = "To get Hints when you wish\n\nFirst press on Fast Pencil"
 
-const FastPencil = ({ iconBoxSize, onClick, ...rest }) => {
+const FastPencil = ({ iconBoxSize, onClick, textStyles, ...rest }) => {
     const styles = useStyles(getStyles)
     return (
         <CopilotStep
@@ -27,7 +27,7 @@ const FastPencil = ({ iconBoxSize, onClick, ...rest }) => {
         >
             <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
                 <PencilIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
-                <Text style={styles.actionText}>Fast Pencil</Text>
+                <Text style={[styles.actionText, textStyles]}>Fast Pencil</Text>
             </Touchable>
         </CopilotStep>
     )

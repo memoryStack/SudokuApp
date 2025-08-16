@@ -28,6 +28,8 @@ interface Props {
     disableNumbersInput?: boolean
     disableEraser?: boolean
     shouldAddNumberInPanel: (number: number) => boolean
+    cellWidth?: number
+    textType?: TEXT_VARIATIONS
 }
 
 const Inputpanel_: React.FC<Props> = ({
@@ -37,10 +39,12 @@ const Inputpanel_: React.FC<Props> = ({
     disableNumbersInput = false,
     disableEraser = false,
     shouldAddNumberInPanel = _noop,
+    cellWidth,
+    textType
 }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
-    const styles = useMemo(() => getStyles(CELL_WIDTH), [CELL_WIDTH])
+    const styles = useMemo(() => getStyles(cellWidth ?? CELL_WIDTH), [cellWidth, CELL_WIDTH])
 
     const onNumberClicked = (number: InputNumber, isLongPress: boolean) => onAction({
         type: ACTION_TYPES.ON_NUMBER_CLICK,
@@ -82,7 +86,7 @@ const Inputpanel_: React.FC<Props> = ({
             onLongPress={() => onNumberClicked(number, true)}
             label={`${number}`}
             textStyles={styles.textStyle}
-            textType={TEXT_VARIATIONS.DISPLAY_SMALL}
+            textType={textType ?? TEXT_VARIATIONS.DISPLAY_SMALL}
             testID={INPUT_PANEL_ITEM_TEST_ID}
         />
     )

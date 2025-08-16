@@ -11,10 +11,10 @@ import {
 } from '../constants'
 import { CELLS_IN_A_HOUSE } from '@domain/board/board.constants'
 
-export const useBoardElementsDimensions = () => {
+export const useBoardElementsDimensions = (customWindowWidth) => {
     const { width: windowWidth } = useWindowDimensions()
 
-    const cellWidth = getCellWidth(windowWidth)
+    const cellWidth = getCellWidth(customWindowWidth ?? windowWidth)
     const boardGridWidth = cellWidth * CELLS_IN_A_HOUSE + getAllBordersTotalSpace()
 
     const boardElementsDimensions = useMemo(() => ({

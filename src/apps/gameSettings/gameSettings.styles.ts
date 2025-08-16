@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
+import { Theme } from 'src/containers/ThemeProvider'
 
-export const getStyles = (_, theme) => StyleSheet.create({
+export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
     page: {
         display: 'flex',
         paddingHorizontal: 16
@@ -29,7 +30,27 @@ export const getStyles = (_, theme) => StyleSheet.create({
         marginTop: 8,
     },
     previewContainer: {
-        marginTop: 16
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        marginTop: 16,
+        borderRadius: 8,
+        padding: 12,
+        paddingBottom: 16,
+        borderWidth: 1,
+        borderColor: _get(theme, 'colors.outline-variant'),
+    },
+    refreeContainer: {
+        paddingLeft: 0,
+        marginBottom: 4,
+        maxWidth: 312
+    },
+    boardControllerContainerStyles: {
+        marginTop: 8,
+        marginBottom: 8
+    },
+    boardControllerTextStyles: {
+        marginTop: 2
     },
     textContainer: {
         flex: 1,
