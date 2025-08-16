@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 
-export const getStyles = () => StyleSheet.create({
+export const getStyles = (_, theme) => StyleSheet.create({
     page: {
         display: 'flex',
         paddingHorizontal: 16
@@ -40,4 +40,11 @@ export const getStyles = () => StyleSheet.create({
     divider: {
         marginVertical: 16,
     },
+    snackbarContainer: {
+        left: 16,
+        right: 16
+    },
+    snackbarText: {
+        color: _get(theme, 'colors.inverse-on-surface'),
+    }
 })

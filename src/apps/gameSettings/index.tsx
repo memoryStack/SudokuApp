@@ -12,6 +12,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { Page } from '../components/Page'
 import { Switch } from 'react-native-paper'; // TODO: import it from UI folder
 import { Dropdown } from 'react-native-paper-dropdown';
+import { Snackbar } from 'react-native-paper';
 
 import _get from '@lodash/get'
 import { getStyles } from './gameSettings.styles'
@@ -48,19 +49,16 @@ import { START_GAME_MENU_ITEMS_IDS } from '@application/usecases/newGameMenu/con
 import { Timer } from '@utils/classes/timer'
 import { Inputpanel } from '../arena/inputPanel'
 import { createBoardControllerRepositoryHandlers } from 'src/repositories/boardControllerRepository/BoardControllerRepository'
-import { GAME_SETTINGS_STATE } from './constants'
+import { GAME_SETTINGS_STATE, OPTION_STATES, SNACKBAR_MSGS, DYNAMIC_DATA_KEYS } from './constants'
 import { createBoardControllerSlice } from '../arena/store/reducers/boardController.reducers'
 import { createGameStateSlice } from '../arena/store/reducers/gameState.reducers'
 import { createGameStateRepositoryHandlers } from 'src/repositories/gameStateRepository/GameStateRepository'
 import { GAME_STATE } from '@application/constants'
+import { useSnackbar } from '../arena/hooks/useSnackbar'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
     DROPDOWN = 'DROPDOWN'
-}
-
-enum DYNAMIC_DATA_KEYS {
-    MISTAKES_LIMIT = 'MISTAKES_LIMIT'
 }
 
 const SETTINGS_ = [
@@ -110,12 +108,6 @@ const SETTINGS_ = [
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
                 description: 'Highlight cells with different different background colors'
-            },
-            {
-                key: GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Highlight numbers in different different colors'
             }
         ]
     },
@@ -166,6 +158,12 @@ const SETTINGS_ = [
 const clues = [0, 0, 0, 0, 0, 2, 0, 0, 0, 5, 9, 0, 3, 0, 0, 0, 1, 0, 0, 6, 3, 4, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 8, 7, 0, 0, 8, 6, 3, 0, 0, 5, 6, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 1, 3, 8, 0, 0, 5, 0, 0, 0, 8, 0, 7, 4, 0, 0, 0, 9, 0, 0, 0, 0, 0]
 const solution = [4, 1, 7, 5, 9, 2, 8, 6, 3, 5, 9, 2, 3, 8, 6, 4, 1, 7, 8, 6, 3, 4, 1, 7, 5, 9, 2, 1, 4, 5, 7, 2, 9, 6, 3, 8, 7, 2, 9, 8, 6, 3, 1, 4, 5, 6, 3, 8, 1, 4, 5, 7, 2, 9, 9, 7, 4, 2, 5, 1, 3, 8, 6, 2, 5, 1, 6, 3, 8, 9, 7, 4, 3, 8, 6, 9, 7, 4, 2, 5, 1]
 
+const getDynamicDataMapping = (settingsConfigsOnOffValue: AllGameSettingsValues) => {
+    return {
+        [DYNAMIC_DATA_KEYS.MISTAKES_LIMIT]: settingsConfigsOnOffValue[GAME_SETTINGS_KEYS.MISTAKES_LIMIT]
+    }
+}
+
 const GameSettings_ = ({
     onAction
 }) => {
@@ -186,6 +184,10 @@ const GameSettings_ = ({
     const theme = useThemeValues()
 
     const dispatch = useDispatch()
+
+    const {
+        snackbarState, showSnackbar, hideSnackbar,
+    } = useSnackbar(7000)
 
     const selectedCell = useSelector(boardStateSelectors.getSelectedCell)
     const mainNumbers = useSelector(boardStateSelectors.getMainNumbers)
@@ -262,7 +264,17 @@ const GameSettings_ = ({
             key: item.key,
             value: newValue
         })
+
         fetchGameSettingsValues()
+        if (item.inputType === INPUT_TYPES.TOGGLE) {
+            const newState = newValue ? OPTION_STATES.ON : OPTION_STATES.OFF
+            const msg = SNACKBAR_MSGS[item.key]?.[newState]
+
+            if (msg) {
+                const dynamicData = getDynamicDataMapping(settingsConfigsOnOffValue)
+                showSnackbar(dynamicInterpolation(msg, dynamicData))
+            }
+        }
         analytics?.sendOnChangeOptionEvent?.({
             option: item.key,
             value: newValue
@@ -270,9 +282,7 @@ const GameSettings_ = ({
     }
 
     const SETTINGS = useMemo(() => {
-        const dynamicData = {
-            [DYNAMIC_DATA_KEYS.MISTAKES_LIMIT]: settingsConfigsOnOffValue[GAME_SETTINGS_KEYS.MISTAKES_LIMIT]
-        }
+        const dynamicData = getDynamicDataMapping(settingsConfigsOnOffValue)
         return SETTINGS_.map((settingsCategory) => {
             return {
                 ...settingsCategory,
@@ -436,7 +446,15 @@ const GameSettings_ = ({
                     </View>
                 ))}
             </ScrollView>
-
+            <Snackbar
+                visible={snackbarState.visible}
+                wrapperStyle={styles.snackbarContainer}
+                onDismiss={hideSnackbar}
+            >
+                <Text type={TEXT_VARIATIONS.LABEL_LARGE} style={styles.snackbarText}>
+                    {snackbarState.message}
+                </Text>
+            </Snackbar>
         </Page>
     )
 }
@@ -444,3 +462,10 @@ const GameSettings_ = ({
 export const GameSettings = React.memo(
     withActions({ actionHandlers: ACTION_HANDLERS })(GameSettings_),
 )
+
+/*
+    fix styles
+
+    TODO: add a tooltip as well to use the preview CTA
+    TODO: mock gameSettings adapter or tooltips visibility of various kind
+*/
