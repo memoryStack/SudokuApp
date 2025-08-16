@@ -40,7 +40,7 @@ import { HintsMenu } from './hintsMenu'
 import Refree from './refree'
 
 import { getStyles } from './arena.styles'
-import { fillPuzzleUseCase, updateUserActivityTime } from '@application/usecases/board'
+import { fillPuzzleUseCase, hideOutNotesWhoseNumbersFilledInHouse, updateUserActivityTime } from '@application/usecases/board'
 import { INITIAL_STATE } from './store/state/board.state'
 import { getPuzzleAvailableStars } from '@application/usecases/puzzleStars'
 import { LevelStarIcon } from '@resources/svgIcons/levelStar'
@@ -315,6 +315,14 @@ const Arena_ = ({
             }
         })
     }, [time])
+
+    const { gameSettingsAdapter } = dependencies
+    useEffect(() => {
+        const allowAnyNoteInCell = gameSettingsAdapter?.allowAnyNoteInCell()
+        if (!allowAnyNoteInCell) {
+            hideOutNotesWhoseNumbersFilledInHouse(dependencies)
+        }
+    }, [gameSettingsAdapter?.allowAnyNoteInCell()])
 
     const onNewGameMenuItemClick = useCallback((puzzleType, puzzleLevelNum) => {
         onAction({

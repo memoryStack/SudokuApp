@@ -55,6 +55,8 @@ import { createGameStateSlice } from '../arena/store/reducers/gameState.reducers
 import { createGameStateRepositoryHandlers } from 'src/repositories/gameStateRepository/GameStateRepository'
 import { GAME_STATE } from '@application/constants'
 import { useSnackbar } from '../arena/hooks/useSnackbar'
+import _isNil from '@lodash/isNil'
+import { hideOutNotesWhoseNumbersFilledInHouse } from '@application/usecases/board'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
@@ -206,6 +208,12 @@ const GameSettings_ = ({
     const dependencies = useRef(_dependencies)
 
     useEffect(() => {
+        fetchGameSettingsValues()
+        const { analytics } = dependencies.current
+        analytics?.sendScreenVisitedEvent?.()
+    }, [])
+
+    useEffect(() => {
         const slice = createBoardStateSlice(GAME_SETTINGS_STATE.BOARD)
         const boardControllerSlice = createBoardControllerSlice(GAME_SETTINGS_STATE.BOARD_CONTROLLER)
         const gameStateSlice = createGameStateSlice(GAME_SETTINGS_STATE.GAME_STATE)
@@ -249,10 +257,11 @@ const GameSettings_ = ({
     }, [])
 
     useEffect(() => {
-        fetchGameSettingsValues()
-        const { analytics } = dependencies.current
-        analytics?.sendScreenVisitedEvent?.()
-    }, [])
+        const allowAnyNoteInCell = settingsConfigsOnOffValue[GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL]
+        if (!_isNil(allowAnyNoteInCell) && !allowAnyNoteInCell) {
+            hideOutNotesWhoseNumbersFilledInHouse(dependencies.current)
+        }
+    }, [settingsConfigsOnOffValue[GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL]])
 
     const fetchGameSettingsValues = () => {
         const { gameSettingsAdapter } = dependencies.current
@@ -479,7 +488,5 @@ export const GameSettings = React.memo(
 
     TODO: add a tooltip as well to use the preview CTA
     TODO: mock gameSettings adapter or tooltips visibility of various kind
-    TODO: when notes have been filled and settings is changed, now remove the extra notes
-            as well from state
 
 */

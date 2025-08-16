@@ -19,6 +19,8 @@ import { BOARD_MOVES_TYPES } from '../constants'
 
 import type { Dependencies } from '../type'
 import { GameSettingsAdapter } from '@application/adapterInterfaces/gameSettings'
+import { BoardIterators } from '@domain/board/utils/boardIterators'
+import _filter from '@lodash/filter'
 
 type AddMainNumberHintAction = {
     cell: Cell
@@ -287,4 +289,26 @@ export const undoUseCase = (dependencies: Dependencies) => {
         updateUserActivityTime(dependencies)
     }
     analytics?.sendUndoClickEvent?.()
+}
+
+export const hideOutNotesWhoseNumbersFilledInHouse = (dependencies: Dependencies) => {
+    const { boardRepository } = dependencies
+    const mainNumbers = boardRepository.getMainNumbers()
+    const notes = boardRepository.getNotes()
+
+    const notesBunch: ToggleNotes = []
+    BoardIterators.forBoardEachCell(cell => {
+        if (!MainNumbersRecord.isCellFilled(mainNumbers, cell)) {
+            _filter(
+                NotesRecord.getCellNotes(notes, cell),
+                ({ noteValue, show }: Note) => {
+                    return show && isMainNumberPresentInAnyHouseOfCell(noteValue, cell, mainNumbers)
+                },
+            ).forEach(({ noteValue }: Note) => {
+                notesBunch.push({ cell, note: noteValue })
+            })
+        }
+    })
+
+    boardRepository.eraseNotesBunch(notesBunch)
 }
