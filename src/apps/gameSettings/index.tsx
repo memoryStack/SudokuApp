@@ -57,6 +57,9 @@ import { GAME_STATE } from '@application/constants'
 import { useSnackbar } from '../arena/hooks/useSnackbar'
 import _isNil from '@lodash/isNil'
 import { hideOutNotesWhoseNumbersFilledInHouse } from '@application/usecases/board'
+import { PreviewStates } from '@application/adapterInterfaces/analytics'
+import Tooltip, { usePopable } from '@ui/atoms/Tooltip'
+import { MAX_GAME_SETTINGS_PRVIEW_TOOLTIP_SHOWN_COUNT } from '@application/adapterInterfaces/coachMarks'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
@@ -115,7 +118,7 @@ const SETTINGS_ = [
                 key: GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: 'Highlight numbers in different different colors'
+                description: 'Highlight notes of a number'
             }
         ]
     },
@@ -191,6 +194,8 @@ const GameSettings_ = ({
 
     const theme = useThemeValues()
 
+    const { ref: tooltipRef, hide: hideTooltip, show: showTooltip } = usePopable()
+
     const dispatch = useDispatch()
 
     const {
@@ -262,6 +267,22 @@ const GameSettings_ = ({
             hideOutNotesWhoseNumbersFilledInHouse(dependencies.current)
         }
     }, [settingsConfigsOnOffValue[GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL]])
+
+    useEffect(() => {
+        const { coachMarksAdapter } = dependencies.current
+        setTimeout(() => {
+            coachMarksAdapter.getCustomizeExperiencePreviewTooltipShownCount()
+                .then((shownCount) => {
+                    if (shownCount < MAX_GAME_SETTINGS_PRVIEW_TOOLTIP_SHOWN_COUNT) {
+                        showTooltip()
+                        setTimeout(() => {
+                            hideTooltip()
+                        }, 7000)
+                        coachMarksAdapter.increaseCustomizeExperiencePreviewTooltipShownCount()
+                    }
+                })
+        }, 2000)
+    }, [])
 
     const fetchGameSettingsValues = () => {
         const { gameSettingsAdapter } = dependencies.current
@@ -368,104 +389,143 @@ const GameSettings_ = ({
         )
     }
 
+    const onPreviewPress = (category) => {
+        const { analytics } = dependencies.current
+        setPreviewSection((current) => {
+            return current === category.title ? '' : category.title
+        })
+        analytics?.sendPreviewPressEvent?.({
+            currentState: category.title === previewSection ? PreviewStates.CLOSED : PreviewStates.OPENED,
+            section: category.title
+        })
+    }
+
+    const PreviewTooltipWrapper = ({ category, children }) => {
+        if (category.title === 'Visual Highlights') {
+            return (
+                <Tooltip
+                    ref={tooltipRef}
+                    content={
+                        <Text
+                            style={styles.tooltipText}
+                            withoutLineHeight
+                        >
+                            {'change settings and click here to see how the Game Experience changes'}
+                        </Text>
+                    }
+                    position={"top"}
+                    caretPosition={"right"}
+                    containerStyle={styles.tooltipContainer}
+                >
+                    {children}
+                </Tooltip>
+            )
+        }
+        return children
+    }
+
     return (
         <Page style={styles.page}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {SETTINGS.map((category, index) => (
-                    <View key={index}>
-                        <View style={styles.categoryContainer}>
-                            <View style={styles.categoryHeaderContainer}>
-                                <Text style={styles.categoryTitle} type={TEXT_VARIATIONS.TITLE_MEDIUM}>{category.title}</Text>
-                                {
-                                    category.hasPreview ?
-                                        <Button
-                                            type={BUTTON_TYPES.TEXT}
-                                            label={'Preview'}
-                                            onPress={() => setPreviewSection((current) => {
-                                                return current === category.title ? '' : category.title
-                                            })}
-                                        />
-                                        : null
-                                }
-                            </View>
-                            <View style={styles.categoryItemsContainer}>
-                                {category.items.map((item, itemIndex) => (
-                                    <View key={item.key} style={[styles.itemContainer, itemIndex ? styles.itemsGap : null]}>
-                                        <View style={styles.textContainer}>
-                                            <Text
-                                                style={styles.itemDescription}
-                                                withoutLineHeight
-                                                type={TEXT_VARIATIONS.BODY_MEDIUM}
-                                            >
-                                                {item.description}
-                                            </Text>
-                                        </View>
-                                        {renderInputView(item)}
+                <View style={styles.allCategoriesContainer}>
+                    {SETTINGS.map((category, index) => {
+                        return (
+                            <View key={index}>
+                                <View style={styles.categoryContainer}>
+                                    <View style={styles.categoryHeaderContainer}>
+                                        <Text style={styles.categoryTitle} type={TEXT_VARIATIONS.TITLE_MEDIUM}>{category.title}</Text>
+                                        {
+                                            category.hasPreview ?
+                                                <PreviewTooltipWrapper category={category}>
+                                                    <Button
+                                                        type={BUTTON_TYPES.TEXT}
+                                                        label={'Preview'}
+                                                        onPress={() => onPreviewPress(category)}
+                                                    />
+                                                </PreviewTooltipWrapper>
+                                                : null
+                                        }
                                     </View>
-                                ))}
+                                    <View style={styles.categoryItemsContainer}>
+                                        {category.items.map((item, itemIndex) => (
+                                            <View key={item.key} style={[styles.itemContainer, itemIndex ? styles.itemsGap : null]}>
+                                                <View style={styles.textContainer}>
+                                                    <Text
+                                                        style={styles.itemDescription}
+                                                        withoutLineHeight
+                                                        type={TEXT_VARIATIONS.BODY_MEDIUM}
+                                                    >
+                                                        {item.description}
+                                                    </Text>
+                                                </View>
+                                                {renderInputView(item)}
+                                            </View>
+                                        ))}
+                                    </View>
+                                    {
+                                        previewSection === category.title ?
+                                            (
+                                                <View style={styles.previewContainer}>
+                                                    <Refree
+                                                        timer={timer}
+                                                        time={{ hours: 0, minutes: 11, seconds: 32 }}
+                                                        mistakes={2}
+                                                        difficultyLevelID={START_GAME_MENU_ITEMS_IDS.MEDIUM}
+                                                        maxMistakesLimit={5}
+                                                        onAction={onAction}
+                                                        containerStyles={styles.refreeContainer}
+                                                    />
+                                                    <Board
+                                                        showCellContent
+                                                        mainNumbers={mainNumbers}
+                                                        notes={notes}
+                                                        onCellClick={(cell) => onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies: dependencies.current } })}
+                                                        getCellBGColor={(cell) => {
+                                                            return getActiveGameBoardCellBgCell(
+                                                                cell, boardStyles, dependencies.current, selectedCell, mainNumbers
+                                                            )
+                                                        }}
+                                                        getCellMainNumberFontColor={(cell) => {
+                                                            return getActiveGameCellMainNumberFontColor(
+                                                                cell, mainNumbers, boardStyles, dependencies.current
+                                                            )
+                                                        }}
+                                                        getNoteStyles={(noteInfo) => {
+                                                            return getActiveGameNoteStyles(
+                                                                noteInfo, selectedCellMainNumber, boardStyles, dependencies.current
+                                                            )
+                                                        }}
+                                                        showAxes={false}
+                                                        customWindowWidth={350}
+                                                        mainNumberTextType={TEXT_VARIATIONS.HEADING_SMALL}
+                                                    />
+                                                    <BoardControllerComp
+                                                        containerStyles={styles.boardControllerContainerStyles}
+                                                        textStyles={styles.boardControllerTextStyles}
+                                                        onAction={onAction}
+                                                        refFromParent={React.createRef()}
+                                                        gameState={gameState}
+                                                        pencilState={pencilState}
+                                                    />
+                                                    <Inputpanel
+                                                        numbersVisible={new Array(10).fill(true)}
+                                                        onAction={onAction}
+                                                        disableNumbersInput={false}
+                                                        disableEraser={false}
+                                                        shouldAddNumberInPanel={() => true}
+                                                        cellWidth={30}
+                                                        textType={TEXT_VARIATIONS.HEADING_MEDIUM}
+                                                    />
+                                                </View>
+                                            )
+                                            : null
+                                    }
+                                </View>
+                                {index < SETTINGS.length - 1 && <Divider style={styles.divider} />}
                             </View>
-                            {
-                                previewSection === category.title ?
-                                    (
-                                        <View style={styles.previewContainer}>
-                                            <Refree
-                                                timer={timer}
-                                                time={{ hours: 0, minutes: 11, seconds: 32 }}
-                                                mistakes={2}
-                                                difficultyLevelID={START_GAME_MENU_ITEMS_IDS.MEDIUM}
-                                                maxMistakesLimit={5}
-                                                onAction={onAction}
-                                                containerStyles={styles.refreeContainer}
-                                            />
-                                            <Board
-                                                showCellContent
-                                                mainNumbers={mainNumbers}
-                                                notes={notes}
-                                                onCellClick={(cell) => onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies: dependencies.current } })}
-                                                getCellBGColor={(cell) => {
-                                                    return getActiveGameBoardCellBgCell(
-                                                        cell, boardStyles, dependencies.current, selectedCell, mainNumbers
-                                                    )
-                                                }}
-                                                getCellMainNumberFontColor={(cell) => {
-                                                    return getActiveGameCellMainNumberFontColor(
-                                                        cell, mainNumbers, boardStyles, dependencies.current
-                                                    )
-                                                }}
-                                                getNoteStyles={(noteInfo) => {
-                                                    return getActiveGameNoteStyles(
-                                                        noteInfo, selectedCellMainNumber, boardStyles, dependencies.current
-                                                    )
-                                                }}
-                                                showAxes={false}
-                                                customWindowWidth={350}
-                                                mainNumberTextType={TEXT_VARIATIONS.HEADING_SMALL}
-                                            />
-                                            <BoardControllerComp
-                                                containerStyles={styles.boardControllerContainerStyles}
-                                                textStyles={styles.boardControllerTextStyles}
-                                                onAction={onAction}
-                                                refFromParent={React.createRef()}
-                                                gameState={gameState}
-                                                pencilState={pencilState}
-                                            />
-                                            <Inputpanel
-                                                numbersVisible={new Array(10).fill(true)}
-                                                onAction={onAction}
-                                                disableNumbersInput={false}
-                                                disableEraser={false}
-                                                shouldAddNumberInPanel={() => true}
-                                                cellWidth={30}
-                                                textType={TEXT_VARIATIONS.HEADING_MEDIUM}
-                                            />
-                                        </View>
-                                    )
-                                    : null
-                            }
-                        </View>
-                        {index < SETTINGS.length - 1 && <Divider style={styles.divider} />}
-                    </View>
-                ))}
+                        )
+                    })}
+                </View>
             </ScrollView>
             <Snackbar
                 visible={snackbarState.visible}
@@ -483,10 +543,3 @@ const GameSettings_ = ({
 export const GameSettings = React.memo(
     withActions({ actionHandlers: ACTION_HANDLERS })(GameSettings_),
 )
-
-/*
-
-    TODO: add a tooltip as well to use the preview CTA
-    TODO: mock gameSettings adapter or tooltips visibility of various kind
-
-*/

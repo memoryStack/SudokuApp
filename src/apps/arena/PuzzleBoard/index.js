@@ -73,11 +73,10 @@ export const getActiveGameBoardCellBgCell = (
 
 export const getActiveGameCellMainNumberFontColor = (cell, mainNumbers, styles, dependencies) => {
     const { gameSettingsAdapter } = dependencies
-    const highlightNumbersFonts = gameSettingsAdapter.highlightNumbersFonts()
+
     const showFeedbackOnMistake = gameSettingsAdapter.showFeedbackOnMistake()
-    if (highlightNumbersFonts) {
-        if (!MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell) && showFeedbackOnMistake) return styles.wronglyFilledNumColor
-        if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor
+    if (showFeedbackOnMistake && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)) {
+        return styles.wronglyFilledNumColor
     }
 
     if (!MainNumbersRecord.isClueCell(mainNumbers, cell)) return styles.userFilledNumColor

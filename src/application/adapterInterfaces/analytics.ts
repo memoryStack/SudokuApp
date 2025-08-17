@@ -68,6 +68,11 @@ export enum PlayGuideStates {
     READ_COMPLETE = 'READ_COMPLETE',
 }
 
+export enum PreviewStates {
+    OPENED = 'OPENED',
+    CLOSED = 'CLOSED'
+}
+
 export type PlayGuideAnalyticsHandler = {
     sendPlayGuideOpenedEvent: () => Promise<void>,
 }
@@ -88,6 +93,7 @@ export type HomeAnalyticsHandlers = {
 export type GameSettingsAnalyticsHandlers = {
     sendScreenVisitedEvent: () => Promise<void>,
     sendOnChangeOptionEvent: ({ option, value }: { option: string, value: any }) => Promise<void>
+    sendPreviewPressEvent: (data: { currentState: PreviewStates, section: string }) => Promise<void>,
 }
 
 export type ScreenAnalyticsHandlers = ArenaAnalyticsHandler

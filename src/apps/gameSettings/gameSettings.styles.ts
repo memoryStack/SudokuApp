@@ -8,6 +8,9 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
         display: 'flex',
         paddingHorizontal: 16
     },
+    allCategoriesContainer: {
+        paddingBottom: 40
+    },
     categoryItemsContainer: {
         marginLeft: 16
     },
@@ -67,5 +70,13 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
     },
     snackbarText: {
         color: _get(theme, 'colors.inverse-on-surface'),
+    },
+    tooltipContainer: {
+        width: 250,
+        left: -120
+    },
+    tooltipText: {
+        color: 'white',
+        padding: 8,
     }
 })

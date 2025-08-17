@@ -18,6 +18,8 @@ type HintsMenuTooltipShownData = {
 
 type CustomizeExperienceTooltipShownData = HintsMenuTooltipShownData
 
+type CustomizeExperiencePreviewTooltipShownData = HintsMenuTooltipShownData
+
 const shownCoachmarks: Partial<Record<COACHMARKS, boolean>> = {}
 
 export const coachMarksAdapter: CoachMarksAdapterUIInterface = {
@@ -56,5 +58,16 @@ export const coachMarksAdapter: CoachMarksAdapterUIInterface = {
     },
     isCoachmarkShownInSession: (coachmark: COACHMARKS) => {
         return Boolean(shownCoachmarks[coachmark])
-    }
+    },
+    getCustomizeExperiencePreviewTooltipShownCount: async () => {
+        const existingData = await getKey(COACHMARKS.GAME_SETTINGS_PREVIEW_TOOLTIP)
+        const finalData = (existingData || { shownCount: 0 }) as CustomizeExperiencePreviewTooltipShownData
+        return finalData.shownCount
+    },
+    increaseCustomizeExperiencePreviewTooltipShownCount: async () => {
+        const existingData = await getKey(COACHMARKS.GAME_SETTINGS_PREVIEW_TOOLTIP)
+        const finalData = (existingData || { shownCount: 0 }) as CustomizeExperienceTooltipShownData
+        finalData.shownCount += 1
+        await setKey(COACHMARKS.GAME_SETTINGS_PREVIEW_TOOLTIP, finalData)
+    },
 }
