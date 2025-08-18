@@ -9,41 +9,51 @@ import type {
     Time,
 } from '@application/adapterInterfaces/stateManagers/refreeRepository'
 
-const {
-    setMistakes,
-    setDifficultylevel,
-    setTime,
-    setState,
-    setLevelNumber,
-    setLastActivityTime
-} = refreeActions
+export const createRefreeStateRepositoryHandlers = (actions, stateReaders): RefreeRepositoryInterface => {
+    const {
+        setMistakes,
+        setDifficultylevel,
+        setTime,
+        setState,
+        setLevelNumber,
+        setLastActivityTime
+    } = actions
 
-export const RefreeRepository: RefreeRepositoryInterface = {
-    getMaxMistakesCount: () => getMaxMistakesLimit(getStoreState()),
-    getGameMistakesCount: () => getMistakes(getStoreState()),
-    setGameMistakesCount: (mistakes: number) => {
-        invokeDispatch(setMistakes(mistakes))
-    },
-    getGameLevel: () => getDifficultyLevel(getStoreState()),
-    // TODO: check it's type properly for 4 levels and custom and shared puzzle as well
-    setGameLevel: (level: string) => {
-        invokeDispatch(setDifficultylevel(level))
-    },
-    getTime: () => getTime(getStoreState()),
-    setTime: (time: Time) => {
-        invokeDispatch(setTime(time))
-    },
-    getLastActivityTime: () => getLastActivityTime(getStoreState()),
-    setLastActivityTime: (time: Time) => {
-        invokeDispatch(setLastActivityTime(time))
-    },
-    setState: (newState: DefaultState) => {
-        invokeDispatch(setState(newState))
-    },
-    getGameLevelNumber: () => {
-        return getLevelNumber(getStoreState())
-    },
-    setGameLevelNumber: (levelNum: number) => {
-        invokeDispatch(setLevelNumber(levelNum))
+    const {
+        getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit, getLevelNumber, getLastActivityTime
+    } = stateReaders
+
+    return {
+        getMaxMistakesCount: () => getMaxMistakesLimit(getStoreState()),
+        getGameMistakesCount: () => getMistakes(getStoreState()),
+        setGameMistakesCount: (mistakes: number) => {
+            invokeDispatch(setMistakes(mistakes))
+        },
+        getGameLevel: () => getDifficultyLevel(getStoreState()),
+        // TODO: check it's type properly for 4 levels and custom and shared puzzle as well
+        setGameLevel: (level: string) => {
+            invokeDispatch(setDifficultylevel(level))
+        },
+        getTime: () => getTime(getStoreState()),
+        setTime: (time: Time) => {
+            invokeDispatch(setTime(time))
+        },
+        getLastActivityTime: () => getLastActivityTime(getStoreState()),
+        setLastActivityTime: (time: Time) => {
+            invokeDispatch(setLastActivityTime(time))
+        },
+        setState: (newState: DefaultState) => {
+            invokeDispatch(setState(newState))
+        },
+        getGameLevelNumber: () => {
+            return getLevelNumber(getStoreState())
+        },
+        setGameLevelNumber: (levelNum: number) => {
+            invokeDispatch(setLevelNumber(levelNum))
+        }
     }
 }
+
+export const RefreeRepository = createRefreeStateRepositoryHandlers(refreeActions, {
+    getMistakes, getDifficultyLevel, getTime, getMaxMistakesLimit, getLevelNumber, getLastActivityTime
+})

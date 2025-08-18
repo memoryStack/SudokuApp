@@ -25,7 +25,7 @@ import { Touchable } from '../components/Touchable'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMaxMistakesLimit } from '../arena/store/selectors/refree.selectors'
 import { useThemeValues } from '../arena/hooks/useTheme'
-import { fetchRefreeDataFromFromLocalStorage } from '../arena/store/reducers/refree.reducers'
+import { createRefreeStateSlice, fetchRefreeDataFromFromLocalStorage } from '../arena/store/reducers/refree.reducers'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import { getContainerBackgroundColor } from '@ui/molecules/Button/button.styles'
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
@@ -38,7 +38,7 @@ import { createBoardStateSlice } from '../arena/store/reducers/board.reducers'
 import { injectReducer, removeReducer } from 'src/redux/store'
 import { createBoardRepositoryHandlers } from 'src/repositories/boardRepository/BoardRepository'
 
-import { boardStateSelectors, boardControllerSelectors, gameStateSelectors } from './state.selectors'
+import { boardStateSelectors, boardControllerSelectors, gameStateSelectors, refreeSelectors } from './state.selectors'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import withActions from '@utils/hocs/withActions'
@@ -60,6 +60,7 @@ import { hideOutNotesWhoseNumbersFilledInHouse } from '@application/usecases/boa
 import { PreviewStates } from '@application/adapterInterfaces/analytics'
 import Tooltip, { usePopable } from '@ui/atoms/Tooltip'
 import { MAX_GAME_SETTINGS_PRVIEW_TOOLTIP_SHOWN_COUNT } from '@application/adapterInterfaces/coachMarks'
+import { createRefreeStateRepositoryHandlers } from 'src/repositories/refreeRepository/refreeRepository'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
@@ -175,9 +176,7 @@ const getDynamicDataMapping = (settingsConfigsOnOffValue: AllGameSettingsValues)
     }
 }
 
-const GameSettings_ = ({
-    onAction
-}) => {
+const GameSettings_ = ({ onAction }) => {
     const _dependencies = useDependency()
 
     const [settingsConfigsOnOffValue, setSettingsConfigsOnOffValue] = React.useState<AllGameSettingsValues>({} as AllGameSettingsValues);
@@ -191,6 +190,8 @@ const GameSettings_ = ({
     const [previewSection, setPreviewSection] = useState('')
 
     const mistakesLimit = useSelector(getMaxMistakesLimit)
+
+    const mistakes = useSelector(refreeSelectors.getMistakes)
 
     const theme = useThemeValues()
 
@@ -222,14 +223,17 @@ const GameSettings_ = ({
         const slice = createBoardStateSlice(GAME_SETTINGS_STATE.BOARD)
         const boardControllerSlice = createBoardControllerSlice(GAME_SETTINGS_STATE.BOARD_CONTROLLER)
         const gameStateSlice = createGameStateSlice(GAME_SETTINGS_STATE.GAME_STATE)
+        const refreeStateSlice = createRefreeStateSlice(GAME_SETTINGS_STATE.REFREE)
 
         injectReducer(GAME_SETTINGS_STATE.BOARD, slice.reducer)
         injectReducer(GAME_SETTINGS_STATE.BOARD_CONTROLLER, boardControllerSlice.reducer)
         injectReducer(GAME_SETTINGS_STATE.GAME_STATE, gameStateSlice.reducer)
+        injectReducer(GAME_SETTINGS_STATE.REFREE, refreeStateSlice.reducer)
 
         const boardRepository = createBoardRepositoryHandlers(slice.actions, boardStateSelectors)
         const boardControllerRepository = createBoardControllerRepositoryHandlers(boardControllerSlice.actions, boardControllerSelectors)
         const gameStateRepository = createGameStateRepositoryHandlers(gameStateSlice.actions, gameStateSelectors)
+        const refreeRepository = createRefreeStateRepositoryHandlers(refreeStateSlice.actions, refreeSelectors)
 
         boardRepository.setState({
             mainNumbers: transformRawPuzzleToStateMainNumbers({
@@ -246,7 +250,8 @@ const GameSettings_ = ({
             ...dependencies.current,
             boardRepository,
             boardControllerRepository,
-            gameStateRepository
+            gameStateRepository,
+            refreeRepository
         }
 
         onAction({
@@ -258,6 +263,7 @@ const GameSettings_ = ({
             removeReducer(GAME_SETTINGS_STATE.BOARD)
             removeReducer(GAME_SETTINGS_STATE.BOARD_CONTROLLER)
             removeReducer(GAME_SETTINGS_STATE.GAME_STATE)
+            removeReducer(GAME_SETTINGS_STATE.REFREE)
         }
     }, [])
 
@@ -469,9 +475,9 @@ const GameSettings_ = ({
                                                     <Refree
                                                         timer={timer}
                                                         time={{ hours: 0, minutes: 11, seconds: 32 }}
-                                                        mistakes={2}
+                                                        mistakes={mistakes}
                                                         difficultyLevelID={START_GAME_MENU_ITEMS_IDS.MEDIUM}
-                                                        maxMistakesLimit={5}
+                                                        maxMistakesLimit={mistakesLimit}
                                                         onAction={onAction}
                                                         containerStyles={styles.refreeContainer}
                                                     />

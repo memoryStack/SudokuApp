@@ -3,7 +3,8 @@ import { GAME_SETTINGS_KEYS } from "@interfaces/gameSettingsAdapter";
 export enum GAME_SETTINGS_STATE {
     BOARD = 'gameSettingsPreview',
     BOARD_CONTROLLER = 'gameSettingsBoardController',
-    GAME_STATE = 'gameSettingsGameState'
+    GAME_STATE = 'gameSettingsGameState',
+    REFREE = 'gameSettingsRefree'
 }
 
 export enum OPTION_STATES {

@@ -18,6 +18,27 @@ const getHintsUsed = state => state[GAME_SETTINGS_STATE.BOARD_CONTROLLER]?.hints
 
 const getGameState = state => state[GAME_SETTINGS_STATE.GAME_STATE]?.gameState
 
+const getMaxMistakesLimit = state => state[GAME_SETTINGS_STATE.REFREE]?.maxMistakesLimit
+
+const getMistakes = state => state[GAME_SETTINGS_STATE.REFREE]?.mistakes
+
+const getDifficultyLevel = state => state[GAME_SETTINGS_STATE.REFREE]?.difficultyLevel
+
+const getLevelNumber = state => state[GAME_SETTINGS_STATE.REFREE]?.levelNumber
+
+const getTime = state => state[GAME_SETTINGS_STATE.REFREE]?.time
+
+const getLastActivityTime = state => state[GAME_SETTINGS_STATE.REFREE]?.lastActivityTime
+
+export const refreeSelectors = {
+    getMaxMistakesLimit,
+    getMistakes,
+    getDifficultyLevel,
+    getLevelNumber,
+    getTime,
+    getLastActivityTime
+}
+
 export const boardStateSelectors = {
     getMainNumbers,
     getSelectedCell,

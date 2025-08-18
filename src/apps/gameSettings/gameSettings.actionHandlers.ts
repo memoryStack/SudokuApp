@@ -48,13 +48,22 @@ const handleFastPencilClick = ({ getState, setState, params }) => {
     })
 }
 
+const handleUndoClick = ({ getState, setState, params }) => {
+    const { dependencies } = getState()
+    BOARD_CONTROLLER_ACTION_HANDLERS[ACTION_TYPES.ON_UNDO_CLICK]?.({
+        getState,
+        setState,
+        params: { ...params, dependencies }
+    })
+}
+
 const ACTION_HANDLERS = {
     ...PUZZLE_BOARD_ACTION_HANDLERS,
     ...INPUT_PANEL_ACTION_HANDLERS,
     [ACTION_TYPES.ON_INIT]: onInit,
     [ACTION_TYPES.ON_PENCIL_CLICK]: handlePencilClick,
     [ACTION_TYPES.ON_FAST_PENCIL_CLICK]: handleFastPencilClick,
-    [ACTION_TYPES.ON_UNDO_CLICK]: _noop,
+    [ACTION_TYPES.ON_UNDO_CLICK]: handleUndoClick,
     [ACTION_TYPES.ON_HINT_CLICK]: _noop,
 }
 

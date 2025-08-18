@@ -65,7 +65,9 @@ const isPuzzleSolved = (mainNumbers: MainNumbers) => {
 
 const isMainNumberEligibleToErase = (cell: Cell, mainNumbers: MainNumbers) => {
     return MainNumbersRecord.isCellFilled(mainNumbers, cell)
-        && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)
+        && !MainNumbersRecord.isClueCell(mainNumbers, cell)
+    // return MainNumbersRecord.isCellFilled(mainNumbers, cell)
+    //     && !MainNumbersRecord.isCellFilledCorrectly(mainNumbers, cell)
 }
 
 const isMainNumberNotEligibleToErase = (cell: Cell, mainNumbers: MainNumbers) => {

@@ -85,7 +85,6 @@ export const fastPencilUseCase = (dependencies: Dependencies) => {
 
 // TODO: make it isolated from selectedCell
 const inputMainNumber = (number: number, cell: Cell, dependencies: InputNumberUseCaseDependencies) => {
-    console.log('@@@@@@ input main number')
     const { boardRepository, refreeRepository, sound } = dependencies
     const selectedCell = cell
     const mainNumbers = boardRepository.getMainNumbers()
