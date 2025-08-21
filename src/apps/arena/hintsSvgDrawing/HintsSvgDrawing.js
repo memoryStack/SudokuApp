@@ -18,9 +18,10 @@ import { SimplePathConfigs } from './svgElementsHandlers/remotePairs/remotePairs
 import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 import { roundToNearestPixel } from '@utils/util'
-import { getRectangularHighlightsPaths } from './svgElementsHandlers/rectangularHighlights'
+import { getRectangularHighlightsPaths, svgBoardSizeDiff } from './svgElementsHandlers/rectangularHighlights'
 
-const svgBoardSizeDiff = 40 // 40 units bigger than the main board
+
+
 
 const HintsSvgDrawing = ({
     boardRef, notesRefs, hint, svgProps, hideMarkersEnd,

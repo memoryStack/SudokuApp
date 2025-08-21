@@ -38,9 +38,21 @@ const strokeProps = {
     strokeLinejoin: 'round',
 }
 
-const STROKE_WIDTH = roundToNearestPixel(10)
+// BELOW ARE FOR DESKTOP
+const DIMENSION_CONFIGS = {
+    strokeWidth: roundToNearestPixel(10),
+    svgBoardSizeDiff: 40,
+    cell: { w: 80, h: 80 },
+    row: { w: 744, h: 80 },
+    column: { w: 80, h: 744 },
+    block: { w: 244, h: 244 },
+    band: {
+        horizontal: { w: 744, h: 244 },
+        vertical: { w: 244, h: 744 }
+    }
+}
 
-const svgBoardSizeDiff = 40
+export const svgBoardSizeDiff = DIMENSION_CONFIGS.svgBoardSizeDiff // 40 units bigger than the main board
 
 const getBordersCountBeforeCell = (cell) => {
     return {
@@ -56,7 +68,7 @@ const getBordersCountBeforeCell = (cell) => {
 }
 
 const getCellCordinates = (cell) => {
-    const dimension = { w: 80, h: 80 }
+    const dimension = DIMENSION_CONFIGS.cell
     const { horizontal, vertical } = getBordersCountBeforeCell(cell)
     return {
         x: cell.col * dimension.w + horizontal.thin * STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH + horizontal.thick * STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH,
@@ -67,7 +79,7 @@ const getCellCordinates = (cell) => {
 
 const getRowCordinates = (num) => {
     const firstCell = { row: num, col: 0 }
-    const dimension = { w: 744, h: 80 }
+    const dimension = DIMENSION_CONFIGS.row
     const firstCellCords = getCellCordinates(firstCell)
 
     return {
@@ -79,7 +91,7 @@ const getRowCordinates = (num) => {
 
 const getColumnCordinates = (num) => {
     const firstCell = { row: 0, col: num }
-    const dimension = { w: 80, h: 744 }
+    const dimension = DIMENSION_CONFIGS.column
     const firstCellCords = getCellCordinates(firstCell)
 
     return {
@@ -92,8 +104,8 @@ const getColumnCordinates = (num) => {
 const getBlockCordinates = (num: number) => {
     const startCell = getBlockStartCell(num)
     const { horizontal, vertical } = getBordersCountBeforeCell(startCell)
-    const dimension = { w: 244, h: 244 }
-    const cellDimensions = { w: 80, h: 80 }
+    const dimension = DIMENSION_CONFIGS.block
+    const cellDimensions = DIMENSION_CONFIGS.cell
     return {
         x: startCell.col * cellDimensions.w + horizontal.thin * STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH + horizontal.thick * STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH,
         y: startCell.row * cellDimensions.h + vertical.thin * STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH + vertical.thick * STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH,
@@ -107,13 +119,10 @@ const getBandCordinates = ({ num, direction }: ElementConfigs['band']) => {
         col: direction === 'h' ? 0 : num * 3,
     }
 
-    const dimension = {
-        w: direction === 'h' ? 744 : 244,
-        h: direction === 'h' ? 244 : 744,
-    }
+    const dimension = direction === 'h' ? DIMENSION_CONFIGS.band.horizontal : DIMENSION_CONFIGS.band.vertical
 
     const { horizontal, vertical } = getBordersCountBeforeCell(startCell)
-    const cellDimensions = { w: 80, h: 80 }
+    const cellDimensions = DIMENSION_CONFIGS.cell
     return {
         x: startCell.col * cellDimensions.w + horizontal.thin * STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH + horizontal.thick * STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH,
         y: startCell.row * cellDimensions.h + vertical.thin * STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH + vertical.thick * STATIC_BOARD_ELEMENTS_DIMENSIONS.THICK_BORDER_WIDTH,
@@ -125,8 +134,8 @@ const getBandCordinates = ({ num, direction }: ElementConfigs['band']) => {
 const getCellCenter = (cell: Cell) => {
     const cellCord = getCellCordinates(cell)
     return {
-        x: cellCord.x + cellCord.dimension.w / 2 + svgBoardSizeDiff / 2,
-        y: cellCord.y + cellCord.dimension.h / 2 + svgBoardSizeDiff / 2,
+        x: cellCord.x + cellCord.dimension.w / 2 + DIMENSION_CONFIGS.svgBoardSizeDiff / 2,
+        y: cellCord.y + cellCord.dimension.h / 2 + DIMENSION_CONFIGS.svgBoardSizeDiff / 2,
     }
 }
 
@@ -170,8 +179,8 @@ const getPathsToEncircleElement = (element: ElementConfigs) => {
     }
 
     const RECT_CORD = {
-        x: cellCord.x - (STROKE_WIDTH / 2) + svgBoardSizeDiff / 2 + STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
-        y: cellCord.y - (STROKE_WIDTH / 2) + svgBoardSizeDiff / 2 + STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
+        x: cellCord.x - (DIMENSION_CONFIGS.strokeWidth / 2) + DIMENSION_CONFIGS.svgBoardSizeDiff / 2 + STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
+        y: cellCord.y - (DIMENSION_CONFIGS.strokeWidth / 2) + DIMENSION_CONFIGS.svgBoardSizeDiff / 2 + STATIC_BOARD_ELEMENTS_DIMENSIONS.THIN_BORDER_WIDTH,
     }
 
     return {
@@ -179,11 +188,11 @@ const getPathsToEncircleElement = (element: ElementConfigs) => {
         props: {
             x: RECT_CORD.x,
             y: RECT_CORD.y,
-            width: cellCord.dimension.w + STROKE_WIDTH,
-            height: cellCord.dimension.h + STROKE_WIDTH,
+            width: cellCord.dimension.w + DIMENSION_CONFIGS.strokeWidth,
+            height: cellCord.dimension.h + DIMENSION_CONFIGS.strokeWidth,
             ...{
                 stroke: linkColor,
-                strokeWidth: STROKE_WIDTH,
+                strokeWidth: DIMENSION_CONFIGS.strokeWidth,
                 strokeLinejoin: 'round',
                 ...element.strokes
             },
