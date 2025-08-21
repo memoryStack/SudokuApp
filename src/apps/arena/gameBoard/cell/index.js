@@ -183,8 +183,8 @@ const Cell_ = ({
     const getCellContent = () => {
         return (
             <>
-                <Text type={TEXT_VARIATIONS.LABEL_SMALL} style={{ fontSize: 10 }}>{`${cords.x}`}</Text>
-                <Text type={TEXT_VARIATIONS.LABEL_SMALL} style={{ fontSize: 10 }}>{`${cords.y}`}</Text>
+                <Text type={TEXT_VARIATIONS.LABEL_SMALL} style={{ fontSize: 10 }}>{`${(cords.x - 29.45).toFixed(2)}`}</Text>
+                <Text type={TEXT_VARIATIONS.LABEL_SMALL} style={{ fontSize: 10 }}>{`${(cords.y - 241.09).toFixed(2)}`}</Text>
             </>
         )
         const showIconAndMainNumber = displayCrossIcon && cellMainValue
