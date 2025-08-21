@@ -39,7 +39,7 @@ const BoardController_ = ({ onAction, refFromParent }) => {
     const disableControllers = !(new GameState(gameState).isGameActive())
 
     const { width: windowWidth } = useWindowDimensions()
-    const CELL_ACTION_ICON_BOX_DIMENSION = 36
+    const CELL_ACTION_ICON_BOX_DIMENSION = (windowWidth / 100) * 5
 
     const onUndoClick = () => onAction({ type: ACTION_TYPES.ON_UNDO_CLICK, payload: { dependencies } })
 

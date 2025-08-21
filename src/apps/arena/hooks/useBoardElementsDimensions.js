@@ -28,7 +28,7 @@ export const useBoardElementsDimensions = () => {
 }
 
 const getCellWidth = windowWidth => {
-    const cellWidth = Math.min((getBoardGridWidth(windowWidth) - getAllBordersTotalSpace()) / CELLS_IN_A_HOUSE, 80)
+    const cellWidth = (getBoardGridWidth(windowWidth) - getAllBordersTotalSpace()) / CELLS_IN_A_HOUSE
     return roundToNearestPixel(cellWidth)
 }
 
