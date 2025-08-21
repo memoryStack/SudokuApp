@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { View, Animated, Image } from 'react-native'
 
@@ -86,7 +86,20 @@ const Cell_ = ({
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
+    const [cords, setCords] = useState({})
+
+    const targetRef = React.useRef(null)
+
     const styles = useStyles(getStyles)
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            targetRef.current?.measure((x, y, width, height, pageX, pageY) => {
+                console.log('@@@@@@@@@', x, y, width, height, pageX, pageY)
+                setCords({ x: pageX.toFixed(2), y: pageY.toFixed(2) })
+            });
+        }, 6000)
+    }, []);
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
@@ -168,6 +181,12 @@ const Cell_ = ({
     )
 
     const getCellContent = () => {
+        return (
+            <>
+                <Text type={TEXT_VARIATIONS.LABEL_SMALL} style={{ fontSize: 10 }}>{`${cords.x}`}</Text>
+                <Text type={TEXT_VARIATIONS.LABEL_SMALL} style={{ fontSize: 10 }}>{`${cords.y}`}</Text>
+            </>
+        )
         const showIconAndMainNumber = displayCrossIcon && cellMainValue
         if (showIconAndMainNumber) {
             return (
@@ -187,6 +206,7 @@ const Cell_ = ({
 
     return (
         // let's use opacity only, this supports passing null as child as well
+
         <Touchable
             activeOpacity={1}
             style={[styles.cell]}
@@ -197,10 +217,14 @@ const Cell_ = ({
                 borderWidth: borderWidthAnim,
                 borderColor: borderColor
             }]}
+
             isAnimated
         >
-            {showCellContent ? getCellContent() : null}
+            <View ref={targetRef} style={[styles.cell]} onLayout={_noop}>
+                {true ? getCellContent() : null}
+            </View>
         </Touchable>
+
     )
 }
 
