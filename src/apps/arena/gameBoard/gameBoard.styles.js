@@ -73,7 +73,7 @@ export const getStyles = ({ BOARD_GRID_WIDTH, BOARD_GRID_HEIGHT, CELL_WIDTH }, t
         marginLeft: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH,
     },
     axisText: {
-        // fontSize: 24,
+        fontSize: 24,
         color: _get(theme, ['colors', 'on-surface-variant-low']),
     },
 })
