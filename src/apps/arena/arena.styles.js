@@ -28,7 +28,7 @@ export const getStyles = (_, theme) => {
             alignItems: 'center',
             backgroundColor: 'transparent',
             // marginTop: 40,
-            paddingHorizontal: 180
+            // paddingHorizontal: 180
         },
         gameOverCardAbsoluteBG: {
             position: 'absolute',
