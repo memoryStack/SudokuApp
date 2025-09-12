@@ -113,7 +113,7 @@ const SETTINGS_ = [
                 key: GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: 'Highlight cells with different different background colors'
+                description: 'Highlight cells with different background colors'
             },
             {
                 key: GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS,

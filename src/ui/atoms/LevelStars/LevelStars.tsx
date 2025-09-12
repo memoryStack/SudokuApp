@@ -9,7 +9,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './levelStars.styles'
 
-import { LevelStarIcon } from '@resources/svgIcons/levelStar'
+import { LevelStarIcon, STAR_COLORS } from '@resources/svgIcons/levelStar'
 
 // TODO: move these to the contants in the UI layer
 export enum ICON_SIZE_TYPES {
@@ -24,7 +24,8 @@ export interface Props {
     activeStars: number
     containerStyle?: StyleProp<ViewStyle>,
     middleStarStyle?: StyleProp<ViewStyle>,
-    iconSizeType?: ICON_SIZE_TYPES
+    iconSizeType?: ICON_SIZE_TYPES,
+    unsolved?: boolean
 }
 
 export const ICON_SIZES = {
@@ -46,7 +47,8 @@ const LevelStars: React.FC<Props> = ({
     activeStars,
     containerStyle,
     middleStarStyle,
-    iconSizeType = ICON_SIZE_TYPES.SMALL
+    iconSizeType = ICON_SIZE_TYPES.SMALL,
+    unsolved,
 }) => {
     const styles = useStyles(getStyles)
     const starsActiveInfo = getStarsActiveInfo(activeStars)
@@ -55,7 +57,11 @@ const LevelStars: React.FC<Props> = ({
 
     const renderIcon = (isActive: boolean) => {
         return (
-            <LevelStarIcon active={isActive} {...iconDimensions} />
+            <LevelStarIcon
+                active={isActive}
+                {...iconDimensions}
+                colorConfigs={unsolved ? STAR_COLORS.unsolvedPuzzle : undefined}
+            />
         )
     }
 

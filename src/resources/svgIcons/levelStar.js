@@ -14,8 +14,13 @@ const activeColors = {
     1: "#f7a928"
 }
 
-const SvgComponent = ({ active = true, ...restProps }) => {
-    const iconColorConfig = active ? activeColors : inactiveColors
+const unsolvedColors = {
+    0: "#ffe2de",
+    1: "#b81f1e"
+}
+
+const SvgComponent = ({ active = true, colorConfigs, ...restProps }) => {
+    const iconColorConfig = colorConfigs ?? (active ? activeColors : inactiveColors)
     return (
         <Svg width={16} height={16} id="star" viewBox="0 0 16 16" {...restProps}>
             <Defs>
@@ -34,6 +39,12 @@ const SvgComponent = ({ active = true, ...restProps }) => {
 }
 
 export const LevelStarIcon = memo(SvgComponent)
+
+export const STAR_COLORS = {
+    inactive: inactiveColors,
+    active: activeColors,
+    unsolvedPuzzle: unsolvedColors
+}
 
 SvgComponent.propTypes = {
     active: PropTypes.bool,

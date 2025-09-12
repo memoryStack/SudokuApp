@@ -22,6 +22,7 @@ export interface Props {
     activeStars: number
     containerStyle?: StyleProp<ViewStyle>,
     testID?: string
+    unsolved?: boolean
 }
 
 const LevelCard: React.FC<Props> = ({
@@ -29,9 +30,10 @@ const LevelCard: React.FC<Props> = ({
     state = LEVEL_STATES.LOCKED,
     activeStars = 0,
     containerStyle,
-    testID = ''
+    testID = '',
+    unsolved = false,
 }) => {
-    const styles = useStyles(getStyles, { levelState: state })
+    const styles = useStyles(getStyles, { levelState: state, unsolved })
 
     const theme = useThemeValues()
 
@@ -39,7 +41,7 @@ const LevelCard: React.FC<Props> = ({
         return (
             <Text
                 type={TEXT_VARIATIONS.LABEL_LARGE}
-                style={[styles.levelText, style]}
+                style={[styles.levelText, style, unsolved ? styles.unsolvedLevelText : null]}
                 withoutLineHeight
             >
                 {levelNum}
@@ -68,6 +70,7 @@ const LevelCard: React.FC<Props> = ({
                     activeStars={0}
                     containerStyle={styles.starsContainer}
                     middleStarStyle={styles.middleStar}
+                    unsolved={unsolved}
                 />
                 {levelNumberView(styles.disabledLevelText)}
             </>

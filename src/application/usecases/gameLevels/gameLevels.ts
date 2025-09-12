@@ -16,8 +16,8 @@ export const getGameLevelsUseCase = async (
     dependencies: Dependencies
 ): Promise<GameLevelsInfo> => {
     const { gameLevelsAdapter } = dependencies
+    // completed means solved + unsolved levels
     const { levels: completedGames, starsEarned } = await gameLevelsAdapter.getGameLevels(selectedLevel)
-
     const MAX_GAMES_IN_LEVEL = ALL_PUZZLES[selectedLevel].length
 
     const maxStars = MAX_GAMES_IN_LEVEL * 3 // TODO : put it in a central place
@@ -50,7 +50,8 @@ export const getGameLevelsUseCase = async (
             completedGames.push({
                 levelNum,
                 activeStars: 0,
-                state: levelNum === nextPuzzleNum ? LEVEL_STATES.UNLOCKED : LEVEL_STATES.LOCKED
+                state: levelNum === nextPuzzleNum ? LEVEL_STATES.UNLOCKED : LEVEL_STATES.LOCKED,
+                unsolved: false,
             })
         }
     }
@@ -59,10 +60,20 @@ export const getGameLevelsUseCase = async (
     return { levels: completedGames, nextPuzzleIndex: nextPuzzleNum - 1, maxStars, starsEarned }
 }
 
+// TODO: these use-cases are very thin, just wrappers
+// and their adapter are filled with fat logic. better move that in the business logic layer
 export const saveCompletedGame = async (
     gameStats: COMPLETED_GAME_STATS,
     dependencies: Dependencies
 ) => {
     const { gameLevelsAdapter } = dependencies
-    gameLevelsAdapter.saveCompletedGame(gameStats)
+    return gameLevelsAdapter.saveCompletedGame(gameStats)
+}
+
+export const saveUnsolvedGame = async (
+    gameStats: COMPLETED_GAME_STATS,
+    dependencies: Dependencies
+) => {
+    const { gameLevelsAdapter } = dependencies
+    return gameLevelsAdapter.saveUnsolvedGame(gameStats)
 }

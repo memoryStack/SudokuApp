@@ -114,6 +114,13 @@ const getCellAxesValues = (cell: Cell) => {
     return `${yAxisTexts[cell.row]}${xAxisTexts[cell.col]}`
 }
 
+const isCellPresentInHouse = (cell: Cell, house: House) => {
+    if (isRowHouse(house.type)) return cell.row === house.num
+    if (isColHouse(house.type)) return cell.col === house.num
+    const { blockNum } = getBlockAndBoxNum(cell)
+    return blockNum === house.num
+}
+
 export {
     isRowHouse,
     isColHouse,
@@ -127,4 +134,5 @@ export {
     areSameCells,
     areCommonHouseCells,
     getCellAxesValues,
+    isCellPresentInHouse
 }

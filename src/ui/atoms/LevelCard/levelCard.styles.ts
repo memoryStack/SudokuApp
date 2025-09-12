@@ -11,7 +11,7 @@ const disabledButtonConfig = {
     state: BUTTON_STATES.DISABLED
 }
 
-export const getStyles = (_: any, theme: Theme) => {
+export const getStyles = ({ unsolved }: any, theme: Theme) => {
     return StyleSheet.create({
         container: {
             display: 'flex',
@@ -21,7 +21,7 @@ export const getStyles = (_: any, theme: Theme) => {
             padding: 8,
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: _get(theme, ['colors', 'outline-variant']),
+            borderColor: _get(theme, ['colors', unsolved ? 'error' : 'outline-variant']),
         },
         levelText: { marginTop: 4 },
         starsContainer: {
@@ -33,6 +33,9 @@ export const getStyles = (_: any, theme: Theme) => {
         },
         disabledLevelText: {
             color: getTextColor(disabledButtonConfig, theme)
+        },
+        unsolvedLevelText: {
+            color: _get(theme, ['colors', 'error'])
         }
     })
 }

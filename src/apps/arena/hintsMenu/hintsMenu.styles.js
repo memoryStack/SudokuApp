@@ -20,7 +20,8 @@ export const getStyles = (_, theme) => StyleSheet.create({
     container: {
         height: '50%',
         width: '75%',
-        backgroundColor: _get(theme, ['colors', 'surface']),
+        // backgroundColor: _get(theme, ['colors', 'surface']),
+        backgroundColor: 'white',
         borderRadius: 32,
         overflow: 'hidden',
     },

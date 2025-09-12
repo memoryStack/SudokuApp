@@ -20,4 +20,5 @@ export type CompletedLevelsDetails = {
 export type GameLevelsAdapter = {
     getGameLevels: (selectedLevel: AUTO_GENERATED_NEW_GAME_IDS) => Promise<CompletedLevelsDetails>
     saveCompletedGame: (gameStats: COMPLETED_GAME_STATS) => Promise<void>
+    saveUnsolvedGame: (gameStats: COMPLETED_GAME_STATS) => Promise<void>
 }

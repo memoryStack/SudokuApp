@@ -1,6 +1,6 @@
 import { HOUSE_TYPE } from '../../board.constants'
 
-import { getHouseCells, isRowHouse, isColHouse, isBlockHouse } from '../housesAndCells'
+import { getHouseCells, isRowHouse, isColHouse, isBlockHouse, isCellPresentInHouse } from '../housesAndCells'
 
 describe('getHouseCells', () => {
     test('returns row house cells in order from left to right', () => {
@@ -68,5 +68,31 @@ describe('Houses Type Check', () => {
 
     test('isBlockHouse() class method verifies if passed houseType is row or not', () => {
         expect(isBlockHouse(HOUSE_TYPE.BLOCK)).toBeTruthy()
+    })
+})
+
+describe('isCellPresentInHouse', () => {
+    test('returns true when cell is part of the given row', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 5 }
+        const cell = { row: 5, col: 5 }
+        expect(isCellPresentInHouse(cell, house)).toBeTruthy()
+    })
+
+    test('returns true when cell is not part of the given row', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 5 }
+        const cell = { row: 0, col: 5 }
+        expect(isCellPresentInHouse(cell, house)).toBeFalsy()
+    })
+
+    test('returns true when cell is part of the given block', () => {
+        const house = { type: HOUSE_TYPE.BLOCK, num: 5 }
+        const cell = { row: 5, col: 6 }
+        expect(isCellPresentInHouse(cell, house)).toBeTruthy()
+    })
+
+    test('returns true when cell is not part of the given block', () => {
+        const house = { type: HOUSE_TYPE.ROW, num: 5 }
+        const cell = { row: 0, col: 0 }
+        expect(isCellPresentInHouse(cell, house)).toBeFalsy()
     })
 })

@@ -218,6 +218,20 @@ export const getHouseAxesValue = ({ type, num }: House) => {
     return HOUSE_TYPE_VS_AXES_VALUES[type][num]
 }
 
+export const getAllCellsInHousesUniquely = (houses: House[]) => {
+    const result = getHouseCells(houses[0])
+
+    for (let i = 1; i < houses.length; i++) {
+        const currentHouseCells = getHouseCells(houses[i])
+        _forEach(currentHouseCells, (cell: Cell) => {
+            if (!isCellExists(cell, result)) result.push(cell)
+        })
+    }
+
+    return result
+}
+
+// TODO: could use getAllCellsInHousesUniquely for re-usability
 export const getHousesCellsSharedByCells = (cells: Cell[]) => {
     const result: Cell[] = []
 

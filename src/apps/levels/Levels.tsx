@@ -82,12 +82,15 @@ const Levels: React.FC<Props> = ({
 
     useEffect(() => {
         navigation.setOptions({ headerRight: () => renderStarsEarning(starsEarned, maxStars, styles) })
-    }, [starsEarned, maxStars, styles])
+    }, [navigation, starsEarned, maxStars, styles])
 
     return (
         <Page
             style={styles.container}
-            onFocus={() => emit(EVENTS.LOCAL.REFRESH_GAME_LEVELS_INFO)}
+            onFocus={() => {
+                emit(EVENTS.LOCAL.REFRESH_GAME_LEVELS_INFO)
+                onAction({ type: ACTION_TYPES.ON_INIT, payload: dependencies })
+            }}
         >
             <GameLevelsList
                 layoutProvider={getLayoutProvider()}

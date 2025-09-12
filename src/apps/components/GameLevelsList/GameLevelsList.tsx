@@ -83,7 +83,7 @@ const GameLevelsList: React.FC<Props> = ({
                 testID={`LEVEL-${data.levelNum}`}
                 onPress={() => onPuzzleClick({ levelNum: data.levelNum })}
             >
-                <LevelCard {...data} containerStyle={styles.levelContainer} />
+                <LevelCard {...data} containerStyle={styles.levelContainer} unsolved={data.unsolved} />
             </Touchable>
         )
     }

@@ -8,6 +8,7 @@ import _isNil from '@lodash/isNil'
 import _intersection from '@lodash/intersection'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 import {
+    getAllCellsInHousesUniquely,
     getCellsCommonHousesInfo,
     getHousesCellsSharedByCells, getUniqueNotesFromCells, isCellExists, sortCells,
 } from '../../../util'
@@ -30,19 +31,21 @@ import { NakedGroupTransformerArgs } from './types'
 import {
     CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
 } from '../../types'
+import { isCellPresentInHouse } from '@domain/board/utils/housesAndCells'
 
 export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }: NakedGroupTransformerArgs): TransformedRawHint => {
     const { groupCells } = rawHint
-    const focusedCells = getHousesCellsSharedByCells(groupCells)
     const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)
-    const removableNotesHostCells = getRemovableNotesCells(groupCells, groupCandidates, focusedCells, notesData)
+    const focusedCells = getHighlightableCells(groupCells, groupCandidates, notesData)
+    const removableNotesHostCells = getRemovableNotesCells(groupCells, groupCandidates, notesData)
+    const hostHouses = getHostHouses(groupCells, groupCandidates, notesData)
     return {
         hasTryOut: true,
         cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData, smartHintsColorSystem),
         focusedCells,
         type: getHintId(groupCandidates),
         title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
-        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells)),
+        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells, hostHouses)),
         applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
         clickableCells: [...groupCells, ...removableNotesHostCells],
         unclickableCellClickInTryOutMsg: `you can select cells which have ${getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)} candidate highlighted in green or red color`,
@@ -56,10 +59,42 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
     }
 }
 
-const getRemovableNotesCells = (groupCells: Cell[], groupCandidates: NoteValue[], focusedCells: Cell[], notesData: Notes) => _filter(focusedCells, (cell: Cell) => {
-    if (isCellExists(cell, groupCells)) return false
-    return _some(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
-})
+const getHighlightableCells = (
+    groupCells: Cell[],
+    groupCandidates: NoteValue[],
+    notesData: Notes
+) => {
+    const hostHouses = getHostHouses(groupCells, groupCandidates, notesData)
+    return getAllCellsInHousesUniquely(hostHouses)
+}
+
+const getHostHouses = (
+    groupCells: Cell[],
+    groupCandidates: NoteValue[],
+    notesData: Notes
+) => {
+    const commonHouses = getCellsCommonHousesInfo(groupCells)
+    if (commonHouses.length === 1) return commonHouses
+    const removableNotesHostCells = getRemovableNotesCells(groupCells, groupCandidates, notesData)
+
+    return commonHouses.filter((possibleHostHouse) => {
+        return removableNotesHostCells.some((cell: Cell) => {
+            return isCellPresentInHouse(cell, possibleHostHouse)
+        })
+    })
+}
+
+const getRemovableNotesCells = (
+    groupCells: Cell[],
+    groupCandidates: NoteValue[],
+    notesData: Notes
+) => {
+    const cellsSharingHousesWithCells = getHousesCellsSharedByCells(groupCells)
+    return _filter(cellsSharingHousesWithCells, (cell: Cell) => {
+        if (isCellExists(cell, groupCells)) return false
+        return _some(groupCandidates, (groupCandidate: NoteValue) => NotesRecord.isNotePresentInCell(notesData, groupCandidate, cell))
+    })
+}
 
 export const getCellsHighlightData = (
     cells: Cell[],
@@ -93,13 +128,12 @@ export const getCellsHighlightData = (
     return result
 }
 
-const getHostHousesText = (groupCells: Cell[]) => {
-    const commonHouses = getCellsCommonHousesInfo(groupCells)
-    return commonHouses.map(commonHouse => `${getHouseNumText(commonHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[commonHouse.type].FULL_NAME}`)
+const getHostHousesText = (hostHouses: House[]) => {
+    return hostHouses.map(commonHouse => `${getHouseNumText(commonHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[commonHouse.type].FULL_NAME}`)
         .join(` ${HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND} `)
 }
 
-const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[]) => {
+const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[], hostHouses: House[]) => {
     const msgPlaceholdersValues = {
         candidatesListTextAndConcatenated: getCandidatesListText(
             groupCandidates,
@@ -110,7 +144,7 @@ const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[]) => {
             HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
         ),
         groupCellsText: getCellsAxesValuesListText(sortCells(groupCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        hostHouses: getHostHousesText(groupCells),
+        hostHouses: getHostHousesText(hostHouses),
     }
     return (HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)] as string[])
         .map(hintChunkTemplate => dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues))
