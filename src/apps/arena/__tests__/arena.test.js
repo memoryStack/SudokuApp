@@ -485,7 +485,7 @@ describe('Erase Board Cell Main Number', () => {
         expect(isEmptyElement(cell)).toBe(true)
     })
 
-    test('can not erase correctly filled value', async () => {
+    test('should allow even correctly filled cells as well', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         const cell = getFirstEmptyCell()
@@ -497,7 +497,7 @@ describe('Erase Board Cell Main Number', () => {
         })
         fireEvent.press(getInputPanelEraser())
 
-        expect(isEmptyElement(cell)).toBe(false)
+        expect(isEmptyElement(cell)).toBe(true)
     })
 
     test('can not erase clue value', async () => {

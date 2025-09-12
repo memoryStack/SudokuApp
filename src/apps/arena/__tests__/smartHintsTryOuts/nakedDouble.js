@@ -117,6 +117,6 @@ describe('Naked Double', () => {
         fireEvent.press(getCellByPosition(63))
         fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel()))
 
-        smartHintHC.getByText('H7 and H9 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 9 and 3 from G9 and H8. these numbers don\'t belong in these cells')
+        smartHintHC.getByText('H7 and H9 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 3 and 9 from H8 and G9. these numbers don\'t belong in these cells')
     })
 })

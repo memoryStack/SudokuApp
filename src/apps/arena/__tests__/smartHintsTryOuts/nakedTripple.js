@@ -133,9 +133,9 @@ describe('Naked Tripple', () => {
         fireEvent.press(getCellByPosition(62))
         fireEvent.press(getInputPanelNumberIfEnabled(1, getInputPanel()))
 
-        smartHintHC.getByText('now fill 2 or 3 in any of G7, H7 and I8 cells to know the fault in previous steps')
-
-        Puzzle.validatePuzzle.mockReset()
+        await waitFor(() => {
+            smartHintHC.getByText('now fill 2 or 3 in any of G7, H7 and I8 cells to know the fault in previous steps')
+        })
     })
 
     test('Wrong Fill: Naked Single in 2 group host cells with same candidate', async () => {
@@ -177,7 +177,7 @@ describe('Naked Tripple', () => {
         fireEvent.press(getCellByPosition(14))
         fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel()))
 
-        smartHintHC.getByText('B4 and C4 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 9 and 5 from B5 and E4. these numbers don\'t belong in these cells')
+        smartHintHC.getByText('B4 and C4 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 5 and 9 from E4 and B5. these numbers don\'t belong in these cells')
     })
 
     test('Wrong Fill: if a group host cell is empty and other 2 host cells have NS in them with same candidate then empty group host cell error result will take precedence', async () => {
@@ -194,6 +194,6 @@ describe('Naked Tripple', () => {
         fireEvent.press(getCellByPosition(14))
         fireEvent.press(getInputPanelNumberIfEnabled(9, getInputPanel()))
 
-        smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 9 and 5 from B5 and E4. these numbers don\'t belong in these cells')
+        smartHintHC.getByText('C4 have no candidate left. in the final solution of puzzle no cell can be empty\nto get back to right track remove 5 and 9 from E4 and B5. these numbers don\'t belong in these cells')
     })
 })
