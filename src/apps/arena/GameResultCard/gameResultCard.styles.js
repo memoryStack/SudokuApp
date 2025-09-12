@@ -7,7 +7,8 @@ export const getStyles = (_, theme) => StyleSheet.create({
     container: {
         padding: 20,
         alignItems: 'center',
-        backgroundColor: get(theme, ['colors', 'surface-container-low']),
+        // backgroundColor: get(theme, ['colors', 'surface-container-low']),
+        backgroundColor: 'white',
         borderRadius: 8,
         width: '70%',
     },
