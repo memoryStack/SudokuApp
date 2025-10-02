@@ -12,7 +12,8 @@ export enum GAME_SETTINGS_KEYS {
     MISTAKES_LIMIT = 'MISTAKES_LIMIT',
     REMIND_TO_TAKE_HINT = 'REMIND_TO_TAKE_HINT',
     GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED = 'GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED',
-    SHOW_FEEDBACK_ON_MISTAKE = 'SHOW_FEEDBACK_ON_MISTAKE'
+    SHOW_FEEDBACK_ON_MISTAKE = 'SHOW_FEEDBACK_ON_MISTAKE',
+    FILL_NUMBER_ON_CELL_CLICK = 'FILL_NUMBER_ON_CELL_CLICK'
 }
 
 export type AllGameSettingsValues = Record<GAME_SETTINGS_KEYS, boolean | number>
@@ -24,7 +25,7 @@ export type UpdateGameSettingValueArgs = {
 
 export interface GameSettingsAdapter extends ApplicationLayerGameSettingsAdapter {
     init: () => Promise<void>
-    fillNoteOnShortClick: () => boolean
+    fillNoteOnShortClick: () => boolean // will be removed
     highlightCells: () => boolean
     highlightNumbersFonts: () => boolean
     soundsEnabled: () => boolean
@@ -35,4 +36,5 @@ export interface GameSettingsAdapter extends ApplicationLayerGameSettingsAdapter
     updateGameSettingValue: (args: UpdateGameSettingValueArgs) => Promise<void>
     shouldGameOverOnMistakesThresholdCrossed: () => boolean
     showFeedbackOnMistake: () => boolean
+    fillNumberOnCellClick: () => boolean
 }

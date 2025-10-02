@@ -6,25 +6,25 @@ import { PENCIL_STATE } from '@application/constants'
 
 const handleNumberClick = ({ getState, params: { number, isLongPress } }) => {
     const { dependencies } = getState()
-    const { gameStateRepository, boardControllerRepository, gameSettingsAdapter, soundAdapter } = dependencies
+    const { gameStateRepository, boardControllerRepository, gameSettingsAdapter, inputPanelRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
+
+    const isNumberLocked = inputPanelRepository.getIsNumberLocked()
+    const numberFillOnCellClickAllowed = gameSettingsAdapter.fillNumberOnCellClick()
+    if ((isLongPress && numberFillOnCellClickAllowed) || isNumberLocked) {
+        const lockedNumber = inputPanelRepository.getLockedNumber()
+        if (lockedNumber !== number) inputPanelRepository.setLockedNumber(number)
+        else inputPanelRepository.unlockNumber()
+        return
+    }
 
     const pencilState = boardControllerRepository.getPencil()
     const fillNoteOnShortClick = gameSettingsAdapter.fillNoteOnShortClick()
     const fillAsNote = fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE
-    const soundsEnabled = gameSettingsAdapter.soundsEnabled()
-    const mistakeFeedbackOn = gameSettingsAdapter.showFeedbackOnMistake()
     inputNumberUseCase(
         number,
         fillAsNote,
-        {
-            ...dependencies,
-            sound: {
-                mistake: { play: () => soundsEnabled && soundAdapter.play(mistakeFeedbackOn ? SOUNDS.MISTAKE : SOUNDS.NUMBER_INPUT) },
-                addNumber: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.NUMBER_INPUT) },
-                removeNumber: { play: () => soundsEnabled && soundAdapter.play(SOUNDS.ERASER_CLICK) },
-            }
-        }
+        dependencies,
     )
 }
 

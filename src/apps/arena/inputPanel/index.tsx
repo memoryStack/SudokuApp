@@ -15,6 +15,9 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { getStyles } from './inputPanel.styles'
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
+import { useDependency } from 'src/hooks/useDependency'
+import { useSelector } from 'react-redux'
+import { getLockedNumber } from '../store/selectors/inputPanel.selectors'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
@@ -43,6 +46,9 @@ const Inputpanel_: React.FC<Props> = ({
     textType
 }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
+
+    // const dependencies = useDependency()
+    const lockedNumber = useSelector(getLockedNumber)
 
     const styles = useMemo(() => getStyles(cellWidth ?? CELL_WIDTH), [cellWidth, CELL_WIDTH])
 
@@ -79,7 +85,7 @@ const Inputpanel_: React.FC<Props> = ({
     const renderInputNumber = (number: InputNumber) => (
         <Button
             key={`${number}`}
-            type={BUTTON_TYPES.TONAL}
+            type={number === lockedNumber ? BUTTON_TYPES.FILLED : BUTTON_TYPES.TONAL}
             state={getButtonState(number)}
             containerStyle={styles.numberButtonContainer}
             onPress={() => onNumberClicked(number, false)}

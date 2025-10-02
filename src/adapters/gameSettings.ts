@@ -13,6 +13,7 @@ const DEFAULT_SETTING = {
     [GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT]: true,
     [GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED]: false,
     [GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE]: true,
+    [GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK]: true,
 }
 
 let currentSettings = {
@@ -66,4 +67,7 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
         })
         currentSettings = await getKey(GAME_SETTINGS_STORAGE_KEY) ?? { ...DEFAULT_SETTING }
     },
+    fillNumberOnCellClick: () => {
+        return currentSettings[GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK] as boolean
+    }
 }

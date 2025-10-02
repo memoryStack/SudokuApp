@@ -133,11 +133,17 @@ const SETTINGS_ = [
                 value: false,
                 description: 'Allow filling all the notes in cell'
             },
+            // {
+            //     key: GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK,
+            //     inputType: INPUT_TYPES.TOGGLE,
+            //     value: false,
+            //     description: 'Fill notes with short press and cell solution number with long press'
+            // }
             {
-                key: GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK,
+                key: GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: 'Fill notes with short press and cell solution number with long press'
+                description: '@@@@@'
             }
         ]
     },

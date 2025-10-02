@@ -61,6 +61,7 @@ jest.mock('@adapters/gameSettings', () => {
             soundsEnabled: jest.fn(() => false),
             fillNoteOnShortClick: jest.fn(() => true),
             shouldGameOverOnMistakesThresholdCrossed: jest.fn(() => false),
+            fillNumberOnCellClick: jest.fn(() => false)
         }
     }
 })
@@ -210,4 +211,104 @@ describe('Game Settings', () => {
             expectMainNumberPresentInCell(emptyCell, '2')
         })
     })
+
+    test('should fill main number on cell click when enabled', async () => {
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+    })
+
+    test('should fill main number on cell click when enabled', async () => {
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+    })
+
+    test('should allow between switching numbers on number click on the input panel while filling numbers on cell click setting is on', async () => {
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+        await renderScreenAndWaitForPuzzleStart()
+
+        let emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '3')
+        })
+    })
+
+    test('should stop filling numbers on cell click when same number has been clicked on input panel after it was in effect', async () => {
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+        await renderScreenAndWaitForPuzzleStart()
+
+        let emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        // unlock the number
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        expect(isEmptyElement(emptyCell)).toBe(true)
+    })
+
+    test('should fill notes on cell click when enabled', async () => {
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        fireEvent.press(screen.getByText('Pencil'))
+
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 2)).toBe(true)
+        })
+    })
+
 })

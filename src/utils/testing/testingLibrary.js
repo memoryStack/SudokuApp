@@ -24,6 +24,7 @@ import refreeReducers from '../../apps/arena/store/reducers/refree.reducers'
 import gameStateReducers from '../../apps/arena/store/reducers/gameState.reducers'
 import boardControllerReducers from '../../apps/arena/store/reducers/boardController.reducers'
 import boardReducers from '../../apps/arena/store/reducers/board.reducers'
+import inputPanelReducers from '../../apps/arena/store/reducers/inputPanel.reducers'
 
 import { initDispatch, initGetState } from '../../redux/dispatch.helpers'
 import { NavigationProvider } from 'src/navigation/navigator'
@@ -42,6 +43,7 @@ const getNewStore = () => {
             gameState: gameStateReducers,
             boardController: boardControllerReducers,
             board: boardReducers,
+            inputPanel: inputPanelReducers
         },
     })
 

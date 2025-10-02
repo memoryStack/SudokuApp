@@ -3,9 +3,21 @@ import { ACTION_TYPES as BOARD_GENERIC_ACTION_TYPES } from '../gameBoard/actionT
 import { Board } from '@domain/board/board'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
 import { areSameCells } from '@domain/board/utils/housesAndCells'
+import { inputNumberUseCase } from '@application/usecases/board'
+import { PENCIL_STATE } from '@application/constants'
 
 const handleCellPress = ({ params: { cell, dependencies } }) => {
-    const { boardRepository, soundAdapter, gameSettingsAdapter } = dependencies
+    const { boardRepository, soundAdapter, gameSettingsAdapter, inputPanelRepository, boardControllerRepository } = dependencies
+
+    if (inputPanelRepository.getIsNumberLocked()) {
+        boardRepository.setSelectedCell(cell)
+        inputNumberUseCase(
+            inputPanelRepository.getLockedNumber(),
+            boardControllerRepository.getPencil() === PENCIL_STATE.ACTIVE,
+            dependencies,
+        )
+        return
+    }
 
     if (!areSameCells(cell, boardRepository.getSelectedCell())) {
         gameSettingsAdapter.soundsEnabled() && soundAdapter.play(SOUNDS.CELL_CLICK)

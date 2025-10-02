@@ -112,22 +112,55 @@ const handleInit = ({ setState, params: { dependencies } }) => {
     setState({ ...initBoardData(), dependencies })
 }
 
-const handleInputNumberClick = ({ setState, getState, params: { number: newInputValue } }) => {
-    const { selectedCell, mainNumbers, dependencies } = getState()
-    const { row, col } = selectedCell
-    if (MainNumbersRecord.isCellFilledWithNumber(mainNumbers, newInputValue, selectedCell)) return
+const inputNumberAndPlaySound = (number, cell, mainNumbers, { setState, getState }) => {
+    const { dependencies } = getState()
+    const { row, col } = cell
+    const oldInputValue = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
+    mainNumbers[row][col].value = number
+    mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, cell, number)
 
-    const oldInputValue = MainNumbersRecord.getCellMainValue(mainNumbers, { row, col })
-    mainNumbers[row][col].value = newInputValue
-    mainNumbers[row][col].wronglyPlaced = areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, selectedCell, newInputValue)
+    const {
+        gameSettingsAdapter,
+        soundAdapter,
+    } = dependencies
 
-    if (oldInputValue && oldInputValue !== newInputValue) {
-        updateWronglyPlacedNumbersStatusInHouses(oldInputValue, selectedCell, mainNumbers)
+    if (oldInputValue && oldInputValue !== number) {
+        updateWronglyPlacedNumbersStatusInHouses(oldInputValue, cell, mainNumbers)
     }
 
     setState({ mainNumbers: [...mainNumbers] })
 
-    if (!mainNumbers[row][col].wronglyPlaced) {
+    if (areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, cell, number)) {
+        gameSettingsAdapter.soundsEnabled() && soundAdapter?.play?.(SOUNDS.MISTAKE)
+    } else {
+        gameSettingsAdapter.soundsEnabled() && soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
+    }
+}
+
+const handleInputNumberClick = ({ setState, getState, params: { number: newInputValue, isLongPress } }) => {
+    const { selectedCell, mainNumbers, dependencies } = getState()
+    const { row, col } = selectedCell
+
+    const {
+        gameSettingsAdapter,
+        inputPanelRepository
+    } = dependencies
+
+    // TODO: this logic just got duplicated. is there a way to manage this kind of logic better ?
+    const isNumberLocked = inputPanelRepository.getIsNumberLocked()
+    const numberFillOnCellClickAllowed = gameSettingsAdapter.fillNumberOnCellClick()
+    if ((isLongPress && numberFillOnCellClickAllowed) || isNumberLocked) {
+        const lockedNumber = inputPanelRepository.getLockedNumber()
+        if (lockedNumber !== newInputValue) inputPanelRepository.setLockedNumber(newInputValue)
+        else inputPanelRepository.unlockNumber()
+        return
+    }
+
+    if (MainNumbersRecord.isCellFilledWithNumber(mainNumbers, newInputValue, selectedCell)) return
+
+    inputNumberAndPlaySound(newInputValue, selectedCell, mainNumbers, { getState, setState })
+
+    if (!isNumberLocked && !mainNumbers[row][col].wronglyPlaced) {
         setTimeout(() => {
             let nextCol = col + 1
             let nextRow = row
@@ -138,12 +171,6 @@ const handleInputNumberClick = ({ setState, getState, params: { number: newInput
             if (nextRow !== CELLS_IN_A_HOUSE) setState({ selectedCell: { row: nextRow, col: nextCol } })
         }, 0)
     }
-
-    const {
-        gameSettingsAdapter,
-        soundAdapter
-    } = dependencies
-    gameSettingsAdapter.soundsEnabled() && soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
 }
 
 const updateWronglyPlacedNumbersStatusInHouses = (oldInputValue, cell, mainNumbers) => {
@@ -196,13 +223,23 @@ const handleEraseClick = ({ setState, getState }) => {
 }
 
 const handleCellClick = ({ setState, getState, params: { cell, dependencies } }) => {
-    const { selectedCell } = getState()
+    const { selectedCell, mainNumbers } = getState()
+
+    const {
+        gameSettingsAdapter,
+        soundAdapter,
+        inputPanelRepository
+    } = dependencies
+
+    if (inputPanelRepository.getIsNumberLocked()) {
+        setState({ selectedCell: cell })
+        inputNumberAndPlaySound(inputPanelRepository.getLockedNumber(), cell, mainNumbers, { getState, setState })
+        return
+    }
+
     if (areSameCells(selectedCell, cell)) return
     setState({ selectedCell: cell })
-    const {
-        soundAdapter,
-        gameSettingsAdapter
-    } = dependencies || {}
+
     gameSettingsAdapter.soundsEnabled() && soundAdapter?.play?.(SOUNDS.CELL_CLICK)
 }
 
@@ -256,12 +293,19 @@ const transformMainNumbersForValidPuzzle = mainNumbers => {
     })
 }
 
+const handleUnmount = ({ getState }) => {
+    const { dependencies } = getState()
+    const { inputPanelRepository } = dependencies
+    inputPanelRepository.unlockNumber()
+}
+
 const ACTION_TYPES = {
     ...BOARD_ACTION_TYPES,
     ...INPUT_PANEL_ACTION_TYPES,
     ON_INIT: 'ON_INIT',
     ON_CLOSE: 'ON_CLOSE',
     ON_PLAY: 'ON_PLAY',
+    ON_UNMOUNT: 'ON_UNMOUNT',
 }
 
 // in-consistency in the action_type names
@@ -272,6 +316,7 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_ERASE_CLICK]: handleEraseClick,
     [ACTION_TYPES.ON_CLOSE]: handleOnClose,
     [ACTION_TYPES.ON_PLAY]: handlePlay,
+    [ACTION_TYPES.ON_UNMOUNT]: handleUnmount,
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }

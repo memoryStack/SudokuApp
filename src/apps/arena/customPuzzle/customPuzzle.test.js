@@ -6,6 +6,7 @@ import {
 } from '@utils/testing/testingLibrary'
 import {
     getCellByPosition, getFirstEmptyCell, getInputPanelEraser, getInputPanelNumberIfEnabled,
+    expectMainNumberPresentInCell
 } from '@utils/testing/arena'
 import { isEmptyElement } from '@utils/testing/touchable'
 import { fireLayoutEvent } from '@utils/testing/fireEvent.utils'
@@ -19,6 +20,7 @@ import { CLOSE_ICON_TEST_ID } from './customPuzzle.constants'
 
 import { useRoute } from '@react-navigation/native'
 import { ROUTES } from '@application/constants'
+import { gameSettingsAdapter } from '@adapters/gameSettings'
 
 jest.mock('@react-navigation/native', () => ({
     ...jest.requireActual('@react-navigation/native'),
@@ -32,6 +34,17 @@ jest.mock('../../../adapters/puzzle/puzzle', () => {
         validatePuzzle: jest.fn(),
     }
     return { Puzzle }
+})
+
+jest.mock('@adapters/gameSettings', () => {
+    const originalModule = jest.requireActual('@adapters/gameSettings')
+    return {
+        ...originalModule,
+        gameSettingsAdapter: {
+            ...originalModule.gameSettingsAdapter,
+            fillNumberOnCellClick: jest.fn(() => false)
+        }
+    }
 })
 
 /*
@@ -154,6 +167,23 @@ describe('Custom Puzzle', () => {
         })
 
         expect(onClosed).toBeCalledTimes(0)
+    })
+
+    test('should fill number on cell click when setting is enabled', async () => {
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+
+        await renderCustomPuzzle()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
     })
 })
 
