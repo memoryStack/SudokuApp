@@ -12,6 +12,7 @@ import type { GameLevelsAdapter } from './adapterInterfaces/gameLevels'
 import type { ScreenAnalyticsHandlers } from './adapterInterfaces/analytics'
 import type { CoachMarksAdapter } from './adapterInterfaces/coachMarks'
 import type { GameSettingsAdapter } from './adapterInterfaces/gameSettings'
+import type { Sound, SoundAdapter } from './adapterInterfaces/sounds'
 
 export type Dependencies = {
     refreeRepository: RefreeRepository
@@ -26,7 +27,8 @@ export type Dependencies = {
     customPuzzleInputToggler?: CustomPuzzleInputToggler
     gameLevelsAdapter: GameLevelsAdapter
     analytics: ScreenAnalyticsHandlers
-    sound: Sound
+    sound?: Sound
+    soundAdapter: SoundAdapter
     coachMarksAdapter: CoachMarksAdapter
     gameSettingsAdapter: GameSettingsAdapter
 }

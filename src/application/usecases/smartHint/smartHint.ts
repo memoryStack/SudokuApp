@@ -163,7 +163,7 @@ export const eraseTryOutNumberUseCase = (
         tryOutMainNumbers: smartHintRepository.getTryOutMainNumbers(),
         actualMainNumbers: boardRepository.getMainNumbers(),
     }
-    if (!cellHasTryOutInput(selectedCell, boardMainNumbers)) {
+    if (!cellHasTryOutInput(selectedCell as Cell, boardMainNumbers)) {
         snackBarAdapter.show({
             msg: 'you can only erase from cells which were filled after this hint is displayed',
             visibleTime: SNACKBAR_VISIBLE_TIME,

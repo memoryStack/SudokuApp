@@ -19,6 +19,7 @@ import { BOARD_MOVES_TYPES } from '../constants'
 
 import type { Dependencies } from '../type'
 import { GameSettingsAdapter } from '@application/adapterInterfaces/gameSettings'
+import { SOUNDS, Sound } from '@application/adapterInterfaces/sounds'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import _filter from '@lodash/filter'
 
@@ -149,14 +150,34 @@ const inputNoteNumber = (
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const inputNumberUseCase = (number: number, fillAsNote: boolean, dependencies: InputNumberUseCaseDependencies) => {
+const getSoundConfigs = (dependencies: Dependencies) => {
+    const { gameSettingsAdapter, soundAdapter } = dependencies
+    const soundsEnabled = gameSettingsAdapter.soundsEnabled()
+    const mistakeFeedbackOn = gameSettingsAdapter.showFeedbackOnMistake()
+
+    const soundPlayHandler = (sound: SOUNDS) => {
+        return () => {
+            if (soundsEnabled) return soundAdapter.play(sound)
+            return Promise.resolve()
+        }
+    }
+
+    return {
+        mistake: { play: soundPlayHandler(mistakeFeedbackOn ? SOUNDS.MISTAKE : SOUNDS.NUMBER_INPUT) },
+        addNumber: { play: soundPlayHandler(SOUNDS.NUMBER_INPUT) },
+        removeNumber: { play: soundPlayHandler(SOUNDS.ERASER_CLICK) },
+    }
+}
+
+export const inputNumberUseCase = (number: number, fillAsNote: boolean, dependencies: Dependencies) => {
     const { boardRepository } = dependencies
+    const soundConfigs = getSoundConfigs(dependencies)
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
     if (MainNumbersRecord.isCellFilled(mainNumbers, selectedCell)) return
 
-    if (fillAsNote) inputNoteNumber(number, boardRepository, dependencies.gameSettingsAdapter, dependencies.sound)
-    else inputMainNumber(number, selectedCell, dependencies)
+    if (fillAsNote) inputNoteNumber(number, boardRepository, dependencies.gameSettingsAdapter, soundConfigs)
+    else inputMainNumber(number, selectedCell, { ...dependencies, sound: soundConfigs })
     updateUserActivityTime(dependencies as unknown as Dependencies)
 }
 
@@ -228,9 +249,10 @@ export const eraseCellUseCase = (dependencies: Dependencies, sound: Sound) => {
 
 export const applyHintUseCase = (applyHintChanges: ApplyHintData, dependencies: Dependencies) => {
     const notesBunch: ToggleNotes = []
+    const soundConfigs = getSoundConfigs(dependencies)
     _forEach(applyHintChanges, ({ cell, action }) => {
         if (action.type === BOARD_MOVES_TYPES.ADD) {
-            inputMainNumber(action.mainNumber, cell, dependencies)
+            inputMainNumber(action.mainNumber, cell, { ...dependencies, sound: soundConfigs })
         } else {
             notesBunch.push(..._map(_get(action, 'notes'), note => ({ cell, note })))
         }
