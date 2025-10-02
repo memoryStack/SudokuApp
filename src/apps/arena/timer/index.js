@@ -47,7 +47,16 @@ const Timer_ = ({ onClick, time }) => {
             addHitSlop
             testID={TIMER_TEST_ID}
         >
-            <Text style={styles.timerText} type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.hours)}:`}</Text>
+            {
+                time.hours !== 0 ?
+                    <Text
+                        style={styles.timerText}
+                        type={TEXT_VARIATIONS.BODY_MEDIUM}
+                    >
+                        {`${_prependZero(time.hours)}:`}
+                    </Text>
+                    : null
+            }
             <Text style={styles.timerText} type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.minutes)}:`}</Text>
             <Text style={styles.timerText} type={TEXT_VARIATIONS.BODY_MEDIUM}>{`${_prependZero(time.seconds)}`}</Text>
             {renderTimerStateIcon()}
