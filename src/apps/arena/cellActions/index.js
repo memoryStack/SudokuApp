@@ -112,13 +112,6 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
                 testID={BOARD_CONTROLLER_TEST_ID}
                 textStyles={textStyles}
             />
-            <Undo
-                disabled={disableControllers}
-                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                onClick={onUndoClick}
-                testID={BOARD_CONTROLLER_TEST_ID}
-                textStyles={textStyles}
-            />
             <Pencil
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
