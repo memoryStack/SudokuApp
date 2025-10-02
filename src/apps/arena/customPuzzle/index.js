@@ -20,6 +20,7 @@ import { CLOSE_ICON_TEST_ID, CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.consta
 import { getStyles } from './customPuzzle.styles'
 import { areCommonHouseCells, areSameCells, sameValueInCells } from '../utils/util'
 import { useDependency } from 'src/hooks/useDependency'
+import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 
 const CustomPuzzle_ = ({
     mainNumbers,
@@ -83,14 +84,18 @@ const CustomPuzzle_ = ({
                 >
                     <CloseIcon height={24} width={24} fill={styles.closeIcon.color} />
                 </Touchable>
-                <Board
-                    showCellContent
-                    mainNumbers={mainNumbers}
-                    notes={notes}
-                    onCellClick={onCellClick}
-                    getCellBGColor={getCellBGColor}
-                    getCellMainNumberFontColor={getCustomPuzzleMainNumFontColor}
-                />
+                <View style={{
+                    marginLeft: -STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH_HALVE
+                }}>
+                    <Board
+                        showCellContent
+                        mainNumbers={mainNumbers}
+                        notes={notes}
+                        onCellClick={onCellClick}
+                        getCellBGColor={getCellBGColor}
+                        getCellMainNumberFontColor={getCustomPuzzleMainNumFontColor}
+                    />
+                </View>
                 <View style={styles.inputPanelContainer}>
                     <Inputpanel onAction={onAction} shouldAddNumberInPanel={shouldAddNumberInPanel} />
                 </View>

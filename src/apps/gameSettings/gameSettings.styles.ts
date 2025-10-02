@@ -44,7 +44,7 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
         borderColor: _get(theme, 'colors.outline-variant'),
     },
     refreeContainer: {
-        paddingLeft: 0,
+        marginLeft: 0,
         marginBottom: 4,
         maxWidth: 312
     },

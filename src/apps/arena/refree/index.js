@@ -21,16 +21,17 @@ import { Timer } from '../timer'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT, PUZZLE_LEVEL_TEXT_TEST_ID } from './refree.constants'
+import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 
-const getStyles = (_, theme) => StyleSheet.create({
+const getStyles = ({ BOARD_GRID_WIDTH }, theme) => StyleSheet.create({
     refereeContainer: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: '94%',
+        width: BOARD_GRID_WIDTH,
         marginBottom: 8,
-        paddingLeft: 20
+        marginLeft: STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH_HALVE
     },
     textColor: {
         color: get(theme, ['colors', 'on-surface-variant-low']),

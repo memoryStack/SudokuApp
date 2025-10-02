@@ -31,7 +31,7 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
 import { GameState } from '@application/utils/gameState'
-import { ARENA_PAGE_TEST_ID, AVAILABLE_STARS_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, HINT_SUGGESTION_TOGGLE_KEY, PUZZLES_LEVELS_LIST_CONTAINER, SMART_HEIGHT_HC_MAX_HEIGHT } from './constants'
+import { ARENA_PAGE_TEST_ID, AVAILABLE_STARS_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, HINT_SUGGESTION_TOGGLE_KEY, PUZZLES_LEVELS_LIST_CONTAINER, SMART_HEIGHT_HC_MAX_HEIGHT, STATIC_BOARD_ELEMENTS_DIMENSIONS } from './constants'
 import GameResultCard from './GameResultCard'
 import { NextGameMenu } from './nextGameMenu'
 import { CustomPuzzle } from './customPuzzle'
@@ -464,7 +464,9 @@ const Arena_ = ({
                     difficultyLevelID={difficultyLevelID}
                     maxMistakesLimit={maxMistakesLimit}
                 />
-                <PuzzleBoard />
+                <View style={{ marginLeft: -STATIC_BOARD_ELEMENTS_DIMENSIONS.AXIS_WIDTH_HALVE }}>
+                    <PuzzleBoard />
+                </View>
                 {/* TODO: it can be named better */}
                 <BoardController
                     refFromParent={boardControllersRef}
