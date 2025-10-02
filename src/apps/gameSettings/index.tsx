@@ -38,7 +38,7 @@ import { createBoardStateSlice } from '../arena/store/reducers/board.reducers'
 import { injectReducer, removeReducer } from 'src/redux/store'
 import { createBoardRepositoryHandlers } from 'src/repositories/boardRepository/BoardRepository'
 
-import { boardStateSelectors, boardControllerSelectors, gameStateSelectors, refreeSelectors } from './state.selectors'
+import { boardStateSelectors, boardControllerSelectors, gameStateSelectors, refreeSelectors, inputPanelSelectors } from './state.selectors'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import withActions from '@utils/hocs/withActions'
@@ -61,6 +61,8 @@ import { PreviewStates } from '@application/adapterInterfaces/analytics'
 import Tooltip, { usePopable } from '@ui/atoms/Tooltip'
 import { MAX_GAME_SETTINGS_PRVIEW_TOOLTIP_SHOWN_COUNT } from '@application/adapterInterfaces/coachMarks'
 import { createRefreeStateRepositoryHandlers } from 'src/repositories/refreeRepository/refreeRepository'
+import { createInputPanelSlice } from '../arena/store/reducers/inputPanel.reducers'
+import { createInputPanelStateRepositoryHandlers } from 'src/repositories/inputPanelRepository/InputPanelRepository'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
@@ -143,7 +145,7 @@ const SETTINGS_ = [
                 key: GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK,
                 inputType: INPUT_TYPES.TOGGLE,
                 value: false,
-                description: '@@@@@'
+                description: 'Lock number and fill on Cell tap'
             }
         ]
     },
@@ -230,16 +232,19 @@ const GameSettings_ = ({ onAction }) => {
         const boardControllerSlice = createBoardControllerSlice(GAME_SETTINGS_STATE.BOARD_CONTROLLER)
         const gameStateSlice = createGameStateSlice(GAME_SETTINGS_STATE.GAME_STATE)
         const refreeStateSlice = createRefreeStateSlice(GAME_SETTINGS_STATE.REFREE)
+        const inputPanelStateSlice = createInputPanelSlice(GAME_SETTINGS_STATE.INPUT_PANEL)
 
         injectReducer(GAME_SETTINGS_STATE.BOARD, slice.reducer)
         injectReducer(GAME_SETTINGS_STATE.BOARD_CONTROLLER, boardControllerSlice.reducer)
         injectReducer(GAME_SETTINGS_STATE.GAME_STATE, gameStateSlice.reducer)
         injectReducer(GAME_SETTINGS_STATE.REFREE, refreeStateSlice.reducer)
+        injectReducer(GAME_SETTINGS_STATE.INPUT_PANEL, inputPanelStateSlice.reducer)
 
         const boardRepository = createBoardRepositoryHandlers(slice.actions, boardStateSelectors)
         const boardControllerRepository = createBoardControllerRepositoryHandlers(boardControllerSlice.actions, boardControllerSelectors)
         const gameStateRepository = createGameStateRepositoryHandlers(gameStateSlice.actions, gameStateSelectors)
         const refreeRepository = createRefreeStateRepositoryHandlers(refreeStateSlice.actions, refreeSelectors)
+        const inputPanelRepository = createInputPanelStateRepositoryHandlers(inputPanelStateSlice.actions, inputPanelSelectors)
 
         boardRepository.setState({
             mainNumbers: transformRawPuzzleToStateMainNumbers({
@@ -252,12 +257,15 @@ const GameSettings_ = ({ onAction }) => {
 
         gameStateRepository.setGameState(GAME_STATE.ACTIVE)
 
+        inputPanelRepository.unlockNumber()
+
         dependencies.current = {
             ...dependencies.current,
             boardRepository,
             boardControllerRepository,
             gameStateRepository,
-            refreeRepository
+            refreeRepository,
+            inputPanelRepository
         }
 
         onAction({
@@ -270,6 +278,7 @@ const GameSettings_ = ({ onAction }) => {
             removeReducer(GAME_SETTINGS_STATE.BOARD_CONTROLLER)
             removeReducer(GAME_SETTINGS_STATE.GAME_STATE)
             removeReducer(GAME_SETTINGS_STATE.REFREE)
+            removeReducer(GAME_SETTINGS_STATE.INPUT_PANEL)
         }
     }, [])
 
@@ -527,6 +536,7 @@ const GameSettings_ = ({ onAction }) => {
                                                         shouldAddNumberInPanel={() => true}
                                                         cellWidth={30}
                                                         textType={TEXT_VARIATIONS.HEADING_MEDIUM}
+                                                        getLockedNumberSelector={inputPanelSelectors.getLockedNumber}
                                                     />
                                                 </View>
                                             )

@@ -4,7 +4,8 @@ export enum GAME_SETTINGS_STATE {
     BOARD = 'gameSettingsPreview',
     BOARD_CONTROLLER = 'gameSettingsBoardController',
     GAME_STATE = 'gameSettingsGameState',
-    REFREE = 'gameSettingsRefree'
+    REFREE = 'gameSettingsRefree',
+    INPUT_PANEL = 'gameSettingsInputPanel'
 }
 
 export enum OPTION_STATES {
@@ -28,6 +29,10 @@ export const SNACKBAR_MSGS = {
     [GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK]: {
         [OPTION_STATES.ON]: `now notes will be filled without turning on Pencil. just press the number.\nlong press the number to fill cell with it's soluton`,
         [OPTION_STATES.OFF]: 'now you have to turn on Pencil to fill notes in cell',
+    },
+    [GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK]: {
+        [OPTION_STATES.ON]: `now numbers & Notes will be filled faster.In Preview do below\na. long press any number to lock it\nb. tap on an empty cell and number will be filled`,
+        [OPTION_STATES.OFF]: 'now you have to first select a cell and then press on number to fill',
     },
     [GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS]: {
         [OPTION_STATES.ON]: 'now cells will have colorful backgrounds',

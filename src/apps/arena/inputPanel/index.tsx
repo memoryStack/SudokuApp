@@ -33,6 +33,7 @@ interface Props {
     shouldAddNumberInPanel: (number: number) => boolean
     cellWidth?: number
     textType?: TEXT_VARIATIONS
+    getLockedNumberSelector?: (state: any) => number
 }
 
 const Inputpanel_: React.FC<Props> = ({
@@ -43,12 +44,12 @@ const Inputpanel_: React.FC<Props> = ({
     disableEraser = false,
     shouldAddNumberInPanel = _noop,
     cellWidth,
-    textType
+    textType,
+    getLockedNumberSelector
 }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
 
-    // const dependencies = useDependency()
-    const lockedNumber = useSelector(getLockedNumber)
+    const lockedNumber = useSelector(getLockedNumberSelector ?? getLockedNumber)
 
     const styles = useMemo(() => getStyles(cellWidth ?? CELL_WIDTH), [cellWidth, CELL_WIDTH])
 

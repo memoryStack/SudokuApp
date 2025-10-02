@@ -30,6 +30,10 @@ const getTime = state => state[GAME_SETTINGS_STATE.REFREE]?.time
 
 const getLastActivityTime = state => state[GAME_SETTINGS_STATE.REFREE]?.lastActivityTime
 
+const getIsNumberLocked = state => state[GAME_SETTINGS_STATE.INPUT_PANEL]?.lockedNumber.isLocked
+
+const getLockedNumber = (state): number => state[GAME_SETTINGS_STATE.INPUT_PANEL]?.lockedNumber.number
+
 export const refreeSelectors = {
     getMaxMistakesLimit,
     getMistakes,
@@ -55,4 +59,9 @@ export const boardControllerSelectors = {
 
 export const gameStateSelectors = {
     getGameState
+}
+
+export const inputPanelSelectors = {
+    getIsNumberLocked,
+    getLockedNumber
 }
