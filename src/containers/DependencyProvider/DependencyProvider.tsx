@@ -7,6 +7,7 @@ import { RefreeRepository } from '../../repositories/refreeRepository'
 import { SmartHintRepository } from '../../repositories/smartHintRepository'
 import { BoardControllerRepository } from '../../repositories/boardControllerRepository'
 import { BoardRepository } from '../../repositories/boardRepository'
+import { InputPanelRepository } from '../../repositories/inputPanelRepository'
 import { snackBarAdapter } from '@adapters/snackbar'
 import { Puzzle } from '@adapters/puzzle'
 import { gamePersistenceAdapter } from '@adapters/gamePersistenceAdapter'
@@ -42,6 +43,7 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
             smartHintRepository: SmartHintRepository,
             boardControllerRepository: BoardControllerRepository,
             boardRepository: BoardRepository,
+            inputPanelRepository: InputPanelRepository,
             snackBarAdapter,
             puzzle: Puzzle,
             gamePersistenceAdapter,

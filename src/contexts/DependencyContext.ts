@@ -5,6 +5,7 @@ import type { RefreeRepository } from '@application/adapterInterfaces/stateManag
 import type { GameStateRepository } from '@application/adapterInterfaces/stateManagers/gameStateRepository'
 import type { SmartHintRepository } from '../interfaces/smartHintRepository'
 import type { BoardRepository } from '@application/adapterInterfaces/stateManagers/boardRepository'
+import type { InputPanelRepository } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
 import type { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
 import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import type { GamePersistenceAdapter } from '@application/adapterInterfaces/gamePersistenceAdapter'
@@ -26,6 +27,7 @@ export type Dependencies = {
     refreeRepository: RefreeRepository
     smartHintRepository: SmartHintRepository
     boardControllerRepository: BoardControllerRepository
+    inputPanelRepository: InputPanelRepository
     boardRepository: BoardRepository
     snackBarAdapter: SnackBarAdapter
     puzzle: PuzzleAdapter
