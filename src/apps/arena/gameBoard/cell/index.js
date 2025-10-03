@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
-import { View } from 'react-native'
+import { Animated, View } from 'react-native'
 
 import PropTypes from 'prop-types'
 
@@ -17,6 +17,9 @@ import { useBoardElementsDimensions } from '../../hooks/useBoardElementsDimensio
 
 import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from './cell.constants'
 import { getStyles } from './cell.styles'
+import { EVENTS } from 'src/constants/events'
+import { addListener, removeListener } from '@utils/GlobalEventBus'
+import { areSameCells } from '@domain/board/utils/housesAndCells'
 
 const CROSS_ICON_AND_CELL_DIMENSION_RATIO = 0.66
 // becoz only 3 notes are there in a row
@@ -39,10 +42,36 @@ const Cell_ = ({
     getNoteStyles,
     customWindowWidth
 }) => {
+
+    const mainNumberFontAnim = useRef(new Animated.Value(1)).current
+
     const { CELL_HEIGHT } = useBoardElementsDimensions()
     const CROSS_ICON_DIMENSION = CELL_HEIGHT * CROSS_ICON_AND_CELL_DIMENSION_RATIO
 
     const styles = useStyles(getStyles, {}, customWindowWidth)
+
+    useEffect(() => {
+        const handler = (cell) => {
+            if (areSameCells(cell, { row, col })) {
+                Animated.sequence([
+                    Animated.timing(mainNumberFontAnim, {
+                        toValue: 1.5,
+                        duration: 200,
+                        useNativeDriver: true
+                    }),
+                    Animated.timing(mainNumberFontAnim, {
+                        toValue: 1,
+                        duration: 200,
+                        useNativeDriver: true
+                    }),
+                ]).start()
+            }
+        }
+        addListener(EVENTS.LOCAL.ANIMATE_CELL_MAIN_NUMBER, handler)
+        return () => {
+            removeListener(EVENTS.LOCAL.ANIMATE_CELL_MAIN_NUMBER, handler)
+        }
+    }, [])
 
     const shouldRenderNotes = () => cellNotes.some(({ show }) => show)
 
@@ -93,14 +122,16 @@ const Cell_ = ({
     )
 
     const renderCellMainValue = () => (
-        <Text
-            style={[styles.mainNumberText, mainValueFontColor]}
-            testID={CELL_MAIN_VALUE_TEST_ID}
-            type={TEXT_VARIATIONS.HEADING_LARGE}
-            withoutLineHeight
-        >
-            {cellMainValue}
-        </Text>
+        <Animated.View style={{ transform: [{ scale: mainNumberFontAnim }] }}>
+            <Text
+                style={[styles.mainNumberText, mainValueFontColor]}
+                testID={CELL_MAIN_VALUE_TEST_ID}
+                type={TEXT_VARIATIONS.HEADING_LARGE}
+                withoutLineHeight
+            >
+                {cellMainValue}
+            </Text>
+        </Animated.View>
     )
 
     const getCellContent = () => {

@@ -22,6 +22,9 @@ import { GameSettingsAdapter } from '@application/adapterInterfaces/gameSettings
 import { SOUNDS, Sound } from '@application/adapterInterfaces/sounds'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import _filter from '@lodash/filter'
+import { emit } from '@utils/GlobalEventBus'
+import { getCellsHavingNumberFilledInAnyHouseOfCell } from '@domain/board/utils/housesAndCells'
+import { EVENTS } from 'src/constants/events'
 
 type AddMainNumberHintAction = {
     cell: Cell
@@ -126,7 +129,13 @@ const inputNoteNumber = (
     const selectedCell = boardRepository.getSelectedCell()
     const mainNumbers = boardRepository.getMainNumbers()
     const allowAnyNoteInCell = gameSettingsAdapter.allowAnyNoteInCell()
-    if (!allowAnyNoteInCell && isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) return
+    if (!allowAnyNoteInCell && isMainNumberPresentInAnyHouseOfCell(number, selectedCell, mainNumbers)) {
+        const cellsFilledWithNumber = getCellsHavingNumberFilledInAnyHouseOfCell(number, selectedCell, mainNumbers)
+        // i just broke the rule of architecture, importing something from the application layer
+        // just for the sake of re-usability
+        emit(EVENTS.LOCAL.ANIMATE_CELL_MAIN_NUMBER, cellsFilledWithNumber[0])
+        return
+    }
 
     const notes = boardRepository.getNotes()
     const notesBunch = [{ cell: selectedCell, note: number }]

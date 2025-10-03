@@ -4,6 +4,8 @@ import _isEqual from "@lodash/isEqual"
 import { CELLS_IN_A_HOUSE, HOUSE_TYPE } from "../board.constants"
 
 import { blockCellToBoardCell, getBlockAndBoxNum } from "./cellsTransformers"
+import _forEach from "@lodash/forEach"
+import { MainNumbersRecord } from "../records/mainNumbersRecord"
 
 function isRowHouse(houseType: HouseType) {
     return houseType === HOUSE_TYPE.ROW
@@ -121,6 +123,30 @@ const isCellPresentInHouse = (cell: Cell, house: House) => {
     return blockNum === house.num
 }
 
+// TODO: it's supposed to be a lowest level util
+const isCellExists = (cell: Cell, store: Cell[]) => store.some(storedCell => areSameCells(storedCell, cell))
+
+// todo: this already exists in the arena/utils/util.ts 
+const getAllCellsInHousesUniquely = (houses: House[]) => {
+    const result = getHouseCells(houses[0])
+
+    for (let i = 1; i < houses.length; i++) {
+        const currentHouseCells = getHouseCells(houses[i])
+        _forEach(currentHouseCells, (cell: Cell) => {
+            if (!isCellExists(cell, result)) result.push(cell)
+        })
+    }
+
+    return result
+}
+
+const getCellsHavingNumberFilledInAnyHouseOfCell = (number: number, cell: Cell, mainNumbers: MainNumbers) => {
+    const cellHouses = getCellHousesInfo(cell)
+    return getAllCellsInHousesUniquely(cellHouses).filter((cell) => {
+        return MainNumbersRecord.isCellFilledWithNumber(mainNumbers, number, cell)
+    })
+}
+
 export {
     isRowHouse,
     isColHouse,
@@ -134,5 +160,6 @@ export {
     areSameCells,
     areCommonHouseCells,
     getCellAxesValues,
-    isCellPresentInHouse
+    isCellPresentInHouse,
+    getCellsHavingNumberFilledInAnyHouseOfCell
 }
