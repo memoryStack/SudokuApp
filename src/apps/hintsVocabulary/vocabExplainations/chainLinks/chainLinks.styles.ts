@@ -14,6 +14,9 @@ export const getStyles = (_: unknown, theme: Theme) => StyleSheet.create({
         marginLeft: -6, // because the Board is taking a lot of space (96% of the screen width)
         alignSelf: 'center',
     },
+    board: {
+        backgroundColor: _get(theme, ['colors', 'surface-container'])
+    },
     truncatedBoardContainer: {
         width: 140,
         height: 140,

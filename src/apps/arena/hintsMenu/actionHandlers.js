@@ -91,6 +91,9 @@ export const showHintHCUseCase = ({
         mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
         notes: hints[0].hasTryOut ? _cloneDeep(notes) : null,
         hints,
+        rawHintMeta: {
+            id, hint, mainNumbers, notes, smartHintsColorSystem
+        }
     }
 
     const { gameStateRepository, smartHintRepository, boardControllerRepository } = dependencies

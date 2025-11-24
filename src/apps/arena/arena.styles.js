@@ -43,7 +43,10 @@ export const getStyles = (_, theme) => {
             alignItems: 'center',
             marginRight: HEADER_HORIZONTAL_MARGIN,
         },
-        availableStarsText: { marginLeft: 8 },
+        availableStarsText: {
+            color: _get(theme, ['colors', 'on-surface']),
+            marginLeft: 8
+        },
         levelsListContainer: {
             height: (Dimensions.get('window').height) * 0.8,
             width: Dimensions.get('window').width,

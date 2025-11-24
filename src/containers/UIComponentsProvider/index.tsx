@@ -14,6 +14,9 @@ type Props = {
 const mapLocalColorsToUILibrary = (localTheme: any) => {
     return {
         primary: localTheme.colors.primary,
+        onBackground: localTheme.colors['on-surface'],
+        inverseSurface: localTheme.colors['inverse-surface'],
+        inverseOnSurface: localTheme.colors['inverse-on-surface'],
     }
 }
 
@@ -23,6 +26,7 @@ const UIComponentsProvider: React.FC<Props> = ({ children }) => {
 
     const theme = {
         ...DefaultTheme,
+        isV3: true,
         colors: {
             ...DefaultTheme.colors,
             ...mapLocalColorsToUILibrary(localTheme)

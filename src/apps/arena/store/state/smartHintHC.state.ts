@@ -1,3 +1,5 @@
+import { SmartHintColorSystem } from 'src/containers/ThemeProvider'
+import { HINTS_IDS } from '../../utils/smartHints/constants'
 import {
     CellsFocusData,
     FocusedCells,
@@ -10,6 +12,7 @@ import {
     RemovableNotesInfo,
     TryOutInputsColors,
 } from '../../utils/smartHints/types'
+import { Hint } from '../selectors/smartHintHC.selectors'
 
 export type HintSvgData = {
     data: Chain
@@ -46,6 +49,14 @@ type InitialState = {
     currentHintNum: number
     hints: HintsInfo[]
     tryOut: SmartHintTryOutBoardData
+    rawHintMeta: {
+        id: HINTS_IDS,
+        hint: any // TODO: add type for this
+        mainNumbers: MainNumbers
+        notes: Notes
+        smartHintsColorSystem: SmartHintColorSystem
+    }
+
 }
 
 export const INITIAL_STATE: InitialState = {
@@ -53,4 +64,5 @@ export const INITIAL_STATE: InitialState = {
     currentHintNum: -1,
     hints: [],
     tryOut: {} as SmartHintTryOutBoardData,
+    rawHintMeta: {}
 }

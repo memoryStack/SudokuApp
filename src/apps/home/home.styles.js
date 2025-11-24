@@ -8,8 +8,7 @@ import { hexToRGBA } from '../../utils/util'
 
 export const getStyles = ({ CELL_WIDTH }, theme) => StyleSheet.create({
     container: {
-        // backgroundColor: _get(theme, ['colors', 'surface']),
-        backgroundColor: 'white'
+        backgroundColor: _get(theme, ['colors', 'surface']),
     },
     viewContainer: {
         paddingTop: 200,

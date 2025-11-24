@@ -3,12 +3,11 @@ import { StyleSheet } from 'react-native'
 import { FONT_WEIGHTS } from '@resources/fonts/font'
 import get from '@lodash/get'
 
-export const getStyles = (_, theme) => StyleSheet.create({
+export const getStyles = (_, theme, isLight) => StyleSheet.create({
     container: {
         padding: 20,
         alignItems: 'center',
-        // backgroundColor: get(theme, ['colors', 'surface-container-low']),
-        backgroundColor: 'white',
+        backgroundColor: get(theme, ['colors', isLight ? 'surface' : 'surface-container-high']),
         borderRadius: 8,
         width: '70%',
     },

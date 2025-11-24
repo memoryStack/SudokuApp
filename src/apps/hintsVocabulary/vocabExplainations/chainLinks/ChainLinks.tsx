@@ -71,6 +71,7 @@ const ChainLinks = () => {
                                         fontWeight: FONT_WEIGHTS.HEAVY,
                                     }
                                 }}
+                                boardContainerStyles={styles.board}
                             />
                         </ReactNativeZoomableView>
                     </View>
@@ -123,6 +124,7 @@ const ChainLinks = () => {
                                         fontWeight: FONT_WEIGHTS.HEAVY,
                                     }
                                 }}
+                                boardContainerStyles={styles.board}
                             />
                         </ReactNativeZoomableView>
                     </View>
@@ -218,6 +220,7 @@ const ChainLinks = () => {
                                         fontWeight: FONT_WEIGHTS.HEAVY,
                                     }
                                 }}
+                                boardContainerStyles={styles.board}
                             />
                         </ReactNativeZoomableView>
                     </View>
@@ -271,6 +274,7 @@ const ChainLinks = () => {
                                         fontWeight: FONT_WEIGHTS.HEAVY,
                                     }
                                 }}
+                                boardContainerStyles={styles.board}
                             />
                         </ReactNativeZoomableView>
                     </View>
@@ -371,6 +375,7 @@ const ChainLinks = () => {
                                     fontWeight: FONT_WEIGHTS.HEAVY,
                                 }
                             }}
+                            boardContainerStyles={styles.board}
                         />
                     </ReactNativeZoomableView>
                 </View>

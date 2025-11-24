@@ -14,8 +14,5 @@ export const getStyles = (_, theme) => StyleSheet.create({
     ruleText: {
         padding: 16,
         color: get(theme, ['colors', 'on-surface']),
-    },
-    axisText: {
-        color: get(theme, ['colors', 'on-surface']),
-    },
+    }
 })

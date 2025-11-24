@@ -22,7 +22,7 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
         marginBottom: 12,
     },
     categoryTitle: {
-
+        color: _get(theme, 'colors.on-surface'),
     },
     itemContainer: {
         flexDirection: 'row',
@@ -35,7 +35,6 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
     previewContainer: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: 'white',
         marginTop: 16,
         borderRadius: 8,
         padding: 12,
@@ -60,13 +59,14 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
         marginRight: 16,
     },
     itemDescription: {
+        color: _get(theme, 'colors.on-surface'),
     },
     divider: {
         marginVertical: 16,
     },
     snackbarContainer: {
         left: 16,
-        right: 16
+        right: 16,
     },
     snackbarText: {
         color: _get(theme, 'colors.inverse-on-surface'),
@@ -76,7 +76,6 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
         left: -120
     },
     tooltipText: {
-        color: 'white',
         padding: 8,
     }
 })

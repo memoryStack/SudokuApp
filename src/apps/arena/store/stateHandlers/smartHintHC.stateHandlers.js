@@ -33,6 +33,9 @@ const stateHandlers = {
             })
         })
     },
+    setCellsToFocusData: (state, { payload }) => {
+        state.hints[0].cellsToFocusData = payload
+    }
 }
 
 export default stateHandlers

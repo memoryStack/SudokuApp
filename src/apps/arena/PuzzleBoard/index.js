@@ -197,7 +197,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
         }
 
         return getActiveGameNoteStyles({ noteValue, show }, selectedCellMainNumber, styles, dependencies)
-    }, [showSmartHint, cellsToFocusData, selectedCellMainNumber, dependencies])
+    }, [showSmartHint, cellsToFocusData, selectedCellMainNumber, dependencies, styles])
 
     return (
         <Board

@@ -10,6 +10,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { getStyles } from './tooltip.styles'
 import { ViewStyle } from 'react-native';
+import _isArray from '@lodash/isArray';
 
 type Props = {
     content: string | React.ReactElement
@@ -28,13 +29,30 @@ const Tooltip = React.forwardRef<PopableManager, Props>((props, ref) => {
     } = props
     const styles = useStyles(getStyles)
 
+    let finalContent = content
+
+    if (typeof content !== 'string') {
+        if (React.isValidElement(content)) {
+            const styleProp = content.props.style
+            const styleFromProps = _isArray(styleProp) ? Object.assign({}, ...styleProp) : styleProp
+
+            finalContent = React.cloneElement(content, {
+                style: {
+                    ...styleFromProps,
+                    color: styles.text.color
+                },
+            })
+        }
+    }
+
     return (
         <Popable
             ref={ref}
-            content={content}
+            content={finalContent}
             action={showOnPress ? undefined : "none"}
             style={[styles.container, containerStyle]}
-            textStyle={{ lineHeight: 16 } as ViewStyle}
+            textStyle={styles.text}
+            backgroundColor={styles.backgroundColor.backgroundColor}
             {...rest}
         >
             {children}

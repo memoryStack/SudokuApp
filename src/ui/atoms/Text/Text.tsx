@@ -52,6 +52,7 @@ const Text: React.FC<Props> = ({
     const fontWeight: keyof typeof FONT_WEIGHT_VS_FONT_FAMILY = _get(styles, 'fontWeight', FONT_WEIGHTS.REGULAR)
 
     const stylesWithFont = {
+        color: _get(theme, ['colors', 'on-surface']),
         ...styles,
         fontFamily: fonts && fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],
         fontWeight,

@@ -50,14 +50,13 @@ export const getStyles = (_, theme) => StyleSheet.create({
         width: '100%',
         marginTop: 8,
     },
-    footerButtonText: { color: '#4088da' },
     tryOutResult: {
         marginTop: 8,
         marginBottom: 4,
         lineHeight: 18,
     },
     tryOutDefaultResult: {
-        color: 'black',
+        color: _get(theme, ['colors', 'on-surface']),
     },
     tryOutErrorResult: {
         color: smartHintColorSystemReader.incorrectTryOutInputMsgColor(_get(theme, 'colors.smartHints')),

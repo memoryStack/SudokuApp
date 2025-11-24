@@ -16,13 +16,27 @@ import { ROUTES } from '../../../navigation/route.constants'
 // TODO: fix circular dependency here, maybe write a util here (but would that help ??)
 import { NAVIGATION_PARAMS as HINTS_VOCABULARY_SCREEN_PARAMS } from '../../../apps/hintsVocabulary'
 import { getStyles } from './smartHintText.styles'
+import { useTheme } from 'src/apps/arena/hooks/useTheme'
+import _get from '@lodash/get'
 
 interface Props extends Omit<TextProps, 'children'> {
     text: string
 }
 
 const CustomTextComponent = ({ style, ...restProps }: { style: Styles[] }) => {
-    const finalStyle = _flatten(_compact(style))
+    let finalStyle = _flatten(_compact(style))
+
+    const { theme } = useTheme()
+
+    if (finalStyle[0]?.color === undefined) {
+        finalStyle = [
+            {
+                ...finalStyle?.[0],
+                color: _get(theme, ['colors', 'on-surface'])
+            }
+        ]
+    }
+
     return (
         <Text style={finalStyle} {...restProps} />
     )

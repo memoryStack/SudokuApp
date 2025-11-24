@@ -24,6 +24,8 @@ export const getTryOutMainNumbers = (state: RootState) => state.smartHintHC.tryO
 
 export const getTryOutNotes = (state: RootState) => state.smartHintHC.tryOut.notes
 
+export const getRawHintData = (state: RootState) => state.smartHintHC.rawHintMeta
+
 export const getTryOutClickableCells = (state: RootState) => state.smartHintHC.hints[0].clickableCells || []
 
 export const getTryOutCellsRestrictedNumberInputs = (state: RootState) => state.smartHintHC.hints[0].cellsRestrictedNumberInputs || []

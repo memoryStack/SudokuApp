@@ -37,6 +37,7 @@ const Candidate = () => {
                         if (areSameCells(cell, { row: 2, col: 2 })) return styles.highlightedCell
                         return null
                     }}
+                    boardContainerStyles={styles.board}
                 />
             </ReactNativeZoomableView>
         </View>
@@ -51,7 +52,9 @@ const Candidate = () => {
                     + ' write small numbers or other notes in pencil to denote a possible solution.</p>'
                 }
             />
-            {Example}
+            <View >
+                {Example}
+            </View>
             <SmartHintText
                 text={'Here in the highlighted cell above 2, 4, 8 and 9 are it\'s candidates'}
             />

@@ -2,9 +2,9 @@ import { StyleSheet } from 'react-native'
 
 import _get from '@lodash/get'
 
-export const getStyles = ({ isIconPresent, windowWidth }, theme) => StyleSheet.create({
+export const getStyles = ({ isIconPresent, windowWidth }, theme, isLight) => StyleSheet.create({
     container: {
-        backgroundColor: 'white', // _get(theme, 'dialog.container.color'),
+        backgroundColor: _get(theme, ['colors', isLight ? 'surface' : 'surface-container-high']),
         borderRadius: _get(theme, 'dialog.container.layout.shape.borderRadius'),
         padding: _get(theme, 'dialog.container.layout.padding'),
         width: Math.min(windowWidth - 48, _get(theme, 'dialog.container.layout.width.max')), // TODO: take care of this 48 here

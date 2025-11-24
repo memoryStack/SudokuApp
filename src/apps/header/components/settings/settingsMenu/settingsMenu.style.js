@@ -1,10 +1,10 @@
 import get from '@lodash/get'
 import { StyleSheet } from 'react-native'
 
-export const getStyles = (_, theme) => StyleSheet.create({
+export const getStyles = (_, theme, isLight) => StyleSheet.create({
     menuContainer: {
         padding: 16,
-        backgroundColor: 'white'
+        backgroundColor: get(theme, ['colors', isLight ? 'surface' : 'surface-container-low']),
     },
     menuItemContainer: {
         height: 40,
@@ -23,6 +23,5 @@ export const getStyles = (_, theme) => StyleSheet.create({
     },
     tooltipText: {
         padding: 8,
-        color: 'white'
     }
 })

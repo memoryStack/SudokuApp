@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import _values from '@lodash/values'
 
 import { useBoardElementsDimensions } from '../../apps/arena/hooks/useBoardElementsDimensions'
-import { useThemeValues } from '../../apps/arena/hooks/useTheme'
+import { useTheme } from '../../apps/arena/hooks/useTheme'
 
 export const useStyles = (stylesHandler, customProps, customWindowWidth) => {
-    const theme = useThemeValues()
+    const { theme, isLight } = useTheme()
 
     const boardElementsDimensions = useBoardElementsDimensions(customWindowWidth)
 
@@ -15,7 +15,7 @@ export const useStyles = (stylesHandler, customProps, customWindowWidth) => {
             ...boardElementsDimensions,
             ...customProps,
         }
-        return stylesHandler(styleHandlerProps, theme)
-    }, [stylesHandler, ..._values(customProps), theme, boardElementsDimensions])
+        return stylesHandler(styleHandlerProps, theme, isLight)
+    }, [stylesHandler, ..._values(customProps), theme, boardElementsDimensions, isLight])
     return styles
 }

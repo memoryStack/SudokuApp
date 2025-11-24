@@ -19,7 +19,7 @@ export const getStyles = ({ CELL_HEIGHT }, theme) => StyleSheet.create({
         alignItems: 'center',
     },
     noteText: {
-        color: _get(theme, ['colors', 'on-surface-variant']),
+        color: _get(theme, ['colors', 'on-surface']),
         fontSize: CELL_HEIGHT * 0.3,
         fontWeight: FONT_WEIGHTS.REGULAR,
     },

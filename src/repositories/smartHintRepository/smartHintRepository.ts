@@ -30,6 +30,7 @@ const {
     updateBoardDataOnTryOutNumberInput,
     updateBoardDataOnTryOutErase,
     setHints,
+    setCellsToFocusData
 } = smartHintHCActions
 
 export const SmartHintRepository: SmartHintRepositoryInterface = {
@@ -45,6 +46,7 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
                 mainNumbers: data.mainNumbers,
                 notes: data.notes,
             },
+            rawHintMeta: data.rawHintMeta
         }
         invokeDispatch(setHints(hints))
     },
@@ -73,6 +75,7 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
     getTryOutCellsRestrictedNumberInputs: () => getTryOutCellsRestrictedNumberInputs(getStoreState()),
     getUnclickableCellClickInTryOutMsg: () => getUnclickableCellClickInTryOutMsg(getStoreState()),
     getCellToFocusData: () => getCellToFocusData(getStoreState()),
+    setCellsToFocusData: (data) => invokeDispatch(setCellsToFocusData(data)),
     getTryOutInputsColors: () => getTryOutInputsColors(getStoreState()),
     getShowSmartHint: () => getShowSmartHint(getStoreState()),
     setUserSawAHint: async () => {

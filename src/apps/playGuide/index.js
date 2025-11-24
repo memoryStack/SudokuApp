@@ -14,15 +14,20 @@ import { Board } from '../arena/gameBoard'
 import { Page } from '../components/Page'
 import { generateMainNumbersFromPuzzleString } from '../arena/utils/util'
 
-import { cellsHighlightData } from './boardData'
+import { getCellsHighlightData } from './boardData'
 import { RULES_TEXT_CONFIG, PUZZLE } from './playGuide.constants'
 import { getStyles } from './playGuide.styles'
 import { useDependency } from 'src/hooks/useDependency'
+import { useTheme } from '../arena/hooks/useTheme'
 
 const PlayGuide_ = () => {
     const styles = useStyles(getStyles)
 
     const { analytics } = useDependency()
+
+    const { theme, isLight } = useTheme()
+
+    const cellsHighlightData = getCellsHighlightData({ theme, isLight })
 
     useEffect(() => {
         analytics?.sendPlayGuideOpenedEvent?.()
@@ -36,7 +41,6 @@ const PlayGuide_ = () => {
     const renderBoard = ({ puzzle, isPuzzleSolved, ...restProps }) => (
         <Board
             mainNumbers={generateMainNumbersFromPuzzleString(puzzle)}
-            axisTextStyles={styles.axisText}
             showCellContent
             getCellBGColor={cell => getCellBGColor(cell, isPuzzleSolved)}
             {...restProps}

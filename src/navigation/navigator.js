@@ -8,6 +8,8 @@ import { NavigationContainer, createNavigationContainerRef } from '@react-naviga
 import { getNavigationOptions } from './navigationOptions'
 import { routes } from './routes'
 import { ROUTES } from './route.constants'
+import { useTheme } from 'src/apps/arena/hooks/useTheme'
+import _get from '@lodash/get'
 
 export const navigationRef = createNavigationContainerRef()
 
@@ -16,29 +18,28 @@ const getScreens = Stack => routes.map(({ name, component }) => (
     <Stack.Screen name={name} key={name} component={component} options={getNavigationOptions} />
 ))
 
-const getNavigator = () => {
+// children prop is for testing purpose to hack navigation prop
+export const NavigationProvider = ({ children }) => {
     const Stack = createStackNavigator()
+    const { theme } = useTheme()
     return (
-        <Stack.Navigator
-            initialRouteName={ROUTES.HOME}
-            screenOptions={{
-                headerShown: true,
-                headerTransparent: true,
-            }}
-        >
-            {getScreens(Stack)}
-        </Stack.Navigator>
+        <NavigationContainer ref={navigationRef} theme={theme}>
+            <Stack.Navigator
+                initialRouteName={ROUTES.HOME}
+                screenOptions={{
+                    headerShown: true,
+                    headerTransparent: true,
+                    headerTitleStyle: {
+                        color: _get(theme, ['colors', 'on-surface'])
+                    },
+                }}
+            >
+                {getScreens(Stack)}
+            </Stack.Navigator>
+            {children}
+        </NavigationContainer>
     )
 }
-
-// children prop is for testing purpose to hack navigation prop
-
-export const NavigationProvider = ({ children }) => (
-    <NavigationContainer ref={navigationRef}>
-        {getNavigator()}
-        {children}
-    </NavigationContainer>
-)
 
 NavigationProvider.propTypes = {
     children: PropTypes.oneOfType([

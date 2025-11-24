@@ -4,7 +4,7 @@ import _get from '@lodash/get'
 
 import { fonts } from '@resources/fonts/font'
 
-export const getStyles = (_, theme) => StyleSheet.create({
+export const getStyles = (_, theme, isLight) => StyleSheet.create({
     container: {
         alignItems: 'center',
         width: '100%',
@@ -27,34 +27,20 @@ export const getStyles = (_, theme) => StyleSheet.create({
         paddingHorizontal: 24,
         width: '80%',
     },
-    snackBarContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 4,
-        padding: 16,
-        marginHorizontal: 24,
-        backgroundColor: 'rgba(0, 0, 0, .9)', // replace this after talking to designer
-        position: 'absolute',
-        bottom: 150,
-        alignSelf: 'center',
-    },
-    snackBarText: {
-        fontSize: 20,
-        textAlign: 'center',
-        color: 'white',
-        fontFamily: fonts.regular,
-    },
     // TODO: use it from tokens
     selectedCellBGColor: {
-        backgroundColor: 'rgb(255, 245, 187)',
+        backgroundColor: _get(theme, ['colors', 'board', 'selectedCellBGColor'])
     },
     mistakeCellBGColor: {
-        backgroundColor: _get(theme, ['colors', 'error-container']),
+        backgroundColor: _get(theme, ['colors', 'board', 'mistakeCellBGColor']),
+    },
+    defaultCellBGColor: {
+        backgroundColor: _get(theme, ['colors', isLight ? 'surface' : 'surface-container-low']),
     },
     wronglyFilledNumColor: {
-        color: _get(theme, ['colors', 'error']),
+        color: _get(theme, ['colors', 'board', 'mistakeCellBGColor']),
     },
     clueNumColor: {
-        color: 'rgb(12, 25, 22)',
+        color: _get(theme, ['colors', 'board', 'clueNumColor'])
     },
 })

@@ -20,8 +20,8 @@ const getStyles = (_, theme) => StyleSheet.create({
     safeAreaView: {
         flex: 1,
         width: '100%',
-        // backgroundColor: _get(theme, ['colors', 'surface']),
-        backgroundColor: 'white'
+        backgroundColor: _get(theme, ['colors', 'surface']),
+        // backgroundColor: _get(theme, ['colors', isLight ? 'surface' : 'surface-bright']),
     },
 })
 

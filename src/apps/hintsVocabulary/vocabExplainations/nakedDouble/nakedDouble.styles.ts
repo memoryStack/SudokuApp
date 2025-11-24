@@ -44,4 +44,7 @@ export const getStyles = (_: unknown, theme: Theme) => StyleSheet.create({
         justifyContent: 'center',
         marginTop: 12,
     },
+    textDefault: {
+        color: _get(theme, ['colors', 'on-surface']),
+    }
 })

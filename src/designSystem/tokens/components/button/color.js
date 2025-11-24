@@ -171,13 +171,36 @@ module.exports = {
             color: {
                 outline: {
                     enabled: {
-                        color: { value: '{colors.neutral-variant.50}' },
+                        color: { value: '{colors.outline-variant}' },
+                    },
+                    disabled: {
+                        color: { value: '{colors.outline-variant}' },
+                    }
+                },
+                container: {
+                    disabled: {
+                        background: {
+                            value: '{colors.on-surface}',
+                        },
+                        opacity: {
+                            value: '12%',
+                            type: 'colorOpacity',
+                        },
                     },
                 },
                 'label-text': {
                     enabled: {
                         color: {
                             value: '{colors.primary}',
+                        },
+                    },
+                    disabled: {
+                        color: {
+                            value: '{colors.on-surface}',
+                        },
+                        opacity: {
+                            value: '38%',
+                            type: 'colorOpacity',
                         },
                     },
                 },

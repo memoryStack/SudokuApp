@@ -38,6 +38,7 @@ import {
     getInputPanelNumbersVisibility,
     getSelectCellOnClose,
     getTotalStepsCount,
+    getRawHintData,
 } from '../store/selectors/smartHintHC.selectors'
 import { useIsHintTryOutStep, useHintTryOutAnalyserResult } from '../hooks/smartHints'
 
@@ -58,6 +59,9 @@ import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { InputPanelNumbersVisibility } from '../utils/smartHints/types'
 import { ArenaAnalyticsHandler } from '@application/adapterInterfaces/analytics'
 import { updateUserActivityTime } from '@application/usecases/board'
+import { useTheme } from '../hooks/useTheme'
+import { showHintHCUseCase } from '../hintsMenu/actionHandlers'
+import { getTransformedRawHints } from '../utils/smartHints'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -76,6 +80,7 @@ const useSmartHintData = () => {
     const currentHintNum = useSelector(getCurrentHintStepNum)
     const totalHintsCount = useSelector(getTotalStepsCount)
     const id = useSelector(getHintType)
+    const rawData = useSelector(getRawHintData)
 
     return {
         id,
@@ -86,6 +91,7 @@ const useSmartHintData = () => {
         inputPanelNumbersVisibility,
         currentHintNum,
         totalHintsCount,
+        rawData
     }
 }
 
@@ -106,6 +112,7 @@ const SmartHintHC_: React.FC<Props> = ({
         inputPanelNumbersVisibility,
         currentHintNum,
         totalHintsCount,
+        rawData
     } = useSmartHintData()
 
     const closeByApplyHintClick = useRef(false)
@@ -154,6 +161,28 @@ const SmartHintHC_: React.FC<Props> = ({
             }
         })
     }, [])
+
+    const { colorScheme, theme } = useTheme()
+
+    const smartHintsColorSystem = _get(theme, ['colors', 'smartHints'])
+
+    useEffect(() => {
+        const {
+            id,
+            hint,
+            mainNumbers,
+            notes,
+            smartHintsColorSystem
+        } = rawData
+
+        const hints = getTransformedRawHints(id, hint, mainNumbers, notes, smartHintsColorSystem)
+
+        const {
+            smartHintRepository
+        } = dependencies
+
+        smartHintRepository.setCellsToFocusData(hints[0].cellsToFocusData)
+    }, [colorScheme, smartHintsColorSystem]) // not listening to rawData on purpose, as it might lead to loop
 
     const smartHintHCRef = useRef(null)
 
@@ -286,12 +315,10 @@ const SmartHintHC_: React.FC<Props> = ({
     const renderFooter = () => (
         <View style={styles.footerContainer}>
             {renderFooterLeftSection()}
-
             <Button
                 label={displayNextButton ? FOOTER_BUTTONS_TEXT.NEXT : FOOTER_BUTTONS_TEXT.APPLY_HINT}
                 onPress={displayNextButton ? onNextClick : onApplyHintClick}
                 avoidDefaultContainerStyles
-                textStyles={styles.footerButtonText}
                 type={BUTTON_TYPES.TEXT}
             />
         </View>

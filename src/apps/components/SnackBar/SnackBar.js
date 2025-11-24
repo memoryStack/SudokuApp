@@ -13,35 +13,45 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 import { EVENTS } from '../../../constants/events'
 
 import { Touchable } from '../Touchable'
+import { useStyles } from '@utils/customHooks/useStyles'
+import _get from '@lodash/get'
 
-const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 4,
-        padding: 16,
-        marginHorizontal: 24,
-        backgroundColor: 'black', // replace this after talking to designer
-        position: 'absolute',
-        bottom: 100,
-        alignSelf: 'center',
-    },
-    msgTextStyle: {
-        color: 'white',
-        textAlign: 'center',
-    },
-    closeButton: {
-        position: 'absolute',
-        top: -10,
-        right: -10,
-        height: 20,
-        width: 20,
-        borderRadius: 10,
-        backgroundColor: 'black',
-    },
-})
+const getStyles = (_, theme) => {
+    return StyleSheet.create({
+        container: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 4,
+            padding: 16,
+            marginHorizontal: 24,
+            backgroundColor: _get(theme, ['colors', 'inverse-surface']), // replace this after talking to designer
+            position: 'absolute',
+            bottom: 100,
+            alignSelf: 'center',
+        },
+        msgTextStyle: {
+            color: _get(theme, ['colors', 'inverse-on-surface']),
+            textAlign: 'center',
+        },
+        closeButton: {
+            position: 'absolute',
+            top: -10,
+            right: -10,
+            height: 20,
+            width: 20,
+            borderRadius: 10,
+            backgroundColor: _get(theme, ['colors', 'inverse-surface']),
+        },
+        closeIconFill: {
+            color: _get(theme, ['colors', 'inverse-on-surface']),
+        }
+    })
+}
 
 const SnackBar_ = () => {
+
+    const styles = useStyles(getStyles)
+
     const [snackBar, setSnackBar] = useState({
         show: false, view: null, msg: '', customStyles: null,
     })
@@ -96,7 +106,7 @@ const SnackBar_ = () => {
                 onPress={onCloseSnackBar}
                 addHitSlop
             >
-                <CloseIcon height={10} width={10} fill="white" />
+                <CloseIcon height={10} width={10} fill={styles.closeIconFill.color} />
             </Touchable>
         </View>
 

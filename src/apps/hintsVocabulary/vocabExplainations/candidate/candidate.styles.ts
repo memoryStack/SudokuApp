@@ -9,6 +9,9 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
         paddingHorizontal: 16,
         // alignItems: 'center',
     },
+    board: {
+        backgroundColor: _get(theme, ['colors', 'surface-container'])
+    },
     exampleBoardContainer: {
         width: 200,
         height: 200,
@@ -17,6 +20,5 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
     },
     highlightedCell: {
         backgroundColor: _get(theme, ['colors', 'smartHints', 'selectedCellBGColor']),
-    },
-
+    }
 })

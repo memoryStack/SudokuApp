@@ -14,6 +14,7 @@ const DEFAULT_SETTING = {
     [GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED]: false,
     [GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE]: true,
     [GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK]: true,
+    [GAME_SETTINGS_KEYS.DARK_MODE]: undefined,
 }
 
 let currentSettings = {
@@ -69,5 +70,8 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
     },
     fillNumberOnCellClick: () => {
         return currentSettings[GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK] as boolean
+    },
+    isDarkMode: () => {
+        return currentSettings[GAME_SETTINGS_KEYS.DARK_MODE] as boolean
     }
 }

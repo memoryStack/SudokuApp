@@ -18,9 +18,10 @@ import { Inputpanel } from '../inputPanel'
 import { ACTION_HANDLERS, ACTION_TYPES, getInitialState } from './actionHandlers'
 import { CLOSE_ICON_TEST_ID, CUSTOM_PUZZLE_TEST_ID } from './customPuzzle.constants'
 import { getStyles } from './customPuzzle.styles'
-import { areCommonHouseCells, areSameCells, sameValueInCells } from '../utils/util'
+import { areMultipleMainNumbersInAnyHouseOfCell, areSameCells } from '../utils/util'
 import { useDependency } from 'src/hooks/useDependency'
 import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
+import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 
 const CustomPuzzle_ = ({
     mainNumbers,
@@ -58,18 +59,17 @@ const CustomPuzzle_ = ({
         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies } })
     }, [onAction])
 
-
-
     const getCellBGColor = cell => {
         if (areSameCells(cell, selectedCell)) return styles.selectedCellBGColor
-        const sameValueAsSelectedBox = sameValueInCells(cell, selectedCell, mainNumbers)
-        const hasSameValueInSameHouseAsSelectedCell = sameValueAsSelectedBox && areCommonHouseCells(cell, selectedCell)
-        if (hasSameValueInSameHouseAsSelectedCell) return styles.mistakeCellBGColor
-        return null
+        return styles.defaultCellBGColor
     }
 
     const getCustomPuzzleMainNumFontColor = cell => {
-        if (mainNumbers[cell.row][cell.col].wronglyPlaced) return styles.wronglyFilledNumColor
+        const cellNumber = MainNumbersRecord.getCellMainValue(mainNumbers, cell)
+        if (
+            MainNumbersRecord.isCellFilled(mainNumbers, cell)
+            && areMultipleMainNumbersInAnyHouseOfCell(mainNumbers, cell, cellNumber)
+        ) return styles.wronglyFilledNumColor
         return styles.clueNumColor
     }
 

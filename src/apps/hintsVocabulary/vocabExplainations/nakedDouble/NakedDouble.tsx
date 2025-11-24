@@ -123,7 +123,7 @@ const NakedDouble = () => {
 
         return (
             <View style={styles.removableNotesExampleContainer}>
-                <Text>
+                <Text style={styles.textDefault}>
                     {
                         'In both cases above, 8 and 9 candidates in cells other than D5 and E6 will be eliminated. So in below example'
                         + ' all candidates highlighted in red color will be eliminated'
@@ -151,8 +151,8 @@ const NakedDouble = () => {
 
         return (
             <View style={styles.removableNotesExampleContainer}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>Naked Tripple in more than one House:</Text>
-                <Text>
+                <Text style={styles.textDefault} type={TEXT_VARIATIONS.TITLE_MEDIUM}>Naked Tripple in more than one House:</Text>
+                <Text style={styles.textDefault}>
                     {
                         'If the two cells are part of two houses simultaneously then Naked Double will affect cells of'
                         + ' both houses. See in example below, cells H5 and H6 are part of row H and 8th block.'

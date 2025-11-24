@@ -24,10 +24,10 @@ import _isEmpty from '@lodash/isEmpty'
 import { Touchable } from '../components/Touchable'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMaxMistakesLimit } from '../arena/store/selectors/refree.selectors'
-import { useThemeValues } from '../arena/hooks/useTheme'
+import { useTheme } from '../arena/hooks/useTheme'
 import { createRefreeStateSlice, fetchRefreeDataFromFromLocalStorage } from '../arena/store/reducers/refree.reducers'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
-import { getContainerBackgroundColor } from '@ui/molecules/Button/button.styles'
+import { getContainerBackgroundColor, getTextColor } from '@ui/molecules/Button/button.styles'
 import Button, { BUTTON_STATES, BUTTON_TYPES } from '@ui/molecules/Button'
 import { getActiveGameBoardCellBgCell, getActiveGameCellMainNumberFontColor, getActiveGameNoteStyles } from '../arena/PuzzleBoard'
 import { getStyles as puzzleBoardStylesHandler } from '../arena/PuzzleBoard/puzzleBoard.styles'
@@ -70,6 +70,15 @@ enum INPUT_TYPES {
 }
 
 const SETTINGS_ = [
+    {
+        title: 'Dark Mode',
+        hasPreview: false,
+        hasToggle: true,
+        inputType: INPUT_TYPES.TOGGLE,
+        key: GAME_SETTINGS_KEYS.DARK_MODE,
+        value: false,
+        items: []
+    },
     {
         title: 'Game Over',
         hasPreview: false,
@@ -201,7 +210,7 @@ const GameSettings_ = ({ onAction }) => {
 
     const mistakes = useSelector(refreeSelectors.getMistakes)
 
-    const theme = useThemeValues()
+    const { theme, isLight, switchTheme } = useTheme()
 
     const { ref: tooltipRef, hide: hideTooltip, show: showTooltip } = usePopable()
 
@@ -322,6 +331,10 @@ const GameSettings_ = ({ onAction }) => {
             value: newValue
         })
 
+        if (item.key === GAME_SETTINGS_KEYS.DARK_MODE) {
+            switchTheme()
+        }
+
         fetchGameSettingsValues()
         if (item.inputType === INPUT_TYPES.TOGGLE) {
             const newState = newValue ? OPTION_STATES.ON : OPTION_STATES.OFF
@@ -341,9 +354,12 @@ const GameSettings_ = ({ onAction }) => {
     const SETTINGS = useMemo(() => {
         const dynamicData = getDynamicDataMapping(settingsConfigsOnOffValue)
         return SETTINGS_.map((settingsCategory) => {
+            const categoryToggleValue = settingsCategory.hasToggle ?
+                { value: settingsConfigsOnOffValue[settingsCategory.key] } : null
             return {
                 ...settingsCategory,
-                items: settingsCategory.items.map((item) => {
+                ...categoryToggleValue,
+                items: settingsCategory.items?.map((item) => {
                     const extraConfigs: { [key: string]: any } = {}
                     if (item.key === GAME_SETTINGS_KEYS.MISTAKES_LIMIT) {
                         extraConfigs.disabled = !settingsConfigsOnOffValue[GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED]
@@ -380,6 +396,7 @@ const GameSettings_ = ({ onAction }) => {
                 menuContentStyle={{
                     width: 50,
                     bottom: 50,
+                    backgroundColor: _get(theme, ['colors', isLight ? 'surface' : 'surface-container-low']),
                 }}
                 disabled={item.disabled}
                 CustomDropdownInput={() => {
@@ -388,14 +405,18 @@ const GameSettings_ = ({ onAction }) => {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: 40, height: 40, borderRadius: 8, borderWidth: 1,
-                            borderColor: theme.colors['outline-variant'],
-                            backgroundColor: item.disabled ? getContainerBackgroundColor({
-                                type: BUTTON_TYPES.FILLED,
-                                state: BUTTON_STATES.DISABLED
-                            }, theme) : undefined
+                            width: 40, height: 40, borderRadius: 8,
+                            backgroundColor: getContainerBackgroundColor({
+                                type: BUTTON_TYPES.TONAL,
+                                state: item.disabled ? BUTTON_STATES.DISABLED : BUTTON_STATES.ENABLED
+                            }, theme)
                         }}>
-                            <Text>{mistakesLimit}</Text>
+                            <Text style={{
+                                color: getTextColor({
+                                    type: BUTTON_TYPES.TONAL,
+                                    state: item.disabled ? BUTTON_STATES.DISABLED : BUTTON_STATES.ENABLED
+                                }, theme)
+                            }}>{mistakesLimit}</Text>
                         </View>
                     )
                 }}
@@ -454,7 +475,13 @@ const GameSettings_ = ({ onAction }) => {
                             <View key={index}>
                                 <View style={styles.categoryContainer}>
                                     <View style={styles.categoryHeaderContainer}>
-                                        <Text style={styles.categoryTitle} type={TEXT_VARIATIONS.TITLE_MEDIUM}>{category.title}</Text>
+                                        <Text
+                                            style={styles.categoryTitle}
+                                            type={TEXT_VARIATIONS.TITLE_MEDIUM}
+                                        >
+                                            {category.title}
+                                        </Text>
+                                        {category.hasToggle ? renderInputView(category) : null}
                                         {
                                             category.hasPreview ?
                                                 <PreviewTooltipWrapper category={category}>
@@ -467,22 +494,26 @@ const GameSettings_ = ({ onAction }) => {
                                                 : null
                                         }
                                     </View>
-                                    <View style={styles.categoryItemsContainer}>
-                                        {category.items.map((item, itemIndex) => (
-                                            <View key={item.key} style={[styles.itemContainer, itemIndex ? styles.itemsGap : null]}>
-                                                <View style={styles.textContainer}>
-                                                    <Text
-                                                        style={styles.itemDescription}
-                                                        withoutLineHeight
-                                                        type={TEXT_VARIATIONS.BODY_MEDIUM}
-                                                    >
-                                                        {item.description}
-                                                    </Text>
-                                                </View>
-                                                {renderInputView(item)}
+                                    {
+                                        category.items?.length ?
+                                            <View style={styles.categoryItemsContainer}>
+                                                {category.items.map((item, itemIndex) => (
+                                                    <View key={item.key} style={[styles.itemContainer, itemIndex ? styles.itemsGap : null]}>
+                                                        <View style={styles.textContainer}>
+                                                            <Text
+                                                                style={styles.itemDescription}
+                                                                withoutLineHeight
+                                                                type={TEXT_VARIATIONS.BODY_MEDIUM}
+                                                            >
+                                                                {item.description}
+                                                            </Text>
+                                                        </View>
+                                                        {renderInputView(item)}
+                                                    </View>
+                                                ))}
                                             </View>
-                                        ))}
-                                    </View>
+                                            : null
+                                    }
                                     {
                                         previewSection === category.title ?
                                             (

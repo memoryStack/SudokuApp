@@ -1,1 +1,1 @@
-export { cellsHighlightData } from './cellsHighlightData'
+export { getCellsHighlightData } from './cellsHighlightData'

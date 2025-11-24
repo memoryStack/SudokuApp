@@ -11,7 +11,7 @@ import {
     XSMALL_SPACE,
 } from './bottomDragger.constants'
 
-export const getStyles = (_, theme) => {
+export const getStyles = (_, theme, isLight) => {
     const { color: scrimColor, opacity: scrimOpacity } = _get(theme, ['bottomSheet', 'scrim'])
 
     return StyleSheet.create({
@@ -37,8 +37,7 @@ export const getStyles = (_, theme) => {
         subView: {
             position: 'absolute',
             width: '100%',
-            // backgroundColor: _get(theme, ['bottomSheet', 'container', 'color']),
-            backgroundColor: "white",
+            backgroundColor: _get(theme, ['colors', isLight ? 'surface' : 'surface-container-low']),
             ..._get(theme, ['bottomSheet', 'container', 'layout', 'shape']),
         },
         clipStyle: {
