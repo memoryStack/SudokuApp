@@ -29,3 +29,22 @@ module.exports = (workers) => {
     : Math.max(1, Math.ceil(cores * (0.5 + 0.5 * Math.exp(-cores * 0.07)) - 1));
 };
 ################################################
+
+
+/*
+  resources that i used when developing Dark Theme
+    a. https://m3.material.io/components/bottom-sheets/specs
+        went here and learned the parallel tokens for a component between themes
+    b. https://github.com/material-foundation/material-tokens/blob/main/tokens.md?plain=1
+        took some reference from docs like these to see parallels between theme tokens
+    c. https://github.com/material-foundation/material-color-utilities/tree/main
+        cloned this project and was able to convert a color's tonal shades in it's C++ version of code
+        using cmake
+    d. https://material-foundation.github.io/material-theme-builder/
+        visited this as well
+    e. blob:https://github.com/dcc636d4-7a84-4e18-96af-bcb222dc1f78
+        downloaded this file as well to know the color parallels between light and dark themes
+    
+
+
+*/
