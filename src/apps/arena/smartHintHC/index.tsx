@@ -172,7 +172,6 @@ const SmartHintHC_: React.FC<Props> = ({
             hint,
             mainNumbers,
             notes,
-            smartHintsColorSystem
         } = rawData
 
         const hints = getTransformedRawHints(id, hint, mainNumbers, notes, smartHintsColorSystem)
@@ -180,7 +179,6 @@ const SmartHintHC_: React.FC<Props> = ({
         const {
             smartHintRepository
         } = dependencies
-
         smartHintRepository.setCellsToFocusData(hints[0].cellsToFocusData)
     }, [colorScheme, smartHintsColorSystem]) // not listening to rawData on purpose, as it might lead to loop
 

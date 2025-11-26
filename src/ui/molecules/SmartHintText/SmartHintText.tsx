@@ -18,6 +18,7 @@ import { NAVIGATION_PARAMS as HINTS_VOCABULARY_SCREEN_PARAMS } from '../../../ap
 import { getStyles } from './smartHintText.styles'
 import { useTheme } from 'src/apps/arena/hooks/useTheme'
 import _get from '@lodash/get'
+import _isArray from '@lodash/isArray'
 
 interface Props extends Omit<TextProps, 'children'> {
     text: string
@@ -26,15 +27,15 @@ interface Props extends Omit<TextProps, 'children'> {
 const CustomTextComponent = ({ style, ...restProps }: { style: Styles[] }) => {
     let finalStyle = _flatten(_compact(style))
 
+    finalStyle = _isArray(finalStyle) ? Object.assign({}, ...finalStyle) : finalStyle
+
     const { theme } = useTheme()
 
-    if (finalStyle[0]?.color === undefined) {
-        finalStyle = [
-            {
-                ...finalStyle?.[0],
-                color: _get(theme, ['colors', 'on-surface'])
-            }
-        ]
+    if (finalStyle?.color === undefined) {
+        finalStyle = {
+            ...finalStyle,
+            color: _get(theme, ['colors', 'on-surface'])
+        }
     }
 
     return (

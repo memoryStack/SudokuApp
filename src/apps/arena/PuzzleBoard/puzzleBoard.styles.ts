@@ -3,15 +3,10 @@ import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
 
 import { FONT_WEIGHTS } from '@resources/fonts/font'
-import { HC_OVERLAY_BG_COLOR } from '../../components/BottomDragger'
 
 import smartHintColorSystemReader from '../utils/smartHints/colorSystem.reader'
-import { hexToRGBA } from '@utils/util'
 
-export const getStyles = (_: unknown, theme: unknown, isLight: boolean) => {
-
-    const { color: scrimColor, opacity: scrimOpacity } = _get(theme, ['bottomSheet', 'scrim'])
-
+export const getStyles = (_: unknown, theme: unknown) => {
     return StyleSheet.create({
         selectedCellBGColor: {
             backgroundColor: _get(theme, ['colors', 'board', 'selectedCellBGColor'])
@@ -29,7 +24,7 @@ export const getStyles = (_: unknown, theme: unknown, isLight: boolean) => {
             backgroundColor: _get(theme, ['colors', 'board', 'defaultCellBGColor']),
         },
         smartHintOutOfFocusBGColor: {
-            backgroundColor: isLight ? hexToRGBA(scrimColor, scrimOpacity) : _get(theme, ['colors', 'surface']),
+            backgroundColor: 'transparent',
         },
         tryOutInputColor: {
             color: smartHintColorSystemReader.tryOutFilledNumberColor(_get(theme, 'colors.smartHints')),
