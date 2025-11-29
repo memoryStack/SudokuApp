@@ -21,8 +21,12 @@ export const createInputPanelStateRepositoryHandlers = (inputPanelActions, state
     } = stateReaders
 
     return {
-        setLockedNumber: (lockNumber: LockNumber) => invokeDispatch(setLockedNumber(lockNumber)),
-        unlockNumber: () => invokeDispatch(unlockNumber()),
+        setLockedNumber: (lockNumber: LockNumber) => {
+            invokeDispatch(setLockedNumber(lockNumber))
+        },
+        unlockNumber: () => {
+            invokeDispatch(unlockNumber())
+        },
         getIsNumberLocked: () => getIsNumberLocked(getStoreState()),
         getLockedNumber: () => getLockedNumber(getStoreState())
     }

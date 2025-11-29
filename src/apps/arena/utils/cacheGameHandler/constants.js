@@ -5,6 +5,7 @@ const GAME_DATA_KEYS = {
     REFEREE: 'referee',
     BOARD_DATA: 'boardData',
     CELL_ACTIONS: 'cellActionsData',
+    INPUT_PANEL: 'inputPanel'
 }
 
 export { PREVIOUS_GAME_DATA_KEY, GAME_DATA_KEYS }

@@ -21,6 +21,7 @@ const persistGameData = (
         boardRepository,
         boardControllerRepository,
         gamePersistenceAdapter,
+        inputPanelRepository
     } = dependencies
 
     const dataToBeCached: GameDataToPersist = {
@@ -42,7 +43,10 @@ const persistGameData = (
             pencilState: boardControllerRepository.getPencil(),
             hints: boardControllerRepository.getHintsLeftCount(),
             hintsUsed: boardControllerRepository.getHintsUsed(),
-        }
+        },
+        [GAME_DATA_KEYS.INPUT_PANEL]: {
+            lockedNumber: inputPanelRepository.getLockedNumber(),
+        },
     }
 
     gamePersistenceAdapter.persistGameData(dataToBeCached)

@@ -12,7 +12,8 @@ const handleNumberClick = ({ getState, params: { number, isLongPress, notesInput
     if (!isGameActive(gameStateRepository.getGameState())) return
     const isNumberLocked = inputPanelRepository.getIsNumberLocked()
     const numberFillOnCellClickAllowed = gameSettingsAdapter.fillNumberOnCellClick()
-    const inputType = notesInput ? INPUT_TYPE.NOTES : INPUT_TYPE.MAIN_NUMBERS
+    const pencilState = boardControllerRepository.getPencil()
+    const inputType = (notesInput || pencilState === PENCIL_STATE.ACTIVE) ? INPUT_TYPE.NOTES : INPUT_TYPE.MAIN_NUMBERS
     if ((isLongPress && numberFillOnCellClickAllowed) || isNumberLocked) {
         const lockedNumber = inputPanelRepository.getLockedNumber()
         const newNumberToLock = { number, type: inputType }
@@ -21,7 +22,6 @@ const handleNumberClick = ({ getState, params: { number, isLongPress, notesInput
         return
     }
 
-    const pencilState = boardControllerRepository.getPencil()
     const fillNoteOnShortClick = gameSettingsAdapter.fillNoteOnShortClick()
     const fillAsNote = notesInput || (fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE)
     inputNumberUseCase(

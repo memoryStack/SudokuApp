@@ -17,6 +17,7 @@ import { showHintHCUseCase } from '../hintsMenu/actionHandlers'
 import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
 
 import { ACTION_HANDLERS as INPUT_PANEL_ACTION_HANDLERS } from '../GameInputPanel/actionHandlers'
+import { INPUT_TYPE } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
 
 // dependencies in state is expected by INPUT_PANEL_ACTION_HANDLERS
 const handleInit = ({ setState, params: { dependencies } }) => {
@@ -35,12 +36,18 @@ const getNewPencilState = currentState => {
 }
 
 const handlePencilClick = ({ params: { dependencies } }) => {
-    const { boardControllerRepository, gameStateRepository } = dependencies
+    const { boardControllerRepository, gameStateRepository, inputPanelRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
     const currentState = boardControllerRepository.getPencil()
     const pencilNewState = getNewPencilState(currentState)
     boardControllerRepository.setPencil(pencilNewState)
+    if (inputPanelRepository.getIsNumberLocked()) {
+        inputPanelRepository.setLockedNumber({
+            ...inputPanelRepository.getLockedNumber(),
+            type: pencilNewState === PENCIL_STATE.ACTIVE ? INPUT_TYPE.NOTES : INPUT_TYPE.MAIN_NUMBERS
+        })
+    }
     dependencies?.analytics?.sendPencilClickEvent?.({
         statusAfterClick: pencilNewState
     })

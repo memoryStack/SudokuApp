@@ -5,6 +5,7 @@ import { GAME_STATE, PENCIL_STATE } from '../constants'
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 import { Time } from './stateManagers/refreeRepository'
 import { Move } from './stateManagers/boardRepository'
+import { INPUT_TYPE } from './stateManagers/inputPanelRepository'
 
 export type PausedGameData = Omit<StartGameData, 'dependencies'> & {
     gameState: GAME_STATE
@@ -29,6 +30,12 @@ export type GameDataToPersist = {
         pencilState: PENCIL_STATE,
         hints: number // these are hints left if there is a limit
         hintsUsed: number
+    },
+    inputPanel: {
+        lockedNumber: {
+            number: number,
+            type: INPUT_TYPE
+        }
     }
 }
 

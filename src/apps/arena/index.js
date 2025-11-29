@@ -56,6 +56,7 @@ import _get from '@lodash/get'
 import { getKey, setKey } from '@utils/storage'
 import { shouldShowCustomizeExperienceTooltipUseCase } from '@application/usecases/customizeExperience'
 import { COACHMARKS } from '@application/adapterInterfaces/coachMarks'
+import _isNil from '@lodash/isNil'
 
 const AvailableStarsHeaderView = ({
     styles,
@@ -153,6 +154,13 @@ const Arena_ = ({
         })
     }, [showSmartHint, smartHintHCHeight, pageHeight])
 
+    const prevAllowNotesInputWithoutPencil = usePrevious(allowNotesInputWithoutPencil)
+    useEffect(() => {
+        if (_isNil(allowNotesInputWithoutPencil) || _isNil(prevAllowNotesInputWithoutPencil)) return
+        if (allowNotesInputWithoutPencil !== prevAllowNotesInputWithoutPencil)
+            dependencies?.inputPanelRepository?.unlockNumber?.()
+    }, [allowNotesInputWithoutPencil, prevAllowNotesInputWithoutPencil])
+
     // don't put the route in the dependency here, else this hook will render two times
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
@@ -185,13 +193,15 @@ const Arena_ = ({
                 smartHintRepository,
                 gameStateRepository,
                 refreeRepository,
-                boardControllerRepository
+                boardControllerRepository,
+                inputPanelRepository
             } = dependencies
             boardRepository.setState(INITIAL_STATE)
             gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
             smartHintRepository.removeHints()
             // refreeRepository.setState(REFREE_DEFAULT_STATE)
             boardControllerRepository.resetState()
+            inputPanelRepository.unlockNumber()
             hideModal()
         }
     }, [])
@@ -461,7 +471,7 @@ const Arena_ = ({
             onLayout={onParentLayout}
         >
             <View style={styles.contentContainer}>
-                {/* {renderFillPuzzleBtn()} */}
+                {renderFillPuzzleBtn()}
                 <Refree
                     timer={timer}
                     time={time}

@@ -10,13 +10,14 @@ import { GAME_DATA_KEYS, PREVIOUS_GAME_DATA_KEY } from 'src/apps/arena/utils/cac
 
 const getPausedGameData = async () => {
     return getKey(PREVIOUS_GAME_DATA_KEY)
-        .then((pausedGameData: GameDataToPersist) => {
+        .then((pausedGameData) => {
             if (_isEmpty(pausedGameData)) return null
             const transformedGameData: PausedGameData = {
                 gameState: pausedGameData[GAME_DATA_KEYS.STATE],
                 ...pausedGameData[GAME_DATA_KEYS.BOARD_DATA],
                 ...pausedGameData[GAME_DATA_KEYS.REFEREE],
                 ...pausedGameData[GAME_DATA_KEYS.CELL_ACTIONS],
+                ...pausedGameData[GAME_DATA_KEYS.INPUT_PANEL],
             }
             return transformedGameData
         })

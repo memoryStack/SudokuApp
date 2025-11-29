@@ -5,6 +5,8 @@ import { Move } from "../adapterInterfaces/stateManagers/boardRepository"
 import { GAME_STATE, PENCIL_STATE } from "../constants"
 import { Dependencies } from "../type"
 import { NEW_GAME_IDS } from "./newGameMenu/constants"
+import { INPUT_TYPE } from "@application/adapterInterfaces/stateManagers/inputPanelRepository"
+import _isNil from "@lodash/isNil"
 
 // TODO: manage this Time type properly, m sure it's getting used at multiple places
 type Time = {
@@ -27,6 +29,11 @@ export type StartGameData = {
     hints?: number
     hintsUsed?: number
     dependencies: Dependencies
+    lockedNumber?: {
+        number: number,
+        type: INPUT_TYPE
+    }
+
 }
 
 export const startGameUseCase = ({
@@ -43,9 +50,11 @@ export const startGameUseCase = ({
     dependencies,
     hints: hintsLeft = MAX_AVAILABLE_HINTS,
     hintsUsed = 0,
+    lockedNumber
 }: StartGameData) => {
     const {
-        boardRepository, refreeRepository, gameStateRepository, boardControllerRepository, analytics
+        boardRepository, refreeRepository, gameStateRepository, boardControllerRepository, analytics,
+        inputPanelRepository
     } = dependencies
 
     boardRepository.setState({ mainNumbers, notes, selectedCell, moves })
@@ -61,6 +70,12 @@ export const startGameUseCase = ({
     boardControllerRepository.setHintsUsed(hintsUsed)
 
     gameStateRepository.setGameState(GAME_STATE.ACTIVE)
+
+    // write it more thoughfully so that these checks don't need to be put
+    if (_isNil(lockedNumber) || _isNil(lockedNumber?.number) || lockedNumber?.number === 0) inputPanelRepository.unlockNumber()
+    else {
+        inputPanelRepository.setLockedNumber(lockedNumber)
+    }
 
     analytics?.sendPuzzleLifeCycleEvent({
         puzzle: boardRepository.getPuzzleString(),

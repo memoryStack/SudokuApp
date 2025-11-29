@@ -130,7 +130,7 @@ export const GameInputPanelView = ({
                 disableNumbersInput={disableNumbersInput}
                 disableEraser={disableEraser}
                 shouldAddNumberInPanel={shouldAddNumberInPanel}
-                lockedNumber={lockedNumberInputType === INPUT_TYPE.MAIN_NUMBERS ? lockedNumberValue : 0}
+                lockedNumber={lockedNumberValue}
                 cellWidth={cellWidth}
             />
         )
