@@ -401,6 +401,25 @@ describe('Board Cell Fill Notes', () => {
             expect(isNotePresentInCell(cell, 2)).toBe(false)
         })
     })
+
+    test('clicking same note number twice should toggle the note off', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+        const numberToFill = 2
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent.press(screen.getByText('Pencil'))
+        fireEvent.press(getInputPanelNumberIfEnabled(numberToFill))
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, numberToFill)).toBe(true)
+        })
+
+        fireEvent.press(getInputPanelNumberIfEnabled(numberToFill))
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, numberToFill)).toBe(false)
+        })
+    })
 })
 
 describe('Board Cell fill MainValue in Notes filled cell', () => {

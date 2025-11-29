@@ -14,9 +14,11 @@ import {
     getInputPanelEraser,
     isNotePresentInCell,
     expectMainNumberPresentInCell,
+    isMainNumberNotPresentInCell,
     solvePuzzle,
     gameOverByMistakes,
     exhaustHints,
+    getCellByPosition,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -38,6 +40,9 @@ import { HINT_SUGGESTION_DIALOG_TEST_ID } from '../ShowHintSuggestionDialog/show
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 import { soundAdapter } from '@adapters/soundAdapter'
 import { gameSettingsAdapter } from '@adapters/gameSettings'
+import { BOARD_CONTROLLER_CONTAINER_TEST_ID, ERASER_CONTROLLER_TEST_ID } from '../cellActions/cellActions.constants'
+import { NOTES_INPUT_PANEL_TEST_ID, MAIN_NUMBER_INPUT_PANEL_TEST_ID } from '../GameInputPanel'
+import { INPUT_PANEL_ITEM_TEST_ID } from '../inputPanel/constants'
 
 const storageUtils = require('@utils/storage')
 
@@ -61,7 +66,8 @@ jest.mock('@adapters/gameSettings', () => {
             soundsEnabled: jest.fn(() => false),
             fillNoteOnShortClick: jest.fn(() => true),
             shouldGameOverOnMistakesThresholdCrossed: jest.fn(() => false),
-            fillNumberOnCellClick: jest.fn(() => false)
+            fillNumberOnCellClick: jest.fn(() => false),
+            fillNotesWithoutPencil: jest.fn(() => false)
         }
     }
 })
@@ -311,4 +317,179 @@ describe('Game Settings', () => {
         })
     })
 
+})
+
+describe('Fill Notes Without Pencil Setting', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'],
+            timerLimit: 100,
+        })
+        gameSettingsAdapter.fillNotesWithoutPencil.mockImplementation(() => true)
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
+    const getNotesInputPanel = () => within(screen.getByTestId(NOTES_INPUT_PANEL_TEST_ID))
+    const getMainNumberInputPanel = () => within(screen.getByTestId(MAIN_NUMBER_INPUT_PANEL_TEST_ID))
+
+    const getNumberFromNotesPanel = (number) => {
+        const notesPanel = getNotesInputPanel()
+        return notesPanel.getByText(String(number))
+    }
+
+    const getNumberFromMainPanel = (number) => {
+        const mainPanel = getMainNumberInputPanel()
+        return mainPanel.getByText(String(number))
+    }
+
+    test('should render two input panels when fillNotesWithoutPencil is enabled', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        expect(screen.getByTestId(NOTES_INPUT_PANEL_TEST_ID)).toBeOnTheScreen()
+        expect(screen.getByTestId(MAIN_NUMBER_INPUT_PANEL_TEST_ID)).toBeOnTheScreen()
+        expect(screen.getByText('Notes')).toBeOnTheScreen()
+        expect(screen.getByText('Main Number')).toBeOnTheScreen()
+    })
+
+    test('should hide Pencil button and show Eraser in cell actions when fillNotesWithoutPencil is enabled', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const boardControllerContainer = within(screen.getByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID))
+        expect(boardControllerContainer.queryByText('Pencil')).not.toBeOnTheScreen()
+        expect(boardControllerContainer.getByTestId(ERASER_CONTROLLER_TEST_ID)).toBeOnTheScreen()
+        expect(boardControllerContainer.getByText('Eraser')).toBeOnTheScreen()
+    })
+
+    test('clicking a number from notes panel should fill note in empty cell, not main number', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent.press(getNumberFromNotesPanel(2))
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 2)).toBe(true)
+        })
+        isMainNumberNotPresentInCell(emptyCell)
+    })
+
+    test('clicking a number from main numbers panel should fill main number in cell', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getNumberFromMainPanel(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+    })
+
+    test('numbers with all instances filled should be disabled in main panel but enabled in notes panel', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const notesPanel = getNotesInputPanel()
+        const mainPanel = getMainNumberInputPanel()
+        expect(mainPanel.getByText('8')).toBeEnabled()
+        expect(notesPanel.getByText('8')).toBeEnabled()
+
+        const cellsToFillWith8 = [12, 27, 32, 79]
+
+        fireEvent(getNumberFromMainPanel(8), 'onLongPress')
+
+        for (const position of cellsToFillWith8) {
+            const cell = getCellByPosition(position)
+            fireEvent.press(cell)
+            await waitFor(() => {
+                expectMainNumberPresentInCell(cell, '8')
+            })
+        }
+
+        await waitFor(() => {
+            expect(mainPanel.getByText('8')).toBeDisabled()
+        })
+        expect(notesPanel.getByText('8')).toBeEnabled()
+    })
+
+    test('switching from locked main number to notes panel number should fill note on cell click', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        let emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getNumberFromMainPanel(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        fireEvent(getNumberFromNotesPanel(3), 'onLongPress')
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 3)).toBe(true)
+        })
+    })
+
+    test('short click on notes panel number should fill note without needing to lock', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 4)).toBe(false)
+        })
+
+        fireEvent.press(getNumberFromNotesPanel(4))
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 4)).toBe(true)
+        })
+    })
+
+    test('eraser in cell actions should erase cell content', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent.press(getNumberFromNotesPanel(2))
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 2)).toBe(true)
+        })
+
+        fireEvent.press(screen.getByTestId(ERASER_CONTROLLER_TEST_ID))
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 2)).toBe(false)
+        })
+    })
+
+    test('locking a number then clicking same number should unlock it', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getNumberFromMainPanel(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        fireEvent.press(getNumberFromMainPanel(2))
+
+        const newEmptyCell = getFirstEmptyCell()
+        fireEvent.press(newEmptyCell)
+
+        expect(isEmptyElement(newEmptyCell)).toBe(true)
+    })
 })

@@ -28,6 +28,9 @@ import { useDependency } from 'src/hooks/useDependency'
 import { useStyles } from '@utils/customHooks/useStyles'
 import _get from '@lodash/get'
 
+export const NOTES_INPUT_PANEL_TEST_ID = 'NOTES_INPUT_PANEL_TEST_ID'
+export const MAIN_NUMBER_INPUT_PANEL_TEST_ID = 'MAIN_NUMBER_INPUT_PANEL_TEST_ID'
+
 const getInstancesCounts = mainNumbers => {
     const instancesCount = new Array(10).fill(0)
     BoardIterators.forBoardEachCell(cell => {
@@ -80,7 +83,7 @@ export const GameInputPanelView = ({
     const renderTwoPanels = () => {
         return (
             <View style={styles.separateInputPanel.container}>
-                <View style={styles.separateInputPanel.inputPanelContainer}>
+                <View style={styles.separateInputPanel.inputPanelContainer} testID={NOTES_INPUT_PANEL_TEST_ID}>
                     <Text style={styles.separateInputPanel.text} type={TEXT_VARIATIONS.BODY_MEDIUM}>Notes</Text>
                     <Inputpanel
                         onAction={({ type, payload }) => {
@@ -102,7 +105,7 @@ export const GameInputPanelView = ({
                         lockedNumber={lockedNumberInputType === INPUT_TYPE.NOTES ? lockedNumberValue : 0}
                     />
                 </View>
-                <View style={styles.separateInputPanel.inputPanelContainer}>
+                <View style={styles.separateInputPanel.inputPanelContainer} testID={MAIN_NUMBER_INPUT_PANEL_TEST_ID}>
                     <Text style={styles.separateInputPanel.text} type={TEXT_VARIATIONS.BODY_MEDIUM}>Main Number</Text>
                     <Inputpanel
                         numbersVisible={numbersVisible}

@@ -25,7 +25,7 @@ import FastPencil from './FastPencil'
 import Hint from './Hint'
 import Eraser from './Eraser';
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './cellActions.constants'
+import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID, ERASER_CONTROLLER_TEST_ID } from './cellActions.constants'
 import { getStyles } from './cellActions.styles'
 import SpotlightTourProvider from 'src/containers/SpotlightTourProvider';
 import { addListener, removeListener } from '@utils/GlobalEventBus';
@@ -151,7 +151,7 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
                         disabled={disableControllers}
                         iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
                         onClick={onEraserClick}
-                        testID={BOARD_CONTROLLER_TEST_ID}
+                        testID={ERASER_CONTROLLER_TEST_ID}
                         textStyles={textStyles}
                     />
                     : null
