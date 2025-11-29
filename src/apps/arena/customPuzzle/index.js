@@ -22,6 +22,8 @@ import { areMultipleMainNumbersInAnyHouseOfCell, areSameCells } from '../utils/u
 import { useDependency } from 'src/hooks/useDependency'
 import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
+import { useSelector } from 'react-redux'
+import { getLockedNumber } from '../store/selectors/inputPanel.selectors'
 
 const CustomPuzzle_ = ({
     mainNumbers,
@@ -32,6 +34,8 @@ const CustomPuzzle_ = ({
     onAction,
 }) => {
     const dependencies = useDependency()
+
+    const { number: lockedNumber } = useSelector(getLockedNumber)
 
     const styles = useStyles(getStyles)
 
@@ -105,7 +109,11 @@ const CustomPuzzle_ = ({
                     />
                 </View>
                 <View style={styles.inputPanelContainer}>
-                    <Inputpanel onAction={onAction} shouldAddNumberInPanel={shouldAddNumberInPanel} />
+                    <Inputpanel
+                        onAction={onAction}
+                        shouldAddNumberInPanel={shouldAddNumberInPanel}
+                        lockedNumber={lockedNumber}
+                    />
                 </View>
                 <Button containerStyle={styles.playButtonContainer} onPress={handlePlayClick} label={PLAY} />
             </View>

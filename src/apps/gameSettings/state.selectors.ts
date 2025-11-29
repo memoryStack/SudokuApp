@@ -1,3 +1,4 @@
+import { LockNumber } from "@application/adapterInterfaces/stateManagers/inputPanelRepository"
 import { GAME_SETTINGS_STATE } from "./constants"
 
 const getMainNumbers = state => state[GAME_SETTINGS_STATE.BOARD]?.mainNumbers
@@ -32,7 +33,7 @@ const getLastActivityTime = state => state[GAME_SETTINGS_STATE.REFREE]?.lastActi
 
 const getIsNumberLocked = state => state[GAME_SETTINGS_STATE.INPUT_PANEL]?.lockedNumber.isLocked
 
-const getLockedNumber = (state): number => state[GAME_SETTINGS_STATE.INPUT_PANEL]?.lockedNumber.number
+const getLockedNumber = (state): LockNumber => state[GAME_SETTINGS_STATE.INPUT_PANEL]?.lockedNumber
 
 export const refreeSelectors = {
     getMaxMistakesLimit,

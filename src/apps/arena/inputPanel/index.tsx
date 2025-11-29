@@ -15,9 +15,6 @@ import { useBoardElementsDimensions } from '../hooks/useBoardElementsDimensions'
 
 import { getStyles } from './inputPanel.styles'
 import { ACTION_TYPES, INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from './constants'
-import { useDependency } from 'src/hooks/useDependency'
-import { useSelector } from 'react-redux'
-import { getLockedNumber } from '../store/selectors/inputPanel.selectors'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ERASER_SOURCE = require('@resources/assets/eraser.png')
@@ -33,7 +30,9 @@ interface Props {
     shouldAddNumberInPanel: (number: number) => boolean
     cellWidth?: number
     textType?: TEXT_VARIATIONS
-    getLockedNumberSelector?: (state: any) => number
+    numOfRows?: number,
+    addEraser?: boolean,
+    lockedNumber?: number
 }
 
 const Inputpanel_: React.FC<Props> = ({
@@ -45,11 +44,11 @@ const Inputpanel_: React.FC<Props> = ({
     shouldAddNumberInPanel = _noop,
     cellWidth,
     textType,
-    getLockedNumberSelector
+    numOfRows = 2,
+    addEraser = true,
+    lockedNumber
 }) => {
     const { CELL_WIDTH } = useBoardElementsDimensions()
-
-    const lockedNumber = useSelector(getLockedNumberSelector ?? getLockedNumber)
 
     const styles = useMemo(() => getStyles(cellWidth ?? CELL_WIDTH), [cellWidth, CELL_WIDTH])
 
@@ -98,7 +97,7 @@ const Inputpanel_: React.FC<Props> = ({
         />
     )
 
-    const renderHorizontalSeparator = () => <View key="hori_seperator" style={styles.horizontalSeperator} />
+    const renderHorizontalSeparator = (keySuffix = '') => <View key={`hori_seperator-${keySuffix}`} style={styles.horizontalSeperator} />
 
     const renderPanelRow = (rowItems: React.ReactElement[], key: string) => (
         <View key={key} style={styles.rowContainer}>
@@ -106,20 +105,22 @@ const Inputpanel_: React.FC<Props> = ({
         </View>
     )
 
+    const itemsInRow = numOfRows === 2 ? 5 : 3
+
     const renderPanelView = () => {
         const rows = []
         let rowItems: React.ReactElement[] = []
         BoardIterators.forCellEachNote(number => {
             if (shouldAddNumberInPanel(number)) rowItems.push(renderInputNumber(number))
-            if (rowItems.length >= 5 && !singleRow) {
-                rows.push(renderPanelRow(rowItems, 'rowOne'))
+            if (rowItems.length >= itemsInRow && !singleRow) {
+                rows.push(renderPanelRow(rowItems, `row-${rows.length}`))
+                rows.push(renderHorizontalSeparator(`${rows.length}`))
                 rowItems = []
             }
         })
 
-        rowItems.push(renderEraser())
-        rows.push(renderHorizontalSeparator())
-        rows.push(renderPanelRow(rowItems, 'rowTwo'))
+        addEraser && rowItems.push(renderEraser())
+        rows.push(renderPanelRow(rowItems, `row-${numOfRows}`))
         return rows
     }
 

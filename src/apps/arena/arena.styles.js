@@ -5,7 +5,7 @@ import _get from '@lodash/get'
 import { hexToRGBA } from '@utils/util'
 import { HEADER_HORIZONTAL_MARGIN } from 'src/navigation/headerSection/headerSection.constants'
 
-export const getStyles = (_, theme) => {
+export const getStyles = ({ allowNotesInputWithoutPencil }, theme) => {
     const { color: scrimColor, opacity: scrimOpacity } = _get(theme, ['dialog', 'scrim'])
     return StyleSheet.create({
         page: {
@@ -15,7 +15,7 @@ export const getStyles = (_, theme) => {
             flex: 1,
             width: '100%',
             alignItems: 'center',
-            marginTop: 40,
+            marginTop: allowNotesInputWithoutPencil ? 20 : 40,
         },
         gameOverCardAbsoluteBG: {
             position: 'absolute',
@@ -34,7 +34,7 @@ export const getStyles = (_, theme) => {
         },
         inputPanelContainer: {
             width: '100%',
-            marginVertical: 20,
+            marginVertical: 16,
         },
         availableStarsContainer: {
             display: 'flex',

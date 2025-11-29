@@ -48,8 +48,11 @@ export const getStyles = (_: any, theme: Theme) => StyleSheet.create({
         maxWidth: 312
     },
     boardControllerContainerStyles: {
-        marginTop: 8,
-        marginBottom: 8
+        marginTop: 0
+    },
+    inputPanelContainer: {
+        width: '100%',
+        marginVertical: 8,
     },
     boardControllerTextStyles: {
         marginTop: 2

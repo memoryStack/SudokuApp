@@ -53,5 +53,9 @@ export const SNACKBAR_MSGS = {
     [GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE]: {
         [OPTION_STATES.ON]: `in Preview do below\n a. fill 1 in first cell\nit's a mistake and see mistakes count has gone up`,
         [OPTION_STATES.OFF]: `in Preview do below\n a. fill 1 in first cell\nit's a mistake and see you can't notice it in preview`,
+    },
+    [GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL]: {
+        [OPTION_STATES.ON]: `in Preview now you will see 2 input panels, one for notes and one for main numbers`,
+        [OPTION_STATES.OFF]: `now you have to tap on Pencil first before filling Notes`,
     }
 }

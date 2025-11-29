@@ -23,6 +23,7 @@ import Undo from './Undo'
 import Pencil from './Pencil'
 import FastPencil from './FastPencil'
 import Hint from './Hint'
+import Eraser from './Eraser';
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { BOARD_CONTROLLER_TEST_ID, BOARD_CONTROLLER_CONTAINER_TEST_ID } from './cellActions.constants'
 import { getStyles } from './cellActions.styles'
@@ -32,8 +33,8 @@ import { EVENTS } from 'src/constants/events';
 import _get from '@lodash/get';
 import { useThemeValues } from '../hooks/useTheme';
 
-const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, containerStyles, textStyles }) => {
-    const dependencies = useDependency()
+const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, containerStyles, textStyles, dependencies }) => {
+    const allowNotesInputWithoutPencil = dependencies?.gameSettingsAdapter?.fillNotesWithoutPencil?.()
 
     const styles = useStyles(getStyles)
 
@@ -43,6 +44,10 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
 
     const { start, copilotEvents, currentStepNumber, totalStepsNumber, goToNext, stop, visible } = useCopilot()
     const wentoff = useRef(false)
+
+    useEffect(() => {
+        onAction({ type: ACTION_TYPES.ON_INIT, payload: { dependencies } })
+    }, [dependencies])
 
     useEffect(() => {
         if (!visible) return
@@ -87,6 +92,8 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
 
     const onFastPencilClick = () => onAction({ type: ACTION_TYPES.ON_FAST_PENCIL_CLICK, payload: { dependencies } })
 
+    const onEraserClick = () => onAction({ type: ACTION_TYPES.ON_ERASE_CLICK, payload: { dependencies } })
+
     const onHintClick = (showAllHints = false) => {
         onAction({
             type: ACTION_TYPES.ON_HINT_CLICK,
@@ -112,14 +119,17 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
                 testID={BOARD_CONTROLLER_TEST_ID}
                 textStyles={textStyles}
             />
-            <Pencil
-                disabled={disableControllers}
-                iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
-                isActive={pencilState === PENCIL_STATE.ACTIVE}
-                onClick={onPencilClick}
-                testID={BOARD_CONTROLLER_TEST_ID}
-                textStyles={textStyles}
-            />
+            {
+                !allowNotesInputWithoutPencil ?
+                    <Pencil
+                        disabled={disableControllers}
+                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                        isActive={pencilState === PENCIL_STATE.ACTIVE}
+                        onClick={onPencilClick}
+                        testID={BOARD_CONTROLLER_TEST_ID}
+                        textStyles={textStyles}
+                    /> : null
+            }
             <FastPencil
                 disabled={disableControllers}
                 iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
@@ -135,20 +145,27 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
                 testID={BOARD_CONTROLLER_TEST_ID}
                 textStyles={textStyles}
             />
+            {
+                allowNotesInputWithoutPencil ?
+                    <Eraser
+                        disabled={disableControllers}
+                        iconBoxSize={CELL_ACTION_ICON_BOX_DIMENSION}
+                        onClick={onEraserClick}
+                        testID={BOARD_CONTROLLER_TEST_ID}
+                        textStyles={textStyles}
+                    />
+                    : null
+            }
         </View>
     )
 }
 
 export const BoardControllerComp = withActions({ actionHandlers: ACTION_HANDLERS })(BoardController_)
 
-const WrappedBoardController = ({ refFromParent, gameState, pencilState }) => {
+const WrappedBoardController = (props) => {
     return (
         <SpotlightTourProvider showFooter={false}>
-            <BoardControllerComp
-                refFromParent={refFromParent}
-                gameState={gameState}
-                pencilState={pencilState}
-            />
+            <BoardControllerComp {...props} />
         </SpotlightTourProvider>
     )
 }

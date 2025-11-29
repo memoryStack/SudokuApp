@@ -3,6 +3,7 @@ import type {
 } from "@application/adapterInterfaces/gameSettings";
 
 export enum GAME_SETTINGS_KEYS {
+    FILL_NOTES_WITHOUT_PENCIL = 'FILL_NOTES_WITHOUT_PENCIL',
     ALLOW_ANY_NOTE_IN_CELL = 'ALLOW_ANY_NOTE_IN_CELL',
     FILL_NOTE_ON_SHORT_CLICK = 'FILL_NOTE_ON_SHORT_CLICK',
     HIGHLIGHT_CELLS = 'HIGHLIGHT_CELLS',
@@ -39,4 +40,5 @@ export interface GameSettingsAdapter extends ApplicationLayerGameSettingsAdapter
     showFeedbackOnMistake: () => boolean
     fillNumberOnCellClick: () => boolean
     isDarkMode: () => boolean
+    fillNotesWithoutPencil: () => boolean
 }

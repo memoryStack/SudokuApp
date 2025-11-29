@@ -5,7 +5,8 @@ import { getIsNumberLocked, getLockedNumber } from '../../apps/arena/store/selec
 import { getStoreState, invokeDispatch } from '../../redux/dispatch.helpers'
 
 import type {
-    InputPanelRepository as InputPanelRepositoryInterface
+    InputPanelRepository as InputPanelRepositoryInterface,
+    LockNumber
 } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
 
 export const createInputPanelStateRepositoryHandlers = (inputPanelActions, stateReaders): InputPanelRepositoryInterface => {
@@ -20,7 +21,7 @@ export const createInputPanelStateRepositoryHandlers = (inputPanelActions, state
     } = stateReaders
 
     return {
-        setLockedNumber: (number: number) => invokeDispatch(setLockedNumber(number)),
+        setLockedNumber: (lockNumber: LockNumber) => invokeDispatch(setLockedNumber(lockNumber)),
         unlockNumber: () => invokeDispatch(unlockNumber()),
         getIsNumberLocked: () => getIsNumberLocked(getStoreState()),
         getLockedNumber: () => getLockedNumber(getStoreState())

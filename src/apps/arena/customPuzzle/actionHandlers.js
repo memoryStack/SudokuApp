@@ -21,6 +21,7 @@ import { startGameUseCase } from '@application/usecases/startGameUseCase'
 import { CUSTOMIZED_PUZZLE_LEVEL_TITLE } from '@resources/constants'
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
+import { INPUT_TYPE } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -150,8 +151,8 @@ const handleInputNumberClick = ({ setState, getState, params: { number: newInput
     const isNumberLocked = inputPanelRepository.getIsNumberLocked()
     const numberFillOnCellClickAllowed = gameSettingsAdapter.fillNumberOnCellClick()
     if ((isLongPress && numberFillOnCellClickAllowed) || isNumberLocked) {
-        const lockedNumber = inputPanelRepository.getLockedNumber()
-        if (lockedNumber !== newInputValue) inputPanelRepository.setLockedNumber(newInputValue)
+        const { number: lockedNumber } = inputPanelRepository.getLockedNumber()
+        if (lockedNumber !== newInputValue) inputPanelRepository.setLockedNumber({ number: newInputValue, type: INPUT_TYPE.MAIN_NUMBERS })
         else inputPanelRepository.unlockNumber()
         return
     }
@@ -233,7 +234,8 @@ const handleCellClick = ({ setState, getState, params: { cell, dependencies } })
 
     if (inputPanelRepository.getIsNumberLocked()) {
         setState({ selectedCell: cell })
-        inputNumberAndPlaySound(inputPanelRepository.getLockedNumber(), cell, mainNumbers, { getState, setState })
+        const { number } = inputPanelRepository.getLockedNumber()
+        inputNumberAndPlaySound(number, cell, mainNumbers, { getState, setState })
         return
     }
 

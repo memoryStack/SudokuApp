@@ -4,16 +4,17 @@ import { Board } from '@domain/board/board'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
 import { areSameCells } from '@domain/board/utils/housesAndCells'
 import { inputNumberUseCase } from '@application/usecases/board'
-import { PENCIL_STATE } from '@application/constants'
+import { INPUT_TYPE } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
 
 const handleCellPress = ({ params: { cell, dependencies } }) => {
-    const { boardRepository, soundAdapter, gameSettingsAdapter, inputPanelRepository, boardControllerRepository } = dependencies
+    const { boardRepository, soundAdapter, gameSettingsAdapter, inputPanelRepository } = dependencies
 
     if (inputPanelRepository.getIsNumberLocked()) {
         boardRepository.setSelectedCell(cell)
+        const { number, type } = inputPanelRepository.getLockedNumber()
         inputNumberUseCase(
-            inputPanelRepository.getLockedNumber(),
-            boardControllerRepository.getPencil() === PENCIL_STATE.ACTIVE,
+            number,
+            type === INPUT_TYPE.NOTES,
             dependencies,
         )
         return

@@ -3,24 +3,27 @@ import { ACTION_TYPES } from '../inputPanel/constants'
 import { isGameActive } from '../utils/util'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
 import { PENCIL_STATE } from '@application/constants'
+import { INPUT_TYPE } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
+import _isEqual from '@lodash/isEqual'
 
-const handleNumberClick = ({ getState, params: { number, isLongPress } }) => {
+const handleNumberClick = ({ getState, params: { number, isLongPress, notesInput = false } }) => {
     const { dependencies } = getState()
     const { gameStateRepository, boardControllerRepository, gameSettingsAdapter, inputPanelRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
-
     const isNumberLocked = inputPanelRepository.getIsNumberLocked()
     const numberFillOnCellClickAllowed = gameSettingsAdapter.fillNumberOnCellClick()
+    const inputType = notesInput ? INPUT_TYPE.NOTES : INPUT_TYPE.MAIN_NUMBERS
     if ((isLongPress && numberFillOnCellClickAllowed) || isNumberLocked) {
         const lockedNumber = inputPanelRepository.getLockedNumber()
-        if (lockedNumber !== number) inputPanelRepository.setLockedNumber(number)
+        const newNumberToLock = { number, type: inputType }
+        if (!_isEqual(lockedNumber, newNumberToLock)) inputPanelRepository.setLockedNumber(newNumberToLock)
         else inputPanelRepository.unlockNumber()
         return
     }
 
     const pencilState = boardControllerRepository.getPencil()
     const fillNoteOnShortClick = gameSettingsAdapter.fillNoteOnShortClick()
-    const fillAsNote = fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE
+    const fillAsNote = notesInput || (fillNoteOnShortClick ? !isLongPress : pencilState === PENCIL_STATE.ACTIVE)
     inputNumberUseCase(
         number,
         fillAsNote,

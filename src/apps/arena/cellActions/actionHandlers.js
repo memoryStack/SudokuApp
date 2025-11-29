@@ -14,6 +14,15 @@ import { HINTS_IDS } from '../utils/smartHints/constants'
 import _isNil from '@lodash/isNil'
 import { showHintHCUseCase } from '../hintsMenu/actionHandlers'
 
+import { ACTION_TYPES as INPUT_PANEL_ACTION_TYPES } from '../inputPanel/constants'
+
+import { ACTION_HANDLERS as INPUT_PANEL_ACTION_HANDLERS } from '../GameInputPanel/actionHandlers'
+
+// dependencies in state is expected by INPUT_PANEL_ACTION_HANDLERS
+const handleInit = ({ setState, params: { dependencies } }) => {
+    setState({ dependencies })
+}
+
 const handleUndoClick = ({ params: { dependencies } }) => {
     const { gameStateRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
@@ -124,17 +133,21 @@ const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, 
 }
 
 const ACTION_TYPES = {
+    ON_INIT: 'ON_INIT',
     ON_UNDO_CLICK: 'ON_UNDO_CLICK',
     ON_PENCIL_CLICK: 'ON_PENCIL_CLICK',
     ON_FAST_PENCIL_CLICK: 'ON_FAST_PENCIL_CLICK',
     ON_HINT_CLICK: 'ON_HINT_CLICK',
+    ...INPUT_PANEL_ACTION_TYPES
 }
 
 const ACTION_HANDLERS = {
+    [ACTION_TYPES.ON_INIT]: handleInit,
     [ACTION_TYPES.ON_UNDO_CLICK]: handleUndoClick,
     [ACTION_TYPES.ON_PENCIL_CLICK]: handlePencilClick,
     [ACTION_TYPES.ON_FAST_PENCIL_CLICK]: handleFastPencilClick,
     [ACTION_TYPES.ON_HINT_CLICK]: handleHintClick,
+    ...INPUT_PANEL_ACTION_HANDLERS
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }

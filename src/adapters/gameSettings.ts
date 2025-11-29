@@ -15,6 +15,7 @@ const DEFAULT_SETTING = {
     [GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE]: true,
     [GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK]: true,
     [GAME_SETTINGS_KEYS.DARK_MODE]: undefined,
+    [GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL]: false,
 }
 
 let currentSettings = {
@@ -73,5 +74,8 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
     },
     isDarkMode: () => {
         return currentSettings[GAME_SETTINGS_KEYS.DARK_MODE] as boolean
+    },
+    fillNotesWithoutPencil: () => {
+        return currentSettings[GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL] as boolean
     }
 }

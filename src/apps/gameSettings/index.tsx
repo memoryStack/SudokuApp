@@ -63,6 +63,7 @@ import { MAX_GAME_SETTINGS_PRVIEW_TOOLTIP_SHOWN_COUNT } from '@application/adapt
 import { createRefreeStateRepositoryHandlers } from 'src/repositories/refreeRepository/refreeRepository'
 import { createInputPanelSlice } from '../arena/store/reducers/inputPanel.reducers'
 import { createInputPanelStateRepositoryHandlers } from 'src/repositories/inputPanelRepository/InputPanelRepository'
+import { GameInputPanelView } from '../arena/GameInputPanel'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
@@ -138,6 +139,12 @@ const SETTINGS_ = [
         title: 'Fill Numbers',
         hasPreview: true,
         items: [
+            {
+                key: GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL,
+                inputType: INPUT_TYPES.TOGGLE,
+                value: false,
+                description: 'Fill notes without Pencil'
+            },
             {
                 key: GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL,
                 inputType: INPUT_TYPES.TOGGLE,
@@ -225,6 +232,7 @@ const GameSettings_ = ({ onAction }) => {
     const notes = useSelector(boardStateSelectors.getNotesInfo)
     const gameState = useSelector(gameStateSelectors.getGameState)
     const pencilState = useSelector(boardControllerSelectors.getPencilStatus)
+    const lockedNumber = useSelector(inputPanelSelectors.getLockedNumber)
 
     const selectedCellMainNumber = MainNumbersRecord.getCellMainValue(mainNumbers, selectedCell)
 
@@ -279,7 +287,7 @@ const GameSettings_ = ({ onAction }) => {
 
         onAction({
             type: ACTION_TYPES.ON_INIT,
-            payload: dependencies.current
+            payload: { dependencies: dependencies.current }
         })
 
         return () => {
@@ -551,23 +559,26 @@ const GameSettings_ = ({ onAction }) => {
                                                         customWindowWidth={350}
                                                         mainNumberTextType={TEXT_VARIATIONS.HEADING_SMALL}
                                                     />
+                                                    <View style={styles.inputPanelContainer}>
+                                                        <GameInputPanelView
+                                                            numbersVisible={new Array(10).fill(true)}
+                                                            onAction={onAction}
+                                                            lockedNumber={lockedNumber}
+                                                            allowNotesInputWithoutPencil={dependencies?.current?.gameSettingsAdapter?.fillNotesWithoutPencil?.()}
+                                                            disableEraser={false}
+                                                            disableNumbersInput={false}
+                                                            cellWidth={30}
+                                                            numbersTextType={TEXT_VARIATIONS.HEADING_MEDIUM}
+                                                        />
+                                                    </View>
                                                     <BoardControllerComp
                                                         containerStyles={styles.boardControllerContainerStyles}
                                                         textStyles={styles.boardControllerTextStyles}
                                                         onAction={onAction}
+                                                        dependencies={dependencies?.current}
                                                         refFromParent={React.createRef()}
                                                         gameState={gameState}
                                                         pencilState={pencilState}
-                                                    />
-                                                    <Inputpanel
-                                                        numbersVisible={new Array(10).fill(true)}
-                                                        onAction={onAction}
-                                                        disableNumbersInput={false}
-                                                        disableEraser={false}
-                                                        shouldAddNumberInPanel={() => true}
-                                                        cellWidth={30}
-                                                        textType={TEXT_VARIATIONS.HEADING_MEDIUM}
-                                                        getLockedNumberSelector={inputPanelSelectors.getLockedNumber}
                                                     />
                                                 </View>
                                             )

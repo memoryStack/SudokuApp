@@ -24,7 +24,7 @@ const ACTION_TYPES = {
     ON_INIT: 'ON_INIT',
 }
 
-const onInit = async ({ setState, params: dependencies }) => {
+const onInit = async ({ setState, params: { dependencies } }) => {
     setState({
         dependencies
     })

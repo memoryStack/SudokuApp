@@ -95,7 +95,9 @@ const Arena_ = ({
         theme
     } = useTheme()
 
-    const styles = useStyles(getStyles)
+    const allowNotesInputWithoutPencil = dependencies?.gameSettingsAdapter?.fillNotesWithoutPencil?.()
+
+    const styles = useStyles(getStyles, { allowNotesInputWithoutPencil })
 
     const [pageHeight, setPageHeight] = useState(0)
 
@@ -459,7 +461,7 @@ const Arena_ = ({
             onLayout={onParentLayout}
         >
             <View style={styles.contentContainer}>
-                {renderFillPuzzleBtn()}
+                {/* {renderFillPuzzleBtn()} */}
                 <Refree
                     timer={timer}
                     time={time}
@@ -471,12 +473,16 @@ const Arena_ = ({
                     <PuzzleBoard />
                 </View>
                 {/* TODO: it can be named better */}
+                {renderInputPanel()}
                 <BoardController
+                    containerStyles={{
+                        marginTop: 0
+                    }}
                     refFromParent={boardControllersRef}
                     gameState={gameState}
                     pencilState={pencilState}
+                    dependencies={dependencies}
                 />
-                {renderInputPanel()}
             </View>
             {renderSmartHintHC()}
             {renderHintsMenu()}

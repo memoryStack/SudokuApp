@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import stateHandlers from '../stateHandlers/inputPanel.stateHandlers'
+import { INPUT_TYPE } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
 
 export const INITIAL_STATE = {
     lockedNumber: {
         isLocked: false,
         number: 0,
+        type: INPUT_TYPE
     }
 }
 
