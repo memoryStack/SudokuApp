@@ -170,6 +170,12 @@ export const getFirstEnabledInputPanelNumber = () => {
     }
 }
 
+export const getInputPanelNumber = (inputNumber, _inputPanel) => {
+    const inputPanel = _inputPanel || within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+    const element = inputPanel.getByText(String(inputNumber))
+    return element
+}
+
 export const getInputPanelNumberIfEnabled = (inputNumber, _inputPanel) => {
     const inputPanel = _inputPanel || within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
 

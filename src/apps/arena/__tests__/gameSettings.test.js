@@ -19,6 +19,7 @@ import {
     gameOverByMistakes,
     exhaustHints,
     getCellByPosition,
+    getInputPanelNumber,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
@@ -416,7 +417,7 @@ describe('Fill Notes Without Pencil Setting', () => {
         expect(notesPanel.getByText('8')).toBeEnabled()
     })
 
-    test('switching from locked main number to notes panel number should fill note on cell click', async () => {
+    test('switching from locked main number to notes panel number can be done by just simple short press and should fill note on cell click', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         let emptyCell = getFirstEmptyCell()
@@ -428,7 +429,7 @@ describe('Fill Notes Without Pencil Setting', () => {
             expectMainNumberPresentInCell(emptyCell, '2')
         })
 
-        fireEvent(getNumberFromNotesPanel(3), 'onLongPress')
+        fireEvent(getNumberFromNotesPanel(3), 'onPress')
 
         emptyCell = getFirstEmptyCell()
         fireEvent.press(emptyCell)
@@ -491,5 +492,176 @@ describe('Fill Notes Without Pencil Setting', () => {
         fireEvent.press(newEmptyCell)
 
         expect(isEmptyElement(newEmptyCell)).toBe(true)
+    })
+})
+
+describe('Number Locking with Pencil Mode', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'],
+            timerLimit: 100,
+        })
+        gameSettingsAdapter.fillNotesWithoutPencil.mockImplementation(() => false)
+        gameSettingsAdapter.fillNumberOnCellClick.mockImplementation(() => true)
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
+    test('lock number with pencil inactive should fill main number on cell click', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+    })
+
+    test('lock number with pencil active should fill note on cell click', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        fireEvent.press(screen.getByText('Pencil'))
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 2)).toBe(true)
+        })
+        isMainNumberNotPresentInCell(emptyCell)
+    })
+
+    test('toggle pencil while number is locked should switch input type', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        let emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        fireEvent.press(screen.getByText('Pencil'))
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expect(isNotePresentInCell(emptyCell, 2)).toBe(true)
+        })
+    })
+
+    test('switch locked number by clicking different number', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        let emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        fireEvent.press(getInputPanelNumberIfEnabled(3))
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '3')
+        })
+    })
+
+    test('unlock number by clicking same locked number', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        let emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        fireEvent.press(getInputPanelNumberIfEnabled(2))
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        expect(isEmptyElement(emptyCell)).toBe(true)
+    })
+
+    test('locked number persists and fills multiple cells', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const emptyCell1 = getFirstEmptyCell()
+        fireEvent.press(emptyCell1)
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+        fireEvent.press(emptyCell1)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell1, '2')
+        })
+
+        const emptyCell2 = getFirstEmptyCell()
+        fireEvent.press(emptyCell2)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell2, '2')
+        })
+
+        const emptyCell3 = getFirstEmptyCell()
+        fireEvent.press(emptyCell3)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell3, '2')
+        })
+    })
+
+    test('disabled number cannot be locked and previous locked number will be retained', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const cellsToFillWith8 = [12, 27, 32, 79]
+
+        let emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent(getInputPanelNumberIfEnabled(8), 'onLongPress')
+
+        for (const position of cellsToFillWith8) {
+            const cell = getCellByPosition(position)
+            fireEvent.press(cell)
+            await waitFor(() => {
+                expectMainNumberPresentInCell(cell, '8')
+            })
+        }
+
+        fireEvent(getInputPanelNumberIfEnabled(2), 'onLongPress')
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        fireEvent(getInputPanelNumber(8), 'onLongPress')
+
+        emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
     })
 })
