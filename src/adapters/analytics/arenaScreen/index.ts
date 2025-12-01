@@ -16,7 +16,12 @@ const EVENT_NAMES = {
     HOW_TO_GET_HINTS_COACHMARK_COMPELTED: 'howToGetHintsCoachmarkCompleted',
     NEED_HINT_SUGGESTION_CONFIRM: 'needHintSuggestionConfirm',
     DND_BY_HINT_SUGGESTION: 'dndByHintSuggestion',
-    HINTS_MENU_TOOLTIP_SHOWN: 'hintsMenuTooltipShown'
+    HINTS_MENU_TOOLTIP_SHOWN: 'hintsMenuTooltipShown',
+    FEEDBACK_DIALOG_SHOWN: 'feedbackDialogShown',
+    FEEDBACK_SUBMITTED: 'feedbackSubmitted',
+    FEEDBACK_SKIPPED: 'feedbackSkipped',
+    FEEDBACK_DND_SELECTED: 'feedbackDNDSelected',
+    FEEDBACK_API_ERROR: 'feedbackApiError'
 }
 
 export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
@@ -84,5 +89,30 @@ export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
         const client = getClient()
         const commonData = await getEventCommonData()
         return client.sendEvent(EVENT_NAMES.HINTS_MENU_TOOLTIP_SHOWN, { ...commonData, ...data })
+    },
+    sendFeedbackDialogShownEvent: async (data) => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.FEEDBACK_DIALOG_SHOWN, { ...commonData, ...data })
+    },
+    sendFeedbackSubmittedEvent: async (data) => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.FEEDBACK_SUBMITTED, { ...commonData, ...data })
+    },
+    sendFeedbackSkippedEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.FEEDBACK_SKIPPED, { ...commonData })
+    },
+    sendFeedbackDNDSelectedEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.FEEDBACK_DND_SELECTED, { ...commonData })
+    },
+    sendFeedbackApiErrorEvent: async (error) => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.FEEDBACK_API_ERROR, { ...commonData, error })
     },
 }

@@ -99,19 +99,29 @@ const handleScreenInFocus = ({ params: { dependencies } }) => {
     resumeGame(dependencies)
 }
 
-const handleHideGameOverCard = ({ setState, params: { fadeAnim, dependencies } }) => {
-    Animated.timing(fadeAnim, {
+const handleGameOverCardClose = ({ setState, params: { fadeAnim, callback = _noop } }) => {
+    return Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 200,
         useNativeDriver: true,
     }).start(() => {
         setState({ showGameSolvedCard: false })
-        setTimeout(() => {
-            setState({ showNextGameMenu: true })
+        callback()
+    })
+}
 
-            const { gameStateRepository } = dependencies
-            gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
-        }, 100)
+const handleHideGameOverCard = ({ setState, params: { fadeAnim, dependencies } }) => {
+    handleGameOverCardClose({
+        setState, params: {
+            fadeAnim, callback: () => {
+                setTimeout(() => {
+                    setState({ showNextGameMenu: true })
+
+                    const { gameStateRepository } = dependencies
+                    gameStateRepository.setGameState(GAME_STATE.GAME_SELECT)
+                }, 100)
+            }
+        }
     })
 }
 
@@ -162,14 +172,13 @@ const handleGameOver = ({ setState, params: { hcAnimatedValue: fadeAnim, gameSta
 }
 
 const handleRestartGame = ({ setState, params: { fadeAnim, dependencies } }) => {
-    Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-    }).start(() => {
-        /* don't switch between order of below function calls else game over card will re-appear again */
-        restartGame(dependencies)
-        setState({ showGameSolvedCard: false })
+    handleGameOverCardClose({
+        setState, params: {
+            fadeAnim,
+            callback: () => {
+                restartGame(dependencies)
+            }
+        }
     })
 }
 
@@ -185,7 +194,8 @@ const ACTION_TYPES = {
     ON_NEW_GAME_MENU_CLOSE: 'ON_NEW_GAME_MENU_CLOSE',
     ON_GAME_OVER: 'ON_GAME_OVER',
     ON_SHOW_GET_HINTS_COACHMARKS: 'ON_SHOW_GET_HINTS_COACHMARKS',
-    ON_RESTART_GAME: 'ON_RESTART_GAME'
+    ON_RESTART_GAME: 'ON_RESTART_GAME',
+    CLOSE_GAME_OVER_CARD: 'CLOSE_GAME_OVER_CARD'
 }
 
 const ACTION_HANDLERS = {
@@ -199,7 +209,8 @@ const ACTION_HANDLERS = {
     [ACTION_TYPES.ON_NEW_GAME_MENU_CLOSE]: handleNewGameMenuClose,
     [ACTION_TYPES.ON_GAME_OVER]: handleGameOver,
     [ACTION_TYPES.ON_SHOW_GET_HINTS_COACHMARKS]: handleShowHowToGetHintsCoachmarks,
-    [ACTION_TYPES.ON_RESTART_GAME]: handleRestartGame
+    [ACTION_TYPES.ON_RESTART_GAME]: handleRestartGame,
+    [ACTION_TYPES.CLOSE_GAME_OVER_CARD]: handleGameOverCardClose
 }
 
 export { ACTION_TYPES, ACTION_HANDLERS }

@@ -52,6 +52,9 @@ export const getStyles = ({ allowNotesInputWithoutPencil }, theme) => {
             width: Dimensions.get('window').width,
             paddingTop: 24,
             paddingHorizontal: 16
-        }
+        },
+        snackbarText: {
+            color: _get(theme, 'colors.inverse-on-surface'),
+        },
     })
 }

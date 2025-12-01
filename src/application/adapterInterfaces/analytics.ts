@@ -41,6 +41,15 @@ export type HintsMenuTooltipShownEventData = {
     count: number
 }
 
+export type FeedbackDialogShownEventData = {
+    gamesLostBeforeShowing: number
+}
+
+export type FeedbackSubmittedEventData = {
+    improvements: string[]
+    hasAdditionalText: boolean
+}
+
 export type ArenaAnalyticsHandler = {
     sendSmartHintVisibleEvent: (data: HintVisibleEventData) => Promise<void>,
     sendPuzzleLifeCycleEvent: (data: PuzzleLifeCycleEvent) => Promise<void>,
@@ -55,6 +64,11 @@ export type ArenaAnalyticsHandler = {
     sendNeedHintSuggestionConfirmEvent: () => Promise<void>,
     sendDNDByHintSuggestionEvent: () => Promise<void>,
     sendHintsMenuTooltipShownEvent: (data: HintsMenuTooltipShownEventData) => Promise<void>,
+    sendFeedbackDialogShownEvent: (data: FeedbackDialogShownEventData) => Promise<void>,
+    sendFeedbackSubmittedEvent: (data: FeedbackSubmittedEventData) => Promise<void>,
+    sendFeedbackSkippedEvent: () => Promise<void>,
+    sendFeedbackDNDSelectedEvent: () => Promise<void>,
+    sendFeedbackApiErrorEvent: (error: string) => Promise<void>,
 }
 
 export type PlayGuideEventData = {

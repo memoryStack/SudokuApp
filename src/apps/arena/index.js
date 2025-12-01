@@ -57,6 +57,11 @@ import { getKey, setKey } from '@utils/storage'
 import { shouldShowCustomizeExperienceTooltipUseCase } from '@application/usecases/customizeExperience'
 import { COACHMARKS } from '@application/adapterInterfaces/coachMarks'
 import _isNil from '@lodash/isNil'
+import { FeedbackBottomSheet, SNACKBAR_MESSAGES } from './FeedbackBottomSheet'
+import { useFeedback } from './hooks/useFeedback'
+import { useSnackbar } from './hooks/useSnackbar'
+
+import { Snackbar } from 'react-native-paper';
 
 const AvailableStarsHeaderView = ({
     styles,
@@ -136,6 +141,55 @@ const Arena_ = ({
 
     const hintsLeft = useSelector(getAvailableHintsCount)
 
+    const { snackbarState, showSnackbar, hideSnackbar } = useSnackbar()
+
+    const isGameSolvedRef = useRef(false)
+
+    const executeRestartGame = useCallback(() => {
+        onAction({ type: ACTION_TYPES.ON_RESTART_GAME, payload: { fadeAnim: fadeAnim.current, dependencies } })
+    }, [onAction, dependencies])
+
+    const executeOpenNextGameMenu = useCallback(() => {
+        onAction({
+            type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD,
+            payload: { fadeAnim: fadeAnim.current, dependencies },
+        })
+    }, [onAction, dependencies])
+
+    const {
+        feedbackRef,
+        showFeedbackSheet,
+        handleGameOverAction,
+        handleSubmit: feedbackSubmit,
+        handleSkip: feedbackSkip,
+        handleDND: feedbackDND,
+        handleFeedbackClosed,
+        incrementGamesLostCount,
+    } = useFeedback({
+        analytics: dependencies?.analytics,
+        onRestartGame: executeRestartGame,
+        onOpenNextGameMenu: executeOpenNextGameMenu,
+    })
+
+    useEffect(() => {
+        if (showFeedbackSheet) {
+            onAction({
+                type: ACTION_TYPES.CLOSE_GAME_OVER_CARD,
+                payload: { fadeAnim: fadeAnim.current, dependencies }
+            })
+        }
+    }, [showFeedbackSheet, dependencies, onAction])
+
+    const handleFeedbackSubmit = useCallback(async (improvements, additionalFeedback) => {
+        const result = await feedbackSubmit(improvements, additionalFeedback)
+        console.log('@@@@@ result', result)
+        if (result.success) {
+            showSnackbar(SNACKBAR_MESSAGES.success)
+        } else {
+            showSnackbar(SNACKBAR_MESSAGES.error)
+        }
+    }, [feedbackSubmit, showSnackbar])
+
     // TODO: putting "route" in dependency array here fails test-cases
     useEffect(() => {
         const { params: { puzzleUrl = '', selectedGameMenuItem = '', levelNum = 0 } = {} } = route || {}
@@ -165,7 +219,12 @@ const Arena_ = ({
     useEffect(() => {
         if (new GameState(gameState).isGameOver()) {
             const { boardControllerRepository, refreeRepository } = dependencies
-            if (!new GameState(gameState).isGameSolved()) currentAvailableStars.current = 0
+            const isSolved = new GameState(gameState).isGameSolved()
+            isGameSolvedRef.current = isSolved
+            if (!isSolved) {
+                currentAvailableStars.current = 0
+                incrementGamesLostCount()
+            }
             const stats = {
                 mistakes: refreeRepository.getGameMistakesCount(),
                 level: refreeRepository.getGameLevel(),
@@ -183,7 +242,7 @@ const Arena_ = ({
                 }
             })
         }
-    }, [gameState, dependencies, onAction])
+    }, [gameState, dependencies, onAction, incrementGamesLostCount])
 
     useEffect(() => {
         // reset the store state for Game
@@ -263,15 +322,12 @@ const Arena_ = ({
     const onCustomPuzzleHCClosed = () => onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
 
     const closeGameOverDialogAndOpenNewGameMenu = useCallback(() => {
-        onAction({
-            type: ACTION_TYPES.ON_HIDE_GAME_OVER_CARD,
-            payload: { fadeAnim: fadeAnim.current, dependencies },
-        })
-    }, [onAction, dependencies])
+        handleGameOverAction('newGame', isGameSolvedRef.current)
+    }, [handleGameOverAction])
 
     const handleRestartGame = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_RESTART_GAME, payload: { fadeAnim: fadeAnim.current, dependencies } })
-    }, [onAction, dependencies])
+        handleGameOverAction('restart', isGameSolvedRef.current)
+    }, [handleGameOverAction])
 
     const isPuzzlePresent = (currentGameState, _previousGameState) => {
         const currentGameStateObj = new GameState(currentGameState)
@@ -462,6 +518,20 @@ const Arena_ = ({
         )
     }
 
+    const renderFeedbackSheet = () => {
+        if (!pageHeight || !showFeedbackSheet) return null
+        return (
+            <FeedbackBottomSheet
+                ref={feedbackRef}
+                parentHeight={pageHeight}
+                onSubmit={handleFeedbackSubmit}
+                onSkip={feedbackSkip}
+                onDND={feedbackDND}
+                onClosed={handleFeedbackClosed}
+            />
+        )
+    }
+
     return (
         <Page
             testID={ARENA_PAGE_TEST_ID}
@@ -500,6 +570,16 @@ const Arena_ = ({
             {renderCustomPuzzleHC()}
             {renderGameOverCard()}
             {renderGameLevelsList()}
+            {renderFeedbackSheet()}
+            <Snackbar
+                visible={snackbarState.visible}
+                wrapperStyle={styles.snackbarContainer}
+                onDismiss={hideSnackbar}
+            >
+                <Text type={TEXT_VARIATIONS.LABEL_LARGE} style={styles.snackbarText}>
+                    {snackbarState.message}
+                </Text>
+            </Snackbar>
         </Page>
     )
 }
@@ -513,7 +593,6 @@ const ALL_ACTION_HANDLERS = [
         actionHandlers: BOARD_CONTROLLER_ACTION_HANDLERS,
     },
 ]
-
 
 export const Arena = React.memo(withActions({ actionHandlers: ALL_ACTION_HANDLERS })(Arena_))
 
