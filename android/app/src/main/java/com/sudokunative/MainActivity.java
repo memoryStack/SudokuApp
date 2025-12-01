@@ -6,6 +6,9 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import android.os.Bundle;
 import android.view.View;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends ReactActivity {
 
@@ -13,6 +16,31 @@ public class MainActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         hideSystemUI();
+
+        View rootView = findViewById(android.R.id.content);
+        
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, new androidx.core.view.OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int bottomPadding = 0;
+                
+                // Check if keyboard is visible
+                if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
+                    Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+                    bottomPadding = imeInsets.bottom;
+                }
+                
+                // Apply padding
+                v.setPadding(
+                    v.getPaddingLeft(),
+                    v.getPaddingTop(),
+                    v.getPaddingRight(),
+                    bottomPadding
+                );
+                
+                return insets;
+            }
+        });
     }
 
     private void hideSystemUI() {
