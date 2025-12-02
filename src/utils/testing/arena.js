@@ -6,7 +6,7 @@ import { ARENA_PAGE_TEST_ID } from '../../apps/arena/constants'
 import { CONTENT_CONTAINER_TEST_ID } from '../../apps/components/BottomDragger/bottomDragger.constants'
 import { CUSTOM_PUZZLE_TEST_ID } from '../../apps/arena/customPuzzle/customPuzzle.constants'
 import { BOARD_CELL_TEST_ID, CELL_MAIN_VALUE_TEST_ID, CELL_NOTE_TEST_ID } from '../../apps/arena/gameBoard/cell/cell.constants'
-import { TIMER_PAUSE_ICON_TEST_ID } from '../../apps/arena/timer/timer.constants'
+import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID } from '../../apps/arena/timer/timer.constants'
 import { BOARD_CONTROLLER_TEST_ID } from '../../apps/arena/cellActions/cellActions.constants'
 import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_ITEM_TEST_ID } from '../../apps/arena/inputPanel/constants'
 import { HINT_MENU_ITEM_TEST_ID } from '../../apps/arena/hintsMenu/hintsMenu.constants'
@@ -89,6 +89,12 @@ export const hasPuzzleStarted = async () => {
         expect(screen.queryByTestId(TIMER_PAUSE_ICON_TEST_ID)).toBeOnTheScreen()
     })
     // jest.useFakeTimers()
+}
+
+export const isPuzzlePaused = async () => {
+    await rntlWaitFor(async () => {
+        expect(screen.queryByTestId(TIMER_START_ICON_TEST_ID)).toBeOnTheScreen()
+    })
 }
 
 export const expectOnAllBoardCells = expectCallback => {

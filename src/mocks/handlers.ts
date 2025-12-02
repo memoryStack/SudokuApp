@@ -21,6 +21,9 @@ export const handlers = [
     http.post('/api/sendEvent', () => {
         return HttpResponse.json({})
     }),
+    http.post('http://52.66.253.10:3000/feedbacks', () => {
+        return HttpResponse.json({ success: true })
+    }),
     http.get('*', () => {
         return HttpResponse.json({})
     }),

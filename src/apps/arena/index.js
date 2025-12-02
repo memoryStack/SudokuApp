@@ -182,7 +182,6 @@ const Arena_ = ({
 
     const handleFeedbackSubmit = useCallback(async (improvements, additionalFeedback) => {
         const result = await feedbackSubmit(improvements, additionalFeedback)
-        console.log('@@@@@ result', result)
         if (result.success) {
             showSnackbar(SNACKBAR_MESSAGES.success)
         } else {
@@ -223,7 +222,7 @@ const Arena_ = ({
             isGameSolvedRef.current = isSolved
             if (!isSolved) {
                 currentAvailableStars.current = 0
-                incrementGamesLostCount()
+                incrementGamesLostCount() // kuch logic idhr, kuch udhr
             }
             const stats = {
                 mistakes: refreeRepository.getGameMistakesCount(),
