@@ -518,7 +518,7 @@ const Arena_ = ({
     }
 
     const renderFeedbackSheet = () => {
-        if (!pageHeight || !showFeedbackSheet) return null
+        if (!pageHeight || !showFeedbackSheet || showGameSolvedCard) return null
         return (
             <FeedbackBottomSheet
                 ref={feedbackRef}
