@@ -18,9 +18,11 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { GameState } from '@application/utils/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
-import { GAME_OVER_CARD_TEST_ID } from './gameResultCard.constants'
+import { GAME_OVER_CARD_TEST_ID, REVIEW_SECTION_TEST_ID, REVIEW_BUTTON_TEST_ID } from './gameResultCard.constants'
 import { getStyles } from './gameResultCard.styles'
 import LevelStars, { ICON_SIZE_TYPES } from '@ui/atoms/LevelStars'
+
+const REVIEW_DESCRIPTION = "If you've improved at Sudoku, please share your feedback to help us improve ❤️"
 
 const getTimeView = (time, styles) => {
     const { hours = 0, minutes = 0, seconds = 0 } = time || {}
@@ -33,7 +35,7 @@ const getTimeView = (time, styles) => {
     )
 }
 
-const GameResultCard = ({ stats, openNextGameMenu, onRestartGame }) => {
+const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSection, onReviewPress }) => {
     const {
         mistakes, time, hintsUsed, starsEarned
     } = stats
@@ -94,6 +96,25 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame }) => {
         )
     }
 
+    const renderReviewSection = () => {
+        if (!showReviewSection || !isGameSolved) return null
+
+        return (
+            <View style={styles.reviewSectionContainer} testID={REVIEW_SECTION_TEST_ID}>
+                <Text style={[styles.textColor, styles.reviewDescription]}>
+                    {REVIEW_DESCRIPTION}
+                </Text>
+                <Button
+                    type={BUTTON_TYPES.FILLED}
+                    label="Review"
+                    onPress={onReviewPress}
+                    containerStyle={styles.reviewButtonContainer}
+                    testID={REVIEW_BUTTON_TEST_ID}
+                />
+            </View>
+        )
+    }
+
     const renderRestartButton = () => (
         <Button
             type={BUTTON_TYPES.FILLED}
@@ -103,9 +124,14 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame }) => {
         />
     )
 
+    const getNewGameButtonType = () => {
+        if (showReviewSection && isGameSolved) return BUTTON_TYPES.OUTLINED
+        return isGameSolved ? BUTTON_TYPES.FILLED : BUTTON_TYPES.OUTLINED
+    }
+
     const renderNewGameButton = () => (
         <Button
-            type={isGameSolved ? BUTTON_TYPES.FILLED : BUTTON_TYPES.OUTLINED}
+            type={getNewGameButtonType()}
             label={NEW_GAME}
             onPress={openNextGameMenu}
             containerStyle={styles.newGameButtonContainer}
@@ -120,6 +146,7 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame }) => {
         >
             {getGameSolvedView()}
             {getGameUnsolvedView()}
+            {renderReviewSection()}
             {!isGameSolved ? renderRestartButton() : null}
             {renderNewGameButton()}
         </View>
@@ -132,10 +159,14 @@ GameResultCard.propTypes = {
     stats: PropTypes.object,
     openNextGameMenu: PropTypes.func,
     onRestartGame: PropTypes.func,
+    showReviewSection: PropTypes.bool,
+    onReviewPress: PropTypes.func,
 }
 
 GameResultCard.defaultProps = {
     stats: {},
     openNextGameMenu: _noop,
     onRestartGame: _noop,
+    showReviewSection: false,
+    onReviewPress: _noop,
 }

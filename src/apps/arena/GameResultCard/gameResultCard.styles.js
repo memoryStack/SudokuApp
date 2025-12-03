@@ -44,5 +44,21 @@ export const getStyles = (_, theme, isLight) => StyleSheet.create({
     middleStar: {
         bottom: 28,
         marginHorizontal: 12
-    }
+    },
+    reviewSectionContainer: {
+        marginTop: 16,
+        paddingTop: 16,
+        borderTopWidth: 1,
+        borderTopColor: get(theme, ['colors', 'outline-variant']),
+        width: '100%',
+        alignItems: 'center',
+    },
+    reviewDescription: {
+        textAlign: 'center',
+        marginBottom: 12,
+        lineHeight: 20,
+    },
+    reviewButtonContainer: {
+        width: '80%',
+    },
 })

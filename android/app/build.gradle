@@ -181,6 +181,8 @@ dependencies {
 
     implementation project(':lottie-react-native')
 
+    implementation project(':react-native-in-app-review')
+
     implementation ("androidx.appcompat:appcompat:1.3.1") {
         version {
             strictly '1.3.1'

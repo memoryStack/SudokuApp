@@ -21,7 +21,9 @@ const EVENT_NAMES = {
     FEEDBACK_SUBMITTED: 'feedbackSubmitted',
     FEEDBACK_SKIPPED: 'feedbackSkipped',
     FEEDBACK_DND_SELECTED: 'feedbackDNDSelected',
-    FEEDBACK_API_ERROR: 'feedbackApiError'
+    FEEDBACK_API_ERROR: 'feedbackApiError',
+    IN_APP_REVIEW_SHOWN: 'inAppReviewShown',
+    IN_APP_REVIEW_COMPLETED: 'inAppReviewCompleted',
 }
 
 export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
@@ -114,5 +116,15 @@ export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
         const client = getClient()
         const commonData = await getEventCommonData()
         return client.sendEvent(EVENT_NAMES.FEEDBACK_API_ERROR, { ...commonData, error })
+    },
+    sendInAppReviewShownEvent: async (data) => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.IN_APP_REVIEW_SHOWN, { ...commonData, ...data })
+    },
+    sendInAppReviewCompletedEvent: async () => {
+        const client = getClient()
+        const commonData = await getEventCommonData()
+        return client.sendEvent(EVENT_NAMES.IN_APP_REVIEW_COMPLETED, { ...commonData })
     },
 }

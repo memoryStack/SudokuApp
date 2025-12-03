@@ -60,6 +60,7 @@ import _isNil from '@lodash/isNil'
 import { FeedbackBottomSheet, SNACKBAR_MESSAGES } from './FeedbackBottomSheet'
 import { useFeedback } from './hooks/useFeedback'
 import { useSnackbar } from './hooks/useSnackbar'
+import { useInAppReview } from './hooks/useInAppReview'
 
 import { Snackbar } from 'react-native-paper';
 
@@ -171,6 +172,16 @@ const Arena_ = ({
         onOpenNextGameMenu: executeOpenNextGameMenu,
     })
 
+    const {
+        showReviewSection,
+        checkAndShowReviewSection,
+        requestReview,
+        hideReviewSection,
+        incrementGamesSolvedCount,
+    } = useInAppReview({
+        analytics: dependencies?.analytics,
+    })
+
     useEffect(() => {
         if (showFeedbackSheet) {
             onAction({
@@ -223,6 +234,9 @@ const Arena_ = ({
             if (!isSolved) {
                 currentAvailableStars.current = 0
                 incrementGamesLostCount() // kuch logic idhr, kuch udhr
+            } else {
+                incrementGamesSolvedCount()
+                checkAndShowReviewSection(true)
             }
             const stats = {
                 mistakes: refreeRepository.getGameMistakesCount(),
@@ -241,7 +255,7 @@ const Arena_ = ({
                 }
             })
         }
-    }, [gameState, dependencies, onAction, incrementGamesLostCount])
+    }, [gameState, dependencies, onAction, incrementGamesLostCount, incrementGamesSolvedCount, checkAndShowReviewSection])
 
     useEffect(() => {
         // reset the store state for Game
@@ -321,8 +335,9 @@ const Arena_ = ({
     const onCustomPuzzleHCClosed = () => onAction({ type: ACTION_TYPES.ON_CUSTOM_PUZZLE_HC_CLOSE })
 
     const closeGameOverDialogAndOpenNewGameMenu = useCallback(() => {
+        hideReviewSection()
         handleGameOverAction('newGame', isGameSolvedRef.current)
-    }, [handleGameOverAction])
+    }, [handleGameOverAction, hideReviewSection])
 
     const handleRestartGame = useCallback(() => {
         handleGameOverAction('restart', isGameSolvedRef.current)
@@ -489,6 +504,8 @@ const Arena_ = ({
                         }}
                         openNextGameMenu={closeGameOverDialogAndOpenNewGameMenu}
                         onRestartGame={handleRestartGame}
+                        showReviewSection={showReviewSection}
+                        onReviewPress={requestReview}
                     />
                 </Animated.View>
             </Touchable>

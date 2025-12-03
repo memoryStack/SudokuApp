@@ -50,6 +50,10 @@ export type FeedbackSubmittedEventData = {
     hasAdditionalText: boolean
 }
 
+export type InAppReviewShownEventData = {
+    gamesSolvedBeforeShowing: number
+}
+
 export type ArenaAnalyticsHandler = {
     sendSmartHintVisibleEvent: (data: HintVisibleEventData) => Promise<void>,
     sendPuzzleLifeCycleEvent: (data: PuzzleLifeCycleEvent) => Promise<void>,
@@ -69,6 +73,8 @@ export type ArenaAnalyticsHandler = {
     sendFeedbackSkippedEvent: () => Promise<void>,
     sendFeedbackDNDSelectedEvent: () => Promise<void>,
     sendFeedbackApiErrorEvent: (error: string) => Promise<void>,
+    sendInAppReviewShownEvent: (data: InAppReviewShownEventData) => Promise<void>,
+    sendInAppReviewCompletedEvent: () => Promise<void>,
 }
 
 export type PlayGuideEventData = {
