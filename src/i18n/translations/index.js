@@ -1,2 +1,2 @@
-export { default as english } from './english.json'
-export { default as hindi } from './hindi.json'
+// Translations are now loaded as namespaces directly in i18n.config.js
+// See translations/en/ and translations/hi/ folders for namespace files

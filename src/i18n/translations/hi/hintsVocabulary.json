@@ -1,0 +1,271 @@
+{
+    "titles": {
+        "candidate": "Candidate",
+        "house": "House",
+        "cell": "Cell",
+        "row": "Row",
+        "column": "Column",
+        "block": "Block",
+        "nakedSingle": "Naked Single",
+        "nakedDouble": "Naked Double",
+        "nakedTripple": "Naked Tripple",
+        "hiddenSingle": "Hidden Single",
+        "hiddenDouble": "Hidden Double",
+        "hiddenTripple": "Hidden Tripple",
+        "omission": "Omission",
+        "chain": "Chain",
+        "chainLinks": "Chain Links",
+        "remotePairs": "Remote Pairs",
+        "xChain": "X-Chain",
+        "xyChain": "XY-Chain",
+        "perfectXWing": "X-Wing",
+        "finnedXWing": "Finned X-Wing",
+        "sashimiFinnedXWing": "Sashimi Finned X-Wing",
+        "xWingCornerCells": "X-Wing Corner Cells",
+        "xWingFinnCells": "X-Wing Finn Cells",
+        "emptyRectangle": "Empty Rectangle"
+    },
+    "cell": {
+        "intro": "In Sudoku, a Cell represents a single square where a number from 1 to 9 can be filled. Sudoku contains 81 (9*9) such cells",
+        "observation": "Here notice that some cells are already filled with numbers from 1 to 9 and some are empty."
+    },
+    "candidate": {
+        "intro": "<p>A Candidate in Sudoku is a digit that could be placed into a <a href=\"CELL\">cell</a>, but you're not totally sure it goes in that cell yet. Some people call this \"pencil marking\", since many solvers write small numbers or other notes in pencil to denote a possible solution.</p>",
+        "observation": "Here in the highlighted cell above 2, 4, 8 and 9 are it's candidates"
+    },
+    "house": {
+        "intro": "<p>A house is a group of 9 <a href=\"CELL\">cells</a> in which numbers from 1 to 9 will be filled uniquely.There are three different types of houses: <a href=\"ROW\">rows</a>, <a href=\"COLUMN\">columns</a> and <a href=\"BLOCK\">blocks</a>.<br/>A Sudoku board contains 9 row houses, 9 column houses and 9 block houses as you can see below.</p>"
+    },
+    "row": {
+        "intro": "<p>In Sudoku, a Row refers to a horizontal line of 9 <a href=\"CELL\">cells</a> from left to right. There are 9 rows from top to bottom labeled as Row A, Row B, ..., Row I and each row contains 9 cells placed side by side horizontally.</p>",
+        "observation": "Here in the above Sudoku Puzzle 9 highlighted cells make Dth row."
+    },
+    "column": {
+        "intro": "<p>In Sudoku, a Column refers to a vertical line of 9 <a href=\"CELL\">cells</a> from top to bottom. In below Sudoku Board, There are 9 columns from left to right labeled as Column 1, Column 2, ..., Column 9 and each column contains 9 cells stacked vertically from top to bottom.</p>",
+        "observation": "Here in the above Sudoku Puzzle 9 highlighted cells make 4th column."
+    },
+    "block": {
+        "intro": "<p>In Sudoku, a Block is a 3*3 square region separated by thick borders in Sudoku Puzzle below. Each block contains 9 <a href=\"CELL\">cells</a> arranged in 3 <a href=\"COLUMN\">columns</a> and 3 <a href=\"ROW\">rows</a>.</p>",
+        "observation": "Here in the above Sudoku Puzzle these 9 highlighted cells make 5th block. And these are 9 such blocks."
+    },
+    "nakedSingle": {
+        "intro": "<p>Naked Single means that in a <a href=\"CELL\">cell</a> only one <a href=\"CANDIDATE\">candidate</a> remains possible and that candidate must fill the cell.\nThe last remaining candidate has no other candidates to hide behind, that's why it is called \"Naked\" single. These are very easy to spot.</p>",
+        "example": "<p>Here in above Sudoku puzzle notice that in D3 cell only 3 is present as candidate because except 3 all the other numbers from 1 to 9 are present in Dth <a href=\"ROW\">row</a>, 3rd <a href=\"COLUMN\">column</a> and 4th <a href=\"BLOCK\">block</a>.</p>"
+    },
+    "hiddenSingle": {
+        "intro": "<p>Hidden Single means that a particular number appears as a <a href=\"CANDIDATE\">candidate</a> in only one <a href=\"CELL\">cell</a> of any <a href=\"ROW\">row</a>, <a href=\"COLUMN\">column</a>, or <a href=\"BLOCK\">block</a>.</p>",
+        "example": "<p>Here in above Sudoku puzzle notice that in 1st Block 1 is present as a candidate in C1 cell only. It can't come in any other empty cell of 1st block like A3, B1, B3, C2 and C3 because 1 is filled in B4, F3 and I2 cells already. So, C1 will be filled by 1 only because this candidate has no other place in 1st block.<br /> It is called Hidden Single because unlike <a href=\"NAKED_SINGLE\">Naked Single</a> candidate 1 is hidden among other candidates like 2, 3, 4 and 8 in the cell.</p>",
+        "howToSpotTitle": "How to spot Hidden Single?",
+        "howToSpot": "<p>Concentrate on one candidate and one block and check where this candidate can come that block cells. If there is only 1 cell where it can come then you have spotted a Hidden Single.</p>"
+    },
+    "nakedDouble": {
+        "intro": "<p>In <a href=\"NAKED_SINGLE\">Naked Single</a>, we focus only on one <a href=\"CANDIDATE\">candidate</a> and one <a href=\"CELL\">cell</a>. Naked Double is the extension of Naked Single. Here we will focus on two candidates and two cells.\nNaked Double is formed when in a <a href=\"HOUSE\">house</a> you can find two cells that contain the same two numbers as candidates.</p>",
+        "example": "<p>Notice in above Sudoku Puzzle in 5th block D5 and E6 cells can have only 8 and 9 as candidates. So, it's a Naked Double and D5 and E6 are locked for 8 and 9 but which cell out of D5 or E6  will have 8 and which will be filled by 9 is still unknown.</p>",
+        "waysToFill": "<p>These cells can be filled only in two ways as shown below</p>",
+        "removableNotes": "In both cases above, 8 and 9 candidates in cells other than D5 and E6 will be eliminated. So in below example all candidates highlighted in red color will be eliminated",
+        "twoHostHouseTitle": "Naked Tripple in more than one House:",
+        "twoHostHouse": "If the two cells are part of two houses simultaneously then Naked Double will affect cells of both houses. See in example below, cells H5 and H6 are part of row H and 8th block."
+    },
+    "chain": {
+        "intro": "<p>Chains are advanced sudoku solving techniques. A chain is simply a stream of implications that lead from an assumption (e.g. <a href=\"CANDIDATE\">candidate</a> x in <a href=\"CELL\">cell</a> y can not come) to some result.</p>",
+        "types": "<p>There are many types of Chain techniques as given below:<br /><ol><li><a href=\"REMOTE_PAIRS\">Remote Pairs</a></li><li><a href=\"X_CHAIN\">X-Chain</a></li></ol><br /><br />Click on one of these to better understand how powerful chain techniques are.</p>"
+    },
+    "remotePairs": {
+        "intro": "<p>Remote Pair is the simplest <a href=\"CHAIN\">Chain</a> technique. Here we build a chain of <a href=\"CELL\">cells</a> which have only two <a href=\"CANDIDATE\">candidates</a> and all of these cells must have same candidates, kind of like <a href=\"NAKED_DOUBLE\">Naked Double</a>. So you can think of Remote Pairs as a bunch of Naked Doubles chained one after the other.</p>",
+        "howToMakeChainTitle": "<b>How to make a Remote Pairs chain ?</b>",
+        "howToMakeChain": "<p><b>How to make a Remote Pairs chain ?</b><br/>To make a Remote Pairs chain, find a cell which has only two possible candidates in it. Now search for cells which make Naked Double this cell, these new cells will be added to chain. Now focus on these new cells and find more cells which make Naked Double with these new cells and add them to chain. Do this repeatedly until you have enough cells. Look at the chain in below puzzle.</p>",
+        "chainFormation": {
+            "intro": "<p>In above puzzle Remote Pairs chain is shown which joins cells in this order {{chainPath}}. All of these cells have same candidates which are 4, 5 in this case.<br /><b>How are <a href=\"CHAIN_LINKS\">Links</a> formed in these cells ?</b><br />This chain is made of <a href=\"CHAIN_LINKS\">Strong Links</a> and <a href=\"CHAIN_LINKS\">Weak Links</a>.<br />Strong Link exists between the candidates of each cell in the chain. These links are not drawn in the chain due to lack of space but imagine that these links are there.<br />Weak Link exists between the candidates of two consecutive cells which make Naked Double. These links are drawn with dotted lines.</p>"
+        },
+        "chainEffect": {
+            "title": "<b>How is Remote Pairs chain useful ?</b>",
+            "intro": "<p><b>How is Remote Pairs chain useful ?</b><br />Cells in this chain can be filled in two ways. Let's try to fill it in both ways and see the conclusion. But first understand the rules to fill these cells.<br /><b>Rules to fill chain cells:</b><br /><ol><li>Start with using <b>Strong</b> Link in first cell of chain</li><li>Links will be used alternatively like {{linkPattern}} ...</li></ol></p>",
+            "firstWayTitle": "<b>First Way to fill the Chain:</b>",
+            "firstWay": "<p><b>First Way to fill the Chain:</b><br />Follow the logic with the puzzle given below.<br /><ul><li>if 4 is false in {{chainCell0}} then 5 has to be true here. (Strong Link)</li><li>since 5 is true in {{chainCell0}} then 5 has to be false in {{chainCell1}}. (Weak Link)</li><li>since 5 is false in {{chainCell1}} then 4 has to be true in {{chainCell1}}. (Strong Link)</li><li>since 4 is true in {{chainCell1}} then 4 has to be false in {{chainCell2}}. (Weak Link)</li><li>since 4 is false in {{chainCell2}} then 5 has to be true in {{chainCell2}}. (Strong Link)</li><li>since 5 is true in {{chainCell2}} then 5 has to be false in {{chainCell3}}. (Weak Link)</li><li>since 5 is false in {{chainCell3}} then 4 has to be true in {{chainCell3}}. (Strong Link)</li></ul></p>",
+            "firstWayConclusion": "<p>Notice in the above logic, by following the rules of filling these cells we found that if candidate 4 can not be filled in {{firstCell}} then it will surely be filled in {{lastCell}}. It means that if {{firstCell}} is 5 then {{lastCell}} must be 4.</p>",
+            "secondWayTitle": "<b>Second Way to fill the Chain:</b>",
+            "secondWay": "<p><b>Second Way to fill the Chain:</b><br />Follow the logic with the puzzle given above.<br /><ul><li>if 5 is false in {{chainCell0}} then 4 has to be true here. (Strong Link)</li><li>since 4 is true in {{chainCell0}} then 4 has to be false in {{chainCell1}}. (Weak Link)</li><li>since 4 is false in {{chainCell1}} then 5 has to be true in {{chainCell1}}. (Strong Link)</li><li>since 5 is true in {{chainCell1}} then 5 has to be false in {{chainCell2}}. (Weak Link)</li><li>since 5 is false in {{chainCell2}} then 4 has to be true in {{chainCell2}}. (Strong Link)</li><li>since 4 is true in {{chainCell2}} then 4 has to be false in {{chainCell3}}. (Weak Link)</li><li>since 4 is false in {{chainCell3}} then 5 has to be true in {{chainCell3}}. (Strong Link)</li></ul></p>",
+            "secondWayConclusion": "<p>Notice in the second way of filling these cells if candidate 5 can not be filled in {{firstCell}} then it will surely be filled in {{lastCell}}. It means that if {{firstCell}} is 4 then {{lastCell}} must be 5.</p>",
+            "finalConclusion": "<p>So in both of these ways, it is sure that one end of chain will be 4 and other end will be 5. so any cell which is in the same <a href=\"HOUSE\">house</a> as first and last cells of chain can not have 4 and 5 as it's candidates. Hence in the example above, F7 cell shares same <a href=\"ROW\">row</a> with F1 and shares same <a href=\"COLUMN\">column</a> with B7. so from F7 candidate 5 can be removed.</p>"
+        },
+        "validChainLength": "<p><b>Note:</b> In a valid Remote Pairs chain the number of participating cells must be <b>even</b> and greater than 3 like 4, 6, 8 ... Otherwise the chain's first and last cells will be filled by same candidates and we won't be able to remove any candidate. And a Remote Pairs chain shouldn't have only 2 cells because that is just a Naked Double.\nTry this out by yourself.</p>"
+    },
+    "hiddenDouble": {
+        "intro": "<p>In <a href=\"HIDDEN_SINGLE\">Hidden Single</a>, we focus on only one <a href=\"CANDIDATE\">candidate</a> and one <a href=\"CELL\">cell</a> in a <a href=\"HOUSE\">house</a>. Hidden Double is the extension of Hidden Single and here we will focus on two candidates and two cells in a house.<br/>A Hidden Double is formed when two candidates are present together only in two cells of a house.</p>",
+        "example": "<p>Notice in above Sudoku Puzzle in 1st <a href=\"BLOCK\">block</a> {{candidates}} are present together only in {{cells}} as candidates. So, it's a Hidden Double.\nIt is called \"Hidden\" because in {{cells}} cells {{candidates}} are hidden behind other candidates due to this it's a little harder to find.</p>",
+        "effect": {
+            "title": "How Hidden Double Affects a House?",
+            "intro": "<p>In below example {{candidates}} will be filled only in the highlighted cells and other candidates highlighted in red color will be removed these cells.<br /><b>Note:</b> exactly which cell will be filled by 1 and which will be filled by 7 is still not clear.</p>"
+        },
+        "invalidExample": {
+            "title": "Invalid Hidden Double Example:",
+            "explanation": "In left example above, 6 and 7 appear two times only in this block but these are distributed over three cells. And in right side example, 3 and 6 also appear two times only but these are spread over four cells. To be a valid Hidden Double both candidates have to be present two times and only in two cells of a house."
+        }
+    },
+    "nakedTripple": {
+        "intro": "<p>In <a href=\"NAKED_DOUBLE\">Naked Double</a>, we focus on two <a href=\"CANDIDATE\">candidates</a> in two <a href=\"CELL\">cells</a> in a <a href=\"HOUSE\">house</a>. In Naked Tripple we focus on three cells and three candidates. So a Naked Tripple is formed when three cells in any house have candidates from a group of three candidates only.</p>",
+        "example": "<p>Notice in above Sudoku Puzzle in 2nd <a href=\"BLOCK\">block</a> {{cells}} cells can have only {{candidates}} as candidates. So, it's a Naked Tripple and {{cells}} are locked for {{candidates}} but which number will go exactly in which cell is still not clear.</p>",
+        "validTypes": "<p><b>Note:</b> It is not necessary that the cells must have all three candidates to make a Naked Tripple. Cells must have atleast two out of these three candidates. So below examples are also correct Naked Tripples.</p>",
+        "invalidExample": {
+            "title": "Invalid Naked Tripple Example:",
+            "explanation": "In above example these three cells have their candidates from a group of four candidates 1, 5, 6 and 7. If 1 was not present in the top-right cell as candidate then it would have been a valid Naked Tripple."
+        },
+        "effect": {
+            "title": "How to remote Notes?",
+            "intro": "In below example {{candidates}} will be filled in the highlighted cells and these numbers will be removed from all the other cells which have {{candidates}} as candidates in the house in which Naked Tripple is formed. So all the candidates highlighted in red color will be eliminated"
+        },
+        "twoHostHouse": {
+            "title": "Naked Tripple in more than one House:",
+            "explanation": "If the three cells are part of two houses simultaneously then Naked Tripple will affect cells of both houses. See in example below, cells {{cells}} are part of row E and 6th block."
+        }
+    },
+    "hiddenTripple": {
+        "intro": "<p>In <a href=\"HIDDEN_DOUBLE\">Hidden Double</a>, we focus on two <a href=\"CANDIDATE\">candidates</a> in two <a href=\"CELL\">cells</a> in a <a href=\"HOUSE\">house</a>. Hidden Tripple is the extension of Hidden Double and here we will focus on three cells and three candidates.<br/><br/>A Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in a house. Each of these three cells must have <b>atleast two</b> out of these three candidates.</p>",
+        "example": "<p>Notice in above Sudoku Puzzle in 6th <a href=\"COLUMN\">column</a> {{candidates}} candidates are present together only in {{cells}} cells. So, it's a Hidden Tripple.\nIt is called \"Hidden\" because in {{cells}} cells {{candidates}} are hidden behind other candidates.\nAlso notice that in above example H6 doesn't have 5 as it's candidate. it's still a valid Hidden Tripple because all the cells must have <b>atleast two</b> out of three candidates and here H6 has 2, 6 as it's candidates out of 2, 5 and 6.</p>",
+        "effect": {
+            "title": "How Hidden Tripple Affects a House?",
+            "intro": "<p>In below example {{cells}} are locked for {{candidates}} because these numbers can't be filled in any other cells of 6th column. So, all the other candidates present in these cells will be removed and these are highlighted in red color.<br /><b>Note:</b> exactly which cell out of {{cells}} will be filled by which number is still not clear. At this point only thing we can say for sure is that candidates highlighted in red color can be removed.</p>"
+        }
+    },
+    "xChain": {
+        "intro": "<p>X-Chains are the <a href=\"CHAIN\">chains</a> that are built using one <a href=\"CANDIDATE\">candidate</a> only. <a href=\"CELL\">Cells</a> in which the candidate is present are joined in the chain using alternate <a href=\"CHAIN_LINKS\">Strong</a> and <a href=\"CHAIN_LINKS\">Weak</a> links between the candidate in focus.<br /><b>Note:</b> An X-Chain must start and end with a Strong link only. Otherwise it will not be helpful. Look at the puzzle below to see an example of X-Chain and try to exercise the definition of X-Chain in the puzzle given below.</p>",
+        "howToMake": {
+            "title": "<b>How to make an X-Chain ?</b>",
+            "explanation": "<p><b>How to make an X-Chain ?</b><br/>To make an X-Chain, first focus on a candidate and try to find the Strong links made by this candidate. After this try to connect these Strong links using other Strong or Weak links of this candidate to make a chain of alternate Strong and Weak links. See in the example above for more clarity.<br/><b>Note:</b> A Strong link can be used as a Weak link to make a Chain. Click <a href=\"CHAIN_LINKS\">here</a> to read more on this.</p>"
+        },
+        "effect": {
+            "title": "<b>How is X-Chain useful ?</b>",
+            "intro": "<p><b>How is X-Chain useful ?</b><br />Cells in this chain can be filled in two ways. Let's try to fill it in both ways and see the conclusion.</p>",
+            "firstWayTitle": "<b>First Way to fill the Chain:</b>",
+            "firstWay": "<p><b>First Way to fill the Chain:</b><br />Follow the logic with the puzzle given below.<br /><ul><li>if 7 is false in {{chainCell0}} then 7 has to be true in {{chainCell1}}. (Strong Link)</li><li>since 7 is true in {{chainCell1}} then 7 has to be false in {{chainCell2}}. (Weak Link)</li><li>since 7 is false in {{chainCell2}} then 7 has to be true in {{chainCell3}}. (Strong Link)</li><li>since 7 is true in {{chainCell3}} then 7 has to be false in {{chainCell4}}. (Weak Link)</li><li>since 7 is false in {{chainCell4}} then 7 has to be true in {{chainCell5}}. (Strong Link)</li></ul></p>",
+            "secondWayTitle": "<b>Second Way to fill the Chain:</b>",
+            "secondWay": "<p><b>Second Way to fill the Chain:</b><br />Imagine that if all the links are reversed in the above puzzle then:<br /><ul><li>if 7 is false in {{chainCell5}} then 7 has to be true in {{chainCell4}}. (Strong Link)</li><li>since 7 is true in {{chainCell4}} then 7 has to be false in {{chainCell3}}. (Weak Link)</li><li>since 7 is false in {{chainCell3}} then 7 has to be true in {{chainCell2}}. (Strong Link)</li><li>since 7 is true in {{chainCell2}} then 7 has to be false in {{chainCell1}}. (Weak Link)</li><li>since 7 is false in {{chainCell1}} then 7 has to be true in {{chainCell0}}. (Strong Link)</li></ul></p>",
+            "conclusion": "<p>So according to first way, if 7 is false in A2 then it has to be true in D3.<br />And according to second way, if 7 is false in D3 then it has to be true in A2.<br />So it is sure that one of A2 or D3 will be filled by 7. Because of this, all the cells which are in same <a href=\"HOUSE\">house</a> with first and last cells of the X-Chain, can't have 7 as their candidate.<br />So in the puzzle above, 7 can be removed as D2 cell's candidate.</p>"
+        }
+    },
+    "chainLinks": {
+        "intro": "<p>Links are the building blocks of all chains. If you don't understand Links then you will not be able to understand Chain techniques.\nLinks define a relationship between <a href=\"CANDIDATE\">candidates</a> of two <a href=\"CELL\">cells</a> in a <a href=\"HOUSE\">house</a> or candidates of a single cell as well. There are two types of links <b>Strong</b> link and <b>Weak</b> link.</p>",
+        "weakLink": {
+            "title": "Weak Link",
+            "definition": "<p>If two candidates are Weakly linked, they cannot be <b>true</b> at the same time.\nIf one of them is <b>true</b>, then the other must be <b>false</b>. Visually Weak Links are drawn in dotted lines. See the examples below.</p>",
+            "rowExample": "<p>Here in above example, if candidate 8 is filled or <b>true</b> in 3rd cell of this row then this candidate has to be <b>false</b> for 8th and 9th cells of this <a href=\"ROW\">row</a>. Same way if 8 is true for 8th cell then it has to be false for 3rd and 9th cell. So candidate 8s are Weakly linked with each other in these cells of this row.<br />Here row is taken as an example, but with the same logic Weak links can be found in <a href=\"COLUMN\">column</a> and <a href=\"BLOCK\">block</a> houses.</p>",
+            "cellExample": "<p>Here a cell is taken as an example to show how Weak links work in a cell. The logic would be same as we applied before. Here the cell has three candidates 2, 4 and 6. If any one of these three is <b>true</b> then all the other candidates have to be <b>false</b>. Hence Weak links can be formed in a Single Cell as well.</p>",
+            "note": "<p><b>Note:</b> In Weak links if a candidate is false in a cell then we can not say whether other candidates would be true of false. For Example, in above diagram, if candidate 2 is false in the cell then we can not surely say whether 4 or 6 will be true or false.</p>"
+        },
+        "strongLink": {
+            "title": "Strong Link",
+            "definition": "<p>When two candidates are Strongly linked, they cannot be <b>false</b> at the same time.\nIf one of them is <b>false</b>, then the other must be <b>true</b>. Notice the difference between Strong link and Weak link definition.\nVisually Strong Links are drawn in solid lines. See the examples below.</p>",
+            "rowExample": "<p>Here in above example, if candidate 4 is not filled or <b>false</b> in 1st cell of this row then this candidate has to be <b>true</b> in 8th cell of this row. So there is a Strong link between candidate 4 in this row.</p>",
+            "cellExample": "<p>Here a cell is taken as an example to show how Strong link works in a cell. The logic would be same as we applied before. Here the cell has two candidates 2 and 7. If any one of these two is <b>false</b> then the other candidate has to be <b>true</b>. Hence Strong link can be formed in a Single Cell as well.</p>",
+            "note": "<p><b>Note:</b> In general we can say that Strong Link is formed only in two ways</p>",
+            "formationRules": "<ol><li>When a candidate is present in only two cells of a house</li><li>When only two candidates are present in a cell</li></ol>"
+        },
+        "overlap": {
+            "title": "Use Strong Link as a Weak Link",
+            "intro": "<p>A Strong Link can be used as a Weak link. But a Weak link can't be used as a Strong Link. See below examples to understand it.</p>",
+            "explanation": "<p>We have seen this example in Strong Link section. Now let's apply Weak link definition to this Strong link and see if a Strong link can be used as a Weak link or not.</p>",
+            "conclusion": "<p>So in this row if 4 is <b>true</b> in 1st cell then it must be <b>false</b> in 8th cell. Hence, a Strong link follows the definition of Weak link correctly.</p>"
+        }
+    },
+    "perfectXWing": {
+        "intro": "<p>In X-Wing, we focus on a single <a href=\"CANDIDATE\">candidate</a> in <a href=\"ROW\">rows</a> and <a href=\"COLUMN\">columns</a>. An X-Wing is formed when a candidate is present only twice in two rows or columns such that both of these rows or columns have that candidate in same positions.<br />Notice an X-Wing in below puzzle.</p>",
+        "formation": "<p>In above puzzle, both columns 1st and 5th have 1 as candidate in their 2nd and 5th cells and these 4 cells where 1 is present make an <b>X</b> letter shape. Let's call these 4 cells as X-Wing <b>corner</b> cells because they are like 4 corners of a rectangle. This \"corner\" term will be used again and again.</p>",
+        "invalidXWing": {
+            "title": "<p><b>Invalid X-Wing example</b></p>",
+            "explanation": "<p>Notice in above puzzle, in both rows B and D candidate 2 is present only two times but cells positions are not same in these rows.<br /> In row B, it's in 7th and 9th cell and in row D it's in 4th and 9th cell. Hence it's not a valid X-Wing.</p>"
+        },
+        "effect": {
+            "title": "<b>How is X-Wing useful ?</b>",
+            "intro": "<p><b>How is X-Wing useful ?</b><br />In below puzzle, to fill 1 in 1st and 5th columns, there are two ways. Let's try both of these ways and see the conclusion.<br /><b>First way</b><br />In 1st column if 1 will be filled in B1 cell then 1 can't be filled in E1 and B5 cells, hence in 5th column 1 can be filled only in E5.</p>",
+            "secondWay": "<p><b>Second way</b><br />In 1st column if 1 will be filled in E1 cell then 1 can't be filled in B1 and E5 cells, hence in 5th column 1 can be filled only in B5.</p>",
+            "conclusion": "<p>There are no other ways to fill 1 in these two columns. So 1 will come in either B1 and E5 cells or in E1 and B5 cells.Hence in row B and E, 1 can be eliminated as candidate from all the cells where it is highlighted in red color.<br /><br /><b>Conclusion</b><br />If X-Wing is found using columns then candidate will be removed from rows in which the X-Wing corner cells are present.<br />And if X-Wing is found using rows then candidate will be removed from columns in which the X-Wing corner cells are present.</p>"
+        },
+        "inRows": {
+            "intro": "<p><b>X-Wing in Rows</b><br />In above X-Wing examples, the candidate was present two times in two columns. So when candiate is present two times in two rows then X-Wing will look like below example</p>",
+            "observation": "<p>Here candidate 3 is present two times in E and H rows, and candidate 3 will be removed from columns 7th and 8th cells where it is highlighted in red color.</p>"
+        }
+    },
+    "finnedXWing": {
+        "intro": "<p>Before learning this technique, you should be comfortable in understanding <a href=\"PERFECT_X_WING\">X-Wing</a> technique.<br />Now the difference between X-Wing and Finned X-Wing is that in one of the <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> the <a href=\"CANDIDATE\">candidate</a> on which we are focusing on, can be present more than two times. And in some cases we can still remove the candidate from some cells.<br />Notice Finned X-Wing example in below puzzle. Here if candidate 1 was not present in H6 cell of 6th column then it would have been a perfect X-Wing. So these extra cells where the candidates are present in row or column are called <b>Finn Cells</b>. And it's highlighted in purple color.</p>",
+        "finnCellsLocation": {
+            "title": "<p><b>Location of Finn Cells for a valid Finned X-Wing</b></p>",
+            "rules": "<p><ul><li>Only one row or column can have Finn Cells</li><li>Finn Cells must be in same <a href=\"BLOCK\">block</a> as one of the 4 X-Wing <a href=\"X_WING_CORNER_CELLS\">corner</a> cells</li></ul></p>",
+            "observation": "<p>Now notice that in above puzzle, these two conditions are satisfied.</p>",
+            "examples": "<p><ul><li>out of 2nd and 6th columns only 6th column have Finn Cells</li><li>H6 Finn Cell is in same block as G6 X-Wing corner cell</li></ul></p>"
+        },
+        "invalidPatterns": {
+            "title": "<p><b>Some examples of Finn Cells which do not follow above conditions</b></p>",
+            "example1": "<p>Here 4th and 5th cells are Finn Cells in row C, but these are not in same block with X-Wing corner cells. It violates 2nd condition mentioned above.</p>",
+            "example2": "<p>Here 5th and 7th cells are Finn Cells in row B, but these are in same block with both of X-Wing corner cells. It too violates 2nd condition mentioned above.</p>"
+        },
+        "effect": {
+            "title": "<b>How is Finned X-Wing useful ?</b>",
+            "intro": "<p><b>How is Finned X-Wing useful ?</b><br />In below puzzle, if it was a proper X-Wing then we could have removed all candidate 1 from row A and G except 4 corner cells. But due to Finn Cell in 6th column, now we would be able to remove candidate 1 from only G5. Read below to understand the reasoning behind it.<br />To fill 1 in 2nd and 6th columns, there are two ways. Let's try both of these ways and see the conclusion.<br /><b>First way</b><br />If we fill 1 in A2 cell of 2nd column then 1 can't be filled in G2 and A6 cells, hence in 6th column 1 will be filled in G6 or H6 cells. And it would look like below<br />Case 1: 1 is filled in A2 and G6</p>",
+            "firstWayCase1": "<p><ul><li>in row A, 1 will be removed from A3, A5</li><li>in row G, 1 will be removed from G3, G5</li></ul></p>",
+            "firstWayCase2Title": "<p>Case 2: 1 is filled in A2 and H6</p>",
+            "firstWayCase2": "<p><ul><li>in row A, 1 will be removed from A3, A5</li><li>in row G, 1 will be removed from G5 only</li></ul></p>",
+            "secondWayIntro": "<p><b>Second way</b><br />If we fill 1 in G2 cell of 2nd column then 1 can't be filled in A2 and G6 cells, hence in 6th column 1 will be filled in A6 or H6 cells. And it would look like below<br />Case 1: 1 is filled in G2 and A6</p>",
+            "secondWayCase1": "<p><ul><li>in row A, 1 will be removed from A3, A5</li><li>in row G, 1 will be removed from G3, G5</li></ul></p>",
+            "secondWayCase2Title": "<p>Case 2: 1 is filled in G2 and H6</p>",
+            "secondWayCase2": "<p><ul><li>in row A, 1 <b>can't</b> be removed from A3 or A5 now</li><li>in row G, 1 will be removed from G3, G5</li></ul></p>",
+            "conclusion": "<p><b>Conclusion</b><br />There are no other ways to fill 1 in these two columns. And notice carefully that in all such cases G5 is the only cell where 1 can't come. In the other cells like A3, A5, G3 candidate 1 can't be removed in all the cases of filling 2nd and 6th columns with 1.<br />So at this point we can remove 1 from G5 only.<br /><br />Hence, in general in Finned X-Wing candidate will be removed from cells which share <a href=\"BLOCK\">block</a> with Finn Cells.</p>"
+        }
+    },
+    "sashimiFinnedXWing": {
+        "intro": "<p>Before learning this technique, you should be comfortable in understanding <a href=\"FINNED_X_WING\">Finned X-Wing</a> technique.<br />Now the difference between Finned X-Wing and Sashimi Finned X-Wing is that in one of the <a href=\"ROW\">rows</a> or <a href=\"COLUMN\">columns</a> the <a href=\"CANDIDATE\">candidate</a> on which we are focusing on, will not be present in one of the X-Wing <a href=\"X_WING_CORNER_CELLS\">corner</a> cells.Notice Sashimi Finned X-Wing example in below puzzle. Here candidate 3 is not present in F4 cell of 4th column. If 3 was present here then it would have been Finned X-Wing but it will be called as Sashimi Finned X-Wing and D4 is the Finn Cell here.</p>",
+        "note": "<p><b>Note:</b> Only one row or column is allowed to have a missing candidate.</p>",
+        "effect": {
+            "title": "<b>How is Sashimi Finned X-Wing useful ?</b>",
+            "intro": "<p><b>How is Sashimi Finned X-Wing useful ?</b><br />Here in below puzzle we will follow the same logic as we did in Finned X-Wing to draw our conclusion.<br />So in below puzzle to fill 3 in 4th and 7th columns, there are two ways. Let's try both of these ways and see the conclusion.<br /><b>First way</b><br />If we fill 3 in F7 cell of 7th column then 3 can't be filled in I7 cell, hence in 4th column 3 will be filled in one of D4 and I4. And it would look like below<br />Case 1: 3 is filled in F7 and D4</p>",
+            "firstWayCase1": "<p><ul><li>in row F, 3 will be removed from F5</li><li>in row I, 3 will <b>not</b> be removed from I5</li></ul></p>",
+            "firstWayCase2Title": "<p>Case 2: 3 is filled in F7 and I4</p>",
+            "firstWayCase2": "<p><ul><li>in row F, 3 will be removed from F5</li><li>in row I, 3 will be removed from I5</li></ul></p>",
+            "secondWayIntro": "<p><b>Second way</b><br />If we fill 3 in I7 cell of 7th column then 3 can't be filled in I4 and F7 cells, hence in 4th column 3 will be filled in D4 only. And it would look like below</p>",
+            "secondWayResult": "<p><ul><li>in row F, 3 will be removed from F5</li><li>in row I, 3 will be removed from I5</li></ul></p>",
+            "conclusion": "<p><b>Conclusion</b><br />There are no other ways to fill 3 in these two columns. And notice carefully that in all such cases F5 is the only cell where 3 can't come. In the I5 candidate 3 can't be removed in all the cases of filling 4th and 7th columns with 3. So at this point we can remove 3 from F5 only.<br /><br />Hence, in general in Sashimi Finned X-Wing candidate will be removed from cells which share <a href=\"BLOCK\">block</a> with Finn Cells.</p>"
+        }
+    },
+    "xyChain": {
+        "intro": "<p>XY-Chain is the <a href=\"CHAIN\">chain</a> that is built using <a href=\"CELL\">cells</a> which have only two <a href=\"CANDIDATE\">candidates</a> (similar to <a href=\"REMOTE_PAIRS\">Remote Pairs</a>) in them but unlike Remote Pairs in XY-Chain any two cells in the chain can have different candidates.<br /><b>Note:</b> Any two consecutive cells in the chain must have atleast one candidate common and <b>First</b> and <b>Last</b> cells also must have atleast one candidate common.<br />Notice an XY-Chain in below puzzle.</p>",
+        "linksDetails": "<p>XY-Chain is made of alternate <a href=\"CHAIN_LINKS\">Strong</a> and <a href=\"CHAIN_LINKS\">Weak</a> links and it must start and end with a Strong Link.<br />Here in the example above, in chain {{chainPath}} imagine that each of these cells has a Strong link between it's candidates. These Strong links are not shown due to lack of space. So, this chain can be read like a sequence of below links</p>",
+        "linksSequence": "<p><ul><li><b>Strong</b> Link between candidate 3 and candidate 9 in G4</li><li><b>Weak</b> Link between candidate 9 of G4 and candidate 9 of E4</li><li><b>Strong</b> Link between candidate 9 and candidate 8 in E4</li><li><b>Weak</b> Link between candidate 8 of E4 and candidate 8 of E6</li><li><b>Strong</b> Link between candidate 8 and candidate 2 in E6</li><li><b>Weak</b> Link between candidate 2 of E6 and candidate 2 of B6</li><li><b>Strong</b> Link between candidate 2 and candidate 3 in B6</li></ul></p>",
+        "effect": {
+            "title": "<b>How is XY-Chain useful ?</b>",
+            "intro": "<p><b>How is XY-Chain useful ?</b><br />This XY-Chain starts from G4 and ends in B6. Both of these cells have 3 as their candidate. Let's take G4 and try to fill this chain with an assumption that what if 3 can not be the solution for G4 cell.</p>",
+            "firstWayTitle": "<b>First Way to fill the Chain:</b>",
+            "firstWay": "<p><b>First Way to fill the Chain:</b><br />Follow the logic with the puzzle given below.<br /><ul><li>if 3 is false in {{chainCell0}} then 9 has to be true in {{chainCell0}}. (Strong Link)</li><li>since 9 is true in {{chainCell0}} then 9 has to be false in {{chainCell1}}. (Weak Link)</li><li>since 9 is false in {{chainCell1}} then 8 has to be true in {{chainCell1}}. (Strong Link)</li><li>since 8 is true in {{chainCell1}} then 8 has to be false in {{chainCell2}}. (Weak Link)</li><li>since 8 is false in {{chainCell2}} then 2 has to be true in {{chainCell2}}. (Strong Link)</li><li>since 2 is true in {{chainCell2}} then 2 has to be false in {{chainCell3}}. (Weak Link)</li><li>since 2 is false in {{chainCell3}} then 3 has to be true in {{chainCell3}}. (Strong Link)</li></ul>So according to this, if 3 is false in {{chainCell0}} then it has to be true in {{chainCell3}}</p>",
+            "secondWayTitle": "<b>Second Way to fill the Chain:</b>",
+            "secondWay": "<p>Now let's take B6 and try to fill this chain with an assumption that what if 3 can not be the solution for B6 cell.<br /><b>Second Way to fill the Chain:</b><br />Imagine that if all the links are reversed in the above puzzle then:<br /><ul><li>if 3 is false in {{chainCell3}} then 2 has to be true in {{chainCell3}}. (Strong Link)</li><li>since 2 is true in {{chainCell3}} then 2 has to be false in {{chainCell2}}. (Weak Link)</li><li>since 2 is false in {{chainCell2}} then 8 has to be true in {{chainCell2}}. (Strong Link)</li><li>since 8 is true in {{chainCell2}} then 8 has to be false in {{chainCell1}}. (Weak Link)</li><li>since 8 is false in {{chainCell1}} then 9 has to be true in {{chainCell1}}. (Strong Link)</li><li>since 9 is true in {{chainCell1}} then 9 has to be false in {{chainCell0}}. (Weak Link)</li><li>since 9 is false in {{chainCell0}} then 3 has to be true in {{chainCell0}}. (Strong Link)</li></ul><br />So according to this, if 3 is false in {{chainCell3}} then it has to be true in {{chainCell0}}</p>",
+            "conclusion": "<p>So it is sure that either <b>First</b> or <b>Last</b> cell will be filled by 3. Because of this, all the cells which are in same <a href=\"HOUSE\">house</a> with first and last cells of the XY-Chain, can't have 3 as their candidate.<br />So in the puzzle above, 7 can be removed as candidate from B3, C3 and G6 cells.</p>"
+        }
+    },
+    "emptyRectangle": {
+        "intro": "<p>To find an Empty Rectangle, we will focus on a single <a href=\"CANDIDATE\">candidate</a> in a <a href=\"HOUSE\">block house</a>. if this candidate is present only in one row and one column in that block house then this candidate might make an Empty Rectangle.<br />Note: the candidate has to be present <b>more than two times</b> in that block.</p>",
+        "validPatterns": {
+            "title": "<p><b>valid patterns of the candidate in the block:</b></p>",
+            "explanation": "<p>in all of the blocks displayed above, the candidate is present in only <b>one row and one column</b>. And the rows and columns are also highlighted which contains these candidates in each block house. For Example, in 1st block, candidate 4 is present in 1st column and Ath row only.</p>"
+        },
+        "invalidPatterns": {
+            "title": "<p><b>invalid patterns of the candidate in block:</b></p>",
+            "explanation": "<p>Why above patterns are invalid ?<br/><ul><li><b>3rd block:</b> candidates in this block can not be fitted into any pair of a row and a column. if we choose one column, let's say 9th, then we need two rows B and C and if we choose one row, let's say C, then we need two columns 8th and 9th</li><li><b>5th block:</b> here all the candidates can be fitted into row E only and no candidates are left that can be fitted into a column as well</li><li><b>7th block:</b> candidate is present only two times in the block. we need it to be present atleast three times</li><li><b>9th block:</b> same reason as explained above for 3rd block</li></ul></p>"
+        },
+        "intersectionCell": {
+            "intro": "<p>Once you are able to find a valid arrangement of the candidate in a block house, now focus on the intersection of the row and column in which the candidate is present in the block. This <b>intersection cell</b> is important.</p>",
+            "observation": "<p>in all of the blocks displayed above, the intersection cell has been highlighted. For Example, in 5th block, candidate 4 is present in row E and column 5 and this row and column intersect at E5 cell.</p>"
+        },
+        "sideHouse": {
+            "intro": "<p>Now we need to find either a row or a column which is not part of the block house and in which this candidate can come <b>only 2 times</b>. Let's call such a row or column as <b>Side House</b>.<br/><b>Note:</b> One cell of this side house in which this candidate is present has to be seen by the intersection cell of the block house.</p>",
+            "observation": "<p>In the above puzzle, row H and column 2nd are shown as an example of a valid Side House. In both of these side houses candidate 4 is present only 2 times and one cell of each house is seen by the intersection cell of the 3rd block house.</p>"
+        },
+        "effect": {
+            "title": "<p><b>How this hint removes notes:</b></p>",
+            "intro": "<p><b>How this hint removes notes:</b><br />Once you have identified a block house and a row of column house with the properties explained above, it's time to find the cell from which the candidate can be removed. Let's use the above example to understand this.</p>",
+            "explanation": "<p>here 3rd block and row H makes Empty Rectangle with candidate 4. And H9 cell of Side House sees intersection cell and H4 is the other cell which does not see intersection cell in the block.<br />The candidate 4 will be removed from the cell which sees the intersection cell (B9 here) and the other cell of Side House which does not see intersection cell (H4 here).<br />So, B4 is that cell from which candidate 4 will be removed. Other candidates of this cell will be safe.<br />Now try to apply this hint in your real puzzles</p>"
+        }
+    },
+    "xWingCornerCells": {
+        "intro": "<p>An <a href=\"PERFECT_X_WING\">X-Wing</a> is formed using two <a href=\"ROW\">rows</a> or <a href=\"COLUMN\">columns</a>. And these two rows or columns have candidate present in two cells only. so combinedly we have 4 cells where the candiate is present. These 4 cells are known as X-Wing corner cells.Notice 1st and 5th columns in X-Wing in below puzzle.</p>",
+        "observation": "<p>So B1, B5, E1 and E5 are X-Wing corner cells in this case.</p>"
+    }
+}
+

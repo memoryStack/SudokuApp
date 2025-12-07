@@ -1,0 +1,11 @@
+{
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "invalidDeeplinkPuzzle": "Invalid Url.",
+    "launchingDefaultPuzzle": "Launching default puzzle",
+    "deeplinkNoSolutions": "Puzzle has no solutions.",
+    "deeplinkMultipleSolutions": "Puzzle has multiple solutions.",
+    "emptyUrl": "Invaild Url",
+    "incompleteNumbers": "Puzzle doesn't have {{count}} numbers",
+    "invalidCharacters": "Puzzle has invalid characters other than 0-9"
+}
+

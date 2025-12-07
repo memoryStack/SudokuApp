@@ -31,10 +31,9 @@ const Home_ = ({ navigation }) => {
     const [pageHeight, setPageHeight] = useState(0)
     const [showNextGameMenu, setShowNextGameMenu] = useState(false)
 
-    const { t } = useTranslation()
+    const { t } = useTranslation('home')
 
     const styles = useStyles(getStyles)
-
 
     useEffect(() => {
         // fetch('http://52.66.253.10:3000/getRecords')
@@ -99,14 +98,14 @@ const Home_ = ({ navigation }) => {
             type={TEXT_VARIATIONS.DISPLAY_LARGE}
             style={styles.gameDisplayName}
         >
-            {'SUPER\nSUDOKU'}
+            {t('gameTitle', "SUPER\nSUDOKU")}
         </Text>
     )
 
     const renderPlayButton = () => (
         <Button
             onPress={handlePlayOfflineClick}
-            label={t('PLAY')}
+            label={t('play', 'PLAY')}
             containerStyle={styles.playButtonContainer}
         />
     )
@@ -114,7 +113,7 @@ const Home_ = ({ navigation }) => {
     const renderGameRulesCTA = () => (
         <Button
             type={BUTTON_TYPES.OUTLINED}
-            label={t('How To Play ?')}
+            label={t('howToPlay', 'How To Play ?')}
             containerStyle={styles.gameRulesCTA}
             onPress={() => navigation.navigate(ROUTES.PLAY_GUIDE)}
         />

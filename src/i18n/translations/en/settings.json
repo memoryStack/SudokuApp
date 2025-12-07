@@ -1,0 +1,53 @@
+{
+    "menu": {
+        "howToPlay": "How to Play?",
+        "language": "Language",
+        "customizeExperience": "Customize Experience",
+        "designSystem": "Design System"
+    },
+    "gameSettings": {
+        "categories": {
+            "darkMode": "Dark Mode",
+            "gameOver": "Game Over",
+            "visualHighlights": "Visual Highlights",
+            "fillNumbers": "Fill Numbers",
+            "sounds": "Sounds",
+            "hints": "Hints"
+        },
+        "descriptions": {
+            "gameOverOnMistakes": "Game over on {{mistakesLimit}} mistakes",
+            "mistakesLimit": "Number of mistake allowed in game",
+            "showFeedbackOnMistake": "Show feedback when mistake is made",
+            "highlightCells": "Highlight cells with different background colors",
+            "highlightNotes": "Highlight notes of a number",
+            "fillNotesWithoutPencil": "Fill notes without Pencil",
+            "allowAnyNote": "Allow filling all the notes in cell",
+            "fillOnCellClick": "Lock number and fill on Cell tap",
+            "soundsEnabled": "Enable or disable all game sounds",
+            "remindToTakeHint": "Show reminders to use hints when stuck"
+        },
+        "snackbar": {
+            "soundsOn": "sounds have been enabled. now try pressing any cell in puzzle and you will hear the tunes",
+            "soundsOff": "no more sounds in game. wish you a nice meditative session",
+            "allowAnyNoteOn": "in Preview do below\npick an empty cell and try to fill 1-9 as notes, notice now you can fill all the notes",
+            "allowAnyNoteOff": "in Preview do below\nin 1st try to fill all the notes. notice only 1, 4, 8 can be filled",
+            "fillNoteShortClickOn": "now notes will be filled without turning on Pencil. just press the number.\nlong press the number to fill cell with it's soluton",
+            "fillNoteShortClickOff": "now you have to turn on Pencil to fill notes in cell",
+            "fillOnCellClickOn": "now numbers & Notes will be filled faster.In Preview do below\na. long press any number to lock it\nb. tap on an empty cell and number will be filled",
+            "fillOnCellClickOff": "now you have to first select a cell and then press on number to fill",
+            "highlightCellsOn": "now cells will have colorful backgrounds",
+            "highlightCellsOff": "all the cells will have same background like solving Sudoku on paper",
+            "highlightNotesOn": "now notes will be highlighted in puzzle.\nin Preview do below\n  a. click Fast Pencil\n  b. select a filled cell\nnotice notes have been highlighted",
+            "highlightNotesOff": "in Preview do below\n  a. click Fast Pencil\n  b. select a filled cell\nnotice all the notes have same color",
+            "remindHintOn": "we will remind you to use hint at a regular interval when no progress is made in puzzle",
+            "remindHintOff": "you are the champ. no more reminders to take hint",
+            "gameOverMistakesOn": "game will be over once your mistakes count is {{mistakesLimit}}. WATCH OUT!",
+            "gameOverMistakesOff": "game won't be over on making mistakes. BE FEARLESS!",
+            "showFeedbackOn": "in Preview do below\n a. fill 1 in first cell\nit's a mistake and see mistakes count has gone up",
+            "showFeedbackOff": "in Preview do below\n a. fill 1 in first cell\nit's a mistake and see you can't notice it in preview",
+            "fillNotesWithoutPencilOn": "in Preview now you will see 2 input panels, one for notes and one for main numbers",
+            "fillNotesWithoutPencilOff": "now you have to tap on Pencil first before filling Notes"
+        },
+        "tooltip": "change settings and click here to see how the Game Experience changes"
+    }
+}

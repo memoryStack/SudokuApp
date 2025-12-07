@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "intro": "A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are already filled. Notice above.\n\nA puzzle is completed when each number from 1 to 9 appears only once in each of the 9 ",
+        "rows": "rows",
+        "columns": "columns",
+        "blocks": "blocks",
+        "suffix": ". Like it's shown above.",
+        "tip": "\n\nStudy the grid to find the numbers that might fit into each cell."
+    },
+    "solutionTitle": "Solution of above puzzle will look like this"
+}

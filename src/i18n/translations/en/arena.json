@@ -1,0 +1,74 @@
+{
+    "nextGameMenu": {
+        "easy": "EASY",
+        "medium": "MEDIUM",
+        "hard": "HARD",
+        "expert": "EXPERT",
+        "customizePuzzle": "Customize Your Puzzle"
+    },
+    "gameResult": {
+        "congratulations": "Congratulations!",
+        "time": "Time",
+        "mistakes": "Mistakes",
+        "hintsUsed": "Hints Used",
+        "gameOverMessage": "You have reached the maximum mistakes limit. Better Luck Next Time",
+        "reviewDescription": "If you've improved at Sudoku, please share your feedback to help us improve ❤️"
+    },
+    "refree": {
+        "mistakesWithLimit": "Mistakes: {{current}}/{{max}}",
+        "mistakesWithoutLimit": "Mistakes: {{current}}",
+        "customizedPuzzle": "Customized Puzzle",
+        "sharedPuzzle": "Shared Puzzle"
+    },
+    "cellActions": {
+        "undo": "Undo",
+        "pencil": "Pencil",
+        "fastPencil": "Fast Pencil",
+        "hint": "Hint",
+        "eraser": "Eraser",
+        "longPressHint": "Long press to see all hints"
+    },
+    "smartHint": {
+        "applyHint": "Apply Hint"
+    },
+    "hintsMenu": {
+        "nakedSingle": "Naked\nSingle",
+        "hiddenSingle": "Hidden\nSingle",
+        "nakedDouble": "Naked\nDouble",
+        "hiddenDouble": "Hidden\nDouble",
+        "nakedTripple": "Naked\nTripple",
+        "hiddenTripple": "Hidden\nTripple",
+        "xWing": "X-Wing",
+        "yWing": "Y-Wing",
+        "omission": "Omission",
+        "remotePairs": "Remote Pairs",
+        "emptyRectangle": "Empty Rectangle",
+        "xChain": "X-Chain",
+        "xyChain": "XY-Chain",
+        "wWing": "W-Wing",
+        "xyzWing": "XYZ-Wing",
+        "uniqueRectangle": "Unique\nRectangle"
+    },
+    "feedback": {
+        "title": "We are just one text away",
+        "description": "We understand that you might have faced some difficulties. Let us know how we can help you solve your next puzzle.",
+        "inputPlaceholder": "Didn't know how to use hints",
+        "options": {
+            "hints": "Had trouble using hints",
+            "hard": "Too hard puzzles"
+        },
+        "snackbar": {
+            "success": "We have recorded your response and will act on it shortly.",
+            "error": "Failed to submit feedback. We are on it!"
+        }
+    },
+    "hintSuggestion": {
+        "title": "Want Help?",
+        "description": "you have been stuck for over {{seconds}}s. Feeling like need help?"
+    },
+    "coachmarks": {
+        "fastPencil": "To get Hints when you wish\n\nFirst press on Fast Pencil",
+        "clickHints": "Now press on \"Hint\"",
+        "customizeExperience": "You can customize your game experience from here"
+    }
+}

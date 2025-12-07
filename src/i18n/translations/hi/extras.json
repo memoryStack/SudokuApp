@@ -1,0 +1,19 @@
+{
+    "houseTypes": {
+        "row": "row",
+        "rowPlural": "rows",
+        "column": "column",
+        "columnPlural": "columns",
+        "block": "block",
+        "blockPlural": "blocks"
+    },
+    "numbers": {
+        "two": "two",
+        "three": "three"
+    },
+    "conjugations": {
+        "and": "and",
+        "or": "or"
+    }
+}
+
