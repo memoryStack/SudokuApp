@@ -473,7 +473,7 @@ const Arena_ = ({
     }
 
     const renderInputPanel = () => (
-        <View style={styles.inputPanelContainer}>
+        <View style={styles.inputPanelContainer} ref={boardControllersRef} collapsable={false}>
             <GameInputPanel dependencies={dependencies} />
         </View>
     )
@@ -574,7 +574,7 @@ const Arena_ = ({
                     containerStyles={{
                         marginTop: 0
                     }}
-                    refFromParent={boardControllersRef}
+                    // refFromParent={boardControllersRef}
                     gameState={gameState}
                     pencilState={pencilState}
                     dependencies={dependencies}
