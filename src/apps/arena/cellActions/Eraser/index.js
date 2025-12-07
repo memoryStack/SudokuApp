@@ -10,6 +10,7 @@ import { PencilIcon } from '@resources/svgIcons/pencil'
 import Text from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../../i18n/hooks/useTranslation'
 
 import { Touchable } from '../../../components/Touchable'
 
@@ -21,11 +22,12 @@ const Eraser = ({
     iconBoxSize, isActive, onClick, disabled, textStyles, ...rest
 }) => {
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
     return (
         <Touchable style={styles.actionContainer} onPress={onClick} disabled={disabled} {...rest}>
             <Image style={[styles.eraser, { width: iconBoxSize, height: iconBoxSize }, disabled ? { opacity: 0.5 } : null]} source={ERASER_SOURCE} />
             <Text style={[styles.actionText, isActive ? styles.activeState : styles.inactiveState, textStyles]}>
-                Eraser
+                {t('cellActions.eraser', 'Eraser')}
             </Text>
         </Touchable>
     )

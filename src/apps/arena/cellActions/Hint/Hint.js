@@ -13,6 +13,7 @@ import Text from '@ui/atoms/Text'
 import Tooltip, { usePopable } from '@ui/atoms/Tooltip'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../../i18n/hooks/useTranslation'
 import { Touchable } from '../../../components/Touchable'
 
 import { getStyles } from '../cellActions.styles'
@@ -23,13 +24,13 @@ import { useDependency } from 'src/hooks/useDependency';
 // and also we can make the hints numbers vary according to the difficulty level. user can customize that as per their
 // comfort and confidence level
 
-// const copilotText = "Now press on \"Hint\"\n\nApp will use notes filled in previous step to find hints in puzzle"
-const copilotText = "Now press on \"Hint\""
-
 const Hint = ({
     iconBoxSize, hints, onClick, disabled, textStyles, ...rest
 }) => {
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
+
+    const copilotText = t('coachmarks.clickHints', 'Now press on "Hint"')
 
     const { ref: tooltipRef, hide, show } = usePopable()
     const hintsMenuTooltipShown = useRef(false)
@@ -92,13 +93,13 @@ const Hint = ({
                 disabled={disabled || noAvailableHints}
                 {...rest}
             >
-                <Tooltip ref={tooltipRef} content={"Long press to see all hints"} position={"top"}>
+                <Tooltip ref={tooltipRef} content={t('cellActions.longPressHint', "Long press to see all hints")} position={"top"}>
                     {/* have to wrap a new Touchable due to tooltip addition */}
                     <Touchable onPress={showOnlyOneHint} onLongPress={showAllHint}>
                         {renderIcon()}
                     </Touchable>
                 </Tooltip>
-                <Text style={[styles.actionText, textStyles]}>Hint</Text>
+                <Text style={[styles.actionText, textStyles]}>{t('cellActions.hint', 'Hint')}</Text>
             </Touchable>
         </CopilotStep>
     )

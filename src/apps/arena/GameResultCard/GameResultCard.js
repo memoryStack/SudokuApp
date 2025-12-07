@@ -9,20 +9,17 @@ import PropTypes from 'prop-types'
 import _noop from '@lodash/noop'
 import _prependZero from '@lodash/prependZero'
 
-import { NEW_GAME, RESTART_GAME } from '@resources/stringLiterals'
-
 import Button, { BUTTON_TYPES } from '@ui/molecules/Button'
 import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
 import { GameState } from '@application/utils/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
 import { GAME_OVER_CARD_TEST_ID, REVIEW_SECTION_TEST_ID, REVIEW_BUTTON_TEST_ID } from './gameResultCard.constants'
 import { getStyles } from './gameResultCard.styles'
 import LevelStars, { ICON_SIZE_TYPES } from '@ui/atoms/LevelStars'
-
-const REVIEW_DESCRIPTION = "If you've improved at Sudoku, please share your feedback to help us improve ❤️"
 
 const getTimeView = (time, styles) => {
     const { hours = 0, minutes = 0, seconds = 0 } = time || {}
@@ -41,6 +38,7 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSect
     } = stats
 
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
 
     const gameState = useSelector(getGameState)
 
@@ -57,7 +55,7 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSect
                 */}
                 {/* <TrophyIcon width={TROPHY_ICON_DIMENSION} height={TROPHY_ICON_DIMENSION} /> */}
                 <Text style={[styles.congratsText, styles.textColor]} type={TEXT_VARIATIONS.HEADING_SMALL}>
-                    Congratulations!
+                    {t('gameResult.congratulations', 'Congratulations!')}
                 </Text>
                 {
                     starsEarned ?
@@ -71,15 +69,15 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSect
                 }
                 <View style={styles.statsContainer}>
                     <View style={styles.statContainer}>
-                        <Text style={styles.textColor}>Time</Text>
+                        <Text style={styles.textColor}>{t('gameResult.time', 'Time')}</Text>
                         {getTimeView(time, styles)}
                     </View>
                     <View style={styles.statContainer}>
-                        <Text style={styles.textColor}>Mistakes</Text>
+                        <Text style={styles.textColor}>{t('gameResult.mistakes', 'Mistakes')}</Text>
                         <Text style={styles.textColor}>{mistakes}</Text>
                     </View>
                     {/* <View style={styles.statContainer}>
-                        <Text style={styles.textColor}>Hints Used</Text>
+                        <Text style={styles.textColor}>{t('gameResult.hintsUsed', 'Hints Used')}</Text>
                         <Text style={styles.textColor}>{hintsUsed}</Text>
                     </View> */}
                 </View>
@@ -91,7 +89,7 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSect
         if (!new GameState(gameState).isGameUnsolved()) return null
         return (
             <Text style={[styles.gameUnsolvedMsg, styles.textColor]}>
-                You have reached the maximum mistakes limit. Better Luck Next Time
+                {t('gameResult.gameOverMessage', 'You have reached the maximum mistakes limit. Better Luck Next Time')}
             </Text>
         )
     }
@@ -102,11 +100,11 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSect
         return (
             <View style={styles.reviewSectionContainer} testID={REVIEW_SECTION_TEST_ID}>
                 <Text style={[styles.textColor, styles.reviewDescription]}>
-                    {REVIEW_DESCRIPTION}
+                    {t('gameResult.reviewDescription', "If you've improved at Sudoku, please share your feedback to help us improve ❤️")}
                 </Text>
                 <Button
                     type={BUTTON_TYPES.FILLED}
-                    label="Review"
+                    label={t('common:review', 'Review')}
                     onPress={onReviewPress}
                     containerStyle={styles.reviewButtonContainer}
                     testID={REVIEW_BUTTON_TEST_ID}
@@ -118,7 +116,7 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSect
     const renderRestartButton = () => (
         <Button
             type={BUTTON_TYPES.FILLED}
-            label={RESTART_GAME}
+            label={t('common:restart', 'Restart')}
             onPress={onRestartGame}
             containerStyle={styles.newGameButtonContainer}
         />
@@ -132,7 +130,7 @@ const GameResultCard = ({ stats, openNextGameMenu, onRestartGame, showReviewSect
     const renderNewGameButton = () => (
         <Button
             type={getNewGameButtonType()}
-            label={NEW_GAME}
+            label={t('common:newGame', 'New Game')}
             onPress={openNextGameMenu}
             containerStyle={styles.newGameButtonContainer}
         />

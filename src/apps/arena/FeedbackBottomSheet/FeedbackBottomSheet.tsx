@@ -9,6 +9,7 @@ import SelectablePill from '@ui/atoms/SelectablePill'
 import { BUTTON_TYPES } from '@ui/molecules/Button/button.constants'
 import { BottomDragger } from '../../components/BottomDragger'
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
 
 import { getStyles } from './feedbackBottomSheet.styles'
 import {
@@ -17,8 +18,6 @@ import {
     FEEDBACK_SKIP_BUTTON_TEST_ID,
     FEEDBACK_DND_BUTTON_TEST_ID,
     FEEDBACK_TEXT_INPUT_TEST_ID,
-    FEEDBACK_OPTIONS,
-    FEEDBACK_CONTENT,
     MAX_FEEDBACK_TEXT_LENGTH,
 } from './feedbackBottomSheet.constants'
 
@@ -43,7 +42,13 @@ const FeedbackBottomSheet_ = forwardRef<FeedbackBottomSheetRef, Props>(({
     onClosed = _noop,
 }, ref) => {
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
     const bottomDraggerRef = useRef<{ openDragger: () => void; closeDragger: () => void }>(null)
+
+    const FEEDBACK_OPTIONS = [
+        { id: 'hints', label: t('feedback.options.hints', 'Had trouble using hints') },
+        { id: 'hard', label: t('feedback.options.hard', 'Too hard puzzles') },
+    ] as const
 
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     const [additionalFeedback, setAdditionalFeedback] = useState('')
@@ -118,7 +123,7 @@ const FeedbackBottomSheet_ = forwardRef<FeedbackBottomSheetRef, Props>(({
                     styles.textInput,
                     isTextInputFocused && styles.textInputFocused,
                 ]}
-                placeholder={FEEDBACK_CONTENT.inputPlaceholder}
+                placeholder={t('feedback.inputPlaceholder', "Didn't know how to use hints") as string}
                 placeholderTextColor={styles.placeholderTextColor.color}
                 value={additionalFeedback}
                 onChangeText={setAdditionalFeedback}
@@ -138,14 +143,14 @@ const FeedbackBottomSheet_ = forwardRef<FeedbackBottomSheetRef, Props>(({
         <View style={styles.buttonsContainer}>
             <View style={styles.noFeedbackButtonsContainer}>
                 <Button
-                    label={FEEDBACK_CONTENT.dndButton}
+                    label={t('common:dontShowAgain', "Don't show again") as string}
                     onPress={handleDND}
                     type={BUTTON_TYPES.OUTLINED}
                     containerStyle={styles.outlinedButton}
                     testID={FEEDBACK_DND_BUTTON_TEST_ID}
                 />
                 <Button
-                    label={FEEDBACK_CONTENT.skipButton}
+                    label={t('common:nextTime', 'Next time') as string}
                     onPress={handleSkip}
                     type={BUTTON_TYPES.OUTLINED}
                     containerStyle={styles.outlinedButton}
@@ -153,7 +158,7 @@ const FeedbackBottomSheet_ = forwardRef<FeedbackBottomSheetRef, Props>(({
                 />
             </View>
             <Button
-                label={FEEDBACK_CONTENT.submitButton}
+                label={t('common:submit', 'Submit') as string}
                 onPress={handleSubmit}
                 containerStyle={styles.submitButton}
                 testID={FEEDBACK_SUBMIT_BUTTON_TEST_ID}
@@ -172,10 +177,10 @@ const FeedbackBottomSheet_ = forwardRef<FeedbackBottomSheetRef, Props>(({
 
             <View style={styles.container}>
                 <Text style={styles.title} type={TEXT_VARIATIONS.TITLE_LARGE}>
-                    {FEEDBACK_CONTENT.title}
+                    {t('feedback.title', 'We are just one text away')}
                 </Text>
                 <Text style={styles.description} type={TEXT_VARIATIONS.BODY_LARGE}>
-                    {FEEDBACK_CONTENT.description}
+                    {t('feedback.description', 'We understand that you might have faced some difficulties. Let us know how we can help you solve your next puzzle.')}
                 </Text>
                 {renderPills()}
                 <KeyboardAvoidingView behavior={'padding'}>

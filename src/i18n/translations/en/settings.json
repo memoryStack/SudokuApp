@@ -15,7 +15,7 @@
             "hints": "Hints"
         },
         "descriptions": {
-            "gameOverOnMistakes": "Game over on {{mistakesLimit}} mistakes",
+            "gameOverOnMistakes": "Game over on {{MISTAKES_LIMIT}} mistakes",
             "mistakesLimit": "Number of mistake allowed in game",
             "showFeedbackOnMistake": "Show feedback when mistake is made",
             "highlightCells": "Highlight cells with different background colors",
@@ -41,7 +41,7 @@
             "highlightNotesOff": "in Preview do below\n  a. click Fast Pencil\n  b. select a filled cell\nnotice all the notes have same color",
             "remindHintOn": "we will remind you to use hint at a regular interval when no progress is made in puzzle",
             "remindHintOff": "you are the champ. no more reminders to take hint",
-            "gameOverMistakesOn": "game will be over once your mistakes count is {{mistakesLimit}}. WATCH OUT!",
+            "gameOverMistakesOn": "game will be over once your mistakes count is {{MISTAKES_LIMIT}}. WATCH OUT!",
             "gameOverMistakesOff": "game won't be over on making mistakes. BE FEARLESS!",
             "showFeedbackOn": "in Preview do below\n a. fill 1 in first cell\nit's a mistake and see mistakes count has gone up",
             "showFeedbackOff": "in Preview do below\n a. fill 1 in first cell\nit's a mistake and see you can't notice it in preview",

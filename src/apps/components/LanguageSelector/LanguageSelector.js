@@ -22,7 +22,7 @@ import { getStyles } from './languageSelector.styles'
 const LanguageSelector_ = ({ hideModal }) => {
     const styles = useStyles(getStyles)
 
-    const { t, i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation()
+    const { t, i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation('dialogs')
 
     const [selectedLanguage, setSelectedLanguage] = useState(defaultSelectedLanguage)
 
@@ -60,15 +60,15 @@ const LanguageSelector_ = ({ hideModal }) => {
     return (
         <Dialog
             styles={styles.container}
-            title={t('Select a Language')}
+            title={t('languageSelector.title', 'Select a Language')}
             body={languagesOptionsView}
             footerButtonsConfig={[
                 {
-                    label: t('Cancel'),
+                    label: t('common:cancel', 'Cancel'),
                     onClick: hideModal,
                 },
                 {
-                    label: t('Save'),
+                    label: t('common:save', 'Save'),
                     onClick: handleSavePress,
                 },
             ]}

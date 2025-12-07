@@ -14,6 +14,7 @@ import Text from '@ui/atoms/Text'
 import StopTouchPropagation from '@ui/molecules/StopTouchPropagation'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
 
 
 import { useDependency } from '../../../hooks/useDependency'
@@ -21,7 +22,7 @@ import withActions from '../../../utils/hocs/withActions'
 
 import { Touchable, TouchableTypes } from '../../components/Touchable'
 
-import { HINTS_MENU_ITEMS } from '../utils/smartHints/constants'
+import { HINTS_IDS } from '../utils/smartHints/constants'
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
 import { useThemeValues } from '../hooks/useTheme'
 
@@ -41,8 +42,47 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const { mainNumbers, notes } = useGameBoardInputs()
 
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
 
     const theme = useThemeValues()
+
+    const HINT_LABELS = {
+        [HINTS_IDS.NAKED_SINGLE]: t('hintsMenu.nakedSingle', 'Naked\nSingle'),
+        [HINTS_IDS.HIDDEN_SINGLE]: t('hintsMenu.hiddenSingle', 'Hidden\nSingle'),
+        [HINTS_IDS.NAKED_DOUBLE]: t('hintsMenu.nakedDouble', 'Naked\nDouble'),
+        [HINTS_IDS.HIDDEN_DOUBLE]: t('hintsMenu.hiddenDouble', 'Hidden\nDouble'),
+        [HINTS_IDS.NAKED_TRIPPLE]: t('hintsMenu.nakedTripple', 'Naked\nTripple'),
+        [HINTS_IDS.HIDDEN_TRIPPLE]: t('hintsMenu.hiddenTripple', 'Hidden\nTripple'),
+        [HINTS_IDS.X_WING]: t('hintsMenu.xWing', 'X-Wing'),
+        [HINTS_IDS.Y_WING]: t('hintsMenu.yWing', 'Y-Wing'),
+        [HINTS_IDS.OMISSION]: t('hintsMenu.omission', 'Omission'),
+        [HINTS_IDS.REMOTE_PAIRS]: t('hintsMenu.remotePairs', 'Remote Pairs'),
+        [HINTS_IDS.EMPTY_RECTANGLE]: t('hintsMenu.emptyRectangle', 'Empty Rectangle'),
+        [HINTS_IDS.X_CHAIN]: t('hintsMenu.xChain', 'X-Chain'),
+        [HINTS_IDS.XY_CHAIN]: t('hintsMenu.xyChain', 'XY-Chain'),
+        [HINTS_IDS.W_WING]: t('hintsMenu.wWing', 'W-Wing'),
+        [HINTS_IDS.XYZ_WING]: t('hintsMenu.xyzWing', 'XYZ-Wing'),
+        [HINTS_IDS.UNIQUE_RECTANGLE]: t('hintsMenu.uniqueRectangle', 'Unique\nRectangle'),
+    }
+
+    const HINTS_MENU_ITEMS = [
+        { label: HINT_LABELS[HINTS_IDS.NAKED_SINGLE], id: HINTS_IDS.NAKED_SINGLE },
+        { label: HINT_LABELS[HINTS_IDS.HIDDEN_SINGLE], id: HINTS_IDS.HIDDEN_SINGLE },
+        { label: HINT_LABELS[HINTS_IDS.OMISSION], id: HINTS_IDS.OMISSION },
+        { label: HINT_LABELS[HINTS_IDS.NAKED_DOUBLE], id: HINTS_IDS.NAKED_DOUBLE },
+        { label: HINT_LABELS[HINTS_IDS.HIDDEN_DOUBLE], id: HINTS_IDS.HIDDEN_DOUBLE },
+        { label: HINT_LABELS[HINTS_IDS.NAKED_TRIPPLE], id: HINTS_IDS.NAKED_TRIPPLE },
+        { label: HINT_LABELS[HINTS_IDS.HIDDEN_TRIPPLE], id: HINTS_IDS.HIDDEN_TRIPPLE },
+        { label: HINT_LABELS[HINTS_IDS.X_WING], id: HINTS_IDS.X_WING },
+        { label: HINT_LABELS[HINTS_IDS.Y_WING], id: HINTS_IDS.Y_WING },
+        { label: HINT_LABELS[HINTS_IDS.EMPTY_RECTANGLE], id: HINTS_IDS.EMPTY_RECTANGLE },
+        { label: HINT_LABELS[HINTS_IDS.REMOTE_PAIRS], id: HINTS_IDS.REMOTE_PAIRS },
+        { label: HINT_LABELS[HINTS_IDS.X_CHAIN], id: HINTS_IDS.X_CHAIN },
+        { label: HINT_LABELS[HINTS_IDS.XY_CHAIN], id: HINTS_IDS.XY_CHAIN },
+        { label: HINT_LABELS[HINTS_IDS.W_WING], id: HINTS_IDS.W_WING },
+        { label: HINT_LABELS[HINTS_IDS.XYZ_WING], id: HINTS_IDS.XYZ_WING },
+        { label: HINT_LABELS[HINTS_IDS.UNIQUE_RECTANGLE], id: HINTS_IDS.UNIQUE_RECTANGLE },
+    ]
 
     useEffect(() => {
         if (_isEmpty(mainNumbers) || _isEmpty(notes)) return

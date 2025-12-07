@@ -16,12 +16,13 @@ import Text from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
+
 import { BottomDragger, getCloseDraggerHandler } from '../../components/BottomDragger'
 import { Touchable } from '../../components/Touchable'
 
 import {
     LEVEL_ICON_DIMENSION,
-    MENU_ITEMS_LABELS,
     NEXT_GAME_MENU_TEST_ID,
 } from './nextGameMenu.constants'
 
@@ -42,6 +43,7 @@ const getBarPath = barNum => [
 // TODO: find a good icon for this resume option
 const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
 
     const dependencies = useDependency()
 
@@ -107,6 +109,15 @@ const NextGameMenu_ = ({ parentHeight, menuItemClick, onMenuClosed }) => {
             closeView()
         }
     }, [menuItemClick])
+
+    const MENU_ITEMS_LABELS = {
+        [START_GAME_MENU_ITEMS_IDS.EASY]: t('nextGameMenu.easy', 'EASY'),
+        [START_GAME_MENU_ITEMS_IDS.MEDIUM]: t('nextGameMenu.medium', 'MEDIUM'),
+        [START_GAME_MENU_ITEMS_IDS.HARD]: t('nextGameMenu.hard', 'HARD'),
+        [START_GAME_MENU_ITEMS_IDS.EXPERT]: t('nextGameMenu.expert', 'EXPERT'),
+        [START_GAME_MENU_ITEMS_IDS.CUSTOMIZE_PUZZLE]: t('nextGameMenu.customizePuzzle', 'Customize Your Puzzle'),
+        [START_GAME_MENU_ITEMS_IDS.RESUME]: t('common:resume', 'Resume'),
+    }
 
     const getNextGameMenu = () => (
         <View style={styles.nextGameMenuContainer}>

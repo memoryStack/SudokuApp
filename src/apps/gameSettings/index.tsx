@@ -8,6 +8,7 @@ import { View, ScrollView } from 'react-native'
 import _noop from '@lodash/noop'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../i18n/hooks/useTranslation'
 
 import { Page } from '../components/Page'
 import { Switch } from 'react-native-paper'; // TODO: import it from UI folder
@@ -49,7 +50,7 @@ import { START_GAME_MENU_ITEMS_IDS } from '@application/usecases/newGameMenu/con
 import { Timer } from '@utils/classes/timer'
 import { Inputpanel } from '../arena/inputPanel'
 import { createBoardControllerRepositoryHandlers } from 'src/repositories/boardControllerRepository/BoardControllerRepository'
-import { GAME_SETTINGS_STATE, OPTION_STATES, SNACKBAR_MSGS, DYNAMIC_DATA_KEYS } from './constants'
+import { GAME_SETTINGS_STATE, OPTION_STATES, DYNAMIC_DATA_KEYS } from './constants'
 import { createBoardControllerSlice } from '../arena/store/reducers/boardController.reducers'
 import { createGameStateSlice } from '../arena/store/reducers/gameState.reducers'
 import { createGameStateRepositoryHandlers } from 'src/repositories/gameStateRepository/GameStateRepository'
@@ -70,127 +71,6 @@ enum INPUT_TYPES {
     DROPDOWN = 'DROPDOWN'
 }
 
-const SETTINGS_ = [
-    {
-        title: 'Dark Mode',
-        hasPreview: false,
-        hasToggle: true,
-        inputType: INPUT_TYPES.TOGGLE,
-        key: GAME_SETTINGS_KEYS.DARK_MODE,
-        value: false,
-        items: []
-    },
-    {
-        title: 'Game Over',
-        hasPreview: false,
-        items: [
-            {
-                key: GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: `Game over on {{${DYNAMIC_DATA_KEYS.MISTAKES_LIMIT}}} mistakes`
-            },
-            {
-                key: GAME_SETTINGS_KEYS.MISTAKES_LIMIT,
-                inputType: INPUT_TYPES.DROPDOWN,
-                value: 0,
-                description: 'Number of mistake allowed in game',
-                disabled: false,
-                options: [
-                    { label: '1', value: '1' },
-                    { label: '2', value: '2' },
-                    { label: '3', value: '3' },
-                    { label: '4', value: '4' },
-                    { label: '5', value: '5' },
-                    { label: '6', value: '6' },
-                    { label: '7', value: '7' },
-                    { label: '8', value: '8' },
-                    { label: '9', value: '9' },
-                    { label: '10', value: '10' },
-                ]
-            }
-        ]
-    },
-    {
-        title: 'Visual Highlights',
-        hasPreview: true,
-        items: [
-            {
-                key: GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Show feedback when mistake is made'
-            },
-            {
-                key: GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Highlight cells with different background colors'
-            },
-            {
-                key: GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Highlight notes of a number'
-            }
-        ]
-    },
-    {
-        title: 'Fill Numbers',
-        hasPreview: true,
-        items: [
-            {
-                key: GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Fill notes without Pencil'
-            },
-            {
-                key: GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Allow filling all the notes in cell'
-            },
-            // {
-            //     key: GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK,
-            //     inputType: INPUT_TYPES.TOGGLE,
-            //     value: false,
-            //     description: 'Fill notes with short press and cell solution number with long press'
-            // }
-            {
-                key: GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Lock number and fill on Cell tap'
-            }
-        ]
-    },
-    {
-        title: 'Sounds',
-        hasPreview: false,
-        items: [
-            {
-                key: GAME_SETTINGS_KEYS.SOUNDS_ENABLED,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Enable or disable all game sounds'
-            }
-        ]
-    },
-    {
-        title: 'Hints',
-        hasPreview: false,
-        items: [
-            {
-                key: GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT,
-                inputType: INPUT_TYPES.TOGGLE,
-                value: false,
-                description: 'Show reminders to use hints when stuck'
-            }
-        ]
-    }
-]
-
 const clues = [0, 0, 0, 0, 0, 2, 0, 0, 0, 5, 9, 0, 3, 0, 0, 0, 1, 0, 0, 6, 3, 4, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 8, 7, 0, 0, 8, 6, 3, 0, 0, 5, 6, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 1, 3, 8, 0, 0, 5, 0, 0, 0, 8, 0, 7, 4, 0, 0, 0, 9, 0, 0, 0, 0, 0]
 const solution = [4, 1, 7, 5, 9, 2, 8, 6, 3, 5, 9, 2, 3, 8, 6, 4, 1, 7, 8, 6, 3, 4, 1, 7, 5, 9, 2, 1, 4, 5, 7, 2, 9, 6, 3, 8, 7, 2, 9, 8, 6, 3, 1, 4, 5, 6, 3, 8, 1, 4, 5, 7, 2, 9, 9, 7, 4, 2, 5, 1, 3, 8, 6, 2, 5, 1, 6, 3, 8, 9, 7, 4, 3, 8, 6, 9, 7, 4, 2, 5, 1]
 
@@ -206,6 +86,165 @@ const GameSettings_ = ({ onAction }) => {
     const [settingsConfigsOnOffValue, setSettingsConfigsOnOffValue] = React.useState<AllGameSettingsValues>({} as AllGameSettingsValues);
 
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('settings')
+
+    const SETTINGS_ = [
+        {
+            title: t('gameSettings.categories.darkMode', 'Dark Mode'),
+            hasPreview: false,
+            hasToggle: true,
+            inputType: INPUT_TYPES.TOGGLE,
+            key: GAME_SETTINGS_KEYS.DARK_MODE,
+            value: false,
+            items: []
+        },
+        {
+            title: t('gameSettings.categories.gameOver', 'Game Over'),
+            hasPreview: false,
+            items: [
+                {
+                    key: GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.gameOverOnMistakes', `Game over on {{${DYNAMIC_DATA_KEYS.MISTAKES_LIMIT}}} mistakes`)
+                },
+                {
+                    key: GAME_SETTINGS_KEYS.MISTAKES_LIMIT,
+                    inputType: INPUT_TYPES.DROPDOWN,
+                    value: 0,
+                    description: t('gameSettings.descriptions.mistakesLimit', 'Number of mistake allowed in game'),
+                    disabled: false,
+                    options: [
+                        { label: '1', value: '1' },
+                        { label: '2', value: '2' },
+                        { label: '3', value: '3' },
+                        { label: '4', value: '4' },
+                        { label: '5', value: '5' },
+                        { label: '6', value: '6' },
+                        { label: '7', value: '7' },
+                        { label: '8', value: '8' },
+                        { label: '9', value: '9' },
+                        { label: '10', value: '10' },
+                    ]
+                }
+            ]
+        },
+        {
+            title: t('gameSettings.categories.visualHighlights', 'Visual Highlights'),
+            hasPreview: true,
+            items: [
+                {
+                    key: GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.showFeedbackOnMistake', 'Show feedback when mistake is made')
+                },
+                {
+                    key: GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.highlightCells', 'Highlight cells with different background colors')
+                },
+                {
+                    key: GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.highlightNotes', 'Highlight notes of a number')
+                }
+            ]
+        },
+        {
+            title: t('gameSettings.categories.fillNumbers', 'Fill Numbers'),
+            hasPreview: true,
+            items: [
+                {
+                    key: GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.fillNotesWithoutPencil', 'Fill notes without Pencil')
+                },
+                {
+                    key: GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.allowAnyNote', 'Allow filling all the notes in cell')
+                },
+                {
+                    key: GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.fillOnCellClick', 'Lock number and fill on Cell tap')
+                }
+            ]
+        },
+        {
+            title: t('gameSettings.categories.sounds', 'Sounds'),
+            hasPreview: false,
+            items: [
+                {
+                    key: GAME_SETTINGS_KEYS.SOUNDS_ENABLED,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.soundsEnabled', 'Enable or disable all game sounds')
+                }
+            ]
+        },
+        {
+            title: t('gameSettings.categories.hints', 'Hints'),
+            hasPreview: false,
+            items: [
+                {
+                    key: GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.remindToTakeHint', 'Show reminders to use hints when stuck')
+                }
+            ]
+        }
+    ]
+
+    const SNACKBAR_MSGS = {
+        [GAME_SETTINGS_KEYS.SOUNDS_ENABLED]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.soundsOn', 'sounds have been enabled. now try pressing any cell in puzzle and you will hear the tunes'),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.soundsOff', 'no more sounds in game. wish you a nice meditative session'),
+        },
+        [GAME_SETTINGS_KEYS.ALLOW_ANY_NOTE_IN_CELL]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.allowAnyNoteOn', `in Preview do below\npick an empty cell and try to fill 1-9 as notes, notice now you can fill all the notes`),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.allowAnyNoteOff', "in Preview do below\nin 1st try to fill all the notes. notice only 1, 4, 8 can be filled"),
+        },
+        [GAME_SETTINGS_KEYS.FILL_NOTE_ON_SHORT_CLICK]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.fillNoteShortClickOn', `now notes will be filled without turning on Pencil. just press the number.\nlong press the number to fill cell with it's soluton`),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.fillNoteShortClickOff', 'now you have to turn on Pencil to fill notes in cell'),
+        },
+        [GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.fillOnCellClickOn', `now numbers & Notes will be filled faster.In Preview do below\na. long press any number to lock it\nb. tap on an empty cell and number will be filled`),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.fillOnCellClickOff', 'now you have to first select a cell and then press on number to fill'),
+        },
+        [GAME_SETTINGS_KEYS.HIGHLIGHT_CELLS]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.highlightCellsOn', 'now cells will have colorful backgrounds'),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.highlightCellsOff', 'all the cells will have same background like solving Sudoku on paper'),
+        },
+        [GAME_SETTINGS_KEYS.HIGHLIGHT_NUMBERS_FONTS]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.highlightNotesOn', 'now notes will be highlighted in puzzle.\nin Preview do below\n  a. click Fast Pencil\n  b. select a filled cell\nnotice notes have been highlighted'),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.highlightNotesOff', 'in Preview do below\n  a. click Fast Pencil\n  b. select a filled cell\nnotice all the notes have same color'),
+        },
+        [GAME_SETTINGS_KEYS.REMIND_TO_TAKE_HINT]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.remindHintOn', 'we will remind you to use hint at a regular interval when no progress is made in puzzle'),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.remindHintOff', 'you are the champ. no more reminders to take hint'),
+        },
+        [GAME_SETTINGS_KEYS.GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.gameOverMistakesOn', `game will be over once your mistakes count is {{${DYNAMIC_DATA_KEYS.MISTAKES_LIMIT}}}. WATCH OUT!`),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.gameOverMistakesOff', "game won't be over on making mistakes. BE FEARLESS!"),
+        },
+        [GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.showFeedbackOn', `in Preview do below\n a. fill 1 in first cell\nit's a mistake and see mistakes count has gone up`),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.showFeedbackOff', `in Preview do below\n a. fill 1 in first cell\nit's a mistake and see you can't notice it in preview`),
+        },
+        [GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.fillNotesWithoutPencilOn', `in Preview now you will see 2 input panels, one for notes and one for main numbers`),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.fillNotesWithoutPencilOff', `now you have to tap on Pencil first before filling Notes`),
+        }
+    }
 
     const boardStyles = useStyles(puzzleBoardStylesHandler)
 
@@ -451,7 +490,7 @@ const GameSettings_ = ({ onAction }) => {
     }
 
     const PreviewTooltipWrapper = ({ category, children }) => {
-        if (category.title === 'Visual Highlights') {
+        if (category.title === t('gameSettings.categories.visualHighlights', 'Visual Highlights')) {
             return (
                 <Tooltip
                     ref={tooltipRef}
@@ -460,7 +499,7 @@ const GameSettings_ = ({ onAction }) => {
                             style={styles.tooltipText}
                             withoutLineHeight
                         >
-                            {'change settings and click here to see how the Game Experience changes'}
+                            {t('gameSettings.tooltip', 'change settings and click here to see how the Game Experience changes')}
                         </Text>
                     }
                     position={"top"}
@@ -495,7 +534,7 @@ const GameSettings_ = ({ onAction }) => {
                                                 <PreviewTooltipWrapper category={category}>
                                                     <Button
                                                         type={BUTTON_TYPES.TEXT}
-                                                        label={'Preview'}
+                                                        label={t('common:preview', 'Preview') as string}
                                                         onPress={() => onPreviewPress(category)}
                                                     />
                                                 </PreviewTooltipWrapper>

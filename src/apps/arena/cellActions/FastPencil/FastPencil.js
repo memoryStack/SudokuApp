@@ -11,14 +11,15 @@ import { PencilIcon } from '@resources/svgIcons/pencil'
 import Text from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../../i18n/hooks/useTranslation'
 import { Touchable } from '../../../components/Touchable'
 
 import { getStyles } from '../cellActions.styles'
 
-const copilotText = "To get Hints when you wish\n\nFirst press on Fast Pencil"
-
 const FastPencil = ({ iconBoxSize, onClick, textStyles, ...rest }) => {
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
+    const copilotText = t('coachmarks.fastPencil', "To get Hints when you wish\n\nFirst press on Fast Pencil")
     return (
         <CopilotStep
             name="clickFastPencil"
@@ -27,7 +28,7 @@ const FastPencil = ({ iconBoxSize, onClick, textStyles, ...rest }) => {
         >
             <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
                 <PencilIcon iconBoxSize={iconBoxSize} fill={styles.inactiveState.color} />
-                <Text style={[styles.actionText, textStyles]}>Fast Pencil</Text>
+                <Text style={[styles.actionText, textStyles]}>{t('cellActions.fastPencil', 'Fast Pencil')}</Text>
             </Touchable>
         </CopilotStep>
     )

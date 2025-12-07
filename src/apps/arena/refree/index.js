@@ -14,14 +14,17 @@ import { useStyles } from '@utils/customHooks/useStyles'
 
 import { Timer as TimeManager } from '@utils/classes/timer'
 
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
 import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
 import { Timer } from '../timer'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
-import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT, PUZZLE_LEVEL_TEXT_TEST_ID } from './refree.constants'
+import { MISTAKES_TEXT_TEST_ID, PUZZLE_LEVEL_TEXT_TEST_ID } from './refree.constants'
 import { STATIC_BOARD_ELEMENTS_DIMENSIONS } from '../constants'
+import { START_GAME_MENU_ITEMS_IDS } from '@application/usecases/newGameMenu/constants'
+import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 
 const getStyles = ({ BOARD_GRID_WIDTH }, theme) => StyleSheet.create({
     refereeContainer: {
@@ -42,6 +45,16 @@ const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelI
     const dependencies = useDependency()
 
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
+
+    const PUZZLE_LEVEL_TEXT = {
+        [START_GAME_MENU_ITEMS_IDS.EASY]: t('nextGameMenu.easy', 'EASY'),
+        [START_GAME_MENU_ITEMS_IDS.MEDIUM]: t('nextGameMenu.medium', 'MEDIUM'),
+        [START_GAME_MENU_ITEMS_IDS.HARD]: t('nextGameMenu.hard', 'HARD'),
+        [START_GAME_MENU_ITEMS_IDS.EXPERT]: t('nextGameMenu.expert', 'EXPERT'),
+        [START_GAME_MENU_ITEMS_IDS.CUSTOMIZE_PUZZLE]: t('refree.customizedPuzzle', 'Customized Puzzle'),
+        [NEW_GAME_IDS.SHARED_PUZZLE]: t('refree.sharedPuzzle', 'Shared Puzzle'),
+    }
 
     const onTimerClick = useCallback(() => {
         onAction({ type: ACTION_TYPES.ON_TIMER_CLICK, payload: { dependencies } })
@@ -59,9 +72,9 @@ const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelI
 
         let mistakesText = ''
         if (gameOverOnMistakesThresholdCrossed) {
-            mistakesText = `Mistakes: ${mistakes}/${maxMistakesLimit}`
+            mistakesText = t('refree.mistakesWithLimit', 'Mistakes: {{current}}/{{max}}', { current: mistakes, max: maxMistakesLimit })
         } else {
-            mistakesText = `Mistakes: ${mistakes}`
+            mistakesText = t('refree.mistakesWithoutLimit', 'Mistakes: {{current}}', { current: mistakes })
         }
         return (
             <Text style={styles.textColor} testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>
@@ -75,7 +88,7 @@ const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelI
             {renderMistakesView()}
             {!showTimer ?
                 <Button
-                    label={showPlayCTA ? 'Play' : 'Pause'}
+                    label={showPlayCTA ? t('common:play', 'Play') : t('common:pause', 'Pause')}
                     onPress={onTimerClick}
                     avoidDefaultContainerStyles
                     textStyles={styles.footerButtonText}

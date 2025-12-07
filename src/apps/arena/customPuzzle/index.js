@@ -7,8 +7,8 @@ import PropTypes from 'prop-types'
 import _noop from '@lodash/noop'
 
 import { CloseIcon } from '@resources/svgIcons/close'
-import { PLAY } from '@resources/stringLiterals'
 import Button from '@ui/molecules/Button'
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
 import { useStyles } from '@utils/customHooks/useStyles'
 import withActions from '../../../utils/hocs/withActions'
 import { BottomDragger } from '../../components/BottomDragger'
@@ -38,6 +38,7 @@ const CustomPuzzle_ = ({
     const { number: lockedNumber } = useSelector(getLockedNumber)
 
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('common')
 
     const customPuzzleRef = useRef(null)
 
@@ -115,7 +116,7 @@ const CustomPuzzle_ = ({
                         lockedNumber={lockedNumber}
                     />
                 </View>
-                <Button containerStyle={styles.playButtonContainer} onPress={handlePlayClick} label={PLAY} />
+                <Button containerStyle={styles.playButtonContainer} onPress={handlePlayClick} label={t('play', 'Play')} />
             </View>
         </BottomDragger>
     )

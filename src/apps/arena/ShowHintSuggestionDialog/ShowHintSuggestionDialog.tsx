@@ -4,6 +4,7 @@ import _get from '@lodash/get'
 import _noop from '@lodash/noop'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../i18n/hooks/useTranslation'
 
 import { getStyles } from './showHintSuggestionDialog.styles'
 import Dialog from '@ui/molecules/Dialog'
@@ -23,6 +24,7 @@ const ShowHintSuggestionDialog: React.FC<Props> = ({
     onConfirmClick,
 }) => {
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
 
     const languagesOptionsView = <LottieView
         style={styles.animationContainer}
@@ -34,16 +36,16 @@ const ShowHintSuggestionDialog: React.FC<Props> = ({
     return (
         <Dialog
             testID={HINT_SUGGESTION_DIALOG_TEST_ID}
-            title={'Want Help?'}
+            title={t('hintSuggestion.title', 'Want Help?')}
             description={description}
             body={languagesOptionsView}
             footerButtonsConfig={[
                 {
-                    label: "Don't show again",
+                    label: t('common:dontShowAgain', "Don't show again"),
                     onClick: onSnoozeClick,
                 },
                 {
-                    label: 'Yes',
+                    label: t('common:yes', 'Yes'),
                     onClick: onConfirmClick,
                     type: BUTTON_TYPES.FILLED,
                 },

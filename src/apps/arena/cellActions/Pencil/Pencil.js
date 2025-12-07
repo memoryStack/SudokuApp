@@ -9,6 +9,7 @@ import { PencilIcon } from '@resources/svgIcons/pencil'
 import Text from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
+import { useTranslation } from '../../../../i18n/hooks/useTranslation'
 
 import { Touchable } from '../../../components/Touchable'
 
@@ -18,11 +19,12 @@ const Pencil = ({
     iconBoxSize, isActive, onClick, textStyles, ...rest
 }) => {
     const styles = useStyles(getStyles)
+    const { t } = useTranslation('arena')
     return (
         <Touchable style={styles.actionContainer} onPress={onClick} {...rest}>
             <PencilIcon iconBoxSize={iconBoxSize} fill={isActive ? styles.activeState.color : styles.inactiveState.color} />
             <Text style={[styles.actionText, isActive ? styles.activeState : styles.inactiveState, textStyles]}>
-                Pencil
+                {t('cellActions.pencil', 'Pencil')}
             </Text>
         </Touchable>
     )

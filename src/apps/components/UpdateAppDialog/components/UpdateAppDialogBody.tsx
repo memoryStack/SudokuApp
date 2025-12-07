@@ -28,7 +28,7 @@ export const DialogBody: React.FC<Props> = ({
 
     const styles = useStyles(getStyles)
 
-    const { t } = useTranslation()
+    const { t } = useTranslation('dialogs')
 
     const renderFeaturesList = () => (
         <View style={styles.featuresContainer}>
@@ -43,19 +43,19 @@ export const DialogBody: React.FC<Props> = ({
 
     const footerBtns = []
     if (cancellable) footerBtns.push({
-        label: t('Cancel'),
+        label: t('common:cancel', 'Cancel'),
         onClick: onCancelPress,
     })
 
     footerBtns.push({
-        label: t('Update'),
+        label: t('common:update', 'Update'),
         onClick: onUpdatePress,
     })
 
     return (
         <Dialog
             styles={styles.container}
-            title={t('New Update Available')}
+            title={t('updateApp.title', 'New Update Available')}
             body={renderFeaturesList()}
             footerButtonsConfig={footerBtns}
         />
