@@ -16,6 +16,7 @@ import {
 } from '../../apps/arena/smartHintHC/constants'
 import { getFirstEmptyCell, isNotePresentInCell } from './arena'
 import { isEmptyElement } from './touchable'
+import { ARENA_INPUT_PANEL_CONTAINER_TEST_ID } from 'src/apps/arena/constants'
 
 const mockBoardControllersRef = async () => {
     // TODO: how to do it by mocking measure function mentioned
@@ -28,7 +29,7 @@ const mockBoardControllersRef = async () => {
         UPDATE 1: have updated it once, spent around 30mins to make the change
     */
     await waitFor(async () => {
-        const view = await screen.findByTestId(BOARD_CONTROLLER_CONTAINER_TEST_ID)
+        const view = await screen.findByTestId(ARENA_INPUT_PANEL_CONTAINER_TEST_ID)
         const boardControllerDimensionMeasurer = view._fiber._debugOwner.ref.current.measure
         boardControllerDimensionMeasurer.mockImplementation(cb => {
             cb(0, 0, 392.72, 50.90, 0, 551.27)

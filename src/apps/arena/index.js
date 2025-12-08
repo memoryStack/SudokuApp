@@ -31,7 +31,16 @@ import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { getShowSmartHint } from './store/selectors/smartHintHC.selectors'
 import { DEFAULT_STATE as REFREE_DEFAULT_STATE } from './refree/refree.constants'
 import { GameState } from '@application/utils/gameState'
-import { ARENA_PAGE_TEST_ID, AVAILABLE_STARS_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, HINT_SUGGESTION_TOGGLE_KEY, PUZZLES_LEVELS_LIST_CONTAINER, SMART_HEIGHT_HC_MAX_HEIGHT, STATIC_BOARD_ELEMENTS_DIMENSIONS } from './constants'
+import {
+    ARENA_PAGE_TEST_ID,
+    AVAILABLE_STARS_TEST_ID,
+    GAME_OVER_CARD_OVERLAY_TEST_ID,
+    HINT_SUGGESTION_TOGGLE_KEY,
+    PUZZLES_LEVELS_LIST_CONTAINER,
+    SMART_HEIGHT_HC_MAX_HEIGHT,
+    STATIC_BOARD_ELEMENTS_DIMENSIONS,
+    ARENA_INPUT_PANEL_CONTAINER_TEST_ID,
+} from './constants'
 import GameResultCard from './GameResultCard'
 import { NextGameMenu } from './nextGameMenu'
 import { CustomPuzzle } from './customPuzzle'
@@ -473,7 +482,11 @@ const Arena_ = ({
     }
 
     const renderInputPanel = () => (
-        <View style={styles.inputPanelContainer} ref={boardControllersRef} collapsable={false}>
+        <View
+            style={styles.inputPanelContainer}
+            ref={boardControllersRef} collapsable={false}
+            testID={ARENA_INPUT_PANEL_CONTAINER_TEST_ID}
+        >
             <GameInputPanel dependencies={dependencies} />
         </View>
     )
