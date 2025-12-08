@@ -1,11 +1,10 @@
 {
-    "somethingWentWrong": "Something went wrong. Please try again.",
-    "invalidDeeplinkPuzzle": "Invalid Url.",
-    "launchingDefaultPuzzle": "Launching default puzzle",
-    "deeplinkNoSolutions": "Puzzle has no solutions.",
-    "deeplinkMultipleSolutions": "Puzzle has multiple solutions.",
-    "emptyUrl": "Invaild Url",
-    "incompleteNumbers": "Puzzle doesn't have {{count}} numbers",
-    "invalidCharacters": "Puzzle has invalid characters other than 0-9"
+    "somethingWentWrong": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
+    "invalidDeeplinkPuzzle": "अमान्य यूआरएल।",
+    "launchingDefaultPuzzle": "डिफ़ॉल्ट पहेली लॉन्च की जा रही है",
+    "deeplinkNoSolutions": "पहेली का कोई समाधान नहीं है।",
+    "deeplinkMultipleSolutions": "पहेली के कई समाधान हैं।",
+    "emptyUrl": "अमान्य यूआरएल",
+    "incompleteNumbers": "पहेली में {{count}} संख्याएँ नहीं हैं",
+    "invalidCharacters": "पहेली में 0-9 के अलावा अमान्य वर्ण हैं"
 }
-

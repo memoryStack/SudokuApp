@@ -1,74 +1,74 @@
 {
     "nextGameMenu": {
-        "easy": "EASY",
-        "medium": "MEDIUM",
-        "hard": "HARD",
-        "expert": "EXPERT",
-        "customizePuzzle": "Customize Your Puzzle"
+        "easy": "आसान",
+        "medium": "मध्यम",
+        "hard": "कठिन",
+        "expert": "विशेषज्ञ",
+        "customizePuzzle": "अपनी पहेली अनुकूलित करें"
     },
     "gameResult": {
-        "congratulations": "Congratulations!",
-        "time": "Time",
-        "mistakes": "Mistakes",
-        "hintsUsed": "Hints Used",
-        "gameOverMessage": "You have reached the maximum mistakes limit. Better Luck Next Time",
-        "reviewDescription": "If you've improved at Sudoku, please share your feedback to help us improve ❤️"
+        "congratulations": "बधाई हो!",
+        "time": "समय",
+        "mistakes": "गलतियाँ",
+        "hintsUsed": "इस्तेमाल किए गए संकेत",
+        "gameOverMessage": "आप अधिकतम गलतियों की सीमा तक पहुँच गए हैं। अगली बार अच्छी किस्मत",
+        "reviewDescription": "यदि आप सुडोकू में सुधार कर चुके हैं, तो कृपया हमारे सुधार में मदद के लिए अपनी प्रतिक्रिया साझा करें ❤️"
     },
     "refree": {
-        "mistakesWithLimit": "Mistakes: {{current}}/{{max}}",
-        "mistakesWithoutLimit": "Mistakes: {{current}}",
-        "customizedPuzzle": "Customized Puzzle",
-        "sharedPuzzle": "Shared Puzzle"
+        "mistakesWithLimit": "गलतियाँ: {{current}}/{{max}}",
+        "mistakesWithoutLimit": "गलतियाँ: {{current}}",
+        "customizedPuzzle": "अनुकूलित पहेली",
+        "sharedPuzzle": "साझा की गई पहेली"
     },
     "cellActions": {
-        "undo": "Undo",
-        "pencil": "Pencil",
-        "fastPencil": "Fast Pencil",
-        "hint": "Hint",
-        "eraser": "Eraser",
-        "longPressHint": "Long press to see all hints"
+        "undo": "पूर्ववत करें",
+        "pencil": "पेंसिल",
+        "fastPencil": "फास्ट पेंसिल",
+        "hint": "संकेत",
+        "eraser": "रबर",
+        "longPressHint": "सभी संकेत देखने के लिए लंबे समय तक दबाएँ"
     },
     "smartHint": {
-        "applyHint": "Apply Hint"
+        "applyHint": "संकेत लागू करें"
     },
     "hintsMenu": {
-        "nakedSingle": "Naked\nSingle",
-        "hiddenSingle": "Hidden\nSingle",
-        "nakedDouble": "Naked\nDouble",
-        "hiddenDouble": "Hidden\nDouble",
-        "nakedTripple": "Naked\nTripple",
-        "hiddenTripple": "Hidden\nTripple",
-        "xWing": "X-Wing",
-        "yWing": "Y-Wing",
-        "omission": "Omission",
-        "remotePairs": "Remote Pairs",
-        "emptyRectangle": "Empty Rectangle",
-        "xChain": "X-Chain",
-        "xyChain": "XY-Chain",
-        "wWing": "W-Wing",
-        "xyzWing": "XYZ-Wing",
-        "uniqueRectangle": "Unique\nRectangle"
+        "nakedSingle": "नेकेड\nसिंगल",
+        "hiddenSingle": "हिडन\nसिंगल",
+        "nakedDouble": "नेकेड\nडबल",
+        "hiddenDouble": "हिडन\nडबल",
+        "nakedTripple": "नेकेड\nट्रिपल",
+        "hiddenTripple": "हिडन\nट्रिपल",
+        "xWing": "एक्स-विंग",
+        "yWing": "वाई-विंग",
+        "omission": "ओमिशन",
+        "remotePairs": "रिमोट पेयर्स",
+        "emptyRectangle": "खाली आयत",
+        "xChain": "एक्स-चेन",
+        "xyChain": "एक्सवाई-चेन",
+        "wWing": "डब्ल्यू-विंग",
+        "xyzWing": "एक्सवाईजेड-विंग",
+        "uniqueRectangle": "अद्वितीय\nआयत"
     },
     "feedback": {
-        "title": "We are just one text away",
-        "description": "We understand that you might have faced some difficulties. Let us know how we can help you solve your next puzzle.",
-        "inputPlaceholder": "Didn't know how to use hints",
+        "title": "हम केवल एक पाठ दूर हैं",
+        "description": "हम समझते हैं कि आपको कुछ कठिनाइयों का सामना करना पड़ा होगा। हमें बताएं कि हम आपकी अगली पहेली को हल करने में कैसे मदद कर सकते हैं।",
+        "inputPlaceholder": "संकेतों का उपयोग कैसे करें पता नहीं था",
         "options": {
-            "hints": "Had trouble using hints",
-            "hard": "Too hard puzzles"
+            "hints": "संकेतों का उपयोग करने में परेशानी हुई",
+            "hard": "बहुत कठिन पहेलियाँ"
         },
         "snackbar": {
-            "success": "We have recorded your response and will act on it shortly.",
-            "error": "Failed to submit feedback. We are on it!"
+            "success": "हमने आपकी प्रतिक्रिया दर्ज की है और शीघ्र ही उस पर कार्य करेंगे।",
+            "error": "प्रतिक्रिया जमा करने में विफल। हम इस पर काम कर रहे हैं!"
         }
     },
     "hintSuggestion": {
-        "title": "Want Help?",
-        "description": "you have been stuck for over {{seconds}}s. Feeling like need help?"
+        "title": "मदद चाहिए?",
+        "description": "आप {{seconds}} सेकंड से अटके हुए हैं। लगता है मदद की जरूरत है?"
     },
     "coachmarks": {
-        "fastPencil": "To get Hints when you wish\n\nFirst press on Fast Pencil",
-        "clickHints": "Now press on \"Hint\"",
-        "customizeExperience": "You can customize your game experience from here"
+        "fastPencil": "जब आप चाहें संकेत प्राप्त करने के लिए\n\nपहले फास्ट पेंसिल पर दबाएँ",
+        "clickHints": "अब \"संकेत\" पर दबाएँ",
+        "customizeExperience": "आप अपने गेम अनुभव को यहाँ से अनुकूलित कर सकते हैं"
     }
 }

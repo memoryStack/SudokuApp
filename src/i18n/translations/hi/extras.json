@@ -1,19 +1,18 @@
 {
     "houseTypes": {
-        "row": "row",
-        "rowPlural": "rows",
-        "column": "column",
-        "columnPlural": "columns",
-        "block": "block",
-        "blockPlural": "blocks"
+        "row": "पंक्ति",
+        "rowPlural": "पंक्तियाँ",
+        "column": "स्तंभ",
+        "columnPlural": "स्तंभ",
+        "block": "ब्लॉक",
+        "blockPlural": "ब्लॉक्स"
     },
     "numbers": {
-        "two": "two",
-        "three": "three"
+        "two": "दो",
+        "three": "तीन"
     },
     "conjugations": {
-        "and": "and",
-        "or": "or"
+        "and": "और",
+        "or": "या"
     }
 }
-

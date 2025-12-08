@@ -1,9 +1,8 @@
 {
     "updateApp": {
-        "title": "New Update Available"
+        "title": "नया अपडेट उपलब्ध"
     },
     "languageSelector": {
-        "title": "Select a Language"
+        "title": "एक भाषा चुनें"
     }
 }
-

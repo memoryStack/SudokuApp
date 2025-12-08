@@ -1,7 +1,7 @@
 {
-    "title": "{{difficulty}} Levels",
-    "easy": "Easy",
-    "medium": "Medium",
-    "hard": "Hard",
-    "expert": "Expert"
+    "title": "{{difficulty}} स्तर",
+    "easy": "आसान",
+    "medium": "मध्यम",
+    "hard": "कठिन",
+    "expert": "विशेषज्ञ"
 }
