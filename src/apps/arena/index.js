@@ -72,6 +72,8 @@ import { useSnackbar } from './hooks/useSnackbar'
 import { useInAppReview } from './hooks/useInAppReview'
 
 import { Snackbar } from 'react-native-paper';
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 const AvailableStarsHeaderView = ({
     styles,
@@ -105,6 +107,8 @@ const Arena_ = ({
     nextPuzzleType
 }) => {
     const dependencies = useDependency()
+
+    const { t } = useTranslation('arena')
 
     const {
         colorScheme,
@@ -302,8 +306,9 @@ const Arena_ = ({
                         Component: ShowHintSuggestionDialog,
                         onCloseCallback: () => updateUserActivityTime(dependencies),
                         props: {
-                            // description: `you have been stuck for over ${inactivityThreshold}s. No harm in using a Hint \u{1F609}.`,
-                            description: `you have been stuck for over ${inactivityThreshold}s. Feeling like need help?`,
+                            description: dynamicInterpolation(
+                                t('hintSuggestion.description'), { seconds: inactivityThreshold }
+                            ),
                             onConfirmClick: () => {
                                 updateUserActivityTime(dependencies)
                                 boardControllerOnAction({
