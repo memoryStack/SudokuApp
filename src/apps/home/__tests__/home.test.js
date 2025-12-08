@@ -32,9 +32,9 @@ describe('Home Page', () => {
         })
 
         await waitFor(() => {
-            expect(screen.queryByText('play')).toBeOnTheScreen()
+            expect(screen.queryByText('PLAY')).toBeOnTheScreen()
         })
-        fireEvent.press(screen.getByText('play'))
+        fireEvent.press(screen.getByText('PLAY'))
 
         // TODO: learn async act() more deeply to understand
         //          react renders due to component internally like network call, setTimeouts etc
