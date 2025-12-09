@@ -129,14 +129,15 @@ const SmartHintHC_: React.FC<Props> = ({
 
     const isHintTryOut = useIsHintTryOutStep()
 
-    const { t: tSmartHints } = useTranslation('smartHints')
+    const { t: tSmartHints, i18n } = useTranslation('smartHints')
 
     const smartHintsTranslationsTexts = useMemo(() => {
         return {
             explanation: getHintExplanationTexts(tSmartHints),
             title: getHintsTitle(tSmartHints),
+            common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {}
         }
-    }, [tSmartHints])
+    }, [tSmartHints, i18n])
 
     const onAction = React.useMemo(() => (action: Action) => {
         if (action.type === ACTION_TYPES.ON_NUMBER_CLICK) {

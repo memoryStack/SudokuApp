@@ -14,9 +14,10 @@ import {
     HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_ID_VS_TITLES, HintExplainationTexts } from '../../stringLiterals'
-import { setCellDataInHintResult, transformCellBGColor } from '../../util'
+import { getAxisValuesFromTranslations, getLanguageSpecificHouseTypeText, getLanguageSpecificNumberText, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     areSameCells,
+    BoardAxesValues,
     getCellAxesValues,
     getCellHousesInfo,
     getHouseAxesValue,
@@ -26,20 +27,28 @@ import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { NakedSingleRawHint } from '../../nakedSingle/types'
 import {
-    AddMainNumberHintAction, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,
+    AddMainNumberHintAction, CellsFocusData, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 
 import { NakedSingleTransformerArgs } from './types'
 import { HINTS_VOCAB_IDS } from '../constants'
 
-const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell, smartHintsExplanationTexts: HintExplainationTexts): string => {
+const getSingleHouseNakedSingleDescription = (
+    houseType: HouseType,
+    solutionValue: SolutionValue,
+    cell: Cell,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+): string => {
+    const {
+        text,
+        config,
+    } = smartHintsTranslationsTexts.explanation[HINTS_IDS.NAKED_SINGLE].SINGLE_HOUSE
     const msgPlaceholdersValues = {
-        houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
+        houseType: getLanguageSpecificHouseTypeText(houseType, config.houseType, smartHintsTranslationsTexts),
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
     }
-    const explainations = smartHintsExplanationTexts[HINTS_IDS.NAKED_SINGLE]
-    return dynamicInterpolation(explainations.SINGLE_HOUSE, msgPlaceholdersValues)
+    return dynamicInterpolation(text, msgPlaceholdersValues)
 }
 
 const getCellHousesText = (cell: Cell) => {
@@ -50,22 +59,37 @@ const getCellHousesText = (cell: Cell) => {
     return `${getHouseAxesValue(cellHouses[0])} ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')}, ${columnNum} ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} and ${blockNum} ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
 }
 
-const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell, smartHintsExplanationTexts: HintExplainationTexts): string => {
+const getMultipleHousesNakeSingleDescription = (
+    solutionValue: SolutionValue,
+    cell: Cell,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+): string => {
+    const {
+        text,
+        config,
+    } = smartHintsTranslationsTexts.explanation[HINTS_IDS.NAKED_SINGLE].MULTIPLE_HOUSE
+
     const msgPlaceholdersValues = {
         solutionValue,
-        cellAxesText: getCellAxesValues(cell),
-        cellHousesText: getCellHousesText(cell),
+        cellAxesText: getCellAxesValues(cell, getAxisValuesFromTranslations(smartHintsTranslationsTexts)),
+        rowNum: getLanguageSpecificNumberText(getCellRowHouseInfo(cell).num + 1, config.rowNum, smartHintsTranslationsTexts),
+        columnNum: getLanguageSpecificNumberText(getCellColHouseInfo(cell).num + 1, config.columnNum, smartHintsTranslationsTexts),
+        blockNum: getLanguageSpecificNumberText(getCellBlockHouseInfo(cell).num + 1, config.blockNum, smartHintsTranslationsTexts),
     }
-    const explainations = smartHintsExplanationTexts[HINTS_IDS.NAKED_SINGLE]
-    return dynamicInterpolation(explainations.MULTIPLE_HOUSE, msgPlaceholdersValues)
+
+    return dynamicInterpolation(text, msgPlaceholdersValues)
 }
 
-const getCompositeHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell, smartHintsExplanationTexts: HintExplainationTexts): string => {
+const getCompositeHousesNakeSingleDescription = (
+    solutionValue: SolutionValue,
+    cell: Cell,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+): string => {
     const msgPlaceholdersValues = {
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
     }
-    const explaination = smartHintsExplanationTexts.composite[HINTS_IDS.NAKED_SINGLE]
+    const explaination = smartHintsTranslationsTexts.explanation.composite[HINTS_IDS.NAKED_SINGLE]
     return dynamicInterpolation(explaination, msgPlaceholdersValues)
 }
 
@@ -122,7 +146,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
                 HOUSE_TYPE.ROW,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
-                smartHintsTranslationsTexts.explanation
+                smartHintsTranslationsTexts
             )
             break
         case NAKED_SINGLE_TYPES.COL:
@@ -131,7 +155,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
                 HOUSE_TYPE.COL,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
-                smartHintsTranslationsTexts.explanation
+                smartHintsTranslationsTexts
             )
             break
         case NAKED_SINGLE_TYPES.BLOCK:
@@ -140,14 +164,14 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
                 HOUSE_TYPE.BLOCK,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
-                smartHintsTranslationsTexts.explanation
+                smartHintsTranslationsTexts
             )
             break
         case NAKED_SINGLE_TYPES.MIX:
             cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell, smartHintsColorSystem)
             const getLogicHandler = rawHint.isComposite ? SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getCompositeHintMsg
                 : SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg
-            logic = getLogicHandler(MainNumbersRecord.getCellSolutionValue(mainNumbers, cell), cell, smartHintsTranslationsTexts.explanation)
+            logic = getLogicHandler(MainNumbersRecord.getCellSolutionValue(mainNumbers, cell), cell, smartHintsTranslationsTexts)
             break
         default:
             break

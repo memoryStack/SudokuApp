@@ -89,112 +89,112 @@ export const HINT_ID_VS_TITLES = {
 
 export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => ({
     [HINTS_IDS.NAKED_SINGLE]: {
-        SINGLE_HOUSE: t('explanations.nakedSingle.singleHouse'),
-        MULTIPLE_HOUSE: t('explanations.nakedSingle.multipleHouse'),
+        SINGLE_HOUSE: t('explanations.nakedSingle.singleHouse', { returnObjects: true }),
+        MULTIPLE_HOUSE: t('explanations.nakedSingle.multipleHouse', { returnObjects: true }),
     },
-    [HINTS_IDS.HIDDEN_SINGLE]: t('explanations.hiddenSingle.default'),
-    [HINTS_IDS.OMISSION]: t('explanations.omission'),
+    [HINTS_IDS.HIDDEN_SINGLE]: t('explanations.hiddenSingle.default', { returnObjects: true }),
+    [HINTS_IDS.OMISSION]: t('explanations.omission', { returnObjects: true }),
     [HINTS_IDS.NAKED_DOUBLE]: [
-        t('explanations.nakedDouble.0'),
-        t('explanations.nakedDouble.1'),
+        t('explanations.nakedDouble.0', { returnObjects: true }),
+        t('explanations.nakedDouble.1', { returnObjects: true }),
     ],
     [HINTS_IDS.NAKED_TRIPPLE]: [
-        t('explanations.nakedTripple.0'),
-        t('explanations.nakedTripple.1'),
+        t('explanations.nakedTripple.0', { returnObjects: true }),
+        t('explanations.nakedTripple.1', { returnObjects: true }),
     ],
     [HINTS_IDS.HIDDEN_DOUBLE]: {
         DEFAULT: [
-            t('explanations.hiddenDouble.default.0'),
-            t('explanations.hiddenDouble.default.1'),
+            t('explanations.hiddenDouble.default.0', { returnObjects: true }),
+            t('explanations.hiddenDouble.default.1', { returnObjects: true }),
         ],
         REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.0'),
-            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.1'),
+            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.0', { returnObjects: true }),
+            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.1', { returnObjects: true }),
         ],
     },
     [HINTS_IDS.HIDDEN_TRIPPLE]: {
         DEFAULT: [
-            t('explanations.hiddenTripple.default.0'),
-            t('explanations.hiddenTripple.default.1'),
+            t('explanations.hiddenTripple.default.0', { returnObjects: true }),
+            t('explanations.hiddenTripple.default.1', { returnObjects: true }),
         ],
         REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.0'),
-            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.1'),
+            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.0', { returnObjects: true }),
+            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.1', { returnObjects: true }),
         ],
     },
     [HINTS_IDS.PERFECT_X_WING]: [
-        t('explanations.perfectXWing.0'),
-        t('explanations.perfectXWing.1'),
-        t('explanations.perfectXWing.2'),
+        t('explanations.perfectXWing.0', { returnObjects: true }),
+        t('explanations.perfectXWing.1', { returnObjects: true }),
+        t('explanations.perfectXWing.2', { returnObjects: true }),
     ],
     [HINTS_IDS.FINNED_X_WING]: [
-        t('explanations.finnedXWing.0'),
-        t('explanations.finnedXWing.1'),
-        t('explanations.finnedXWing.2'),
+        t('explanations.finnedXWing.0', { returnObjects: true }),
+        t('explanations.finnedXWing.1', { returnObjects: true }),
+        t('explanations.finnedXWing.2', { returnObjects: true }),
     ],
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
-        t('explanations.sashimiFinnedXWing.0'),
-        t('explanations.sashimiFinnedXWing.1'),
+        t('explanations.sashimiFinnedXWing.0', { returnObjects: true }),
+        t('explanations.sashimiFinnedXWing.1', { returnObjects: true }),
     ],
     [HINTS_IDS.Y_WING]: [
-        t('explanations.yWing.0'),
-        t('explanations.yWing.1'),
-        t('explanations.yWing.2'),
-        t('explanations.yWing.3'),
+        t('explanations.yWing.0', { returnObjects: true }),
+        t('explanations.yWing.1', { returnObjects: true }),
+        t('explanations.yWing.2', { returnObjects: true }),
+        t('explanations.yWing.3', { returnObjects: true }),
     ],
     [HINTS_IDS.REMOTE_PAIRS]: [
-        t('explanations.remotePairs.0'),
-        t('explanations.remotePairs.1'),
+        t('explanations.remotePairs.0', { returnObjects: true }),
+        t('explanations.remotePairs.1', { returnObjects: true }),
     ],
     [HINTS_IDS.X_CHAIN]: [
-        t('explanations.xChain.0'),
-        t('explanations.xChain.1'),
+        t('explanations.xChain.0', { returnObjects: true }),
+        t('explanations.xChain.1', { returnObjects: true }),
     ],
     [HINTS_IDS.XY_CHAIN]: [
-        t('explanations.xyChain.0'),
-        t('explanations.xyChain.1'),
+        t('explanations.xyChain.0', { returnObjects: true }),
+        t('explanations.xyChain.1', { returnObjects: true }),
     ],
     [HINTS_IDS.EMPTY_RECTANGLE]: [
-        t('explanations.emptyRectangle.0'),
+        t('explanations.emptyRectangle.0', { returnObjects: true }),
     ],
     [HINTS_IDS.W_WING]: [
-        t('explanations.wWing.0'),
+        t('explanations.wWing.0', { returnObjects: true }),
     ],
     [HINTS_IDS.XYZ_WING]: [
-        t('explanations.xyzWing.0'),
+        t('explanations.xyzWing.0', { returnObjects: true }),
     ],
     [HINTS_IDS.UNIQUE_RECTANGLE]: {
         [UR_TYPES.TYPE_ONE]: {
             singleExtraCandidateMsg: [
-                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.0'),
-                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.1'),
+                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.0', { returnObjects: true }),
+                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.1', { returnObjects: true }),
             ],
             multipleExtraCandidateMsg: [
-                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.0'),
-                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.1'),
+                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.0', { returnObjects: true }),
+                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.1', { returnObjects: true }),
             ],
         },
         [UR_TYPES.TYPE_TWO]: [
-            t('explanations.uniqueRectangle.typeTwo.0'),
-            t('explanations.uniqueRectangle.typeTwo.1'),
+            t('explanations.uniqueRectangle.typeTwo.0', { returnObjects: true }),
+            t('explanations.uniqueRectangle.typeTwo.1', { returnObjects: true }),
         ],
         [UR_TYPES.TYPE_THREE]: [
-            t('explanations.uniqueRectangle.typeThree.0'),
-            t('explanations.uniqueRectangle.typeThree.1'),
+            t('explanations.uniqueRectangle.typeThree.0', { returnObjects: true }),
+            t('explanations.uniqueRectangle.typeThree.1', { returnObjects: true }),
         ],
         [UR_TYPES.TYPE_FOUR]: [
-            t('explanations.uniqueRectangle.typeFour.0'),
-            t('explanations.uniqueRectangle.typeFour.1'),
+            t('explanations.uniqueRectangle.typeFour.0', { returnObjects: true }),
+            t('explanations.uniqueRectangle.typeFour.1', { returnObjects: true }),
         ],
         [UR_TYPES.TYPE_SIX]: [
-            t('explanations.uniqueRectangle.typeSix.0'),
-            t('explanations.uniqueRectangle.typeSix.1'),
-            t('explanations.uniqueRectangle.typeSix.2'),
+            t('explanations.uniqueRectangle.typeSix.0', { returnObjects: true }),
+            t('explanations.uniqueRectangle.typeSix.1', { returnObjects: true }),
+            t('explanations.uniqueRectangle.typeSix.2', { returnObjects: true }),
         ],
     },
     composite: {
-        [HINTS_IDS.NAKED_SINGLE]: t('explanations.nakedSingle.composite'),
-        [HINTS_IDS.HIDDEN_SINGLE]: t('explanations.hiddenSingle.composite'),
+        [HINTS_IDS.NAKED_SINGLE]: t('explanations.nakedSingle.composite', { returnObjects: true }),
+        [HINTS_IDS.HIDDEN_SINGLE]: t('explanations.hiddenSingle.composite', { returnObjects: true }),
     },
 })
 

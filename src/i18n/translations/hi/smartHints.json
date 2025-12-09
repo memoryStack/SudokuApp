@@ -25,18 +25,34 @@
         "prev": "पिछला",
         "applyHint": "संकेत लागू करें"
     },
-    "houseTypes": {
-        "row": "पंक्ति",
-        "column": "स्तंभ",
-        "block": "ब्लॉक",
-        "rows": "पंक्तियाँ",
-        "columns": "स्तंभ",
-        "blocks": "ब्लॉक"
-    },
     "explanations": {
         "nakedSingle": {
-            "singleHouse": "<p>इस {{houseType}} में केवल {{cellAxesText}} सेल खाली है इसलिए {{solutionValue}} यहाँ आएगा</p>",
-            "multipleHouse": "<p>{{solutionValue}} को छोड़कर 1-9 के अन्य सभी अंक {{cellHousesText}} में मिलाकर मौजूद हैं, इसलिए {{cellAxesText}} में केवल {{solutionValue}} आ सकता है</p>",
+            "singleHouse": {
+                "text": "<p>इस {{houseType}} में केवल {{cellAxesText}} <a href=\"CELL\">सेल</a> खाली है इसलिए {{solutionValue}} यहाँ आएगा</p>",
+                "config": {
+                    "houseType": {
+                        "form": "singular",
+                        "type": "house"
+                    }
+                }
+            },
+            "multipleHouse": {
+                "text": "<p>{{solutionValue}} को छोड़कर 1 से 9 तक के अन्य सभी अंक <a href=\"ROW\">पंक्ति</a> नं. {{rowNum}}, <a href=\"COLUMN\">स्तंभ</a> नं. {{columnNum}} और <a href=\"BLOCK\">ब्लॉक</a> नं. {{blockNum}} में मिलाकर मौजूद हैं, इसलिए {{cellAxesText}} में केवल {{solutionValue}} आ सकता है</p>",
+                "config": {
+                    "rowNum": {
+                        "form": "alphabetic",
+                        "type": "number"
+                    },
+                    "columnNum": {
+                        "form": "numeric",
+                        "type": "number"
+                    },
+                    "blockNum": {
+                        "form": "numeric",
+                        "type": "number"
+                    }
+                }
+            },
             "composite": "<p>{{solutionValue}} को छोड़कर 1-9 का कोई अन्य अंक {{cellAxesText}} में नहीं आ सकता, इसलिए केवल {{solutionValue}} {{cellAxesText}} में आ सकता है।</p>"
         },
         "hiddenSingle": {

@@ -69,15 +69,18 @@ export type TryOutResult = {
 
 export type InputPanelNumbersVisibility = InputPanelVisibleNumbers
 
+export type SmartHintsTranslationsTexts = {
+    explanation: HintExplainationTexts
+    title: Record<HINTS_IDS, string>
+    common: Record<string, string | object>
+}
+
 export type RawHintTransformersArgs = {
     rawHint: unknown
     mainNumbers: MainNumbers
     notesData: Notes
     smartHintsColorSystem: SmartHintsColorSystem
-    smartHintsTranslationsTexts: {
-        explanation: HintExplainationTexts
-        title: Record<HINTS_IDS, string>
-    }
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
 }
 
 export type RemovableNotesInfo = {

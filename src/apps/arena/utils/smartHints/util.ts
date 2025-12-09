@@ -1,7 +1,7 @@
 import _get from '@lodash/get'
 import _reduce from '@lodash/reduce'
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
-import { isCellExists } from '../util'
+import { BoardAxesValues, isCellExists } from '../util'
 import { HiddenSingleRawHint } from './hiddenSingle/types'
 import { NakedSingleRawHint } from './nakedSingle/types'
 import {
@@ -11,7 +11,8 @@ import {
     NotesToHighlightData,
     PuzzleSingles,
     Singles,
-    SmartHintsColorSystem
+    SmartHintsColorSystem,
+    SmartHintsTranslationsTexts
 } from './types'
 import smartHintColorSystemReader from './colorSystem.reader'
 import _isNil from '@lodash/isNil'
@@ -137,6 +138,37 @@ const highlightNoteInCellsWithGivenColor = (
 
 export const joinStringsWithComma = (strings: string[]) => {
     return strings.join(', ')
+}
+
+export const getAxisValuesFromTranslations = (translations: SmartHintsTranslationsTexts): BoardAxesValues => {
+    return {
+        xAxis: translations.common.boardXAxis,
+        yAxis: translations.common.boardYAxis
+    }
+}
+
+export const getLanguageSpecificNumberText = (
+    number: number,
+    translationConfig,
+    translations: SmartHintsTranslationsTexts
+) => {
+    if (translationConfig.type === 'number') {
+        const form = translationConfig.form
+        return translations.common.numbers?.[form]?.[number] ?? number
+    }
+    return number
+}
+
+export const getLanguageSpecificHouseTypeText = (
+    houseType: HouseType,
+    translationConfig,
+    translations: SmartHintsTranslationsTexts
+) => {
+    if (translationConfig.type === 'house') {
+        const form = translationConfig.form
+        return translations.common.houseTypes[houseType][form]
+    }
+    return houseType
 }
 
 export {

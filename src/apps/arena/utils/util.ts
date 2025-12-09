@@ -202,7 +202,35 @@ export const areSameCellsSets = (setA: Cell[], setB: Cell[]) => {
 
 export const filterHouseCells = (house: House, filterCallback: (cell: Cell) => boolean) => getHouseCells(house).filter((cell: Cell) => filterCallback(cell))
 
-export const getCellAxesValues = (cell: Cell) => {
+export type BoardAxesValues = {
+    xAxis: {
+        row_0: string,
+        row_1: string,
+        row_2: string,
+        row_3: string,
+        row_4: string,
+        row_5: string,
+        row_6: string,
+        row_7: string,
+        row_8: string,
+    }
+    yAxis: {
+        col_0: string,
+        col_1: string,
+        col_2: string,
+        col_3: string,
+        col_4: string,
+        col_5: string,
+        col_6: string,
+        col_7: string,
+        col_8: string,
+    }
+}
+
+export const getCellAxesValues = (cell: Cell, boardAxesValues?: BoardAxesValues) => {
+    if (boardAxesValues) {
+        return `${boardAxesValues.yAxis[`row_${cell.row}`]}${boardAxesValues.xAxis[`col_${cell.col}`]}`
+    }
     const yAxisTexts = BOARD_AXES_VALUES.Y_AXIS
     const xAxisTexts = BOARD_AXES_VALUES.X_AXIS
     return `${yAxisTexts[cell.row]}${xAxisTexts[cell.col]}`

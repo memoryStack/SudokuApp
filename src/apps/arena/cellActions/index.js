@@ -44,13 +44,14 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
 
     const theme = useThemeValues()
 
-    const { t: tSmartHints } = useTranslation('smartHints')
+    const { t: tSmartHints, i18n } = useTranslation('smartHints')
     const smartHintsTranslationsTexts = useMemo(() => {
         return {
             explanation: getHintExplanationTexts(tSmartHints),
             title: getHintsTitle(tSmartHints),
+            common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {}
         }
-    }, [tSmartHints])
+    }, [tSmartHints, i18n])
 
     const { start, copilotEvents, currentStepNumber, totalStepsNumber, goToNext, stop, visible } = useCopilot()
     const wentoff = useRef(false)

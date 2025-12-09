@@ -45,14 +45,15 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const styles = useStyles(getStyles)
     const { t } = useTranslation('arena')
 
-    const { t: tSmartHints } = useTranslation('smartHints')
+    const { t: tSmartHints, i18n } = useTranslation('smartHints')
 
     const smartHintsTranslationsTexts = useMemo(() => {
         return {
             explanation: getHintExplanationTexts(tSmartHints),
             title: getHintsTitle(tSmartHints),
+            common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {}
         }
-    }, [tSmartHints])
+    }, [tSmartHints, i18n])
 
     const theme = useThemeValues()
 

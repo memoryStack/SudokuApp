@@ -25,18 +25,34 @@
         "prev": "Prev",
         "applyHint": "Apply Hint"
     },
-    "houseTypes": {
-        "row": "row",
-        "column": "column",
-        "block": "block",
-        "rows": "rows",
-        "columns": "columns",
-        "blocks": "blocks"
-    },
     "explanations": {
         "nakedSingle": {
-            "singleHouse": "<p>in this {{houseType}} only {{cellAxesText}} <a href=\"CELL\">cell</a> is empty so {{solutionValue}} will come here</p>",
-            "multipleHouse": "<p>except {{solutionValue}} all other numbers from 1-9 are present in {{cellHousesText}} combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}</p>",
+            "singleHouse": {
+                "text": "<p>in this {{houseType}} only {{cellAxesText}} <a href=\"CELL\">cell</a> is empty so {{solutionValue}} will come here</p>",
+                "config": {
+                    "houseType": {
+                        "form": "singular",
+                        "type": "house"
+                    }
+                }
+            },
+            "multipleHouse": {
+                "text": "<p>except {{solutionValue}} all other numbers from 1-9 are present in {{rowNum}} <a href=\"ROW\">row</a>, {{columnNum}} <a href=\"COLUMN\">column</a> and {{blockNum}} <a href=\"BLOCK\">block</a> combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}</p>",
+                "config": {
+                    "rowNum": {
+                        "form": "alphabetic",
+                        "type": "number"
+                    },
+                    "columnNum": {
+                        "form": "ordinal",
+                        "type": "number"
+                    },
+                    "blockNum": {
+                        "form": "ordinal",
+                        "type": "number"
+                    }
+                }
+            },
             "composite": "<p>except {{solutionValue}} no other number from 1-9 can come in {{cellAxesText}}, so only {{solutionValue}} can come in {{cellAxesText}}.</p>"
         },
         "hiddenSingle": {

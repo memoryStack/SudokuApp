@@ -19,6 +19,20 @@
     "nextTime": "Next time",
     "review": "Review",
     "pause": "Pause",
+    "houseTypes": {
+        "row": {
+            "singular": "row",
+            "plural": "rows"
+        },
+        "col": {
+            "singular": "column",
+            "plural": "columns"
+        },
+        "block": {
+            "singular": "block",
+            "plural": "blocks"
+        }
+    },
     "boardYAxis": {
         "row_0": "A",
         "row_1": "B",
@@ -40,5 +54,51 @@
         "col_6": "7",
         "col_7": "8",
         "col_8": "9"
+    },
+    "numbers": {
+        "alphabetic": {
+            "1": "A",
+            "2": "B",
+            "3": "C",
+            "4": "D",
+            "5": "E",
+            "6": "F",
+            "7": "G",
+            "8": "H",
+            "9": "I"
+        },
+        "ordinal": {
+            "1": "1st",
+            "2": "2nd",
+            "3": "3rd",
+            "4": "4th",
+            "5": "5th",
+            "6": "6th",
+            "7": "7th",
+            "8": "8th",
+            "9": "9th"
+        },
+        "numeric": {
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9"
+        },
+        "words": {
+            "1": "one",
+            "2": "two",
+            "3": "three",
+            "4": "four",
+            "5": "five",
+            "6": "six",
+            "7": "seven",
+            "8": "eight",
+            "9": "nine"
+        }
     }
 }
