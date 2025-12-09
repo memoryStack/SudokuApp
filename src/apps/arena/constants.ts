@@ -1,10 +1,27 @@
-import { BOARD_CELLS_COUNT } from '@domain/board/board.constants'
+import { TFunction } from 'i18next'
+
+import { BOARD_CELLS_COUNT, HOUSES_COUNT_OF_A_TYPE } from '@domain/board/board.constants'
 
 import { roundToNearestPixel } from '../../utils/util'
 
 export const BOARD_AXES_VALUES = {
     Y_AXIS: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
     X_AXIS: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+}
+
+export const getBoardAxesValues = (t: TFunction) => {
+    const getValuesList = (axis: string) => {
+        const result: string[] = []
+        const keyPrefix = axis === 'row' ? 'boardYAxis' : 'boardXAxis'
+        for (let i = 0; i < HOUSES_COUNT_OF_A_TYPE; i++) {
+            result.push(t(`common:${keyPrefix}.${axis}_${i}`))
+        }
+        return result
+    }
+    return {
+        Y_AXIS: getValuesList('row'),
+        X_AXIS: getValuesList('col'),
+    }
 }
 
 export const BOARD_TO_WINDOW_WIDTH_RATIO = 0.94

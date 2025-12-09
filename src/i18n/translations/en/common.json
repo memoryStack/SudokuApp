@@ -18,5 +18,27 @@
     "dontShowAgain": "Don't show again",
     "nextTime": "Next time",
     "review": "Review",
-    "pause": "Pause"
+    "pause": "Pause",
+    "boardYAxis": {
+        "row_0": "A",
+        "row_1": "B",
+        "row_2": "C",
+        "row_3": "D",
+        "row_4": "E",
+        "row_5": "F",
+        "row_6": "G",
+        "row_7": "H",
+        "row_8": "I"
+    },
+    "boardXAxis": {
+        "col_0": "1",
+        "col_1": "2",
+        "col_2": "3",
+        "col_3": "4",
+        "col_4": "5",
+        "col_5": "6",
+        "col_6": "7",
+        "col_7": "8",
+        "col_8": "9"
+    }
 }

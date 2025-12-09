@@ -13,9 +13,9 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { CellsFocusData, Chain } from '../utils/smartHints/types'
 
 import {
-    BOARD_AXES_VALUES,
     BOARD_GRID_BORDERS_DIRECTION,
     BoardGridBorderDirectionValue,
+    getBoardAxesValues,
     STATIC_BOARD_ELEMENTS_DIMENSIONS,
 } from '../constants'
 
@@ -26,6 +26,7 @@ import { BoardIterators } from '@domain/board/utils/boardIterators'
 
 import { getStyles } from './gameBoard.styles'
 import { Cell } from './cell'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const looper: number[] = []
 const bordersLooper: number[] = []
@@ -85,6 +86,12 @@ const Board_: React.FC<Props> = ({
     const styles = useStyles(getStyles, {}, customWindowWidth)
 
     const boardRef = useRef(null)
+
+    const { t } = useTranslation()
+
+    const BOARD_AXES_VALUES = useMemo(() => {
+        return getBoardAxesValues(t)
+    }, [t])
 
     const notesRefs = useMemo(() => {
         const result: NotesRefs = []
