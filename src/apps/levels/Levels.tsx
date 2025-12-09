@@ -28,6 +28,7 @@ import { emit } from '@utils/GlobalEventBus'
 import { EVENTS } from 'src/constants/events'
 import { AUTO_GENERATED_NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants';
 import { StyleSheetObject } from 'src/apps/types'
+import { useTranslation } from 'src/i18n/hooks/useTranslation';
 
 const itemEqualityChecker = () => new DataProvider((r1, r2) => {
     return r1 !== r2
@@ -70,13 +71,17 @@ const Levels: React.FC<Props> = ({
 
     const dependencies = useDependency()
 
+    const { t } = useTranslation('screenTitles', {
+        keyPrefix: 'gameLevels',
+    })
+
     useEffect(() => {
         onAction({ type: ACTION_TYPES.ON_INIT, payload: dependencies })
     }, [])
 
     useEffect(() => {
         const selectedLevel = getRouteParamValue('selectedGameMenuItem', route) as AUTO_GENERATED_NEW_GAME_IDS
-        const title = `${GAME_LEVELS_TEXT[selectedLevel]} Levels`
+        const title = t(selectedLevel as string)
         title && navigation.setOptions({ title })
     }, [])
 

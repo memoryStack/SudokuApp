@@ -10,13 +10,28 @@ import { routes } from './routes'
 import { ROUTES } from './route.constants'
 import { useTheme } from 'src/apps/arena/hooks/useTheme'
 import _get from '@lodash/get'
+import { useTranslation } from 'react-i18next'
 
 export const navigationRef = createNavigationContainerRef()
 
 // TODO: how to dynamically load the screens ??
-const getScreens = Stack => routes.map(({ name, component }) => (
-    <Stack.Screen name={name} key={name} component={component} options={getNavigationOptions} />
-))
+const getScreens = Stack => {
+    const { t } = useTranslation('screenTitles')
+    return routes.map(({ name, component }) => (
+        <Stack.Screen
+            name={name}
+            key={name}
+            component={component}
+            options={(...args) => {
+                const options = getNavigationOptions(...args)
+                if (options.title) {
+                    options.title = t(name)
+                }
+                return options
+            }}
+        />
+    ))
+}
 
 // children prop is for testing purpose to hack navigation prop
 export const NavigationProvider = ({ children }) => {

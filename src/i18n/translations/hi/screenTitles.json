@@ -1,0 +1,21 @@
+{
+    "home": "होम",
+    "arena": "अखाड़ा",
+    "play_guide": "कैसे खेलें?",
+    "hints_vocabulary_explaination": "संकेत शब्दावली व्याख्या",
+    "levels": "अपना गेम चुनें",
+    "game_settings": "अनुभव अनुकूलित करें",
+    "design_system": "डिज़ाइन सिस्टम",
+    "badge": "बैज",
+    "typography": "टाइपोग्राफी",
+    "button": "बटन",
+    "divider": "डिवाइडर",
+    "dialog": "डायलॉग",
+    "level_card": "लेवल कार्ड",
+    "gameLevels": {
+        "EASY": "आसान स्तर",
+        "MEDIUM": "मध्यम स्तर",
+        "HARD": "कठिन स्तर",
+        "EXPERT": "विशेषज्ञ स्तर"
+    }
+}
