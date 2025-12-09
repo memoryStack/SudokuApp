@@ -4,7 +4,7 @@ import type {
 } from '@application/adapterInterfaces/stateManagers/smartHintHCRepository'
 
 import {
-    CellsFocusData, ClickableCells, RemovableNotesInfo, SmartHintsColorSystem, TryOutInputsColors,
+    CellsFocusData, ClickableCells, RemovableNotesInfo, SmartHintsColorSystem, TryOutInputsColors, HintSteps
 } from '../apps/arena/utils/smartHints/types'
 import { HintsInfo } from 'src/apps/arena/store/state/smartHintHC.state'
 
@@ -32,5 +32,6 @@ export interface SmartHintRepository extends ApplicationLayerSmartHintRepoInterf
     getUnclickableCellClickInTryOutMsg: () => string | undefined
     getCellToFocusData: () => CellsFocusData | null
     setCellsToFocusData: (data: CellsFocusData) => void
+    setStepsText: ({ steps, title }: { steps: HintSteps, title: string }) => void
     getTryOutInputsColors: () => TryOutInputsColors | null | undefined
 }

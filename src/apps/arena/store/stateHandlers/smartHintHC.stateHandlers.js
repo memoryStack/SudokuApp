@@ -35,6 +35,11 @@ const stateHandlers = {
     },
     setCellsToFocusData: (state, { payload }) => {
         state.hints[0].cellsToFocusData = payload
+    },
+    setStepsText: (state, { payload }) => {
+        const { steps, title } = payload
+        state.hints[0].steps = steps
+        state.hints[0].title = title
     }
 }
 

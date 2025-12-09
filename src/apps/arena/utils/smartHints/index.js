@@ -21,10 +21,14 @@ import {
 
 import { HINTS_IDS } from './constants'
 
-export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData, smartHintsColorSystem) => {
+export const getTransformedRawHints = (hintId, rawHints, mainNumbers, notesData, smartHintsColorSystem, smartHintsTranslationsTexts) => {
     if (_isEmpty(rawHints)) return null
     return _map(rawHints, rawHint => HINT_ID_VS_RAW_HINT_TRANSFORMERS[hintId]({
-        rawHint, mainNumbers, notesData, smartHintsColorSystem,
+        rawHint,
+        mainNumbers,
+        notesData,
+        smartHintsColorSystem,
+        smartHintsTranslationsTexts
     }))
 }
 

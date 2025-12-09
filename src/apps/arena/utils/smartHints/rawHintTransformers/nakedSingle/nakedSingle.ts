@@ -13,7 +13,7 @@ import {
     HINTS_IDS,
     HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
-import { COMPOSITE_HINT_EXPLANATION_TEXTS, HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { HINT_ID_VS_TITLES, HintExplainationTexts } from '../../stringLiterals'
 import { setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     areSameCells,
@@ -32,15 +32,13 @@ import {
 import { NakedSingleTransformerArgs } from './types'
 import { HINTS_VOCAB_IDS } from '../constants'
 
-const explainations = HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE]
-
-const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell): string => {
+const getSingleHouseNakedSingleDescription = (houseType: HouseType, solutionValue: SolutionValue, cell: Cell, smartHintsExplanationTexts: HintExplainationTexts): string => {
     const msgPlaceholdersValues = {
         houseType: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
     }
-
+    const explainations = smartHintsExplanationTexts[HINTS_IDS.NAKED_SINGLE]
     return dynamicInterpolation(explainations.SINGLE_HOUSE, msgPlaceholdersValues)
 }
 
@@ -52,21 +50,23 @@ const getCellHousesText = (cell: Cell) => {
     return `${getHouseAxesValue(cellHouses[0])} ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')}, ${columnNum} ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} and ${blockNum} ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')}`
 }
 
-const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell): string => {
+const getMultipleHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell, smartHintsExplanationTexts: HintExplainationTexts): string => {
     const msgPlaceholdersValues = {
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
         cellHousesText: getCellHousesText(cell),
     }
+    const explainations = smartHintsExplanationTexts[HINTS_IDS.NAKED_SINGLE]
     return dynamicInterpolation(explainations.MULTIPLE_HOUSE, msgPlaceholdersValues)
 }
 
-const getCompositeHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell): string => {
+const getCompositeHousesNakeSingleDescription = (solutionValue: SolutionValue, cell: Cell, smartHintsExplanationTexts: HintExplainationTexts): string => {
     const msgPlaceholdersValues = {
         solutionValue,
         cellAxesText: getCellAxesValues(cell),
     }
-    return dynamicInterpolation(COMPOSITE_HINT_EXPLANATION_TEXTS[HINTS_IDS.NAKED_SINGLE], msgPlaceholdersValues)
+    const explaination = smartHintsExplanationTexts.composite[HINTS_IDS.NAKED_SINGLE]
+    return dynamicInterpolation(explaination, msgPlaceholdersValues)
 }
 
 const SMART_HINTS_TECHNIQUES = {
@@ -110,9 +110,8 @@ const getApplyHintData = (rawHint: NakedSingleRawHint): AddMainNumberHintAction[
     ]
 }
 
-export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem }: NakedSingleTransformerArgs): TransformedRawHint => {
+export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem, smartHintsTranslationsTexts }: NakedSingleTransformerArgs): TransformedRawHint => {
     const { type, cell } = rawHint
-
     const { row, col } = cell
     let cellsToFocusData = {}
     let logic = ''
@@ -123,6 +122,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
                 HOUSE_TYPE.ROW,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
+                smartHintsTranslationsTexts.explanation
             )
             break
         case NAKED_SINGLE_TYPES.COL:
@@ -131,6 +131,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
                 HOUSE_TYPE.COL,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
+                smartHintsTranslationsTexts.explanation
             )
             break
         case NAKED_SINGLE_TYPES.BLOCK:
@@ -139,13 +140,14 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
                 HOUSE_TYPE.BLOCK,
                 MainNumbersRecord.getCellSolutionValue(mainNumbers, cell),
                 cell,
+                smartHintsTranslationsTexts.explanation
             )
             break
         case NAKED_SINGLE_TYPES.MIX:
             cellsToFocusData = nakedSingleMixHousesDataToHighlight(cell, smartHintsColorSystem)
             const getLogicHandler = rawHint.isComposite ? SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getCompositeHintMsg
                 : SMART_HINTS_TECHNIQUES.NAKED_SINGLE.DESCRIPTION.getMultipleHouseMsg
-            logic = getLogicHandler(MainNumbersRecord.getCellSolutionValue(mainNumbers, cell), cell)
+            logic = getLogicHandler(MainNumbersRecord.getCellSolutionValue(mainNumbers, cell), cell, smartHintsTranslationsTexts.explanation)
             break
         default:
             break
@@ -154,7 +156,7 @@ export const transformNakedSingleRawHint = ({ rawHint, mainNumbers, smartHintsCo
     return {
         type: HINTS_IDS.NAKED_SINGLE,
         cellsToFocusData,
-        title: SMART_HINTS_TECHNIQUES.NAKED_SINGLE.TITLE,
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.NAKED_SINGLE],
         steps: [{ text: logic }],
         selectCellOnClose: { row, col },
         applyHint: getApplyHintData(rawHint),

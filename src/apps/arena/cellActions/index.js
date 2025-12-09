@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useMemo } from 'react'
 
 import { View, useWindowDimensions } from 'react-native'
 
@@ -32,6 +32,8 @@ import { addListener, removeListener } from '@utils/GlobalEventBus';
 import { EVENTS } from 'src/constants/events';
 import _get from '@lodash/get';
 import { useThemeValues } from '../hooks/useTheme';
+import { getHintExplanationTexts, getHintsTitle } from '../utils/smartHints/stringLiterals';
+import { useTranslation } from 'src/i18n/hooks/useTranslation';
 
 const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, containerStyles, textStyles, dependencies }) => {
     const allowNotesInputWithoutPencil = dependencies?.gameSettingsAdapter?.fillNotesWithoutPencil?.()
@@ -41,6 +43,14 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
     const hints = useSelector(getAvailableHintsCount)
 
     const theme = useThemeValues()
+
+    const { t: tSmartHints } = useTranslation('smartHints')
+    const smartHintsTranslationsTexts = useMemo(() => {
+        return {
+            explanation: getHintExplanationTexts(tSmartHints),
+            title: getHintsTitle(tSmartHints),
+        }
+    }, [tSmartHints])
 
     const { start, copilotEvents, currentStepNumber, totalStepsNumber, goToNext, stop, visible } = useCopilot()
     const wentoff = useRef(false)
@@ -100,7 +110,8 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
             payload: {
                 dependencies,
                 smartHintsColorSystem: _get(theme, 'colors.smartHints'),
-                showAllHints
+                showAllHints,
+                smartHintsTranslationsTexts
             }
         })
     }

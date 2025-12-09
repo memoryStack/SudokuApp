@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useMemo } from 'react'
 
 import { View } from 'react-native'
 
@@ -33,6 +33,7 @@ import {
     HINT_MENU_ITEM_TEST_ID,
 } from './hintsMenu.constants'
 import { getStyles } from './hintsMenu.styles'
+import { getHintExplanationTexts, getHintsTitle } from '../utils/smartHints/stringLiterals'
 
 const COLUMNS_COUNT = 3
 
@@ -43,6 +44,15 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
 
     const styles = useStyles(getStyles)
     const { t } = useTranslation('arena')
+
+    const { t: tSmartHints } = useTranslation('smartHints')
+
+    const smartHintsTranslationsTexts = useMemo(() => {
+        return {
+            explanation: getHintExplanationTexts(tSmartHints),
+            title: getHintsTitle(tSmartHints),
+        }
+    }, [tSmartHints])
 
     const theme = useThemeValues()
 
@@ -111,6 +121,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
                 notes,
                 smartHintsColorSystem: _get(theme, 'colors.smartHints'),
                 dependencies,
+                smartHintsTranslationsTexts
             },
         })
     }

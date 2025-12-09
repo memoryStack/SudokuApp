@@ -1,6 +1,7 @@
 import { TRY_OUT_RESULT_STATES } from './tryOutInputAnalyser/constants'
 import { LINK_TYPES } from './chains/xChain/xChain.constants'
-
+import { HintExplainationTexts } from './stringLiterals'
+import { HINTS_IDS } from './constants'
 export interface NotesToHighlightData {
     [note: string]: {
         fontColor: string
@@ -73,6 +74,10 @@ export type RawHintTransformersArgs = {
     mainNumbers: MainNumbers
     notesData: Notes
     smartHintsColorSystem: SmartHintsColorSystem
+    smartHintsTranslationsTexts: {
+        explanation: HintExplainationTexts
+        title: Record<HINTS_IDS, string>
+    }
 }
 
 export type RemovableNotesInfo = {

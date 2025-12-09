@@ -14,7 +14,7 @@ type HiddenGroupHintExplainationText = {
     REMOVABLE_NOTES_IN_SECONDARY_HOUSE: string[]
 }
 
-type HintExplainationTexts = {
+export type HintExplainationTexts = {
     [HINTS_IDS.NAKED_SINGLE]: NakedSingleHintExplainationText
     [HINTS_IDS.HIDDEN_SINGLE]: string
     [HINTS_IDS.OMISSION]: string
@@ -33,31 +33,35 @@ type HintExplainationTexts = {
     [HINTS_IDS.W_WING]: string[]
     [HINTS_IDS.XYZ_WING]: string[]
     [HINTS_IDS.UNIQUE_RECTANGLE]: {}
+    composite: {
+        [HINTS_IDS.NAKED_SINGLE]: string
+        [HINTS_IDS.HIDDEN_SINGLE]: string
+    }
 }
 
-export const getHintTitle = (hintId: string, t: TFunction): string => {
-    const titleKeys: Record<string, string> = {
-        [HINTS_IDS.NAKED_SINGLE]: 'smartHints:titles.nakedSingle',
-        [HINTS_IDS.HIDDEN_SINGLE]: 'smartHints:titles.hiddenSingle',
-        [HINTS_IDS.NAKED_DOUBLE]: 'smartHints:titles.nakedDouble',
-        [HINTS_IDS.NAKED_TRIPPLE]: 'smartHints:titles.nakedTripple',
-        [HINTS_IDS.HIDDEN_DOUBLE]: 'smartHints:titles.hiddenDouble',
-        [HINTS_IDS.HIDDEN_TRIPPLE]: 'smartHints:titles.hiddenTripple',
-        [HINTS_IDS.PERFECT_X_WING]: 'smartHints:titles.perfectXWing',
-        [HINTS_IDS.FINNED_X_WING]: 'smartHints:titles.finnedXWing',
-        [HINTS_IDS.SASHIMI_FINNED_X_WING]: 'smartHints:titles.sashimiFinnedXWing',
-        [HINTS_IDS.Y_WING]: 'smartHints:titles.yWing',
-        [HINTS_IDS.OMISSION]: 'smartHints:titles.omission',
-        [HINTS_IDS.REMOTE_PAIRS]: 'smartHints:titles.remotePairs',
-        [HINTS_IDS.X_CHAIN]: 'smartHints:titles.xChain',
-        [HINTS_IDS.XY_CHAIN]: 'smartHints:titles.xyChain',
-        [HINTS_IDS.EMPTY_RECTANGLE]: 'smartHints:titles.emptyRectangle',
-        [HINTS_IDS.W_WING]: 'smartHints:titles.wWing',
-        [HINTS_IDS.XYZ_WING]: 'smartHints:titles.xyzWing',
-        [HINTS_IDS.UNIQUE_RECTANGLE]: 'smartHints:titles.uniqueRectangle',
-        [HINTS_IDS.ALL]: 'smartHints:titles.all',
+export const getHintsTitle = (t: TFunction): Record<HINTS_IDS, string> => {
+    const titles: Record<HINTS_IDS, string> = {
+        [HINTS_IDS.NAKED_SINGLE]: t('titles.nakedSingle'),
+        [HINTS_IDS.HIDDEN_SINGLE]: t('titles.hiddenSingle'),
+        [HINTS_IDS.NAKED_DOUBLE]: t('titles.nakedDouble'),
+        [HINTS_IDS.NAKED_TRIPPLE]: t('titles.nakedTripple'),
+        [HINTS_IDS.HIDDEN_DOUBLE]: t('titles.hiddenDouble'),
+        [HINTS_IDS.HIDDEN_TRIPPLE]: t('titles.hiddenTripple'),
+        [HINTS_IDS.PERFECT_X_WING]: t('titles.perfectXWing'),
+        [HINTS_IDS.FINNED_X_WING]: t('titles.finnedXWing'),
+        [HINTS_IDS.SASHIMI_FINNED_X_WING]: t('titles.sashimiFinnedXWing'),
+        [HINTS_IDS.Y_WING]: t('titles.yWing'),
+        [HINTS_IDS.OMISSION]: t('titles.omission'),
+        [HINTS_IDS.REMOTE_PAIRS]: t('titles.remotePairs'),
+        [HINTS_IDS.X_CHAIN]: t('titles.xChain'),
+        [HINTS_IDS.XY_CHAIN]: t('titles.xyChain'),
+        [HINTS_IDS.EMPTY_RECTANGLE]: t('titles.emptyRectangle'),
+        [HINTS_IDS.W_WING]: t('titles.wWing'),
+        [HINTS_IDS.XYZ_WING]: t('titles.xyzWing'),
+        [HINTS_IDS.UNIQUE_RECTANGLE]: t('titles.uniqueRectangle'),
+        [HINTS_IDS.ALL]: t('titles.all'),
     }
-    return t(titleKeys[hintId] || hintId)
+    return titles
 }
 
 // Legacy object for backward compatibility - will be deprecated
@@ -85,114 +89,113 @@ export const HINT_ID_VS_TITLES = {
 
 export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => ({
     [HINTS_IDS.NAKED_SINGLE]: {
-        SINGLE_HOUSE: t('smartHints:explanations.nakedSingle.singleHouse'),
-        MULTIPLE_HOUSE: t('smartHints:explanations.nakedSingle.multipleHouse'),
+        SINGLE_HOUSE: t('explanations.nakedSingle.singleHouse'),
+        MULTIPLE_HOUSE: t('explanations.nakedSingle.multipleHouse'),
     },
-    [HINTS_IDS.HIDDEN_SINGLE]: t('smartHints:explanations.hiddenSingle.default'),
-    [HINTS_IDS.OMISSION]: t('smartHints:explanations.omission'),
+    [HINTS_IDS.HIDDEN_SINGLE]: t('explanations.hiddenSingle.default'),
+    [HINTS_IDS.OMISSION]: t('explanations.omission'),
     [HINTS_IDS.NAKED_DOUBLE]: [
-        t('smartHints:explanations.nakedDouble.0'),
-        t('smartHints:explanations.nakedDouble.1'),
+        t('explanations.nakedDouble.0'),
+        t('explanations.nakedDouble.1'),
     ],
     [HINTS_IDS.NAKED_TRIPPLE]: [
-        t('smartHints:explanations.nakedTripple.0'),
-        t('smartHints:explanations.nakedTripple.1'),
+        t('explanations.nakedTripple.0'),
+        t('explanations.nakedTripple.1'),
     ],
     [HINTS_IDS.HIDDEN_DOUBLE]: {
         DEFAULT: [
-            t('smartHints:explanations.hiddenDouble.default.0'),
-            t('smartHints:explanations.hiddenDouble.default.1'),
+            t('explanations.hiddenDouble.default.0'),
+            t('explanations.hiddenDouble.default.1'),
         ],
         REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            t('smartHints:explanations.hiddenDouble.removableNotesInSecondaryHouse.0'),
-            t('smartHints:explanations.hiddenDouble.removableNotesInSecondaryHouse.1'),
+            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.0'),
+            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.1'),
         ],
     },
     [HINTS_IDS.HIDDEN_TRIPPLE]: {
         DEFAULT: [
-            t('smartHints:explanations.hiddenTripple.default.0'),
-            t('smartHints:explanations.hiddenTripple.default.1'),
+            t('explanations.hiddenTripple.default.0'),
+            t('explanations.hiddenTripple.default.1'),
         ],
         REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            t('smartHints:explanations.hiddenTripple.removableNotesInSecondaryHouse.0'),
-            t('smartHints:explanations.hiddenTripple.removableNotesInSecondaryHouse.1'),
+            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.0'),
+            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.1'),
         ],
     },
     [HINTS_IDS.PERFECT_X_WING]: [
-        t('smartHints:explanations.perfectXWing.0'),
-        t('smartHints:explanations.perfectXWing.1'),
-        t('smartHints:explanations.perfectXWing.2'),
+        t('explanations.perfectXWing.0'),
+        t('explanations.perfectXWing.1'),
+        t('explanations.perfectXWing.2'),
     ],
     [HINTS_IDS.FINNED_X_WING]: [
-        t('smartHints:explanations.finnedXWing.0'),
-        t('smartHints:explanations.finnedXWing.1'),
-        t('smartHints:explanations.finnedXWing.2'),
+        t('explanations.finnedXWing.0'),
+        t('explanations.finnedXWing.1'),
+        t('explanations.finnedXWing.2'),
     ],
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
-        t('smartHints:explanations.sashimiFinnedXWing.0'),
-        t('smartHints:explanations.sashimiFinnedXWing.1'),
+        t('explanations.sashimiFinnedXWing.0'),
+        t('explanations.sashimiFinnedXWing.1'),
     ],
     [HINTS_IDS.Y_WING]: [
-        t('smartHints:explanations.yWing.0'),
-        t('smartHints:explanations.yWing.1'),
-        t('smartHints:explanations.yWing.2'),
-        t('smartHints:explanations.yWing.3'),
+        t('explanations.yWing.0'),
+        t('explanations.yWing.1'),
+        t('explanations.yWing.2'),
+        t('explanations.yWing.3'),
     ],
     [HINTS_IDS.REMOTE_PAIRS]: [
-        t('smartHints:explanations.remotePairs.0'),
-        t('smartHints:explanations.remotePairs.1'),
+        t('explanations.remotePairs.0'),
+        t('explanations.remotePairs.1'),
     ],
     [HINTS_IDS.X_CHAIN]: [
-        t('smartHints:explanations.xChain.0'),
-        t('smartHints:explanations.xChain.1'),
+        t('explanations.xChain.0'),
+        t('explanations.xChain.1'),
     ],
     [HINTS_IDS.XY_CHAIN]: [
-        t('smartHints:explanations.xyChain.0'),
-        t('smartHints:explanations.xyChain.1'),
+        t('explanations.xyChain.0'),
+        t('explanations.xyChain.1'),
     ],
     [HINTS_IDS.EMPTY_RECTANGLE]: [
-        t('smartHints:explanations.emptyRectangle.0'),
+        t('explanations.emptyRectangle.0'),
     ],
     [HINTS_IDS.W_WING]: [
-        t('smartHints:explanations.wWing.0'),
+        t('explanations.wWing.0'),
     ],
     [HINTS_IDS.XYZ_WING]: [
-        t('smartHints:explanations.xyzWing.0'),
+        t('explanations.xyzWing.0'),
     ],
     [HINTS_IDS.UNIQUE_RECTANGLE]: {
         [UR_TYPES.TYPE_ONE]: {
             singleExtraCandidateMsg: [
-                t('smartHints:explanations.uniqueRectangle.typeOne.singleExtraCandidate.0'),
-                t('smartHints:explanations.uniqueRectangle.typeOne.singleExtraCandidate.1'),
+                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.0'),
+                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.1'),
             ],
             multipleExtraCandidateMsg: [
-                t('smartHints:explanations.uniqueRectangle.typeOne.multipleExtraCandidate.0'),
-                t('smartHints:explanations.uniqueRectangle.typeOne.multipleExtraCandidate.1'),
+                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.0'),
+                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.1'),
             ],
         },
         [UR_TYPES.TYPE_TWO]: [
-            t('smartHints:explanations.uniqueRectangle.typeTwo.0'),
-            t('smartHints:explanations.uniqueRectangle.typeTwo.1'),
+            t('explanations.uniqueRectangle.typeTwo.0'),
+            t('explanations.uniqueRectangle.typeTwo.1'),
         ],
         [UR_TYPES.TYPE_THREE]: [
-            t('smartHints:explanations.uniqueRectangle.typeThree.0'),
-            t('smartHints:explanations.uniqueRectangle.typeThree.1'),
+            t('explanations.uniqueRectangle.typeThree.0'),
+            t('explanations.uniqueRectangle.typeThree.1'),
         ],
         [UR_TYPES.TYPE_FOUR]: [
-            t('smartHints:explanations.uniqueRectangle.typeFour.0'),
-            t('smartHints:explanations.uniqueRectangle.typeFour.1'),
+            t('explanations.uniqueRectangle.typeFour.0'),
+            t('explanations.uniqueRectangle.typeFour.1'),
         ],
         [UR_TYPES.TYPE_SIX]: [
-            t('smartHints:explanations.uniqueRectangle.typeSix.0'),
-            t('smartHints:explanations.uniqueRectangle.typeSix.1'),
-            t('smartHints:explanations.uniqueRectangle.typeSix.2'),
+            t('explanations.uniqueRectangle.typeSix.0'),
+            t('explanations.uniqueRectangle.typeSix.1'),
+            t('explanations.uniqueRectangle.typeSix.2'),
         ],
     },
-})
-
-export const getCompositeHintExplanationTexts = (t: TFunction) => ({
-    [HINTS_IDS.NAKED_SINGLE]: t('smartHints:explanations.nakedSingle.composite'),
-    [HINTS_IDS.HIDDEN_SINGLE]: t('smartHints:explanations.hiddenSingle.composite'),
+    composite: {
+        [HINTS_IDS.NAKED_SINGLE]: t('explanations.nakedSingle.composite'),
+        [HINTS_IDS.HIDDEN_SINGLE]: t('explanations.hiddenSingle.composite'),
+    },
 })
 
 // Legacy exports for backward compatibility - will be deprecated

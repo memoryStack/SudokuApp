@@ -89,7 +89,7 @@ const getEasiestHintData = (allHints) => {
     }
 }
 
-const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, showAllHints } }) => {
+const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, showAllHints, smartHintsTranslationsTexts } }) => {
     const { gameStateRepository, boardControllerRepository, boardRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
@@ -112,7 +112,8 @@ const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, 
                 notes,
                 hintDetails: easiestHint,
                 smartHintsColorSystem,
-                dependencies
+                dependencies,
+                smartHintsTranslationsTexts
             })
         } else {
             // no hints found

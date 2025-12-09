@@ -83,10 +83,11 @@ export const showHintHCUseCase = ({
     notes,
     hintDetails,
     smartHintsColorSystem,
-    dependencies
+    dependencies,
+    smartHintsTranslationsTexts
 }) => {
     const { id, hint } = hintDetails
-    const hints = getTransformedRawHints(id, hint, mainNumbers, notes, smartHintsColorSystem)
+    const hints = getTransformedRawHints(id, hint, mainNumbers, notes, smartHintsColorSystem, smartHintsTranslationsTexts)
     const hintData = {
         mainNumbers: hints[0].hasTryOut ? _cloneDeep(mainNumbers) : null,
         notes: hints[0].hasTryOut ? _cloneDeep(notes) : null,
@@ -104,13 +105,18 @@ export const showHintHCUseCase = ({
 
 const handleMenuItemPress = ({
     getState, params: {
-        id, mainNumbers, notes, smartHintsColorSystem, dependencies,
+        id, mainNumbers, notes, smartHintsColorSystem, dependencies, smartHintsTranslationsTexts
     },
 }) => {
     const { availableRawHints } = getState()
 
     showHintHCUseCase({
-        mainNumbers, notes, smartHintsColorSystem, hintDetails: { id, hint: availableRawHints[id] }, dependencies
+        mainNumbers,
+        notes,
+        smartHintsColorSystem,
+        hintDetails: { id, hint: availableRawHints[id] },
+        dependencies,
+        smartHintsTranslationsTexts
     })
 
     // const hints = getTransformedRawHints(id, availableRawHints[id], mainNumbers, notes, smartHintsColorSystem)

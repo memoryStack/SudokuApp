@@ -14,7 +14,12 @@ import {
 } from '../../../util'
 
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { HintExplainationTexts, HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { NakedGroupTransformerArgs } from './types'
+import {
+    CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
+} from '../../types'
+import { isCellPresentInHouse } from '@domain/board/utils/housesAndCells'
 import {
     setCellDataInHintResult,
     getCandidatesListText,
@@ -23,17 +28,11 @@ import {
     transformCellBGColor,
 } from '../../util'
 import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.constants'
-
 import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { NakedGroupTransformerArgs } from './types'
-import {
-    CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
-} from '../../types'
-import { isCellPresentInHouse } from '@domain/board/utils/housesAndCells'
 
-export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem }: NakedGroupTransformerArgs): TransformedRawHint => {
+export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColorSystem, smartHintsTranslationsTexts }: NakedGroupTransformerArgs): TransformedRawHint => {
     const { groupCells } = rawHint
     const groupCandidates = getUniqueNotesFromCells(groupCells, notesData)
     const focusedCells = getHighlightableCells(groupCells, groupCandidates, notesData)
@@ -44,8 +43,8 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
         cellsToFocusData: getCellsHighlightData(focusedCells, groupCells, groupCandidates, notesData, smartHintsColorSystem),
         focusedCells,
         type: getHintId(groupCandidates),
-        title: HINT_ID_VS_TITLES[getHintId(groupCandidates)],
-        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells, hostHouses)),
+        title: smartHintsTranslationsTexts.title[getHintId(groupCandidates)],
+        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells, hostHouses, smartHintsTranslationsTexts.explanation)),
         applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
         clickableCells: [...groupCells, ...removableNotesHostCells],
         unclickableCellClickInTryOutMsg: `you can select cells which have ${getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)} candidate highlighted in green or red color`,
@@ -133,7 +132,7 @@ const getHostHousesText = (hostHouses: House[]) => {
         .join(` ${HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND} `)
 }
 
-const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[], hostHouses: House[]) => {
+const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[], hostHouses: House[], smartHintsExplanationTexts: HintExplainationTexts) => {
     const msgPlaceholdersValues = {
         candidatesListTextAndConcatenated: getCandidatesListText(
             groupCandidates,
@@ -146,7 +145,7 @@ const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[], hostHou
         groupCellsText: getCellsAxesValuesListText(sortCells(groupCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
         hostHouses: getHostHousesText(hostHouses),
     }
-    return (HINT_EXPLANATION_TEXTS[getHintId(groupCandidates)] as string[])
+    return (smartHintsExplanationTexts[getHintId(groupCandidates)] as string[])
         .map(hintChunkTemplate => dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues))
 }
 

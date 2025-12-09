@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import {
     View, ScrollView, NativeSyntheticEvent, NativeScrollEvent,
@@ -63,6 +63,7 @@ import { updateUserActivityTime } from '@application/usecases/board'
 import { useTheme } from '../hooks/useTheme'
 import { showHintHCUseCase } from '../hintsMenu/actionHandlers'
 import { getTransformedRawHints } from '../utils/smartHints'
+import { getHintExplanationTexts, getHintsTitle } from '../utils/smartHints/stringLiterals'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -128,6 +129,15 @@ const SmartHintHC_: React.FC<Props> = ({
 
     const isHintTryOut = useIsHintTryOutStep()
 
+    const { t: tSmartHints } = useTranslation('smartHints')
+
+    const smartHintsTranslationsTexts = useMemo(() => {
+        return {
+            explanation: getHintExplanationTexts(tSmartHints),
+            title: getHintsTitle(tSmartHints),
+        }
+    }, [tSmartHints])
+
     const onAction = React.useMemo(() => (action: Action) => {
         if (action.type === ACTION_TYPES.ON_NUMBER_CLICK) {
             action.payload = {
@@ -177,13 +187,17 @@ const SmartHintHC_: React.FC<Props> = ({
             notes,
         } = rawData
 
-        const hints = getTransformedRawHints(id, hint, mainNumbers, notes, smartHintsColorSystem)
+        const hints = getTransformedRawHints(id, hint, mainNumbers, notes, smartHintsColorSystem, smartHintsTranslationsTexts)
 
         const {
             smartHintRepository
         } = dependencies
         smartHintRepository.setCellsToFocusData(hints[0].cellsToFocusData)
-    }, [colorScheme, smartHintsColorSystem]) // not listening to rawData on purpose, as it might lead to loop
+        smartHintRepository.setStepsText({
+            steps: hints[0].steps,
+            title: hints[0].title,
+        })
+    }, [colorScheme, smartHintsColorSystem, smartHintsTranslationsTexts]) // not listening to rawData on purpose, as it might lead to loop
 
     const smartHintHCRef = useRef(null)
 
