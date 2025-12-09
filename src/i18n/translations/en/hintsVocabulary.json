@@ -266,5 +266,9 @@
     "xWingCornerCells": {
         "intro": "<p>An <a href=\"PERFECT_X_WING\">X-Wing</a> is formed using two <a href=\"ROW\">rows</a> or <a href=\"COLUMN\">columns</a>. And these two rows or columns have candidate present in two cells only. so combinedly we have 4 cells where the candiate is present. These 4 cells are known as X-Wing corner cells.Notice 1st and 5th columns in X-Wing in below puzzle.</p>",
         "observation": "<p>So B1, B5, E1 and E5 are X-Wing corner cells in this case.</p>"
+    },
+    "xWingFinnCells": {
+        "intro": "<p>In <a href=\"PERFECT_X_WING\">X-Wing</a> sometimes the candidate is present in a <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> more than two times. these extra cells are called as <b>Finn Cells</b>.<br />Notice in below puzzle. Here candidate 1 is present 3 times in 6th column and in 2nd column it is present two times only.</p>",
+        "observation": "<p>So here H6 is the Finn Cell and A2, A6, G2 and G6 are <a href=\"X_WING_CORNER_CELLS\">Corner</a> cells.</p>"
     }
 }

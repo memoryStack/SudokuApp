@@ -35,7 +35,9 @@ const focusedCellsInExample = [
 const XWingFinnCells = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
-
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'xWingFinnCells',
+    })
     const boardData = useBoardData(puzzle)
 
     const finnedXWing = {
@@ -91,20 +93,13 @@ const XWingFinnCells = () => {
         <View style={styles.container}>
             <SmartHintText
                 text={
-                    '<p>'
-                    + `In ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} sometimes the candidate is present in a ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')}`
-                    + ' more than two times. these extra cells are called as <b>Finn Cells</b>.'
-                    + '<br />'
-                    + 'Notice in below puzzle. Here candidate 1 is present 3 times in 6th column and in 2nd column it is present two times only.'
-                    + '</p>'
+                    t('intro')
                 }
             />
             {Example}
             <SmartHintText
                 text={
-                    '<p>'
-                    + `So here H6 is the Finn Cell and A2, A6, G2 and G6 are ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'Corner')} cells.`
-                    + '</p>'
+                    t('observation')
                 }
             />
         </View>
