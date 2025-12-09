@@ -1,11 +1,12 @@
+import { TFunction } from 'i18next'
 import { HINTS_IDS } from '../utils/smartHints/constants'
 import { HINTS_VOCAB_IDS } from '../utils/smartHints/rawHintTransformers'
 
-export const FOOTER_BUTTONS_TEXT = {
-    NEXT: 'Next',
-    PREV: 'Prev',
-    APPLY_HINT: 'Apply Hint',
-}
+export const getFooterButtonsText = (t: TFunction) => ({
+    NEXT: t('smartHints:footerButtons.next'),
+    PREV: t('smartHints:footerButtons.prev'),
+    APPLY_HINT: t('smartHints:footerButtons.applyHint'),
+})
 
 export const SMART_HINT_CHANGES_APPLY_DELAY = 100
 

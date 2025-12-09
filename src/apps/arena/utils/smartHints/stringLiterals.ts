@@ -1,29 +1,8 @@
+import { TFunction } from 'i18next'
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import { HINTS_VOCAB_IDS } from './rawHintTransformers/constants'
 import { HINTS_IDS } from './constants'
 import { UR_TYPES } from './uniqueRectangle/constants'
-
-export const HINT_ID_VS_TITLES = {
-    [HINTS_IDS.NAKED_SINGLE]: 'Naked Single',
-    [HINTS_IDS.HIDDEN_SINGLE]: 'Hidden Single',
-    [HINTS_IDS.NAKED_DOUBLE]: 'Naked Double',
-    [HINTS_IDS.NAKED_TRIPPLE]: 'Naked Tripple',
-    [HINTS_IDS.HIDDEN_DOUBLE]: 'Hidden Double',
-    [HINTS_IDS.HIDDEN_TRIPPLE]: 'Hidden Tripple',
-    [HINTS_IDS.PERFECT_X_WING]: 'X-Wing',
-    [HINTS_IDS.FINNED_X_WING]: 'Finned X-Wing',
-    [HINTS_IDS.SASHIMI_FINNED_X_WING]: 'Sashimi Finned X-Wing',
-    [HINTS_IDS.Y_WING]: 'Y-Wing',
-    [HINTS_IDS.OMISSION]: 'Omission',
-    [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
-    [HINTS_IDS.X_CHAIN]: 'X-Chain',
-    [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
-    [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
-    [HINTS_IDS.W_WING]: 'W-Wing',
-    [HINTS_IDS.XYZ_WING]: 'XYZ-Wing',
-    [HINTS_IDS.UNIQUE_RECTANGLE]: 'Unique Rectangle',
-    [HINTS_IDS.ALL]: 'hints',
-}
 
 type NakedSingleHintExplainationText = {
     SINGLE_HOUSE: string
@@ -56,6 +35,167 @@ type HintExplainationTexts = {
     [HINTS_IDS.UNIQUE_RECTANGLE]: {}
 }
 
+export const getHintTitle = (hintId: string, t: TFunction): string => {
+    const titleKeys: Record<string, string> = {
+        [HINTS_IDS.NAKED_SINGLE]: 'smartHints:titles.nakedSingle',
+        [HINTS_IDS.HIDDEN_SINGLE]: 'smartHints:titles.hiddenSingle',
+        [HINTS_IDS.NAKED_DOUBLE]: 'smartHints:titles.nakedDouble',
+        [HINTS_IDS.NAKED_TRIPPLE]: 'smartHints:titles.nakedTripple',
+        [HINTS_IDS.HIDDEN_DOUBLE]: 'smartHints:titles.hiddenDouble',
+        [HINTS_IDS.HIDDEN_TRIPPLE]: 'smartHints:titles.hiddenTripple',
+        [HINTS_IDS.PERFECT_X_WING]: 'smartHints:titles.perfectXWing',
+        [HINTS_IDS.FINNED_X_WING]: 'smartHints:titles.finnedXWing',
+        [HINTS_IDS.SASHIMI_FINNED_X_WING]: 'smartHints:titles.sashimiFinnedXWing',
+        [HINTS_IDS.Y_WING]: 'smartHints:titles.yWing',
+        [HINTS_IDS.OMISSION]: 'smartHints:titles.omission',
+        [HINTS_IDS.REMOTE_PAIRS]: 'smartHints:titles.remotePairs',
+        [HINTS_IDS.X_CHAIN]: 'smartHints:titles.xChain',
+        [HINTS_IDS.XY_CHAIN]: 'smartHints:titles.xyChain',
+        [HINTS_IDS.EMPTY_RECTANGLE]: 'smartHints:titles.emptyRectangle',
+        [HINTS_IDS.W_WING]: 'smartHints:titles.wWing',
+        [HINTS_IDS.XYZ_WING]: 'smartHints:titles.xyzWing',
+        [HINTS_IDS.UNIQUE_RECTANGLE]: 'smartHints:titles.uniqueRectangle',
+        [HINTS_IDS.ALL]: 'smartHints:titles.all',
+    }
+    return t(titleKeys[hintId] || hintId)
+}
+
+// Legacy object for backward compatibility - will be deprecated
+export const HINT_ID_VS_TITLES = {
+    [HINTS_IDS.NAKED_SINGLE]: 'Naked Single',
+    [HINTS_IDS.HIDDEN_SINGLE]: 'Hidden Single',
+    [HINTS_IDS.NAKED_DOUBLE]: 'Naked Double',
+    [HINTS_IDS.NAKED_TRIPPLE]: 'Naked Tripple',
+    [HINTS_IDS.HIDDEN_DOUBLE]: 'Hidden Double',
+    [HINTS_IDS.HIDDEN_TRIPPLE]: 'Hidden Tripple',
+    [HINTS_IDS.PERFECT_X_WING]: 'X-Wing',
+    [HINTS_IDS.FINNED_X_WING]: 'Finned X-Wing',
+    [HINTS_IDS.SASHIMI_FINNED_X_WING]: 'Sashimi Finned X-Wing',
+    [HINTS_IDS.Y_WING]: 'Y-Wing',
+    [HINTS_IDS.OMISSION]: 'Omission',
+    [HINTS_IDS.REMOTE_PAIRS]: 'Remote Pairs',
+    [HINTS_IDS.X_CHAIN]: 'X-Chain',
+    [HINTS_IDS.XY_CHAIN]: 'XY-Chain',
+    [HINTS_IDS.EMPTY_RECTANGLE]: 'Empty Rectangle',
+    [HINTS_IDS.W_WING]: 'W-Wing',
+    [HINTS_IDS.XYZ_WING]: 'XYZ-Wing',
+    [HINTS_IDS.UNIQUE_RECTANGLE]: 'Unique Rectangle',
+    [HINTS_IDS.ALL]: 'hints',
+}
+
+export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => ({
+    [HINTS_IDS.NAKED_SINGLE]: {
+        SINGLE_HOUSE: t('smartHints:explanations.nakedSingle.singleHouse'),
+        MULTIPLE_HOUSE: t('smartHints:explanations.nakedSingle.multipleHouse'),
+    },
+    [HINTS_IDS.HIDDEN_SINGLE]: t('smartHints:explanations.hiddenSingle.default'),
+    [HINTS_IDS.OMISSION]: t('smartHints:explanations.omission'),
+    [HINTS_IDS.NAKED_DOUBLE]: [
+        t('smartHints:explanations.nakedDouble.0'),
+        t('smartHints:explanations.nakedDouble.1'),
+    ],
+    [HINTS_IDS.NAKED_TRIPPLE]: [
+        t('smartHints:explanations.nakedTripple.0'),
+        t('smartHints:explanations.nakedTripple.1'),
+    ],
+    [HINTS_IDS.HIDDEN_DOUBLE]: {
+        DEFAULT: [
+            t('smartHints:explanations.hiddenDouble.default.0'),
+            t('smartHints:explanations.hiddenDouble.default.1'),
+        ],
+        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
+            t('smartHints:explanations.hiddenDouble.removableNotesInSecondaryHouse.0'),
+            t('smartHints:explanations.hiddenDouble.removableNotesInSecondaryHouse.1'),
+        ],
+    },
+    [HINTS_IDS.HIDDEN_TRIPPLE]: {
+        DEFAULT: [
+            t('smartHints:explanations.hiddenTripple.default.0'),
+            t('smartHints:explanations.hiddenTripple.default.1'),
+        ],
+        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
+            t('smartHints:explanations.hiddenTripple.removableNotesInSecondaryHouse.0'),
+            t('smartHints:explanations.hiddenTripple.removableNotesInSecondaryHouse.1'),
+        ],
+    },
+    [HINTS_IDS.PERFECT_X_WING]: [
+        t('smartHints:explanations.perfectXWing.0'),
+        t('smartHints:explanations.perfectXWing.1'),
+        t('smartHints:explanations.perfectXWing.2'),
+    ],
+    [HINTS_IDS.FINNED_X_WING]: [
+        t('smartHints:explanations.finnedXWing.0'),
+        t('smartHints:explanations.finnedXWing.1'),
+        t('smartHints:explanations.finnedXWing.2'),
+    ],
+    [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
+        t('smartHints:explanations.sashimiFinnedXWing.0'),
+        t('smartHints:explanations.sashimiFinnedXWing.1'),
+    ],
+    [HINTS_IDS.Y_WING]: [
+        t('smartHints:explanations.yWing.0'),
+        t('smartHints:explanations.yWing.1'),
+        t('smartHints:explanations.yWing.2'),
+        t('smartHints:explanations.yWing.3'),
+    ],
+    [HINTS_IDS.REMOTE_PAIRS]: [
+        t('smartHints:explanations.remotePairs.0'),
+        t('smartHints:explanations.remotePairs.1'),
+    ],
+    [HINTS_IDS.X_CHAIN]: [
+        t('smartHints:explanations.xChain.0'),
+        t('smartHints:explanations.xChain.1'),
+    ],
+    [HINTS_IDS.XY_CHAIN]: [
+        t('smartHints:explanations.xyChain.0'),
+        t('smartHints:explanations.xyChain.1'),
+    ],
+    [HINTS_IDS.EMPTY_RECTANGLE]: [
+        t('smartHints:explanations.emptyRectangle.0'),
+    ],
+    [HINTS_IDS.W_WING]: [
+        t('smartHints:explanations.wWing.0'),
+    ],
+    [HINTS_IDS.XYZ_WING]: [
+        t('smartHints:explanations.xyzWing.0'),
+    ],
+    [HINTS_IDS.UNIQUE_RECTANGLE]: {
+        [UR_TYPES.TYPE_ONE]: {
+            singleExtraCandidateMsg: [
+                t('smartHints:explanations.uniqueRectangle.typeOne.singleExtraCandidate.0'),
+                t('smartHints:explanations.uniqueRectangle.typeOne.singleExtraCandidate.1'),
+            ],
+            multipleExtraCandidateMsg: [
+                t('smartHints:explanations.uniqueRectangle.typeOne.multipleExtraCandidate.0'),
+                t('smartHints:explanations.uniqueRectangle.typeOne.multipleExtraCandidate.1'),
+            ],
+        },
+        [UR_TYPES.TYPE_TWO]: [
+            t('smartHints:explanations.uniqueRectangle.typeTwo.0'),
+            t('smartHints:explanations.uniqueRectangle.typeTwo.1'),
+        ],
+        [UR_TYPES.TYPE_THREE]: [
+            t('smartHints:explanations.uniqueRectangle.typeThree.0'),
+            t('smartHints:explanations.uniqueRectangle.typeThree.1'),
+        ],
+        [UR_TYPES.TYPE_FOUR]: [
+            t('smartHints:explanations.uniqueRectangle.typeFour.0'),
+            t('smartHints:explanations.uniqueRectangle.typeFour.1'),
+        ],
+        [UR_TYPES.TYPE_SIX]: [
+            t('smartHints:explanations.uniqueRectangle.typeSix.0'),
+            t('smartHints:explanations.uniqueRectangle.typeSix.1'),
+            t('smartHints:explanations.uniqueRectangle.typeSix.2'),
+        ],
+    },
+})
+
+export const getCompositeHintExplanationTexts = (t: TFunction) => ({
+    [HINTS_IDS.NAKED_SINGLE]: t('smartHints:explanations.nakedSingle.composite'),
+    [HINTS_IDS.HIDDEN_SINGLE]: t('smartHints:explanations.hiddenSingle.composite'),
+})
+
+// Legacy exports for backward compatibility - will be deprecated
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
     [HINTS_IDS.NAKED_SINGLE]: {
         SINGLE_HOUSE: `<p>in this {{houseType}} only {{cellAxesText}} ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} is empty so {{solutionValue}} will come here</p>`,
@@ -139,7 +279,7 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + ` present only in two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} of`
         + ` any ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')}. we need to find either two such rows or two columns.`
         + '\nthese four cells where the candidate is present in these rows or columns must be aligned'
-        + ' like four corners of a rectangle.</p>', // or square
+        + ' like four corners of a rectangle.</p>',
 
         'here {{candidate}} is present only in two cells of {{houseAAxesValue}} and {{houseBAxesValue}}'
         + ' {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.'
@@ -261,7 +401,6 @@ export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
         + '</p>'
     ],
     [HINTS_IDS.UNIQUE_RECTANGLE]: {
-        // TODO: there is a lot of copy pasting here for the same msg, fix it
         [UR_TYPES.TYPE_ONE]: {
             singleExtraCandidateMsg: [
                 `<p>If {{extraNotesText}} doesn't come in {{cellWithExtraCandidates}} then each of these 4 cells will be left`
@@ -370,4 +509,13 @@ export const COMPOSITE_HINT_EXPLANATION_TEXTS = {
     [HINTS_IDS.HIDDEN_SINGLE]:
         '<p>in the highlighted {{houseType}}, {{solutionValue}} can\'t come in any other'
         + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} except {{hostCell}} so in {{hostCell}} only {{solutionValue}} will come</p>`
+}
+
+export const getFooterButtonText = (key: string, t: TFunction): string => {
+    const textKeys: Record<string, string> = {
+        NEXT: 'smartHints:footerButtons.next',
+        PREV: 'smartHints:footerButtons.prev',
+        APPLY_HINT: 'smartHints:footerButtons.applyHint',
+    }
+    return t(textKeys[key] || key)
 }

@@ -21,7 +21,7 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getStyles } from './xWingFinnCells.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
-
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 const puzzle = '500000000002009010730004000106008090020793050090100408000200073060900800000000001'
 
 const focusedCellsInExample = [

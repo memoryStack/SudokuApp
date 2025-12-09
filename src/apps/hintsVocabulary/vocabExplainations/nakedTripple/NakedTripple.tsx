@@ -28,6 +28,7 @@ import { getCellsAxesValuesListText } from 'src/apps/arena/utils/smartHints/rawH
 import { getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
 import { getStyles } from './nakedTripple.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 type ZoomableViewConfigs = {
     initialZoom?: number
@@ -57,6 +58,12 @@ const NakedDouble = () => {
     const theme = useThemeValues()
     const oneHostHosueBoardData = useBoardData(oneHostHouse)
     const twoHostHosueBoardData = useBoardData(twoHostHouse, 200)
+
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'nakedTripple',
+    })
+
+    const { t: commonT } = useTranslation(['common'])
 
     const Example = !_isNil(oneHostHosueBoardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
@@ -125,13 +132,11 @@ const NakedDouble = () => {
 
         return (
             <View style={styles.removableNotesExampleContainer}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>How to remote Notes?</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>
+                    {t('effect.title')}
+                </Text>
                 <Text>
-                    {
-                        `In below example ${oneHostHouseDetails.candidatesListText} will be filled in the highlighted cells`
-                        + ` and these numbers will be removed from all the other cells which have ${oneHostHouseDetails.candidatesListText} as candidates`
-                        + ' in the house in which Naked Tripple is formed. So all the candidates highlighted in red color will be eliminated'
-                    }
+                    {t('effect.intro', { candidates: oneHostHouseDetails.candidatesListText })}
                 </Text>
                 <View style={styles.removableNotesBoardContainer}>
                     {renderTruncatedBoardForExample(oneHostHosueBoardData.mainNumbers, oneHostHosueBoardData.notes, cellsFocusData, oneHostHouseHostCells, { initialOffsetY: 120 })}
@@ -155,12 +160,11 @@ const NakedDouble = () => {
 
         return (
             <View style={styles.removableNotesExampleContainer}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>Naked Tripple in more than one House:</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>
+                    {t('twoHostHouse.title')}
+                </Text>
                 <Text>
-                    {
-                        'If the three cells are part of two houses simultaneously then Naked Tripple will affect cells of'
-                        + ` both houses. See in example below, cells ${twoHostHouseDetails.cellsListText} are part of row E and 6th block.`
-                    }
+                    {t('twoHostHouse.explanation', { cells: twoHostHouseDetails.cellsListText })}
                 </Text>
                 <View style={styles.exampleBoardContainer}>
                     <Board
@@ -192,18 +196,11 @@ const NakedDouble = () => {
 
         return (
             <View>
-                <SmartHintText
-                    text={
-                        '<p>'
-                        + '<b>Note:</b> It is not necessary that the cells must have all three candidates to make a Naked Tripple.'
-                        + ' Cells must have atleast two out of these three candidates. So below examples are also correct Naked Tripples.'
-                        + '</p>'
-                    }
-                />
+                <SmartHintText text={t('validTypes')} />
                 {/* take care of this style name */}
                 <View style={styles.waysToFillBoardContainer}>
                     {renderTruncatedBoardForExample(oneHostHosueBoardData.mainNumbers, oneHostHosueBoardData.notes, {}, firstExampleHostCells, { initialOffsetX: -120, initialOffsetY: 120 })}
-                    <Text>OR</Text>
+                    <Text>{commonT('or')}</Text>
                     {renderTruncatedBoardForExample(twoHostHosueBoardData.mainNumbers, twoHostHosueBoardData.notes, {}, secondExampleHostCells, { initialOffsetX: -120 })}
                 </View>
             </View>
@@ -216,16 +213,15 @@ const NakedDouble = () => {
 
         return (
             <View style={{ marginTop: 16 }}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>Invalid Naked Tripple Example:</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>
+                    {t('invalidExample.title')}
+                </Text>
                 {/* take care of this style name */}
                 <View style={styles.removableNotesBoardContainer}>
                     {renderTruncatedBoardForExample(twoHostHosueBoardData.mainNumbers, twoHostHosueBoardData.notes, {}, firstExampleHostCells, { initialOffsetX: -120 })}
                 </View>
                 <Text style={{ marginTop: 8 }}>
-                    {
-                        'In above example these three cells have their candidates from a group of four candidates 1, 5, 6 and 7.'
-                        + ' If 1 was not present in the top-right cell as candidate then it would have been a valid Naked Tripple.'
-                    }
+                    {t('invalidExample.explanation')}
                 </Text>
             </View>
         )
@@ -234,26 +230,13 @@ const NakedDouble = () => {
     return (
         <View style={styles.container}>
             <SmartHintText
-                text={
-                    '<p>'
-                    + `In <a href="${HINTS_VOCAB_IDS.NAKED_DOUBLE}">Naked Double</a>, we focus on two`
-                    + ` <a href="${HINTS_VOCAB_IDS.CANDIDATE}">candidates</a> in two <a href="${HINTS_VOCAB_IDS.CELL}">cells</a> in a <a href="${HINTS_VOCAB_IDS.HOUSE}">house</a>.`
-                    + ' In Naked Tripple we focus on three cells and three candidates. So a Naked Tripple is formed when three cells in any'
-                    + ' house have candidates from a group of three candidates only.'
-                    + '</p>'
-                }
+                text={t('intro')}
             />
             {Example}
-            <SmartHintText
-                text={
-                    '<p>'
-                    + `Notice in above Sudoku Puzzle in 2nd <a href="${HINTS_VOCAB_IDS.BLOCK}">block</a> ${oneHostHouseDetails.cellsListText} cells can`
-                    + ` have only ${oneHostHouseDetails.candidatesListText} as candidates. So, it's a Naked Tripple and`
-                    + ` ${oneHostHouseDetails.cellsListText} are locked for ${oneHostHouseDetails.candidatesListText} but which number will`
-                    + ' go exactly in which cell is still not clear.'
-                    + '</p>'
-                }
-            />
+            <SmartHintText text={t('example', {
+                cells: oneHostHouseDetails.cellsListText,
+                candidates: oneHostHouseDetails.candidatesListText
+            })} />
             {typesOfValidNakedTripples()}
             {invalidNakedTripples()}
             {removableNotesHighlight()}

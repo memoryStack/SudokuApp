@@ -1,0 +1,150 @@
+{
+    "titles": {
+        "nakedSingle": "Naked Single",
+        "hiddenSingle": "Hidden Single",
+        "nakedDouble": "Naked Double",
+        "nakedTripple": "Naked Tripple",
+        "hiddenDouble": "Hidden Double",
+        "hiddenTripple": "Hidden Tripple",
+        "perfectXWing": "X-Wing",
+        "finnedXWing": "Finned X-Wing",
+        "sashimiFinnedXWing": "Sashimi Finned X-Wing",
+        "yWing": "Y-Wing",
+        "omission": "Omission",
+        "remotePairs": "Remote Pairs",
+        "xChain": "X-Chain",
+        "xyChain": "XY-Chain",
+        "emptyRectangle": "Empty Rectangle",
+        "wWing": "W-Wing",
+        "xyzWing": "XYZ-Wing",
+        "uniqueRectangle": "Unique Rectangle",
+        "all": "hints"
+    },
+    "footerButtons": {
+        "next": "Next",
+        "prev": "Prev",
+        "applyHint": "Apply Hint"
+    },
+    "houseTypes": {
+        "row": "row",
+        "column": "column",
+        "block": "block",
+        "rows": "rows",
+        "columns": "columns",
+        "blocks": "blocks"
+    },
+    "explanations": {
+        "nakedSingle": {
+            "singleHouse": "<p>in this {{houseType}} only {{cellAxesText}} <a href=\"CELL\">cell</a> is empty so {{solutionValue}} will come here</p>",
+            "multipleHouse": "<p>except {{solutionValue}} all other numbers from 1-9 are present in {{cellHousesText}} combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}</p>",
+            "composite": "<p>except {{solutionValue}} no other number from 1-9 can come in {{cellAxesText}}, so only {{solutionValue}} can come in {{cellAxesText}}.</p>"
+        },
+        "hiddenSingle": {
+            "default": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in crossed <a href=\"CELL\">cells</a> because of {{solutionValue}} in {{filledCellsWithSolutionValue}}. so in {{hostCell}} only {{solutionValue}} can come</p>",
+            "composite": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in any other <a href=\"CELL\">cells</a> except {{hostCell}} so in {{hostCell}} only {{solutionValue}} will come</p>"
+        },
+        "omission": "<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of {{hostHouseHostCellsListText}} and all of these <a href=\"CELL\">cells</a> are part of {{secondaryHouseNumText}} as well. so wherever we try to fill {{note}} in this {{hostHouseFullName}}, {{note}} in {{removableNotesHostCellsListText}} can't come</p>",
+        "nakedDouble": [
+            "<p>A Naked Double occurs when two <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> contain only two possible <a href=\"CANDIDATE\">candidates</a>, and these two cells share the same set of candidates.\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}} as their candidates so this forms a Naked Double in {{hostHouses}}.</p>",
+            "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed."
+        ],
+        "nakedTripple": [
+            "<p>a Naked Tripple is formed when three <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> have <a href=\"CANDIDATE\">candidates</a> only from a set of 3 candidates. and each cell must have atleast 2 candidates out of these 3.\nhere {{groupCellsText}} have a Naked Tripple in {{hostHouses}}.</p>",
+            "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed."
+        ],
+        "hiddenDouble": {
+            "default": [
+                "<p>a Hidden Double is formed when two <a href=\"CANDIDATE\">candidates</a> are present together only in two <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
+                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}"
+            ],
+            "removableNotesInSecondaryHouse": [
+                "<p>a Hidden Double is formed when two <a href=\"CANDIDATE\">candidates</a> are present together only in two <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
+                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed from {{secondaryHouseRemovableNotesHostCells}} as well"
+            ]
+        },
+        "hiddenTripple": {
+            "default": [
+                "<p>a Hidden Tripple is formed when three <a href=\"CANDIDATE\">candidates</a> are present together only in three <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\neach of these three cells must have atleast two out of these three candidates.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
+                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}"
+            ],
+            "removableNotesInSecondaryHouse": [
+                "<p>a Hidden Tripple is formed when three <a href=\"CANDIDATE\">candidates</a> are present together only in three <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\neach of these three cells must have atleast two out of these three candidates.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
+                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed from {{secondaryHouseRemovableNotesHostCells}} as well"
+            ]
+        },
+        "perfectXWing": [
+            "<p>to spot an X-Wing, start with looking for a <a href=\"CANDIDATE\">candidate</a> which is present only in two <a href=\"CELL\">cells</a> of any <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a>. we need to find either two such rows or two columns.\nthese four cells where the candidate is present in these rows or columns must be aligned like four corners of a rectangle.</p>",
+            "here {{candidate}} is present only in two cells of {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.\ndue to this arrangement of {{candidate}} in these {{houseFullNamePlural}}, any {{candidate}} that is highlighted in red color in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} can be removed",
+            "because to fill {{candidate}} in both {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}}, it can be filled either in {{topDownDiagonalText}} OR in {{bottomUpDiagonalText}} cells.\nbecause of this {{candidate}} present in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} in red color will be removed"
+        ],
+        "finnedXWing": [
+            "<p>If you don't understand <a href=\"PERFECT_X_WING\">X-Wing</a> then you should learn that first.\nwhen the <a href=\"CANDIDATE\">candidate</a> is present in more than 2 <a href=\"CELL\">cells</a> of only one <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> then it's not a perfect X-Wing but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called <a href=\"X_WING_FINN_CELLS\">Finn Cells</a>.\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>",
+            "<p>only one row or column can have these finn cells. and these finn cells must be in the same <a href=\"BLOCK\">block</a> with atleast one of the X-Wing <a href=\"X_WING_CORNER_CELLS\">corner cells</a>.\nnotice here that {{finnCellsAxesListText}} (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}</p>",
+            "here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells. because in {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} comes in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then {{candidate}} can't come in {{removableNotesHostCells}} only. and if {{candidate}} doesn't come in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}"
+        ],
+        "sashimiFinnedXWing": [
+            "<p>If you don't understand <a href=\"FINNED_X_WING\">Finned X-Wing</a> then you should learn that first.\nwhen in Finned X-Wing the <a href=\"CANDIDATE\">candidate</a> is missing in one of the <a href=\"X_WING_CORNER_CELLS\">corner</a>  <a href=\"CELL\">cell</a> which is in same <a href=\"BLOCK\">block</a> as <a href=\"X_WING_FINN_CELLS\">finn cells</a> then it will be called Sashimi Finned X-Wing.</p>",
+            "here {{candidate}} isn't present in {{sashimiCell}} and this cell is in same block as {{finnCellsAxesListText}} finn {{finnCellEnglishText}}\njust like Finned X-Wing in Sashimi Finned X-Wing also we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells because however we fill {{candidate}} in {{hostHousesAxesListText}} {{hostHousePluralName}}, in all cases {{candidate}} can't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}."
+        ],
+        "yWing": [
+            "<p>look for a <a href=\"CELL\">cell</a> which has only two <a href=\"CANDIDATE\">candidates</a> in it. we will call it pivot cell.\nin puzzle {{pivotCell}} is highlighted as pivot cell</p>",
+            "<p>now look for two more cells which also have only two candidates in them and which share a <a href=\"HOUSE\">house</a> with pivot cell. these will be wings cells. wings cells themselves shouldn't be in same house.\nhere {{wingCellsText}} are wings cells\n{{firstWingCell}} and {{pivotCell}} are in {{firstWingAndPivotCommonHouse}} and {{secondWingCell}} and {{pivotCell}} are in {{secondWingAndPivotCommonHouse}}. but {{firstWingCell}} and {{secondWingCell}} are not in any same house</p>",
+            "<p>now notice the arrangements of candidates in pivot and wings cells\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells, {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}. and other <a href=\"CANDIDATE\">candidate</a> of both wings cells is same, which is {{commonNoteInWings}} here.</p>",
+            "due to this arrangement {{commonNoteInWings}} will be removed from cells which share a house with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}. so {{removableNotesHostCells}} can't have {{commonNoteInWings}} as their solution"
+        ],
+        "remotePairs": [
+            "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{remotePairNotes}} as their <a href=\"CANDIDATE\">candidates</a>. Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either by candidates in {{colorA}} or by candidates in {{colorB}}</p>",
+            "Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can't come because {{remotePairNotes}} will always fill {{exampleChainCells}}"
+        ],
+        "xChain": [
+            "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{note}} as their <a href=\"CANDIDATE\">candidate</a>.\nFollow this Chain from {{chainFirstCell}} to {{chainLastCell}}, {{firstWayToFillChainCells}}.</p>",
+            "another way to fill {{note}} in this Chain is to fill it in reverse order like {{secondWayToFillChainCells}}.\nin both of these ways either {{chainFirstCell}} or {{chainLastCell}} will definitely be {{note}}, due to this {{removableNotesHostCells}} can't be {{note}} in any way"
+        ],
+        "xyChain": [
+            "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have two <a href=\"CANDIDATE\">candidates</a> and any two consecutive cells have one candidate common. For Example, {{chainFirstCell}} and {{chainSecondCell}} both have {{firstLinkCommonCandidate}} as their candidate. And also note that {{chainFirstCell}}(first cell) and {{chainLastCell}}(last cell) both have {{removableNote}} as their candidate in them.\nThis type of chain of cells is called XY-Chain.</p>",
+            "<p>Now {{chainFirstCell}} can be filled in two ways.<br /><b>First:</b> Fill {{removableNote}} here.<br /><b>Second:</b> Fill {{firstCellCandidateOtherThanRemovableCandidate}} here. Due to this {{chainFillingWay}}.<br />Notice that in both ways, either {{chainFirstCell}} or {{chainLastCell}} will be filled by {{removableNote}}.<br />So all the {{removableNote}}s from {{removableNotesHostCells}} will be removed because these cells share <a href=\"HOUSE\">house</a> with first and last cell of this chain.</p>"
+        ],
+        "emptyRectangle": [
+            "<p>Notice <a href=\"CANDIDATE\">candidate</a> {{candidate}} in {{conjugateHouseWithHouseTypeLink}} and {{hostBlockHouseWithHouseTypeLink}}. No matter where {{candidate}} is filled in {{conjugateHouse}} and {{hostBlockHouse}}, {{candidate}} will always be removed from {{removableNoteHostCell}} <a href=\"CELL\">cell</a>.\nClick on Next button to exercise this hint.\n</p>"
+        ],
+        "wWing": [
+            "<p>Notice that in {{conjguateHouse}} no matter where you fill {{conjugateHouseNote}}, one of {{nakedPairHostCells}} have to be filled by {{removableNote}}.\nIf {{conjugateHouseNote}} is filled in {{firstConjugateHouseCell}} then {{firstNakedPairHostCell}} have to be {{removableNote}} and if {{conjugateHouseNote}} is filled in {{secondConjugateHouseCell}} then {{secondNakedPairHostCell}} have to be {{removableNote}}.\nSo all the {{removableNote}} in red color can be removed.\n</p>"
+        ],
+        "xyzWing": [
+            "<p>Notice three <a href=\"CELL\">cells</a> {{xyzWingCells}}, these have their <a href=\"CANDIDATE\">candidates</a> only from {{xyzWingCandidates}}. You can fill {{xyzWingCandidates}} in {{xyzWingCells}} in any combination, one of these cells must be filled by {{wingsAndPivotCommonNote}} for sure.\nHence {{wingsAndPivotCommonNote}} can be removed from {{removableNoteHostCells}}\n</p>"
+        ],
+        "uniqueRectangle": {
+            "typeOne": {
+                "singleExtraCandidate": [
+                    "<p>If {{extraNotesText}} doesn't come in {{cellWithExtraCandidates}} then each of these 4 cells will be left with two candidates {{firstURNote}} and {{secondURNote}}. It will result in two ways to fill these cells without impacting other cells in any way.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}</p>",
+                    "This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}. So in {{cellWithExtraCandidates}} {{firstURNote}} and {{secondURNote}} have to be removed."
+                ],
+                "multipleExtraCandidate": [
+                    "<p>If none of {{extraNotesText}} comes in {{cellWithExtraCandidates}} then each of these 4 cells will be left with two candidates {{firstURNote}} and {{secondURNote}}. It will result in two ways to fill these cells without impacting other cells in any way.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}</p>",
+                    "This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}. So in {{cellWithExtraCandidates}} {{firstURNote}} and {{secondURNote}} have to be removed."
+                ]
+            },
+            "typeTwo": [
+                "<p>If {{extraNote}} doesn't comes in any of {{cellsWithExtraCandidateList}} then each of these 4 cells {{urHostCellsList}} will be left with two candidates {{firstURNote}} and {{secondURNote}}. It will result in two ways to fill these cells without impacting other cells in any way.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}</p>",
+                "This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}. So in one of {{cellsWithExtraCandidateList}} {{extraNote}} will come and due to that {{extraNote}} will be removed from the cells where it is highlighted in red color."
+            ],
+            "typeThree": [
+                "<p>If none of {{ngCandidates}} come in {{cellsWithExtraCandidates}} then these 4 cells {{urHostCells}} will be filled by {{urNotes}} only and it would lead to two ways of solving this puzzle.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}. This is not possible since this puzzle has only one solution.</p>",
+                "<p>So conclusion is that either in {{firstCellWithExtraCandidates}} {{firstCellExtraCandidates}} has to come or in {{secondCellWithExtraCandidates}} {{secondCellExtraCandidates}} has to come. Whichever is the case, either {{firstNGCells}} will make a {{ngHintText}} or {{secondNGCells}} will make a {{ngHintText}}. And due to this we can remove the numbers highlighted in red color.</p>"
+            ],
+            "typeFour": [
+                "<p>Notice that {{omissonNote}} is making an <a href=\"OMISSION\">Omission</a> in {{omissionHostHouse}}. It means that {{omissonNote}} has to come in one of {{cellsWithExtraCandidatesOrConcat}}. And if {{removableNote}} also come in {{cellsWithExtraCandidatesOrConcat}} then it will result in two ways to fill these 4 cells without impacting other cells in any way.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}</p>",
+                "<p>This puzzle has only one valid solution so it is impossible to fill all of these 4 cells with just {{firstURNote}} and {{secondURNote}}. So only option left is to remove {{removableNote}} from {{cellsWithExtraCandidatesAndConcat}} because of two reasons. First, {{omissonNote}} will definitely come in one of {{cellsWithExtraCandidatesOrConcat}} and second, {{firstURNote}} and {{secondURNote}} make a <a href=\"NAKED_DOUBLE\">Naked Double</a> in {{cellsHavingOnlyURNotes}} cells so {{firstURNote}} and {{secondURNote}} both will definitely come in these two cells.</p>"
+            ],
+            "typeSix": [
+                "<p>If in {{cellsWithExtraCandidateList}} only {{urNotes}} comes then this puzzle will have two solutions. One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}. But this puzzle has only one solution so these 4 cells can not be filled with just {{urNotes}}.</p>",
+                "<p>Now there are two options to avoid the impossible scenario, either {{firstCellWithExtraCandidates}} gets filled by {{extraCandidatesInFirstCell}} or {{secondCellWithExtraCandidates}} gets filled by {{extraCandidatesInSecondCell}}. Or both of these might be true as well. In all of these options there is one thing that will always be true, {{removableCandidate}} will be removed from {{cellsWithExtraCandidateList}}. Notice that {{xWingCandidate}} makes an <a href=\"PERFECT_X_WING\">X-Wing</a> in {{rowHostHouses}} and {{columnHostHouses}}. This is the key to understand this.</p>",
+                "<p>If {{extraCandidatesInFirstCell}} fills {{firstCellWithExtraCandidates}} then <b>{{urHostCellInSameRowWithFirstCellWithExtraCandidates}} and {{urHostCellInSameColWithFirstCellWithExtraCandidates}}</b> are the only cells in {{firstCellWithExtraCandidatesRowHouse}} and {{firstCellWithExtraCandidatesColumnHouse}} respectively where {{xWingCandidate}} can come. And If {{extraCandidatesInSecondCell}} fills {{secondCellWithExtraCandidates}} then <b>{{urHostCellInSameRowWithSecondCellWithExtraCandidates}} and {{urHostCellInSameColWithSecondCellWithExtraCandidates}}</b> are the only cells in {{secondCellWithExtraCandidatesRowHouse}} and {{secondCellWithExtraCandidatesColumnHouse}} respectively where {{xWingCandidate}} can come. In both the cases {{xWingCandidate}} will be filled in <b>{{cellsHavingOnlyURNotes}}</b>, so we can remove {{xWingCandidate}} from {{cellsWithExtraCandidateList}}.</p>"
+            ]
+        }
+    },
+    "cellHousesText": {
+        "rowColumnBlock": "{{rowAxes}} <a href=\"ROW\">row</a>, {{columnOrdinal}} <a href=\"COLUMN\">column</a> and {{blockOrdinal}} <a href=\"BLOCK\">block</a>"
+    },
+    "learnMore": "Learn More"
+}

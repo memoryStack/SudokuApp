@@ -24,6 +24,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import _get from '@lodash/get'
 import { getStyles } from './nakedDouble.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const oneHostHouse = '687004523953002614142356978310007246760000305020000701096001032230000057070000069'
 const oneHostHouseHostCells = [{ row: 3, col: 4 }, { row: 4, col: 5 }]
@@ -35,6 +36,12 @@ const NakedDouble = () => {
     const theme = useThemeValues()
     const oneHostHosueBoardData = useBoardData(oneHostHouse)
     const twoHostHosueBoardData = useBoardData(twoHostHouse, 1000)
+
+    const { t } = useTranslation(['hintsVocabulary'], {
+        keyPrefix: 'nakedDouble',
+    })
+
+    const { t: commonT } = useTranslation(['common'])
 
     const Example = !_isNil(oneHostHosueBoardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
@@ -93,11 +100,11 @@ const NakedDouble = () => {
         return (
             <View style={styles.waysToFillNDCellsContainer}>
                 <SmartHintText
-                    text="<p>These cells can be filled only in two ways as shown below</p>"
+                    text={t('waysToFill')}
                 />
                 <View style={styles.waysToFillBoardContainer}>
                     {renderTruncatedBoardForExample(mainNumbersForFirstFillWay)}
-                    <Text>OR</Text>
+                    <Text>{commonT('or')}</Text>
                     {renderTruncatedBoardForExample(mainNumbersForSecondFillWay)}
                 </View>
             </View>
@@ -124,10 +131,7 @@ const NakedDouble = () => {
         return (
             <View style={styles.removableNotesExampleContainer}>
                 <Text style={styles.textDefault}>
-                    {
-                        'In both cases above, 8 and 9 candidates in cells other than D5 and E6 will be eliminated. So in below example'
-                        + ' all candidates highlighted in red color will be eliminated'
-                    }
+                    {t('removableNotes')}
                 </Text>
                 <View style={styles.removableNotesBoardContainer}>
                     {renderTruncatedBoardForExample(mainNumbersForFirstFillWay, cellsFocusData)}
@@ -151,12 +155,11 @@ const NakedDouble = () => {
 
         return (
             <View style={styles.removableNotesExampleContainer}>
-                <Text style={styles.textDefault} type={TEXT_VARIATIONS.TITLE_MEDIUM}>Naked Tripple in more than one House:</Text>
+                <Text style={styles.textDefault} type={TEXT_VARIATIONS.TITLE_MEDIUM}>
+                    {t('twoHostHouseTitle')}
+                </Text>
                 <Text style={styles.textDefault}>
-                    {
-                        'If the two cells are part of two houses simultaneously then Naked Double will affect cells of'
-                        + ' both houses. See in example below, cells H5 and H6 are part of row H and 8th block.'
-                    }
+                    {t('twoHostHouse')}
                 </Text>
                 <View style={styles.exampleBoardContainer}>
                     <Board
@@ -184,25 +187,11 @@ const NakedDouble = () => {
     return (
         <View style={styles.container}>
             <SmartHintText
-                text={
-                    '<p>'
-                    + `In <a href="${HINTS_VOCAB_IDS.NAKED_SINGLE}">Naked Single</a>, we focus only on one`
-                    + ` <a href="${HINTS_VOCAB_IDS.CANDIDATE}">candidate</a> and one <a href="${HINTS_VOCAB_IDS.CELL}">cell</a>.`
-                    + ' Naked Double is the extension of Naked Single. Here we will focus on two candidates and two cells.\n'
-                    + `Naked Double is formed when in a <a href="${HINTS_VOCAB_IDS.HOUSE}">house</a> you can find two cells that contain the same two`
-                    + ' numbers as candidates.'
-                    + '</p>'
-                }
+                text={t('intro')}
             />
             {Example}
             <SmartHintText
-                text={
-                    '<p>'
-                    + 'Notice in above Sudoku Puzzle in 5th block D5 and E6 cells can have only 8 and 9 as candidates.'
-                    + ' So, it\'s a Naked Double and D5 and E6 are locked for 8 and 9 but which cell out of D5 or E6 '
-                    + ' will have 8 and which will be filled by 9 is still unknown.'
-                    + '</p>'
-                }
+                text={t('example')}
             />
             {waysToFillNakedDouble()}
             {removableNotesHighlight()}

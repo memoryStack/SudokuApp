@@ -24,6 +24,7 @@ import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain
 import { getStyles } from './perfectXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const puzzle = '980062753065003000327050006790030500050009000832045009673591428249687005518020007'
 
@@ -55,7 +56,9 @@ const focusedCellsInExample = [
 const PerfectXWing = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
-
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'perfectXWing',
+    })
     const boardData = useBoardData(puzzle)
 
     const xWing = {
@@ -125,11 +128,7 @@ const PerfectXWing = () => {
     const explainXWingFormationInExample = () => (
         <SmartHintText
             text={
-                '<p>'
-                + 'In above puzzle, both columns 1st and 5th have 1 as candidate in their 2nd and 5th cells and these 4 cells where 1 is present make'
-                + ' an <b>X</b> letter shape. Let\'s call these 4 cells as X-Wing <b>corner</b> cells because they are like 4 corners of a rectangle.'
-                + ' This "corner" term will be used again and again.'
-                + '</p>'
+                t('formation')
             }
         />
     )
@@ -175,17 +174,11 @@ const PerfectXWing = () => {
 
         return (
             <View style={{ marginTop: 12 }}>
-                <SmartHintText text="<p><b>Invalid X-Wing example</b></p>" />
+                <SmartHintText text={t('invalidXWing.title')} />
                 {boardExample}
                 <SmartHintText
                     text={
-                        '<p>'
-                        + 'Notice in above puzzle, in both rows B and D candidate 2 is present only two times'
-                        + ' but cells positions are not same in these rows.'
-                        + '<br />'
-                        + ' In row B, it\'s in 7th and 9th cell and in row D'
-                        + ' it\'s in 4th and 9th cell. Hence it\'s not a valid X-Wing.'
-                        + '</p>'
+                        t('invalidXWing.explanation')
                     }
                 />
             </View>
@@ -196,44 +189,19 @@ const PerfectXWing = () => {
         <View style={{ marginTop: 12 }}>
             <SmartHintText
                 text={
-                    '<p>'
-                    + '<b>How is X-Wing useful ?</b>'
-                    + '<br />'
-                    + 'In below puzzle, to fill 1 in 1st and 5th columns, there are two ways. Let\'s try both of these'
-                    + ' ways and see the conclusion.'
-                    + '<br />'
-                    + '<b>First way</b>'
-                    + '<br />'
-                    + 'In 1st column if 1 will be filled in B1 cell then 1 can\'t be filled in E1 and B5 cells, hence in 5th column'
-                    + ' 1 can be filled only in E5.'
-                    + '</p>'
+                    t('effect.intro')
                 }
             />
             {Example}
             <SmartHintText
                 text={
-                    '<p>'
-                    + '<b>Second way</b>'
-                    + '<br />'
-                    + 'In 1st column if 1 will be filled in E1 cell then 1 can\'t be filled in B1 and E5 cells, hence in 5th column'
-                    + ' 1 can be filled only in B5.'
-                    + '</p>'
+                    t('effect.secondWay')
                 }
             />
             <View style={{ marginTop: 8 }}>
                 <SmartHintText
                     text={
-                        '<p>'
-                        + 'There are no other ways to fill 1 in these two columns. So 1 will come in either B1 and E5 cells or in E1 and B5 cells.'
-                        + 'Hence in row B and E, 1 can be eliminated as candidate from all the cells where it is highlighted in red color.'
-                        + '<br />'
-                        + '<br />'
-                        + '<b>Conclusion</b>'
-                        + '<br />'
-                        + 'If X-Wing is found using columns then candidate will be removed from rows in which the X-Wing corner cells are present.'
-                        + '<br />'
-                        + 'And if X-Wing is found using rows then candidate will be removed from columns in which the X-Wing corner cells are present.'
-                        + '</p>'
+                        t('effect.conclusion')
                     }
                 />
             </View>
@@ -300,21 +268,13 @@ const PerfectXWing = () => {
             <View style={{ marginTop: 12 }}>
                 <SmartHintText
                     text={
-                        '<p>'
-                        + '<b>X-Wing in Rows</b>'
-                        + '<br />'
-                        + 'In above X-Wing examples, the candidate was present two times in two columns. So when candiate is present two times in two rows'
-                        + ' then X-Wing will look like below example'
-                        + '</p>'
+                        t('inRows.intro')
                     }
                 />
                 {boardExample}
                 <SmartHintText
                     text={
-                        '<p>'
-                        + 'Here candidate 3 is present two times in E and H rows, and candidate 3 will be removed from columns 7th and 8th'
-                        + ' cells where it is highlighted in red color.'
-                        + '</p>'
+                        t('inRows.observation')
                     }
                 />
             </View>
@@ -325,13 +285,7 @@ const PerfectXWing = () => {
         <View style={styles.container}>
             <SmartHintText
                 text={
-                    '<p>'
-                    + `In X-Wing, we focus on a single ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} in ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'rows')} and ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'columns')}.`
-                    + ' An X-Wing is formed when a candidate is present only twice in two rows or columns such that both of these rows or columns have that candidate'
-                    + ' in same positions.'
-                    + '<br />'
-                    + 'Notice an X-Wing in below puzzle.'
-                    + '</p>'
+                    t('intro')
                 }
             />
             {Example}

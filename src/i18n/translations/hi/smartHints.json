@@ -1,0 +1,150 @@
+{
+    "titles": {
+        "nakedSingle": "नेकेड सिंगल",
+        "hiddenSingle": "हिडन सिंगल",
+        "nakedDouble": "नेकेड डबल",
+        "nakedTripple": "नेकेड ट्रिपल",
+        "hiddenDouble": "हिडन डबल",
+        "hiddenTripple": "हिडन ट्रिपल",
+        "perfectXWing": "एक्स-विंग",
+        "finnedXWing": "फिन्ड एक्स-विंग",
+        "sashimiFinnedXWing": "साशिमी फिन्ड एक्स-विंग",
+        "yWing": "वाई-विंग",
+        "omission": "ओमिशन",
+        "remotePairs": "रिमोट पेयर्स",
+        "xChain": "एक्स-चेन",
+        "xyChain": "एक्सवाई-चेन",
+        "emptyRectangle": "खाली आयत",
+        "wWing": "डब्ल्यू-विंग",
+        "xyzWing": "एक्सवाईजेड-विंग",
+        "uniqueRectangle": "अद्वितीय आयत",
+        "all": "संकेत"
+    },
+    "footerButtons": {
+        "next": "अगला",
+        "prev": "पिछला",
+        "applyHint": "संकेत लागू करें"
+    },
+    "houseTypes": {
+        "row": "पंक्ति",
+        "column": "स्तंभ",
+        "block": "ब्लॉक",
+        "rows": "पंक्तियाँ",
+        "columns": "स्तंभ",
+        "blocks": "ब्लॉक"
+    },
+    "explanations": {
+        "nakedSingle": {
+            "singleHouse": "<p>इस {{houseType}} में केवल {{cellAxesText}} सेल खाली है इसलिए {{solutionValue}} यहाँ आएगा</p>",
+            "multipleHouse": "<p>{{solutionValue}} को छोड़कर 1-9 के अन्य सभी अंक {{cellHousesText}} में मिलाकर मौजूद हैं, इसलिए {{cellAxesText}} में केवल {{solutionValue}} आ सकता है</p>",
+            "composite": "<p>{{solutionValue}} को छोड़कर 1-9 का कोई अन्य अंक {{cellAxesText}} में नहीं आ सकता, इसलिए केवल {{solutionValue}} {{cellAxesText}} में आ सकता है।</p>"
+        },
+        "hiddenSingle": {
+            "default": "<p>हाइलाइट किए गए {{houseType}} में, {{solutionValue}} क्रॉस किए गए सेल में {{filledCellsWithSolutionValue}} में {{solutionValue}} के कारण नहीं आ सकता। इसलिए {{hostCell}} में केवल {{solutionValue}} आएगा</p>",
+            "composite": "<p>हाइलाइट किए गए {{houseType}} में, {{solutionValue}} {{hostCell}} के अलावा किसी अन्य सेल में नहीं आ सकता इसलिए {{hostCell}} में केवल {{solutionValue}} आएगा</p>"
+        },
+        "omission": "<p>हाइलाइट किए गए {{hostHouseFullName}} में, {{note}} केवल {{hostHouseHostCellsListText}} में से एक में आ सकता है और ये सभी सेल {{secondaryHouseNumText}} का भी हिस्सा हैं। इसलिए इस {{hostHouseFullName}} में जहाँ भी हम {{note}} भरने की कोशिश करें, {{removableNotesHostCellsListText}} में {{note}} नहीं आ सकता</p>",
+        "nakedDouble": [
+            "<p>एक नेकेड डबल तब होता है जब किसी हाउस में दो सेल में केवल दो संभावित उम्मीदवार होते हैं, और इन दो सेल में उम्मीदवारों का एक ही सेट होता है।\nयहाँ {{groupCellsText}} दोनों में {{candidatesListTextAndConcatenated}} उनके उम्मीदवार के रूप में हैं इसलिए यह {{hostHouses}} में एक नेकेड डबल बनाता है।</p>",
+            "यहाँ {{groupCellsText}} {{candidatesListTextAndConcatenated}} के लिए आरक्षित हैं। हालाँकि {{candidatesListTextAndConcatenated}} में से कौन सा अंक किस सेल में भरेगा यह अभी स्पष्ट नहीं है। लेकिन इस बिंदु पर हम कह सकते हैं कि लाल रंग में हाइलाइट किए गए सभी {{candidatesListTextAndConcatenated}} को हटाया जा सकता है।"
+        ],
+        "nakedTripple": [
+            "<p>एक नेकेड ट्रिपल तब बनता है जब किसी हाउस में तीन सेल में केवल 3 उम्मीदवारों के सेट से उम्मीदवार होते हैं। और प्रत्येक सेल में इन 3 में से कम से कम 2 उम्मीदवार होने चाहिए।\nयहाँ {{groupCellsText}} {{hostHouses}} में एक नेकेड ट्रिपल बनाते हैं।</p>",
+            "यहाँ {{groupCellsText}} {{candidatesListTextAndConcatenated}} के लिए आरक्षित हैं। हालाँकि {{candidatesListTextAndConcatenated}} में से कौन सा अंक किस सेल में भरेगा यह अभी स्पष्ट नहीं है। लेकिन इस बिंदु पर हम कह सकते हैं कि लाल रंग में हाइलाइट किए गए सभी {{candidatesListTextAndConcatenated}} को हटाया जा सकता है।"
+        ],
+        "hiddenDouble": {
+            "default": [
+                "<p>एक हिडन डबल तब बनता है जब दो उम्मीदवार किसी हाउस में केवल दो सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
+                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए"
+            ],
+            "removableNotesInSecondaryHouse": [
+                "<p>एक हिडन डबल तब बनता है जब दो उम्मीदवार किसी हाउस में केवल दो सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
+                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए\nनोट: {{groupCellsText}} {{secondaryHostHouse}} में भी हैं, इसलिए {{secondaryHouseRemovableNotes}} को {{secondaryHouseRemovableNotesHostCells}} से भी हटाया जाएगा"
+            ]
+        },
+        "hiddenTripple": {
+            "default": [
+                "<p>एक हिडन ट्रिपल तब बनता है जब तीन उम्मीदवार किसी हाउस में केवल तीन सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\nइन तीन सेल में से प्रत्येक में इन तीन उम्मीदवारों में से कम से कम दो होने चाहिए।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
+                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए"
+            ],
+            "removableNotesInSecondaryHouse": [
+                "<p>एक हिडन ट्रिपल तब बनता है जब तीन उम्मीदवार किसी हाउस में केवल तीन सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\nइन तीन सेल में से प्रत्येक में इन तीन उम्मीदवारों में से कम से कम दो होने चाहिए।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
+                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए\nनोट: {{groupCellsText}} {{secondaryHostHouse}} में भी हैं, इसलिए {{secondaryHouseRemovableNotes}} को {{secondaryHouseRemovableNotesHostCells}} से भी हटाया जाएगा"
+            ]
+        },
+        "perfectXWing": [
+            "<p>एक्स-विंग पहचानने के लिए, एक उम्मीदवार को खोजें जो किसी पंक्ति या स्तंभ के केवल दो सेल में मौजूद हो। हमें या तो ऐसी दो पंक्तियाँ या दो स्तंभ खोजने होंगे।\nइन पंक्तियों या स्तंभों में जहाँ उम्मीदवार मौजूद है वे चार सेल एक आयत के चार कोनों की तरह संरेखित होने चाहिए।</p>",
+            "यहाँ {{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullNamePlural}} के केवल दो सेल में मौजूद है जो {{rectangleCornersText}} आयत बनाता है।\nइन {{houseFullNamePlural}} में {{candidate}} की इस व्यवस्था के कारण, {{crossHouseAAxesValue}} और {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} में लाल रंग में हाइलाइट किया गया कोई भी {{candidate}} हटाया जा सकता है",
+            "क्योंकि {{houseAAxesValue}} और {{houseBAxesValue}} दोनों {{houseFullNamePlural}} में {{candidate}} भरने के लिए, इसे या तो {{topDownDiagonalText}} में या {{bottomUpDiagonalText}} सेल में भरा जा सकता है।\nइसके कारण {{crossHouseAAxesValue}} और {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} में लाल रंग में मौजूद {{candidate}} हटा दिया जाएगा"
+        ],
+        "finnedXWing": [
+            "<p>यदि आप एक्स-विंग नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब उम्मीदवार केवल एक पंक्ति या स्तंभ के 2 से अधिक सेल में मौजूद हो तो यह एक परफेक्ट एक्स-विंग नहीं है लेकिन कुछ मामलों में हम इसे फिन्ड एक्स-विंग कह सकते हैं। जहाँ उम्मीदवार मौजूद है वे अतिरिक्त सेल फिन सेल कहलाते हैं।\n{{finnedLegAxesText}} {{finnedLegHouseText}} में {{finnCellsAxesListText}} {{finnCellEnglishText}} में अतिरिक्त {{candidate}} देखें</p>",
+            "<p>केवल एक पंक्ति या स्तंभ में ये फिन सेल हो सकते हैं। और ये फिन सेल एक्स-विंग कॉर्नर सेल में से कम से कम एक के साथ एक ही ब्लॉक में होने चाहिए।\nयहाँ देखें कि {{finnCellsAxesListText}} (फिन {{finnCellEnglishText}}) {{finnedBlockPerfectCellsAxesText}} {{cornersText}} के साथ ब्लॉक {{shareVerbGrammaticalText}}</p>",
+            "यहाँ हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं। क्योंकि {{finnedLegAxesText}} {{finnedLegHouseText}} में यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में आता है तो {{candidate}} केवल {{removableNotesHostCells}} में नहीं आ सकता। और यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में नहीं आता तो फिन्ड एक्स-विंग परफेक्ट एक्स-विंग की तरह व्यवहार करेगा और {{candidate}} निश्चित रूप से {{removableNotesHostCells}} में नहीं आएगा"
+        ],
+        "sashimiFinnedXWing": [
+            "<p>यदि आप फिन्ड एक्स-विंग नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब फिन्ड एक्स-विंग में उम्मीदवार उस कॉर्नर सेल में गायब हो जो फिन सेल के समान ब्लॉक में है तो इसे साशिमी फिन्ड एक्स-विंग कहा जाएगा।</p>",
+            "यहाँ {{candidate}} {{sashimiCell}} में मौजूद नहीं है और यह सेल {{finnCellsAxesListText}} फिन {{finnCellEnglishText}} के समान ब्लॉक में है\nफिन्ड एक्स-विंग की तरह साशिमी फिन्ड एक्स-विंग में भी हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं क्योंकि {{hostHousesAxesListText}} {{hostHousePluralName}} में {{candidate}} चाहे जैसे भी भरें, सभी मामलों में {{candidate}} {{removableNotesHostCells}} {{removableNotesHostCellsText}} में नहीं आ सकता।"
+        ],
+        "yWing": [
+            "<p>एक सेल खोजें जिसमें केवल दो उम्मीदवार हों। हम इसे पिवट सेल कहेंगे।\nपहेली में {{pivotCell}} पिवट सेल के रूप में हाइलाइट किया गया है</p>",
+            "<p>अब दो और सेल खोजें जिनमें भी केवल दो उम्मीदवार हों और जो पिवट सेल के साथ एक हाउस साझा करते हों। ये विंग्स सेल होंगे। विंग्स सेल स्वयं एक ही हाउस में नहीं होने चाहिए। यहाँ {{wingCellsText}} विंग्स सेल हैं\n{{firstWingCell}} और {{pivotCell}} {{firstWingAndPivotCommonHouse}} में हैं और {{secondWingCell}} और {{pivotCell}} {{secondWingAndPivotCommonHouse}} में हैं। लेकिन {{firstWingCell}} और {{secondWingCell}} किसी एक ही हाउस में नहीं हैं</p>",
+            "<p>अब पिवट और विंग्स सेल में उम्मीदवारों की व्यवस्था देखें\nपिवट सेल के दोनों उम्मीदवार {{pivotCellNotes}} दोनों विंग्स सेल में अलग-अलग मौजूद हैं, {{firstPivotNote}} {{pivotCellFirstNoteWingHostCell}} में और {{secondPivotNote}} {{pivotCellSecondNoteWingHostCell}} में। और दोनों विंग्स सेल का अन्य उम्मीदवार समान है, जो यहाँ {{commonNoteInWings}} है।</p>",
+            "इस व्यवस्था के कारण {{commonNoteInWings}} उन सेल से हटा दिया जाएगा जो दोनों विंग्स सेल के साथ एक हाउस साझा करते हैं। क्योंकि {{pivotCell}} में {{firstPivotNote}} या {{secondPivotNote}} में से जो भी भरें, विंग्स सेल में से कम से कम एक {{commonNoteInWings}} होना चाहिए। इसलिए {{removableNotesHostCells}} के पास {{commonNoteInWings}} उनके समाधान के रूप में नहीं हो सकता"
+        ],
+        "remotePairs": [
+            "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{remotePairNotes}} उनके उम्मीदवार के रूप में हैं। इस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, ये सभी सेल या तो {{colorA}} में उम्मीदवारों से या {{colorB}} में उम्मीदवारों से भरे जाएंगे</p>",
+            "इन सेल में जैसे चाहें अंक भरें, लाल रंग में हाइलाइट किए गए उम्मीदवार हमेशा हटा दिए जाएंगे।\nउदाहरण के लिए, {{exampleRemovableNotesHostCell}} में {{exampleRemovableNotesInCell}} नहीं आ सकते क्योंकि {{remotePairNotes}} हमेशा {{exampleChainCells}} भरेंगे"
+        ],
+        "xChain": [
+            "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{note}} उनके उम्मीदवार के रूप में है।\nइस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, {{firstWayToFillChainCells}}।</p>",
+            "इस चेन में {{note}} भरने का दूसरा तरीका इसे उल्टे क्रम में भरना है जैसे {{secondWayToFillChainCells}}।\nइन दोनों तरीकों में या तो {{chainFirstCell}} या {{chainLastCell}} निश्चित रूप से {{note}} होगा, इसके कारण {{removableNotesHostCells}} किसी भी तरह से {{note}} नहीं हो सकते"
+        ],
+        "xyChain": [
+            "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में दो उम्मीदवार हैं और किन्हीं दो क्रमागत सेल में एक उम्मीदवार समान है। उदाहरण के लिए, {{chainFirstCell}} और {{chainSecondCell}} दोनों में {{firstLinkCommonCandidate}} उनके उम्मीदवार के रूप में है। और यह भी ध्यान दें कि {{chainFirstCell}}(पहला सेल) और {{chainLastCell}}(अंतिम सेल) दोनों में {{removableNote}} उनके उम्मीदवार के रूप में है।\nइस प्रकार की सेल की चेन को XY-चेन कहते हैं।</p>",
+            "<p>अब {{chainFirstCell}} को दो तरीकों से भरा जा सकता है।<br /><b>पहला:</b> यहाँ {{removableNote}} भरें।<br /><b>दूसरा:</b> यहाँ {{firstCellCandidateOtherThanRemovableCandidate}} भरें। इसके कारण {{chainFillingWay}}।<br />ध्यान दें कि दोनों तरीकों में, या तो {{chainFirstCell}} या {{chainLastCell}} {{removableNote}} से भरा जाएगा।<br />इसलिए {{removableNotesHostCells}} से सभी {{removableNote}} हटा दिए जाएंगे क्योंकि ये सेल इस चेन के पहले और अंतिम सेल के साथ हाउस साझा करते हैं।</p>"
+        ],
+        "emptyRectangle": [
+            "<p>{{conjugateHouseWithHouseTypeLink}} और {{hostBlockHouseWithHouseTypeLink}} में उम्मीदवार {{candidate}} देखें। {{conjugateHouse}} और {{hostBlockHouse}} में {{candidate}} चाहे जहाँ भी भरा जाए, {{candidate}} हमेशा {{removableNoteHostCell}} सेल से हटा दिया जाएगा।\nइस संकेत का अभ्यास करने के लिए अगला बटन क्लिक करें।</p>"
+        ],
+        "wWing": [
+            "<p>ध्यान दें कि {{conjguateHouse}} में आप जहाँ भी {{conjugateHouseNote}} भरें, {{nakedPairHostCells}} में से एक को {{removableNote}} से भरना होगा।\nयदि {{conjugateHouseNote}} {{firstConjugateHouseCell}} में भरा जाता है तो {{firstNakedPairHostCell}} को {{removableNote}} होना होगा और यदि {{conjugateHouseNote}} {{secondConjugateHouseCell}} में भरा जाता है तो {{secondNakedPairHostCell}} को {{removableNote}} होना होगा।\nइसलिए लाल रंग में सभी {{removableNote}} हटाए जा सकते हैं।</p>"
+        ],
+        "xyzWing": [
+            "<p>तीन सेल {{xyzWingCells}} देखें, इनमें उनके उम्मीदवार केवल {{xyzWingCandidates}} से हैं। आप {{xyzWingCells}} में {{xyzWingCandidates}} किसी भी संयोजन में भर सकते हैं, इनमें से एक सेल निश्चित रूप से {{wingsAndPivotCommonNote}} से भरा जाना चाहिए।\nइसलिए {{wingsAndPivotCommonNote}} को {{removableNoteHostCells}} से हटाया जा सकता है</p>"
+        ],
+        "uniqueRectangle": {
+            "typeOne": {
+                "singleExtraCandidate": [
+                    "<p>यदि {{extraNotesText}} {{cellWithExtraCandidates}} में नहीं आता तो इन 4 सेल में से प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                    "इस पहेली का केवल एक वैध समाधान है इसलिए इन 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए {{cellWithExtraCandidates}} में {{firstURNote}} और {{secondURNote}} को हटाना होगा।"
+                ],
+                "multipleExtraCandidate": [
+                    "<p>यदि {{extraNotesText}} में से कोई भी {{cellWithExtraCandidates}} में नहीं आता तो इन 4 सेल में से प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                    "इस पहेली का केवल एक वैध समाधान है इसलिए इन 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए {{cellWithExtraCandidates}} में {{firstURNote}} और {{secondURNote}} को हटाना होगा।"
+                ]
+            },
+            "typeTwo": [
+                "<p>यदि {{extraNote}} {{cellsWithExtraCandidateList}} में से किसी में नहीं आता तो इन 4 सेल {{urHostCellsList}} में से प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                "इस पहेली का केवल एक वैध समाधान है इसलिए इन 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए {{cellsWithExtraCandidateList}} में से किसी एक में {{extraNote}} आएगा और इसके कारण {{extraNote}} उन सेल से हटा दिया जाएगा जहाँ यह लाल रंग में हाइलाइट किया गया है।"
+            ],
+            "typeThree": [
+                "<p>यदि {{ngCandidates}} में से कोई भी {{cellsWithExtraCandidates}} में नहीं आता तो ये 4 सेल {{urHostCells}} केवल {{urNotes}} से भरे जाएंगे और इससे इस पहेली को हल करने के दो तरीके होंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। यह संभव नहीं है क्योंकि इस पहेली का केवल एक समाधान है।</p>",
+                "<p>तो निष्कर्ष यह है कि या तो {{firstCellWithExtraCandidates}} में {{firstCellExtraCandidates}} आना होगा या {{secondCellWithExtraCandidates}} में {{secondCellExtraCandidates}} आना होगा। जो भी हो, या तो {{firstNGCells}} एक {{ngHintText}} बनाएगा या {{secondNGCells}} एक {{ngHintText}} बनाएगा। और इसके कारण हम लाल रंग में हाइलाइट किए गए अंकों को हटा सकते हैं।</p>"
+            ],
+            "typeFour": [
+                "<p>ध्यान दें कि {{omissonNote}} {{omissionHostHouse}} में एक ओमिशन बना रहा है। इसका मतलब है कि {{omissonNote}} को {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आना होगा। और यदि {{removableNote}} भी {{cellsWithExtraCandidatesOrConcat}} में आता है तो इससे इन 4 सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                "<p>इस पहेली का केवल एक वैध समाधान है इसलिए इन सभी 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए बचा एकमात्र विकल्प {{cellsWithExtraCandidatesAndConcat}} से {{removableNote}} को हटाना है दो कारणों से। पहला, {{omissonNote}} निश्चित रूप से {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आएगा और दूसरा, {{firstURNote}} और {{secondURNote}} {{cellsHavingOnlyURNotes}} सेल में एक नेकेड डबल बनाते हैं इसलिए {{firstURNote}} और {{secondURNote}} दोनों निश्चित रूप से इन दो सेल में आएंगे।</p>"
+            ],
+            "typeSix": [
+                "<p>यदि {{cellsWithExtraCandidateList}} में केवल {{urNotes}} आते हैं तो इस पहेली के दो समाधान होंगे। एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। लेकिन इस पहेली का केवल एक समाधान है इसलिए इन 4 सेल को केवल {{urNotes}} से नहीं भरा जा सकता।</p>",
+                "<p>अब असंभव परिदृश्य से बचने के दो विकल्प हैं, या तो {{firstCellWithExtraCandidates}} {{extraCandidatesInFirstCell}} से भरा जाए या {{secondCellWithExtraCandidates}} {{extraCandidatesInSecondCell}} से भरा जाए। या ये दोनों सच भी हो सकते हैं। इन सभी विकल्पों में एक बात हमेशा सच होगी, {{removableCandidate}} {{cellsWithExtraCandidateList}} से हटा दिया जाएगा। ध्यान दें कि {{xWingCandidate}} {{rowHostHouses}} और {{columnHostHouses}} में एक एक्स-विंग बनाता है। यह समझने की कुंजी है।</p>",
+                "<p>यदि {{extraCandidatesInFirstCell}} {{firstCellWithExtraCandidates}} भरता है तो <b>{{urHostCellInSameRowWithFirstCellWithExtraCandidates}} और {{urHostCellInSameColWithFirstCellWithExtraCandidates}}</b> क्रमशः {{firstCellWithExtraCandidatesRowHouse}} और {{firstCellWithExtraCandidatesColumnHouse}} में एकमात्र सेल हैं जहाँ {{xWingCandidate}} आ सकता है। और यदि {{extraCandidatesInSecondCell}} {{secondCellWithExtraCandidates}} भरता है तो <b>{{urHostCellInSameRowWithSecondCellWithExtraCandidates}} और {{urHostCellInSameColWithSecondCellWithExtraCandidates}}</b> क्रमशः {{secondCellWithExtraCandidatesRowHouse}} और {{secondCellWithExtraCandidatesColumnHouse}} में एकमात्र सेल हैं जहाँ {{xWingCandidate}} आ सकता है। दोनों मामलों में {{xWingCandidate}} <b>{{cellsHavingOnlyURNotes}}</b> में भरा जाएगा, इसलिए हम {{cellsWithExtraCandidateList}} से {{xWingCandidate}} हटा सकते हैं।</p>"
+            ]
+        }
+    },
+    "cellHousesText": {
+        "rowColumnBlock": "{{rowAxes}} पंक्ति, {{columnOrdinal}} स्तंभ और {{blockOrdinal}} ब्लॉक"
+    },
+    "learnMore": "और जानें"
+}

@@ -13,6 +13,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransformers'
 import { getStyles } from './candidate.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const examplePuzzle = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
 
@@ -43,21 +44,17 @@ const Candidate = () => {
         </View>
     ) : null
 
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'candidate',
+    })
+
     return (
         <View style={styles.container}>
-            <SmartHintText
-                text={
-                    `<p>A Candidate in Sudoku is a digit that could be placed into a <a href="${HINTS_VOCAB_IDS.CELL}">cell</a>, but you're not`
-                    + ' totally sure it goes in that cell yet. Some people call this "pencil marking", since many solvers'
-                    + ' write small numbers or other notes in pencil to denote a possible solution.</p>'
-                }
-            />
+            <SmartHintText text={t('intro')} />
             <View >
                 {Example}
             </View>
-            <SmartHintText
-                text={'Here in the highlighted cell above 2, 4, 8 and 9 are it\'s candidates'}
-            />
+            <SmartHintText text={t('observation')} />
         </View>
     )
 }

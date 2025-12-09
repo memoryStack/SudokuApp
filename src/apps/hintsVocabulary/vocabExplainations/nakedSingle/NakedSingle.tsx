@@ -14,6 +14,7 @@ import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransfor
 import { useBoardData } from '../hooks/useBoardData'
 
 import { getStyles } from './nakedSingle.styles'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const examplePuzzle = '007005068005800100008197005010050600704286903002010050400539800009008400820400500'
 
@@ -21,7 +22,9 @@ const nakedSingleHostCell = { row: 3, col: 2 }
 
 const NakedSingle = () => {
     const styles = useStyles(getStyles)
-
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'nakedSingle',
+    })
     const boardData = useBoardData(examplePuzzle)
 
     const Example = !_isNil(boardData.mainNumbers) ? (
@@ -41,22 +44,11 @@ const NakedSingle = () => {
     return (
         <View style={styles.container}>
             <SmartHintText
-                text={
-                    '<p>'
-                    + `Naked Single means that in a <a href="${HINTS_VOCAB_IDS.CELL}">cell</a> only one <a href="${HINTS_VOCAB_IDS.CANDIDATE}">candidate</a> remains`
-                    + ' possible and that candidate must fill the cell.\n'
-                    + 'The last remaining candidate has no other candidates to hide behind, that\'s why it is called "Naked" single. These are very easy to spot.'
-                    + '</p>'
-                }
+                text={t('intro')}
             />
             {Example}
             <SmartHintText
-                text={
-                    '<p>'
-                    + 'Here in above Sudoku puzzle notice that in D3 cell only 3 is present as candidate because except 3 all the other'
-                    + ` numbers from 1 to 9 are present in Dth <a href="${HINTS_VOCAB_IDS.ROW}">row</a>, 3rd <a href="${HINTS_VOCAB_IDS.COLUMN}">column</a> and 4th <a href="${HINTS_VOCAB_IDS.BLOCK}">block</a>.`
-                    + '</p>'
-                }
+                text={t('example')}
             />
         </View>
     )

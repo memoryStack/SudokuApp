@@ -20,6 +20,7 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getStyles } from './chainLinks.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { BoardData, getLinkHTMLText, getTrimmedBoardData } from '../utils'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const puzzle = '027958600900003000603000050009780000080634010000019700070000304000300001004571890'
 
@@ -27,6 +28,10 @@ const ChainLinks = () => {
     const styles = useStyles(getStyles)
 
     const boardData = useBoardData(puzzle)
+
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'chainLinks',
+    })
 
     const renderWeakLinkDefinition = () => {
         const renderWeakLinkExamplesInRow = () => {
@@ -78,14 +83,7 @@ const ChainLinks = () => {
                     <View style={{ marginTop: 8 }}>
                         <SmartHintText
                             text={
-                                '<p>'
-                                + 'Here in above example, if candidate 8 is filled or <b>true</b> in 3rd cell of this row then this candidate'
-                                + ` has to be <b>false</b> for 8th and 9th cells of this ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')}.`
-                                + ' Same way if 8 is true for 8th cell then it has to be false for 3rd and 9th cell.'
-                                + ' So candidate 8s are Weakly linked with each other in these cells of this row.'
-                                + '<br />'
-                                + `Here row is taken as an example, but with the same logic Weak links can be found in ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} and ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} houses.`
-                                + '</p>'
+                                t('weakLink.rowExample')
                             }
                         />
                     </View>
@@ -130,14 +128,7 @@ const ChainLinks = () => {
                     </View>
                     <View style={{ marginTop: 8 }}>
                         <SmartHintText
-                            text={
-                                '<p>'
-                                + 'Here a cell is taken as an example to show how Weak links work in a cell.'
-                                + ' The logic would be same as we applied before. Here the cell has three candidates 2, 4 and 6.'
-                                + ' If any one of these three is <b>true</b> then all the other candidates have to be <b>false</b>.'
-                                + ' Hence Weak links can be formed in a Single Cell as well.'
-                                + '</p>'
-                            }
+                            text={t('weakLink.cellExample')}
                         />
                     </View>
                 </>
@@ -146,15 +137,9 @@ const ChainLinks = () => {
 
         return (
             <View style={{ marginTop: 16 }}>
-                <Text type={TEXT_VARIATIONS.TITLE_LARGE}>Weak Link</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_LARGE}>{t('weakLink.title')}</Text>
                 <SmartHintText
-                    text={
-                        '<p>'
-                        + 'If two candidates are Weakly linked, they cannot be <b>true</b> at the same time.'
-                        + '\nIf one of them is <b>true</b>, then the other must be <b>false</b>. Visually Weak Links are drawn'
-                        + ' in dotted lines. See the examples below.'
-                        + '</p>'
-                    }
+                    text={t('weakLink.definition')}
                 />
                 <View style={{ marginVertical: 8, marginTop: 20 }}>
                     {renderWeakLinkExamplesInRow()}
@@ -163,13 +148,7 @@ const ChainLinks = () => {
                     {renderWeakLinkExamplesInCell()}
                 </View>
                 <SmartHintText
-                    text={
-                        '<p>'
-                        + '<b>Note:</b> In Weak links if a candidate is false in a cell then we can not say'
-                        + ' whether other candidates would be true of false. For Example, in above diagram, if'
-                        + ' candidate 2 is false in the cell then we can not surely say whether 4 or 6 will be true or false.'
-                        + '</p>'
-                    }
+                    text={t('weakLink.note')}
                 />
             </View>
         )
@@ -226,12 +205,7 @@ const ChainLinks = () => {
                     </View>
                     <View style={{ marginTop: 8 }}>
                         <SmartHintText
-                            text={
-                                '<p>'
-                                + 'Here in above example, if candidate 4 is not filled or <b>false</b> in 1st cell of this row then this candidate'
-                                + ' has to be <b>true</b> in 8th cell of this row. So there is a Strong link between candidate 4 in this row.'
-                                + '</p>'
-                            }
+                            text={t('strongLink.rowExample')}
                         />
                     </View>
                 </>
@@ -280,14 +254,7 @@ const ChainLinks = () => {
                     </View>
                     <View style={{ marginTop: 8 }}>
                         <SmartHintText
-                            text={
-                                '<p>'
-                                + 'Here a cell is taken as an example to show how Strong link works in a cell.'
-                                + ' The logic would be same as we applied before. Here the cell has two candidates 2 and 7.'
-                                + ' If any one of these two is <b>false</b> then the other candidate has to be <b>true</b>.'
-                                + ' Hence Strong link can be formed in a Single Cell as well.'
-                                + '</p>'
-                            }
+                            text={t('strongLink.cellExample')}
                         />
                     </View>
                 </>
@@ -296,15 +263,10 @@ const ChainLinks = () => {
 
         return (
             <View style={{ marginTop: 24 }}>
-                <Text type={TEXT_VARIATIONS.TITLE_LARGE}>Strong Link</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_LARGE}>{t('strongLink.title')}</Text>
                 <SmartHintText
                     text={
-                        '<p>'
-                        + 'When two candidates are Strongly linked, they cannot be <b>false</b> at the same time.'
-                        + '\nIf one of them is <b>false</b>, then the other must be <b>true</b>. Notice the difference'
-                        + ' between Strong link and Weak link definition.'
-                        + '\nVisually Strong Links are drawn in solid lines. See the examples below.'
-                        + '</p>'
+                        t('strongLink.definition')
                     }
                 />
                 <View style={{ marginVertical: 8, marginTop: 20 }}>
@@ -315,20 +277,12 @@ const ChainLinks = () => {
                 </View>
                 {/* TODO: how to add horizontal padding/space for <ol /> items ?? */}
                 <SmartHintText
-                    text={
-                        '<p>'
-                        + '<b>Note:</b> In general we can say that Strong Link is formed only in two ways'
-                        + '</p>'
-                    }
+                    text={t('strongLink.note')}
+
                 />
                 <View style={{ marginLeft: 16 }}>
                     <SmartHintText
-                        text={
-                            '<ol>'
-                            + '<li>When a candidate is present in only two cells of a house</li>'
-                            + '<li>When only two candidates are present in a cell</li>'
-                            + '</ol>'
-                        }
+                        text={t('strongLink.formationRules')}
                     />
                 </View>
             </View>
@@ -383,36 +337,23 @@ const ChainLinks = () => {
         }
         return (
             <View style={{ marginTop: 24 }}>
-                <Text type={TEXT_VARIATIONS.TITLE_LARGE}>Use Strong Link as a Weak Link</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_LARGE}>{t('overlap.title')}</Text>
                 <SmartHintText
-                    text={
-                        '<p>'
-                        + 'A Strong Link can be used as a Weak link. But a Weak link can\'t be used as a Strong Link.'
-                        + ' See below examples to understand it.'
-                        + '</p>'
-                    }
+                    text={t('overlap.intro')}
                 />
                 <View style={{ marginVertical: 8, marginTop: 20 }}>
                     {renderStrongLinkExamplesInRow(LINK_TYPES.STRONG)}
                 </View>
                 <SmartHintText
                     text={
-                        '<p>'
-                        + 'We have seen this example in Strong Link section. Now let\'s apply Weak link definition to this Strong link and'
-                        + ' see if a Strong link can be used as a Weak link or not.'
-                        + '</p>'
+                        t('overlap.explanation')
                     }
                 />
                 <View style={{ marginVertical: 8, marginTop: 20 }}>
                     {renderStrongLinkExamplesInRow(LINK_TYPES.WEAK)}
                 </View>
                 <SmartHintText
-                    text={
-                        '<p>'
-                        + 'So in this row if 4 is <b>true</b> in 1st cell then it must be <b>false</b> in 8th cell.'
-                        + ' Hence, a Strong link follows the definition of Weak link correctly.'
-                        + '</p>'
-                    }
+                    text={t('overlap.conclusion')}
                 />
             </View>
         )
@@ -421,13 +362,7 @@ const ChainLinks = () => {
         <View style={styles.container}>
             {/* this definition of links simply talks about "candidates", is there a general entity for links ?? */}
             <SmartHintText
-                text={
-                    '<p>'
-                    + 'Links are the building blocks of all chains. If you don\'t understand Links then you will not be able to understand'
-                    + ` Chain techniques.\nLinks define a relationship between ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} of two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')}`
-                    + ` in a ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'house')} or candidates of a single cell as well. There are two types of links <b>Strong</b> link and <b>Weak</b> link.`
-                    + '</p>'
-                }
+                text={t('intro')}
             />
             {renderWeakLinkDefinition()}
             {renderStrongLinkDefinition()}

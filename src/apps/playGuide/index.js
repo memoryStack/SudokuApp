@@ -10,12 +10,13 @@ import Text, { TEXT_VARIATIONS } from '@ui/atoms/Text'
 
 import { useStyles } from '@utils/customHooks/useStyles'
 
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { Board } from '../arena/gameBoard'
 import { Page } from '../components/Page'
 import { generateMainNumbersFromPuzzleString } from '../arena/utils/util'
 
 import { getCellsHighlightData } from './boardData'
-import { RULES_TEXT_CONFIG, PUZZLE } from './playGuide.constants'
+import { getRulesTextConfig, getSolutionTitle, PUZZLE } from './playGuide.constants'
 import { getStyles } from './playGuide.styles'
 import { useDependency } from 'src/hooks/useDependency'
 import { useTheme } from '../arena/hooks/useTheme'
@@ -23,6 +24,7 @@ import { useTheme } from '../arena/hooks/useTheme'
 const PlayGuide_ = () => {
     const styles = useStyles(getStyles)
 
+    const { t } = useTranslation()
     const { analytics } = useDependency()
 
     const { theme, isLight } = useTheme()
@@ -49,7 +51,7 @@ const PlayGuide_ = () => {
 
     const renderRules = () => (
         <Text style={styles.ruleText}>
-            {RULES_TEXT_CONFIG.map(({ key, label, styles: subTextStyles = {} }) => (
+            {getRulesTextConfig(t).map(({ key, label, styles: subTextStyles = {} }) => (
                 <Text key={key} style={subTextStyles}>{label}</Text>
             ))}
         </Text>
@@ -57,7 +59,7 @@ const PlayGuide_ = () => {
 
     const renderPuzzleSolution = () => (
         <View style={styles.puzzleSolutionContainer}>
-            <Text style={styles.ruleText} type={TEXT_VARIATIONS.TITLE_MEDIUM}>Solution of above puzzle will look like this</Text>
+            <Text style={styles.ruleText} type={TEXT_VARIATIONS.TITLE_MEDIUM}>{getSolutionTitle(t)}</Text>
             {renderBoard({
                 puzzle: {
                     unsolved: PUZZLE.SOLVED,

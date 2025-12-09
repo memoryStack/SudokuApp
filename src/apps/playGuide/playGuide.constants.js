@@ -4,15 +4,13 @@ import { HOUSE_TYPE } from '@domain/board/board.constants'
 
 import { HOUSES_COLORS } from './boardData/cellsHighlightData'
 
-export const RULES_TEXT_CONFIG = [
+export const getRulesTextConfig = (t) => [
     {
-        label: 'A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are'
-            + ' already filled. Notice above.\n\nA puzzle is completed when each number from 1 to 9 appears only once'
-            + ' in each of the 9 ',
+        label: t('playGuide:rules.part1'),
         key: 'part_1',
     },
     {
-        label: 'rows',
+        label: t('playGuide:rules.rows'),
         styles: {
             color: HOUSES_COLORS.HOUSE_TEXT[HOUSE_TYPE.ROW],
             fontWeight: FONT_WEIGHTS.BOLD,
@@ -20,11 +18,11 @@ export const RULES_TEXT_CONFIG = [
         key: 'part_2',
     },
     {
-        label: ', ',
+        label: t('playGuide:rules.part3'),
         key: 'part_3',
     },
     {
-        label: 'columns',
+        label: t('playGuide:rules.columns'),
         styles: {
             color: HOUSES_COLORS.HOUSE_TEXT[HOUSE_TYPE.COL],
             fontWeight: FONT_WEIGHTS.BOLD,
@@ -32,11 +30,11 @@ export const RULES_TEXT_CONFIG = [
         key: 'part_4',
     },
     {
-        label: ', and ',
+        label: t('playGuide:rules.part5'),
         key: 'part_5',
     },
     {
-        label: 'blocks',
+        label: t('playGuide:rules.blocks'),
         styles: {
             color: HOUSES_COLORS.HOUSE_TEXT[HOUSE_TYPE.BLOCK],
             fontWeight: FONT_WEIGHTS.BOLD,
@@ -44,14 +42,16 @@ export const RULES_TEXT_CONFIG = [
         key: 'part_6',
     },
     {
-        label: '. Like it\'s shown above.',
+        label: t('playGuide:rules.part7'),
         key: 'part_7',
     },
     {
-        label: '\n\nStudy the grid to find the numbers that might fit into each cell.',
+        label: t('playGuide:rules.part8'),
         key: 'part_8',
     },
 ]
+
+export const getSolutionTitle = (t) => t('playGuide:solutionTitle')
 
 export const PUZZLE = {
     UNSOLVED: '590803001000700002740002060000036010206010908010950000020300074300004000100605089',

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 import { View } from 'react-native'
 
@@ -35,7 +36,9 @@ const focusedCellsInExample = [
 const XWingCornerCells = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
-
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'xWingCornerCells',
+    })
     const boardData = useBoardData(puzzle)
 
     const xWing = {
@@ -106,16 +109,11 @@ const XWingCornerCells = () => {
         <View style={styles.container}>
             <SmartHintText
                 text={
-                    '<p>'
-                    + `An ${getLinkHTMLText(HINTS_VOCAB_IDS.PERFECT_X_WING, 'X-Wing')} is formed using two ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'rows')} or ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'columns')}.`
-                    + ' And these two rows or columns have candidate present in two cells only. so combinedly we have 4 cells where'
-                    + ' the candiate is present. These 4 cells are known as X-Wing corner cells.'
-                    + 'Notice 1st and 5th columns in X-Wing in below puzzle.'
-                    + '</p>'
+                    t('intro')
                 }
             />
             {Example}
-            <SmartHintText text="<p>So B1, B5, E1 and E5 are X-Wing corner cells in this case.</p>" />
+            <SmartHintText text={t('observation')} />
         </View>
     )
 }

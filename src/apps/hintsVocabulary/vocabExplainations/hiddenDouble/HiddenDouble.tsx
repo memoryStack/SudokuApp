@@ -26,6 +26,7 @@ import { highlightPrimaryHouseCells } from 'src/apps/arena/utils/smartHints/rawH
 import { getStyles } from './hiddenDouble.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText } from '../utils'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 type ZoomableViewConfigs = {
     initialZoom?: number
@@ -45,6 +46,12 @@ const HiddenDouble = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
     const oneHostHosueBoardData = useBoardData(oneHostHouse)
+
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'hiddenDouble',
+    })
+
+    const { t: commonT } = useTranslation(['common'])
 
     const Example = !_isNil(oneHostHosueBoardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
@@ -125,16 +132,11 @@ const HiddenDouble = () => {
 
         return (
             <View style={styles.removableNotesExampleContainer}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>How Hidden Double Affects a House?</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>
+                    {t('effect.title')}
+                </Text>
                 <SmartHintText
-                    text={
-                        '<p>'
-                        + `In below example ${oneHostHouseDetails.candidatesListText} will be filled only in the highlighted cells`
-                        + ' and other candidates highlighted in red color will be removed these cells.'
-                        + '<br />'
-                        + '<b>Note:</b> exactly which cell will be filled by 1 and which will be filled by 7 is still not clear.'
-                        + '</p>'
-                    }
+                    text={t('effect.intro', { candidates: oneHostHouseDetails.candidatesListText })}
                 />
 
                 <View style={styles.removableNotesBoardContainer}>
@@ -156,18 +158,16 @@ const HiddenDouble = () => {
         const secondExampleHostCells = [{ row: 0, col: 7 }, { row: 1, col: 6 }, { row: 1, col: 7 }, { row: 2, col: 8 }]
         return (
             <View style={{ marginTop: 16 }}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>Invalid Hidden Double Example:</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>
+                    {t('invalidExample.title')}
+                </Text>
                 <View style={styles.invalidExamplesBoardContainer}>
                     {renderTruncatedBoardForExample(oneHostHosueBoardData.mainNumbers, oneHostHosueBoardData.notes, {}, firstExampleHostCells, { initialOffsetX: 110, initialOffsetY: -110 })}
-                    <Text>OR</Text>
+                    <Text>{commonT('or')}</Text>
                     {renderTruncatedBoardForExample(oneHostHosueBoardData.mainNumbers, oneHostHosueBoardData.notes, {}, secondExampleHostCells, { initialOffsetX: -120, initialOffsetY: 120 })}
                 </View>
                 <Text style={{ marginTop: 8 }}>
-                    {
-                        'In left example above, 6 and 7 appear two times only in this block but these are distributed over three cells.'
-                        + ' And in right side example, 3 and 6 also appear two times only but these are spread over four cells. To be a valid'
-                        + ' Hidden Double both candidates have to be present two times and only in two cells of a house.'
-                    }
+                    {t('invalidExample.explanation')}
                 </Text>
             </View>
         )
@@ -175,16 +175,7 @@ const HiddenDouble = () => {
 
     return (
         <View style={styles.container}>
-            <SmartHintText
-                text={
-                    '<p>'
-                    + `In ${getLinkHTMLText(HINTS_VOCAB_IDS.HIDDEN_SINGLE, 'Hidden Single')}, we focus on only one ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidate')} and one ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cell')} in a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.`
-                    + ' Hidden Double is the extension of Hidden Single and here we will focus on two candidates and two cells in a house.'
-                    + '<br/>'
-                    + 'A Hidden Double is formed when two candidates are present together only in two cells of a house.'
-                    + '</p>'
-                }
-            />
+            <SmartHintText text={t('intro')} />
             {Example}
             {invalidHiddenDouble()}
             {removableNotesHighlight()}

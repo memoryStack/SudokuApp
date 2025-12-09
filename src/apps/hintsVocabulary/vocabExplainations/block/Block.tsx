@@ -15,11 +15,16 @@ import { HINTS_VOCAB_IDS } from 'src/apps/arena/utils/smartHints/rawHintTransfor
 
 import { getStyles } from './block.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const examplePuzzle = '760059080050100004000700000603090820005020600021070405000006000900008040010540036'
 
 const Block = () => {
     const styles = useStyles(getStyles)
+
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'block',
+    })
 
     const boardData = useBoardData(examplePuzzle)
 
@@ -39,17 +44,10 @@ const Block = () => {
     return (
         <View style={styles.container}>
             <SmartHintText
-                text={
-                    '<p>'
-                    + 'In Sudoku, a Block is a 3*3 square region separated by thick borders in Sudoku Puzzle below.'
-                    + ` Each block contains 9 <a href="${HINTS_VOCAB_IDS.CELL}">cells</a> arranged in 3 <a href="${HINTS_VOCAB_IDS.COLUMN}">columns</a> and 3 <a href="${HINTS_VOCAB_IDS.ROW}">rows</a>.`
-                    + '</p>'
-                }
+                text={t('intro')}
             />
             {Example}
-            <SmartHintText
-                text="Here in the above Sudoku Puzzle these 9 highlighted cells make 5th block. And these are 9 such blocks."
-            />
+            <SmartHintText text={t('observation')} />
         </View>
     )
 }

@@ -24,6 +24,7 @@ import { highlightPrimaryHouseCells } from 'src/apps/arena/utils/smartHints/rawH
 import { getStyles } from './hiddenTripple.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText } from '../utils'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const oneHostHouse = '500620037004890000000050000930000000020000605700000003000009000000000700680570002'
 const oneHostHouseHostCells = [{ row: 3, col: 5 }, { row: 5, col: 5 }, { row: 7, col: 5 }]
@@ -37,6 +38,9 @@ const HiddenTripple = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
     const oneHostHosueBoardData = useBoardData(oneHostHouse)
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'hiddenTripple',
+    })
 
     const Example = !_isNil(oneHostHosueBoardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
@@ -69,17 +73,12 @@ const HiddenTripple = () => {
 
         return (
             <View style={{ marginTop: 16 }}>
-                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>How Hidden Tripple Affects a House?</Text>
+                <Text type={TEXT_VARIATIONS.TITLE_MEDIUM}>
+                    {t('effect.title')}
+                </Text>
                 <SmartHintText
                     text={
-                        '<p>'
-                        + `In below example ${oneHostHouseDetails.cellsListText} are locked for ${oneHostHouseDetails.candidatesListText}`
-                        + ' because these numbers can\'t be filled in any other cells of 6th column. So, all the other candidates present'
-                        + ' in these cells will be removed and these are highlighted in red color.'
-                        + '<br />'
-                        + `<b>Note:</b> exactly which cell out of ${oneHostHouseDetails.cellsListText} will be filled by which number is still not clear.`
-                        + ' At this point only thing we can say for sure is that candidates highlighted in red color can be removed.'
-                        + '</p>'
+                        t('effect.intro', { candidates: oneHostHouseDetails.candidatesListText, cells: oneHostHouseDetails.cellsListText })
                     }
                 />
                 <View style={styles.exampleBoardContainer}>
@@ -112,26 +111,13 @@ const HiddenTripple = () => {
 
             <SmartHintText
                 text={
-                    '<p>'
-                    + `In ${getLinkHTMLText(HINTS_VOCAB_IDS.HIDDEN_DOUBLE, 'Hidden Double')}, we focus on two`
-                    + ` ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')} in two ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} in a ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')}.`
-                    + ' Hidden Tripple is the extension of Hidden Double and here we will focus on three cells and three candidates.'
-                    + '<br/>'
-                    + '<br/>'
-                    + 'A Hidden Tripple is formed when three candidates are present together only in three cells and nowhere else in a house.'
-                    + ' Each of these three cells must have <b>atleast two</b> out of these three candidates.'
-                    + '</p>'
+                    t('intro')
                 }
             />
             {Example}
             <SmartHintText
                 text={
-                    '<p>'
-                    + `Notice in above Sudoku Puzzle in 6th ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} ${oneHostHouseDetails.candidatesListText} candidates are present`
-                    + ` together only in ${oneHostHouseDetails.cellsListText} cells. So, it's a Hidden Tripple.`
-                    + `\nIt is called "Hidden" because in ${oneHostHouseDetails.cellsListText} cells ${oneHostHouseDetails.candidatesListText} are hidden behind other candidates.`
-                    + '\nAlso notice that in above example H6 doesn\'t have 5 as it\'s candidate. it\'s still a valid Hidden Tripple because all the cells must have <b>atleast two</b> out of three candidates and here H6 has 2, 6 as it\'s candidates out of 2, 5 and 6.'
-                    + '</p>'
+                    t('example', { candidates: oneHostHouseDetails.candidatesListText, cells: oneHostHouseDetails.cellsListText })
                 }
             />
             {removableNotesHighlight()}

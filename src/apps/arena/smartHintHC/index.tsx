@@ -22,6 +22,7 @@ import { useStyles } from '@utils/customHooks/useStyles'
 import SmartHintText from '@ui/molecules/SmartHintText'
 import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
 import _isNil from '@lodash/isNil'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { useDependency } from '../../../hooks/useDependency'
 import withActions from '../../../utils/hocs/withActions'
 
@@ -48,7 +49,7 @@ import { TRY_OUT_RESULT_STATES } from '../utils/smartHints/tryOutInputAnalyser/c
 import { ACTION_HANDLERS, ACTION_TYPES } from './actionHandlers'
 import { getStyles } from './smartHintHC.styles'
 import {
-    FOOTER_BUTTONS_TEXT,
+    getFooterButtonsText,
     SMART_HINT_HC_TEST_ID,
     CLOSE_ICON_TEST_ID,
     SMART_HINT_HC_BOTTOM_DRAGGER_CHILD_TEST_ID,
@@ -102,6 +103,8 @@ const SmartHintHC_: React.FC<Props> = ({
 }) => {
     const dependencies = useDependency()
     const styles = useStyles(getStyles)
+    const { t } = useTranslation()
+    const FOOTER_BUTTONS_TEXT = getFooterButtonsText(t)
 
     const {
         id: hintId,
@@ -292,7 +295,7 @@ const SmartHintHC_: React.FC<Props> = ({
     const renderLearnMoreLink = () => {
         if (!learnMoreAvailable) return null
         return (
-            <SmartHintText text={getLinkHTMLText(hintVocabId, 'Learn More')} />
+            <SmartHintText text={getLinkHTMLText(hintVocabId, t('smartHints:learnMore'))} />
         )
     }
 

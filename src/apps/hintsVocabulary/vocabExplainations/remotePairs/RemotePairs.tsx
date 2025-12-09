@@ -22,13 +22,16 @@ import _last from '@lodash/last'
 import { getStyles } from './remotePairs.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText } from '../utils'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const puzzle = '798452316603781092012030870370265048820143760060897023980014237107028050200070081'
 
 const RemotePairs = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
-
+    const { t } = useTranslation('hintsVocabulary', {
+        keyPrefix: 'remotePairs',
+    })
     const boardData = useBoardData(puzzle)
 
     const rawRemotePairs = {
@@ -72,17 +75,7 @@ const RemotePairs = () => {
     const renderHowToMakeAChain = () => (
         <View style={{ marginTop: 12 }}>
             <SmartHintText
-                text={
-                    '<p>'
-                    + '<b>How to make a Remote Pairs chain ?</b>'
-                    + '<br/>'
-                    + 'To make a Remote Pairs chain, find a cell which has only two possible candidates in it.'
-                    + ' Now search for cells which make Naked Double this cell, these new cells will be added to chain.'
-                    + ' Now focus on these new cells and find more cells which make Naked Double with these new cells and'
-                    + ' add them to chain. Do this repeatedly until you have enough cells.'
-                    + ' Look at the chain in below puzzle.'
-                    + '</p>'
-                }
+                text={t('howToMakeChain')}
             />
         </View>
     )
@@ -92,20 +85,7 @@ const RemotePairs = () => {
         return (
             <SmartHintText
                 text={
-                    '<p>'
-                    + `In above puzzle Remote Pairs chain is shown which joins cells in this order ${chainText}.`
-                    + ' All of these cells have same candidates which are 4, 5 in this case.'
-                    + '<br />'
-                    + `<b>How are ${getLinkHTMLText(HINTS_VOCAB_IDS.CHAIN_LINKS, 'Links')} formed in these cells ?</b>`
-                    + '<br />'
-                    + `This chain is made of ${getLinkHTMLText(HINTS_VOCAB_IDS.CHAIN_LINKS, 'Strong Links')} and ${getLinkHTMLText(HINTS_VOCAB_IDS.CHAIN_LINKS, 'Weak Links')}.`
-                    + '<br />'
-                    + 'Strong Link exists between the candidates of each cell in the chain. These links are not drawn in the chain due to'
-                    + ' lack of space but imagine that these links are there.'
-                    + '<br />'
-                    + 'Weak Link exists between the candidates of two consecutive cells which make Naked Double. These'
-                    + ' links are drawn with dotted lines.'
-                    + '</p>'
+                    t('chainFormation.intro', { chainPath: chainText })
                 }
             />
         )
@@ -115,87 +95,41 @@ const RemotePairs = () => {
         <View style={{ marginTop: 12 }}>
             <SmartHintText
                 text={
-                    '<p>'
-                    + '<b>How is Remote Pairs chain useful ?</b>'
-                    + '<br />'
-                    + 'Cells in this chain can be filled in two ways. Let\'s try to fill it in both ways'
-                    + ' and see the conclusion. But first understand the rules to fill these cells.'
-                    + '<br />'
-                    + '<b>Rules to fill chain cells:</b>'
-                    + '<br />'
-                    + '<ol>'
-                    + '<li>Start with using <b>Strong</b> Link in first cell of chain</li>'
-                    + `<li>Links will be used alternatively like ${joinStringsListWithArrow(['Strong', 'Weak', 'Strong'])} ...</li>`
-                    + '</ol>'
-                    + '</p>'
+                    t('chainEffect.intro', { linkPattern: joinStringsListWithArrow(['Strong', 'Weak', 'Strong']) })
                 }
             />
             <SmartHintText
                 text={
-                    '<p>'
-                    + '<b>First Way to fill the Chain:</b>'
-                    + '<br />'
-                    + 'Follow the logic with the puzzle given below.'
-                    + '<br />'
-                    + '<ul>'
-                    + `<li>if 4 is false in ${chainCellsAxesList[0]} then 5 has to be true here. (Strong Link)</li>`
-                    + `<li>since 5 is true in ${chainCellsAxesList[0]} then 5 has to be false in ${chainCellsAxesList[1]}. (Weak Link)</li>`
-                    + `<li>since 5 is false in ${chainCellsAxesList[1]} then 4 has to be true in ${chainCellsAxesList[1]}. (Strong Link)</li>`
-                    + `<li>since 4 is true in ${chainCellsAxesList[1]} then 4 has to be false in ${chainCellsAxesList[2]}. (Weak Link)</li>`
-                    + `<li>since 4 is false in ${chainCellsAxesList[2]} then 5 has to be true in ${chainCellsAxesList[2]}. (Strong Link)</li>`
-                    + `<li>since 5 is true in ${chainCellsAxesList[2]} then 5 has to be false in ${chainCellsAxesList[3]}. (Weak Link)</li>`
-                    + `<li>since 5 is false in ${chainCellsAxesList[3]} then 4 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
-                    + '</ul>'
-                    + '</p>'
+                    t('chainEffect.firstWay', { chainCell0: chainCellsAxesList[0], chainCell1: chainCellsAxesList[1], chainCell2: chainCellsAxesList[2], chainCell3: chainCellsAxesList[3] })
                 }
             />
             {Example}
             <SmartHintText
                 text={
-                    '<p>'
-                    + 'Notice in the above logic, by following the rules of filling these cells we found'
-                    + ` that if candidate 4 can not be filled in ${_head(chainCellsAxesList)} then it will surely be`
-                    + ` filled in ${_last(chainCellsAxesList)}. It means that if ${_head(chainCellsAxesList)} is 5 then ${_last(chainCellsAxesList)} must be 4.`
-                    + '</p>'
+                    t('chainEffect.firstWayConclusion', { firstCell: _head(chainCellsAxesList), lastCell: _last(chainCellsAxesList) })
                 }
             />
             <SmartHintText
                 text={
-                    '<p>'
-                    + '<b>Second Way to fill the Chain:</b>'
-                    + '<br />'
-                    + 'Follow the logic with the puzzle given above.'
-                    + '<br />'
-                    + '<ul>'
-                    + `<li>if 5 is false in ${chainCellsAxesList[0]} then 4 has to be true here. (Strong Link)</li>`
-                    + `<li>since 4 is true in ${chainCellsAxesList[0]} then 4 has to be false in ${chainCellsAxesList[1]}. (Weak Link)</li>`
-                    + `<li>since 4 is false in ${chainCellsAxesList[1]} then 5 has to be true in ${chainCellsAxesList[1]}. (Strong Link)</li>`
-                    + `<li>since 5 is true in ${chainCellsAxesList[1]} then 5 has to be false in ${chainCellsAxesList[2]}. (Weak Link)</li>`
-                    + `<li>since 5 is false in ${chainCellsAxesList[2]} then 4 has to be true in ${chainCellsAxesList[2]}. (Strong Link)</li>`
-                    + `<li>since 4 is true in ${chainCellsAxesList[2]} then 4 has to be false in ${chainCellsAxesList[3]}. (Weak Link)</li>`
-                    + `<li>since 4 is false in ${chainCellsAxesList[3]} then 5 has to be true in ${chainCellsAxesList[3]}. (Strong Link)</li>`
-                    + '</ul>'
-                    + '</p>'
+                    t('chainEffect.secondWay', {
+                        chainCell0: chainCellsAxesList[0],
+                        chainCell1: chainCellsAxesList[1],
+                        chainCell2: chainCellsAxesList[2],
+                        chainCell3: chainCellsAxesList[3],
+                        firstCell: _head(chainCellsAxesList),
+                        lastCell: _last(chainCellsAxesList),
+                    })
                 }
             />
             <SmartHintText
                 text={
-                    '<p>'
-                    + `Notice in the second way of filling these cells if candidate 5 can not be filled in ${_head(chainCellsAxesList)} then it will surely be`
-                    + ` filled in ${_last(chainCellsAxesList)}. It means that if ${_head(chainCellsAxesList)} is 4 then ${_last(chainCellsAxesList)} must be 5.`
-                    + '</p>'
+                    t('chainEffect.secondWayConclusion', { firstCell: _head(chainCellsAxesList), lastCell: _last(chainCellsAxesList) })
                 }
             />
             <View style={{ marginTop: 8 }}>
                 <SmartHintText
                     text={
-                        '<p>'
-                        + 'So in both of these ways, it is sure that one end of chain will be 4 and other end will be 5.'
-                        + ` so any cell which is in the same ${getLinkHTMLText(HINTS_VOCAB_IDS.HOUSE, 'house')} as first and`
-                        + ' last cells of chain can not have 4 and 5 as it\'s candidates. Hence in the example above, F7 cell'
-                        + ` shares same ${getLinkHTMLText(HINTS_VOCAB_IDS.ROW, 'row')} with F1 and shares same ${getLinkHTMLText(HINTS_VOCAB_IDS.COLUMN, 'column')} with B7.`
-                        + ' so from F7 candidate 5 can be removed.'
-                        + '</p>'
+                        t('chainEffect.finalConclusion')
                     }
                 />
             </View>
@@ -206,13 +140,7 @@ const RemotePairs = () => {
         <View style={{ marginTop: 12 }}>
             <SmartHintText
                 text={
-                    '<p>'
-                    + '<b>Note:</b> In a valid Remote Pairs chain the number of participating cells'
-                    + ' must be <b>even</b> and greater than 3 like 4, 6, 8 ... Otherwise the chain\'s first'
-                    + ' and last cells will be filled by same candidates and we won\'t be able to remove any candidate.'
-                    + ' And a Remote Pairs chain shouldn\'t have only 2 cells because that is just a Naked Double.'
-                    + '\nTry this out by yourself.'
-                    + '</p>'
+                    t('validChainLength')
                 }
             />
         </View>
@@ -221,14 +149,7 @@ const RemotePairs = () => {
     return (
         <View style={styles.container}>
             <SmartHintText
-                text={
-                    '<p>'
-                    + `Remote Pair is the simplest ${getLinkHTMLText(HINTS_VOCAB_IDS.CHAIN, 'Chain')} technique.`
-                    + ` Here we build a chain of ${getLinkHTMLText(HINTS_VOCAB_IDS.CELL, 'cells')} which have only two ${getLinkHTMLText(HINTS_VOCAB_IDS.CANDIDATE, 'candidates')}`
-                    + ` and all of these cells must have same candidates, kind of like ${getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_DOUBLE, 'Naked Double')}.`
-                    + ' So you can think of Remote Pairs as a bunch of Naked Doubles chained one after the other.'
-                    + '</p>'
-                }
+                text={t('intro')}
             />
             {renderHowToMakeAChain()}
             {Example}

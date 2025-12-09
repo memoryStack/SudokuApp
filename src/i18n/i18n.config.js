@@ -16,6 +16,8 @@ const NAMESPACES = [
     'errors',
     'hintsVocabulary',
     'extras',
+    'smartHints',
+    'tryOutAnalyser',
 ]
 
 const resources = {
@@ -30,6 +32,8 @@ const resources = {
         errors: require('./translations/en/errors.json'),
         hintsVocabulary: require('./translations/en/hintsVocabulary.json'),
         extras: require('./translations/en/extras.json'),
+        smartHints: require('./translations/en/smartHints.json'),
+        tryOutAnalyser: require('./translations/en/tryOutAnalyser.json'),
     },
     [LANGUAGE_KEYS.HINDI]: {
         common: require('./translations/hi/common.json'),
@@ -42,6 +46,8 @@ const resources = {
         errors: require('./translations/hi/errors.json'),
         hintsVocabulary: require('./translations/hi/hintsVocabulary.json'),
         extras: require('./translations/hi/extras.json'),
+        smartHints: require('./translations/hi/smartHints.json'),
+        tryOutAnalyser: require('./translations/hi/tryOutAnalyser.json'),
     },
 }
 

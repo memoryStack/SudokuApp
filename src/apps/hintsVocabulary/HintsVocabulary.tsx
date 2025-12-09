@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 
 import {
     BackHandler, BackPressEventName, ScrollView, NativeSyntheticEvent, NativeScrollEvent,
@@ -19,11 +19,12 @@ import { EVENTS } from '../../constants/events'
 
 import { getStyles } from './hintsVocabulary.styles'
 import { Page } from '../components/Page'
-import { HINTS_VOCAB_TITLE, NAVIGATION_PARAMS } from './hintsVocabulary.constants'
+import { NAVIGATION_PARAMS, getHintsVocabTitle } from './hintsVocabulary.constants'
 
 import { VOCAB_COMPONENTS } from './vocabExplainations'
 import { useDependency } from 'src/hooks/useDependency'
 import { type HintsVocobularyAnalyticsHandler } from '@application/adapterInterfaces/analytics'
+import { useTranslation } from 'react-i18next'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -43,6 +44,10 @@ const HintsVocabulary_ = ({ navigation, route }) => {
     const styles = useStyles(getStyles)
 
     const { analytics } = useDependency()
+
+    const { t } = useTranslation()
+
+    const HINTS_VOCAB_TITLE = useMemo(() => getHintsVocabTitle(t), [t])
 
     useEffect(() => {
         const vocabKeyword = _get(route, ['params', NAVIGATION_PARAMS.VOCAB_KEYWORD])
@@ -67,7 +72,7 @@ const HintsVocabulary_ = ({ navigation, route }) => {
             const scrollHandler = _get(scrollViewRef, 'current.scrollTo', _noop)
             scrollHandler({ x: 0, y: currentVocab.scrollPosition, animated: true })
         }
-    }, [navigation, currentVocab])
+    }, [navigation, currentVocab, HINTS_VOCAB_TITLE])
 
     useEffect(() => {
         const backPressHandler = () => {

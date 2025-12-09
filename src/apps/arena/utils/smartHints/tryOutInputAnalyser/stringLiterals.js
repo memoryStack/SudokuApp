@@ -2,6 +2,142 @@ import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/uti
 import { XWING_TYPES } from '../xWing/constants'
 import { HINTS_VOCAB_IDS } from '../rawHintTransformers'
 
+export const getUnattainableTryOutState = (t) => t('tryOutAnalyser:unattainableState')
+
+export const getHiddenGroupTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:hiddenGroup.noInput'),
+    REMOVABLE_GROUP_CANDIDATE_FILLED: t('tryOutAnalyser:hiddenGroup.removableGroupCandidateFilled'),
+    INVALID_CANDIDATE_IN_GROUP_CELL: {
+        NO_HOST_CELL_FOR_GROUP_CANDIDATES: t('tryOutAnalyser:hiddenGroup.invalidCandidateInGroupCell.noHostCellForGroupCandidates'),
+        INSUFFICIENT_HOST_CELLS: t('tryOutAnalyser:hiddenGroup.invalidCandidateInGroupCell.insufficientHostCells'),
+    },
+    VALID_FILL: {
+        FULL: t('tryOutAnalyser:hiddenGroup.validFill.full'),
+        PARTIAL: t('tryOutAnalyser:hiddenGroup.validFill.partial'),
+    },
+})
+
+export const getNakedGroupsTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:nakedGroups.noInput'),
+    EMPTY_GROUP_CELL: t('tryOutAnalyser:nakedGroups.emptyGroupCell'),
+    MULTIPLE_CELLS_NAKED_SINGLE: t('tryOutAnalyser:nakedGroups.multipleCellsNakedSingle'),
+    VALID_FILL: {
+        FULL: t('tryOutAnalyser:nakedGroups.validFill.full'),
+        PARTIAL: t('tryOutAnalyser:nakedGroups.validFill.partial'),
+    },
+})
+
+export const getNakedTrippleTexts = (t) => ({
+    FUTURE_EMPTY_CELL: {
+        NAKED_SINGLE_PAIR: t('tryOutAnalyser:nakedTripple.futureEmptyCell.nakedSinglePair'),
+        NAKED_DOUBLE_PAIR: {
+            NAKED_SINGLE_IN_THIRD_CELL: t('tryOutAnalyser:nakedTripple.futureEmptyCell.nakedDoublePair.nakedSingleInThirdCell'),
+            NAKED_DOUBLE_IN_THIRD_CELL: t('tryOutAnalyser:nakedTripple.futureEmptyCell.nakedDoublePair.nakedDoubleInThirdCell'),
+        },
+    },
+})
+
+export const getXWingTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:xWing.noInput'),
+    SAME_CROSSHOUSE: t('tryOutAnalyser:xWing.sameCrosshouse'),
+    ONE_LEG_NO_CANDIDATE: t('tryOutAnalyser:xWing.oneLegNoCandidate'),
+    [XWING_TYPES.PERFECT]: {
+        BOTH_LEGS_WITHOUT_CANDIDATE: t('tryOutAnalyser:xWing.perfect.bothLegsWithoutCandidate'),
+    },
+    ONE_LEG_VALID_FILL: t('tryOutAnalyser:xWing.oneLegValidFill'),
+    BOTH_LEG_VALID_FILL: t('tryOutAnalyser:xWing.bothLegValidFill'),
+})
+
+export const getYWingTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:yWing.noInput'),
+    ELIMINABLE_NOTES_CELL_FILLED: {
+        PIVOT_CELL_WITHOUT_CANDIDATE: t('tryOutAnalyser:yWing.eliminableNotesCellFilled.pivotCellWithoutCandidate'),
+        WING_CELL_WITHOUT_CANDIDATE: t('tryOutAnalyser:yWing.eliminableNotesCellFilled.wingCellWithoutCandidate'),
+        BOTH_WINGS_WITHOUT_INPUT: t('tryOutAnalyser:yWing.eliminableNotesCellFilled.bothWingsWithoutInput'),
+        ONE_OF_WINGS_WITHOUT_INPUT: t('tryOutAnalyser:yWing.eliminableNotesCellFilled.oneOfWingsWithoutInput'),
+    },
+    PIVOT_CELL_WITHOUT_CANDIDATE: t('tryOutAnalyser:yWing.pivotCellWithoutCandidate'),
+    ELIMINABLE_NOTES_CELL_WITHOUT_CANDIDATE: t('tryOutAnalyser:yWing.eliminableNotesCellWithoutCandidate'),
+    VALID_FILL: {
+        PARTIAL: t('tryOutAnalyser:yWing.validFill.partial'),
+        FULL: t('tryOutAnalyser:yWing.validFill.full'),
+    },
+})
+
+export const getRemotePairsTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:remotePairs.noInput'),
+    CHAIN_CELL_WITHOUT_CANDIDATE: t('tryOutAnalyser:remotePairs.chainCellWithoutCandidate'),
+    REMOVABLE_NOTES_CELL_FILLED: {
+        ALL_CHAIN_CELLS_EMPTY: t('tryOutAnalyser:remotePairs.removableNotesCellFilled.allChainCellsEmpty'),
+        CHAIN_CELLS_PARTIALLY_FILLED: t('tryOutAnalyser:remotePairs.removableNotesCellFilled.chainCellsPartiallyFilled'),
+        CHAIN_CELL_WITHOUT_CANDIDATE: {
+            ONLY_REMOVABLE_NOTES_FILLED: t('tryOutAnalyser:remotePairs.removableNotesCellFilled.chainCellWithoutCandidate.onlyRemovableNotesFilled'),
+            BOTH_COLORS_CANDIDATES_FILLED: t('tryOutAnalyser:remotePairs.removableNotesCellFilled.chainCellWithoutCandidate.bothColorsCandidatesFilled'),
+        },
+    },
+    CHAIN_CELLS_BOTH_COLOR_CANDIDATES_FILLED: {
+        CELL_WITH_NO_CANDIDATES_IN_PROGRESS: t('tryOutAnalyser:remotePairs.chainCellsBothColorCandidatesFilled.cellWithNoCandidatesInProgress'),
+        CELL_WITH_NO_CANDIDATES: t('tryOutAnalyser:remotePairs.chainCellsBothColorCandidatesFilled.cellWithNoCandidates'),
+    },
+    VALID_FILL: {
+        PARTIAL: t('tryOutAnalyser:remotePairs.validFill.partial'),
+        FULL: t('tryOutAnalyser:remotePairs.validFill.full'),
+    },
+})
+
+export const getEmptyRectangleTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:emptyRectangle.noInput'),
+    REMOVABLE_NOTE_CELL_FILLED: {
+        BLOCK_OR_CONJUGATE_HOUSE_FILLED: t('tryOutAnalyser:emptyRectangle.removableNoteCellFilled.blockOrConjugateHouseFilled'),
+        BLOCK_OR_CONJUGATE_HOUSE_NOT_FILLED: t('tryOutAnalyser:emptyRectangle.removableNoteCellFilled.blockOrConjugateHouseNotFilled'),
+    },
+    CONJUGATE_HOUSE_AND_BLOCK_HOST_HOUSE_FILLED: t('tryOutAnalyser:emptyRectangle.conjugateHouseAndBlockHostHouseFilled'),
+    CONJUGATE_HOUSE_FILLED: {
+        REMOVABLE_NOTE_PRESENT: t('tryOutAnalyser:emptyRectangle.conjugateHouseFilled.removableNotePresent'),
+        REMOVABLE_NOTE_REMOVED: t('tryOutAnalyser:emptyRectangle.conjugateHouseFilled.removableNoteRemoved'),
+    },
+    BLOCK_HOST_HOUSE_FILLED: {
+        REMOVABLE_NOTE_PRESENT: t('tryOutAnalyser:emptyRectangle.blockHostHouseFilled.removableNotePresent'),
+        REMOVABLE_NOTE_REMOVED: t('tryOutAnalyser:emptyRectangle.blockHostHouseFilled.removableNoteRemoved'),
+    },
+})
+
+export const getWWingTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:wWing.noInput'),
+    REMOVABLE_NOTE_CELL_FILLED: {
+        NO_OTHER_CELL_FILLED: t('tryOutAnalyser:wWing.removableNoteCellFilled.noOtherCellFilled'),
+        CONJUGATE_HOUSE_FILLED: t('tryOutAnalyser:wWing.removableNoteCellFilled.conjugateHouseFilled'),
+        ONE_NAKED_PAIR_CELL_FILLED: t('tryOutAnalyser:wWing.removableNoteCellFilled.oneNakedPairCellFilled'),
+        BOTH_NAKED_PAIR_CELLS_FILLED: t('tryOutAnalyser:wWing.removableNoteCellFilled.bothNakedPairCellsFilled'),
+    },
+    CONJUGATE_CELL_FILLED: {
+        NO_OTHER_CELL_FILLED: t('tryOutAnalyser:wWing.conjugateCellFilled.noOtherCellFilled'),
+        ONE_NAKED_PAIR_CELL_FILLED: {
+            REMOVABLE_NOTE_FILLED_IN_NAKED_PAIR_CELL: t('tryOutAnalyser:wWing.conjugateCellFilled.oneNakedPairCellFilled.removableNoteFilledInNakedPairCell'),
+            CONJUGATE_NOTE_FILLED_IN_NAKED_PAIR_CELL: t('tryOutAnalyser:wWing.conjugateCellFilled.oneNakedPairCellFilled.conjugateNoteFilledInNakedPairCell'),
+        },
+        BOTH_NAKED_PAIR_CELL_FILLED: t('tryOutAnalyser:wWing.conjugateCellFilled.bothNakedPairCellFilled'),
+    },
+    NAKED_PAIR_CELL_FILLED: {
+        FILLED_WITH_REMOVABLE_NOTE: t('tryOutAnalyser:wWing.nakedPairCellFilled.filledWithRemovableNote'),
+        ONE_NAKED_PAIR_CELL_FILLED_WITH_CONJUGATE_NOTE: t('tryOutAnalyser:wWing.nakedPairCellFilled.oneNakedPairCellFilledWithConjugateNote'),
+        NO_PLACE_FOR_CONJUGATE_NOTE_IN_CONJUGATE_HOUSE: t('tryOutAnalyser:wWing.nakedPairCellFilled.noPlaceForConjugateNoteInConjugateHouse'),
+    },
+})
+
+export const getXYZWingTexts = (t) => ({
+    NO_INPUT: t('tryOutAnalyser:xyzWing.noInput'),
+    REMOVABLE_NOTE_CELL_FILLED: {
+        NO_OTHER_CELL_FILLED: t('tryOutAnalyser:xyzWing.removableNoteCellFilled.noOtherCellFilled'),
+        CELLS_HAVE_NAKED_SINGLE: t('tryOutAnalyser:xyzWing.removableNoteCellFilled.cellsHaveNakedSingle'),
+        CELL_WITHOUT_CANDIDATES: t('tryOutAnalyser:xyzWing.removableNoteCellFilled.cellWithoutCandidates'),
+    },
+    ALL_CELLS_FILLED_PROPERLY: t('tryOutAnalyser:xyzWing.allCellsFilledProperly'),
+    COMMON_NOTE_FILLED_IN_ANY_WING_CELLS: t('tryOutAnalyser:xyzWing.commonNoteFilledInAnyWingCells'),
+    PARTIALLY_FILLED: t('tryOutAnalyser:xyzWing.partiallyFilled'),
+})
+
+// Legacy exports for backward compatibility - will be deprecated
 export const UNATTAINABLE_TRY_OUT_STATE = 'not sure how we reached here'
 
 export const HIDDEN_GROUP = {
