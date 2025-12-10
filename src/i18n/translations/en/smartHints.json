@@ -75,7 +75,23 @@
                 }
             }
         },
-        "omission": "<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of {{hostHouseHostCellsListText}} and all of these <a href=\"CELL\">cells</a> are part of {{secondaryHouseNumText}} as well. so wherever we try to fill {{note}} in this {{hostHouseFullName}}, {{note}} in {{removableNotesHostCellsListText}} can't come</p>",
+        "omission": {
+            "text": "<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of {{hostHouseHostCellsListText}} and all of these <a href=\"CELL\">cells</a> are part of {{secondaryHouseNum}} {{secondaryHouseName}} as well. so wherever we try to fill {{note}} in this {{hostHouseFullName}}, {{note}} in {{removableNotesHostCellsListText}} can't come</p>",
+            "config": {
+                "hostHouseFullName": {
+                    "form": "singular",
+                    "type": "house"
+                },
+                "secondaryHouseNum": {
+                    "form": "ordinal",
+                    "type": "number"
+                },
+                "secondaryHouseName": {
+                    "form": "singular",
+                    "type": "house"
+                }
+            }
+        },
         "nakedDouble": [
             "<p>A Naked Double occurs when two <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> contain only two possible <a href=\"CANDIDATE\">candidates</a>, and these two cells share the same set of candidates.\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}} as their candidates so this forms a Naked Double in {{hostHouses}}.</p>",
             "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed."

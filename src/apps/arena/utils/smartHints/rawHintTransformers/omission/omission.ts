@@ -13,13 +13,13 @@ import {
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
-import { setCellDataInHintResult, transformCellBGColor } from '../../util'
+import { getAxisValuesFromTranslations, getLanguageSpecificHouseTypeText, getLanguageSpecificNumberText, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { OmissionTransformerArgs } from './types'
 import { RawOmissionHint } from '../../omission/types'
 import {
-    CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+    CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 import { HOUSE_TYPE_VS_VOCAB_ID } from '../constants'
 
@@ -83,25 +83,42 @@ const getRemovableNotesHostCells = (omission: RawOmissionHint, notes: Notes) => 
 
 // extract it out if this func is needed
 // at other places as well
-const getHintExplaination = (omission: RawOmissionHint, notes: Notes) => {
+const getHintExplaination = (
+    omission: RawOmissionHint,
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
     const { hostHouse, note, removableNotesHostHouse } = omission
     const hostHouseHostCells = getHouseNoteHostCells(note, hostHouse, notes)
 
     const hostHouseHostCellsListText = getCellsAxesValuesListText(
         hostHouseHostCells,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        smartHintsTranslationsTexts.common.conjugations.and,
+        getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     )
+
+    const {
+        text,
+        config,
+    } = smartHintsTranslationsTexts.explanation[HINTS_IDS.OMISSION]
 
     const msgPlaceholdersValues = {
         note,
-        hostHouseFullName: getLinkHTMLText(HOUSE_TYPE_VS_VOCAB_ID[hostHouse.type], HOUSE_TYPE_VS_FULL_NAMES[hostHouse.type].FULL_NAME),
+        hostHouseFullName: getLinkHTMLText(
+            HOUSE_TYPE_VS_VOCAB_ID[hostHouse.type],
+            getLanguageSpecificHouseTypeText(hostHouse.type, config.hostHouseFullName, smartHintsTranslationsTexts)
+        ),
         hostHouseHostCellsListText,
-        secondaryHouseNumText: `${getHouseNumText(removableNotesHostHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[removableNotesHostHouse.type].FULL_NAME}`,
-        removableNotesHostCellsListText: getCellsAxesValuesListText(getRemovableNotesHostCells(omission, notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        secondaryHouseNum: getLanguageSpecificNumberText(removableNotesHostHouse.num + 1, config.secondaryHouseNum, smartHintsTranslationsTexts),
+        secondaryHouseName: getLanguageSpecificHouseTypeText(removableNotesHostHouse.type, config.secondaryHouseName, smartHintsTranslationsTexts),
+        removableNotesHostCellsListText: getCellsAxesValuesListText(
+            getRemovableNotesHostCells(omission, notes),
+            smartHintsTranslationsTexts.common.conjugations.and,
+            getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+        ),
     }
 
-    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.OMISSION]
-    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+    return dynamicInterpolation(text, msgPlaceholdersValues)
 }
 
 const getApplyHintData = (omission: RawOmissionHint, notes: Notes): NotesRemovalHintAction[] => {
@@ -112,10 +129,15 @@ const getApplyHintData = (omission: RawOmissionHint, notes: Notes): NotesRemoval
     }))
 }
 
-export const transformOmissionRawHint = ({ rawHint: omission, notesData, smartHintsColorSystem }: OmissionTransformerArgs): TransformedRawHint => ({
+export const transformOmissionRawHint = ({
+    rawHint: omission,
+    notesData,
+    smartHintsColorSystem,
+    smartHintsTranslationsTexts,
+}: OmissionTransformerArgs): TransformedRawHint => ({
     type: HINTS_IDS.OMISSION,
     cellsToFocusData: getUICellsToFocusData(omission, notesData, smartHintsColorSystem),
-    title: HINT_ID_VS_TITLES[HINTS_IDS.OMISSION],
-    steps: [{ text: getHintExplaination(omission, notesData) }],
+    title: smartHintsTranslationsTexts.title[HINTS_IDS.OMISSION],
+    steps: [{ text: getHintExplaination(omission, notesData, smartHintsTranslationsTexts) }],
     applyHint: getApplyHintData(omission, notesData),
 })

@@ -75,7 +75,23 @@
                 }
             }
         },
-        "omission": "<p>हाइलाइट किए गए {{hostHouseFullName}} में, {{note}} केवल {{hostHouseHostCellsListText}} में से एक में आ सकता है और ये सभी सेल {{secondaryHouseNumText}} का भी हिस्सा हैं। इसलिए इस {{hostHouseFullName}} में जहाँ भी हम {{note}} भरने की कोशिश करें, {{removableNotesHostCellsListText}} में {{note}} नहीं आ सकता</p>",
+        "omission": {
+            "text": "<p>हाइलाइट किए गए {{hostHouseFullName}} में, {{note}} केवल {{hostHouseHostCellsListText}} में से एक में आ सकता है और ये सभी सेल {{secondaryHouseName}} नं. {{secondaryHouseNum}} का भी हिस्सा हैं। इसलिए इस {{hostHouseFullName}} में जहाँ भी हम {{note}} भरने की कोशिश करें, {{removableNotesHostCellsListText}} में {{note}} नहीं आ सकता</p>",
+            "config": {
+                "hostHouseFullName": {
+                    "form": "singular",
+                    "type": "house"
+                },
+                "secondaryHouseNum": {
+                    "form": "ordinal",
+                    "type": "number"
+                },
+                "secondaryHouseName": {
+                    "form": "singular",
+                    "type": "house"
+                }
+            }
+        },
         "nakedDouble": [
             "<p>एक नेकेड डबल तब होता है जब किसी हाउस में दो सेल में केवल दो संभावित उम्मीदवार होते हैं, और इन दो सेल में उम्मीदवारों का एक ही सेट होता है।\nयहाँ {{groupCellsText}} दोनों में {{candidatesListTextAndConcatenated}} उनके उम्मीदवार के रूप में हैं इसलिए यह {{hostHouses}} में एक नेकेड डबल बनाता है।</p>",
             "यहाँ {{groupCellsText}} {{candidatesListTextAndConcatenated}} के लिए आरक्षित हैं। हालाँकि {{candidatesListTextAndConcatenated}} में से कौन सा अंक किस सेल में भरेगा यह अभी स्पष्ट नहीं है। लेकिन इस बिंदु पर हम कह सकते हैं कि लाल रंग में हाइलाइट किए गए सभी {{candidatesListTextAndConcatenated}} को हटाया जा सकता है।"
