@@ -17,6 +17,7 @@ import {
 import smartHintColorSystemReader from './colorSystem.reader'
 import _isNil from '@lodash/isNil'
 import _forEach from '@lodash/forEach'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 const setCellDataInHintResult = (
     cell: Cell,
@@ -36,6 +37,12 @@ const setCellNotesHighlightDataInHintResult = (
 }
 
 const maxHintsLimitReached = (hints: unknown[], maxHintsThreshold: number) => hints.length >= maxHintsThreshold
+
+export const joinStringsListWithConjugation = (strings: string[], conjugation: string) => {
+    if (strings.length === 1) return strings[0]
+    const allStringsExceptLast = strings.slice(0, strings.length - 1)
+    return `${allStringsExceptLast.join(', ')} ${conjugation} ${strings[strings.length - 1]}`
+}
 
 const getCandidatesListText = (candidates: NoteValue[], lastCandidateConjugation = '') => {
     if (candidates.length === 1) return `${candidates[0]}`
@@ -169,6 +176,25 @@ export const getLanguageSpecificHouseTypeText = (
         return translations.common.houseTypes[houseType][form]
     }
     return houseType
+}
+
+const getHouseWithNumAndNameText = (house: House, translationConfig, translations: SmartHintsTranslationsTexts) => {
+    const rawText = translations.common.houseTypes.numAndName
+    return dynamicInterpolation(rawText, {
+        houseNum: getLanguageSpecificNumberText(house.num, translationConfig.houseNum, translations),
+        houseName: getLanguageSpecificHouseTypeText(house.type, translationConfig.houseName, translations),
+    })
+}
+
+export const getLanguageSpecificHouseListText = (
+    houses: House[],
+    translationConfig,
+    translations: SmartHintsTranslationsTexts
+) => {
+    const housesTexts = houses.map(house => {
+        return getHouseWithNumAndNameText(house, translationConfig, translations)
+    })
+    return joinStringsListWithConjugation(housesTexts, translations.common.conjugations[translationConfig.conjugation])
 }
 
 export {

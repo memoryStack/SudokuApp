@@ -92,10 +92,31 @@
                 }
             }
         },
-        "nakedDouble": [
-            "<p>A Naked Double occurs when two <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> contain only two possible <a href=\"CANDIDATE\">candidates</a>, and these two cells share the same set of candidates.\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}} as their candidates so this forms a Naked Double in {{hostHouses}}.</p>",
-            "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed."
-        ],
+        "nakedDouble": {
+            "texts": [
+                {
+                    "text": "<p>A Naked Double occurs when two <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> contain only two possible <a href=\"CANDIDATE\">candidates</a>, and these two cells share the same set of candidates.\nhere both {{groupCellsText}} have {{candidatesListTextAndConcatenated}} as their candidates so this forms a Naked Double in {{hostHouses}}.</p>",
+                    "config": {
+                        "hostHouses": {
+                            "houseNum": {
+                                "type": "number",
+                                "form": "ordinal"
+                            },
+                            "houseName": {
+                                "type": "house",
+                                "form": "singular"
+                            },
+                            "conjugation": "and"
+                        }
+                    }
+                },
+                {
+                    "text": "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.",
+                    "config": {}
+                }
+            ],
+            "unclickableCellClickInTryOutMsg": {}
+        },
         "nakedTripple": [
             "<p>a Naked Tripple is formed when three <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> have <a href=\"CANDIDATE\">candidates</a> only from a set of 3 candidates. and each cell must have atleast 2 candidates out of these 3.\nhere {{groupCellsText}} have a Naked Tripple in {{hostHouses}}.</p>",
             "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed."

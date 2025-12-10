@@ -35,7 +35,8 @@
         "block": {
             "singular": "block",
             "plural": "blocks"
-        }
+        },
+        "numAndName": "{{houseNum}} {{houseName}}"
     },
     "boardYAxis": {
         "row_0": "A",

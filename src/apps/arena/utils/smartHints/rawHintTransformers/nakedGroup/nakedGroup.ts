@@ -17,7 +17,7 @@ import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION, HOUSE_TYPE_VS_FULL_NAME
 import { HintExplainationTexts, HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { NakedGroupTransformerArgs } from './types'
 import {
-    CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
+    CellHighlightData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 import { isCellPresentInHouse } from '@domain/board/utils/housesAndCells'
 import {
@@ -26,6 +26,8 @@ import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     transformCellBGColor,
+    getAxisValuesFromTranslations,
+    getLanguageSpecificHouseListText,
 } from '../../util'
 import { NAKED_DOUBLE_CANDIDATES_COUNT } from '../../nakedGroup/nakedGroup.constants'
 import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
@@ -44,7 +46,9 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
         focusedCells,
         type: getHintId(groupCandidates),
         title: smartHintsTranslationsTexts.title[getHintId(groupCandidates)],
-        steps: getHintExplanationStepsFromHintChunks(getHintChunks(groupCandidates, groupCells, hostHouses, smartHintsTranslationsTexts.explanation)),
+        steps: getHintExplanationStepsFromHintChunks(
+            getHintChunks(groupCandidates, groupCells, hostHouses, smartHintsTranslationsTexts)
+        ),
         applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
         clickableCells: [...groupCells, ...removableNotesHostCells],
         unclickableCellClickInTryOutMsg: `you can select cells which have ${getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)} candidate highlighted in green or red color`,
@@ -132,21 +136,41 @@ const getHostHousesText = (hostHouses: House[]) => {
         .join(` ${HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND} `)
 }
 
-const getHintChunks = (groupCandidates: NoteValue[], groupCells: Cell[], hostHouses: House[], smartHintsExplanationTexts: HintExplainationTexts) => {
-    const msgPlaceholdersValues = {
+const getHintChunks = (
+    groupCandidates: NoteValue[],
+    groupCells: Cell[],
+    hostHouses: House[],
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts,
+) => {
+
+    const {
+        texts,
+    } = smartHintsTranslationsTexts.explanation[HINTS_IDS.NAKED_DOUBLE]
+
+    const commonMsgPlaceholdersValues = {
         candidatesListTextAndConcatenated: getCandidatesListText(
             groupCandidates,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+            smartHintsTranslationsTexts.common.conjugations.and,
         ),
         candidatesListTextOrConcatenated: getCandidatesListText(
             groupCandidates,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
+            smartHintsTranslationsTexts.common.conjugations.or,
         ),
-        groupCellsText: getCellsAxesValuesListText(sortCells(groupCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        hostHouses: getHostHousesText(hostHouses),
+        groupCellsText: getCellsAxesValuesListText(
+            sortCells(groupCells),
+            smartHintsTranslationsTexts.common.conjugations.and,
+            getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+        ),
     }
-    return (smartHintsExplanationTexts[getHintId(groupCandidates)] as string[])
-        .map(hintChunkTemplate => dynamicInterpolation(hintChunkTemplate, msgPlaceholdersValues))
+
+    return texts.map(({ text, config }: { text: string, config: any }) => {
+        const msgPlaceholdersValues = {
+            ...commonMsgPlaceholdersValues,
+            hostHouses: config.hostHouses ? getLanguageSpecificHouseListText(hostHouses, config.hostHouses, smartHintsTranslationsTexts) : undefined,
+        }
+
+        return dynamicInterpolation(text, msgPlaceholdersValues)
+    })
 }
 
 const getHintId = (groupCandidates: NoteValue[]) => (groupCandidates.length === NAKED_DOUBLE_CANDIDATES_COUNT ? HINTS_IDS.NAKED_DOUBLE : HINTS_IDS.NAKED_TRIPPLE)
