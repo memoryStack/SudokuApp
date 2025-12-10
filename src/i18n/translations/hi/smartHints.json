@@ -56,8 +56,24 @@
             "composite": "<p>{{solutionValue}} को छोड़कर 1-9 का कोई अन्य अंक {{cellAxesText}} में नहीं आ सकता, इसलिए केवल {{solutionValue}} {{cellAxesText}} में आ सकता है।</p>"
         },
         "hiddenSingle": {
-            "default": "<p>हाइलाइट किए गए {{houseType}} में, {{solutionValue}} क्रॉस किए गए सेल में {{filledCellsWithSolutionValue}} में {{solutionValue}} के कारण नहीं आ सकता। इसलिए {{hostCell}} में केवल {{solutionValue}} आएगा</p>",
-            "composite": "<p>हाइलाइट किए गए {{houseType}} में, {{solutionValue}} {{hostCell}} के अलावा किसी अन्य सेल में नहीं आ सकता इसलिए {{hostCell}} में केवल {{solutionValue}} आएगा</p>"
+            "default": {
+                "text": "<p>हाइलाइट किए गए {{houseType}} में, {{solutionValue}} क्रॉस किए गए सेल में {{filledCellsWithSolutionValue}} में {{solutionValue}} के कारण नहीं आ सकता। इसलिए {{hostCell}} में केवल {{solutionValue}} आएगा</p>",
+                "config": {
+                    "houseType": {
+                        "form": "singular",
+                        "type": "house"
+                    }
+                }
+            },
+            "composite": {
+                "text": "<p>हाइलाइट किए गए {{houseType}} में, {{solutionValue}} {{hostCell}} के अलावा किसी अन्य सेल में नहीं आ सकता इसलिए {{hostCell}} में केवल {{solutionValue}} आएगा</p>",
+                "config": {
+                    "houseType": {
+                        "form": "singular",
+                        "type": "house"
+                    }
+                }
+            }
         },
         "omission": "<p>हाइलाइट किए गए {{hostHouseFullName}} में, {{note}} केवल {{hostHouseHostCellsListText}} में से एक में आ सकता है और ये सभी सेल {{secondaryHouseNumText}} का भी हिस्सा हैं। इसलिए इस {{hostHouseFullName}} में जहाँ भी हम {{note}} भरने की कोशिश करें, {{removableNotesHostCellsListText}} में {{note}} नहीं आ सकता</p>",
         "nakedDouble": [

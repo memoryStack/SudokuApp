@@ -56,8 +56,24 @@
             "composite": "<p>except {{solutionValue}} no other number from 1-9 can come in {{cellAxesText}}, so only {{solutionValue}} can come in {{cellAxesText}}.</p>"
         },
         "hiddenSingle": {
-            "default": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in crossed <a href=\"CELL\">cells</a> because of {{solutionValue}} in {{filledCellsWithSolutionValue}}. so in {{hostCell}} only {{solutionValue}} can come</p>",
-            "composite": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in any other <a href=\"CELL\">cells</a> except {{hostCell}} so in {{hostCell}} only {{solutionValue}} will come</p>"
+            "default": {
+                "text": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in crossed <a href=\"CELL\">cells</a> because of {{solutionValue}} in {{filledCellsWithSolutionValue}}. so in {{hostCell}} only {{solutionValue}} can come</p>",
+                "config": {
+                    "houseType": {
+                        "form": "singular",
+                        "type": "house"
+                    }
+                }
+            },
+            "composite": {
+                "text": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in any other <a href=\"CELL\">cells</a> except {{hostCell}} so in {{hostCell}} only {{solutionValue}} will come</p>",
+                "config": {
+                    "houseType": {
+                        "form": "singular",
+                        "type": "house"
+                    }
+                }
+            }
         },
         "omission": "<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of {{hostHouseHostCellsListText}} and all of these <a href=\"CELL\">cells</a> are part of {{secondaryHouseNumText}} as well. so wherever we try to fill {{note}} in this {{hostHouseFullName}}, {{note}} in {{removableNotesHostCellsListText}} can't come</p>",
         "nakedDouble": [

@@ -17,7 +17,7 @@ import {
 } from '@domain/board/utils/housesAndCells'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 
-import { getCellsFromCellsToFocusedData, setCellDataInHintResult, transformCellBGColor } from '../../util'
+import { getAxisValuesFromTranslations, getCellsFromCellsToFocusedData, getLanguageSpecificHouseTypeText, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     HIDDEN_SINGLE_TYPES,
     HINTS_IDS,
@@ -232,19 +232,23 @@ const getHiddenSingleInBlockHighlightData = (hostCell: Cell, mainNumbers: MainNu
     return cellsToFocusData
 }
 
-const getHiddenSingleLogic = (rawHint: HiddenSingleRawHint, solutionValue: SolutionValue, filledCellsWithSolutionValue: Cell[]) => {
+const getHiddenSingleLogic = (rawHint: HiddenSingleRawHint, solutionValue: SolutionValue, filledCellsWithSolutionValue: Cell[], smartHintsTranslationsTexts: SmartHintsTranslationsTexts) => {
     const { type: houseType, cell } = rawHint
+    const { text, config } = smartHintsTranslationsTexts.explanation[HINTS_IDS.HIDDEN_SINGLE]
     const msgPlaceholdersValues = {
-        houseType: getLinkHTMLText(HOUSE_TYPE_VS_VOCAB_ID[houseType], HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME),
+        houseType: getLinkHTMLText(
+            HOUSE_TYPE_VS_VOCAB_ID[houseType],
+            getLanguageSpecificHouseTypeText(houseType, config.houseType, smartHintsTranslationsTexts)
+        ),
         solutionValue,
-        hostCell: getCellAxesValues(cell),
+        hostCell: getCellAxesValues(cell, getAxisValuesFromTranslations(smartHintsTranslationsTexts)),
         filledCellsWithSolutionValue: getCellsAxesValuesListText(
             filledCellsWithSolutionValue,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+            smartHintsTranslationsTexts.common.conjugations.and,
+            getAxisValuesFromTranslations(smartHintsTranslationsTexts)
         ),
     }
-    const msgTemplate = HINT_EXPLANATION_TEXTS[HINTS_IDS.HIDDEN_SINGLE]
-    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+    return dynamicInterpolation(text, msgPlaceholdersValues)
 }
 
 const getApplyHintData = (rawHint: HiddenSingleRawHint): AddMainNumberHintAction[] => {
@@ -258,7 +262,7 @@ const getApplyHintData = (rawHint: HiddenSingleRawHint): AddMainNumberHintAction
 }
 
 export const transformHiddenSingleRawHint = ({
-    rawHint, mainNumbers, smartHintsColorSystem
+    rawHint, mainNumbers, smartHintsColorSystem, smartHintsTranslationsTexts
 }: HiddenSingleTransformerArgs): TransformedRawHint => {
     const { cell, type } = rawHint
 
@@ -274,8 +278,8 @@ export const transformHiddenSingleRawHint = ({
     return {
         type: HINTS_IDS.HIDDEN_SINGLE,
         cellsToFocusData,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_SINGLE],
-        steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue, filledCellsWithSolutionValue) }],
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.HIDDEN_SINGLE],
+        steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue, filledCellsWithSolutionValue, smartHintsTranslationsTexts) }],
         selectCellOnClose: cell,
         applyHint: getApplyHintData(rawHint),
     }

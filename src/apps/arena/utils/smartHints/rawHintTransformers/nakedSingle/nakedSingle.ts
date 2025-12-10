@@ -46,7 +46,7 @@ const getSingleHouseNakedSingleDescription = (
     const msgPlaceholdersValues = {
         houseType: getLanguageSpecificHouseTypeText(houseType, config.houseType, smartHintsTranslationsTexts),
         solutionValue,
-        cellAxesText: getCellAxesValues(cell),
+        cellAxesText: getCellAxesValues(cell, getAxisValuesFromTranslations(smartHintsTranslationsTexts)),
     }
     return dynamicInterpolation(text, msgPlaceholdersValues)
 }
@@ -87,7 +87,7 @@ const getCompositeHousesNakeSingleDescription = (
 ): string => {
     const msgPlaceholdersValues = {
         solutionValue,
-        cellAxesText: getCellAxesValues(cell),
+        cellAxesText: getCellAxesValues(cell, getAxisValuesFromTranslations(smartHintsTranslationsTexts)),
     }
     const explaination = smartHintsTranslationsTexts.explanation.composite[HINTS_IDS.NAKED_SINGLE]
     return dynamicInterpolation(explaination, msgPlaceholdersValues)

@@ -4,23 +4,26 @@ import _isEmpty from '@lodash/isEmpty'
 
 import { isRowHouse } from '@domain/board/utils/housesAndCells'
 
-import { getCellAxesValues, getHouseAxesValue } from '../../util'
+import { BoardAxesValues, getCellAxesValues, getHouseAxesValue } from '../../util'
 
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 
-export const getCellsAxesValuesListText = (cells: Cell[], lastCellConjugation: string = '') => {
+export const getCellsAxesValuesListText = (
+    cells: Cell[], lastCellConjugation: string = '', boardAxesValues: BoardAxesValues
+) => {
     if (_isEmpty(cells)) return ''
 
-    if (cells.length === 1) return getCellAxesValues(cells[0])
+    if (cells.length === 1) return getCellAxesValues(cells[0], boardAxesValues)
 
-    if (!lastCellConjugation) return getCellsAxesList(cells).join(', ')
+    if (!lastCellConjugation) return getCellsAxesList(cells, boardAxesValues).join(', ')
 
     const allCellsExceptLast = cells.slice(0, cells.length - 1)
-    const cellsAxesList = getCellsAxesList(allCellsExceptLast)
-    return `${cellsAxesList.join(', ')} ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1])}`
+    const cellsAxesList = getCellsAxesList(allCellsExceptLast, boardAxesValues)
+    return `${cellsAxesList.join(', ')} ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1], boardAxesValues)}`
 }
 
-export const getCellsAxesList = (cells: Cell[]) => _map(cells, (cell: Cell) => getCellAxesValues(cell))
+export const getCellsAxesList = (cells: Cell[], boardAxesValues: BoardAxesValues) =>
+    _map(cells, (cell: Cell) => getCellAxesValues(cell, boardAxesValues))
 
 export const getHouseNumText = (house: House) => {
     if (!isRowHouse(house.type)) return toOrdinal(house.num + 1)

@@ -11,27 +11,34 @@ import {
 } from '../../../util'
 import { getHouseCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 
-import { setCellDataInHintResult, transformCellBGColor } from '../../util'
+import { getAxisValuesFromTranslations, getLanguageSpecificHouseTypeText, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { HINTS_IDS, HOUSE_TYPE_VS_FULL_NAMES } from '../../constants'
 import { COMPOSITE_HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 
 import {
-    AddMainNumberHintAction, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,
+    AddMainNumberHintAction, CellsFocusData, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 import { HiddenSingleRawHint } from '../../hiddenSingle/types'
 import { HiddenSingleTransformerArgs } from './types'
 import { HOUSE_TYPE_VS_VOCAB_ID } from '../constants'
 
-const getHiddenSingleLogic = (rawHint: HiddenSingleRawHint, solutionValue: SolutionValue) => {
+const getHiddenSingleLogic = (
+    rawHint: HiddenSingleRawHint,
+    solutionValue: SolutionValue,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
     const { type: houseType, cell } = rawHint
+    const { text, config } = smartHintsTranslationsTexts.explanation.composite[HINTS_IDS.HIDDEN_SINGLE]
     const msgPlaceholdersValues = {
-        houseType: getLinkHTMLText(HOUSE_TYPE_VS_VOCAB_ID[houseType], HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME),
+        houseType: getLinkHTMLText(
+            HOUSE_TYPE_VS_VOCAB_ID[houseType],
+            getLanguageSpecificHouseTypeText(houseType, config.houseType, smartHintsTranslationsTexts)
+        ),
         solutionValue,
-        hostCell: getCellAxesValues(cell),
+        hostCell: getCellAxesValues(cell, getAxisValuesFromTranslations(smartHintsTranslationsTexts)),
     }
-    const msgTemplate = COMPOSITE_HINT_EXPLANATION_TEXTS[HINTS_IDS.HIDDEN_SINGLE]
-    return dynamicInterpolation(msgTemplate, msgPlaceholdersValues)
+    return dynamicInterpolation(text, msgPlaceholdersValues)
 }
 
 const getApplyHintData = (rawHint: HiddenSingleRawHint): AddMainNumberHintAction[] => {
@@ -63,13 +70,15 @@ const highlightHoseHouseCells = (hiddenSingle: HiddenSingleRawHint, smartHintsCo
     return result
 }
 
-export const transformCompositeHiddenSingleRawHint = ({ rawHint, mainNumbers, smartHintsColorSystem }: HiddenSingleTransformerArgs): TransformedRawHint => {
+export const transformCompositeHiddenSingleRawHint = ({
+    rawHint, mainNumbers, smartHintsColorSystem, smartHintsTranslationsTexts
+}: HiddenSingleTransformerArgs): TransformedRawHint => {
     const hiddenSingleCellSolutionValue = MainNumbersRecord.getCellSolutionValue(mainNumbers, rawHint.cell)
     return {
         type: HINTS_IDS.HIDDEN_SINGLE,
         cellsToFocusData: highlightHoseHouseCells(rawHint, smartHintsColorSystem),
-        title: HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_SINGLE],
-        steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue) }],
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.HIDDEN_SINGLE],
+        steps: [{ text: getHiddenSingleLogic(rawHint, hiddenSingleCellSolutionValue, smartHintsTranslationsTexts) }],
         selectCellOnClose: rawHint.cell,
         applyHint: getApplyHintData(rawHint),
     }

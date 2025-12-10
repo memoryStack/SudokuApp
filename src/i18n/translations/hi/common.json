@@ -19,7 +19,11 @@
     "nextTime": "अगली बार",
     "review": "समीक्षा करें",
     "pause": "रोकें",
-    "boardYAxis": {
+    "conjugations": {
+        "and": "और",
+        "or": "या"
+    },
+    "_boardYAxis": {
         "row_0": "A",
         "row_1": "B",
         "row_2": "C",
@@ -29,6 +33,17 @@
         "row_6": "G",
         "row_7": "H",
         "row_8": "I"
+    },
+    "boardYAxis": {
+        "row_0": "क",
+        "row_1": "ख",
+        "row_2": "ग",
+        "row_3": "घ",
+        "row_4": "ङ",
+        "row_5": "च",
+        "row_6": "छ",
+        "row_7": "ज",
+        "row_8": "झ"
     },
     "boardXAxis": {
         "col_0": "1",
