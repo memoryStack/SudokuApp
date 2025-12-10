@@ -145,7 +145,7 @@ const getHintChunks = (
 
     const {
         texts,
-    } = smartHintsTranslationsTexts.explanation[HINTS_IDS.NAKED_DOUBLE]
+    } = smartHintsTranslationsTexts.explanation[getHintId(groupCandidates)]
 
     const commonMsgPlaceholdersValues = {
         candidatesListTextAndConcatenated: getCandidatesListText(

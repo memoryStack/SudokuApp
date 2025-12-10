@@ -117,10 +117,31 @@
             ],
             "unclickableCellClickInTryOutMsg": {}
         },
-        "nakedTripple": [
-            "<p>a Naked Tripple is formed when three <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> have <a href=\"CANDIDATE\">candidates</a> only from a set of 3 candidates. and each cell must have atleast 2 candidates out of these 3.\nhere {{groupCellsText}} have a Naked Tripple in {{hostHouses}}.</p>",
-            "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed."
-        ],
+        "nakedTripple": {
+            "texts": [
+                {
+                    "text": "<p>a Naked Tripple is formed when three <a href=\"CELL\">cells</a> in any <a href=\"HOUSE\">house</a> have <a href=\"CANDIDATE\">candidates</a> only from a set of 3 candidates. and each cell must have atleast 2 candidates out of these 3.\nhere {{groupCellsText}} have a Naked Tripple in {{hostHouses}}.</p>",
+                    "config": {
+                        "hostHouses": {
+                            "houseNum": {
+                                "type": "number",
+                                "form": "ordinal"
+                            },
+                            "houseName": {
+                                "type": "house",
+                                "form": "singular"
+                            },
+                            "conjugation": "and"
+                        }
+                    }
+                },
+                {
+                    "text": "here {{groupCellsText}} are reserved for {{candidatesListTextAndConcatenated}}. Although which number out of {{candidatesListTextAndConcatenated}} will fill exactly which cell is still not clear. but at this point we can say that all the {{candidatesListTextAndConcatenated}} highlighted in red can be removed.",
+                    "config": {}
+                }
+            ],
+            "unclickableCellClickInTryOutMsg": {}
+        },
         "hiddenDouble": {
             "default": [
                 "<p>a Hidden Double is formed when two <a href=\"CANDIDATE\">candidates</a> are present together only in two <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",

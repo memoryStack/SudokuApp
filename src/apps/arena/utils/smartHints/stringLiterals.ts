@@ -95,10 +95,7 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
     [HINTS_IDS.HIDDEN_SINGLE]: t('explanations.hiddenSingle.default', { returnObjects: true }),
     [HINTS_IDS.OMISSION]: t('explanations.omission', { returnObjects: true }),
     [HINTS_IDS.NAKED_DOUBLE]: t('explanations.nakedDouble', { returnObjects: true }),
-    [HINTS_IDS.NAKED_TRIPPLE]: [
-        t('explanations.nakedTripple.0', { returnObjects: true }),
-        t('explanations.nakedTripple.1', { returnObjects: true }),
-    ],
+    [HINTS_IDS.NAKED_TRIPPLE]: t('explanations.nakedTripple', { returnObjects: true }),
     [HINTS_IDS.HIDDEN_DOUBLE]: {
         DEFAULT: [
             t('explanations.hiddenDouble.default.0', { returnObjects: true }),

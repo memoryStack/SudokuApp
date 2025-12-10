@@ -181,7 +181,7 @@ export const getLanguageSpecificHouseTypeText = (
 const getHouseWithNumAndNameText = (house: House, translationConfig, translations: SmartHintsTranslationsTexts) => {
     const rawText = translations.common.houseTypes.numAndName
     return dynamicInterpolation(rawText, {
-        houseNum: getLanguageSpecificNumberText(house.num, translationConfig.houseNum, translations),
+        houseNum: getLanguageSpecificNumberText(house.num + 1, translationConfig.houseNum, translations),
         houseName: getLanguageSpecificHouseTypeText(house.type, translationConfig.houseName, translations),
     })
 }

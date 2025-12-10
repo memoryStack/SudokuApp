@@ -111,16 +111,37 @@
                     }
                 },
                 {
-                    "text": "यहाँ {{groupCellsText}} {{candidatesListTextAndConcatenated}} के लिए आरक्षित हैं। हालाँकि {{candidatesListTextAndConcatenated}} में से कौन सा अंक किस सेल में भरेगा यह अभी स्पष्ट नहीं है। लेकिन इस बिंदु पर हम कह सकते हैं कि लाल रंग में हाइलाइट किए गए सभी {{candidatesListTextAndConcatenated}} को हटाया जा सकता है।",
+                    "text": "यहाँ {{groupCellsText}} सेल्स {{candidatesListTextAndConcatenated}} के लिए आरक्षित हैं। हालाँकि {{candidatesListTextAndConcatenated}} में से कौन सा अंक किस सेल में भरेगा यह अभी स्पष्ट नहीं है। लेकिन इस बिंदु पर हम कह सकते हैं कि लाल रंग में हाइलाइट किए गए सभी {{candidatesListTextAndConcatenated}} को हटाया जा सकता है।",
                     "config": {}
                 }
             ],
             "unclickableCellClickInTryOutMsg": {}
         },
-        "nakedTripple": [
-            "<p>एक नेकेड ट्रिपल तब बनता है जब किसी हाउस में तीन सेल में केवल 3 उम्मीदवारों के सेट से उम्मीदवार होते हैं। और प्रत्येक सेल में इन 3 में से कम से कम 2 उम्मीदवार होने चाहिए।\nयहाँ {{groupCellsText}} {{hostHouses}} में एक नेकेड ट्रिपल बनाते हैं।</p>",
-            "यहाँ {{groupCellsText}} {{candidatesListTextAndConcatenated}} के लिए आरक्षित हैं। हालाँकि {{candidatesListTextAndConcatenated}} में से कौन सा अंक किस सेल में भरेगा यह अभी स्पष्ट नहीं है। लेकिन इस बिंदु पर हम कह सकते हैं कि लाल रंग में हाइलाइट किए गए सभी {{candidatesListTextAndConcatenated}} को हटाया जा सकता है।"
-        ],
+        "nakedTripple": {
+            "texts": [
+                {
+                    "text": "<p>एक नेकेड ट्रिपल तब बनता है जब किसी <a href=\"HOUSE\">हाउस</a> में तीन <a href=\"CELL\">सेल</a> में केवल 3 <a href=\"CANDIDATE\">उम्मीदवारों</a> के सेट से उम्मीदवार होते हैं। और प्रत्येक सेल में इन 3 में से कम से कम 2 उम्मीदवार होने चाहिए।\nयहाँ {{groupCellsText}} मिलकर {{hostHouses}} में एक नेकेड ट्रिपल बनाते हैं।</p>",
+                    "config": {
+                        "hostHouses": {
+                            "houseNum": {
+                                "type": "number",
+                                "form": "ordinal"
+                            },
+                            "houseName": {
+                                "type": "house",
+                                "form": "singular"
+                            },
+                            "conjugation": "and"
+                        }
+                    }
+                },
+                {
+                    "text": "यहाँ {{groupCellsText}} सेल्स {{candidatesListTextAndConcatenated}} के लिए आरक्षित हैं। हालाँकि {{candidatesListTextAndConcatenated}} में से कौन सा अंक किस सेल में भरेगा यह अभी स्पष्ट नहीं है। लेकिन इस बिंदु पर हम कह सकते हैं कि लाल रंग में हाइलाइट किए गए सभी {{candidatesListTextAndConcatenated}} को हटाया जा सकता है।",
+                    "config": {}
+                }
+            ],
+            "unclickableCellClickInTryOutMsg": {}
+        },
         "hiddenDouble": {
             "default": [
                 "<p>एक हिडन डबल तब बनता है जब दो उम्मीदवार किसी हाउस में केवल दो सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
