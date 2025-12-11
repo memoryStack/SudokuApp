@@ -18,6 +18,7 @@ import smartHintColorSystemReader from './colorSystem.reader'
 import _isNil from '@lodash/isNil'
 import _forEach from '@lodash/forEach'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import { isBlockHouse, isColHouse, isRowHouse } from '@domain/board/utils/housesAndCells'
 
 const setCellDataInHintResult = (
     cell: Cell,
@@ -166,6 +167,35 @@ export const getLanguageSpecificNumberText = (
     return number
 }
 
+type HouseNumTextTranslationConfig = {
+    type: 'houseNumber'
+    form: {
+        row: 'axis' | 'number'
+        col: 'number' | 'number_ordinal'
+        block: 'number' | 'number_ordinal'
+    }
+}
+export const getLanguageSpecificHouseNumText = (
+    house: House,
+    translationConfig: HouseNumTextTranslationConfig,
+    translations: SmartHintsTranslationsTexts
+) => {
+    if (translationConfig.type === 'houseNumber') {
+        const numberForm = translationConfig.form[house.type]
+
+        const houseNumberConfig = translations.common.houseNumber[house.type][numberForm]
+        if (houseNumberConfig.treatLikeNumber) {
+            return getLanguageSpecificNumberText(
+                house.num + 1,
+                { type: 'number', form: houseNumberConfig.form },
+                translations
+            )
+        }
+        return houseNumberConfig[house.num]
+    }
+    return '{{invalid house form}}'
+}
+
 export const getLanguageSpecificHouseTypeText = (
     houseType: HouseType,
     translationConfig,
@@ -178,17 +208,35 @@ export const getLanguageSpecificHouseTypeText = (
     return houseType
 }
 
-const getHouseWithNumAndNameText = (house: House, translationConfig, translations: SmartHintsTranslationsTexts) => {
+type HouseTypeTextTranslationConfig = {
+    type: 'house'
+    form: 'singular' | 'plural' | 'oblique'
+}
+type HouseNumAndNameTextTranslationConfig = {
+    houseNum: HouseNumTextTranslationConfig
+    houseName: HouseTypeTextTranslationConfig
+
+}
+export const getHouseWithNumAndNameText = (
+    house: House,
+    translationConfig: HouseNumAndNameTextTranslationConfig,
+    translations: SmartHintsTranslationsTexts
+) => {
     const rawText = translations.common.houseTypes.numAndName
     return dynamicInterpolation(rawText, {
-        houseNum: getLanguageSpecificNumberText(house.num + 1, translationConfig.houseNum, translations),
+        houseNum: getLanguageSpecificHouseNumText(house, translationConfig.houseNum, translations),
         houseName: getLanguageSpecificHouseTypeText(house.type, translationConfig.houseName, translations),
     })
 }
 
+type HouseListTextTranslationConfig = {
+    houseNum: HouseNumTextTranslationConfig
+    houseName: HouseTypeTextTranslationConfig
+    conjugation: "and" | "or"
+}
 export const getLanguageSpecificHouseListText = (
     houses: House[],
-    translationConfig,
+    translationConfig: HouseListTextTranslationConfig,
     translations: SmartHintsTranslationsTexts
 ) => {
     const housesTexts = houses.map(house => {

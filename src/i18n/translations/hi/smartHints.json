@@ -39,17 +39,13 @@
             "multipleHouse": {
                 "text": "<p>{{solutionValue}} को छोड़कर 1 से 9 तक के अन्य सभी अंक <a href=\"ROW\">पंक्ति</a> नं. {{rowNum}}, <a href=\"COLUMN\">स्तंभ</a> नं. {{columnNum}} और <a href=\"BLOCK\">ब्लॉक</a> नं. {{blockNum}} में मिलाकर मौजूद हैं, इसलिए {{cellAxesText}} में केवल {{solutionValue}} आ सकता है</p>",
                 "config": {
-                    "rowNum": {
-                        "form": "alphabetic",
-                        "type": "number"
-                    },
-                    "columnNum": {
-                        "form": "numeric",
-                        "type": "number"
-                    },
-                    "blockNum": {
-                        "form": "numeric",
-                        "type": "number"
+                    "housesNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
                     }
                 }
             },
@@ -83,8 +79,12 @@
                     "type": "house"
                 },
                 "secondaryHouseNum": {
-                    "form": "ordinal",
-                    "type": "number"
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
                 },
                 "secondaryHouseName": {
                     "form": "singular",
@@ -99,8 +99,12 @@
                     "config": {
                         "hostHouses": {
                             "houseNum": {
-                                "type": "number",
-                                "form": "ordinal"
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
                             },
                             "houseName": {
                                 "type": "house",
@@ -124,8 +128,12 @@
                     "config": {
                         "hostHouses": {
                             "houseNum": {
-                                "type": "number",
-                                "form": "ordinal"
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
                             },
                             "houseName": {
                                 "type": "house",
@@ -143,24 +151,176 @@
             "unclickableCellClickInTryOutMsg": {}
         },
         "hiddenDouble": {
-            "default": [
-                "<p>एक हिडन डबल तब बनता है जब दो उम्मीदवार किसी हाउस में केवल दो सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
-                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए"
-            ],
-            "removableNotesInSecondaryHouse": [
-                "<p>एक हिडन डबल तब बनता है जब दो उम्मीदवार किसी हाउस में केवल दो सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
-                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए\nनोट: {{groupCellsText}} {{secondaryHostHouse}} में भी हैं, इसलिए {{secondaryHouseRemovableNotes}} को {{secondaryHouseRemovableNotesHostCells}} से भी हटाया जाएगा"
-            ]
+            "default": {
+                "texts": [
+                    {
+                        "text": "<p>एक हिडन डबल तब बनता है जब दो <a href=\"CANDIDATE\">उम्मीदवार</a> किसी <a href=\"HOUSE\">हाउस</a> में केवल दो <a href=\"CELL\">सेल</a> में एक साथ मौजूद होते हैं और कहीं और नहीं।\n{{hostHouseNumAndName}} में {{candidatesListText}} देखें</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} {{hostHouseNumAndName}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "removableNotesInSecondaryHouse": {
+                "texts": [
+                    {
+                        "text": "<p>एक हिडन डबल तब बनता है जब दो <a href=\"CANDIDATE\">उम्मीदवार</a> किसी <a href=\"HOUSE\">हाउस</a> में केवल दो <a href=\"CELL\">सेल</a> में एक साथ मौजूद होते हैं और कहीं और नहीं।\n{{hostHouseNumAndName}} में {{candidatesListText}} देखें</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} {{hostHouseNumAndName}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए\nनोट: {{groupCellsText}} {{secondaryHostHouse}} में भी हैं, इसलिए {{secondaryHouseRemovableNotes}} को {{secondaryHouseRemovableNotesHostCells}} से भी हटाया जाएगा",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
         },
         "hiddenTripple": {
-            "default": [
-                "<p>एक हिडन ट्रिपल तब बनता है जब तीन उम्मीदवार किसी हाउस में केवल तीन सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\nइन तीन सेल में से प्रत्येक में इन तीन उम्मीदवारों में से कम से कम दो होने चाहिए।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
-                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए"
-            ],
-            "removableNotesInSecondaryHouse": [
-                "<p>एक हिडन ट्रिपल तब बनता है जब तीन उम्मीदवार किसी हाउस में केवल तीन सेल में एक साथ मौजूद होते हैं और कहीं और नहीं।\nइन तीन सेल में से प्रत्येक में इन तीन उम्मीदवारों में से कम से कम दो होने चाहिए।\n{{hostHouseNumText}} {{houseType}} में {{candidatesListText}} देखें</p>",
-                "{{candidatesListText}} {{hostHouseNumText}} {{houseType}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए\nनोट: {{groupCellsText}} {{secondaryHostHouse}} में भी हैं, इसलिए {{secondaryHouseRemovableNotes}} को {{secondaryHouseRemovableNotesHostCells}} से भी हटाया जाएगा"
-            ]
+            "default": {
+                "texts": [
+                    {
+                        "text": "<p>एक हिडन ट्रिपल तब बनता है जब तीन <a href=\"CANDIDATE\">उम्मीदवार</a> किसी <a href=\"HOUSE\">हाउस</a> में केवल तीन <a href=\"CELL\">सेल</a> में एक साथ मौजूद होते हैं और कहीं और नहीं।\nइन तीन सेल में से प्रत्येक में इन तीन उम्मीदवारों में से कम से कम दो होने चाहिए।\n{{hostHouseNumAndName}} में {{candidatesListText}} देखें</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} {{hostHouseNumAndName}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "removableNotesInSecondaryHouse": {
+                "texts": [
+                    {
+                        "text": "<p>एक हिडन ट्रिपल तब बनता है जब तीन <a href=\"CANDIDATE\">उम्मीदवार</a> किसी <a href=\"HOUSE\">हाउस</a> में केवल तीन <a href=\"CELL\">सेल</a> में एक साथ मौजूद होते हैं और कहीं और नहीं।\nइन तीन सेल में से प्रत्येक में इन तीन उम्मीदवारों में से कम से कम दो होने चाहिए।\n{{hostHouseNumAndName}} में {{candidatesListText}} देखें</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} {{hostHouseNumAndName}} में केवल {{groupCellsText}} सेल में आ सकते हैं, इसलिए इन सेल को केवल इन अंकों के लिए आरक्षित होना चाहिए। इसके कारण {{primaryHouseRemovableNotes}} को {{primaryHouseRemovableNotesHostCells}} से हटाया जाना चाहिए\nनोट: {{groupCellsText}} {{secondaryHostHouse}} में भी हैं, इसलिए {{secondaryHouseRemovableNotes}} को {{secondaryHouseRemovableNotesHostCells}} से भी हटाया जाएगा",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
         },
         "perfectXWing": [
             "<p>एक्स-विंग पहचानने के लिए, एक उम्मीदवार को खोजें जो किसी पंक्ति या स्तंभ के केवल दो सेल में मौजूद हो। हमें या तो ऐसी दो पंक्तियाँ या दो स्तंभ खोजने होंगे।\nइन पंक्तियों या स्तंभों में जहाँ उम्मीदवार मौजूद है वे चार सेल एक आयत के चार कोनों की तरह संरेखित होने चाहिए।</p>",

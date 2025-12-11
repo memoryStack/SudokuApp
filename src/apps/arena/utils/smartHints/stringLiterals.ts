@@ -97,24 +97,12 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
     [HINTS_IDS.NAKED_DOUBLE]: t('explanations.nakedDouble', { returnObjects: true }),
     [HINTS_IDS.NAKED_TRIPPLE]: t('explanations.nakedTripple', { returnObjects: true }),
     [HINTS_IDS.HIDDEN_DOUBLE]: {
-        DEFAULT: [
-            t('explanations.hiddenDouble.default.0', { returnObjects: true }),
-            t('explanations.hiddenDouble.default.1', { returnObjects: true }),
-        ],
-        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.0', { returnObjects: true }),
-            t('explanations.hiddenDouble.removableNotesInSecondaryHouse.1', { returnObjects: true }),
-        ],
+        DEFAULT: t('explanations.hiddenDouble.default', { returnObjects: true }),
+        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: t('explanations.hiddenDouble.removableNotesInSecondaryHouse', { returnObjects: true }),
     },
     [HINTS_IDS.HIDDEN_TRIPPLE]: {
-        DEFAULT: [
-            t('explanations.hiddenTripple.default.0', { returnObjects: true }),
-            t('explanations.hiddenTripple.default.1', { returnObjects: true }),
-        ],
-        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: [
-            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.0', { returnObjects: true }),
-            t('explanations.hiddenTripple.removableNotesInSecondaryHouse.1', { returnObjects: true }),
-        ],
+        DEFAULT: t('explanations.hiddenTripple.default', { returnObjects: true }),
+        REMOVABLE_NOTES_IN_SECONDARY_HOUSE: t('explanations.hiddenTripple.removableNotesInSecondaryHouse', { returnObjects: true }),
     },
     [HINTS_IDS.PERFECT_X_WING]: [
         t('explanations.perfectXWing.0', { returnObjects: true }),

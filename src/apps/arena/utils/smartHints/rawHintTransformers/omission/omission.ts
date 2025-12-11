@@ -13,7 +13,7 @@ import {
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
-import { getAxisValuesFromTranslations, getLanguageSpecificHouseTypeText, getLanguageSpecificNumberText, setCellDataInHintResult, transformCellBGColor } from '../../util'
+import { getAxisValuesFromTranslations, getLanguageSpecificHouseNumText, getLanguageSpecificHouseTypeText, getLanguageSpecificNumberText, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { OmissionTransformerArgs } from './types'
@@ -109,7 +109,11 @@ const getHintExplaination = (
             getLanguageSpecificHouseTypeText(hostHouse.type, config.hostHouseFullName, smartHintsTranslationsTexts)
         ),
         hostHouseHostCellsListText,
-        secondaryHouseNum: getLanguageSpecificNumberText(removableNotesHostHouse.num + 1, config.secondaryHouseNum, smartHintsTranslationsTexts),
+        secondaryHouseNum: getLanguageSpecificHouseNumText(
+            removableNotesHostHouse,
+            config.secondaryHouseNum,
+            smartHintsTranslationsTexts
+        ),
         secondaryHouseName: getLanguageSpecificHouseTypeText(removableNotesHostHouse.type, config.secondaryHouseName, smartHintsTranslationsTexts),
         removableNotesHostCellsListText: getCellsAxesValuesListText(
             getRemovableNotesHostCells(omission, notes),

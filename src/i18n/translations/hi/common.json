@@ -142,5 +142,43 @@
             "oblique": "ब्लॉकों"
         },
         "numAndName": "{{houseName}} नं. {{houseNum}}"
+    },
+    "houseNumber": {
+        "row": {
+            "axis": {
+                "0": "क",
+                "1": "ख",
+                "2": "ग",
+                "3": "घ",
+                "4": "ङ",
+                "5": "च",
+                "6": "छ",
+                "7": "ज",
+                "8": "झ"
+            },
+            "number": {
+                "treatLikeNumber": true
+            }
+        },
+        "col": {
+            "number": {
+                "treatLikeNumber": true,
+                "form": "numeric"
+            },
+            "number_ordinal": {
+                "treatLikeNumber": true,
+                "form": "ordinal"
+            }
+        },
+        "block": {
+            "number": {
+                "treatLikeNumber": true,
+                "form": "numeric"
+            },
+            "number_ordinal": {
+                "treatLikeNumber": true,
+                "form": "ordinal"
+            }
+        }
     }
 }

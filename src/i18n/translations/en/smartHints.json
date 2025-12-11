@@ -39,17 +39,13 @@
             "multipleHouse": {
                 "text": "<p>except {{solutionValue}} all other numbers from 1-9 are present in {{rowNum}} <a href=\"ROW\">row</a>, {{columnNum}} <a href=\"COLUMN\">column</a> and {{blockNum}} <a href=\"BLOCK\">block</a> combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}</p>",
                 "config": {
-                    "rowNum": {
-                        "form": "alphabetic",
-                        "type": "number"
-                    },
-                    "columnNum": {
-                        "form": "ordinal",
-                        "type": "number"
-                    },
-                    "blockNum": {
-                        "form": "ordinal",
-                        "type": "number"
+                    "housesNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
                     }
                 }
             },
@@ -83,8 +79,12 @@
                     "type": "house"
                 },
                 "secondaryHouseNum": {
-                    "form": "ordinal",
-                    "type": "number"
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
                 },
                 "secondaryHouseName": {
                     "form": "singular",
@@ -99,8 +99,12 @@
                     "config": {
                         "hostHouses": {
                             "houseNum": {
-                                "type": "number",
-                                "form": "ordinal"
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
                             },
                             "houseName": {
                                 "type": "house",
@@ -124,8 +128,12 @@
                     "config": {
                         "hostHouses": {
                             "houseNum": {
-                                "type": "number",
-                                "form": "ordinal"
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
                             },
                             "houseName": {
                                 "type": "house",
@@ -143,24 +151,176 @@
             "unclickableCellClickInTryOutMsg": {}
         },
         "hiddenDouble": {
-            "default": [
-                "<p>a Hidden Double is formed when two <a href=\"CANDIDATE\">candidates</a> are present together only in two <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
-                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}"
-            ],
-            "removableNotesInSecondaryHouse": [
-                "<p>a Hidden Double is formed when two <a href=\"CANDIDATE\">candidates</a> are present together only in two <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
-                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed from {{secondaryHouseRemovableNotesHostCells}} as well"
-            ]
+            "default": {
+                "texts": [
+                    {
+                        "text": "<p>a Hidden Double is formed when two <a href=\"CANDIDATE\">candidates</a> are present together only in two <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\nObserve {{candidatesListText}} in {{hostHouseNumAndName}}</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumAndName}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "removableNotesInSecondaryHouse": {
+                "texts": [
+                    {
+                        "text": "<p>a Hidden Double is formed when two <a href=\"CANDIDATE\">candidates</a> are present together only in two <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\nObserve {{candidatesListText}} in {{hostHouseNumAndName}}</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumAndName}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed from {{secondaryHouseRemovableNotesHostCells}} as well",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
         },
         "hiddenTripple": {
-            "default": [
-                "<p>a Hidden Tripple is formed when three <a href=\"CANDIDATE\">candidates</a> are present together only in three <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\neach of these three cells must have atleast two out of these three candidates.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
-                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}"
-            ],
-            "removableNotesInSecondaryHouse": [
-                "<p>a Hidden Tripple is formed when three <a href=\"CANDIDATE\">candidates</a> are present together only in three <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\neach of these three cells must have atleast two out of these three candidates.\nObserve {{candidatesListText}} in {{hostHouseNumText}} {{houseType}}</p>",
-                "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumText}} {{houseType}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed from {{secondaryHouseRemovableNotesHostCells}} as well"
-            ]
+            "default": {
+                "texts": [
+                    {
+                        "text": "<p>a Hidden Tripple is formed when three <a href=\"CANDIDATE\">candidates</a> are present together only in three <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\neach of these three cells must have atleast two out of these three candidates.\nObserve {{candidatesListText}} in {{hostHouseNumAndName}}</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumAndName}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "removableNotesInSecondaryHouse": {
+                "texts": [
+                    {
+                        "text": "<p>a Hidden Tripple is formed when three <a href=\"CANDIDATE\">candidates</a> are present together only in three <a href=\"CELL\">cells</a> and nowhere else in any <a href=\"HOUSE\">house</a>.\neach of these three cells must have atleast two out of these three candidates.\nObserve {{candidatesListText}} in {{hostHouseNumAndName}}</p>",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "text": "{{candidatesListText}} can come only in {{groupCellsText}} cells in {{hostHouseNumAndName}}, so these cells have to be reserved for these numbers only. due to this {{primaryHouseRemovableNotes}} must be removed from {{primaryHouseRemovableNotesHostCells}}\nNote: {{groupCellsText}} belong in {{secondaryHostHouse}} also, so {{secondaryHouseRemovableNotes}} will be removed from {{secondaryHouseRemovableNotesHostCells}} as well",
+                        "config": {
+                            "hostHouseNumAndName": {
+                                "houseNum": {
+                                    "type": "houseNumber",
+                                    "form": {
+                                        "row": "axis",
+                                        "col": "number_ordinal",
+                                        "block": "number_ordinal"
+                                    }
+                                },
+                                "houseName": {
+                                    "type": "house",
+                                    "form": "singular"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
         },
         "perfectXWing": [
             "<p>to spot an X-Wing, start with looking for a <a href=\"CANDIDATE\">candidate</a> which is present only in two <a href=\"CELL\">cells</a> of any <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a>. we need to find either two such rows or two columns.\nthese four cells where the candidate is present in these rows or columns must be aligned like four corners of a rectangle.</p>",

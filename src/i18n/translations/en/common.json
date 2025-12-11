@@ -38,6 +38,44 @@
         },
         "numAndName": "{{houseNum}} {{houseName}}"
     },
+    "houseNumber": {
+        "row": {
+            "axis": {
+                "0": "A",
+                "1": "B",
+                "2": "C",
+                "3": "D",
+                "4": "E",
+                "5": "F",
+                "6": "G",
+                "7": "H",
+                "8": "I"
+            },
+            "number": {
+                "treatLikeNumber": true
+            }
+        },
+        "col": {
+            "number": {
+                "treatLikeNumber": true,
+                "form": "numeric"
+            },
+            "number_ordinal": {
+                "treatLikeNumber": true,
+                "form": "ordinal"
+            }
+        },
+        "block": {
+            "number": {
+                "treatLikeNumber": true,
+                "form": "numeric"
+            },
+            "number_ordinal": {
+                "treatLikeNumber": true,
+                "form": "ordinal"
+            }
+        }
+    },
     "boardYAxis": {
         "row_0": "A",
         "row_1": "B",

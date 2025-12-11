@@ -14,7 +14,7 @@ import {
     HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
 import { HINT_ID_VS_TITLES, HintExplainationTexts } from '../../stringLiterals'
-import { getAxisValuesFromTranslations, getLanguageSpecificHouseTypeText, getLanguageSpecificNumberText, setCellDataInHintResult, transformCellBGColor } from '../../util'
+import { getAxisValuesFromTranslations, getLanguageSpecificHouseNumText, getLanguageSpecificHouseTypeText, getLanguageSpecificNumberText, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import {
     areSameCells,
     BoardAxesValues,
@@ -72,9 +72,21 @@ const getMultipleHousesNakeSingleDescription = (
     const msgPlaceholdersValues = {
         solutionValue,
         cellAxesText: getCellAxesValues(cell, getAxisValuesFromTranslations(smartHintsTranslationsTexts)),
-        rowNum: getLanguageSpecificNumberText(getCellRowHouseInfo(cell).num + 1, config.rowNum, smartHintsTranslationsTexts),
-        columnNum: getLanguageSpecificNumberText(getCellColHouseInfo(cell).num + 1, config.columnNum, smartHintsTranslationsTexts),
-        blockNum: getLanguageSpecificNumberText(getCellBlockHouseInfo(cell).num + 1, config.blockNum, smartHintsTranslationsTexts),
+        rowNum: getLanguageSpecificHouseNumText(
+            getCellRowHouseInfo(cell),
+            config.housesNum,
+            smartHintsTranslationsTexts
+        ),
+        columnNum: getLanguageSpecificHouseNumText(
+            getCellColHouseInfo(cell),
+            config.housesNum,
+            smartHintsTranslationsTexts
+        ),
+        blockNum: getLanguageSpecificHouseNumText(
+            getCellBlockHouseInfo(cell),
+            config.housesNum,
+            smartHintsTranslationsTexts
+        ),
     }
 
     return dynamicInterpolation(text, msgPlaceholdersValues)

@@ -33,7 +33,7 @@ import {
 } from '../../../util'
 
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
-import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
+import { getCellsAxesValuesListText, getHouseNumAndName, getHouseNumText } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
     setCellDataInHintResult,
@@ -41,13 +41,15 @@ import {
     removeDuplicteCells,
     getCandidatesListText,
     transformCellBGColor,
+    getHouseWithNumAndNameText,
+    getAxisValuesFromTranslations,
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { getBlockAndBoxNum } from '@domain/board/utils/cellsTransformers'
 import { HiddenGroupTransformerArgs } from './types'
 import {
-    CellHighlightData, CellsFocusData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
+    CellHighlightData, CellsFocusData, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 
 import { GroupCandidate, GroupCandidates, GroupHostCells } from '../../hiddenGroup/types'
@@ -242,26 +244,46 @@ const getHintChunks = (
     secondaryHostHouse: House,
     secondaryHouseEligibleForHighlight: boolean,
     notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts,
 ): string[] => {
     const hintId = groupCandidates.length === 2 ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE
-    const msgTemplates = secondaryHouseEligibleForHighlight ? HINT_EXPLANATION_TEXTS[hintId].REMOVABLE_NOTES_IN_SECONDARY_HOUSE
-        : HINT_EXPLANATION_TEXTS[hintId].DEFAULT as string[]
+    const { texts } = secondaryHouseEligibleForHighlight ?
+        smartHintsTranslationsTexts.explanation[hintId].REMOVABLE_NOTES_IN_SECONDARY_HOUSE
+        : smartHintsTranslationsTexts.explanation[hintId].DEFAULT as string[]
     const groupCellsRemovableNotes = getGroupCellsRemovableNotes(groupCandidates, groupCells, notes)
     const primaryHouseRemovableNotesHostCells = getPrimaryHouseRemovableNotesHostCells(groupCandidates, groupCells, notes)
-    const msgPlaceholdersValues = {
-        houseType: HOUSE_TYPE_VS_FULL_NAMES[house.type].FULL_NAME,
-        hostHouseNumText: getHouseNumText(house),
-        candidatesListText: getCandidatesListText(_sortBy(groupCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        groupCellsText: getCellsAxesValuesListText(sortCells(groupCells)),
-        primaryHouseRemovableNotes: getCandidatesListText(groupCellsRemovableNotes),
-        primaryHouseRemovableNotesHostCells: getCellsAxesValuesListText(primaryHouseRemovableNotesHostCells),
-        ...secondaryHouseEligibleForHighlight && {
-            secondaryHostHouse: `${getHouseNumText(secondaryHostHouse)} ${HOUSE_TYPE_VS_FULL_NAMES[secondaryHostHouse.type].FULL_NAME}`,
-            secondaryHouseRemovableNotes: getCandidatesListText(getSecondaryHouseRemovableNotes(secondaryHostHouse, groupCandidates, groupCells, notes)),
-            secondaryHouseRemovableNotesHostCells: getCellsAxesValuesListText(getSecondaryHouseRemovableNotesHostCells(secondaryHostHouse, groupCandidates, groupCells, notes)),
-        },
-    }
-    return msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+
+    return texts.map(({ text, config }: { text: string, config: {} }): string => {
+        const msgPlaceholdersValues = {
+            hostHouseNumAndName: getHouseWithNumAndNameText(
+                house, config.hostHouseNumAndName, smartHintsTranslationsTexts
+            ),
+            candidatesListText: getCandidatesListText(
+                _sortBy(groupCandidates),
+                smartHintsTranslationsTexts.common.conjugations.and,
+            ),
+            groupCellsText: getCellsAxesValuesListText(
+                sortCells(groupCells), undefined, getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+            ),
+            primaryHouseRemovableNotes: getCandidatesListText(groupCellsRemovableNotes),
+            primaryHouseRemovableNotesHostCells: getCellsAxesValuesListText(
+                primaryHouseRemovableNotesHostCells, undefined, getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+            ),
+            ...secondaryHouseEligibleForHighlight && {
+                secondaryHostHouse: config.hostHouseNumAndName ? getHouseWithNumAndNameText(
+                    secondaryHostHouse, config.hostHouseNumAndName, smartHintsTranslationsTexts
+                ) : '',
+                secondaryHouseRemovableNotes: getCandidatesListText(getSecondaryHouseRemovableNotes(secondaryHostHouse, groupCandidates, groupCells, notes)),
+                secondaryHouseRemovableNotesHostCells: getCellsAxesValuesListText(
+                    getSecondaryHouseRemovableNotesHostCells(secondaryHostHouse, groupCandidates, groupCells, notes),
+                    undefined,
+                    getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+                ),
+            },
+        }
+
+        return dynamicInterpolation(text, msgPlaceholdersValues)
+    })
 }
 
 const getTryOutInputPanelAllowedCandidates = (groupCandidates: GroupCandidates, hostCells: GroupHostCells, notes: Notes): NoteValue[] => {
@@ -342,6 +364,7 @@ export const transformHiddenGroupRawHint = ({
     mainNumbers,
     notesData,
     smartHintsColorSystem,
+    smartHintsTranslationsTexts,
 }: HiddenGroupTransformerArgs): TransformedRawHint => {
     const { house, groupCandidates, groupCells: hostCells } = group
 
@@ -385,7 +408,15 @@ export const transformHiddenGroupRawHint = ({
     }
 
     // pass secondary house as well here
-    const hintChunks = getHintChunks(house, groupCandidates, hostCells, secondaryHostHouse, secondaryHouseEligibleForHighlight as boolean, notesData)
+    const hintChunks = getHintChunks(
+        house,
+        groupCandidates,
+        hostCells,
+        secondaryHostHouse,
+        secondaryHouseEligibleForHighlight as boolean,
+        notesData,
+        smartHintsTranslationsTexts
+    )
 
     const isHiddenDoubles = groupCandidates.length === 2
     const tryOutInputPanelAllowedCandidates = getTryOutInputPanelAllowedCandidates(
@@ -398,8 +429,8 @@ export const transformHiddenGroupRawHint = ({
         type: isHiddenDoubles ? HINTS_IDS.HIDDEN_DOUBLE : HINTS_IDS.HIDDEN_TRIPPLE,
         hasTryOut: true,
         title: isHiddenDoubles
-            ? HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_DOUBLE]
-            : HINT_ID_VS_TITLES[HINTS_IDS.HIDDEN_TRIPPLE],
+            ? smartHintsTranslationsTexts.title[HINTS_IDS.HIDDEN_DOUBLE]
+            : smartHintsTranslationsTexts.title[HINTS_IDS.HIDDEN_TRIPPLE],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         cellsToFocusData,
         focusedCells,
