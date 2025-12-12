@@ -527,9 +527,14 @@
         "wWing": [
             "<p>ध्यान दें कि {{conjguateHouse}} में आप जहाँ भी {{conjugateHouseNote}} भरें, {{nakedPairHostCells}} में से एक को {{removableNote}} से भरना होगा।\nयदि {{conjugateHouseNote}} {{firstConjugateHouseCell}} में भरा जाता है तो {{firstNakedPairHostCell}} को {{removableNote}} होना होगा और यदि {{conjugateHouseNote}} {{secondConjugateHouseCell}} में भरा जाता है तो {{secondNakedPairHostCell}} को {{removableNote}} होना होगा।\nइसलिए लाल रंग में सभी {{removableNote}} हटाए जा सकते हैं।</p>"
         ],
-        "xyzWing": [
-            "<p>तीन सेल {{xyzWingCells}} देखें, इनमें उनके उम्मीदवार केवल {{xyzWingCandidates}} से हैं। आप {{xyzWingCells}} में {{xyzWingCandidates}} किसी भी संयोजन में भर सकते हैं, इनमें से एक सेल निश्चित रूप से {{wingsAndPivotCommonNote}} से भरा जाना चाहिए।\nइसलिए {{wingsAndPivotCommonNote}} को {{removableNoteHostCells}} से हटाया जा सकता है</p>"
-        ],
+        "xyzWing": {
+            "texts": [
+                {
+                    "text": "<p>तीन <a href=\"CELL\">सेल</a> {{xyzWingCells}} देखें, इनमें उनके <a href=\"CANDIDATE\">उम्मीदवार</a> केवल {{xyzWingCandidates}} से हैं। आप {{xyzWingCells}} में {{xyzWingCandidates}} किसी भी संयोजन में भर सकते हैं, इनमें से एक सेल निश्चित रूप से {{wingsAndPivotCommonNote}} से भरा जाना चाहिए।\nइसलिए {{wingsAndPivotCommonNote}} को {{removableNoteHostCells}} से हटाया जा सकता है</p>",
+                    "config": {}
+                }
+            ]
+        },
         "uniqueRectangle": {
             "typeOne": {
                 "singleExtraCandidate": [

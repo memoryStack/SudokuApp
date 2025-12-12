@@ -124,9 +124,7 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
     [HINTS_IDS.W_WING]: [
         t('explanations.wWing.0', { returnObjects: true }),
     ],
-    [HINTS_IDS.XYZ_WING]: [
-        t('explanations.xyzWing.0', { returnObjects: true }),
-    ],
+    [HINTS_IDS.XYZ_WING]: t('explanations.xyzWing', { returnObjects: true }),
     [HINTS_IDS.UNIQUE_RECTANGLE]: {
         [UR_TYPES.TYPE_ONE]: {
             singleExtraCandidateMsg: [

@@ -469,7 +469,7 @@
                     "text": "<p>now notice the arrangements of candidates in pivot and wings cells\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells, {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}. and other <a href=\"CANDIDATE\">candidate</a> of both wings cells is same, which is {{commonNoteInWings}} here.</p>"
                 },
                 {
-                    "text": "due to this arrangement {{commonNoteInWings}} will be removed from cells which share a house with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}. so {{removableNotesHostCells}} can't have {{commonNoteInWings}} as their solution",
+                    "text": "due to this arrangement {{commonNoteInWings}} will be removed from cells which share a house with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}. so {{removableNotesHostCells}} can't have {{commonNoteInWings}} as their solution"
                 }
             ],
             "config": {
@@ -527,9 +527,14 @@
         "wWing": [
             "<p>Notice that in {{conjguateHouse}} no matter where you fill {{conjugateHouseNote}}, one of {{nakedPairHostCells}} have to be filled by {{removableNote}}.\nIf {{conjugateHouseNote}} is filled in {{firstConjugateHouseCell}} then {{firstNakedPairHostCell}} have to be {{removableNote}} and if {{conjugateHouseNote}} is filled in {{secondConjugateHouseCell}} then {{secondNakedPairHostCell}} have to be {{removableNote}}.\nSo all the {{removableNote}} in red color can be removed.\n</p>"
         ],
-        "xyzWing": [
-            "<p>Notice three <a href=\"CELL\">cells</a> {{xyzWingCells}}, these have their <a href=\"CANDIDATE\">candidates</a> only from {{xyzWingCandidates}}. You can fill {{xyzWingCandidates}} in {{xyzWingCells}} in any combination, one of these cells must be filled by {{wingsAndPivotCommonNote}} for sure.\nHence {{wingsAndPivotCommonNote}} can be removed from {{removableNoteHostCells}}\n</p>"
-        ],
+        "xyzWing": {
+            "texts": [
+                {
+                    "text": "<p>Notice three <a href=\"CELL\">cells</a> {{xyzWingCells}}, these have their <a href=\"CANDIDATE\">candidates</a> only from {{xyzWingCandidates}}. You can fill {{xyzWingCandidates}} in {{xyzWingCells}} in any combination, one of these cells must be filled by {{wingsAndPivotCommonNote}} for sure.\nHence {{wingsAndPivotCommonNote}} can be removed from {{removableNoteHostCells}}\n</p>",
+                    "config": {}
+                }
+            ]
+        },
         "uniqueRectangle": {
             "typeOne": {
                 "singleExtraCandidate": [

@@ -2,19 +2,19 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
 
 import { HINTS_IDS } from '../../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 
-import { getCellsAxesValuesListText, getHouseNumAndName } from '../helpers'
+import { getCellsAxesValuesListText } from '../helpers'
 import {
     getCandidatesListText,
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     highlightNoteInCellsWithGivenColor,
+    getAxisValuesFromTranslations,
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import {
-    CellsFocusData, CellsRestrictedNumberInputs, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+    CellsFocusData, CellsRestrictedNumberInputs, NotesRemovalHintAction, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 
 import { XYZWingTransformerArgs } from './types'
@@ -37,17 +37,49 @@ const getXYZWingCells = (xyzWing: XYZWingRawHint) => {
     ]
 }
 
-const getHintExplanationText = (xyzWing: XYZWingRawHint, notes: Notes) => {
-    const msgTemplates = HINT_EXPLANATION_TEXTS.XYZ_WING
+type XYZWingTranslation = {
+    texts: { text: string, config: Record<string, any> }[]
+}
 
-    const msgPlaceholdersValues = {
-        xyzWingCells: getCellsAxesValuesListText(getXYZWingCells(xyzWing)),
-        xyzWingCandidates: getCandidatesListText(xyzWing.pivot.notes),
-        wingsAndPivotCommonNote: xyzWing.wingsAndPivotCommonNote,
-        removableNoteHostCells: getCellsAxesValuesListText(xyzWing.removableNoteHostCells)
+const getHintChunks = (
+    xyzWing: XYZWingRawHint,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const xyzWingTranslation = smartHintsTranslationsTexts.explanation[HINTS_IDS.XYZ_WING] as unknown as XYZWingTranslation
+    const { texts } = xyzWingTranslation
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const common = smartHintsTranslationsTexts.common as {
+        conjugations: { and: string, or: string }
     }
 
-    const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    return texts.map(({ text }: { text: string, config: Record<string, any> }) => {
+        const msgPlaceholdersValues = {
+            xyzWingCells: getCellsAxesValuesListText(
+                getXYZWingCells(xyzWing),
+                common.conjugations.and,
+                axisValues
+            ),
+            xyzWingCandidates: getCandidatesListText(
+                xyzWing.pivot.notes,
+                common.conjugations.and
+            ),
+            wingsAndPivotCommonNote: xyzWing.wingsAndPivotCommonNote,
+            removableNoteHostCells: getCellsAxesValuesListText(
+                xyzWing.removableNoteHostCells,
+                common.conjugations.and,
+                axisValues
+            )
+        }
+
+        return dynamicInterpolation(text, msgPlaceholdersValues)
+    })
+}
+
+const getHintExplanationText = (
+    xyzWing: XYZWingRawHint,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const hintChunks = getHintChunks(xyzWing, smartHintsTranslationsTexts)
     return getHintExplanationStepsFromHintChunks(hintChunks)
 }
 
@@ -120,12 +152,13 @@ export const transformXYZWingRawHint = ({
     rawHint: xyzWing,
     notesData,
     smartHintsColorSystem,
+    smartHintsTranslationsTexts,
 }: XYZWingTransformerArgs): TransformedRawHint => {
     return {
         type: HINTS_IDS.XYZ_WING,
         hasTryOut: true,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.XYZ_WING],
-        steps: getHintExplanationText(xyzWing, notesData),
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.XYZ_WING],
+        steps: getHintExplanationText(xyzWing, smartHintsTranslationsTexts),
         cellsToFocusData: getCellsToFocusData(xyzWing, notesData, smartHintsColorSystem),
         focusedCells: getAllFocusedCellsCoordinates(xyzWing),
         applyHint: getApplyHintData(xyzWing),
