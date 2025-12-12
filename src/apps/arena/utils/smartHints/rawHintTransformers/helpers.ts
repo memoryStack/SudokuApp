@@ -9,7 +9,7 @@ import { BoardAxesValues, getCellAxesValues, getHouseAxesValue } from '../../uti
 import { HOUSE_TYPE_VS_FULL_NAMES } from '../constants'
 
 export const getCellsAxesValuesListText = (
-    cells: Cell[], lastCellConjugation: string = '', boardAxesValues: BoardAxesValues
+    cells: Cell[], lastCellConjugation: string = '', boardAxesValues?: BoardAxesValues
 ) => {
     if (_isEmpty(cells)) return ''
 
@@ -22,7 +22,7 @@ export const getCellsAxesValuesListText = (
     return `${cellsAxesList.join(', ')} ${lastCellConjugation} ${getCellAxesValues(cells[cells.length - 1], boardAxesValues)}`
 }
 
-export const getCellsAxesList = (cells: Cell[], boardAxesValues: BoardAxesValues) =>
+export const getCellsAxesList = (cells: Cell[], boardAxesValues?: BoardAxesValues) =>
     _map(cells, (cell: Cell) => getCellAxesValues(cell, boardAxesValues))
 
 export const getHouseNumText = (house: House) => {

@@ -15,6 +15,9 @@ import {
     getTryOutInputPanelNumbersVisibility,
     getCellsFromCellsToFocusedData,
     transformCellBGColor,
+    getLanguageSpecificHouseTypeText,
+    HouseNumTextTranslationConfig,
+    getAxisValuesFromTranslations,
 } from '../../../util'
 import { getCrossHouseType, getXWingCandidate, getXWingCells } from '../../../xWing/utils'
 
@@ -31,6 +34,7 @@ import smartHintColorSystemReader from '../../../colorSystem.reader'
 import { XWingRawHint } from '../../../xWing/types'
 import {
     CellsFocusData, SmartHintsColorSystem, CellHighlightData, TransformedRawHint,
+    SmartHintsTranslationsTexts,
 } from '../../../types'
 import { joinStringsListWithArrow } from '../../helpers'
 
@@ -112,31 +116,47 @@ const highlightCrossHouseCells = (
     })
 }
 
-const getXWingCornersText = (xWing: XWingRawHint) => {
+const getXWingCornersText = (
+    xWing: XWingRawHint,
+    translations?: SmartHintsTranslationsTexts,
+) => {
     const {
         topLeft, topRight, bottomLeft, bottomRight,
     } = getXWingCornerCells(xWing)
-
+    const axisValues = getAxisValuesFromTranslations(translations as SmartHintsTranslationsTexts)
     const cornersAxesList = [topLeft, topRight, bottomRight, bottomLeft, topLeft]
-        .map(cell => getCellAxesValues(cell))
+        .map(cell => getCellAxesValues(cell, axisValues))
     return joinStringsListWithArrow(cornersAxesList)
 }
 
-const getHintChunks = (xWing: XWingRawHint) => {
-    const { topDown: topDownDiagonalText, bottomUp: bottomUpDiagonalText } = getDiagonalsCornersAxesTexts(xWing)
-    const msgPlaceholdersValues = {
-        candidate: getXWingCandidate(xWing),
-        ...getXWingHousesTexts(xWing.houseType, xWing.legs),
-        houseFullNamePlural: getXWingHouseFullNamePlural(xWing),
-        rectangleCornersText: getXWingCornersText(xWing),
-        topDownDiagonalText,
-        bottomUpDiagonalText,
-        ...getCrossHouseAxesText(xWing),
-        crossHouseFullNamePlural: getXWingCrossHouseFullNamePlural(xWing),
-    }
+const getHintChunks = (
+    xWing: XWingRawHint,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const { topDown: topDownDiagonalText, bottomUp: bottomUpDiagonalText } = getDiagonalsCornersAxesTexts(
+        xWing,
+        smartHintsTranslationsTexts
+    )
 
-    const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.PERFECT_X_WING] as string[]
-    return msgTemplates.map(template => dynamicInterpolation(template, msgPlaceholdersValues))
+    const { texts } = smartHintsTranslationsTexts.explanation[HINTS_IDS.PERFECT_X_WING]
+
+    return texts.map(({ text, config }: { text: string, config: Record<string, any> }) => {
+        const msgPlaceholdersValues = {
+            candidate: getXWingCandidate(xWing),
+            ...getXWingHousesTexts(xWing.houseType, xWing.legs, config?.houseAxesValue?.houseNum, smartHintsTranslationsTexts),
+            houseFullNamePlural: config.housesFullName ? getLanguageSpecificHouseTypeText(xWing.houseType, config.housesFullName, smartHintsTranslationsTexts) : undefined,
+            rectangleCornersText: getXWingCornersText(xWing, smartHintsTranslationsTexts),
+            topDownDiagonalText,
+            bottomUpDiagonalText,
+            ...getCrossHouseAxesText(xWing, config?.houseAxesValue?.houseNum, smartHintsTranslationsTexts),
+            crossHouseFullNamePlural: config.housesFullName ? getLanguageSpecificHouseTypeText(getCrossHouseType(xWing.houseType), config.housesFullName, smartHintsTranslationsTexts) : undefined,
+        }
+
+        return dynamicInterpolation(text, {
+            ...msgPlaceholdersValues,
+            ...config,
+        })
+    })
 }
 
 const getRemovableNotesHostCells = (
@@ -151,6 +171,7 @@ export const getPerfectXWingUIData = (
     xWing: XWingRawHint,
     notesData: Notes,
     smartHintsColorSystem: SmartHintsColorSystem,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts,
 ): TransformedRawHint => {
     const { legs, houseType } = xWing
     const { candidate } = legs[0]
@@ -170,10 +191,10 @@ export const getPerfectXWingUIData = (
     return {
         hasTryOut: true,
         type: HINTS_IDS.PERFECT_X_WING,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.PERFECT_X_WING],
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.PERFECT_X_WING],
         cellsToFocusData,
         focusedCells,
-        steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing)),
+        steps: getHintExplanationStepsFromHintChunks(getHintChunks(xWing, smartHintsTranslationsTexts)),
         clickableCells: [...xWingCells, ...removableNotesHostCells],
         unclickableCellClickInTryOutMsg: 'you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.',
         applyHint: getApplyHintData(candidate, removableNotesHostCells),

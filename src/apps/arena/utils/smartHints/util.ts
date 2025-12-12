@@ -167,7 +167,7 @@ export const getLanguageSpecificNumberText = (
     return number
 }
 
-type HouseNumTextTranslationConfig = {
+export type HouseNumTextTranslationConfig = {
     type: 'houseNumber'
     form: {
         row: 'axis' | 'number'

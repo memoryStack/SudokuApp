@@ -322,11 +322,52 @@
                 ]
             }
         },
-        "perfectXWing": [
-            "<p>to spot an X-Wing, start with looking for a <a href=\"CANDIDATE\">candidate</a> which is present only in two <a href=\"CELL\">cells</a> of any <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a>. we need to find either two such rows or two columns.\nthese four cells where the candidate is present in these rows or columns must be aligned like four corners of a rectangle.</p>",
-            "here {{candidate}} is present only in two cells of {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.\ndue to this arrangement of {{candidate}} in these {{houseFullNamePlural}}, any {{candidate}} that is highlighted in red color in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} can be removed",
-            "because to fill {{candidate}} in both {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}}, it can be filled either in {{topDownDiagonalText}} OR in {{bottomUpDiagonalText}} cells.\nbecause of this {{candidate}} present in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} in red color will be removed"
-        ],
+        "perfectXWing": {
+            "texts": [
+                {
+                    "text": "<p>to spot an X-Wing, start with looking for a <a href=\"CANDIDATE\">candidate</a> which is present only in two <a href=\"CELL\">cells</a> of any <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a>. we need to find either two such rows or two columns.\nthese four cells where the candidate is present in these rows or columns must be aligned like four corners of a rectangle.</p>",
+                    "config": {}
+                },
+                {
+                    "text": "here {{candidate}} is present only in two cells of {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}} forming a {{rectangleCornersText}} rectangle.\ndue to this arrangement of {{candidate}} in these {{houseFullNamePlural}}, any {{candidate}} that is highlighted in red color in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} can be removed",
+                    "config": {
+                        "houseAxesValue": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "housesFullName": {
+                            "type": "house",
+                            "form": "plural"
+                        }
+                    }
+                },
+                {
+                    "text": "because to fill {{candidate}} in both {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}}, it can be filled either in {{topDownDiagonalText}} OR in {{bottomUpDiagonalText}} cells.\nbecause of this {{candidate}} present in {{crossHouseAAxesValue}} and {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} in red color will be removed",
+                    "config": {
+                        "houseAxesValue": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "housesFullName": {
+                            "type": "house",
+                            "form": "plural"
+                        }
+                    }
+                }
+            ]
+        },
         "finnedXWing": [
             "<p>If you don't understand <a href=\"PERFECT_X_WING\">X-Wing</a> then you should learn that first.\nwhen the <a href=\"CANDIDATE\">candidate</a> is present in more than 2 <a href=\"CELL\">cells</a> of only one <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> then it's not a perfect X-Wing but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called <a href=\"X_WING_FINN_CELLS\">Finn Cells</a>.\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>",
             "<p>only one row or column can have these finn cells. and these finn cells must be in the same <a href=\"BLOCK\">block</a> with atleast one of the X-Wing <a href=\"X_WING_CORNER_CELLS\">corner cells</a>.\nnotice here that {{finnCellsAxesListText}} (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}</p>",

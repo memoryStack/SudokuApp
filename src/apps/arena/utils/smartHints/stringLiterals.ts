@@ -104,20 +104,9 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
         DEFAULT: t('explanations.hiddenTripple.default', { returnObjects: true }),
         REMOVABLE_NOTES_IN_SECONDARY_HOUSE: t('explanations.hiddenTripple.removableNotesInSecondaryHouse', { returnObjects: true }),
     },
-    [HINTS_IDS.PERFECT_X_WING]: [
-        t('explanations.perfectXWing.0', { returnObjects: true }),
-        t('explanations.perfectXWing.1', { returnObjects: true }),
-        t('explanations.perfectXWing.2', { returnObjects: true }),
-    ],
-    [HINTS_IDS.FINNED_X_WING]: [
-        t('explanations.finnedXWing.0', { returnObjects: true }),
-        t('explanations.finnedXWing.1', { returnObjects: true }),
-        t('explanations.finnedXWing.2', { returnObjects: true }),
-    ],
-    [HINTS_IDS.SASHIMI_FINNED_X_WING]: [
-        t('explanations.sashimiFinnedXWing.0', { returnObjects: true }),
-        t('explanations.sashimiFinnedXWing.1', { returnObjects: true }),
-    ],
+    [HINTS_IDS.PERFECT_X_WING]: t('explanations.perfectXWing', { returnObjects: true }),
+    [HINTS_IDS.FINNED_X_WING]: t('explanations.finnedXWing', { returnObjects: true }),
+    [HINTS_IDS.SASHIMI_FINNED_X_WING]: t('explanations.sashimiFinnedXWing', { returnObjects: true }),
     [HINTS_IDS.Y_WING]: [
         t('explanations.yWing.0', { returnObjects: true }),
         t('explanations.yWing.1', { returnObjects: true }),

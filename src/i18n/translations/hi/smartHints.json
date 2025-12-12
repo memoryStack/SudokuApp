@@ -322,11 +322,52 @@
                 ]
             }
         },
-        "perfectXWing": [
-            "<p>एक्स-विंग पहचानने के लिए, एक उम्मीदवार को खोजें जो किसी पंक्ति या स्तंभ के केवल दो सेल में मौजूद हो। हमें या तो ऐसी दो पंक्तियाँ या दो स्तंभ खोजने होंगे।\nइन पंक्तियों या स्तंभों में जहाँ उम्मीदवार मौजूद है वे चार सेल एक आयत के चार कोनों की तरह संरेखित होने चाहिए।</p>",
-            "यहाँ {{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullNamePlural}} के केवल दो सेल में मौजूद है जो {{rectangleCornersText}} आयत बनाता है।\nइन {{houseFullNamePlural}} में {{candidate}} की इस व्यवस्था के कारण, {{crossHouseAAxesValue}} और {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} में लाल रंग में हाइलाइट किया गया कोई भी {{candidate}} हटाया जा सकता है",
-            "क्योंकि {{houseAAxesValue}} और {{houseBAxesValue}} दोनों {{houseFullNamePlural}} में {{candidate}} भरने के लिए, इसे या तो {{topDownDiagonalText}} में या {{bottomUpDiagonalText}} सेल में भरा जा सकता है।\nइसके कारण {{crossHouseAAxesValue}} और {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} में लाल रंग में मौजूद {{candidate}} हटा दिया जाएगा"
-        ],
+        "perfectXWing": {
+            "texts": [
+                {
+                    "text": "<p>एक्स-विंग पहचानने के लिए, एक <a href=\"CANDIDATE\">उम्मीदवार</a> को खोजें जो किसी <a href=\"ROW\">पंक्ति</a> या <a href=\"COLUMN\">स्तंभ</a> के केवल दो <a href=\"CELL\">सेल</a> में मौजूद हो। हमें या तो ऐसी दो पंक्तियाँ या दो स्तंभ खोजने होंगे।\nइन पंक्तियों या स्तंभों में जहाँ उम्मीदवार मौजूद है वे चार सेल एक आयत के चार कोनों की तरह संरेखित होने चाहिए।</p>",
+                    "config": {}
+                },
+                {
+                    "text": "यहाँ {{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullNamePlural}} के केवल दो सेल में मौजूद है जो {{rectangleCornersText}} आयत बनाता है।\nइन {{houseFullNamePlural}} में {{candidate}} की इस व्यवस्था के कारण, {{crossHouseAAxesValue}} और {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} में लाल रंग में हाइलाइट किया गया कोई भी {{candidate}} हटाया जा सकता है",
+                    "config": {
+                        "houseAxesValue": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "housesFullName": {
+                            "type": "house",
+                            "form": "plural"
+                        }
+                    }
+                },
+                {
+                    "text": "क्योंकि {{houseAAxesValue}} और {{houseBAxesValue}} दोनों {{houseFullNamePlural}} में {{candidate}} भरने के लिए, इसे या तो {{topDownDiagonalText}} में या {{bottomUpDiagonalText}} सेल में भरा जा सकता है।\nइसके कारण {{crossHouseAAxesValue}} और {{crossHouseBAxesValue}} {{crossHouseFullNamePlural}} में लाल रंग में मौजूद {{candidate}} हटा दिया जाएगा",
+                    "config": {
+                        "houseAxesValue": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "housesFullName": {
+                            "type": "house",
+                            "form": "plural"
+                        }
+                    }
+                }
+            ]
+        },
         "finnedXWing": [
             "<p>यदि आप एक्स-विंग नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब उम्मीदवार केवल एक पंक्ति या स्तंभ के 2 से अधिक सेल में मौजूद हो तो यह एक परफेक्ट एक्स-विंग नहीं है लेकिन कुछ मामलों में हम इसे फिन्ड एक्स-विंग कह सकते हैं। जहाँ उम्मीदवार मौजूद है वे अतिरिक्त सेल फिन सेल कहलाते हैं।\n{{finnedLegAxesText}} {{finnedLegHouseText}} में {{finnCellsAxesListText}} {{finnCellEnglishText}} में अतिरिक्त {{candidate}} देखें</p>",
             "<p>केवल एक पंक्ति या स्तंभ में ये फिन सेल हो सकते हैं। और ये फिन सेल एक्स-विंग कॉर्नर सेल में से कम से कम एक के साथ एक ही ब्लॉक में होने चाहिए।\nयहाँ देखें कि {{finnCellsAxesListText}} (फिन {{finnCellEnglishText}}) {{finnedBlockPerfectCellsAxesText}} {{cornersText}} के साथ ब्लॉक {{shareVerbGrammaticalText}}</p>",
