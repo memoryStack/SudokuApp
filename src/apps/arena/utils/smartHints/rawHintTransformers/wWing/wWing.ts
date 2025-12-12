@@ -12,18 +12,20 @@ import _intersection from '@lodash/intersection'
 
 import { HINTS_IDS } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
-import { areCellsFromSameHouse, areSameCells, areSameColCells, areSameRowCells, getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
+import { areCellsFromSameHouse, areSameCells, areSameColCells, areSameRowCells, BoardAxesValues, getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 
 import { getCellsAxesValuesListText, getHouseNumAndName } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
+    getHouseWithNumAndNameText,
     getTryOutInputPanelNumbersVisibility,
     highlightNoteInCellsWithGivenColor,
+    getAxisValuesFromTranslations
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import {
-    CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+    CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 
 import { WWingTransformerArgs } from './types'
@@ -34,7 +36,7 @@ const CELLS_NOTES_COLORS = {
     NAKED_PAIR_OTHER_NOTE: 'green'
 }
 
-export const getConjugateHouseAndNakedPairCellsPairing = (wWing: WWingRawHint, notes: Notes) => {
+export const getConjugateHouseAndNakedPairCellsPairing = (wWing: WWingRawHint, notes: Notes, axesValues: BoardAxesValues) => {
     const result: { [conjugateHouseCell: string]: string } = {}
     const conjugateHouseCells = getNoteHostCellsInHouse(wWing.conjugateNote, wWing.conjugateHouse, notes)
 
@@ -59,31 +61,32 @@ export const getConjugateHouseAndNakedPairCellsPairing = (wWing: WWingRawHint, n
 
     cellsPairing.forEach(([conjugateHouseCell, nakedPairCells]) => {
         if (!_isNil(conjugateHouseCell) && !_isNil(nakedPairCells[0])) {
-            result[getCellAxesValues(conjugateHouseCell as Cell)] = getCellAxesValues(nakedPairCells[0] as Cell)
+            result[getCellAxesValues(conjugateHouseCell as Cell, axesValues)] = getCellAxesValues(nakedPairCells[0] as Cell, axesValues)
         }
     })
 
     return result
 }
 
-const getHintExplanationText = (wWing: WWingRawHint, notes: Notes) => {
-    const conjugateHouseCellsAndNakedPairCellsPairing = getConjugateHouseAndNakedPairCellsPairing(wWing, notes)
+const getHintExplanationText = (wWing: WWingRawHint, notes: Notes, smartHintsTranslationsTexts: SmartHintsTranslationsTexts) => {
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const conjugateHouseCellsAndNakedPairCellsPairing = getConjugateHouseAndNakedPairCellsPairing(wWing, notes, axesValues)
     const conjugateHouseCellsKeys = Object.keys(conjugateHouseCellsAndNakedPairCellsPairing)
     const firstConjugateHouseCell = conjugateHouseCellsKeys[0]
     const secondConjugateHouseCell = conjugateHouseCellsKeys[1]
 
-    const msgTemplates = HINT_EXPLANATION_TEXTS.W_WING
+    const { texts, config } = smartHintsTranslationsTexts.explanation[HINTS_IDS.W_WING]
     const msgPlaceholdersValues = {
-        conjguateHouse: getHouseNumAndName(wWing.conjugateHouse),
+        conjguateHouse: getHouseWithNumAndNameText(wWing.conjugateHouse, config.conjguateHouse, smartHintsTranslationsTexts),
         conjugateHouseNote: wWing.conjugateNote,
-        nakedPairHostCells: getCellsAxesValuesListText(wWing.nakedPairCells),
+        nakedPairHostCells: getCellsAxesValuesListText(wWing.nakedPairCells, undefined, axesValues),
         removableNote: wWing.removableNote,
         firstConjugateHouseCell,
         secondConjugateHouseCell,
         firstNakedPairHostCell: conjugateHouseCellsAndNakedPairCellsPairing[firstConjugateHouseCell],
         secondNakedPairHostCell: conjugateHouseCellsAndNakedPairCellsPairing[secondConjugateHouseCell],
     }
-    const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    const hintChunks = texts.map(({ text }: { text: string }) => dynamicInterpolation(text, msgPlaceholdersValues))
     return getHintExplanationStepsFromHintChunks(hintChunks)
 }
 
@@ -146,6 +149,7 @@ export const transformWWingRawHint = ({
     rawHint: wWing,
     notesData,
     smartHintsColorSystem,
+    smartHintsTranslationsTexts
 }: WWingTransformerArgs): TransformedRawHint => {
     const focusedCells = [
         ...wWing.nakedPairCells,
@@ -156,8 +160,8 @@ export const transformWWingRawHint = ({
     return {
         type: HINTS_IDS.W_WING,
         hasTryOut: true,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.W_WING],
-        steps: getHintExplanationText(wWing, notesData),
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.W_WING],
+        steps: getHintExplanationText(wWing, notesData, smartHintsTranslationsTexts),
         cellsToFocusData: getCellsToFocusData(wWing, notesData, smartHintsColorSystem),
         focusedCells,
         applyHint: getApplyHintData(wWing),

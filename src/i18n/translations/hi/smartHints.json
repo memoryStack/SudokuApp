@@ -524,9 +524,29 @@
                 }
             }
         },
-        "wWing": [
-            "<p>ध्यान दें कि {{conjguateHouse}} में आप जहाँ भी {{conjugateHouseNote}} भरें, {{nakedPairHostCells}} में से एक को {{removableNote}} से भरना होगा।\nयदि {{conjugateHouseNote}} {{firstConjugateHouseCell}} में भरा जाता है तो {{firstNakedPairHostCell}} को {{removableNote}} होना होगा और यदि {{conjugateHouseNote}} {{secondConjugateHouseCell}} में भरा जाता है तो {{secondNakedPairHostCell}} को {{removableNote}} होना होगा।\nइसलिए लाल रंग में सभी {{removableNote}} हटाए जा सकते हैं।</p>"
-        ],
+        "wWing": {
+            "texts": [
+                {
+                    "text": "<p>ध्यान दें कि {{conjguateHouse}} में आप जहाँ भी {{conjugateHouseNote}} भरें, {{nakedPairHostCells}} में से एक को {{removableNote}} से भरना होगा।\nयदि {{conjugateHouseNote}} {{firstConjugateHouseCell}} में भरा जाता है तो {{firstNakedPairHostCell}} को {{removableNote}} होना होगा और यदि {{conjugateHouseNote}} {{secondConjugateHouseCell}} में भरा जाता है तो {{secondNakedPairHostCell}} को {{removableNote}} होना होगा।\nइसलिए लाल रंग में सभी {{removableNote}} हटाए जा सकते हैं।</p>"
+                }
+            ],
+            "config": {
+                "conjguateHouse": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "xyzWing": {
             "texts": [
                 {

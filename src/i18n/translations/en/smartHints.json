@@ -524,9 +524,29 @@
                 }
             }
         },
-        "wWing": [
-            "<p>Notice that in {{conjguateHouse}} no matter where you fill {{conjugateHouseNote}}, one of {{nakedPairHostCells}} have to be filled by {{removableNote}}.\nIf {{conjugateHouseNote}} is filled in {{firstConjugateHouseCell}} then {{firstNakedPairHostCell}} have to be {{removableNote}} and if {{conjugateHouseNote}} is filled in {{secondConjugateHouseCell}} then {{secondNakedPairHostCell}} have to be {{removableNote}}.\nSo all the {{removableNote}} in red color can be removed.\n</p>"
-        ],
+        "wWing": {
+            "texts": [
+                {
+                    "text": "<p>Notice that in {{conjguateHouse}} no matter where you fill {{conjugateHouseNote}}, one of {{nakedPairHostCells}} have to be filled by {{removableNote}}.\nIf {{conjugateHouseNote}} is filled in {{firstConjugateHouseCell}} then {{firstNakedPairHostCell}} have to be {{removableNote}} and if {{conjugateHouseNote}} is filled in {{secondConjugateHouseCell}} then {{secondNakedPairHostCell}} have to be {{removableNote}}.\nSo all the {{removableNote}} in red color can be removed.\n</p>"
+                }
+            ],
+            "config": {
+                "conjguateHouse": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "xyzWing": {
             "texts": [
                 {
