@@ -501,9 +501,29 @@
             "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में दो उम्मीदवार हैं और किन्हीं दो क्रमागत सेल में एक उम्मीदवार समान है। उदाहरण के लिए, {{chainFirstCell}} और {{chainSecondCell}} दोनों में {{firstLinkCommonCandidate}} उनके उम्मीदवार के रूप में है। और यह भी ध्यान दें कि {{chainFirstCell}}(पहला सेल) और {{chainLastCell}}(अंतिम सेल) दोनों में {{removableNote}} उनके उम्मीदवार के रूप में है।\nइस प्रकार की सेल की चेन को XY-चेन कहते हैं।</p>",
             "<p>अब {{chainFirstCell}} को दो तरीकों से भरा जा सकता है।<br /><b>पहला:</b> यहाँ {{removableNote}} भरें।<br /><b>दूसरा:</b> यहाँ {{firstCellCandidateOtherThanRemovableCandidate}} भरें। इसके कारण {{chainFillingWay}}।<br />ध्यान दें कि दोनों तरीकों में, या तो {{chainFirstCell}} या {{chainLastCell}} {{removableNote}} से भरा जाएगा।<br />इसलिए {{removableNotesHostCells}} से सभी {{removableNote}} हटा दिए जाएंगे क्योंकि ये सेल इस चेन के पहले और अंतिम सेल के साथ हाउस साझा करते हैं।</p>"
         ],
-        "emptyRectangle": [
-            "<p>{{conjugateHouseWithHouseTypeLink}} और {{hostBlockHouseWithHouseTypeLink}} में उम्मीदवार {{candidate}} देखें। {{conjugateHouse}} और {{hostBlockHouse}} में {{candidate}} चाहे जहाँ भी भरा जाए, {{candidate}} हमेशा {{removableNoteHostCell}} सेल से हटा दिया जाएगा।\nइस संकेत का अभ्यास करने के लिए अगला बटन क्लिक करें।</p>"
-        ],
+        "emptyRectangle": {
+            "texts": [
+                {
+                    "text": "<p>{{conjugateHouseName}} नं. {{conjugateHouseNum}} और {{hostBlockHouseName}} नं. {{hostBlockHouseNum}} में <a href=\"CANDIDATE\">उम्मीदवार</a> {{candidate}} देखें। {{conjugateHouse}} और {{hostBlockHouse}} में {{candidate}} चाहे जहाँ भी भरा जाए, {{candidate}} हमेशा {{removableNoteHostCell}} <a href=\"CELL\">सेल</a> से हटा दिया जाएगा।\nइस संकेत का अभ्यास करने के लिए अगला बटन क्लिक करें।</p>"
+                }
+            ],
+            "config": {
+                "houseNumAndName": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "wWing": [
             "<p>ध्यान दें कि {{conjguateHouse}} में आप जहाँ भी {{conjugateHouseNote}} भरें, {{nakedPairHostCells}} में से एक को {{removableNote}} से भरना होगा।\nयदि {{conjugateHouseNote}} {{firstConjugateHouseCell}} में भरा जाता है तो {{firstNakedPairHostCell}} को {{removableNote}} होना होगा और यदि {{conjugateHouseNote}} {{secondConjugateHouseCell}} में भरा जाता है तो {{secondNakedPairHostCell}} को {{removableNote}} होना होगा।\nइसलिए लाल रंग में सभी {{removableNote}} हटाए जा सकते हैं।</p>"
         ],

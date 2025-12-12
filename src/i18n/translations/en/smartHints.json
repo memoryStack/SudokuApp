@@ -466,7 +466,7 @@
                     "text": "<p>now look for two more cells which also have only two candidates in them and which share a <a href=\"HOUSE\">house</a> with pivot cell. these will be wings cells. wings cells themselves shouldn't be in same house.\nhere {{wingCellsText}} are wings cells\n{{firstWingCell}} and {{pivotCell}} are in {{firstWingAndPivotCommonHouse}} and {{secondWingCell}} and {{pivotCell}} are in {{secondWingAndPivotCommonHouse}}. but {{firstWingCell}} and {{secondWingCell}} are not in any same house</p>"
                 },
                 {
-                    "text": "<p>now notice the arrangements of candidates in pivot and wings cells\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells, {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}. and other <a href=\"CANDIDATE\">candidate</a> of both wings cells is same, which is {{commonNoteInWings}} here.</p>",
+                    "text": "<p>now notice the arrangements of candidates in pivot and wings cells\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells, {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}. and other <a href=\"CANDIDATE\">candidate</a> of both wings cells is same, which is {{commonNoteInWings}} here.</p>"
                 },
                 {
                     "text": "due to this arrangement {{commonNoteInWings}} will be removed from cells which share a house with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}. so {{removableNotesHostCells}} can't have {{commonNoteInWings}} as their solution",
@@ -501,9 +501,29 @@
             "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have two <a href=\"CANDIDATE\">candidates</a> and any two consecutive cells have one candidate common. For Example, {{chainFirstCell}} and {{chainSecondCell}} both have {{firstLinkCommonCandidate}} as their candidate. And also note that {{chainFirstCell}}(first cell) and {{chainLastCell}}(last cell) both have {{removableNote}} as their candidate in them.\nThis type of chain of cells is called XY-Chain.</p>",
             "<p>Now {{chainFirstCell}} can be filled in two ways.<br /><b>First:</b> Fill {{removableNote}} here.<br /><b>Second:</b> Fill {{firstCellCandidateOtherThanRemovableCandidate}} here. Due to this {{chainFillingWay}}.<br />Notice that in both ways, either {{chainFirstCell}} or {{chainLastCell}} will be filled by {{removableNote}}.<br />So all the {{removableNote}}s from {{removableNotesHostCells}} will be removed because these cells share <a href=\"HOUSE\">house</a> with first and last cell of this chain.</p>"
         ],
-        "emptyRectangle": [
-            "<p>Notice <a href=\"CANDIDATE\">candidate</a> {{candidate}} in {{conjugateHouseWithHouseTypeLink}} and {{hostBlockHouseWithHouseTypeLink}}. No matter where {{candidate}} is filled in {{conjugateHouse}} and {{hostBlockHouse}}, {{candidate}} will always be removed from {{removableNoteHostCell}} <a href=\"CELL\">cell</a>.\nClick on Next button to exercise this hint.\n</p>"
-        ],
+        "emptyRectangle": {
+            "texts": [
+                {
+                    "text": "<p>Notice <a href=\"CANDIDATE\">candidate</a> {{candidate}} in {{conjugateHouseNum}} {{conjugateHouseName}} and {{hostBlockHouseNum}} {{hostBlockHouseName}}. No matter where {{candidate}} is filled in {{conjugateHouse}} and {{hostBlockHouse}}, {{candidate}} will always be removed from {{removableNoteHostCell}} <a href=\"CELL\">cell</a>.\nClick on Next button to exercise this hint.\n</p>"
+                }
+            ],
+            "config": {
+                "houseNumAndName": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "wWing": [
             "<p>Notice that in {{conjguateHouse}} no matter where you fill {{conjugateHouseNote}}, one of {{nakedPairHostCells}} have to be filled by {{removableNote}}.\nIf {{conjugateHouseNote}} is filled in {{firstConjugateHouseCell}} then {{firstNakedPairHostCell}} have to be {{removableNote}} and if {{conjugateHouseNote}} is filled in {{secondConjugateHouseCell}} then {{secondNakedPairHostCell}} have to be {{removableNote}}.\nSo all the {{removableNote}} in red color can be removed.\n</p>"
         ],

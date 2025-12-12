@@ -120,9 +120,7 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
         t('explanations.xyChain.0', { returnObjects: true }),
         t('explanations.xyChain.1', { returnObjects: true }),
     ],
-    [HINTS_IDS.EMPTY_RECTANGLE]: [
-        t('explanations.emptyRectangle.0', { returnObjects: true }),
-    ],
+    [HINTS_IDS.EMPTY_RECTANGLE]: t('explanations.emptyRectangle', { returnObjects: true }),
     [HINTS_IDS.W_WING]: [
         t('explanations.wWing.0', { returnObjects: true }),
     ],

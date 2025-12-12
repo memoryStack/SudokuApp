@@ -15,20 +15,24 @@ import _intersection from '@lodash/intersection'
 import {
     HINTS_IDS, HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../constants'
-import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
+import { HINT_EXPLANATION_TEXTS } from '../../stringLiterals'
 import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 
 import { getHouseNumAndName, getHouseNumText } from '../helpers'
 import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
-    highlightNoteInCellsWithGivenColor
+    highlightNoteInCellsWithGivenColor,
+    getAxisValuesFromTranslations,
+    getLanguageSpecificHouseNumText,
+    getLanguageSpecificHouseTypeText,
+    getHouseWithNumAndNameText,
 } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { EmptyRectangleTransformerArgs } from './types'
 import {
-    CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, TransformedRawHint,
+    CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 
 import { EmptyRectangleRawHint } from '../../emptyRectangle/types'
@@ -88,25 +92,38 @@ const getApplyHintData = (emptyRectangle: EmptyRectangleRawHint) => {
     return result
 }
 
-const getHintExplanationText = (emptyRectangle: EmptyRectangleRawHint) => {
+const getHintExplanationText = (
+    emptyRectangle: EmptyRectangleRawHint,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts,
+) => {
     const { conjugateHouse } = emptyRectangle
 
-    const msgTemplates = HINT_EXPLANATION_TEXTS.EMPTY_RECTANGLE
+    const { texts, config } = smartHintsTranslationsTexts.explanation[HINTS_IDS.EMPTY_RECTANGLE]
 
     const blockHostHouse = getBlockHostHouse(emptyRectangle)
 
-    const conjugateHouseWithHouseTypeLink = `${getHouseNumText(conjugateHouse)} ${getLinkHTMLText(HOUSE_TYPE_VS_VOCAB_ID[conjugateHouse.type], HOUSE_TYPE_VS_FULL_NAMES[conjugateHouse.type].FULL_NAME)}`
-    const hostBlockHouseWithHouseTypeLink = `${getHouseNumText(blockHostHouse)} ${getLinkHTMLText(HOUSE_TYPE_VS_VOCAB_ID[blockHostHouse.type], HOUSE_TYPE_VS_FULL_NAMES[blockHostHouse.type].FULL_NAME)}`
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+
     const msgPlaceholdersValues = {
         candidate: emptyRectangle.note,
-        conjugateHouseWithHouseTypeLink,
-        hostBlockHouseWithHouseTypeLink,
-        conjugateHouse: getHouseNumAndName(emptyRectangle.conjugateHouse),
-        hostBlockHouse: getHouseNumAndName(blockHostHouse),
-        removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell)
+        conjugateHouseNum: getLanguageSpecificHouseNumText(conjugateHouse, config.houseNumAndName.houseNum, smartHintsTranslationsTexts),
+        conjugateHouseName:
+            getLinkHTMLText(
+                HOUSE_TYPE_VS_VOCAB_ID[conjugateHouse.type],
+                getLanguageSpecificHouseTypeText(conjugateHouse.type, config.houseNumAndName.houseName, smartHintsTranslationsTexts)
+            ),
+        hostBlockHouseNum: getLanguageSpecificHouseNumText(blockHostHouse, config.houseNumAndName.houseNum, smartHintsTranslationsTexts),
+        hostBlockHouseName: getLinkHTMLText(
+            HOUSE_TYPE_VS_VOCAB_ID[blockHostHouse.type],
+            getLanguageSpecificHouseTypeText(blockHostHouse.type, config.houseNumAndName.houseName, smartHintsTranslationsTexts)
+        ),
+        conjugateHouse: getHouseWithNumAndNameText(conjugateHouse, config.houseNumAndName, smartHintsTranslationsTexts),
+        hostBlockHouse: getHouseWithNumAndNameText(blockHostHouse, config.houseNumAndName, smartHintsTranslationsTexts),
+
+        removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axesValues)
     }
 
-    const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    const hintChunks = texts.map(({ text }: { text: string }) => dynamicInterpolation(text, msgPlaceholdersValues))
     return getHintExplanationStepsFromHintChunks(hintChunks)
 }
 
@@ -115,6 +132,7 @@ export const transformEmptyRectangleRawHint = ({
     mainNumbers,
     notesData,
     smartHintsColorSystem,
+    smartHintsTranslationsTexts,
 }: EmptyRectangleTransformerArgs): TransformedRawHint => {
 
     const focusedCells = [
@@ -126,8 +144,8 @@ export const transformEmptyRectangleRawHint = ({
     return {
         type: HINTS_IDS.EMPTY_RECTANGLE,
         hasTryOut: true,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.EMPTY_RECTANGLE],
-        steps: getHintExplanationText(emptyRectangle),
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.EMPTY_RECTANGLE],
+        steps: getHintExplanationText(emptyRectangle, smartHintsTranslationsTexts),
         cellsToFocusData: getCellsToFocusData(emptyRectangle, notesData, smartHintsColorSystem),
         focusedCells,
         applyHint: getApplyHintData(emptyRectangle),
