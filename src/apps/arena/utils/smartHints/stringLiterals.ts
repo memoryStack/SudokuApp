@@ -107,12 +107,7 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
     [HINTS_IDS.PERFECT_X_WING]: t('explanations.perfectXWing', { returnObjects: true }),
     [HINTS_IDS.FINNED_X_WING]: t('explanations.finnedXWing', { returnObjects: true }),
     [HINTS_IDS.SASHIMI_FINNED_X_WING]: t('explanations.sashimiFinnedXWing', { returnObjects: true }),
-    [HINTS_IDS.Y_WING]: [
-        t('explanations.yWing.0', { returnObjects: true }),
-        t('explanations.yWing.1', { returnObjects: true }),
-        t('explanations.yWing.2', { returnObjects: true }),
-        t('explanations.yWing.3', { returnObjects: true }),
-    ],
+    [HINTS_IDS.Y_WING]: t('explanations.yWing', { returnObjects: true }),
     [HINTS_IDS.REMOTE_PAIRS]: [
         t('explanations.remotePairs.0', { returnObjects: true }),
         t('explanations.remotePairs.1', { returnObjects: true }),

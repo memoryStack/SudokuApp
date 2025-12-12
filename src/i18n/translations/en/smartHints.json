@@ -457,12 +457,38 @@
                 }
             ]
         },
-        "yWing": [
-            "<p>look for a <a href=\"CELL\">cell</a> which has only two <a href=\"CANDIDATE\">candidates</a> in it. we will call it pivot cell.\nin puzzle {{pivotCell}} is highlighted as pivot cell</p>",
-            "<p>now look for two more cells which also have only two candidates in them and which share a <a href=\"HOUSE\">house</a> with pivot cell. these will be wings cells. wings cells themselves shouldn't be in same house.\nhere {{wingCellsText}} are wings cells\n{{firstWingCell}} and {{pivotCell}} are in {{firstWingAndPivotCommonHouse}} and {{secondWingCell}} and {{pivotCell}} are in {{secondWingAndPivotCommonHouse}}. but {{firstWingCell}} and {{secondWingCell}} are not in any same house</p>",
-            "<p>now notice the arrangements of candidates in pivot and wings cells\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells, {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}. and other <a href=\"CANDIDATE\">candidate</a> of both wings cells is same, which is {{commonNoteInWings}} here.</p>",
-            "due to this arrangement {{commonNoteInWings}} will be removed from cells which share a house with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}. so {{removableNotesHostCells}} can't have {{commonNoteInWings}} as their solution"
-        ],
+        "yWing": {
+            "texts": [
+                {
+                    "text": "<p>look for a <a href=\"CELL\">cell</a> which has only two <a href=\"CANDIDATE\">candidates</a> in it. we will call it pivot cell.\nin puzzle {{pivotCell}} is highlighted as pivot cell</p>"
+                },
+                {
+                    "text": "<p>now look for two more cells which also have only two candidates in them and which share a <a href=\"HOUSE\">house</a> with pivot cell. these will be wings cells. wings cells themselves shouldn't be in same house.\nhere {{wingCellsText}} are wings cells\n{{firstWingCell}} and {{pivotCell}} are in {{firstWingAndPivotCommonHouse}} and {{secondWingCell}} and {{pivotCell}} are in {{secondWingAndPivotCommonHouse}}. but {{firstWingCell}} and {{secondWingCell}} are not in any same house</p>"
+                },
+                {
+                    "text": "<p>now notice the arrangements of candidates in pivot and wings cells\nboth candidates of pivot cell {{pivotCellNotes}} are present separately in both wings cells, {{firstPivotNote}} in {{pivotCellFirstNoteWingHostCell}} and {{secondPivotNote}} in {{pivotCellSecondNoteWingHostCell}}. and other <a href=\"CANDIDATE\">candidate</a> of both wings cells is same, which is {{commonNoteInWings}} here.</p>",
+                },
+                {
+                    "text": "due to this arrangement {{commonNoteInWings}} will be removed from cells which share a house with both wings cells. because in {{pivotCell}} whatever you fill out of {{firstPivotNote}} or {{secondPivotNote}}, atleast one of wings cells must be {{commonNoteInWings}}. so {{removableNotesHostCells}} can't have {{commonNoteInWings}} as their solution",
+                }
+            ],
+            "config": {
+                "houseNumAndName": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "remotePairs": [
             "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{remotePairNotes}} as their <a href=\"CANDIDATE\">candidates</a>. Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either by candidates in {{colorA}} or by candidates in {{colorB}}</p>",
             "Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can't come because {{remotePairNotes}} will always fill {{exampleChainCells}}"

@@ -15,10 +15,13 @@ import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import {
     CellHighlightData,
-    CellsFocusData, CellsRestrictedNumberInputs, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, TransformedRawHint,
+    CellsFocusData, CellsRestrictedNumberInputs, NotesRemovalHintAction, NotesToHighlightData, RemovableNotesInfo, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 import {
     setCellDataInHintResult, getHintExplanationStepsFromHintChunks, transformCellBGColor, getTryOutInputPanelNumbersVisibility, getCellsFromCellsToFocusedData, getCandidatesListText,
+    getLanguageSpecificHouseListText,
+    getHouseWithNumAndNameText,
+    getAxisValuesFromTranslations,
 } from '../../util'
 import { YWingRawHint, YWingCell } from '../../yWing/types'
 import { getEliminatableNotesCells } from '../../yWing/utils'
@@ -92,15 +95,16 @@ const getPivotNotesWithWingsHostCellsMap = (pivotNotes: NoteValue[], wings: YWin
 }
 
 const getHintExplainationChunks = ({
-    pivotNotes, commonNoteInWings, pivotCell, wings, eliminableNotesCells,
+    pivotNotes, commonNoteInWings, pivotCell, wings, eliminableNotesCells, smartHintsTranslationsTexts
 }: {
     pivotNotes: NoteValue[]
     commonNoteInWings: NoteValue
     pivotCell: Cell
     wings: YWingCell[]
     eliminableNotesCells: Cell[]
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
 }): string[] => {
-    const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.Y_WING] as string[]
+    const { texts, config } = smartHintsTranslationsTexts.explanation[HINTS_IDS.Y_WING]
 
     const wingCells = wings.map(wing => wing.cell)
 
@@ -108,27 +112,48 @@ const getHintExplainationChunks = ({
     const pivotAndSecondWingCellCommonHouse = getCellsCommonHousesInfo([pivotCell, wingCells[1]])[0]
 
     const pivotNotesWingsHostCells = getPivotNotesWithWingsHostCellsMap(pivotNotes, wings)
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     const msgPlaceholdersValues = {
         firstPivotNote: pivotNotes[0],
         secondPivotNote: pivotNotes[1],
         commonNoteInWings,
-        pivotCell: getCellAxesValues(pivotCell),
-        wingCellsText: getCellsAxesValuesListText(wingCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        eliminableNotesCells: getCellsAxesValuesListText(eliminableNotesCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        firstWingCell: getCellAxesValues(wingCells[0]),
-        secondWingCell: getCellAxesValues(wingCells[1]),
-        firstWingAndPivotCommonHouse: getHouseNumAndName(pivotAndFirstWingCellCommonHouse),
-        secondWingAndPivotCommonHouse: getHouseNumAndName(pivotAndSecondWingCellCommonHouse),
-
-        pivotCellNotes: getCandidatesListText(_sortBy(pivotNotes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        pivotCellFirstNoteWingHostCell: getCellAxesValues(pivotNotesWingsHostCells[pivotNotes[0]]),
-        pivotCellSecondNoteWingHostCell: getCellAxesValues(pivotNotesWingsHostCells[pivotNotes[1]]),
-
-        removableNotesHostCells: getCellsAxesValuesListText(sortCells(eliminableNotesCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        pivotCell: getCellAxesValues(pivotCell, axesValues),
+        wingCellsText: getCellsAxesValuesListText(
+            wingCells,
+            smartHintsTranslationsTexts.common.conjugations.and,
+            axesValues
+        ),
+        eliminableNotesCells: getCellsAxesValuesListText(
+            eliminableNotesCells,
+            smartHintsTranslationsTexts.common.conjugations.and,
+            axesValues
+        ),
+        firstWingCell: getCellAxesValues(wingCells[0], axesValues),
+        secondWingCell: getCellAxesValues(wingCells[1], axesValues),
+        firstWingAndPivotCommonHouse: getHouseWithNumAndNameText(
+            pivotAndFirstWingCellCommonHouse,
+            config.houseNumAndName,
+            smartHintsTranslationsTexts
+        ),
+        secondWingAndPivotCommonHouse: getHouseWithNumAndNameText(
+            pivotAndSecondWingCellCommonHouse,
+            config.houseNumAndName,
+            smartHintsTranslationsTexts
+        ),
+        pivotCellNotes: getCandidatesListText(_sortBy(pivotNotes), smartHintsTranslationsTexts.common.conjugations.and),
+        pivotCellFirstNoteWingHostCell: getCellAxesValues(pivotNotesWingsHostCells[pivotNotes[0]], axesValues),
+        pivotCellSecondNoteWingHostCell: getCellAxesValues(pivotNotesWingsHostCells[pivotNotes[1]], axesValues),
+        removableNotesHostCells: getCellsAxesValuesListText(
+            sortCells(eliminableNotesCells),
+            smartHintsTranslationsTexts.common.conjugations.and,
+            axesValues
+        ),
     }
 
-    return msgTemplates.map(msgTemplate => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    return texts.map(({ text }: { text: string }) => {
+        return dynamicInterpolation(text, msgPlaceholdersValues)
+    })
 }
 
 const getApplyHintData = (yWing: YWingRawHint, notesData: Notes): NotesRemovalHintAction[] => {
@@ -151,7 +176,12 @@ const getCellsRestrictedNumberInputs = (commonNoteInWings: NoteValue, eliminable
     return result
 }
 
-export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsColorSystem }: YWingTransformerArgs): TransformedRawHint => {
+export const transformYWingRawHint = ({
+    rawHint: yWing,
+    notesData,
+    smartHintsColorSystem,
+    smartHintsTranslationsTexts,
+}: YWingTransformerArgs): TransformedRawHint => {
     const { pivot, wings } = yWing
 
     const wingCells = wings.map(wing => wing.cell)
@@ -173,11 +203,12 @@ export const transformYWingRawHint = ({ rawHint: yWing, notesData, smartHintsCol
         pivotCell: pivot.cell,
         wings,
         eliminableNotesCells,
+        smartHintsTranslationsTexts,
     })
 
     return {
         type: HINTS_IDS.Y_WING,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.Y_WING],
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.Y_WING],
         cellsToFocusData,
         focusedCells: getCellsFromCellsToFocusedData(cellsToFocusData),
         steps: getHintExplanationStepsFromHintChunks(hintChunks),

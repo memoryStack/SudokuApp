@@ -457,12 +457,38 @@
                 }
             ]
         },
-        "yWing": [
-            "<p>एक सेल खोजें जिसमें केवल दो उम्मीदवार हों। हम इसे पिवट सेल कहेंगे।\nपहेली में {{pivotCell}} पिवट सेल के रूप में हाइलाइट किया गया है</p>",
-            "<p>अब दो और सेल खोजें जिनमें भी केवल दो उम्मीदवार हों और जो पिवट सेल के साथ एक हाउस साझा करते हों। ये विंग्स सेल होंगे। विंग्स सेल स्वयं एक ही हाउस में नहीं होने चाहिए। यहाँ {{wingCellsText}} विंग्स सेल हैं\n{{firstWingCell}} और {{pivotCell}} {{firstWingAndPivotCommonHouse}} में हैं और {{secondWingCell}} और {{pivotCell}} {{secondWingAndPivotCommonHouse}} में हैं। लेकिन {{firstWingCell}} और {{secondWingCell}} किसी एक ही हाउस में नहीं हैं</p>",
-            "<p>अब पिवट और विंग्स सेल में उम्मीदवारों की व्यवस्था देखें\nपिवट सेल के दोनों उम्मीदवार {{pivotCellNotes}} दोनों विंग्स सेल में अलग-अलग मौजूद हैं, {{firstPivotNote}} {{pivotCellFirstNoteWingHostCell}} में और {{secondPivotNote}} {{pivotCellSecondNoteWingHostCell}} में। और दोनों विंग्स सेल का अन्य उम्मीदवार समान है, जो यहाँ {{commonNoteInWings}} है।</p>",
-            "इस व्यवस्था के कारण {{commonNoteInWings}} उन सेल से हटा दिया जाएगा जो दोनों विंग्स सेल के साथ एक हाउस साझा करते हैं। क्योंकि {{pivotCell}} में {{firstPivotNote}} या {{secondPivotNote}} में से जो भी भरें, विंग्स सेल में से कम से कम एक {{commonNoteInWings}} होना चाहिए। इसलिए {{removableNotesHostCells}} के पास {{commonNoteInWings}} उनके समाधान के रूप में नहीं हो सकता"
-        ],
+        "yWing": {
+            "texts": [
+                {
+                    "text": "<p>एक <a href=\"CELL\">सेल</a> खोजें जिसमें केवल दो <a href=\"CANDIDATE\">उम्मीदवार</a> हों। हम इसे पिवट सेल कहेंगे।\nपहेली में {{pivotCell}} पिवट सेल के रूप में हाइलाइट किया गया है</p>"
+                },
+                {
+                    "text": "<p>अब दो और सेल खोजें जिनमें भी केवल दो उम्मीदवार हों और जो पिवट सेल के साथ एक <a href=\"HOUSE\">हाउस</a> साझा करते हों। ये विंग्स सेल होंगे। विंग्स सेल स्वयं एक ही हाउस में नहीं होने चाहिए। यहाँ {{wingCellsText}} विंग्स सेल हैं\n{{firstWingCell}} और {{pivotCell}} {{firstWingAndPivotCommonHouse}} में हैं और {{secondWingCell}} और {{pivotCell}} {{secondWingAndPivotCommonHouse}} में हैं। लेकिन {{firstWingCell}} और {{secondWingCell}} किसी एक ही हाउस में नहीं हैं</p>"
+                },
+                {
+                    "text": "<p>अब पिवट और विंग्स सेल में उम्मीदवारों की व्यवस्था देखें\nपिवट सेल के दोनों उम्मीदवार {{pivotCellNotes}} दोनों विंग्स सेल में अलग-अलग मौजूद हैं, {{firstPivotNote}} {{pivotCellFirstNoteWingHostCell}} में और {{secondPivotNote}} {{pivotCellSecondNoteWingHostCell}} में। और दोनों विंग्स सेल का अन्य <a href=\"COMMON_NOTE_IN_WINGS\">उम्मीदवार</a> समान है, जो यहाँ {{commonNoteInWings}} है।</p>"
+                },
+                {
+                    "text": "इस व्यवस्था के कारण {{commonNoteInWings}} उन सेल से हटा दिया जाएगा जो दोनों विंग्स सेल के साथ एक हाउस साझा करते हैं। क्योंकि {{pivotCell}} में {{firstPivotNote}} या {{secondPivotNote}} में से जो भी भरें, विंग्स सेल में से कम से कम एक {{commonNoteInWings}} होना चाहिए। इसलिए {{removableNotesHostCells}} के पास {{commonNoteInWings}} उनके समाधान के रूप में नहीं हो सकता"
+                }
+            ],
+            "config": {
+                "houseNumAndName": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "remotePairs": [
             "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{remotePairNotes}} उनके उम्मीदवार के रूप में हैं। इस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, ये सभी सेल या तो {{colorA}} में उम्मीदवारों से या {{colorB}} में उम्मीदवारों से भरे जाएंगे</p>",
             "इन सेल में जैसे चाहें अंक भरें, लाल रंग में हाइलाइट किए गए उम्मीदवार हमेशा हटा दिए जाएंगे।\nउदाहरण के लिए, {{exampleRemovableNotesHostCell}} में {{exampleRemovableNotesInCell}} नहीं आ सकते क्योंकि {{remotePairNotes}} हमेशा {{exampleChainCells}} भरेंगे"
