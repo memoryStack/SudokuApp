@@ -368,15 +368,95 @@
                 }
             ]
         },
-        "finnedXWing": [
-            "<p>यदि आप एक्स-विंग नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब उम्मीदवार केवल एक पंक्ति या स्तंभ के 2 से अधिक सेल में मौजूद हो तो यह एक परफेक्ट एक्स-विंग नहीं है लेकिन कुछ मामलों में हम इसे फिन्ड एक्स-विंग कह सकते हैं। जहाँ उम्मीदवार मौजूद है वे अतिरिक्त सेल फिन सेल कहलाते हैं।\n{{finnedLegAxesText}} {{finnedLegHouseText}} में {{finnCellsAxesListText}} {{finnCellEnglishText}} में अतिरिक्त {{candidate}} देखें</p>",
-            "<p>केवल एक पंक्ति या स्तंभ में ये फिन सेल हो सकते हैं। और ये फिन सेल एक्स-विंग कॉर्नर सेल में से कम से कम एक के साथ एक ही ब्लॉक में होने चाहिए।\nयहाँ देखें कि {{finnCellsAxesListText}} (फिन {{finnCellEnglishText}}) {{finnedBlockPerfectCellsAxesText}} {{cornersText}} के साथ ब्लॉक {{shareVerbGrammaticalText}}</p>",
-            "यहाँ हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं। क्योंकि {{finnedLegAxesText}} {{finnedLegHouseText}} में यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में आता है तो {{candidate}} केवल {{removableNotesHostCells}} में नहीं आ सकता। और यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में नहीं आता तो फिन्ड एक्स-विंग परफेक्ट एक्स-विंग की तरह व्यवहार करेगा और {{candidate}} निश्चित रूप से {{removableNotesHostCells}} में नहीं आएगा"
-        ],
-        "sashimiFinnedXWing": [
-            "<p>यदि आप फिन्ड एक्स-विंग नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब फिन्ड एक्स-विंग में उम्मीदवार उस कॉर्नर सेल में गायब हो जो फिन सेल के समान ब्लॉक में है तो इसे साशिमी फिन्ड एक्स-विंग कहा जाएगा।</p>",
-            "यहाँ {{candidate}} {{sashimiCell}} में मौजूद नहीं है और यह सेल {{finnCellsAxesListText}} फिन {{finnCellEnglishText}} के समान ब्लॉक में है\nफिन्ड एक्स-विंग की तरह साशिमी फिन्ड एक्स-विंग में भी हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं क्योंकि {{hostHousesAxesListText}} {{hostHousePluralName}} में {{candidate}} चाहे जैसे भी भरें, सभी मामलों में {{candidate}} {{removableNotesHostCells}} {{removableNotesHostCellsText}} में नहीं आ सकता।"
-        ],
+        "finnedXWing": {
+            "texts": [
+                {
+                    "text": "<p>यदि आप <a href=\"PERFECT_X_WING\">एक्स-विंग</a> नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब <a href=\"CANDIDATE\">उम्मीदवार</a> केवल एक <a href=\"ROW\">पंक्ति</a> या <a href=\"COLUMN\">स्तंभ</a> के 2 से अधिक <a href=\"CELL\">सेल</a> में मौजूद हो तो यह एक परफेक्ट एक्स-विंग नहीं है लेकिन कुछ मामलों में हम इसे फिन्ड एक्स-विंग कह सकते हैं। जहाँ उम्मीदवार मौजूद है वे अतिरिक्त सेल <a href=\"X_WING_FINN_CELLS\">फिन सेल</a> कहलाते हैं।\n{{finnedLegAxesText}} {{finnedLegHouseText}} में {{finnCellsAxesListText}} {{finnCellEnglishText}} में अतिरिक्त {{candidate}} देखें</p>",
+                    "config": {
+                        "finnedLegAxesText": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "finnedLegHouseText": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                },
+                {
+                    "text": "<p>केवल एक पंक्ति या स्तंभ में ये फिन सेल हो सकते हैं। और ये फिन सेल एक्स-विंग <a href=\"X_WING_CORNER_CELLS\">कॉर्नर सेल</a> में से कम से कम एक के साथ एक ही <a href=\"BLOCK\">ब्लॉक</a> में होने चाहिए।\nयहाँ देखें कि {{finnCellsAxesListText}} (फिन {{finnCellEnglishText}}) {{finnedBlockPerfectCellsAxesText}} {{cornersText}} के साथ ब्लॉक {{shareVerbGrammaticalText}}</p>",
+                    "config": {}
+                },
+                {
+                    "text": "यहाँ हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं। क्योंकि {{finnedLegAxesText}} {{finnedLegHouseText}} में यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में आता है तो {{candidate}} केवल {{removableNotesHostCells}} में नहीं आ सकता। और यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में नहीं आता तो फिन्ड एक्स-विंग परफेक्ट एक्स-विंग की तरह व्यवहार करेगा और {{candidate}} निश्चित रूप से {{removableNotesHostCells}} में नहीं आएगा",
+                    "config": {
+                        "crossHouseFullNamePlural": {
+                            "type": "house",
+                            "form": "oblique"
+                        },
+                        "finnedLegAxesText": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "finnedLegHouseText": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                }
+            ],
+            "finnCellsPrefix": {
+                "singular": "इस",
+                "plural": "किसी भी"
+            }
+        },
+        "sashimiFinnedXWing": {
+            "texts": [
+                {
+                    "text": "<p>यदि आप <a href=\"FINNED_X_WING\">फिन्ड एक्स-विंग</a> नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब फिन्ड एक्स-विंग में <a href=\"CANDIDATE\">उम्मीदवार</a> उस <a href=\"X_WING_CORNER_CELLS\">कॉर्नर सेल</a> में गायब हो जो <a href=\"X_WING_FINN_CELLS\">फिन सेल</a> के समान <a href=\"BLOCK\">ब्लॉक</a> में है तो इसे साशिमी फिन्ड एक्स-विंग कहा जाएगा।</p>",
+                    "config": {}
+                },
+                {
+                    "text": "यहाँ {{candidate}} {{sashimiCell}} में मौजूद नहीं है और यह सेल {{finnCellsAxesListText}} फिन {{finnCellEnglishText}} के समान ब्लॉक में है\nफिन्ड एक्स-विंग की तरह साशिमी फिन्ड एक्स-विंग में भी हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं क्योंकि {{hostHousesAxesListText}} {{hostHousePluralName}} में {{candidate}} चाहे जैसे भी भरें, सभी मामलों में {{candidate}} {{removableNotesHostCells}} {{removableNotesHostCellsText}} में नहीं आ सकता।",
+                    "config": {
+                        "crossHouseFullNamePlural": {
+                            "type": "house",
+                            "form": "plural"
+                        },
+                        "hostHousePluralName": {
+                            "type": "house",
+                            "form": "plural"
+                        },
+                        "finnedLegAxesText": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "finnedLegHouseText": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                }
+            ]
+        },
         "yWing": [
             "<p>एक सेल खोजें जिसमें केवल दो उम्मीदवार हों। हम इसे पिवट सेल कहेंगे।\nपहेली में {{pivotCell}} पिवट सेल के रूप में हाइलाइट किया गया है</p>",
             "<p>अब दो और सेल खोजें जिनमें भी केवल दो उम्मीदवार हों और जो पिवट सेल के साथ एक हाउस साझा करते हों। ये विंग्स सेल होंगे। विंग्स सेल स्वयं एक ही हाउस में नहीं होने चाहिए। यहाँ {{wingCellsText}} विंग्स सेल हैं\n{{firstWingCell}} और {{pivotCell}} {{firstWingAndPivotCommonHouse}} में हैं और {{secondWingCell}} और {{pivotCell}} {{secondWingAndPivotCommonHouse}} में हैं। लेकिन {{firstWingCell}} और {{secondWingCell}} किसी एक ही हाउस में नहीं हैं</p>",

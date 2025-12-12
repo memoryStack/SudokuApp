@@ -368,15 +368,95 @@
                 }
             ]
         },
-        "finnedXWing": [
-            "<p>If you don't understand <a href=\"PERFECT_X_WING\">X-Wing</a> then you should learn that first.\nwhen the <a href=\"CANDIDATE\">candidate</a> is present in more than 2 <a href=\"CELL\">cells</a> of only one <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> then it's not a perfect X-Wing but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called <a href=\"X_WING_FINN_CELLS\">Finn Cells</a>.\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>",
-            "<p>only one row or column can have these finn cells. and these finn cells must be in the same <a href=\"BLOCK\">block</a> with atleast one of the X-Wing <a href=\"X_WING_CORNER_CELLS\">corner cells</a>.\nnotice here that {{finnCellsAxesListText}} (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}</p>",
-            "here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells. because in {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} comes in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then {{candidate}} can't come in {{removableNotesHostCells}} only. and if {{candidate}} doesn't come in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}"
-        ],
-        "sashimiFinnedXWing": [
-            "<p>If you don't understand <a href=\"FINNED_X_WING\">Finned X-Wing</a> then you should learn that first.\nwhen in Finned X-Wing the <a href=\"CANDIDATE\">candidate</a> is missing in one of the <a href=\"X_WING_CORNER_CELLS\">corner</a>  <a href=\"CELL\">cell</a> which is in same <a href=\"BLOCK\">block</a> as <a href=\"X_WING_FINN_CELLS\">finn cells</a> then it will be called Sashimi Finned X-Wing.</p>",
-            "here {{candidate}} isn't present in {{sashimiCell}} and this cell is in same block as {{finnCellsAxesListText}} finn {{finnCellEnglishText}}\njust like Finned X-Wing in Sashimi Finned X-Wing also we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells because however we fill {{candidate}} in {{hostHousesAxesListText}} {{hostHousePluralName}}, in all cases {{candidate}} can't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}."
-        ],
+        "finnedXWing": {
+            "texts": [
+                {
+                    "text": "<p>If you don't understand <a href=\"PERFECT_X_WING\">X-Wing</a> then you should learn that first.\nwhen the <a href=\"CANDIDATE\">candidate</a> is present in more than 2 <a href=\"CELL\">cells</a> of only one <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> then it's not a perfect X-Wing but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called <a href=\"X_WING_FINN_CELLS\">Finn Cells</a>.\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>",
+                    "config": {
+                        "finnedLegAxesText": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "finnedLegHouseText": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                },
+                {
+                    "text": "<p>only one row or column can have these finn cells. and these finn cells must be in the same <a href=\"BLOCK\">block</a> with atleast one of the X-Wing <a href=\"X_WING_CORNER_CELLS\">corner cells</a>.\nnotice here that {{finnCellsAxesListText}} (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}</p>",
+                    "config": {}
+                },
+                {
+                    "text": "here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells. because in {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} comes in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then {{candidate}} can't come in {{removableNotesHostCells}} only. and if {{candidate}} doesn't come in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}",
+                    "config": {
+                        "crossHouseFullNamePlural": {
+                            "type": "house",
+                            "form": "plural"
+                        },
+                        "finnedLegAxesText": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "finnedLegHouseText": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                }
+            ],
+            "finnCellsPrefix": {
+                "singular": "the",
+                "plural": "any of the"
+            }
+        },
+        "sashimiFinnedXWing": {
+            "texts": [
+                {
+                    "text": "<p>If you don't understand <a href=\"FINNED_X_WING\">Finned X-Wing</a> then you should learn that first.\nwhen in Finned X-Wing the <a href=\"CANDIDATE\">candidate</a> is missing in one of the <a href=\"X_WING_CORNER_CELLS\">corner</a>  <a href=\"CELL\">cell</a> which is in same <a href=\"BLOCK\">block</a> as <a href=\"X_WING_FINN_CELLS\">finn cells</a> then it will be called Sashimi Finned X-Wing.</p>",
+                    "config": {}
+                },
+                {
+                    "text": "here {{candidate}} isn't present in {{sashimiCell}} and this cell is in same block as {{finnCellsAxesListText}} finn {{finnCellEnglishText}}\njust like Finned X-Wing in Sashimi Finned X-Wing also we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells because however we fill {{candidate}} in {{hostHousesAxesListText}} {{hostHousePluralName}}, in all cases {{candidate}} can't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.",
+                    "config": {
+                        "crossHouseFullNamePlural": {
+                            "type": "house",
+                            "form": "plural"
+                        },
+                        "hostHousePluralName": {
+                            "type": "house",
+                            "form": "plural"
+                        },
+                        "finnedLegAxesText": {
+                            "houseNum": {
+                                "type": "houseNumber",
+                                "form": {
+                                    "row": "axis",
+                                    "col": "number_ordinal",
+                                    "block": "number_ordinal"
+                                }
+                            }
+                        },
+                        "finnedLegHouseText": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                }
+            ]
+        },
         "yWing": [
             "<p>look for a <a href=\"CELL\">cell</a> which has only two <a href=\"CANDIDATE\">candidates</a> in it. we will call it pivot cell.\nin puzzle {{pivotCell}} is highlighted as pivot cell</p>",
             "<p>now look for two more cells which also have only two candidates in them and which share a <a href=\"HOUSE\">house</a> with pivot cell. these will be wings cells. wings cells themselves shouldn't be in same house.\nhere {{wingCellsText}} are wings cells\n{{firstWingCell}} and {{pivotCell}} are in {{firstWingAndPivotCommonHouse}} and {{secondWingCell}} and {{pivotCell}} are in {{secondWingAndPivotCommonHouse}}. but {{firstWingCell}} and {{secondWingCell}} are not in any same house</p>",

@@ -11,7 +11,6 @@ import { HOUSE_TYPE } from '@domain/board/board.constants'
 import {
     HINTS_IDS,
     HINT_TEXT_ELEMENTS_JOIN_CONJUGATION,
-    HOUSE_TYPE_VS_FULL_NAMES,
 } from '../../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../../stringLiterals'
 import { getCellAxesValues } from '../../../../util'
@@ -22,8 +21,12 @@ import {
     getHintExplanationStepsFromHintChunks,
     getTryOutInputPanelNumbersVisibility,
     transformCellBGColor,
+    getAxisValuesFromTranslations,
+    getLanguageSpecificHouseNumText,
+    getLanguageSpecificHouseTypeText,
+    HouseNumTextTranslationConfig,
 } from '../../../util'
-import { getCellsAxesValuesListText, getHouseNumText } from '../../helpers'
+import { getCellsAxesValuesListText } from '../../helpers'
 
 import {
     categorizeLegs,
@@ -33,51 +36,121 @@ import {
     getXWingCandidate,
     getXWingHosuesInOrder,
     getXWingCells,
+    getCrossHouseType,
 } from '../../../xWing/utils'
 import { XWING_TYPES } from '../../../xWing/constants'
 
-import { getApplyHintData, getXWingCrossHouseFullNamePlural } from './helpers'
+import { getApplyHintData } from './helpers'
 import smartHintColorSystemReader from '../../../colorSystem.reader'
 import {
-    CellHighlightData, CellsFocusData, SmartHintsColorSystem, TransformedRawHint,
+    CellHighlightData, CellsFocusData, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../../types'
 import { XWingRawHint } from '../../../xWing/types'
 
-const getCrossHouseType = (houseType: HouseType) => (isRowHouse(houseType) ? HOUSE_TYPE.COL : HOUSE_TYPE.ROW)
+type FinnedXWingTranslation = {
+    texts: { text: string, config: Record<string, any> }[]
+    finnCellsPrefix: { singular: string, plural: string }
+}
 
-const getPlaceholdersValues = (xWing: XWingRawHint, removableNotesHostCells: Cell[]) => {
+type CommonTranslations = {
+    houseTypes: {
+        cell: { singular: string, plural: string }
+        [key: string]: any
+    }
+    shareVerb: { singular: string, plural: string }
+    corners: { singular: string, plural: string }
+    conjugations: { and: string, or: string }
+    [key: string]: any
+}
+
+const getPlaceholdersValues = (
+    xWing: XWingRawHint,
+    removableNotesHostCells: Cell[],
+    config: Record<string, any>,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
     const { houseType, legs } = xWing
     const { perfectLeg, otherLeg: finnedLeg } = categorizeLegs(legs[0], legs[1])
     const { finns: finnCells } = categorizeFinnedLegCells(perfectLeg.cells, finnedLeg.cells)
     const finnedBlockPerfectCells = getPerfectCellsInFinnedBlock(legs)
     const xWingHouses = getXWingHosuesInOrder(xWing)
+    const crossHouseType = getCrossHouseType(houseType)
 
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const finnedXWingTranslation = smartHintsTranslationsTexts.explanation[HINTS_IDS.FINNED_X_WING] as unknown as FinnedXWingTranslation
+    const finnCellsPrefixConfig = finnedXWingTranslation.finnCellsPrefix
+    const common = smartHintsTranslationsTexts.common as unknown as CommonTranslations
+
+    const finnedLegAxesTextConfig = config?.finnedLegAxesText?.houseNum as HouseNumTextTranslationConfig
+    const finnedLegHouseTextConfig = config?.finnedLegHouseText
     return {
         candidate: getXWingCandidate(xWing),
-        finnedLegAxesText: getHouseNumText(getCellHouseForHouseType(houseType, finnedLeg.cells[0])),
-        finnedLegHouseText: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME,
-        finnCellsAxesListText: getCellsAxesValuesListText(finnCells),
-        finnCellEnglishText: finnCells.length === 1 ? 'cell' : 'cells',
-        shareVerbGrammaticalText: finnCells.length === 1 ? 'shares' : 'share',
+        finnedLegAxesText: finnedLegAxesTextConfig
+            ? getLanguageSpecificHouseNumText(
+                getCellHouseForHouseType(houseType, finnedLeg.cells[0]),
+                finnedLegAxesTextConfig,
+                smartHintsTranslationsTexts
+            )
+            : undefined,
+        finnedLegHouseText: finnedLegHouseTextConfig
+            ? getLanguageSpecificHouseTypeText(houseType, finnedLegHouseTextConfig, smartHintsTranslationsTexts)
+            : undefined,
+        finnCellsAxesListText: getCellsAxesValuesListText(finnCells, '', axisValues),
+        finnCellEnglishText: finnCells.length === 1
+            ? common.houseTypes.cell.singular
+            : common.houseTypes.cell.plural,
+        shareVerbGrammaticalText: finnCells.length === 1
+            ? common.shareVerb.singular
+            : common.shareVerb.plural,
         finnedBlockPerfectCellsAxesText: getCellsAxesValuesListText(
             finnedBlockPerfectCells,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+            common.conjugations.and,
+            axisValues
         ),
-        cornersText: finnedBlockPerfectCells.length === 1 ? 'corner' : 'corners',
-        crossHouseFullNamePlural: getXWingCrossHouseFullNamePlural(xWing),
-        hostHousesAxesListText: `${getHouseNumText(xWingHouses[0])} and ${getHouseNumText(xWingHouses[1])}`,
-        hostHousePluralName: HOUSE_TYPE_VS_FULL_NAMES[houseType].FULL_NAME_PLURAL,
-        removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        removableNotesHostCellsText: removableNotesHostCells.length === 1 ? 'cell' : 'cells',
-        finnCellsPrefix: finnCells.length === 1 ? 'the' : 'any of the',
+        cornersText: finnedBlockPerfectCells.length === 1
+            ? common.corners.singular
+            : common.corners.plural,
+        crossHouseFullNamePlural: config?.crossHouseFullNamePlural
+            ? getLanguageSpecificHouseTypeText(crossHouseType, config.crossHouseFullNamePlural, smartHintsTranslationsTexts)
+            : undefined,
+        hostHousesAxesListText: finnedLegAxesTextConfig ? `${getLanguageSpecificHouseNumText(
+            xWingHouses[0],
+            finnedLegAxesTextConfig,
+            smartHintsTranslationsTexts
+        )} ${common.conjugations.and} ${getLanguageSpecificHouseNumText(
+            xWingHouses[1],
+            finnedLegAxesTextConfig,
+            smartHintsTranslationsTexts
+        )}` : undefined,
+        hostHousePluralName: config?.hostHousePluralName
+            ? getLanguageSpecificHouseTypeText(houseType, config.hostHousePluralName, smartHintsTranslationsTexts)
+            : undefined,
+        removableNotesHostCells: getCellsAxesValuesListText(
+            removableNotesHostCells,
+            common.conjugations.and,
+            axisValues
+        ),
+        removableNotesHostCellsText: removableNotesHostCells.length === 1
+            ? common.houseTypes.cell.singular
+            : common.houseTypes.cell.plural,
+        finnCellsPrefix: finnCells.length === 1
+            ? finnCellsPrefixConfig.singular
+            : finnCellsPrefixConfig.plural,
     }
 }
 
-const getFinnedXWingHintChunks = (xWing: XWingRawHint, removableNotesHostCells: Cell[]): string[] => {
-    const msgPlaceholdersValues = getPlaceholdersValues(xWing, removableNotesHostCells)
+const getFinnedXWingHintChunks = (
+    xWing: XWingRawHint,
+    removableNotesHostCells: Cell[],
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+): string[] => {
+    const finnedXWingTranslation = smartHintsTranslationsTexts.explanation[HINTS_IDS.FINNED_X_WING] as unknown as FinnedXWingTranslation
+    const { texts } = finnedXWingTranslation
 
-    return (HINT_EXPLANATION_TEXTS[HINTS_IDS.FINNED_X_WING] as string[])
-        .map(template => dynamicInterpolation(template, msgPlaceholdersValues))
+    return texts.map(({ text, config }: { text: string, config: Record<string, any> }) => {
+        const msgPlaceholdersValues = getPlaceholdersValues(xWing, removableNotesHostCells, config, smartHintsTranslationsTexts)
+        return dynamicInterpolation(text, msgPlaceholdersValues)
+    })
 }
 
 // this implementation is different from utils implementation
@@ -89,15 +162,24 @@ const getSashimiCell = (xWing: XWingRawHint, notes: Notes) => {
     return finnedLeg.cells.find(cell => !NotesRecord.isNotePresentInCell(notes, candidate, cell))
 }
 
-const getSashimiFinnedHintChunks = (xWing: XWingRawHint, removableNotesHostCells: Cell[], notes: Notes): string[] => {
-    const placeholdersValues = {
-        ...getPlaceholdersValues(xWing, removableNotesHostCells),
-        sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes) as Cell),
-        sashimiCell: getCellAxesValues(getSashimiCell(xWing, notes) as Cell),
-    }
+const getSashimiFinnedHintChunks = (
+    xWing: XWingRawHint,
+    removableNotesHostCells: Cell[],
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+): string[] => {
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const finnedXWingTranslation = smartHintsTranslationsTexts.explanation[HINTS_IDS.SASHIMI_FINNED_X_WING] as unknown as FinnedXWingTranslation
+    const { texts } = finnedXWingTranslation
 
-    return (HINT_EXPLANATION_TEXTS[HINTS_IDS.SASHIMI_FINNED_X_WING] as string[])
-        .map(template => dynamicInterpolation(template, placeholdersValues))
+    return texts.map(({ text, config }: { text: string, config: Record<string, any> }) => {
+        const msgPlaceholdersValues = {
+            ...getPlaceholdersValues(xWing, removableNotesHostCells, config, smartHintsTranslationsTexts),
+            sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes) as Cell, axisValues),
+            sashimiCell: getCellAxesValues(getSashimiCell(xWing, notes) as Cell, axisValues)
+        }
+        return dynamicInterpolation(text, msgPlaceholdersValues)
+    })
 }
 
 // doing 2 things
@@ -202,6 +284,7 @@ export const getFinnedXWingUIData = (
     xWing: XWingRawHint,
     notesData: Notes,
     smartHintsColorSystem: SmartHintsColorSystem,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts,
 ): TransformedRawHint => {
     const { type: finnedXWingType, legs, houseType } = xWing
     const { candidate } = legs[0]
@@ -237,16 +320,16 @@ export const getFinnedXWingUIData = (
     }
 
     const hintChunks = finnedXWingType === XWING_TYPES.FINNED
-        ? getFinnedXWingHintChunks(xWing, removableNotesHostCells)
-        : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData)
+        ? getFinnedXWingHintChunks(xWing, removableNotesHostCells, smartHintsTranslationsTexts)
+        : getSashimiFinnedHintChunks(xWing, removableNotesHostCells, notesData, smartHintsTranslationsTexts)
 
     return {
         type: finnedXWingType === XWING_TYPES.FINNED ? HINTS_IDS.FINNED_X_WING : HINTS_IDS.SASHIMI_FINNED_X_WING,
         cellsToFocusData,
         title:
             finnedXWingType === XWING_TYPES.FINNED
-                ? HINT_ID_VS_TITLES[HINTS_IDS.FINNED_X_WING]
-                : HINT_ID_VS_TITLES[HINTS_IDS.SASHIMI_FINNED_X_WING],
+                ? smartHintsTranslationsTexts.title[HINTS_IDS.FINNED_X_WING]
+                : smartHintsTranslationsTexts.title[HINTS_IDS.SASHIMI_FINNED_X_WING],
         steps: getHintExplanationStepsFromHintChunks(hintChunks),
         applyHint: getApplyHintData(candidate, removableNotesHostCells),
         ...tryOutProps,

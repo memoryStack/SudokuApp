@@ -36,7 +36,11 @@
             "singular": "block",
             "plural": "blocks"
         },
-        "numAndName": "{{houseNum}} {{houseName}}"
+        "numAndName": "{{houseNum}} {{houseName}}",
+        "cell": {
+            "singular": "cell",
+            "plural": "cells"
+        }
     },
     "houseNumber": {
         "row": {
@@ -97,6 +101,14 @@
         "col_6": "7",
         "col_7": "8",
         "col_8": "9"
+    },
+    "corners": {
+        "singular": "corner",
+        "plural": "corners"
+    },
+    "shareVerb": {
+        "singular": "shares",
+        "plural": "share"
     },
     "numbers": {
         "alphabetic": {

@@ -56,6 +56,14 @@
         "col_7": "8",
         "col_8": "9"
     },
+    "corners": {
+        "singular": "कोने",
+        "plural": "कोनों"
+    },
+    "shareVerb": {
+        "singular": "साझा करता है",
+        "plural": "साझा करते हैं"
+    },
     "numbers": {
         "masculine": {
             "1": "पहला",
@@ -140,6 +148,10 @@
             "singular": "ब्लॉक",
             "plural": "ब्लॉक",
             "oblique": "ब्लॉकों"
+        },
+        "cell": {
+            "singular": "सेल",
+            "plural": "सेल्स"
         },
         "numAndName": "{{houseName}} नं. {{houseNum}}"
     },
