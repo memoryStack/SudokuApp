@@ -496,7 +496,7 @@
         "xChain": {
             "texts": [
                 {
-                    "text": "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{note}} उनके उम्मीदवार के रूप में है।\nइस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, {{firstWayToFillChainCells}}।</p>"
+                    "text": "<p><a href=\"CELL\">सेल्स</a> की चेन {{chain}} देखें। इन सभी सेल में {{note}} उनके <a href=\"CANDIDATE\">उम्मीदवार</a> के रूप में है।\nइस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, {{firstWayToFillChainCells}}।</p>"
                 },
                 {
                     "text": "इस चेन में {{note}} भरने का दूसरा तरीका इसे उल्टे क्रम में भरना है जैसे {{secondWayToFillChainCells}}।\nइन दोनों तरीकों में या तो {{chainFirstCell}} या {{chainLastCell}} निश्चित रूप से {{note}} होगा, इसके कारण {{removableNotesHostCells}} किसी भी तरह से {{note}} नहीं हो सकते"
