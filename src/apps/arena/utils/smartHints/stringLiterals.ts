@@ -112,10 +112,7 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
         t('explanations.remotePairs.0', { returnObjects: true }),
         t('explanations.remotePairs.1', { returnObjects: true }),
     ],
-    [HINTS_IDS.X_CHAIN]: [
-        t('explanations.xChain.0', { returnObjects: true }),
-        t('explanations.xChain.1', { returnObjects: true }),
-    ],
+    [HINTS_IDS.X_CHAIN]: t('explanations.xChain', { returnObjects: true }),
     [HINTS_IDS.XY_CHAIN]: [
         t('explanations.xyChain.0', { returnObjects: true }),
         t('explanations.xyChain.1', { returnObjects: true }),

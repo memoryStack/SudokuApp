@@ -19,6 +19,7 @@ import {
     InputPanelNumbersVisibility,
     TryOutInputsColors,
     ChainLink,
+    SmartHintsTranslationsTexts,
 } from '../../types'
 import { XChainTransformerArgs } from './types'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
@@ -31,6 +32,8 @@ import {
     transformCellBGColor,
     setCellNotesHighlightDataInHintResult,
     getTryOutInputPanelNumbersVisibility,
+    getAxisValuesFromTranslations,
+    getHouseWithNumAndNameText,
 } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { LINK_TYPES } from '../../chains/xChain/xChain.constants'
@@ -70,15 +73,15 @@ const getUICellsToFocusData = (xChain: XChainRawHint, smartHintsColorSystem: Sma
     return result
 }
 
-const getExplainationStepsText = (xChain: XChainRawHint, chainLinks: Chain) => {
+const getExplainationStepsText = (
+    xChain: XChainRawHint, chainLinks: Chain, smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
     const { note, chain, removableNotesHostCells } = xChain
 
-    const chainNotesFillingTextTemplates = {
-        firstLinkExplaination: 'if {{linkSourceCell}} is not {{note}} then {{linkSinkCell}} has to be {{note}}({{note}}'
-            + ' can come only in one of {{linkSourceCell}} or {{linkSinkCell}} in {{firstLinkHostHouse}})',
-        otherLinkExplaination: '{{linkSourceCell}} can\'t be {{note}} then {{linkSinkCell}} has to be {{note}}',
-    }
+    const { texts, chainTexts, config } = smartHintsTranslationsTexts.explanation[HINTS_IDS.X_CHAIN]
 
+    const chainNotesFillingTextTemplates = chainTexts.forward
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     const firstWayToFillChainCells = _compact(_map(chainLinks, (link: ChainLink, indx: number) => {
         const { start, end, type } = link
         if (type === LINK_TYPES.WEAK) return null
@@ -86,17 +89,18 @@ const getExplainationStepsText = (xChain: XChainRawHint, chainLinks: Chain) => {
             : chainNotesFillingTextTemplates.otherLinkExplaination
         const placeholdersValues = {
             note,
-            firstLinkHostHouse: getHouseNumAndName(_head(getCellsCommonHousesInfo([start.cell, end.cell]))),
-            linkSourceCell: getCellAxesValues(start.cell),
-            linkSinkCell: getCellAxesValues(end.cell),
+            firstLinkHostHouse: getHouseWithNumAndNameText(
+                _head(getCellsCommonHousesInfo([start.cell, end.cell])),
+                config.houseNumAndName,
+                smartHintsTranslationsTexts
+            ),
+            linkSourceCell: getCellAxesValues(start.cell, axesValues),
+            linkSinkCell: getCellAxesValues(end.cell, axesValues)
         }
         return dynamicInterpolation(explainationText, placeholdersValues)
     })).join(', ')
 
-    const reverseOrderChainNotesFillingTextTemplates = {
-        firstLinkExplaination: 'if {{linkSourceCell}} is not {{note}} then {{linkSinkCell}} has to be {{note}}',
-        otherLinkExplaination: '{{linkSourceCell}} can\'t be {{note}} then {{linkSinkCell}} has to be {{note}}',
-    }
+    const reverseOrderChainNotesFillingTextTemplates = chainTexts.reverse
     const secondWayToFillChainCells = _compact(_map(_reverse([...chainLinks]), (link: ChainLink, indx: number) => {
         const { start, end, type } = link
         if (type === LINK_TYPES.WEAK) return null
@@ -104,25 +108,35 @@ const getExplainationStepsText = (xChain: XChainRawHint, chainLinks: Chain) => {
             : reverseOrderChainNotesFillingTextTemplates.otherLinkExplaination
         const placeholdersValues = {
             note,
-            firstLinkHostHouse: getHouseNumAndName(_head(getCellsCommonHousesInfo([start.cell, end.cell]))),
-            linkSourceCell: getCellAxesValues(end.cell),
-            linkSinkCell: getCellAxesValues(start.cell),
+            firstLinkHostHouse: getHouseWithNumAndNameText(
+                _head(getCellsCommonHousesInfo([start.cell, end.cell])),
+                config.houseNumAndName,
+                smartHintsTranslationsTexts
+            ),
+            linkSourceCell: getCellAxesValues(end.cell, axesValues),
+            linkSinkCell: getCellAxesValues(start.cell, axesValues)
         }
         return dynamicInterpolation(explainationText, placeholdersValues)
     })).join(', ')
 
     const placeholdersValues = {
         note,
-        chain: joinStringsListWithArrow(_map(chain, (chainCell: Cell) => getCellAxesValues(chainCell))),
-        chainFirstCell: getCellAxesValues(_head(chain)),
-        chainLastCell: getCellAxesValues(_last(chain)),
-        removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        chain: joinStringsListWithArrow(_map(chain, (chainCell: Cell) => getCellAxesValues(chainCell, axesValues))),
+        chainFirstCell: getCellAxesValues(_head(chain), axesValues),
+        chainLastCell: getCellAxesValues(_last(chain), axesValues),
+        removableNotesHostCells: getCellsAxesValuesListText(
+            removableNotesHostCells,
+            smartHintsTranslationsTexts.common.conjugations.and,
+            axesValues
+        ),
         firstWayToFillChainCells,
         secondWayToFillChainCells,
     }
 
-    const rawExplainationTexts = HINT_EXPLANATION_TEXTS[HINTS_IDS.X_CHAIN]
-    const explainationTextsWithPlaceholdersFilled = _map(rawExplainationTexts, (aStepRawText: string) => dynamicInterpolation(aStepRawText, placeholdersValues))
+    const explainationTextsWithPlaceholdersFilled = _map(
+        texts,
+        ({ text }: { text: string }) => dynamicInterpolation(text, placeholdersValues)
+    )
     return getHintExplanationStepsFromHintChunks(explainationTextsWithPlaceholdersFilled, false)
 }
 
@@ -177,7 +191,9 @@ const getTryOutInputsColors = (
     return result
 }
 
-export const transformXChainRawHint = ({ rawHint: xChain, notesData, smartHintsColorSystem }: XChainTransformerArgs): TransformedRawHint => {
+export const transformXChainRawHint = ({
+    rawHint: xChain, notesData, smartHintsColorSystem, smartHintsTranslationsTexts
+}: XChainTransformerArgs): TransformedRawHint => {
     const cellsToFocusData = getUICellsToFocusData(xChain, smartHintsColorSystem)
 
     const { note, chain, removableNotesHostCells } = xChain
@@ -189,10 +205,10 @@ export const transformXChainRawHint = ({ rawHint: xChain, notesData, smartHintsC
 
     return ({
         type: HINTS_IDS.X_CHAIN,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.X_CHAIN],
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.X_CHAIN],
         cellsToFocusData,
         focusedCells: clickableCells,
-        steps: getExplainationStepsText(xChain, chainLinks),
+        steps: getExplainationStepsText(xChain, chainLinks, smartHintsTranslationsTexts),
         svgProps: { data: chainLinks },
         hasTryOut: false, // TODO:
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([note]) as InputPanelNumbersVisibility,

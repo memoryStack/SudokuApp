@@ -493,10 +493,42 @@
             "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{remotePairNotes}} उनके उम्मीदवार के रूप में हैं। इस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, ये सभी सेल या तो {{colorA}} में उम्मीदवारों से या {{colorB}} में उम्मीदवारों से भरे जाएंगे</p>",
             "इन सेल में जैसे चाहें अंक भरें, लाल रंग में हाइलाइट किए गए उम्मीदवार हमेशा हटा दिए जाएंगे।\nउदाहरण के लिए, {{exampleRemovableNotesHostCell}} में {{exampleRemovableNotesInCell}} नहीं आ सकते क्योंकि {{remotePairNotes}} हमेशा {{exampleChainCells}} भरेंगे"
         ],
-        "xChain": [
-            "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{note}} उनके उम्मीदवार के रूप में है।\nइस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, {{firstWayToFillChainCells}}।</p>",
-            "इस चेन में {{note}} भरने का दूसरा तरीका इसे उल्टे क्रम में भरना है जैसे {{secondWayToFillChainCells}}।\nइन दोनों तरीकों में या तो {{chainFirstCell}} या {{chainLastCell}} निश्चित रूप से {{note}} होगा, इसके कारण {{removableNotesHostCells}} किसी भी तरह से {{note}} नहीं हो सकते"
-        ],
+        "xChain": {
+            "texts": [
+                {
+                    "text": "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{note}} उनके उम्मीदवार के रूप में है।\nइस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, {{firstWayToFillChainCells}}।</p>"
+                },
+                {
+                    "text": "इस चेन में {{note}} भरने का दूसरा तरीका इसे उल्टे क्रम में भरना है जैसे {{secondWayToFillChainCells}}।\nइन दोनों तरीकों में या तो {{chainFirstCell}} या {{chainLastCell}} निश्चित रूप से {{note}} होगा, इसके कारण {{removableNotesHostCells}} किसी भी तरह से {{note}} नहीं हो सकते"
+                }
+            ],
+            "chainTexts": {
+                "forward": {
+                    "firstLinkExplaination": "यदि {{linkSourceCell}} {{note}} नहीं है तो {{linkSinkCell}} को {{note}} होना चाहिए({{note}} केवल {{firstLinkHostHouse}} में {{linkSourceCell}} या {{linkSinkCell}} में ही आ सकता है)",
+                    "otherLinkExplaination": "{{linkSourceCell}} {{note}} नहीं हो सकता तो {{linkSinkCell}} को {{note}} होना ही चाहिए"
+                },
+                "reverse": {
+                    "firstLinkExplaination": "यदि {{linkSourceCell}} {{note}} नहीं है तो {{linkSinkCell}} को {{note}} होना चाहिए",
+                    "otherLinkExplaination": "{{linkSourceCell}} {{note}} नहीं हो सकता तो {{linkSinkCell}} को {{note}} होना ही चाहिए"
+                }
+            },
+            "config": {
+                "houseNumAndName": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "xyChain": [
             "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में दो उम्मीदवार हैं और किन्हीं दो क्रमागत सेल में एक उम्मीदवार समान है। उदाहरण के लिए, {{chainFirstCell}} और {{chainSecondCell}} दोनों में {{firstLinkCommonCandidate}} उनके उम्मीदवार के रूप में है। और यह भी ध्यान दें कि {{chainFirstCell}}(पहला सेल) और {{chainLastCell}}(अंतिम सेल) दोनों में {{removableNote}} उनके उम्मीदवार के रूप में है।\nइस प्रकार की सेल की चेन को XY-चेन कहते हैं।</p>",
             "<p>अब {{chainFirstCell}} को दो तरीकों से भरा जा सकता है।<br /><b>पहला:</b> यहाँ {{removableNote}} भरें।<br /><b>दूसरा:</b> यहाँ {{firstCellCandidateOtherThanRemovableCandidate}} भरें। इसके कारण {{chainFillingWay}}।<br />ध्यान दें कि दोनों तरीकों में, या तो {{chainFirstCell}} या {{chainLastCell}} {{removableNote}} से भरा जाएगा।<br />इसलिए {{removableNotesHostCells}} से सभी {{removableNote}} हटा दिए जाएंगे क्योंकि ये सेल इस चेन के पहले और अंतिम सेल के साथ हाउस साझा करते हैं।</p>"

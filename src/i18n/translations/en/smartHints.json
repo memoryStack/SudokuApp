@@ -493,10 +493,42 @@
             "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{remotePairNotes}} as their <a href=\"CANDIDATE\">candidates</a>. Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either by candidates in {{colorA}} or by candidates in {{colorB}}</p>",
             "Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can't come because {{remotePairNotes}} will always fill {{exampleChainCells}}"
         ],
-        "xChain": [
-            "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{note}} as their <a href=\"CANDIDATE\">candidate</a>.\nFollow this Chain from {{chainFirstCell}} to {{chainLastCell}}, {{firstWayToFillChainCells}}.</p>",
-            "another way to fill {{note}} in this Chain is to fill it in reverse order like {{secondWayToFillChainCells}}.\nin both of these ways either {{chainFirstCell}} or {{chainLastCell}} will definitely be {{note}}, due to this {{removableNotesHostCells}} can't be {{note}} in any way"
-        ],
+        "xChain": {
+            "texts": [
+                {
+                    "text": "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{note}} as their <a href=\"CANDIDATE\">candidate</a>.\nFollow this Chain from {{chainFirstCell}} to {{chainLastCell}}, {{firstWayToFillChainCells}}.</p>"
+                },
+                {
+                    "text": "another way to fill {{note}} in this Chain is to fill it in reverse order like {{secondWayToFillChainCells}}.\nin both of these ways either {{chainFirstCell}} or {{chainLastCell}} will definitely be {{note}}, due to this {{removableNotesHostCells}} can't be {{note}} in any way"
+                }
+            ],
+            "chainTexts": {
+                "forward": {
+                    "firstLinkExplaination": "if {{linkSourceCell}} is not {{note}} then {{linkSinkCell}} has to be {{note}}({{note}} can come only in one of {{linkSourceCell}} or {{linkSinkCell}} in {{firstLinkHostHouse}})",
+                    "otherLinkExplaination": "{{linkSourceCell}} can't be {{note}} then {{linkSinkCell}} has to be {{note}}"
+                },
+                "reverse": {
+                    "firstLinkExplaination": "if {{linkSourceCell}} is not {{note}} then {{linkSinkCell}} has to be {{note}}",
+                    "otherLinkExplaination": "{{linkSourceCell}} can't be {{note}} then {{linkSinkCell}} has to be {{note}}"
+                }
+            },
+            "config": {
+                "houseNumAndName": {
+                    "houseNum": {
+                        "type": "houseNumber",
+                        "form": {
+                            "row": "axis",
+                            "col": "number_ordinal",
+                            "block": "number_ordinal"
+                        }
+                    },
+                    "houseName": {
+                        "type": "house",
+                        "form": "singular"
+                    }
+                }
+            }
+        },
         "xyChain": [
             "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have two <a href=\"CANDIDATE\">candidates</a> and any two consecutive cells have one candidate common. For Example, {{chainFirstCell}} and {{chainSecondCell}} both have {{firstLinkCommonCandidate}} as their candidate. And also note that {{chainFirstCell}}(first cell) and {{chainLastCell}}(last cell) both have {{removableNote}} as their candidate in them.\nThis type of chain of cells is called XY-Chain.</p>",
             "<p>Now {{chainFirstCell}} can be filled in two ways.<br /><b>First:</b> Fill {{removableNote}} here.<br /><b>Second:</b> Fill {{firstCellCandidateOtherThanRemovableCandidate}} here. Due to this {{chainFillingWay}}.<br />Notice that in both ways, either {{chainFirstCell}} or {{chainLastCell}} will be filled by {{removableNote}}.<br />So all the {{removableNote}}s from {{removableNotesHostCells}} will be removed because these cells share <a href=\"HOUSE\">house</a> with first and last cell of this chain.</p>"
