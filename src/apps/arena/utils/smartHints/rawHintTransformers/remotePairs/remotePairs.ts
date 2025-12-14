@@ -19,6 +19,7 @@ import {
     setCellDataInHintResult,
     setCellNotesHighlightDataInHintResult,
     transformCellBGColor,
+    getAxisValuesFromTranslations,
 } from '../../util'
 import { BoardIterators } from '@domain/board/utils/boardIterators'
 import smartHintColorSystemReader from '../../colorSystem.reader'
@@ -32,6 +33,7 @@ import {
     SmartHintsColorSystem,
     TransformedRawHint,
     TryOutInputsColors,
+    SmartHintsTranslationsTexts,
 } from '../../types'
 import { RemotePairsRawHint } from '../../chains/remotePairs/types'
 import { areCommonHouseCells, getCellAxesValues } from '../../../util'
@@ -133,27 +135,39 @@ const getChainCellsWhichRemoveNotesInCell = (cell: Cell, chainCells: RemotePairs
     return result
 }
 
-const getExplainationStepsText = (remotePairs: RemotePairsRawHint, notes: Notes) => {
+const getExplainationStepsText = (
+    remotePairs: RemotePairsRawHint,
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const { texts, supportingTexts: { remotePairsNotesColors } } = smartHintsTranslationsTexts.explanation[HINTS_IDS.REMOTE_PAIRS]
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     const { remotePairNotes, orderedChainCells, removableNotesHostCells } = remotePairs
-    const rawExplainationTexts = HINT_EXPLANATION_TEXTS[HINTS_IDS.REMOTE_PAIRS]
-    const chainText = joinStringsListWithArrow(_map(orderedChainCells, (chainCell: Cell) => getCellAxesValues(chainCell)))
+
+    const chainText = joinStringsListWithArrow(_map(
+        orderedChainCells,
+        (chainCell: Cell) => getCellAxesValues(chainCell, axesValues))
+    )
     const exampleRemovableNotesHostCell = _head(removableNotesHostCells)
     const exampleRemovableNotesInCell = _intersection(NotesRecord.getCellVisibleNotesList(notes, exampleRemovableNotesHostCell), remotePairNotes)
     const exampleChainCells = getChainCellsWhichRemoveNotesInCell(exampleRemovableNotesHostCell, orderedChainCells)
 
     const placeholdersValues = {
         chain: chainText,
-        remotePairNotes: getCandidatesListText(remotePairNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        chainFirstCell: getCellAxesValues(_head(orderedChainCells)),
-        chainLastCell: getCellAxesValues(_last(orderedChainCells)),
-        colorA: REMOTE_PAIRS_COLORS_TEXT[0],
-        colorB: REMOTE_PAIRS_COLORS_TEXT[1],
-        exampleRemovableNotesHostCell: getCellAxesValues(exampleRemovableNotesHostCell),
-        exampleRemovableNotesInCell: getCandidatesListText(exampleRemovableNotesInCell, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        exampleChainCells: getCellsAxesValuesListText(exampleChainCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        remotePairNotes: getCandidatesListText(remotePairNotes, smartHintsTranslationsTexts.common.conjugations.and),
+        chainFirstCell: getCellAxesValues(_head(orderedChainCells), axesValues),
+        chainLastCell: getCellAxesValues(_last(orderedChainCells), axesValues),
+        colorA: remotePairsNotesColors.colorA,
+        colorB: remotePairsNotesColors.colorB,
+        exampleRemovableNotesHostCell: getCellAxesValues(exampleRemovableNotesHostCell, axesValues),
+        exampleRemovableNotesInCell: getCandidatesListText(exampleRemovableNotesInCell, smartHintsTranslationsTexts.common.conjugations.and),
+        exampleChainCells: getCellsAxesValuesListText(exampleChainCells, smartHintsTranslationsTexts.common.conjugations.and),
     }
 
-    const explainationTextsWithPlaceholdersFilled = _map(rawExplainationTexts, (aStepRawText: string) => dynamicInterpolation(aStepRawText, placeholdersValues))
+    const explainationTextsWithPlaceholdersFilled = _map(
+        texts,
+        ({ text }: { text: string }) => dynamicInterpolation(text, placeholdersValues)
+    )
     return getHintExplanationStepsFromHintChunks(explainationTextsWithPlaceholdersFilled)
 }
 
@@ -189,7 +203,9 @@ const getTryOutInputsColors = (
     return result
 }
 
-export const transformRemotePairsRawHint = ({ rawHint: remotePairs, notesData, smartHintsColorSystem }: RemotePairsTransformerArgs): TransformedRawHint => {
+export const transformRemotePairsRawHint = ({
+    rawHint: remotePairs, notesData, smartHintsColorSystem, smartHintsTranslationsTexts
+}: RemotePairsTransformerArgs): TransformedRawHint => {
     const { orderedChainCells, removableNotesHostCells } = remotePairs
     const clickableCells = [...orderedChainCells, ...removableNotesHostCells]
     const cellsToFocusData = getUICellsToFocusData(remotePairs, smartHintsColorSystem)
@@ -198,10 +214,10 @@ export const transformRemotePairsRawHint = ({ rawHint: remotePairs, notesData, s
 
     return ({
         type: HINTS_IDS.REMOTE_PAIRS,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.REMOTE_PAIRS],
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.REMOTE_PAIRS],
         cellsToFocusData,
         focusedCells: clickableCells, // TODO: this "focusedCells" field is just simple two faced
-        steps: getExplainationStepsText(remotePairs, notesData),
+        steps: getExplainationStepsText(remotePairs, notesData, smartHintsTranslationsTexts),
         svgProps: { data: getSvgData(remotePairs) },
         hasTryOut: true,
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(remotePairs.remotePairNotes) as InputPanelNumbersVisibility,

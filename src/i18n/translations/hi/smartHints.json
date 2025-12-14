@@ -489,10 +489,22 @@
                 }
             }
         },
-        "remotePairs": [
-            "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में {{remotePairNotes}} उनके उम्मीदवार के रूप में हैं। इस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, ये सभी सेल या तो {{colorA}} में उम्मीदवारों से या {{colorB}} में उम्मीदवारों से भरे जाएंगे</p>",
-            "इन सेल में जैसे चाहें अंक भरें, लाल रंग में हाइलाइट किए गए उम्मीदवार हमेशा हटा दिए जाएंगे।\nउदाहरण के लिए, {{exampleRemovableNotesHostCell}} में {{exampleRemovableNotesInCell}} नहीं आ सकते क्योंकि {{remotePairNotes}} हमेशा {{exampleChainCells}} भरेंगे"
-        ],
+        "remotePairs": {
+            "texts": [
+                {
+                    "text": "<p><a href=\"CELL\">सेल्स</a> की चेन {{chain}} देखें। इन सभी सेल में {{remotePairNotes}} उनके <a href=\"CANDIDATE\">उम्मीदवार</a> के रूप में हैं। इस चेन को {{chainFirstCell}} से {{chainLastCell}} तक फॉलो करें, ये सभी सेल या तो {{colorA}} उम्मीदवारों से या {{colorB}} उम्मीदवारों से भरे जाएंगे</p>"
+                },
+                {
+                    "text": "इन सेल में जैसे चाहें अंक भरें, लाल रंग में हाइलाइट किए गए उम्मीदवार हमेशा हटा दिए जाएंगे।\nउदाहरण के लिए, {{exampleRemovableNotesHostCell}} में {{exampleRemovableNotesInCell}} नहीं आ सकते क्योंकि {{remotePairNotes}} हमेशा {{exampleChainCells}} भरेंगे"
+                }
+            ],
+            "supportingTexts": {
+                "remotePairsNotesColors": {
+                    "colorA": "हरे",
+                    "colorB": "नीले"
+                }
+            }
+        },
         "xChain": {
             "texts": [
                 {

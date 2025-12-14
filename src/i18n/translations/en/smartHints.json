@@ -489,10 +489,22 @@
                 }
             }
         },
-        "remotePairs": [
-            "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{remotePairNotes}} as their <a href=\"CANDIDATE\">candidates</a>. Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either by candidates in {{colorA}} or by candidates in {{colorB}}</p>",
-            "Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can't come because {{remotePairNotes}} will always fill {{exampleChainCells}}"
-        ],
+        "remotePairs": {
+            "texts": [
+                {
+                    "text": "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have {{remotePairNotes}} as their <a href=\"CANDIDATE\">candidates</a>. Follow this Chain from {{chainFirstCell}} to {{chainLastCell}}, all of these cells will be filled either by candidates in {{colorA}} or by candidates in {{colorB}}</p>"
+                },
+                {
+                    "text": "Fill numbers in these cells any way you want, candidates highlighted in red color will always be removed.\nFor Example, in {{exampleRemovableNotesHostCell}} {{exampleRemovableNotesInCell}} can't come because {{remotePairNotes}} will always fill {{exampleChainCells}}"
+                }
+            ],
+            "supportingTexts": {
+                "remotePairsNotesColors": {
+                    "colorA": "green",
+                    "colorB": "blue"
+                }
+            }
+        },
         "xChain": {
             "texts": [
                 {
