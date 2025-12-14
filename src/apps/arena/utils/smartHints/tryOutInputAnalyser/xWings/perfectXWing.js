@@ -1,7 +1,9 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _isEmpty from '@lodash/isEmpty'
 
-import { getXWingHouseFullName, getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'
+import { getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'
+import { getHouseWithNumAndNameText, getAxisValuesFromTranslations } from '../../util'
+import { getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 
 import { getXWingCandidate } from '../../xWing/utils'
 
@@ -14,44 +16,49 @@ import {
     getOneLegWithNoCandidateResult,
     getLegsFilledWithoutErrorResult,
 } from './helpers'
-import { XWING } from '../stringLiterals'
 import { XWING_TYPES } from '../../xWing/constants'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
-export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }, boardInputs) => {
+export const perfectXWingTryOutAnalyser = ({ xWing, xWingCells, removableNotesHostCells }, boardInputs, smartHintsTranslationsTexts) => {
     if (noInputInTryOut([...xWingCells, ...removableNotesHostCells], boardInputs)) {
-        return getNoInputResult(xWing)
+        return getNoInputResult(xWing, smartHintsTranslationsTexts)
     }
 
     if (!_isEmpty(filterFilledCellsInTryOut(removableNotesHostCells, boardInputs))) {
-        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells, boardInputs)
+        return getRemovableNoteHostCellFilledResult(xWing, removableNotesHostCells, boardInputs, smartHintsTranslationsTexts)
     }
 
-    return getLegsFilledWithoutErrorResult(xWing, boardInputs)
+    return getLegsFilledWithoutErrorResult(xWing, boardInputs, smartHintsTranslationsTexts)
 }
 
-const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells, boardInputs) => {
+const getRemovableNoteHostCellFilledResult = (xWing, removableNotesHostCells, boardInputs, smartHintsTranslationsTexts) => {
     const removableNotesHostCellsFilled = filterFilledCellsInTryOut(removableNotesHostCells, boardInputs)
     if (removableNotesHostCellsFilled.length === 2) {
-        return getBothHouseWithoutCandidateErrorResult(xWing, removableNotesHostCellsFilled)
+        return getBothHouseWithoutCandidateErrorResult(xWing, removableNotesHostCellsFilled, smartHintsTranslationsTexts)
     }
 
-    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells, boardInputs)
+    const noCandidateInALegError = getOneLegWithNoCandidateResult(xWing, removableNotesHostCells, boardInputs, smartHintsTranslationsTexts)
     if (noCandidateInALegError) return noCandidateInALegError
 
-    return getSameCrossHouseCandidatePossibilitiesResult(xWing)
+    return getSameCrossHouseCandidatePossibilitiesResult(xWing, smartHintsTranslationsTexts)
 }
 
-const getBothHouseWithoutCandidateErrorResult = (xWing, removableNotesHostCellsFilled) => {
+const getBothHouseWithoutCandidateErrorResult = (xWing, removableNotesHostCellsFilled, smartHintsTranslationsTexts) => {
+    const config = smartHintsTranslationsTexts.tryOutAnalyser.xWing.config
+    const houseNumConfig = config.houseAAxesValue
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     const msgPlaceholderValues = {
-        ...getXWingHousesTexts(xWing.houseType, xWing.legs),
+        ...getXWingHousesTexts(xWing.houseType, xWing.legs, houseNumConfig, smartHintsTranslationsTexts),
         candidate: getXWingCandidate(xWing),
-        houseFullName: getXWingHouseFullName(xWing),
-        filledRemovableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCellsFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        houseFullName: getLanguageSpecificHouseTypeText(
+            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]),
+            config.houseFullName.houseName,
+            smartHintsTranslationsTexts
+        ),
+        filledRemovableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCellsFilled, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
     }
     return {
-        msg: dynamicInterpolation(XWING[XWING_TYPES.PERFECT].BOTH_LEGS_WITHOUT_CANDIDATE, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.xWing.perfect.bothLegsWithoutCandidate, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }

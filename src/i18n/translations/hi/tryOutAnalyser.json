@@ -17,7 +17,23 @@
             "full": "{{candidatesListText}} {{groupCellsAxesListText}} सेल में बिना किसी त्रुटि के भरे गए हैं। इन सेल को {{candidatesListText}} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि इस हाइलाइट किए गए क्षेत्र में {{groupCellsAxesListText}} के अलावा अन्य सेल में {{candidatesListText}} नहीं आ सकते।",
             "partial": "{{filledCandidates}} {{filledCandidatesHostCells}} में बिना किसी त्रुटि के {{filledCandidatesCountHV}} भरे गए। {{toBeFilledCandidates}} भरने का भी प्रयोग करें यह समझने के लिए कि {{toBeFilledCandidatesPronoun}} कहाँ आ सकते हैं या नहीं आ सकते"
         },
-        "unclickableCellClickedInTryOutMsg": "आप केवल उन्हीं सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किए गए उम्मीदवार हैं, क्योंकि हम अन्य सेल्स के बारे में कोई टिप्पणी नहीं कर रहे हैं।"
+        "unclickableCellClickedInTryOutMsg": "आप केवल उन्हीं सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किए गए उम्मीदवार हैं, क्योंकि हम अन्य सेल्स के बारे में कोई टिप्पणी नहीं कर रहे हैं।",
+        "config": {
+            "primaryHouseFullName": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
+        }
     },
     "nakedGroups": {
         "noInput": "यह समझने के लिए कि इन्हें क्यों हटाया जाना चाहिए, जहाँ {{candidatesListText}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें",
@@ -45,7 +61,69 @@
             "bothLegsWithoutCandidate": "{{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullName}} में कोई सेल नहीं है जहाँ {{candidate}} आ सके\nइस त्रुटि को ठीक करने के लिए, {{filledRemovableNotesHostCells}} से {{candidate}} हटाएं"
         },
         "oneLegValidFill": "पहेली के अंतिम समाधान में {{candidate}} {{houseAxesText}} {{houseFullName}} के {{filledXWingCornerCell}} सेल में आ सकता है\nजहाँ यह लाल या हरे रंग में हाइलाइट है वहाँ {{candidate}} भरने का भी प्रयोग करें",
-        "bothLegValidFill": "{{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullName}} में बिना किसी त्रुटि के भरा गया है और ध्यान दें कि लाल रंग में थे सभी {{candidate}} भी हटा दिए गए हैं।\nआप इन {{houseFullName}} में {{candidate}} अन्य संयोजनों में भी भर सकते हैं, ऐसे सभी संयोजनों में लाल रंग में थे सभी {{candidate}} हटा दिए जाएंगे"
+        "bothLegValidFill": "{{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullName}} में बिना किसी त्रुटि के भरा गया है और ध्यान दें कि लाल रंग में थे सभी {{candidate}} भी हटा दिए गए हैं।\nआप इन {{houseFullName}} में {{candidate}} अन्य संयोजनों में भी भर सकते हैं, ऐसे सभी संयोजनों में लाल रंग में थे सभी {{candidate}} हटा दिए जाएंगे",
+        "config": {
+            "houseFullName": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "houseFullNamePlural": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "plural"
+                }
+            },
+            "houseAAxesValue": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "houseBAxesValue": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "inhabitableHouseAxesText": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "houseAxesText": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            }
+        }
     },
     "yWing": {
         "restrictedNumberInputMsg": "कृपया यहाँ केवल {{commonNoteInWings}} भरें। हम इस सेल में अन्य अंकों के बारे में कोई टिप्पणी नहीं कर रहे।",
@@ -98,6 +176,50 @@
         "blockHostHouseFilled": {
             "removableNotePresent": "अब {{conjugateHouse}} में कहीं भी {{candidate}} भरें या इसे {{removableNoteHostCell}} में भरें",
             "removableNoteRemoved": "यदि {{filledHostCell}} में {{candidate}} भरा जाता है तो {{candidate}} {{removableNoteHostCell}} में नहीं आ सकता"
+        },
+        "config": {
+            "conjugateHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "blockHostHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "candidateInhabitableHostHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
         }
     },
     "wWing": {
@@ -120,6 +242,22 @@
             "filledWithRemovableNote": "यदि अंतिम समाधान में {{filledNakedPairCells}} में {{removableNote}} आता है तो निश्चित रूप से {{removableNote}} उन सेल में नहीं आ सकता जहाँ यह लाल रंग में हाइलाइट था",
             "oneNakedPairCellFilledWithConjugateNote": "<p>{{conjugateHouse}} में {{hiddenSingleCell}} में बना हिडन सिंगल देखें। अब इस सेल को {{conjugateNote}} से भरना होगा</p>",
             "noPlaceForConjugateNoteInConjugateHouse": "ध्यान दें कि अब {{conjugateHouse}} में कोई सेल नहीं है जहाँ {{conjugateHouseNote}} भरा जा सके। इसे ठीक करने के लिए {{nakedPairCells}} में से किसी एक से {{conjugateHouseNote}} हटाएं और फिर से शुरू करें"
+        },
+        "config": {
+            "conjugateHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
         }
     },
     "xyzWing": {

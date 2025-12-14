@@ -64,6 +64,26 @@
         "singular": "साझा करता है",
         "plural": "साझा करते हैं"
     },
+    "helpingVerb": {
+        "singular": "है",
+        "plural": "हैं"
+    },
+    "doNotVerb": {
+        "singular": "नहीं",
+        "plural": "नहीं"
+    },
+    "pronouns": {
+        "singular": "यह",
+        "plural": "ये"
+    },
+    "this": {
+        "singular": "यह",
+        "plural": "ये"
+    },
+    "number": {
+        "singular": "अंक",
+        "plural": "अंक"
+    },
     "numbers": {
         "masculine": {
             "1": "पहला",

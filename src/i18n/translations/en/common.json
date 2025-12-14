@@ -110,6 +110,26 @@
         "singular": "shares",
         "plural": "share"
     },
+    "helpingVerb": {
+        "singular": "is",
+        "plural": "are"
+    },
+    "doNotVerb": {
+        "singular": "doesn't",
+        "plural": "don't"
+    },
+    "pronouns": {
+        "singular": "it",
+        "plural": "these"
+    },
+    "this": {
+        "singular": "this",
+        "plural": "these"
+    },
+    "number": {
+        "singular": "number",
+        "plural": "numbers"
+    },
     "numbers": {
         "alphabetic": {
             "1": "A",

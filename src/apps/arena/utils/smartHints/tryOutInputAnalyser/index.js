@@ -26,10 +26,10 @@ const tryOutAnalysers = {
     [HINTS_IDS.XYZ_WING]: xyzWingTryOutAnalyser,
 }
 
-export const analyseTryOutInput = ({ hintType, data, boardInputs }) => {
+export const analyseTryOutInput = ({ hintType, data, boardInputs, smartHintsTranslationsTexts }) => {
     const handler = tryOutAnalysers[hintType]
     if (handler) {
-        return handler(data, boardInputs)
+        return handler(data, boardInputs, smartHintsTranslationsTexts)
     }
     throw new Error('invalid type of hint try-out requested for analysing')
 }

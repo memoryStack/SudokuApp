@@ -17,7 +17,23 @@
             "full": "{{candidatesListText}} are filled in {{groupCellsAxesListText}} cells without any error. this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what will be the exact solution for these cells but we are sure that {{candidatesListText}} can't come in cells other than {{groupCellsAxesListText}} in this highlighted region.",
             "partial": "{{filledCandidates}} {{filledCandidatesCountHV}} filled in {{filledCandidatesHostCells}} without any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can't be filled"
         },
-        "unclickableCellClickedInTryOutMsg": "you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells."
+        "unclickableCellClickedInTryOutMsg": "you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.",
+        "config": {
+            "primaryHouseFullName": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
+        }
     },
     "nakedGroups": {
         "noInput": "try to fill {{candidatesListText}} where it is highlighted in red color to understand why these should be removed",
@@ -45,7 +61,69 @@
             "bothLegsWithoutCandidate": "there is no cell in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} where {{candidate}} can come\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}"
         },
         "oneLegValidFill": "{{candidate}} might come in {{filledXWingCornerCell}} cell of {{houseAxesText}} {{houseFullName}} in final solution of puzzle\nexperiment with filling {{candidate}} in other places as well where it is highlighted in red or green color",
-        "bothLegValidFill": "{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} without any error and notice that all the {{candidate}}s that were in red color are also removed.\nyou can fill {{candidate}} in these {{houseFullName}} in other combinations as well, in all such combinations all the {{candidate}}s that were in red color will be removed"
+        "bothLegValidFill": "{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} without any error and notice that all the {{candidate}}s that were in red color are also removed.\nyou can fill {{candidate}} in these {{houseFullName}} in other combinations as well, in all such combinations all the {{candidate}}s that were in red color will be removed",
+        "config": {
+            "houseFullName": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "houseFullNamePlural": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "plural"
+                }
+            },
+            "houseAAxesValue": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "houseBAxesValue": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "inhabitableHouseAxesText": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "houseAxesText": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            }
+        }
     },
     "yWing": {
         "restrictedNumberInputMsg": "please enter only {{commonNoteInWings}} here. we are not commenting anything about other numbers in this cell",
@@ -98,6 +176,50 @@
         "blockHostHouseFilled": {
             "removableNotePresent": "Now fill {{candidate}} anywhere in {{conjugateHouse}} or fill it in {{removableNoteHostCell}}",
             "removableNoteRemoved": "If {{candidate}} is filled in {{filledHostCell}} then {{candidate}} can not come in {{removableNoteHostCell}}"
+        },
+        "config": {
+            "conjugateHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "blockHostHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "candidateInhabitableHostHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
         }
     },
     "wWing": {
@@ -120,6 +242,22 @@
             "filledWithRemovableNote": "If {{removableNote}} comes in {{filledNakedPairCells}} in the final solution then definitely {{removableNote}} can not come in the cells where it was highlighted in red color",
             "oneNakedPairCellFilledWithConjugateNote": "<p>Notice the Hidden Single created in {{conjugateHouse}} in {{hiddenSingleCell}}. Now this cell has to be filled with {{conjugateNote}}</p>",
             "noPlaceForConjugateNoteInConjugateHouse": "Notice that now there is no cell in {{conjugateHouse}} where {{conjugateHouseNote}} can be filled. to fix it remove {{conjugateHouseNote}} from one of {{nakedPairCells}} and start again"
+        },
+        "config": {
+            "conjugateHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
         }
     },
     "xyzWing": {

@@ -5,7 +5,6 @@ import _sortBy from '@lodash/sortBy'
 import _difference from '@lodash/difference'
 
 import { getCellAxesValues, sortCells } from '../../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 import { YWingRawHint } from '../../yWing/types'
 
@@ -19,24 +18,26 @@ import {
     isCellWithoutAnyCandidate,
     noInputInTryOut,
 } from '../helpers'
-import { YWING } from '../stringLiterals'
-import { getCandidatesListText } from '../../util'
+import { getCandidatesListText, getAxisValuesFromTranslations } from '../../util'
 import { BoardInputs } from '../types'
+import { SmartHintsTranslationsTexts } from '../../types'
 
 export const yWingTryOutAnalyser = (
     { yWing, eliminableNotesCells }: { yWing: YWingRawHint, eliminableNotesCells: Cell[] },
     boardInputs: BoardInputs,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts,
 ) => {
     const { pivot, wings, wingsCommonNote } = yWing
 
     const wingCells = wings.map(wing => wing.cell)
 
     const inputPanelCandidates = _sortNumbers([wingsCommonNote, ...pivot.notes])
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     if (noInputInTryOut([...wingCells, pivot.cell, ...eliminableNotesCells], boardInputs)) {
         const msgPlaceholderValues = { commonNoteInWings: wingsCommonNote }
         return {
-            msg: dynamicInterpolation(YWING.NO_INPUT, msgPlaceholderValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.noInput, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
@@ -44,12 +45,12 @@ export const yWingTryOutAnalyser = (
     if (anyCellHasTryOutInput(eliminableNotesCells, boardInputs)) {
         if (isCellWithoutAnyCandidate(pivot.cell, boardInputs)) {
             const msgPlaceholderValues = {
-                pivotCell: getCellAxesValues(pivot.cell),
+                pivotCell: getCellAxesValues(pivot.cell, axisValues),
                 commonNoteInWings: wingsCommonNote,
-                eliminableNotesFilledCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(eliminableNotesCells, boardInputs), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+                eliminableNotesFilledCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(eliminableNotesCells, boardInputs), smartHintsTranslationsTexts.common.conjugations.and, axisValues),
             }
             return {
-                msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.PIVOT_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.eliminableNotesCellFilled.pivotCellWithoutCandidate, msgPlaceholderValues),
                 state: TRY_OUT_RESULT_STATES.ERROR,
             }
         }
@@ -57,40 +58,40 @@ export const yWingTryOutAnalyser = (
         const wingsWithoutAnyCandidate = getCellsWithNoCandidates(wingCells, boardInputs)
         if (!_isEmpty(wingsWithoutAnyCandidate)) {
             const msgPlaceholderValues = {
-                emptyWingCell: getCellAxesValues(wingsWithoutAnyCandidate[0]),
+                emptyWingCell: getCellAxesValues(wingsWithoutAnyCandidate[0], axisValues),
                 commonNoteInWings: wingsCommonNote,
-                eliminableNotesFilledCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(eliminableNotesCells, boardInputs), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+                eliminableNotesFilledCells: getCellsAxesValuesListText(filterFilledCellsInTryOut(eliminableNotesCells, boardInputs), smartHintsTranslationsTexts.common.conjugations.and, axisValues),
             }
             return {
-                msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.WING_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.eliminableNotesCellFilled.wingCellWithoutCandidate, msgPlaceholderValues),
                 state: TRY_OUT_RESULT_STATES.ERROR,
             }
         }
 
         const filledWingsCells = filterFilledCellsInTryOut(wingCells, boardInputs)
         if (_isEmpty(filledWingsCells)) {
-            const msgPlaceholderValues = { wingsCells: getCellsAxesValuesListText(sortCells(wingCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND) }
+            const msgPlaceholderValues = { wingsCells: getCellsAxesValuesListText(sortCells(wingCells), smartHintsTranslationsTexts.common.conjugations.and, axisValues) }
             return {
-                msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.BOTH_WINGS_WITHOUT_INPUT, msgPlaceholderValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.eliminableNotesCellFilled.bothWingsWithoutInput, msgPlaceholderValues),
                 state: TRY_OUT_RESULT_STATES.START,
             }
         }
 
         const wingsWithoutTryOutInput = filterCellsWithoutTryoutInput(wingCells, boardInputs)
-        const msgPlaceholderValues = { emptyWingCell: getCellAxesValues(wingsWithoutTryOutInput[0]) }
+        const msgPlaceholderValues = { emptyWingCell: getCellAxesValues(wingsWithoutTryOutInput[0], axisValues) }
         return {
-            msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_FILLED.ONE_OF_WINGS_WITHOUT_INPUT, msgPlaceholderValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.eliminableNotesCellFilled.oneOfWingsWithoutInput, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
 
     if (isCellWithoutAnyCandidate(pivot.cell, boardInputs)) {
         const msgPlaceholderValues = {
-            pivotCell: getCellAxesValues(pivot.cell),
+            pivotCell: getCellAxesValues(pivot.cell, axisValues),
             commonNoteInWings: wingsCommonNote,
         }
         return {
-            msg: dynamicInterpolation(YWING.PIVOT_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.pivotCellWithoutCandidate, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.ERROR,
         }
     }
@@ -98,11 +99,11 @@ export const yWingTryOutAnalyser = (
     const emptyEliminableNotesHostCells = getCellsWithNoCandidates(eliminableNotesCells, boardInputs)
     if (!_isEmpty(emptyEliminableNotesHostCells)) {
         const msgPlaceholderValues = {
-            eliminableNotesCellsWithoutCandidates: getCellsAxesValuesListText(sortCells(emptyEliminableNotesHostCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-            filledPivotAndWingsCells: getCellsAxesValuesListText(sortCells(filterFilledCellsInTryOut([pivot.cell, ...wingCells], boardInputs)), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            eliminableNotesCellsWithoutCandidates: getCellsAxesValuesListText(sortCells(emptyEliminableNotesHostCells), smartHintsTranslationsTexts.common.conjugations.and, axisValues),
+            filledPivotAndWingsCells: getCellsAxesValuesListText(sortCells(filterFilledCellsInTryOut([pivot.cell, ...wingCells], boardInputs)), smartHintsTranslationsTexts.common.conjugations.and, axisValues),
         }
         return {
-            msg: dynamicInterpolation(YWING.ELIMINABLE_NOTES_CELL_WITHOUT_CANDIDATE, msgPlaceholderValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.eliminableNotesCellWithoutCandidate, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.ERROR,
         }
     }
@@ -113,26 +114,28 @@ export const yWingTryOutAnalyser = (
         const { tryOutMainNumbers } = boardInputs
         const filledCandidates = getCorrectFilledTryOutCandidates(yWingCells, tryOutMainNumbers)
         const toBeFilledCandidates = _difference(inputPanelCandidates, filledCandidates)
+        const filledIsPlural = filledCandidates.length > 1
+        const toBeFilledIsPlural = toBeFilledCandidates.length > 1
 
         const msgPlaceholderValues = {
-            filledCandidates: getCandidatesListText(_sortBy(filledCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-            filledCandidatesCountHV: filledCandidates.length > 1 ? 'are' : 'is',
-            toBeFilledCandidates: getCandidatesListText(_sortBy(toBeFilledCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-            toBeFilledCandidatesPronoun: toBeFilledCandidates.length > 1 ? 'these' : 'it',
+            filledCandidates: getCandidatesListText(_sortBy(filledCandidates), smartHintsTranslationsTexts.common.conjugations.and),
+            filledCandidatesCountHV: smartHintsTranslationsTexts.common.helpingVerb[filledIsPlural ? 'plural' : 'singular'],
+            toBeFilledCandidates: getCandidatesListText(_sortBy(toBeFilledCandidates), smartHintsTranslationsTexts.common.conjugations.and),
+            toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
         }
         return {
-            msg: dynamicInterpolation(YWING.VALID_FILL.PARTIAL, msgPlaceholderValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.partial, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
 
     const msgPlaceholderValues = {
-        candidatesListText: getCandidatesListText(_sortBy(inputPanelCandidates), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        candidatesListText: getCandidatesListText(_sortBy(inputPanelCandidates), smartHintsTranslationsTexts.common.conjugations.and),
         commonNoteInWings: wingsCommonNote,
-        eliminableNotesHostCells: getCellsAxesValuesListText(sortCells(eliminableNotesCells), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        eliminableNotesHostCells: getCellsAxesValuesListText(sortCells(eliminableNotesCells), smartHintsTranslationsTexts.common.conjugations.and, axisValues),
     }
     return {
-        msg: dynamicInterpolation(YWING.VALID_FILL.FULL, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.full, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

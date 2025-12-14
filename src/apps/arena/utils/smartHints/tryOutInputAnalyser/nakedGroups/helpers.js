@@ -6,20 +6,21 @@ import { cellHasTryOutInput } from '../../../../smartHintHC/helpers'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
-import { getCandidatesListText } from '../../util'
+import { getCandidatesListText, getAxisValuesFromTranslations } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
-import { NAKED_GROUPS } from '../stringLiterals'
 import { getCandidatesToBeFilled, getCellsWithNoCandidates, getCorrectFilledTryOutCandidates } from '../helpers'
 import { isCellExists } from '../../../util'
+import { SmartHintsTranslationsTexts } from '../../types'
 
-export const getNakedGroupNoTryOutInputResult = groupCandidates => {
+export const getNakedGroupNoTryOutInputResult = (groupCandidates, smartHintsTranslationsTexts) => {
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     const msgPlaceholderValues = {
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        candidatesListText: getCandidatesListText(groupCandidates, smartHintsTranslationsTexts.common.conjugations.and),
     }
     return {
-        msg: dynamicInterpolation(NAKED_GROUPS.NO_INPUT, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.nakedGroups.noInput, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.START,
     }
 }
@@ -43,7 +44,7 @@ export const getNakedSingleCellsWithNoteInAscOrder = (cells, boardNotes) => cell
     }))
     .sort(({ note: noteA }, { note: noteB }) => noteA - noteB)
 
-export const getNakedGroupTryOutInputErrorResult = (groupCandidates, groupCells, focusedCells, boardInputs) => {
+export const getNakedGroupTryOutInputErrorResult = (groupCandidates, groupCells, focusedCells, boardInputs, smartHintsTranslationsTexts) => {
     const cellsWithNoCandidates = getCellsWithNoCandidates(focusedCells, boardInputs)
 
     if (cellsWithNoCandidates.length) {
@@ -54,32 +55,34 @@ export const getNakedGroupTryOutInputErrorResult = (groupCandidates, groupCells,
                 cell,
             }))
 
-        return getEmptyCellsErrorResult(cellsWithNoCandidates, cellsFilledByRemovableNotes)
+        return getEmptyCellsErrorResult(cellsWithNoCandidates, cellsFilledByRemovableNotes, smartHintsTranslationsTexts)
     }
 
     const multipleCellsNakedSingleCandidates = getMultipleCellsNakedSinglesCandidates(groupCandidates, focusedCells, boardInputs)
     if (multipleCellsNakedSingleCandidates.length) {
-        return getMultipleCellsNakedSinglesErrorResult(multipleCellsNakedSingleCandidates, focusedCells, boardInputs)
+        return getMultipleCellsNakedSinglesErrorResult(multipleCellsNakedSingleCandidates, focusedCells, boardInputs, smartHintsTranslationsTexts)
     }
 
     return null
 }
 
-const getEmptyCellsErrorResult = (cellsWithNoCandidates, cellsFilledByRemovableNotes) => {
+const getEmptyCellsErrorResult = (cellsWithNoCandidates, cellsFilledByRemovableNotes, smartHintsTranslationsTexts) => {
     const removableFilledNotesList = cellsFilledByRemovableNotes.map(({ number }) => number)
     const removableFilledNotesHostCellsList = cellsFilledByRemovableNotes.map(({ cell }) => cell)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const isPlural = removableFilledNotesList.length > 1
     const msgPlaceholderValues = {
-        emptyCellsListText: getCellsAxesValuesListText(cellsWithNoCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        removableFilledNotes: getCandidatesListText(removableFilledNotesList, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        removableFilledNotesHostCells: getCellsAxesValuesListText(removableFilledNotesHostCellsList, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        numbersPronoun: removableFilledNotesList.length > 1 ? 'these' : 'this',
-        numbersTextSingularPlural: removableFilledNotesList.length > 1 ? 'numbers' : 'number',
-        candidatesHV: removableFilledNotesList.length > 1 ? 'don\'t' : 'doesn\'t',
-        cellsPronoun: removableFilledNotesList.length > 1 ? 'these' : 'this',
-        cellsSingularPlural: removableFilledNotesList.length > 1 ? 'cells' : 'cell',
+        emptyCellsListText: getCellsAxesValuesListText(cellsWithNoCandidates, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
+        removableFilledNotes: getCandidatesListText(removableFilledNotesList, smartHintsTranslationsTexts.common.conjugations.and),
+        removableFilledNotesHostCells: getCellsAxesValuesListText(removableFilledNotesHostCellsList, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
+        numbersPronoun: smartHintsTranslationsTexts.common.this[isPlural ? 'plural' : 'singular'],
+        numbersTextSingularPlural: smartHintsTranslationsTexts.common.number[isPlural ? 'plural' : 'singular'],
+        candidatesHV: smartHintsTranslationsTexts.common.doNotVerb[isPlural ? 'plural' : 'singular'],
+        cellsPronoun: smartHintsTranslationsTexts.common.this[isPlural ? 'plural' : 'singular'],
+        cellsSingularPlural: smartHintsTranslationsTexts.common.houseTypes.cell[isPlural ? 'plural' : 'singular'],
     }
     return {
-        msg: dynamicInterpolation(NAKED_GROUPS.EMPTY_GROUP_CELL, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.nakedGroups.emptyGroupCell, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -89,20 +92,23 @@ const getMultipleCellsNakedSinglesCandidates = (groupCandidates, focusedCells, b
     return candidateNakedSingleHostCells.length > 1
 })
 
-const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells, boardInputs) => {
+const getMultipleCellsNakedSinglesErrorResult = (multipleCellsNakedSingleCandidates, focusedCells, boardInputs, smartHintsTranslationsTexts) => {
     const firstCandidate = multipleCellsNakedSingleCandidates[0]
     const firstCandidateHostCells = getCandidateNakedSingleHostCells(firstCandidate, focusedCells, boardInputs)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const isPlural = firstCandidateHostCells.length > 2
     const msgPlaceholderValues = {
         candidate: firstCandidate,
         emptyCellsListText: getCellsAxesValuesListText(
             firstCandidateHostCells,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+            smartHintsTranslationsTexts.common.conjugations.and,
+            axisValues
         ),
-        nakedSingleHostCellNounText: firstCandidateHostCells.length > 2 ? 'cells' : 'cell',
+        nakedSingleHostCellNounText: smartHintsTranslationsTexts.common.houseTypes.cell[isPlural ? 'plural' : 'singular'],
     }
 
     return {
-        msg: dynamicInterpolation(NAKED_GROUPS.MULTIPLE_CELLS_NAKED_SINGLE, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.nakedGroups.multipleCellsNakedSingle, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.START,
     }
 }
@@ -116,35 +122,39 @@ const getCandidateNakedSingleHostCells = (candidate, focusedCells, boardInputs) 
     )
 }
 
-export const getAllInputsFilledResult = (groupCandidates, groupCells, tryOutMainNumbers) => {
+export const getAllInputsFilledResult = (groupCandidates, groupCells, tryOutMainNumbers, smartHintsTranslationsTexts) => {
     const filledCandidatesHostCells = getCorrectlyFilledCandidatesHostCells(groupCandidates, groupCells, tryOutMainNumbers)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     const msgPlaceholderValues = {
-        candidatesHostCells: getCellsAxesValuesListText(filledCandidatesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        candidatesListText: getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        candidatesHostCells: getCellsAxesValuesListText(filledCandidatesHostCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
+        candidatesListText: getCandidatesListText(groupCandidates, smartHintsTranslationsTexts.common.conjugations.and),
     }
 
     return {
-        msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.FULL, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.nakedGroups.validFill.full, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }
 
-export const getPartialCorrectlyFilledResult = (groupCandidates, groupCells, tryOutMainNumbers) => {
+export const getPartialCorrectlyFilledResult = (groupCandidates, groupCells, tryOutMainNumbers, smartHintsTranslationsTexts) => {
     const filledCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     const candidatesToBeFilled = getCandidatesToBeFilled(filledCandidates, groupCandidates)
     const filledCandidatesHostCells = getCorrectlyFilledCandidatesHostCells(filledCandidates, groupCells, tryOutMainNumbers)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const filledIsPlural = filledCandidates.length > 1
+    const toBeFilledIsPlural = candidatesToBeFilled.length > 1
 
     const msgPlaceholderValues = {
-        toBeFilledCandidates: getCandidatesListText(candidatesToBeFilled, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        filledCandidates: getCandidatesListText(filledCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        filledCandidatesHostCells: getCellsAxesValuesListText(filledCandidatesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        filledCandidatesCountHV: filledCandidates.length === 1 ? 'is' : 'are',
-        toBeFilledCandidatesPronoun: candidatesToBeFilled.length > 1 ? 'these' : 'it',
+        toBeFilledCandidates: getCandidatesListText(candidatesToBeFilled, smartHintsTranslationsTexts.common.conjugations.and),
+        filledCandidates: getCandidatesListText(filledCandidates, smartHintsTranslationsTexts.common.conjugations.and),
+        filledCandidatesHostCells: getCellsAxesValuesListText(filledCandidatesHostCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
+        filledCandidatesCountHV: smartHintsTranslationsTexts.common.helpingVerb[filledIsPlural ? 'plural' : 'singular'],
+        toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
     }
 
     return {
-        msg: dynamicInterpolation(NAKED_GROUPS.VALID_FILL.PARTIAL, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.nakedGroups.validFill.partial, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

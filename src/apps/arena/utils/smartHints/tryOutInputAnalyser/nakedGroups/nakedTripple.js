@@ -13,7 +13,7 @@ import {
 } from '../../../util'
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { noInputInTryOut, getCorrectFilledTryOutCandidates } from '../helpers'
-import { getCandidatesListText } from '../../util'
+import { getCandidatesListText, getAxisValuesFromTranslations } from '../../util'
 import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { isNakedSinglePresent } from '../../nakedSingle/nakedSingle'
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
@@ -27,39 +27,38 @@ import {
     getAllInputsFilledResult,
     getPartialCorrectlyFilledResult,
 } from './helpers'
-import { NAKED_TRIPPLE } from '../stringLiterals'
 
-export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }, boardInputs) => {
+export const nakedTrippleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }, boardInputs, smartHintsTranslationsTexts) => {
     if (noInputInTryOut(focusedCells, boardInputs)) {
-        return getNakedGroupNoTryOutInputResult(groupCandidates)
+        return getNakedGroupNoTryOutInputResult(groupCandidates, smartHintsTranslationsTexts)
     }
 
-    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells, boardInputs)
+    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells, boardInputs, smartHintsTranslationsTexts)
     if (tryOutErrorResult) {
         return tryOutErrorResult
     }
 
     if (allGroupCellsEmpty(groupCells, boardInputs)) {
-        const nakedSinglePairCellError = getNakedSinglePairCellsErrorResultIfExist(groupCells, boardInputs)
+        const nakedSinglePairCellError = getNakedSinglePairCellsErrorResultIfExist(groupCells, boardInputs, smartHintsTranslationsTexts)
         if (nakedSinglePairCellError) return nakedSinglePairCellError
 
-        const nakedDoublePairCellError = getNakedDoublePairCellsErrorResultIfPresent(groupCells, boardInputs)
+        const nakedDoublePairCellError = getNakedDoublePairCellsErrorResultIfPresent(groupCells, boardInputs, smartHintsTranslationsTexts)
         if (nakedDoublePairCellError) return nakedDoublePairCellError
     }
 
-    return getValidProgressResult(groupCandidates, groupCells, boardInputs)
+    return getValidProgressResult(groupCandidates, groupCells, boardInputs, smartHintsTranslationsTexts)
 }
 
 const allGroupCellsEmpty = (groupCells, { tryOutMainNumbers }) => groupCells.every(cell => !MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 
 // two cells have naked single in them because of that third one
 // will have no candidate in them
-const getNakedSinglePairCellsErrorResultIfExist = (groupCells, { tryOutNotes }) => {
+const getNakedSinglePairCellsErrorResultIfExist = (groupCells, { tryOutNotes }, smartHintsTranslationsTexts) => {
     const invalidNakedSingleCellsCombination = getNakedSinglesInvalidCombination(groupCells, tryOutNotes)
     if (invalidNakedSingleCellsCombination) {
         const chosenCells = getChosenCells(invalidNakedSingleCellsCombination, groupCells)
         const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-        return getNakedSinglePairErrorResult(chosenCells, notChosenCell, tryOutNotes)
+        return getNakedSinglePairErrorResult(chosenCells, notChosenCell, tryOutNotes, smartHintsTranslationsTexts)
     }
 
     return null
@@ -92,39 +91,41 @@ const getChosenCells = (combination, groupCells) => combination.map(idx => group
 
 const getNotChosenCell = (chosenCells, allCells) => allCells.find(cell => !isCellExists(cell, chosenCells))
 
-const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
+const getNakedSinglePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo, smartHintsTranslationsTexts) => {
     const chosenCellWithNote = getNakedSingleCellsWithNoteInAscOrder(chosenCells, tryOutNotesInfo)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     const msgPlaceholderValues = {
-        futureEmptyCellText: getCellAxesValues(notChosenCell),
+        futureEmptyCellText: getCellAxesValues(notChosenCell, axisValues),
         nakedSingleCandidatesWithAndJoin: getNotesListTextFromCellsWithNotes(
             chosenCellWithNote,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+            smartHintsTranslationsTexts.common.conjugations.and,
         ),
         nakedSingleCandidatesWithOrJoin: getNotesListTextFromCellsWithNotes(
             chosenCellWithNote,
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR,
+            smartHintsTranslationsTexts.common.conjugations.or,
         ),
         nakedSingleHostCellsAxesText: getCellsAxesValuesListText(
             getCellsFromCellsWithNote(chosenCellWithNote),
-            HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+            smartHintsTranslationsTexts.common.conjugations.and,
+            axisValues
         ),
     }
 
     return {
-        msg: dynamicInterpolation(NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_SINGLE_PAIR, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.nakedTripple.futureEmptyCell.nakedSinglePair, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.START,
     }
 }
 
 // two cells have naked double in them because of that third one
 // will have no candidate in it
-const getNakedDoublePairCellsErrorResultIfPresent = (groupCells, { tryOutNotes }) => {
+const getNakedDoublePairCellsErrorResultIfPresent = (groupCells, { tryOutNotes }, smartHintsTranslationsTexts) => {
     const invalidNakedDoubleCellsCombination = getNakedDoublesInvalidCombination(groupCells, tryOutNotes)
     if (!invalidNakedDoubleCellsCombination) return null
 
     const chosenCells = getChosenCells(invalidNakedDoubleCellsCombination, groupCells)
     const notChosenCell = getNotChosenCell(chosenCells, groupCells)
-    return getNakedDoublePairErrorResult(chosenCells, notChosenCell, tryOutNotes)
+    return getNakedDoublePairErrorResult(chosenCells, notChosenCell, tryOutNotes, smartHintsTranslationsTexts)
 }
 
 const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHOOSE_K[3][2].find(combination => {
@@ -141,7 +142,7 @@ const getNakedDoublesInvalidCombination = (groupCells, tryOutNotesInfo) => N_CHO
     return false
 })
 
-const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo) => {
+const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesInfo, smartHintsTranslationsTexts) => {
     const aChosenCellNotes = NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, chosenCells[0])
     const notChosenCellNotes = NotesRecord.getCellVisibleNotesList(tryOutNotesInfo, notChosenCell)
 
@@ -152,10 +153,11 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
         chosenCellsPotentialMultipleNakedSingleCandidate = notChosenCellNotes[0] === aChosenCellNotes[0] ? aChosenCellNotes[1] : aChosenCellNotes[0]
     }
 
-    const chosenCellsAxesText = getCellsAxesValuesListText(chosenCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const chosenCellsAxesText = getCellsAxesValuesListText(chosenCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues)
     const notChosenCellCandidatesListText = getCandidatesListText(
         notChosenCellNotes,
-        HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND,
+        smartHintsTranslationsTexts.common.conjugations.and,
     )
 
     let msgPlaceholderValues; let
@@ -163,19 +165,19 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
     if (isThirdCellHasNakedSingle) {
         msgPlaceholderValues = {
             nakedSingleCandidate: notChosenCellNotes[0],
-            nakedSingleHostCell: getCellAxesValues(notChosenCell),
+            nakedSingleHostCell: getCellAxesValues(notChosenCell, axisValues),
             nakedPairCellAxesText: chosenCellsAxesText,
             chosenCellsPotentialMultipleNakedSingleCandidate,
         }
-        resultMsg = NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_DOUBLE_PAIR.NAKED_SINGLE_IN_THIRD_CELL
+        resultMsg = smartHintsTranslationsTexts.tryOutAnalyser.nakedTripple.futureEmptyCell.nakedDoublePair.nakedSingleInThirdCell
     } else {
         msgPlaceholderValues = {
-            nakedDoubleCandidatesList: getCandidatesListText(aChosenCellNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-            nakedDoubleHostCellAxesText: getCellsAxesValuesListText(sortCells([...chosenCells, notChosenCell]), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-            futureEmptyCellText: getCellAxesValues(notChosenCell),
+            nakedDoubleCandidatesList: getCandidatesListText(aChosenCellNotes, smartHintsTranslationsTexts.common.conjugations.or),
+            nakedDoubleHostCellAxesText: getCellsAxesValuesListText(sortCells([...chosenCells, notChosenCell]), smartHintsTranslationsTexts.common.conjugations.and, axisValues),
+            futureEmptyCellText: getCellAxesValues(notChosenCell, axisValues),
             futureEmptyCellCandidatesListText: notChosenCellCandidatesListText,
         }
-        resultMsg = NAKED_TRIPPLE.FUTURE_EMPTY_CELL.NAKED_DOUBLE_PAIR.NAKED_DOUBLE_IN_THIRD_CELL
+        resultMsg = smartHintsTranslationsTexts.tryOutAnalyser.nakedTripple.futureEmptyCell.nakedDoublePair.nakedDoubleInThirdCell
     }
 
     return {
@@ -185,10 +187,10 @@ const getNakedDoublePairErrorResult = (chosenCells, notChosenCell, tryOutNotesIn
     }
 }
 
-const getValidProgressResult = (groupCandidates, groupCells, { tryOutMainNumbers }) => {
+const getValidProgressResult = (groupCandidates, groupCells, { tryOutMainNumbers }, smartHintsTranslationsTexts) => {
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-        return getAllInputsFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
+        return getAllInputsFilledResult(groupCandidates, groupCells, tryOutMainNumbers, smartHintsTranslationsTexts)
     }
-    return getPartialCorrectlyFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
+    return getPartialCorrectlyFilledResult(groupCandidates, groupCells, tryOutMainNumbers, smartHintsTranslationsTexts)
 }

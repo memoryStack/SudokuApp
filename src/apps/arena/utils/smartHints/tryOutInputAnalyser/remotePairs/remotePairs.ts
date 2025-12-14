@@ -11,7 +11,6 @@ import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { TryOutInputsColors } from '../../types'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
@@ -21,13 +20,13 @@ import {
     getCellsWithNoCandidates,
     noInputInTryOut,
 } from '../helpers'
-import { REMOTE_PAIRS } from '../stringLiterals'
 import { BoardInputs } from '../types'
-import { getCandidatesListText } from '../../util'
+import { getCandidatesListText, getAxisValuesFromTranslations } from '../../util'
 import { RemotePairsRawHint } from '../../chains/remotePairs/types'
+import { SmartHintsTranslationsTexts } from '../../types'
 
-const getNoInputResult = () => ({
-    msg: REMOTE_PAIRS.NO_INPUT,
+const getNoInputResult = (smartHintsTranslationsTexts: SmartHintsTranslationsTexts) => ({
+    msg: smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.noInput,
     state: TRY_OUT_RESULT_STATES.START,
 })
 
@@ -54,13 +53,15 @@ const getFilledChainCellsGroupByColors = (
 export const remotePairsTryOutAnalyser = (
     data: { remotePairs: RemotePairsRawHint, tryOutInputsColors: TryOutInputsColors },
     boardInputs: BoardInputs,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts,
 ) => {
     const { remotePairs, tryOutInputsColors } = data
 
     const { removableNotesHostCells, orderedChainCells } = remotePairs
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     if (noInputInTryOut([...orderedChainCells, ...removableNotesHostCells], boardInputs)) {
-        return getNoInputResult()
+        return getNoInputResult(smartHintsTranslationsTexts)
     }
 
     const filledChainCells = filterFilledCellsInTryOut(orderedChainCells, boardInputs)
@@ -72,13 +73,13 @@ export const remotePairsTryOutAnalyser = (
     if (!_isEmpty(filledRemovableNotesHostCells)) {
         if (!_isEmpty(chainCellsWithoutAnyCandidates)) {
             const placeholderValues = {
-                emptyCells: getCellsAxesValuesListText(chainCellsWithoutAnyCandidates),
-                removableNotesFilledHostCells: getCellsAxesValuesListText(filledRemovableNotesHostCells),
+                emptyCells: getCellsAxesValuesListText(chainCellsWithoutAnyCandidates, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
+                removableNotesFilledHostCells: getCellsAxesValuesListText(filledRemovableNotesHostCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
             }
 
             const msgTemplate = _isEmpty(filledChainCells) || !errorInFillingChainCells
-                ? REMOTE_PAIRS.REMOVABLE_NOTES_CELL_FILLED.CHAIN_CELL_WITHOUT_CANDIDATE.ONLY_REMOVABLE_NOTES_FILLED
-                : REMOTE_PAIRS.REMOVABLE_NOTES_CELL_FILLED.CHAIN_CELL_WITHOUT_CANDIDATE.BOTH_COLORS_CANDIDATES_FILLED
+                ? smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.removableNotesCellFilled.chainCellWithoutCandidate.onlyRemovableNotesFilled
+                : smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.removableNotesCellFilled.chainCellWithoutCandidate.bothColorsCandidatesFilled
 
             return ({
                 msg: dynamicInterpolation(msgTemplate, placeholderValues),
@@ -88,19 +89,19 @@ export const remotePairsTryOutAnalyser = (
 
         const removableNotesFilled = _unique(_map(filledRemovableNotesHostCells, (cell: Cell) => MainNumbersRecord.getCellMainValue(boardInputs.tryOutMainNumbers, cell)))
         const placeholderValues = {
-            removableNotesFilled: getCandidatesListText(removableNotesFilled),
-            removableNotesFilledHostCells: getCellsAxesValuesListText(filledRemovableNotesHostCells),
+            removableNotesFilled: getCandidatesListText(removableNotesFilled, smartHintsTranslationsTexts.common.conjugations.and),
+            removableNotesFilledHostCells: getCellsAxesValuesListText(filledRemovableNotesHostCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
         }
 
         if (!_isEmpty(filledChainCells)) {
             return ({
-                msg: dynamicInterpolation(REMOTE_PAIRS.REMOVABLE_NOTES_CELL_FILLED.CHAIN_CELLS_PARTIALLY_FILLED, placeholderValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.removableNotesCellFilled.chainCellsPartiallyFilled, placeholderValues),
                 state: TRY_OUT_RESULT_STATES.START,
             })
         }
 
         return ({
-            msg: dynamicInterpolation(REMOTE_PAIRS.REMOVABLE_NOTES_CELL_FILLED.ALL_CHAIN_CELLS_EMPTY, placeholderValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.removableNotesCellFilled.allChainCellsEmpty, placeholderValues),
             state: TRY_OUT_RESULT_STATES.START,
         })
     }
@@ -108,7 +109,7 @@ export const remotePairsTryOutAnalyser = (
     const emptyChainCells = filterCellsWithoutTryoutInput(orderedChainCells, boardInputs)
     if (_isEmpty(emptyChainCells)) {
         return ({
-            msg: dynamicInterpolation(REMOTE_PAIRS.VALID_FILL.FULL, { removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND) }),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.validFill.full, { removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues) }),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         })
     }
@@ -116,27 +117,27 @@ export const remotePairsTryOutAnalyser = (
     if (errorInFillingChainCells) {
         if (!_isEmpty(chainCellsWithoutAnyCandidates)) {
             const mainNumbersColors = _keys(chainCellsGroupByFilledNumberFontColor)
-            const colorACells = getCellsAxesValuesListText(chainCellsGroupByFilledNumberFontColor[mainNumbersColors[0]])
-            const colorBCells = getCellsAxesValuesListText(chainCellsGroupByFilledNumberFontColor[mainNumbersColors[1]])
+            const colorACells = getCellsAxesValuesListText(chainCellsGroupByFilledNumberFontColor[mainNumbersColors[0]], smartHintsTranslationsTexts.common.conjugations.and, axisValues)
+            const colorBCells = getCellsAxesValuesListText(chainCellsGroupByFilledNumberFontColor[mainNumbersColors[1]], smartHintsTranslationsTexts.common.conjugations.and, axisValues)
             const placeholderValues = {
-                emptyCells: getCellsAxesValuesListText(chainCellsWithoutAnyCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+                emptyCells: getCellsAxesValuesListText(chainCellsWithoutAnyCandidates, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
                 colorACells,
                 colorBCells,
             }
             return ({
-                msg: dynamicInterpolation(REMOTE_PAIRS.CHAIN_CELLS_BOTH_COLOR_CANDIDATES_FILLED.CELL_WITH_NO_CANDIDATES, placeholderValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.chainCellsBothColorCandidatesFilled.cellWithNoCandidates, placeholderValues),
                 state: TRY_OUT_RESULT_STATES.ERROR,
             })
         }
 
         return ({
-            msg: REMOTE_PAIRS.CHAIN_CELLS_BOTH_COLOR_CANDIDATES_FILLED.CELL_WITH_NO_CANDIDATES_IN_PROGRESS,
+            msg: smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.chainCellsBothColorCandidatesFilled.cellWithNoCandidatesInProgress,
             state: TRY_OUT_RESULT_STATES.START,
         })
     }
 
     return ({
-        msg: REMOTE_PAIRS.VALID_FILL.PARTIAL,
+        msg: smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.validFill.partial,
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     })
 }

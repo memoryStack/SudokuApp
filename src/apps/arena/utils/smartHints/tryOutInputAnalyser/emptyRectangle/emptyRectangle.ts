@@ -7,20 +7,20 @@ import { NotesRecord } from '@domain/board/records/notesRecord'
 
 import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
 
-import { getHouseNumAndName } from '../../rawHintTransformers/helpers'
-
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { anyCellHasTryOutInput, filterFilledCellsInTryOut } from '../helpers'
-import { EMPTY_RECTANGLE } from '../stringLiterals'
 
 import { EmptyRectangleRawHint } from '../../emptyRectangle/types'
 
 import { BoardInputs } from '../types'
 import { getBlockHostHouse } from '../../emptyRectangle/helpers'
+import { getHouseWithNumAndNameText, getAxisValuesFromTranslations } from '../../util'
+import { SmartHintsTranslationsTexts } from '../../types'
 
 export const emptyRectangleTryOutAnalyser = (
     { emptyRectangle }: { emptyRectangle: EmptyRectangleRawHint },
-    boardInputs: BoardInputs
+    boardInputs: BoardInputs,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
 ) => {
     const blockHostHouse = getBlockHostHouse(emptyRectangle)
     const conjugateHouseCells = getNoteHostCellsInHouse(emptyRectangle.note, emptyRectangle.conjugateHouse, boardInputs.actualNotes)
@@ -30,37 +30,41 @@ export const emptyRectangleTryOutAnalyser = (
     const blockHostHouseFilled = anyCellHasTryOutInput(blockHostHouseCells, boardInputs)
     const removableNoteHostCellFilled = anyCellHasTryOutInput([emptyRectangle.removableNotesHostCell], boardInputs)
 
+    const config = smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.config
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+
     if (!(conjugateHouseFilled || blockHostHouseFilled || removableNoteHostCellFilled)) {
         const msgPlaceholdersValues = {
             candidate: emptyRectangle.note,
-            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell)
+            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axisValues)
         }
         return {
-            msg: dynamicInterpolation(EMPTY_RECTANGLE.NO_INPUT, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.noInput, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
 
     if (removableNoteHostCellFilled) {
         if (conjugateHouseFilled || blockHostHouseFilled) {
+            const inhabitableHouse = conjugateHouseFilled ? blockHostHouse : emptyRectangle.conjugateHouse
             const msgPlaceholdersValues = {
                 candidate: emptyRectangle.note,
-                candidateInhabitableHostHouse: getHouseNumAndName(conjugateHouseFilled ? blockHostHouse : emptyRectangle.conjugateHouse),
-                removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell)
+                candidateInhabitableHostHouse: getHouseWithNumAndNameText(inhabitableHouse, config.candidateInhabitableHostHouse, smartHintsTranslationsTexts),
+                removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axisValues)
             }
             return {
-                msg: dynamicInterpolation(EMPTY_RECTANGLE.REMOVABLE_NOTE_CELL_FILLED.BLOCK_OR_CONJUGATE_HOUSE_FILLED, msgPlaceholdersValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.removableNoteCellFilled.blockOrConjugateHouseFilled, msgPlaceholdersValues),
                 state: TRY_OUT_RESULT_STATES.ERROR,
             }
         }
 
         const msgPlaceholdersValues = {
             candidate: emptyRectangle.note,
-            conjugateHouse: getHouseNumAndName(emptyRectangle.conjugateHouse),
-            blockHostHouse: getHouseNumAndName(blockHostHouse)
+            conjugateHouse: getHouseWithNumAndNameText(emptyRectangle.conjugateHouse, config.conjugateHouse, smartHintsTranslationsTexts),
+            blockHostHouse: getHouseWithNumAndNameText(blockHostHouse, config.blockHostHouse, smartHintsTranslationsTexts)
         }
         return {
-            msg: dynamicInterpolation(EMPTY_RECTANGLE.REMOVABLE_NOTE_CELL_FILLED.BLOCK_OR_CONJUGATE_HOUSE_NOT_FILLED, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.removableNoteCellFilled.blockOrConjugateHouseNotFilled, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
@@ -68,12 +72,12 @@ export const emptyRectangleTryOutAnalyser = (
     if (conjugateHouseFilled && blockHostHouseFilled) {
         const msgPlaceholdersValues = {
             candidate: emptyRectangle.note,
-            conjugateHouse: getHouseNumAndName(emptyRectangle.conjugateHouse),
-            blockHostHouse: getHouseNumAndName(blockHostHouse),
-            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell)
+            conjugateHouse: getHouseWithNumAndNameText(emptyRectangle.conjugateHouse, config.conjugateHouse, smartHintsTranslationsTexts),
+            blockHostHouse: getHouseWithNumAndNameText(blockHostHouse, config.blockHostHouse, smartHintsTranslationsTexts),
+            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axisValues)
         }
         return {
-            msg: dynamicInterpolation(EMPTY_RECTANGLE.CONJUGATE_HOUSE_AND_BLOCK_HOST_HOUSE_FILLED, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.conjugateHouseAndBlockHostHouseFilled, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
@@ -83,22 +87,22 @@ export const emptyRectangleTryOutAnalyser = (
         if (notePresentInCell) {
             const msgPlaceholdersValues = {
                 candidate: emptyRectangle.note,
-                blockHostHouse: getHouseNumAndName(blockHostHouse),
-                removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell),
+                blockHostHouse: getHouseWithNumAndNameText(blockHostHouse, config.blockHostHouse, smartHintsTranslationsTexts),
+                removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axisValues),
             }
             return {
-                msg: dynamicInterpolation(EMPTY_RECTANGLE.CONJUGATE_HOUSE_FILLED.REMOVABLE_NOTE_PRESENT, msgPlaceholdersValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.conjugateHouseFilled.removableNotePresent, msgPlaceholdersValues),
                 state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
             }
         }
 
         const msgPlaceholdersValues = {
             candidate: emptyRectangle.note,
-            filledHostCell: getCellAxesValues(_head(filterFilledCellsInTryOut(conjugateHouseCells, boardInputs))),
-            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell),
+            filledHostCell: getCellAxesValues(_head(filterFilledCellsInTryOut(conjugateHouseCells, boardInputs)), axisValues),
+            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axisValues),
         }
         return {
-            msg: dynamicInterpolation(EMPTY_RECTANGLE.CONJUGATE_HOUSE_FILLED.REMOVABLE_NOTE_REMOVED, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.conjugateHouseFilled.removableNoteRemoved, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
@@ -108,28 +112,28 @@ export const emptyRectangleTryOutAnalyser = (
         if (notePresentInCell) {
             const msgPlaceholdersValues = {
                 candidate: emptyRectangle.note,
-                conjugateHouse: getHouseNumAndName(emptyRectangle.conjugateHouse),
-                removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell),
+                conjugateHouse: getHouseWithNumAndNameText(emptyRectangle.conjugateHouse, config.conjugateHouse, smartHintsTranslationsTexts),
+                removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axisValues),
             }
             return {
-                msg: dynamicInterpolation(EMPTY_RECTANGLE.BLOCK_HOST_HOUSE_FILLED.REMOVABLE_NOTE_PRESENT, msgPlaceholdersValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.blockHostHouseFilled.removableNotePresent, msgPlaceholdersValues),
                 state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
             }
         }
 
         const msgPlaceholdersValues = {
             candidate: emptyRectangle.note,
-            filledHostCell: getCellAxesValues(_head(filterFilledCellsInTryOut(blockHostHouseCells, boardInputs))),
-            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell),
+            filledHostCell: getCellAxesValues(_head(filterFilledCellsInTryOut(blockHostHouseCells, boardInputs)), axisValues),
+            removableNoteHostCell: getCellAxesValues(emptyRectangle.removableNotesHostCell, axisValues),
         }
         return {
-            msg: dynamicInterpolation(EMPTY_RECTANGLE.BLOCK_HOST_HOUSE_FILLED.REMOVABLE_NOTE_REMOVED, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.emptyRectangle.blockHostHouseFilled.removableNoteRemoved, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
 
     return {
-        msg: 'Oops! Invalid State.',
+        msg: smartHintsTranslationsTexts.tryOutAnalyser.unattainableState,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }

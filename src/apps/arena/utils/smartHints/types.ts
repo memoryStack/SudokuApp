@@ -86,6 +86,12 @@ export type TryOutAnalyserTranslations = Record<string, TryOutAnalyserHintTransl
     }
     xyzWing: TryOutAnalyserHintTranslation & {
         restrictedNumberInputMsg: string
+        removableNoteCellFilled: {
+            noOtherCellFilled: string
+            cellsHaveNakedSingle: string
+            cellWithoutCandidates: string
+        }
+        [key: string]: any
     }
     hiddenGroup: TryOutAnalyserHintTranslation & {
         unclickableCellClickedInTryOutMsg: string
@@ -95,11 +101,64 @@ export type TryOutAnalyserTranslations = Record<string, TryOutAnalyserHintTransl
     }
 }
 
+export type CommonTranslations = {
+    conjugations: {
+        and: string
+        or: string
+    }
+    helpingVerb: {
+        singular: string
+        plural: string
+    }
+    doNotVerb: {
+        singular: string
+        plural: string
+    }
+    pronouns: {
+        singular: string
+        plural: string
+    }
+    this: {
+        singular: string
+        plural: string
+    }
+    number: {
+        singular: string
+        plural: string
+    }
+    houseTypes: {
+        row: {
+            singular: string
+            plural: string
+            oblique?: string
+        }
+        col: {
+            singular: string
+            plural: string
+            oblique?: string
+        }
+        block: {
+            singular: string
+            plural: string
+            oblique?: string
+        }
+        cell: {
+            singular: string
+            plural: string
+        }
+        numAndName: string
+    }
+    houseNumber: Record<string, any>
+    boardXAxis: Record<string, string>
+    boardYAxis: Record<string, string>
+    [key: string]: any
+}
+
 export type SmartHintsTranslationsTexts = {
     tryOutAnalyser: TryOutAnalyserTranslations
     explanation: HintExplainationTexts
     title: Record<HINTS_IDS, string>
-    common: Record<string, string | object>
+    common: CommonTranslations
 }
 
 export type RawHintTransformersArgs = {

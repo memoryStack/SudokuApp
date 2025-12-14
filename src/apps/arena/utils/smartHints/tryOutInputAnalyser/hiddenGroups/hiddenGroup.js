@@ -7,52 +7,58 @@ import { NotesRecord } from '@domain/board/records/notesRecord'
 
 import { filterEmptyCells, sortCells } from '../../../util'
 
-import { getCellsAxesValuesListText, getHouseNumAndName } from '../../rawHintTransformers/helpers'
-import { getCandidatesListText } from '../../util'
+import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
+import { getCandidatesListText, getAxisValuesFromTranslations, getHouseWithNumAndNameText } from '../../util'
 
 import { TRY_OUT_RESULT_STATES } from '../constants'
 import { getCandidatesToBeFilled, getCorrectFilledTryOutCandidates, noInputInTryOut } from '../helpers'
-import { HIDDEN_GROUP } from '../stringLiterals'
 
 export const hiddenGroupTryOutAnalyser = (
     {
         groupCandidates, groupCells, removableGroupCandidatesHostCells, primaryHouse,
     },
     boardInputs,
+    smartHintsTranslationsTexts,
 ) => {
     if (noInputInTryOut([...groupCells, ...removableGroupCandidatesHostCells], boardInputs)) {
-        return getNoInputResult()
+        return getNoInputResult(smartHintsTranslationsTexts)
     }
 
     if (removableGroupCandidatesFilledHostCells(removableGroupCandidatesHostCells, boardInputs).length) {
-        return removableGroupCandidatesFilledResult(removableGroupCandidatesHostCells, primaryHouse, boardInputs)
+        return removableGroupCandidatesFilledResult(removableGroupCandidatesHostCells, primaryHouse, boardInputs, smartHintsTranslationsTexts)
     }
 
     if (someGroupCellWronglyFilled(groupCells, groupCandidates, boardInputs)) {
-        return groupCellWronglyFilledResult(groupCells, groupCandidates, primaryHouse, boardInputs)
+        return groupCellWronglyFilledResult(groupCells, groupCandidates, primaryHouse, boardInputs, smartHintsTranslationsTexts)
     }
 
-    return correctlyFilledGroupCellsResult(groupCells, groupCandidates, boardInputs)
+    return correctlyFilledGroupCellsResult(groupCells, groupCandidates, boardInputs, smartHintsTranslationsTexts)
 }
 
-const getNoInputResult = () => ({
-    msg: HIDDEN_GROUP.NO_INPUT,
+const getNoInputResult = (smartHintsTranslationsTexts) => ({
+    msg: smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.noInput,
     state: TRY_OUT_RESULT_STATES.START,
 })
 
 const removableGroupCandidatesFilledHostCells = (removableGroupCandidatesHostCells, { tryOutMainNumbers }) => removableGroupCandidatesHostCells.filter(cell => MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
 
-const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse, boardInputs) => {
+const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse, boardInputs, smartHintsTranslationsTexts) => {
     const filledCellsWithNumbers = getRemovableGroupCandidatesFilledCellsWithNumbers(removableGroupCandidatesHostCells, boardInputs)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const isPlural = filledCellsWithNumbers.length > 1
     const msgPlaceholderValues = {
-        primaryHouseFullName: getHouseNumAndName(primaryHouse),
+        primaryHouseFullName: getHouseWithNumAndNameText(
+            primaryHouse,
+            smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.config.primaryHouseFullName,
+            smartHintsTranslationsTexts
+        ),
         filledCandidatesListText: getCandidatesListText(getNumbersFromCellsWithNumbers(filledCellsWithNumbers)),
-        filledCellsAxesListText: getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers)),
-        filledInstancesHelpingVerb: filledCellsWithNumbers.length > 1 ? 'are' : 'is',
-        cellSingularPlural: filledCellsWithNumbers.length > 1 ? 'cells' : 'cell',
+        filledCellsAxesListText: getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers), undefined, axisValues),
+        filledInstancesHelpingVerb: smartHintsTranslationsTexts.common.helpingVerb[isPlural ? 'plural' : 'singular'],
+        cellSingularPlural: smartHintsTranslationsTexts.common.houseTypes.cell[isPlural ? 'plural' : 'singular'],
     }
     return {
-        msg: dynamicInterpolation(HIDDEN_GROUP.REMOVABLE_GROUP_CANDIDATE_FILLED, msgPlaceholderValues),
+        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.removableGroupCandidateFilled, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -90,10 +96,15 @@ const getWronglyFilledGroupCellsInfo = (_groupCells, groupCandidates, { tryOutMa
 }
 
 // TODO: break down this function
-const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse, boardInputs) => {
+const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse, boardInputs, smartHintsTranslationsTexts) => {
     let errorMsg
-    const primaryHouseFullName = getHouseNumAndName(primaryHouse)
+    const primaryHouseFullName = getHouseWithNumAndNameText(
+        primaryHouse,
+        smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.config.primaryHouseFullName,
+        smartHintsTranslationsTexts
+    )
     const groupCandidatesToBeFilled = getGroupCandidatesToBeFilled(groupCells, groupCandidates, boardInputs)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     const groupCandidatesToBeFilledWithoutHostCells = getGroupCandidatesToBeFilledWithoutHostCells(
         groupCandidatesToBeFilled,
@@ -105,7 +116,7 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse,
     const wronglyFilledGroupCells = getCellsFromCellsWithNumbers(wronglyFilledGroupCellsInfo)
     const wronglyFilledNumbersInGroupCells = getNumbersFromCellsWithNumbers(wronglyFilledGroupCellsInfo)
     const wronglyFilledNumbersInGroupCellsListText = getCandidatesListText(wronglyFilledNumbersInGroupCells)
-    const wronglyFilledGroupCellsAxesListText = getCellsAxesValuesListText(wronglyFilledGroupCells)
+    const wronglyFilledGroupCellsAxesListText = getCellsAxesValuesListText(wronglyFilledGroupCells, undefined, axisValues)
 
     let msgPlaceholderValues
     if (groupCandidatesToBeFilledWithoutHostCells.length !== 0) {
@@ -115,27 +126,28 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse,
             wronglyFilledNumbersInGroupCellsListText,
             wronglyFilledGroupCellsAxesListText,
         }
-        errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.NO_HOST_CELL_FOR_GROUP_CANDIDATES
+        errorMsg = smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.invalidCandidateInGroupCell.noHostCellForGroupCandidates
     } else {
         const { tryOutMainNumbers } = boardInputs
         const emptyGroupCells = sortCells(filterEmptyCells(groupCells, tryOutMainNumbers))
         const candidatesListText = getCandidatesListText(_sortBy(groupCandidatesToBeFilled))
-        const emptyCellsAxesListText = getCellsAxesValuesListText(emptyGroupCells)
+        const emptyCellsAxesListText = getCellsAxesValuesListText(emptyGroupCells, undefined, axisValues)
         const candidatesCountWithoutCells = groupCandidatesToBeFilled.length - emptyGroupCells.length
+        const emptyIsPlural = emptyGroupCells.length > 1
 
         msgPlaceholderValues = {
             candidatesToBeFilledCount: groupCandidatesToBeFilled.length,
             candidatesListText,
             emptyGroupCellsCount: emptyGroupCells.length,
-            emptyGroupCellsNounText: emptyGroupCells.length > 1 ? 'cells' : 'cell',
+            emptyGroupCellsNounText: smartHintsTranslationsTexts.common.houseTypes.cell[emptyIsPlural ? 'plural' : 'singular'],
             emptyCellsAxesListText,
-            emptyGroupCellsHelpingVerb: emptyGroupCells.length > 1 ? 'are' : 'is',
+            emptyGroupCellsHelpingVerb: smartHintsTranslationsTexts.common.helpingVerb[emptyIsPlural ? 'plural' : 'singular'],
             primaryHouseFullName,
             candidatesCountWithoutCells,
             wronglyFilledNumbersInGroupCellsListText,
             wronglyFilledGroupCellsAxesListText,
         }
-        errorMsg = HIDDEN_GROUP.INVALID_CANDIDATE_IN_GROUP_CELL.INSUFFICIENT_HOST_CELLS
+        errorMsg = smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.invalidCandidateInGroupCell.insufficientHostCells
     }
 
     return {
@@ -147,16 +159,17 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse,
 const getGroupCandidatesToBeFilledWithoutHostCells = (groupCandidatesToBeFilled, groupCells, { tryOutNotes }) => groupCandidatesToBeFilled.filter(groupCandidate => !groupCells.some(cell => NotesRecord.isNotePresentInCell(tryOutNotes, groupCandidate, cell)))
 
 // TODO: break down this function
-const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, { tryOutMainNumbers, tryOutNotes }) => {
+const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, { tryOutMainNumbers, tryOutNotes }, smartHintsTranslationsTexts) => {
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     let progressMsg = ''
     let msgPlaceholderValues
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
         msgPlaceholderValues = {
             candidatesListText: getCandidatesListText(_sortBy(groupCandidates)),
-            groupCellsAxesListText: getCellsAxesValuesListText(sortCells(groupCells)),
+            groupCellsAxesListText: getCellsAxesValuesListText(sortCells(groupCells), undefined, axisValues),
         }
-        progressMsg = HIDDEN_GROUP.VALID_FILL.FULL
+        progressMsg = smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.validFill.full
     } else {
         const correctlyFilledGroupCellsInfo = []
         sortCells(groupCells).filter(cell => MainNumbersRecord.isCellFilled(tryOutMainNumbers, cell))
@@ -171,15 +184,17 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, { tryOutMa
             candidatesToBeFilled.push(...NotesRecord.getCellVisibleNotesList(tryOutNotes, cell))
         })
         candidatesToBeFilled = _sortBy(_unique(candidatesToBeFilled))
+        const filledIsPlural = correctlyFilledGroupCandidates.length > 1
+        const toBeFilledIsPlural = candidatesToBeFilled.length > 1
 
         msgPlaceholderValues = {
             filledCandidates: getCandidatesListText(correctlyFilledGroupCandidates),
-            filledCandidatesCountHV: correctlyFilledGroupCandidates.length > 1 ? 'are' : 'is',
-            filledCandidatesHostCells: getCellsAxesValuesListText(filledGroupCells),
+            filledCandidatesCountHV: smartHintsTranslationsTexts.common.helpingVerb[filledIsPlural ? 'plural' : 'singular'],
+            filledCandidatesHostCells: getCellsAxesValuesListText(filledGroupCells, undefined, axisValues),
             toBeFilledCandidates: getCandidatesListText(_sortBy(candidatesToBeFilled)),
-            toBeFilledCandidatesPronoun: candidatesToBeFilled.length > 1 ? 'these' : 'it',
+            toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
         }
-        progressMsg = HIDDEN_GROUP.VALID_FILL.PARTIAL
+        progressMsg = smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.validFill.partial
     }
 
     return {

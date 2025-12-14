@@ -7,12 +7,12 @@ import {
     getPartialCorrectlyFilledResult,
 } from './helpers'
 
-export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }, boardInputs) => {
+export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, groupCells }, boardInputs, smartHintsTranslationsTexts) => {
     if (noInputInTryOut(focusedCells, boardInputs)) {
-        return getNakedGroupNoTryOutInputResult(groupCandidates)
+        return getNakedGroupNoTryOutInputResult(groupCandidates, smartHintsTranslationsTexts)
     }
 
-    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells, boardInputs)
+    const tryOutErrorResult = getNakedGroupTryOutInputErrorResult(groupCandidates, groupCells, focusedCells, boardInputs, smartHintsTranslationsTexts)
     if (tryOutErrorResult) {
         return tryOutErrorResult
     }
@@ -20,7 +20,7 @@ export const nakedDoubleTryOutAnalyser = ({ groupCandidates, focusedCells, group
     const { tryOutMainNumbers } = boardInputs
     const correctlyFilledGroupCandidates = getCorrectFilledTryOutCandidates(groupCells, tryOutMainNumbers)
     if (correctlyFilledGroupCandidates.length === groupCandidates.length) {
-        return getAllInputsFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
+        return getAllInputsFilledResult(groupCandidates, groupCells, tryOutMainNumbers, smartHintsTranslationsTexts)
     }
-    return getPartialCorrectlyFilledResult(groupCandidates, groupCells, tryOutMainNumbers)
+    return getPartialCorrectlyFilledResult(groupCandidates, groupCells, tryOutMainNumbers, smartHintsTranslationsTexts)
 }

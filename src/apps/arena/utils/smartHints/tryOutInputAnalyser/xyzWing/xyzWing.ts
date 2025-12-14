@@ -13,14 +13,13 @@ import {
     filterNakedSingleCells,
     getCellsWithNoCandidates
 } from '../helpers'
-import { XYZ_WING } from '../stringLiterals'
 
 import { BoardInputs } from '../types'
-import { getCandidatesListText } from '../../util'
-import { HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
+import { getCandidatesListText, getAxisValuesFromTranslations } from '../../util'
 
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { XYZWingRawHint } from '../../xyzWing/types'
+import { SmartHintsTranslationsTexts } from '../../types'
 
 const getWingsCellsCoordinates = (xyzWing: XYZWingRawHint) => {
     return [xyzWing.wings[0].cell, xyzWing.wings[1].cell]
@@ -28,12 +27,14 @@ const getWingsCellsCoordinates = (xyzWing: XYZWingRawHint) => {
 
 export const xyzWingTryOutAnalyser = (
     { xyzWing }: { xyzWing: XYZWingRawHint },
-    boardInputs: BoardInputs
+    boardInputs: BoardInputs,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
 ) => {
 
     const wingCellsCoordinates = getWingsCellsCoordinates(xyzWing)
     const pivotCellCoordinates = xyzWing.pivot.cell
     const wingAllCells = [pivotCellCoordinates, ...wingCellsCoordinates]
+    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     const removableNoteHostCellsFilled = anyCellHasTryOutInput(xyzWing.removableNoteHostCells, boardInputs)
     const pivotCellFilled = anyCellHasTryOutInput([xyzWing.pivot.cell], boardInputs)
@@ -43,10 +44,10 @@ export const xyzWingTryOutAnalyser = (
         const msgPlaceholdersValues = {
             xyzCellsCandidates: getCandidatesListText(xyzWing.pivot.notes),
             removableCandidate: xyzWing.wingsAndPivotCommonNote,
-            removableNoteHostCells: getCellsAxesValuesListText(xyzWing.removableNoteHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+            removableNoteHostCells: getCellsAxesValuesListText(xyzWing.removableNoteHostCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
         }
         return {
-            msg: dynamicInterpolation(XYZ_WING.NO_INPUT, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.noInput, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.START,
         }
     }
@@ -54,10 +55,10 @@ export const xyzWingTryOutAnalyser = (
     if (removableNoteHostCellsFilled) {
         if (!(pivotCellFilled || anyWingsFilled)) {
             const msgPlaceholdersValues = {
-                nakedSinglesCells: getCellsAxesValuesListText(wingCellsCoordinates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND)
+                nakedSinglesCells: getCellsAxesValuesListText(wingCellsCoordinates, smartHintsTranslationsTexts.common.conjugations.and, axisValues)
             }
             return {
-                msg: dynamicInterpolation(XYZ_WING.REMOVABLE_NOTE_CELL_FILLED.NO_OTHER_CELL_FILLED, msgPlaceholdersValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.removableNoteCellFilled.noOtherCellFilled, msgPlaceholdersValues),
                 state: TRY_OUT_RESULT_STATES.START,
             }
         }
@@ -66,12 +67,12 @@ export const xyzWingTryOutAnalyser = (
         if (!_isEmpty(cellsWithoutCandidates)) {
             const filledRemovableNoteHostCell = filterFilledCellsInTryOut(xyzWing.removableNoteHostCells, boardInputs)
             const msgPlaceholdersValues = {
-                cellsWithNoCandidates: getCellsAxesValuesListText(cellsWithoutCandidates),
+                cellsWithNoCandidates: getCellsAxesValuesListText(cellsWithoutCandidates, undefined, axisValues),
                 removableCandidate: xyzWing.wingsAndPivotCommonNote,
-                filledRemovableNoteHostCell: getCellAxesValues(filledRemovableNoteHostCell[0])
+                filledRemovableNoteHostCell: getCellAxesValues(filledRemovableNoteHostCell[0], axisValues)
             }
             return {
-                msg: dynamicInterpolation(XYZ_WING.REMOVABLE_NOTE_CELL_FILLED.CELL_WITHOUT_CANDIDATES, msgPlaceholdersValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.removableNoteCellFilled.cellWithoutCandidates, msgPlaceholdersValues),
                 state: TRY_OUT_RESULT_STATES.ERROR,
             }
         }
@@ -79,10 +80,10 @@ export const xyzWingTryOutAnalyser = (
         const nsCells = filterNakedSingleCells(wingAllCells, boardInputs)
         if (!_isEmpty(nsCells)) {
             const msgPlaceholdersValues = {
-                nakedSinglesCells: getCellsAxesValuesListText(nsCells)
+                nakedSinglesCells: getCellsAxesValuesListText(nsCells, undefined, axisValues)
             }
             return {
-                msg: dynamicInterpolation(XYZ_WING.REMOVABLE_NOTE_CELL_FILLED.CELLS_HAVE_NAKED_SINGLE, msgPlaceholdersValues),
+                msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.removableNoteCellFilled.cellsHaveNakedSingle, msgPlaceholdersValues),
                 state: TRY_OUT_RESULT_STATES.START,
             }
         }
@@ -91,11 +92,11 @@ export const xyzWingTryOutAnalyser = (
     const emptyWingCells = filterCellsWithoutTryoutInput(wingAllCells, boardInputs)
     if (_isEmpty(emptyWingCells)) {
         const msgPlaceholdersValues = {
-            xyzCells: getCellsAxesValuesListText(wingAllCells),
+            xyzCells: getCellsAxesValuesListText(wingAllCells, undefined, axisValues),
             removableCandidate: xyzWing.wingsAndPivotCommonNote
         }
         return {
-            msg: dynamicInterpolation(XYZ_WING.ALL_CELLS_FILLED_PROPERLY, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.allCellsFilledProperly, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
@@ -105,26 +106,26 @@ export const xyzWingTryOutAnalyser = (
     })
     if (!_isEmpty(wingCellsFilledWithCommonNote)) {
         const msgPlaceholdersValues = {
-            emptyWingCells: getCellsAxesValuesListText(filterCellsWithoutTryoutInput(wingAllCells, boardInputs)),
+            emptyWingCells: getCellsAxesValuesListText(filterCellsWithoutTryoutInput(wingAllCells, boardInputs), undefined, axisValues),
             removableCandidate: xyzWing.wingsAndPivotCommonNote,
-            wingCellsFilledWithRemovableCandidate: getCellsAxesValuesListText(wingCellsFilledWithCommonNote),
-            removableNoteHostCells: getCellsAxesValuesListText(xyzWing.removableNoteHostCells)
+            wingCellsFilledWithRemovableCandidate: getCellsAxesValuesListText(wingCellsFilledWithCommonNote, undefined, axisValues),
+            removableNoteHostCells: getCellsAxesValuesListText(xyzWing.removableNoteHostCells, undefined, axisValues)
         }
         return {
-            msg: dynamicInterpolation(XYZ_WING.COMMON_NOTE_FILLED_IN_ANY_WING_CELLS, msgPlaceholdersValues),
+            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.commonNoteFilledInAnyWingCells, msgPlaceholdersValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
 
     if (!_isEmpty(emptyWingCells)) {
         return {
-            msg: XYZ_WING.PARTIALLY_FILLED,
+            msg: smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.partiallyFilled,
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
 
     return {
-        msg: 'Oops! Invalid State. Something is wrong from our side.',
+        msg: smartHintsTranslationsTexts.tryOutAnalyser.unattainableState,
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
