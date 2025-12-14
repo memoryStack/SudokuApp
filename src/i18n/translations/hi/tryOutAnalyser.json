@@ -1,5 +1,10 @@
 {
     "unattainableState": "यह स्थिति कैसे आई पता नहीं",
+    "unclickableCellClickedInTryOutMsg": {
+        "singular": "आप उन सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किया गया {{candidate}} उम्मीदवार है",
+        "plural": "आप उन सेल्स को चुन सकते हैं जिनमें {{candidatesListText}} के उम्मीदवार हरे या लाल रंग से हाइलाइट किए गए हैं",
+        "clickAnyHighlightedCell": "आप केवल उन्हीं सेल्स को चुन सकते हैं जो यहाँ हाइलाइट किए गए हैं"
+    },
     "hiddenGroup": {
         "noInput": "यह समझने के लिए कि इन्हें इन सेल से क्यों हटाया जाना चाहिए, लाल रंग में हाइलाइट किए गए अंक भरने का प्रयास करें",
         "removableGroupCandidateFilled": "{{filledCandidatesListText}} {{filledCellsAxesListText}} में {{filledInstancesHelpingVerb}} भरे गए। इसके कारण {{primaryHouseFullName}} में {{filledCandidatesListText}} के लिए कोई {{cellSingularPlural}} नहीं {{filledInstancesHelpingVerb}}\nइस त्रुटि को ठीक करने के लिए, {{filledCellsAxesListText}} से {{filledCandidatesListText}} हटाएं",
@@ -10,7 +15,8 @@
         "validFill": {
             "full": "{{candidatesListText}} {{groupCellsAxesListText}} सेल में बिना किसी त्रुटि के भरे गए हैं। इन सेल को {{candidatesListText}} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि इस हाइलाइट किए गए क्षेत्र में {{groupCellsAxesListText}} के अलावा अन्य सेल में {{candidatesListText}} नहीं आ सकते।",
             "partial": "{{filledCandidates}} {{filledCandidatesHostCells}} में बिना किसी त्रुटि के {{filledCandidatesCountHV}} भरे गए। {{toBeFilledCandidates}} भरने का भी प्रयोग करें यह समझने के लिए कि {{toBeFilledCandidatesPronoun}} कहाँ आ सकते हैं या नहीं आ सकते"
-        }
+        },
+        "unclickableCellClickedInTryOutMsg": "आप केवल उन्हीं सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किए गए उम्मीदवार हैं, क्योंकि हम अन्य सेल्स के बारे में कोई टिप्पणी नहीं कर रहे हैं।"
     },
     "nakedGroups": {
         "noInput": "यह समझने के लिए कि इन्हें क्यों हटाया जाना चाहिए, जहाँ {{candidatesListText}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें",
@@ -73,7 +79,8 @@
         "validFill": {
             "partial": "अब तक आपने चेन सेल सही से भरे हैं। इस तकनीक को पूरी तरह समझने के लिए अन्य सेल भी भरें",
             "full": "बधाई! आपने चेन के सभी सेल सफलतापूर्वक भर दिए हैं। इन सेल को भरने के समाधानों में से यह एक है। यह भी ध्यान दें कि {{removableNotesHostCells}} से लाल रंग में हाइलाइट किए गए सभी उम्मीदवार हटा दिए गए हैं। इन चेन सेल को दूसरे तरीके से भरने का प्रयास करें और आप पाएंगे कि परिणाम वही होगा।"
-        }
+        },
+        "unclickableCellClickedInTryOutMsg": "आप केवल चेन सेल्स या उन सेल्स को चुन सकते हैं जिनमें लाल रंग से हाइलाइट किए गए उम्मीदवार हैं।"
     },
     "emptyRectangle": {
         "noInput": "यह समझने के लिए कि {{removableNoteHostCell}} में {{candidate}} क्यों नहीं आ सकता, इन हाइलाइट किए गए सेल में से किसी में {{candidate}} भरें",

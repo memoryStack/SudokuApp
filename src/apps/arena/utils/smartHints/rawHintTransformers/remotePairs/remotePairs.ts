@@ -223,7 +223,7 @@ export const transformRemotePairsRawHint = ({
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(remotePairs.remotePairNotes) as InputPanelNumbersVisibility,
         tryOutAnalyserData: { remotePairs, tryOutInputsColors },
         clickableCells,
-        unclickableCellClickInTryOutMsg: 'you can only select Chain cells or cells which have candidates highlighted in red color',
+        unclickableCellClickInTryOutMsg: smartHintsTranslationsTexts.tryOutAnalyser.remotePairs.unclickableCellClickedInTryOutMsg,
         applyHint: getApplyHintData(remotePairs, notesData),
         tryOutInputsColors,
     })

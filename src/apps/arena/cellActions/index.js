@@ -34,6 +34,7 @@ import _get from '@lodash/get';
 import { useThemeValues } from '../hooks/useTheme';
 import { getHintExplanationTexts, getHintsTitle } from '../utils/smartHints/stringLiterals';
 import { useTranslation } from 'src/i18n/hooks/useTranslation';
+import { useSmartHintsTranslations } from 'src/apps/hintsVocabulary/vocabExplainations/hooks/useSmartHintsTranslations';
 
 const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, containerStyles, textStyles, dependencies }) => {
     const allowNotesInputWithoutPencil = dependencies?.gameSettingsAdapter?.fillNotesWithoutPencil?.()
@@ -44,14 +45,7 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
 
     const theme = useThemeValues()
 
-    const { t: tSmartHints, i18n } = useTranslation('smartHints')
-    const smartHintsTranslationsTexts = useMemo(() => {
-        return {
-            explanation: getHintExplanationTexts(tSmartHints),
-            title: getHintsTitle(tSmartHints),
-            common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {}
-        }
-    }, [tSmartHints, i18n])
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const { start, copilotEvents, currentStepNumber, totalStepsNumber, goToNext, stop, visible } = useCopilot()
     const wentoff = useRef(false)

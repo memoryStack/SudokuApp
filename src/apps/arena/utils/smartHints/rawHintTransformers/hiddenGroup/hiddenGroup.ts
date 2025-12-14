@@ -446,7 +446,7 @@ export const transformHiddenGroupRawHint = ({
         removableNotes: getRemovableNotesHostCellsMap(groupCandidates, hostCells, removableGroupCandidatesHostCells, notesData),
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(tryOutInputPanelAllowedCandidates) as InputPanelVisibleNumbers,
         clickableCells: _cloneDeep([...hostCells, ...removableGroupCandidatesHostCells]),
-        unclickableCellClickInTryOutMsg: 'you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.',
+        unclickableCellClickInTryOutMsg: smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.unclickableCellClickedInTryOutMsg,
         cellsRestrictedNumberInputs: getRemovableGroupCandidatesHostCellsRestrictedNumberInputs(
             removableGroupCandidatesHostCells,
             groupCandidates,

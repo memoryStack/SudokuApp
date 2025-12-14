@@ -169,7 +169,7 @@ export const transformXYZWingRawHint = ({
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(xyzWing.pivot.notes) as InputPanelVisibleNumbers,
         clickableCells: getAllFocusedCellsCoordinates(xyzWing),
         cellsRestrictedNumberInputs: getTryOutCellsRestrictedNumberInputs(xyzWing, notesData),
-        unclickableCellClickInTryOutMsg: 'you can only select the cells which are highlighted here.',
+        unclickableCellClickInTryOutMsg: smartHintsTranslationsTexts.tryOutAnalyser.unclickableCellClickedInTryOutMsg.clickAnyHighlightedCell,
         restrictedNumberInputMsg: `you can only fill ${xyzWing.wingsAndPivotCommonNote} because we are not commenting about any other number in this cell`
     }
 }

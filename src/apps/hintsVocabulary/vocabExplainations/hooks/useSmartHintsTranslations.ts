@@ -5,15 +5,16 @@ import { SmartHintsTranslationsTexts } from 'src/apps/arena/utils/smartHints/typ
 
 export const useSmartHintsTranslations = (): SmartHintsTranslationsTexts => {
     const { t: tSmartHints, i18n } = useTranslation('smartHints')
+    const { t: tTryOutAnalyser } = useTranslation('tryOutAnalyser')
 
     const smartHintsTranslationsTexts = useMemo(() => {
         return {
             explanation: getHintExplanationTexts(tSmartHints),
             title: getHintsTitle(tSmartHints),
-            common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {}
+            common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {},
+            tryOutAnalyser: i18n.getDataByLanguage(i18n.language)?.['tryOutAnalyser'] ?? {},
         }
-    }, [tSmartHints, i18n])
+    }, [tSmartHints, tTryOutAnalyser, i18n])
 
     return smartHintsTranslationsTexts
 }
-

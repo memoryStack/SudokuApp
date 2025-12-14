@@ -1,5 +1,10 @@
 {
     "unattainableState": "not sure how we reached here",
+    "unclickableCellClickedInTryOutMsg": {
+        "singular": "you can select cells which have {{candidate}} candidate highlighted in green or red color",
+        "plural": "you can select cells which have {{candidatesListText}} candidates highlighted in green or red color",
+        "clickAnyHighlightedCell": "you can only select cells which are highlighted here"
+    },
     "hiddenGroup": {
         "noInput": "try to fill numbers highlighted in red color to understand why these should be removed from these cells",
         "removableGroupCandidateFilled": "{{filledCandidatesListText}} {{filledInstancesHelpingVerb}} filled in {{filledCellsAxesListText}}. because of this there {{filledInstancesHelpingVerb}} no {{cellSingularPlural}} left for {{filledCandidatesListText}} in {{primaryHouseFullName}}\nto fix this error, remove {{filledCandidatesListText}} from {{filledCellsAxesListText}}",
@@ -10,7 +15,8 @@
         "validFill": {
             "full": "{{candidatesListText}} are filled in {{groupCellsAxesListText}} cells without any error. this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what will be the exact solution for these cells but we are sure that {{candidatesListText}} can't come in cells other than {{groupCellsAxesListText}} in this highlighted region.",
             "partial": "{{filledCandidates}} {{filledCandidatesCountHV}} filled in {{filledCandidatesHostCells}} without any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can't be filled"
-        }
+        },
+        "unclickableCellClickedInTryOutMsg": "you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells."
     },
     "nakedGroups": {
         "noInput": "try to fill {{candidatesListText}} where it is highlighted in red color to understand why these should be removed",
@@ -73,7 +79,8 @@
         "validFill": {
             "partial": "till now you have filled Chain cells correctly. fill other cells as well to fully understand this technique",
             "full": "yayy! you have successfully filled all the cells in the Chain. this is one of the solutions to fill these cells. also notice that all the candidates highlighted in red color from {{removableNotesHostCells}} are removed. try to fill these Chain cells in another way and you will find that the result will be same."
-        }
+        },
+        "unclickableCellClickedInTryOutMsg": "you can only select Chain cells or cells which have candidates highlighted in red color"
     },
     "emptyRectangle": {
         "noInput": "Fill {{candidate}} in any of these highlighted cells to understand why {{candidate}} can not come in {{removableNoteHostCell}}",

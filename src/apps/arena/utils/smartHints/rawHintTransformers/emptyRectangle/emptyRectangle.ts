@@ -155,6 +155,6 @@ export const transformEmptyRectangleRawHint = ({
         removableNotes: { [emptyRectangle.note]: [emptyRectangle.removableNotesHostCell] },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([emptyRectangle.note]) as InputPanelVisibleNumbers,
         clickableCells: _cloneDeep(focusedCells),
-        unclickableCellClickInTryOutMsg: 'you can only select the cells which are highlighted here.',
+        unclickableCellClickInTryOutMsg: smartHintsTranslationsTexts.tryOutAnalyser.unclickableCellClickedInTryOutMsg.clickAnyHighlightedCell
     }
 }

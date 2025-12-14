@@ -70,6 +70,7 @@ export type TryOutResult = {
 export type InputPanelNumbersVisibility = InputPanelVisibleNumbers
 
 export type SmartHintsTranslationsTexts = {
+    tryOutAnalyser: Record<string, object>
     explanation: HintExplainationTexts
     title: Record<HINTS_IDS, string>
     common: Record<string, string | object>

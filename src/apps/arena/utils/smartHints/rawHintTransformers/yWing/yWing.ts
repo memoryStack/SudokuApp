@@ -215,7 +215,7 @@ export const transformYWingRawHint = ({
         applyHint: getApplyHintData(yWing, notesData),
         hasTryOut: true,
         clickableCells: [pivot.cell, ...wingCells, ...eliminableNotesCells],
-        unclickableCellClickInTryOutMsg: 'you can only select cells which are highlighted here',
+        unclickableCellClickInTryOutMsg: smartHintsTranslationsTexts.tryOutAnalyser.unclickableCellClickedInTryOutMsg.clickAnyHighlightedCell,
         tryOutAnalyserData: {
             yWing,
             eliminableNotesCells,

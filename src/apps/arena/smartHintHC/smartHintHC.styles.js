@@ -23,7 +23,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     },
     hintTitleContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'baseline',
     },
     hintTitle: {
         fontWeight: FONT_WEIGHTS.MEDIUM,

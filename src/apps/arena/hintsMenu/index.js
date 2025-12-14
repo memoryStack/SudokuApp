@@ -34,6 +34,7 @@ import {
 } from './hintsMenu.constants'
 import { getStyles } from './hintsMenu.styles'
 import { getHintExplanationTexts, getHintsTitle } from '../utils/smartHints/stringLiterals'
+import { useSmartHintsTranslations } from 'src/apps/hintsVocabulary/vocabExplainations/hooks/useSmartHintsTranslations'
 
 const COLUMNS_COUNT = 3
 
@@ -45,15 +46,7 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
     const styles = useStyles(getStyles)
     const { t } = useTranslation('arena')
 
-    const { t: tSmartHints, i18n } = useTranslation('smartHints')
-
-    const smartHintsTranslationsTexts = useMemo(() => {
-        return {
-            explanation: getHintExplanationTexts(tSmartHints),
-            title: getHintsTitle(tSmartHints),
-            common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {}
-        }
-    }, [tSmartHints, i18n])
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const theme = useThemeValues()
 

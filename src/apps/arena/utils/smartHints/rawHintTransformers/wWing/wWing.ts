@@ -171,6 +171,6 @@ export const transformWWingRawHint = ({
         removableNotes: { [wWing.removableNote]: wWing.removableNoteHostCells },
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility(wWing.nakedPairNotes) as InputPanelVisibleNumbers,
         clickableCells: _cloneDeep(focusedCells),
-        unclickableCellClickInTryOutMsg: 'you can only select the cells which are highlighted here.',
+        unclickableCellClickInTryOutMsg: smartHintsTranslationsTexts.tryOutAnalyser.unclickableCellClickedInTryOutMsg.clickAnyHighlightedCell
     }
 }

@@ -51,7 +51,10 @@ export const transformNakedGroupRawHint = ({ rawHint, notesData, smartHintsColor
         ),
         applyHint: getApplyHintData(focusedCells, groupCells, groupCandidates, notesData),
         clickableCells: [...groupCells, ...removableNotesHostCells],
-        unclickableCellClickInTryOutMsg: `you can select cells which have ${getCandidatesListText(groupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)} candidate highlighted in green or red color`,
+        unclickableCellClickInTryOutMsg: dynamicInterpolation(
+            smartHintsTranslationsTexts.tryOutAnalyser.unclickableCellClickedInTryOutMsg.plural,
+            { candidatesListText: getCandidatesListText(groupCandidates, smartHintsTranslationsTexts.common.conjugations.or) }
+        ),
         removableNotes: getRemovableNotesHostCellsMap(groupCandidates, removableNotesHostCells, notesData),
         tryOutAnalyserData: {
             groupCandidates,
