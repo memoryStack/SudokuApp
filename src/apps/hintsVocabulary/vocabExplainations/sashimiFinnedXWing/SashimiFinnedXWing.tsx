@@ -20,6 +20,7 @@ import { LEG_TYPES, XWING_TYPES } from 'src/apps/arena/utils/smartHints/xWing/co
 import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { getStyles } from './sashimiFinnedXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
@@ -40,6 +41,7 @@ const FinnedXWing = () => {
         keyPrefix: 'sashimiFinnedXWing',
     })
     const boardData = useBoardData(puzzle)
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const finnedXWing = {
         isComposite: false,
@@ -64,6 +66,7 @@ const FinnedXWing = () => {
         notesData: boardData.notes,
         mainNumbers: boardData.mainNumbers,
         smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+        smartHintsTranslationsTexts,
     })
 
     const Example = !_isNil(boardData.mainNumbers) ? (

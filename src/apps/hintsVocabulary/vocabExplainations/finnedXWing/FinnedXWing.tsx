@@ -21,6 +21,7 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view'
 import { getStyles } from './finnedXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
 import { TransformedRawHint } from 'src/apps/arena/utils/smartHints/types'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
@@ -42,6 +43,7 @@ const FinnedXWing = () => {
         keyPrefix: 'finnedXWing',
     })
     const boardData = useBoardData(puzzle)
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const finnedXWing = {
         isComposite: false,
@@ -66,6 +68,7 @@ const FinnedXWing = () => {
         notesData: boardData.notes,
         mainNumbers: boardData.mainNumbers,
         smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+        smartHintsTranslationsTexts,
     })
 
     const Example = !_isNil(boardData.mainNumbers) ? (
@@ -163,6 +166,7 @@ const FinnedXWing = () => {
             notesData: boardData.notes,
             mainNumbers: boardData.mainNumbers,
             smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+            smartHintsTranslationsTexts,
         })
 
         const exampleTwoTransformedXWing = transformXWingRawHint({
@@ -170,6 +174,7 @@ const FinnedXWing = () => {
             notesData: boardData.notes,
             mainNumbers: boardData.mainNumbers,
             smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+            smartHintsTranslationsTexts,
         })
 
         const firstExampleFocusedCells = getHouseCells({ type: HOUSE_TYPE.ROW, num: 2 })

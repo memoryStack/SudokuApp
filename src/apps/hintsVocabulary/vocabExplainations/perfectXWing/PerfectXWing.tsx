@@ -23,6 +23,7 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
 import { getStyles } from './perfectXWing.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
@@ -60,6 +61,7 @@ const PerfectXWing = () => {
         keyPrefix: 'perfectXWing',
     })
     const boardData = useBoardData(puzzle)
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const xWing = {
         isComposite: false,
@@ -84,6 +86,7 @@ const PerfectXWing = () => {
         notesData: boardData.notes,
         mainNumbers: boardData.mainNumbers,
         smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+        smartHintsTranslationsTexts,
     })
 
     const XWingCrossConfigs = [
@@ -146,6 +149,7 @@ const PerfectXWing = () => {
             notesData: boardData.notes,
             mainNumbers: boardData.mainNumbers,
             smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+            smartHintsTranslationsTexts,
         })
         const xWingCells = getXWingCells(faultyXWingWithMoreThanTwoCrossHouses.legs)
         const boardExample = !_isNil(boardData.mainNumbers) ? (
@@ -238,6 +242,7 @@ const PerfectXWing = () => {
             notesData: boardData.notes,
             mainNumbers: boardData.mainNumbers,
             smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+            smartHintsTranslationsTexts,
         })
 
         const boardExample = !_isNil(boardData.mainNumbers) ? (

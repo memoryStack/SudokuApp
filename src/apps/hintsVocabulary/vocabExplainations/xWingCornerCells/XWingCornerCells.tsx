@@ -22,6 +22,7 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { LINK_TYPES } from 'src/apps/arena/utils/smartHints/chains/xChain/xChain.constants'
 import { getStyles } from './xWingCornerCells.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 import { getLinkHTMLText, getTrimmedBoardData } from '../utils'
 
 const puzzle = '980062753065003000327050006790030500050009000832045009673591428249687005518020007'
@@ -40,6 +41,7 @@ const XWingCornerCells = () => {
         keyPrefix: 'xWingCornerCells',
     })
     const boardData = useBoardData(puzzle)
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const xWing = {
         isComposite: false,
@@ -64,6 +66,7 @@ const XWingCornerCells = () => {
         notesData: boardData.notes,
         mainNumbers: boardData.mainNumbers,
         smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+        smartHintsTranslationsTexts,
     })
 
     const XWingCrossConfigs = [

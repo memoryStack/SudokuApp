@@ -21,6 +21,7 @@ import _head from '@lodash/head'
 import _last from '@lodash/last'
 import { getStyles } from './remotePairs.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 import { getLinkHTMLText } from '../utils'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
@@ -33,6 +34,7 @@ const RemotePairs = () => {
         keyPrefix: 'remotePairs',
     })
     const boardData = useBoardData(puzzle)
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const rawRemotePairs = {
         isComposite: false,
@@ -48,6 +50,7 @@ const RemotePairs = () => {
         notesData: boardData.notes,
         mainNumbers: boardData.mainNumbers,
         smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+        smartHintsTranslationsTexts,
     })
 
     const Example = !_isNil(boardData.mainNumbers) ? (

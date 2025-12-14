@@ -18,6 +18,7 @@ import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import { getCellsAxesList, joinStringsListWithArrow } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
 import { getStyles } from './xyChain.styles'
 import { useBoardData } from '../hooks/useBoardData'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 import { getLinkHTMLText } from '../utils'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
@@ -30,6 +31,7 @@ const XYChain = () => {
         keyPrefix: 'xyChain',
     })
     const boardData = useBoardData(puzzle)
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
     const rawXYChain = {
         isComposite: false,
@@ -50,6 +52,7 @@ const XYChain = () => {
         notesData: boardData.notes,
         mainNumbers: boardData.mainNumbers,
         smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+        smartHintsTranslationsTexts,
     })
 
     const Example = !_isNil(boardData.mainNumbers) ? (
