@@ -3,16 +3,14 @@ import _forEach from '@lodash/forEach'
 
 import { CellAndRemovableNotes, URTransformerArgs, UniqueRectangleTypeFourRawHint } from '../../types/uniqueRectangle'
 
-import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem } from '../../types'
-import _map from '@lodash/map'
-import { getHintExplanationStepsFromHintChunks, setCellBGColor, setCellNotesColor } from '../../util'
+import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem, SmartHintsTranslationsTexts } from '../../types'
+import { getAxisValuesFromTranslations, getCandidatesListText, getHintExplanationStepsFromHintChunks, getHouseWithNumAndNameText, setCellBGColor, setCellNotesColor } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { getCellAxesValues } from '@domain/board/utils/housesAndCells'
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
-import { HINT_EXPLANATION_TEXTS } from '../../stringLiterals'
+import { HINTS_IDS } from '../../constants'
 import { UR_TYPES } from '../../uniqueRectangle/constants'
-import { getCellsAxesValuesListText, getHouseNumAndName } from '../helpers'
+import { getCellsAxesValuesListText } from '../helpers'
 import { getURHostCellsWithExtraCandidates, getExtraNotesInURCells, getURHostCellsHavingURNotesOnly } from './helpers'
+import { getCellAxesValues } from '../../../util'
 
 const getCellsToFocus = (ur: UniqueRectangleTypeFourRawHint) => ur.hostCells
 
@@ -44,42 +42,55 @@ const getCellsToFocusData = (
     return cellsToFocusData
 }
 
-const getHintExplanationText = (ur: UniqueRectangleTypeFourRawHint, notes: Notes) => {
+const getHintExplanationText = (
+    ur: UniqueRectangleTypeFourRawHint,
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const { texts, config } = smartHintsTranslationsTexts.explanation[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_FOUR]
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const { conjugations } = smartHintsTranslationsTexts.common
+
     const cellsWithExtraCandidates = getURHostCellsWithExtraCandidates(ur, notes)
     const msgPlaceholdersValues = {
         extraNote: getExtraNotesInURCells(ur, notes)[0],
         omissonNote: ur.urNoteOmission.note,
         removableNote: ur.removableURNote,
-        cellsWithExtraCandidatesOrConcat: getCellsAxesValuesListText(cellsWithExtraCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-        cellsWithExtraCandidatesAndConcat: getCellsAxesValuesListText(cellsWithExtraCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        cellsHavingOnlyURNotes: getCellsAxesValuesListText(getURHostCellsHavingURNotesOnly(ur, notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        omissionHostHouse: getHouseNumAndName(ur.urNoteOmission.house),
+        cellsWithExtraCandidatesOrConcat: getCellsAxesValuesListText(cellsWithExtraCandidates, conjugations.or, axesValues),
+        cellsWithExtraCandidatesAndConcat: getCellsAxesValuesListText(cellsWithExtraCandidates, conjugations.and, axesValues),
+        cellsHavingOnlyURNotes: getCellsAxesValuesListText(getURHostCellsHavingURNotesOnly(ur, notes), conjugations.and, axesValues),
+        omissionHostHouse: getHouseWithNumAndNameText(
+            ur.urNoteOmission.house,
+            config.houseNumAndName,
+            smartHintsTranslationsTexts
+        ),
         firstURNote: ur.urNotes[0],
         secondURNote: ur.urNotes[1],
-        firstHostCell: getCellAxesValues(ur.hostCells[0]),
-        secondHostCell: getCellAxesValues(ur.hostCells[1]),
-        thirdHostCell: getCellAxesValues(ur.hostCells[2]),
-        fourthHostCell: getCellAxesValues(ur.hostCells[3])
+        firstHostCell: getCellAxesValues(ur.hostCells[0], axesValues),
+        secondHostCell: getCellAxesValues(ur.hostCells[1], axesValues),
+        thirdHostCell: getCellAxesValues(ur.hostCells[2], axesValues),
+        fourthHostCell: getCellAxesValues(ur.hostCells[3], axesValues)
     }
 
-    const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_FOUR]
-    const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    const hintChunks = texts.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
     return getHintExplanationStepsFromHintChunks(hintChunks, false)
 }
 
 export const transformURTypeFour = ({
     rawHint: ur,
     notesData,
-    smartHintsColorSystem
+    smartHintsColorSystem,
+    smartHintsTranslationsTexts
 }: URTransformerArgs): TransformedRawHint => {
+    const generalTitleText = smartHintsTranslationsTexts.title[HINTS_IDS.UNIQUE_RECTANGLE]
     return {
         type: 'UNIQUE_RECTANGLE',
         hasTryOut: true,
-        title: 'Unique Rectangle-4', // this is not reflected
+        title: `${generalTitleText}-4`,
 
         cellsToFocusData: getCellsToFocusData(ur as UniqueRectangleTypeFourRawHint, notesData, smartHintsColorSystem),
         focusedCells: getCellsToFocus(ur as UniqueRectangleTypeFourRawHint),
-        steps: getHintExplanationText(ur as UniqueRectangleTypeFourRawHint, notesData),
+        steps: getHintExplanationText(ur as UniqueRectangleTypeFourRawHint, notesData, smartHintsTranslationsTexts),
         // cellsToFocusData: getCellsToFocusData(wWing, notesData, smartHintsColorSystem),
         // focusedCells,
         // applyHint: getApplyHintData(wWing),

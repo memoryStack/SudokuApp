@@ -611,30 +611,54 @@
         "uniqueRectangle": {
             "typeOne": {
                 "singleExtraCandidate": [
-                    "<p>यदि {{extraNotesText}} {{cellWithExtraCandidates}} में नहीं आता तो इन 4 सेल में से प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                    "<p>यदि {{extraNotesText}} {{cellWithExtraCandidates}} में नहीं आता तो इन 4 सेल्स में प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
                     "इस पहेली का केवल एक वैध समाधान है इसलिए इन 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए {{cellWithExtraCandidates}} में {{firstURNote}} और {{secondURNote}} को हटाना होगा।"
                 ],
                 "multipleExtraCandidate": [
-                    "<p>यदि {{extraNotesText}} में से कोई भी {{cellWithExtraCandidates}} में नहीं आता तो इन 4 सेल में से प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                    "<p>यदि {{extraNotesText}} में से कोई भी {{cellWithExtraCandidates}} में नहीं आता तो इन 4 सेल्स में प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
                     "इस पहेली का केवल एक वैध समाधान है इसलिए इन 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए {{cellWithExtraCandidates}} में {{firstURNote}} और {{secondURNote}} को हटाना होगा।"
                 ]
             },
             "typeTwo": [
-                "<p>यदि {{extraNote}} {{cellsWithExtraCandidateList}} में से किसी में नहीं आता तो इन 4 सेल {{urHostCellsList}} में से प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
-                "इस पहेली का केवल एक वैध समाधान है इसलिए इन 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए {{cellsWithExtraCandidateList}} में से किसी एक में {{extraNote}} आएगा और इसके कारण {{extraNote}} उन सेल से हटा दिया जाएगा जहाँ यह लाल रंग में हाइलाइट किया गया है।"
+                "<p>यदि {{extraNote}} {{cellsWithExtraCandidateList}} में से किसी में नहीं आता तो इन 4 सेल्स {{urHostCellsList}} में प्रत्येक में दो उम्मीदवार {{firstURNote}} और {{secondURNote}} बचेंगे। इससे इन सेल्स को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                "इस पहेली का केवल एक वैध समाधान है इसलिए इन 4 सेल्स को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए {{cellsWithExtraCandidateList}} में से किसी एक में {{extraNote}} आएगा और इसके कारण {{extraNote}} उन सेल से हटा दिया जाएगा जहाँ यह लाल रंग में हाइलाइट किया गया है।"
             ],
-            "typeThree": [
-                "<p>यदि {{ngCandidates}} में से कोई भी {{cellsWithExtraCandidates}} में नहीं आता तो ये 4 सेल {{urHostCells}} केवल {{urNotes}} से भरे जाएंगे और इससे इस पहेली को हल करने के दो तरीके होंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। यह संभव नहीं है क्योंकि इस पहेली का केवल एक समाधान है।</p>",
-                "<p>तो निष्कर्ष यह है कि या तो {{firstCellWithExtraCandidates}} में {{firstCellExtraCandidates}} आना होगा या {{secondCellWithExtraCandidates}} में {{secondCellExtraCandidates}} आना होगा। जो भी हो, या तो {{firstNGCells}} एक {{ngHintText}} बनाएगा या {{secondNGCells}} एक {{ngHintText}} बनाएगा। और इसके कारण हम लाल रंग में हाइलाइट किए गए अंकों को हटा सकते हैं।</p>"
-            ],
-            "typeFour": [
-                "<p>ध्यान दें कि {{omissonNote}} {{omissionHostHouse}} में एक ओमिशन बना रहा है। इसका मतलब है कि {{omissonNote}} को {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आना होगा। और यदि {{removableNote}} भी {{cellsWithExtraCandidatesOrConcat}} में आता है तो इससे इन 4 सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
-                "<p>इस पहेली का केवल एक वैध समाधान है इसलिए इन सभी 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए बचा एकमात्र विकल्प {{cellsWithExtraCandidatesAndConcat}} से {{removableNote}} को हटाना है दो कारणों से। पहला, {{omissonNote}} निश्चित रूप से {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आएगा और दूसरा, {{firstURNote}} और {{secondURNote}} {{cellsHavingOnlyURNotes}} सेल में एक नेकेड डबल बनाते हैं इसलिए {{firstURNote}} और {{secondURNote}} दोनों निश्चित रूप से इन दो सेल में आएंगे।</p>"
-            ],
+            "typeThree": {
+                "texts": [
+                    "<p>यदि {{ngCandidates}} में से कोई भी {{cellsWithExtraCandidates}} में नहीं आता तो ये 4 सेल्स {{urHostCells}} केवल {{urNotes}} से भरे जाएंगे और इससे इस पहेली को हल करने के दो तरीके होंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। यह संभव नहीं है क्योंकि इस पहेली का केवल एक समाधान है।</p>",
+                    "<p>तो निष्कर्ष यह है कि या तो {{firstCellWithExtraCandidates}} में {{firstCellExtraCandidates}} आना होगा या {{secondCellWithExtraCandidates}} में {{secondCellExtraCandidates}} आना होगा। जो भी हो, या तो {{firstNGCells}} एक {{ngHintText}} बनाएगा या {{secondNGCells}} एक {{ngHintText}} बनाएगा। और इसके कारण हम लाल रंग में हाइलाइट किए गए अंकों को हटा सकते हैं।</p>"
+                ],
+                "ngHintTexts": {
+                    "nakedDouble": "<a href=\"NAKED_DOUBLE\">नेकेड डबल</a>",
+                    "nakedTripple": "<a href=\"NAKED_TRIPPLE\">नेकेड ट्रिपल</a>"
+                }
+            },
+            "typeFour": {
+                "texts": [
+                    "<p>ध्यान दें कि {{omissonNote}} {{omissionHostHouse}} में एक <a href=\"OMISSION\">ओमिशन</a> बना रहा है। इसका मतलब है कि {{omissonNote}} को {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आना होगा। और यदि {{removableNote}} भी {{cellsWithExtraCandidatesOrConcat}} में आता है तो इससे इन 4 सेल्स को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
+                    "<p>इस पहेली का केवल एक वैध समाधान है इसलिए इन सभी 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए बचा एकमात्र विकल्प {{cellsWithExtraCandidatesAndConcat}} से {{removableNote}} को हटाना है दो कारणों से। पहला, {{omissonNote}} निश्चित रूप से {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आएगा और दूसरा, {{firstURNote}} और {{secondURNote}} {{cellsHavingOnlyURNotes}} सेल में एक <a href=\"NAKED_DOUBLE\">नेकेड डबल</a> बनाते हैं इसलिए {{firstURNote}} और {{secondURNote}} दोनों निश्चित रूप से इन दो सेल में आएंगे।</p>"
+                ],
+                "config": {
+                    "houseNumAndName": {
+                        "houseNum": {
+                            "type": "houseNumber",
+                            "form": {
+                                "row": "axis",
+                                "col": "number_ordinal",
+                                "block": "number_ordinal"
+                            }
+                        },
+                        "houseName": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                }
+            },
             "typeSix": {
                 "texts": [
                     {
-                        "text": "<p>यदि {{cellsWithExtraCandidateList}} में केवल {{urNotes}} आते हैं तो इस पहेली के दो समाधान होंगे। एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। लेकिन इस पहेली का केवल एक समाधान है इसलिए इन 4 सेल को केवल {{urNotes}} से नहीं भरा जा सकता।</p>"
+                        "text": "<p>यदि {{cellsWithExtraCandidateList}} में केवल {{urNotes}} आते हैं तो इस पहेली के दो समाधान होंगे। एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। लेकिन इस पहेली का केवल एक समाधान है इसलिए इन 4 सेल्स को केवल {{urNotes}} से नहीं भरा जा सकता।</p>"
                     },
                     {
                         "text": "<p>अब असंभव परिदृश्य से बचने के दो विकल्प हैं, या तो {{firstCellWithExtraCandidates}} {{extraCandidatesInFirstCell}} से भरा जाए या {{secondCellWithExtraCandidates}} {{extraCandidatesInSecondCell}} से भरा जाए। या ये दोनों सच भी हो सकते हैं। इन सभी विकल्पों में एक बात हमेशा सच होगी, {{removableCandidate}} {{cellsWithExtraCandidateList}} से हटा दिया जाएगा। ध्यान दें कि {{xWingCandidate}} {{rowHostHouses}} और {{columnHostHouses}} में एक <a href=\"PERFECT_X_WING\">एक्स-विंग</a> बनाता है। यह समझने की कुंजी है।</p>"

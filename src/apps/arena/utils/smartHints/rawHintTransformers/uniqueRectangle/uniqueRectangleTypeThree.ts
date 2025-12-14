@@ -1,23 +1,16 @@
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _forEach from '@lodash/forEach'
-import _filter from '@lodash/filter'
-import _difference from '@lodash/difference'
 
 import { CellAndRemovableNotes, URTransformerArgs, UniqueRectangleTypeThreeRawHint } from '../../types/uniqueRectangle'
 
-import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem } from '../../types'
-import _map from '@lodash/map'
-import { getCandidatesListText, getHintExplanationStepsFromHintChunks, setCellBGColor, setCellNotesColor } from '../../util'
+import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem, SmartHintsTranslationsTexts } from '../../types'
+import { getAxisValuesFromTranslations, getCandidatesListText, getHintExplanationStepsFromHintChunks, setCellBGColor, setCellNotesColor } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { getCellAxesValues } from '@domain/board/utils/housesAndCells'
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
-import { HINT_EXPLANATION_TEXTS } from '../../stringLiterals'
+import { HINTS_IDS } from '../../constants'
 import { UR_TYPES } from '../../uniqueRectangle/constants'
 import { getCellsAxesValuesListText } from '../helpers'
 import { getURHostCellsWithExtraCandidates, getExtraNotesInURCell } from './helpers'
-import { getCellsDifference } from '../../../util'
-import { getLinkHTMLText } from 'src/apps/hintsVocabulary/vocabExplainations/utils'
-import { HINTS_VOCAB_IDS } from '../constants'
+import { getCellsDifference, getCellAxesValues } from '../../../util'
 
 const getCellsToFocusData = (
     ur: UniqueRectangleTypeThreeRawHint,
@@ -41,34 +34,41 @@ const getCellsToFocusData = (
     return cellsToFocusData
 }
 
-const getHintExplanationText = (ur: UniqueRectangleTypeThreeRawHint, notes: Notes) => {
+const getHintExplanationText = (
+    ur: UniqueRectangleTypeThreeRawHint,
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const { texts, ngHintTexts } = smartHintsTranslationsTexts.explanation[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_THREE]
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const { conjugations } = smartHintsTranslationsTexts.common
+
     const cellsWithExtraCandidates = getURHostCellsWithExtraCandidates(ur, notes)
     const ngCellsOutsideURHostCells = getCellsDifference(ur.nakedPairCells, ur.hostCells)
-    const msgPlaceholdersValues = {
-        ngCandidates: getCandidatesListText(ur.nakedPairNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-        cellsWithExtraCandidates: getCellsAxesValuesListText(cellsWithExtraCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        urHostCells: getCellsAxesValuesListText(ur.hostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        urNotes: getCandidatesListText(ur.urNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
 
-        firstCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[0]),
-        firstCellExtraCandidates: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[0], notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-        secondCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[1]),
-        secondCellExtraCandidates: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[1], notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-        firstNGCells: getCellsAxesValuesListText([...ngCellsOutsideURHostCells, cellsWithExtraCandidates[0]]),
-        secondNGCells: getCellsAxesValuesListText([...ngCellsOutsideURHostCells, cellsWithExtraCandidates[1]]),
-        ngHintText: ngCellsOutsideURHostCells.length === 1 ? getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_DOUBLE, 'Naked Double')
-            : getLinkHTMLText(HINTS_VOCAB_IDS.NAKED_TRIPPLE, 'Naked Tripple'),
+    const msgPlaceholdersValues = {
+        ngCandidates: getCandidatesListText(ur.nakedPairNotes, conjugations.or),
+        cellsWithExtraCandidates: getCellsAxesValuesListText(cellsWithExtraCandidates, conjugations.and, axesValues),
+        urHostCells: getCellsAxesValuesListText(ur.hostCells, conjugations.and, axesValues),
+        urNotes: getCandidatesListText(ur.urNotes, conjugations.and),
+
+        firstCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[0], axesValues),
+        firstCellExtraCandidates: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[0], notes), conjugations.or),
+        secondCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[1], axesValues),
+        secondCellExtraCandidates: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[1], notes), conjugations.or),
+        firstNGCells: getCellsAxesValuesListText([...ngCellsOutsideURHostCells, cellsWithExtraCandidates[0]], undefined, axesValues),
+        secondNGCells: getCellsAxesValuesListText([...ngCellsOutsideURHostCells, cellsWithExtraCandidates[1]], undefined, axesValues),
+        ngHintText: ngCellsOutsideURHostCells.length === 1 ? ngHintTexts.nakedDouble : ngHintTexts.nakedTripple,
 
         firstURNote: ur.urNotes[0],
         secondURNote: ur.urNotes[1],
-        firstHostCell: getCellAxesValues(ur.hostCells[0]),
-        secondHostCell: getCellAxesValues(ur.hostCells[1]),
-        thirdHostCell: getCellAxesValues(ur.hostCells[2]),
-        fourthHostCell: getCellAxesValues(ur.hostCells[3])
+        firstHostCell: getCellAxesValues(ur.hostCells[0], axesValues),
+        secondHostCell: getCellAxesValues(ur.hostCells[1], axesValues),
+        thirdHostCell: getCellAxesValues(ur.hostCells[2], axesValues),
+        fourthHostCell: getCellAxesValues(ur.hostCells[3], axesValues)
     }
 
-    const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_THREE]
-    const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    const hintChunks = texts.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
     return getHintExplanationStepsFromHintChunks(hintChunks, false)
 }
 
@@ -86,13 +86,15 @@ const getCellsToFocus = (ur: UniqueRectangleTypeThreeRawHint) => {
 export const transformURTypeThree = ({
     rawHint: _ur,
     notesData,
-    smartHintsColorSystem
+    smartHintsColorSystem,
+    smartHintsTranslationsTexts
 }: URTransformerArgs): TransformedRawHint => {
     const ur = _ur as UniqueRectangleTypeThreeRawHint
+    const generalTitleText = smartHintsTranslationsTexts.title[HINTS_IDS.UNIQUE_RECTANGLE]
     return {
-        title: 'Unique Rectangle-3',
+        title: `${generalTitleText}-3`,
         hasTryOut: false,
-        steps: getHintExplanationText(ur, notesData),
+        steps: getHintExplanationText(ur, notesData, smartHintsTranslationsTexts),
         cellsToFocusData: getCellsToFocusData(ur, smartHintsColorSystem),
         focusedCells: getCellsToFocus(ur as UniqueRectangleTypeThreeRawHint),
         // tryOutAnalyserData: {

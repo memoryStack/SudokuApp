@@ -623,14 +623,38 @@
                 "<p>If {{extraNote}} doesn't comes in any of {{cellsWithExtraCandidateList}} then each of these 4 cells {{urHostCellsList}} will be left with two candidates {{firstURNote}} and {{secondURNote}}. It will result in two ways to fill these cells without impacting other cells in any way.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}</p>",
                 "This puzzle has only one valid solution so it is impossible to fill these 4 cells with just {{firstURNote}} and {{secondURNote}}. So in one of {{cellsWithExtraCandidateList}} {{extraNote}} will come and due to that {{extraNote}} will be removed from the cells where it is highlighted in red color."
             ],
-            "typeThree": [
-                "<p>If none of {{ngCandidates}} come in {{cellsWithExtraCandidates}} then these 4 cells {{urHostCells}} will be filled by {{urNotes}} only and it would lead to two ways of solving this puzzle.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}. This is not possible since this puzzle has only one solution.</p>",
-                "<p>So conclusion is that either in {{firstCellWithExtraCandidates}} {{firstCellExtraCandidates}} has to come or in {{secondCellWithExtraCandidates}} {{secondCellExtraCandidates}} has to come. Whichever is the case, either {{firstNGCells}} will make a {{ngHintText}} or {{secondNGCells}} will make a {{ngHintText}}. And due to this we can remove the numbers highlighted in red color.</p>"
-            ],
-            "typeFour": [
-                "<p>Notice that {{omissonNote}} is making an <a href=\"OMISSION\">Omission</a> in {{omissionHostHouse}}. It means that {{omissonNote}} has to come in one of {{cellsWithExtraCandidatesOrConcat}}. And if {{removableNote}} also come in {{cellsWithExtraCandidatesOrConcat}} then it will result in two ways to fill these 4 cells without impacting other cells in any way.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}</p>",
-                "<p>This puzzle has only one valid solution so it is impossible to fill all of these 4 cells with just {{firstURNote}} and {{secondURNote}}. So only option left is to remove {{removableNote}} from {{cellsWithExtraCandidatesAndConcat}} because of two reasons. First, {{omissonNote}} will definitely come in one of {{cellsWithExtraCandidatesOrConcat}} and second, {{firstURNote}} and {{secondURNote}} make a <a href=\"NAKED_DOUBLE\">Naked Double</a> in {{cellsHavingOnlyURNotes}} cells so {{firstURNote}} and {{secondURNote}} both will definitely come in these two cells.</p>"
-            ],
+            "typeThree": {
+                "texts": [
+                    "<p>If none of {{ngCandidates}} come in {{cellsWithExtraCandidates}} then these 4 cells {{urHostCells}} will be filled by {{urNotes}} only and it would lead to two ways of solving this puzzle.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}. This is not possible since this puzzle has only one solution.</p>",
+                    "<p>So conclusion is that either in {{firstCellWithExtraCandidates}} {{firstCellExtraCandidates}} has to come or in {{secondCellWithExtraCandidates}} {{secondCellExtraCandidates}} has to come. Whichever is the case, either {{firstNGCells}} will make a {{ngHintText}} or {{secondNGCells}} will make a {{ngHintText}}. And due to this we can remove the numbers highlighted in red color.</p>"
+                ],
+                "ngHintTexts": {
+                    "nakedDouble": "<a href=\"NAKED_DOUBLE\">Naked Double</a>",
+                    "nakedTripple": "<a href=\"NAKED_TRIPPLE\">Naked Tripple</a>"
+                }
+            },
+            "typeFour": {
+                "texts": [
+                    "<p>Notice that {{omissonNote}} is making an <a href=\"OMISSION\">Omission</a> in {{omissionHostHouse}}. It means that {{omissonNote}} has to come in one of {{cellsWithExtraCandidatesOrConcat}}. And if {{removableNote}} also come in {{cellsWithExtraCandidatesOrConcat}} then it will result in two ways to fill these 4 cells without impacting other cells in any way.<br/>One way is to fill {{firstURNote}} in {{firstHostCell}}, {{secondURNote}} in {{secondHostCell}}, {{firstURNote}} in {{thirdHostCell}} and {{secondURNote}} in {{fourthHostCell}}. And second way is to fill {{secondURNote}} in {{firstHostCell}}, {{firstURNote}} in {{secondHostCell}}, {{secondURNote}} in {{thirdHostCell}} and {{firstURNote}} in {{fourthHostCell}}</p>",
+                    "<p>This puzzle has only one valid solution so it is impossible to fill all of these 4 cells with just {{firstURNote}} and {{secondURNote}}. So only option left is to remove {{removableNote}} from {{cellsWithExtraCandidatesAndConcat}} because of two reasons. First, {{omissonNote}} will definitely come in one of {{cellsWithExtraCandidatesOrConcat}} and second, {{firstURNote}} and {{secondURNote}} make a <a href=\"NAKED_DOUBLE\">Naked Double</a> in {{cellsHavingOnlyURNotes}} cells so {{firstURNote}} and {{secondURNote}} both will definitely come in these two cells.</p>"
+                ],
+                "config": {
+                    "houseNumAndName": {
+                        "houseNum": {
+                            "type": "houseNumber",
+                            "form": {
+                                "row": "axis",
+                                "col": "number_ordinal",
+                                "block": "number_ordinal"
+                            }
+                        },
+                        "houseName": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    }
+                }
+            },
             "typeSix": {
                 "texts": [
                     {

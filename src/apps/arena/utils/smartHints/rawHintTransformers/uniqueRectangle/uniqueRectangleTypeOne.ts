@@ -4,15 +4,15 @@ import _difference from '@lodash/difference'
 
 import { BaseURRawHint, CellAndRemovableNotes, URTransformerArgs } from '../../types/uniqueRectangle'
 
-import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem } from '../../types'
+import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem, SmartHintsTranslationsTexts } from '../../types'
 import _map from '@lodash/map'
-import { getCandidatesListText, getHintExplanationStepsFromHintChunks, setCellBGColor, setCellNotesColor } from '../../util'
+import { getAxisValuesFromTranslations, getCandidatesListText, getHintExplanationStepsFromHintChunks, setCellBGColor, setCellNotesColor } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { areSameCells, getCellAxesValues } from '@domain/board/utils/housesAndCells'
+import { areSameCells } from '@domain/board/utils/housesAndCells'
 import { NotesRecord } from '@domain/board/records/notesRecord'
-import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
-import { HINT_EXPLANATION_TEXTS } from '../../stringLiterals'
+import { HINTS_IDS } from '../../constants'
 import { UR_TYPES } from '../../uniqueRectangle/constants'
+import { getCellAxesValues } from '../../../util'
 
 // move it in helpers
 const getRemovableNotesVsHostCells = (ur: BaseURRawHint) => {
@@ -49,22 +49,31 @@ const getCellsToFocusData = (
     return cellsToFocusData
 }
 
-const getHintExplanationText = (ur: BaseURRawHint, notes: Notes) => {
+const getHintExplanationText = (
+    ur: BaseURRawHint,
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const typeOneTexts = smartHintsTranslationsTexts.explanation[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_ONE]
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const { conjugations } = smartHintsTranslationsTexts.common
+
     const removableNotesHostCell = ur.cellAndRemovableNotes[0].cell
     const cellNotes = NotesRecord.getCellVisibleNotesList(notes, removableNotesHostCell)
     const extraNotes = _difference(cellNotes, ur.urNotes)
 
-    const extraNotesText = getCandidatesListText(extraNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR)
+    const extraNotesText = getCandidatesListText(extraNotes, conjugations.or)
     const firstURNote = ur.urNotes[0]
     const secondURNote = ur.urNotes[1]
-    const cellWithExtraCandidates = getCellAxesValues(removableNotesHostCell)
-    const firstHostCell = getCellAxesValues(ur.hostCells[0])
-    const secondHostCell = getCellAxesValues(ur.hostCells[1])
-    const thirdHostCell = getCellAxesValues(ur.hostCells[2])
-    const fourthHostCell = getCellAxesValues(ur.hostCells[3])
+    const cellWithExtraCandidates = getCellAxesValues(removableNotesHostCell, axesValues)
+    const firstHostCell = getCellAxesValues(ur.hostCells[0], axesValues)
+    const secondHostCell = getCellAxesValues(ur.hostCells[1], axesValues)
+    const thirdHostCell = getCellAxesValues(ur.hostCells[2], axesValues)
+    const fourthHostCell = getCellAxesValues(ur.hostCells[3], axesValues)
 
-    const msgTemplates = extraNotes.length === 1 ? HINT_EXPLANATION_TEXTS[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_ONE].singleExtraCandidateMsg
-        : HINT_EXPLANATION_TEXTS[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_ONE].multipleExtraCandidateMsg
+    const msgTemplates = extraNotes.length === 1
+        ? typeOneTexts.singleExtraCandidate
+        : typeOneTexts.multipleExtraCandidate
 
     const msgPlaceholdersValues = {
         extraNotesText,
@@ -84,12 +93,14 @@ const getHintExplanationText = (ur: BaseURRawHint, notes: Notes) => {
 export const transformURTypeOne = ({
     rawHint: ur,
     notesData,
-    smartHintsColorSystem
+    smartHintsColorSystem,
+    smartHintsTranslationsTexts
 }: URTransformerArgs): TransformedRawHint => {
+    const generalTitleText = smartHintsTranslationsTexts.title[HINTS_IDS.UNIQUE_RECTANGLE]
     return {
-        title: 'Unique Rectangle-1',
+        title: `${generalTitleText}-1`,
         hasTryOut: false,
-        steps: getHintExplanationText(ur, notesData),
+        steps: getHintExplanationText(ur, notesData, smartHintsTranslationsTexts),
         cellsToFocusData: getCellsToFocusData(ur, smartHintsColorSystem),
         focusedCells: ur.hostCells,
         // tryOutAnalyserData: {
