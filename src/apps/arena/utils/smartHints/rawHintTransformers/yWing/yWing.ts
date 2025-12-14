@@ -224,6 +224,9 @@ export const transformYWingRawHint = ({
         inputPanelNumbersVisibility: getTryOutInputPanelNumbersVisibility([commonNoteInWings, ...pivot.notes]) as InputPanelVisibleNumbers,
 
         cellsRestrictedNumberInputs: getCellsRestrictedNumberInputs(commonNoteInWings, eliminableNotesCells, notesData),
-        restrictedNumberInputMsg: `please enter only ${commonNoteInWings} here. we are not commenting anything about other numbers in this cell`,
+        restrictedNumberInputMsg: dynamicInterpolation(
+            smartHintsTranslationsTexts.tryOutAnalyser.yWing.restrictedNumberInputMsg,
+            { commonNoteInWings }
+        ),
     }
 }

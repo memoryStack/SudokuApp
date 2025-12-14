@@ -170,6 +170,9 @@ export const transformXYZWingRawHint = ({
         clickableCells: getAllFocusedCellsCoordinates(xyzWing),
         cellsRestrictedNumberInputs: getTryOutCellsRestrictedNumberInputs(xyzWing, notesData),
         unclickableCellClickInTryOutMsg: smartHintsTranslationsTexts.tryOutAnalyser.unclickableCellClickedInTryOutMsg.clickAnyHighlightedCell,
-        restrictedNumberInputMsg: `you can only fill ${xyzWing.wingsAndPivotCommonNote} because we are not commenting about any other number in this cell`
+        restrictedNumberInputMsg: dynamicInterpolation(
+            smartHintsTranslationsTexts.tryOutAnalyser.xyzWing.restrictedNumberInputMsg,
+            { wingsAndPivotCommonNote: xyzWing.wingsAndPivotCommonNote }
+        )
     }
 }

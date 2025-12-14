@@ -1,5 +1,6 @@
 {
     "unattainableState": "not sure how we reached here",
+    "restrictedNumberInputMsg": "input the numbers which are highlighted in red color in this cell. other numbers don't help in learning this hint.",
     "unclickableCellClickedInTryOutMsg": {
         "singular": "you can select cells which have {{candidate}} candidate highlighted in green or red color",
         "plural": "you can select cells which have {{candidatesListText}} candidates highlighted in green or red color",
@@ -47,6 +48,7 @@
         "bothLegValidFill": "{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} without any error and notice that all the {{candidate}}s that were in red color are also removed.\nyou can fill {{candidate}} in these {{houseFullName}} in other combinations as well, in all such combinations all the {{candidate}}s that were in red color will be removed"
     },
     "yWing": {
+        "restrictedNumberInputMsg": "please enter only {{commonNoteInWings}} here. we are not commenting anything about other numbers in this cell",
         "noInput": "try to fill {{commonNoteInWings}} where it is highlighted in red color to see why these should be removed",
         "eliminableNotesCellFilled": {
             "pivotCellWithoutCandidate": "{{pivotCell}} is left with no candidates. to fix this error remove {{commonNoteInWings}} from {{eliminableNotesFilledCells}} and then fill one of these wings cells with {{commonNoteInWings}}",
@@ -121,6 +123,7 @@
         }
     },
     "xyzWing": {
+        "restrictedNumberInputMsg": "you can only fill {{wingsAndPivotCommonNote}} because we are not commenting about any other number in this cell",
         "noInput": "fill {{xyzCellsCandidates}} in any of these highlighted cells to understand why {{removableCandidate}} can not come in {{removableNoteHostCells}}",
         "removableNoteCellFilled": {
             "noOtherCellFilled": "<p>notice the Naked Single created in {{nakedSinglesCells}}. Now fill these cells to understand the fault in previous step</p>",

@@ -1,5 +1,6 @@
 {
     "unattainableState": "यह स्थिति कैसे आई पता नहीं",
+    "restrictedNumberInputMsg": "इस सेल में लाल रंग में हाइलाइट किए गए अंक भरें। अन्य अंक इस संकेत को सीखने में मदद नहीं करते।",
     "unclickableCellClickedInTryOutMsg": {
         "singular": "आप उन सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किया गया {{candidate}} उम्मीदवार है",
         "plural": "आप उन सेल्स को चुन सकते हैं जिनमें {{candidatesListText}} के उम्मीदवार हरे या लाल रंग से हाइलाइट किए गए हैं",
@@ -47,6 +48,7 @@
         "bothLegValidFill": "{{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullName}} में बिना किसी त्रुटि के भरा गया है और ध्यान दें कि लाल रंग में थे सभी {{candidate}} भी हटा दिए गए हैं।\nआप इन {{houseFullName}} में {{candidate}} अन्य संयोजनों में भी भर सकते हैं, ऐसे सभी संयोजनों में लाल रंग में थे सभी {{candidate}} हटा दिए जाएंगे"
     },
     "yWing": {
+        "restrictedNumberInputMsg": "कृपया यहाँ केवल {{commonNoteInWings}} भरें। हम इस सेल में अन्य अंकों के बारे में कोई टिप्पणी नहीं कर रहे।",
         "noInput": "यह देखने के लिए कि इन्हें क्यों हटाया जाना चाहिए, जहाँ {{commonNoteInWings}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें",
         "eliminableNotesCellFilled": {
             "pivotCellWithoutCandidate": "{{pivotCell}} में कोई उम्मीदवार नहीं बचा। इस त्रुटि को ठीक करने के लिए {{eliminableNotesFilledCells}} से {{commonNoteInWings}} हटाएं और फिर इनमें से किसी विंग्स सेल को {{commonNoteInWings}} से भरें",
@@ -121,6 +123,7 @@
         }
     },
     "xyzWing": {
+        "restrictedNumberInputMsg": "आप केवल {{wingsAndPivotCommonNote}} भर सकते हैं क्योंकि हम इस सेल में किसी अन्य अंक के बारे में टिप्पणी नहीं कर रहे।",
         "noInput": "यह समझने के लिए कि {{removableNoteHostCells}} में {{removableCandidate}} क्यों नहीं आ सकता, इन हाइलाइट किए गए सेल में से किसी में {{xyzCellsCandidates}} भरें",
         "removableNoteCellFilled": {
             "noOtherCellFilled": "<p>{{nakedSinglesCells}} में बना नेकेड सिंगल देखें। पिछले चरण में गलती समझने के लिए अब इन सेल को भरें</p>",

@@ -69,8 +69,34 @@ export type TryOutResult = {
 
 export type InputPanelNumbersVisibility = InputPanelVisibleNumbers
 
+export type TryOutAnalyserHintTranslation = Record<string, unknown> & {
+    restrictedNumberInputMsg?: string
+    unclickableCellClickedInTryOutMsg?: string
+}
+
+export type TryOutAnalyserTranslations = Record<string, TryOutAnalyserHintTranslation | unknown> & {
+    restrictedNumberInputMsg: string
+    unclickableCellClickedInTryOutMsg: {
+        singular: string
+        plural: string
+        clickAnyHighlightedCell: string
+    }
+    yWing: TryOutAnalyserHintTranslation & {
+        restrictedNumberInputMsg: string
+    }
+    xyzWing: TryOutAnalyserHintTranslation & {
+        restrictedNumberInputMsg: string
+    }
+    hiddenGroup: TryOutAnalyserHintTranslation & {
+        unclickableCellClickedInTryOutMsg: string
+    }
+    remotePairs: TryOutAnalyserHintTranslation & {
+        unclickableCellClickedInTryOutMsg: string
+    }
+}
+
 export type SmartHintsTranslationsTexts = {
-    tryOutAnalyser: Record<string, object>
+    tryOutAnalyser: TryOutAnalyserTranslations
     explanation: HintExplainationTexts
     title: Record<HINTS_IDS, string>
     common: Record<string, string | object>

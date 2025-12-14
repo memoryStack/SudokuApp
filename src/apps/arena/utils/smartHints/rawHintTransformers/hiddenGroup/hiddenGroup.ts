@@ -452,7 +452,6 @@ export const transformHiddenGroupRawHint = ({
             groupCandidates,
             notesData,
         ),
-        restrictedNumberInputMsg:
-            'input the numbers which are highlighted in red color in this cell. other numbers don\'t help in learning this hint.',
+        restrictedNumberInputMsg: smartHintsTranslationsTexts.tryOutAnalyser.restrictedNumberInputMsg,
     }
 }
