@@ -19,9 +19,8 @@ import {
     Chain,
     NotesToHighlightData,
     NotesRemovalHintAction,
-    InputPanelNumbersVisibility,
-    TryOutInputsColors,
     ChainLink,
+    SmartHintsTranslationsTexts
 } from '../../types'
 import { XYChainTransformerArgs } from './types'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
@@ -34,6 +33,7 @@ import {
     transformCellBGColor,
     setCellNotesHighlightDataInHintResult,
     getTryOutInputPanelNumbersVisibility,
+    getAxisValuesFromTranslations,
 } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { LINK_TYPES } from '../../chains/xChain/xChain.constants'
@@ -79,15 +79,23 @@ const getUICellsToFocusData = (
     return result
 }
 
-const getExplainationStepsText = (xyChain: XYChainRawHint, notes: Notes) => {
+const getExplainationStepsText = (
+    xyChain: XYChainRawHint,
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
     const { note: removableNote, chain, removableNotesHostCells } = xyChain
-    const chainFirstCellAxesText = getCellAxesValues(chain[0])
-    const chainSecondCellAxesText = getCellAxesValues(chain[1])
-    const chainLastCellAxesText = getCellAxesValues(_last(chain))
+
+    const { texts, chainTexts } = smartHintsTranslationsTexts.explanation[HINTS_IDS.XY_CHAIN]
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+
+    const chainFirstCellAxesText = getCellAxesValues(chain[0], axesValues)
+    const chainSecondCellAxesText = getCellAxesValues(chain[1], axesValues)
+    const chainLastCellAxesText = getCellAxesValues(_last(chain), axesValues)
 
     const firstCellCandidateOtherThanRemovableCandidate = _difference(NotesRecord.getCellVisibleNotesList(notes, chain[0]), [removableNote])[0]
 
-    const chainCellFillingText = '{{cell}} must be filled by {{candidate}}'
+    const chainCellFillingText = chainTexts.chainCellFillingText
 
     let previousCellFilledCandidate = firstCellCandidateOtherThanRemovableCandidate
     const chainFillingWay = _compact(_map(chain, (cell: Cell, index: number) => {
@@ -95,23 +103,26 @@ const getExplainationStepsText = (xyChain: XYChainRawHint, notes: Notes) => {
 
         const currentCellCandidate = _difference(NotesRecord.getCellVisibleNotesList(notes, cell), [previousCellFilledCandidate])[0]
         previousCellFilledCandidate = currentCellCandidate
-        return dynamicInterpolation(chainCellFillingText, { cell: getCellAxesValues(cell), candidate: currentCellCandidate })
+        return dynamicInterpolation(chainCellFillingText, { cell: getCellAxesValues(cell, axesValues), candidate: currentCellCandidate })
     }))
 
     const placeholdersValues = {
         chainFirstCell: chainFirstCellAxesText,
         chainSecondCell: chainSecondCellAxesText,
         chainLastCell: chainLastCellAxesText,
-        chain: joinStringsListWithArrow(getCellsAxesList(chain)),
+        chain: joinStringsListWithArrow(getCellsAxesList(chain, axesValues)),
         firstLinkCommonCandidate: getCommonNoteInCells(chain[0], chain[1], notes),
         removableNote,
         firstCellCandidateOtherThanRemovableCandidate,
         chainFillingWay: chainFillingWay.join(', '),
-        removableNotesHostCells: getCellsAxesValuesListText(removableNotesHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
+        removableNotesHostCells: getCellsAxesValuesListText(
+            removableNotesHostCells,
+            smartHintsTranslationsTexts.common.conjugations.and as string,
+            axesValues
+        ),
     }
 
-    const rawExplainationTexts = HINT_EXPLANATION_TEXTS[HINTS_IDS.XY_CHAIN]
-    const explainationTextsWithPlaceholdersFilled = _map(rawExplainationTexts, (aStepRawText: string) => dynamicInterpolation(aStepRawText, placeholdersValues))
+    const explainationTextsWithPlaceholdersFilled = _map(texts, ({ text }: { text: string }) => dynamicInterpolation(text, placeholdersValues))
 
     return getHintExplanationStepsFromHintChunks(explainationTextsWithPlaceholdersFilled, false)
 }
@@ -176,17 +187,19 @@ const getApplyHintData = (xyChain: XYChainRawHint) => {
     return result
 }
 
-export const transformXYChainRawHint = ({ rawHint: xyChain, notesData, smartHintsColorSystem }: XYChainTransformerArgs): TransformedRawHint => {
+export const transformXYChainRawHint = ({
+    rawHint: xyChain, notesData, smartHintsColorSystem, smartHintsTranslationsTexts
+}: XYChainTransformerArgs): TransformedRawHint => {
     const chainLinks = getSvgData(xyChain, notesData)
     const cellsToFocusData = getUICellsToFocusData(xyChain, smartHintsColorSystem, notesData)
     addLinkCellsNotesHighlightedColor(chainLinks, notesData, cellsToFocusData)
 
     return ({
         type: HINTS_IDS.XY_CHAIN,
-        title: HINT_ID_VS_TITLES[HINTS_IDS.XY_CHAIN],
+        title: smartHintsTranslationsTexts.title[HINTS_IDS.XY_CHAIN],
         cellsToFocusData,
         // focusedCells: clickableCells,
-        steps: getExplainationStepsText(xyChain, notesData),
+        steps: getExplainationStepsText(xyChain, notesData, smartHintsTranslationsTexts),
         svgProps: { data: chainLinks },
         applyHint: getApplyHintData(xyChain),
         hasTryOut: false, // TODO:

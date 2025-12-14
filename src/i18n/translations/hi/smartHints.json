@@ -529,10 +529,19 @@
                 }
             }
         },
-        "xyChain": [
-            "<p>सेल की चेन {{chain}} देखें। इन सभी सेल में दो उम्मीदवार हैं और किन्हीं दो क्रमागत सेल में एक उम्मीदवार समान है। उदाहरण के लिए, {{chainFirstCell}} और {{chainSecondCell}} दोनों में {{firstLinkCommonCandidate}} उनके उम्मीदवार के रूप में है। और यह भी ध्यान दें कि {{chainFirstCell}}(पहला सेल) और {{chainLastCell}}(अंतिम सेल) दोनों में {{removableNote}} उनके उम्मीदवार के रूप में है।\nइस प्रकार की सेल की चेन को XY-चेन कहते हैं।</p>",
-            "<p>अब {{chainFirstCell}} को दो तरीकों से भरा जा सकता है।<br /><b>पहला:</b> यहाँ {{removableNote}} भरें।<br /><b>दूसरा:</b> यहाँ {{firstCellCandidateOtherThanRemovableCandidate}} भरें। इसके कारण {{chainFillingWay}}।<br />ध्यान दें कि दोनों तरीकों में, या तो {{chainFirstCell}} या {{chainLastCell}} {{removableNote}} से भरा जाएगा।<br />इसलिए {{removableNotesHostCells}} से सभी {{removableNote}} हटा दिए जाएंगे क्योंकि ये सेल इस चेन के पहले और अंतिम सेल के साथ हाउस साझा करते हैं।</p>"
-        ],
+        "xyChain": {
+            "texts": [
+                {
+                    "text": "<p><a href=\"CELL\">सेल्स</a> की चेन {{chain}} देखें। इन सभी सेल्स में दो <a href=\"CANDIDATE\">उम्मीदवार</a> हैं और किन्हीं दो क्रमागत सेल्स में एक उम्मीदवार समान है। उदाहरण के लिए, {{chainFirstCell}} और {{chainSecondCell}} दोनों में {{firstLinkCommonCandidate}} उनके उम्मीदवार के रूप में है। और यह भी ध्यान दें कि {{chainFirstCell}}(पहला सेल) और {{chainLastCell}}(अंतिम सेल) दोनों में {{removableNote}} उनके उम्मीदवार के रूप में है।\nइस प्रकार की सेल की चेन को एक्सवाई-चेन कहते हैं।</p>"
+                },
+                {
+                    "text": "<p>अब {{chainFirstCell}} को दो तरीकों से भरा जा सकता है।<br /><b>पहला:</b> यहाँ {{removableNote}} भरें।<br /><b>दूसरा:</b> यहाँ {{firstCellCandidateOtherThanRemovableCandidate}} भरें। इसके कारण {{chainFillingWay}}।<br />ध्यान दें कि दोनों तरीकों में, या तो {{chainFirstCell}} या {{chainLastCell}} {{removableNote}} से भरा जाएगा।<br />इसलिए {{removableNotesHostCells}} से सभी {{removableNote}} हटा दिए जाएंगे क्योंकि ये सेल इस चेन के पहले और अंतिम सेल के साथ <a href=\"HOUSE\">हाउस</a> साझा करते हैं।</p>"
+                }
+            ],
+            "chainTexts": {
+                "chainCellFillingText": "{{cell}} को {{candidate}} से भरा जाना ही चाहिए"
+            }
+        },
         "emptyRectangle": {
             "texts": [
                 {

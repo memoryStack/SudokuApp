@@ -529,10 +529,19 @@
                 }
             }
         },
-        "xyChain": [
-            "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have two <a href=\"CANDIDATE\">candidates</a> and any two consecutive cells have one candidate common. For Example, {{chainFirstCell}} and {{chainSecondCell}} both have {{firstLinkCommonCandidate}} as their candidate. And also note that {{chainFirstCell}}(first cell) and {{chainLastCell}}(last cell) both have {{removableNote}} as their candidate in them.\nThis type of chain of cells is called XY-Chain.</p>",
-            "<p>Now {{chainFirstCell}} can be filled in two ways.<br /><b>First:</b> Fill {{removableNote}} here.<br /><b>Second:</b> Fill {{firstCellCandidateOtherThanRemovableCandidate}} here. Due to this {{chainFillingWay}}.<br />Notice that in both ways, either {{chainFirstCell}} or {{chainLastCell}} will be filled by {{removableNote}}.<br />So all the {{removableNote}}s from {{removableNotesHostCells}} will be removed because these cells share <a href=\"HOUSE\">house</a> with first and last cell of this chain.</p>"
-        ],
+        "xyChain": {
+            "texts": [
+                {
+                    "text": "<p>Notice the Chain of <a href=\"CELL\">cells</a> {{chain}}. All of these cells have two <a href=\"CANDIDATE\">candidates</a> and any two consecutive cells have one candidate common. For Example, {{chainFirstCell}} and {{chainSecondCell}} both have {{firstLinkCommonCandidate}} as their candidate. And also note that {{chainFirstCell}}(first cell) and {{chainLastCell}}(last cell) both have {{removableNote}} as their candidate in them.\nThis type of chain of cells is called XY-Chain.</p>"
+                },
+                {
+                    "text": "<p>Now {{chainFirstCell}} can be filled in two ways.<br /><b>First:</b> Fill {{removableNote}} here.<br /><b>Second:</b> Fill {{firstCellCandidateOtherThanRemovableCandidate}} here. Due to this {{chainFillingWay}}.<br />Notice that in both ways, either {{chainFirstCell}} or {{chainLastCell}} will be filled by {{removableNote}}.<br />So all the {{removableNote}}s from {{removableNotesHostCells}} will be removed because these cells share <a href=\"HOUSE\">house</a> with first and last cell of this chain.</p>"
+                }
+            ],
+            "chainTexts": {
+                "chainCellFillingText": "{{cell}} must be filled by {{candidate}}"
+            }
+        },
         "emptyRectangle": {
             "texts": [
                 {
