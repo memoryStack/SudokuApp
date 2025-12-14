@@ -115,33 +115,11 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
     [HINTS_IDS.W_WING]: t('explanations.wWing', { returnObjects: true }),
     [HINTS_IDS.XYZ_WING]: t('explanations.xyzWing', { returnObjects: true }),
     [HINTS_IDS.UNIQUE_RECTANGLE]: {
-        [UR_TYPES.TYPE_ONE]: {
-            singleExtraCandidateMsg: [
-                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.0', { returnObjects: true }),
-                t('explanations.uniqueRectangle.typeOne.singleExtraCandidate.1', { returnObjects: true }),
-            ],
-            multipleExtraCandidateMsg: [
-                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.0', { returnObjects: true }),
-                t('explanations.uniqueRectangle.typeOne.multipleExtraCandidate.1', { returnObjects: true }),
-            ],
-        },
-        [UR_TYPES.TYPE_TWO]: [
-            t('explanations.uniqueRectangle.typeTwo.0', { returnObjects: true }),
-            t('explanations.uniqueRectangle.typeTwo.1', { returnObjects: true }),
-        ],
-        [UR_TYPES.TYPE_THREE]: [
-            t('explanations.uniqueRectangle.typeThree.0', { returnObjects: true }),
-            t('explanations.uniqueRectangle.typeThree.1', { returnObjects: true }),
-        ],
-        [UR_TYPES.TYPE_FOUR]: [
-            t('explanations.uniqueRectangle.typeFour.0', { returnObjects: true }),
-            t('explanations.uniqueRectangle.typeFour.1', { returnObjects: true }),
-        ],
-        [UR_TYPES.TYPE_SIX]: [
-            t('explanations.uniqueRectangle.typeSix.0', { returnObjects: true }),
-            t('explanations.uniqueRectangle.typeSix.1', { returnObjects: true }),
-            t('explanations.uniqueRectangle.typeSix.2', { returnObjects: true }),
-        ],
+        [UR_TYPES.TYPE_ONE]: t('explanations.uniqueRectangle.typeOne', { returnObjects: true }),
+        [UR_TYPES.TYPE_TWO]: t('explanations.uniqueRectangle.typeTwo', { returnObjects: true }),
+        [UR_TYPES.TYPE_THREE]: t('explanations.uniqueRectangle.typeThree', { returnObjects: true }),
+        [UR_TYPES.TYPE_FOUR]: t('explanations.uniqueRectangle.typeFour', { returnObjects: true }),
+        [UR_TYPES.TYPE_SIX]: t('explanations.uniqueRectangle.typeSix', { returnObjects: true }),
     },
     composite: {
         [HINTS_IDS.NAKED_SINGLE]: t('explanations.nakedSingle.composite', { returnObjects: true }),

@@ -631,11 +631,49 @@
                 "<p>ध्यान दें कि {{omissonNote}} {{omissionHostHouse}} में एक ओमिशन बना रहा है। इसका मतलब है कि {{omissonNote}} को {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आना होगा। और यदि {{removableNote}} भी {{cellsWithExtraCandidatesOrConcat}} में आता है तो इससे इन 4 सेल को भरने के दो तरीके होंगे जो किसी भी तरह से अन्य सेल को प्रभावित नहीं करेंगे।<br/>एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है</p>",
                 "<p>इस पहेली का केवल एक वैध समाधान है इसलिए इन सभी 4 सेल को केवल {{firstURNote}} और {{secondURNote}} से भरना असंभव है। इसलिए बचा एकमात्र विकल्प {{cellsWithExtraCandidatesAndConcat}} से {{removableNote}} को हटाना है दो कारणों से। पहला, {{omissonNote}} निश्चित रूप से {{cellsWithExtraCandidatesOrConcat}} में से किसी एक में आएगा और दूसरा, {{firstURNote}} और {{secondURNote}} {{cellsHavingOnlyURNotes}} सेल में एक नेकेड डबल बनाते हैं इसलिए {{firstURNote}} और {{secondURNote}} दोनों निश्चित रूप से इन दो सेल में आएंगे।</p>"
             ],
-            "typeSix": [
-                "<p>यदि {{cellsWithExtraCandidateList}} में केवल {{urNotes}} आते हैं तो इस पहेली के दो समाधान होंगे। एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। लेकिन इस पहेली का केवल एक समाधान है इसलिए इन 4 सेल को केवल {{urNotes}} से नहीं भरा जा सकता।</p>",
-                "<p>अब असंभव परिदृश्य से बचने के दो विकल्प हैं, या तो {{firstCellWithExtraCandidates}} {{extraCandidatesInFirstCell}} से भरा जाए या {{secondCellWithExtraCandidates}} {{extraCandidatesInSecondCell}} से भरा जाए। या ये दोनों सच भी हो सकते हैं। इन सभी विकल्पों में एक बात हमेशा सच होगी, {{removableCandidate}} {{cellsWithExtraCandidateList}} से हटा दिया जाएगा। ध्यान दें कि {{xWingCandidate}} {{rowHostHouses}} और {{columnHostHouses}} में एक एक्स-विंग बनाता है। यह समझने की कुंजी है।</p>",
-                "<p>यदि {{extraCandidatesInFirstCell}} {{firstCellWithExtraCandidates}} भरता है तो <b>{{urHostCellInSameRowWithFirstCellWithExtraCandidates}} और {{urHostCellInSameColWithFirstCellWithExtraCandidates}}</b> क्रमशः {{firstCellWithExtraCandidatesRowHouse}} और {{firstCellWithExtraCandidatesColumnHouse}} में एकमात्र सेल हैं जहाँ {{xWingCandidate}} आ सकता है। और यदि {{extraCandidatesInSecondCell}} {{secondCellWithExtraCandidates}} भरता है तो <b>{{urHostCellInSameRowWithSecondCellWithExtraCandidates}} और {{urHostCellInSameColWithSecondCellWithExtraCandidates}}</b> क्रमशः {{secondCellWithExtraCandidatesRowHouse}} और {{secondCellWithExtraCandidatesColumnHouse}} में एकमात्र सेल हैं जहाँ {{xWingCandidate}} आ सकता है। दोनों मामलों में {{xWingCandidate}} <b>{{cellsHavingOnlyURNotes}}</b> में भरा जाएगा, इसलिए हम {{cellsWithExtraCandidateList}} से {{xWingCandidate}} हटा सकते हैं।</p>"
-            ]
+            "typeSix": {
+                "texts": [
+                    {
+                        "text": "<p>यदि {{cellsWithExtraCandidateList}} में केवल {{urNotes}} आते हैं तो इस पहेली के दो समाधान होंगे। एक तरीका {{firstHostCell}} में {{firstURNote}}, {{secondHostCell}} में {{secondURNote}}, {{thirdHostCell}} में {{firstURNote}} और {{fourthHostCell}} में {{secondURNote}} भरना है। और दूसरा तरीका {{firstHostCell}} में {{secondURNote}}, {{secondHostCell}} में {{firstURNote}}, {{thirdHostCell}} में {{secondURNote}} और {{fourthHostCell}} में {{firstURNote}} भरना है। लेकिन इस पहेली का केवल एक समाधान है इसलिए इन 4 सेल को केवल {{urNotes}} से नहीं भरा जा सकता।</p>"
+                    },
+                    {
+                        "text": "<p>अब असंभव परिदृश्य से बचने के दो विकल्प हैं, या तो {{firstCellWithExtraCandidates}} {{extraCandidatesInFirstCell}} से भरा जाए या {{secondCellWithExtraCandidates}} {{extraCandidatesInSecondCell}} से भरा जाए। या ये दोनों सच भी हो सकते हैं। इन सभी विकल्पों में एक बात हमेशा सच होगी, {{removableCandidate}} {{cellsWithExtraCandidateList}} से हटा दिया जाएगा। ध्यान दें कि {{xWingCandidate}} {{rowHostHouses}} और {{columnHostHouses}} में एक <a href=\"PERFECT_X_WING\">एक्स-विंग</a> बनाता है। यह समझने की कुंजी है।</p>"
+                    },
+                    {
+                        "text": "<p>यदि {{extraCandidatesInFirstCell}} {{firstCellWithExtraCandidates}} भरता है तो <b>{{urHostCellInSameRowWithFirstCellWithExtraCandidates}} और {{urHostCellInSameColWithFirstCellWithExtraCandidates}}</b> क्रमशः {{firstCellWithExtraCandidatesRowHouse}} और {{firstCellWithExtraCandidatesColumnHouse}} में अकेली ऐसी सेल्स हैं जहाँ {{xWingCandidate}} आ सकता है। और यदि {{extraCandidatesInSecondCell}} {{secondCellWithExtraCandidates}} भरता है तो <b>{{urHostCellInSameRowWithSecondCellWithExtraCandidates}} और {{urHostCellInSameColWithSecondCellWithExtraCandidates}}</b> क्रमशः {{secondCellWithExtraCandidatesRowHouse}} और {{secondCellWithExtraCandidatesColumnHouse}} में अकेली ऐसी सेल्स हैं जहाँ {{xWingCandidate}} आ सकता है। दोनों मामलों में {{xWingCandidate}} <b>{{cellsHavingOnlyURNotes}}</b> में भरा जाएगा, इसलिए हम {{cellsWithExtraCandidateList}} से {{xWingCandidate}} हटा सकते हैं।</p>"
+                    }
+                ],
+                "config": {
+                    "houseNumAndName": {
+                        "houseNum": {
+                            "type": "houseNumber",
+                            "form": {
+                                "row": "axis",
+                                "col": "number_ordinal",
+                                "block": "number_ordinal"
+                            }
+                        },
+                        "houseName": {
+                            "type": "house",
+                            "form": "singular"
+                        }
+                    },
+                    "hostHouses": {
+                        "houseNum": {
+                            "type": "houseNumber",
+                            "form": {
+                                "row": "axis",
+                                "col": "number_ordinal",
+                                "block": "number_ordinal"
+                            }
+                        },
+                        "houseName": {
+                            "type": "house",
+                            "form": "oblique"
+                        }
+                    }
+                }
+            }
         }
     },
     "cellHousesText": {

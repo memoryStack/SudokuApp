@@ -5,18 +5,18 @@ import _difference from '@lodash/difference'
 
 import { BaseURRawHint, CellAndRemovableNotes, URTransformerArgs, UniqueRectangleTypeSixRawHint } from '../../types/uniqueRectangle'
 
-import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem, AddMainNumberHintAction } from '../../types'
+import { TransformedRawHint, CellsFocusData, SmartHintsColorSystem, AddMainNumberHintAction, SmartHintsTranslationsTexts } from '../../types'
 import _map from '@lodash/map'
-import { getCandidatesListText, getHintExplanationStepsFromHintChunks, joinStringsWithComma, setCellBGColor, setCellNotesColor } from '../../util'
+import { getAxisValuesFromTranslations, getCandidatesListText, getHintExplanationStepsFromHintChunks, getHouseWithNumAndNameText, getLanguageSpecificHouseNumText, getLanguageSpecificHouseTypeText, joinStringsWithComma, setCellBGColor, setCellNotesColor } from '../../util'
 import smartHintColorSystemReader from '../../colorSystem.reader'
-import { areSameCells, getCellAxesValues, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
+import { areSameCells, getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 import { HINTS_IDS, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION } from '../../constants'
 import { HINT_EXPLANATION_TEXTS } from '../../stringLiterals'
 import { UR_TYPES } from '../../uniqueRectangle/constants'
 import { getCellsAxesValuesListText, getHouseOrdinalNum, getHouseOrdinalNumAndName } from '../helpers'
 import { getURHostCellsWithExtraCandidates, getExtraNotesInURCells, getExtraNotesInURCell, getURHostCellsHavingURNotesOnly } from './helpers'
 import _find from '@lodash/find'
-import { areSameHouses, getCellsCommonHouses, getCellsCommonHousesInfo } from '../../../util'
+import { areSameHouses, getCellsCommonHouses, getCellsCommonHousesInfo, getCellAxesValues } from '../../../util'
 import { HOUSE_TYPE } from '@domain/board/board.constants'
 import { BOARD_MOVES_TYPES } from '@application/constants'
 
@@ -48,46 +48,68 @@ const getURHostCellsSharingGivenHouseWithCell = (ur: BaseURRawHint, house: House
     })
 }
 
-const getHintExplanationText = (ur: UniqueRectangleTypeSixRawHint, notes: Notes) => {
+const getHintExplanationText = (
+    ur: UniqueRectangleTypeSixRawHint,
+    notes: Notes,
+    smartHintsTranslationsTexts: SmartHintsTranslationsTexts
+) => {
+    const { texts, config } = smartHintsTranslationsTexts.explanation[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_SIX]
+    const axesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     const cellsWithExtraCandidates = getURHostCellsWithExtraCandidates(ur, notes)
+    const { conjugations } = smartHintsTranslationsTexts.common
     const msgPlaceholdersValues = {
-        urNotes: getCandidatesListText(ur.urNotes, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-        cellsWithExtraCandidateList: getCellsAxesValuesListText(cellsWithExtraCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-        firstCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[0]),
-        extraCandidatesInFirstCell: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[0], notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
-        secondCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[1]),
-        extraCandidatesInSecondCell: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[1], notes), HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.OR),
+        urNotes: getCandidatesListText(ur.urNotes, conjugations.and),
+        cellsWithExtraCandidateList: getCellsAxesValuesListText(cellsWithExtraCandidates, conjugations.or, axesValues),
+        firstCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[0], axesValues),
+        extraCandidatesInFirstCell: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[0], notes), conjugations.or),
+        secondCellWithExtraCandidates: getCellAxesValues(cellsWithExtraCandidates[1], axesValues),
+        extraCandidatesInSecondCell: getCandidatesListText(getExtraNotesInURCell(ur, cellsWithExtraCandidates[1], notes), conjugations.or),
         removableCandidate: ur.xWing.candidate,
         xWingCandidate: ur.xWing.candidate,
-        rowHostHouses: `${joinStringsWithComma(_map(ur.xWing.houses.rows, (house: House) => getHouseOrdinalNum(house)))} rows`,
-        columnHostHouses: `${joinStringsWithComma(_map(ur.xWing.houses.columns, (house: House) => getHouseOrdinalNum(house)))} columns`,
+        rowHostHouses: `${joinStringsWithComma(_map(ur.xWing.houses.rows, (house: House) => getLanguageSpecificHouseNumText(house, config.hostHouses.houseNum, smartHintsTranslationsTexts)))} ${getLanguageSpecificHouseTypeText(HOUSE_TYPE.ROW, config.hostHouses.houseName, smartHintsTranslationsTexts)}`,
+        columnHostHouses: `${joinStringsWithComma(_map(ur.xWing.houses.columns, (house: House) => getLanguageSpecificHouseNumText(house, config.hostHouses.houseNum, smartHintsTranslationsTexts)))} ${getLanguageSpecificHouseTypeText(HOUSE_TYPE.COL, config.hostHouses.houseName, smartHintsTranslationsTexts)}`,
         urHostCellInSameRowWithFirstCellWithExtraCandidates: getCellAxesValues(getURHostCellsSharingGivenHouseWithCell(
             ur, getCellHouseForHouseType(HOUSE_TYPE.ROW, cellsWithExtraCandidates[0]), cellsWithExtraCandidates[0]
-        )[0]),
+        )[0], axesValues),
         urHostCellInSameColWithFirstCellWithExtraCandidates: getCellAxesValues(getURHostCellsSharingGivenHouseWithCell(
             ur, getCellHouseForHouseType(HOUSE_TYPE.COL, cellsWithExtraCandidates[0]), cellsWithExtraCandidates[0]
-        )[0]),
-        firstCellWithExtraCandidatesRowHouse: getHouseOrdinalNumAndName(getCellHouseForHouseType(HOUSE_TYPE.ROW, cellsWithExtraCandidates[0])),
-        firstCellWithExtraCandidatesColumnHouse: getHouseOrdinalNumAndName(getCellHouseForHouseType(HOUSE_TYPE.COL, cellsWithExtraCandidates[0])),
+        )[0], axesValues),
+        firstCellWithExtraCandidatesRowHouse: getHouseWithNumAndNameText(
+            getCellHouseForHouseType(HOUSE_TYPE.ROW, cellsWithExtraCandidates[0]),
+            config.houseNumAndName,
+            smartHintsTranslationsTexts
+        ),
+        firstCellWithExtraCandidatesColumnHouse: getHouseWithNumAndNameText(
+            getCellHouseForHouseType(HOUSE_TYPE.COL, cellsWithExtraCandidates[0]),
+            config.houseNumAndName,
+            smartHintsTranslationsTexts
+        ),
         urHostCellInSameRowWithSecondCellWithExtraCandidates: getCellAxesValues(getURHostCellsSharingGivenHouseWithCell(
             ur, getCellHouseForHouseType(HOUSE_TYPE.ROW, cellsWithExtraCandidates[1]), cellsWithExtraCandidates[1]
-        )[0]),
+        )[0], axesValues),
         urHostCellInSameColWithSecondCellWithExtraCandidates: getCellAxesValues(getURHostCellsSharingGivenHouseWithCell(
             ur, getCellHouseForHouseType(HOUSE_TYPE.COL, cellsWithExtraCandidates[1]), cellsWithExtraCandidates[1]
-        )[0]),
-        secondCellWithExtraCandidatesRowHouse: getHouseOrdinalNumAndName(getCellHouseForHouseType(HOUSE_TYPE.ROW, cellsWithExtraCandidates[1])),
-        secondCellWithExtraCandidatesColumnHouse: getHouseOrdinalNumAndName(getCellHouseForHouseType(HOUSE_TYPE.COL, cellsWithExtraCandidates[1])),
-        cellsHavingOnlyURNotes: getCellsAxesValuesListText(getURHostCellsHavingURNotesOnly(ur, notes)),
+        )[0], axesValues),
+        secondCellWithExtraCandidatesRowHouse: getHouseWithNumAndNameText(
+            getCellHouseForHouseType(HOUSE_TYPE.ROW, cellsWithExtraCandidates[1]),
+            config.houseNumAndName,
+            smartHintsTranslationsTexts
+        ),
+        secondCellWithExtraCandidatesColumnHouse: getHouseWithNumAndNameText(
+            getCellHouseForHouseType(HOUSE_TYPE.COL, cellsWithExtraCandidates[1]),
+            config.houseNumAndName,
+            smartHintsTranslationsTexts
+        ),
+        cellsHavingOnlyURNotes: getCellsAxesValuesListText(getURHostCellsHavingURNotesOnly(ur, notes), undefined, axesValues),
         firstURNote: ur.urNotes[0],
         secondURNote: ur.urNotes[1],
-        firstHostCell: getCellAxesValues(ur.hostCells[0]),
-        secondHostCell: getCellAxesValues(ur.hostCells[1]),
-        thirdHostCell: getCellAxesValues(ur.hostCells[2]),
-        fourthHostCell: getCellAxesValues(ur.hostCells[3])
+        firstHostCell: getCellAxesValues(ur.hostCells[0], axesValues),
+        secondHostCell: getCellAxesValues(ur.hostCells[1], axesValues),
+        thirdHostCell: getCellAxesValues(ur.hostCells[2], axesValues),
+        fourthHostCell: getCellAxesValues(ur.hostCells[3], axesValues)
     }
 
-    const msgTemplates = HINT_EXPLANATION_TEXTS[HINTS_IDS.UNIQUE_RECTANGLE][UR_TYPES.TYPE_SIX]
-    const hintChunks = msgTemplates.map((msgTemplate: string) => dynamicInterpolation(msgTemplate, msgPlaceholdersValues))
+    const hintChunks = texts.map(({ text }: { text: string }) => dynamicInterpolation(text, msgPlaceholdersValues))
     return getHintExplanationStepsFromHintChunks(hintChunks, false)
 }
 
@@ -115,12 +137,14 @@ const getApplyHintData = (ur: UniqueRectangleTypeSixRawHint, notes: Notes): AddM
 export const transformURTypeSix = ({
     rawHint: ur,
     notesData,
-    smartHintsColorSystem
+    smartHintsColorSystem,
+    smartHintsTranslationsTexts
 }: URTransformerArgs): TransformedRawHint => {
+    const generalTitleText = smartHintsTranslationsTexts.title[HINTS_IDS.UNIQUE_RECTANGLE]
     return {
-        title: 'Unique Rectangle-6',
+        title: `${generalTitleText}-6`,
         hasTryOut: false,
-        steps: getHintExplanationText(ur as UniqueRectangleTypeSixRawHint, notesData),
+        steps: getHintExplanationText(ur as UniqueRectangleTypeSixRawHint, notesData, smartHintsTranslationsTexts),
         cellsToFocusData: getCellsToFocusData(ur, smartHintsColorSystem),
         focusedCells: getCellsToFocus(ur),
         applyHint: getApplyHintData(ur as UniqueRectangleTypeSixRawHint, notesData),
