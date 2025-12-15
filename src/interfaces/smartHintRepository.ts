@@ -33,5 +33,7 @@ export interface SmartHintRepository extends ApplicationLayerSmartHintRepoInterf
     getCellToFocusData: () => CellsFocusData | null
     setCellsToFocusData: (data: CellsFocusData) => void
     setStepsText: ({ steps, title }: { steps: HintSteps, title: string }) => void
+    setUnclickableCellClickInTryOutMsg: (msg: string | undefined) => void
+    setRestrictedNumberInputMsg: (msg: string | undefined) => void
     getTryOutInputsColors: () => TryOutInputsColors | null | undefined
 }

@@ -205,6 +205,12 @@ const SmartHintHC_: React.FC<Props> = ({
             steps: hints[0].steps,
             title: hints[0].title,
         })
+        if (hints[0].unclickableCellClickInTryOutMsg !== undefined) {
+            smartHintRepository.setUnclickableCellClickInTryOutMsg(hints[0].unclickableCellClickInTryOutMsg)
+        }
+        if (hints[0].restrictedNumberInputMsg !== undefined) {
+            smartHintRepository.setRestrictedNumberInputMsg(hints[0].restrictedNumberInputMsg)
+        }
     }, [colorScheme, smartHintsColorSystem, smartHintsTranslationsTexts]) // not listening to rawData on purpose, as it might lead to loop
 
     const smartHintHCRef = useRef(null)

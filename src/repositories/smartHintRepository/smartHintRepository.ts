@@ -31,7 +31,9 @@ const {
     updateBoardDataOnTryOutErase,
     setHints,
     setCellsToFocusData,
-    setStepsText
+    setStepsText,
+    setUnclickableCellClickInTryOutMsg,
+    setRestrictedNumberInputMsg
 } = smartHintHCActions
 
 export const SmartHintRepository: SmartHintRepositoryInterface = {
@@ -78,6 +80,8 @@ export const SmartHintRepository: SmartHintRepositoryInterface = {
     getCellToFocusData: () => getCellToFocusData(getStoreState()),
     setCellsToFocusData: (data) => invokeDispatch(setCellsToFocusData(data)),
     setStepsText: (data) => invokeDispatch(setStepsText(data)),
+    setUnclickableCellClickInTryOutMsg: (msg: string | undefined) => invokeDispatch(setUnclickableCellClickInTryOutMsg(msg)),
+    setRestrictedNumberInputMsg: (msg: string | undefined) => invokeDispatch(setRestrictedNumberInputMsg(msg)),
     getTryOutInputsColors: () => getTryOutInputsColors(getStoreState()),
     getShowSmartHint: () => getShowSmartHint(getStoreState()),
     setUserSawAHint: async () => {

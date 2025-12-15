@@ -40,6 +40,12 @@ const stateHandlers = {
         const { steps, title } = payload
         state.hints[0].steps = steps
         state.hints[0].title = title
+    },
+    setUnclickableCellClickInTryOutMsg: (state, { payload }) => {
+        state.hints[0].unclickableCellClickInTryOutMsg = payload
+    },
+    setRestrictedNumberInputMsg: (state, { payload }) => {
+        state.hints[0].restrictedNumberInputMsg = payload
     }
 }
 
