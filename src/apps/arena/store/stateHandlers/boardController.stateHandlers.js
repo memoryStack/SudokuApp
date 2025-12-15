@@ -1,6 +1,8 @@
 const stateHandlers = {
     resetState: (state, { payload }) => {
-        state = payload
+        return {
+            ...payload,
+        }
     },
     setPencil: (state, { payload }) => {
         state.pencilState = payload
