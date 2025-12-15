@@ -69,6 +69,12 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
         })
         currentSettings = await getKey(GAME_SETTINGS_STORAGE_KEY) ?? { ...DEFAULT_SETTING }
     },
+    updateGameSettingValueWithoutPersisting: (args: UpdateGameSettingValueArgs) => {
+        currentSettings = {
+            ...currentSettings,
+            [args.key]: args.value
+        }
+    },
     fillNumberOnCellClick: () => {
         return currentSettings[GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK] as boolean
     },

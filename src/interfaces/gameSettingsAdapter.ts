@@ -36,6 +36,7 @@ export interface GameSettingsAdapter extends ApplicationLayerGameSettingsAdapter
     remindToTakeHint: () => boolean
     getAllGameSettingsValues: () => Promise<AllGameSettingsValues>
     updateGameSettingValue: (args: UpdateGameSettingValueArgs) => Promise<void>
+    updateGameSettingValueWithoutPersisting: (args: UpdateGameSettingValueArgs) => void
     shouldGameOverOnMistakesThresholdCrossed: () => boolean
     showFeedbackOnMistake: () => boolean
     fillNumberOnCellClick: () => boolean

@@ -10,6 +10,7 @@ import theme from '../../designSystem/tokens.json'
 import darkTheme from '../../designSystem/tokens-dark.json'
 import _isNil from '@lodash/isNil'
 import DependencyContext from '@contexts/DependencyContext'
+import { GAME_SETTINGS_KEYS } from '@interfaces/gameSettingsAdapter'
 
 const COLOR_SCHEMES = {
     LIGHT: 'light',
@@ -22,11 +23,20 @@ const ThemeProvider = ({ children }) => {
         gameSettingsAdapter
     } = useContext(DependencyContext)
 
+    const deviceColorScheme = useColorScheme()
+
     const [colorScheme, setColorScheme] = useState(useColorScheme() ?? COLOR_SCHEMES.LIGHT)
 
     useEffect(() => {
         if (!_isNil(gameSettingsAdapter.isDarkMode())) {
             setColorScheme(gameSettingsAdapter.isDarkMode() ? COLOR_SCHEMES.DARK : COLOR_SCHEMES.LIGHT)
+        } else {
+            // save dark mode on/off in volatile state for gameSettings screen
+            // dark mode toggle button to show correct state
+            gameSettingsAdapter.updateGameSettingValueWithoutPersisting({
+                key: GAME_SETTINGS_KEYS.DARK_MODE,
+                value: deviceColorScheme === COLOR_SCHEMES.DARK
+            })
         }
     }, [gameSettingsInitialized, gameSettingsAdapter])
 
