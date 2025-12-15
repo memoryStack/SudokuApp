@@ -22,6 +22,7 @@ import { CUSTOMIZED_PUZZLE_LEVEL_TITLE } from '@resources/constants'
 import { NEW_GAME_IDS } from '@application/usecases/newGameMenu/constants'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
 import { INPUT_TYPE } from '@application/adapterInterfaces/stateManagers/inputPanelRepository'
+import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 
 const initBoardData = () => {
     const mainNumbers = MainNumbersRecord.initMainNumbers()
@@ -257,11 +258,11 @@ const showSnackBar = ({ msg }) => {
     })
 }
 
-const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef, dependencies } }) => {
+const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef, dependencies, customPuzzleSnackBarTexts } }) => {
     const { mainNumbers } = getState()
 
     if (Board.getCluesCount(mainNumbers) < 18) {
-        showSnackBar({ msg: 'clues are less than 18' })
+        showSnackBar({ msg: customPuzzleSnackBarTexts.cluesLessThan18 })
         return
     }
 
@@ -269,14 +270,18 @@ const handlePlay = async ({ setState, getState, params: { ref: customPuzzleHCRef
     if (duplicateNumber.present) {
         const { cell } = duplicateNumber
         setState({ selectedCell: cell })
-        showSnackBar({ msg: `puzzle has multiple instances of ${MainNumbersRecord.getCellMainValue(mainNumbers, cell)} in same house` })
+        showSnackBar({
+            msg: dynamicInterpolation(customPuzzleSnackBarTexts.duplicateNumberInHouse, {
+                value: MainNumbersRecord.getCellMainValue(mainNumbers, cell)
+            }),
+        })
         return
     }
 
     const hasMultipleSolutions = await getPuzzleSolutionType(mainNumbers) === PUZZLE_SOLUTION_TYPES.MULTIPLE_SOLUTIONS
 
     if (hasMultipleSolutions) {
-        showSnackBar({ msg: 'puzzle has multiple valid solutions. please input valid puzzle' })
+        showSnackBar({ msg: customPuzzleSnackBarTexts.multipleSolutions })
     } else {
         transformMainNumbersForValidPuzzle(mainNumbers)
         startGameUseCase({

@@ -1,5 +1,11 @@
 {
     "unattainableState": "यह स्थिति कैसे आई पता नहीं",
+    "snackbars": {
+        "selectCellBeforeInput": "संख्या भरने से पहले कृपया कोई सेल चुनें",
+        "invalidNumberForCell": "{{number}} इस सेल में नहीं जा सकता। इसे वहाँ भरने का प्रयास करें जहाँ {{number}} एक उम्मीदवार संख्या हो",
+        "eraseOnlyFromNewlyFilledCells": "आप केवल उन्हीं सेल्स से मिटा सकते हैं जो इस संकेत के दिखाए जाने के बाद भरे गए थे",
+        "clickNextToSelectCell": "सेल चुनने के लिए अंतिम चरण पर जाने हेतु 'अगला' बटन पर क्लिक करें"
+    },
     "restrictedNumberInputMsg": "इस सेल में लाल रंग में हाइलाइट किए गए अंक भरें। अन्य अंक इस संकेत को सीखने में मदद नहीं करते।",
     "unclickableCellClickedInTryOutMsg": {
         "singular": "आप उन सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किया गया {{candidate}} उम्मीदवार है",

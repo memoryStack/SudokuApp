@@ -1,5 +1,11 @@
 {
     "unattainableState": "not sure how we reached here",
+    "snackbars": {
+        "selectCellBeforeInput": "please select some cell before filling number",
+        "invalidNumberForCell": "{{number}} can't go in this cell. try filling it where {{number}} is a candidate",
+        "eraseOnlyFromNewlyFilledCells": "you can only erase from cells which were filled after this hint is displayed",
+        "clickNextToSelectCell": "click on Next button and go to last step to select cell"
+    },
     "restrictedNumberInputMsg": "input the numbers which are highlighted in red color in this cell. other numbers don't help in learning this hint.",
     "unclickableCellClickedInTryOutMsg": {
         "singular": "you can select cells which have {{candidate}} candidate highlighted in green or red color",

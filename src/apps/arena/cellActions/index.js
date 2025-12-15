@@ -44,8 +44,14 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
     const hints = useSelector(getAvailableHintsCount)
 
     const theme = useThemeValues()
+    const { t, i18n } = useTranslation('arena')
 
     const smartHintsTranslationsTexts = useSmartHintsTranslations()
+
+    const noHintsFoundSnackBarMsg = React.useMemo(
+        () => t('snackbars.noHintsFound'),
+        [t, i18n.language],
+    )
 
     const { start, copilotEvents, currentStepNumber, totalStepsNumber, goToNext, stop, visible } = useCopilot()
     const wentoff = useRef(false)
@@ -106,7 +112,8 @@ const BoardController_ = ({ onAction, refFromParent, gameState, pencilState, con
                 dependencies,
                 smartHintsColorSystem: _get(theme, 'colors.smartHints'),
                 showAllHints,
-                smartHintsTranslationsTexts
+                smartHintsTranslationsTexts,
+                noHintsFoundSnackBarMsg,
             }
         })
     }

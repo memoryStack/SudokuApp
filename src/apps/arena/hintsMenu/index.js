@@ -88,13 +88,15 @@ const HintsMenu_ = ({ onAction, availableRawHints }) => {
         { label: HINT_LABELS[HINTS_IDS.UNIQUE_RECTANGLE], id: HINTS_IDS.UNIQUE_RECTANGLE },
     ]
 
+    const noHintsFoundSnackBarMsg = t('snackbars.noHintsFound')
+
     useEffect(() => {
         if (_isEmpty(mainNumbers) || _isEmpty(notes)) return
         onAction({
             type: ACTION_TYPES.ON_INIT,
-            payload: { mainNumbers, notes, dependencies },
+            payload: { mainNumbers, notes, dependencies, noHintsFoundSnackBarMsg },
         })
-    }, [onAction, mainNumbers, notes])
+    }, [onAction, mainNumbers, notes, dependencies, noHintsFoundSnackBarMsg])
 
     useEffect(() => {
         return () => {

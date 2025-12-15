@@ -39,6 +39,7 @@ const CustomPuzzle_ = ({
 
     const styles = useStyles(getStyles)
     const { t } = useTranslation('common')
+    const { t: tArena, i18n } = useTranslation('arena')
 
     const customPuzzleRef = useRef(null)
 
@@ -56,9 +57,21 @@ const CustomPuzzle_ = ({
         onAction({ type: ACTION_TYPES.ON_CLOSE, payload: customPuzzleRef })
     }, [onAction])
 
+    const customPuzzleSnackBarTexts = React.useMemo(
+        () => ({
+            cluesLessThan18: tArena('snackbars.customPuzzle.cluesLessThan18'),
+            duplicateNumberInHouse: tArena('snackbars.customPuzzle.duplicateNumberInHouse'),
+            multipleSolutions: tArena('snackbars.customPuzzle.multipleSolutions'),
+        }),
+        [tArena, i18n.language],
+    )
+
     const handlePlayClick = useCallback(() => {
-        onAction({ type: ACTION_TYPES.ON_PLAY, payload: { ref: customPuzzleRef, dependencies } })
-    }, [onAction, dependencies])
+        onAction({
+            type: ACTION_TYPES.ON_PLAY,
+            payload: { ref: customPuzzleRef, dependencies, customPuzzleSnackBarTexts },
+        })
+    }, [onAction, dependencies, customPuzzleSnackBarTexts])
 
     const onCellClick = useCallback(cell => {
         onAction({ type: ACTION_TYPES.ON_CELL_PRESS, payload: { cell, dependencies } })

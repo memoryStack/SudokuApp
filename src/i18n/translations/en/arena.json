@@ -70,5 +70,17 @@
         "fastPencil": "To get Hints when you wish\n\nFirst press on Fast Pencil",
         "clickHints": "Now press on \"Hint\"",
         "customizeExperience": "You can customize your game experience from here"
+    },
+    "snackbars": {
+        "cluesCannotBeRemoved": "Clues can not be removed",
+        "noHintsFound": "Oops! no hints are found\nFill some guesses in puzzle and then click \"Hint\"",
+        "customPuzzle": {
+            "cluesLessThan18": "clues are less than 18",
+            "duplicateNumberInHouse": "puzzle has multiple instances of {{value}} in same house",
+            "multipleSolutions": "puzzle has multiple valid solutions. please input valid puzzle"
+        },
+        "tryOut": {
+            "clickNextToSelectCell": "click on Next button and go to last step to select cell"
+        }
     }
 }

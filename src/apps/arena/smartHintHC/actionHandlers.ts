@@ -11,7 +11,7 @@ import { InputNumber } from '../inputPanel'
 import { Hint } from '../store/selectors/smartHintHC.selectors'
 import { cellHasTryOutInput } from './helpers'
 import { applyHintUseCase, updateUserActivityTime } from '@application/usecases/board'
-import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase, isValidInputNumberClick } from '@application/usecases/smartHint/smartHint'
+import { eraseTryOutNumberUseCase, inputTryOutNumberUseCase, isValidInputNumberClick, TryOutSnackBarTexts } from '@application/usecases/smartHint/smartHint'
 import { ArenaAnalyticsHandler, HintVisibleEventData, ScreenAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 import type { Dependencies } from '@contexts/DependencyContext'
 import { areSameCells } from '@domain/board/utils/housesAndCells'
@@ -87,8 +87,8 @@ const sendTryoutUsedEvent = ({
 const handleNumberClick = ({
     getState,
     setState,
-    params: { number, selectedCell, dependencies, hintId },
-}: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell, dependencies: Dependencies, hintId: string } }) => {
+    params: { number, selectedCell, dependencies, hintId, tryOutSnackBarTexts },
+}: StatePropsHandlers & { params: { number: InputNumber, selectedCell: Cell, dependencies: Dependencies, hintId: string, tryOutSnackBarTexts: TryOutSnackBarTexts } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
 
     const { smartHintRepository, boardRepository, gameSettingsAdapter } = dependencies
@@ -106,7 +106,7 @@ const handleNumberClick = ({
         handleEraserClick({ getState, setState, params: { dependencies, hintId, avoidEraseSound: true } })
     }
     const soundsEnabled = gameSettingsAdapter.soundsEnabled()
-    inputTryOutNumberUseCase(number, focusedCells, styles.snackBar, {
+    inputTryOutNumberUseCase(number, focusedCells, styles.snackBar, tryOutSnackBarTexts, {
         ...dependencies,
         sound: {
             play: () => soundsEnabled && dependencies?.soundAdapter?.play?.(SOUNDS.NUMBER_INPUT)
@@ -122,12 +122,12 @@ const handleNumberClick = ({
 }
 
 const handleEraserClick = ({
-    getState, setState, params: { dependencies, hintId, avoidEraseSound },
-}: StatePropsHandlers & { params: { dependencies: Dependencies, hintId: string, avoidEraseSound?: boolean } }) => {
+    getState, setState, params: { dependencies, hintId, avoidEraseSound, tryOutSnackBarTexts },
+}: StatePropsHandlers & { params: { dependencies: Dependencies, hintId: string, avoidEraseSound?: boolean, tryOutSnackBarTexts: TryOutSnackBarTexts } }) => {
     const { focusedCells, styles } = getState() as StateMaintainedByWithActionHOC
     const { gameSettingsAdapter } = dependencies
     const soundsEnabled = gameSettingsAdapter.soundsEnabled()
-    eraseTryOutNumberUseCase(focusedCells, styles.snackBar, {
+    eraseTryOutNumberUseCase(focusedCells, styles.snackBar, tryOutSnackBarTexts, {
         ...dependencies,
         sound: {
             play: (avoidEraseSound || !soundsEnabled) ? _noop : () => dependencies?.soundAdapter?.play?.(SOUNDS.ERASER_CLICK)

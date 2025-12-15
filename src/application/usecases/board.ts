@@ -26,6 +26,10 @@ import { emit } from '@utils/GlobalEventBus'
 import { getCellsHavingNumberFilledInAnyHouseOfCell } from '@domain/board/utils/housesAndCells'
 import { EVENTS } from 'src/constants/events'
 
+export type BoardSnackBarTexts = {
+    cluesCannotBeRemoved: string
+}
+
 type AddMainNumberHintAction = {
     cell: Cell
     action: {
@@ -231,14 +235,14 @@ const eraseMainNumber = (boardRepository: BoardRepository) => {
     boardRepository.addMove(constructMove(move, selectedCell))
 }
 
-export const eraseCellUseCase = (dependencies: Dependencies, sound: Sound) => {
+export const eraseCellUseCase = (dependencies: Dependencies, sound: Sound, snackBarTexts: BoardSnackBarTexts) => {
     const { boardRepository, snackBarAdapter } = dependencies
     const mainNumbers = boardRepository.getMainNumbers()
     const selectedCell = boardRepository.getSelectedCell()
 
     if (Board.isMainNumberNotEligibleToErase(selectedCell, mainNumbers)) {
         snackBarAdapter.show({
-            msg: 'Clues can not be removed',
+            msg: snackBarTexts.cluesCannotBeRemoved,
             visibleTime: 5000
         })
         return

@@ -27,6 +27,8 @@ import { INPUT_TYPE } from '@application/adapterInterfaces/stateManagers/inputPa
 import { useDependency } from 'src/hooks/useDependency'
 import { useStyles } from '@utils/customHooks/useStyles'
 import _get from '@lodash/get'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { ACTION_TYPES } from '../inputPanel/constants'
 
 export const NOTES_INPUT_PANEL_TEST_ID = 'NOTES_INPUT_PANEL_TEST_ID'
 export const MAIN_NUMBER_INPUT_PANEL_TEST_ID = 'MAIN_NUMBER_INPUT_PANEL_TEST_ID'
@@ -142,6 +144,7 @@ export const GameInputPanelView = ({
 
 const GameInputPanel_ = ({ onAction }) => {
     const dependencies = useDependency()
+    const { t, i18n } = useTranslation('arena')
     const { mainNumbers } = useGameBoardInputs()
 
     const lockedNumber = useSelector(getLockedNumber)
@@ -166,10 +169,33 @@ const GameInputPanel_ = ({ onAction }) => {
 
     const allowNotesInputWithoutPencil = dependencies?.gameSettingsAdapter?.fillNotesWithoutPencil?.()
 
+    const boardSnackBarTexts = React.useMemo(
+        () => ({
+            cluesCannotBeRemoved: t('snackbars.cluesCannotBeRemoved'),
+        }),
+        [t, i18n.language],
+    )
+
+    const onActionWithTexts = React.useCallback(
+        ({ type, payload }) => {
+            if (type === ACTION_TYPES.ON_ERASE_CLICK) {
+                return onAction({
+                    type,
+                    payload: {
+                        ...(payload || {}),
+                        boardSnackBarTexts,
+                    },
+                })
+            }
+            return onAction({ type, payload })
+        },
+        [onAction, boardSnackBarTexts],
+    )
+
     return (
         <GameInputPanelView
             allowNotesInputWithoutPencil={allowNotesInputWithoutPencil}
-            onAction={onAction}
+            onAction={onActionWithTexts}
             disableNumbersInput={!isGameActive}
             disableEraser={!isGameActive}
             cellWidth={CELL_WIDTH}

@@ -38,6 +38,7 @@ import { ACTION_HANDLERS_CONFIG } from './actionHandlers.config'
 import { SMART_HINT_TRY_OUT_ACTION_PROP_NAME } from './constants'
 import { getStyles } from './puzzleBoard.styles'
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
+import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 export const getActiveGameBoardCellBgCell = (
     cell,
@@ -95,6 +96,7 @@ export const getActiveGameNoteStyles = ({ noteValue, show }, selectedCellMainNum
 
 const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHintTryOutOnAction }) => {
     const dependencies = useDependency()
+    const { t: tTryOutAnalyser } = useTranslation('tryOutAnalyser')
     const hasTryOut = useHintHasTryOutStep()
     const isHintTryOut = useIsHintTryOutStep(true)
 
@@ -130,7 +132,7 @@ const PuzzleBoard_ = ({ onAction, [SMART_HINT_TRY_OUT_ACTION_PROP_NAME]: smartHi
                 }
                 if (hasTryOut) {
                     emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-                        msg: 'click on Next button and go to last step to select cell',
+                        msg: tTryOutAnalyser('snackbars.clickNextToSelectCell'),
                         visibleTime: 5000,
                     })
                 }

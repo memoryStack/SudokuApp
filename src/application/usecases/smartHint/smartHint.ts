@@ -17,6 +17,12 @@ import { MAX_HINTS_MENU_TOOLTIP_SHOWN_COUNT } from "@application/adapterInterfac
 
 const SNACKBAR_VISIBLE_TIME = 4000
 
+export type TryOutSnackBarTexts = {
+    selectCellBeforeInput: string
+    getInvalidNumberInputMsg: (args: { number: MainNumberValue }) => string
+    eraseOnlyFromNewlyFilledCells: string
+}
+
 export const isValidInputNumberClick = (number: MainNumberValue, smartHintRepository: SmartHintRepository, boardRepository: Dependencies['boardRepository']) => {
     const selectedCell = smartHintRepository.getTryOutSelectedCell() as Cell
     const notes = boardRepository.getNotes() as Notes
@@ -60,13 +66,14 @@ export const inputTryOutNumberUseCase = (
     number: MainNumberValue,
     focusedCells: Cell[],
     snackBarCustomStyles: any,
+    snackBarTexts: TryOutSnackBarTexts,
     dependencies: Dependencies
 ) => {
     const { smartHintRepository, snackBarAdapter, sound, boardRepository } = dependencies
     const selectedCell = smartHintRepository.getTryOutSelectedCell()
     if (_isEmpty(selectedCell)) {
         snackBarAdapter.show({
-            msg: 'please select some cell before filling number',
+            msg: snackBarTexts.selectCellBeforeInput,
             visibleTime: SNACKBAR_VISIBLE_TIME,
             customStyles: snackBarCustomStyles,
         })
@@ -75,7 +82,7 @@ export const inputTryOutNumberUseCase = (
 
     if (!isValidInputNumberClick(number, smartHintRepository, boardRepository)) {
         snackBarAdapter.show({
-            msg: `${number} can't go in this cell. try filling it where ${number} is a candidate`,
+            msg: snackBarTexts.getInvalidNumberInputMsg({ number }),
             visibleTime: SNACKBAR_VISIBLE_TIME,
             customStyles: snackBarCustomStyles,
         })
@@ -153,6 +160,7 @@ const getNotesToEnterHostCells = (focusedCells: Cell[], dependencies: Dependenci
 export const eraseTryOutNumberUseCase = (
     focusedCells: Cell[],
     snackBarCustomStyles: any,
+    snackBarTexts: TryOutSnackBarTexts,
     dependencies: Dependencies
 ) => {
     const { smartHintRepository, boardRepository, snackBarAdapter, sound } = dependencies
@@ -165,7 +173,7 @@ export const eraseTryOutNumberUseCase = (
     }
     if (!cellHasTryOutInput(selectedCell as Cell, boardMainNumbers)) {
         snackBarAdapter.show({
-            msg: 'you can only erase from cells which were filled after this hint is displayed',
+            msg: snackBarTexts.eraseOnlyFromNewlyFilledCells,
             visibleTime: SNACKBAR_VISIBLE_TIME,
             customStyles: snackBarCustomStyles,
         })

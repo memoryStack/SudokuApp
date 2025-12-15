@@ -1,4 +1,4 @@
-import { eraseCellUseCase, inputNumberUseCase } from '@application/usecases/board'
+import { eraseCellUseCase, inputNumberUseCase, BoardSnackBarTexts } from '@application/usecases/board'
 import { ACTION_TYPES } from '../inputPanel/constants'
 import { isGameActive } from '../utils/util'
 import { SOUNDS } from 'src/interfaces/soundAdapter'
@@ -31,14 +31,18 @@ const handleNumberClick = ({ getState, params: { number, isLongPress, notesInput
     )
 }
 
-const handleEraserClick = ({ getState }) => {
+const handleEraserClick = ({ getState, params: { boardSnackBarTexts } }) => {
     const { dependencies } = getState()
     const { gameStateRepository, gameSettingsAdapter, soundAdapter } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
-    eraseCellUseCase(dependencies, {
-        play: () => gameSettingsAdapter.soundsEnabled() && soundAdapter.play(SOUNDS.ERASER_CLICK)
-    })
+    eraseCellUseCase(
+        dependencies,
+        {
+            play: () => gameSettingsAdapter.soundsEnabled() && soundAdapter.play(SOUNDS.ERASER_CLICK),
+        },
+        boardSnackBarTexts,
+    )
 }
 
 export const ACTION_HANDLERS = {

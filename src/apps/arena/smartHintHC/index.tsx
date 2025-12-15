@@ -65,6 +65,7 @@ import { showHintHCUseCase } from '../hintsMenu/actionHandlers'
 import { getTransformedRawHints } from '../utils/smartHints'
 import { getHintExplanationTexts, getHintsTitle } from '../utils/smartHints/stringLiterals'
 import { useSmartHintsTranslations } from 'src/apps/hintsVocabulary/vocabExplainations/hooks/useSmartHintsTranslations'
+import { TryOutSnackBarTexts } from '@application/usecases/smartHint/smartHint'
 
 type ScrollEventType = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -132,20 +133,33 @@ const SmartHintHC_: React.FC<Props> = ({
 
     const smartHintsTranslationsTexts = useSmartHintsTranslations()
 
+    const { t: tTryOutAnalyser, i18n } = useTranslation('tryOutAnalyser')
+
+    const tryOutSnackBarTexts: TryOutSnackBarTexts = React.useMemo(
+        () => ({
+            selectCellBeforeInput: tTryOutAnalyser('snackbars.selectCellBeforeInput'),
+            getInvalidNumberInputMsg: ({ number }) =>
+                tTryOutAnalyser('snackbars.invalidNumberForCell', { number }),
+            eraseOnlyFromNewlyFilledCells: tTryOutAnalyser('snackbars.eraseOnlyFromNewlyFilledCells'),
+        }),
+        [tTryOutAnalyser, i18n.language],
+    )
+
     const onAction = React.useMemo(() => (action: Action) => {
         if (action.type === ACTION_TYPES.ON_NUMBER_CLICK) {
             action.payload = {
                 ...(action.payload),
                 selectedCell,
                 dependencies,
-                hintId
+                hintId,
+                tryOutSnackBarTexts,
             }
         }
         if (action.type === ACTION_TYPES.ON_ERASE_CLICK) {
-            action.payload = { dependencies, hintId }
+            action.payload = { dependencies, hintId, tryOutSnackBarTexts }
         }
         onActionFromProps(action)
-    }, [hintId, selectedCell, onActionFromProps, dependencies])
+    }, [hintId, selectedCell, onActionFromProps, dependencies, tryOutSnackBarTexts])
 
     useEffect(() => {
         const {

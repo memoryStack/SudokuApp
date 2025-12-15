@@ -89,7 +89,7 @@ const getEasiestHintData = (allHints) => {
     }
 }
 
-const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, showAllHints, smartHintsTranslationsTexts } }) => {
+const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, showAllHints, smartHintsTranslationsTexts, noHintsFoundSnackBarMsg } }) => {
     const { gameStateRepository, boardControllerRepository, boardRepository } = dependencies
     if (!isGameActive(gameStateRepository.getGameState())) return
 
@@ -118,7 +118,7 @@ const handleHintClick = async ({ params: { dependencies, smartHintsColorSystem, 
         } else {
             // no hints found
             emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-                msg: 'Oops! no hints are found\nFill some guesses in puzzle and then click "Hint"',
+                msg: noHintsFoundSnackBarMsg,
                 visibleTime: 5000,
                 customStyles: {
                     bottom: 50,

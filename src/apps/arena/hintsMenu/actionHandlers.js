@@ -19,7 +19,7 @@ import { NotesRecord } from '@domain/board/records/notesRecord'
 import { convertBoardCellToNum } from '@domain/board/utils/cellsTransformers'
 import { showHowToGetHintsCoachMarksUseCase } from '@application/usecases/smartHint/smartHint'
 
-const onInit = async ({ setState, getState, params: { mainNumbers, notes, dependencies } }) => {
+const onInit = async ({ setState, getState, params: { mainNumbers, notes, dependencies, noHintsFoundSnackBarMsg } }) => {
     const puzzle = MainNumbersRecord.getPuzzleCurrentMainNumbers(mainNumbers).join('')
     const disabledHints = []
     const rawHints = await Puzzle.getRawHints(puzzle, notes, disabledHints)
@@ -38,7 +38,7 @@ const onInit = async ({ setState, getState, params: { mainNumbers, notes, depend
 
     if (availableHintsCount === 0) {
         emit(EVENTS.LOCAL.SHOW_SNACK_BAR, {
-            msg: 'Oops! no hints are found\nFill some guesses in puzzle and then click "Hint"',
+            msg: noHintsFoundSnackBarMsg,
             visibleTime: 3000,
             customStyles: {
                 bottom: 50,
