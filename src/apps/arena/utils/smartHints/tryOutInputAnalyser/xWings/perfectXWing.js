@@ -2,7 +2,7 @@ import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
 import _isEmpty from '@lodash/isEmpty'
 
 import { getXWingHousesTexts } from '../../rawHintTransformers/xWing/transformers/helpers'
-import { getHouseWithNumAndNameText, getAxisValuesFromTranslations } from '../../util'
+import { getHouseWithNumAndNameText, getAxisValuesFromTranslations, getLanguageSpecificHouseTypeText } from '../../util'
 import { getCellHouseForHouseType } from '@domain/board/utils/housesAndCells'
 
 import { getXWingCandidate } from '../../xWing/utils'
@@ -51,7 +51,7 @@ const getBothHouseWithoutCandidateErrorResult = (xWing, removableNotesHostCellsF
         ...getXWingHousesTexts(xWing.houseType, xWing.legs, houseNumConfig, smartHintsTranslationsTexts),
         candidate: getXWingCandidate(xWing),
         houseFullName: getLanguageSpecificHouseTypeText(
-            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]),
+            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]).type,
             config.houseFullName.houseName,
             smartHintsTranslationsTexts
         ),

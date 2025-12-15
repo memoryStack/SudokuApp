@@ -15,7 +15,6 @@ import { isCellExists } from '../../../util'
 import { SmartHintsTranslationsTexts } from '../../types'
 
 export const getNakedGroupNoTryOutInputResult = (groupCandidates, smartHintsTranslationsTexts) => {
-    const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
     const msgPlaceholderValues = {
         candidatesListText: getCandidatesListText(groupCandidates, smartHintsTranslationsTexts.common.conjugations.and),
     }

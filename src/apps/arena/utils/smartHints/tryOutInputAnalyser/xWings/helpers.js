@@ -20,14 +20,14 @@ import { filterFilledCellsInTryOut } from '../helpers'
 export const getNoInputResult = (xWing, smartHintsTranslationsTexts) => {
     const config = smartHintsTranslationsTexts.tryOutAnalyser.xWing.config
     const houseNumConfig = config.houseAAxesValue
-    const houseFullNameConfig = config.houseFullNamePlural
+    const houseFullNameConfig = config.houseFullNamePlural.houseName
     const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
         ...getXWingHousesTexts(xWing.houseType, xWing.legs, houseNumConfig, smartHintsTranslationsTexts),
-        houseFullName: getHouseWithNumAndNameText(
-            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]),
+        houseFullName: getLanguageSpecificHouseTypeText(
+            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]).type,
             houseFullNameConfig,
             smartHintsTranslationsTexts
         ),
@@ -41,13 +41,13 @@ export const getNoInputResult = (xWing, smartHintsTranslationsTexts) => {
 export const getSameCrossHouseCandidatePossibilitiesResult = (xWing, smartHintsTranslationsTexts) => {
     const config = smartHintsTranslationsTexts.tryOutAnalyser.xWing.config
     const houseNumConfig = config.houseAAxesValue
-    const houseFullNameConfig = config.houseFullNamePlural
+    const houseFullNameConfig = config.houseFullNamePlural.houseName
 
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
         ...getXWingHousesTexts(xWing.houseType, xWing.legs, houseNumConfig, smartHintsTranslationsTexts),
-        houseFullNamePlural: getHouseWithNumAndNameText(
-            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]),
+        houseFullNamePlural: getLanguageSpecificHouseTypeText(
+            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]).type,
             houseFullNameConfig,
             smartHintsTranslationsTexts
         ),
@@ -69,9 +69,9 @@ export const getOneLegWithNoCandidateResult = (xWing, removableNotesHostCells, b
 
     const msgPlaceholdersValues = {
         candidate,
-        houseFullName: getHouseWithNumAndNameText(
-            inhabitableHouse,
-            config.houseFullName,
+        houseFullName: getLanguageSpecificHouseTypeText(
+            inhabitableHouse.type,
+            config.houseFullName.houseName,
             smartHintsTranslationsTexts
         ),
         inhabitableHouseAxesText: getLanguageSpecificHouseNumText(inhabitableHouse, config.inhabitableHouseAxesText, smartHintsTranslationsTexts),
@@ -116,7 +116,7 @@ const getOneLegFilledWithoutErrorResult = (xWing, boardInputs, smartHintsTransla
         houseAxesText: getLanguageSpecificHouseNumText(filledLegHouse, config.houseAxesText, smartHintsTranslationsTexts),
         houseFullName: getLanguageSpecificHouseTypeText(
             filledLegHouse.type,
-            config.houseFullName,
+            config.houseFullName.houseName,
             smartHintsTranslationsTexts
         ),
         filledXWingCornerCell: getCellsAxesValuesListText(filledXWingCells, undefined, axisValues),
@@ -130,16 +130,16 @@ const getOneLegFilledWithoutErrorResult = (xWing, boardInputs, smartHintsTransla
 const getBothLegsFilledWithoutErrorResult = (xWing, smartHintsTranslationsTexts) => {
     const config = smartHintsTranslationsTexts.tryOutAnalyser.xWing.config
     const houseNumConfig = config.houseAAxesValue
-    const houseFullNameConfig = config.houseFullNamePlural
+    const houseFullNameConfig = config.houseFullNamePlural.houseName
 
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
-        houseFullName: getHouseWithNumAndNameText(
-            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]),
+        houseFullName: getLanguageSpecificHouseTypeText(
+            getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]).type,
             houseFullNameConfig,
             smartHintsTranslationsTexts
         ),
-        ...getXWingHousesTexts(xWing.houseType, xWing.legs, houseNumConfig, smartHintsTranslationsTexts),
+        ...getXWingHousesTexts(xWing.houseType, xWing.legs, houseNumConfig, smartHintsTranslationsTexts)
     }
 
     return {
