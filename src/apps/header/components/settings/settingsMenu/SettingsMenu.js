@@ -98,7 +98,7 @@ export const SettingsMenu_ = ({ onAction }) => {
             key: ITEMS_KEYS.HOW_TO_PLAY,
             label: t('menu.howToPlay', 'How to Play?'),
         },
-        __DEV__ && {
+        {
             key: ITEMS_KEYS.SELECT_LANGUAGE,
             label: t('menu.language', 'Language'),
         },
