@@ -101,6 +101,12 @@ beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
+beforeEach(() => {
+    const { feedbackAdapter } = require('src/adapters/feedbackAdapter')
+    jest.spyOn(feedbackAdapter, 'getDNDStatus')
+    feedbackAdapter.getDNDStatus.mockResolvedValue(true)
+})
+
 describe('Arena Screen', () => {
     // added this to avoid "ReferenceError: You are trying to `import` a file after the Jest environment has been torn down."
     // error due to timer setTimeout
