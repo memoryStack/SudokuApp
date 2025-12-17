@@ -16,6 +16,7 @@ import { HINTS_VOCAB_IDS, transformXYChainRawHint } from 'src/apps/arena/utils/s
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
 import { getCellsAxesList, joinStringsListWithArrow } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
+import { getAxisValuesFromTranslations } from 'src/apps/arena/utils/smartHints/util'
 import { getStyles } from './xyChain.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
@@ -32,6 +33,7 @@ const XYChain = () => {
     })
     const boardData = useBoardData(puzzle)
     const smartHintsTranslationsTexts = useSmartHintsTranslations()
+    const boardAxesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     const rawXYChain = {
         isComposite: false,
@@ -45,7 +47,7 @@ const XYChain = () => {
         removableNotesHostCells: [{ row: 1, col: 3 }, { row: 2, col: 3 }, { row: 6, col: 5 }],
     }
 
-    const chainCellsAxesList = getCellsAxesList(rawXYChain.chain)
+    const chainCellsAxesList = getCellsAxesList(rawXYChain.chain, boardAxesValues)
 
     const transformedXYChain = transformXYChainRawHint({
         rawHint: rawXYChain,

@@ -18,21 +18,18 @@ import { HOUSE_TYPE } from '@domain/board/board.constants'
 
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 
-import { getCellsAxesValuesListText } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
-import { getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
+import { getCellsAxesList, getCellsAxesValuesListText } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
+import { getAxisValuesFromTranslations, getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
 import { highlightPrimaryHouseCells } from 'src/apps/arena/utils/smartHints/rawHintTransformers/hiddenGroup/hiddenGroup'
 import { getStyles } from './hiddenTripple.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText } from '../utils'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 
 const oneHostHouse = '500620037004890000000050000930000000020000605700000003000009000000000700680570002'
 const oneHostHouseHostCells = [{ row: 3, col: 5 }, { row: 5, col: 5 }, { row: 7, col: 5 }]
 const oneHostHouseGroupCandidates = [2, 5, 6]
-const oneHostHouseDetails = {
-    cellsListText: getCellsAxesValuesListText(oneHostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-    candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-}
 
 const HiddenTripple = () => {
     const styles = useStyles(getStyles)
@@ -41,6 +38,13 @@ const HiddenTripple = () => {
     const { t } = useTranslation('hintsVocabulary', {
         keyPrefix: 'hiddenTripple',
     })
+
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
+    const boardAxesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+    const oneHostHouseDetails = {
+        cellsListText: getCellsAxesValuesListText(oneHostHouseHostCells, smartHintsTranslationsTexts.common.conjugations.and, boardAxesValues),
+        candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, smartHintsTranslationsTexts.common.conjugations.and),
+    }
 
     const Example = !_isNil(oneHostHosueBoardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>

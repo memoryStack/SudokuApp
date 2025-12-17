@@ -23,6 +23,7 @@ import { getStyles } from './remotePairs.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 import { getLinkHTMLText } from '../utils'
+import { getAxisValuesFromTranslations } from 'src/apps/arena/utils/smartHints/util'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 
 const puzzle = '798452316603781092012030870370265048820143760060897023980014237107028050200070081'
@@ -35,6 +36,7 @@ const RemotePairs = () => {
     })
     const boardData = useBoardData(puzzle)
     const smartHintsTranslationsTexts = useSmartHintsTranslations()
+    const boardAxesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
 
     const rawRemotePairs = {
         isComposite: false,
@@ -43,7 +45,7 @@ const RemotePairs = () => {
         removableNotesHostCells: [{ row: 5, col: 6 }],
     }
 
-    const chainCellsAxesList = getCellsAxesList(rawRemotePairs.orderedChainCells)
+    const chainCellsAxesList = getCellsAxesList(rawRemotePairs.orderedChainCells, boardAxesValues)
 
     const transformedRemotePairs = transformRemotePairsRawHint({
         rawHint: rawRemotePairs,
@@ -84,7 +86,7 @@ const RemotePairs = () => {
     )
 
     const renderChainFormationDetails = () => {
-        const chainText = joinStringsListWithArrow(_map(rawRemotePairs.orderedChainCells, (chainCell: Cell) => getCellAxesValues(chainCell)))
+        const chainText = joinStringsListWithArrow(getCellsAxesList(rawRemotePairs.orderedChainCells, boardAxesValues))
         return (
             <SmartHintText
                 text={
@@ -98,7 +100,13 @@ const RemotePairs = () => {
         <View style={{ marginTop: 12 }}>
             <SmartHintText
                 text={
-                    t('chainEffect.intro', { linkPattern: joinStringsListWithArrow(['Strong', 'Weak', 'Strong']) })
+                    t('chainEffect.intro', {
+                        linkPattern: joinStringsListWithArrow([
+                            t('chainEffect.linkTypes.strong'),
+                            t('chainEffect.linkTypes.weak'),
+                            t('chainEffect.linkTypes.strong'),
+                        ]),
+                    })
                 }
             />
             <SmartHintText

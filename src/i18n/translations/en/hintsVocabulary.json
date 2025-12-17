@@ -80,6 +80,10 @@
         "chainEffect": {
             "title": "<b>How is Remote Pairs chain useful ?</b>",
             "intro": "<p><b>How is Remote Pairs chain useful ?</b><br />Cells in this chain can be filled in two ways. Let's try to fill it in both ways and see the conclusion. But first understand the rules to fill these cells.<br /><b>Rules to fill chain cells:</b><br /><ol><li>Start with using <b>Strong</b> Link in first cell of chain</li><li>Links will be used alternatively like {{linkPattern}} ...</li></ol></p>",
+            "linkTypes": {
+                "strong": "Strong",
+                "weak": "Weak"
+            },
             "firstWayTitle": "<b>First Way to fill the Chain:</b>",
             "firstWay": "<p><b>First Way to fill the Chain:</b><br />Follow the logic with the puzzle given below.<br /><ul><li>if 4 is false in {{chainCell0}} then 5 has to be true here. (Strong Link)</li><li>since 5 is true in {{chainCell0}} then 5 has to be false in {{chainCell1}}. (Weak Link)</li><li>since 5 is false in {{chainCell1}} then 4 has to be true in {{chainCell1}}. (Strong Link)</li><li>since 4 is true in {{chainCell1}} then 4 has to be false in {{chainCell2}}. (Weak Link)</li><li>since 4 is false in {{chainCell2}} then 5 has to be true in {{chainCell2}}. (Strong Link)</li><li>since 5 is true in {{chainCell2}} then 5 has to be false in {{chainCell3}}. (Weak Link)</li><li>since 5 is false in {{chainCell3}} then 4 has to be true in {{chainCell3}}. (Strong Link)</li></ul></p>",
             "firstWayConclusion": "<p>Notice in the above logic, by following the rules of filling these cells we found that if candidate 4 can not be filled in {{firstCell}} then it will surely be filled in {{lastCell}}. It means that if {{firstCell}} is 5 then {{lastCell}} must be 4.</p>",

@@ -21,12 +21,13 @@ import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-vi
 import { CellsFocusData } from 'src/apps/arena/utils/smartHints/types'
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import { getCellsAxesValuesListText } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
-import { getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
+import { getAxisValuesFromTranslations, getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
 import { highlightPrimaryHouseCells } from 'src/apps/arena/utils/smartHints/rawHintTransformers/hiddenGroup/hiddenGroup'
 import { getStyles } from './hiddenDouble.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { getLinkHTMLText } from '../utils'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 
 type ZoomableViewConfigs = {
     initialZoom?: number
@@ -37,15 +38,17 @@ type ZoomableViewConfigs = {
 const oneHostHouse = '200710805000085009000069710627001008001050600400600931092370000300540000504092006'
 const oneHostHouseHostCells = [{ row: 1, col: 0 }, { row: 1, col: 1 }]
 const oneHostHouseGroupCandidates = [1, 7]
-const oneHostHouseDetails = {
-    cellsListText: getCellsAxesValuesListText(oneHostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-    candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-}
-
 const HiddenDouble = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
     const oneHostHosueBoardData = useBoardData(oneHostHouse)
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
+    const boardAxesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+
+    const oneHostHouseDetails = {
+        cellsListText: getCellsAxesValuesListText(oneHostHouseHostCells, smartHintsTranslationsTexts.common.conjugations.and, boardAxesValues),
+        candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, smartHintsTranslationsTexts.common.conjugations.and),
+    }
 
     const { t } = useTranslation('hintsVocabulary', {
         keyPrefix: 'hiddenDouble',
@@ -64,14 +67,7 @@ const HiddenDouble = () => {
                 }}
             />
             <SmartHintText
-                text={
-                    '<p>'
-                    + `Notice in above Sudoku Puzzle in 1st ${getLinkHTMLText(HINTS_VOCAB_IDS.BLOCK, 'block')} ${oneHostHouseDetails.candidatesListText} are present`
-                    + ` together only in ${oneHostHouseDetails.cellsListText} as candidates. So, it's a Hidden Double.`
-                    + `\nIt is called "Hidden" because in ${oneHostHouseDetails.cellsListText} cells ${oneHostHouseDetails.candidatesListText} are hidden behind other candidates`
-                    + ' due to this it\'s a little harder to find.'
-                    + '</p>'
-                }
+                text={t('example', { candidates: oneHostHouseDetails.candidatesListText, cells: oneHostHouseDetails.cellsListText })}
             />
         </View>
     ) : null

@@ -25,10 +25,11 @@ import { getHouseCells } from '@domain/board/utils/housesAndCells'
 import { useThemeValues } from 'src/apps/arena/hooks/useTheme'
 import _get from '@lodash/get'
 import { getCellsAxesValuesListText } from 'src/apps/arena/utils/smartHints/rawHintTransformers/helpers'
-import { getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
+import { getAxisValuesFromTranslations, getCandidatesListText } from 'src/apps/arena/utils/smartHints/util'
 import { getStyles } from './nakedTripple.styles'
 import { useBoardData } from '../hooks/useBoardData'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
+import { useSmartHintsTranslations } from '../hooks/useSmartHintsTranslations'
 
 type ZoomableViewConfigs = {
     initialZoom?: number
@@ -40,19 +41,9 @@ const oneHostHouse = '3900007000000306505070000490493805066010549838530004009008
 const oneHostHouseHostCells = [{ row: 0, col: 4 }, { row: 2, col: 3 }, { row: 2, col: 4 }]
 const oneHostHouseGroupCandidates = [1, 2, 6]
 
-const oneHostHouseDetails = {
-    cellsListText: getCellsAxesValuesListText(oneHostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-    candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-}
-
 const twoHostHouse = '400500370320000004060000000800002030210840000000000090070090106940651000000070500'
 const twoHostHouseHostCells = [{ row: 4, col: 6 }, { row: 4, col: 7 }, { row: 4, col: 8 }]
 const twoHostHouseGroupCandidates = [5, 6, 7]
-const twoHostHouseDetails = {
-    cellsListText: getCellsAxesValuesListText(twoHostHouseHostCells, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-    candidatesListText: getCandidatesListText(twoHostHouseGroupCandidates, HINT_TEXT_ELEMENTS_JOIN_CONJUGATION.AND),
-}
-
 const NakedDouble = () => {
     const styles = useStyles(getStyles)
     const theme = useThemeValues()
@@ -64,6 +55,19 @@ const NakedDouble = () => {
     })
 
     const { t: commonT } = useTranslation(['common'])
+
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
+    const boardAxesValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
+
+    const oneHostHouseDetails = {
+        cellsListText: getCellsAxesValuesListText(oneHostHouseHostCells, smartHintsTranslationsTexts.common.conjugations.and, boardAxesValues),
+        candidatesListText: getCandidatesListText(oneHostHouseGroupCandidates, smartHintsTranslationsTexts.common.conjugations.and),
+    }
+
+    const twoHostHouseDetails = {
+        cellsListText: getCellsAxesValuesListText(twoHostHouseHostCells, smartHintsTranslationsTexts.common.conjugations.and, boardAxesValues),
+        candidatesListText: getCandidatesListText(twoHostHouseGroupCandidates, smartHintsTranslationsTexts.common.conjugations.and),
+    }
 
     const Example = !_isNil(oneHostHosueBoardData.mainNumbers) ? (
         <View style={styles.exampleBoardContainer}>
