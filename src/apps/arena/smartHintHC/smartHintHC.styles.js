@@ -28,6 +28,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     hintTitle: {
         fontWeight: FONT_WEIGHTS.MEDIUM,
         color: _get(theme, ['colors', 'on-surface']),
+        lineHeight: 32,
     },
     bodyContainer: {
         flex: 1,
@@ -36,10 +37,11 @@ export const getStyles = (_, theme) => StyleSheet.create({
     hintLogicText: {
         lineHeight: 20,
         color: _get(theme, ['colors', 'on-surface']),
+        lineHeight: 24,
     },
     hintsCountText: {
         marginLeft: 8,
-        fontSize: 20,
+        fontSize: 22,
         color: _get(theme, ['colors', 'on-surface']),
     },
     footerContainer: {
@@ -53,7 +55,7 @@ export const getStyles = (_, theme) => StyleSheet.create({
     tryOutResult: {
         marginTop: 8,
         marginBottom: 4,
-        lineHeight: 18,
+        lineHeight: 22,
     },
     tryOutDefaultResult: {
         color: _get(theme, ['colors', 'on-surface']),
