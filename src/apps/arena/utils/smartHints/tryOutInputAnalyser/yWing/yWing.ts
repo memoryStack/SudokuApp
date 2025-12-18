@@ -21,6 +21,7 @@ import {
 import { getCandidatesListText, getAxisValuesFromTranslations } from '../../util'
 import { BoardInputs } from '../types'
 import { SmartHintsTranslationsTexts } from '../../types'
+import { formatMessage } from '@utils/util'
 
 export const yWingTryOutAnalyser = (
     { yWing, eliminableNotesCells }: { yWing: YWingRawHint, eliminableNotesCells: Cell[] },
@@ -122,9 +123,10 @@ export const yWingTryOutAnalyser = (
             filledCandidatesCountHV: smartHintsTranslationsTexts.common.helpingVerb[filledIsPlural ? 'plural' : 'singular'],
             toBeFilledCandidates: getCandidatesListText(_sortBy(toBeFilledCandidates), smartHintsTranslationsTexts.common.conjugations.and),
             toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
+            filledCandidatesCount: filledCandidates.length
         }
         return {
-            msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.partial, msgPlaceholderValues),
+            msg: formatMessage(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.partial, msgPlaceholderValues),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }
@@ -135,7 +137,7 @@ export const yWingTryOutAnalyser = (
         eliminableNotesHostCells: getCellsAxesValuesListText(sortCells(eliminableNotesCells), smartHintsTranslationsTexts.common.conjugations.and, axisValues),
     }
     return {
-        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.full, msgPlaceholderValues),
+        msg: formatMessage(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.full, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

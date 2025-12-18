@@ -1,5 +1,7 @@
 import { PixelRatio } from 'react-native'
 
+import IntlMessageFormat from 'intl-messageformat'
+
 export const isHexColor = (color = '') => color.startsWith('#')
 
 export const hexToRGBA = (hex: string, opacity = 100) => {
@@ -17,3 +19,12 @@ export const consoleLog = (...args: unknown[]) => {
 }
 
 export const roundToNearestPixel = (sizeInDp: number) => PixelRatio.roundToNearestPixel(sizeInDp)
+
+export const formatMessage = (message: string, values: Record<string, unknown>) => {
+    try {
+        return new IntlMessageFormat(message, 'en-US').format(values)
+    } catch (error) {
+        console.error(error)
+        return message
+    }
+}

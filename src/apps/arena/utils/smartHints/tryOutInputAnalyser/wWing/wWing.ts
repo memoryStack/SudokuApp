@@ -5,7 +5,7 @@ import _head from '@lodash/head'
 
 import { NotesRecord } from '@domain/board/records/notesRecord'
 
-import { getCellAxesValues, getNoteHostCellsInHouse } from '../../../util'
+import { getCellAxesValues, getNoteHostCellsInHouse, isCellExists } from '../../../util'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
 
@@ -78,8 +78,9 @@ export const wWingTryOutAnalyser = (
         if (nakedPairCellsFilled) {
             const filledNakedPairCells = filterFilledCellsInTryOut(wWing.nakedPairCells, boardInputs)
             if (filledNakedPairCells.length === 1) {
+                const emptyCell = wWing.nakedPairCells.find(cell => !isCellExists(cell, filledNakedPairCells))
                 const msgPlaceholdersValues = {
-                    emptyNakedPairCell: getCellAxesValues(filledNakedPairCells[0], axisValues)
+                    emptyNakedPairCell: getCellAxesValues(emptyCell, axisValues)
                 }
                 return {
                     msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.wWing.removableNoteCellFilled.oneNakedPairCellFilled, msgPlaceholdersValues),

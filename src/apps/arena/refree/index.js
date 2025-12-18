@@ -72,9 +72,9 @@ const Refree_ = ({ timer, onAction, maxMistakesLimit, mistakes, difficultyLevelI
 
         let mistakesText = ''
         if (gameOverOnMistakesThresholdCrossed) {
-            mistakesText = t('refree.mistakesWithLimit', 'Mistakes: {{current}}/{{max}}', { current: mistakes, max: maxMistakesLimit })
+            mistakesText = t('refree.mistakesWithLimit', { current: mistakes, max: maxMistakesLimit })
         } else {
-            mistakesText = t('refree.mistakesWithoutLimit', 'Mistakes: {{current}}', { current: mistakes })
+            mistakesText = t('refree.mistakesWithoutLimit', { current: mistakes })
         }
         return (
             <Text style={styles.textColor} testID={MISTAKES_TEXT_TEST_ID} type={TEXT_VARIATIONS.BODY_MEDIUM}>

@@ -161,7 +161,7 @@ const getExplainationStepsText = (
         colorB: remotePairsNotesColors.colorB,
         exampleRemovableNotesHostCell: getCellAxesValues(exampleRemovableNotesHostCell, axesValues),
         exampleRemovableNotesInCell: getCandidatesListText(exampleRemovableNotesInCell, smartHintsTranslationsTexts.common.conjugations.and),
-        exampleChainCells: getCellsAxesValuesListText(exampleChainCells, smartHintsTranslationsTexts.common.conjugations.and),
+        exampleChainCells: getCellsAxesValuesListText(exampleChainCells, smartHintsTranslationsTexts.common.conjugations.and, axesValues)
     }
 
     const explainationTextsWithPlaceholdersFilled = _map(

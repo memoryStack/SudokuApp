@@ -2,26 +2,26 @@
     "unattainableState": "यह स्थिति कैसे आई पता नहीं",
     "snackbars": {
         "selectCellBeforeInput": "संख्या भरने से पहले कृपया कोई सेल चुनें",
-        "invalidNumberForCell": "{{number}} इस सेल में नहीं जा सकता। इसे वहाँ भरने का प्रयास करें जहाँ {{number}} एक उम्मीदवार संख्या हो",
-        "eraseOnlyFromNewlyFilledCells": "आप केवल उन्हीं सेल्स से मिटा सकते हैं जो इस संकेत के दिखाए जाने के बाद भरे गए थे",
-        "clickNextToSelectCell": "सेल चुनने के लिए अंतिम चरण पर जाने हेतु 'अगला' बटन पर क्लिक करें"
+        "invalidNumberForCell": "{number} इस सेल में नहीं जा सकता। इसे वहाँ भरने का प्रयास करें जहाँ {number} एक उम्मीदवार संख्या हो",
+        "eraseOnlyFromNewlyFilledCells": "आप केवल उन्हीं सेल्स से संख्या मिटा सकते हैं जो इस संकेत के दिखाए जाने के बाद भरे गए है",
+        "clickNextToSelectCell": "सेल चुनने के लिए अंतिम चरण पर जाने हेतु 'अगला' बटन दबाएं"
     },
-    "restrictedNumberInputMsg": "इस सेल में लाल रंग में हाइलाइट किए गए अंक भरें। अन्य अंक इस संकेत को सीखने में मदद नहीं करते।",
+    "restrictedNumberInputMsg": "इस सेल मे लाल रंग मे हाइलाइट किए गए अंक भरें। अन्य अंक इस संकेत को सीखने मे मदद नहीं करते।",
     "unclickableCellClickedInTryOutMsg": {
         "singular": "आप उन सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किया गया {{candidate}} उम्मीदवार है",
         "plural": "आप उन सेल्स को चुन सकते हैं जिनमें {{candidatesListText}} के उम्मीदवार हरे या लाल रंग से हाइलाइट किए गए हैं",
         "clickAnyHighlightedCell": "आप केवल उन्हीं सेल्स को चुन सकते हैं जो यहाँ हाइलाइट किए गए हैं"
     },
     "hiddenGroup": {
-        "noInput": "यह समझने के लिए कि इन्हें इन सेल से क्यों हटाया जाना चाहिए, लाल रंग में हाइलाइट किए गए अंक भरने का प्रयास करें",
-        "removableGroupCandidateFilled": "{{filledCandidatesListText}} {{filledCellsAxesListText}} में {{filledInstancesHelpingVerb}} भरे गए। इसके कारण {{primaryHouseFullName}} में {{filledCandidatesListText}} के लिए कोई {{cellSingularPlural}} नहीं {{filledInstancesHelpingVerb}}\nइस त्रुटि को ठीक करने के लिए, {{filledCellsAxesListText}} से {{filledCandidatesListText}} हटाएं",
+        "noInput": "लाल रंग में हाइलाइट किए गए अंको को भरने का प्रयास करें",
+        "removableGroupCandidateFilled": "{filledCandidatesListText} {filledCellsAxesListText} में {removableGCCount, plural, =1 {भरा गया} other {भरे गए}} है। इसके कारण {primaryHouseFullName} में {filledCandidatesListText} के लिए कोई {cellSingularPlural} नही बची है।\nइस त्रुटि को ठीक करने के लिए {filledCellsAxesListText} से {filledCandidatesListText} हटाएं",
         "invalidCandidateInGroupCell": {
-            "noHostCellForGroupCandidates": "{{primaryHouseFullName}} में {{candidatesListText}} किसी सेल में नहीं आ सकते\nइस त्रुटि को ठीक करने के लिए, {{wronglyFilledGroupCellsAxesListText}} से {{wronglyFilledNumbersInGroupCellsListText}} हटाएं",
-            "insufficientHostCells": "{{candidatesListText}} भरे जाने चाहिए लेकिन {{primaryHouseFullName}} में इनके लिए केवल {{emptyCellsAxesListText}} {{emptyGroupCellsHelpingVerb}} उपलब्ध हैं। इसलिए {{candidatesListText}} में से {{candidatesCountWithoutCells}} इस {{primaryHouseFullName}} में नहीं भरे जा सकते।\nइस त्रुटि को ठीक करने के लिए, {{wronglyFilledGroupCellsAxesListText}} से {{wronglyFilledNumbersInGroupCellsListText}} हटाएं"
+            "noHostCellForGroupCandidates": "{{primaryHouseFullName}} में {{candidatesListText}} किसी सेल में नहीं आ सकते\nइस त्रुटि को ठीक करने के लिए {{wronglyFilledGroupCellsAxesListText}} से {{wronglyFilledNumbersInGroupCellsListText}} हटाए",
+            "insufficientHostCells": "{{primaryHouseFullName}} मे {{candidatesListText}} भरे जाने चाहिए लेकिन इनके लिए केवल {{emptyCellsAxesListText}} ही उपलब्ध है। इसलिए {{candidatesListText}} मे से इस {{primaryHouseFullName}} मे किसी ना किसी संख्या के लिए कोई जगह नही बची है।\nइस त्रुटि को ठीक करने के लिए {{wronglyFilledGroupCellsAxesListText}} से {{wronglyFilledNumbersInGroupCellsListText}} हटाए"
         },
         "validFill": {
-            "full": "{{candidatesListText}} {{groupCellsAxesListText}} सेल में बिना किसी त्रुटि के भरे गए हैं। इन सेल को {{candidatesListText}} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि इस हाइलाइट किए गए क्षेत्र में {{groupCellsAxesListText}} के अलावा अन्य सेल में {{candidatesListText}} नहीं आ सकते।",
-            "partial": "{{filledCandidates}} {{filledCandidatesHostCells}} में बिना किसी त्रुटि के {{filledCandidatesCountHV}} भरे गए। {{toBeFilledCandidates}} भरने का भी प्रयोग करें यह समझने के लिए कि {{toBeFilledCandidatesPronoun}} कहाँ आ सकते हैं या नहीं आ सकते"
+            "full": "{candidatesListText} {groupCellsAxesListText} सेल में बिना किसी त्रुटि के भरे गए है। इन सेल्स को {candidatesListText} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल्स का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि इस हाइलाइट किए गए क्षेत्र में {groupCellsAxesListText} के अलावा अन्य सेल्स मे {candidatesListText} नही आ सकते।",
+            "partial": "{filledCandidates} {filledCandidatesHostCells} में बिना किसी त्रुटि के {correctlyFilledGCCount, plural, =1 {भर दिया गया} other {भरे गए}} है। {toBeFilledCandidates} भरने का भी प्रयोग करें ताकि समझ पाओ की ये कहा आ सकते है कहा नहीं"
         },
         "unclickableCellClickedInTryOutMsg": "आप केवल उन्हीं सेल्स को चुन सकते हैं जिनमें हरे या लाल रंग से हाइलाइट किए गए उम्मीदवार हैं, क्योंकि हम अन्य सेल्स के बारे में कोई टिप्पणी नहीं कर रहे हैं।",
         "config": {
@@ -42,12 +42,12 @@
         }
     },
     "nakedGroups": {
-        "noInput": "यह समझने के लिए कि इन्हें क्यों हटाया जाना चाहिए, जहाँ {{candidatesListText}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें",
-        "emptyGroupCell": "{{emptyCellsListText}} में कोई उम्मीदवार नहीं बचा। पहेली के अंतिम समाधान में कोई सेल खाली नहीं हो सकता\nसही रास्ते पर वापस आने के लिए {{removableFilledNotesHostCells}} से {{removableFilledNotes}} हटाएं। {{numbersPronoun}} {{numbersTextSingularPlural}} {{candidatesHV}} {{cellsPronoun}} {{cellsSingularPlural}} में आते हैं",
-        "multipleCellsNakedSingle": "{{candidate}} {{emptyCellsListText}} के लिए नेकेड सिंगल है। पिछले चरणों में गलती जानने के लिए {{candidate}} इनमें से किसी एक सेल में भरें",
+        "noInput": "जहाँ {{candidatesListText}} लाल रंग में हाइलाइट है उन्हे वहाँ भरने का प्रयास करे ताकि समझ पाओ की इन्हे वहा से क्यो हटाया जाना चाहिए",
+        "emptyGroupCell": "{{emptyCellsListText}} में कोई उम्मीदवार नहीं बचा। पहेली के हल तभी होगीं जब कोई सेल खाली नही बचेगा\nसही रास्ते पर वापस आने के लिए {{removableFilledNotesHostCells}} से {{removableFilledNotes}} हटाए।",
+        "multipleCellsNakedSingle": "{{candidate}} {{emptyCellsListText}} के लिए नेकेड सिंगल है। पिछले कदमो मे गलती जानने के लिए {{candidate}} इनमें से किसी एक सेल मे भरे",
         "validFill": {
-            "full": "{{candidatesListText}} {{candidatesHostCells}} सेल में बिना किसी त्रुटि के भरे गए हैं। इन सेल को {{candidatesListText}} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि इस हाइलाइट किए गए क्षेत्र में {{candidatesHostCells}} के अलावा अन्य सेल में {{candidatesListText}} नहीं आ सकते।",
-            "partial": "{{filledCandidates}} {{filledCandidatesHostCells}} में बिना किसी त्रुटि के {{filledCandidatesCountHV}} भरे गए। {{toBeFilledCandidates}} भरने का भी प्रयोग करें यह समझने के लिए कि {{toBeFilledCandidatesPronoun}} कहाँ और क्यों भरे जाने चाहिए"
+            "full": "{{candidatesListText}} {{candidatesHostCells}} सेल्स मे बिना किसी त्रुटि के भरे गए हैं। इन सेल्स को {{candidatesListText}} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि इस हाइलाइट किए गए क्षेत्र में {{candidatesHostCells}} के अलावा अन्य सेल में {{candidatesListText}} नहीं आ सकते।",
+            "partial": "{filledCandidates} {filledCandidatesHostCells} में बिना किसी त्रुटि के {correctlyFilledGCCount, plural, =1 {भर दिया गया} other {भरे गए}} है। {toBeFilledCandidates} भरने का भी प्रयोग करें ताकि समझ पाओ की ये कहा आ सकते है कहा नहीं"
         }
     },
     "nakedTripple": {
@@ -60,14 +60,14 @@
         }
     },
     "xWing": {
-        "noInput": "यह समझने के लिए कि इन्हें क्यों हटाया जाना चाहिए, जहाँ {{candidate}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें",
+        "noInput": "जहाँ {{candidate}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें ताकि समझ पाओ की इन्हे क्यो हटाया जाना चाहिए",
         "sameCrosshouse": "पिछले चरणों में त्रुटि समझने के लिए अब {{houseAAxesValue}} या {{houseBAxesValue}} {{houseFullNamePlural}} में से किसी में {{candidate}} भरें",
-        "oneLegNoCandidate": "{{inhabitableHouseAxesText}} {{houseFullName}} में कोई सेल नहीं है जहाँ {{candidate}} आ सके\nइस त्रुटि को ठीक करने के लिए, {{filledRemovableNotesHostCells}} से {{candidate}} हटाएं",
+        "oneLegNoCandidate": "{{inhabitableHouseAxesText}} {{houseFullName}} में कोई सेल नहीं है जहाँ {{candidate}} आ सके\nइस त्रुटि को ठीक करने के लिए {{filledRemovableNotesHostCells}} से {{candidate}} हटाएं",
         "perfect": {
-            "bothLegsWithoutCandidate": "{{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullName}} में कोई सेल नहीं है जहाँ {{candidate}} आ सके\nइस त्रुटि को ठीक करने के लिए, {{filledRemovableNotesHostCells}} से {{candidate}} हटाएं"
+            "bothLegsWithoutCandidate": "{{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullName}} में कोई सेल नहीं है जहाँ {{candidate}} आ सके\nइस त्रुटि को ठीक करने के लिए {{filledRemovableNotesHostCells}} से {{candidate}} हटाएं"
         },
-        "oneLegValidFill": "पहेली के अंतिम समाधान में {{candidate}} {{houseAxesText}} {{houseFullName}} के {{filledXWingCornerCell}} सेल में आ सकता है\nजहाँ यह लाल या हरे रंग में हाइलाइट है वहाँ {{candidate}} भरने का भी प्रयोग करें",
-        "bothLegValidFill": "{{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullName}} में बिना किसी त्रुटि के भरा गया है और ध्यान दें कि लाल रंग में थे सभी {{candidate}} भी हटा दिए गए हैं।\nआप इन {{houseFullName}} में {{candidate}} अन्य संयोजनों में भी भर सकते हैं, ऐसे सभी संयोजनों में लाल रंग में थे सभी {{candidate}} हटा दिए जाएंगे",
+        "oneLegValidFill": "पहेली के अंतिम समाधान में {{candidate}} {{houseAxesText}} {{houseFullName}} के {{filledXWingCornerCell}} सेल में आ सकता है। अब जहाँ यह लाल या हरे रंग में हाइलाइट है वहाँ {{candidate}} भरने का भी प्रयोग करें",
+        "bothLegValidFill": "{{candidate}} {{houseAAxesValue}} और {{houseBAxesValue}} {{houseFullNamePlural}} में बिना किसी त्रुटि के भरा गया है और ध्यान दें कि लाल रंग में थे सभी {{candidate}} भी हटा दिए गए हैं।\nआप इन {{houseFullNamePlural}} में {{candidate}} अन्य तरीको से भी भर सकते हैं, ऐसे सभी तरीको में लाल रंग में दिखाए गए सभी {{candidate}} हटा दिए जाएंगे",
         "config": {
             "houseFullName": {
                 "houseNum": {
@@ -94,7 +94,7 @@
                 },
                 "houseName": {
                     "type": "house",
-                    "form": "plural"
+                    "form": "oblique"
                 }
             },
             "houseAAxesValue": {
@@ -133,29 +133,29 @@
     },
     "yWing": {
         "restrictedNumberInputMsg": "कृपया यहाँ केवल {{commonNoteInWings}} भरें। हम इस सेल में अन्य अंकों के बारे में कोई टिप्पणी नहीं कर रहे।",
-        "noInput": "यह देखने के लिए कि इन्हें क्यों हटाया जाना चाहिए, जहाँ {{commonNoteInWings}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें",
+        "noInput": "जहाँ {{commonNoteInWings}} लाल रंग में हाइलाइट है वहाँ भरने का प्रयास करें ताकि समझ पाओ की इन्हे वहा से क्यो हटाया जाना चाहिए",
         "eliminableNotesCellFilled": {
-            "pivotCellWithoutCandidate": "{{pivotCell}} में कोई उम्मीदवार नहीं बचा। इस त्रुटि को ठीक करने के लिए {{eliminableNotesFilledCells}} से {{commonNoteInWings}} हटाएं और फिर इनमें से किसी विंग्स सेल को {{commonNoteInWings}} से भरें",
+            "pivotCellWithoutCandidate": "{{pivotCell}} में कोई उम्मीदवार नहीं बचा। इस त्रुटि को ठीक करने के लिए {{eliminableNotesFilledCells}} से {{commonNoteInWings}} हटाएं और फिर इनमें से किसी विंग्स सेल्स को {{commonNoteInWings}} से भरें",
             "wingCellWithoutCandidate": "{{emptyWingCell}} में कोई उम्मीदवार नहीं बचा। इस त्रुटि को ठीक करने के लिए {{eliminableNotesFilledCells}} से {{commonNoteInWings}} हटाएं",
             "bothWingsWithoutInput": "पिछले चरणों में त्रुटि समझने के लिए {{wingsCells}} भरें",
             "oneOfWingsWithoutInput": "पिछले चरणों में त्रुटि समझने के लिए {{emptyWingCell}} भरें"
         },
-        "pivotCellWithoutCandidate": "{{pivotCell}} में कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए आपको इनमें से किसी विंग्स सेल में {{commonNoteInWings}} भरना होगा",
+        "pivotCellWithoutCandidate": "{{pivotCell}} में कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए आपको इनमें से किसी विंग्स सेल्स में {{commonNoteInWings}} भरना होगा",
         "eliminableNotesCellWithoutCandidate": "{{eliminableNotesCellsWithoutCandidates}} में कोई उम्मीदवार नहीं बचा। इस त्रुटि को ठीक करने के लिए {{filledPivotAndWingsCells}} में अंक बदलने का प्रयास करें",
         "validFill": {
-            "partial": "{{filledCandidates}} बिना किसी त्रुटि के {{filledCandidatesCountHV}} भरे गए। {{toBeFilledCandidates}} भरने का भी प्रयोग करें यह समझने के लिए कि {{toBeFilledCandidatesPronoun}} कहाँ आ सकते हैं या नहीं आ सकते",
-            "full": "{{candidatesListText}} पिवट और विंग्स सेल में बिना किसी त्रुटि के भरे गए हैं। इन सेल को {{candidatesListText}} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि {{eliminableNotesHostCells}} सेल में {{commonNoteInWings}} नहीं आ सकता"
+            "partial": "{filledCandidates} बिना किसी त्रुटि के {filledCandidatesCount, plural, =1 {भर दिया गया} other {भरे गए}} है। {toBeFilledCandidates} भरने का भी प्रयोग करें यह समझने के लिए कि {toBeFilledCandidatesPronoun} कहाँ आ सकते हैं या नहीं आ सकते",
+            "full": "{candidatesListText} पिवट और विंग्स सेल्स में बिना किसी त्रुटि के भरे गए हैं। इन सेल्स को {candidatesListText} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल्स का आखिर समाधान क्या होगा लेकिन हमें यकीन है कि {eliminableNotesHostCells} सेल में {commonNoteInWings} नहीं आ सकता"
         }
     },
     "remotePairs": {
-        "noInput": "यह देखने के लिए कि इन्हें क्यों हटाया जाना चाहिए, लाल रंग में हाइलाइट किए गए उम्मीदवार भरने का प्रयास करें",
+        "noInput": "लाल रंग में हाइलाइट किए गए उम्मीदवार भरने का प्रयास करें ताकि समझ पाओ की इन्हे वहा से क्यो हटाया जाना चाहिए",
         "chainCellWithoutCandidate": "सेल में कोई उम्मीदवार मौजूद नहीं है",
         "removableNotesCellFilled": {
             "allChainCellsEmpty": "यह समझने के लिए कि {{removableNotesFilledHostCells}} में {{removableNotesFilled}} क्यों नहीं भरना चाहिए, अब तीरों द्वारा दिए गए क्रम में चेन सेल भरें",
             "chainCellsPartiallyFilled": "{{removableNotesFilledHostCells}} में {{removableNotesFilled}} भरने के बाद बनी समस्या समझने के लिए चेन सेल भरते रहें",
             "chainCellWithoutCandidate": {
                 "onlyRemovableNotesFilled": "{{emptyCells}} के लिए कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए, {{removableNotesFilledHostCells}} से अंक हटाएं",
-                "bothColorsCandidatesFilled": "{{emptyCells}} के लिए कोई उम्मीदवार नहीं बचा। चेन सेल में सही से अंक भरने के लिए, पहले {{removableNotesFilledHostCells}} से अंक हटाएं और फिर आपको चेन सेल से भी कुछ अंक मिटाने होंगे ताकि चेन सेल केवल एक ही रंग के अंकों से भरे जाएं"
+                "bothColorsCandidatesFilled": "{{emptyCells}} के लिए कोई उम्मीदवार नहीं बचा। चेन सेल में सही से अंक भरने के लिए, पहले {{removableNotesFilledHostCells}} से अंक हटाएं और फिर आपको चेन सेल्स से भी कुछ अंक मिटाने होंगे ताकि चेन सेल्स केवल एक ही रंग के अंकों से भरे जाएं"
             }
         },
         "chainCellsBothColorCandidatesFilled": {
@@ -164,14 +164,14 @@
         },
         "validFill": {
             "partial": "अब तक आपने चेन सेल सही से भरे हैं। इस तकनीक को पूरी तरह समझने के लिए अन्य सेल भी भरें",
-            "full": "बधाई! आपने चेन के सभी सेल सफलतापूर्वक भर दिए हैं। इन सेल को भरने के समाधानों में से यह एक है। यह भी ध्यान दें कि {{removableNotesHostCells}} से लाल रंग में हाइलाइट किए गए सभी उम्मीदवार हटा दिए गए हैं। इन चेन सेल को दूसरे तरीके से भरने का प्रयास करें और आप पाएंगे कि परिणाम वही होगा।"
+            "full": "बधाई! आपने चेन के सभी सेल्स सफलतापूर्वक भर दिए हैं। इन सेल्स को भरने के समाधानों में से यह एक है। यह भी ध्यान दें कि {{removableNotesHostCells}} से लाल रंग में हाइलाइट किए गए सभी उम्मीदवार हटा दिए गए हैं। इन चेन सेल्स को दूसरे तरीके से भरने का प्रयास करें और आप पाएंगे कि परिणाम वही होगा।"
         },
         "unclickableCellClickedInTryOutMsg": "आप केवल चेन सेल्स या उन सेल्स को चुन सकते हैं जिनमें लाल रंग से हाइलाइट किए गए उम्मीदवार हैं।"
     },
     "emptyRectangle": {
         "noInput": "यह समझने के लिए कि {{removableNoteHostCell}} में {{candidate}} क्यों नहीं आ सकता, इन हाइलाइट किए गए सेल में से किसी में {{candidate}} भरें",
         "removableNoteCellFilled": {
-            "blockOrConjugateHouseFilled": "ध्यान दें कि {{candidateInhabitableHostHouse}} में {{candidate}} के लिए कोई सेल नहीं बचा। इस त्रुटि को ठीक करने के लिए, {{removableNoteHostCell}} से {{candidate}} हटाएं और फिर से शुरू करें",
+            "blockOrConjugateHouseFilled": "ध्यान दें कि {{candidateInhabitableHostHouse}} में {{candidate}} के लिए कोई सेल नहीं बचा। इस त्रुटि को ठीक करने के लिए {{removableNoteHostCell}} से {{candidate}} हटाएं और फिर से शुरू करें",
             "blockOrConjugateHouseNotFilled": "पिछले चरण में गलती जानने के लिए अब {{conjugateHouse}} या {{blockHostHouse}} में {{candidate}} भरें"
         },
         "conjugateHouseAndBlockHostHouseFilled": "पहेली के अंतिम समाधान में {{candidate}} {{conjugateHouse}} और {{blockHostHouse}} में इस संयोजन में भरा जा सकता है। अन्य संयोजनों में {{candidate}} भरने का प्रयास करें, उन सभी में {{candidate}} {{removableNoteHostCell}} से हटा दिया जाएगा",
@@ -231,21 +231,21 @@
     "wWing": {
         "noInput": "यह समझने के लिए कि {{removableNoteHostCells}} में {{removableCandidate}} क्यों नहीं आ सकता, इन हाइलाइट किए गए सेल में से किसी में {{nakedPairCandidates}} भरें",
         "removableNoteCellFilled": {
-            "noOtherCellFilled": "<p>{{nakedSinglesCells}} में बना नेकेड सिंगल देखें। पिछले चरण में गलती समझने के लिए अब इन सेल को भरें</p>",
-            "conjugateHouseFilled": "{{nakedPairCellWithNoCandidates}} के लिए कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए, {{filledRemovableNoteHostCell}} से {{removableNote}} हटाएं और इन सेल को भरने के लिए कोई अन्य संयोजन आज़माएं",
+            "noOtherCellFilled": "<p>{{nakedSinglesCells}} में बना नेकेड सिंगल देखें। पिछले चरण में गलती समझने के लिए अब इन सेल्स को भरें</p>",
+            "conjugateHouseFilled": "{{nakedPairCellWithNoCandidates}} के लिए कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए {{filledRemovableNoteHostCell}} से {{removableNote}} को हटना होगा",
             "oneNakedPairCellFilled": "{{emptyNakedPairCell}} भी भरें क्योंकि इसमें नेकेड सिंगल है",
             "bothNakedPairCellsFilled": "ध्यान दें कि अब {{conjugateHouse}} में कोई सेल नहीं है जहाँ {{conjugateHouseNote}} भरा जा सके। इसे ठीक करने के लिए {{filledRemovableNoteHostCell}} से {{removableNote}} हटाएं और फिर से शुरू करें"
         },
         "conjugateCellFilled": {
             "noOtherCellFilled": "<p>{{nakedSinglesCells}} में बना नेकेड सिंगल देखें। अब इस सेल को {{removableNote}} से भरना होगा</p>",
             "oneNakedPairCellFilled": {
-                "removableNoteFilledInNakedPairCell": "अब आप चाहें तो {{emptyCell}} में {{candidatesChoicesInEmptyCell}} भर सकते हैं। अंतिम समाधान में ये सेल इस संयोजन में भरे जा सकते हैं और ध्यान दें कि लाल रंग में हाइलाइट किए गए सभी {{removableNote}} भी हटा दिए गए हैं",
+                "removableNoteFilledInNakedPairCell": "अब आप चाहें तो {{emptyCell}} में {{candidatesChoicesInEmptyCell}} भर सकते हैं। अंतिम समाधान में ये सेल इस तरीक़े से भरे जा सकते हैं और ध्यान दें कि लाल रंग में हाइलाइट किए गए सभी {{removableNote}} भी हटा दिए गए हैं",
                 "conjugateNoteFilledInNakedPairCell": "अब {{emptyCell}} में नेकेड सिंगल भरें"
             },
-            "bothNakedPairCellFilled": "अंतिम समाधान में ये सेल इस संयोजन में भरे जा सकते हैं और ध्यान दें कि लाल रंग में हाइलाइट किए गए सभी {{removableNote}} भी हटा दिए गए हैं"
+            "bothNakedPairCellFilled": "अंतिम समाधान में ये सेल्स इस तरीक़े में भरे जा सकते हैं और ध्यान दें कि लाल रंग में हाइलाइट किए गए सभी {{removableNote}} भी हटा दिए गए हैं"
         },
         "nakedPairCellFilled": {
-            "filledWithRemovableNote": "यदि अंतिम समाधान में {{filledNakedPairCells}} में {{removableNote}} आता है तो निश्चित रूप से {{removableNote}} उन सेल में नहीं आ सकता जहाँ यह लाल रंग में हाइलाइट था",
+            "filledWithRemovableNote": "यदि अंतिम समाधान में {{filledNakedPairCells}} में {{removableNote}} आता है तो निश्चित रूप से {{removableNote}} उन सेल्स में नहीं आ सकता जहाँ यह लाल रंग में हाइलाइट था",
             "oneNakedPairCellFilledWithConjugateNote": "<p>{{conjugateHouse}} में {{hiddenSingleCell}} में बना हिडन सिंगल देखें। अब इस सेल को {{conjugateNote}} से भरना होगा</p>",
             "noPlaceForConjugateNoteInConjugateHouse": "ध्यान दें कि अब {{conjugateHouse}} में कोई सेल नहीं है जहाँ {{conjugateHouseNote}} भरा जा सके। इसे ठीक करने के लिए {{nakedPairCells}} में से किसी एक से {{conjugateHouseNote}} हटाएं और फिर से शुरू करें"
         },
@@ -270,12 +270,12 @@
         "restrictedNumberInputMsg": "आप केवल {{wingsAndPivotCommonNote}} भर सकते हैं क्योंकि हम इस सेल में किसी अन्य अंक के बारे में टिप्पणी नहीं कर रहे।",
         "noInput": "यह समझने के लिए कि {{removableNoteHostCells}} में {{removableCandidate}} क्यों नहीं आ सकता, इन हाइलाइट किए गए सेल में से किसी में {{xyzCellsCandidates}} भरें",
         "removableNoteCellFilled": {
-            "noOtherCellFilled": "<p>{{nakedSinglesCells}} में बना नेकेड सिंगल देखें। पिछले चरण में गलती समझने के लिए अब इन सेल को भरें</p>",
+            "noOtherCellFilled": "<p>{{nakedSinglesCells}} में बना नेकेड सिंगल देखें। पिछले चरण में गलती समझने के लिए अब इन सेल्स को भरें</p>",
             "cellsHaveNakedSingle": "अब {{nakedSinglesCells}} में नेकेड सिंगल है, अगला कदम {{nakedSinglesCells}} भरना हो सकता है।",
-            "cellWithoutCandidates": "{{cellsWithNoCandidates}} के लिए कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए, {{filledRemovableNoteHostCell}} से {{removableCandidate}} हटाएं और इन हाइलाइट किए गए सेल को भरने के लिए कोई अन्य संयोजन आज़माएं"
+            "cellWithoutCandidates": "{{cellsWithNoCandidates}} के लिए कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए {{filledRemovableNoteHostCell}} से {{removableCandidate}} हटाएं और इन हाइलाइट किए गए सेल को भरने के लिए कोई अन्य तरीक़ा आज़माएं"
         },
-        "allCellsFilledProperly": "बधाई! आपने {{xyzCells}} बिना किसी त्रुटि के भर दिए। यह संयोजन इन सेल का अंतिम समाधान हो भी सकता है और नहीं भी। लेकिन ध्यान दें कि लाल रंग में हाइलाइट किए गए सभी {{removableCandidate}} हटा दिए गए हैं",
+        "allCellsFilledProperly": "बधाई! आपने {{xyzCells}} बिना किसी त्रुटि के भर दिए। यह तरीक़ा इन सेल का अंतिम समाधान हो भी सकता है और नहीं भी। लेकिन ध्यान दें कि लाल रंग में हाइलाइट किए गए सभी {{removableCandidate}} हटा दिए गए हैं",
         "commonNoteFilledInAnyWingCells": "आप चाहें तो {{emptyWingCells}} भर सकते हैं लेकिन यदि पहेली के अंतिम समाधान में {{removableCandidate}} {{wingCellsFilledWithRemovableCandidate}} भरता है तो {{removableCandidate}} {{removableNoteHostCells}} में नहीं आ सकता। जैसा कि आप देख सकते हैं {{removableCandidate}} {{removableNoteHostCells}} से हटा दिया गया है",
-        "partiallyFilled": "अब तक आपने सेल बिना किसी त्रुटि के भरे हैं। उनमें हाइलाइट किए गए उम्मीदवारों के साथ अन्य सेल भी भरें"
+        "partiallyFilled": "अब तक आपने सेल बिना किसी त्रुटि के भरे हैं। उनमें हाइलाइट किए गए उम्मीदवारों के साथ अन्य सेल्स भी भरें"
     }
 }

@@ -15,8 +15,8 @@
         "reviewDescription": "If you've improved at Sudoku, please share your feedback to help us improve ❤️"
     },
     "refree": {
-        "mistakesWithLimit": "Mistakes: {{current}}/{{max}}",
-        "mistakesWithoutLimit": "Mistakes: {{current}}",
+        "mistakesWithLimit": "Mistakes: {current}/{max}",
+        "mistakesWithoutLimit": "Mistakes: {current}",
         "customizedPuzzle": "Customized Puzzle",
         "sharedPuzzle": "Shared Puzzle"
     },

@@ -134,7 +134,7 @@ const getBothLegsFilledWithoutErrorResult = (xWing, smartHintsTranslationsTexts)
 
     const msgPlaceholdersValues = {
         candidate: getXWingCandidate(xWing),
-        houseFullName: getLanguageSpecificHouseTypeText(
+        houseFullNamePlural: getLanguageSpecificHouseTypeText(
             getCellHouseForHouseType(xWing.houseType, xWing.legs[0].cells[0]).type,
             houseFullNameConfig,
             smartHintsTranslationsTexts

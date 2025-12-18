@@ -13,6 +13,7 @@ import { TRY_OUT_RESULT_STATES } from '../constants'
 import { getCandidatesToBeFilled, getCellsWithNoCandidates, getCorrectFilledTryOutCandidates } from '../helpers'
 import { isCellExists } from '../../../util'
 import { SmartHintsTranslationsTexts } from '../../types'
+import { formatMessage } from '@utils/util'
 
 export const getNakedGroupNoTryOutInputResult = (groupCandidates, smartHintsTranslationsTexts) => {
     const msgPlaceholderValues = {
@@ -150,10 +151,11 @@ export const getPartialCorrectlyFilledResult = (groupCandidates, groupCells, try
         filledCandidatesHostCells: getCellsAxesValuesListText(filledCandidatesHostCells, smartHintsTranslationsTexts.common.conjugations.and, axisValues),
         filledCandidatesCountHV: smartHintsTranslationsTexts.common.helpingVerb[filledIsPlural ? 'plural' : 'singular'],
         toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
+        correctlyFilledGCCount: filledCandidates.length
     }
 
     return {
-        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.nakedGroups.validFill.partial, msgPlaceholderValues),
+        msg: formatMessage(smartHintsTranslationsTexts.tryOutAnalyser.nakedGroups.validFill.partial, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

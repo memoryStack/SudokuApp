@@ -15,8 +15,8 @@
         "reviewDescription": "यदि आप सुडोकू में सुधार कर चुके हैं, तो कृपया हमारे सुधार में मदद के लिए अपनी प्रतिक्रिया साझा करें ❤️"
     },
     "refree": {
-        "mistakesWithLimit": "गलतियाँ: {{current}}/{{max}}",
-        "mistakesWithoutLimit": "गलतियाँ: {{current}}",
+        "mistakesWithLimit": "गलतियाँ: {current}/{max}",
+        "mistakesWithoutLimit": "गलतियाँ: {current}",
         "customizedPuzzle": "अनुकूलित पहेली",
         "sharedPuzzle": "साझा की गई पहेली"
     },

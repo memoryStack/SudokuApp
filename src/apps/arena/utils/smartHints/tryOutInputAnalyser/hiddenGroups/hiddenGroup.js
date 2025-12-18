@@ -5,6 +5,8 @@ import _unique from '@lodash/unique'
 import { MainNumbersRecord } from '@domain/board/records/mainNumbersRecord'
 import { NotesRecord } from '@domain/board/records/notesRecord'
 
+import { formatMessage } from '@utils/util'
+
 import { filterEmptyCells, sortCells } from '../../../util'
 
 import { getCellsAxesValuesListText } from '../../rawHintTransformers/helpers'
@@ -56,9 +58,10 @@ const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells,
         filledCellsAxesListText: getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers), undefined, axisValues),
         filledInstancesHelpingVerb: smartHintsTranslationsTexts.common.helpingVerb[isPlural ? 'plural' : 'singular'],
         cellSingularPlural: smartHintsTranslationsTexts.common.houseTypes.cell[isPlural ? 'plural' : 'singular'],
+        removableGCCount: filledCellsWithNumbers.length
     }
     return {
-        msg: dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.removableGroupCandidateFilled, msgPlaceholderValues),
+        msg: formatMessage(smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.removableGroupCandidateFilled, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -193,12 +196,13 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, { tryOutMa
             filledCandidatesHostCells: getCellsAxesValuesListText(filledGroupCells, undefined, axisValues),
             toBeFilledCandidates: getCandidatesListText(_sortBy(candidatesToBeFilled)),
             toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
+            correctlyFilledGCCount: correctlyFilledGroupCandidates.length
         }
         progressMsg = smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.validFill.partial
     }
 
     return {
-        msg: dynamicInterpolation(progressMsg, msgPlaceholderValues),
+        msg: formatMessage(progressMsg, msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
     }
 }

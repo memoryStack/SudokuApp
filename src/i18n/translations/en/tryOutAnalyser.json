@@ -67,7 +67,7 @@
             "bothLegsWithoutCandidate": "there is no cell in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} where {{candidate}} can come\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}"
         },
         "oneLegValidFill": "{{candidate}} might come in {{filledXWingCornerCell}} cell of {{houseAxesText}} {{houseFullName}} in final solution of puzzle\nexperiment with filling {{candidate}} in other places as well where it is highlighted in red or green color",
-        "bothLegValidFill": "{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} without any error and notice that all the {{candidate}}s that were in red color are also removed.\nyou can fill {{candidate}} in these {{houseFullName}} in other combinations as well, in all such combinations all the {{candidate}}s that were in red color will be removed",
+        "bothLegValidFill": "{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}} without any error and notice that all the {{candidate}}s that were in red color are also removed.\nyou can fill {{candidate}} in these {{houseFullNamePlural}} in other combinations as well, in all such combinations all the {{candidate}}s that were in red color will be removed",
         "config": {
             "houseFullName": {
                 "houseNum": {
