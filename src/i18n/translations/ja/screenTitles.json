@@ -1,0 +1,21 @@
+{
+    "home": "Home",
+    "arena": "Arena",
+    "play_guide": "How To Play?",
+    "hints_vocabulary_explaination": "Hints Vocabulary Explanation",
+    "levels": "Choose Your Game",
+    "game_settings": "Customize Experience",
+    "design_system": "Design System",
+    "badge": "Badge",
+    "typography": "Typography",
+    "button": "Button",
+    "divider": "Divider",
+    "dialog": "Dialog",
+    "level_card": "Level Card",
+    "gameLevels": {
+        "EASY": "Easy Levels",
+        "MEDIUM": "Medium Levels",
+        "HARD": "Hard Levels",
+        "EXPERT": "Expert Levels"
+    }
+}

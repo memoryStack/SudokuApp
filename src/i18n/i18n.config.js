@@ -53,6 +53,23 @@ const resources = {
         smartHints: require('./translations/hi/smartHints.json'),
         tryOutAnalyser: require('./translations/hi/tryOutAnalyser.json'),
     },
+    ...(LANGUAGE_KEYS.JAPANESE && {
+        [LANGUAGE_KEYS.JAPANESE]: {
+            common: require('./translations/ja/common.json'),
+            home: require('./translations/ja/home.json'),
+            levels: require('./translations/ja/levels.json'),
+            arena: require('./translations/ja/arena.json'),
+            playGuide: require('./translations/ja/playGuide.json'),
+            settings: require('./translations/ja/settings.json'),
+            dialogs: require('./translations/ja/dialogs.json'),
+            errors: require('./translations/ja/errors.json'),
+            screenTitles: require('./translations/ja/screenTitles.json'),
+            hintsVocabulary: require('./translations/ja/hintsVocabulary.json'),
+            extras: require('./translations/ja/extras.json'),
+            smartHints: require('./translations/ja/smartHints.json'),
+            tryOutAnalyser: require('./translations/ja/tryOutAnalyser.json'),
+        },
+    }),
 }
 
 i18n

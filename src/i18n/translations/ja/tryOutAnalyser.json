@@ -1,0 +1,281 @@
+{
+    "unattainableState": "not sure how we reached here",
+    "snackbars": {
+        "selectCellBeforeInput": "please select some cell before filling number",
+        "invalidNumberForCell": "{{number}} can't go in this cell. try filling it where {{number}} is a candidate",
+        "eraseOnlyFromNewlyFilledCells": "you can only erase from cells which were filled after this hint is displayed",
+        "clickNextToSelectCell": "click on Next button and go to last step to select cell"
+    },
+    "restrictedNumberInputMsg": "input the numbers which are highlighted in red color in this cell. other numbers don't help in learning this hint.",
+    "unclickableCellClickedInTryOutMsg": {
+        "singular": "you can select cells which have {{candidate}} candidate highlighted in green or red color",
+        "plural": "you can select cells which have {{candidatesListText}} candidates highlighted in green or red color",
+        "clickAnyHighlightedCell": "you can only select cells which are highlighted here"
+    },
+    "hiddenGroup": {
+        "noInput": "try to fill numbers highlighted in red color to understand why these should be removed from these cells",
+        "removableGroupCandidateFilled": "{{filledCandidatesListText}} {{filledInstancesHelpingVerb}} filled in {{filledCellsAxesListText}}. because of this there {{filledInstancesHelpingVerb}} no {{cellSingularPlural}} left for {{filledCandidatesListText}} in {{primaryHouseFullName}}\nto fix this error, remove {{filledCandidatesListText}} from {{filledCellsAxesListText}}",
+        "invalidCandidateInGroupCell": {
+            "noHostCellForGroupCandidates": "in {{primaryHouseFullName}} {{candidatesListText}} can't come in any cell\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}",
+            "insufficientHostCells": "{{candidatesListText}} need to be filled but only {{emptyCellsAxesListText}} {{emptyGroupCellsHelpingVerb}} available for these in {{primaryHouseFullName}}. so {{candidatesCountWithoutCells}} out of {{candidatesListText}} can't be filled in this {{primaryHouseFullName}}.\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}"
+        },
+        "validFill": {
+            "full": "{{candidatesListText}} are filled in {{groupCellsAxesListText}} cells without any error. this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what will be the exact solution for these cells but we are sure that {{candidatesListText}} can't come in cells other than {{groupCellsAxesListText}} in this highlighted region.",
+            "partial": "{{filledCandidates}} {{filledCandidatesCountHV}} filled in {{filledCandidatesHostCells}} without any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can't be filled"
+        },
+        "unclickableCellClickedInTryOutMsg": "you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.",
+        "config": {
+            "primaryHouseFullName": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
+        }
+    },
+    "nakedGroups": {
+        "noInput": "try to fill {{candidatesListText}} where it is highlighted in red color to understand why these should be removed",
+        "emptyGroupCell": "{{emptyCellsListText}} have no candidate left. in the final solution of puzzle no cell can be empty \nto get back to right track remove {{removableFilledNotes}} from {{removableFilledNotesHostCells}}. {{numbersPronoun}} {{numbersTextSingularPlural}} {{candidatesHV}} belong in {{cellsPronoun}} {{cellsSingularPlural}}",
+        "multipleCellsNakedSingle": "{{candidate}} is Naked Single for {{emptyCellsListText}}. fill {{candidate}} in one of these cells to know the fault in previous steps",
+        "validFill": {
+            "full": "{{candidatesListText}} are filled in {{candidatesHostCells}} cells without any error. this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what will be the exact solution for these cells but we are sure that {{candidatesListText}} can't come in cells other than {{candidatesHostCells}} in this highlighted region.",
+            "partial": "{{filledCandidates}} {{filledCandidatesCountHV}} filled in {{filledCandidatesHostCells}} without any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} should be filled and why"
+        }
+    },
+    "nakedTripple": {
+        "futureEmptyCell": {
+            "nakedSinglePair": "now fill {{nakedSingleCandidatesWithAndJoin}} in {{nakedSingleHostCellsAxesText}} respectively to know the fault in previous steps",
+            "nakedDoublePair": {
+                "nakedSingleInThirdCell": "now fill {{nakedSingleCandidate}} in {{nakedSingleHostCell}} to know the fault in previous steps",
+                "nakedDoubleInThirdCell": "now fill {{nakedDoubleCandidatesList}} in any of {{nakedDoubleHostCellAxesText}} cells to know the fault in previous steps"
+            }
+        }
+    },
+    "xWing": {
+        "noInput": "try to fill {{candidate}} where it is highlighted in red color to understand why these should be removed",
+        "sameCrosshouse": "now fill {{candidate}} in any of {{houseAAxesValue}} or {{houseBAxesValue}} {{houseFullNamePlural}} to understand the error in previous steps",
+        "oneLegNoCandidate": "there is no cell in {{inhabitableHouseAxesText}} {{houseFullName}} where {{candidate}} can come\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}",
+        "perfect": {
+            "bothLegsWithoutCandidate": "there is no cell in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullName}} where {{candidate}} can come\nto fix this error, remove {{candidate}} from {{filledRemovableNotesHostCells}}"
+        },
+        "oneLegValidFill": "{{candidate}} might come in {{filledXWingCornerCell}} cell of {{houseAxesText}} {{houseFullName}} in final solution of puzzle\nexperiment with filling {{candidate}} in other places as well where it is highlighted in red or green color",
+        "bothLegValidFill": "{{candidate}} is filled in {{houseAAxesValue}} and {{houseBAxesValue}} {{houseFullNamePlural}} without any error and notice that all the {{candidate}}s that were in red color are also removed.\nyou can fill {{candidate}} in these {{houseFullNamePlural}} in other combinations as well, in all such combinations all the {{candidate}}s that were in red color will be removed",
+        "config": {
+            "houseFullName": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "houseFullNamePlural": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "plural"
+                }
+            },
+            "houseAAxesValue": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "houseBAxesValue": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "inhabitableHouseAxesText": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            },
+            "houseAxesText": {
+                "type": "houseNumber",
+                "form": {
+                    "row": "axis",
+                    "col": "number_ordinal",
+                    "block": "number_ordinal"
+                }
+            }
+        }
+    },
+    "yWing": {
+        "restrictedNumberInputMsg": "please enter only {{commonNoteInWings}} here. we are not commenting anything about other numbers in this cell",
+        "noInput": "try to fill {{commonNoteInWings}} where it is highlighted in red color to see why these should be removed",
+        "eliminableNotesCellFilled": {
+            "pivotCellWithoutCandidate": "{{pivotCell}} is left with no candidates. to fix this error remove {{commonNoteInWings}} from {{eliminableNotesFilledCells}} and then fill one of these wings cells with {{commonNoteInWings}}",
+            "wingCellWithoutCandidate": "{{emptyWingCell}} is left with no candidates. to fix this error remove {{commonNoteInWings}} from {{eliminableNotesFilledCells}}",
+            "bothWingsWithoutInput": "fill {{wingsCells}} to understand the error in previous steps",
+            "oneOfWingsWithoutInput": "fill {{emptyWingCell}} to understand the error in previous steps"
+        },
+        "pivotCellWithoutCandidate": "{{pivotCell}} is left with no candidates. to fix this you will have to fill {{commonNoteInWings}} in one of these wings cells",
+        "eliminableNotesCellWithoutCandidate": "{{eliminableNotesCellsWithoutCandidates}} have no candidates left. to fix this error try changing numbers in {{filledPivotAndWingsCells}}",
+        "validFill": {
+            "partial": "{{filledCandidates}} {{filledCandidatesCountHV}} filled without any error. experiment with filling {{toBeFilledCandidates}} as well to understand where {{toBeFilledCandidatesPronoun}} can or can't be filled",
+            "full": "{{candidatesListText}} are filled in pivot and wings cells without any error. this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what will be the exact solution for these cells but we are sure that {{commonNoteInWings}} can't come in {{eliminableNotesHostCells}} cells"
+        }
+    },
+    "remotePairs": {
+        "noInput": "try to fill candidates highlighted in red color to see why these should be removed",
+        "chainCellWithoutCandidate": "no candidate is present in cell",
+        "removableNotesCellFilled": {
+            "allChainCellsEmpty": "now fill Chain cells in the sequence given by arrows to understand why {{removableNotesFilled}} shouldn't be filled in {{removableNotesFilledHostCells}}",
+            "chainCellsPartiallyFilled": "keep filling Chain cells to understand the problem created after filling {{removableNotesFilled}} in {{removableNotesFilledHostCells}}",
+            "chainCellWithoutCandidate": {
+                "onlyRemovableNotesFilled": "no candidates are left for {{emptyCells}}. to fix it, remove number from {{removableNotesFilledHostCells}}",
+                "bothColorsCandidatesFilled": "no candidates are left for {{emptyCells}}. to fill numbers in Chain cells properly, first remove number from {{removableNotesFilledHostCells}} and then you will have to erase some numbers from Chain cells as well so that Chain cells are filled by same color numbers only"
+            }
+        },
+        "chainCellsBothColorCandidatesFilled": {
+            "cellWithNoCandidatesInProgress": "Chain cells are filled with both colors numbers. keep filling the Chain to understand why it will be filled by same color numbers only",
+            "cellWithNoCandidates": "no candidates are left for {{emptyCells}}. to fix this error either remove number from {{colorACells}} or from {{colorBCells}} because this Chain can be filled by same colors numbers only otherwise some cells will be left without any candidates."
+        },
+        "validFill": {
+            "partial": "till now you have filled Chain cells correctly. fill other cells as well to fully understand this technique",
+            "full": "yayy! you have successfully filled all the cells in the Chain. this is one of the solutions to fill these cells. also notice that all the candidates highlighted in red color from {{removableNotesHostCells}} are removed. try to fill these Chain cells in another way and you will find that the result will be same."
+        },
+        "unclickableCellClickedInTryOutMsg": "you can only select Chain cells or cells which have candidates highlighted in red color"
+    },
+    "emptyRectangle": {
+        "noInput": "Fill {{candidate}} in any of these highlighted cells to understand why {{candidate}} can not come in {{removableNoteHostCell}}",
+        "removableNoteCellFilled": {
+            "blockOrConjugateHouseFilled": "Notice that there is no cell left for {{candidate}} in {{candidateInhabitableHostHouse}}. To fix this error, remove {{candidate}} from {{removableNoteHostCell}} and start again",
+            "blockOrConjugateHouseNotFilled": "Now fill {{candidate}} either in {{conjugateHouse}} or {{blockHostHouse}} to know the fault in previous step"
+        },
+        "conjugateHouseAndBlockHostHouseFilled": "{{candidate}} might be filled in this combination in {{conjugateHouse}} and {{blockHostHouse}} in the final solution of the puzzle. Try to fill {{candidate}} in other combinations, in all of them {{candidate}} will be removed from {{removableNoteHostCell}}",
+        "conjugateHouseFilled": {
+            "removableNotePresent": "Now fill {{candidate}} anywhere in {{blockHostHouse}} or fill it in {{removableNoteHostCell}}",
+            "removableNoteRemoved": "If {{candidate}} is filled in {{filledHostCell}} then {{candidate}} can not come in {{removableNoteHostCell}}"
+        },
+        "blockHostHouseFilled": {
+            "removableNotePresent": "Now fill {{candidate}} anywhere in {{conjugateHouse}} or fill it in {{removableNoteHostCell}}",
+            "removableNoteRemoved": "If {{candidate}} is filled in {{filledHostCell}} then {{candidate}} can not come in {{removableNoteHostCell}}"
+        },
+        "config": {
+            "conjugateHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "blockHostHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            },
+            "candidateInhabitableHostHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
+        }
+    },
+    "wWing": {
+        "noInput": "Fill {{nakedPairCandidates}} in any of these highlighted cells to understand why {{removableCandidate}} can not come in {{removableNoteHostCells}}",
+        "removableNoteCellFilled": {
+            "noOtherCellFilled": "<p>Notice the Naked Single created in {{nakedSinglesCells}}. Now fill these cells to understand the fault in previous step</p>",
+            "conjugateHouseFilled": "there are no candidates left for {{nakedPairCellWithNoCandidates}}. to fix it, remove {{removableNote}} from {{filledRemovableNoteHostCell}} and try some other combination to fill these cells",
+            "oneNakedPairCellFilled": "Fill {{emptyNakedPairCell}} as well because it has Naked Single in it",
+            "bothNakedPairCellsFilled": "Notice that now there is no cell in {{conjugateHouse}} where {{conjugateHouseNote}} can be filled. to fix it remove {{removableNote}} from {{filledRemovableNoteHostCell}} and start again"
+        },
+        "conjugateCellFilled": {
+            "noOtherCellFilled": "<p>Notice the Naked Single created in {{nakedSinglesCells}}. Now this cell has to be filled with {{removableNote}}</p>",
+            "oneNakedPairCellFilled": {
+                "removableNoteFilledInNakedPairCell": "now you can fill {{candidatesChoicesInEmptyCell}} in {{emptyCell}} if you want. in the final solution these cells might be filled in this combination and notice that all the {{removableNote}} highlighted in red color have been removed also",
+                "conjugateNoteFilledInNakedPairCell": "now fill Naked Single in {{emptyCell}}"
+            },
+            "bothNakedPairCellFilled": "in the final solution these cells might be filled in this combination and notice that all the {{removableNote}} highlighted in red color have been removed also"
+        },
+        "nakedPairCellFilled": {
+            "filledWithRemovableNote": "If {{removableNote}} comes in {{filledNakedPairCells}} in the final solution then definitely {{removableNote}} can not come in the cells where it was highlighted in red color",
+            "oneNakedPairCellFilledWithConjugateNote": "<p>Notice the Hidden Single created in {{conjugateHouse}} in {{hiddenSingleCell}}. Now this cell has to be filled with {{conjugateNote}}</p>",
+            "noPlaceForConjugateNoteInConjugateHouse": "Notice that now there is no cell in {{conjugateHouse}} where {{conjugateHouseNote}} can be filled. to fix it remove {{conjugateHouseNote}} from one of {{nakedPairCells}} and start again"
+        },
+        "config": {
+            "conjugateHouse": {
+                "houseNum": {
+                    "type": "houseNumber",
+                    "form": {
+                        "row": "axis",
+                        "col": "number_ordinal",
+                        "block": "number_ordinal"
+                    }
+                },
+                "houseName": {
+                    "type": "house",
+                    "form": "singular"
+                }
+            }
+        }
+    },
+    "xyzWing": {
+        "restrictedNumberInputMsg": "you can only fill {{wingsAndPivotCommonNote}} because we are not commenting about any other number in this cell",
+        "noInput": "fill {{xyzCellsCandidates}} in any of these highlighted cells to understand why {{removableCandidate}} can not come in {{removableNoteHostCells}}",
+        "removableNoteCellFilled": {
+            "noOtherCellFilled": "<p>notice the Naked Single created in {{nakedSinglesCells}}. Now fill these cells to understand the fault in previous step</p>",
+            "cellsHaveNakedSingle": "now {{nakedSinglesCells}} have Naked Single, next step can be to fill {{nakedSinglesCells}}.",
+            "cellWithoutCandidates": "there are no candidates left for {{cellsWithNoCandidates}}. to fix it, remove {{removableCandidate}} from {{filledRemovableNoteHostCell}} and try some other combination to fill these highlighted cells"
+        },
+        "allCellsFilledProperly": "Yayy! you have filled {{xyzCells}} without any error. this combination may or may not be the final solution for these cells. but notice that all the {{removableCandidate}} highlighted in red color have been removed",
+        "commonNoteFilledInAnyWingCells": "you can fill {{emptyWingCells}} if you want but if {{removableCandidate}} fills {{wingCellsFilledWithRemovableCandidate}} in the final solution of puzzle then {{removableCandidate}} can not come in {{removableNoteHostCells}}. as you can see that {{removableCandidate}} has been removed from {{removableNoteHostCells}}",
+        "partiallyFilled": "till now you have filled cells without any error. fill other cells as well with the candidates highlighted in them"
+    }
+}
