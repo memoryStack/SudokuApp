@@ -14,6 +14,12 @@
         "gameOverMessage": "आप अधिकतम गलतियों की सीमा तक पहुँच गए हैं। अगली बार अच्छी किस्मत",
         "reviewDescription": "यदि आप सुडोकू में सुधार कर चुके हैं, तो कृपया हमारे सुधार में मदद के लिए अपनी प्रतिक्रिया साझा करें ❤️"
     },
+    "inputPanel": {
+        "names": {
+            "notes": "नोट्स",
+            "mainNumbers": "मुख्य अंक"
+        }
+    },
     "refree": {
         "mistakesWithLimit": "गलतियाँ: {current}/{max}",
         "mistakesWithoutLimit": "गलतियाँ: {current}",

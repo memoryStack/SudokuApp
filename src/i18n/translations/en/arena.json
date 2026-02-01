@@ -14,6 +14,12 @@
         "gameOverMessage": "You have reached the maximum mistakes limit. Better Luck Next Time",
         "reviewDescription": "If you've improved at Sudoku, please share your feedback to help us improve ❤️"
     },
+    "inputPanel": {
+        "names": {
+            "notes": "Notes",
+            "mainNumbers": "Main Number"
+        }
+    },
     "refree": {
         "mistakesWithLimit": "Mistakes: {current}/{max}",
         "mistakesWithoutLimit": "Mistakes: {current}",

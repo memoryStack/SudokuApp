@@ -92,7 +92,7 @@ export const GameInputPanelView = ({
     remainingCounts,
     customStyles = {}
 }) => {
-
+    const { t } = useTranslation('arena')
     const styles = useStyles(getStyles)
 
     const { number: lockedNumberValue, type: lockedNumberInputType } = lockedNumber ?? { number: 0, type: '' }
@@ -101,7 +101,7 @@ export const GameInputPanelView = ({
         return (
             <View style={styles.separateInputPanel.container}>
                 <View style={styles.separateInputPanel.inputPanelContainer} testID={NOTES_INPUT_PANEL_TEST_ID}>
-                    <Text style={styles.separateInputPanel.text} type={TEXT_VARIATIONS.BODY_MEDIUM}>Notes</Text>
+                    <Text style={styles.separateInputPanel.text} type={TEXT_VARIATIONS.BODY_MEDIUM}>{t('inputPanel.names.notes')}</Text>
                     <Inputpanel
                         onAction={({ type, payload }) => {
                             return onAction({
@@ -123,7 +123,7 @@ export const GameInputPanelView = ({
                     />
                 </View>
                 <View style={styles.separateInputPanel.inputPanelContainer} testID={MAIN_NUMBER_INPUT_PANEL_TEST_ID}>
-                    <Text style={styles.separateInputPanel.text} type={TEXT_VARIATIONS.BODY_MEDIUM}>Main Number</Text>
+                    <Text style={styles.separateInputPanel.text} type={TEXT_VARIATIONS.BODY_MEDIUM}>{t('inputPanel.names.mainNumbers')}</Text>
                     <Inputpanel
                         numbersVisible={numbersVisible}
                         onAction={onAction}
