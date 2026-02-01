@@ -22,8 +22,8 @@ const EVENT_NAMES = {
     FEEDBACK_SKIPPED: 'feedbackSkipped',
     FEEDBACK_DND_SELECTED: 'feedbackDNDSelected',
     FEEDBACK_API_ERROR: 'feedbackApiError',
-    IN_APP_REVIEW_SHOWN: 'inAppReviewShown',
-    IN_APP_REVIEW_COMPLETED: 'inAppReviewCompleted',
+    IN_APP_REVIEW_CTA_SHOWN_ON_GAME_OVER: 'inAppReviewCtaShownOnGameOver',
+    IN_APP_REVIEW_FORM_SHOWN: 'inAppReviewFormShown',
 }
 
 export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
@@ -117,14 +117,14 @@ export const ArenaAnalyticsHandlers: ArenaAnalyticsHandler = {
         const commonData = await getEventCommonData()
         return client.sendEvent(EVENT_NAMES.FEEDBACK_API_ERROR, { ...commonData, error })
     },
-    sendInAppReviewShownEvent: async (data) => {
+    sendInAppReviewCtaShownOnGameOverEvent: async (data) => {
         const client = getClient()
         const commonData = await getEventCommonData()
-        return client.sendEvent(EVENT_NAMES.IN_APP_REVIEW_SHOWN, { ...commonData, ...data })
+        return client.sendEvent(EVENT_NAMES.IN_APP_REVIEW_CTA_SHOWN_ON_GAME_OVER, { ...commonData, ...data })
     },
-    sendInAppReviewCompletedEvent: async () => {
+    sendInAppReviewFormShownEvent: async () => {
         const client = getClient()
         const commonData = await getEventCommonData()
-        return client.sendEvent(EVENT_NAMES.IN_APP_REVIEW_COMPLETED, { ...commonData })
+        return client.sendEvent(EVENT_NAMES.IN_APP_REVIEW_FORM_SHOWN, { ...commonData })
     },
 }

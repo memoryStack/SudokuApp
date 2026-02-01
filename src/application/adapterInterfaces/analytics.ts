@@ -73,8 +73,8 @@ export type ArenaAnalyticsHandler = {
     sendFeedbackSkippedEvent: () => Promise<void>,
     sendFeedbackDNDSelectedEvent: () => Promise<void>,
     sendFeedbackApiErrorEvent: (error: string) => Promise<void>,
-    sendInAppReviewShownEvent: (data: InAppReviewShownEventData) => Promise<void>,
-    sendInAppReviewCompletedEvent: () => Promise<void>,
+    sendInAppReviewCtaShownOnGameOverEvent: (data: InAppReviewShownEventData) => Promise<void>,
+    sendInAppReviewFormShownEvent: () => Promise<void>,
 }
 
 export type PlayGuideEventData = {

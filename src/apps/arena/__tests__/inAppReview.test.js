@@ -196,8 +196,8 @@ describe('useInAppReview Hook - shouldShowReviewSection conditions', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -220,8 +220,8 @@ describe('useInAppReview Hook - shouldShowReviewSection conditions', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -244,8 +244,8 @@ describe('useInAppReview Hook - shouldShowReviewSection conditions', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -268,8 +268,8 @@ describe('useInAppReview Hook - shouldShowReviewSection conditions', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -292,8 +292,8 @@ describe('useInAppReview Hook - shouldShowReviewSection conditions', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -316,8 +316,8 @@ describe('useInAppReview Hook - shouldShowReviewSection conditions', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -364,8 +364,8 @@ describe('useInAppReview Hook - Review Provided Condition', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -390,8 +390,8 @@ describe('useInAppReview Hook - Review Provided Condition', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -417,8 +417,8 @@ describe('useInAppReview Hook - Review Provided Condition', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -485,8 +485,8 @@ describe('useInAppReview Hook - Regular Interval of 3 Games', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -497,7 +497,7 @@ describe('useInAppReview Hook - Regular Interval of 3 Games', () => {
         })
 
         expect(result.current.showReviewSection).toBe(true)
-        expect(mockParams.analytics.sendInAppReviewShownEvent).toHaveBeenCalledWith({ gamesSolvedBeforeShowing: 3 })
+        expect(mockParams.analytics.sendInAppReviewCtaShownOnGameOverEvent).toHaveBeenCalledWith({ gamesSolvedBeforeShowing: 3 })
     })
 
     test('review section is shown at 6 games solved (second interval)', async () => {
@@ -512,8 +512,8 @@ describe('useInAppReview Hook - Regular Interval of 3 Games', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -524,7 +524,7 @@ describe('useInAppReview Hook - Regular Interval of 3 Games', () => {
         })
 
         expect(result.current.showReviewSection).toBe(true)
-        expect(mockParams.analytics.sendInAppReviewShownEvent).toHaveBeenCalledWith({ gamesSolvedBeforeShowing: 6 })
+        expect(mockParams.analytics.sendInAppReviewCtaShownOnGameOverEvent).toHaveBeenCalledWith({ gamesSolvedBeforeShowing: 6 })
     })
 
     test('games solved count is reset after successful review', async () => {
@@ -535,8 +535,8 @@ describe('useInAppReview Hook - Regular Interval of 3 Games', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -558,8 +558,8 @@ describe('useInAppReview Hook - Regular Interval of 3 Games', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -605,8 +605,8 @@ describe('useInAppReview Hook - Request Review on Button Click', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -630,8 +630,8 @@ describe('useInAppReview Hook - Request Review on Button Click', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -657,8 +657,8 @@ describe('useInAppReview Hook - Request Review on Button Click', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -703,13 +703,13 @@ describe('useInAppReview Hook - Analytics Events', () => {
         jest.restoreAllMocks()
     })
 
-    test('sendInAppReviewShownEvent is called when review section is shown', async () => {
+    test('sendInAppReviewCtaShownOnGameOverEvent is called when review section is shown', async () => {
         const { useInAppReview: realUseInAppReview } = jest.requireActual('../hooks/useInAppReview')
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -719,18 +719,18 @@ describe('useInAppReview Hook - Analytics Events', () => {
             await result.current.checkAndShowReviewSection(true)
         })
 
-        expect(mockParams.analytics.sendInAppReviewShownEvent).toHaveBeenCalledWith({ gamesSolvedBeforeShowing: 3 })
+        expect(mockParams.analytics.sendInAppReviewCtaShownOnGameOverEvent).toHaveBeenCalledWith({ gamesSolvedBeforeShowing: 3 })
     })
 
-    test('sendInAppReviewCompletedEvent is called when review flow completes successfully', async () => {
+    test('sendInAppReviewFormShownEvent is called when review flow completes successfully', async () => {
         inAppReviewAdapter.requestInAppReview.mockResolvedValue(true)
 
         const { useInAppReview: realUseInAppReview } = jest.requireActual('../hooks/useInAppReview')
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -744,18 +744,18 @@ describe('useInAppReview Hook - Analytics Events', () => {
             await result.current.requestReview()
         })
 
-        expect(mockParams.analytics.sendInAppReviewCompletedEvent).toHaveBeenCalled()
+        expect(mockParams.analytics.sendInAppReviewFormShownEvent).toHaveBeenCalled()
     })
 
-    test('sendInAppReviewCompletedEvent is NOT called when review flow fails', async () => {
+    test('sendInAppReviewFormShownEvent is NOT called when review flow fails', async () => {
         inAppReviewAdapter.requestInAppReview.mockResolvedValue(false)
 
         const { useInAppReview: realUseInAppReview } = jest.requireActual('../hooks/useInAppReview')
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -769,7 +769,7 @@ describe('useInAppReview Hook - Analytics Events', () => {
             await result.current.requestReview()
         })
 
-        expect(mockParams.analytics.sendInAppReviewCompletedEvent).not.toHaveBeenCalled()
+        expect(mockParams.analytics.sendInAppReviewFormShownEvent).not.toHaveBeenCalled()
     })
 })
 
@@ -808,8 +808,8 @@ describe('useInAppReview Hook - Once Per Session', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 
@@ -842,8 +842,8 @@ describe('useInAppReview Hook - Once Per Session', () => {
 
         const mockParams = {
             analytics: {
-                sendInAppReviewShownEvent: jest.fn(),
-                sendInAppReviewCompletedEvent: jest.fn(),
+                sendInAppReviewCtaShownOnGameOverEvent: jest.fn(),
+                sendInAppReviewFormShownEvent: jest.fn(),
             },
         }
 

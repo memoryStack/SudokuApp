@@ -6,8 +6,8 @@ const MIN_GAMES_SOLVED_BEFORE_REVIEW = 3
 
 interface UseInAppReviewParams {
     analytics?: {
-        sendInAppReviewShownEvent: (data: InAppReviewShownEventData) => Promise<void>
-        sendInAppReviewCompletedEvent: () => Promise<void>
+        sendInAppReviewCtaShownOnGameOverEvent: (data: InAppReviewShownEventData) => Promise<void>
+        sendInAppReviewFormShownEvent: () => Promise<void>
     }
 }
 
@@ -44,7 +44,7 @@ export const useInAppReview = ({
         if (shouldShow) {
             setShowReviewSection(true)
             inAppReviewAdapter.setReviewShownThisSession()
-            analytics?.sendInAppReviewShownEvent({ gamesSolvedBeforeShowing: gamesSolvedCountRef.current })
+            analytics?.sendInAppReviewCtaShownOnGameOverEvent({ gamesSolvedBeforeShowing: gamesSolvedCountRef.current })
         }
     }, [shouldShowReviewSection, analytics])
 
@@ -54,7 +54,7 @@ export const useInAppReview = ({
         if (reviewCompleted) {
             await inAppReviewAdapter.setReviewProvided()
             await inAppReviewAdapter.resetGamesSolvedCount()
-            analytics?.sendInAppReviewCompletedEvent()
+            analytics?.sendInAppReviewFormShownEvent()
             setShowReviewSection(false)
         }
 
