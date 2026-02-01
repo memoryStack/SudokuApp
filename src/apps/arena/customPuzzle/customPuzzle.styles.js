@@ -43,4 +43,15 @@ export const getStyles = (_, theme, isLight) => StyleSheet.create({
     clueNumColor: {
         color: _get(theme, ['colors', 'board', 'clueNumColor'])
     },
+    inputPanelCustomStyles: {
+        numberButtonContainer: {
+            marginHorizontal: 8,
+        },
+        horizontalSeperator: {
+            height: 16,
+        },
+        eraserContainer: {
+            marginHorizontal: 8,
+        },
+    }
 })

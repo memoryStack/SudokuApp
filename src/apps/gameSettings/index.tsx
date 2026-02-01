@@ -64,7 +64,7 @@ import { MAX_GAME_SETTINGS_PRVIEW_TOOLTIP_SHOWN_COUNT } from '@application/adapt
 import { createRefreeStateRepositoryHandlers } from 'src/repositories/refreeRepository/refreeRepository'
 import { createInputPanelSlice } from '../arena/store/reducers/inputPanel.reducers'
 import { createInputPanelStateRepositoryHandlers } from 'src/repositories/inputPanelRepository/InputPanelRepository'
-import { GameInputPanelView } from '../arena/GameInputPanel'
+import { GameInputPanelView, getRemainingCounts } from '../arena/GameInputPanel'
 
 enum INPUT_TYPES {
     TOGGLE = 'TOGGLE',
@@ -133,6 +133,12 @@ const GameSettings_ = ({ onAction }) => {
             title: t('gameSettings.categories.visualHighlights', 'Visual Highlights'),
             hasPreview: true,
             items: [
+                {
+                    key: GAME_SETTINGS_KEYS.SHOW_REMAINING_COUNT,
+                    inputType: INPUT_TYPES.TOGGLE,
+                    value: false,
+                    description: t('gameSettings.descriptions.showRemainingCount', 'Show how often a number can still be used')
+                },
                 {
                     key: GAME_SETTINGS_KEYS.SHOW_FEEDBACK_ON_MISTAKE,
                     inputType: INPUT_TYPES.TOGGLE,
@@ -204,6 +210,10 @@ const GameSettings_ = ({ onAction }) => {
     ]
 
     const SNACKBAR_MSGS = {
+        [GAME_SETTINGS_KEYS.SHOW_REMAINING_COUNT]: {
+            [OPTION_STATES.ON]: t('gameSettings.snackbar.showRemainingCountOn', 'now you will see remaining count for each number in input panel'),
+            [OPTION_STATES.OFF]: t('gameSettings.snackbar.showRemainingCountOff', 'remaining count is now hidden from input panel'),
+        },
         [GAME_SETTINGS_KEYS.SOUNDS_ENABLED]: {
             [OPTION_STATES.ON]: t('gameSettings.snackbar.soundsOn', 'sounds have been enabled. now try pressing any cell in puzzle and you will hear the tunes'),
             [OPTION_STATES.OFF]: t('gameSettings.snackbar.soundsOff', 'no more sounds in game. wish you a nice meditative session'),
@@ -607,7 +617,10 @@ const GameSettings_ = ({ onAction }) => {
                                                             disableEraser={false}
                                                             disableNumbersInput={false}
                                                             cellWidth={30}
-                                                            numbersTextType={TEXT_VARIATIONS.HEADING_MEDIUM}
+                                                            numbersTextType={TEXT_VARIATIONS.TITLE_LARGE}
+                                                            remainingCountTextType={TEXT_VARIATIONS.LABEL_SMALL}
+                                                            showRemainingCount={settingsConfigsOnOffValue[GAME_SETTINGS_KEYS.SHOW_REMAINING_COUNT] as boolean}
+                                                            remainingCounts={getRemainingCounts(mainNumbers)}
                                                         />
                                                     </View>
                                                     <BoardControllerComp

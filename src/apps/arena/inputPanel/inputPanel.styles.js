@@ -29,6 +29,13 @@ export const getStyles = CELL_WIDTH => {
         textStyle: {
             fontWeight: FONT_WEIGHTS.MEDIUM,
         },
+        remainingCountText: {
+            marginBottom: 4,
+        },
+        numberWithCountContainer: {
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         eraser: {
             width: '50%',
             height: '50%',

@@ -13,6 +13,7 @@ import withActions from '../../../utils/hocs/withActions'
 import { Inputpanel } from '../inputPanel'
 
 import { useGameBoardInputs } from '../hooks/useGameBoardInputs'
+import { getMainNumbers } from '../store/selectors/board.selectors'
 import { GameState } from '@application/utils/gameState'
 import { getGameState } from '../store/selectors/gameState.selectors'
 
@@ -42,6 +43,16 @@ const getInstancesCounts = mainNumbers => {
         }
     })
     return instancesCount
+}
+
+/** Remaining instances to fill per digit 1-9, based on getMainNumbers (actual board only) */
+export const getRemainingCounts = (mainNumbers) => {
+    const instancesCount = getInstancesCounts(mainNumbers)
+    const remaining = new Array(10)
+    for (let i = 1; i <= MAX_INSTANCES_OF_A_NUMBER; i++) {
+        remaining[i] = MAX_INSTANCES_OF_A_NUMBER - (instancesCount[i] || 0)
+    }
+    return remaining
 }
 
 const getStyles = (_, theme) => {
@@ -75,7 +86,11 @@ export const GameInputPanelView = ({
     cellWidth,
     lockedNumber,
     numbersVisible,
-    numbersTextType
+    numbersTextType,
+    showRemainingCount = false,
+    remainingCountTextType,
+    remainingCounts,
+    customStyles = {}
 }) => {
 
     const styles = useStyles(getStyles)
@@ -119,7 +134,10 @@ export const GameInputPanelView = ({
                         addEraser={false}
                         cellWidth={cellWidth * 0.8}
                         textType={numbersTextType ?? TEXT_VARIATIONS.HEADING_MEDIUM}
+                        remainingCountTextType={remainingCountTextType}
                         lockedNumber={lockedNumberInputType === INPUT_TYPE.MAIN_NUMBERS ? lockedNumberValue : 0}
+                        showRemainingCount={showRemainingCount}
+                        remainingCounts={remainingCounts}
                     />
                 </View>
             </View>
@@ -137,15 +155,19 @@ export const GameInputPanelView = ({
                 shouldAddNumberInPanel={shouldAddNumberInPanel}
                 lockedNumber={lockedNumberValue}
                 cellWidth={cellWidth}
+                showRemainingCount={showRemainingCount}
+                remainingCounts={remainingCounts}
+                customStyles={customStyles}
             />
         )
     )
 }
 
-const GameInputPanel_ = ({ onAction }) => {
+const GameInputPanel_ = ({ onAction, customStyles }) => {
     const dependencies = useDependency()
     const { t, i18n } = useTranslation('arena')
     const { mainNumbers } = useGameBoardInputs()
+    const mainNumbersFromBoard = useSelector(getMainNumbers)
 
     const lockedNumber = useSelector(getLockedNumber)
 
@@ -168,6 +190,12 @@ const GameInputPanel_ = ({ onAction }) => {
     }, [mainNumbers, numbersVisible])
 
     const allowNotesInputWithoutPencil = dependencies?.gameSettingsAdapter?.fillNotesWithoutPencil?.()
+    const showRemainingCountSetting = dependencies?.gameSettingsAdapter?.showRemainingCount?.()
+
+    const remainingCounts = React.useMemo(
+        () => (mainNumbersFromBoard ? getRemainingCounts(mainNumbersFromBoard) : null),
+        [mainNumbersFromBoard],
+    )
 
     const boardSnackBarTexts = React.useMemo(
         () => ({
@@ -201,6 +229,9 @@ const GameInputPanel_ = ({ onAction }) => {
             cellWidth={CELL_WIDTH}
             numbersVisible={numbersVisible}
             lockedNumber={lockedNumber}
+            showRemainingCount={isGameActive && showRemainingCountSetting}
+            remainingCounts={remainingCounts}
+            customStyles={customStyles}
         />
     )
 }

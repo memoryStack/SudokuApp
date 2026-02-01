@@ -193,7 +193,7 @@ describe('Remote Pairs Try-Out', () => {
         fireEvent.press(getCellByPosition(49))
         fireEvent.press(getInputPanelNumberIfEnabled(7, getInputPanel()))
 
-        smartHintHC.getByText('no candidates are left for D5. to fix this error either remove number from B5 or from F4, F3 because this Chain can be filled by same colors numbers only otherwise some cells will be left without any candidates.')
+        smartHintHC.getByText('no candidates are left for D5. to fix this error either remove number from B5 or from F4 and F3 because this Chain can be filled by same colors numbers only otherwise some cells will be left without any candidates.')
     })
 
     test('multi color numbers are filled and removable notes are also filled and due to this some cell in chain is left without candidates', async () => {

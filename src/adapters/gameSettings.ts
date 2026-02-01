@@ -16,6 +16,7 @@ const DEFAULT_SETTING = {
     [GAME_SETTINGS_KEYS.FILL_NUMBER_ON_CELL_CLICK]: true,
     [GAME_SETTINGS_KEYS.DARK_MODE]: undefined,
     [GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL]: false,
+    [GAME_SETTINGS_KEYS.SHOW_REMAINING_COUNT]: false,
 }
 
 let currentSettings = {
@@ -83,5 +84,8 @@ export const gameSettingsAdapter: GameSettingsAdapter = {
     },
     fillNotesWithoutPencil: () => {
         return currentSettings[GAME_SETTINGS_KEYS.FILL_NOTES_WITHOUT_PENCIL] as boolean
+    },
+    showRemainingCount: () => {
+        return currentSettings[GAME_SETTINGS_KEYS.SHOW_REMAINING_COUNT] as boolean
     }
 }

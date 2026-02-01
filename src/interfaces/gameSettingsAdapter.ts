@@ -15,7 +15,8 @@ export enum GAME_SETTINGS_KEYS {
     GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED = 'GAME_OVER_ON_MISTAKES_THRESHOLD_CROSSED',
     SHOW_FEEDBACK_ON_MISTAKE = 'SHOW_FEEDBACK_ON_MISTAKE',
     FILL_NUMBER_ON_CELL_CLICK = 'FILL_NUMBER_ON_CELL_CLICK',
-    DARK_MODE = 'DARK_MODE'
+    DARK_MODE = 'DARK_MODE',
+    SHOW_REMAINING_COUNT = 'SHOW_REMAINING_COUNT'
 }
 
 export type AllGameSettingsValues = Record<GAME_SETTINGS_KEYS, boolean | number | undefined>
@@ -42,4 +43,5 @@ export interface GameSettingsAdapter extends ApplicationLayerGameSettingsAdapter
     fillNumberOnCellClick: () => boolean
     isDarkMode: () => boolean
     fillNotesWithoutPencil: () => boolean
+    showRemainingCount: () => boolean
 }

@@ -492,7 +492,11 @@ const Arena_ = ({
             ref={boardControllersRef} collapsable={false}
             testID={ARENA_INPUT_PANEL_CONTAINER_TEST_ID}
         >
-            <GameInputPanel dependencies={dependencies} />
+            <GameInputPanel dependencies={dependencies} customStyles={{
+                numberButtonContainer: styles.inputPanelCustomStyles.numberButtonContainer,
+                horizontalSeperator: styles.inputPanelCustomStyles.horizontalSeperator,
+                eraserContainer: styles.inputPanelCustomStyles.eraserContainer,
+            }} />
         </View>
     )
 

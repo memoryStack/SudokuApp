@@ -12,6 +12,7 @@ import {
     getFirstEnabledInputPanelNumber,
     getInputPanelNumberIfEnabled,
     getInputPanelEraser,
+    getCellByPosition,
     isNotePresentInCell,
     expectMainNumberPresentInCell,
     solvePuzzle,
@@ -24,7 +25,8 @@ import {
 
 import { isEmptyElement } from '@utils/testing/touchable'
 
-import { assertHintsLeft } from '@utils/testing/smartHints'
+import { assertHintsLeft, openSmartHintHC, gotoTryOutStep, getInputPanel } from '@utils/testing/smartHints'
+import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'

@@ -20,14 +20,17 @@ import {
     exhaustHints,
     getCellByPosition,
     getInputPanelNumber,
+    getInputPanelNumberWithRemainingCountIfEnabled,
 } from '@utils/testing/arena'
 
 import { isEmptyElement } from '@utils/testing/touchable'
 
-import { assertHintsLeft } from '@utils/testing/smartHints'
+import { assertHintsLeft, openSmartHintHC, gotoTryOutStep, getInputPanel } from '@utils/testing/smartHints'
+import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
 import { TIMER_PAUSE_ICON_TEST_ID, TIMER_START_ICON_TEST_ID, TIMER_TEST_ID } from '../timer/timer.constants'
+import { INPUT_PANEL_CONTAINER_TEST_ID, INPUT_PANEL_REMAINING_COUNT_TEST_ID } from '../inputPanel/constants'
 import { ARENA_PAGE_TEST_ID, GAME_OVER_CARD_OVERLAY_TEST_ID, PUZZLES_LEVELS_LIST_CONTAINER } from '../constants'
 import { PREVIOUS_GAME_DATA_KEY } from '../utils/cacheGameHandler'
 import { MISTAKES_TEXT_TEST_ID } from '../refree/refree.constants'
@@ -44,6 +47,18 @@ import { gameSettingsAdapter } from '@adapters/gameSettings'
 import { BOARD_CONTROLLER_CONTAINER_TEST_ID, ERASER_CONTROLLER_TEST_ID } from '../cellActions/cellActions.constants'
 import { NOTES_INPUT_PANEL_TEST_ID, MAIN_NUMBER_INPUT_PANEL_TEST_ID } from '../GameInputPanel'
 import { INPUT_PANEL_ITEM_TEST_ID } from '../inputPanel/constants'
+
+import { configure } from '@testing-library/dom'
+
+
+configure({
+    getElementError: (message: string, container) => {
+        const error = new Error(message);
+        error.name = 'TestingLibraryElementError';
+        error.stack = null;
+        return error;
+    },
+});
 
 const storageUtils = require('@utils/storage')
 
@@ -68,7 +83,8 @@ jest.mock('@adapters/gameSettings', () => {
             fillNoteOnShortClick: jest.fn(() => true),
             shouldGameOverOnMistakesThresholdCrossed: jest.fn(() => false),
             fillNumberOnCellClick: jest.fn(() => false),
-            fillNotesWithoutPencil: jest.fn(() => false)
+            fillNotesWithoutPencil: jest.fn(() => false),
+            showRemainingCount: jest.fn(() => false),
         }
     }
 })
@@ -663,5 +679,98 @@ describe('Number Locking with Pencil Mode', () => {
         await waitFor(() => {
             expectMainNumberPresentInCell(emptyCell, '2')
         })
+    })
+})
+
+describe('Input Panel Remaining Count', () => {
+    beforeEach(() => {
+        jest.useFakeTimers({
+            doNotFake: ['nextTick'],
+            timerLimit: 100,
+        })
+        gameSettingsAdapter.fillNoteOnShortClick.mockImplementation(() => false)
+        gameSettingsAdapter.showRemainingCount.mockImplementation(() => true)
+    })
+    afterEach(() => {
+        jest.useRealTimers()
+        jest.clearAllMocks()
+    })
+
+    describe('Visibility of remaining count', () => {
+        test('remaining count is visible when showRemainingCount is true', async () => {
+            await renderScreenAndWaitForPuzzleStart()
+            const mainPanel = screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID)
+            const arenaInputPanel = within(mainPanel)
+            expect(arenaInputPanel.getByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-2`)).toBeVisible()
+        })
+        test('remaining count is not visible when showRemainingCount is false', async () => {
+            gameSettingsAdapter.showRemainingCount.mockImplementation(() => false)
+            await renderScreenAndWaitForPuzzleStart()
+            const mainPanel = screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID)
+            const arenaInputPanel = within(mainPanel)
+            expect(arenaInputPanel.queryByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-2`)).not.toBeVisible()
+        })
+    })
+
+    test('input panel remaining count decreases when correct number is filled in board', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const mainPanel = screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID)
+        const arenaInputPanel = within(mainPanel)
+        const countFor2Before = arenaInputPanel.getByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-2`)
+        const beforeCount = parseInt(countFor2Before.props.children, 10)
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent.press(getInputPanelNumberWithRemainingCountIfEnabled(2))
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '2')
+        })
+
+        const countFor2After = arenaInputPanel.getByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-2`)
+        expect(countFor2After).toHaveTextContent(String(beforeCount - 1))
+    })
+
+    test('input panel remaining count does not decrease when incorrect number is filled in board', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const mainPanel = screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID)
+        const arenaInputPanel = within(mainPanel)
+        const countFor2Before = arenaInputPanel.getByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-3`)
+        const beforeCount = parseInt(countFor2Before.props.children, 10)
+
+        const emptyCell = getFirstEmptyCell()
+        fireEvent.press(emptyCell)
+        fireEvent.press(getInputPanelNumberWithRemainingCountIfEnabled(3))
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(emptyCell, '3')
+        })
+
+        const countFor2After = arenaInputPanel.getByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-3`)
+        expect(countFor2After).toHaveTextContent(String(beforeCount))
+    })
+
+    test('input panel remaining count does not change when filling number in hints tryout', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        const mainPanel = screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID)
+        const arenaInputPanel = within(mainPanel)
+        const countFor3Before = arenaInputPanel.getByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-3`)
+        const beforeCount = parseInt(countFor3Before.props.children, 10)
+
+        await openSmartHintHC(HINT_LABELS[HINTS_IDS.NAKED_DOUBLE])
+        await gotoTryOutStep()
+        const tryoutInputPanel = getInputPanel()
+        fireEvent.press(getCellByPosition(70))
+        fireEvent.press(getInputPanelNumberIfEnabled(3, tryoutInputPanel))
+
+        await waitFor(() => {
+            expectMainNumberPresentInCell(getCellByPosition(70), '3')
+        })
+
+        const countFor3After = arenaInputPanel.getByTestId(`${INPUT_PANEL_REMAINING_COUNT_TEST_ID}-3`)
+        expect(countFor3After).toHaveTextContent(String(beforeCount))
     })
 })

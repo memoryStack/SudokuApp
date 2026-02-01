@@ -26,6 +26,7 @@ interface Props {
     state?: BUTTON_STATES,
     textType?: TEXT_VARIATIONS,
     testID?: string,
+    renderChildren?: (textStyles: TextStyle) => React.ReactNode | undefined,
 }
 
 const Button_: React.FC<Props> = ({
@@ -39,6 +40,7 @@ const Button_: React.FC<Props> = ({
     state = BUTTON_STATES.ENABLED,
     children = null,
     textType,
+    renderChildren,
     ...rest
 }) => {
     const { t } = useTranslation()
@@ -69,7 +71,7 @@ const Button_: React.FC<Props> = ({
             accessibilityRole="button"
             {...rest}
         >
-            {children || renderLabel()}
+            {children ?? renderChildren?.(getTextFinalStyles()) ?? renderLabel()}
         </Touchable>
     )
 }

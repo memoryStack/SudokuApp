@@ -56,5 +56,16 @@ export const getStyles = ({ allowNotesInputWithoutPencil }, theme) => {
         snackbarText: {
             color: _get(theme, 'colors.inverse-on-surface'),
         },
+        inputPanelCustomStyles: {
+            numberButtonContainer: {
+                marginHorizontal: 8,
+            },
+            horizontalSeperator: {
+                height: 16,
+            },
+            eraserContainer: {
+                marginHorizontal: 8,
+            },
+        }
     })
 }

@@ -18,6 +18,10 @@ export enum DYNAMIC_DATA_KEYS {
 }
 
 export const SNACKBAR_MSGS = {
+    [GAME_SETTINGS_KEYS.SHOW_REMAINING_COUNT]: {
+        [OPTION_STATES.ON]: 'now you will see remaining count for each number in input panel',
+        [OPTION_STATES.OFF]: 'remaining count is now hidden from input panel',
+    },
     [GAME_SETTINGS_KEYS.SOUNDS_ENABLED]: {
         [OPTION_STATES.ON]: 'sounds have been enabled. now try pressing any cell in puzzle and you will hear the tunes',
         [OPTION_STATES.OFF]: 'no more sounds in game. wish you a nice meditative session',

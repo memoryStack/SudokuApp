@@ -24,7 +24,8 @@
             "allowAnyNote": "Allow filling all the notes in cell",
             "fillOnCellClick": "Lock number and fill on Cell tap",
             "soundsEnabled": "Enable or disable all game sounds",
-            "remindToTakeHint": "Show reminders to use hints when stuck"
+            "remindToTakeHint": "Show reminders to use hints when stuck",
+            "showRemainingCount": "数字がまだ何回使用できるかを表示"
         },
         "snackbar": {
             "soundsOn": "sounds have been enabled. now try pressing any cell in puzzle and you will hear the tunes",
@@ -46,7 +47,9 @@
             "showFeedbackOn": "in Preview do below\n a. fill 1 in first cell\nit's a mistake and see mistakes count has gone up",
             "showFeedbackOff": "in Preview do below\n a. fill 1 in first cell\nit's a mistake and see you can't notice it in preview",
             "fillNotesWithoutPencilOn": "in Preview now you will see 2 input panels, one for notes and one for main numbers",
-            "fillNotesWithoutPencilOff": "now you have to tap on Pencil first before filling Notes"
+            "fillNotesWithoutPencilOff": "now you have to tap on Pencil first before filling Notes",
+            "showRemainingCountOn": "入力パネルで各数字の残り使用可能回数が表示されます",
+            "showRemainingCountOff": "入力パネルから残り使用可能回数の表示が非表示になりました"
         },
         "tooltip": "change settings and click here to see how the Game Experience changes"
     }

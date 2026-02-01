@@ -193,6 +193,17 @@ export const getInputPanelNumberIfEnabled = (inputNumber, _inputPanel) => {
     return element
 }
 
+export const getInputPanelNumberWithRemainingCountIfEnabled = (inputNumber, _inputPanel) => {
+    const inputPanel = _inputPanel || within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
+
+    const element = inputPanel.getByTestId(`${INPUT_PANEL_ITEM_TEST_ID}-${inputNumber}`)
+    // will fail the test-case if someday mocked puzzle is changed and this
+    // requested input number is not enabled for new puzzle
+
+    expect(element).toBeEnabled()
+    return element
+}
+
 export const getInputPanelEraser = _inputPanel => {
     const inputPanel = _inputPanel || within(screen.getByTestId(INPUT_PANEL_CONTAINER_TEST_ID))
     const allItems = inputPanel.getAllByTestId(INPUT_PANEL_ITEM_TEST_ID)

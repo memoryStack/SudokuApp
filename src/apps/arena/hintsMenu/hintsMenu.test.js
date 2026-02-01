@@ -31,8 +31,6 @@ jest.mock('@react-navigation/native', () => ({
 const renderHintsMenu = async props => {
     render(<HintsMenu {...props} />)
 
-    console.log('@@@@@@ 1')
-
     await new Promise(r => setTimeout(r, 1000))
 
     await waitFor(() => {
@@ -45,9 +43,7 @@ const renderHintsMenu = async props => {
         invokeDispatch(boardActions.setMainNumbers(mainNumbers))
         invokeDispatch(boardActions.setNotes(notes))
     })
-    console.log('@@@@@@ 1')
     await waitForAvailableHintsToBeChecked()
-    console.log('@@@@@@ 2')
 }
 
 describe.skip('Available Hints Menu', () => {

@@ -127,6 +127,11 @@ const CustomPuzzle_ = ({
                         onAction={onAction}
                         shouldAddNumberInPanel={shouldAddNumberInPanel}
                         lockedNumber={lockedNumber}
+                        customStyles={{
+                            numberButtonContainer: styles.inputPanelCustomStyles.numberButtonContainer,
+                            horizontalSeperator: styles.inputPanelCustomStyles.horizontalSeperator,
+                            eraserContainer: styles.inputPanelCustomStyles.eraserContainer,
+                        }}
                     />
                 </View>
                 <Button containerStyle={styles.playButtonContainer} onPress={handlePlayClick} label={t('play', 'Play')} />
