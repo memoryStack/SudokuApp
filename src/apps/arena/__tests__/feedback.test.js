@@ -78,6 +78,15 @@ jest.mock('../hooks/useFeedback', () => ({
     useFeedback: jest.fn(() => mockUseFeedbackReturn)
 }))
 
+const mockShowSnackbar = jest.fn()
+jest.mock('../hooks/useSnackbar', () => ({
+    useSnackbar: jest.fn(() => ({
+        snackbarState: { visible: false, message: '' },
+        showSnackbar: mockShowSnackbar,
+        hideSnackbar: jest.fn(),
+    })),
+}))
+
 const { useFeedback } = require('../hooks/useFeedback')
 
 beforeAll(() => server.listen())
@@ -91,6 +100,7 @@ describe('Feedback Dialog - UI Integration', () => {
             timerLimit: 100,
         })
         jest.clearAllMocks()
+        mockShowSnackbar.mockClear()
 
         mockUseFeedbackReturn.showFeedbackSheet = true
         mockUseFeedbackReturn.handleSubmit.mockResolvedValue({ success: true })
@@ -109,7 +119,23 @@ describe('Feedback Dialog - UI Integration', () => {
         })
     })
 
-    test('clicking submit button calls handleSubmit with correct data format', async () => {
+    test('clicking submit button with no input shows snackbar and does not call handleSubmit', async () => {
+        await renderScreenAndWaitForPuzzleStart()
+
+        await waitFor(() => {
+            screen.getByTestId(FEEDBACK_BOTTOM_SHEET_TEST_ID)
+        })
+
+        const feedbackSheet = within(screen.getByTestId(FEEDBACK_BOTTOM_SHEET_TEST_ID))
+        fireEvent.press(feedbackSheet.getByTestId(FEEDBACK_SUBMIT_BUTTON_TEST_ID))
+
+        await waitFor(() => {
+            expect(mockShowSnackbar).toHaveBeenCalledWith('Please provide your inputs here first', expect.any(Object))
+        })
+        expect(mockUseFeedbackReturn.handleSubmit).not.toHaveBeenCalled()
+    })
+
+    test('clicking submit button with input calls handleSubmit with correct data format', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await waitFor(() => {

@@ -97,7 +97,7 @@ describe('Feedback Dialog - Pending Action Execution', () => {
         jest.restoreAllMocks()
     })
 
-    test('after submit, pending restart action executes restartGame', async () => {
+    test('after submit with input, pending restart action executes restartGame', async () => {
         await renderScreenAndWaitForPuzzleStart()
 
         await gameOverByMistakes()
@@ -117,6 +117,7 @@ describe('Feedback Dialog - Pending Action Execution', () => {
         await isPuzzlePaused()
 
         const feedbackSheet = within(screen.getByTestId(FEEDBACK_BOTTOM_SHEET_TEST_ID))
+        fireEvent.press(feedbackSheet.getByTestId('FEEDBACK_PILL_HINTS'))
         fireEvent.press(feedbackSheet.getByTestId(FEEDBACK_SUBMIT_BUTTON_TEST_ID))
 
         await hasPuzzleStarted()

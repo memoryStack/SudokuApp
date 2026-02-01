@@ -59,7 +59,8 @@
         },
         "snackbar": {
             "success": "We have recorded your response and will act on it shortly.",
-            "error": "Failed to submit feedback. We are on it!"
+            "error": "Failed to submit feedback. We are on it!",
+            "pleaseProvideInput": "Please provide your inputs here first"
         }
     },
     "hintSuggestion": {

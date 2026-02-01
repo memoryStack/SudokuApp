@@ -1,7 +1,12 @@
 import { StyleSheet } from 'react-native'
 import _get from '@lodash/get'
 
+import { hexToRGBA } from '@utils/util'
+
 export const getStyles = (_: unknown, theme: unknown) => {
+    const disabledContainer = _get(theme, ['button', 'filled', 'color', 'container', 'disabled'], {})
+    const disabledLabel = _get(theme, ['button', 'filled', 'color', 'label-text', 'disabled'], {})
+
     return StyleSheet.create({
         container: {
             padding: 16,
@@ -18,7 +23,17 @@ export const getStyles = (_: unknown, theme: unknown) => {
             flexDirection: 'row',
             flexWrap: 'wrap',
             gap: 12,
+        },
+        pillsContainerWrapper: {
+            borderWidth: 1,
+            borderColor: _get(theme, ['colors', 'outline']),
+            borderRadius: 8,
+            padding: 12,
             marginBottom: 24,
+        },
+        pillsContainerWrapperHighlight: {
+            borderColor: _get(theme, ['colors', 'error']),
+            borderWidth: 1,
         },
         textInputContainer: {
             marginBottom: 24,
@@ -35,6 +50,10 @@ export const getStyles = (_: unknown, theme: unknown) => {
         },
         textInputFocused: {
             borderColor: _get(theme, ['colors', 'primary']),
+            borderWidth: 2,
+        },
+        textInputHighlight: {
+            borderColor: _get(theme, ['colors', 'error']),
             borderWidth: 2,
         },
         characterCount: {
@@ -57,6 +76,12 @@ export const getStyles = (_: unknown, theme: unknown) => {
         },
         submitButton: {
             width: '100%',
+        },
+        submitButtonVisuallyDisabled: {
+            backgroundColor: hexToRGBA(disabledContainer.background, disabledContainer.opacity),
+        },
+        submitButtonLabelVisuallyDisabled: {
+            color: hexToRGBA(disabledLabel.color, disabledLabel.opacity),
         },
         outlinedButton: {
             paddingHorizontal: 16,

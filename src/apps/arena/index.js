@@ -562,6 +562,7 @@ const Arena_ = ({
                 onSkip={feedbackSkip}
                 onDND={feedbackDND}
                 onClosed={handleFeedbackClosed}
+                onShowValidationMessage={(message) => showSnackbar(message, { marginBottom: 48 })}
             />
         )
     }
@@ -607,7 +608,7 @@ const Arena_ = ({
             {renderFeedbackSheet()}
             <Snackbar
                 visible={snackbarState.visible}
-                wrapperStyle={styles.snackbarContainer}
+                wrapperStyle={[styles.snackbarContainer, snackbarState.containerStyle]}
                 onDismiss={hideSnackbar}
             >
                 <Text type={TEXT_VARIATIONS.LABEL_LARGE} style={styles.snackbarText}>
