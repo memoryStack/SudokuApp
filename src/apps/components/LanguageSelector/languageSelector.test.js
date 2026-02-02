@@ -17,7 +17,7 @@ describe('Language Selector Dialog', () => {
 
     test('clicking on each language option will select that option', async () => {
         const hideModal = jest.fn()
-        render(<LanguageSelector hideModal={hideModal} />)
+        render(<LanguageSelector hideModal={hideModal} dependencies={{ commonAnalytics: { sendLanguageSavedEvent: jest.fn() } }} />)
 
         await waitFor(() => {
             screen.getByTestId(LANGUAGE_OPTION_TEST_ID[LANGUAGE_KEYS.HINDI])
@@ -35,7 +35,7 @@ describe('Language Selector Dialog', () => {
 
     test('Cancel button will request to close the modal', async () => {
         const hideModal = jest.fn()
-        render(<LanguageSelector hideModal={hideModal} />)
+        render(<LanguageSelector hideModal={hideModal} dependencies={{ commonAnalytics: { sendLanguageSavedEvent: jest.fn() } }} />)
         await waitFor(() => {
             screen.getByText('Cancel')
         })
@@ -45,7 +45,7 @@ describe('Language Selector Dialog', () => {
 
     test('Save button will request to change the language and close the modal', async () => {
         const hideModal = jest.fn()
-        render(<LanguageSelector hideModal={hideModal} />)
+        render(<LanguageSelector hideModal={hideModal} dependencies={{ commonAnalytics: { sendLanguageSavedEvent: jest.fn() } }} />)
         await waitFor(() => {
             screen.getByText('Save')
         })
@@ -57,7 +57,7 @@ describe('Language Selector Dialog', () => {
 
     test('Save button will request to change the language with newly selected language', async () => {
         const hideModal = jest.fn()
-        render(<LanguageSelector hideModal={hideModal} />)
+        render(<LanguageSelector hideModal={hideModal} dependencies={{ commonAnalytics: { sendLanguageSavedEvent: jest.fn() } }} />)
         await waitFor(() => {
             screen.getByText('हिंदी')
         })
