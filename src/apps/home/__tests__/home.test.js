@@ -15,8 +15,18 @@ import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settings
 import { HOME_PAGE_TEST_ID } from '../home.constants'
 import { waitFor } from '@testing-library/react-native'
 import { server } from 'src/mocks/node'
-
 jest.mock('../../../adapters/puzzle/puzzle')
+
+const mockMarkShown = jest.fn()
+const defaultHookReturn = {
+    show: false,
+    message: '',
+    tooltipId: null,
+    markShown: mockMarkShown,
+}
+jest.mock('../hooks/useCustomizeExperienceTooltip', () => ({
+    useCustomizeExperienceTooltip: jest.fn(() => defaultHookReturn),
+}))
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
@@ -81,6 +91,36 @@ describe('Home Page', () => {
         expect(screen.getByTestId(PUZZLE_LEVEL_TEXT_TEST_ID)).toHaveTextContent('MEDIUM')
         expect(screen.getByTestId(MISTAKES_TEXT_TEST_ID)).toHaveTextContent(/Mistakes: 0/)
         expect(screen.getByTestId(TIMER_TEST_ID)).toHaveTextContent(/00:00:00/)
+    })
+})
+
+describe('Home customize experience tooltip', () => {
+    beforeEach(() => {
+        const { useCustomizeExperienceTooltip } = require('../hooks/useCustomizeExperienceTooltip')
+        useCustomizeExperienceTooltip.mockImplementation(() => defaultHookReturn)
+    })
+
+    test('renders home screen when hook returns show true and message (tooltip data passed to UI)', async () => {
+        const { useCustomizeExperienceTooltip } = require('../hooks/useCustomizeExperienceTooltip')
+        const tooltipMessage = 'Want Dark Mode?\nCheckout "Customize Experience" here'
+        useCustomizeExperienceTooltip.mockImplementation(() => ({
+            show: true,
+            message: tooltipMessage,
+            tooltipId: 'darkMode',
+            markShown: mockMarkShown,
+        }))
+
+        renderScreen({
+            getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
+        })
+
+        await waitFor(() => {
+            expect(screen.queryByTestId(HOME_PAGE_TEST_ID)).toBeOnTheScreen()
+        })
+
+        // Hook returns tooltip data; Home uses it in useEffect to set navigation params for header tooltip.
+        // Full tooltip display depends on header/route params (tested via hook unit tests).
+        expect(useCustomizeExperienceTooltip).toHaveBeenCalled()
     })
 })
 

@@ -12,7 +12,7 @@ import Button from '@ui/molecules/Button'
 import { useStyles } from '@utils/customHooks/useStyles'
 import { Timer } from '@utils/classes/timer'
 import { useDependency } from '../../hooks/useDependency'
-import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_RIGHT_CUSTOM_ELEMENTS, NAV_PARAMS } from '../../navigation/headerSection/headerSection.constants'
+import { HEADER_ITEMS, HEADER_ITEMS_PRESS_HANDLERS_KEYS, HEADER_RIGHT_CUSTOM_ELEMENTS } from '../../navigation/headerSection/headerSection.constants'
 import { usePrevious } from '../../utils/customHooks'
 import withActions from '../../utils/hocs/withActions'
 
@@ -63,8 +63,6 @@ import ShowHintSuggestionDialog from './ShowHintSuggestionDialog'
 import { useTheme } from './hooks/useTheme'
 import _get from '@lodash/get'
 import { getKey, setKey } from '@utils/storage'
-import { shouldShowCustomizeExperienceTooltipUseCase } from '@application/usecases/customizeExperience'
-import { COACHMARKS } from '@application/adapterInterfaces/coachMarks'
 import _isNil from '@lodash/isNil'
 import { FeedbackBottomSheet, SNACKBAR_MESSAGES } from './FeedbackBottomSheet'
 import { useFeedback } from './hooks/useFeedback'
@@ -389,31 +387,6 @@ const Arena_ = ({
                 }]
             })
     }, [navigation, handleSharePuzzleClick, colorScheme])
-
-    useEffect(() => {
-        const { coachMarksAdapter } = dependencies
-        if (coachMarksAdapter.isCoachmarkShownInSession(COACHMARKS.CUSTOMIZE_EXPERIENCE_TOOLTIP)) return
-        shouldShowCustomizeExperienceTooltipUseCase(dependencies).then(async (show) => {
-            if (show) {
-                navigation.setParams({
-                    [NAV_PARAMS.SETTINGS_TOOLTIP]: {
-                        show: true,
-                        message: "You can customize your game experience from here"
-                    }
-                })
-                setTimeout(() => {
-                    navigation.setParams({
-                        [NAV_PARAMS.SETTINGS_TOOLTIP]: { show: false, message: "" }
-                    })
-                }, 8000)
-                const { coachMarksAdapter, analytics } = dependencies
-                await coachMarksAdapter?.increaseCustomizeExperienceTooltipShownCount?.()
-                // analytics?.sendHintsMenuTooltipShownEvent?.({
-                //     count: await coachMarksAdapter?.getHintsMenuTooltipCount?.()
-                // })
-            }
-        })
-    }, [time])
 
     const { gameSettingsAdapter } = dependencies
     useEffect(() => {

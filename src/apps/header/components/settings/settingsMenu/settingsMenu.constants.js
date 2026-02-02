@@ -27,3 +27,4 @@ export const MENU_ITEMS = _compact([
 ])
 
 export const SETTINGS_MENU_TEST_ID = 'settings_menu'
+export const SETTINGS_TOOLTIP_MESSAGE_TEST_ID = 'settings_tooltip_message'

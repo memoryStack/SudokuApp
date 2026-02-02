@@ -1,3 +1,4 @@
+import type { CustomizeExperienceTooltipState } from '@application/adapterInterfaces/coachMarks'
 import { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
 
 import _map from "@lodash/map"
@@ -16,11 +17,15 @@ type HintsMenuTooltipShownData = {
     shownCount: number
 }
 
-type CustomizeExperienceTooltipShownData = HintsMenuTooltipShownData
+type CustomizeExperienceTooltipPersistedData = CustomizeExperienceTooltipState
 
 type CustomizeExperiencePreviewTooltipShownData = HintsMenuTooltipShownData
 
 const shownCoachmarks: Partial<Record<COACHMARKS, boolean>> = {}
+
+const DEFAULT_CUSTOMIZE_EXPERIENCE_TOOLTIP_STATE: CustomizeExperienceTooltipState = {
+    knownTooltipIds: []
+}
 
 export const coachMarksAdapter: CoachMarksAdapterUIInterface = {
     setUserLearnedToGetHints: async () => {
@@ -44,16 +49,20 @@ export const coachMarksAdapter: CoachMarksAdapterUIInterface = {
         const finalData = (existingData || { shownCount: 0 }) as HintsMenuTooltipShownData
         return finalData.shownCount
     },
-    getCustomizeExperienceTooltipShownCount: async () => {
-        const existingData = await getKey(COACHMARKS.CUSTOMIZE_EXPERIENCE_TOOLTIP)
-        const finalData = (existingData || { shownCount: 0 }) as CustomizeExperienceTooltipShownData
-        return finalData.shownCount
+    getCustomizeExperienceTooltipState: async () => {
+        const existing = await getKey(COACHMARKS.CUSTOMIZE_EXPERIENCE_TOOLTIP) as CustomizeExperienceTooltipPersistedData | null | undefined
+        if (!existing || !Array.isArray(existing.knownTooltipIds)) {
+            return { ...DEFAULT_CUSTOMIZE_EXPERIENCE_TOOLTIP_STATE }
+        }
+        return { knownTooltipIds: [...existing.knownTooltipIds] }
     },
-    increaseCustomizeExperienceTooltipShownCount: async () => {
-        const existingData = await getKey(COACHMARKS.CUSTOMIZE_EXPERIENCE_TOOLTIP)
-        const finalData = (existingData || { shownCount: 0 }) as CustomizeExperienceTooltipShownData
-        finalData.shownCount += 1
-        await setKey(COACHMARKS.CUSTOMIZE_EXPERIENCE_TOOLTIP, finalData)
+    markCustomizeExperienceTooltipKnown: async (tooltipId: string) => {
+        const existing = await coachMarksAdapter.getCustomizeExperienceTooltipState()
+        if (existing.knownTooltipIds.includes(tooltipId)) return
+        const next = { knownTooltipIds: [...existing.knownTooltipIds, tooltipId] }
+        await setKey(COACHMARKS.CUSTOMIZE_EXPERIENCE_TOOLTIP, next)
+    },
+    markCustomizeExperienceTooltipShownInSession: () => {
         shownCoachmarks[COACHMARKS.CUSTOMIZE_EXPERIENCE_TOOLTIP] = true
     },
     isCoachmarkShownInSession: (coachmark: COACHMARKS) => {

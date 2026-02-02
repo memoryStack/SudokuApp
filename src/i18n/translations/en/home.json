@@ -1,5 +1,14 @@
 {
     "play": "PLAY",
     "gameTitle": "SUPER\nSUDOKU",
-    "howToPlay": "How To Play ?"
+    "howToPlay": "How To Play ?",
+    "coachmarks": {
+        "customizeExperience": {
+            "darkMode": "Want Dark Mode?\nCheckout \"Customize Experience\" here",
+            "fillNotesWithoutPencil": "Want to fill notes without turning pencil on/off?\nCheckout \"Fill Numbers\" in Customize Experience.",
+            "showFeedbackOnMistake": "Annoyed by red warnings on making mistakes?\nCheckout \"Visual Highlights\" in Customize Experience.",
+            "soundsEnabled": "Want to play in silent mode?\nCheckout \"Sounds\" in Customize Experience.",
+            "fillNumberOnCellClick": "Want to fill a number quickly on just cell tap?\nCheckout \"Fill Numbers\" in Customize Experience."
+        }
+    }
 }

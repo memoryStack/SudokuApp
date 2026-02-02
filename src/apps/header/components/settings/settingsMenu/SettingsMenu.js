@@ -27,7 +27,7 @@ import { useModal } from '../../../../arena/hooks/useModal'
 import { Touchable } from '../../../../components/Touchable'
 
 import { ACTION_HANDLERS, ACTION_TYPES } from './settingsMenu.actionHandlers'
-import { ITEMS_KEYS, SETTINGS_MENU_TEST_ID } from './settingsMenu.constants'
+import { ITEMS_KEYS, SETTINGS_MENU_TEST_ID, SETTINGS_TOOLTIP_MESSAGE_TEST_ID } from './settingsMenu.constants'
 import { getStyles } from './settingsMenu.style'
 import { SETTINGS_BUTTON_TEST_ID } from '../settings.constants';
 import { NAV_PARAMS } from 'src/navigation/headerSection/headerSection.constants';
@@ -73,6 +73,7 @@ export const SettingsMenu_ = ({ onAction }) => {
                 <Text
                     style={styles.tooltipText}
                     withoutLineHeight
+                    testID={SETTINGS_TOOLTIP_MESSAGE_TEST_ID}
                 >
                     {tooltip.message}
                 </Text>
