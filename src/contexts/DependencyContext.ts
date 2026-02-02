@@ -10,7 +10,7 @@ import type { SnackBarAdapter } from '@application/adapterInterfaces/snackbar'
 import type { PuzzleAdapter } from '@application/adapterInterfaces/puzzleGenerator'
 import type { GamePersistenceAdapter } from '@application/adapterInterfaces/gamePersistenceAdapter'
 import { GameLevelsAdapter } from '@application/adapterInterfaces/gameLevels'
-import type { AllAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
+import type { AllAnalyticsHandlers, CommonAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 import { SoundAdapter } from 'src/interfaces/soundAdapter'
 import type { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
 import { ArenaServiceAdapterInterface } from 'src/interfaces/arenaServiceAdapter'
@@ -34,6 +34,7 @@ export type Dependencies = {
     gamePersistenceAdapter: GamePersistenceAdapter
     gameLevelsAdapter: GameLevelsAdapter
     analytics: AllAnalyticsHandlers
+    commonAnalytics: CommonAnalyticsHandlers
     soundAdapter: SoundAdapter
     coachMarksAdapter: CoachMarksAdapterUIInterface
     userDetailsAdapter: UserDetailsAdapter

@@ -9,12 +9,13 @@ const handleHowToPlayPress = ({ params }) => {
 }
 
 const handleLanguageSelectPress = ({ params }) => {
-    const { modalContextValues: { showModal, hideModal } } = params
+    const { modalContextValues: { showModal, hideModal }, dependencies } = params
 
     showModal({
         Component: LanguageSelector,
         props: {
             hideModal,
+            dependencies,
         },
     })
 }

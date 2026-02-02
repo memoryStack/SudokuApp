@@ -123,3 +123,13 @@ export type ScreenAnalyticsHandlers = ArenaAnalyticsHandler
     | GameSettingsAnalyticsHandlers
 
 export type AllAnalyticsHandlers = Partial<Record<ROUTES, ScreenAnalyticsHandlers>>
+
+/** Event data when app language is saved (e.g. from language selector). */
+export type LanguageSavedEventData = {
+    language: string
+}
+
+/** Analytics handlers available from any screen (e.g. language selector dialog). */
+export type CommonAnalyticsHandlers = {
+    sendLanguageSavedEvent: (data: LanguageSavedEventData) => Promise<void>
+}

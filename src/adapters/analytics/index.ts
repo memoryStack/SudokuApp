@@ -5,6 +5,7 @@ import { PlayGuideAnalyticsHandlers } from "./playGuideScreen";
 import { HintsVocobularyAnalyticsHandlers } from "./hintVocabularyScreen";
 import type { AllAnalyticsHandlers as AllAnalyticsHandlersType } from "@application/adapterInterfaces/analytics";
 import { GameSettingsAnalyticsHandler } from "./gameSettings";
+import { CommonAnalyticsHandler } from "./common";
 
 export const AnalyticsHandlers: AllAnalyticsHandlersType = {
     [ROUTES.HOME]: HomeAnalyticsHandlers,
@@ -13,3 +14,5 @@ export const AnalyticsHandlers: AllAnalyticsHandlersType = {
     [ROUTES.HINTS_VOCABULARY_EXPLAINATION]: HintsVocobularyAnalyticsHandlers,
     [ROUTES.GAME_SETTINGS]: GameSettingsAnalyticsHandler,
 }
+
+export { CommonAnalyticsHandler }

@@ -31,6 +31,7 @@ import { ITEMS_KEYS, SETTINGS_MENU_TEST_ID, SETTINGS_TOOLTIP_MESSAGE_TEST_ID } f
 import { getStyles } from './settingsMenu.style'
 import { SETTINGS_BUTTON_TEST_ID } from '../settings.constants';
 import { NAV_PARAMS } from 'src/navigation/headerSection/headerSection.constants';
+import { useDependency } from 'src/hooks/useDependency'
 
 export const SettingsMenu_ = ({ onAction }) => {
     const [openMenu, toggleMenuVisibility] = useToggle(false)
@@ -42,6 +43,8 @@ export const SettingsMenu_ = ({ onAction }) => {
         show: false,
         message: ''
     })
+
+    const dependencies = useDependency()
 
     const { ref: tooltipRef, hide, show } = usePopable()
 
@@ -61,7 +64,7 @@ export const SettingsMenu_ = ({ onAction }) => {
     const onItemPress = ({ key }) => {
         onAction({
             type: ACTION_TYPES.ON_ITEM_PRESS,
-            payload: { itemKey: key, modalContextValues, navigation },
+            payload: { itemKey: key, modalContextValues, navigation, dependencies },
         })
         toggleMenuVisibility()
     }

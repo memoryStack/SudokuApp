@@ -9,11 +9,13 @@ import { ROUTES } from '@application/constants'
 import { SoundAdapter } from 'src/interfaces/soundAdapter'
 import { GameSettingsAdapter } from 'src/interfaces/gameSettingsAdapter'
 import { CoachMarksAdapterUIInterface } from 'src/interfaces/coachMarksToursAdapter'
+import type { CommonAnalyticsHandlers } from '@application/adapterInterfaces/analytics'
 
 interface Dependencies extends Omit<ApplicationLayerDependencies, 'sound'> {
     soundAdapter: SoundAdapter
     coachMarksAdapter: CoachMarksAdapterUIInterface
     gameSettingsAdapter: GameSettingsAdapter
+    commonAnalytics: CommonAnalyticsHandlers
 }
 
 export const useDependency = (): Dependencies => {

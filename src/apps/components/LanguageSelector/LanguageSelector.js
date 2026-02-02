@@ -19,7 +19,7 @@ import { Touchable } from '../Touchable'
 import { LANGUAGE_OPTION_TEST_ID, SELECTED_OPTION_HIGHLIGHTER_TEST_ID } from './languageSelector.constants'
 import { getStyles } from './languageSelector.styles'
 
-const LanguageSelector_ = ({ hideModal }) => {
+const LanguageSelector_ = ({ hideModal, dependencies }) => {
     const styles = useStyles(getStyles)
 
     const { t, i18n, selectedLanguage: defaultSelectedLanguage } = useTranslation('dialogs')
@@ -30,6 +30,7 @@ const LanguageSelector_ = ({ hideModal }) => {
 
     const handleSavePress = () => {
         i18n.changeLanguage(selectedLanguage)
+        dependencies.commonAnalytics?.sendLanguageSavedEvent?.({ language: selectedLanguage })
         hideModal()
     }
 

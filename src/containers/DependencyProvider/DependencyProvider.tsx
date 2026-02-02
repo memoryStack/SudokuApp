@@ -12,7 +12,7 @@ import { snackBarAdapter } from '@adapters/snackbar'
 import { Puzzle } from '@adapters/puzzle'
 import { gamePersistenceAdapter } from '@adapters/gamePersistenceAdapter'
 import { gameLevelsAdapter } from '@adapters/gameLevelsAdapter'
-import { AnalyticsHandlers } from '@adapters/analytics'
+import { AnalyticsHandlers, CommonAnalyticsHandler } from '@adapters/analytics'
 import { soundAdapter } from '@adapters/soundAdapter'
 import { coachMarksAdapter } from '@adapters/coachMarksToursAdapter'
 import { ArenaServiceAdapter } from '@adapters/services/arenaServiceAdapter'
@@ -49,6 +49,7 @@ const DependencyProvider: React.FC<Props> = ({ children }) => {
             gamePersistenceAdapter,
             gameLevelsAdapter,
             analytics: AnalyticsHandlers,
+            commonAnalytics: CommonAnalyticsHandler,
             soundAdapter,
             coachMarksAdapter,
             userDetailsAdapter: userDetailsAdapter,
