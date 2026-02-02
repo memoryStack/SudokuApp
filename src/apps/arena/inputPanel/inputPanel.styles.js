@@ -30,7 +30,7 @@ export const getStyles = CELL_WIDTH => {
             fontWeight: FONT_WEIGHTS.MEDIUM,
         },
         remainingCountText: {
-            marginBottom: 4,
+            marginBottom: 3,
         },
         numberWithCountContainer: {
             alignItems: 'center',

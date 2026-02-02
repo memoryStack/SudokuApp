@@ -117,7 +117,7 @@ export const GameInputPanelView = ({
                         shouldAddNumberInPanel={shouldAddNumberInPanel}
                         numOfRows={3}
                         addEraser={false}
-                        cellWidth={cellWidth * 0.8}
+                        cellWidth={cellWidth * 0.85}
                         textType={numbersTextType ?? TEXT_VARIATIONS.HEADING_MEDIUM}
                         lockedNumber={lockedNumberInputType === INPUT_TYPE.NOTES ? lockedNumberValue : 0}
                     />
@@ -132,7 +132,7 @@ export const GameInputPanelView = ({
                         shouldAddNumberInPanel={shouldAddNumberInPanel}
                         numOfRows={3}
                         addEraser={false}
-                        cellWidth={cellWidth * 0.8}
+                        cellWidth={cellWidth * 0.85}
                         textType={numbersTextType ?? TEXT_VARIATIONS.HEADING_MEDIUM}
                         remainingCountTextType={remainingCountTextType}
                         lockedNumber={lockedNumberInputType === INPUT_TYPE.MAIN_NUMBERS ? lockedNumberValue : 0}
