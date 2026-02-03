@@ -13,8 +13,10 @@ import { SETTINGS_BUTTON_TEST_ID } from '../../header/components/settings/settin
 import { SETTINGS_MENU_TEST_ID } from '../../header/components/settings/settingsMenu/settingsMenu.constants'
 
 import { HOME_PAGE_TEST_ID } from '../home.constants'
+import { CUSTOMIZE_EXPERIENCE_TOOLTIP_DISPLAY_DURATION_MS } from '../home.constants'
 import { waitFor } from '@testing-library/react-native'
 import { server } from 'src/mocks/node'
+
 jest.mock('../../../adapters/puzzle/puzzle')
 
 const mockMarkShown = jest.fn()
@@ -121,6 +123,37 @@ describe('Home customize experience tooltip', () => {
         // Hook returns tooltip data; Home uses it in useEffect to set navigation params for header tooltip.
         // Full tooltip display depends on header/route params (tested via hook unit tests).
         expect(useCustomizeExperienceTooltip).toHaveBeenCalled()
+    })
+
+    test('customize experience tooltip is auto hidden after 8 secs', async () => {
+        jest.useFakeTimers({ doNotFake: ['nextTick'] })
+        mockMarkShown.mockClear()
+
+        const { useCustomizeExperienceTooltip } = require('../hooks/useCustomizeExperienceTooltip')
+        useCustomizeExperienceTooltip.mockImplementation(() => ({
+            show: true,
+            message: 'Want Dark Mode?',
+            tooltipId: 'darkMode',
+            markShown: mockMarkShown,
+        }))
+
+        renderScreen({
+            getScreenRootElement: () => screen.getByTestId(HOME_PAGE_TEST_ID),
+        })
+
+        await waitFor(() => {
+            expect(screen.queryByTestId(HOME_PAGE_TEST_ID)).toBeOnTheScreen()
+        })
+
+        expect(mockMarkShown).not.toHaveBeenCalled()
+
+        act(() => {
+            jest.advanceTimersByTime(CUSTOMIZE_EXPERIENCE_TOOLTIP_DISPLAY_DURATION_MS)
+        })
+
+        expect(mockMarkShown).toHaveBeenCalledTimes(1)
+
+        jest.useRealTimers()
     })
 })
 

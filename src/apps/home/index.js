@@ -53,13 +53,10 @@ const Home_ = ({ navigation }) => {
             navigation.setParams({
                 [NAV_PARAMS.SETTINGS_TOOLTIP]: { show: false, message: '' },
             })
+            markCustomizeTooltipShown()
             tooltipHideTimeoutRef.current = null
         }, CUSTOMIZE_EXPERIENCE_TOOLTIP_DISPLAY_DURATION_MS)
-        markCustomizeTooltipShown()
-        return () => {
-            if (tooltipHideTimeoutRef.current) clearTimeout(tooltipHideTimeoutRef.current)
-        }
-    }, [showCustomizeTooltip, customizeTooltipMessage, navigation, markCustomizeTooltipShown])
+    }, [showCustomizeTooltip, customizeTooltipMessage, markCustomizeTooltipShown])
 
     useEffect(() => {
         // fetch('http://52.66.253.10:3000/getRecords')
