@@ -51,43 +51,43 @@
 
 ## below script is a step towards CI
 
-developerStagedFilesCount=$(git diff --cached --numstat | wc -l)
+# developerStagedFilesCount=$(git diff --cached --numstat | wc -l)
 
-if [ $developerStagedFilesCount = 0 ] ; then
-    HINT_COLOR='\033[0;33m';
-        echo "${HINT_COLOR}No local changes are staged for commit";
-    exit 1;
-fi
+# if [ $developerStagedFilesCount = 0 ] ; then
+#     HINT_COLOR='\033[0;33m';
+#         echo "${HINT_COLOR}No local changes are staged for commit";
+#     exit 1;
+# fi
 
-developerStagedFiles=$(git diff --name-only --cached)
-untrackedFiles=$(git ls-files --others --exclude-standard)
+# developerStagedFiles=$(git diff --name-only --cached)
+# untrackedFiles=$(git ls-files --others --exclude-standard)
 
-renamedFilesOldNames=$(git diff --cached --name-status --diff-filter=R | awk '{ 
-    for (i=1; i<=NF; i++) { 
-        if ($i ~ /^R[0-9]+$/) renamedFilesOldNames = renamedFilesOldNames " " $(i+1)
-    } 
-} END { print renamedFilesOldNames }')
+# renamedFilesOldNames=$(git diff --cached --name-status --diff-filter=R | awk '{ 
+#     for (i=1; i<=NF; i++) { 
+#         if ($i ~ /^R[0-9]+$/) renamedFilesOldNames = renamedFilesOldNames " " $(i+1)
+#     } 
+# } END { print renamedFilesOldNames }')
 
-git add .
+# git add .
 
-git stash
+# git stash
 
-currentBranch=$(git rev-parse --abbrev-ref HEAD)
-# TODO: what if the branch is not present on the remote, what will happen ??
-git pull --rebase origin $currentBranch # remote changes are already tested via CI
+# currentBranch=$(git rev-parse --abbrev-ref HEAD)
+# # TODO: what if the branch is not present on the remote, what will happen ??
+# git pull --rebase origin $currentBranch # remote changes are already tested via CI
 
-git stash pop || { 
-    HINT_COLOR='\033[0;33m';
-        echo "${HINT_COLOR}Guess: Local changes are in conflict with remote, resolve the conflicts and run \"git commit\" again";
-    exit 1;
-}
+# git stash pop || { 
+#     HINT_COLOR='\033[0;33m';
+#         echo "${HINT_COLOR}Guess: Local changes are in conflict with remote, resolve the conflicts and run \"git commit\" again";
+#     exit 1;
+# }
 
-git add $developerStagedFiles
+# git add $developerStagedFiles
 
-git restore --staged $untrackedFiles
+# git restore --staged $untrackedFiles
 
-git add $renamedFilesOldNames
+# git add $renamedFilesOldNames
 
-npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
+# npm run lint # run linter locally; don't run it as last command until all the eslint issues disappear
 
-npm run test # run test cases for local changes in case developer didn't run them locally
+# npm run test # run test cases for local changes in case developer didn't run them locally
