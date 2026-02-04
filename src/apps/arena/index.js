@@ -72,6 +72,7 @@ import { useInAppReview } from './hooks/useInAppReview'
 import { Snackbar } from 'react-native-paper';
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
 import { dynamicInterpolation } from '@lodash/dynamicInterpolation'
+import { useSmartHintsTranslations } from 'src/apps/hintsVocabulary/vocabExplainations/hooks/useSmartHintsTranslations'
 
 const AvailableStarsHeaderView = ({
     styles,
@@ -107,6 +108,8 @@ const Arena_ = ({
     const dependencies = useDependency()
 
     const { t } = useTranslation('arena')
+    const smartHintsTranslationsTexts = useSmartHintsTranslations()
+    const noHintsFoundSnackBarMsg = t('snackbars.noHintsFound')
 
     const {
         colorScheme,
@@ -313,7 +316,9 @@ const Arena_ = ({
                                     type: BOARD_CONTROLLER_ACTION_TYPES.ON_HINT_CLICK,
                                     payload: {
                                         dependencies,
-                                        smartHintsColorSystem: _get(theme, 'colors.smartHints')
+                                        smartHintsColorSystem: _get(theme, 'colors.smartHints'),
+                                        smartHintsTranslationsTexts,
+                                        noHintsFoundSnackBarMsg
                                     }
                                 })
                                 setTimeout(hideModal, 300)

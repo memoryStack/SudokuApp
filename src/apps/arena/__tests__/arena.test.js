@@ -25,7 +25,7 @@ import {
 
 import { isEmptyElement } from '@utils/testing/touchable'
 
-import { assertHintsLeft, openSmartHintHC, gotoTryOutStep, getInputPanel } from '@utils/testing/smartHints'
+import { assertHintsLeft, openSmartHintHC, gotoTryOutStep, getInputPanel, mockBoardControllersRef, measureSmartHintHC } from '@utils/testing/smartHints'
 import { HINTS_IDS, HINT_LABELS } from '../utils/smartHints/constants'
 import { HEADER_ITEMS, HEADER_ITEM_VS_TEST_ID } from '../../../navigation/headerSection/headerSection.constants'
 import { ROUTES } from '../../../navigation/route.constants'
@@ -43,6 +43,7 @@ import { SETTINGS_BUTTON_TEST_ID } from 'src/apps/header/components/settings/set
 import { SETTINGS_MENU_TEST_ID } from 'src/apps/header/components/settings/settingsMenu/settingsMenu.constants'
 import { getTimeDifferenceInSeconds } from '../utils/util'
 import { HINT_SUGGESTION_DIALOG_TEST_ID } from '../ShowHintSuggestionDialog/showHintSuggestionDialog.constants'
+import { SMART_HINT_HC_TEST_ID } from '../smartHintHC/constants'
 import { server } from 'src/mocks/node'
 import { gameSettingsAdapter } from '@adapters/gameSettings'
 
@@ -1065,5 +1066,40 @@ describe('Hint Suggestion Card', () => {
         await waitFor(() => {
             screen.getByTestId(HINT_SUGGESTION_DIALOG_TEST_ID)
         })
+    })
+
+    test('when "Want Help?" dialog is clicked as "Yes" then naked single smart hint HC is opened (without filling notes)', async () => {
+        getTimeDifferenceInSeconds.mockImplementation(() => 500)
+        await renderScreenAndWaitForPuzzleStart()
+        await mockBoardControllersRef()
+        // Do not fill any notes; advance timers so "Want Help?" dialog appears
+        act(() => {
+            jest.advanceTimersByTime(500 * 1000)
+        })
+
+        await waitFor(() => {
+            screen.getByTestId(HINT_SUGGESTION_DIALOG_TEST_ID)
+        })
+
+        act(() => {
+            fireEvent.press(screen.getByText('Yes'))
+        })
+        // Flush async handler (getRawHints promise and showHintHCUseCase)
+        await act(async () => {
+            await Promise.resolve()
+            await Promise.resolve()
+        })
+        act(() => {
+            jest.advanceTimersByTime(400)
+        })
+
+        await waitFor(() => {
+            expect(screen.getByTestId(SMART_HINT_HC_TEST_ID)).toBeOnTheScreen()
+        }, { timeout: 3000 })
+
+        measureSmartHintHC()
+
+        const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
+        expect(smartHintHC.getByText(/Naked Single/i)).toBeOnTheScreen()
     })
 })
