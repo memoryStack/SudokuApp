@@ -18,7 +18,7 @@ import { getFirstEmptyCell, isNotePresentInCell } from './arena'
 import { isEmptyElement } from './touchable'
 import { ARENA_INPUT_PANEL_CONTAINER_TEST_ID } from 'src/apps/arena/constants'
 
-const mockBoardControllersRef = async () => {
+export const mockBoardControllersRef = async () => {
     // TODO: how to do it by mocking measure function mentioned
     // in "react-native/jest/MockNativeMethods"
     // this implementation contains implementatin details of the component and
@@ -52,6 +52,10 @@ export const openSmartHintHC = async hintItemToClick => {
         screen.getByTestId(SMART_HINT_HC_TEST_ID)
     })
 
+    measureSmartHintHC()
+}
+
+export const measureSmartHintHC = () => {
     act(() => {
         // event used by BottomDragger component to
         // measure child view dimensions
