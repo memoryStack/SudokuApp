@@ -208,9 +208,9 @@ const Arena_ = ({
     const handleFeedbackSubmit = useCallback(async (improvements, additionalFeedback) => {
         const result = await feedbackSubmit(improvements, additionalFeedback)
         if (result.success) {
-            showSnackbar(SNACKBAR_MESSAGES.success)
+            showSnackbar(t('feedback.snackbar.success'))
         } else {
-            showSnackbar(SNACKBAR_MESSAGES.error)
+            showSnackbar(t('feedback.snackbar.error'))
         }
     }, [feedbackSubmit, showSnackbar])
 
