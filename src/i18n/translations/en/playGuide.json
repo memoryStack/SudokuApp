@@ -1,13 +1,6 @@
 {
     "rules": {
-        "part1": "A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are already filled. Notice above.\n\nA puzzle is completed when each number from 1 to 9 appears only once in each of the 9 ",
-        "rows": "rows",
-        "part3": ", ",
-        "columns": "columns",
-        "part5": ", and ",
-        "blocks": "blocks",
-        "part7": ". Like it's shown above.",
-        "part8": "\n\nStudy the grid to find the numbers that might fit into each cell."
+        "text": "<p>A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are already filled. Notice above.<br /><br />A puzzle is completed when each number from 1 to 9 appears only once in each of the 9 <row>rows</row>, <col>columns</col>, and <block>blocks</block>. Like it's shown above.<br /><br />Study the grid to find the numbers that might fit into each cell.</p>"
     },
     "solutionTitle": "Solution of above puzzle will look like this"
 }

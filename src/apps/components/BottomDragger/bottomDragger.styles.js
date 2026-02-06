@@ -45,11 +45,6 @@ export const getStyles = (_, theme, isLight) => {
             width: 24,
             borderRadius: XSMALL_SPACE,
             backgroundColor: hexToRGBA('#282C3F', 20),
-        },
-        headerText: {
-            fontSize: 20,
-            color: hexToRGBA('#282C3F', 90),
-            fontFamily: fonts.regular,
-        },
+        }
     })
 }

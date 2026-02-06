@@ -25,12 +25,29 @@ export interface Props {
     testID?: string
 }
 
-const getFinalStyles = (styleProp: Styles, type: TEXT_VARIATIONS, withoutLineHeight: boolean, theme: unknown) => {
-    const styleFromProps = _isArray(styleProp) ? Object.assign({}, ...styleProp as StyleArray) : styleProp
+export const getTextStyles = ({
+    customStyles, type = TEXT_VARIATIONS.BODY_LARGE, withoutLineHeight = false, theme
+}: {
+    customStyles: Styles,
+    type: TEXT_VARIATIONS,
+    withoutLineHeight?: boolean,
+    theme: unknown
+}) => {
+    const styleFromProps = _isArray(customStyles) ? Object.assign({}, ...customStyles as StyleArray) : customStyles
 
-    const result = {
+    let result = {
+        color: _get(theme, ['colors', 'on-surface']),
         ..._get(theme, TEXT_VARIATION_VS_TOKENS_PATH[type], {}),
         ...styleFromProps,
+    }
+
+    const fontWeight: keyof typeof FONT_WEIGHT_VS_FONT_FAMILY = _get(result, 'fontWeight', FONT_WEIGHTS.REGULAR)
+    result = {
+        ...result,
+        fontFamily: fonts && fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],
+        fontWeight,
+        includeFontPadding: false,
+        textAlignVertical: 'center',
     }
 
     if (withoutLineHeight) delete result.lineHeight
@@ -47,22 +64,13 @@ const Text: React.FC<Props> = ({
 }) => {
     const theme = useThemeValues()
 
-    const styles = getFinalStyles(style, type, withoutLineHeight, theme)
-    // extract this type calculation to font.js if needs at another place
-    const fontWeight: keyof typeof FONT_WEIGHT_VS_FONT_FAMILY = _get(styles, 'fontWeight', FONT_WEIGHTS.REGULAR)
-
-    const stylesWithFont = {
-        color: _get(theme, ['colors', 'on-surface']),
-        ...styles,
-        fontFamily: fonts && fonts[FONT_WEIGHT_VS_FONT_FAMILY[fontWeight]],
-        fontWeight,
-        includeFontPadding: false,
-        textAlignVertical: 'center',
-    }
+    const styles = getTextStyles({
+        customStyles: style, type, withoutLineHeight, theme
+    })
 
     return (
         <RNText
-            style={stylesWithFont}
+            style={styles}
             testID={testID}
             {...rest}
         />

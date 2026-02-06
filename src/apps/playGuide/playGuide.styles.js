@@ -8,11 +8,16 @@ export const getStyles = (_, theme) => StyleSheet.create({
         height: '100%',
         width: '100%',
     },
+    rulesContainer: {
+        paddingHorizontal: 16,
+    },
     puzzleSolutionContainer: {
+        marginTop: 24,
         paddingBottom: 40,
     },
-    ruleText: {
-        padding: 16,
+    solutionTitle: {
         color: get(theme, ['colors', 'on-surface']),
+        marginBottom: 16,
+        paddingHorizontal: 16
     }
 })
