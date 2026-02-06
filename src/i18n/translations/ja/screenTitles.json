@@ -13,9 +13,9 @@
     "dialog": "Dialog",
     "level_card": "Level Card",
     "gameLevels": {
-        "EASY": "Easy Levels",
-        "MEDIUM": "Medium Levels",
-        "HARD": "Hard Levels",
-        "EXPERT": "Expert Levels"
+        "EASY": "初級レベル",
+        "MEDIUM": "中級レベル",
+        "HARD": "上級レベル",
+        "EXPERT": "エキスパートレベル"
     }
 }
