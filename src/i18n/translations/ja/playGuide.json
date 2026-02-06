@@ -1,6 +1,6 @@
 {
     "rules": {
-        "text": "<p>A sudoku puzzle begins with a grid in which some of the numbers(known as clues) are already filled. Notice above.\n\nA puzzle is completed when each number from 1 to 9 appears only once in each of the 9 <row>rows</row>, <col>columns</col>, and <block>blocks</block>. Like it's shown above.\n\nStudy the grid to find the numbers that might fit into each cell.</p>"
+        "text": "<p>数独パズルは、いくつかの数字（「手がかり」と呼ばれる）があらかじめ埋められているグリッドから始まります。上の図を見てください。\n\nパズルは、1〜9 のそれぞれの数字が、9 つの <row>行</row>・<col>列</col>・<block>ブロック</block>のそれぞれに 1 回ずつだけ現れたときに完成です。上のようになります。\n\nどのマスにどの数字が入るかを見つけるために、グリッドをよく観察してみましょう。</p>"
     },
-    "solutionTitle": "Solution of above puzzle will look like this"
+    "solutionTitle": "上のパズルの解答はこのようになります"
 }
