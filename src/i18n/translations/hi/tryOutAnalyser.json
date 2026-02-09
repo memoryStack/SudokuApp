@@ -14,7 +14,7 @@
     },
     "hiddenGroup": {
         "noInput": "लाल रंग में हाइलाइट किए गए अंको को भरने का प्रयास करें",
-        "removableGroupCandidateFilled": "{filledCandidatesListText} {filledCellsAxesListText} में {removableGCCount, plural, =1 {भरा गया} other {भरे गए}} है। इसके कारण {primaryHouseFullName} में {filledCandidatesListText} के लिए कोई {cellSingularPlural} नही बची है।\nइस त्रुटि को ठीक करने के लिए {filledCellsAxesListText} से {filledCandidatesListText} हटाएं",
+        "removableGroupCandidateFilled": "{filledCandidatesListText} {filledCellsAxesListText} में {removableGCCount, plural, =1 {भरा गया} other {भरे गए}} है। इसके कारण {primaryHouseFullName} में {filledCandidatesListText} के लिए कोई $t(other:grammatical:cell:one) नही बची है।\nइस त्रुटि को ठीक करने के लिए {filledCellsAxesListText} से {filledCandidatesListText} हटाएं",
         "invalidCandidateInGroupCell": {
             "noHostCellForGroupCandidates": "{{primaryHouseFullName}} में {{candidatesListText}} किसी सेल में नहीं आ सकते\nइस त्रुटि को ठीक करने के लिए {{wronglyFilledGroupCellsAxesListText}} से {{wronglyFilledNumbersInGroupCellsListText}} हटाए",
             "insufficientHostCells": "{{primaryHouseFullName}} मे {{candidatesListText}} भरे जाने चाहिए लेकिन इनके लिए केवल {{emptyCellsAxesListText}} ही उपलब्ध है। इसलिए {{candidatesListText}} मे से इस {{primaryHouseFullName}} मे किसी ना किसी संख्या के लिए कोई जगह नही बची है।\nइस त्रुटि को ठीक करने के लिए {{wronglyFilledGroupCellsAxesListText}} से {{wronglyFilledNumbersInGroupCellsListText}} हटाए"
@@ -43,7 +43,7 @@
     },
     "nakedGroups": {
         "noInput": "जहाँ {{candidatesListText}} लाल रंग में हाइलाइट है उन्हे वहाँ भरने का प्रयास करे ताकि समझ पाओ की इन्हे वहा से क्यो हटाया जाना चाहिए",
-        "emptyGroupCell": "{{emptyCellsListText}} में कोई उम्मीदवार नहीं बचा। पहेली के हल तभी होगीं जब कोई सेल खाली नही बचेगा\nसही रास्ते पर वापस आने के लिए {{removableFilledNotesHostCells}} से {{removableFilledNotes}} हटाए।",
+        "emptyGroupCell": "{{emptyCellsListText}} में कोई उम्मीदवार नहीं बचा। पहेली हल तभी होगीं जब कोई सेल खाली नही बचेगा\nसही रास्ते पर वापस आने के लिए {{removableFilledNotesHostCells}} से {{removableFilledNotes}} हटाए।",
         "multipleCellsNakedSingle": "{{candidate}} {{emptyCellsListText}} के लिए नेकेड सिंगल है। पिछले कदमो मे गलती जानने के लिए {{candidate}} इनमें से किसी एक सेल मे भरे",
         "validFill": {
             "full": "{{candidatesListText}} {{candidatesHostCells}} सेल्स मे बिना किसी त्रुटि के भरे गए हैं। इन सेल्स को {{candidatesListText}} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल का सटीक समाधान क्या होगा लेकिन हमें यकीन है कि इस हाइलाइट किए गए क्षेत्र में {{candidatesHostCells}} के अलावा अन्य सेल में {{candidatesListText}} नहीं आ सकते।",
@@ -143,7 +143,7 @@
         "pivotCellWithoutCandidate": "{{pivotCell}} में कोई उम्मीदवार नहीं बचा। इसे ठीक करने के लिए आपको इनमें से किसी विंग्स सेल्स में {{commonNoteInWings}} भरना होगा",
         "eliminableNotesCellWithoutCandidate": "{{eliminableNotesCellsWithoutCandidates}} में कोई उम्मीदवार नहीं बचा। इस त्रुटि को ठीक करने के लिए {{filledPivotAndWingsCells}} में अंक बदलने का प्रयास करें",
         "validFill": {
-            "partial": "{filledCandidates} बिना किसी त्रुटि के {filledCandidatesCount, plural, =1 {भर दिया गया} other {भरे गए}} है। {toBeFilledCandidates} भरने का भी प्रयोग करें यह समझने के लिए कि {toBeFilledCandidatesPronoun} कहाँ आ सकते हैं या नहीं आ सकते",
+            "partial": "{filledCandidates} बिना किसी त्रुटि के {filledCandidatesCount, plural, =1 {भर दिया गया} other {भरे गए}} है। {toBeFilledCandidates} भरने का भी प्रयोग करें यह समझने के लिए कि $t(other:grammatical:pronouns:one) कहाँ आ सकते हैं या नहीं आ सकते",
             "full": "{candidatesListText} पिवट और विंग्स सेल्स में बिना किसी त्रुटि के भरे गए हैं। इन सेल्स को {candidatesListText} से भरने के कई तरीकों में से यह एक है। अभी तक हमें नहीं पता कि इन सेल्स का आखिर समाधान क्या होगा लेकिन हमें यकीन है कि {eliminableNotesHostCells} सेल में {commonNoteInWings} नहीं आ सकता"
         }
     },

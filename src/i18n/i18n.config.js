@@ -1,7 +1,7 @@
 import i18n from 'i18next'
-import ICU from "i18next-icu";
 import { initReactI18next } from 'react-i18next'
 import 'intl-pluralrules'
+import IntlMessageFormat from 'intl-messageformat'
 
 import { languageDetectorPlugin } from './plugins/languageDetector'
 import { LANGUAGE_KEYS } from './languages'
@@ -20,6 +20,7 @@ const NAMESPACES = [
     'extras',
     'smartHints',
     'tryOutAnalyser',
+    'other'
 ]
 
 const resources = {
@@ -37,6 +38,7 @@ const resources = {
         extras: require('./translations/en/extras.json'),
         smartHints: require('./translations/en/smartHints.json'),
         tryOutAnalyser: require('./translations/en/tryOutAnalyser.json'),
+        other: require('./translations/en/other.json'),
     },
     [LANGUAGE_KEYS.HINDI]: {
         common: require('./translations/hi/common.json'),
@@ -52,6 +54,7 @@ const resources = {
         extras: require('./translations/hi/extras.json'),
         smartHints: require('./translations/hi/smartHints.json'),
         tryOutAnalyser: require('./translations/hi/tryOutAnalyser.json'),
+        other: require('./translations/hi/other.json'),
     },
     ...(LANGUAGE_KEYS.JAPANESE && {
         [LANGUAGE_KEYS.JAPANESE]: {
@@ -68,22 +71,55 @@ const resources = {
             extras: require('./translations/ja/extras.json'),
             smartHints: require('./translations/ja/smartHints.json'),
             tryOutAnalyser: require('./translations/ja/tryOutAnalyser.json'),
+            other: require('./translations/ja/other.json'),
         },
     }),
+}
+
+const postProcessor = {
+    type: 'postProcessor',
+    name: 'icu-formatter',
+    process: function (value, key, options, translator) {
+        /* return manipulated value */
+        try {
+            const finalObj = {
+                ...options,
+            }
+            delete finalObj.keyPrefix
+            delete finalObj.lng
+            delete finalObj.lngs
+            delete finalObj.ns
+
+
+            if (value.includes('{nounCount, plural,')) {
+                console.log('@@@@@@@ raw value - ', value)
+            }
+
+            return new IntlMessageFormat(value, 'en-US').format(finalObj)
+        } catch (error) {
+            if (key.join('.').includes('finnedXWing')) {
+                // console.log('@@@@@@@ error - ', error)
+            }
+            // console.error('@@@@@@@ error - ', error)
+            return value
+        }
+    }
 }
 
 i18n
     .use(initReactI18next)
     .use(languageDetectorPlugin)
-    .use(ICU)
+    .use(postProcessor)
     .init({
         resources,
         ns: NAMESPACES,
         defaultNS: 'common',
         fallbackLng: [LANGUAGE_KEYS.ENGLISH],
         interpolation: {
-            escapeValue: false,
+            escapeValue: false
         },
+        postProcess: ['icu-formatter'], // List your processors here
+
         react: {
             useSuspense: false,
         },

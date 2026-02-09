@@ -10,5 +10,9 @@
             "soundsEnabled": "Want to play in silent mode?\nCheckout \"Sounds\" in Customize Experience.",
             "fillNumberOnCellClick": "Want to fill a number quickly on just cell tap?\nCheckout \"Fill Numbers\" in Customize Experience."
         }
-    }
+    },
+    "temp": "this is a {temp} string",
+    "testa": "this is a string $t(other:shareVerb)",
+    "test": "@@@@@",
+    "AAAAA": "{numPersons, plural, =0 {no persons} =1 {one person} other {# persons}}"
 }

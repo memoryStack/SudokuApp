@@ -22,7 +22,7 @@ export const roundToNearestPixel = (sizeInDp: number) => PixelRatio.roundToNeare
 
 export const formatMessage = (message: string, values: Record<string, unknown>) => {
     try {
-        return new IntlMessageFormat(message, 'en-US').format(values)
+        return new IntlMessageFormat(message, 'en-US', undefined, { ignoreTag: true }).format(values)
     } catch (error) {
         console.error(error)
         return message

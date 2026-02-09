@@ -371,7 +371,7 @@
         "finnedXWing": {
             "texts": [
                 {
-                    "text": "<p>यदि आप <a href=\"PERFECT_X_WING\">एक्स-विंग</a> नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब <a href=\"CANDIDATE\">उम्मीदवार</a> केवल एक <a href=\"ROW\">पंक्ति</a> या <a href=\"COLUMN\">स्तंभ</a> के 2 से अधिक <a href=\"CELL\">सेल</a> में मौजूद हो तो यह एक परफेक्ट एक्स-विंग नहीं है लेकिन कुछ मामलों में हम इसे फिन्ड एक्स-विंग कह सकते हैं। जहाँ उम्मीदवार मौजूद है वे अतिरिक्त सेल <a href=\"X_WING_FINN_CELLS\">फिन सेल</a> कहलाते हैं।\n{{finnedLegAxesText}} {{finnedLegHouseText}} में {{finnCellsAxesListText}} {{finnCellEnglishText}} में अतिरिक्त {{candidate}} देखें</p>",
+                    "text": "<p>यदि आप <a href=\"PERFECT_X_WING\">एक्स-विंग</a> नहीं समझते हैं तो आपको पहले वह सीखना चाहिए।\nजब <a href=\"CANDIDATE\">उम्मीदवार</a> केवल एक <a href=\"ROW\">पंक्ति</a> या <a href=\"COLUMN\">स्तंभ</a> के 2 से अधिक <a href=\"CELL\">सेल</a> में मौजूद हो तो यह एक परफेक्ट एक्स-विंग नहीं है लेकिन कुछ मामलों में हम इसे फिन्ड एक्स-विंग कह सकते हैं। जहाँ उम्मीदवार मौजूद है वे अतिरिक्त सेल <a href=\"X_WING_FINN_CELLS\">फिन सेल</a> कहलाते हैं।\n{{finnedLegAxesText}} {{finnedLegHouseText}} में {{finnCellsAxesListText}} $t(other:grammatical:cell:one) में अतिरिक्त {{candidate}} देखें</p>",
                     "config": {
                         "finnedLegAxesText": {
                             "houseNum": {
@@ -390,11 +390,11 @@
                     }
                 },
                 {
-                    "text": "<p>केवल एक पंक्ति या स्तंभ में ये फिन सेल हो सकते हैं। और ये फिन सेल एक्स-विंग <a href=\"X_WING_CORNER_CELLS\">कॉर्नर सेल</a> में से कम से कम एक के साथ एक ही <a href=\"BLOCK\">ब्लॉक</a> में होने चाहिए।\nयहाँ देखें कि {{finnCellsAxesListText}} (फिन {{finnCellEnglishText}}) {{finnedBlockPerfectCellsAxesText}} {{cornersText}} के साथ ब्लॉक {{shareVerbGrammaticalText}}</p>",
+                    "text": "<p>केवल एक पंक्ति या स्तंभ में ये फिन सेल हो सकते हैं। और ये फिन सेल एक्स-विंग <a href=\"X_WING_CORNER_CELLS\">कॉर्नर सेल</a> में से कम से कम एक के साथ एक ही <a href=\"BLOCK\">ब्लॉक</a> में होने चाहिए।\nयहाँ देखें कि {{finnCellsAxesListText}} (फिन $t(other:grammatical:cell:one)) {{finnedBlockPerfectCellsAxesText}} $t(other:grammatical:corners:one) के साथ ब्लॉक $t(other:grammatical:shareVerb:one)</p>",
                     "config": {}
                 },
                 {
-                    "text": "यहाँ हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं। क्योंकि {{finnedLegAxesText}} {{finnedLegHouseText}} में यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में आता है तो {{candidate}} केवल {{removableNotesHostCells}} में नहीं आ सकता। और यदि {{candidate}} {{finnCellsPrefix}} फिन {{finnCellEnglishText}} में नहीं आता तो फिन्ड एक्स-विंग परफेक्ट एक्स-विंग की तरह व्यवहार करेगा और {{candidate}} निश्चित रूप से {{removableNotesHostCells}} में नहीं आएगा",
+                    "text": "यहाँ हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं। क्योंकि {{finnedLegAxesText}} {{finnedLegHouseText}} में यदि {{candidate}} {{finnCellsPrefix}} फिन $t(other:grammatical:cell:one) में आता है तो {{candidate}} केवल {{removableNotesHostCells}} में नहीं आ सकता। और यदि {{candidate}} {{finnCellsPrefix}} फिन $t(other:grammatical:cell:one) में नहीं आता तो फिन्ड एक्स-विंग परफेक्ट एक्स-विंग की तरह व्यवहार करेगा और {{candidate}} निश्चित रूप से {{removableNotesHostCells}} में नहीं आएगा",
                     "config": {
                         "crossHouseFullNamePlural": {
                             "type": "house",
@@ -429,7 +429,7 @@
                     "config": {}
                 },
                 {
-                    "text": "यहाँ {{candidate}} {{sashimiCell}} में मौजूद नहीं है और यह सेल {{finnCellsAxesListText}} फिन {{finnCellEnglishText}} के समान ब्लॉक में है\nफिन्ड एक्स-विंग की तरह साशिमी फिन्ड एक्स-विंग में भी हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं क्योंकि {{hostHousesAxesListText}} {{hostHousePluralName}} में {{candidate}} चाहे जैसे भी भरें, सभी मामलों में {{candidate}} {{removableNotesHostCells}} {{removableNotesHostCellsText}} में नहीं आ सकता।",
+                    "text": "यहाँ {{candidate}} {{sashimiCell}} में मौजूद नहीं है और यह सेल {{finnCellsAxesListText}} फिन $t(other:grammatical:cell:one) के समान ब्लॉक में है\nफिन्ड एक्स-विंग की तरह साशिमी फिन्ड एक्स-विंग में भी हम इन {{crossHouseFullNamePlural}} से {{candidate}} हटा सकते हैं लेकिन केवल उन सेल से जो फिन सेल के साथ ब्लॉक साझा करते हैं क्योंकि {{hostHousesAxesListText}} {{hostHousePluralName}} में {{candidate}} चाहे जैसे भी भरें, सभी मामलों में {{candidate}} {{removableNotesHostCells}} $t(other:grammatical:cell:two) में नहीं आ सकता।",
                     "config": {
                         "crossHouseFullNamePlural": {
                             "type": "house",

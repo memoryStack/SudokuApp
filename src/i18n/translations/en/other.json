@@ -1,0 +1,32 @@
+{
+    "grammatical": {
+        "shareVerb": {
+            "one": "{shareVerbNounCount_one, plural, =1 {shares} other {share}}",
+            "two": "{shareVerbNounCount_two, plural, =1 {shares} other {share}}"
+        },
+        "cell": {
+            "one": "{cellCount_one, plural, =1 {cell} other {cells}}",
+            "two": "{cellCount_two, plural, =1 {cell} other {cells}}"
+        },
+        "corners": {
+            "one": "{cornersCount_one, plural, =1 {corner} other {corners}}"
+        },
+        "helpingVerb": {
+            "one": "{helpingVerbNounCount_one, plural, =1 {is} other {are}}",
+            "two": "{helpingVerbNounCount_two, plural, =1 {is} other {are}}"
+        },
+        "doNotVerb": {
+            "one": "{doNotVerbNounCount_one, plural, =1 {doesn't} other {don't}}"
+        },
+        "this": {
+            "one": "{thisNounCount_one, plural, =1 {this} other {these}}",
+            "two": "{thisNounCount_two, plural, =1 {this} other {these}}"
+        },
+        "number": {
+            "one": "{numberCount_one, plural, =1 {number} other {numbers}}"
+        },
+        "pronouns": {
+            "one": "{pronounsNounCount_one, plural, =1 {it} other {these}}"
+        }
+    }
+}

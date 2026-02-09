@@ -14,14 +14,14 @@
     },
     "hiddenGroup": {
         "noInput": "try to fill numbers highlighted in red color to understand why these should be removed from these cells",
-        "removableGroupCandidateFilled": "{filledCandidatesListText} {filledInstancesHelpingVerb} filled in {filledCellsAxesListText}. because of this there {filledInstancesHelpingVerb} no {cellSingularPlural} left for {filledCandidatesListText} in {primaryHouseFullName}\nto fix this error, remove {filledCandidatesListText} from {filledCellsAxesListText}",
+        "removableGroupCandidateFilled": "{filledCandidatesListText} $t(other:grammatical:helpingVerb:one) filled in {filledCellsAxesListText}. because of this there $t(other:grammatical:helpingVerb:one) no $t(other:grammatical:cell:one) left for {filledCandidatesListText} in {primaryHouseFullName}\nto fix this error, remove {filledCandidatesListText} from {filledCellsAxesListText}",
         "invalidCandidateInGroupCell": {
             "noHostCellForGroupCandidates": "in {{primaryHouseFullName}} {{candidatesListText}} can't come in any cell\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}",
-            "insufficientHostCells": "{{candidatesListText}} need to be filled but only {{emptyCellsAxesListText}} {{emptyGroupCellsHelpingVerb}} available for these in {{primaryHouseFullName}}. so {{candidatesCountWithoutCells}} out of {{candidatesListText}} can't be filled in this {{primaryHouseFullName}}.\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}"
+            "insufficientHostCells": "{{candidatesListText}} need to be filled but only {{emptyCellsAxesListText}} $t(other:grammatical:helpingVerb:two) available for these in {{primaryHouseFullName}}. so {{candidatesCountWithoutCells}} out of {{candidatesListText}} can't be filled in this {{primaryHouseFullName}}.\nto fix this error, remove {{wronglyFilledNumbersInGroupCellsListText}} from {{wronglyFilledGroupCellsAxesListText}}"
         },
         "validFill": {
             "full": "{candidatesListText} are filled in {groupCellsAxesListText} cells without any error. this is one of many ways to fill these cells with {candidatesListText}. till now we are not sure what will be the exact solution for these cells but we are sure that {candidatesListText} can't come in cells other than {groupCellsAxesListText} in this highlighted region.",
-            "partial": "{filledCandidates} {filledCandidatesCountHV} filled in {filledCandidatesHostCells} without any error. experiment with filling {toBeFilledCandidates} as well to understand where {toBeFilledCandidatesPronoun} can or can't be filled"
+            "partial": "{filledCandidates} $t(other:grammatical:helpingVerb:one) filled in {filledCandidatesHostCells} without any error. experiment with filling {toBeFilledCandidates} as well to understand where $t(other:grammatical:pronouns:one) can or can't be filled"
         },
         "unclickableCellClickedInTryOutMsg": "you can select cells which have candidates highlighted in green or red color. because we are not commenting about other cells.",
         "config": {
@@ -43,11 +43,11 @@
     },
     "nakedGroups": {
         "noInput": "try to fill {{candidatesListText}} where it is highlighted in red color to understand why these should be removed",
-        "emptyGroupCell": "{{emptyCellsListText}} have no candidate left. in the final solution of puzzle no cell can be empty \nto get back to right track remove {{removableFilledNotes}} from {{removableFilledNotesHostCells}}. {{numbersPronoun}} {{numbersTextSingularPlural}} {{candidatesHV}} belong in {{cellsPronoun}} {{cellsSingularPlural}}",
+        "emptyGroupCell": "{{emptyCellsListText}} have no candidate left. in the final solution of puzzle no cell can be empty \nto get back to right track remove {{removableFilledNotes}} from {{removableFilledNotesHostCells}}. $t(other:grammatical:this:one) $t(other:grammatical:number:one) $t(other:grammatical:doNotVerb:one) belong in $t(other:grammatical:this:two) $t(other:grammatical:cell:one)",
         "multipleCellsNakedSingle": "{{candidate}} is Naked Single for {{emptyCellsListText}}. fill {{candidate}} in one of these cells to know the fault in previous steps",
         "validFill": {
             "full": "{{candidatesListText}} are filled in {{candidatesHostCells}} cells without any error. this is one of many ways to fill these cells with {{candidatesListText}}. till now we are not sure what will be the exact solution for these cells but we are sure that {{candidatesListText}} can't come in cells other than {{candidatesHostCells}} in this highlighted region.",
-            "partial": "{filledCandidates} {filledCandidatesCountHV} filled in {filledCandidatesHostCells} without any error. experiment with filling {toBeFilledCandidates} as well to understand where {toBeFilledCandidatesPronoun} should be filled and why"
+            "partial": "{filledCandidates} $t(other:grammatical:helpingVerb:one) filled in {filledCandidatesHostCells} without any error. experiment with filling {toBeFilledCandidates} as well to understand where $t(other:grammatical:pronouns:one) should be filled and why"
         }
     },
     "nakedTripple": {
@@ -143,7 +143,7 @@
         "pivotCellWithoutCandidate": "{{pivotCell}} is left with no candidates. to fix this you will have to fill {{commonNoteInWings}} in one of these wings cells",
         "eliminableNotesCellWithoutCandidate": "{{eliminableNotesCellsWithoutCandidates}} have no candidates left. to fix this error try changing numbers in {{filledPivotAndWingsCells}}",
         "validFill": {
-            "partial": "{filledCandidates} {filledCandidatesCountHV} filled without any error. experiment with filling {toBeFilledCandidates} as well to understand where {toBeFilledCandidatesPronoun} can or can't be filled",
+            "partial": "{filledCandidates} $t(other:grammatical:helpingVerb:one) filled without any error. experiment with filling {toBeFilledCandidates} as well to understand where $t(other:grammatical:pronouns:one) can or can't be filled",
             "full": "{candidatesListText} are filled in pivot and wings cells without any error. this is one of many ways to fill these cells with {candidatesListText}. till now we are not sure what will be the exact solution for these cells but we are sure that {commonNoteInWings} can't come in {eliminableNotesHostCells} cells"
         }
     },

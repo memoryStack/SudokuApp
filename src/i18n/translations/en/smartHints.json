@@ -371,7 +371,7 @@
         "finnedXWing": {
             "texts": [
                 {
-                    "text": "<p>If you don't understand <a href=\"PERFECT_X_WING\">X-Wing</a> then you should learn that first.\nwhen the <a href=\"CANDIDATE\">candidate</a> is present in more than 2 <a href=\"CELL\">cells</a> of only one <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> then it's not a perfect X-Wing but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called <a href=\"X_WING_FINN_CELLS\">Finn Cells</a>.\nnotice extra {{candidate}} in {{finnCellsAxesListText}} {{finnCellEnglishText}} in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>",
+                    "text": "<p>If you don't understand <a href=\"PERFECT_X_WING\">X-Wing</a> then you should learn that first.\nwhen the <a href=\"CANDIDATE\">candidate</a> is present in more than 2 <a href=\"CELL\">cells</a> of only one <a href=\"ROW\">row</a> or <a href=\"COLUMN\">column</a> then it's not a perfect X-Wing but in some cases we can call it Finned X-Wing. the extra cells where candidate is present are called <a href=\"X_WING_FINN_CELLS\">Finn Cells</a>.\nnotice extra {{candidate}} in {{finnCellsAxesListText}} $t(other:grammatical:cell:one) in {{finnedLegAxesText}} {{finnedLegHouseText}}</p>",
                     "config": {
                         "finnedLegAxesText": {
                             "houseNum": {
@@ -390,11 +390,11 @@
                     }
                 },
                 {
-                    "text": "<p>only one row or column can have these finn cells. and these finn cells must be in the same <a href=\"BLOCK\">block</a> with atleast one of the X-Wing <a href=\"X_WING_CORNER_CELLS\">corner cells</a>.\nnotice here that {{finnCellsAxesListText}} (finn {{finnCellEnglishText}}) {{shareVerbGrammaticalText}} block with {{finnedBlockPerfectCellsAxesText}} {{cornersText}}</p>",
+                    "text": "<p>only one row or column can have these finn cells. and these finn cells must be in the same <a href=\"BLOCK\">block</a> with atleast one of the X-Wing <a href=\"X_WING_CORNER_CELLS\">corner cells</a>.\nnotice here that {{finnCellsAxesListText}} (finn $t(other:grammatical:cell:one)) $t(other:grammatical:shareVerb:one) block with {{finnedBlockPerfectCellsAxesText}} $t(other:grammatical:corners:one)</p>",
                     "config": {}
                 },
                 {
-                    "text": "here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells. because in {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} comes in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then {{candidate}} can't come in {{removableNotesHostCells}} only. and if {{candidate}} doesn't come in {{finnCellsPrefix}} finn {{finnCellEnglishText}} then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}",
+                    "text": "here we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells. because in {{finnedLegAxesText}} {{finnedLegHouseText}} if {{candidate}} comes in {{finnCellsPrefix}} finn $t(other:grammatical:cell:one) then {{candidate}} can't come in {{removableNotesHostCells}} only. and if {{candidate}} doesn't come in {{finnCellsPrefix}} finn $t(other:grammatical:cell:one) then Finned X-Wing will behave like Perfect X-Wing and {{candidate}} will surely not come in {{removableNotesHostCells}}",
                     "config": {
                         "crossHouseFullNamePlural": {
                             "type": "house",
@@ -429,7 +429,7 @@
                     "config": {}
                 },
                 {
-                    "text": "here {{candidate}} isn't present in {{sashimiCell}} and this cell is in same block as {{finnCellsAxesListText}} finn {{finnCellEnglishText}}\njust like Finned X-Wing in Sashimi Finned X-Wing also we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells because however we fill {{candidate}} in {{hostHousesAxesListText}} {{hostHousePluralName}}, in all cases {{candidate}} can't come in {{removableNotesHostCells}} {{removableNotesHostCellsText}}.",
+                    "text": "here {{candidate}} isn't present in {{sashimiCell}} and this cell is in same block as {{finnCellsAxesListText}} finn $t(other:grammatical:cell:one)\njust like Finned X-Wing in Sashimi Finned X-Wing also we can remove {{candidate}} from these {{crossHouseFullNamePlural}} but only from cells which share block with finn cells because however we fill {{candidate}} in {{hostHousesAxesListText}} {{hostHousePluralName}}, in all cases {{candidate}} can't come in {{removableNotesHostCells}} $t(other:grammatical:cell:two).",
                     "config": {
                         "crossHouseFullNamePlural": {
                             "type": "house",

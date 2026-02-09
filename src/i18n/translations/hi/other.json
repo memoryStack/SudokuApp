@@ -1,0 +1,32 @@
+{
+    "grammatical": {
+        "shareVerb": {
+            "one": "{shareVerbNounCount_one, plural, =1 {साझा करता है} other {साझा करते हैं}}",
+            "two": "{shareVerbNounCount_two, plural, =1 {साझा करता है} other {साझा करते हैं}}"
+        },
+        "cell": {
+            "one": "{cellCount_one, plural, =1 {सेल} other {सेल्स}}",
+            "two": "{cellCount_two, plural, =1 {सेल} other {सेल्स}}"
+        },
+        "corners": {
+            "one": "{cornersCount_one, plural, =1 {कोने} other {कोनों}}"
+        },
+        "helpingVerb": {
+            "one": "{helpingVerbNounCount_one, plural, =1 {है} other {हैं}}",
+            "two": "{helpingVerbNounCount_two, plural, =1 {है} other {हैं}}"
+        },
+        "doNotVerb": {
+            "one": "{doNotVerbNounCount_one, plural, =1 {नहीं करता} other {नहीं करते}}"
+        },
+        "this": {
+            "one": "{thisNounCount_one, plural, =1 {यह} other {ये}}",
+            "two": "{thisNounCount_two, plural, =1 {यह} other {ये}}"
+        },
+        "number": {
+            "one": "{numberCount_one, plural, =1 {संख्या} other {संख्याएं}}"
+        },
+        "pronouns": {
+            "one": "{pronounsNounCount_one, plural, =1 {यह} other {ये}}"
+        }
+    }
+}

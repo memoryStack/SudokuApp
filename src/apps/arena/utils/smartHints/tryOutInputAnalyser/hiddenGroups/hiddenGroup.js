@@ -47,7 +47,6 @@ const removableGroupCandidatesFilledHostCells = (removableGroupCandidatesHostCel
 const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells, primaryHouse, boardInputs, smartHintsTranslationsTexts) => {
     const filledCellsWithNumbers = getRemovableGroupCandidatesFilledCellsWithNumbers(removableGroupCandidatesHostCells, boardInputs)
     const axisValues = getAxisValuesFromTranslations(smartHintsTranslationsTexts)
-    const isPlural = filledCellsWithNumbers.length > 1
     const msgPlaceholderValues = {
         primaryHouseFullName: getHouseWithNumAndNameText(
             primaryHouse,
@@ -56,12 +55,15 @@ const removableGroupCandidatesFilledResult = (removableGroupCandidatesHostCells,
         ),
         filledCandidatesListText: getCandidatesListText(getNumbersFromCellsWithNumbers(filledCellsWithNumbers)),
         filledCellsAxesListText: getCellsAxesValuesListText(getCellsFromCellsWithNumbers(filledCellsWithNumbers), undefined, axisValues),
-        filledInstancesHelpingVerb: smartHintsTranslationsTexts.common.helpingVerb[isPlural ? 'plural' : 'singular'],
-        cellSingularPlural: smartHintsTranslationsTexts.common.houseTypes.cell[isPlural ? 'plural' : 'singular'],
-        removableGCCount: filledCellsWithNumbers.length
+        helpingVerbNounCount_one: filledCellsWithNumbers.length,
+        cellCount_one: filledCellsWithNumbers.length,
+        removableGCCount: filledCellsWithNumbers.length,
     }
     return {
-        msg: formatMessage(smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.removableGroupCandidateFilled, msgPlaceholderValues),
+        msg: formatMessage(
+            dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.removableGroupCandidateFilled, msgPlaceholderValues),
+            msgPlaceholderValues,
+        ),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -136,15 +138,13 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse,
         const candidatesListText = getCandidatesListText(_sortBy(groupCandidatesToBeFilled))
         const emptyCellsAxesListText = getCellsAxesValuesListText(emptyGroupCells, undefined, axisValues)
         const candidatesCountWithoutCells = groupCandidatesToBeFilled.length - emptyGroupCells.length
-        const emptyIsPlural = emptyGroupCells.length > 1
 
         msgPlaceholderValues = {
             candidatesToBeFilledCount: groupCandidatesToBeFilled.length,
             candidatesListText,
             emptyGroupCellsCount: emptyGroupCells.length,
-            emptyGroupCellsNounText: smartHintsTranslationsTexts.common.houseTypes.cell[emptyIsPlural ? 'plural' : 'singular'],
             emptyCellsAxesListText,
-            emptyGroupCellsHelpingVerb: smartHintsTranslationsTexts.common.helpingVerb[emptyIsPlural ? 'plural' : 'singular'],
+            helpingVerbNounCount_two: emptyGroupCells.length,
             primaryHouseFullName,
             candidatesCountWithoutCells,
             wronglyFilledNumbersInGroupCellsListText,
@@ -154,7 +154,7 @@ const groupCellWronglyFilledResult = (groupCells, groupCandidates, primaryHouse,
     }
 
     return {
-        msg: dynamicInterpolation(errorMsg, msgPlaceholderValues),
+        msg: formatMessage(dynamicInterpolation(errorMsg, msgPlaceholderValues), msgPlaceholderValues),
         state: TRY_OUT_RESULT_STATES.ERROR,
     }
 }
@@ -187,16 +187,15 @@ const correctlyFilledGroupCellsResult = (groupCells, groupCandidates, { tryOutMa
             candidatesToBeFilled.push(...NotesRecord.getCellVisibleNotesList(tryOutNotes, cell))
         })
         candidatesToBeFilled = _sortBy(_unique(candidatesToBeFilled))
-        const filledIsPlural = correctlyFilledGroupCandidates.length > 1
         const toBeFilledIsPlural = candidatesToBeFilled.length > 1
 
         msgPlaceholderValues = {
             filledCandidates: getCandidatesListText(correctlyFilledGroupCandidates),
-            filledCandidatesCountHV: smartHintsTranslationsTexts.common.helpingVerb[filledIsPlural ? 'plural' : 'singular'],
             filledCandidatesHostCells: getCellsAxesValuesListText(filledGroupCells, undefined, axisValues),
             toBeFilledCandidates: getCandidatesListText(_sortBy(candidatesToBeFilled)),
-            toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
-            correctlyFilledGCCount: correctlyFilledGroupCandidates.length
+            pronounsNounCount_one: candidatesToBeFilled.length,
+            correctlyFilledGCCount: correctlyFilledGroupCandidates.length,
+            helpingVerbNounCount_one: correctlyFilledGroupCandidates.length,
         }
         progressMsg = smartHintsTranslationsTexts.tryOutAnalyser.hiddenGroup.validFill.partial
     }

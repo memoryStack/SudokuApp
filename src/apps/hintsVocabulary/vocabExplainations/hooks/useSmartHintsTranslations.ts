@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'src/i18n/hooks/useTranslation'
-import { getHintExplanationTexts, getHintsTitle } from 'src/apps/arena/utils/smartHints/stringLiterals'
+import { getHintExplanationTexts, getHintsTitle, getTryOutAnalyserTexts } from 'src/apps/arena/utils/smartHints/stringLiterals'
 import { SmartHintsTranslationsTexts } from 'src/apps/arena/utils/smartHints/types'
 
 export const useSmartHintsTranslations = (): SmartHintsTranslationsTexts => {
@@ -12,7 +12,7 @@ export const useSmartHintsTranslations = (): SmartHintsTranslationsTexts => {
             explanation: getHintExplanationTexts(tSmartHints),
             title: getHintsTitle(tSmartHints),
             common: i18n.getDataByLanguage(i18n.language)?.['common'] ?? {},
-            tryOutAnalyser: i18n.getDataByLanguage(i18n.language)?.['tryOutAnalyser'] ?? {},
+            tryOutAnalyser: getTryOutAnalyserTexts(tTryOutAnalyser),
         }
     }, [tSmartHints, tTryOutAnalyser, i18n])
 

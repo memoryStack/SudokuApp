@@ -120,13 +120,16 @@ export const yWingTryOutAnalyser = (
 
         const msgPlaceholderValues = {
             filledCandidates: getCandidatesListText(_sortBy(filledCandidates), smartHintsTranslationsTexts.common.conjugations.and),
-            filledCandidatesCountHV: smartHintsTranslationsTexts.common.helpingVerb[filledIsPlural ? 'plural' : 'singular'],
             toBeFilledCandidates: getCandidatesListText(_sortBy(toBeFilledCandidates), smartHintsTranslationsTexts.common.conjugations.and),
-            toBeFilledCandidatesPronoun: smartHintsTranslationsTexts.common.pronouns[toBeFilledIsPlural ? 'plural' : 'singular'],
-            filledCandidatesCount: filledCandidates.length
+            pronounsNounCount_one: toBeFilledCandidates.length,
+            filledCandidatesCount: filledCandidates.length,
+            helpingVerbNounCount_one: filledCandidates.length,
         }
         return {
-            msg: formatMessage(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.partial, msgPlaceholderValues),
+            msg: formatMessage(
+                dynamicInterpolation(smartHintsTranslationsTexts.tryOutAnalyser.yWing.validFill.partial, msgPlaceholderValues),
+                msgPlaceholderValues,
+            ),
             state: TRY_OUT_RESULT_STATES.VALID_PROGRESS,
         }
     }

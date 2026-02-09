@@ -127,6 +127,102 @@ export const getHintExplanationTexts = (t: TFunction): HintExplainationTexts => 
     },
 })
 
+export const getTryOutAnalyserTexts = (t: TFunction) => ({
+    unattainableState: t('unattainableState'),
+    snackbars: t('snackbars', { returnObjects: true }),
+    restrictedNumberInputMsg: t('restrictedNumberInputMsg'),
+    unclickableCellClickedInTryOutMsg: t('unclickableCellClickedInTryOutMsg', { returnObjects: true }),
+
+    hiddenGroup: {
+        noInput: t('hiddenGroup.noInput'),
+        removableGroupCandidateFilled: t('hiddenGroup.removableGroupCandidateFilled'),
+        invalidCandidateInGroupCell: {
+            noHostCellForGroupCandidates: t('hiddenGroup.invalidCandidateInGroupCell.noHostCellForGroupCandidates'),
+            insufficientHostCells: t('hiddenGroup.invalidCandidateInGroupCell.insufficientHostCells'),
+        },
+        validFill: {
+            full: t('hiddenGroup.validFill.full'),
+            partial: t('hiddenGroup.validFill.partial'),
+        },
+        unclickableCellClickedInTryOutMsg: t('hiddenGroup.unclickableCellClickedInTryOutMsg'),
+        config: t('hiddenGroup.config', { returnObjects: true }),
+    },
+
+    nakedGroups: {
+        noInput: t('nakedGroups.noInput'),
+        emptyGroupCell: t('nakedGroups.emptyGroupCell'),
+        multipleCellsNakedSingle: t('nakedGroups.multipleCellsNakedSingle'),
+        validFill: {
+            full: t('nakedGroups.validFill.full'),
+            partial: t('nakedGroups.validFill.partial'),
+        },
+    },
+
+    nakedTripple: {
+        futureEmptyCell: t('nakedTripple.futureEmptyCell', { returnObjects: true }),
+    },
+
+    xWing: {
+        noInput: t('xWing.noInput'),
+        sameCrosshouse: t('xWing.sameCrosshouse'),
+        oneLegNoCandidate: t('xWing.oneLegNoCandidate'),
+        perfect: t('xWing.perfect', { returnObjects: true }),
+        oneLegValidFill: t('xWing.oneLegValidFill'),
+        bothLegValidFill: t('xWing.bothLegValidFill'),
+        config: t('xWing.config', { returnObjects: true }),
+    },
+
+    yWing: {
+        restrictedNumberInputMsg: t('yWing.restrictedNumberInputMsg'),
+        noInput: t('yWing.noInput'),
+        eliminableNotesCellFilled: t('yWing.eliminableNotesCellFilled', { returnObjects: true }),
+        pivotCellWithoutCandidate: t('yWing.pivotCellWithoutCandidate'),
+        eliminableNotesCellWithoutCandidate: t('yWing.eliminableNotesCellWithoutCandidate'),
+        validFill: {
+            partial: t('yWing.validFill.partial'),
+            full: t('yWing.validFill.full'),
+        },
+    },
+
+    remotePairs: {
+        noInput: t('remotePairs.noInput'),
+        chainCellWithoutCandidate: t('remotePairs.chainCellWithoutCandidate'),
+        removableNotesCellFilled: t('remotePairs.removableNotesCellFilled', { returnObjects: true }),
+        chainCellsBothColorCandidatesFilled: t('remotePairs.chainCellsBothColorCandidatesFilled', { returnObjects: true }),
+        validFill: {
+            partial: t('remotePairs.validFill.partial'),
+            full: t('remotePairs.validFill.full'),
+        },
+        unclickableCellClickedInTryOutMsg: t('remotePairs.unclickableCellClickedInTryOutMsg'),
+    },
+
+    emptyRectangle: {
+        noInput: t('emptyRectangle.noInput'),
+        removableNoteCellFilled: t('emptyRectangle.removableNoteCellFilled', { returnObjects: true }),
+        conjugateHouseAndBlockHostHouseFilled: t('emptyRectangle.conjugateHouseAndBlockHostHouseFilled'),
+        conjugateHouseFilled: t('emptyRectangle.conjugateHouseFilled', { returnObjects: true }),
+        blockHostHouseFilled: t('emptyRectangle.blockHostHouseFilled', { returnObjects: true }),
+        config: t('emptyRectangle.config', { returnObjects: true }),
+    },
+
+    wWing: {
+        noInput: t('wWing.noInput'),
+        removableNoteCellFilled: t('wWing.removableNoteCellFilled', { returnObjects: true }),
+        conjugateCellFilled: t('wWing.conjugateCellFilled', { returnObjects: true }),
+        nakedPairCellFilled: t('wWing.nakedPairCellFilled', { returnObjects: true }),
+        config: t('wWing.config', { returnObjects: true }),
+    },
+
+    xyzWing: {
+        restrictedNumberInputMsg: t('xyzWing.restrictedNumberInputMsg'),
+        noInput: t('xyzWing.noInput'),
+        removableNoteCellFilled: t('xyzWing.removableNoteCellFilled', { returnObjects: true }),
+        allCellsFilledProperly: t('xyzWing.allCellsFilledProperly'),
+        commonNoteFilledInAnyWingCells: t('xyzWing.commonNoteFilledInAnyWingCells'),
+        partiallyFilled: t('xyzWing.partiallyFilled'),
+    },
+})
+
 // Legacy exports for backward compatibility - will be deprecated
 export const HINT_EXPLANATION_TEXTS: HintExplainationTexts = {
     [HINTS_IDS.NAKED_SINGLE]: {

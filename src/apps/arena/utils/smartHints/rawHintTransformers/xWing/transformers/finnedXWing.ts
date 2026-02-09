@@ -46,6 +46,7 @@ import {
     CellHighlightData, CellsFocusData, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../../types'
 import { XWingRawHint } from '../../../xWing/types'
+import { formatMessage } from '@utils/util'
 
 type FinnedXWingTranslation = {
     texts: { text: string, config: Record<string, any> }[]
@@ -96,20 +97,15 @@ const getPlaceholdersValues = (
             ? getLanguageSpecificHouseTypeText(houseType, finnedLegHouseTextConfig, smartHintsTranslationsTexts)
             : undefined,
         finnCellsAxesListText: getCellsAxesValuesListText(finnCells, '', axisValues),
-        finnCellEnglishText: finnCells.length === 1
-            ? common.houseTypes.cell.singular
-            : common.houseTypes.cell.plural,
-        shareVerbGrammaticalText: finnCells.length === 1
-            ? common.shareVerb.singular
-            : common.shareVerb.plural,
+        cellCount_one: finnCells.length,
+        shareVerbNounCount_one: finnCells.length,
+        shareVerbNounCount_two: 1,
         finnedBlockPerfectCellsAxesText: getCellsAxesValuesListText(
             finnedBlockPerfectCells,
             common.conjugations.and,
             axisValues
         ),
-        cornersText: finnedBlockPerfectCells.length === 1
-            ? common.corners.singular
-            : common.corners.plural,
+        cornersCount_one: finnedBlockPerfectCells.length,
         crossHouseFullNamePlural: config?.crossHouseFullNamePlural
             ? getLanguageSpecificHouseTypeText(crossHouseType, config.crossHouseFullNamePlural, smartHintsTranslationsTexts)
             : undefined,
@@ -130,9 +126,7 @@ const getPlaceholdersValues = (
             common.conjugations.and,
             axisValues
         ),
-        removableNotesHostCellsText: removableNotesHostCells.length === 1
-            ? common.houseTypes.cell.singular
-            : common.houseTypes.cell.plural,
+        cellCount_two: removableNotesHostCells.length,
         finnCellsPrefix: finnCells.length === 1
             ? finnCellsPrefixConfig.singular
             : finnCellsPrefixConfig.plural,
@@ -149,7 +143,7 @@ const getFinnedXWingHintChunks = (
 
     return texts.map(({ text, config }: { text: string, config: Record<string, any> }) => {
         const msgPlaceholdersValues = getPlaceholdersValues(xWing, removableNotesHostCells, config, smartHintsTranslationsTexts)
-        return dynamicInterpolation(text, msgPlaceholdersValues)
+        return String(formatMessage(dynamicInterpolation(text, msgPlaceholdersValues), msgPlaceholdersValues))
     })
 }
 
@@ -178,7 +172,7 @@ const getSashimiFinnedHintChunks = (
             sashimiCellAxesText: getCellAxesValues(getSashimiCell(xWing, notes) as Cell, axisValues),
             sashimiCell: getCellAxesValues(getSashimiCell(xWing, notes) as Cell, axisValues)
         }
-        return dynamicInterpolation(text, msgPlaceholdersValues)
+        return String(formatMessage(dynamicInterpolation(text, msgPlaceholdersValues), msgPlaceholdersValues))
     })
 }
 
