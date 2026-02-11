@@ -215,14 +215,26 @@ type HouseTypeTextTranslationConfig = {
 type HouseNumAndNameTextTranslationConfig = {
     houseNum: HouseNumTextTranslationConfig
     houseName: HouseTypeTextTranslationConfig
-
 }
 export const getHouseWithNumAndNameText = (
     house: House,
     translationConfig: HouseNumAndNameTextTranslationConfig,
     translations: SmartHintsTranslationsTexts
 ) => {
-    const rawText = translations.common.houseTypes.numAndName
+    const numAndNameTemplate = translations.common.houseTypes.numAndName as any
+
+    let rawText: string
+    if (typeof numAndNameTemplate === 'string') {
+        // Simple string template, e.g. "{{houseNum}} {{houseName}}"
+        rawText = numAndNameTemplate
+    } else if (numAndNameTemplate && typeof numAndNameTemplate === 'object') {
+        // Per-house-type templates, e.g. { row: "...", col: "...", block: "..." }
+        const byType = numAndNameTemplate[house.type]
+        rawText = typeof byType === 'string' ? byType : ''
+    } else {
+        rawText = ''
+    }
+
     return dynamicInterpolation(rawText, {
         houseNum: getLanguageSpecificHouseNumText(house, translationConfig.houseNum, translations),
         houseName: getLanguageSpecificHouseTypeText(house.type, translationConfig.houseName, translations),

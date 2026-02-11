@@ -72,13 +72,13 @@
             }
         },
         "omission": {
-            "text": "<p>हाइलाइट किए गए {{hostHouseFullName}} में, {{note}} केवल {{hostHouseHostCellsListText}} में से एक में आ सकता है और ये सभी सेल {{secondaryHouseName}} नं. {{secondaryHouseNum}} का भी हिस्सा हैं। इसलिए इस {{hostHouseFullName}} में जहाँ भी हम {{note}} भरने की कोशिश करें, {{removableNotesHostCellsListText}} में {{note}} नहीं आ सकता</p>",
+            "text": "<p>हाइलाइट किए गए {{hostHouseFullName}} में, {{note}} केवल {{hostHouseHostCellsListText}} में से एक में आ सकता है और ये सभी सेल $t(other:houseNumAndName:one) का भी हिस्सा हैं। इसलिए इस {{hostHouseFullName}} में जहाँ भी हम {{note}} भरने की कोशिश करें, {{removableNotesHostCellsListText}} में {{note}} नहीं आ सकता</p>",
             "config": {
                 "hostHouseFullName": {
                     "form": "singular",
                     "type": "house"
                 },
-                "secondaryHouseNum": {
+                "houseNum_one": {
                     "type": "houseNumber",
                     "form": {
                         "row": "axis",
@@ -86,7 +86,7 @@
                         "block": "number_ordinal"
                     }
                 },
-                "secondaryHouseName": {
+                "houseName_one": {
                     "form": "singular",
                     "type": "house"
                 }

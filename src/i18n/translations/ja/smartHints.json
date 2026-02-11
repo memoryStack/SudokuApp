@@ -1,34 +1,34 @@
 {
     "titles": {
-        "nakedSingle": "Naked Single",
-        "hiddenSingle": "Hidden Single",
-        "nakedDouble": "Naked Double",
-        "nakedTripple": "Naked Tripple",
-        "hiddenDouble": "Hidden Double",
-        "hiddenTripple": "Hidden Tripple",
-        "perfectXWing": "X-Wing",
-        "finnedXWing": "Finned X-Wing",
-        "sashimiFinnedXWing": "Sashimi Finned X-Wing",
-        "yWing": "Y-Wing",
-        "omission": "Omission",
-        "remotePairs": "Remote Pairs",
-        "xChain": "X-Chain",
-        "xyChain": "XY-Chain",
-        "emptyRectangle": "Empty Rectangle",
-        "wWing": "W-Wing",
-        "xyzWing": "XYZ-Wing",
-        "uniqueRectangle": "Unique Rectangle",
-        "all": "hints"
+        "nakedSingle": "ネイキッドシングル",
+        "hiddenSingle": "ヒドゥンシングル",
+        "nakedDouble": "ネイキッドダブル",
+        "nakedTripple": "ネイキッドトリプル",
+        "hiddenDouble": "ヒドゥンダブル",
+        "hiddenTripple": "ヒドゥントリプル",
+        "perfectXWing": "Xウィング",
+        "finnedXWing": "フィン付きXウィング",
+        "sashimiFinnedXWing": "サシミ・フィン付きXウィング",
+        "yWing": "Yウィング",
+        "omission": "オミッション",
+        "remotePairs": "リモートペア",
+        "xChain": "Xチェイン",
+        "xyChain": "XYチェイン",
+        "emptyRectangle": "エンプティレクタングル",
+        "wWing": "Wウィング",
+        "xyzWing": "XYZウィング",
+        "uniqueRectangle": "ユニークレクタングル",
+        "all": "ヒント"
     },
     "footerButtons": {
-        "next": "Next",
-        "prev": "Prev",
-        "applyHint": "Apply Hint"
+        "next": "次へ",
+        "prev": "前へ",
+        "applyHint": "ヒントを適用"
     },
     "explanations": {
         "nakedSingle": {
             "singleHouse": {
-                "text": "<p>in this {{houseType}} only {{cellAxesText}} <a href=\"CELL\">cell</a> is empty so {{solutionValue}} will come here</p>",
+                "text": "<p>この{{houseType}}で空いているのは {{cellAxesText}} の<a href=\"CELL\">マス</a>だけなので、ここには {{solutionValue}} が入ります。</p>",
                 "config": {
                     "houseType": {
                         "form": "singular",
@@ -37,7 +37,7 @@
                 }
             },
             "multipleHouse": {
-                "text": "<p>except {{solutionValue}} all other numbers from 1-9 are present in {{rowNum}} <a href=\"ROW\">row</a>, {{columnNum}} <a href=\"COLUMN\">column</a> and {{blockNum}} <a href=\"BLOCK\">block</a> combinedly, so only number that can come in {{cellAxesText}} is {{solutionValue}}</p>",
+                "text": "<p>{{solutionValue}} 以外の 1〜9 の数字は、{{rowNum}} <a href=\"ROW\">行</a>、{{columnNum}} <a href=\"COLUMN\">列</a>、{{blockNum}} <a href=\"BLOCK\">ブロック</a>のどこかにすべて現れているので、{{cellAxesText}} のマスに入る数字は {{solutionValue}} しかありません。</p>",
                 "config": {
                     "housesNum": {
                         "type": "houseNumber",
@@ -49,11 +49,11 @@
                     }
                 }
             },
-            "composite": "<p>except {{solutionValue}} no other number from 1-9 can come in {{cellAxesText}}, so only {{solutionValue}} can come in {{cellAxesText}}.</p>"
+            "composite": "<p>1〜9 の中で {{solutionValue}} 以外の数字は {{cellAxesText}} のマスには入れないので、このマスには {{solutionValue}} しか入りません。</p>"
         },
         "hiddenSingle": {
             "default": {
-                "text": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in crossed <a href=\"CELL\">cells</a> because of {{solutionValue}} in {{filledCellsWithSolutionValue}}. so in {{hostCell}} only {{solutionValue}} can come</p>",
+                "text": "<p>ハイライトされた{{houseType}}では、{{filledCellsWithSolutionValue}}の{{solutionValue}}があるため、×印の<a href=\"CELL\">マス</a>に{{solutionValue}}は入れません。したがって、{{hostCell}}にだけ{{solutionValue}}が入ります。</p>",
                 "config": {
                     "houseType": {
                         "form": "singular",
@@ -62,7 +62,7 @@
                 }
             },
             "composite": {
-                "text": "<p>in the highlighted {{houseType}}, {{solutionValue}} can't come in any other <a href=\"CELL\">cells</a> except {{hostCell}} so in {{hostCell}} only {{solutionValue}} will come</p>",
+                "text": "<p>ハイライトされた{{houseType}}では、{{hostCell}}以外の他の<a href=\"CELL\">マス</a>に{{solutionValue}}は入れませんので、{{hostCell}}にだけ{{solutionValue}}が入ります。</p>",
                 "config": {
                     "houseType": {
                         "form": "singular",
@@ -72,21 +72,21 @@
             }
         },
         "omission": {
-            "text": "<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of {{hostHouseHostCellsListText}} and all of these <a href=\"CELL\">cells</a> are part of {{secondaryHouseNum}} {{secondaryHouseName}} as well. so wherever we try to fill {{note}} in this {{hostHouseFullName}}, {{note}} in {{removableNotesHostCellsListText}} can't come</p>",
+            "text": "<p>ハイライトされた{{hostHouseFullName}}では、{{note}}は{{hostHouseHostCellsListText}}のいずれか一方のみに入る可能性があり、これらの<a href=\"CELL\">マス</a>はすべて$t(other:houseNumAndName:one)にも含まれています。したがって、この{{hostHouseFullName}}のどこに{{note}}を入れようとしても、{{removableNotesHostCellsListText}}の{{note}}は入りません。</p>",
             "config": {
                 "hostHouseFullName": {
                     "form": "singular",
                     "type": "house"
                 },
-                "secondaryHouseNum": {
+                "houseNum_one": {
                     "type": "houseNumber",
                     "form": {
                         "row": "axis",
-                        "col": "number_ordinal",
-                        "block": "number_ordinal"
+                        "col": "number",
+                        "block": "number"
                     }
                 },
-                "secondaryHouseName": {
+                "houseName_one": {
                     "form": "singular",
                     "type": "house"
                 }
@@ -703,5 +703,5 @@
     "cellHousesText": {
         "rowColumnBlock": "{{rowAxes}} <a href=\"ROW\">row</a>, {{columnOrdinal}} <a href=\"COLUMN\">column</a> and {{blockOrdinal}} <a href=\"BLOCK\">block</a>"
     },
-    "learnMore": "Learn More"
+    "learnMore": "詳しく見る"
 }

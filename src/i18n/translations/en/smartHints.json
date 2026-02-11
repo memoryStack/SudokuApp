@@ -72,13 +72,13 @@
             }
         },
         "omission": {
-            "text": "<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of {{hostHouseHostCellsListText}} and all of these <a href=\"CELL\">cells</a> are part of {{secondaryHouseNum}} {{secondaryHouseName}} as well. so wherever we try to fill {{note}} in this {{hostHouseFullName}}, {{note}} in {{removableNotesHostCellsListText}} can't come</p>",
+            "text": "<p>in the highlighted {{hostHouseFullName}}, {{note}} can come only in one of {{hostHouseHostCellsListText}} and all of these <a href=\"CELL\">cells</a> are part of $t(other:houseNumAndName:one) as well. so wherever we try to fill {{note}} in this {{hostHouseFullName}}, {{note}} in {{removableNotesHostCellsListText}} can't come</p>",
             "config": {
                 "hostHouseFullName": {
                     "form": "singular",
                     "type": "house"
                 },
-                "secondaryHouseNum": {
+                "houseNum_one": {
                     "type": "houseNumber",
                     "form": {
                         "row": "axis",
@@ -86,7 +86,7 @@
                         "block": "number_ordinal"
                     }
                 },
-                "secondaryHouseName": {
+                "houseName_one": {
                     "form": "singular",
                     "type": "house"
                 }

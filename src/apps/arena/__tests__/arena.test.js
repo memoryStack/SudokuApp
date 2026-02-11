@@ -38,7 +38,7 @@ import { NEXT_GAME_MENU_TEST_ID } from '../nextGameMenu/nextGameMenu.constants'
 import { MAX_AVAILABLE_HINTS } from '../store/state/boardController.state'
 import { getGameLevelsUseCase } from '@application/usecases/gameLevels/gameLevels'
 import { LEVEL_STATES } from '@application/usecases/gameLevels/constants'
-import { consoleLog } from '@utils/util'
+import { consoleLog, formatMessage } from '@utils/util'
 import { SETTINGS_BUTTON_TEST_ID } from 'src/apps/header/components/settings/settings.constants'
 import { SETTINGS_MENU_TEST_ID } from 'src/apps/header/components/settings/settingsMenu/settingsMenu.constants'
 import { getTimeDifferenceInSeconds } from '../utils/util'
@@ -1101,5 +1101,32 @@ describe('Hint Suggestion Card', () => {
 
         const smartHintHC = within(screen.getByTestId(SMART_HINT_HC_TEST_ID))
         expect(smartHintHC.getByText(/Naked Single/i)).toBeOnTheScreen()
+    })
+})
+
+import IntlMessageFormat from 'intl-messageformat'
+
+describe.only('IntlMessageFormat', () => {
+
+    test.only('should render omission hint explanation text', async () => {
+        // const locale = 'en-US'
+        // const locale = 'ja'
+        const locale = 'hi'
+
+        const listFormatter = new Intl.ListFormat(locale, {
+            style: 'long',  // 'long', 'short', or 'narrow'
+            type: 'unit'  // 'conjunction' (and), 'disjunction' (or), or 'unit'
+        });
+
+        const numbers = ["a", "c"];
+        const formattedList = listFormatter.format(numbers);
+
+        console.log('@@@@@@ formattedList', formattedList)
+
+        // new IntlMessageFormat(message, locale, undefined, { ignoreTag: true }).format(values)
+
+        const nf = new Intl.NumberFormat(locale, { style: 'decimal' })
+        const formattedNumber = nf.format(1)
+        console.log('@@@@@@ formattedNumber', formattedNumber)
     })
 })

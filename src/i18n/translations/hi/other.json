@@ -1,4 +1,8 @@
 {
+    "houseNumAndName": {
+        "one": "{{houseName_one}} नं. {{houseNum_one}}",
+        "two": "{{houseName_two}} नं. {{houseNum_two}}"
+    },
     "grammatical": {
         "shareVerb": {
             "one": "{shareVerbNounCount_one, plural, =1 {साझा करता है} other {साझा करते हैं}}",

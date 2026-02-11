@@ -120,7 +120,7 @@ const SmartHintHC_: React.FC<Props> = ({
         totalHintsCount,
         rawData
     } = useSmartHintData()
-
+    console.log('@@@@@@ logic - ', logic)
     const closeByApplyHintClick = useRef(false)
 
     const { selectedCell } = useGameBoardInputs()

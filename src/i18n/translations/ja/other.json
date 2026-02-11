@@ -1,4 +1,8 @@
 {
+    "houseNumAndName": {
+        "one": "{houseType_one, select, row {{houseNum_one}{houseName_one}} other {{houseNum_one}{houseName_one}目}}",
+        "two": "{houseType_two, select, row {{houseNum_two}{houseName_two}} other {{houseNum_two}{houseName_two}目}}"
+    },
     "grammatical": {
         "shareVerb": {
             "one": "{shareVerbNounCount_one, plural, =1 {shares} other {share}}",

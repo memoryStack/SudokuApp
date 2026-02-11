@@ -13,7 +13,7 @@ import {
 } from '../../constants'
 import { HINT_EXPLANATION_TEXTS, HINT_ID_VS_TITLES } from '../../stringLiterals'
 import { getCellsAxesValuesListText, getHouseNumText } from '../helpers'
-import { getAxisValuesFromTranslations, getLanguageSpecificHouseNumText, getLanguageSpecificHouseTypeText, getLanguageSpecificNumberText, setCellDataInHintResult, transformCellBGColor } from '../../util'
+import { getAxisValuesFromTranslations, getLanguageSpecificHouseNumText, getLanguageSpecificHouseTypeText, setCellDataInHintResult, transformCellBGColor } from '../../util'
 import { BOARD_MOVES_TYPES } from '../../../../constants'
 import smartHintColorSystemReader from '../../colorSystem.reader'
 import { OmissionTransformerArgs } from './types'
@@ -22,6 +22,7 @@ import {
     CellHighlightData, CellsFocusData, NotesRemovalHintAction, SmartHintsColorSystem, SmartHintsTranslationsTexts, TransformedRawHint,
 } from '../../types'
 import { HOUSE_TYPE_VS_VOCAB_ID } from '../constants'
+import { formatMessage } from '@utils/util'
 
 const addHostHouseHighlightData = (
     omission: RawOmissionHint,
@@ -102,6 +103,8 @@ const getHintExplaination = (
         config,
     } = smartHintsTranslationsTexts.explanation[HINTS_IDS.OMISSION]
 
+    console.log('@@@@@@ removableNotesHostHouse.type', text)
+
     const msgPlaceholdersValues = {
         note,
         hostHouseFullName: getLinkHTMLText(
@@ -109,12 +112,17 @@ const getHintExplaination = (
             getLanguageSpecificHouseTypeText(hostHouse.type, config.hostHouseFullName, smartHintsTranslationsTexts)
         ),
         hostHouseHostCellsListText,
-        secondaryHouseNum: getLanguageSpecificHouseNumText(
+        houseNum_one: getLanguageSpecificHouseNumText(
             removableNotesHostHouse,
-            config.secondaryHouseNum,
+            config.houseNum_one,
             smartHintsTranslationsTexts
         ),
-        secondaryHouseName: getLanguageSpecificHouseTypeText(removableNotesHostHouse.type, config.secondaryHouseName, smartHintsTranslationsTexts),
+        houseName_one: getLanguageSpecificHouseTypeText(
+            removableNotesHostHouse.type,
+            config.houseName_one as any,
+            smartHintsTranslationsTexts
+        ),
+        houseType_one: removableNotesHostHouse.type,
         removableNotesHostCellsListText: getCellsAxesValuesListText(
             getRemovableNotesHostCells(omission, notes),
             smartHintsTranslationsTexts.common.conjugations.and,
@@ -122,7 +130,10 @@ const getHintExplaination = (
         ),
     }
 
-    return dynamicInterpolation(text, msgPlaceholdersValues)
+    return formatMessage(
+        dynamicInterpolation(text, msgPlaceholdersValues),
+        msgPlaceholdersValues
+    )
 }
 
 const getApplyHintData = (omission: RawOmissionHint, notes: Notes): NotesRemovalHintAction[] => {

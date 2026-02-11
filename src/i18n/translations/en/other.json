@@ -1,4 +1,8 @@
 {
+    "houseNumAndName": {
+        "one": "{{houseNum_one}} {{houseName_one}}",
+        "two": "{{houseNum_two}} {{houseName_two}}"
+    },
     "grammatical": {
         "shareVerb": {
             "one": "{shareVerbNounCount_one, plural, =1 {shares} other {share}}",

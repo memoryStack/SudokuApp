@@ -7,87 +7,87 @@
         "customizePuzzle": "パズルをカスタマイズ"
     },
     "gameResult": {
-        "congratulations": "Congratulations!",
-        "time": "Time",
-        "mistakes": "Mistakes",
-        "hintsUsed": "Hints Used",
-        "gameOverMessage": "You have reached the maximum mistakes limit. Better Luck Next Time",
-        "reviewDescription": "If you've improved at Sudoku, please share your feedback to help us improve ❤️"
+        "congratulations": "おめでとうございます！",
+        "time": "時間",
+        "mistakes": "ミス",
+        "hintsUsed": "使ったヒント",
+        "gameOverMessage": "ミスの上限に達しました。次回ぜひリベンジしてください。",
+        "reviewDescription": "数独が上達したと感じたら、ぜひご意見を送ってください。今後の改善に役立てます。"
     },
     "inputPanel": {
         "names": {
-            "notes": "Notes",
-            "mainNumbers": "Main Number"
+            "notes": "メモ",
+            "mainNumbers": "本数字"
         }
     },
     "refree": {
-        "mistakesWithLimit": "Mistakes: {current}/{max}",
-        "mistakesWithoutLimit": "Mistakes: {current}",
-        "customizedPuzzle": "Customized Puzzle",
-        "sharedPuzzle": "Shared Puzzle"
+        "mistakesWithLimit": "ミス: {current}/{max}",
+        "mistakesWithoutLimit": "ミス: {current}",
+        "customizedPuzzle": "カスタマイズパズル",
+        "sharedPuzzle": "共有されたパズル"
     },
     "cellActions": {
-        "undo": "Undo",
-        "pencil": "Pencil",
-        "fastPencil": "Fast Pencil",
-        "hint": "Hint",
-        "eraser": "Eraser",
-        "longPressHint": "Long press to see all hints"
+        "undo": "元に戻す",
+        "pencil": "メモモード",
+        "fastPencil": "高速メモ",
+        "hint": "ヒント",
+        "eraser": "消しゴム",
+        "longPressHint": "長押しでヒント一覧を表示"
     },
     "smartHint": {
-        "applyHint": "Apply Hint"
+        "applyHint": "ヒントを適用"
     },
     "hintsMenu": {
-        "nakedSingle": "Naked\nSingle",
-        "hiddenSingle": "Hidden\nSingle",
-        "nakedDouble": "Naked\nDouble",
-        "hiddenDouble": "Hidden\nDouble",
-        "nakedTripple": "Naked\nTripple",
-        "hiddenTripple": "Hidden\nTripple",
-        "xWing": "X-Wing",
-        "yWing": "Y-Wing",
-        "omission": "Omission",
-        "remotePairs": "Remote Pairs",
-        "emptyRectangle": "Empty Rectangle",
-        "xChain": "X-Chain",
-        "xyChain": "XY-Chain",
-        "wWing": "W-Wing",
-        "xyzWing": "XYZ-Wing",
-        "uniqueRectangle": "Unique\nRectangle"
+        "nakedSingle": "ネイキッド\nシングル",
+        "hiddenSingle": "ヒドゥン\nシングル",
+        "nakedDouble": "ネイキッド\nダブル",
+        "hiddenDouble": "ヒドゥン\nダブル",
+        "nakedTripple": "ネイキッド\nトリプル",
+        "hiddenTripple": "ヒドゥン\nトリプル",
+        "xWing": "Xウィング",
+        "yWing": "Yウィング",
+        "omission": "オミッション",
+        "remotePairs": "リモートペア",
+        "emptyRectangle": "エンプティレクタングル",
+        "xChain": "Xチェイン",
+        "xyChain": "XYチェイン",
+        "wWing": "Wウィング",
+        "xyzWing": "XYZウィング",
+        "uniqueRectangle": "ユニーク\nレクタングル"
     },
     "feedback": {
-        "title": "We are just one text away",
-        "description": "We understand that you might have faced some difficulties. Let us know how we can help you solve your next puzzle.",
-        "inputPlaceholder": "Didn't know how to use hints",
+        "title": "いつでもご相談ください",
+        "description": "プレイ中に困ったことがあれば、次のパズルを解くお手伝いができるよう教えてください。",
+        "inputPlaceholder": "ヒントの使い方が分かりませんでした",
         "options": {
-            "hints": "Had trouble using hints",
-            "hard": "Too hard puzzles"
+            "hints": "ヒントの使い方で困った",
+            "hard": "パズルが難しすぎた"
         },
         "snackbar": {
-            "success": "We have recorded your response and will act on it shortly.",
-            "error": "Failed to submit feedback. We are on it!",
+            "success": "ご意見ありがとうございます。今後の改善に役立てます。",
+            "error": "送信に失敗しました。しばらくしてからもう一度お試しください。",
             "pleaseProvideInput": "ここに入力してください"
         }
     },
     "hintSuggestion": {
-        "title": "Want Help?",
-        "description": "you have been stuck for over {{seconds}}s. Feeling like need help?"
+        "title": "お手伝いしますか？",
+        "description": "{{seconds}}秒以上手が止まっています。ヒントが必要ですか？"
     },
     "coachmarks": {
-        "fastPencil": "To get Hints when you wish\n\nFirst press on Fast Pencil",
-        "clickHints": "Now press on \"Hint\"",
-        "customizeExperience": "You can customize your game experience from here"
+        "fastPencil": "欲しいときだけヒントを見るには\n\nまず「高速メモ」をタップします",
+        "clickHints": "次に「ヒント」をタップします",
+        "customizeExperience": "ここからゲーム体験をカスタマイズできます"
     },
     "snackbars": {
-        "cluesCannotBeRemoved": "Clues can not be removed",
-        "noHintsFound": "Oops! no hints are found\nFill some guesses in puzzle and then click \"Hint\"",
+        "cluesCannotBeRemoved": "最初から入っている数字は消せません",
+        "noHintsFound": "ヒントは見つかりませんでした。\nいくつかマスを埋めてから「ヒント」を押してください",
         "customPuzzle": {
-            "cluesLessThan18": "clues are less than 18",
-            "duplicateNumberInHouse": "puzzle has multiple instances of {{value}} in same house",
-            "multipleSolutions": "puzzle has multiple valid solutions. please input valid puzzle"
+            "cluesLessThan18": "ヒントの数が18個未満です",
+            "duplicateNumberInHouse": "同じハウス内に {{value}} が複数あります",
+            "multipleSolutions": "このパズルには複数の解が存在します。有効なパズルを入力してください"
         },
         "tryOut": {
-            "clickNextToSelectCell": "click on Next button and go to last step to select cell"
+            "clickNextToSelectCell": "「次へ」ボタンを押して最後のステップに進み、マスを選択してください"
         }
     }
 }

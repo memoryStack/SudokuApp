@@ -1,106 +1,27 @@
 {
-    "play": "Play",
+    "play": "プレイ",
     "cancel": "キャンセル",
     "save": "保存",
     "update": "更新",
-    "yes": "Yes",
-    "no": "No",
-    "submit": "Submit",
-    "share": "Share",
-    "restart": "Restart",
-    "newGame": "New Game",
+    "yes": "はい",
+    "no": "いいえ",
+    "submit": "送信",
+    "share": "共有",
+    "restart": "リスタート",
+    "newGame": "新しいゲーム",
     "resume": "再開",
-    "next": "Next",
-    "prev": "Prev",
+    "next": "次へ",
+    "prev": "前へ",
     "preview": "プレビュー",
-    "or": "OR",
-    "learnMore": "Learn More",
-    "dontShowAgain": "Don't show again",
-    "nextTime": "Next time",
-    "review": "Review",
-    "pause": "Pause",
+    "or": "または",
+    "learnMore": "詳しく見る",
+    "dontShowAgain": "次回から表示しない",
+    "nextTime": "次回",
+    "review": "レビュー",
+    "pause": "一時停止",
     "conjugations": {
         "and": "and",
         "or": "or"
-    },
-    "houseTypes": {
-        "row": {
-            "singular": "row",
-            "plural": "rows"
-        },
-        "col": {
-            "singular": "column",
-            "plural": "columns"
-        },
-        "block": {
-            "singular": "block",
-            "plural": "blocks"
-        },
-        "numAndName": "{{houseNum}} {{houseName}}",
-        "cell": {
-            "singular": "cell",
-            "plural": "cells"
-        }
-    },
-    "houseNumber": {
-        "row": {
-            "axis": {
-                "0": "A",
-                "1": "B",
-                "2": "C",
-                "3": "D",
-                "4": "E",
-                "5": "F",
-                "6": "G",
-                "7": "H",
-                "8": "I"
-            },
-            "number": {
-                "treatLikeNumber": true
-            }
-        },
-        "col": {
-            "number": {
-                "treatLikeNumber": true,
-                "form": "numeric"
-            },
-            "number_ordinal": {
-                "treatLikeNumber": true,
-                "form": "ordinal"
-            }
-        },
-        "block": {
-            "number": {
-                "treatLikeNumber": true,
-                "form": "numeric"
-            },
-            "number_ordinal": {
-                "treatLikeNumber": true,
-                "form": "ordinal"
-            }
-        }
-    },
-    "boardYAxis": {
-        "row_0": "A",
-        "row_1": "B",
-        "row_2": "C",
-        "row_3": "D",
-        "row_4": "E",
-        "row_5": "F",
-        "row_6": "G",
-        "row_7": "H",
-        "row_8": "I"
-    },
-    "boardXAxis": {
-        "col_0": "1",
-        "col_1": "2",
-        "col_2": "3",
-        "col_3": "4",
-        "col_4": "5",
-        "col_5": "6",
-        "col_6": "7",
-        "col_7": "8",
-        "col_8": "9"
     },
     "corners": {
         "singular": "corner",
@@ -131,27 +52,38 @@
         "plural": "numbers"
     },
     "numbers": {
-        "alphabetic": {
-            "1": "A",
-            "2": "B",
-            "3": "C",
-            "4": "D",
-            "5": "E",
-            "6": "F",
-            "7": "G",
-            "8": "H",
-            "9": "I"
+        "masculine": {
+            "1": "1番目",
+            "2": "2番目",
+            "3": "3番目",
+            "4": "4番目",
+            "5": "5番目",
+            "6": "6番目",
+            "7": "7番目",
+            "8": "8番目",
+            "9": "9番目"
         },
-        "ordinal": {
-            "1": "1st",
-            "2": "2nd",
-            "3": "3rd",
-            "4": "4th",
-            "5": "5th",
-            "6": "6th",
-            "7": "7th",
-            "8": "8th",
-            "9": "9th"
+        "feminine": {
+            "1": "1番目",
+            "2": "2番目",
+            "3": "3番目",
+            "4": "4番目",
+            "5": "5番目",
+            "6": "6番目",
+            "7": "7番目",
+            "8": "8番目",
+            "9": "9番目"
+        },
+        "plural": {
+            "1": "1番目",
+            "2": "2番目",
+            "3": "3番目",
+            "4": "4番目",
+            "5": "5番目",
+            "6": "6番目",
+            "7": "7番目",
+            "8": "8番目",
+            "9": "9番目"
         },
         "numeric": {
             "1": "1",
@@ -164,16 +96,132 @@
             "8": "8",
             "9": "9"
         },
+        "alphabetic": {
+            "1": "A",
+            "2": "B",
+            "3": "C",
+            "4": "D",
+            "5": "E",
+            "6": "F",
+            "7": "G",
+            "8": "H",
+            "9": "I"
+        },
+        "ordinal": {
+            "1": "1番目",
+            "2": "2番目",
+            "3": "3番目",
+            "4": "4番目",
+            "5": "5番目",
+            "6": "6番目",
+            "7": "7番目",
+            "8": "8番目",
+            "9": "9番目"
+        },
         "words": {
-            "1": "one",
-            "2": "two",
-            "3": "three",
-            "4": "four",
-            "5": "five",
-            "6": "six",
-            "7": "seven",
-            "8": "eight",
-            "9": "nine"
+            "1": "一",
+            "2": "二",
+            "3": "三",
+            "4": "四",
+            "5": "五",
+            "6": "六",
+            "7": "七",
+            "8": "八",
+            "9": "九"
         }
+    },
+    "houseTypes": {
+        "row": {
+            "singular": "行",
+            "plural": "行",
+            "oblique": "行"
+        },
+        "col": {
+            "singular": "列",
+            "plural": "列",
+            "oblique": "列"
+        },
+        "block": {
+            "singular": "ブロック",
+            "plural": "ブロック",
+            "oblique": "ブロック"
+        },
+        "cell": {
+            "singular": "マス",
+            "plural": "マス"
+        },
+        "numAndName": {
+            "row": "{{houseNum}}{{houseName}}",
+            "col": "{{houseNum}}{{houseName}}目",
+            "block": "{{houseNum}}{{houseName}}目"
+        }
+    },
+    "houseNumber": {
+        "row": {
+            "axis": {
+                "0": "A",
+                "1": "B",
+                "2": "C",
+                "3": "D",
+                "4": "E",
+                "5": "F",
+                "6": "G",
+                "7": "H",
+                "8": "I"
+            },
+            "number": {
+                "treatLikeNumber": true
+            }
+        },
+        "col": {
+            "number": {
+                "treatLikeNumber": true,
+                "form": "numeric"
+            },
+            "number_ordinal": {
+                "treatLikeNumber": true,
+                "form": "ordinal"
+            },
+            "number_words": {
+                "treatLikeNumber": true,
+                "form": "words"
+            }
+        },
+        "block": {
+            "number": {
+                "treatLikeNumber": true,
+                "form": "numeric"
+            },
+            "number_ordinal": {
+                "treatLikeNumber": true,
+                "form": "ordinal"
+            },
+            "number_words": {
+                "treatLikeNumber": true,
+                "form": "words"
+            }
+        }
+    },
+    "boardYAxis": {
+        "row_0": "A",
+        "row_1": "B",
+        "row_2": "C",
+        "row_3": "D",
+        "row_4": "E",
+        "row_5": "F",
+        "row_6": "G",
+        "row_7": "H",
+        "row_8": "I"
+    },
+    "boardXAxis": {
+        "col_0": "1",
+        "col_1": "2",
+        "col_2": "3",
+        "col_3": "4",
+        "col_4": "5",
+        "col_5": "6",
+        "col_6": "7",
+        "col_7": "8",
+        "col_8": "9"
     }
 }
